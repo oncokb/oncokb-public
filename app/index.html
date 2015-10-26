@@ -1,0 +1,113 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/nprogress/nprogress.css" />
+    <link rel="stylesheet" href="bower_components/Materialize/bin/materialize.css" />
+    <link rel="stylesheet" href="bower_components/materialize/bin/materialize.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+</head>
+<body ng-controller="MainCtrl as ctrl">
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="parentCompany navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <span class="navbar-brand">cBioPortal &middot; MSKCC</span>
+        </div>
+        <div class="projects">
+            <a>OncoKB</a>
+            <a href="http://cbioportal.org">cBioPortal</a>
+            <a href="http://oncotree.mskcc.org">OncoTree</a>
+        </div>
+    </div>
+</div>
+<!-- Add your site or application content here -->
+<div class="subNav navbar navbar-inverse navbar-fixed-top" class="" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span class="navbar-brand"><img class="logo" src="images/oncokb_18.png"/>ncoKB</span>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ng-class="{ active: isActive('/')}"><a href="#/">Home</a></li>
+                <li ng-class="{ active: isActive('/levels')}"><a href="#/levels">Levels of Evidence</a></li>
+                <li ng-class="{ active: isActive('/variants')}"><a href="#/variants">Actionable Variants</a></li>
+                <li ng-class="{ active: isActive('/team')}"><a href="#/team">Team</a></li>
+                <li ng-class="{ active: isActive('/cbioportal')}"><a href="#/cbioportal">cBioPortal Access</a></li>
+                <li ng-class="{ active: isActive('/api')}" ><a href="#/api">API</a></li>
+            </ul>
+            <!--<a href="http://www.mskcc.org/"><img id="mskcc_logo" class="navbar-right" src="images/mskcc_fixed.png"-->
+            <!--style="height: 50px"/></a>-->
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="content" ng-view=""></div>
+
+    <div class="footer"><p><a target="_blank" href="http://cmo.mskcc.org/">CMO</a> | <a target="_blank"
+                                                                                        href="https://cbioportal.mskcc.org/">cBioPortal</a>
+    </p>
+
+        <p>Questions and feedback: Contact <a href="mailto:richarj2@mskcc.org?Subject=MSK-IMPACT%20Publication%20Policy"
+                                              target="_top">Julia Rudolph</a></p>
+    </div>
+</div>
+
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+<script>
+    !function (A, n, g, u, l, a, r) {
+        A.GoogleAnalyticsObject = l, A[l] = A[l] || function () {
+                (A[l].q = A[l].q || []).push(arguments)
+            }, A[l].l = +new Date, a = n.createElement(g),
+            r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
+    }(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-XXXXX-X');
+    ga('send', 'pageview');
+</script>
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<script src="bower_components/nprogress/nprogress.js"></script>
+<script src="bower_components/Materialize/bin/materialize.js"></script>
+<script src="bower_components/materialize/bin/materialize.js"></script>
+<script src="bower_components/angular-materialize/src/angular-materialize.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<script src="scripts/app.js"></script>
+<script src="scripts/controllers/main.js"></script>
+<!-- endbuild -->
+</body>
+</html>

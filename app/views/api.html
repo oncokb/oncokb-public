@@ -1,0 +1,27 @@
+
+<div class="row">
+    <div class="col s12">
+        <ul class="tabs" tabs>
+            <li class="tab col s6"><a class="active" href="#apiSummary">Summary</a></li>
+            <li class="tab col s6"><a href="#apiEvidence">Evidence</a></li>
+        </ul>
+    </div>
+    <div id="apiSummary" class="col s12 tabsContent">
+        <span style="margin: 0 24px;">URL: /summary.json</span>
+        <ul class="collapsible popout" data-collapsible="accordion" watch>
+            <li ng-repeat="single in tabs.apiSummary.collapsibleElements">
+                <div class="collapsible-header">{{single.title}}</div>
+                <div class="collapsible-body"><div ng-include="single.include"></div></div>
+            </li>
+        </ul>
+    </div>
+    <div id="apiEvidence" class="col s12">
+        <span style="margin: 0 24px;">URL: /evidence.json</span>
+        <ul class="collapsible popout" data-collapsible="accordion" watch>
+            <li ng-repeat="single in tabs.apiEvidence.collapsibleElements">
+                <div class="collapsible-header">{{single.title}}</div>
+                <div class="collapsible-body"><div ng-include="single.include"></div></div>
+            </li>
+        </ul>
+    </div>
+</div>
