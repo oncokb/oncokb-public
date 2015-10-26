@@ -3,7 +3,6 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 @import "font-awesome/scss/font-awesome.scss";
 @import "Materialize/sass/materialize.scss";
-@import "materialize/sass/materialize.scss";
 // endbower
 
 body {
@@ -154,6 +153,14 @@ body {
     background-color: #2986e2;
 }
 
+/* Overwrite Materialize css*/
+.btn, .btn-large {
+    background-color: #2986e2;
+}
+.btn:hover, .btn-large:hover {
+    background-color: #2986e2;
+}
+
 /*Self defined styles*/
 .parentCompany {
     height: 30px;
@@ -210,4 +217,8 @@ a:hover, a:focus {
 
 .tabsContent {
     margin-top: 20px;
+}
+
+.floatRight {
+    float: right;
 }
