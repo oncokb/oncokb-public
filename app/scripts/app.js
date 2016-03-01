@@ -23,7 +23,7 @@ angular
         $routeProvider
             .when('/', {
                 templateUrl: 'views/main.html',
-                controller: 'MainCtrl'
+                controller: 'HomeCtrl'
             })
             .when('/levels', {
                 templateUrl: 'views/levels.html',
@@ -46,7 +46,7 @@ angular
                 controller: 'MainCtrl'
             })
             .otherwise({
-                redirectTo: '/'
+                redirectTo: 'HomeCtrl'
             });
     });
 
