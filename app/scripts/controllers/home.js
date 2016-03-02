@@ -18,6 +18,8 @@ angular.module('oncokbStaticApp')
         }),
         fontFamily: 'tunga',
         shape: 'Ariel',
+        rotateRatio: 0,
+        gridSize: '14',
         hover: function (item, dimension, event) {
           var el = document.getElementById('canvas-hover');
           var hoverLabelElement = document.getElementById('canvas-hover-label');
@@ -30,8 +32,8 @@ angular.module('oncokbStaticApp')
           el.removeAttribute('hidden');
           el.style.left = dimension.x + 'px';
           el.style.top = dimension.y + 'px';
-          el.style.width = dimension.w + 8 + 'px';
-          el.style.height = dimension.h + 8 + 'px';
+          el.style.width = dimension.w + 4 + 'px';
+          el.style.height = dimension.h + 4 + 'px';
 
 
           hoverLabelElement.removeAttribute('hidden');
