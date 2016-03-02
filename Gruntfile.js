@@ -238,7 +238,7 @@ module.exports = function (grunt) {
         src: [
           '<%= yeoman.dist %>/scripts/{,*/}*.js',
           '<%= yeoman.dist %>/styles/{,*/}*.css',
-          '<%= yeoman.dist %>/resources/files{,*/}*.{csv,pptx,json}',
+          '<%= yeoman.dist %>/resources/files{,*/}*.{pptx}',
           '<%= yeoman.dist %>/resources/images{,*/}*.{png,png,jpeg,gif,webp,svg}',
           '<%= yeoman.dist %>/styles/fonts/*'
         ]
