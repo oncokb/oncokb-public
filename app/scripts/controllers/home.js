@@ -8,16 +8,16 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-  .controller('HomeCtrl', function ($scope) {
+  .controller('HomeCtrl', function ($scope, $location) {
     $scope.content = {hoveredGene: "gets", hoveredCount: ''};
 
     d3.csv('resources/files/all_genes_with_variants.csv', function (content) {
       WordCloud(document.getElementById('wordCloud'), {
         list: content.map(function (d) {
-          return [d.gene, Math.sqrt(d.alt*2) * 4, d.alt];
+          return [d.gene, Math.sqrt(d.alt*2) * 5, d.alt];
         }),
         fontFamily: 'tunga',
-        //shape: 'pentagon',
+        shape: 'Ariel',
         hover: function (item, dimension, event) {
           var el = document.getElementById('canvas-hover');
           var hoverLabelElement = document.getElementById('canvas-hover-label');
@@ -38,6 +38,9 @@ angular.module('oncokbStaticApp')
           $scope.content.hoveredGene = item[0];
           $scope.content.hoveredCount = item[2];
           $scope.$apply();
+        },
+        click: function() {
+          $location.path('/gene');
         }
       });
     });
