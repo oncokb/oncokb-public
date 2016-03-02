@@ -261,16 +261,20 @@ a:hover, a:focus {
   padding: 2px;
   margin: -4px 0 0 -4px;
   pointer-events: none;
+  border-radius: 0.5em;
 }
 
 #canvas-hover-label {
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: rgba(176, 176, 176, 0.8);
+  background-color: rgba(255, 255, 255, 1);
   color: #333;
   margin-top: 6px;
   padding: 0 0.5em;
   border-radius: 0.5em;
+  font-size: 18px;
+  border: 2px solid black;
+
   white-space: nowrap;
 }
