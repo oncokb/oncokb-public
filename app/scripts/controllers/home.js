@@ -35,7 +35,7 @@ angular.module('oncokbStaticApp')
         fontFamily: 'Calibri',
         shape: 'circle',
         rotateRatio: 0,
-        gridSize: '8',
+        gridSize: '10',
         shuffle: false,
         color: function (word) {
           return levelColors.hasOwnProperty(genes[word].hLevel)?levelColors[genes[word].hLevel]:levelColors['Other'];
