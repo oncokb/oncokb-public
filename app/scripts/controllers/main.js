@@ -13,6 +13,11 @@ angular.module('oncokbStaticApp')
       return viewLocation === $location.path();
     };
 
+    $scope.toggled = false;
+    $scope.toggleMenu = function() {
+      $scope.toggled = !$scope.toggled;
+    };
+
     $scope.tabs = {
       'apiSummary': {
         name: 'Summary',

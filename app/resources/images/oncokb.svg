@@ -1,6 +1,23 @@
-<svg width="14" height="14">
-<g transform="translate(7, 7)">
-<circle r="6" fill="none" stroke-width="2" stroke="#007fff"></circle>
-<circle r="3" fill="none" stroke-width="2" stroke="#007fff"></circle>
-<circle r="1.5" fill="#007fff" stroke="none"></circle>
-</g></svg>
+<!--<svg width="14" height="14">-->
+  <!--<g transform="translate(7, 7)">-->
+    <!--<circle r="6" fill="none" stroke-width="2" stroke="#007fff"></circle>-->
+    <!--<circle r="3" fill="none" stroke-width="2" stroke="#007fff"></circle>-->
+    <!--<circle r="1.5" fill="#007fff" stroke="none"></circle>-->
+  <!--</g>-->
+<!--</svg>-->
+
+<!--<svg width="14" height="14">-->
+  <!--<g transform="translate(7, 7)">-->
+    <!--<circle r="6" fill="none" stroke-width="2" stroke="#f00"></circle>-->
+    <!--<circle r="3" fill="none" stroke-width="2" stroke="#f00"></circle>-->
+    <!--<circle r="1.5" fill="#f00" stroke="none"></circle>-->
+  <!--</g>-->
+<!--</svg>-->
+
+<svg  xmlns="http://www.w3.org/2000/svg" width="18" height="18">
+  <g transform="translate(9, 9)">
+    <circle r="7.5" fill="none" stroke-width="2" stroke="#f00"></circle>
+    <circle r="4.5" fill="none" stroke-width="2" stroke="#f00"></circle>
+    <circle r="2.5" fill="#f00" stroke="none"></circle>
+  </g>
+</svg>
