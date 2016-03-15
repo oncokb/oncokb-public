@@ -8,7 +8,7 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-  .controller('HomeCtrl', function ($scope, $location) {
+  .controller('HomeCtrl', function($scope, $location) {
     $scope.content = {hoveredGene: "gets", hoveredCount: ''};
 
     d3.csv('resources/files/all_genes_with_all_variants.csv', function(content) {
@@ -25,12 +25,22 @@ angular.module('oncokbStaticApp')
         'Other': '#000000'
       };
 
+      var levelSize = {
+        'LEVEL_1': 60,
+        'LEVEL_2A': 50,
+        'LEVEL_2B': 40,
+        'LEVEL_3A': 35,
+        'LEVEL_3B': 30,
+        'LEVEL_4': 20,
+        'Other': 15
+      };
+
       var genes = {};
 
       WordCloud(document.getElementById('wordCloud'), {
         list: content.map(function(d) {
           genes[d.gene] = d;
-          return [d.gene, Math.sqrt(d.altNum * 3) * 4, d.altNum];
+          return [d.gene, levelSize.hasOwnProperty(d.hLevel) ? (levelSize[d.hLevel] + Math.sqrt(d.altNum)) : levelSize['Other'], d.altNum];
         }),
         fontFamily: 'Calibri',
         shape: 'circle',
