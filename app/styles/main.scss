@@ -22,10 +22,6 @@ $orange: #c84e23;
 }
 
 @media (max-width: 993px) {
-  body {
-    padding-top: 120px;
-    font-family: Helvetica;
-  }
   .wrapper {
     /* Negative indent footer by its height */
     margin: 0 auto -200px;
@@ -34,6 +30,18 @@ $orange: #c84e23;
   }
   .footer {
     height: 200px;
+  }
+}
+
+@media (max-width: 610px) {
+  body {
+    padding-top: 160px;
+  }
+}
+
+@media (max-width: 993px) and (min-width: 610px) {
+  body {
+    padding-top: 130px;
   }
 }
 
@@ -106,6 +114,7 @@ html {
 
 body {
   height: 100%;
+  font-family: Helvetica;
 }
 
 //
@@ -196,7 +205,7 @@ body {
     position: absolute;
     color: white;
     top: 18px;
-    width:100%;
+    width: 100%;
     text-align: center;
   }
   span:nth-child(even) {
@@ -275,9 +284,10 @@ body {
   //padding-right: 30px;
 }
 
-table.gene-table td:first-child{
+table.gene-table td:first-child {
   white-space: nowrap;
 }
+
 /* Content classes */
 .content {
   margin-top: 20px;
