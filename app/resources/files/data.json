@@ -1,1205 +1,1033 @@
 [
   {
     "variant": "A246P",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "A33T",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "A489_T491del",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "A727V",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "A762V",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "Activating Mutations",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "R1",
     "pmids": "19001320, 19884556, 20619739"
   },
   {
     "variant": "AGK-BRAF fusion",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "AKAP9-BRAF Fusion",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF amplification",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF V600E + MEK1 C121S",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF V600E + MEK1 Q56P",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF-AGK Fusion",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "R1",
     "pmids": 23890088
   },
   {
     "variant": "BRAF-CCDC6 fusion",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF-CDK5RAP2 fusion",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF-CUL1 Fusion",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Unknown",
     "hLevel": "3B",
     "pmids": 26324360
   },
   {
     "variant": "BRAF-KIAA1549 Fusion",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF-LUC7L2 fusion",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF-NCRNA00244 fusion",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF-PJA2 fusion",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF-SCRIB fusion",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF-SND1 Fusion",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "BRAF-VIPR2 fusion",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "CUL1-BRAF Fusion",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "3A",
     "pmids": 26324360
   },
   {
     "variant": "D594A",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "D594E",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "D594G",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "D594N",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "D594V",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "D594Y",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "E501G",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "E501K",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "E549Q",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "E586K",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "E715K",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "F109I",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "F247L",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "F294L",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "F468C",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "F595I",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "F595L",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "FAM131B-BRAF Fusion",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G12A",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G12C",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G12D",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G12R",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G12S",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G12V",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G13D",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G13R",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G13V",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G189C",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G464E",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G464V",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G466A",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G466E",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G466V",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G469A",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G469del",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G469E",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G469L",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G469R",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G469V",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G596C",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G596R",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G596V",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G606W",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G69S",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "G8V",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "H539Y",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "H574Y",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "H725Y",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "I463S",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "I572F",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "insT",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "insTT",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "K205N",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "K472C",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "K483M",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "K499E",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "K601E",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "3A",
     "pmids": "22663011, 24933606"
   },
   {
     "variant": "K601N",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "K601T",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "KIAA1549-BRAF Fusion",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "3A",
     "pmids": 15466206
   },
   {
     "variant": "KS601NT",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "KSRW601del",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L312P",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L331F",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L382F",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L485F",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L485W",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L505H",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L525P",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L553R",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L577I",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L579Q",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "3A",
     "pmids": "21310613, 22663011"
   },
   {
     "variant": "L579R",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "3A",
     "pmids": "21310613, 22663011"
   },
   {
     "variant": "L579S",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "3A",
     "pmids": "21310613, 22663011"
   },
   {
     "variant": "L579V",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "3A",
     "pmids": "21310613, 22663011"
   },
   {
     "variant": "L584F",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L597Q",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L597R",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L597S",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "L597V",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "3A",
     "pmids": 22798288
   },
   {
     "variant": "L674Q",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "M620I",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "MKRN1-BRAF",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "MKRN1-BRAF Fusion",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "N486_P490del",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "N581D",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Not oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "N581I",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "N581S",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "N581Y",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "NF1 inactivating mutations",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "P124L",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "P124S",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "P162S",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "P321L",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "P343L",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "P345L",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "P367L",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "P367S",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "p61BRAF",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "P708S",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "PAPSS1-BRAF fusion",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "Q201H",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "Q257H",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "Q257R",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "Q302R",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "Q61K",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "Q61L",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "Q61R",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "R239Q",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "R252Q",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "R271H",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "R354Q",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "R362L",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "R462I",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "R509Q",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "R558Q",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "R671Q",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "R682W",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "S125F",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "S136P",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "S151A",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "S363F",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "S467A",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "S614P",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "SND1-BRAF Fusion",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "T121I",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "T233P",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "T310I",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "T332I",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "T529I",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "T529M",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "T529N",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "T599dup",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "T599I",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Likely Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "TRIM24-BRAF Fusion",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "V168L",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "V458L",
-    "evidenceType": "",
     "oncogenic": "",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "V459L",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "V600 wildtype",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Unknown",
     "hLevel": 1,
     "pmids": "25341541, 26027431"
   },
   {
     "variant": "V600D",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "3A",
     "pmids": 26287849
   },
   {
     "variant": "V600E",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": 1,
     "pmids": "19001320, 19884556, 20619739, 20818844, 22281684, 22446022, 22448344, 22663011, 22735384, 23846731, 24508103, 24863690, 25089220, 25265492, 25265494, 25287827, 25399551, 25583765, 26287849"
   },
   {
     "variant": "V600K",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": 1,
     "pmids": "21639808, 22663011, 23846731, 25089220, 25265492, 25265494, 25287827, 25399551, 26287849"
   },
   {
     "variant": "V600M",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "3A",
     "pmids": 26287849
   },
   {
     "variant": "V600R",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "3A",
     "pmids": 26287849
   },
   {
     "variant": "V600_K601delinsE",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "W604G",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "Y472C",
-    "evidenceType": "ONCOGENIC",
     "oncogenic": "Oncogenic",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "Y472S",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   },
   {
     "variant": "Y633C",
-    "evidenceType": "VUS",
-    "oncogenic": "",
+    "oncogenic": "Unknown",
     "hLevel": "",
     "pmids": ""
   }
