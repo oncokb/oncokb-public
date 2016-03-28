@@ -50,14 +50,13 @@
           <span></span>
           <b>Menu</b>
         </div>
-        <span class="navbar-brand"><img class="logo" src="resources/images/oncokb_red.png"/>ncoKB</span>
+        <span class="navbar-brand"><img class="logo" src="resources/images/oncokb_18_orange.png"/>ncoKB</span>
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <li ng-class="{ active: isActive('/')}"><a href="#/">Home</a></li>
           <li ng-class="{ active: isActive('/levels')}"><a href="#/levels">Levels of Evidence</a></li>
-          <li ng-class="{ active: isActive('/team')}"><a href="#/team">Team</a></li>
-          <li ng-class="{ active: isActive('/quest')}"><a href="#/quest">Quest OncoVantage</a></li>
+          <li ng-class="{ active: isActive('/team')}"><a href="#/team">About</a></li>
           <li ng-class="{ active: isActive('/api')}"><a href="#/api">API</a></li>
         </ul>
         <div class="pull-right" ng-class="{hidden: toggled}">
@@ -74,12 +73,10 @@
       <div class="container">
         <div class="subNav">
           <!-- In order to use last child css style, add div wrapper -->
-          <div class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12">
-            <span># of genes: 427</span>
-            <span># of mutations: 3000</span>
-            <span># of OncoTree tumor types: 50</span>
+          <div ng-show="subNavItems.length > 0" class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12 subNav-sxn-1">
+            <span ng-repeat="item in subNavItems">{{item}}</span>
           </div>
-          <div class="pull-right col-md-3 col-lg-3 col-sm-12 col-xs-12"><input type="text"
+          <div class="pull-right col-md-3 col-lg-3 col-sm-12 col-xs-12 subNav-sxn-2"><input type="text"
                                                                                placeholder="Search variant"/></div>
         </div>
       </div>
@@ -95,6 +92,7 @@
       <div class="">
         <a href="http://mskcc.org" class="">MSKCC <i class="fa fa-external-link"></i></a>
         <a href="http://cmo.mskcc.org" class="">CMO <i class="fa fa-external-link"></i></a>
+        <a href="http://www.questdiagnostics.com/home.html" class="">Quest Diagnostics <i class="fa fa-external-link"></i></a>
         <a href="http://cbioportal.org" class="">cBioPortal <i class="fa fa-external-link"></i></a>
         <a href="http://oncotree.mskcc.org" class="">OncoTree <i class="fa fa-external-link"></i></a>
       </div>

@@ -1,44 +1,52 @@
-<div>
+<div class="gene">
   <div class="row"></div>
   <div class="row">
-    <div class="col-lg-4 col-md-4">
-      <div class="row gene-info">
-        <span class="gene-title">BRAF</span><br/>
-        <div class="col-md-6 col-lg-6">
-          <span class="gene-numbers-titile"># of Variants</span><br/>
-          <span class="gene-numbers-content">170</span>
-        </div>
-        <div class="col-md-6 col-lg-6">
-          <span class="gene-numbers-titile">Highest Level</span><br/>
-          <span class="gene-numbers-content">1</span>
-        </div>
-      </div>
+    <div class="col-lg-6 col-md-6">
+      <p><span class="gene-title">BRAF</span>encodes a serine/threonine kinase involved in the MAPK signaling pathway.
+        Mutations of BRAF are found in melanomas and thyroid, lung and colorectal cancers, among others.</p>
+      <span class="pull-right" ng-class="{'hide': !!moreInfo}">See BRAF background
+        <i class="fa fa-arrow-circle-o-down gene-more-info-icon" ng-click="moreInfo=!moreInfo"></i></span>
+      <p ng-class="{'hide': !moreInfo}">The BRAF protein is a serine/threonine kinase that plays
+        a key role in the regulation of the mitogen-activated protein kinase (MAPK) cascade (PMID: 15520807),
+        which under physiologic conditions regulates the expression of genes involved in cellular functions,
+        including proliferation (PMID: 24202393). Genetic alterations in BRAF are found primarily in melanomas
+        and thyroid cancers as well as a small fraction of lung and colorectal cancers. The most common BRAF
+        point mutation is V600E, which deregulates the protein's kinase activity leading to constitutive BRAF
+        activation and signaling as a monomer (PMID: 20179705), although other mutations have been found
+        (PMID: 12068308) which affect the protein's propensity to dimerize (PMID: 16858395, 26343582).
+        The product of these alterations is a BRAF kinase that can activate MAPK signaling in an unregulated manner and,
+        in some instances, is directly responsible for cancer growth (PMID: 15520807).</p>
+      <span class="pull-right" ng-class="{'hide': !moreInfo}">Hide <i
+        class="fa fa-arrow-circle-o-up gene-less-info-icon" ng-click="moreInfo=!moreInfo"></i></span>
     </div>
-    <div class="col-lg-8 col-md-8">
-      <p>BRAF, an intracellular kinase and component of the cell growth MAPK (mitogen-activated protein kinase)
-        signaling pathway, is mutated in a diverse range of human cancers, including melanoma and lung cancer.</p>
-      <p>The BRAF protein is a serine/threonine kinase that plays a key role in the regulation
-        of the
-        mitogen-activated
-        protein kinase (MAPK) cascade (PMID: 15520807), which under physiologic conditions regulates the expression of
-        genes involved in cellular functions, including proliferation (PMID: 24202393). Genetic alterations in BRAF are
-        found primarily in melanomas and thyroid cancers as well as a small fraction of lung and colorectal cancers. The
-        most common BRAF point mutation is V600E, which deregulates the protein's kinase activity leading to
-        constitutive
-        BRAF activation and signaling as a monomer (PMID: 20179705), although other mutations have been found (PMID:
-        12068308) which affect the protein's propensity to dimerize (PMID: 16858395, 26343582). The product of these
-        alterations is a BRAF kinase that can activate MAPK signaling in an unregulated manner and, in some instances,
-        is
-        directly responsible for cancer growth (PMID: 15520807).</p>
+
+    <div class="col-lg-6 col-md-6">
+      <img class="img-full" src="resources/images/chart.png" style="height: 300px">
+      <!--<div class="gene-info">-->
+      <!--<table class="table table-bordered gene-numbers">-->
+      <!--<tbody>-->
+      <!--<tr>-->
+      <!--&lt;!&ndash;<td>170 variants</td>&ndash;&gt;-->
+      <!--&lt;!&ndash;<td>Level 1</td>&ndash;&gt;-->
+      <!--</tr>-->
+      <!--</tbody>-->
+      <!--</table>-->
+      <!--<div class="col-md-6 col-lg-6">-->
+      <!--<span class="gene-numbers-titile"></span><br/>-->
+      <!--<span class="gene-numbers-content">170</span>-->
+      <!--</div>-->
+      <!--<div class="col-md-6 col-lg-6">-->
+      <!--<span class="gene-numbers-titile"></span><br/>-->
+      <!--<span class="gene-numbers-content">1</span>-->
+      <!--</div>-->
+      <!--</div>-->
     </div>
   </div>
 
   <div class="row">
-    <img class="img-full" src="resources/images/braf_frequency.png">
-  </div>
-
-  <div class="row">
-    <div class="col-lg-12 col-md-12">
+    <!--<div class="col-lg-4 col-md-4">-->
+    <!--</div>-->
+    <div class="col-lg-12 col-md-12" style="padding-top: 70px">
       <img class="img-full" src="resources/images/mutation_mapper.png">
     </div>
   </div>

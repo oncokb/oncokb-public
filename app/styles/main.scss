@@ -11,7 +11,7 @@ $orange: #c84e23;
 @media only screen and (min-width: 993px) {
   /* line 12, ../../bower_components/Materialize/sass/components/_grid.scss */
   .container {
-    width: 80%;
+    width: 90%;
   }
 }
 
@@ -139,12 +139,12 @@ body {
 }
 
 .subNav {
-  height: 50px;
-  line-height: 30px;
+  height: 60px;
+  line-height: 40px;
   padding: 10px 0;
 
   span {
-    font-size: 16px;
+    font-size: 22px;
     color: white;
     border-right: 1px solid #1c75cd;
     padding: 0 10px;
@@ -165,6 +165,10 @@ body {
   input[type=text]:focus {
     border-bottom-color: $orange;
     box-shadow: 0 1px 0 0 $orange;
+  }
+  .subNav-sxn-1, .subNav-sxn-2 {
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
@@ -282,6 +286,12 @@ body {
 .container.nav-container {
   //padding-left: 30px;
   //padding-right: 30px;
+}
+
+.gene {
+  .gene-more-info-icon:hover, .gene-less-info-icon:hover {
+    cursor: pointer;
+  }
 }
 
 table.gene-table td:first-child {
@@ -542,20 +552,15 @@ a:hover, a:focus {
 
 .gene-info {
   text-align: center;
+  table {
+    th, td {
+      text-align: center;
+    }
+  }
 }
 
 .gene-title {
   font-size: 40px;
-}
-
-.gene-numbers {
-  padding-top: 60px;
-  text-align: center;
-}
-
-.gene-numbers-content {
-  font-size: 20px;
-  color: #1c75cd;
 }
 
 #levelDownload {

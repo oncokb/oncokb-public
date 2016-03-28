@@ -8,7 +8,7 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-  .controller('MainCtrl', function ($scope, $location) {
+  .controller('MainCtrl', function ($scope, $rootScope, $location) {
     $scope.isActive = function (viewLocation) {
       return viewLocation === $location.path();
     };
@@ -320,7 +320,9 @@ angular.module('oncokbStaticApp')
         }]
       }
     };
+
+    if(!$rootScope.subNavItems) {
+      $rootScope.subNavItems = [];
+    }
     NProgress.done();
-
-
   });

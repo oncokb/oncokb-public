@@ -44,6 +44,10 @@ angular
         controller: 'GeneCtrl',
         controllerAs: 'gene'
       })
+      .when('/genes', {
+        templateUrl: 'views/genes.html',
+        controller: 'MainCtrl'
+      })
       .when('/quest', {
         templateUrl: 'views/quest.html',
         controller: 'QuestCtrl',

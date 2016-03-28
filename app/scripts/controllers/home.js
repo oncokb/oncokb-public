@@ -8,21 +8,21 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-  .controller('HomeCtrl', function($scope, $location) {
+  .controller('HomeCtrl', function($scope, $location, $rootScope) {
     $scope.content = {hoveredGene: "gets", hoveredCount: ''};
 
     d3.csv('resources/files/all_genes_with_all_variants.csv', function(content) {
       var levelColors = {
-        'LEVEL_1': '#006400',
-        'LEVEL_2A': '#32CD32',
-        'LEVEL_2B': '#98FB98',
-        'LEVEL_3A': '#FFAA00',
-        'LEVEL_3B': '#FF0000',
-        'LEVEL_4': '#8B0000',
+        'LEVEL_1': '#008D14',
+        'LEVEL_2A': '#019192',
+        'LEVEL_2B': '#2A5E8E',
+        'LEVEL_3A': '#794C87',
+        'LEVEL_3B': '#9B7EB6',
+        'LEVEL_4': 'black',
         //'LEVEL_R1': '#F40000',
         //'LEVEL_R2': '#C4006F',
         //'LEVEL_R3': '#6F08A3',
-        'Other': '#000000'
+        'Other': 'grey'
       };
 
       var levelSize = {
@@ -37,10 +37,12 @@ angular.module('oncokbStaticApp')
 
       var genes = {};
 
+      $rootScope.subNavItems = ['427 Genes', '3000 Variants', '400 Tumor Types'];
+
       WordCloud(document.getElementById('wordCloud'), {
         list: content.map(function(d) {
           genes[d.gene] = d;
-          return [d.gene, levelSize.hasOwnProperty(d.hLevel) ? (levelSize[d.hLevel] + Math.sqrt(d.altNum)) : levelSize['Other'], d.altNum];
+          return [d.gene, levelSize.hasOwnProperty(d.hLevel) ? (levelSize[d.hLevel] + Math.sqrt(d.altNum)) : levelSize['Other'], d.altNum, d.hLevel];
         }),
         fontFamily: 'Calibri',
         shape: 'circle',
@@ -69,6 +71,7 @@ angular.module('oncokbStaticApp')
           hoverLabelElement.removeAttribute('hidden');
           $scope.content.hoveredGene = item[0];
           $scope.content.hoveredCount = item[2];
+          $scope.content.hoveredHighestLevel = item[3].replace('LEVEL_','');
           $scope.$apply();
         },
         click: function() {
