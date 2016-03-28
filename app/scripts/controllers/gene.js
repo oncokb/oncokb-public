@@ -15,6 +15,8 @@ angular.module('oncokbStaticApp')
       .withBootstrap();
     $scope.dt.dtColumns = [
       DTColumnBuilder.newColumn('variant').withTitle('Variant'),
+      DTColumnBuilder.newColumn('evidenceType').withTitle('Evidence Type'),
+      DTColumnBuilder.newColumn('oncogenic').withTitle('Oncogenic'),
       DTColumnBuilder.newColumn('pmids').withTitle('PMIDs'),
       DTColumnBuilder.newColumn('hLevel').withTitle('Highest Level')
     ];

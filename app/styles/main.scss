@@ -294,8 +294,10 @@ body {
   }
 }
 
-table.gene-table td:first-child {
-  white-space: nowrap;
+table.gene-table {
+  td:first-child, th {
+    white-space: nowrap;
+  }
 }
 
 /* Content classes */
