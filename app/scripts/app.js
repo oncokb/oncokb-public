@@ -21,6 +21,7 @@ angular
     'datatables',
     'datatables.bootstrap'
   ])
+  .constant('_', window._)
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
@@ -39,24 +40,58 @@ angular
         templateUrl: 'views/api.html',
         controller: 'MainCtrl'
       })
-      .when('/gene', {
+      .when('/gene/:geneName', {
         templateUrl: 'views/gene.html',
         controller: 'GeneCtrl',
         controllerAs: 'gene'
-      })
-      .when('/genes', {
-        templateUrl: 'views/genes.html',
-        controller: 'MainCtrl'
       })
       .when('/quest', {
         templateUrl: 'views/quest.html',
         controller: 'QuestCtrl',
         controllerAs: 'quest'
       })
+      .when('/genes', {
+        templateUrl: 'views/genes.html',
+        controller: 'GenesCtrl',
+        controllerAs: 'genes'
+      })
       .otherwise({
-        redirectTo: 'HomeCtrl'
+        redirectTo: '/'
       });
   });
+
+angular.module('oncokbStaticApp').run(
+  function($timeout, $rootScope) {
+    $rootScope.view = {
+      subNavItems: [{
+        content: '427 Genes',
+        link: '#/genes'
+      }, {content: '3800 Variants'}, {content: '333 Tumor Types'}]
+    };
+    $rootScope.data = {
+      levelColors: {
+        '1': '#008D14',
+        '2A': '#019192',
+        '2B': '#2A5E8E',
+        '3A': '#794C87',
+        '3B': '#9B7EB6',
+        '4': 'black',
+        //'R1': '#F40000',
+        //'R2': '#C4006F',
+        //'R3': '#6F08A3',
+        'Other': 'grey'
+      }
+    };
+    $rootScope.$on('$routeChangeEnd', function() {
+      if (!$rootScope.view.subNavItems || $rootScope.view.subNavItems.length === 1) {
+        $rootScope.view.subNavItems = [{
+          content: '427 Genes',
+          link: '#/genes'
+        }, {content: '3800 Variants'}, {content: '333 Tumor Types'}];
+      }
+    });
+  });
+
 
 NProgress.start();
 angular.element(document).ready(function () {

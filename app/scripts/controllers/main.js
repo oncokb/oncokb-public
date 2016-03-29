@@ -321,8 +321,5 @@ angular.module('oncokbStaticApp')
       }
     };
 
-    if(!$rootScope.subNavItems) {
-      $rootScope.subNavItems = [];
-    }
     NProgress.done();
   });

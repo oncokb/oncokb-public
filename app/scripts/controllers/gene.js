@@ -19,5 +19,5 @@ angular.module('oncokbStaticApp')
       DTColumnBuilder.newColumn('pmids').withTitle('Evidence'),
       DTColumnBuilder.newColumn('hLevel').withTitle('Highest Level')
     ];
-    $rootScope.subNavItems = ['BRAF', '170 Variants', '50 Tumor Types', 'Level One'];
+    $rootScope.view.subNavItems = [{content: 'BRAF'}, {content: '170 Variants'}, {content: '50 Tumor Types'}, {content: 'Level One'}];
   });

@@ -12,35 +12,29 @@ angular.module('oncokbStaticApp')
     $scope.content = {hoveredGene: "gets", hoveredCount: ''};
 
     d3.csv('resources/files/all_genes_with_all_variants.csv', function(content) {
-      var levelColors = {
-        'LEVEL_1': '#008D14',
-        'LEVEL_2A': '#019192',
-        'LEVEL_2B': '#2A5E8E',
-        'LEVEL_3A': '#794C87',
-        'LEVEL_3B': '#9B7EB6',
-        'LEVEL_4': 'black',
-        //'LEVEL_R1': '#F40000',
-        //'LEVEL_R2': '#C4006F',
-        //'LEVEL_R3': '#6F08A3',
-        'Other': 'grey'
-      };
+      var levelColors = $rootScope.data.levelColors;
 
       var levelSize = {
-        'LEVEL_1': 60,
-        'LEVEL_2A': 50,
-        'LEVEL_2B': 40,
-        'LEVEL_3A': 35,
-        'LEVEL_3B': 30,
-        'LEVEL_4': 20,
+        '1': 60,
+        '2A': 50,
+        '2B': 40,
+        '3A': 35,
+        '3B': 30,
+        '4': 20,
         'Other': 15
       };
 
       var genes = {};
 
-      $rootScope.subNavItems = ['427 Genes', '3000 Variants', '400 Tumor Types'];
+      $rootScope.view.subNavItems = [{
+        content: '427 Genes',
+        link: '#/genes'
+      }, {content: '3800 Variants'}, {content: '333 Tumor Types'}];
 
       WordCloud(document.getElementById('wordCloud'), {
         list: content.map(function(d) {
+          d.hLevel = d.hLevel.replace('LEVEL_', '');
+          d.hLevel = d.hLevel.replace('NULL', '');
           genes[d.gene] = d;
           return [d.gene, levelSize.hasOwnProperty(d.hLevel) ? (levelSize[d.hLevel] + Math.sqrt(d.altNum)) : levelSize['Other'], d.altNum, d.hLevel];
         }),
@@ -71,11 +65,11 @@ angular.module('oncokbStaticApp')
           hoverLabelElement.removeAttribute('hidden');
           $scope.content.hoveredGene = item[0];
           $scope.content.hoveredCount = item[2];
-          $scope.content.hoveredHighestLevel = item[3].replace('LEVEL_','');
+          $scope.content.hoveredHighestLevel = item[3];
           $scope.$apply();
         },
-        click: function() {
-          $location.path('/gene');
+        click: function(item) {
+          $location.path('/gene/' + item[0]);
         }
       });
     });

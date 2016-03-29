@@ -170,6 +170,17 @@ body {
     padding-left: 0;
     padding-right: 0;
   }
+  .subNav-sxn-1 a{
+    color: #fff;
+  }
+  .subNav-sxn-1 a:hover{
+    color: #fff;
+    cursor: pointer;
+  }
+  .subNav-sxn-1 a:active{
+    color: #fff;
+    cursor: default;
+  }
 }
 
 .menu-toggle {
@@ -294,6 +305,25 @@ body {
   }
 }
 
+.genes {
+  .level-title {
+    margin-left: 10px;
+  }
+  .level-item {
+    margin: 3px 10px;
+    white-space: nowrap;
+    float: left;
+    transition: border-color .5s ease-in-out;
+    -webkit-transition: border-color .5s ease-in-out;
+    -moz-transition: border-color .5s ease-in-out;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+  }
+  .level-item:hover {
+    border-bottom-color: #1c75cd;
+  }
+}
+
 table.gene-table {
   td:first-child, th {
     white-space: nowrap;
@@ -342,6 +372,7 @@ table.gene-table {
 /*Overide bootstrap styles*/
 .navbar-collapse {
   border: 0;
+  padding-left: 0;
 }
 
 .navbar-collapse.collapsing, .navbar-collapse.collapse.in {

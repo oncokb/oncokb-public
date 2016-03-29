@@ -73,8 +73,11 @@
       <div class="container">
         <div class="subNav">
           <!-- In order to use last child css style, add div wrapper -->
-          <div ng-show="subNavItems.length > 0" class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12 subNav-sxn-1">
-            <span ng-repeat="item in subNavItems">{{item}}</span>
+          <div ng-show="view.subNavItems.length > 0" class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12 subNav-sxn-1">
+            <span ng-repeat="item in view.subNavItems">
+              <span ng-if="!item.link">{{item.content}}</span>
+              <a ng-if="item.link" ng-href="{{item.link}}" target="_self">{{item.content}}</a>
+            </span>
           </div>
           <div class="pull-right col-md-3 col-lg-3 col-sm-12 col-xs-12 subNav-sxn-2"><input type="text"
                                                                                placeholder="Search variant"/></div>
@@ -164,6 +167,7 @@
 <script src="bower_components/angular-datatables/dist/plugins/tabletools/angular-datatables.tabletools.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/buttons/angular-datatables.buttons.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/select/angular-datatables.select.js"></script>
+<script src="bower_components/underscore/underscore.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -174,6 +178,7 @@
 <script src="scripts/controllers/gene.js"></script>
 <script src="scripts/controllers/home.js"></script>
 <script src="scripts/controllers/quest.js"></script>
+<script src="scripts/controllers/genes.js"></script>
 <!-- endbuild -->
 </body>
 </html>
