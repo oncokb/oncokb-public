@@ -19,5 +19,15 @@ angular.module('oncokbStaticApp')
       DTColumnBuilder.newColumn('pmids').withTitle('Evidence'),
       DTColumnBuilder.newColumn('hLevel').withTitle('Highest Level')
     ];
-    $rootScope.view.subNavItems = [{content: 'BRAF'}, {content: '170 Variants'}, {content: '50 Tumor Types'}, {content: 'Level One'}];
+    $scope.view = {};
+    $scope.view.levelColors = $rootScope.data.levelColors;
+    $rootScope.view.subNavItems = [{content: 'BRAF'}, {content: '170 Variants'}, {content: '50 Tumor Types'}];
+
+    $scope.setColor = function(level) {
+      if ($scope.view.levelColors.hasOwnProperty(level)) {
+        return {color: $scope.view.levelColors[level]};
+      } else {
+        return {color: $scope.view.levelColors.other};
+      }
+    };
   });

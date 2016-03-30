@@ -1,12 +1,29 @@
 <div class="genes">
-  <div ng-repeat="item in view.levels" class="row">
-    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-      <h5 class="level-title" ng-style="setColor(item.level)">{{item.level.toLowerCase()==='other'?'Other':'Level '+item.level}}:</h5>
-      <hr/>
-      <div>
-        <span class="level-item" ng-repeat="gene in item.data"
-              ng-click="clickGene(gene)">{{gene}}</span>
-      </div>
-    </div>
-  </div>
+  <table datatable="ng" dt-options="dt.dtOptions" dt-columns="dt.dtColumnDefs"
+         class="table row-border hover gened-table">
+    <thead>
+    <tr>
+      <th>Gene</th>
+      <th>The Highest Level</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="gene in view.genes">
+      <td ng-click="clickGene(gene.gene)">{{gene.gene}}</td>
+      <td>{{gene.level}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!--<div ng-repeat="item in view.levels" class="row">-->
+    <!--<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">-->
+      <!--<h5 class="level-title" ng-style="setColor(item.level)">{{item.level.toLowerCase()==='other'?'Other':'Level-->
+        <!--'+item.level}}:</h5>-->
+      <!--<hr/>-->
+      <!--<div>-->
+        <!--<span class="level-item" ng-repeat="gene in item.data"-->
+              <!--ng-click="clickGene(gene)">{{gene}}</span>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
 </div>

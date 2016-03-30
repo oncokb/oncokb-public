@@ -8,7 +8,7 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-  .controller('GenesCtrl', function($scope, $rootScope, $location, _) {
+  .controller('GenesCtrl', function($scope, $rootScope, $location, _, DTOptionsBuilder, DTColumnDefBuilder) {
     $scope.view = {};
 
     $scope.setColor = function(level) {
@@ -22,6 +22,20 @@ angular.module('oncokbStaticApp')
     $scope.clickGene = function(gene) {
       $location.path('/gene/' + gene);
     };
+
+
+    $scope.dt = {};
+    $scope.dt.dtOptions = {
+      hasBootstrap: true,
+      paginationType: 'simple',
+      language: {
+        loadingRecords: '<img src="resources/images/loader.gif"> Loading...'
+      }
+    };
+    $scope.dt.dtColumnDefs = [
+      DTColumnDefBuilder.newColumnDef(0),
+      DTColumnDefBuilder.newColumnDef(1)
+    ];
 
     d3.csv('resources/files/all_genes_with_all_variants.csv', function(content) {
       var priorityLevels = ['1', '2A', '2B', '3A', '3B', '4', 'R1', 'R2', 'R3'];
@@ -53,7 +67,11 @@ angular.module('oncokbStaticApp')
       }
 
       d3.csv('resources/files/all_genes_428.csv', function(_content) {
-        var _genes = _.map(_content, function(m){if(m.gene)return m.gene});
+        var _genes = _.map(_content, function(m) {
+          if (m.gene) {
+            return m.gene
+          }
+        });
         var _diff = _.difference(_genes, genesWithLevels)
         otherGenes.data = _.union(otherGenes.data, _diff);
 
@@ -63,6 +81,16 @@ angular.module('oncokbStaticApp')
         }
         $scope.view.levels = levelsContent;
         $scope.view.levelColors = $rootScope.data.levelColors;
+
+        $scope.view.genes = _.map(content, function(item, index) {
+          var _hLevel = _.isString(item.hLevel) ? (item.hLevel.replace('LEVEL_', '')).replace('NULL', '') : undefined;
+
+          return {gene: item.gene, level: _hLevel};
+        });
+
+        $scope.view.genes = _.union($scope.view.genes, _.map(_diff, function(gene) {
+          return {gene: gene, level: ''};
+        }));
         $scope.$apply();
       });
     });
