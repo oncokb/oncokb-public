@@ -1,0 +1,236 @@
+/*------------------------------------*\
+    VARIABLES
+\*------------------------------------*/
+
+$font-sans:  "Gotham SSm A", "Gotham SSm B", "Helvetica Neueu", Helvetica, Arial, sans-serif;
+$font-serif: Georgia, "Times New Roman", serif;
+
+// Drupal specific variables
+$screen-drupal-mobile-toolbar:610px;
+$drupal-toolbar-height: 39px;
+$drupal-toolbar-sub-menu-height: 40px;
+
+$emergencyMessageHeightNarrow: 76px;
+$emergencyMessageHeightWide: 64px;
+
+/* ----- Responsive Size & Breakpoint Variables ----- */
+
+// Bootstrap breakpoints for reference (not overrides)
+$screen-xs-min: 480px;
+$screen-sm-min: 768px;
+$screen-md-min: 992px;
+$screen-lg-min: 1200px;
+
+$mobile: $screen-xs-min;
+$tablet: $screen-sm-min;
+$desktop: $screen-md-min;
+$widescreen: $screen-lg-min;
+$extra-widescreen: $screen-lg-min + 200px;
+
+$pad: 15px;
+$content-gutter: $pad;
+$content-max-width: 1200px;
+$content-column-gutter: 40px;
+
+$vertical-spacing: $pad;
+$vertical-spacing-lg: $vertical-spacing * 2;
+$vertical-spacing-sm: $vertical-spacing / 2;
+$vertical-spacing-xs: $vertical-spacing / 5;
+
+$vertical-spacing-main-menu: $vertical-spacing;
+
+$border-radius: 5px;
+
+// the point at which multiple, interdependent navigation changes happen in tandem
+$navSwitch: 950px;
+$footerSwitch: $screen-md-min;
+
+/* The following two variables are used to adjust the height of other elements
+  so as to not run underneath the fixed navigation (ie. the old .side-navigation) */
+
+$navHeightSm: 50px; // height of fixed navbar at small sizes
+$navHeightLg: 70px; // height of fixed navbar at large sizes
+$headerHeightLg: 122px;
+$headerHeightSm: 50px;
+
+
+$expand-point-higlights: 600px;
+$expand-point-title-box: 600px;
+$expand-point-tite-main-image: 600px;
+$expand-point-main-text: 600px;
+$expand-point-main-text-2: 992px;
+$expand-point-big-quote: 768px;
+$expand-point-photo-grid-1: 500px;
+$expand-point-photo-grid-2: 768px;
+$expand-point-main-menu-icons: 1100px;
+$expand-point-filter-layout-switch: 800px;
+$expand-point-btn-sm-layout-switch: 798px;
+$expand-point-btn-md-layout-switch: $screen-md-min;
+$expand-point-image-right-caption: 992px;
+$expand-point-sub-nav-teaser: 630px;
+$expand-point-timelinejs: 800px;
+
+/* ----- Color Variables ----- */
+
+// brand colors
+$darker-blue: #064785;
+$dark-blue: #1c75cd;
+$medium-blue: #03aedf;
+$light-blue: #9bdcff;
+
+$brand-color: $dark-blue;
+$brand-over: $darker-blue;
+$brand-accent: #38657f;
+$brand-background: #b0e5fc;
+$no-segment-background: #d8f3fe;
+
+$danger-dark: #bd1426;
+$warning-yellow: #e09600;
+
+// neutrals & text colors
+$pure-white: #fff;
+$pure-black: #000;
+$grey: #dfdfd8;
+$grey-background: #e9e9e4;
+$grey-warm: #b3b3a6;
+$main-text: #222;
+$grey-link: #747474;
+$dark-grey-link: #4b4b49;
+$dark-grey-background: #737373;
+$dark-grey-copy: #444445;
+$caption-color: #777;
+$very-light: #f3f4ef;
+$transparent-white: rgba(255, 255, 255, 0.9);
+
+// social colors
+$color-facebook: #37619e;
+$color-twitter: mix($pure-black, #2dabdf, 15%);
+$color-linkedin: #196e9b;
+
+// Other colors
+$required: #d9534f;
+
+/* ----- Site Sections ----- */
+
+// section-specific colors
+$pc: #017aac;
+$pc-over: #014867;
+$pc-accent: #a82054;
+$pc-background: #e9f9ff;
+$pc-edge: #afe5f6;
+
+$pd: $pc;
+$pd-over: $pc-over;
+$pd-accent: $pc-accent;
+$pd-background: $pc-background;
+$pd-edge: $pc-edge;
+
+$rs: #c84e23;
+$rs-over: #7a1f00;
+$rs-accent: #00837b;
+$rs-background: #ffedd2;
+$rs-edge: #f8bd61;
+
+$hp: #00837b;
+$hp-over: #00514b;
+$hp-accent: #fdc94b;
+$hp-accent-alt: #996f0a;
+$hp-background: #edfdfc;
+$hp-edge: #dbfbfa;
+
+$gsk: #1c75cd;
+$gsk-over: #064785;
+$gsk-btn-over: #7a1f00;
+$gsk-accent: #c84e23;
+$gsk-background: #f0f0ec;
+$gsk-edge: #1c75cd;
+$gsk-segmentPageAction: #03aedf;
+$gsk-navigation-edge: #5f5e5e;
+
+$utility-nav-search-placeholder-color: $caption-color;
+$utility-nav-search-background: #2C8AE6;
+
+// More Science, Less Fear campaign
+$mslf-teal: #009287;
+$mslf-orange: #eb4825;
+$mslf-magenta: $pc-accent;
+$mslf-blue: $dark-blue;
+
+$quote-neutral: #656565;
+
+
+/* Segment Map
+  see example use in _content-tile.scss, _landing-page-hero.scss... */
+
+$segments: (
+  (segmentSlug: pc,
+  segmentColor: $pc,
+  segmentBackground: $pc-background,
+  segmentEdge: $pc-edge,
+  segmentOver: $pc-over,
+  segmentAccent: $pc-accent,
+  segmentColorAlt: $pc,
+  segmentColorAltOver: $pc-over,
+  segmentTitle: "For Adult Patients"),
+
+  (segmentSlug: pd,
+  segmentColor: $pd,
+  segmentBackground: $pd-background,
+  segmentEdge: $pd-edge,
+  segmentOver: $pd-over,
+  segmentAccent: $pd-accent,
+  segmentColorAlt: $pd-accent,
+  segmentColorAltOver: darken($pd-accent,20%),
+  segmentTitle: "For Pediatric Patients"),
+
+  (segmentSlug: rs,
+  segmentColor: $rs,
+  segmentBackground: $rs-background,
+  segmentEdge: $rs-edge,
+  segmentOver: $rs-over,
+  segmentAccent: $rs-accent,
+  segmentColorAlt: $rs,
+  segmentColorAltOver: $rs-over,
+  segmentTitle: "For Research Scientists"),
+
+  (segmentSlug: hp,
+  segmentColor: $hp,
+  segmentBackground: $hp-background,
+  segmentEdge: $hp-edge,
+  segmentOver: $hp-over,
+  segmentAccent: $hp-accent,
+  segmentAccentAlt: $hp-accent-alt,
+  segmentColorAlt: $hp,
+  segmentColorAltOver: $hp-over,
+  segmentTitle: "For Healthcare Professionals"),
+
+  (segmentSlug: gsk,
+  segmentColor: $gsk,
+  segmentBackground: $gsk-background,
+  segmentEdge: $gsk-edge,
+  segmentOver: $gsk-over,
+  segmentAccent: $gsk-accent,
+  segmentTitle: "Gerstner Sloan Kettering",
+  segmentPageAction: $gsk-segmentPageAction,
+  segmentButtonHover: $gsk-btn-over,
+  segmentColorAlt: $gsk,
+  segmentColorAltOver: $gsk-over,
+  segmentNavigationEdge: $gsk-navigation-edge)
+);
+
+
+/* ----- Bootstrap Variable Overrides ----- */
+
+$brand-primary  : $brand-color;
+$btn-primary-bg : $brand-primary;
+$text-color   : $main-text;
+$link-color   : $brand-primary;
+$btn-info   : $medium-blue;
+$btn-info-bg  : $btn-info;
+$input-color-placeholder: $main-text;
+
+$bootstrap-sass-asset-helper: false;
+// [converter] Asset helpers such as Sprockets and Node.js Mincer do not resolve relative paths
+$icon-font-path: "../../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+
+$container-large-desktop: 1200px;

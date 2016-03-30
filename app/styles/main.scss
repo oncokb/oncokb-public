@@ -5,7 +5,13 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "Materialize/sass/materialize.scss";
 // endbower
 
-$orange: #c84e23;
+@import "vars";
+@import "mixins";
+@import "typography";
+@import "font";
+
+$orange: $gsk-accent;
+
 
 /* Tag Styles */
 @media only screen and (min-width: 993px) {
@@ -114,7 +120,7 @@ html {
 
 body {
   height: 100%;
-  font-family: Helvetica;
+  font-family: $font-sans;
 }
 
 //
@@ -139,8 +145,8 @@ body {
 }
 
 .subNav {
-  height: 60px;
-  line-height: 40px;
+  height: 50px;
+  line-height: 30px;
   padding: 10px 0;
 
   span {
@@ -291,7 +297,8 @@ body {
 }
 
 .mskcc-logo, .mskcc-icon {
-  height: 50px;
+  height: 60px;
+  padding: 5px 0;
 }
 
 .container.nav-container {
@@ -322,6 +329,9 @@ body {
   .level-item:hover {
     border-bottom-color: #1c75cd;
   }
+  .table tbody td:first-child:hover {
+    cursor: pointer;
+  }
 }
 
 table.gene-table {
@@ -344,6 +354,9 @@ table.gene-table {
   color: #fff;
   background-color: #737373;
   text-align: center;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 300;
   a {
     color: white;
     border-right: 0.5px solid #fff;
@@ -367,6 +380,11 @@ table.gene-table {
 /* ID styles*/
 #genesDownload a {
   color: white;
+}
+
+/* Overwrite datatable style*/
+.pagination li  {
+  padding: 0;
 }
 
 /*Overide bootstrap styles*/
@@ -399,6 +417,8 @@ table.gene-table {
 
 .navbar-brand {
   font-weight: bold;
+  height: 60px;
+  line-height: 30px;
 }
 
 .navbar-inverse {
@@ -418,6 +438,7 @@ table.gene-table {
 
 .navbar-inverse .navbar-nav > li > a {
   color: #fff;
+  line-height: 30px;
 }
 
 .navbar-inverse .navbar-brand {
@@ -447,7 +468,7 @@ table.gene-table {
 }
 
 .navbar-toggle {
-  width: 50px;
+  width: 60px;
 }
 
 .navbar-toggle .icon-bar {
