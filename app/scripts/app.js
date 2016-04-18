@@ -61,8 +61,10 @@ angular
   });
 
 angular.module('oncokbStaticApp').run(
-  function($timeout, $rootScope) {
-    $rootScope.view = {
+  function($timeout, $rootScope, _) {
+    $rootScope.meta = {};
+    $rootScope.view = {};
+    $rootScope.meta.view = {
       subNavItems: [{
         content: '427 Genes',
         link: '#/genes'
@@ -82,12 +84,12 @@ angular.module('oncokbStaticApp').run(
         'Other': 'grey'
       }
     };
-    $rootScope.$on('$routeChangeEnd', function() {
-      if (!$rootScope.view.subNavItems || $rootScope.view.subNavItems.length === 1) {
-        $rootScope.view.subNavItems = [{
-          content: '427 Genes',
-          link: '#/genes'
-        }, {content: '3800 Variants'}, {content: '333 Tumor Types'}];
+    $rootScope.$on('$routeChangeStart', function() {
+      $rootScope.view.subNavItems = [];
+    });
+    $rootScope.$on('$routeChangeSuccess', function() {
+      if (!$rootScope.view.subNavItems || $rootScope.view.subNavItems.length === 0) {
+        $.extend(true, $rootScope.view.subNavItems, $rootScope.meta.view.subNavItems);
       }
     });
   });
