@@ -4,13 +4,15 @@
     <thead>
     <tr>
       <th>Gene</th>
-      <th>The Highest Level</th>
+      <th>Highest Level of Evidence</th>
+      <th># of Variants</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="gene in view.genes">
       <td ng-click="clickGene(gene.gene)">{{gene.gene}}</td>
       <td>{{gene.level}}</td>
+      <td>{{gene.altNum}}</td>
     </tr>
     </tbody>
   </table>

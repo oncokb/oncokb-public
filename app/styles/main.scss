@@ -332,14 +332,31 @@ body {
   .table tbody td:first-child:hover {
     cursor: pointer;
   }
+  input[type=search] {
+    border-color: #1c75cd;
+    font-size: 14px;
+  }
+  input[type=search]:focus {
+    border-bottom-color: $orange;
+    box-shadow: 0 1px 0 0 $orange;
+  }
+}
+
+div.dataTables_length label, div.dataTables_filter label {
+  font-size: 14px;
 }
 
 .gene-table {
   td:first-child, th {
     white-space: nowrap;
   }
-  label {
+  input[type=search] {
+    border-color: #1c75cd;
     font-size: 14px;
+  }
+  input[type=search]:focus {
+    border-bottom-color: $orange;
+    box-shadow: 0 1px 0 0 $orange;
   }
 }
 
@@ -625,14 +642,18 @@ a:hover, a:focus {
   margin: auto;
 }
 
+.word-cloud-hint {
+  margin-top: 20px;
+  font-size: 12px;
+}
+
 #levelDownload {
   margin-bottom: 10px;
 }
 
 #canvas-container {
-  @media (min-width: 993px) {
-    margin-left: 70px;
-  }
+  margin: 0 auto;
+  width: 1000px;
   position: relative;
 }
 

@@ -34,7 +34,8 @@ angular.module('oncokbStaticApp')
     };
     $scope.dt.dtColumnDefs = [
       DTColumnDefBuilder.newColumnDef(0),
-      DTColumnDefBuilder.newColumnDef(1)
+      DTColumnDefBuilder.newColumnDef(1),
+      DTColumnDefBuilder.newColumnDef(2)
     ];
 
     d3.csv('resources/files/all_genes_with_all_variants.csv', function(content) {
@@ -85,11 +86,11 @@ angular.module('oncokbStaticApp')
         $scope.view.genes = _.map(content, function(item, index) {
           var _hLevel = _.isString(item.hLevel) ? (item.hLevel.replace('LEVEL_', '')).replace('NULL', '') : undefined;
 
-          return {gene: item.gene, level: _hLevel};
+          return {gene: item.gene, level: _hLevel, altNum: item.altNum};
         });
 
         $scope.view.genes = _.union($scope.view.genes, _.map(_diff, function(gene) {
-          return {gene: gene, level: ''};
+          return {gene: gene, level: '', altNum: 0};
         }));
         $scope.$apply();
       });
