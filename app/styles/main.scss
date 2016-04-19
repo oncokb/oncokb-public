@@ -2,7 +2,6 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 @import "font-awesome/scss/font-awesome.scss";
-@import "Materialize/sass/materialize.scss";
 // endbower
 
 @import "vars";
@@ -167,6 +166,7 @@ body {
     margin: 0;
     border-color: #1c75cd;
     color: #fff;
+    font-size: 14px;
   }
   input[type=text]:focus {
     border-bottom-color: $orange;
@@ -334,9 +334,12 @@ body {
   }
 }
 
-table.gene-table {
+.gene-table {
   td:first-child, th {
     white-space: nowrap;
+  }
+  label {
+    font-size: 14px;
   }
 }
 
@@ -615,6 +618,11 @@ a:hover, a:focus {
 
 .gene-title {
   font-size: 40px;
+}
+
+.team {
+  width: 900px;
+  margin: auto;
 }
 
 #levelDownload {
