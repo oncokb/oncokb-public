@@ -1,1034 +1,1538 @@
 [
   {
-    "variant": "A246P",
+    "alteration": "A246P",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "A33T",
+    "alteration": "A33T",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "A489_T491del",
+    "alteration": "A489_T491del",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "A727V",
+    "alteration": "A727V",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "A762V",
+    "alteration": "A762V",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "Activating Mutations",
+    "alteration": "Activating Mutations",
     "oncogenic": "",
-    "hLevel": "R1",
+    "tumorType": "colorectal cancer",
+    "level": "R1",
+    "drugs": "Cetuximab+Panitumumab",
     "pmids": "19001320, 19884556, 20619739"
   },
   {
-    "variant": "AGK-BRAF fusion",
+    "alteration": "AGK-BRAF fusion",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "AKAP9-BRAF Fusion",
-    "oncogenic": "Oncogenic",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "BRAF amplification",
-    "oncogenic": "",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "BRAF V600E + MEK1 C121S",
-    "oncogenic": "",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "BRAF V600E + MEK1 Q56P",
-    "oncogenic": "",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "BRAF-AGK Fusion",
-    "oncogenic": "Oncogenic",
-    "hLevel": "R1",
+    "tumorType": "melanoma",
+    "level": "R1",
+    "drugs": "Vemurafenib",
     "pmids": 23890088
   },
   {
-    "variant": "BRAF-CCDC6 fusion",
-    "oncogenic": "Unknown",
-    "hLevel": "",
+    "alteration": "AKAP9-BRAF Fusion",
+    "oncogenic": "Oncogenic",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "BRAF-CDK5RAP2 fusion",
-    "oncogenic": "Unknown",
-    "hLevel": "",
+    "alteration": "BRAF amplification",
+    "oncogenic": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "BRAF-CUL1 Fusion",
+    "alteration": "BRAF V600E + MEK1 C121S",
+    "oncogenic": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF V600E + MEK1 Q56P",
+    "oncogenic": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF-AGK Fusion",
+    "oncogenic": "Oncogenic",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF-CCDC6 fusion",
     "oncogenic": "Unknown",
-    "hLevel": "3B",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF-CDK5RAP2 fusion",
+    "oncogenic": "Unknown",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF-CUL1 Fusion",
+    "oncogenic": "Unknown",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF-KIAA1549 Fusion",
+    "oncogenic": "Oncogenic",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF-LUC7L2 fusion",
+    "oncogenic": "Unknown",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF-NCRNA00244 fusion",
+    "oncogenic": "Unknown",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF-PJA2 fusion",
+    "oncogenic": "Unknown",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF-SCRIB fusion",
+    "oncogenic": "Unknown",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF-SND1 Fusion",
+    "oncogenic": "Oncogenic",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "BRAF-VIPR2 fusion",
+    "oncogenic": "Unknown",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "CUL1-BRAF Fusion",
+    "oncogenic": "",
+    "tumorType": "ovarian cancer",
+    "level": "3A",
+    "drugs": "Paclitaxel+Selumetinib",
     "pmids": 26324360
   },
   {
-    "variant": "BRAF-KIAA1549 Fusion",
+    "alteration": "D594A",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "BRAF-LUC7L2 fusion",
-    "oncogenic": "Unknown",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "BRAF-NCRNA00244 fusion",
-    "oncogenic": "Unknown",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "BRAF-PJA2 fusion",
-    "oncogenic": "Unknown",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "BRAF-SCRIB fusion",
-    "oncogenic": "Unknown",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "BRAF-SND1 Fusion",
+    "alteration": "D594E",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "BRAF-VIPR2 fusion",
+    "alteration": "D594G",
+    "oncogenic": "Oncogenic",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "D594N",
+    "oncogenic": "Oncogenic",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "D594V",
+    "oncogenic": "Oncogenic",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "D594Y",
+    "oncogenic": "Oncogenic",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "E501G",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "CUL1-BRAF Fusion",
-    "oncogenic": "",
-    "hLevel": "3A",
-    "pmids": 26324360
-  },
-  {
-    "variant": "D594A",
-    "oncogenic": "Oncogenic",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "D594E",
-    "oncogenic": "Oncogenic",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "D594G",
-    "oncogenic": "Oncogenic",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "D594N",
-    "oncogenic": "Oncogenic",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "D594V",
-    "oncogenic": "Oncogenic",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "D594Y",
-    "oncogenic": "Oncogenic",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "E501G",
+    "alteration": "E501K",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "E501K",
+    "alteration": "E549Q",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "E549Q",
-    "oncogenic": "Unknown",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "E586K",
+    "alteration": "E586K",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "E715K",
+    "alteration": "E715K",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "F109I",
+    "alteration": "F109I",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "F247L",
+    "alteration": "F247L",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "F294L",
+    "alteration": "F294L",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "F468C",
+    "alteration": "F468C",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "F595I",
+    "alteration": "F595I",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "F595L",
+    "alteration": "F595L",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "FAM131B-BRAF Fusion",
+    "alteration": "FAM131B-BRAF Fusion",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G12A",
+    "alteration": "G12A",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G12C",
+    "alteration": "G12C",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G12D",
+    "alteration": "G12D",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G12R",
+    "alteration": "G12R",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G12S",
+    "alteration": "G12S",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G12V",
+    "alteration": "G12V",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G13D",
+    "alteration": "G13D",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G13R",
+    "alteration": "G13R",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G13V",
+    "alteration": "G13V",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G189C",
+    "alteration": "G189C",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G464E",
+    "alteration": "G464E",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G464V",
+    "alteration": "G464V",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G466A",
+    "alteration": "G466A",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G466E",
+    "alteration": "G466E",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G466V",
+    "alteration": "G466V",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G469A",
+    "alteration": "G469A",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G469del",
+    "alteration": "G469del",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G469E",
+    "alteration": "G469E",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G469L",
+    "alteration": "G469L",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G469R",
+    "alteration": "G469R",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G469V",
+    "alteration": "G469V",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G596C",
+    "alteration": "G596C",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G596R",
+    "alteration": "G596R",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G596V",
+    "alteration": "G596V",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G606W",
+    "alteration": "G606W",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G69S",
+    "alteration": "G69S",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "G8V",
+    "alteration": "G8V",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "H539Y",
+    "alteration": "H539Y",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "H574Y",
+    "alteration": "H574Y",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "H725Y",
+    "alteration": "H725Y",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "I463S",
+    "alteration": "I463S",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "I572F",
+    "alteration": "I572F",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "insT",
+    "alteration": "insT",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "insTT",
+    "alteration": "insTT",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "K205N",
+    "alteration": "K205N",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "K472C",
+    "alteration": "K472C",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "K483M",
+    "alteration": "K483M",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "K499E",
+    "alteration": "K499E",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "K601E",
+    "alteration": "K601E",
     "oncogenic": "Oncogenic",
-    "hLevel": "3A",
+    "tumorType": "melanoma",
+    "level": "3A",
+    "drugs": "Trametinib",
     "pmids": "22663011, 24933606"
   },
   {
-    "variant": "K601N",
+    "alteration": "K601N",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "K601T",
+    "alteration": "K601T",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "KIAA1549-BRAF Fusion",
+    "alteration": "KIAA1549-BRAF Fusion",
     "oncogenic": "Oncogenic",
-    "hLevel": "3A",
+    "tumorType": "Spindle Cell Neoplasms",
+    "level": "3A",
+    "drugs": "Sorafenib+Temsirolimus",
     "pmids": 15466206
   },
   {
-    "variant": "KS601NT",
+    "alteration": "KS601NT",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "KSRW601del",
+    "alteration": "KSRW601del",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L312P",
+    "alteration": "L312P",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L331F",
+    "alteration": "L331F",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L382F",
+    "alteration": "L382F",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L485F",
+    "alteration": "L485F",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L485W",
+    "alteration": "L485W",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L505H",
+    "alteration": "L505H",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L525P",
+    "alteration": "L525P",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L553R",
+    "alteration": "L553R",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L577I",
+    "alteration": "L577I",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L579Q",
+    "alteration": "L579Q",
     "oncogenic": "",
-    "hLevel": "3A",
-    "pmids": "21310613, 22663011"
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
   },
   {
-    "variant": "L579R",
+    "alteration": "L579R",
     "oncogenic": "",
-    "hLevel": "3A",
-    "pmids": "21310613, 22663011"
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
   },
   {
-    "variant": "L579S",
+    "alteration": "L579S",
     "oncogenic": "",
-    "hLevel": "3A",
-    "pmids": "21310613, 22663011"
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
   },
   {
-    "variant": "L579V",
+    "alteration": "L579V",
     "oncogenic": "",
-    "hLevel": "3A",
-    "pmids": "21310613, 22663011"
-  },
-  {
-    "variant": "L584F",
-    "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L597Q",
+    "alteration": "L584F",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L597R",
+    "alteration": "L597Q",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L597S",
+    "alteration": "L597R",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "L597V",
+    "alteration": "L597S",
     "oncogenic": "Oncogenic",
-    "hLevel": "3A",
-    "pmids": 22798288
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
   },
   {
-    "variant": "L674Q",
+    "alteration": "L597V",
+    "oncogenic": "Oncogenic",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
+    "pmids": ""
+  },
+  {
+    "alteration": "L674Q",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "M620I",
+    "alteration": "M620I",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "MKRN1-BRAF",
+    "alteration": "MKRN1-BRAF",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "MKRN1-BRAF Fusion",
+    "alteration": "MKRN1-BRAF Fusion",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "N486_P490del",
+    "alteration": "N486_P490del",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "N581D",
+    "alteration": "N581D",
     "oncogenic": "Not oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "N581I",
+    "alteration": "N581I",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "N581S",
+    "alteration": "N581S",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "N581Y",
+    "alteration": "N581Y",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "NF1 inactivating mutations",
+    "alteration": "NF1 inactivating mutations",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "P124L",
+    "alteration": "P124L",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "P124S",
+    "alteration": "P124S",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "P162S",
+    "alteration": "P162S",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "P321L",
+    "alteration": "P321L",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "P343L",
+    "alteration": "P343L",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "P345L",
+    "alteration": "P345L",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "P367L",
+    "alteration": "P367L",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "P367S",
+    "alteration": "P367S",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "p61BRAF",
+    "alteration": "p61BRAF",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "P708S",
+    "alteration": "P708S",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "PAPSS1-BRAF fusion",
+    "alteration": "PAPSS1-BRAF fusion",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "Q201H",
+    "alteration": "Q201H",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "Q257H",
+    "alteration": "Q257H",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "Q257R",
+    "alteration": "Q257R",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "Q302R",
+    "alteration": "Q302R",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "Q61K",
+    "alteration": "Q61K",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "Q61L",
+    "alteration": "Q61L",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "Q61R",
+    "alteration": "Q61R",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "R239Q",
+    "alteration": "R239Q",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "R252Q",
+    "alteration": "R252Q",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "R271H",
+    "alteration": "R271H",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "R354Q",
+    "alteration": "R354Q",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "R362L",
+    "alteration": "R362L",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "R462I",
+    "alteration": "R462I",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "R509Q",
+    "alteration": "R509Q",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "R558Q",
+    "alteration": "R558Q",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "R671Q",
+    "alteration": "R671Q",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "R682W",
+    "alteration": "R682W",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "S125F",
+    "alteration": "S125F",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "S136P",
+    "alteration": "S136P",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "S151A",
+    "alteration": "S151A",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "S363F",
+    "alteration": "S363F",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "S467A",
+    "alteration": "S467A",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "S614P",
+    "alteration": "S614P",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "SND1-BRAF Fusion",
+    "alteration": "SND1-BRAF Fusion",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "T121I",
+    "alteration": "T121I",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "T233P",
+    "alteration": "T233P",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "T310I",
+    "alteration": "T310I",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "T332I",
+    "alteration": "T332I",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "T529I",
+    "alteration": "T529I",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "T529M",
+    "alteration": "T529M",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "T529N",
+    "alteration": "T529N",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "T599dup",
+    "alteration": "T599dup",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "T599I",
+    "alteration": "T599I",
     "oncogenic": "Likely Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "TRIM24-BRAF Fusion",
+    "alteration": "TRIM24-BRAF Fusion",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "V168L",
+    "alteration": "V168L",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "V458L",
+    "alteration": "V458L",
     "oncogenic": "",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "V459L",
+    "alteration": "V459L",
     "oncogenic": "Unknown",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "V600 wildtype",
+    "alteration": "V600 wildtype",
     "oncogenic": "Unknown",
-    "hLevel": 1,
+    "tumorType": "melanoma",
+    "level": "1",
+    "drugs": "Ipilimumab+Nivolumab",
     "pmids": "25341541, 26027431"
   },
   {
-    "variant": "V600D",
-    "oncogenic": "Oncogenic",
-    "hLevel": "3A",
-    "pmids": 26287849
-  },
-  {
-    "variant": "V600E",
-    "oncogenic": "Oncogenic",
-    "hLevel": 1,
-    "pmids": "19001320, 19884556, 20619739, 20818844, 22281684, 22446022, 22448344, 22663011, 22735384, 23846731, 24508103, 24863690, 25089220, 25265492, 25265494, 25287827, 25399551, 25583765, 26287849"
-  },
-  {
-    "variant": "V600K",
-    "oncogenic": "Oncogenic",
-    "hLevel": 1,
-    "pmids": "21639808, 22663011, 23846731, 25089220, 25265492, 25265494, 25287827, 25399551, 26287849"
-  },
-  {
-    "variant": "V600M",
-    "oncogenic": "Oncogenic",
-    "hLevel": "3A",
-    "pmids": 26287849
-  },
-  {
-    "variant": "V600R",
-    "oncogenic": "Oncogenic",
-    "hLevel": "3A",
-    "pmids": 26287849
-  },
-  {
-    "variant": "V600_K601delinsE",
-    "oncogenic": "Oncogenic",
-    "hLevel": "",
-    "pmids": ""
-  },
-  {
-    "variant": "W604G",
+    "alteration": "V600 wildtype",
     "oncogenic": "Unknown",
-    "hLevel": "",
-    "pmids": ""
+    "tumorType": "melanoma",
+    "level": "1",
+    "drugs": "Nivolumab",
+    "pmids": "25341541, 26027431"
   },
   {
-    "variant": "Y472C",
+    "alteration": "V600 wildtype",
+    "oncogenic": "Unknown",
+    "tumorType": "non-small cell lung cancer",
+    "level": "1",
+    "drugs": "Nivolumab",
+    "pmids": "25341541, 26027431"
+  },
+  {
+    "alteration": "V600_K601delinsE",
     "oncogenic": "Oncogenic",
-    "hLevel": "",
+    "tumorType": "",
+    "level": "",
+    "drugs": "",
     "pmids": ""
   },
   {
-    "variant": "Y472S",
-    "oncogenic": "Unknown",
-    "hLevel": "",
-    "pmids": ""
+    "alteration": "V600D",
+    "oncogenic": "Oncogenic",
+    "tumorType": "Non Small Cell Lung Cancer",
+    "level": "2A",
+    "drugs": "Vemurafenib",
+    "pmids": 20818844
   },
   {
-    "variant": "Y633C",
-    "oncogenic": "Unknown",
-    "hLevel": "",
-    "pmids": ""
+    "alteration": "V600D",
+    "oncogenic": "Oncogenic",
+    "tumorType": "melanoma",
+    "level": "2A",
+    "drugs": "Vemurafenib",
+    "pmids": 21639808
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "thyroid cancer",
+    "level": "2B",
+    "drugs": "Trametinib+Dabrafenib",
+    "pmids": "25089220, 25399552"
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "Non Small Cell Lung Cancer",
+    "level": "2A",
+    "drugs": "Vemurafenib",
+    "pmids": 20818844
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "melanoma",
+    "level": "1",
+    "drugs": "Dabrafenib",
+    "pmids": "22735384, 25089220"
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "melanoma",
+    "level": "1",
+    "drugs": "Vemurafenib",
+    "pmids": "20818844, 24508103"
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "colorectal cancer",
+    "level": "R1",
+    "drugs": "Cetuximab+Panitumumab",
+    "pmids": "19001320, 19884556, 20619739, 22446022"
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "colorectal cancer",
+    "level": "R1",
+    "drugs": "Dabrafenib",
+    "pmids": "20818844, 22281684, 22448344, 25089220"
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "colorectal cancer",
+    "level": "R1",
+    "drugs": "Vemurafenib",
+    "pmids": "22281684, 22448344"
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "hairy cell leukemia",
+    "level": "2B",
+    "drugs": "Dabrafenib",
+    "pmids": "24863690, 25583765"
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "hairy cell leukemia",
+    "level": "2B",
+    "drugs": "Vemurafenib",
+    "pmids": 24508103
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "hairy cell leukemia",
+    "level": "2B",
+    "drugs": "Trametinib+Dabrafenib",
+    "pmids": "25089220, 25399551"
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "Non Small Cell Lung Cancer",
+    "level": "2A",
+    "drugs": "Dabrafenib",
+    "pmids": 25089220
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "Non Small Cell Lung Cancer",
+    "level": "2B",
+    "drugs": "Trametinib+Dabrafenib",
+    "pmids": 25089220
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "Erdheim-Chester Disease",
+    "level": "2B",
+    "drugs": "Trametinib+Dabrafenib",
+    "pmids": 25089220
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "low grade glioma",
+    "level": "2B",
+    "drugs": "Trametinib+Dabrafenib",
+    "pmids": 25089220
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "glioblastoma",
+    "level": "2B",
+    "drugs": "Trametinib+Dabrafenib",
+    "pmids": "25089220, 25399551"
+  },
+  {
+    "alteration": "V600E",
+    "oncogenic": "Oncogenic",
+    "tumorType": "gastrointestinal stromal tumor",
+    "level": "2B",
+    "drugs": "Dabrafenib",
+    "pmids": 25089220
+  },
+  {
+    "alteration": "V600G",
+    "oncogenic": "",
+    "tumorType": "Non Small Cell Lung Cancer",
+    "level": "2A",
+    "drugs": "Vemurafenib",
+    "pmids": 20818844
+  },
+  {
+    "alteration": "V600G",
+    "oncogenic": "",
+    "tumorType": "melanoma",
+    "level": "2A",
+    "drugs": "Vemurafenib",
+    "pmids": 21639808
+  },
+  {
+    "alteration": "V600K",
+    "oncogenic": "Oncogenic",
+    "tumorType": "thyroid cancer",
+    "level": "2B",
+    "drugs": "Trametinib+Dabrafenib",
+    "pmids": "25089220, 25399551"
+  },
+  {
+    "alteration": "V600K",
+    "oncogenic": "Oncogenic",
+    "tumorType": "Non Small Cell Lung Cancer",
+    "level": "2A",
+    "drugs": "Vemurafenib",
+    "pmids": 20818844
+  },
+  {
+    "alteration": "V600K",
+    "oncogenic": "Oncogenic",
+    "tumorType": "melanoma",
+    "level": "2A",
+    "drugs": "Vemurafenib",
+    "pmids": 21639808
+  },
+  {
+    "alteration": "V600M",
+    "oncogenic": "Oncogenic",
+    "tumorType": "Non Small Cell Lung Cancer",
+    "level": "2A",
+    "drugs": "Vemurafenib",
+    "pmids": 20818844
+  },
+  {
+    "alteration": "V600M",
+    "oncogenic": "Oncogenic",
+    "tumorType": "melanoma",
+    "level": "2A",
+    "drugs": "Vemurafenib",
+    "pmids": 21639808
+  },
+  {
+    "alteration": "V600R",
+    "oncogenic": "Oncogenic",
+    "tumorType": "Non Small Cell Lung Cancer",
+    "level": "2A",
+    "drugs": "Vemurafenib",
+    "pmids": 20818844
+  },
+  {
+    "alteration": "V600R",
+    "oncogenic": "Oncogenic",
+    "tumorType": "melanoma",
+    "level": "2A",
+    "drugs": "Vemurafenib",
+    "pmids": 21639808
   }
 ]
