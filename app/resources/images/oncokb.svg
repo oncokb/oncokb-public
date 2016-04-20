@@ -1,23 +1,26 @@
 <!--<svg width="14" height="14">-->
-  <!--<g transform="translate(7, 7)">-->
-    <!--<circle r="6" fill="none" stroke-width="2" stroke="#007fff"></circle>-->
-    <!--<circle r="3" fill="none" stroke-width="2" stroke="#007fff"></circle>-->
-    <!--<circle r="1.5" fill="#007fff" stroke="none"></circle>-->
-  <!--</g>-->
+<!--<g transform="translate(7, 7)">-->
+<!--<circle r="6" fill="none" stroke-width="2" stroke="#007fff"></circle>-->
+<!--<circle r="3" fill="none" stroke-width="2" stroke="#007fff"></circle>-->
+<!--<circle r="1.5" fill="#007fff" stroke="none"></circle>-->
+<!--</g>-->
 <!--</svg>-->
 
 <!--<svg width="14" height="14">-->
-  <!--<g transform="translate(7, 7)">-->
-    <!--<circle r="6" fill="none" stroke-width="2" stroke="#f00"></circle>-->
-    <!--<circle r="3" fill="none" stroke-width="2" stroke="#f00"></circle>-->
-    <!--<circle r="1.5" fill="#f00" stroke="none"></circle>-->
-  <!--</g>-->
+<!--<g transform="translate(7, 7)">-->
+<!--<circle r="6" fill="none" stroke-width="2" stroke="#f00"></circle>-->
+<!--<circle r="3" fill="none" stroke-width="2" stroke="#f00"></circle>-->
+<!--<circle r="1.5" fill="#f00" stroke="none"></circle>-->
+<!--</g>-->
 <!--</svg>-->
 
-<svg  xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+<svg xmlns="http://www.w3.org/2000/svg" width="95" height="22" >
   <g transform="translate(11, 11)">
     <circle r="9.5" fill="none" stroke-width="3" stroke="#c84e23"></circle>
     <circle r="5.5" fill="none" stroke-width="3" stroke="#c84e23"></circle>
     <circle r="3" fill="#c84e23" stroke="none"></circle>
+  </g>
+  <g transform="translate(23, 20)">
+    <text font-size="20" font-weight="bold" font-family="Montserrat, 'Helvetica Neue'">ncoKB</text>
   </g>
 </svg>
