@@ -1,12 +1,55 @@
-<div id="canvas-container">
-  <canvas id="wordCloud" width="1000" height="600"></canvas>
-  <div id="canvas-hover" hidden>
-    <b id="canvas-hover-label">{{content.hoveredGene}} has {{content.hoveredCount}} variants annotated.
-      <br/><span
-        ng-show="content.hoveredHighestLevel">Highest level of evidence: Level {{content.hoveredHighestLevel}}</span></b>
+<setction>
+  <div class="container">
+    <div class="main-oncokb-header">
+      <div class="row">
+        <div class="col-lg-3 col-md-3"></div>
+        <div class="col-lg-6 col-md-6">
+          <div class="logo-wrapper">
+            <img src="resources/images/oncokb-lg.png"/>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3"></div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 col-md-3"></div>
+        <div class="col-lg-6 col-md-6">
+          <p> Precision Oncology Knowledge Base</p>
+        </div>
+        <div class="col-lg-3 col-md-3"></div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2 col-md-2"></div>
+        <div class="col-lg-8 col-md-6">
+          <p> 418 genes, 4670 variants, 60 tumor types, 1000 drugs </p>
+        </div>
+        <div class="col-lg-2 col-md-2"></div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2 col-md-2"></div>
+        <div class="col-lg-8 col-md-8 main-search">
+          <input type="search" placeholder="Search Gene" />
+        </div>
+        <div class="col-lg-2 col-md-2"></div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 col-md-3">
+          <main-level level="1"></main-level>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="word-cloud-hint">Genes are color-coded by <a href="#/levels">level of evidence</a>, and the size of the
-    gene label is proportional to the number of annotated variants.<br/>
-    Click on a gene symbol to get more information.
+</setction>
+<setction>
+  <div id="canvas-container">
+    <canvas id="wordCloud" width="1000" height="600"></canvas>
+    <div id="canvas-hover" hidden>
+      <b id="canvas-hover-label">{{content.hoveredGene}} has {{content.hoveredCount}} variants annotated.
+        <br/><span
+          ng-show="content.hoveredHighestLevel">Highest level of evidence: Level {{content.hoveredHighestLevel}}</span></b>
+    </div>
+    <div class="word-cloud-hint">Genes are color-coded by <a href="#/levels">level of evidence</a>, and the size of the
+      gene label is proportional to the number of annotated variants.<br/>
+      Click on a gene symbol to get more information.
+    </div>
   </div>
-</div>
+</setction>

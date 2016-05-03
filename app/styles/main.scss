@@ -9,24 +9,35 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "typography";
 @import "font";
 
-$orange: $gsk-accent;
-
+//$orange: $gsk-accent;
+$orange: orange;
+$width: 993px;
+$sm-width: 768px;
+$range-min-width: $width;
+$range-max-sm-width: $width - 1;
+$range-min-sm-width: $sm-width;
+$range-max-xm-width: $sm-width - 1;
 
 /* Tag Styles */
-@media only screen and (min-width: 993px) {
-  /* line 12, ../../bower_components/Materialize/sass/components/_grid.scss */
+@media only screen {
+  body {
+    padding-top: 100px;
+  }
+}
+
+@media only screen and (min-width: $range-min-width) {
   .container {
     width: 90%;
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: $range-max-sm-width) {
   .container {
     width: 100%;
   }
 }
 
-@media (max-width: 993px) {
+@media (max-width: $range-max-sm-width) {
   .wrapper {
     /* Negative indent footer by its height */
     margin: 0 auto -200px;
@@ -38,22 +49,7 @@ $orange: $gsk-accent;
   }
 }
 
-@media (max-width: 610px) {
-  body {
-    padding-top: 160px;
-  }
-}
-
-@media (max-width: 993px) and (min-width: 610px) {
-  body {
-    padding-top: 130px;
-  }
-}
-
-@media (min-width: 993px) {
-  body {
-    padding-top: 100px;
-  }
+@media (min-width: $range-min-width) {
   .wrapper {
     /* Negative indent footer by its height */
     margin: 0 auto -120px;
@@ -71,13 +67,13 @@ $orange: $gsk-accent;
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: $range-min-sm-width) {
   .menu-toggle {
     display: none;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $range-max-xm-width) {
   .parentCompany {
     display: none;
   }
@@ -87,28 +83,13 @@ $orange: $gsk-accent;
   .mskcc-logo {
     display: none;
   }
-  .mskcc-icon {
-    display: none;
-  }
   .menu-toggle {
     display: block;
   }
 }
 
-@media (min-width: 920px) {
+@media (min-width: $range-min-sm-width) {
   .mskcc-logo {
-    display: block;
-  }
-  .mskcc-icon {
-    display: none;
-  }
-}
-
-@media (max-width: 920px) and (min-width: 768px) {
-  .mskcc-logo {
-    display: none;
-  }
-  .mskcc-icon {
     display: block;
   }
 }
@@ -151,7 +132,7 @@ body {
   span {
     font-size: 22px;
     color: white;
-    border-right: 1px solid #1c75cd;
+    border-right: 1px solid $dark-blue;
     padding: 0 10px;
   }
   span:first-child {
@@ -164,7 +145,7 @@ body {
     height: 29px;
     width: 100%;
     margin: 0;
-    border-color: #1c75cd;
+    border-color: $dark-blue;
     color: #fff;
     font-size: 14px;
   }
@@ -277,12 +258,12 @@ body {
 }
 
 .menu-toggle.open span:nth-child(3) {
-  left: -50%;
+  left: 0;
   opacity: 0;
 }
 
 .menu-toggle.open span:nth-child(4) {
-  left: 100%;
+  left: 60%;
   opacity: 0;
 }
 
@@ -296,9 +277,9 @@ body {
   top: 13px;
 }
 
-.mskcc-logo, .mskcc-icon {
-  height: 60px;
-  padding: 5px 0;
+.mskcc-logo {
+  height: 50px;
+  margin: 10px;
 }
 
 .container.nav-container {
@@ -327,13 +308,13 @@ body {
     cursor: pointer;
   }
   .level-item:hover {
-    border-bottom-color: #1c75cd;
+    border-bottom-color: $dark-blue;
   }
   .table tbody td:first-child:hover {
     cursor: pointer;
   }
   input[type=search] {
-    border-color: #1c75cd;
+    border-color: $dark-blue;
     font-size: 14px;
   }
   input[type=search]:focus {
@@ -351,7 +332,7 @@ div.dataTables_length label, div.dataTables_filter label {
     white-space: nowrap;
   }
   input[type=search] {
-    border-color: #1c75cd;
+    border-color: $dark-blue;
     font-size: 14px;
   }
   input[type=search]:focus {
@@ -423,7 +404,12 @@ div.dataTables_length label, div.dataTables_filter label {
   }
   a:hover {
     background-color: $orange;
+    border-bottom: 1px solid #b3b3a6;
     color: white;
+  }
+  .active a,.active a:hover,.active a:focus {
+    border-bottom: 1px solid #b3b3a6;
+    color: #fff;
   }
 }
 
@@ -432,17 +418,16 @@ div.dataTables_length label, div.dataTables_filter label {
 }
 
 .navbar-header {
-  background-color: #1c75cd;
+  background-color: $dark-blue;
 }
 
 .navbar-brand {
-  font-weight: bold;
-  height: 60px;
-  line-height: 30px;
+  height: 70px;
+  padding: 10px;
 }
 
 .navbar-inverse {
-  background-color: #1c75cd;
+  background-color: $dark-blue;
   border: 0;
   webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -458,7 +443,7 @@ div.dataTables_length label, div.dataTables_filter label {
 
 .navbar-inverse .navbar-nav > li > a {
   color: #fff;
-  line-height: 30px;
+  line-height: 37px;
 }
 
 .navbar-inverse .navbar-brand {
@@ -473,18 +458,18 @@ div.dataTables_length label, div.dataTables_filter label {
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus {
-  color: #1c75cd;
-  background-color: #fff;
-  opacity: 1;
-  //border-bottom: 2px solid #1c75cd;
+  border-bottom: 3px solid $orange;
+  background-color: $dark-blue;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  border-bottom: 3px solid transparent;
 }
 
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-  color: #1c75cd;
-  background-color: #fff;
-  opacity: 0.8;
-  //border-bottom: 2px solid #1c75cd;
+  border-bottom: 3px solid $orange;
+  background-color: $dark-blue;
 }
 
 .navbar-toggle {
@@ -512,7 +497,7 @@ div.dataTables_length label, div.dataTables_filter label {
 }
 
 .btn-info {
-  background-color: #1c75cd;
+  background-color: $dark-blue;
   border: 0;
 }
 
@@ -525,8 +510,7 @@ div.dataTables_length label, div.dataTables_filter label {
 }
 
 .navbar-brand .logo {
-  margin-bottom: 5px;
-  margin-right: 1px;
+  height: 50px;
 }
 
 .parentCompany ul.nav.navbar-nav > li > a {
@@ -544,16 +528,16 @@ div.dataTables_length label, div.dataTables_filter label {
 
 .parentCompany.navbar {
   min-height: 30px;
-  background-color: #1c75cd;
+  background-color: $dark-blue;
 }
 
 /* Overwrite Materialize css*/
 .btn, .btn-large {
-  background-color: #1c75cd;
+  background-color: $dark-blue;
 }
 
 .btn:hover, .btn-large:hover {
-  background-color: #1c75cd;
+  background-color: $dark-blue;
 }
 
 /*Self defined styles*/
@@ -579,7 +563,7 @@ div.dataTables_length label, div.dataTables_filter label {
 }
 
 .projects > a:nth-child(1) {
-  color: #1c75cd;
+  color: $dark-blue;
   background: #fff;
   webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -646,6 +630,57 @@ a:hover, a:focus {
   margin-top: 20px;
   font-size: 12px;
   text-align: center;
+}
+
+.main-oncokb-header {
+  //width: 70%;
+  //margin: 0 auto;
+  p {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  .logo-wrapper {
+    margin: 0 auto;
+    @media screen and (max-width: $range-max-sm-width){
+      width: 320px;
+      img {
+        width: 320px;
+      }
+    }
+    @media screen and (min-width: $range-min-width){
+      width: 400px;
+      img {
+        width: 400px;
+      }
+    }
+  }
+  .main-search {
+    input[type=search] {
+      text-align: center;
+      border-radius: 10px;
+      font-size: 20px;
+    }
+    input[type=search]:focus {
+      border-bottom-color: $orange;
+      box-shadow: 0 1px 0 0 $orange;
+    }
+    ::-webkit-input-placeholder {
+      text-align: center;
+    }
+
+    :-moz-placeholder { /* Firefox 18- */
+      text-align: center;
+    }
+
+    ::-moz-placeholder {  /* Firefox 19+ */
+      text-align: center;
+    }
+
+    :-ms-input-placeholder {
+      text-align: center;
+    }
+  }
 }
 
 #levelDownload {
