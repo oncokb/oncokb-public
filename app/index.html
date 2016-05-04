@@ -8,11 +8,11 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
   <!-- build:css(.) styles/vendor.css -->
   <!-- bower:css -->
-  <link rel="stylesheet" href="bower_components/nprogress/nprogress.css" />
-  <link rel="stylesheet" href="bower_components/Materialize/bin/materialize.css" />
-  <link rel="stylesheet" href="bower_components/datatables/media/css/jquery.dataTables.css" />
-  <link rel="stylesheet" href="bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.css" />
-  <link rel="stylesheet" href="bower_components/qtip2/jquery.qtip.css" />
+  <link rel="stylesheet" href="bower_components/nprogress/nprogress.css"/>
+  <link rel="stylesheet" href="bower_components/Materialize/bin/materialize.css"/>
+  <link rel="stylesheet" href="bower_components/datatables/media/css/jquery.dataTables.css"/>
+  <link rel="stylesheet" href="bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.css"/>
+  <link rel="stylesheet" href="bower_components/qtip2/jquery.qtip.css"/>
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css(.tmp) styles/main.css -->
@@ -25,18 +25,6 @@
   your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<!--<div class="parentCompany navbar navbar-inverse navbar-fixed-top">-->
-<!--<div class="container">-->
-<!--<div class="navbar-header">-->
-<!--<span class="navbar-brand">MSKCC &middot; Knowledge</span>-->
-<!--</div>-->
-<!--<div class="projects">-->
-<!--<a>OncoKB</a>-->
-<!--<a href="http://oncotree.mskcc.org">OncoTree</a>-->
-<!--<a target="_blank" class="right" href="http://cbioportal.org">cBioPortal <i class="fa fa-external-link"></i></a>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
 <!-- Add your site or application content here -->
 <div class="wrapper">
   <div class="navbar navbar-inverse navbar-fixed-top" class="" role="navigation">
@@ -55,74 +43,75 @@
         <span class="navbar-brand"><img class="logo" src="resources/images/oncokb.png"/></span>
       </div>
       <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav">
           <li ng-class="{ active: isActive('/')}"><a href="#/">Home</a></li>
+          <li ng-class="{ active: isActive('/about')}"><a href="#/about">About OncoKB</a></li>
+          <li ng-class="{ active: isActive('/team')}"><a href="#/team">Team</a></li>
           <li ng-class="{ active: isActive('/levels')}"><a href="#/levels">Levels of Evidence</a></li>
-          <li ng-class="{ active: isActive('/team')}"><a href="#/team">About</a></li>
-          <li ng-class="{ active: isActive('/api')}"><a href="#/api">API</a></li>
-          <div class="pull-right" ng-class="{hidden: toggled}">
+          <!--<li ng-class="{ active: isActive('/api')}"><a href="#/api">API</a></li>-->
+        </ul>
+        <div class="pull-right" ng-class="{hidden: toggled}">
           <span><a href="http://mskcc.org"><img class="mskcc-logo"
                                                 src="resources/images/MSKLogo_fff.png"/></a></span>
-          </div>
-        </ul>
-        <!--<a href="http://www.mskcc.org/"><img id="mskcc_logo" class="navbar-right" src="images/mskcc_fixed.png"-->
-        <!--style="height: 50px"/></a>-->
-      </div>
-    </div>
-    <!--<div class="subNavWrapper">-->
-    <!--<div class="container">-->
-    <!--<div class="subNav">-->
-    <!--&lt;!&ndash; In order to use last child css style, add div wrapper &ndash;&gt;-->
-    <!--<div ng-show="view.subNavItems.length > 0" class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12 subNav-sxn-1">-->
-    <!--<span ng-repeat="item in view.subNavItems">-->
-    <!--<span ng-if="!item.link">{{item.content}}</span>-->
-    <!--<a ng-if="item.link" ng-href="{{item.link}}" target="_self">{{item.content}}</a>-->
-    <!--</span>-->
-    <!--</div>-->
-    <!--<div class="pull-right col-md-3 col-lg-3 col-sm-12 col-xs-12 subNav-sxn-2"><input type="text"-->
-    <!--placeholder="Search"/></div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-  </div>
-  <div class="content" ng-view=""></div>
-</div>
-<div class="footer">
-  <div class="container">
-    <div class="row footer-row-1">
-      <div class="">
-        <a href="http://mskcc.org" class="">MSK <i class="fa fa-external-link"></i></a>
-        <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology" class="">CMO <i
-          class="fa fa-external-link"></i></a>
-        <a href="http://www.questdiagnostics.com/home.html" class="">Quest Diagnostics <i
-          class="fa fa-external-link"></i></a>
-        <a href="http://cbioportal.org" class="">cBioPortal <i class="fa fa-external-link"></i></a>
-        <a href="http://oncotree.mskcc.org" class="">OncoTree <i class="fa fa-external-link"></i></a>
-      </div>
-    </div>
-    <div class="row footer-row-2">
-      <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
-        <div class="">
-          <a href="#/team" class="">About us</a>
-          <a href="mailto:team@oncokb.org" target="_top">Contact us</a>
-          <a href="mailto:richarj2@mskcc.org?Subject=MSK-IMPACT%20Publication%20Policy" target="_top">Questions?</a>
+          <span><a href="http://mskcc.org"><img class="mskcc-icon"
+                                                src="resources/images/MSKIcon_fff.png"/></a></span>
         </div>
       </div>
-      <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12 mskcc-footer-logo0-wrapper">
-        <a class="logo" href="http://mskcc.org" title="Memorial Sloan Kettering Cancer Center">
-          <span><img src="resources/images/MSKLogo_fff.png" class="mskcc-footer-logo"></span>
-        </a>
-      </div>
-      <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
-        <span>© 2016 Memorial Sloan Kettering Cancer Center</span>
+    </div>
+    <div class="subNavWrapper" ng-show="view.currentPage==='gene'">
+      <div class="container">
+        <div class="subNav">
+          <!-- In order to use last child css style, add div wrapper -->
+          <div ng-show="view.subNavItems.length > 0"
+               class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12 subNav-sxn-1">
+            <span ng-repeat="item in view.subNavItems">
+              <span ng-if="!item.link">{{item.content}}</span>
+              <a ng-if="item.link" ng-href="{{item.link}}" target="_self">{{item.content}}</a>
+            </span>
+          </div>
+
+        </div>
       </div>
     </div>
-    <!--<p><a target="_blank" href="http://cmo.mskcc.org/">CMO</a> | <a target="_blank"-->
-    <!--href="https://cbioportal.mskcc.org/">cBioPortal</a>-->
-    <!--</p>-->
+  </div>
+  <div class="content" ng-view=""></div>
+  <div class="footer">
+    <div class="container">
+      <div class="row footer-row-1">
+        <div class="">
+          <a href="http://mskcc.org" class="">MSK <i class="fa fa-external-link"></i></a>
+          <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology" class="">CMO <i
+            class="fa fa-external-link"></i></a>
+          <a href="http://www.questdiagnostics.com/home.html" class="">Quest Diagnostics <i
+            class="fa fa-external-link"></i></a>
+          <a href="http://cbioportal.org" class="">cBioPortal <i class="fa fa-external-link"></i></a>
+          <a href="http://oncotree.mskcc.org" class="">OncoTree <i class="fa fa-external-link"></i></a>
+        </div>
+      </div>
+      <div class="row footer-row-2">
+        <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+          <div class="">
+            <a href="#/team" class="">About us</a>
+            <a href="mailto:team@oncokb.org" target="_top">Contact us</a>
+            <a href="mailto:richarj2@mskcc.org?Subject=MSK-IMPACT%20Publication%20Policy" target="_top">Questions?</a>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12 mskcc-footer-logo0-wrapper">
+          <a class="logo" href="http://mskcc.org" title="Memorial Sloan Kettering Cancer Center">
+            <span><img src="resources/images/MSKLogo_fff.png" class="mskcc-footer-logo"></span>
+          </a>
+        </div>
+        <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+          <span>© 2016 Memorial Sloan Kettering Cancer Center</span>
+        </div>
+      </div>
+      <!--<p><a target="_blank" href="http://cmo.mskcc.org/">CMO</a> | <a target="_blank"-->
+      <!--href="https://cbioportal.mskcc.org/">cBioPortal</a>-->
+      <!--</p>-->
 
-    <!--<p>Questions and feedback: Contact <a href="mailto:richarj2@mskcc.org?Subject=MSK-IMPACT%20Publication%20Policy"-->
-    <!--target="_top">Julia Rudolph</a></p>-->
+      <!--<p>Questions and feedback: Contact <a href="mailto:richarj2@mskcc.org?Subject=MSK-IMPACT%20Publication%20Policy"-->
+      <!--target="_top">Julia Rudolph</a></p>-->
+    </div>
   </div>
 </div>
 
@@ -158,10 +147,13 @@
 <script src="bower_components/angular-datatables/dist/angular-datatables.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/colreorder/angular-datatables.colreorder.js"></script>
-<script src="bower_components/angular-datatables/dist/plugins/columnfilter/angular-datatables.columnfilter.js"></script>
-<script src="bower_components/angular-datatables/dist/plugins/light-columnfilter/angular-datatables.light-columnfilter.js"></script>
+<script
+  src="bower_components/angular-datatables/dist/plugins/columnfilter/angular-datatables.columnfilter.js"></script>
+<script
+  src="bower_components/angular-datatables/dist/plugins/light-columnfilter/angular-datatables.light-columnfilter.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/colvis/angular-datatables.colvis.js"></script>
-<script src="bower_components/angular-datatables/dist/plugins/fixedcolumns/angular-datatables.fixedcolumns.js"></script>
+<script
+  src="bower_components/angular-datatables/dist/plugins/fixedcolumns/angular-datatables.fixedcolumns.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/fixedheader/angular-datatables.fixedheader.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/scroller/angular-datatables.scroller.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/tabletools/angular-datatables.tabletools.js"></script>
@@ -185,6 +177,7 @@
 <script src="scripts/controllers/quest.js"></script>
 <script src="scripts/controllers/genes.js"></script>
 <script src="scripts/directives/main-level.js"></script>
+<script src="scripts/controllers/about.js"></script>
 <!-- endbuild -->
 </body>
 </html>

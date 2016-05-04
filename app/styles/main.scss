@@ -21,7 +21,7 @@ $range-max-xm-width: $sm-width - 1;
 /* Tag Styles */
 @media only screen {
   body {
-    padding-top: 100px;
+    padding-top: 70px;
   }
 }
 
@@ -29,10 +29,16 @@ $range-max-xm-width: $sm-width - 1;
   .container {
     width: 90%;
   }
+  .about, .team {
+    width: 80%;
+  }
 }
 
 @media only screen and (max-width: $range-max-sm-width) {
   .container {
+    width: 100%;
+  }
+  .about, .team {
     width: 100%;
   }
 }
@@ -80,7 +86,7 @@ $range-max-xm-width: $sm-width - 1;
   .subNav.navbar-fixed-top {
     top: 0;
   }
-  .mskcc-logo {
+  .mskcc-icon {
     display: none;
   }
   .menu-toggle {
@@ -88,10 +94,23 @@ $range-max-xm-width: $sm-width - 1;
   }
 }
 
-@media (min-width: $range-min-sm-width) {
+@media (max-width: $range-max-sm-width) and (min-width: $range-min-sm-width) {
+  .mskcc-icon {
+    display: block;
+  }
+  .mskcc-logo {
+    display: none;
+  }
+}
+
+@media (min-width: $range-min-width) {
   .mskcc-logo {
     display: block;
   }
+  .mskcc-icon {
+    display: none;
+  }
+
 }
 
 html {
@@ -127,7 +146,7 @@ body {
 .subNav {
   height: 50px;
   line-height: 30px;
-  padding: 10px 0;
+  padding: 10px;
 
   span {
     font-size: 22px;
@@ -277,7 +296,7 @@ body {
   top: 13px;
 }
 
-.mskcc-logo {
+.mskcc-icon, .mskcc-logo {
   height: 50px;
   margin: 10px;
 }
@@ -288,6 +307,7 @@ body {
 }
 
 .gene {
+  margin-top: 50px;
   .gene-more-info-icon:hover, .gene-less-info-icon:hover {
     cursor: pointer;
   }
@@ -621,9 +641,11 @@ a:hover, a:focus {
   font-size: 40px;
 }
 
-.team {
-  width: 900px;
+.about, .team {
   margin: auto;
+  h5 {
+    font-weight: 700;
+  }
 }
 
 .word-cloud-hint {

@@ -55,13 +55,18 @@ angular
         controller: 'GenesCtrl',
         controllerAs: 'genes'
       })
+      .when('/about', {
+        templateUrl: 'views/about.html',
+        controller: 'AboutCtrl',
+        controllerAs: 'about'
+      })
       .otherwise({
         redirectTo: '/'
       });
   });
 
 angular.module('oncokbStaticApp').run(
-  function($timeout, $rootScope, _) {
+  function($timeout, $rootScope, $location, _) {
     $rootScope.meta = {};
     $rootScope.view = {};
     $rootScope.meta.view = {
@@ -88,6 +93,8 @@ angular.module('oncokbStaticApp').run(
       $rootScope.view.subNavItems = [];
     });
     $rootScope.$on('$routeChangeSuccess', function() {
+      var path = $location.path().split('/') || [];
+      $rootScope.view.currentPage = path.length > 2 ? path[1] : '';
       if (!$rootScope.view.subNavItems || $rootScope.view.subNavItems.length === 0) {
         $.extend(true, $rootScope.view.subNavItems, $rootScope.meta.view.subNavItems);
       }

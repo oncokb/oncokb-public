@@ -44,9 +44,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="420" height="100">
   <!-- <rect width="100%" height="100%" fill="#1c75cd"></rect> -->
   <g transform="translate(50, 50)">
-    <circle r="43" fill="none" stroke-width="12" stroke="#1c75cd"></circle>
-    <circle r="25" fill="none" stroke-width="12" stroke="#1c75cd"></circle>
-    <circle r="12" fill="#1c75cd" stroke="none"></circle>
+    <circle r="43" fill="none" stroke-width="12" stroke="gold"></circle>
+    <circle r="25" fill="none" stroke-width="12" stroke="gold"></circle>
+    <circle r="12" fill="gold" stroke="none"></circle>
   </g>
   <g transform="translate(102, 90)">
     <text font-size="100" fill="#000" font-family="Helvetica" font-weight="bold">ncoKB</text>

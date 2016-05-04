@@ -10,7 +10,7 @@ angular.module('oncokbStaticApp')
   .directive('mainLevel', function () {
     return {
       templateUrl: 'views/mainLevel.html',
-      restrict: 'AE',
+      restrict: 'E',
       scope: {
         level: '='
       },
