@@ -1,4 +1,5 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$fa-font-path: "../bower_components/font-awesome/fonts";
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 @import "font-awesome/scss/font-awesome.scss";
@@ -48,7 +49,7 @@ $range-max-xm-width: $sm-width - 1;
     /* Negative indent footer by its height */
     margin: 0 auto -200px;
     /* Pad bottom by footer height */
-    padding: 0 0 200px;
+    padding: 20px 0 200px;
   }
   .footer {
     height: 200px;
@@ -60,7 +61,7 @@ $range-max-xm-width: $sm-width - 1;
     /* Negative indent footer by its height */
     margin: 0 auto -120px;
     /* Pad bottom by footer height */
-    padding: 0 0 120px;
+    padding: 20px 0 120px;
   }
   .footer {
     height: 120px;
@@ -363,7 +364,6 @@ div.dataTables_length label, div.dataTables_filter label {
 
 /* Content classes */
 .content {
-  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -680,12 +680,33 @@ a:hover, a:focus {
   .main-search {
     input[type=search] {
       text-align: center;
-      border-radius: 10px;
+      display: block;
+      width: 100%;
+      height: 50px;
+      padding: 6px 12px;
       font-size: 20px;
+      line-height: 1.428571429;
+      color: #555555;
+      background-color: #fff;
+      background-image: none;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
     }
     input[type=search]:focus {
-      border-bottom-color: $orange;
-      box-shadow: 0 1px 0 0 $orange;
+      border-color: $orange;
+    }
+    .btn {
+      background-color: white;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      margin-left: 0;
+      border-left: 0;
+      height: 50px;
     }
     ::-webkit-input-placeholder {
       text-align: center;
