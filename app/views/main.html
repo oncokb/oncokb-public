@@ -41,13 +41,13 @@
         <div class="col-lg-2 col-md-2"></div>
         <div class="col-lg-8 col-md-8 main-search">
           <div class="row">
-            <div class="col-lg-4 col-md-4">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
               <main-level level="1"></main-level>
             </div>
-            <div class="col-lg-4 col-md-4">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
               <main-level level="'2A'"></main-level>
             </div>
-            <div class="col-lg-4 col-md-4">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
               <main-level level="'3A'"></main-level>
             </div>
             <!--<div class="col-lg-3 col-md-3">-->
@@ -63,16 +63,19 @@
   </div>
 </setction>
 <setction>
-  <div id="canvas-container">
-    <canvas id="wordCloud" width="1000" height="600"></canvas>
-    <div id="canvas-hover" hidden>
-      <b id="canvas-hover-label">{{content.hoveredGene}} has {{content.hoveredCount}} variants annotated.
-        <br/><span
-          ng-show="content.hoveredHighestLevel">Highest level of evidence: Level {{content.hoveredHighestLevel}}</span></b>
-    </div>
-    <div class="word-cloud-hint">Genes are color-coded by <a href="#/levels">level of evidence</a>, and the size of the
-      gene label is proportional to the number of annotated variants.<br/>
-      Click on a gene symbol to get more information.
+  <div class="container">
+    <div id="canvas-container">
+      <canvas id="wordCloud"></canvas>
+      <div id="canvas-hover" hidden>
+        <b id="canvas-hover-label">{{content.hoveredGene}} has {{content.hoveredCount}} variants annotated.
+          <br/><span
+            ng-show="content.hoveredHighestLevel">Highest level of evidence: Level {{content.hoveredHighestLevel}}</span></b>
+      </div>
+      <div class="word-cloud-hint">Genes are color-coded by <a href="#/levels">level of evidence</a>, and the size of
+        the
+        gene label is proportional to the number of annotated variants.<br/>
+        Click on a gene symbol to get more information.
+      </div>
     </div>
   </div>
 </setction>

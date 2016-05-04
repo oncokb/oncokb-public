@@ -8,12 +8,26 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-  .controller('HomeCtrl', function($scope, $location, $rootScope) {
+  .controller('HomeCtrl', function($scope, $location, $rootScope, $window) {
     $scope.content = {hoveredGene: "gets", hoveredCount: ''};
-
+    $scope.wordCloudContent = {};
     d3.csv('resources/files/all_genes_with_all_variants.csv', function(content) {
-      var levelColors = $rootScope.data.levelColors;
+      $scope.wordCloudContent = content;
 
+      $rootScope.view.subNavItems = [{
+        content: '427 Genes',
+        link: '#/genes'
+      }, {content: '3800 Variants'}, {content: '333 Tumor Types'}];
+
+      generateWordCloud(content);
+    });
+
+    angular.element($window).bind('resize', function() {
+      generateWordCloud($scope.wordCloudContent);
+    });
+
+    function generateWordCloud(content) {
+      var levelColors = $rootScope.data.levelColors;
       var levelSize = {
         '1': 60,
         '2A': 50,
@@ -23,13 +37,12 @@ angular.module('oncokbStaticApp')
         '4': 20,
         'Other': 15
       };
-
       var genes = {};
+      var canvas = document.getElementById('wordCloud');
+      var canvasWidth = $('#canvas-container').width();
 
-      $rootScope.view.subNavItems = [{
-        content: '427 Genes',
-        link: '#/genes'
-      }, {content: '3800 Variants'}, {content: '333 Tumor Types'}];
+      canvas.setAttribute("width", canvasWidth);
+      canvas.setAttribute("height", 600 + 1100 - (canvasWidth > 1100 ? 1100 : canvasWidth));
 
       WordCloud(document.getElementById('wordCloud'), {
         list: content.map(function(d) {
@@ -41,7 +54,7 @@ angular.module('oncokbStaticApp')
         fontFamily: 'Calibri',
         shape: 'circle',
         rotateRatio: 0,
-        gridSize: '10',
+        gridSize: '12',
         shuffle: false,
         color: function(word) {
           return levelColors.hasOwnProperty(genes[word].hLevel) ? levelColors[genes[word].hLevel] : levelColors['Other'];
@@ -72,5 +85,5 @@ angular.module('oncokbStaticApp')
           $location.path('/gene/' + item[0]);
         }
       });
-    });
+    }
   });
