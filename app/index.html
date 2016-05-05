@@ -25,24 +25,13 @@
   your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<!--<div class="parentCompany navbar navbar-inverse navbar-fixed-top">-->
-<!--<div class="container">-->
-<!--<div class="navbar-header">-->
-<!--<span class="navbar-brand">MSKCC &middot; Knowledge</span>-->
-<!--</div>-->
-<!--<div class="projects">-->
-<!--<a>OncoKB</a>-->
-<!--<a href="http://oncotree.mskcc.org">OncoTree</a>-->
-<!--<a target="_blank" class="right" href="http://cbioportal.org">cBioPortal <i class="fa fa-external-link"></i></a>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
 <!-- Add your site or application content here -->
 <div class="wrapper">
   <div class="navbar navbar-inverse navbar-fixed-top" class="" role="navigation">
     <div class="container nav-container">
       <div class="navbar-header">
-        <div data-toggle="collapse" data-target=".navbar-collapse" class="menu-toggle" ng-class="{open: toggled}" ng-click="toggleMenu()">
+        <div data-toggle="collapse" data-target=".navbar-collapse" class="nav-toggle menu-toggle"
+             ng-class="{open: toggled}" ng-click="toggleMenu()">
           <span></span>
           <span></span>
           <span></span>
@@ -51,52 +40,51 @@
           <span></span>
           <b>Menu</b>
         </div>
-        <span class="navbar-brand"><img class="logo" src="resources/images/oncokb_c84e23_22.png"/>ncoKB</span>
+        <span class="navbar-brand"><img class="logo" src="resources/images/oncokb-orange.png"/></span>
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <li ng-class="{ active: isActive('/')}"><a href="#/">Home</a></li>
+          <li ng-class="{ active: isActive('/about')}"><a href="#/about">About OncoKB</a></li>
+          <li ng-class="{ active: isActive('/team')}"><a href="#/team">Team</a></li>
           <li ng-class="{ active: isActive('/levels')}"><a href="#/levels">Levels of Evidence</a></li>
-          <li ng-class="{ active: isActive('/team')}"><a href="#/team">About</a></li>
-          <li ng-class="{ active: isActive('/api')}"><a href="#/api">API</a></li>
+          <!--<li ng-class="{ active: isActive('/api')}"><a href="#/api">API</a></li>-->
         </ul>
         <div class="pull-right" ng-class="{hidden: toggled}">
           <span><a href="http://mskcc.org"><img class="mskcc-logo"
-                                                                   src="resources/images/MSKLogo_fff.png"/></a></span>
+                                                src="resources/images/MSKLogo_fff.png"/></a></span>
           <span><a href="http://mskcc.org"><img class="mskcc-icon"
-                                                                 src="resources/images/mskcc_icon.png"/></a></span>
+                                                src="resources/images/MSKIcon_fff.png"/></a></span>
         </div>
-        <!--<a href="http://www.mskcc.org/"><img id="mskcc_logo" class="navbar-right" src="images/mskcc_fixed.png"-->
-        <!--style="height: 50px"/></a>-->
       </div>
     </div>
-    <div class="subNavWrapper">
+    <div class="subNavWrapper" ng-show="view.currentPage==='gene'">
       <div class="container">
         <div class="subNav">
           <!-- In order to use last child css style, add div wrapper -->
-          <div ng-show="view.subNavItems.length > 0" class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12 subNav-sxn-1">
+          <div ng-show="view.subNavItems.length > 0"
+               class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12 subNav-sxn-1">
             <span ng-repeat="item in view.subNavItems">
               <span ng-if="!item.link">{{item.content}}</span>
               <a ng-if="item.link" ng-href="{{item.link}}" target="_self">{{item.content}}</a>
             </span>
           </div>
-          <div class="pull-right col-md-3 col-lg-3 col-sm-12 col-xs-12 subNav-sxn-2"><input type="text"
-                                                                               placeholder="Search"/></div>
+
         </div>
       </div>
     </div>
   </div>
-  <div class="container">
-    <div class="content" ng-view=""></div>
-  </div>
+  <div class="content" ng-view=""></div>
 </div>
 <div class="footer">
   <div class="container">
     <div class="row footer-row-1">
       <div class="">
-        <a href="http://mskcc.org" class="">MSKCC <i class="fa fa-external-link"></i></a>
-        <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology" class="">CMO <i class="fa fa-external-link"></i></a>
-        <a href="http://www.questdiagnostics.com/home.html" class="">Quest Diagnostics <i class="fa fa-external-link"></i></a>
+        <a href="http://mskcc.org" class="">MSK <i class="fa fa-external-link"></i></a>
+        <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology" class="">CMO <i
+          class="fa fa-external-link"></i></a>
+        <a href="http://www.questdiagnostics.com/home.html" class="">Quest Diagnostics <i
+          class="fa fa-external-link"></i></a>
         <a href="http://cbioportal.org" class="">cBioPortal <i class="fa fa-external-link"></i></a>
         <a href="http://oncotree.mskcc.org" class="">OncoTree <i class="fa fa-external-link"></i></a>
       </div>
@@ -185,6 +173,8 @@
 <script src="scripts/controllers/home.js"></script>
 <script src="scripts/controllers/quest.js"></script>
 <script src="scripts/controllers/genes.js"></script>
+<script src="scripts/directives/main-level.js"></script>
+<script src="scripts/controllers/about.js"></script>
 <!-- endbuild -->
 </body>
 </html>
