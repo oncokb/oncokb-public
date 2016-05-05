@@ -13,9 +13,14 @@ angular.module('oncokbStaticApp')
       restrict: 'E',
       scope: {
         level: '=',
-        color: '='
+        color: '=',
+        desc: '=',
+        class: '='
       },
       link: function postLink(scope, element, attrs) {
+        scope.status = {
+          open: false
+        };
       }
     };
   });

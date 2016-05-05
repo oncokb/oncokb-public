@@ -5,70 +5,16 @@
 $font-sans:  "Gotham SSm A", "Gotham SSm B", "Helvetica Neueu", Helvetica, Arial, sans-serif;
 $font-serif: Georgia, "Times New Roman", serif;
 
-// Drupal specific variables
-$screen-drupal-mobile-toolbar:610px;
-$drupal-toolbar-height: 39px;
-$drupal-toolbar-sub-menu-height: 40px;
-
-$emergencyMessageHeightNarrow: 76px;
-$emergencyMessageHeightWide: 64px;
-
 /* ----- Responsive Size & Breakpoint Variables ----- */
 
 // Bootstrap breakpoints for reference (not overrides)
-$screen-xs-min: 480px;
-$screen-sm-min: 768px;
-$screen-md-min: 992px;
-$screen-lg-min: 1200px;
-
-$mobile: $screen-xs-min;
-$tablet: $screen-sm-min;
-$desktop: $screen-md-min;
-$widescreen: $screen-lg-min;
-$extra-widescreen: $screen-lg-min + 200px;
-
-$pad: 15px;
-$content-gutter: $pad;
-$content-max-width: 1200px;
-$content-column-gutter: 40px;
-
-$vertical-spacing: $pad;
-$vertical-spacing-lg: $vertical-spacing * 2;
-$vertical-spacing-sm: $vertical-spacing / 2;
-$vertical-spacing-xs: $vertical-spacing / 5;
-
-$vertical-spacing-main-menu: $vertical-spacing;
-
-$border-radius: 5px;
-
-// the point at which multiple, interdependent navigation changes happen in tandem
-$navSwitch: 950px;
-$footerSwitch: $screen-md-min;
-
-/* The following two variables are used to adjust the height of other elements
-  so as to not run underneath the fixed navigation (ie. the old .side-navigation) */
-
-$navHeightSm: 50px; // height of fixed navbar at small sizes
-$navHeightLg: 70px; // height of fixed navbar at large sizes
-$headerHeightLg: 122px;
-$headerHeightSm: 50px;
-
-
-$expand-point-higlights: 600px;
-$expand-point-title-box: 600px;
-$expand-point-tite-main-image: 600px;
-$expand-point-main-text: 600px;
-$expand-point-main-text-2: 992px;
-$expand-point-big-quote: 768px;
-$expand-point-photo-grid-1: 500px;
-$expand-point-photo-grid-2: 768px;
-$expand-point-main-menu-icons: 1100px;
-$expand-point-filter-layout-switch: 800px;
-$expand-point-btn-sm-layout-switch: 798px;
-$expand-point-btn-md-layout-switch: $screen-md-min;
-$expand-point-image-right-caption: 992px;
-$expand-point-sub-nav-teaser: 630px;
-$expand-point-timelinejs: 800px;
+//$orange: $gsk-accent;
+$width: 993px;
+$sm-width: 768px;
+$range-min-width: $width;
+$range-max-sm-width: $width - 1;
+$range-min-sm-width: $sm-width;
+$range-max-xm-width: $sm-width - 1;
 
 /* ----- Color Variables ----- */
 
@@ -84,6 +30,7 @@ $brand-accent: #38657f;
 $brand-background: #b0e5fc;
 $no-segment-background: #d8f3fe;
 
+$orange: #FF9900;
 $danger-dark: #bd1426;
 $warning-yellow: #e09600;
 
@@ -101,6 +48,14 @@ $dark-grey-copy: #444445;
 $caption-color: #777;
 $very-light: #f3f4ef;
 $transparent-white: rgba(255, 255, 255, 0.9);
+
+//Level colors
+$level-1: #008D14;
+$level-2A: #019192;
+$level-2B: #2A5E8E;
+$level-3A: #794C87;
+$level-3B: #9B7EB6;
+$level-4: #000000;
 
 // social colors
 $color-facebook: #37619e;

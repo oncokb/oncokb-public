@@ -1,32 +1,61 @@
-<setction>
-  <div class="container">
-    <div class="main-oncokb-header">
+<div class="container">
+  <div class="main-oncokb-header">
+    <div class="logo">
       <div class="row">
         <div class="col-lg-3 col-md-3"></div>
-        <div class="col-lg-6 col-md-6">
+        <div class="col-lg-6 col-md-6 grid">
           <div class="logo-wrapper">
-            <img src="resources/images/oncokb-lg.png"/>
+            <img src="resources/images/oncokb.svg"/>
           </div>
         </div>
         <div class="col-lg-3 col-md-3"></div>
       </div>
+    </div>
+    <div class="tag-line">
       <div class="row">
         <div class="col-lg-3 col-md-3"></div>
         <div class="col-lg-6 col-md-6">
-          <p> Precision Oncology Knowledge Base</p>
+          <span class="level-1">Precision Oncology Knowledge Base</span><br/>
+          <span class="level-2">Annotation of Somatic Mutations in Cancer</span>
         </div>
         <div class="col-lg-3 col-md-3"></div>
       </div>
+    </div>
+    <!--<div class="row">-->
+    <!--<div class="col-lg-2 col-md-2"></div>-->
+    <!--<div class="col-lg-8 col-md-6">-->
+    <!--<p><a ng-href="#/genes" target="_self">418 genes</a>, 4670 variants, 60 tumor types, 1000 drugs </p>-->
+    <!--</div>-->
+    <!--<div class="col-lg-2 col-md-2"></div>-->
+    <!--</div>-->
+    <div class="number">
       <div class="row">
         <div class="col-lg-2 col-md-2"></div>
-        <div class="col-lg-8 col-md-6">
-          <p><a ng-href="#/genes" target="_self">418 genes</a>, 4670 variants, 60 tumor types, 1000 drugs </p>
+        <div class="col-lg-8 col-md-6 has-inside-grid">
+          <div class="col-lg-3 col-md-3 col-sm-6 col-md-6">
+            <div class="item"><span class="number gene"><a href="#/genes">{{content.main.gene}}</a></span><br/><span
+              class="category">Genes</span></div>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-6 col-md-6">
+            <div class="item"><span class="number">{{content.main.alteration}}</span><br/><span class="category">Variants</span>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-6 col-md-6">
+            <div class="item"><span class="number">{{content.main.tumorType}}</span><br/><span class="category">Tumor Types</span>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-6 col-md-6">
+            <div class="item"><span class="number">{{content.main.drug}}</span><br/><span
+              class="category">Drugs</span></div>
+          </div>
         </div>
         <div class="col-lg-2 col-md-2"></div>
       </div>
+    </div>
+    <div class="main-search">
       <div class="row">
         <div class="col-lg-2 col-md-2"></div>
-        <div class="col-lg-8 col-md-8 main-search">
+        <div class="col-lg-8 col-md-8">
           <div class="input-group">
             <input type="search" class="form-control" placeholder="Search Gene">
             <span class="input-group-btn">
@@ -38,33 +67,48 @@
         <div class="col-lg-2 col-md-2"></div>
       </div>
     </div>
-  </div>
-  </div>
-</setction>
-<setction>
-  <div class="container" style="margin-top: 40px">
-    <div class="row">
-      <div class="col-lg-7 col-md-6 col-sm-6 col-xm-0">
-      </div>
-      <div class="col-lg-5 col-md-4 col-sm-6 col-xm-12 main-search">
-        <main-level level="1" color="'#008D14'"></main-level>
-        <main-level level="'2A'" color="'#019192'"></main-level>
-        <main-level level="'3A'" color="'#794C87'"></main-level>
-        <main-level level="4" color="'#000000'"></main-level>
-      </div>
-      </div>
-    <div id="canvas-container">
-      <canvas id="wordCloud"></canvas>
-      <div id="canvas-hover" hidden>
-        <b id="canvas-hover-label">{{content.hoveredGene}} has {{content.hoveredCount}} variants annotated.
-          <br/><span
-            ng-show="content.hoveredHighestLevel">Highest level of evidence: Level {{content.hoveredHighestLevel}}</span></b>
-      </div>
-      <div class="word-cloud-hint">Genes are color-coded by <a href="#/levels">level of evidence</a>, and the size of
-        the
-        gene label is proportional to the number of annotated variants.<br/>
-        Click on a gene symbol to get more information.
+    <div class="levels">
+      <div class="row">
+        <div class="col-lg-2 col-md-2"></div>
+        <div class="col-lg-8 col-md-8 has-inside-grid">
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xm-12">
+            <main-level level="'1'" class="'level-1'" color="'#008D14'" desc="'FDA-approved'"></main-level>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xm-12">
+            <main-level level="'2'" class="'level-2'" color="'#019192'" desc="'Standard-of-care'"></main-level>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xm-12">
+            <main-level level="'3'" class="'level-3'" color="'#794C87'" desc="'Clinical evidence'"></main-level>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-2"></div>
       </div>
     </div>
   </div>
-</setction>
+</div>
+</div>
+<!--<div class="container">-->
+<!--<div class="row">-->
+<!--<div class="col-lg-7 col-md-6 col-sm-6 col-xm-0">-->
+<!--</div>-->
+<!--<div class="col-lg-5 col-md-4 col-sm-6 col-xm-12 main-search">-->
+<!--<main-level level="1" color="'#008D14'" desc="'Test'"></main-level>-->
+<!--<main-level level="'2A'" color="'#019192'"></main-level>-->
+<!--<main-level level="'3A'" color="'#794C87'"></main-level>-->
+<!--<main-level level="4" color="'#000000'"></main-level>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div id="canvas-container">-->
+<!--<canvas id="wordCloud"></canvas>-->
+<!--<div id="canvas-hover" hidden>-->
+<!--<b id="canvas-hover-label">{{content.hoveredGene}} has {{content.hoveredCount}} variants annotated.-->
+<!--<br/><span-->
+<!--ng-show="content.hoveredHighestLevel">Highest level of evidence: Level {{content.hoveredHighestLevel}}</span></b>-->
+<!--</div>-->
+<!--<div class="word-cloud-hint">Genes are color-coded by <a href="#/levels">level of evidence</a>, and the size of-->
+<!--the-->
+<!--gene label is proportional to the number of annotated variants.<br/>-->
+<!--Click on a gene symbol to get more information.-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->

@@ -1,0 +1,208 @@
+/* Styles for home page */
+
+.main-oncokb-header {
+  margin-top: 40px;
+
+  p {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .logo {
+    .row {
+      margin-bottom: 0;
+    }
+    .grid {
+      padding-bottom: 5px;
+    }
+  }
+
+  .tag-line {
+    margin-bottom: 50px;
+  }
+
+  .number {
+    .row {
+      margin-bottom: 40px;
+    }
+    .item {
+      text-align: center;
+      .number {
+        padding-top: 20px;
+        font-weight: bold;
+        font-size: 35px;
+        border-bottom: 1px solid $orange;
+      }
+      .category {
+      }
+    }
+  }
+
+  .number.gene > a {
+    color: #000;
+  }
+
+  .number.gene > a:hover {
+    color: $dark-blue;
+  }
+
+  .has-inside-grid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .tag-line {
+    font-weight: normal;
+    text-align: center;
+    .level-1 {
+      font-size: 20px;
+      color: $orange;
+      font-weight: 500;
+    }
+    .level-2 {
+      font-size: 15px;
+      color: grey;
+    }
+  }
+
+  .levels {
+    :focus {
+      outline: none;
+    }
+  }
+
+  .logo-wrapper {
+    margin: 0 auto;
+    @media screen and (max-width: $range-max-sm-width) {
+      width: 320px;
+      img {
+        width: 320px;
+      }
+    }
+    @media screen and (min-width: $range-min-width) {
+      width: 400px;
+      img {
+        width: 400px;
+      }
+    }
+  }
+
+  .main-search {
+    input[type=search] {
+      text-align: center;
+      display: block;
+      width: 100%;
+      height: 50px;
+      padding: 6px 12px;
+      font-size: 20px;
+      line-height: 1.428571429;
+      color: #555555;
+      background-color: #fff;
+      background-image: none;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+    }
+    input[type=search]:focus {
+      border-color: $orange;
+    }
+    .row {
+      margin-bottom: 40px;
+    }
+    .btn {
+      background-color: white;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      margin-left: 0;
+      border-left: 0;
+      height: 50px;
+    }
+    ::-webkit-input-placeholder {
+      text-align: center;
+    }
+
+    :-moz-placeholder { /* Firefox 18- */
+      text-align: center;
+    }
+
+    ::-moz-placeholder { /* Firefox 19+ */
+      text-align: center;
+    }
+
+    :-ms-input-placeholder {
+      text-align: center;
+    }
+  }
+
+  .main-level {
+    .button {
+      margin: auto;
+      width: 160px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .level-name {
+      font-size: 22px;
+    }
+    .level-desc {
+      font-size: 16px;
+    }
+    .gene-number {
+      font-size: 18px;
+    }
+    .level-1 {
+      color: $level-1;
+      //border-image: url('/resources/images/level-1-40px.png') 0 0 0 40 stretch;
+    }
+    .level-2 {
+      color: $level-2A;
+    }
+    .level-3 {
+      color: $level-3A;
+    }
+    .level-4 {
+      color: $level-4;
+    }
+  }
+
+  .word-cloud-hint {
+    margin-top: 20px;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  #canvas-container {
+    width: 100%;
+    position: relative;
+  }
+
+  #canvas-hover {
+    position: absolute;
+    border: 2px solid #fff;
+    box-shadow: 0 0 4px 0 #008;
+    padding: 2px;
+    margin: -4px 0 0 -4px;
+    pointer-events: none;
+    border-radius: 0.5em;
+  }
+
+  #canvas-hover-label {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: rgba(255, 255, 255, 1);
+    color: #333;
+    margin-top: 6px;
+    padding: 0 0.5em;
+    border-radius: 0.5em;
+    font-size: 18px;
+    border: 2px solid black;
+
+    white-space: nowrap;
+  }
+}
