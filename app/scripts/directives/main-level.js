@@ -12,7 +12,8 @@ angular.module('oncokbStaticApp')
       templateUrl: 'views/mainLevel.html',
       restrict: 'E',
       scope: {
-        level: '='
+        level: '=',
+        color: '='
       },
       link: function postLink(scope, element, attrs) {
       }
