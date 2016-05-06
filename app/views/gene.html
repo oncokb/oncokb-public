@@ -1,62 +1,169 @@
-<div class="gene">
-  <div class="row"></div>
-  <div class="row">
-    <div class="col-lg-6 col-md-6">
-      <span class="gene-title">BRAF</span><span>The highest level of evidence: <span ng-style="setColor('1')">Level 1</span></span>
-      <p>BRAF encodes a serine/threonine kinase involved in the MAPK signaling pathway.
-        Mutations of BRAF are found in melanomas and thyroid, lung and colorectal cancers, among others.</p>
-      <span class="pull-right" ng-class="{'hide': !!moreInfo}">See BRAF background
-        <i class="fa fa-arrow-circle-o-down gene-more-info-icon" ng-click="moreInfo=!moreInfo"></i></span>
-      <p ng-class="{'hide': !moreInfo}">The BRAF protein is a serine/threonine kinase that plays
-        a key role in the regulation of the mitogen-activated protein kinase (MAPK) cascade (PMID: 15520807),
-        which under physiologic conditions regulates the expression of genes involved in cellular functions,
-        including proliferation (PMID: 24202393). Genetic alterations in BRAF are found primarily in melanomas
-        and thyroid cancers as well as a small fraction of lung and colorectal cancers. The most common BRAF
-        point mutation is V600E, which deregulates the protein's kinase activity leading to constitutive BRAF
-        activation and signaling as a monomer (PMID: 20179705), although other mutations have been found
-        (PMID: 12068308) which affect the protein's propensity to dimerize (PMID: 16858395, 26343582).
-        The product of these alterations is a BRAF kinase that can activate MAPK signaling in an unregulated manner and,
-        in some instances, is directly responsible for cancer growth (PMID: 15520807).</p>
-      <span class="pull-right" ng-class="{'hide': !moreInfo}">Hide <i
-        class="fa fa-arrow-circle-o-up gene-less-info-icon" ng-click="moreInfo=!moreInfo"></i></span>
+<link href="../lib/mutation-mapper/css/tipTip.css" type="text/css" rel="stylesheet" />
+<link href="../lib/mutation-mapper/css/jquery.qtip.min.css" type="text/css" rel="stylesheet" />
+<link href="../lib/mutation-mapper/css/smoothness/jquery-ui-1.10.3.custom.css" type="text/css" rel="stylesheet" />
+<link href="../lib/mutation-mapper/mutationMapper.css" type="text/css" rel="stylesheet" />
+<link href="../lib/mutation-mapper/mutation_info_panel.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript" src="../lib/mutation-mapper/cbio-util.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/download-util.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/FileSaver.min.js"></script>
+<!--might need to put those files back since the customize panel failed-->
+<!--<script type="text/javascript" src="../lib/mutation-mapper/jquery.min.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/jquery-migrate.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/jquery.dataTables.js"></script>-->
+
+<script type="text/javascript" src="../lib/mutation-mapper/jquery.expander.min.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/jquery.qtip.min.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/jquery.tipTip.min.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/jquery.scrollTo.min.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/underscore-min.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/backbone-min.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/d3.min.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/cbio-util.js"></script>
+<script type="text/javascript" src="../lib/mutation-mapper/mutationMapper.js"></script>
+
+
+<script type="text/javascript">
+    // this is for the moustache-like templates
+    _.templateSettings = {
+        interpolate: /\{\{(.+?)\}\}/g
+    };</script>
+
+
+<div class="gene" ng-app="oncokbStaticApp" ng-controller="GeneCtrl">
+
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <span class="gene-title">{{gene}}</span><span>The highest level of evidence: <span ng-style="setColor('1')">Level 1</span></span>
+            <p>BRAF encodes a serine/threonine kinase involved in the MAPK signaling pathway.
+                Mutations of BRAF are found in melanomas and thyroid, lung and colorectal cancers, among others.</p>
+            <span class="pull-right" ng-class="{'hide': !!moreInfo}">See BRAF background
+                <i class="fa fa-arrow-circle-o-down gene-more-info-icon" ng-click="moreInfo = !moreInfo"></i></span>
+            <p ng-class="{'hide': !moreInfo}">The BRAF protein is a serine/threonine kinase that plays
+                a key role in the regulation of the mitogen-activated protein kinase (MAPK) cascade (PMID: 15520807),
+                which under physiologic conditions regulates the expression of genes involved in cellular functions,
+                including proliferation (PMID: 24202393). Genetic alterations in BRAF are found primarily in melanomas
+                and thyroid cancers as well as a small fraction of lung and colorectal cancers. The most common BRAF
+                point mutation is V600E, which deregulates the protein's kinase activity leading to constitutive BRAF
+                activation and signaling as a monomer (PMID: 20179705), although other mutations have been found
+                (PMID: 12068308) which affect the protein's propensity to dimerize (PMID: 16858395, 26343582).
+                The product of these alterations is a BRAF kinase that can activate MAPK signaling in an unregulated manner and,
+                in some instances, is directly responsible for cancer growth (PMID: 15520807).</p>
+            <span class="pull-right" ng-class="{'hide': !moreInfo}">Hide <i
+                    class="fa fa-arrow-circle-o-up gene-less-info-icon" ng-click="moreInfo = !moreInfo"></i></span>
+        </div>
+
+        <div class="col-lg-6 col-md-6">
+
+            <div id="histogramDiv"></div>
+
+        </div>
     </div>
 
-    <div class="col-lg-6 col-md-6">
-        <div id="myDiv"></div>
-<!--      <img class="img-full" src="resources/images/chart.png" style="height: 300px">-->
-      <!--<div class="gene-info">-->
-      <!--<table class="table table-bordered gene-numbers">-->
-      <!--<tbody>-->
-      <!--<tr>-->
-      <!--&lt;!&ndash;<td>170 variants</td>&ndash;&gt;-->
-      <!--&lt;!&ndash;<td>Level 1</td>&ndash;&gt;-->
-      <!--</tr>-->
-      <!--</tbody>-->
-      <!--</table>-->
-      <!--<div class="col-md-6 col-lg-6">-->
-      <!--<span class="gene-numbers-titile"></span><br/>-->
-      <!--<span class="gene-numbers-content">170</span>-->
-      <!--</div>-->
-      <!--<div class="col-md-6 col-lg-6">-->
-      <!--<span class="gene-numbers-titile"></span><br/>-->
-      <!--<span class="gene-numbers-content">1</span>-->
-      <!--</div>-->
-      <!--</div>-->
-    </div>
-  </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
 
-  <div class="row">
-    <!--<div class="col-lg-4 col-md-4">-->
-    <!--</div>-->
-    <div class="col-lg-12 col-md-12" style="padding-top: 70px">
-      <img class="img-full" src="resources/images/mutation_mapper.png">
-    </div>
-  </div>
+            <div id="templateDiv"></div>
+            <div id="mutation_details"></div>
 
-  <div class="row gene-table">
-    <div class="col-lg-12 col-md-12">
-      <table datatable="" dt-options="dt.dtOptions" dt-columns="dt.dtColumns"
-             class="row-border hover"></table>
+            <!-- Customized Mutation Table components -->
+
+            <script type="text/template" id="custom_mutation_case_id_template">
+                <b alt="{{caseIdTip}}" class="{{caseIdClass}}">{{caseId}}</b>
+            </script>
+        </div>
     </div>
-  </div>
+
+    <div class="row gene-table">
+        <div class="col-lg-12 col-md-12">
+
+
+            <br/><br/><br/>
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#clinicalVariants">Clinical Relevant Variants</a></li>
+                <li><a data-toggle="tab" href="#annotatedVariants">Annotated Variants</a></li>
+
+            </ul>
+
+            <div class="tab-content">
+                <div id="clinicalVariants" class="tab-pane fade in active">
+                    <br/><br/><br/>
+                    <table datatable="ng" class="row-border hover">
+                        <thead>
+                            <tr>
+                                <th>Variant</th>
+                                <th>Cancer Type</th>
+                                <th>Level</th>
+                                <th>Drug</th>
+                                <th>Drug PMID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in allClinicalVariants = (clinicalVariants| filter: synchronizeData())">
+                                <td>{{ x.variant}}</td>
+                                <td>{{ x.cancerType}}</td>
+                                <td>{{ x.level}}</td>
+                                <td>{{ x.drug}}</td>
+                                <td>
+                                    <span ng-repeat="pub in x.drugPmids">
+                                        <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < x.drugPmids.length - 1">, </span></span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div id="annotatedVariants" class="tab-pane fade">
+                    <br/><br/><br/>
+
+                    <table datatable="ng" class="row-border hover">
+                        <thead>
+                            <tr>
+                                <th>Variant</th>
+                                <th>Mutation Effect</th>
+                                <th>Mutation Effect PMID</th>
+                                <th>Oncogenic</th>
+                                <th>Oncogenic PMID</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="y in allAnnoatedVariants = (annoatedVariants| filter: synchronizeData())">
+                                <td>{{ y.variant}}</td>
+                                <td>{{ y.mutationEffect}}</td>
+                                <td>
+                                    <span ng-repeat="pub in y.mutationEffectPmids">
+                                        <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < y.mutationEffectPmids.length - 1">, </span></span>
+                                    </span>
+                                </td>
+                                <td>{{ y.oncogenic}}</td>
+                                <td>
+                                    <span ng-repeat="pub in y.oncogenicPmids">
+                                        <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < y.oncogenicPmids.length - 1">, </span></span>
+                                    </span>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </div>
+
+<script type="text/template" id="custom_mutation_details_template">
+    <div class='mutation-3d-container'></div>
+    <div class='mutation-details-loader'>
+    <img src='{{loaderImage}}'/>
+    </div>
+    <div class='mutation-details-content'>
+    {{mainContent}}
+    </div>
+</script>
+
