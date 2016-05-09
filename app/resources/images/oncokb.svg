@@ -1,23 +1,54 @@
 <!--<svg width="14" height="14">-->
-  <!--<g transform="translate(7, 7)">-->
-    <!--<circle r="6" fill="none" stroke-width="2" stroke="#007fff"></circle>-->
-    <!--<circle r="3" fill="none" stroke-width="2" stroke="#007fff"></circle>-->
-    <!--<circle r="1.5" fill="#007fff" stroke="none"></circle>-->
-  <!--</g>-->
+<!--<g transform="translate(7, 7)">-->
+<!--<circle r="6" fill="none" stroke-width="2" stroke="#007fff"></circle>-->
+<!--<circle r="3" fill="none" stroke-width="2" stroke="#007fff"></circle>-->
+<!--<circle r="1.5" fill="#007fff" stroke="none"></circle>-->
+<!--</g>-->
 <!--</svg>-->
 
 <!--<svg width="14" height="14">-->
-  <!--<g transform="translate(7, 7)">-->
-    <!--<circle r="6" fill="none" stroke-width="2" stroke="#f00"></circle>-->
-    <!--<circle r="3" fill="none" stroke-width="2" stroke="#f00"></circle>-->
-    <!--<circle r="1.5" fill="#f00" stroke="none"></circle>-->
-  <!--</g>-->
+<!--<g transform="translate(7, 7)">-->
+<!--<circle r="6" fill="none" stroke-width="2" stroke="#f00"></circle>-->
+<!--<circle r="3" fill="none" stroke-width="2" stroke="#f00"></circle>-->
+<!--<circle r="1.5" fill="#f00" stroke="none"></circle>-->
+<!--</g>-->
 <!--</svg>-->
 
-<svg  xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-  <g transform="translate(11, 11)">
-    <circle r="9.5" fill="none" stroke-width="3" stroke="#c84e23"></circle>
-    <circle r="5.5" fill="none" stroke-width="3" stroke="#c84e23"></circle>
-    <circle r="3" fill="#c84e23" stroke="none"></circle>
+<!--<svg xmlns="http://www.w3.org/2000/svg" width="95" height="22" >-->
+<!--<g transform="translate(11, 11)">-->
+<!--<circle r="9.5" fill="none" stroke-width="3" stroke="#c84e23"></circle>-->
+<!--<circle r="5.5" fill="none" stroke-width="3" stroke="#c84e23"></circle>-->
+<!--<circle r="3" fill="#c84e23" stroke="none"></circle>-->
+<!--</g>-->
+<!--<g transform="translate(23, 20)">-->
+<!--<text font-size="20" font-weight="bold" font-family="Montserrat, 'Helvetica Neue'">ncoKB</text>-->
+<!--</g>-->
+<!--</svg>-->
+
+<!--//OncoKB white logo with MSK-->
+<!--<svg xmlns="http://www.w3.org/2000/svg" width="205" height="60">-->
+<!--&lt;!&ndash;<rect width="100%" height="100%" fill="#1c75cd"></rect>&ndash;&gt;-->
+<!--<g transform="translate(35, 20)">-->
+<!--<circle r="17" fill="none" stroke-width="4" stroke="#FF9900"></circle>-->
+<!--<circle r="10" fill="none" stroke-width="4" stroke="#FF9900"></circle>-->
+<!--<circle r="4" fill="#FF9900" stroke="none"></circle>-->
+<!--</g>-->
+<!--<g transform="translate(55, 35)">-->
+<!--<text font-size="40" fill="#fff" font-family="Helvetica" font-weight="bold">ncoKB</text>-->
+<!--</g>-->
+<!--<g transform="translate(17, 55)">-->
+<!--<text font-size="14" fill="#fff" font-family="Helvetica" font-weight="bold">Memorial Sloan Kettering</text>-->
+<!--</g>-->
+<!--</svg>-->
+
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="100">
+  <!-- <rect width="100%" height="100%" fill="#1c75cd"></rect> -->
+  <g transform="translate(50, 50)">
+    <circle r="43" fill="none" stroke-width="12" stroke="gold"></circle>
+    <circle r="25" fill="none" stroke-width="12" stroke="gold"></circle>
+    <circle r="12" fill="gold" stroke="none"></circle>
+  </g>
+  <g transform="translate(102, 90)">
+    <text font-size="100" fill="#000" font-family="Helvetica" font-weight="bold">ncoKB</text>
   </g>
 </svg>
