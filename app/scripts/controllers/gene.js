@@ -13,18 +13,18 @@ angular.module('oncokbStaticApp')
             $scope.gene = $routeParams.geneName;
             //clinical variants table and annotated variants table
             //using mock up data currently
-            $scope.clinicalVariants = [{variant: 'E17K', cancerType: 'colorectal cancer', level: 'R1', drug: 'Cetuximab+Panitumumab', drugPmids: [9467011, 22473468]},{variant: 'D594G', cancerType: '', level: '', drug: ''},
-                {variant: 'D594A', cancerType: '', level: 'R2', drug: ''},{variant: 'D594E', cancerType: '', level: '', drug: ''},
-                {variant: 'D594N', cancerType: '', level: '', drug: ''},{variant: 'D594V', cancerType: 'R3', level: '', drug: ''},
-                {variant: 'E715K', cancerType: '', level: '', drug: ''},{variant: 'V600E', cancerType: '', level: '', drug: ''},
-                {variant: 'V600R', cancerType: '', level: 'R2', drug: ''},{variant: 'V600K', cancerType: '', level: '', drug: ''}];
-            
+            $scope.clinicalVariants = [{variant: 'E17K', cancerType: 'colorectal cancer', level: 'R1', drug: ['Cetuximab+Panitumumab'], drugPmids: [9467011, 22473468]}, {variant: 'D594G', cancerType: '', level: '', drug: []},
+                {variant: 'D594A', cancerType: '', level: 'R2', drug: []}, {variant: 'D594E', cancerType: '', level: '', drug: []},
+                {variant: 'D594N', cancerType: '', level: '', drug: []}, {variant: 'D594V', cancerType: 'R3', level: '', drug: []},
+                {variant: 'E715K', cancerType: '', level: '', drug: []}, {variant: 'V600E', cancerType: '', level: '', drug: []},
+                {variant: 'V600R', cancerType: '', level: 'R2', drug: []}, {variant: 'V600K', cancerType: '', level: '', drug: []}];
+
             $scope.annoatedVariants = [{variant: 'E17K', mutationEffect: '', oncogenic: ''}, {variant: 'D594G', mutationEffect: '', oncogenic: 'Likely Oncogenic', oncogenicPmids: [9467011, 22473468]},
                 {variant: 'D594A', mutationEffect: 'Activating', oncogenic: 'Oncogenic'}, {variant: 'D594E', mutationEffect: 'Inactivating', mutationEffectPmids: [9467011, 22473468], oncogenic: 'Unknown'},
                 {variant: 'D594N', mutationEffect: '', oncogenic: 'Oncogenic'}, {variant: 'D594V', mutationEffect: 'Activating', mutationEffectPmids: [9467011, 22473468], oncogenic: 'Unknown'},
-                {variant: 'E715K', mutationEffect: 'Activating', oncogenic: 'Oncogenic',oncogenicPmids: [9467011, 22473468], }, {variant: 'V600E', mutationEffect: '', oncogenic: 'Unknown'},
+                {variant: 'E715K', mutationEffect: 'Activating', oncogenic: 'Oncogenic', oncogenicPmids: [9467011, 22473468], }, {variant: 'V600E', mutationEffect: '', oncogenic: 'Unknown'},
                 {variant: 'V600R', mutationEffect: 'Inactivating', oncogenic: 'Oncogenic'}, {variant: 'V600K', mutationEffect: '', oncogenic: 'Unknown'}];
-            
+
             //filter the tables by chosen data in mutation mapper
             //use flag to tell if any need to filter the table or not
             $scope.flag = true;
@@ -35,12 +35,12 @@ angular.module('oncokbStaticApp')
                     if ($scope.flag)
                         return true;
                     else {
-                          return ($scope.alterationNames.indexOf(x.variant) !== -1);
+                        return ($scope.alterationNames.indexOf(x.variant) !== -1);
                     }
                 }
             };
 
-             
+
             $scope.view = {};
             $scope.view.levelColors = $rootScope.data.levelColors;
             $rootScope.view.subNavItems = [{content: 'BRAF'}, {content: '170 Variants'}, {content: '50 Tumor Types'}];
@@ -53,7 +53,7 @@ angular.module('oncokbStaticApp')
                 }
             };
 
-      
+
             //fetch portal alteration data for histogram and construct the histogram with plotly.js
             function fetchHistogramData() {
                 $http.get("http://localhost:8080/oncokb/api/portalAlterationSampleCount")
@@ -159,7 +159,7 @@ angular.module('oncokbStaticApp')
                     colors.fill('green');
                     colors[tempIndex] = 'rgb(0, 102, 0)';
                     Plotly.redraw('histogramDiv', data, layout, {displaylogo: false, modeBarButtonsToRemove: ['sendDataToCloud', 'zoom2d', 'pan2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian']});
-                    updateTable();
+//                    updateTable();
 
                     $(".mutation-details-filter-reset").click(function () {
                         //show all of the data again
@@ -168,10 +168,10 @@ angular.module('oncokbStaticApp')
                     });
 
                 });
-              
+
             }
             fetchHistogramData();
-            
+
 
 
             //fetch the mutation mapper from api and construct the graph from mutation mapper library
@@ -184,9 +184,9 @@ angular.module('oncokbStaticApp')
                 });
                 mutationMapperConstructor(mutationData, false);
             });
-            
+
             // customized settings for main mapper
-            var initOpts = function()
+            var initOpts = function ()
             {
                 return {
                     el: "#mutation_details",
@@ -301,7 +301,7 @@ angular.module('oncokbStaticApp')
                 }
             };
             var mutationMapper = null, mutationDiagram = null;
-             
+
             function mutationMapperConstructor(mutationData, updateFlag) {
                 if (!updateFlag) {
                     //load the template when first load the page
@@ -314,17 +314,18 @@ angular.module('oncokbStaticApp')
                             mainMutationView.dispatcher.on(MutationDetailsEvents.DIAGRAM_INIT, function (diagram) {
                                 $(".mutation-details-uniprot-link").hide();
                                 mutationDiagram = diagram;
-                                //might need to add some other events: lollipop deselect and click on the mutation type panel
-                                mutationDiagram.dispatcher.on("mutationDiagramLollipopSelected", updateTable);
-
-                                $(".mutation-details-filter-reset").click(function () {    
+                                //still need to work on the click mutation type panel event
+                                mutationDiagram.dispatcher.on(MutationDetailsEvents.LOLLIPOP_SELECTED, function(){updateTable("select")});
+                                mutationDiagram.dispatcher.on(MutationDetailsEvents.LOLLIPOP_DESELECTED, function(){updateTable("deselect")});
+//                                mutationDiagram.dispatcher.on(MutationDetailsEvents.INFO_PANEL_MUTATION_TYPE_SELECTED, function(){updateTable("mutationTypePanel")});
+                                $(".mutation-details-filter-reset").click(function () {
                                     $scope.$apply(function () {
                                         $scope.flag = true;
                                     });
                                 });
-                    
+
                             });
-                           
+
                         });
 
                     });
@@ -337,7 +338,8 @@ angular.module('oncokbStaticApp')
 
             }
             //get the chosen mutation data from the lollipop and update the table
-            function updateTable(){
+            function updateTable(type) {
+                 
                 var proteinChanges = [];
                 _.each(mutationDiagram.getSelectedElements(), function (ele) {
 
@@ -349,12 +351,19 @@ angular.module('oncokbStaticApp')
                 });
                 $scope.$apply(function () {
                     //this is the function for real data once the API is ready
-                    //$scope.alterationNames = _.uniq(proteinChanges);
-                    $scope.alterationNames = ["D594A", "D594E", "D594N", "D594V"];
-                    $scope.flag = false;
+                    if(type === "select")
+                    {
+                        //$scope.alterationNames = _.uniq(proteinChanges);
+                        $scope.alterationNames = ["D594A", "D594E", "D594N", "D594V"];
+                        $scope.flag = false;
+                    }
+                    else if(type === "deselect")
+                    {
+                        $scope.flag = true;
+                    }
                 });
             }
 
-            
+
 
         });

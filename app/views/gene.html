@@ -7,11 +7,8 @@
 <script type="text/javascript" src="../lib/mutation-mapper/cbio-util.js"></script>
 <script type="text/javascript" src="../lib/mutation-mapper/download-util.js"></script>
 <script type="text/javascript" src="../lib/mutation-mapper/FileSaver.min.js"></script>
-<!--might need to put those files back since the customize panel failed-->
-<!--<script type="text/javascript" src="../lib/mutation-mapper/jquery.min.js"></script>
+
 <script type="text/javascript" src="../lib/mutation-mapper/jquery-ui.min.js"></script>
-<script type="text/javascript" src="../lib/mutation-mapper/jquery-migrate.js"></script>
-<script type="text/javascript" src="../lib/mutation-mapper/jquery.dataTables.js"></script>-->
 
 <script type="text/javascript" src="../lib/mutation-mapper/jquery.expander.min.js"></script>
 <script type="text/javascript" src="../lib/mutation-mapper/jquery.qtip.min.js"></script>
@@ -19,7 +16,6 @@
 <script type="text/javascript" src="../lib/mutation-mapper/jquery.scrollTo.min.js"></script>
 <script type="text/javascript" src="../lib/mutation-mapper/underscore-min.js"></script>
 <script type="text/javascript" src="../lib/mutation-mapper/backbone-min.js"></script>
-<script type="text/javascript" src="../lib/mutation-mapper/d3.min.js"></script>
 <script type="text/javascript" src="../lib/mutation-mapper/cbio-util.js"></script>
 <script type="text/javascript" src="../lib/mutation-mapper/mutationMapper.js"></script>
 
@@ -67,11 +63,7 @@
             <div id="templateDiv"></div>
             <div id="mutation_details"></div>
 
-            <!-- Customized Mutation Table components -->
 
-            <script type="text/template" id="custom_mutation_case_id_template">
-                <b alt="{{caseIdTip}}" class="{{caseIdClass}}">{{caseId}}</b>
-            </script>
         </div>
     </div>
 
@@ -104,7 +96,11 @@
                                 <td>{{ x.variant}}</td>
                                 <td>{{ x.cancerType}}</td>
                                 <td>{{ x.level}}</td>
-                                <td>{{ x.drug}}</td>
+                                <td>
+                                    <span ng-repeat="drugItem in x.drug">
+                                        <span>{{drugItem}}<span ng-if="$index < x.drug.length - 1">, </span></span>
+                                    </span>
+                                </td>
                                 <td>
                                     <span ng-repeat="pub in x.drugPmids">
                                         <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < x.drugPmids.length - 1">, </span></span>
@@ -166,4 +162,7 @@
     {{mainContent}}
     </div>
 </script>
-
+<!-- Customized Mutation Table components -->
+<script type="text/template" id="custom_mutation_case_id_template">
+    <b alt="{{caseIdTip}}" class="{{caseIdClass}}">{{caseId}}</b>
+</script>
