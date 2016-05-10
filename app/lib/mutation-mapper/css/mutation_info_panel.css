@@ -1,0 +1,37 @@
+span.mutation-type-info {
+	padding-right: 10px;
+}
+
+div.mutation-info-panel-container {
+	padding-top: 10px;
+	padding-bottom: 15px;
+}
+
+div.mutation-info-panel-content {
+	padding-left: 30px;
+}
+
+span.mutation-type-count {
+	padding: 5px;
+	color: #EFEFEF;
+}
+span.missense_mutation_count {
+	background-color: #008000;
+	font-weight: bold;
+        border-radius: 10px;
+}
+span.trunc_mutation_count {
+	background-color: #FF0000;
+	font-weight: bold;
+        border-radius: 10px;
+}
+span.inframe_mutation_count {
+	background-color: #000000;
+	font-weight: bold;
+        border-radius: 10px;
+}
+span.other_mutation_count {
+	background-color: #808080;
+	font-weight: bold;
+        border-radius: 10px;
+}
