@@ -12,18 +12,14 @@ angular.module('oncokbStaticApp')
         .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $http) {
             $scope.gene = $routeParams.geneName;
             //clinical variants table and annotated variants table
-            //using mock up data currently
-            $scope.clinicalVariants = [{variant: 'E17K', cancerType: 'colorectal cancer', level: 'R1', drug: ['Cetuximab+Panitumumab'], drugPmids: [9467011, 22473468]}, {variant: 'D594G', cancerType: '', level: '', drug: []},
-                {variant: 'D594A', cancerType: '', level: 'R2', drug: []}, {variant: 'D594E', cancerType: '', level: '', drug: []},
-                {variant: 'D594N', cancerType: '', level: '', drug: []}, {variant: 'D594V', cancerType: 'R3', level: '', drug: []},
-                {variant: 'E715K', cancerType: '', level: '', drug: []}, {variant: 'V600E', cancerType: '', level: '', drug: []},
-                {variant: 'V600R', cancerType: '', level: 'R2', drug: []}, {variant: 'V600K', cancerType: '', level: '', drug: []}];
-
-            $scope.annoatedVariants = [{variant: 'E17K', mutationEffect: '', oncogenic: ''}, {variant: 'D594G', mutationEffect: '', oncogenic: 'Likely Oncogenic', oncogenicPmids: [9467011, 22473468]},
-                {variant: 'D594A', mutationEffect: 'Activating', oncogenic: 'Oncogenic'}, {variant: 'D594E', mutationEffect: 'Inactivating', mutationEffectPmids: [9467011, 22473468], oncogenic: 'Unknown'},
-                {variant: 'D594N', mutationEffect: '', oncogenic: 'Oncogenic'}, {variant: 'D594V', mutationEffect: 'Activating', mutationEffectPmids: [9467011, 22473468], oncogenic: 'Unknown'},
-                {variant: 'E715K', mutationEffect: 'Activating', oncogenic: 'Oncogenic', oncogenicPmids: [9467011, 22473468], }, {variant: 'V600E', mutationEffect: '', oncogenic: 'Unknown'},
-                {variant: 'V600R', mutationEffect: 'Inactivating', oncogenic: 'Oncogenic'}, {variant: 'V600K', mutationEffect: '', oncogenic: 'Unknown'}];
+            $http.get("http://dashi-dev.cbio.mskcc.org:8080/oncokb/api/public/v1/search/variants/clinical?hugoSymbol=" + $routeParams.geneName)
+                    .then(function (clinicalVariants) {
+                        $scope.clinicalVariants = clinicalVariants.data.data;
+                    });
+            $http.get("http://dashi-dev.cbio.mskcc.org:8080/oncokb/api/public/v1/search/variants/biological?hugoSymbol=" + $routeParams.geneName)
+                    .then(function (biologicalVariants) {
+                        $scope.annoatedVariants = biologicalVariants.data.data;
+                    });
 
             //filter the tables by chosen data in mutation mapper
             //use flag to tell if any need to filter the table or not
@@ -101,13 +97,13 @@ angular.module('oncokbStaticApp')
                 var maxLengthStudy = "", colors = [];
                 for (var i = 0; i < shortNames.length; i++)
                 {
-                    colors.push('green');
+                    colors.push('#1c75cd');
                     if (shortNames[i].length > maxLengthStudy.length)
                         maxLengthStudy = shortNames[i];
                 }
 
 
-                var trace1 = {
+                var trace = {
                     x: shortNames,
                     y: frequencies,
                     type: 'bar',
@@ -118,18 +114,16 @@ angular.module('oncokbStaticApp')
                     }
                 };
 
-                var data = [trace1];
+                var data = [trace];
 
                 var layout = {
                     yaxis: {
                         title: 'Alteration Frequency',
                         titlefont: {
-                            size: 16,
-                            color: 'rgb(107, 107, 107)'
+                            size: 16
                         },
                         tickfont: {
-                            size: 10,
-                            color: 'rgb(107, 107, 107)'
+                            size: 12
                         },
                         tickmode: 'array',
                         ticksuffix: "%",
@@ -156,14 +150,13 @@ angular.module('oncokbStaticApp')
                     });
 
                     mutationMapperConstructor(newMutationData, true);
-                    colors.fill('green');
-                    colors[tempIndex] = 'rgb(0, 102, 0)';
+                    colors.fill('#1c75cd');
+                    colors[tempIndex] = '#064885';
                     Plotly.redraw('histogramDiv', data, layout, {displaylogo: false, modeBarButtonsToRemove: ['sendDataToCloud', 'zoom2d', 'pan2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian']});
-//                    updateTable();
 
                     $(".mutation-details-filter-reset").click(function () {
                         //show all of the data again
-                        colors.fill('green');
+                        colors.fill('#1c75cd');
                         Plotly.redraw('histogramDiv', data, layout, {displaylogo: false, modeBarButtonsToRemove: ['sendDataToCloud', 'zoom2d', 'pan2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian']});
                     });
 
@@ -186,62 +179,6 @@ angular.module('oncokbStaticApp')
             });
 
             // customized settings for main mapper
-            var initOpts = function ()
-            {
-                return {
-                    el: "#mutation_details",
-                    proxy: {
-                        mutationProxy: {
-                            options: {
-                                initMode: "full"
-                            }
-                        },
-                        pfamProxy: {
-                            options: {
-                                servletName: $(".url-pfam-service").val() ||
-                                        "http://www.cbioportal.org/getPfamSequence.json",
-                                initMode: "lazy"
-                            }
-                        },
-                        pdbProxy: {
-                            options: {
-                                servletName: $(".url-pdb-service").val() ||
-                                        "http://www.cbioportal.org/get3dPdb.json",
-                                initMode: "lazy"
-                            }
-                        },
-                        mutationAlignerProxy: {
-                            options: {
-                                servletName: $(".url-mutation-aligner-service").val() ||
-                                        "http://www.cbioportal.org/getMutationAligner.json",
-                                initMode: "lazy"
-                            }
-                        },
-                        pancanProxy: {
-                            options: {
-                                servletName: $(".url-pancancer-mutation-service").val() ||
-                                        "http://www.cbioportal.org/pancancerMutations.json",
-                                initMode: "lazy"
-                            }
-                        },
-                        portalProxy: {
-                            options: {
-                                servletName: $(".url-portal-metadata-service").val() ||
-                                        "http://www.cbioportal.org/portalMetadata.json",
-                                initMode: "lazy"
-                            }
-                        },
-                        variantAnnotationProxy: {
-                            options: {
-                                servletName: $(".url-variant-annotation-service").val() ||
-                                        "http://localhost:38080/variant_annotation/hgvs",
-                                initMode: "lazy"
-                            }
-                        }
-                    }
-                }
-            }
-
             var geneList = [$routeParams.geneName];
             var options = {
                 el: "#mutation_details",
@@ -301,7 +238,7 @@ angular.module('oncokbStaticApp')
                 }
             };
             var mutationMapper = null, mutationDiagram = null;
-
+            var resetFlag = false;
             function mutationMapperConstructor(mutationData, updateFlag) {
                 if (!updateFlag) {
                     //load the template when first load the page
@@ -315,14 +252,23 @@ angular.module('oncokbStaticApp')
                                 $(".mutation-details-uniprot-link").hide();
                                 mutationDiagram = diagram;
                                 //still need to work on the click mutation type panel event
-                                mutationDiagram.dispatcher.on(MutationDetailsEvents.LOLLIPOP_SELECTED, function(){updateTable("select")});
-                                mutationDiagram.dispatcher.on(MutationDetailsEvents.LOLLIPOP_DESELECTED, function(){updateTable("deselect")});
-//                                mutationDiagram.dispatcher.on(MutationDetailsEvents.INFO_PANEL_MUTATION_TYPE_SELECTED, function(){updateTable("mutationTypePanel")});
-                                $(".mutation-details-filter-reset").click(function () {
-                                    $scope.$apply(function () {
-                                        $scope.flag = true;
-                                    });
+                                mutationDiagram.dispatcher.on(MutationDetailsEvents.LOLLIPOP_SELECTED, function () {
+                                    updateTable("select");
                                 });
+                                mutationDiagram.dispatcher.on(MutationDetailsEvents.LOLLIPOP_DESELECTED, function () {
+                                    updateTable("deselect");
+                                });
+                                
+                                $(".mutation-details-filter-reset").click(function () {
+                                    resetFlag = true;
+                                });
+                                
+                                mutationDiagram.dispatcher.on(MutationDetailsEvents.DIAGRAM_PLOT_UPDATED, function(){
+                                    if(resetFlag)updateTable("reset");
+                                    else updateTable("plotUpdate");
+                                });
+                                
+                                
 
                             });
 
@@ -339,28 +285,38 @@ angular.module('oncokbStaticApp')
             }
             //get the chosen mutation data from the lollipop and update the table
             function updateTable(type) {
-                 
+                
                 var proteinChanges = [];
-                _.each(mutationDiagram.getSelectedElements(), function (ele) {
+                if(type === "plotUpdate")
+                {
+                    var pileUpValues = mutationDiagram.pileups;
+                    var currentProteinChanges = PileupUtil.getPileupMutations(pileUpValues);
+                    _.each(currentProteinChanges, function (ele) {
+                        proteinChanges.push(ele.attributes.proteinChange);
+                    });
+                }
+                else {
+                    _.each(mutationDiagram.getSelectedElements(), function (ele) {
 
-                    var mutations = ele.datum().mutations;
-                    _.each(mutations, function (item) {
-                        proteinChanges.push(item.attributes.proteinChange);
+                        var mutations = ele.datum().mutations;
+                        _.each(mutations, function (item) {
+                            proteinChanges.push(item.attributes.proteinChange);
+                        });
+
                     });
 
-                });
+                }
+                
                 $scope.$apply(function () {
-                    //this is the function for real data once the API is ready
-                    if(type === "select")
-                    {
-                        //$scope.alterationNames = _.uniq(proteinChanges);
-                        $scope.alterationNames = ["D594A", "D594E", "D594N", "D594V"];
-                        $scope.flag = false;
-                    }
-                    else if(type === "deselect")
+                    if (type === "deselect" || type === "reset")
                     {
                         $scope.flag = true;
-                    }
+                        resetFlag = false;
+                    }else
+                    {
+                        $scope.flag = false;
+                        $scope.alterationNames = _.uniq(proteinChanges);
+                    }  
                 });
             }
 
