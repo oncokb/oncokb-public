@@ -29,9 +29,26 @@ angular.module('oncokbStaticApp')
       getGenes: function() {
         return $http.get(apiLink + 'genes/');
       },
-      getEvidence: function(hugoSymbol, type) {
+      getGeneSummary: function(hugoSymbol) {
         return $http.get(apiLink + 'search/evidences?hugoSymbol=' + hugoSymbol +
-          '&type=' + type);
+          '&type=GENE_SUMMARY');
+      },
+      getGeneBackground: function(hugoSymbol) {
+        return $http.get(apiLink + 'search/evidences?hugoSymbol=' + hugoSymbol +
+          '&type=GENE_BACKGROUND');
+      },
+      getClinicalVariantByGene: function(hugoSymbol) {
+        return $http.get(apiLink + 'search/variants/biological?hugoSymbol=' + hugoSymbol);
+      },
+      getBiologicalVariantByGene: function(hugoSymbol) {
+        return $http.get(apiLink + 'search/variants/clinical?hugoSymbol=' + hugoSymbol);
+      },
+      getPortalAlterationSampleCount: function(hugoSymbol) {
+        if(hugoSymbol) {
+          return $http.get("http://localhost:8080/oncokb/api/portalAlterationSampleCount?hugoSymbol=" + hugoSymbol);
+        }else {
+          return $http.get("http://localhost:8080/oncokb/api/portalAlterationSampleCount");
+        }
       }
     };
   });

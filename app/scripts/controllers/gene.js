@@ -9,17 +9,71 @@
  */
 
 angular.module('oncokbStaticApp')
-        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $http) {
+        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $http, api) {
             $scope.gene = $routeParams.geneName;
+            $scope.meta = {};
+            $scope.status = {
+              hasSummary: false,
+              hasBackground: false,
+              hasLevel: false,
+              moreInfo: false
+            };
+            $rootScope.view.subNavItems = [{content: $scope.gene}];
+
             //clinical variants table and annotated variants table
-            $http.get("http://dashi-dev.cbio.mskcc.org:8080/oncokb/api/public/v1/search/variants/clinical?hugoSymbol=" + $routeParams.geneName)
-                    .then(function (clinicalVariants) {
-                        $scope.clinicalVariants = clinicalVariants.data.data;
-                    });
-            $http.get("http://dashi-dev.cbio.mskcc.org:8080/oncokb/api/public/v1/search/variants/biological?hugoSymbol=" + $routeParams.geneName)
-                    .then(function (biologicalVariants) {
-                        $scope.annoatedVariants = biologicalVariants.data.data;
-                    });
+            api.getClinicalVariantByGene($scope.gene)
+              .then(function(clinicalVariants) {
+                $scope.clinicalVariants = clinicalVariants.data.data;
+              });
+
+            api.getBiologicalVariantByGene($scope.gene)
+              .then(function(biologicalVariants) {
+                $scope.annoatedVariants = biologicalVariants.data.data;
+              });
+
+            api.getNumbers('gene', $scope.gene)
+              .then(function(result) {
+                var content = result.data;
+                var subNavItems = [{content: $scope.gene}];
+                if(content.data.alteration) {
+                  subNavItems.push({content: content.data.alteration + ' Variants'});
+                }
+
+                if(content.data.tumorType) {
+                  subNavItems.push({content: content.data.tumorType + ' Tumor Types'});
+                }
+
+                if(content.data.highestLevel) {
+                  $scope.meta.highestLevel = content.data.highestLevel.replace('LEVEL_', '');
+                  $scope.status.hasLevel = true;
+                }
+
+                $rootScope.view.subNavItems = subNavItems;
+              }, function(result) {
+              });
+
+            api.getGeneSummary($scope.gene)
+              .then(function(result) {
+                var content = result.data;
+                $scope.meta.geneSummary = content.data.length > 0 ? content.data[0].description : '';
+                $scope.status.hasSummary = true;
+              }, function(result) {
+                $scope.meta.geneSummary = '';
+              });
+
+
+            api.getGeneBackground($scope.gene)
+              .then(function(result) {
+                var content = result.data;
+                if (content.data.length > 0) {
+                  $scope.meta.geneBackground = content.data[0].description;
+                  $scope.status.hasBackground = true;
+                } else {
+                  $scope.meta.geneBackground = '';
+                }
+              }, function(result) {
+                $scope.meta.geneBackground = '';
+              });
 
             //filter the tables by chosen data in mutation mapper
             //use flag to tell if any need to filter the table or not
@@ -39,7 +93,6 @@ angular.module('oncokbStaticApp')
 
             $scope.view = {};
             $scope.view.levelColors = $rootScope.data.levelColors;
-            $rootScope.view.subNavItems = [{content: 'BRAF'}, {content: '170 Variants'}, {content: '50 Tumor Types'}];
 
             $scope.setColor = function (level) {
                 if ($scope.view.levelColors.hasOwnProperty(level)) {
@@ -52,9 +105,9 @@ angular.module('oncokbStaticApp')
 
             //fetch portal alteration data for histogram and construct the histogram with plotly.js
             function fetchHistogramData() {
-                $http.get("http://localhost:8080/oncokb/api/portalAlterationSampleCount")
+                api.getPortalAlterationSampleCount()
                         .then(function (totalCounts) {
-                            $http.get("http://localhost:8080/oncokb/api/portalAlterationSampleCount?hugoSymbol=" + $routeParams.geneName)
+                          api.getPortalAlterationSampleCount($scope.gene)
                                     .then(function (countsByGene) {
                                         var studies = [], results = [], shortNames = [], frequencies = [], fullNames = [];
                                         for (var i = 0; i < countsByGene.data.length; i++) {
@@ -258,17 +311,17 @@ angular.module('oncokbStaticApp')
                                 mutationDiagram.dispatcher.on(MutationDetailsEvents.LOLLIPOP_DESELECTED, function () {
                                     updateTable("deselect");
                                 });
-                                
+
                                 $(".mutation-details-filter-reset").click(function () {
                                     resetFlag = true;
                                 });
-                                
+
                                 mutationDiagram.dispatcher.on(MutationDetailsEvents.DIAGRAM_PLOT_UPDATED, function(){
                                     if(resetFlag)updateTable("reset");
                                     else updateTable("plotUpdate");
                                 });
-                                
-                                
+
+
 
                             });
 
@@ -285,7 +338,7 @@ angular.module('oncokbStaticApp')
             }
             //get the chosen mutation data from the lollipop and update the table
             function updateTable(type) {
-                
+
                 var proteinChanges = [];
                 if(type === "plotUpdate")
                 {
@@ -306,7 +359,7 @@ angular.module('oncokbStaticApp')
                     });
 
                 }
-                
+
                 $scope.$apply(function () {
                     if (type === "deselect" || type === "reset")
                     {
@@ -316,7 +369,7 @@ angular.module('oncokbStaticApp')
                     {
                         $scope.flag = false;
                         $scope.alterationNames = _.uniq(proteinChanges);
-                    }  
+                    }
                 });
             }
 
