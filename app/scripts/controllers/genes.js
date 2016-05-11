@@ -26,11 +26,12 @@ angular.module('oncokbStaticApp')
 
     $scope.dt = {};
     $scope.dt.dtOptions = {
+      paging: false,
       hasBootstrap: true,
-      paginationType: 'simple',
       language: {
-        loadingRecords: '<img src="resources/images/loader.gif"> Loading...'
-      }
+        loadingRecords: '<img src="resources/images/loader.gif">'
+      },
+      scrollY: 500
     };
     $scope.dt.dtColumnDefs = [
       DTColumnDefBuilder.newColumnDef(0),

@@ -1,6 +1,6 @@
-<link href="../lib/mutation-mapper/css/jquery-ui-1.10.3.custom.css" type="text/css" rel="stylesheet" />
-<link href="../lib/mutation-mapper/css/mutationMapper.css" type="text/css" rel="stylesheet" />
-<link href="../lib/mutation-mapper/css/mutation_info_panel.css" type="text/css" rel="stylesheet" />
+<link href="../lib/mutation-mapper/css/jquery-ui-1.10.3.custom.css" type="text/css" rel="stylesheet"/>
+<link href="../lib/mutation-mapper/css/mutationMapper.css" type="text/css" rel="stylesheet"/>
+<link href="../lib/mutation-mapper/css/mutation_info_panel.css" type="text/css" rel="stylesheet"/>
 
 <script type="text/javascript" src="../lib/mutation-mapper/cbio-util.js"></script>
 <script type="text/javascript" src="../lib/mutation-mapper/download-util.js"></script>
@@ -10,148 +10,137 @@
 
 
 <script type="text/javascript">
-    // this is for the moustache-like templates
-    _.templateSettings = {
-        interpolate: /\{\{(.+?)\}\}/g
-    };</script>
+  // this is for the moustache-like templates
+  _.templateSettings = {
+    interpolate: /\{\{(.+?)\}\}/g
+  };</script>
 
 
-<div class="gene" style="margin:50px" ng-app="oncokbStaticApp" ng-controller="GeneCtrl">
+<div class="gene container" ng-app="oncokbStaticApp" ng-controller="GeneCtrl">
 
-    <div class="row">
-        <div class="col-lg-6 col-md-6">
-            <span class="gene-title">{{gene}}</span><span>The highest level of evidence: <span ng-style="setColor('1')">Level 1</span></span>
-            <p>BRAF encodes a serine/threonine kinase involved in the MAPK signaling pathway.
-                Mutations of BRAF are found in melanomas and thyroid, lung and colorectal cancers, among others.</p>
-            <span class="pull-right" ng-class="{'hide': !!moreInfo}">See BRAF background
-                <i class="fa fa-arrow-circle-o-down gene-more-info-icon" ng-click="moreInfo = !moreInfo"></i></span>
-            <p ng-class="{'hide': !moreInfo}">The BRAF protein is a serine/threonine kinase that plays
-                a key role in the regulation of the mitogen-activated protein kinase (MAPK) cascade (PMID: 15520807),
-                which under physiologic conditions regulates the expression of genes involved in cellular functions,
-                including proliferation (PMID: 24202393). Genetic alterations in BRAF are found primarily in melanomas
-                and thyroid cancers as well as a small fraction of lung and colorectal cancers. The most common BRAF
-                point mutation is V600E, which deregulates the protein's kinase activity leading to constitutive BRAF
-                activation and signaling as a monomer (PMID: 20179705), although other mutations have been found
-                (PMID: 12068308) which affect the protein's propensity to dimerize (PMID: 16858395, 26343582).
-                The product of these alterations is a BRAF kinase that can activate MAPK signaling in an unregulated manner and,
-                in some instances, is directly responsible for cancer growth (PMID: 15520807).</p>
-            <span class="pull-right" ng-class="{'hide': !moreInfo}">Hide <i
-                    class="fa fa-arrow-circle-o-up gene-less-info-icon" ng-click="moreInfo = !moreInfo"></i></span>
-        </div>
-
-        <div class="col-lg-6 col-md-6">
-
-            <div id="histogramDiv"></div>
-
-        </div>
+  <div class="row">
+    <div class="col-lg-6 col-md-6">
+      <span class="gene-title">{{gene}}</span><br/>
+      <h5 ng-if="status.hasLevel">Highest level of evidence: <span
+        ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h5>
+      <p ng-if="status.hasSummary">{{meta.geneSummary}}</p>
+      <span ng-if="status.hasBackground" class="pull-right" ng-class="{'hide': !!status.moreInfo}">See BRAF background
+        <i class="fa fa-arrow-circle-o-down gene-more-info-icon" ng-click="status.moreInfo=!status.moreInfo"></i></span>
+      <p ng-if="status.hasBackground" ng-class="{'hide': !status.moreInfo}">{{meta.geneBackground}}</p>
+      <span class="pull-right" ng-class="{'hide': !status.moreInfo}">Hide <i
+        class="fa fa-arrow-circle-o-up gene-less-info-icon" ng-click="status.moreInfo=!status.moreInfo"></i></span>
     </div>
 
-    <div class="row">
-        <div class="col-lg-12 col-md-12">
+    <div class="col-lg-6 col-md-6">
 
-            <div id="templateDiv"></div>
-            <div id="mutation_details"></div>
+      <div id="histogramDiv"></div>
 
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12">
+
+      <div id="templateDiv"></div>
+      <div id="mutation_details"></div>
+
+
+    </div>
+  </div>
+
+  <div class="row gene-table">
+    <div class="col-lg-12 col-md-12">
+      <br/><br/><br/>
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#clinicalVariants">Clinic Relevant Variants</a></li>
+        <li><a data-toggle="tab" href="#annotatedVariants">All Annotated Variants</a></li>
+
+      </ul>
+      <div class="tab-content">
+        <div id="clinicalVariants" class="tab-pane fade in active">
+          <br/><br/><br/>
+          <table datatable="ng" class="row-border hover">
+            <thead>
+            <tr>
+              <th>Variant</th>
+              <th>Cancer Type</th>
+              <th>Level</th>
+              <th>Drug</th>
+              <th>Evidence</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="x in allClinicalVariants = (clinicalVariants| filter: synchronizeData())">
+              <td>{{ x.variant}}</td>
+              <td>{{ x.cancerType}}</td>
+              <td>{{ x.level}}</td>
+              <td>
+                <span ng-repeat="drugItem in x.drug">
+                    <span>{{drugItem}}<span ng-if="$index < x.drug.length - 1">, </span></span>
+                </span>
+              </td>
+              <td>
+                <span ng-repeat="pub in x.drugPmids">
+                    <span qtip number="{{pub}}">{{pub}}<span
+                      ng-if="$index < x.drugPmids.length - 1">, </span></span>
+                </span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
 
         </div>
-    </div>
+        <div id="annotatedVariants" class="tab-pane fade">
+          <br/><br/><br/>
 
-    <div class="row gene-table">
-        <div class="col-lg-12 col-md-12">
+          <table datatable="ng" class="row-border hover">
+            <thead>
+            <tr>
+              <th>Variant</th>
+              <th>Mutation Effect</th>
+              <th>Mutation Effect PMID</th>
+              <th>Oncogenic</th>
+              <th>Oncogenic PMID</th>
 
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="y in allAnnoatedVariants = (annoatedVariants| filter: synchronizeData())">
+              <td>{{ y.variant}}</td>
+              <td>{{ y.mutationEffect}}</td>
+              <td>
+                <span ng-repeat="pub in y.mutationEffectPmids">
+                    <span qtip number="{{pub}}">{{pub}}<span
+                      ng-if="$index < y.mutationEffectPmids.length - 1">, </span></span>
+                </span>
+              </td>
+              <td>{{ y.oncogenic}}</td>
+              <td>
+                <span ng-repeat="pub in y.oncogenicPmids">
+                    <span qtip number="{{pub}}">{{pub}}<span
+                      ng-if="$index < y.oncogenicPmids.length - 1">, </span></span>
+                </span>
+              </td>
 
-            <br/><br/><br/>
-            <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#clinicalVariants">Clinic Relevant Variants</a></li>
-                <li><a data-toggle="tab" href="#annotatedVariants">All Annotated Variants</a></li>
-
-            </ul>
-
-            <div class="tab-content">
-                <div id="clinicalVariants" class="tab-pane fade in active">
-                    <br/><br/><br/>
-                    <table datatable="ng" class="row-border hover">
-                        <thead>
-                            <tr>
-                                <th>Variant</th>
-                                <th>Cancer Type</th>
-                                <th>Level</th>
-                                <th>Drug</th>
-                                <th>Evidence</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="x in allClinicalVariants = (clinicalVariants| filter: synchronizeData())">
-                                <td>{{ x.variant}}</td>
-                                <td>{{ x.cancerType}}</td>
-                                <td>{{ x.level}}</td>
-                                <td>
-                                    <span ng-repeat="drugItem in x.drug">
-                                        <span>{{drugItem}}<span ng-if="$index < x.drug.length - 1">, </span></span>
-                                    </span>
-                                </td>
-                                <td>
-                                    <span ng-repeat="pub in x.drugPmids">
-                                        <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < x.drugPmids.length - 1">, </span></span>
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-                <div id="annotatedVariants" class="tab-pane fade">
-                    <br/><br/><br/>
-
-                    <table datatable="ng" class="row-border hover">
-                        <thead>
-                            <tr>
-                                <th>Variant</th>
-                                <th>Mutation Effect</th>
-                                <th>Mutation Effect PMID</th>
-                                <th>Oncogenic</th>
-                                <th>Oncogenic PMID</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="y in allAnnoatedVariants = (annoatedVariants| filter: synchronizeData())">
-                                <td>{{ y.variant}}</td>
-                                <td>{{ y.mutationEffect}}</td>
-                                <td>
-                                    <span ng-repeat="pub in y.mutationEffectPmids">
-                                        <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < y.mutationEffectPmids.length - 1">, </span></span>
-                                    </span>
-                                </td>
-                                <td>{{ y.oncogenic}}</td>
-                                <td>
-                                    <span ng-repeat="pub in y.oncogenicPmids">
-                                        <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < y.oncogenicPmids.length - 1">, </span></span>
-                                    </span>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-
-            </div>
-
+            </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <script type="text/template" id="custom_mutation_details_template">
-    <div class='mutation-3d-container'></div>
-    <div class='mutation-details-loader'>
+  <div class='mutation-3d-container'></div>
+  <div class='mutation-details-loader'>
     <img src='{{loaderImage}}'/>
-    </div>
-    <div class='mutation-details-content'>
+  </div>
+  <div class='mutation-details-content'>
     {{mainContent}}
-    </div>
+  </div>
 </script>
 <!-- Customized Mutation Table components -->
 <script type="text/template" id="custom_mutation_case_id_template">
-    <b alt="{{caseIdTip}}" class="{{caseIdClass}}">{{caseId}}</b>
+  <b alt="{{caseIdTip}}" class="{{caseIdClass}}">{{caseId}}</b>
 </script>

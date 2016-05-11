@@ -9,7 +9,7 @@
  */
 angular.module('oncokbStaticApp')
   .controller('HomeCtrl', function($scope, $location, $rootScope, $window) {
-    $scope.content = {hoveredGene: "gets", hoveredCount: ''};
+    $scope.content = {hoveredGene: "gets", hoveredCount: '', main: $rootScope.meta.numbers.main};
     $scope.wordCloudContent = {};
     d3.csv('resources/files/all_genes_with_all_variants.csv', function(content) {
       $scope.wordCloudContent = content;
@@ -26,6 +26,10 @@ angular.module('oncokbStaticApp')
       generateWordCloud($scope.wordCloudContent);
     });
 
+    $rootScope.$watch('meta.numbers', function(n, o) {
+      $scope.content.main = n.main;
+    });
+
     function generateWordCloud(content) {
       var levelColors = $rootScope.data.levelColors;
       var levelSize = {
@@ -34,7 +38,7 @@ angular.module('oncokbStaticApp')
         '2B': 40,
         '3A': 35,
         '3B': 30,
-        '4': 20,
+        '4': 15,
         'Other': 15
       };
       var genes = {};

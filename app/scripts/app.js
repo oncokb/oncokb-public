@@ -19,10 +19,12 @@ angular
     'ui.materialize',
     'ui.router',
     'datatables',
-    'datatables.bootstrap'
+    'datatables.bootstrap',
+    'ui.bootstrap'
   ])
   .constant('_', window._)
-  .config(function ($routeProvider) {
+  .constant('apiLink', 'http://dashi-dev.cbio.mskcc.org:8080/oncokb/api/public/v1/')
+  .config(function($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -66,9 +68,30 @@ angular
   });
 
 angular.module('oncokbStaticApp').run(
-  function($timeout, $rootScope, $location, _) {
-    $rootScope.meta = {};
-    $rootScope.view = {};
+  function($timeout, $rootScope, $location, _, api) {
+
+    $rootScope.meta = {
+      levelsDesc: {
+        '1': 'FDA-approved biomarker and drug in this indication',
+        '2A': 'Standard-of-care biomarker and drug in this indication but not FDA-approved',
+        '2B': 'FDA-approved biomarker and drug in another indication but not FDA or Standard-of-care for this indication',
+        '3A': 'Clinical evidence links biomarker to drug response in this indication but neither biomarker or drug are FDA-approved or Standard-of-care',
+        '3B': 'Clinical evidence links biomarker to drug response in another indication but neither biomarker or drug are FDA-approved or Standard-of-care',
+        '4': 'Preclinical evidence associates this biomarker to drug response but neither biomarker or drug are FDA-approved or Standard-of-care',
+      },
+      numbers: {
+        main: {
+          gene: 0,
+          alteration: 0,
+          tumorType: 0,
+          drug: 0,
+        }
+      }
+    }
+
+    $rootScope.view = {
+      currentPage: '/'
+    };
     $rootScope.meta.view = {
       subNavItems: [{
         content: '427 Genes',
@@ -82,13 +105,28 @@ angular.module('oncokbStaticApp').run(
         '2B': '#2A5E8E',
         '3A': '#794C87',
         '3B': '#9B7EB6',
-        '4': 'black',
+        '4': 'grey',
         //'R1': '#F40000',
         //'R2': '#C4006F',
         //'R3': '#6F08A3',
         'Other': 'grey'
       }
     };
+
+    api.getNumbers('main')
+      .success(function(result) {
+        if (result.meta.code === 200) {
+          $rootScope.meta.numbers = {
+            main: {
+              gene: result.data.gene,
+              alteration: result.data.alteration,
+              tumorType: result.data.tumorType,
+              drug: result.data.drug,
+            }
+          };
+        }
+      });
+
     $rootScope.$on('$routeChangeStart', function() {
       $rootScope.view.subNavItems = [];
     });
@@ -99,10 +137,11 @@ angular.module('oncokbStaticApp').run(
         $.extend(true, $rootScope.view.subNavItems, $rootScope.meta.view.subNavItems);
       }
     });
-  });
+  })
+;
 
 
 NProgress.start();
-angular.element(document).ready(function () {
+angular.element(document).ready(function() {
   angular.bootstrap(document, ['oncokbStaticApp']);
 });

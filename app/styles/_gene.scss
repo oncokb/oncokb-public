@@ -1,0 +1,26 @@
+/* Styles for gene page */
+
+.gene {
+  margin-top: 50px;
+  .gene-more-info-icon:hover, .gene-less-info-icon:hover {
+    cursor: pointer;
+  }
+
+  .gene-table {
+    td:first-child, th {
+      white-space: nowrap;
+    }
+    input[type=search] {
+      border-color: $dark-blue;
+      font-size: 14px;
+    }
+    input[type=search]:focus {
+      border-bottom-color: $orange;
+      box-shadow: 0 1px 0 0 $orange;
+    }
+  }
+
+  .gene-title {
+    font-size: 40px;
+  }
+}

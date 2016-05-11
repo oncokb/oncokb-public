@@ -1,0 +1,137 @@
+@media only screen {
+  body {
+    padding-top: 70px;
+  }
+}
+
+@media only screen and (min-width: $range-min-width) {
+  .container {
+    width: 90%;
+  }
+  .about, .team {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: $range-max-sm-width) {
+  .container {
+    width: 100%;
+  }
+  .about, .team {
+    width: 100%;
+  }
+}
+
+@media (max-width: $range-max-sm-width) {
+  .wrapper {
+    /* Negative indent footer by its height */
+    margin: 0 auto -210px;
+    /* Pad bottom by footer height */
+    padding: 20px 0 210px;
+  }
+  .footer {
+    height: 210px;
+  }
+}
+
+@media (min-width: $range-min-width) {
+  .wrapper {
+    /* Negative indent footer by its height */
+    margin: 0 auto -120px;
+    /* Pad bottom by footer height */
+    padding: 20px 0 120px;
+  }
+  .footer {
+    height: 120px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .navbar-nav > li > a {
+    padding: 15px 6px;
+  }
+}
+
+@media (min-width: $range-min-sm-width) {
+  .menu-toggle {
+    display: none;
+  }
+}
+
+@media (max-width: $range-max-xm-width) {
+  .parentCompany {
+    display: none;
+  }
+  .subNav.navbar-fixed-top {
+    top: 0;
+  }
+  .mskcc-icon {
+    display: none;
+  }
+  .menu-toggle {
+    display: block;
+  }
+}
+
+@media (max-width: $range-max-sm-width) and (min-width: $range-min-sm-width) {
+  .mskcc-icon {
+    display: block;
+  }
+  .mskcc-logo {
+    display: none;
+  }
+}
+
+@media (min-width: $range-min-width) {
+  .mskcc-logo {
+    display: block;
+  }
+  .mskcc-icon {
+    display: none;
+  }
+
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  font-family: $font-sans;
+}
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+}
+
+.footer {
+  width: 100%;
+  padding: 10px 0;
+  color: #fff;
+  background-color: #737373;
+  text-align: center;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 300;
+  a {
+    color: white;
+    border-right: 0.5px solid #fff;
+    padding: 0 5px;
+  }
+  a:last-child {
+    border: 0;
+  }
+  .footer-row-2 {
+    line-height: 50px;
+    margin-bottom: 0;
+  }
+  .mskcc-footer-logo0-wrapper {
+    height: 50px;
+  }
+  .mskcc-footer-logo {
+    height: 50px;
+  }
+}
