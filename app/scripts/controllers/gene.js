@@ -14,7 +14,7 @@ angular.module('oncokbStaticApp')
             api.getNumbers('gene', $routeParams.geneName)
                     .then(function (result) {
                         var content = result.data;
-                        if (content) { 
+                        if (content) {
                             $scope.gene = content.data.gene.hugoSymbol;
                             $route.updateParams({geneName: $scope.gene});
                             var subNavItems = [{content: $scope.gene}];
@@ -41,7 +41,7 @@ angular.module('oncokbStaticApp')
                     });
 
 
-            
+
 
             $scope.meta = {};
             $scope.status = {
@@ -129,17 +129,17 @@ angular.module('oncokbStaticApp')
                                         var studies = [], results = [], shortNames = [], frequencies = [], fullNames = [];
                                         for (var i = 0; i < countsByGene.data.length; i++) {
 //                                            if(i < 2){
-                                                 for (var j = 0; j < totalCounts.data.length; j++)
+                                            for (var j = 0; j < totalCounts.data.length; j++)
+                                            {
+                                                if (totalCounts.data[j][0] === countsByGene.data[i][0])
                                                 {
-                                                    if (totalCounts.data[j][0] === countsByGene.data[i][0])
-                                                    {
-                                                        results.push({study: countsByGene.data[i][0], frequency: (100 * countsByGene.data[i][1] / totalCounts.data[j][1]).toFixed(1)});
-                                                        break;
-                                                    }
-
+                                                    results.push({study: countsByGene.data[i][0], frequency: (100 * countsByGene.data[i][1] / totalCounts.data[j][1]).toFixed(1)});
+                                                    break;
                                                 }
+
+                                            }
 //                                            }
-                                           
+
 
                                         }
                                         results.sort(function (a, b) {
@@ -176,14 +176,13 @@ angular.module('oncokbStaticApp')
                         maxLengthStudy = shortNames[i];
                 }
                 var histogramWidth = 500;
-                if(frequencies.length < 5)
+                if (frequencies.length < 5)
                 {
                     histogramWidth = 150 + 50 * frequencies.length;
-                }
-                else if(frequencies.length < 10){
+                } else if (frequencies.length < 10) {
                     histogramWidth = 100 + 50 * frequencies.length;
                 }
-                
+
 
                 var trace = {
                     x: shortNames,
@@ -252,7 +251,7 @@ angular.module('oncokbStaticApp')
             //fetch the mutation mapper from api and construct the graph from mutation mapper library
             var mutationData = [];
             api.getMutationMapperData($routeParams.geneName).then(function (mutationMapperInfo) {
-                $scope.mutationMapperFlag = mutationMapperInfo.data.length > 0 ? true: false;
+                $scope.mutationMapperFlag = mutationMapperInfo.data.length > 0 ? true : false;
                 var count = 1;
                 mutationMapperInfo.data.forEach(function (item) {
                     mutationData.push({cancerStudy: item.cancerStudy, geneSymbol: item.gene.hugoSymbol, caseId: item.sampleId, proteinChange: item.proteinChange, mutationType: item.alterationType, proteinPosStart: item.proteinStart, proteinPosEnd: item.proteinEnd, mutationSid: "stalone_mut_" + count, mutationId: "stalone_mut_" + count});
