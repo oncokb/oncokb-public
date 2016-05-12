@@ -16,11 +16,11 @@
   };</script>
 
 
-<div class="gene container" ng-app="oncokbStaticApp" ng-controller="GeneCtrl">
+<div class="gene container">
 
   <div class="row">
-    <div class="col-lg-6 col-md-6">
-      <span class="gene-title">{{gene}}</span><br/>
+    <div ng:class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[altFreFlag==true]">
+      <span class="gene-title">{{gene}}</span><br/>  
       <h5 ng-if="status.hasLevel">Highest level of evidence: <span
         ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h5>
       <p ng-if="status.hasSummary">{{meta.geneSummary}}</p>
@@ -31,14 +31,14 @@
         class="fa fa-arrow-circle-o-up gene-less-info-icon" ng-click="status.moreInfo=!status.moreInfo"></i></span>
     </div>
 
-    <div class="col-lg-6 col-md-6">
+    <div class="col-lg-6 col-md-6" ng-if="altFreFlag">
 
-      <div id="histogramDiv"></div>
+      <div id="histogramDiv" style="overflow-x: auto"></div>
 
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" ng-if="mutationMapperFlag">
     <div class="col-lg-12 col-md-12">
 
       <div id="templateDiv"></div>
@@ -51,21 +51,21 @@
   <div class="row gene-table">
     <div class="col-lg-12 col-md-12">
       <br/><br/><br/>
-      <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#clinicalVariants">Clinic Relevant Variants</a></li>
-        <li><a data-toggle="tab" href="#annotatedVariants">All Annotated Variants</a></li>
+      <ul class="nav nav-tabs" ng-if="clinicalVariants.length > 0 || annoatedVariants.length > 0">
+        <li class="active" ng-if="clinicalVariants.length > 0"><a data-toggle="tab" href="#clinicalVariants">Clinic Relevant Variants</a></li>
+        <li ng-if="annoatedVariants.length > 0"><a data-toggle="tab" href="#annotatedVariants">All Annotated Variants</a></li>
 
       </ul>
       <div class="tab-content">
-        <div id="clinicalVariants" class="tab-pane fade in active">
+        <div id="clinicalVariants" class="tab-pane fade in active" ng-if="clinicalVariants.length > 0">
           <br/><br/><br/>
-          <table datatable="ng" class="row-border hover">
+          <table id="clinicalTable" datatable="ng" class="row-border hover">
             <thead>
             <tr>
               <th>Variant</th>
               <th>Cancer Type</th>
-              <th>Level</th>
               <th>Drug</th>
+              <th>Level</th>
               <th>Evidence</th>
             </tr>
             </thead>
@@ -73,12 +73,12 @@
             <tr ng-repeat="x in allClinicalVariants = (clinicalVariants| filter: synchronizeData())">
               <td>{{ x.variant}}</td>
               <td>{{ x.cancerType}}</td>
-              <td>{{ x.level}}</td>
               <td>
                 <span ng-repeat="drugItem in x.drug">
                     <span>{{drugItem}}<span ng-if="$index < x.drug.length - 1">, </span></span>
                 </span>
               </td>
+              <td>{{ x.highestLevel}}</td>
               <td>
                 <span ng-repeat="pub in x.drugPmids">
                     <span qtip number="{{pub}}">{{pub}}<span
@@ -90,17 +90,16 @@
           </table>
 
         </div>
-        <div id="annotatedVariants" class="tab-pane fade">
+        <div id="annotatedVariants" class="tab-pane fade" ng-if="annoatedVariants.length > 0">
           <br/><br/><br/>
 
-          <table datatable="ng" class="row-border hover">
+          <table id="annotatedTable" datatable="ng" class="row-border hover" style="width: 100%">
             <thead>
             <tr>
               <th>Variant</th>
               <th>Mutation Effect</th>
-              <th>Mutation Effect PMID</th>
               <th>Oncogenic</th>
-              <th>Oncogenic PMID</th>
+              <th>Evidence</th>
 
             </tr>
             </thead>
@@ -108,23 +107,20 @@
             <tr ng-repeat="y in allAnnoatedVariants = (annoatedVariants| filter: synchronizeData())">
               <td>{{ y.variant}}</td>
               <td>{{ y.mutationEffect}}</td>
-              <td>
-                <span ng-repeat="pub in y.mutationEffectPmids">
-                    <span qtip number="{{pub}}">{{pub}}<span
-                      ng-if="$index < y.mutationEffectPmids.length - 1">, </span></span>
-                </span>
-              </td>
               <td>{{ y.oncogenic}}</td>
               <td>
+                <span ng-repeat="pub in y.mutationEffectPmids">
+                    <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < y.mutationEffectPmids.length - 1">, </span></span>
+                </span>
                 <span ng-repeat="pub in y.oncogenicPmids">
-                    <span qtip number="{{pub}}">{{pub}}<span
-                      ng-if="$index < y.oncogenicPmids.length - 1">, </span></span>
+                    <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < y.oncogenicPmids.length - 1">, </span></span>
                 </span>
               </td>
 
             </tr>
             </tbody>
           </table>
+           
         </div>
       </div>
     </div>

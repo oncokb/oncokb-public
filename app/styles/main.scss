@@ -99,6 +99,11 @@ a:hover, a:focus {
   margin-bottom: 10px;
 }
 
+.myQTip{
+  min-width: 600px;
+  min-height: 400px;
+}
+
 /* Include styles for each page */
 @import "home";
 @import "genes";
