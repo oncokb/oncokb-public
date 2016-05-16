@@ -698,7 +698,7 @@ var MutationViewsUtil = (function()
 	 */
 	function renderTablePlaceholder(imageLocation)
 	{
-		imageLocation = imageLocation || "images/ajax-loader.gif";
+		imageLocation = imageLocation || "../../resources/images/loader.gif";
 
 		// TODO customize width & height?
 		var vars = {loaderImage: imageLocation, width: 15, height: 15};
@@ -7643,7 +7643,7 @@ var Mutation3dVisView = Backbone.View.extend({
 		var templateFn = BackboneTemplateCache.getTemplateFn("mutation_3d_vis_template");
 		// TODO make the images customizable?
 		var template = templateFn(
-			{loaderImage: "images/ajax-loader.gif",
+			{loaderImage: "../../resources/images/loader.gif",
 				helpImage: "images/help.png"});
 
 		// load the compiled HTML into the Backbone "el"
@@ -8712,7 +8712,7 @@ var MutationDetailsTableView = Backbone.View.extend({
 		// compile the template using underscore
 		var templateFn = BackboneTemplateCache.getTemplateFn("mutation_details_table_template");
 		// TODO customize loader image
-		var template = templateFn({loaderImage: "images/ajax-loader.gif"});
+		var template = templateFn({loaderImage: "../../resources/images/loader.gif"});
 
 		// load the compiled HTML into the Backbone "el"
 		self.$el.html(template);
@@ -9006,7 +9006,7 @@ var MutationDetailsView = Backbone.View.extend({
 		var content = self._generateContent();
 
 		// TODO make the image customizable?
-		var variables = {loaderImage: "images/ajax-loader.gif",
+		var variables = {loaderImage: "../../resources/images/loader.gif",
 			listContent: content.listContent,
 			mainContent: content.mainContent};
 
@@ -9107,7 +9107,7 @@ var MutationDetailsView = Backbone.View.extend({
 			var templateFn = BackboneTemplateCache.getTemplateFn(self.options.config.mainContentTemplate);
 
 			mainContent += templateFn(
-					{loaderImage: "images/ajax-loader.gif",
+					{loaderImage: "../../resources/images/loader.gif",
 						geneSymbol: gene,
 						geneId: cbio.util.safeProperty(gene)});
 
@@ -10457,7 +10457,7 @@ var PdbTableView = Backbone.View.extend({
 		// compile the template using underscore
 		var templateFn = BackboneTemplateCache.getTemplateFn("pdb_table_view_template");
 		// TODO customize loader image
-		var template = templateFn({loaderImage: "images/ajax-loader.gif"});
+		var template = templateFn({loaderImage: "../../resources/images/loader.gif"});
 
 		// load the compiled HTML into the Backbone "el"
 		self.$el.html(template);

@@ -21,7 +21,7 @@ angular.module('oncokbStaticApp')
                     var my = attrs.hasOwnProperty('my') ? attrs.my : 'bottom center';
                     var at = attrs.hasOwnProperty('at') ? attrs.at : 'top center';
 
-                    src = '<iframe width="600px" height="300px" src="http://www.ncbi.nlm.nih.gov/pubmed/' + attrs.number + '"></iframe>';
+                    src = '<iframe width="580px" height="400px" src="http://www.ncbi.nlm.nih.gov/pubmed/' + attrs.number + '"></iframe>';
                     content = $(src);
 
                     my = 'top left';
@@ -37,7 +37,7 @@ angular.module('oncokbStaticApp')
                             viewport: $(window)
                         },
                         style: {
-                            classes: 'qtip-light qtip-rounded'
+                            classes: 'qtip-light qtip-rounded myQTip',
                         },
                         show: 'mouseover',
                         hide: {
@@ -45,6 +45,7 @@ angular.module('oncokbStaticApp')
                             fixed: true,
                             delay: 100
                         }
+                       
                     };
                     $(element).qtip(options);
 

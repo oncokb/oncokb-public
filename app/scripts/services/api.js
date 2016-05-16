@@ -38,10 +38,10 @@ angular.module('oncokbStaticApp')
           '&type=GENE_BACKGROUND');
       },
       getClinicalVariantByGene: function(hugoSymbol) {
-        return $http.get(apiLink + 'search/variants/biological?hugoSymbol=' + hugoSymbol);
+        return $http.get(apiLink + 'search/variants/clinical?hugoSymbol=' + hugoSymbol);
       },
       getBiologicalVariantByGene: function(hugoSymbol) {
-        return $http.get(apiLink + 'search/variants/clinical?hugoSymbol=' + hugoSymbol);
+        return $http.get(apiLink + 'search/variants/biological?hugoSymbol=' + hugoSymbol);
       },
       getPortalAlterationSampleCount: function(hugoSymbol) {
         if(hugoSymbol) {
@@ -49,6 +49,12 @@ angular.module('oncokbStaticApp')
         }else {
           return $http.get("http://localhost:8080/oncokb/api/portalAlterationSampleCount");
         }
+      },
+      getMutationMapperData: function(hugoSymbol) {
+        return $http.get("http://localhost:8080/oncokb/api/mutationMapperData?hugoSymbol=" + hugoSymbol);
+      },
+      getStudies: function(studies){
+          return $http.get("http://www.cbioportal.org/api/studies?study_ids=" + studies);
       }
     };
   });
