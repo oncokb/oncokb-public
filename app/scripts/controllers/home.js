@@ -8,12 +8,14 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-  .controller('HomeCtrl', function($scope, $location, $rootScope, $window) {
+  .controller('HomeCtrl', function($scope, $location, $rootScope, $window, api) {
     $scope.content = {
       hoveredGene: "gets",
       hoveredCount: '',
       main: $rootScope.meta.numbers.main,
-      levels: $rootScope.meta.numbers.levels
+      levels: $rootScope.meta.numbers.levels,
+      matchedGenes: [],
+      selectedGene: ''
     };
     // $scope.wordCloudContent = {};
     // d3.csv('resources/files/all_genes_with_all_variants.csv', function(content) {
@@ -31,9 +33,24 @@ angular.module('oncokbStaticApp')
     //   generateWordCloud($scope.wordCloudContent);
     // });
 
-    $scope.getGeneCountForLevel = function(level) {
-      if ($scope.content.levels.hasOwnProperty(level)) {
-        return $scope.content.levels[level].length;
+    $scope.searchKeyUp = function(query) {
+      return api.searchGene(query, false)
+        .then(function(result) {
+          if(result.status === 200) {
+            return result.data.data;
+          }
+        }, function() {
+
+        });
+    };
+
+    $scope.searchConfirmed = function(event) {
+      if(event && event.type && $scope.content.selectedGene.hugoSymbol) {
+        if(event.type ==='keypress' && event.keyCode === 13) {
+          $location.path('/gene/' + $scope.content.selectedGene.hugoSymbol);
+        }else if(event.type ==='click') {
+          $location.path('/gene/' + $scope.content.selectedGene.hugoSymbol);
+        }
       }
     };
 
