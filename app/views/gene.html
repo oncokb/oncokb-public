@@ -58,8 +58,9 @@
             </ul>
             <div class="tab-content">
                 <div id="clinicalVariants" class="tab-pane fade in active" ng-if="clinicalVariants.length > 0">
-                    <br/><br/><br/>
-                    <table id="clinicalTable" datatable="ng" class="row-border hover">
+                    <br/>
+<!--                    <li ng-repeat="user in users | regex:'type': testerReg">{{user.name}}</li>-->
+                    <table id="clinicalTable" datatable="ng" class="row-border hover" dt-options="clinicalDT.dtOptions" dt-columns="clinicalDT.dtColumnDefs">
                         <thead>
                             <tr>
                                 <th>Variant</th>
@@ -70,7 +71,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="x in allClinicalVariants = (clinicalVariants| filter: synchronizeData())">
+                            <tr ng-repeat="x in clinicalVariants | regex: 'variant': alterationNames">
                                 <td>{{ x.variant}}</td>
                                 <td>{{ x.cancerType}}</td>
                                 <td>
@@ -81,8 +82,7 @@
                                 <td>{{ x.highestLevel}}</td>
                                 <td>
                                     <span ng-repeat="pub in x.drugPmids">
-                                        <span qtip number="{{pub}}">{{pub}}<span
-                                                ng-if="$index < x.drugPmids.length - 1">, </span></span>
+                                        <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < x.drugPmids.length - 1">, </span></span>
                                     </span>
                                 </td>
                             </tr>
@@ -91,9 +91,9 @@
 
                 </div>
                 <div id="annotatedVariants" class="tab-pane fade" ng-if="annoatedVariants.length > 0">
-                    <br/><br/><br/>
+                    <br/>
 
-                    <table id="annotatedTable" datatable="ng" class="row-border hover" style="width: 100%">
+                    <table id="annotatedTable" datatable="ng" class="row-border hover" dt-options="biologicalDT.dtOptions" dt-columns="biologicalDT.dtColumnDefs">
                         <thead>
                             <tr>
                                 <th>Variant</th>
@@ -104,7 +104,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="y in allAnnoatedVariants = (annoatedVariants| filter: synchronizeData())">
+                            <tr ng-repeat="y in annoatedVariants | regex: 'variant': alterationNames">
                                 <td>{{ y.variant}}</td>
                                 <td>{{ y.mutationEffect}}</td>
                                 <td>{{ y.oncogenic}}</td>
