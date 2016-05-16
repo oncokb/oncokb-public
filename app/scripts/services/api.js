@@ -28,6 +28,13 @@ angular.module('oncokbStaticApp')
         }
         return null;
       },
+      searchGene: function(query, exactMatch) {
+        if(!_.isBoolean(exactMatch)) {
+          exactMatch = false;
+        }
+        return $http.get(apiLink + 'search/gene?query=' + query +
+          '&exactMatch='+exactMatch.toString());
+      },
       getGenes: function() {
         return $http.get(apiLink + 'genes/');
       },

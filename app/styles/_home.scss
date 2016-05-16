@@ -122,6 +122,14 @@
       border-left: 0;
       height: 50px;
     }
+    .dropdown-menu {
+      margin: -1px 0 0;
+      width: calc(100% - 38px);
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      text-align: center;
+
+    }
     ::-webkit-input-placeholder {
       text-align: center;
     }
