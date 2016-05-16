@@ -23,6 +23,8 @@ angular.module('oncokbStaticApp')
           return $http.get(apiLink + 'numbers/genes/');
         } else if (type === 'gene') {
           return $http.get(apiLink + 'numbers/gene/' + hugoSymbol);
+        } else if (type === 'levels') {
+          return $http.get(apiLink + 'numbers/levels/');
         }
         return null;
       },

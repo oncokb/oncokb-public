@@ -13,6 +13,7 @@ angular.module('oncokbStaticApp')
       restrict: 'E',
       scope: {
         level: '=',
+        geneCount: '=',
         color: '=',
         desc: '=',
         class: '='

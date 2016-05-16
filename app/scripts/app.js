@@ -23,7 +23,8 @@ angular
     'ui.bootstrap'
   ])
   .constant('_', window._)
-  .constant('apiLink', 'http://dashi-dev.cbio.mskcc.org:8080/oncokb/api/public/v1/')
+  // .constant('apiLink', 'http://dashi-dev.cbio.mskcc.org:8080/oncokb/api/public/v1/')
+  .constant('apiLink', 'http://localhost:8080/oncokb/api/public/v1/')
   .config(function($routeProvider) {
     $routeProvider
       .when('/', {
@@ -85,7 +86,8 @@ angular.module('oncokbStaticApp').run(
           alteration: 0,
           tumorType: 0,
           drug: 0,
-        }
+        },
+        levels: {}
       }
     }
 
@@ -116,14 +118,32 @@ angular.module('oncokbStaticApp').run(
     api.getNumbers('main')
       .success(function(result) {
         if (result.meta.code === 200) {
-          $rootScope.meta.numbers = {
-            main: {
-              gene: result.data.gene,
-              alteration: result.data.alteration,
-              tumorType: result.data.tumorType,
-              drug: result.data.drug,
-            }
+          $rootScope.meta.numbers.main = {
+            gene: result.data.gene,
+            alteration: result.data.alteration,
+            tumorType: result.data.tumorType,
+            drug: result.data.drug,
           };
+        }
+      });
+
+    api.getNumbers('levels')
+      .success(function(result) {
+        if (result.meta.code === 200 && _.isArray(result.data)) {
+          var levels = {}, levels = {};
+          _.each(result.data, function(item) {
+            if (item.level) {
+              var match = item.level.match(/(\d)+/);
+              if (_.isArray(match) && match.length > 0) {
+                if (!levels.hasOwnProperty(match[0])) {
+                  levels[match[0].toString()] = [];
+                }
+                levels[match[0].toString()] = _.union(levels[match[0]], item.genes);
+              }
+            }
+          });
+
+          $rootScope.meta.numbers.levels = levels;
         }
       });
 

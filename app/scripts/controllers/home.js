@@ -9,25 +9,40 @@
  */
 angular.module('oncokbStaticApp')
   .controller('HomeCtrl', function($scope, $location, $rootScope, $window) {
-    $scope.content = {hoveredGene: "gets", hoveredCount: '', main: $rootScope.meta.numbers.main};
-    $scope.wordCloudContent = {};
-    d3.csv('resources/files/all_genes_with_all_variants.csv', function(content) {
-      $scope.wordCloudContent = content;
+    $scope.content = {
+      hoveredGene: "gets",
+      hoveredCount: '',
+      main: $rootScope.meta.numbers.main,
+      levels: $rootScope.meta.numbers.levels
+    };
+    // $scope.wordCloudContent = {};
+    // d3.csv('resources/files/all_genes_with_all_variants.csv', function(content) {
+    //   $scope.wordCloudContent = content;
+    //
+    //   $rootScope.view.subNavItems = [{
+    //     content: '427 Genes',
+    //     link: '#/genes'
+    //   }, {content: '3800 Variants'}, {content: '333 Tumor Types'}];
+    //
+    //   generateWordCloud(content);
+    // });
+    //
+    // angular.element($window).bind('resize', function() {
+    //   generateWordCloud($scope.wordCloudContent);
+    // });
 
-      $rootScope.view.subNavItems = [{
-        content: '427 Genes',
-        link: '#/genes'
-      }, {content: '3800 Variants'}, {content: '333 Tumor Types'}];
+    $scope.getGeneCountForLevel = function(level) {
+      if ($scope.content.levels.hasOwnProperty(level)) {
+        return $scope.content.levels[level].length;
+      }
+    };
 
-      generateWordCloud(content);
+    $rootScope.$watch('meta.numbers.main', function(n, o) {
+      $scope.content.main = n;
     });
 
-    angular.element($window).bind('resize', function() {
-      generateWordCloud($scope.wordCloudContent);
-    });
-
-    $rootScope.$watch('meta.numbers', function(n, o) {
-      $scope.content.main = n.main;
+    $rootScope.$watch('meta.numbers.levels', function(n, o) {
+      $scope.content.levels = n;
     });
 
     function generateWordCloud(content) {
