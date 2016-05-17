@@ -3,13 +3,13 @@
     <div class="row">
         <div ng:class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[altFreFlag == true]">
             <span class="gene-title" ng-if="gene.length > 0">{{gene}}</span><br/>
-            <h5 ng-if="status.hasLevel">Highest level of evidence: <span
-                    ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h5>
+            <h4 ng-if="status.hasLevel">Highest level of evidence: <span
+                    ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h4>
             <p ng-if="status.hasSummary">{{meta.geneSummary}}</p>
-            <span ng-if="status.hasBackground" class="pull-right" ng-class="{'hide': !!status.moreInfo}">See BRAF background
+            <span ng-if="status.hasBackground" ng-class="{'hide': !!status.moreInfo}">See {{gene}} background
                 <i class="fa fa-arrow-circle-o-down gene-more-info-icon" ng-click="status.moreInfo = !status.moreInfo"></i></span>
             <p ng-if="status.hasBackground" ng-class="{'hide': !status.moreInfo}">{{meta.geneBackground}}</p>
-            <span class="pull-right" ng-class="{'hide': !status.moreInfo}">Hide <i
+            <span ng-class="{'hide': !status.moreInfo}">Hide <i
                     class="fa fa-arrow-circle-o-up gene-less-info-icon" ng-click="status.moreInfo = !status.moreInfo"></i></span>
         </div>
 
