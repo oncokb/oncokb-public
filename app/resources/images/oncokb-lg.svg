@@ -9,7 +9,7 @@
 	<circle fill="#FF9900" cx="0" cy="0" r="4"/>
 </g>
 <g transform="translate(55, 35)">
-	<text fill="#FFFFFF" font-family="'Times-Roman'" font-size="40">ncoKB</text>
+	<text fill="#FFFFFF" font-family="'Avenir-Black'" font-size="40">ncoKB</text>
 </g>
 <g transform="translate(15, 55)">
 	<text fill="#FFFFFF" font-family="'TimesNewRomanPSMT'" font-size="16">Memorial Sloan Kettering</text>
