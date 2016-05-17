@@ -351,7 +351,7 @@ angular.module('oncokbStaticApp')
             function mutationMapperConstructor(mutationData, updateFlag) {
                 if (!updateFlag) {
                     //load the template when first load the page
-                    $("#templateDiv").load("../../lib/mutation-mapper/mutationMapperTemplates.html", function () {
+                    $("#templateDiv").load("views/mutationMapperTemplates.html", function () {
                         // init mutation mapper
                         mutationMapper = new MutationMapper(options);
                         mutationMapper.init();
