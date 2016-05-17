@@ -54,6 +54,12 @@ angular.module('oncokbStaticApp')
       }
     };
 
+    $scope.getGeneCountForLevel = function(level) {
+      if ($scope.content.levels.hasOwnProperty(level)) {
+        return $scope.content.levels[level].length;
+      }
+    };
+
     $rootScope.$watch('meta.numbers.main', function(n, o) {
       $scope.content.main = n;
     });

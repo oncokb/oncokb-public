@@ -23,8 +23,8 @@ angular
     'ui.bootstrap'
   ])
   .constant('_', window._)
-  // .constant('apiLink', 'http://dashi-dev.cbio.mskcc.org:8080/oncokb/api/public/v1/')
-  .constant('apiLink', 'http://localhost:8080/oncokb/api/public/v1/')
+  .constant('apiLink', 'http://dashi-dev.cbio.mskcc.org:8080/oncokb-public-api/api/public/v1/')
+  // .constant('apiLink', 'http://localhost:8080/oncokb/api/public/v1/')
   .config(function($routeProvider) {
     $routeProvider
       .when('/', {

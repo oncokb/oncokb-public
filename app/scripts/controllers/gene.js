@@ -62,7 +62,7 @@ angular.module('oncokbStaticApp')
                     .then(function (biologicalVariants) {
                         $scope.annoatedVariants = biologicalVariants.data.data;
 //                        $('#annotatedTable').wrap('<div style="overflow:auto" />');
-                            
+
                     });
 
             $scope.clinicalDT = {};
@@ -92,7 +92,7 @@ angular.module('oncokbStaticApp')
                 scrollY: 500,
                 sDom: "ft",
 //                scrollX: "100%"
-                
+
             };
             $scope.biologicalDT.dtColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(0),
@@ -128,7 +128,7 @@ angular.module('oncokbStaticApp')
 
 
             //filter the tables by chosen data in mutation mapper
-            
+
             $scope.altFreFlag = true;
             $scope.mutationMapperFlag = true;
             $scope.alterationNames = "";
@@ -384,7 +384,8 @@ angular.module('oncokbStaticApp')
                             });
 
                         });
-
+                        $(".dataTables_scrollHeadInner").width("100%");
+                        $(".dataTable").width("100%");
                     });
                 } else
                 {
@@ -396,7 +397,7 @@ angular.module('oncokbStaticApp')
             }
             //get the chosen mutation data from the lollipop and update the table
             function updateTable(type) {
- 
+
                 var proteinChanges = [];
                 if (type === "plotUpdate")
                 {
@@ -434,19 +435,19 @@ angular.module('oncokbStaticApp')
                     }
                 });
             }
-            
+
 //            $("#annotatedTable").wrap("<div style='position:relative;overflow:auto;height:400px;'/>");
 
 
         }).filter('regex', function () {
     return function (input, field, regex) {
-         
+
         var patt = new RegExp(regex, "i");
         var out = [];
         for (var i = 0; i < input.length; i++) {
             if (patt.test(input[i][field]))
                 out.push(input[i]);
-        }   
+        }
         return out;
     }
 
