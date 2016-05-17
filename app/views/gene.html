@@ -20,7 +20,7 @@
 
     <div class="row">
         <div ng:class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[altFreFlag == true]">
-            <span class="gene-title">{{gene}}</span><br/>  
+            <span class="gene-title" ng-if="gene.length > 0">{{gene}}</span><br/>  
             <h5 ng-if="status.hasLevel">Highest level of evidence: <span
                     ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h5>
             <p ng-if="status.hasSummary">{{meta.geneSummary}}</p>
@@ -59,7 +59,7 @@
             <div class="tab-content">
                 <div id="clinicalVariants" class="tab-pane fade in active" ng-if="clinicalVariants.length > 0">
                     <br/>
-<!--                    <li ng-repeat="user in users | regex:'type': testerReg">{{user.name}}</li>-->
+
                     <table id="clinicalTable" datatable="ng" class="row-border hover" dt-options="clinicalDT.dtOptions" dt-columns="clinicalDT.dtColumnDefs">
                         <thead>
                             <tr>
@@ -93,7 +93,7 @@
                 <div id="annotatedVariants" class="tab-pane fade" ng-if="annoatedVariants.length > 0">
                     <br/>
 
-                    <table id="annotatedTable" datatable="ng" class="row-border hover" dt-options="biologicalDT.dtOptions" dt-columns="biologicalDT.dtColumnDefs">
+                    <table id="annotatedTable" datatable="ng" class="row-border hover" dt-options="biologicalDT.dtOptions" dt-columns="biologicalDT.dtColumnDefs" dt-instance="biologicalDT.dtInstance">
                         <thead>
                             <tr>
                                 <th>Variant</th>

@@ -61,6 +61,8 @@ angular.module('oncokbStaticApp')
             api.getBiologicalVariantByGene($scope.gene)
                     .then(function (biologicalVariants) {
                         $scope.annoatedVariants = biologicalVariants.data.data;
+//                        $('#annotatedTable').wrap('<div style="overflow:auto" />');
+                            
                     });
 
             $scope.clinicalDT = {};
@@ -70,7 +72,7 @@ angular.module('oncokbStaticApp')
                 language: {
                     loadingRecords: '<img src="resources/images/loader.gif">'
                 },
-                maxScrollY: 500,
+                scrollY: 500,
                 sDom: "ft"
             };
             $scope.clinicalDT.dtColumnDefs = [
@@ -87,7 +89,10 @@ angular.module('oncokbStaticApp')
                 language: {
                     loadingRecords: '<img src="resources/images/loader.gif">'
                 },
-                scrollY: 500
+                scrollY: 500,
+                sDom: "ft",
+//                scrollX: "100%"
+                
             };
             $scope.biologicalDT.dtColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(0),
@@ -95,7 +100,8 @@ angular.module('oncokbStaticApp')
                 DTColumnDefBuilder.newColumnDef(2),
                 DTColumnDefBuilder.newColumnDef(3)
             ];
-
+            $scope.biologicalDT.dtInstance = {};
+//            $scope.biologicalDT.dtInstance.fnAdjustColumnSizing();
 
             api.getGeneSummary($scope.gene)
                     .then(function (result) {
@@ -428,6 +434,8 @@ angular.module('oncokbStaticApp')
                     }
                 });
             }
+            
+//            $("#annotatedTable").wrap("<div style='position:relative;overflow:auto;height:400px;'/>");
 
 
         }).filter('regex', function () {
