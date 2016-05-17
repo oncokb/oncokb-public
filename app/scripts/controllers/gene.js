@@ -9,7 +9,7 @@
  */
 
 angular.module('oncokbStaticApp')
-        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $location, $route, api) {
+        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $location, $route, api, DTColumnDefBuilder) {
             $scope.gene = $routeParams.geneName;
             api.getNumbers('gene', $routeParams.geneName)
                     .then(function (result) {
@@ -61,9 +61,47 @@ angular.module('oncokbStaticApp')
             api.getBiologicalVariantByGene($scope.gene)
                     .then(function (biologicalVariants) {
                         $scope.annoatedVariants = biologicalVariants.data.data;
+//                        $('#annotatedTable').wrap('<div style="overflow:auto" />');
+                            
                     });
 
-
+            $scope.clinicalDT = {};
+            $scope.clinicalDT.dtOptions = {
+                paging: false,
+                hasBootstrap: true,
+                language: {
+                    loadingRecords: '<img src="resources/images/loader.gif">'
+                },
+                scrollY: 500,
+                sDom: "ft"
+            };
+            $scope.clinicalDT.dtColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(0),
+                DTColumnDefBuilder.newColumnDef(1),
+                DTColumnDefBuilder.newColumnDef(2),
+                DTColumnDefBuilder.newColumnDef(3),
+                DTColumnDefBuilder.newColumnDef(4)
+            ];
+            $scope.biologicalDT = {};
+            $scope.biologicalDT.dtOptions = {
+                paging: false,
+                hasBootstrap: true,
+                language: {
+                    loadingRecords: '<img src="resources/images/loader.gif">'
+                },
+                scrollY: 500,
+                sDom: "ft",
+//                scrollX: "100%"
+                
+            };
+            $scope.biologicalDT.dtColumnDefs = [
+                DTColumnDefBuilder.newColumnDef(0),
+                DTColumnDefBuilder.newColumnDef(1),
+                DTColumnDefBuilder.newColumnDef(2),
+                DTColumnDefBuilder.newColumnDef(3)
+            ];
+            $scope.biologicalDT.dtInstance = {};
+//            $scope.biologicalDT.dtInstance.fnAdjustColumnSizing();
 
             api.getGeneSummary($scope.gene)
                     .then(function (result) {
@@ -90,22 +128,10 @@ angular.module('oncokbStaticApp')
 
 
             //filter the tables by chosen data in mutation mapper
-            //use flag to tell if any need to filter the table or not
-            $scope.flag = true;
+            
             $scope.altFreFlag = true;
             $scope.mutationMapperFlag = true;
-            $scope.alterationNames = [];
-            $scope.synchronizeData = function () {
-
-                return function (x) {
-                    if ($scope.flag)
-                        return true;
-                    else {
-                        return ($scope.alterationNames.indexOf(x.variant) !== -1);
-                    }
-                }
-            };
-
+            $scope.alterationNames = "";
 
             $scope.view = {};
             $scope.view.levelColors = $rootScope.data.levelColors;
@@ -223,6 +249,7 @@ angular.module('oncokbStaticApp')
                 Plotly.newPlot('histogramDiv', data, layout, {displaylogo: false, modeBarButtonsToRemove: ['sendDataToCloud', 'zoom2d', 'pan2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian']});
                 var myPlot = document.getElementById("histogramDiv");
                 myPlot.on('plotly_click', function (eventData) {
+                    resetFlag = false;
                     var tempIndex = shortNames.indexOf(eventData.points[0].x);
                     var tempValue = studies[tempIndex];
                     var newMutationData = [];
@@ -369,7 +396,7 @@ angular.module('oncokbStaticApp')
             }
             //get the chosen mutation data from the lollipop and update the table
             function updateTable(type) {
-
+ 
                 var proteinChanges = [];
                 if (type === "plotUpdate")
                 {
@@ -389,20 +416,38 @@ angular.module('oncokbStaticApp')
                     });
 
                 }
-
                 $scope.$apply(function () {
+
                     if (type === "deselect" || type === "reset")
                     {
-                        $scope.flag = true;
-                        resetFlag = false;
+                        $scope.alterationNames = "";
                     } else
                     {
-                        $scope.flag = false;
-                        $scope.alterationNames = _.uniq(proteinChanges);
+                        proteinChanges = _.uniq(proteinChanges);
+                        var regexString = "";
+                        for (var i = 0; i < proteinChanges.length -1; i++) {
+                            regexString += proteinChanges[i] + "|";
+                        }
+                        regexString += proteinChanges[proteinChanges.length -1];
+                        $scope.alterationNames = regexString;
+                        console.log('regex string ', regexString);
                     }
                 });
             }
+            
+//            $("#annotatedTable").wrap("<div style='position:relative;overflow:auto;height:400px;'/>");
 
 
+        }).filter('regex', function () {
+    return function (input, field, regex) {
+         
+        var patt = new RegExp(regex, "i");
+        var out = [];
+        for (var i = 0; i < input.length; i++) {
+            if (patt.test(input[i][field]))
+                out.push(input[i]);
+        }   
+        return out;
+    }
 
-        });
+});
