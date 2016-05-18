@@ -64,6 +64,9 @@ angular.module('oncokbStaticApp')
       },
       getStudies: function(studies){
           return $http.get("http://www.cbioportal.org/api/studies?study_ids=" + studies);
+      },
+      getpumbedArticle: function(pumbedID){
+          return $http.get("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=" + pumbedID);
       }
     };
   });

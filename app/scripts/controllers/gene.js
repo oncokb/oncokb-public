@@ -9,7 +9,7 @@
  */
 
 angular.module('oncokbStaticApp')
-        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $location, $route, api, DTColumnDefBuilder) {
+        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $location, $route, api, DTColumnDefBuilder) { 
             $scope.gene = $routeParams.geneName;
             api.getNumbers('gene', $routeParams.geneName)
                     .then(function (result) {
@@ -68,40 +68,14 @@ angular.module('oncokbStaticApp')
             $scope.clinicalDT = {};
             $scope.clinicalDT.dtOptions = {
                 paging: false,
-                hasBootstrap: true,
-                language: {
-                    loadingRecords: '<img src="resources/images/loader.gif">'
-                },
-                scrollY: 500,
                 sDom: "ft"
             };
-            $scope.clinicalDT.dtColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(0),
-                DTColumnDefBuilder.newColumnDef(1),
-                DTColumnDefBuilder.newColumnDef(2),
-                DTColumnDefBuilder.newColumnDef(3),
-                DTColumnDefBuilder.newColumnDef(4)
-            ];
+
             $scope.biologicalDT = {};
             $scope.biologicalDT.dtOptions = {
                 paging: false,
-                hasBootstrap: true,
-                language: {
-                    loadingRecords: '<img src="resources/images/loader.gif">'
-                },
-                scrollY: 500,
-                sDom: "ft",
-//                scrollX: "100%"
-
+                sDom: "ft"
             };
-            $scope.biologicalDT.dtColumnDefs = [
-                DTColumnDefBuilder.newColumnDef(0),
-                DTColumnDefBuilder.newColumnDef(1),
-                DTColumnDefBuilder.newColumnDef(2),
-                DTColumnDefBuilder.newColumnDef(3)
-            ];
-            $scope.biologicalDT.dtInstance = {};
-//            $scope.biologicalDT.dtInstance.fnAdjustColumnSizing();
 
             api.getGeneSummary($scope.gene)
                     .then(function (result) {
@@ -125,8 +99,18 @@ angular.module('oncokbStaticApp')
                     }, function (result) {
                         $scope.meta.geneBackground = '';
                     });
-
-
+            $scope.sortBy = '';
+            $scope.mySort = function (item) {
+                if ($scope.sortBy = 'variant')
+                    return item.cancerType;
+                else
+                    return false;
+            };
+            $scope.displayOncogenic = function(item){
+                if(item === "Oncogenic")return "Yes";
+                else if(item === "Likely Oncogenic")return "Likely";
+                else return item;
+            }
             //filter the tables by chosen data in mutation mapper
 
             $scope.altFreFlag = true;
@@ -152,42 +136,45 @@ angular.module('oncokbStaticApp')
                             api.getPortalAlterationSampleCount($scope.gene)
                                     .then(function (countsByGene) {
                                         $scope.altFreFlag = (countsByGene.data.length > 0 ? true : false);
-                                        var studies = [], results = [], shortNames = [], frequencies = [], fullNames = [];
-                                        for (var i = 0; i < countsByGene.data.length; i++) {
+                                        if ($scope.altFreFlag) {
+                                            var studies = [], results = [], shortNames = [], frequencies = [], fullNames = [];
+                                            for (var i = 0; i < countsByGene.data.length; i++) {
 //                                            if(i < 2){
-                                            for (var j = 0; j < totalCounts.data.length; j++)
-                                            {
-                                                if (totalCounts.data[j][0] === countsByGene.data[i][0])
+                                                for (var j = 0; j < totalCounts.data.length; j++)
                                                 {
-                                                    results.push({study: countsByGene.data[i][0], frequency: (100 * countsByGene.data[i][1] / totalCounts.data[j][1]).toFixed(1)});
-                                                    break;
-                                                }
+                                                    if (totalCounts.data[j][0] === countsByGene.data[i][0])
+                                                    {
+                                                        results.push({study: countsByGene.data[i][0], frequency: (100 * countsByGene.data[i][1] / totalCounts.data[j][1]).toFixed(1)});
+                                                        break;
+                                                    }
 
-                                            }
+                                                }
 //                                            }
 
 
-                                        }
-                                        results.sort(function (a, b) {
-                                            return b.frequency - a.frequency;
-                                        });
-                                        results.forEach(function (item) {
-                                            studies.push(item.study);
-                                            frequencies.push(item.frequency);
-                                        });
-                                        api.getStudies(studies.join())
-                                                .then(function (studyInfo) {
-                                                    studies.forEach(function (item) {
-                                                        studyInfo.data.forEach(function (item1) {
-                                                            if (item1.id === item) {
-                                                                shortNames.push(item1.short_name.substring(0, item1.short_name.length - 7));
-                                                                fullNames.push(item1.name);
-                                                            }
+                                            }
+                                            results.sort(function (a, b) {
+                                                return b.frequency - a.frequency;
+                                            });
+                                            results.forEach(function (item) {
+                                                studies.push(item.study);
+                                                frequencies.push(item.frequency);
+                                            });
+                                            api.getStudies(studies.join())
+                                                    .then(function (studyInfo) {
+                                                        studies.forEach(function (item) {
+                                                            studyInfo.data.forEach(function (item1) {
+                                                                if (item1.id === item) {
+                                                                    shortNames.push(item1.short_name.substring(0, item1.short_name.length - 7));
+                                                                    fullNames.push(item1.name);
+                                                                }
+                                                            });
                                                         });
-                                                    });
 
-                                                    plots(studies, shortNames, fullNames, frequencies);
-                                                });
+                                                        plots(studies, shortNames, fullNames, frequencies);
+                                                    });
+                                        }
+
 
                                     });
                         });
@@ -279,12 +266,15 @@ angular.module('oncokbStaticApp')
             var mutationData = [];
             api.getMutationMapperData($routeParams.geneName).then(function (mutationMapperInfo) {
                 $scope.mutationMapperFlag = mutationMapperInfo.data.length > 0 ? true : false;
-                var count = 1;
-                mutationMapperInfo.data.forEach(function (item) {
-                    mutationData.push({cancerStudy: item.cancerStudy, geneSymbol: item.gene.hugoSymbol, caseId: item.sampleId, proteinChange: item.proteinChange, mutationType: item.alterationType, proteinPosStart: item.proteinStart, proteinPosEnd: item.proteinEnd, mutationSid: "stalone_mut_" + count, mutationId: "stalone_mut_" + count});
-                    count++;
-                });
-                mutationMapperConstructor(mutationData, false);
+                if ($scope.mutationMapperFlag) {
+                    var count = 1;
+                    mutationMapperInfo.data.forEach(function (item) {
+                        mutationData.push({cancerStudy: item.cancerStudy, geneSymbol: item.gene.hugoSymbol, caseId: item.sampleId, proteinChange: item.proteinChange, mutationType: item.alterationType, proteinPosStart: item.proteinStart, proteinPosEnd: item.proteinEnd, mutationSid: "stalone_mut_" + count, mutationId: "stalone_mut_" + count});
+                        count++;
+                    });
+                    mutationMapperConstructor(mutationData, false);
+                }
+
             });
 
             // customized settings for main mapper
@@ -417,38 +407,26 @@ angular.module('oncokbStaticApp')
                     });
 
                 }
-                $scope.$apply(function () {
-
-                    if (type === "deselect" || type === "reset")
-                    {
-                        $scope.alterationNames = "";
-                    } else
-                    {
-                        proteinChanges = _.uniq(proteinChanges);
-                        var regexString = "";
-                        for (var i = 0; i < proteinChanges.length -1; i++) {
-                            regexString += proteinChanges[i] + "|";
-                        }
-                        regexString += proteinChanges[proteinChanges.length -1];
-                        $scope.alterationNames = regexString;
-                        console.log('regex string ', regexString);
+                if (type === "deselect" || type === "reset")
+                {
+                    $scope.alterationNames = "";
+                } else
+                {
+                    proteinChanges = _.uniq(proteinChanges);
+                    var regexString = "";
+                    for (var i = 0; i < proteinChanges.length - 1; i++) {
+                        regexString += proteinChanges[i] + "|";
                     }
-                });
+                    regexString += proteinChanges[proteinChanges.length - 1];
+                    $scope.alterationNames = regexString;
+                    console.log('regex string ', regexString);
+                }
+                $rootScope.$digest();
+            }
+            
+            $scope.synchronizeData = function(item){
+                var patt = new RegExp($scope.alterationNames, "i");
+                return patt.test(item.variant);
             }
 
-//            $("#annotatedTable").wrap("<div style='position:relative;overflow:auto;height:400px;'/>");
-
-
-        }).filter('regex', function () {
-    return function (input, field, regex) {
-
-        var patt = new RegExp(regex, "i");
-        var out = [];
-        for (var i = 0; i < input.length; i++) {
-            if (patt.test(input[i][field]))
-                out.push(input[i]);
-        }
-        return out;
-    }
-
-});
+        });
