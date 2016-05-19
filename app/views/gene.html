@@ -1,8 +1,8 @@
-<div class="gene container">
+<div class="gene container" ng-if="gene.length > 0">
 
     <div class="row">
         <div ng:class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[altFreFlag == true]">
-            <span class="gene-title" ng-if="gene.length > 0">{{gene}}</span><br/>
+            <span class="gene-title">{{gene}}</span><br/>
             <h4 ng-if="status.hasLevel">Highest level of evidence: <span
                     ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h4>
             <p ng-if="status.hasSummary">{{meta.geneSummary}}</p>
@@ -32,17 +32,16 @@
 
     <div class="row gene-table">
         <div class="col-lg-12 col-md-12">
-            <br/><br/><br/>
+            
             <ul class="nav nav-tabs" ng-if="clinicalVariants.length > 0 || annoatedVariants.length > 0">
-                <li class="active" ng-if="clinicalVariants.length > 0"><a data-toggle="tab" href="#clinicalVariants">Clinic Relevant Variants</a></li>
-                <li ng-if="annoatedVariants.length > 0"><a data-toggle="tab" href="#annotatedVariants">All Annotated Variants</a></li>
+                <li class="active" ng-if="clinicalVariants.length > 0"><a data-toggle="tab" href="#clinicalVariants">Clinically Relevant Variants ({{clinicalVariants.length}})</a></li>
+                <li ng-if="annoatedVariants.length > 0"><a data-toggle="tab" href="#annotatedVariants">All Annotated Variants ({{annoatedVariants.length}})</a></li>
 
             </ul>
             <div class="tab-content">
-                <div id="clinicalVariants" class="tab-pane fade in active" ng-if="clinicalVariants.length > 0">
-                    <br/>
-
-                    <table id="clinicalTable" datatable="ng" class="row-border hover" dt-options="clinicalDT.dtOptions" dt-columns="clinicalDT.dtColumnDefs">
+                <div id="clinicalVariants" class="tab-pane fade in active" ng-if="clinicalVariants.length > 0" >
+                    
+                    <table id="clinicalTable" class="row-border hover">
                         <thead>
                             <tr>
                                 <th>Variant</th>
@@ -53,7 +52,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="x in clinicalVariants | regex: 'variant': alterationNames">
+                            <tr ng-repeat="x in clinicalVariants">
                                 <td>{{ x.variant}}</td>
                                 <td>{{ x.cancerType}}</td>
                                 <td>
@@ -61,42 +60,35 @@
                                         <span>{{drugItem}}<span ng-if="$index < x.drug.length - 1">, </span></span>
                                     </span>
                                 </td>
-                                <td>{{ x.highestLevel}}</td>
+                                <td>{{ x.highestLevel.toUpperCase()}}</td>
                                 <td>
-                                    <span ng-repeat="pub in x.drugPmids">
-                                        <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < x.drugPmids.length - 1">, </span></span>
-                                    </span>
+                                    <span class="referenceStyle" style="visibility: {{(x.drugPmids.length > 0 ? 'visible' : 'hidden')}} " qtip number="{{x.drugPmids.join()}}">{{x.drugPmids.length + (x.drugPmids.length > 1 ? ' references' : ' reference')}} </span>
+                                     
                                 </td>
                             </tr>
                         </tbody>
                     </table>
 
                 </div>
-                <div id="annotatedVariants" class="tab-pane fade" ng-if="annoatedVariants.length > 0">
-                    <br/>
-
-                    <table id="annotatedTable" datatable="ng" class="row-border hover" dt-options="biologicalDT.dtOptions" dt-columns="biologicalDT.dtColumnDefs" dt-instance="biologicalDT.dtInstance">
+                <div id="annotatedVariants" class="tab-pane fade" ng-if="annoatedVariants.length > 0" >
+                    
+                    <table id="annotatedTable" class="row-border hover">
                         <thead>
                             <tr>
                                 <th>Variant</th>
-                                <th>Mutation Effect</th>
                                 <th>Oncogenic</th>
+                                <th>Mutation Effect</th>
                                 <th>Evidence</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="y in annoatedVariants | regex: 'variant': alterationNames">
+                            <tr ng-repeat="y in annoatedVariants">
                                 <td>{{ y.variant}}</td>
+                                <td>{{ displayOncogenic(y.oncogenic) }}</td>
                                 <td>{{ y.mutationEffect}}</td>
-                                <td>{{ y.oncogenic}}</td>
                                 <td>
-                                    <span ng-repeat="pub in y.mutationEffectPmids">
-                                        <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < y.mutationEffectPmids.length - 1">, </span></span>
-                                    </span>
-                                    <span ng-repeat="pub in y.oncogenicPmids">
-                                        <span qtip number="{{pub}}">{{pub}}<span ng-if="$index < y.oncogenicPmids.length - 1">, </span></span>
-                                    </span>
+                                    <span style="visibility: {{(y.mutationEffectPmids.concat(y.oncogenicPmids).length > 0 ? 'visible' : 'hidden')}} " qtip number="{{y.mutationEffectPmids.concat(y.oncogenicPmids).join()}}">{{y.mutationEffectPmids.concat(y.oncogenicPmids).length + (y.mutationEffectPmids.concat(y.oncogenicPmids).length > 1 ? ' references' : ' reference')}}</span>
                                 </td>
 
                             </tr>

@@ -100,10 +100,12 @@ a:hover, a:focus {
 }
 
 .myQTip{
-  min-width: 620px;
-  min-height: 400px;
+  min-width: 500px;
 }
 
+.referenceStyle{
+    white-space: nowrap;
+}
 /* Include styles for each page */
 @import "home";
 @import "genes";
