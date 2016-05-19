@@ -16,7 +16,7 @@ angular.module('oncokbStaticApp')
                 },
                 link: function (scope, element, attrs) {
                     var src = '';
-                    var content = '<ul class="list-group">';
+                    var content = '<ul class="list-group" style="margin-bottom: 5px">';
                     var hideEvent = 'mouseleave';
                     var my = attrs.hasOwnProperty('my') ? attrs.my : 'bottom center';
                     var at = attrs.hasOwnProperty('at') ? attrs.at : 'top center';
@@ -29,9 +29,9 @@ angular.module('oncokbStaticApp')
                         if (articlesData !== undefined && articlesData.uids.length > 0) {
                             articlesData.uids.forEach(function (uid) {
                                 var articleContent = articlesData[uid];
-                                content += '<li class="list-group-item"><a href="http://www.ncbi.nlm.nih.gov/pubmed/' + uid + '" target="_blank">' + articleContent.title + '</a>';
+                                content += '<li class="list-group-item" style="width: 100%"><a href="http://www.ncbi.nlm.nih.gov/pubmed/' + uid + '" target="_blank"><b>' + articleContent.title + '</b></a>';
                                 if(articleContent.authors !== undefined){
-                                    content += '<p>' + articleContent.authors[0].name + ' et al.</p></li>';
+                                    content += '<p>' + articleContent.authors[0].name + ' et al. ' + articleContent.source + '. ' + articleContent.pubdate + '</p></li>';
                                 }                                
                             });
                             content += "</ul>";
@@ -51,7 +51,7 @@ angular.module('oncokbStaticApp')
                                 viewport: $(window)
                             },
                             style: {
-                                classes: 'qtip-light qtip-rounded',
+                                classes: 'qtip-light qtip-rounded myQTip',
                             },
                             show: 'mouseover',
                             hide: {

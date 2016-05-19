@@ -9,7 +9,7 @@
  */
 
 angular.module('oncokbStaticApp')
-        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $location, $route, api, DTColumnDefBuilder) { 
+        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $location, $route, api, DTColumnDefBuilder) {
             $scope.gene = $routeParams.geneName;
             api.getNumbers('gene', $routeParams.geneName)
                     .then(function (result) {
@@ -61,21 +61,7 @@ angular.module('oncokbStaticApp')
             api.getBiologicalVariantByGene($scope.gene)
                     .then(function (biologicalVariants) {
                         $scope.annoatedVariants = biologicalVariants.data.data;
-//                        $('#annotatedTable').wrap('<div style="overflow:auto" />');
-
                     });
-
-            $scope.clinicalDT = {};
-            $scope.clinicalDT.dtOptions = {
-                paging: false,
-                sDom: "ft"
-            };
-
-            $scope.biologicalDT = {};
-            $scope.biologicalDT.dtOptions = {
-                paging: false,
-                sDom: "ft"
-            };
 
             api.getGeneSummary($scope.gene)
                     .then(function (result) {
@@ -99,23 +85,19 @@ angular.module('oncokbStaticApp')
                     }, function (result) {
                         $scope.meta.geneBackground = '';
                     });
-            $scope.sortBy = '';
-            $scope.mySort = function (item) {
-                if ($scope.sortBy = 'variant')
-                    return item.cancerType;
+
+            $scope.displayOncogenic = function (item) {
+                if (item === "Oncogenic")
+                    return "Yes";
+                else if (item === "Likely Oncogenic")
+                    return "Likely";
                 else
-                    return false;
-            };
-            $scope.displayOncogenic = function(item){
-                if(item === "Oncogenic")return "Yes";
-                else if(item === "Likely Oncogenic")return "Likely";
-                else return item;
+                    return item;
             }
             //filter the tables by chosen data in mutation mapper
 
             $scope.altFreFlag = true;
             $scope.mutationMapperFlag = true;
-            $scope.alterationNames = "";
 
             $scope.view = {};
             $scope.view.levelColors = $rootScope.data.levelColors;
@@ -233,7 +215,7 @@ angular.module('oncokbStaticApp')
                     width: histogramWidth
                 };
 
-                Plotly.newPlot('histogramDiv', data, layout, {displaylogo: false, modeBarButtonsToRemove: ['sendDataToCloud', 'zoom2d', 'pan2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian']});
+                Plotly.newPlot('histogramDiv', data, layout, {displayModeBar: false});
                 var myPlot = document.getElementById("histogramDiv");
                 myPlot.on('plotly_click', function (eventData) {
                     resetFlag = false;
@@ -247,12 +229,12 @@ angular.module('oncokbStaticApp')
                     mutationMapperConstructor(newMutationData, true);
                     colors.fill('#1c75cd');
                     colors[tempIndex] = '#064885';
-                    Plotly.redraw('histogramDiv', data, layout, {displaylogo: false, modeBarButtonsToRemove: ['sendDataToCloud', 'zoom2d', 'pan2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian']});
+                    Plotly.redraw('histogramDiv', data, layout, {displayModeBar: false});
 
                     $(".mutation-details-filter-reset").click(function () {
                         //show all of the data again
                         colors.fill('#1c75cd');
-                        Plotly.redraw('histogramDiv', data, layout, {displaylogo: false, modeBarButtonsToRemove: ['sendDataToCloud', 'zoom2d', 'pan2d', 'resetScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian']});
+                        Plotly.redraw('histogramDiv', data, layout, {displayModeBar: false});
                     });
 
                 });
@@ -264,6 +246,7 @@ angular.module('oncokbStaticApp')
 
             //fetch the mutation mapper from api and construct the graph from mutation mapper library
             var mutationData = [];
+            var clinicalTable, annotatedTable;
             api.getMutationMapperData($routeParams.geneName).then(function (mutationMapperInfo) {
                 $scope.mutationMapperFlag = mutationMapperInfo.data.length > 0 ? true : false;
                 if ($scope.mutationMapperFlag) {
@@ -273,6 +256,45 @@ angular.module('oncokbStaticApp')
                         count++;
                     });
                     mutationMapperConstructor(mutationData, false);
+                }
+                //apply datatable options here 
+                jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+                    "num-html-pre": function (a) {
+                        var x = String(a).replace(/(?!^-)[^0-9.]/g, "");
+                        return parseFloat(x);
+                    },
+                    "num-html-asc": function (a, b) {
+                        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                    },
+                    "num-html-desc": function (a, b) {
+                        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+                    }
+                });
+                clinicalTable = $('#clinicalTable').DataTable({
+                    hasBootstrap: true,
+                    "aoColumns": [{"sType": "num-html"}, null, null, null,
+                        {"sType": "num-html"}
+                    ],
+                    paging: false,
+                    scrollY: 300,
+                    sDom: "ft"
+                });
+
+                annotatedTable = $('#annotatedTable').DataTable({
+                    hasBootstrap: true,
+                    "aoColumns": [{"sType": "num-html"}, null, null,
+                        {"sType": "num-html"}
+                    ],
+                    paging: false,
+                    scrollY: 300,
+                    sDom: "ft"
+                });
+
+                var table = $.fn.dataTable.fnTables();
+                if (table.length > 0) {
+                    for (var i = 0; i < table.length; i++) {
+                        $(table[i]).dataTable().fnAdjustColumnSizing();
+                    }
                 }
 
             });
@@ -369,13 +391,11 @@ angular.module('oncokbStaticApp')
                                         updateTable("plotUpdate");
                                 });
 
-
-
                             });
 
+
                         });
-                        $(".dataTables_scrollHeadInner").width("100%");
-                        $(".dataTable").width("100%");
+
                     });
                 } else
                 {
@@ -385,6 +405,8 @@ angular.module('oncokbStaticApp')
 
 
             }
+
+
             //get the chosen mutation data from the lollipop and update the table
             function updateTable(type) {
 
@@ -405,11 +427,14 @@ angular.module('oncokbStaticApp')
                         });
 
                     });
-
                 }
                 if (type === "deselect" || type === "reset")
                 {
-                    $scope.alterationNames = "";
+                    clinicalTable.column(0).search("")
+                            .draw();
+                    annotatedTable.column(0).search("")
+                            .draw();
+                    resetFlag = false;
                 } else
                 {
                     proteinChanges = _.uniq(proteinChanges);
@@ -418,15 +443,15 @@ angular.module('oncokbStaticApp')
                         regexString += proteinChanges[i] + "|";
                     }
                     regexString += proteinChanges[proteinChanges.length - 1];
-                    $scope.alterationNames = regexString;
-                    console.log('regex string ', regexString);
+                    clinicalTable.column(0).search(regexString, true)
+                            .draw();
+                    annotatedTable.column(0).search(regexString, true)
+                            .draw();
+
                 }
-                $rootScope.$digest();
+
             }
-            
-            $scope.synchronizeData = function(item){
-                var patt = new RegExp($scope.alterationNames, "i");
-                return patt.test(item.variant);
-            }
+
+
 
         });
