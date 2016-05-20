@@ -1,7 +1,7 @@
 <div class="gene container" ng-if="gene.length > 0">
 
     <div class="row">
-        <div ng:class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[altFreFlag == true]">
+        <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[altFreFlag == true]">
             <span class="gene-title">{{gene}}</span><br/>
             <h4 ng-if="status.hasLevel">Highest level of evidence: <span
                     ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h4>
@@ -14,9 +14,7 @@
         </div>
 
         <div class="col-lg-6 col-md-6" ng-if="altFreFlag">
-
-            <div id="histogramDiv" style="overflow-x: auto"></div>
-
+            <div id="histogramDiv"></div>
         </div>
     </div>
 
@@ -32,7 +30,7 @@
 
     <div class="row gene-table">
         <div class="col-lg-12 col-md-12">
-            
+
             <ul class="nav nav-tabs" ng-if="clinicalVariants.length > 0 || annoatedVariants.length > 0">
                 <li class="active" ng-if="clinicalVariants.length > 0"><a data-toggle="tab" href="#clinicalVariants">Clinically Relevant Variants ({{clinicalVariants.length}})</a></li>
                 <li ng-if="annoatedVariants.length > 0"><a data-toggle="tab" href="#annotatedVariants">All Annotated Variants ({{annoatedVariants.length}})</a></li>
@@ -40,7 +38,7 @@
             </ul>
             <div class="tab-content">
                 <div id="clinicalVariants" class="tab-pane fade in active" ng-if="clinicalVariants.length > 0" >
-                    
+
                     <table id="clinicalTable" class="row-border hover">
                         <thead>
                             <tr>
@@ -60,10 +58,10 @@
                                         <span>{{drugItem}}<span ng-if="$index < x.drug.length - 1">, </span></span>
                                     </span>
                                 </td>
-                                <td>{{ x.highestLevel.toUpperCase()}}</td>
+                                <td>{{ x.level.toUpperCase()}}</td>
                                 <td>
                                     <span class="referenceStyle" style="visibility: {{(x.drugPmids.length > 0 ? 'visible' : 'hidden')}} " qtip number="{{x.drugPmids.join()}}">{{x.drugPmids.length + (x.drugPmids.length > 1 ? ' references' : ' reference')}} </span>
-                                     
+
                                 </td>
                             </tr>
                         </tbody>
@@ -71,7 +69,7 @@
 
                 </div>
                 <div id="annotatedVariants" class="tab-pane fade" ng-if="annoatedVariants.length > 0" >
-                    
+
                     <table id="annotatedTable" class="row-border hover">
                         <thead>
                             <tr>
