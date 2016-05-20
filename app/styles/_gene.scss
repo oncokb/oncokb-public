@@ -18,9 +18,21 @@
       border-bottom-color: $orange;
       box-shadow: 0 1px 0 0 $orange;
     }
+    .dataTables_filter {
+      label {
+        white-space: nowrap;
+      }
+      input[type=search] {
+        width: auto;
+      }
+    }
   }
 
   .gene-title {
     font-size: 40px;
+  }
+
+  .mutation-details-content {
+    margin-left: 0;
   }
 }

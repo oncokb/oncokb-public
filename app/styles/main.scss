@@ -95,17 +95,22 @@ a:hover, a:focus {
   }
 }
 
-#levelDownload {
-  margin-bottom: 10px;
-}
-
-.myQTip{
+.gene-evidence-qtip {
   min-width: 500px;
 }
 
 .referenceStyle{
     white-space: nowrap;
 }
+
+#levelDownload {
+  margin-bottom: 10px;
+}
+#custom_mutation_details_template .mutation-details-loader>img{
+  margin: auto;
+  width: 30px;
+}
+
 /* Include styles for each page */
 @import "home";
 @import "genes";
