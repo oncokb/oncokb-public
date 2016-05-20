@@ -331,6 +331,8 @@ angular.module('oncokbStaticApp')
           }
 
           $rootScope.view.subNavItems = subNavItems;
+
+          fetchHistogramData();
         } else {
           console.log('no such gene existed ');
           $location.path('/genes');
@@ -409,7 +411,7 @@ angular.module('oncokbStaticApp')
         });
         clinicalTable = $('#clinicalTable').DataTable({
           hasBootstrap: true,
-          "aoColumns": [{"sType": "num-html"}, null, null, null,
+          "aoColumns": [{"sType": "num-html"}, null, null, {"sType": "level"},
             {"sType": "num-html"}
           ],
           paging: false,
@@ -460,5 +462,4 @@ angular.module('oncokbStaticApp')
       }, 160);
     };
 
-    fetchHistogramData();
   });

@@ -11,6 +11,9 @@
   .about, .team, .level-page {
     width: 90%;
   }
+  .about .about-poster {
+    width: 80%;
+  }
 }
 
 @media only screen and (max-width: $range-max-sm-width) {
@@ -18,6 +21,9 @@
     width: 100%;
   }
   .about, .team, .level-page {
+    width: 100%;
+  }
+  .about .about-poster {
     width: 100%;
   }
 }
