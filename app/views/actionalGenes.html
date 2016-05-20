@@ -1,0 +1,64 @@
+<div class="container">
+   <h2 style="color: #008D14">Level 1</h2>
+    
+    <table datatable="ng" class="row-border hover" dt-options="biologicalDT.dtOptions" dt-columns="biologicalDT.dtColumnDefs">
+    <thead>
+    <tr>
+        <th>Gene</th>
+        <th>Variants</th>
+        <th>Disease</th>
+        <th>Drugs</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="x in level1Genes">
+        <td>{{x.gene}}</td>
+        <td>{{x.variants}}</td>
+        <td>{{x.disease}}</td>
+        <td>{{x.drugs}}</td>
+    </tr>
+    </tbody>
+</table>
+     <hr><h2 style="color: #019192">Level 2</h2>
+   
+    <table datatable="ng" class="row-border hover" dt-options="biologicalDT.dtOptions" dt-columns="biologicalDT.dtColumnDefs">
+    <thead>
+    <tr>
+        <th>Gene</th>
+        <th>Variants</th>
+        <th>Disease</th>
+        <th>Drugs</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="x in level2Genes">
+        <td>{{x.gene}}</td>
+        <td>{{x.variants}}</td>
+        <td>{{x.disease}}</td>
+        <td>{{x.drugs}}</td>
+    </tr>
+    </tbody>
+</table>
+    <hr><h2 style="color: #794C87">Level 3</h2>
+ 
+    <table id="level3" datatable="ng" class="row-border hover" dt-options="biologicalDT.dtOptions" dt-columns="biologicalDT.dtColumnDefs">
+    <thead>
+    <tr>
+        <th>Gene</th>
+        <th>Variants</th>
+        <th>Disease</th>
+        <th>Drugs</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="x in level3Genes">
+        <td>{{x.gene}}</td>
+        <td>{{x.variants}}</td>
+        <td>{{x.disease}}</td>
+        <td>{{x.drugs}}</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
