@@ -1,114 +1,121 @@
 <div class="gene container" ng-if="gene.length > 0">
 
-    <div class="row">
-        <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[altFreFlag == true]">
-            <span class="gene-title">{{gene}}</span><br/>
-            <h4 ng-if="status.hasLevel">Highest level of evidence: <span
-                    ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h4>
-            <p ng-if="status.hasSummary">{{meta.geneSummary}}</p>
+  <div class="row">
+    <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[altFreFlag == true]">
+      <span class="gene-title">{{gene}}</span><br/>
+      <h4 ng-if="status.hasLevel">Highest level of evidence: <span
+        ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h4>
+      <p ng-if="status.hasSummary">{{meta.geneSummary}}</p>
             <span ng-if="status.hasBackground" ng-class="{'hide': !!status.moreInfo}">See {{gene}} background
-                <i class="fa fa-arrow-circle-o-down gene-more-info-icon" ng-click="status.moreInfo = !status.moreInfo"></i></span>
-            <p ng-if="status.hasBackground" ng-class="{'hide': !status.moreInfo}">{{meta.geneBackground}}</p>
+                <i class="fa fa-arrow-circle-o-down gene-more-info-icon"
+                   ng-click="status.moreInfo = !status.moreInfo"></i></span>
+      <p ng-if="status.hasBackground" ng-class="{'hide': !status.moreInfo}">{{meta.geneBackground}}</p>
             <span ng-class="{'hide': !status.moreInfo}">Hide <i
-                    class="fa fa-arrow-circle-o-up gene-less-info-icon" ng-click="status.moreInfo = !status.moreInfo"></i></span>
-        </div>
-
-        <div class="col-lg-6 col-md-6" ng-if="altFreFlag">
-            <div id="histogramDiv"></div>
-        </div>
+              class="fa fa-arrow-circle-o-up gene-less-info-icon"
+              ng-click="status.moreInfo = !status.moreInfo"></i></span>
     </div>
 
-    <div class="row" ng-if="mutationMapperFlag">
-        <div class="col-lg-12 col-md-12">
-
-            <div id="templateDiv"></div>
-            <div id="mutation_details"></div>
-
-
-        </div>
+    <div class="col-lg-6 col-md-6" ng-if="altFreFlag">
+      <div id="histogramDiv"></div>
     </div>
+  </div>
 
-    <div class="row gene-table">
-        <div class="col-lg-12 col-md-12">
+  <div class="row" ng-if="mutationMapperFlag">
+    <div class="col-lg-12 col-md-12">
 
-            <ul class="nav nav-tabs" ng-if="clinicalVariants.length > 0 || annoatedVariants.length > 0">
-                <li class="active" ng-if="clinicalVariants.length > 0"><a data-toggle="tab" href="#clinicalVariants">Clinically Relevant Variants ({{clinicalVariants.length}})</a></li>
-                <li ng-if="annoatedVariants.length > 0"><a data-toggle="tab" href="#annotatedVariants">All Annotated Variants ({{annoatedVariants.length}})</a></li>
+      <div id="templateDiv"></div>
+      <div id="mutation_details"></div>
 
-            </ul>
-            <div class="tab-content">
-                <div id="clinicalVariants" class="tab-pane fade in active" ng-if="clinicalVariants.length > 0" >
 
-                    <table id="clinicalTable" class="row-border hover">
-                        <thead>
-                            <tr>
-                                <th>Variant</th>
-                                <th>Cancer Type</th>
-                                <th>Drug</th>
-                                <th>Level</th>
-                                <th>Evidence</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="x in clinicalVariants">
-                                <td>{{ x.variant}}</td>
-                                <td>{{ x.cancerType}}</td>
-                                <td>
+    </div>
+  </div>
+
+  <div class="row gene-table">
+    <div class="col-lg-12 col-md-12">
+
+      <ul class="nav nav-tabs" ng-if="clinicalVariants.length > 0 || annoatedVariants.length > 0">
+        <li class="active" ng-if="clinicalVariants.length > 0" ng-click="tableClicked('clinical')"><a data-toggle="tab" href="#clinicalVariants">Clinically
+          Relevant Variants ({{clinicalVariants.length}})</a></li>
+        <li ng-if="annoatedVariants.length > 0" ng-click="tableClicked('annotated')"><a data-toggle="tab" href="#annotatedVariants">All Annotated Variants
+          ({{annoatedVariants.length}})</a></li>
+
+      </ul>
+      <div class="tab-content">
+        <div id="clinicalVariants" class="tab-pane fade in active" ng-if="clinicalVariants.length > 0" >
+
+          <table id="clinicalTable" class="row-border hover">
+            <thead>
+            <tr>
+              <th>Variant</th>
+              <th>Cancer Type</th>
+              <th>Drug</th>
+              <th>Level</th>
+              <th>Evidence</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="x in clinicalVariants">
+              <td>{{ x.variant}}</td>
+              <td>{{ x.cancerType}}</td>
+              <td>
                                     <span ng-repeat="drugItem in x.drug">
                                         <span>{{drugItem}}<span ng-if="$index < x.drug.length - 1">, </span></span>
                                     </span>
-                                </td>
-                                <td>{{ x.level.toUpperCase()}}</td>
-                                <td>
-                                    <span class="referenceStyle" style="visibility: {{(x.drugPmids.length > 0 ? 'visible' : 'hidden')}} " qtip number="{{x.drugPmids.join()}}">{{x.drugPmids.length + (x.drugPmids.length > 1 ? ' references' : ' reference')}} </span>
+              </td>
+              <td>{{ x.level.toUpperCase()}}</td>
+              <td>
+                <span class="referenceStyle" style="visibility: {{(x.drugPmids.length > 0 ? 'visible' : 'hidden')}} "
+                      qtip number="{{x.drugPmids.join()}}">{{x.drugPmids.length + (x.drugPmids.length > 1 ? ' references' : ' reference')}} </span>
 
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+              </td>
+            </tr>
+            </tbody>
+          </table>
 
-                </div>
-                <div id="annotatedVariants" class="tab-pane fade" ng-if="annoatedVariants.length > 0" >
-
-                    <table id="annotatedTable" class="row-border hover">
-                        <thead>
-                            <tr>
-                                <th>Variant</th>
-                                <th>Oncogenic</th>
-                                <th>Mutation Effect</th>
-                                <th>Evidence</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="y in annoatedVariants">
-                                <td>{{ y.variant}}</td>
-                                <td>{{ displayOncogenic(y.oncogenic) }}</td>
-                                <td>{{ y.mutationEffect}}</td>
-                                <td>
-                                    <span style="visibility: {{(y.mutationEffectPmids.concat(y.oncogenicPmids).length > 0 ? 'visible' : 'hidden')}} " qtip number="{{y.mutationEffectPmids.concat(y.oncogenicPmids).join()}}">{{y.mutationEffectPmids.concat(y.oncogenicPmids).length + (y.mutationEffectPmids.concat(y.oncogenicPmids).length > 1 ? ' references' : ' reference')}}</span>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
         </div>
+        <div id="annotatedVariants" class="tab-pane fade" ng-if="annoatedVariants.length > 0">
+
+          <table id="annotatedTable" class="row-border hover">
+            <thead>
+            <tr>
+              <th>Variant</th>
+              <th>Oncogenic</th>
+              <th>Mutation Effect</th>
+              <th>Evidence</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="y in annoatedVariants">
+              <td>{{ y.variant}}</td>
+              <td>{{ displayOncogenic(y.oncogenic) }}</td>
+              <td>{{ y.mutationEffect}}</td>
+              <td>
+                <span
+                  style="visibility: {{(y.mutationEffectPmids.concat(y.oncogenicPmids).length > 0 ? 'visible' : 'hidden')}} "
+                  qtip number="{{y.mutationEffectPmids.concat(y.oncogenicPmids).join()}}">{{y.mutationEffectPmids.concat(y.oncogenicPmids).length + (y.mutationEffectPmids.concat(y.oncogenicPmids).length > 1 ? ' references' : ' reference')}}</span>
+              </td>
+
+            </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <script type="text/template" id="custom_mutation_details_template">
-    <div class='mutation-3d-container'></div>
-    <div class='mutation-details-loader'>
+  <div class='mutation-3d-container'></div>
+  <div class='mutation-details-loader'>
     <img src='{{loaderImage}}'/>
-    </div>
-    <div class='mutation-details-content'>
+  </div>
+  <div class='mutation-details-content'>
     {{mainContent}}
-    </div>
+  </div>
 </script>
 <!-- Customized Mutation Table components -->
 <script type="text/template" id="custom_mutation_case_id_template">
-    <b alt="{{caseIdTip}}" class="{{caseIdClass}}">{{caseId}}</b>
+  <b alt="{{caseIdTip}}" class="{{caseIdClass}}">{{caseId}}</b>
 </script>
