@@ -241,10 +241,7 @@ angular.module('oncokbStaticApp')
                 else
                   updateTable("plotUpdate");
               });
-
             });
-
-
           });
 
         });
