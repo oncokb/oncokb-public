@@ -9,8 +9,11 @@ $font-serif: Georgia, "Times New Roman", serif;
 
 // Bootstrap breakpoints for reference (not overrides)
 //$orange: $gsk-accent;
+$lg-width: 1230px;
 $width: 993px;
 $sm-width: 768px;
+$range-min-lg-width: $lg-width;
+$range-max-width: $lg-width - 1;
 $range-min-width: $width;
 $range-max-sm-width: $width - 1;
 $range-min-sm-width: $sm-width;

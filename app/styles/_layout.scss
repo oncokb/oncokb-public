@@ -94,7 +94,7 @@
   }
 }
 
-@media (max-width: $range-max-sm-width) and (min-width: $range-min-sm-width) {
+@media (max-width: $range-max-width) and (min-width: $range-min-sm-width) {
   .mskcc-icon {
     display: block;
   }
@@ -103,7 +103,7 @@
   }
 }
 
-@media (min-width: $range-min-width) {
+@media (min-width: $range-min-lg-width) {
   .mskcc-logo {
     display: block;
   }
