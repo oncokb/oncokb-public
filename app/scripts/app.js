@@ -65,6 +65,11 @@ angular
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
+      .when('/actionableGenes', {
+        templateUrl: 'views/actionalGenes.html',
+        controller: 'actionableGenesCtrl',
+        controllerAs: 'actionableGenes'
+      })
       .otherwise({
         redirectTo: '/'
       });
