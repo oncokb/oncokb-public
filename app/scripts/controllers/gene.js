@@ -150,6 +150,7 @@ angular.module('oncokbStaticApp')
         y: frequencies,
         type: 'bar',
         text: fullNames,
+        hoverinfo: 'y+text',
         marker: {
           color: colors
         }
@@ -177,8 +178,11 @@ angular.module('oncokbStaticApp')
           tickangle: 30,
           fixedrange: true
         },
-        height: 300,
-        width: histogramWidth
+        height: 250,
+        width: $('.plot-container').width(),
+        margin: {
+          t: 30,
+        }
       };
 
       Plotly.newPlot('histogramDiv', data, layout, {displayModeBar: false});
