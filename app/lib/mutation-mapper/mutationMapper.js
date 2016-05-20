@@ -33,6 +33,7 @@
  *
  * @author Selcuk Onur Sumer
  */
+
 var DataTableUtil = (function()
 {
 	/**
@@ -19475,7 +19476,7 @@ function PancanMutationHistogram(byProteinPosData, byGeneData, cancer_study_meta
         bykeyword: generate_cancer_study2datum(bykeyword_data),
         bygene: generate_cancer_study2datum(bygene_data)
     };
-    
+
     var commonKeys = _.intersection( _.keys(cancer_study2datum.bykeyword), _.keys(cancer_study2datum.bygene) );
     bykeyword_data = [];
     bygene_data = [];
@@ -19507,7 +19508,7 @@ function PancanMutationHistogram(byProteinPosData, byGeneData, cancer_study_meta
 
         bygene_datum.count = new_count;
     });
-    
+
     var totalByGene = _.reduce(bygene_data, function(memo, datum){ return memo + datum.count; }, 0);
     var totalByKeyword = _.reduce(bykeyword_data, function(memo, datum){ return memo + datum.count; }, 0);
     var totalSequenced = _.reduce(cancer_study2meta_data, function(memo, datum){ return memo + datum.num_sequenced_samples; }, 0);
@@ -19815,7 +19816,7 @@ function PancanMutationHistogram(byProteinPosData, byGeneData, cancer_study_meta
         var percent = (d.frequency * 100).toFixed(1)+'%';
         return (_.template("<span><b>{{percent}}</b> (<b>{{count}}</b> of {{total}} sequenced samples)</span>"))({percent: percent, count: count, total: total});
     }
-    
+
     function countText(bykeyword, bygene, total) {
         return "<p style='color: " + googlered + "; margin-bottom:0;'>"
                 + keyword  + ": "  + qtip_template(bykeyword, total) + "</p>"

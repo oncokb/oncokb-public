@@ -30,6 +30,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+_.templateSettings = {
+  interpolate: /\{\{(.+?)\}\}/g
+};
+
 if (cbio === undefined)
 {
 	var cbio = {};
