@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -6,10 +6,10 @@
 
 
 angular.module('oncokbStaticApp')
-        .controller('actionableGenesCtrl', function($scope, DTColumnDefBuilder){
+        .controller('actionableGenesCtrl', function($scope, $location, DTColumnDefBuilder){
             $scope.level1Genes = [
                 {
-                    "gene": "ABL",
+                    "gene": "ABL1",
                     "variants": "BCR-ABL fusion",
                     "disease": "CML, ALL",
                     "drugs": "Imatinib"
@@ -351,8 +351,10 @@ angular.module('oncokbStaticApp')
                 DTColumnDefBuilder.newColumnDef(2),
                 DTColumnDefBuilder.newColumnDef(3)
             ];
-    
-    
+
+            $scope.clickGene = function(gene) {
+              $location.path('/gene/' + gene);
+            };
         });
 
 

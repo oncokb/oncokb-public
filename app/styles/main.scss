@@ -110,6 +110,12 @@ a:hover, a:focus {
     white-space: nowrap;
 }
 
+.actionable-genes {
+  table tbody td:first-child:hover {
+    cursor: pointer;
+  }
+}
+
 #levelDownload {
   margin-bottom: 10px;
 }

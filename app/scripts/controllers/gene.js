@@ -63,6 +63,7 @@ angular.module('oncokbStaticApp')
       render: {
         mutationDetails: {
           coreTemplate: "custom_mutation_details_template",
+          loaderImage: 'resources/images/loader.gif',
           init: function(mutationDetailsView) {
             // hide loader image
             mutationDetailsView.$el.find(".mutation-details-loader").hide();
