@@ -56,7 +56,7 @@ angular.module('oncokbStaticApp')
         mutationTable: false,
         vis3d: false,
         mutationDiagram: {
-          elWidth: 1100
+          elWidth: $('.wrapper>.navbar>.container').width() - 20 //When initialize mutation mapper, gene html hasn't been loaded yet. Only navbar is available.
         },
         mutationSummary: false
       },
