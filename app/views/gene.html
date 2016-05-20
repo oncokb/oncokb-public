@@ -34,16 +34,22 @@
     <div class="col-lg-12 col-md-12">
 
       <ul class="nav nav-tabs" ng-if="clinicalVariants.length > 0 || annoatedVariants.length > 0">
-        <li class="active" ng-if="clinicalVariants.length > 0" ng-click="tableClicked('clinical')"><a data-toggle="tab" href="#clinicalVariants">Clinically
+        <li class="active" ng-if="clinicalVariants.length > 0" ng-click="tableClicked('clinical')"><a data-toggle="tab"
+                                                                                                      href="#clinicalVariants">Clinically
           Relevant Variants ({{clinicalVariants.length}})</a></li>
-        <li ng-if="annoatedVariants.length > 0" ng-click="tableClicked('annotated')"><a data-toggle="tab" href="#annotatedVariants">All Annotated Variants
+        <li ng-if="annoatedVariants.length > 0" ng-click="tableClicked('annotated')"><a data-toggle="tab"
+                                                                                        href="#annotatedVariants">All
+          Annotated Variants
           ({{annoatedVariants.length}})</a></li>
 
       </ul>
       <div class="tab-content">
-        <div id="clinicalVariants" class="tab-pane fade in active" ng-if="clinicalVariants.length > 0" >
+        <div id="clinicalVariants" class="tab-pane fade in active" ng-if="clinicalVariants.length > 0">
 
-          <table id="clinicalTable" class="row-border hover">
+          <table id="clinicalTable" class="row-border hover"
+                 datatable="ng" dt-options="view.clinicalTableOptions"
+                 dt-instance="meta.clinicalTable"
+          >
             <thead>
             <tr>
               <th>Variant</th>
@@ -75,7 +81,10 @@
         </div>
         <div id="annotatedVariants" class="tab-pane fade" ng-if="annoatedVariants.length > 0">
 
-          <table id="annotatedTable" class="row-border hover">
+          <table id="annotatedTable" class="row-border hover"
+                 datatable="ng" dt-options="view.biologicalTableOptions"
+                 dt-instance="meta.biologicalTable"
+          >
             <thead>
             <tr>
               <th>Variant</th>

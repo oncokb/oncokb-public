@@ -75,7 +75,7 @@ angular.module('oncokbStaticApp')
                     "drugs": "Imatinib"
                 },
                 {
-                    "gene": "PDGFB",
+                    "gene": "PDGFRB",
                     "variants": "COL1A1-PDGFB fusion",
                     "disease": "Dermatofibrosarcoma Protuberans",
                     "drugs": "Imatinib"
