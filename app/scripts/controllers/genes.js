@@ -23,13 +23,20 @@ angular.module('oncokbStaticApp')
       language: {
         loadingRecords: '<img src="resources/images/loader.gif">'
       },
-      scrollY: 500
+      scrollY: 500,
+      aaSorting: [ [1,'desc'], [0,'asc'] ],
+      aoColumnDefs: [{
+        aTargets: 0
+      }, {
+        aTargets: 1,
+        sType: 'level',
+        asSorting: ['desc', 'asc']
+      }, {
+        aTargets: 2,
+        asSorting: ['desc', 'asc']
+      }
+      ]
     };
-    $scope.dt.dtColumnDefs = [
-      DTColumnDefBuilder.newColumnDef(0),
-      DTColumnDefBuilder.newColumnDef(1),
-      DTColumnDefBuilder.newColumnDef(2)
-    ];
 
     api.getNumbers('genes')
       .then(function(content) {
@@ -45,3 +52,30 @@ angular.module('oncokbStaticApp')
         $scope.meta.genes = [];
       });
   });
+
+jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+  "level-asc": function(a, b) {
+    var levels = ['3B', '3A', '2B', '2A', '1'];
+    var _a = levels.indexOf(a);
+    var _b = levels.indexOf(b);
+    if (_a === -1) {
+      return 1;
+    }
+    if (_b === -1) {
+      return -1;
+    }
+    return _a - _b;
+  },
+  "level-desc": function(a, b) {
+    var levels = ['3B', '3A', '2B', '2A', '1'];
+    var _a = levels.indexOf(a);
+    var _b = levels.indexOf(b);
+    if (_a === -1) {
+      return 1;
+    }
+    if (_b === -1) {
+      return -1;
+    }
+    return _b - _a;
+  }
+});

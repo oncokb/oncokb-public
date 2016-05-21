@@ -95,12 +95,25 @@ a:hover, a:focus {
   }
 }
 
+.about {
+  .about-poster {
+    margin: auto;
+    display: block;
+  }
+}
+
 .gene-evidence-qtip {
   min-width: 500px;
 }
 
 .referenceStyle{
     white-space: nowrap;
+}
+
+.actionable-genes {
+  table tbody td:first-child:hover {
+    cursor: pointer;
+  }
 }
 
 #levelDownload {

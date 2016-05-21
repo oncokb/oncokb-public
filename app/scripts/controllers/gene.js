@@ -13,7 +13,6 @@ angular.module('oncokbStaticApp')
 
     //fetch the mutation mapper from api and construct the graph from mutation mapper library
     var mutationData = [];
-    var clinicalTable, annotatedTable;
 
     // customized settings for main mapper
     var geneList = [$routeParams.geneName];
@@ -63,6 +62,7 @@ angular.module('oncokbStaticApp')
       render: {
         mutationDetails: {
           coreTemplate: "custom_mutation_details_template",
+          loaderImage: 'resources/images/loader.gif',
           init: function(mutationDetailsView) {
             // hide loader image
             mutationDetailsView.$el.find(".mutation-details-loader").hide();
@@ -274,9 +274,9 @@ angular.module('oncokbStaticApp')
         });
       }
       if (type === "deselect" || type === "reset") {
-        clinicalTable.column(0).search("")
+        $scope.meta.clinicalTable.DataTable.column(0).search("")
           .draw();
-        annotatedTable.column(0).search("")
+        $scope.meta.biologicalTable.DataTable.column(0).search("")
           .draw();
         resetFlag = false;
       } else {
@@ -286,9 +286,9 @@ angular.module('oncokbStaticApp')
           regexString += proteinChanges[i] + "|";
         }
         regexString += proteinChanges[proteinChanges.length - 1];
-        clinicalTable.column(0).search(regexString, true)
+        $scope.meta.clinicalTable.DataTable.column(0).search(regexString, true)
           .draw();
-        annotatedTable.column(0).search(regexString, true)
+        $scope.meta.biologicalTable.DataTable.column(0).search(regexString, true)
           .draw();
 
       }
@@ -297,17 +297,38 @@ angular.module('oncokbStaticApp')
 
     $scope.gene = $routeParams.geneName;
     $scope.meta = {};
+    $scope.meta.clinicalTable = {};
+    $scope.meta.biologicalTable = {};
     $scope.status = {
       hasSummary: false,
       hasBackground: false,
       hasLevel: false,
-      moreInfo: false
+      moreInfo: false,
+      getClinicalEvidence: false,
+      getBiologicalEvidence: false,
     };
     $scope.altFreFlag = true;
     $scope.mutationMapperFlag = true;
     $scope.view = {};
     $scope.view.levelColors = $rootScope.data.levelColors;
-
+    $scope.view.clinicalTableOptions = {
+      hasBootstrap: true,
+      "aoColumns": [{"sType": "num-html"}, null, null, {"sType": "level"},
+        {"sType": "num-html"}
+      ],
+      paging: false,
+      scrollY: 300,
+      sDom: "ft"
+    };
+    $scope.view.biologicalTableOptions = {
+      hasBootstrap: true,
+      "aoColumns": [{"sType": "num-html"}, null, null,
+        {"sType": "num-html"}
+      ],
+      paging: false,
+      scrollY: 300,
+      sDom: "ft"
+    };
     $rootScope.view.subNavItems = [{content: $scope.gene}];
 
     api.getNumbers('gene', $routeParams.geneName)
@@ -331,6 +352,8 @@ angular.module('oncokbStaticApp')
           }
 
           $rootScope.view.subNavItems = subNavItems;
+
+          fetchHistogramData();
         } else {
           console.log('no such gene existed ');
           $location.path('/genes');
@@ -393,40 +416,6 @@ angular.module('oncokbStaticApp')
           });
           mutationMapperConstructor(mutationData, false);
         }
-
-        //apply datatable options here
-        jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-          "num-html-pre": function(a) {
-            var x = String(a).replace(/(?!^-)[^0-9.]/g, "");
-            return parseFloat(x);
-          },
-          "num-html-asc": function(a, b) {
-            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-          },
-          "num-html-desc": function(a, b) {
-            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-          }
-        });
-        clinicalTable = $('#clinicalTable').DataTable({
-          hasBootstrap: true,
-          "aoColumns": [{"sType": "num-html"}, null, null, null,
-            {"sType": "num-html"}
-          ],
-          paging: false,
-          scrollY: 300,
-          sDom: "ft"
-        });
-
-        annotatedTable = $('#annotatedTable').DataTable({
-          hasBootstrap: true,
-          "aoColumns": [{"sType": "num-html"}, null, null,
-            {"sType": "num-html"}
-          ],
-          paging: false,
-          scrollY: 300,
-          sDom: "ft"
-        });
-
       });
 
     $scope.displayOncogenic = function(item) {
@@ -451,14 +440,27 @@ angular.module('oncokbStaticApp')
       console.log('clicked');
       $timeout(function() {
         if (type === 'annotated') {
-          console.log('annotatedTable adjusted.');
-          annotatedTable.columns.adjust().draw();
+          console.log('biologicalTable adjusted.');
+          $scope.meta.biologicalTable.DataTable.columns.adjust().draw();
         } else if (type === 'clinical') {
           console.log('clinical adjusted.');
-          clinicalTable.columns.adjust().draw();
+          $scope.meta.clinicalTable.DataTable.columns.adjust().draw();
         }
       }, 160);
     };
 
-    fetchHistogramData();
   });
+
+//apply datatable options here
+jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+  "num-html-pre": function(a) {
+    var x = String(a).replace(/(?!^-)[^0-9.]/g, "");
+    return parseFloat(x);
+  },
+  "num-html-asc": function(a, b) {
+    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+  },
+  "num-html-desc": function(a, b) {
+    return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+  }
+});

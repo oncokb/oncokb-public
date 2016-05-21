@@ -239,7 +239,7 @@ module.exports = function (grunt) {
           '<%= yeoman.dist %>/scripts/{,*/}*.js',
           '<%= yeoman.dist %>/styles/{,*/}*.css',
           '<%= yeoman.dist %>/resources/files{,*/}*.{pptx}',
-          '<%= yeoman.dist %>/resources/images{,*/}*.{png,png,jpeg,gif,webp,svg}',
+          '<%= yeoman.dist %>/resources/images{,*/}*.{png,png,jpeg,webp,svg}',
           '<%= yeoman.dist %>/styles/fonts/*'
         ]
       }
@@ -255,7 +255,7 @@ module.exports = function (grunt) {
         flow: {
           html: {
             steps: {
-              js: ['concat'],
+              js: ['concat', 'uglify'],
               css: ['cssmin']
             },
             post: {}
@@ -377,7 +377,7 @@ module.exports = function (grunt) {
             '.htaccess',
             '*.html',
             'views/{,*/}*.html',
-            'resources/files{,*/}*.{webp,ppt,pptx,csv,json}',
+            'resources/files{,*/}*.{webp,ppt,pptx,csv,json,gif}',
             'styles/fonts/{,*/}*.*'
           ]
         }, {
@@ -392,10 +392,14 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>'
         }, {
           expand: true,
-          dot: true,
-          cwd: 'bower_components/font-awesome/fonts',
-          src: '**',
-          dest: '<%= yeoman.dist %>/fonts/'
+          cwd: '.',
+          src: 'bower_components/font-awesome/fonts/*',
+          dest: '<%= yeoman.dist %>'
+        }, {
+          expand: true,
+          cwd: 'bower_components/datatables/media/',
+          src: 'images/*.png',
+          dest: '<%= yeoman.dist %>'
         }]
       },
       styles: {
@@ -469,9 +473,9 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
-    // 'cdnify',
+    'cdnify',
     'cssmin',
-    // 'uglify',
+    'uglify',
     'filerev',
     'usemin',
     'htmlmin'
