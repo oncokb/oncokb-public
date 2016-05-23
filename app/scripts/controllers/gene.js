@@ -109,13 +109,19 @@ angular.module('oncokbStaticApp')
                   studies.push(item.study);
                   frequencies.push(item.frequency);
                 });
+                var tempIndex = 0;
                 api.getStudies(studies.join())
                   .then(function(studyInfo) {
                     studies.forEach(function(item) {
                       studyInfo.data.forEach(function(item1) {
                         if (item1.id === item) {
                           shortNames.push(item1.short_name.substring(0, item1.short_name.length - 7));
-                          fullNames.push(item1.name);
+                          if (item1.name.length > 50) {
+                            tempIndex = item1.name.indexOf("(TCGA,");
+                            fullNames.push(item1.name.substring(0, tempIndex) + '<br>' + item1.name.substring(tempIndex));
+                           } else {
+                            fullNames.push(item1.name);
+                          }
                         }
                       });
                     });
