@@ -36,11 +36,11 @@
       <ul class="nav nav-tabs" ng-if="clinicalVariants.length > 0 || annoatedVariants.length > 0">
         <li ng-class="{'in active': clinicalVariants.length > 0}" ng-if="clinicalVariants.length > 0" ng-click="tableClicked('clinical')"><a data-toggle="tab"
                                                                                                       href="#clinicalVariants">Clinically
-          Relevant Variants ({{clinicalVariants.length}})</a></li>
+          Relevant Variants (<span id="clinicalCount">{{clinicalVariants.length}}</span>)</a></li>
         <li ng-class="{'in active': clinicalVariants.length === 0 && annoatedVariants.length > 0}" ng-if="annoatedVariants.length > 0" ng-click="tableClicked('annotated')"><a data-toggle="tab"
                                                                                         href="#annotatedVariants">All
           Annotated Variants
-          ({{annoatedVariants.length}})</a></li>
+          (<span id="annotatedCount">{{annoatedVariants.length}}</span>)</a></li>
 
       </ul>
       <div class="tab-content">

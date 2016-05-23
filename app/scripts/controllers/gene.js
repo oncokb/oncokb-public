@@ -282,9 +282,11 @@ angular.module('oncokbStaticApp')
       if (type === "deselect" || type === "reset") {
         if(_.isObject($scope.meta.clinicalTable) && $scope.meta.clinicalTable.DataTable) {
           $scope.meta.clinicalTable.DataTable.column(0).search("").draw();
+          $("#clinicalCount").text($scope.meta.clinicalTable.DataTable.$('tr', {"filter":"applied"}).length);
         }
         if(_.isObject($scope.meta.biologicalTable) && $scope.meta.biologicalTable.DataTable) {
           $scope.meta.biologicalTable.DataTable.column(0).search("").draw();
+          $("#annotatedCount").text($scope.meta.biologicalTable.DataTable.$('tr', {"filter":"applied"}).length);
         }
         resetFlag = false;
       } else {
@@ -296,9 +298,11 @@ angular.module('oncokbStaticApp')
         regexString += proteinChanges[proteinChanges.length - 1];
         if(_.isObject($scope.meta.clinicalTable) && $scope.meta.clinicalTable.DataTable) {
           $scope.meta.clinicalTable.DataTable.column(0).search(regexString, true).draw();
+          $("#clinicalCount").text($scope.meta.clinicalTable.DataTable.$('tr', {"filter":"applied"}).length);
         }
         if(_.isObject($scope.meta.biologicalTable) && $scope.meta.biologicalTable.DataTable) {
           $scope.meta.biologicalTable.DataTable.column(0).search(regexString, true).draw();
+          $("#annotatedCount").text($scope.meta.biologicalTable.DataTable.$('tr', {"filter":"applied"}).length);
         }
       }
 
@@ -462,9 +466,11 @@ angular.module('oncokbStaticApp')
         if (type === 'annotated' && $scope.meta.biologicalTable && $scope.meta.biologicalTable.DataTable) {
           console.log('biologicalTable adjusted.');
           $scope.meta.biologicalTable.DataTable.columns.adjust().draw();
+          $("#annotatedCount").text($scope.meta.biologicalTable.DataTable.$('tr', {"filter":"applied"}).length);
         } else if (type === 'clinical' && $scope.meta.clinicalTable && $scope.meta.clinicalTable.DataTable) {
           console.log('clinical adjusted.');
           $scope.meta.clinicalTable.DataTable.columns.adjust().draw();
+          $("#clinicalCount").text($scope.meta.clinicalTable.DataTable.$('tr', {"filter":"applied"}).length);
         }
       }, 160);
     };
