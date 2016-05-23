@@ -34,17 +34,17 @@
     <div class="col-lg-12 col-md-12">
 
       <ul class="nav nav-tabs" ng-if="clinicalVariants.length > 0 || annoatedVariants.length > 0">
-        <li class="active" ng-if="clinicalVariants.length > 0" ng-click="tableClicked('clinical')"><a data-toggle="tab"
+        <li ng-class="{'in active': clinicalVariants.length > 0}" ng-if="clinicalVariants.length > 0" ng-click="tableClicked('clinical')"><a data-toggle="tab"
                                                                                                       href="#clinicalVariants">Clinically
           Relevant Variants ({{clinicalVariants.length}})</a></li>
-        <li ng-if="annoatedVariants.length > 0" ng-click="tableClicked('annotated')"><a data-toggle="tab"
+        <li ng-class="{'in active': clinicalVariants.length === 0 && annoatedVariants.length > 0}" ng-if="annoatedVariants.length > 0" ng-click="tableClicked('annotated')"><a data-toggle="tab"
                                                                                         href="#annotatedVariants">All
           Annotated Variants
           ({{annoatedVariants.length}})</a></li>
 
       </ul>
       <div class="tab-content">
-        <div id="clinicalVariants" class="tab-pane fade in active" ng-if="clinicalVariants.length > 0">
+        <div id="clinicalVariants" class="tab-pane fade" ng-class="{'in active': clinicalVariants.length > 0}" ng-if="clinicalVariants.length > 0">
 
           <table id="clinicalTable" class="row-border hover"
                  datatable="ng" dt-options="view.clinicalTableOptions"
@@ -54,7 +54,7 @@
             <tr>
               <th>Variant</th>
               <th>Cancer Type</th>
-              <th>Drug</th>
+              <th>Drug(s)</th>
               <th>Level</th>
               <th>Evidence</th>
             </tr>
@@ -64,9 +64,9 @@
               <td>{{ x.variant}}</td>
               <td>{{ x.cancerType}}</td>
               <td>
-                                    <span ng-repeat="drugItem in x.drug">
-                                        <span>{{drugItem}}<span ng-if="$index < x.drug.length - 1">, </span></span>
-                                    </span>
+                <span ng-repeat="drugItem in x.drug">
+                    <span>{{drugItem}}<br ng-if="$index < x.drug.length - 1" /></span>
+                </span>
               </td>
               <td>{{ x.level.toUpperCase()}}</td>
               <td>
@@ -79,7 +79,7 @@
           </table>
 
         </div>
-        <div id="annotatedVariants" class="tab-pane fade" ng-if="annoatedVariants.length > 0">
+        <div id="annotatedVariants" class="tab-pane fade" ng-class="{'in active': clinicalVariants.length === 0 && annoatedVariants.length > 0}"  ng-if="annoatedVariants.length > 0">
 
           <table id="annotatedTable" class="row-border hover"
                  datatable="ng" dt-options="view.biologicalTableOptions"
@@ -101,6 +101,7 @@
               <td>{{ y.mutationEffect}}</td>
               <td>
                 <span
+                  class="gene-evidence-td-span"
                   style="visibility: {{(y.mutationEffectPmids.concat(y.oncogenicPmids).length > 0 ? 'visible' : 'hidden')}} "
                   qtip number="{{y.mutationEffectPmids.concat(y.oncogenicPmids).join()}}">{{y.mutationEffectPmids.concat(y.oncogenicPmids).length + (y.mutationEffectPmids.concat(y.oncogenicPmids).length > 1 ? ' references' : ' reference')}}</span>
               </td>

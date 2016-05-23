@@ -104,6 +104,10 @@ a:hover, a:focus {
 
 .gene-evidence-qtip {
   min-width: 500px;
+  .qtip-content {
+    overflow-y: auto;
+    max-height: 300px;
+  }
 }
 
 .referenceStyle{

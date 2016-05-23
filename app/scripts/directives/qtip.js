@@ -13,8 +13,8 @@ angular.module('oncokbStaticApp')
       link: function(scope, element, attrs) {
         var src = '';
         var hideEvent = 'mouseleave';
-        var my = attrs.hasOwnProperty('my') ? attrs.my : 'top left';
-        var at = attrs.hasOwnProperty('at') ? attrs.at : 'bottom right';
+        var my = attrs.hasOwnProperty('my') ? attrs.my : 'center right';
+        var at = attrs.hasOwnProperty('at') ? attrs.at : 'left center';
 
         // src = '<iframe width="610px" height="400px" src="http://www.ncbi.nlm.nih.gov/pubmed/' + attrs.number + '"></iframe>';
         // content = $(src);
@@ -26,7 +26,8 @@ angular.module('oncokbStaticApp')
             viewport: $(window)
           },
           style: {
-            classes: 'qtip-light qtip-rounded',
+            classes: 'qtip-light qtip-rounded qtip-gene-evidence',
+            'max-height': 300
           },
           show: 'mouseover',
           hide: {
@@ -46,7 +47,7 @@ angular.module('oncokbStaticApp')
                     var articleContent = articlesData[uid];
                     content += '<li class="list-group-item" style="width: 100%"><a href="http://www.ncbi.nlm.nih.gov/pubmed/' + uid + '" target="_blank"><b>' + articleContent.title + '</b></a>';
                     if (articleContent.authors !== undefined) {
-                      content += '<p>' + articleContent.authors[0].name + ' et al. ' + articleContent.source + '. ' + articleContent.pubdate + '</p></li>';
+                      content += '<span>' + articleContent.authors[0].name + ' et al. ' + articleContent.source + '. ' + articleContent.pubdate + '</span></li>';
                     }
                   });
                   content += "</ul>";
