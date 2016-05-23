@@ -1,8 +1,6 @@
 /* Styles for home page */
 
 .main-oncokb-header {
-    margin-top: 40px;
-
     p {
         text-align: center;
         font-size: 24px;
@@ -16,10 +14,6 @@
         .grid {
             padding-bottom: 5px;
         }
-    }
-
-    .tag-line {
-        margin-bottom: 50px;
     }
 
     .number {
@@ -53,15 +47,14 @@
     }
 
     .tag-line {
+        margin-bottom: 50px;
         font-weight: normal;
         text-align: center;
         .level-1 {
-            font-size: 20px;
             color: $orange;
             font-weight: 500;
         }
         .level-2 {
-            font-size: 15px;
             color: grey;
         }
     }
@@ -74,7 +67,13 @@
 
     .logo-wrapper {
         margin: 0 auto;
-        @media screen and (max-width: $range-max-sm-width) {
+        @media screen and (max-width: $range-max-xm-width) {
+          width: 200px;
+          img {
+            width: 200px;
+          }
+        }
+        @media screen and (max-width: $range-max-sm-width) and (min-width: $range-min-sm-width) {
             width: 320px;
             img {
                 width: 320px;
@@ -148,6 +147,7 @@
     }
 
     .main-level {
+        margin-bottom: 15px;
         .button {
             margin: auto;
             width: 160px;

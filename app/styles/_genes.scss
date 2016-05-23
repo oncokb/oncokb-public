@@ -17,6 +17,9 @@
   .level-item:hover {
     border-bottom-color: $dark-blue;
   }
+  .table tbody td:first-child {
+    text-decoration: underline;
+  }
   .table tbody td:first-child:hover {
     cursor: pointer;
   }

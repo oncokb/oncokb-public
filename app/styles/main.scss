@@ -115,6 +115,9 @@ a:hover, a:focus {
 }
 
 .actionable-genes {
+  table tbody td:first-child {
+    text-decoration: underline;
+  }
   table tbody td:first-child:hover {
     cursor: pointer;
   }

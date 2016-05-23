@@ -30,13 +30,12 @@
 .navbar-header {
   background-color: $dark-blue;
   .logo-brand {
-    height: 50px;
+    height: 40px;
   }
 }
 
 .navbar-brand {
   height: 70px;
-  padding: 10px;
 }
 
 .navbar-brand > img {
@@ -131,16 +130,16 @@
   line-height: 30px;
   padding: 10px;
 
-  span {
+  span.item {
     font-size: 22px;
     color: white;
     border-right: 1px solid $dark-blue;
     padding: 0 10px;
   }
-  span:first-child {
+  span.item:first-child {
     padding-left: 0;
   }
-  span:last-child {
+  span.item:last-child {
     border: 0;
   }
   input[type=text] {

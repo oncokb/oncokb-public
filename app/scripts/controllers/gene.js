@@ -341,14 +341,7 @@ angular.module('oncokbStaticApp')
           $scope.gene = content.data.gene.hugoSymbol;
           $route.updateParams({geneName: $scope.gene});
           var subNavItems = [{content: $scope.gene}];
-          if (content.data.alteration) {
-            subNavItems.push({content: content.data.alteration + ' Variants'});
-          }
-
-          if (content.data.tumorType) {
-            subNavItems.push({content: content.data.tumorType + ' Tumor Types'});
-          }
-
+          
           if (content.data.highestLevel) {
             $scope.meta.highestLevel = content.data.highestLevel.replace('LEVEL_', '');
             $scope.status.hasLevel = true;
@@ -373,6 +366,24 @@ angular.module('oncokbStaticApp')
 
     api.getBiologicalVariantByGene($scope.gene)
       .then(function(biologicalVariants) {
+        var numofOncogenicVariants = 0;
+
+        _.each(biologicalVariants.data.data, function(item) {
+          if (item.oncogenic) {
+            if (item.oncogenic.toLowerCase().indexOf('oncogenic') !== -1) {
+              numofOncogenicVariants++;
+            }
+          }
+        });
+
+        if (numofOncogenicVariants > 0) {
+
+          $rootScope.view.subNavItems = [
+            {content: $scope.gene},
+            {content: numofOncogenicVariants + ' oncogenic variants'}
+          ];
+        }
+
         $scope.annoatedVariants = biologicalVariants.data.data;
       });
 

@@ -51,11 +51,11 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li ng-class="{ active: isActive('/')}"><a href="#/">Home</a></li>
-          <li ng-class="{ active: isActive('/about')}"><a href="#/about">About OncoKB</a></li>
-          <li ng-class="{ active: isActive('/team')}"><a href="#/team">Team</a></li>
-          <li ng-class="{ active: isActive('/levels')}"><a href="#/levels">Levels of Evidence</a></li>
-          <li ng-class="{ active: isActive('/actionableGenes')}"><a href="#/actionableGenes">Actionable Genes</a></li>
+          <li ng-class="{ active: isActive('/')}"><a href="#/"><span>Home</span></a></li>
+          <li ng-class="{ active: isActive('/about')}"><a href="#/about"><span>About OncoKB</span></a></li>
+          <li ng-class="{ active: isActive('/team')}"><a href="#/team"><span>Team</span></a></li>
+          <li ng-class="{ active: isActive('/levels')}"><a href="#/levels"><span>Levels of Evidence</span></a></li>
+          <li ng-class="{ active: isActive('/actionableGenes')}"><a href="#/actionableGenes"><span>Actionable Genes</span></a></li>
           <!--<li ng-class="{ active: isActive('/api')}"><a href="#/api">API</a></li>-->
         </ul>
         <div class="pull-right" ng-class="{hidden: toggled}">
@@ -72,7 +72,7 @@
           <!-- In order to use last child css style, add div wrapper -->
           <div ng-show="view.subNavItems.length > 0"
                class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12 subNav-sxn-1">
-            <span ng-repeat="item in view.subNavItems">
+            <span ng-repeat="item in view.subNavItems" class="item">
               <span ng-if="!item.link">{{item.content}}</span>
               <a ng-if="item.link" ng-href="{{item.link}}" target="_self">{{item.content}}</a>
             </span>
