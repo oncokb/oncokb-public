@@ -173,7 +173,7 @@ angular.module('oncokbStaticApp')
         },
         xaxis: {
           tickfont: {
-            size: Math.min(180 / maxLengthStudy.length, 15)
+            size: Math.max(Math.min(180 / maxLengthStudy.length, 15, 180/shortNames.length), 6)
           },
           tickangle: 30,
           fixedrange: true
@@ -274,10 +274,12 @@ angular.module('oncokbStaticApp')
         });
       }
       if (type === "deselect" || type === "reset") {
-        $scope.meta.clinicalTable.DataTable.column(0).search("")
-          .draw();
-        $scope.meta.biologicalTable.DataTable.column(0).search("")
-          .draw();
+        if(_.isObject($scope.meta.clinicalTable) && $scope.meta.clinicalTable.DataTable) {
+          $scope.meta.clinicalTable.DataTable.column(0).search("").draw();
+        }
+        if(_.isObject($scope.meta.biologicalTable) && $scope.meta.biologicalTable.DataTable) {
+          $scope.meta.biologicalTable.DataTable.column(0).search("").draw();
+        }
         resetFlag = false;
       } else {
         proteinChanges = _.uniq(proteinChanges);
@@ -286,11 +288,12 @@ angular.module('oncokbStaticApp')
           regexString += proteinChanges[i] + "|";
         }
         regexString += proteinChanges[proteinChanges.length - 1];
-        $scope.meta.clinicalTable.DataTable.column(0).search(regexString, true)
-          .draw();
-        $scope.meta.biologicalTable.DataTable.column(0).search(regexString, true)
-          .draw();
-
+        if(_.isObject($scope.meta.clinicalTable) && $scope.meta.clinicalTable.DataTable) {
+          $scope.meta.clinicalTable.DataTable.column(0).search(regexString, true).draw();
+        }
+        if(_.isObject($scope.meta.biologicalTable) && $scope.meta.biologicalTable.DataTable) {
+          $scope.meta.biologicalTable.DataTable.column(0).search(regexString, true).draw();
+        }
       }
 
     }
@@ -439,10 +442,10 @@ angular.module('oncokbStaticApp')
       //Bootstrap fade in has 150ms transition time. DataTable only can gets width after the transition.
       console.log('clicked');
       $timeout(function() {
-        if (type === 'annotated') {
+        if (type === 'annotated' && $scope.meta.biologicalTable && $scope.meta.biologicalTable.DataTable) {
           console.log('biologicalTable adjusted.');
           $scope.meta.biologicalTable.DataTable.columns.adjust().draw();
-        } else if (type === 'clinical') {
+        } else if (type === 'clinical' && $scope.meta.clinicalTable && $scope.meta.clinicalTable.DataTable) {
           console.log('clinical adjusted.');
           $scope.meta.clinicalTable.DataTable.columns.adjust().draw();
         }
