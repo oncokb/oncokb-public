@@ -31,6 +31,20 @@
   }
 }
 
+@media (min-width: $range-min-sm-width) {
+  .main-oncokb-header {
+    margin-top: 40px;
+    .tag-line {
+      .level-1 {
+        font-size: 20px;
+      }
+      .level-2 {
+        font-size: 15px;
+      }
+    }
+  }
+}
+
 @media (max-width: $range-max-xm-width) {
   $footer-height: 315px;
   .wrapper {
@@ -41,6 +55,32 @@
   }
   .footer {
     height: $footer-height;
+  }
+  .parentCompany {
+    display: none;
+  }
+  .subNav.navbar-fixed-top {
+    top: 0;
+  }
+  .mskcc-icon {
+    display: none;
+  }
+  .menu-toggle {
+    display: block;
+  }
+  .navbar-brand {
+    padding: 15px 10px 15px 25px;
+  }
+  .main-oncokb-header {
+    margin-top: 10px;
+    .tag-line {
+      .level-1 {
+        font-size: 18px;
+      }
+      .level-2 {
+        font-size: 13px;
+      }
+    }
   }
 }
 
@@ -70,9 +110,21 @@
   }
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 900px) and (min-width: 800px){
   .navbar-nav > li > a {
     padding: 15px 6px;
+  }
+}
+
+@media (max-width: 800px) and (min-width: $range-min-sm-width) {
+  .navbar-nav > li > a {
+    padding: 15px 0px;
+  }
+  .navbar-nav > li > a > span{
+    padding: 0 3px;
+  }
+  .navbar-nav > li:not(:last-child) > a > span{
+    border-right: 1px solid $darker-blue;
   }
 }
 
@@ -80,20 +132,11 @@
   .menu-toggle {
     display: none;
   }
-}
-
-@media (max-width: $range-max-xm-width) {
-  .parentCompany {
-    display: none;
+  .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+    margin-left: 0;
   }
-  .subNav.navbar-fixed-top {
-    top: 0;
-  }
-  .mskcc-icon {
-    display: none;
-  }
-  .menu-toggle {
-    display: block;
+  .navbar-brand {
+    padding: 15px 10px;
   }
 }
 
