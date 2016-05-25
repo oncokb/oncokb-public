@@ -345,22 +345,37 @@ angular.module('oncokbStaticApp')
             $scope.view = {};
             $scope.view.levelColors = $rootScope.data.levelColors;
             $scope.view.clinicalTableOptions = {
-                hasBootstrap: true,
-                "aoColumns": [{"sType": "num-html"}, null, null, null,
-                    {"sType": "num-html"}
-                ],
-                paging: false,
-                scrollY: 300,
-                sDom: "ft"
+              hasBootstrap: true,
+              "aoColumns": [
+                {"sType": "num-html"},
+                null,
+                null,
+                {asSorting: ['asc', 'desc']},
+                {
+                  "sType": "num-html",
+                  asSorting: ['desc', 'asc']
+                }
+              ],
+              paging: false,
+              scrollCollapse: true,
+              scrollY: 500,
+              sDom: "ft",
+              aaSorting: [[3, 'asc'], [0, 'asc']]
             };
             $scope.view.biologicalTableOptions = {
                 hasBootstrap: true,
-                "aoColumns": [{"sType": "num-html"}, null, null,
-                    {"sType": "num-html"}
+                "aoColumns": [
+                  {"sType": "num-html"},
+                  {asSorting: ['desc', 'asc']},
+                  null,
+                  {"sType": "num-html",
+                    asSorting: ['desc', 'asc']}
                 ],
                 paging: false,
-                scrollY: 300,
-                sDom: "ft"
+                scrollCollapse: true,
+                scrollY: 500,
+                sDom: "ft",
+                aaSorting: [ [1,'desc'], [0,'asc']]
             };
             $rootScope.view.subNavItems = [{content: $scope.gene}];
 
@@ -400,28 +415,29 @@ angular.module('oncokbStaticApp')
 
             api.getBiologicalVariantByGene($scope.gene)
                     .then(function (biologicalVariants) {
-                        var numofOncogenicVariants = 0;
-
-                        _.each(biologicalVariants.data.data, function (item) {
-                            if (item.oncogenic) {
-                                if (item.oncogenic.toLowerCase().indexOf('oncogenic') !== -1) {
-                                    numofOncogenicVariants++;
-                                }
-                            }
-                        });
-
-                        if (numofOncogenicVariants > 0) {
-
-                            $rootScope.view.subNavItems = [
-                                {content: $scope.gene},
-                                {content: numofOncogenicVariants + ' oncogenic variants'}
-                            ];
-                        }
+                        // var numofOncogenicVariants = 0;
+                        //
+                        // _.each(biologicalVariants.data.data, function (item) {
+                        //     if (item.oncogenic) {
+                        //         if (item.oncogenic.toLowerCase().indexOf('oncogenic') !== -1) {
+                        //             numofOncogenicVariants++;
+                        //         }
+                        //     }
+                        // });
 
                         $scope.annoatedVariants = biologicalVariants.data.data;
                         uniqueAnnotatedVariants = _.uniq(_.map($scope.annoatedVariants, function (item) {
                             return item.variant;
                         }));
+
+
+                        if (uniqueAnnotatedVariants.length > 0) {
+                          $rootScope.view.subNavItems = [
+                            {content: $scope.gene},
+                            {content: uniqueAnnotatedVariants.length + ' annotated variants'}
+                          ];
+                        }
+
                         $scope.annoatedVariantsCount = uniqueAnnotatedVariants.length;
                     });
 

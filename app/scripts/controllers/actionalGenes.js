@@ -342,7 +342,7 @@ angular.module('oncokbStaticApp')
             $scope.biologicalDT = {};
             $scope.biologicalDT.dtOptions = {
                 paging: false,
-                scrollY: 300,
+                scrollY: 481,
                 hasBootstrap: true
             };
             $scope.biologicalDT.dtColumnDefs = [
