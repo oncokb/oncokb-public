@@ -6,13 +6,13 @@
             <h4 ng-if="status.hasLevel">Highest level of evidence: <span
                     ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h4>
             <p ng-if="status.hasSummary">{{meta.geneSummary}}</p>
-            <span ng-if="status.hasBackground" ng-class="{'hide': !!status.moreInfo}">See {{gene}} background
+            <p style="font-style: italic" ng-if="status.hasBackground" ng-class="{'hide': !!status.moreInfo}">See {{gene}} background
                 <i class="fa fa-arrow-circle-o-down gene-more-info-icon"
-                   ng-click="status.moreInfo = !status.moreInfo"></i></span>
-            
-            <span ng-class="{'hide': !status.moreInfo}">Hide {{gene}} background<i
+                   ng-click="status.moreInfo = !status.moreInfo"></i></p>
+
+            <p style="font-style: italic" ng-class="{'hide': !status.moreInfo}">Hide {{gene}} background<i
                     class="fa fa-arrow-circle-o-up gene-less-info-icon"
-                    ng-click="status.moreInfo = !status.moreInfo"></i></span>
+                    ng-click="status.moreInfo = !status.moreInfo"></i></p>
             <p ng-if="status.hasBackground" ng-class="{'hide': !status.moreInfo}">{{meta.geneBackground}}</p>
         </div>
 

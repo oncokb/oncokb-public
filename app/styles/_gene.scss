@@ -5,6 +5,9 @@
   .gene-more-info-icon:hover, .gene-less-info-icon:hover {
     cursor: pointer;
   }
+  .gene-more-info-icon, .gene-less-info-icon {
+    margin-left: 5px;
+  }
 
   .gene-table {
     td:first-child, th {
@@ -37,5 +40,12 @@
 
   .mutation-details-content {
     margin-left: 0;
+  }
+
+  input.diagram-y-axis-limit-input {
+    width: 50px;
+    text-align: center;
+    background: white;
+    border: none;
   }
 }
