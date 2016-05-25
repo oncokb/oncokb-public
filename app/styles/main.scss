@@ -114,14 +114,7 @@ a:hover, a:focus {
     white-space: nowrap;
 }
 
-.actionable-genes {
-  table tbody td:first-child {
-    text-decoration: underline;
-  }
-  table tbody td:first-child:hover {
-    cursor: pointer;
-  }
-}
+
 
 #levelDownload {
   margin-bottom: 10px;
@@ -131,8 +124,10 @@ a:hover, a:focus {
   width: 30px;
 }
 
+
 /* Include styles for each page */
 @import "home";
 @import "genes";
 @import "gene";
 @import "team";
+@import "actionable";

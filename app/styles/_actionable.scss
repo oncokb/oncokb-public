@@ -1,0 +1,32 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 24, 2016, 3:17:05 PM
+    Author     : jiaojiao
+*/
+
+.actionable-genes {
+    table tbody td:first-child {
+        text-decoration: underline;
+    }
+    table tbody td:first-child:hover {
+        cursor: pointer;
+    }
+    .target-style{
+        margin-top:-80px; 
+        padding-top:80px;
+    }
+    .align-style{
+        position:relative;
+        top:50px
+    }
+    .green-color{
+        color:green
+    }
+    .left-float{
+        float:left
+    }
+}

@@ -47,7 +47,7 @@ angular.module('oncokbStaticApp')
                     var articleContent = articlesData[uid];
                     content += '<li class="list-group-item" style="width: 100%"><a href="http://www.ncbi.nlm.nih.gov/pubmed/' + uid + '" target="_blank"><b>' + articleContent.title + '</b></a>';
                     if (articleContent.authors !== undefined) {
-                      content += '<span>' + articleContent.authors[0].name + ' et al. ' + articleContent.source + '. ' + articleContent.pubdate + '</span></li>';
+                      content += '<br/><span>' + articleContent.authors[0].name + ' et al. ' + articleContent.source + '. ' + (new Date(articleContent.pubdate)).getFullYear() + '</span></li>';
                     }
                   });
                   content += "</ul>";
