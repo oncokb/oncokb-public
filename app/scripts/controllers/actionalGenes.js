@@ -338,7 +338,7 @@ angular.module('oncokbStaticApp')
                     "drugs": "Crizotinib"
                 }
             ];
-            $scope.data = [{name: 'a', firstname: 'jiaojiao', lastname:'wang'},{name: 'b', firstname: 'jiaojiao', lastname:'wang'},{name: 'c', firstname: 'jiaojiao', lastname:'wang'}];
+            
             $scope.biologicalDT = {};
             $scope.biologicalDT.dtOptions = {
                 paging: false,
@@ -352,7 +352,7 @@ angular.module('oncokbStaticApp')
                 DTColumnDefBuilder.newColumnDef(3)
             ];
 
-            $scope.clickGene = function(gene) {
+            $scope.clickGene = function(gene) { 
               $location.path('/gene/' + gene);
             };
         });
