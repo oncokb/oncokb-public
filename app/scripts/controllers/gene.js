@@ -85,7 +85,7 @@ angular.module('oncokbStaticApp')
                                     .then(function (countsByGene) {
                                         $scope.altFreFlag = (countsByGene.data.length > 0 ? true : false);
                                         if ($scope.altFreFlag) {
-                                            var studies = [], results = [], shortNames = [], frequencies = [], fullNames = [], hoverInfo = [];
+                                            var studies = [], results = [], shortNames = [], frequencies = [], fullNames = [], hoverInfo = [], tempNames = [];
                                             for (var i = 0; i < countsByGene.data.length; i++) {
                                                 for (var j = 0; j < totalCounts.data.length; j++) {
                                                     if (totalCounts.data[j][0] === countsByGene.data[i][0]) {
@@ -108,25 +108,32 @@ angular.module('oncokbStaticApp')
                                                 frequencies.push(item.frequency);
                                                 hoverInfo.push(item.frequency + "% of the patients have " + $scope.gene + " mutation");
                                             });
-                                            var tempIndex = 0;
+                                            var tempIndex = 0, tempString = "", secondIndex = 0;
                                             api.getStudies(studies.join())
                                                     .then(function (studyInfo) {
                                                         studies.forEach(function (item) {
                                                             studyInfo.data.forEach(function (item1) {
                                                                 if (item1.id === item) {
                                                                     shortNames.push(item1.short_name.substring(0, item1.short_name.length - 7));
-                                                                    if (item1.name.length > 40) {
+                                                                    fullNames.push(item1.name);
+                                                                    //insert new line symbol to label content based on study name length
+                                                                   if(item1.name.length < 40) {
+                                                                        tempNames.push(item1.name);
+                                                                    } else if (item1.name.length < 60){
                                                                         tempIndex = item1.name.indexOf("(TCGA,");
-                                                                        fullNames.push(item1.name.substring(0, tempIndex) + '<br>' + item1.name.substring(tempIndex));
-                                                                    } else {
-                                                                        fullNames.push(item1.name);
-                                                                    }
+                                                                        tempNames.push(item1.name.substring(0, tempIndex) + '<br>' + item1.name.substring(tempIndex));
+                                                                    } else{
+                                                                        tempIndex = item1.name.indexOf("(TCGA,");
+                                                                        tempString = item1.name.substring(0, tempIndex).trim();
+                                                                        secondIndex = tempString.lastIndexOf(" ");
+                                                                        tempNames.push(item1.name.substring(0, secondIndex) + '<br>' + item1.name.substring(secondIndex));
+                                                                    } 
                                                                 }
                                                             });
                                                         });
 
                                                         _.each(hoverInfo, function (item, index) {
-                                                            hoverInfo[index] = item + "<br> in " + fullNames[index];
+                                                            hoverInfo[index] = item + "<br> in " + tempNames[index];
                                                         });
 
                                                         plots(studies, shortNames, fullNames, frequencies, hoverInfo);
@@ -171,7 +178,7 @@ angular.module('oncokbStaticApp')
                 var layout = {
                     title: 'Tumor Types with ' + $scope.gene + ' Alterations',
                     yaxis: {
-                        title: 'Alteration Frequency',
+                        title: 'Mutation Frequency',
                         titlefont: {
                             size: 14
                         },
