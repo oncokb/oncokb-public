@@ -338,11 +338,12 @@ angular.module('oncokbStaticApp')
                     "drugs": "Crizotinib"
                 }
             ];
-            
+
             $scope.biologicalDT = {};
             $scope.biologicalDT.dtOptions = {
                 paging: false,
                 scrollY: 481,
+                scrollCollapse: true,
                 hasBootstrap: true
             };
             $scope.biologicalDT.dtColumnDefs = [
@@ -352,7 +353,7 @@ angular.module('oncokbStaticApp')
                 DTColumnDefBuilder.newColumnDef(3)
             ];
 
-            $scope.clickGene = function(gene) { 
+            $scope.clickGene = function(gene) {
               $location.path('/gene/' + gene);
             };
         });

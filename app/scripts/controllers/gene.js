@@ -127,7 +127,7 @@ angular.module('oncokbStaticApp')
                                                                         tempString = item1.name.substring(0, tempIndex).trim();
                                                                         secondIndex = tempString.lastIndexOf(" ");
                                                                         tempNames.push(item1.name.substring(0, secondIndex) + '<br>' + item1.name.substring(secondIndex));
-                                                                    } 
+                                                                    }
                                                                 }
                                                             });
                                                         });
@@ -441,7 +441,7 @@ angular.module('oncokbStaticApp')
                         if (uniqueAnnotatedVariants.length > 0) {
                           $rootScope.view.subNavItems = [
                             {content: $scope.gene},
-                            {content: uniqueAnnotatedVariants.length + ' annotated variants'}
+                            {content: uniqueAnnotatedVariants.length + ' annotated variant' + (uniqueAnnotatedVariants.length > 1 ? 's' : '')}
                           ];
                         }
 

@@ -35,11 +35,12 @@
         <div class="col-lg-12 col-md-12">
 
             <ul class="nav nav-tabs" ng-if="clinicalVariants.length > 0 || annoatedVariants.length > 0">
-                <li ng-class="{'in active': clinicalVariants.length > 0}" ng-if="clinicalVariants.length > 0" ng-click="tableClicked('clinical')"><a data-toggle="tab"
-                                                                                                                                                     href="#clinicalVariants">Clinically
-                        Relevant Variants ({{clinicalVariantsCount}})</a></li>
-                <li ng-class="{'in active': clinicalVariants.length === 0 && annoatedVariants.length > 0}" ng-if="annoatedVariants.length > 0" ng-click="tableClicked('annotated')"><a data-toggle="tab"
-                                                                                                                                                                                       href="#annotatedVariants">All Annotated Variants ({{annoatedVariantsCount}})</a></li>
+                <li ng-class="{'in active': clinicalVariants.length > 0}" ng-if="clinicalVariants.length > 0"
+                    ng-click="tableClicked('clinical')"><a data-toggle="tab" href="#clinicalVariants">
+                  Clinically Relevant Variant{{clinicalVariantsCount>1?'s':''}} ({{clinicalVariantsCount}})</a></li>
+              <li ng-class="{'in active': clinicalVariants.length === 0 && annoatedVariants.length > 0}"
+                  ng-if="annoatedVariants.length > 0" ng-click="tableClicked('annotated')">
+                <a data-toggle="tab" href="#annotatedVariants">All Annotated Variant{{annoatedVariantsCount>1?'s':''}} ({{annoatedVariantsCount}})</a></li>
 
             </ul>
             <div class="tab-content">
