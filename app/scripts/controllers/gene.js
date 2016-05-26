@@ -117,7 +117,7 @@ angular.module('oncokbStaticApp')
                                                                     shortNames.push(item1.short_name.substring(0, item1.short_name.length - 7));
                                                                     fullNames.push(item1.name);
                                                                     //insert new line symbol to label content based on study name length
-                                                                   if(item1.name.length < 50) {
+                                                                   if(item1.name.length < 40) {
                                                                         tempNames.push(item1.name);
                                                                     } else if (item1.name.length < 60){
                                                                         tempIndex = item1.name.indexOf("(TCGA,");
