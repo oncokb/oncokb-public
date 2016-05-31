@@ -176,7 +176,7 @@ angular.module('oncokbStaticApp')
                 var data = [trace];
 
                 var layout = {
-                    title: 'Tumor Types with ' + $scope.gene + ' Alterations',
+                    // title: 'Tumor Types with ' + $scope.gene + ' Alterations',
                     yaxis: {
                         title: 'Mutation Frequency',
                         titlefont: {
