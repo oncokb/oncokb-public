@@ -127,7 +127,7 @@ angular.module('oncokbStaticApp')
                                                                         tempString = item1.name.substring(0, tempIndex).trim();
                                                                         secondIndex = tempString.lastIndexOf(" ");
                                                                         tempNames.push(item1.name.substring(0, secondIndex) + '<br>' + item1.name.substring(secondIndex));
-                                                                    } 
+                                                                    }
                                                                 }
                                                             });
                                                         });
@@ -176,7 +176,7 @@ angular.module('oncokbStaticApp')
                 var data = [trace];
 
                 var layout = {
-                    title: 'Tumor Types with ' + $scope.gene + ' Alterations',
+                    // title: 'Tumor Types with ' + $scope.gene + ' Alterations',
                     yaxis: {
                         title: 'Mutation Frequency',
                         titlefont: {

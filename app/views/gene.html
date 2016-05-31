@@ -6,24 +6,39 @@
             <h4 ng-if="status.hasLevel">Highest level of evidence: <span
                     ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h4>
             <p ng-if="status.hasSummary">{{meta.geneSummary}}</p>
-            <p style="font-style: italic" ng-if="status.hasBackground" ng-class="{'hide': !!status.moreInfo}">See {{gene}} background
-                <i class="fa fa-arrow-circle-o-down gene-more-info-icon"
-                   ng-click="status.moreInfo = !status.moreInfo"></i></p>
-
-            <p style="font-style: italic" ng-class="{'hide': !status.moreInfo}">Hide {{gene}} background<i
-                    class="fa fa-arrow-circle-o-up gene-less-info-icon"
-                    ng-click="status.moreInfo = !status.moreInfo"></i></p>
-            <p ng-if="status.hasBackground" ng-class="{'hide': !status.moreInfo}">{{meta.geneBackground}}</p>
+          <p class="gene-background-info-wrapper">
+            <span class="gene-more-info"
+                  ng-click="status.moreInfo = !status.moreInfo"
+                  ng-if="status.hasBackground"
+                  ng-class="{'hide': !!status.moreInfo}">
+              See {{gene}} background<i class="fa fa-arrow-circle-o-down gene-more-info-icon"></i>
+            </span>
+            <span class="gene-less-info"
+                  ng-class="{'hide': !status.moreInfo}"
+                  ng-click="status.moreInfo = !status.moreInfo">
+              Hide {{gene}} background<i
+              class="fa fa-arrow-circle-o-up gene-less-info-icon"></i>
+            </span>
+          </p>
+          <p ng-if="status.hasBackground" ng-class="{'hide': !status.moreInfo}">{{meta.geneBackground}}</p>
         </div>
 
         <div class="col-lg-6 col-md-6" ng-if="altFreFlag">
-            <div id="histogramDiv"></div>
+          <div class="histogram-title">
+            Tumor Types with {{gene}} Mutations
+            <i class="fa fa-question-circle-o"
+               qtip
+               my="bottom center"
+               at="top center"
+               qtip-content="Currently this graph doesn't include copy number changes and fusions"></i>
+          </div>
+          <div id="histogramDiv"></div>
         </div>
     </div>
 
     <div class="row" ng-if="mutationMapperFlag">
         <div class="col-lg-12 col-md-12">
-            <div style="text-align: center;"><p>Annotated Mutation Distribution {{studyName}}</p></div>
+            <div class="mutation-mapper-title"><span>Annotated Mutation Distribution {{studyName}}</span></div>
             <div id="templateDiv"></div>
             <div id="mutation_details"></div>
 
@@ -66,10 +81,10 @@
                                         <span>{{drugItem}}<br ng-if="$index < x.drug.length - 1" /></span>
                                     </span>
                                 </td>
-                                <td><span level-qtip number="{{x.level}}">{{ x.level.toUpperCase()}}</span></td>
+                                <td><span qtip qtip-type="geneLevel" number="{{x.level}}">{{ x.level.toUpperCase()}}</span></td>
                                 <td>
                                     <span class="referenceStyle" style="visibility: {{(x.drugPmids.length > 0 ? 'visible' : 'hidden')}} "
-                                          qtip number="{{x.drugPmids.join()}}">{{x.drugPmids.length + (x.drugPmids.length > 1 ? ' references' : ' reference')}} </span>
+                                          qtip qtip-type="geneEvidence" number="{{x.drugPmids.join()}}">{{x.drugPmids.length + (x.drugPmids.length > 1 ? ' references' : ' reference')}} </span>
 
                                 </td>
                             </tr>
@@ -100,7 +115,7 @@
                                     <span
                                         class="gene-evidence-td-span"
                                         style="visibility: {{(y.mutationEffectPmids.concat(y.oncogenicPmids).length > 0 ? 'visible' : 'hidden')}} "
-                                        qtip number="{{y.mutationEffectPmids.concat(y.oncogenicPmids).join()}}">{{y.mutationEffectPmids.concat(y.oncogenicPmids).length + (y.mutationEffectPmids.concat(y.oncogenicPmids).length > 1 ? ' references' : ' reference')}}</span>
+                                        qtip qtip-type="geneEvidence" number="{{y.mutationEffectPmids.concat(y.oncogenicPmids).join()}}">{{y.mutationEffectPmids.concat(y.oncogenicPmids).length + (y.mutationEffectPmids.concat(y.oncogenicPmids).length > 1 ? ' references' : ' reference')}}</span>
                                 </td>
 
                             </tr>

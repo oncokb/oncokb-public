@@ -562,15 +562,17 @@
 		   class='mutation-details-uniprot-link'
 		   target='_blank'>{{uniprotId}}</a>
 		<span class='mutation-diagram-toolbar-buttons'>
-			<button class='diagram-to-pdf'>PDF</button>
-			<button class='diagram-to-svg'>SVG</button>
-			<button class="diagram-customize">Customize</button>
-			<button class="diagram-help">Color Codes</button>
+			<button class='diagram-to-pdf btn btn-default btn-xs'>PDF</button>
+			<button class='diagram-to-svg btn btn-default btn-xs'>SVG</button>
+			<button class="diagram-customize btn btn-default btn-xs">Customize</button>
+			<button class="diagram-help btn btn-default btn-xs">Color Codes</button>
 		</span>
 	</div>
-	<div class="mutation-diagram-help ui-widget"></div>
-	<div class="mutation-diagram-customize ui-widget"></div>
-	<div class='mutation-diagram-container'></div>
+  <div class="mutation-diagram-body">
+    <div class="card mutation-diagram-help ui-widget"></div>
+    <div class="card mutation-diagram-customize ui-widget"></div>
+    <div class='mutation-diagram-container'></div>
+  </div>
 </script>
 
 <script type="text/template" id="mutation_customize_panel_template">
