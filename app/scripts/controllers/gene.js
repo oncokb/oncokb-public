@@ -9,7 +9,7 @@
  */
 
 angular.module('oncokbStaticApp')
-        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $location, $route, api, $timeout, DTColumnDefBuilder) {
+        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $location, $route, api, $timeout, DTColumnDefBuilder, utils) {
 
             //fetch the mutation mapper from api and construct the graph from mutation mapper library
             var mutationData = [], uniqueClinicVariants = [], uniqueAnnotatedVariants = [];
@@ -451,7 +451,7 @@ angular.module('oncokbStaticApp')
             api.getGeneSummary($scope.gene)
                     .then(function (result) {
                         var content = result.data;
-                        $scope.meta.geneSummary = content.data.length > 0 ? content.data[0].description : '';
+                        $scope.meta.geneSummary = content.data.length > 0 ? utils.insertSourceLink(content.data[0].description) : '';
                         $scope.status.hasSummary = true;
                     }, function (result) {
                         $scope.meta.geneSummary = '';
@@ -461,7 +461,7 @@ angular.module('oncokbStaticApp')
                     .then(function (result) {
                         var content = result.data;
                         if (content.data.length > 0) {
-                            $scope.meta.geneBackground = content.data[0].description;
+                            $scope.meta.geneBackground = utils.insertSourceLink(content.data[0].description);
                             $scope.status.hasBackground = true;
                         } else {
                             $scope.meta.geneBackground = '';
