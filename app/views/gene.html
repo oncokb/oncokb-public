@@ -5,7 +5,7 @@
             <span class="gene-title">{{gene}}</span><br/>
             <h4 ng-if="status.hasLevel">Highest level of evidence: <span
                     ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</span></h4>
-            <p ng-if="status.hasSummary">{{meta.geneSummary}}</p>
+            <p ng-if="status.hasSummary" ng-bind-html="meta.geneSummary"></p>
           <p class="gene-background-info-wrapper">
             <span class="gene-more-info"
                   ng-click="status.moreInfo = !status.moreInfo"
@@ -20,7 +20,7 @@
               class="fa fa-arrow-circle-o-up gene-less-info-icon"></i>
             </span>
           </p>
-          <p ng-if="status.hasBackground" ng-class="{'hide': !status.moreInfo}">{{meta.geneBackground}}</p>
+          <p ng-if="status.hasBackground" ng-class="{'hide': !status.moreInfo}" ng-bind-html="meta.geneBackground"></p>
         </div>
 
         <div class="col-lg-6 col-md-6" ng-if="altFreFlag">
