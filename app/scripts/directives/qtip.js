@@ -13,8 +13,8 @@ angular.module('oncokbStaticApp')
       link: function(scope, element, attrs) {
         var src = '';
         var hideEvent = 'mouseleave';
-        var my = attrs.hasOwnProperty('my') ? attrs.my : 'center right';
-        var at = attrs.hasOwnProperty('at') ? attrs.at : 'left center';
+        var my = attrs.hasOwnProperty('my') ? attrs.my : 'bottom right';
+        var at = attrs.hasOwnProperty('at') ? attrs.at : 'top left';
         var type = attrs.hasOwnProperty('qtipType') ? attrs.qtipType : '';
         var content = attrs.hasOwnProperty('qtipContent') ? attrs.qtipContent : '';
 

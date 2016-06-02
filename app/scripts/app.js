@@ -72,7 +72,7 @@ angular
         controller: 'actionableGenesCtrl',
         controllerAs: 'actionableGenes'
       })
-      .when('/license', {
+      .when('/terms', {
         templateUrl: 'views/license.html',
         controller: 'LicenseCtrl',
         controllerAs: 'license'
