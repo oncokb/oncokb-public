@@ -9,7 +9,7 @@
  */
 
 angular.module('oncokbStaticApp')
-        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $location, $route, api, $timeout, DTColumnDefBuilder) {
+        .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $location, $route, api, $timeout, DTColumnDefBuilder, utils) {
 
             //fetch the mutation mapper from api and construct the graph from mutation mapper library
             var mutationData = [], uniqueClinicVariants = [], uniqueAnnotatedVariants = [];
@@ -176,9 +176,9 @@ angular.module('oncokbStaticApp')
                 var data = [trace];
 
                 var layout = {
-                    title: 'Tumor Types with ' + $scope.gene + ' Alterations',
+                    // title: 'Tumor Types with ' + $scope.gene + ' Alterations',
                     yaxis: {
-                        title: 'Mutation Frequency',
+                        title: 'Mutation Frequency (%)',
                         titlefont: {
                             size: 14
                         },
@@ -186,12 +186,11 @@ angular.module('oncokbStaticApp')
                             size: 12
                         },
                         tickmode: 'array',
-                        ticksuffix: "%",
                         fixedrange: true
                     },
                     xaxis: {
                         tickfont: {
-                            size: Math.max(Math.min(180 / maxLengthStudy.length, 15, 180 / shortNames.length), 6)
+                            size: Math.max(Math.min(260 / maxLengthStudy.length, 15, 180 / shortNames.length), 6)
                         },
                         tickangle: 30,
                         fixedrange: true
@@ -199,7 +198,7 @@ angular.module('oncokbStaticApp')
                     height: 250,
                     width: $('.plot-container').width(),
                     margin: {
-                        t: 30,
+                        t: 10,
                     }
                 };
 
@@ -234,7 +233,7 @@ angular.module('oncokbStaticApp')
                 if (!updateFlag) {
                     //load the template when first load the page
                     $("#templateDiv").load("views/mutationMapperTemplates.html", function () {
-                        $scope.studyName = "accross Cancer Types";
+                        $scope.studyName = "across Cancer Types";
                         // init mutation mapper
                         mutationMapper = new MutationMapper(options);
                         mutationMapper.init();
@@ -303,7 +302,7 @@ angular.module('oncokbStaticApp')
                     resetFlag = false;
                     $scope.clinicalVariantsCount = uniqueClinicVariants.length;
                     $scope.annoatedVariantsCount = uniqueAnnotatedVariants.length;
-                    $scope.studyName = "accross Cancer Types";
+                    $scope.studyName = "across Cancer Types";
                 } else {
                     proteinChanges = _.uniq(proteinChanges);
                     var regexString = "";
@@ -451,7 +450,7 @@ angular.module('oncokbStaticApp')
             api.getGeneSummary($scope.gene)
                     .then(function (result) {
                         var content = result.data;
-                        $scope.meta.geneSummary = content.data.length > 0 ? content.data[0].description : '';
+                        $scope.meta.geneSummary = content.data.length > 0 ? utils.insertSourceLink(content.data[0].description) : '';
                         $scope.status.hasSummary = true;
                     }, function (result) {
                         $scope.meta.geneSummary = '';
@@ -461,7 +460,7 @@ angular.module('oncokbStaticApp')
                     .then(function (result) {
                         var content = result.data;
                         if (content.data.length > 0) {
-                            $scope.meta.geneBackground = content.data[0].description;
+                            $scope.meta.geneBackground = utils.insertSourceLink(content.data[0].description);
                             $scope.status.hasBackground = true;
                         } else {
                             $scope.meta.geneBackground = '';

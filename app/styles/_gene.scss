@@ -2,11 +2,27 @@
 
 .gene {
   margin-top: 50px;
-  .gene-more-info-icon:hover, .gene-less-info-icon:hover {
+  .gene-background-info-wrapper {
+    font-style: italic;
+    .gene-more-info-icon, .gene-less-info-icon {
+      margin-left: 5px;
+    }
+  }
+  .gene-background-info-wrapper:hover, .gene-background-info-wrapper:focus {
     cursor: pointer;
   }
-  .gene-more-info-icon, .gene-less-info-icon {
-    margin-left: 5px;
+
+  .histogram-title {
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .mutation-mapper-title {
+    position: absolute;
+    top: 0;
+    font-weight: 500;
+    max-width: calc(100% - 300px);
   }
 
   .gene-table {
@@ -47,5 +63,14 @@
     text-align: center;
     background: white;
     border: none;
+  }
+  .mutation-diagram-body {
+    float: left;
+  }
+  .mutation-diagram-toolbar {
+    float: right;
+    .btn-xs {
+      height: 24px;
+    }
   }
 }

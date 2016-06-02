@@ -12,17 +12,6 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
 @import "layout";
 @import "nav";
 
-/* Overwrite Materialize css*/
-.btn, .btn-large {
-  background-color: $dark-blue;
-}
-
-.btn:hover, .btn-large:hover {
-  background-color: $dark-blue;
-}
-/* ------------------------ */
-
-
 
 .content {
   margin-bottom: 20px;
@@ -88,7 +77,7 @@ a:hover, a:focus {
   width: 100%;
 }
 
-.about, .team, .level-page {
+.about, .team, .level-page, .license {
   margin: auto;
   h5 {
     font-weight: 700;
@@ -96,9 +85,25 @@ a:hover, a:focus {
 }
 
 .about {
+  .about-title {
+    font-size: 30px;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+    float: left;
+    line-height: 45px;
+  }
   .about-poster {
     margin: auto;
     display: block;
+  }
+  .quest-info {
+    color: green;
+    width: 125px;
+    float: left;
+    font-style: italic;
+    margin-top: 2.5px;
   }
 }
 
@@ -114,8 +119,20 @@ a:hover, a:focus {
     white-space: nowrap;
 }
 
+.level-page {
+  .btn, .btn-large {
+    background-color: $dark-blue;
+  }
 
+  .btn:hover, .btn-large:hover {
+    background-color: $dark-blue;
+  }
+}
 
+.old-browser-warning {
+  background: red;
+  color: white;
+}
 #levelDownload {
   margin-bottom: 10px;
 }

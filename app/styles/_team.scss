@@ -7,4 +7,23 @@
     font-size: 12px;
     color: grey;
   }
+  .col-lg-3 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  @media (min-width: $range-min-lg-width) {
+    .col-lg-3.item-1 {
+      width: 22%;
+      padding-left: 15px;
+    }
+    .col-lg-3.item-2 {
+      width: 33%;
+    }
+    .col-lg-3.item-3 {
+      width: 24%;
+    }
+    .col-lg-3.item-4 {
+      width: 21%;
+    }
+  }
 }

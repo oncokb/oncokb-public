@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title>OncoKB</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -50,12 +50,11 @@
   <meta name="theme-color" content="#ffffff">
 </head>
 <body ng-controller="MainCtrl as ctrl">
-<!--[if lt IE 7]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-  your browser</a> to improve your experience.</p>
+<!--[if lte IE 9]>
+<p class="old-browser-warning">You are using an old version of Internet Explorer. For better performance, we recommend
+  using <b>Google Chrome, Firefox, Safari, or Internet Explorer 10 or above to visit this web site.</p>
 <![endif]-->
 
-<!-- Add your site or application content here -->
 <div class="wrapper">
   <div class="navbar navbar-inverse navbar-fixed-top" class="" role="navigation">
     <div class="container nav-container">
@@ -125,8 +124,9 @@
     <div class="row footer-row-2">
       <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
         <div class="">
-          <a href="#/team" class="">About us</a>
+          <a href="#/terms" class="">Usage Terms</a>
           <a href="mailto:team@oncokb.org" target="_top">Contact us</a>
+          <a href="https://twitter.com/OncoKB" target="_blank">Twitter</a>
         </div>
       </div>
       <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12 mskcc-footer-logo0-wrapper">
@@ -138,27 +138,19 @@
         <span>© 2016 Memorial Sloan Kettering Cancer Center</span>
       </div>
     </div>
-    <!--<p><a target="_blank" href="http://cmo.mskcc.org/">CMO</a> | <a target="_blank"-->
-    <!--href="https://cbioportal.mskcc.org/">cBioPortal</a>-->
-    <!--</p>-->
-
-    <!--<p>Questions and feedback: Contact <a href="mailto:richarj2@mskcc.org?Subject=MSK-IMPACT%20Publication%20Policy"-->
-    <!--target="_top">Julia Rudolph</a></p>-->
   </div>
 </div>
 
-<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
 <script>
-  !function(A, n, g, u, l, a, r) {
-    A.GoogleAnalyticsObject = l, A[l] = A[l] || function() {
-        (A[l].q = A[l].q || []).push(arguments)
-      }, A[l].l = +new Date, a = n.createElement(g),
-      r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
-  }(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-XXXXX-X');
+  ga('create', 'UA-76620102-2', 'auto');
   ga('send', 'pageview');
 </script>
+
 <!-- build:js(.) scripts/vendor.js -->
 <!-- bower:js -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -216,10 +208,11 @@
 <script src="scripts/controllers/genes.js"></script>
 <script src="scripts/controllers/actionalGenes.js"></script>
 <script src="scripts/directives/qtip.js"></script>
-<script src="scripts/directives/levelQtip.js"></script>
 <script src="scripts/directives/main-level.js"></script>
 <script src="scripts/controllers/about.js"></script>
 <script src="scripts/services/api.js"></script>
+<script src="scripts/controllers/license.js"></script>
+<script src="scripts/services/utils.js"></script>
 <!-- endbuild -->
 </body>
 </html>

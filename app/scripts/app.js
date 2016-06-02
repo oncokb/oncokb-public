@@ -27,8 +27,8 @@ angular
   .constant('publicApiLink', 'api/public/v1/')
   // .constant('apiLink', 'http://localhost:8080/oncokb-api/api/')
   // .constant('publicApiLink', 'http://localhost:8080/oncokb-api/api/public/v1/')
-  // .constant('apiLink', 'http://dashi-dev.cbio.mskcc.org:8080/oncokb-public-api/api/')
-  // .constant('publicApiLink', 'http://dashi-dev.cbio.mskcc.org:8080/oncokb-public-api/api/public/v1/')
+  // .constant('apiLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/')
+  // .constant('publicApiLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/public/v1/')
   .config(function($routeProvider) {
     $routeProvider
       .when('/', {
@@ -71,6 +71,11 @@ angular
         templateUrl: 'views/actionalGenes.html',
         controller: 'actionableGenesCtrl',
         controllerAs: 'actionableGenes'
+      })
+      .when('/terms', {
+        templateUrl: 'views/license.html',
+        controller: 'LicenseCtrl',
+        controllerAs: 'license'
       })
       .otherwise({
         redirectTo: '/'
