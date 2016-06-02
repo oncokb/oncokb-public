@@ -106,7 +106,7 @@ angular.module('oncokbStaticApp')
                                             results.forEach(function (item) {
                                                 studies.push(item.study);
                                                 frequencies.push(item.frequency);
-                                                hoverInfo.push(item.frequency + "% of the patients have " + $scope.gene + " mutation");
+                                                hoverInfo.push(item.frequency + "% of patients have annotated " + $scope.gene + " mutation");
                                             });
                                             var tempIndex = 0, tempString = "", secondIndex = 0;
                                             api.getStudies(studies.join())
