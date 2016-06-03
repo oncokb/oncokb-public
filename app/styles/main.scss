@@ -42,6 +42,11 @@ div.dataTables_length label, div.dataTables_filter label {
 .btn-info:hover {
   background-color: #0066cb;
 }
+
+.navbar-fixed-top .navbar-collapse, .navbar-fixed-bottom .navbar-collapse {
+  max-height: 370px;
+}
+
 /* ----------------------- */
 
 a:hover, a:focus {
