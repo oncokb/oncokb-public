@@ -23,8 +23,8 @@ angular
     'ui.bootstrap'
   ])
   .constant('_', window._)
-  .constant('apiLink', 'api/')
-  .constant('publicApiLink', 'api/public/v1/')
+  .constant('apiLink', 'legacy-api/')
+  .constant('publicApiLink', 'public-api/v1/')
   // .constant('apiLink', 'http://localhost:8080/oncokb-api/api/')
   // .constant('publicApiLink', 'http://localhost:8080/oncokb-api/api/public/v1/')
   // .constant('apiLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/')
