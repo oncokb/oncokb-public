@@ -77,6 +77,11 @@ angular
         controller: 'LicenseCtrl',
         controllerAs: 'license'
       })
+      .when('/news', {
+        templateUrl: 'views/news.html',
+        controller: 'NewsCtrl',
+        controllerAs: 'news'
+      })
       .otherwise({
         redirectTo: '/'
       });
