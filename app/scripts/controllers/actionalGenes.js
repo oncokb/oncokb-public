@@ -6,12 +6,12 @@
 
 
 angular.module('oncokbStaticApp')
-        .controller('actionableGenesCtrl', function($scope, $location, DTColumnDefBuilder){
+        .controller('actionableGenesCtrl', function ($scope, $location, DTColumnDefBuilder) {
             $scope.level1Genes = [
                 {
-                    "gene": "ABL1",
-                    "variants": "BCR-ABL fusion",
-                    "disease": "CML, ALL",
+                    "gene": "ABL",
+                    "variants": "BCR-ABL Fusion",
+                    "disease": "Chronic myeloid leukemia,         Acute lymphoblastic leukemia",
                     "drugs": "Imatinib"
                 },
                 {
@@ -52,31 +52,31 @@ angular.module('oncokbStaticApp')
                 },
                 {
                     "gene": "KIT",
-                    "variants": "10 specific missense / indels",
-                    "disease": "GIST",
-                    "drugs": "Imatinib, Sunitinib"
+                    "variants": "10 specific missense mutations / indels",
+                    "disease": "Gastrointestinal stromal tumor",
+                    "drugs": "Imatinib, Sunitinib, Regorafenib"
                 },
                 {
                     "gene": "PDGFRA",
-                    "variants": "FIP1L1-PDGFRA fusion",
-                    "disease": "Hypereosinophilic Syndrome, CEL",
+                    "variants": "FIP1L1-PDGFRA Fusion",
+                    "disease": "Hypereosinophilic syndrome, Chronic eosinophilic leukemia",
                     "drugs": "Imatinib"
                 },
                 {
                     "gene": "PDGFRA",
                     "variants": "Fusions",
-                    "disease": "MDS/MPD",
+                    "disease": "Myelodysplastic /myeloproliferative disease",
                     "drugs": "Imatinib"
                 },
                 {
                     "gene": "PDGFRB",
                     "variants": "Fusions",
-                    "disease": "MDS/MPD",
+                    "disease": "Myelodysplastic /myeloproliferative disease",
                     "drugs": "Imatinib"
                 },
                 {
-                    "gene": "PDGFRB",
-                    "variants": "COL1A1-PDGFB fusion",
+                    "gene": "PDGFB",
+                    "variants": "COL1A1-PDGFB Fusion",
                     "disease": "Dermatofibrosarcoma Protuberans",
                     "drugs": "Imatinib"
                 },
@@ -87,23 +87,29 @@ angular.module('oncokbStaticApp')
                     "drugs": "Crizotinib"
                 }
             ];
-             $scope.level2Genes = [
+            $scope.level2Genes = [
                 {
                     "gene": "ALK",
                     "variants": "Fusions",
-                    "disease": "IMT",
+                    "disease": "Inflammatory myofibroblastic tumor",
                     "drugs": "Crizotinib, Ceritinib"
+                },
+                {
+                    "gene": "BRAF",
+                    "variants": "V600E",
+                    "disease": "Non-small cell lung cancer",
+                    "drugs": "Dabrafenib, Trametinib"
                 },
                 {
                     "gene": "BRAF",
                     "variants": "V600K/D/M/R/G",
                     "disease": "Melanoma",
-                    "drugs": "Vemurafenib, Dabrafenib"
+                    "drugs": "Vemurafenib"
                 },
                 {
                     "gene": "BRAF",
                     "variants": "V600E/K/D/M/R/G",
-                    "disease": "NSCLC, ECD",
+                    "disease": "Non-small cell lung cancer,                    Erdheim-Chester disease",
                     "drugs": "Vemurafenib"
                 },
                 {
@@ -127,43 +133,49 @@ angular.module('oncokbStaticApp')
                 {
                     "gene": "EGFR",
                     "variants": "G719A/C/D/S, S768I, L861Q/R",
-                    "disease": "NSCLC",
+                    "disease": "Non-small cell lung cancer",
                     "drugs": "Erlotinib, Gefitinib, Afatinib"
                 },
                 {
                     "gene": "KIT",
-                    "variants": "K642E, L576P, V560E, V559D, D820E",
-                    "disease": "Melanoma, GIST",
-                    "drugs": "Imatinib, Sorafenib"
+                    "variants": "K642E, L576P, V560E, V559D",
+                    "disease": "Melanoma",
+                    "drugs": "Imatinib"
+                },
+                {
+                    "gene": "KIT",
+                    "variants": "D820E",
+                    "disease": "Gastrointestinal stromal tumor",
+                    "drugs": "Sorafenib"
                 },
                 {
                     "gene": "MET",
-                    "variants": "Amplification, Exon 14 skipping mt",
-                    "disease": "NSCLC",
+                    "variants": "Amplification, Exon 14 skipping mutations",
+                    "disease": "Non-small cell lung cancer",
                     "drugs": "Crizotinib"
                 },
                 {
                     "gene": "PDGFRA",
-                    "variants": "17 specific missense / indels",
-                    "disease": "GIST",
+                    "variants": "17 specific missense mutations / indels",
+                    "disease": "Gastrointestinal stromal tumor",
                     "drugs": "Imatinib"
                 },
                 {
                     "gene": "RET",
                     "variants": "Fusions",
-                    "disease": "Lung Cancer",
+                    "disease": "Lung cancer",
                     "drugs": "Cabozantinib"
                 },
                 {
                     "gene": "TSC1",
                     "variants": "Inactivating mutations",
-                    "disease": "SEGA",
+                    "disease": "Subependymal giant cell astrocytoma",
                     "drugs": "Everolimus"
                 },
                 {
                     "gene": "TSC2",
                     "variants": "Inactivating mutations",
-                    "disease": "SEGA",
+                    "disease": "Subependymal giant cell astrocytoma",
                     "drugs": "Everolimus"
                 }
             ];
@@ -172,50 +184,68 @@ angular.module('oncokbStaticApp')
                 {
                     "gene": "AKT1",
                     "variants": "E17K",
-                    "disease": "Breast Cancer, Ovarian Cancer",
+                    "disease": "Breast cancer, Ovarian cancer",
                     "drugs": "AZD5363"
                 },
                 {
                     "gene": "ALK",
-                    "variants": "L1196M/Q, R1275Q, C1156Y",
-                    "disease": "Lung Cancer, Neuroblastoma",
-                    "drugs": "Brigatinib, X-396, Crizotinib"
+                    "variants": "L1196M/Q",
+                    "disease": "Lung cancer",
+                    "drugs": "Brigatinib"
+                },
+                {
+                    "gene": "ALK",
+                    "variants": "L1196M, C1156Y",
+                    "disease": "Lung cancer",
+                    "drugs": "X-396"
+                },
+                {
+                    "gene": "ALK",
+                    "variants": "R1275Q",
+                    "disease": "Neuroblastoma",
+                    "drugs": "Crizotinib"
                 },
                 {
                     "gene": "ARAF",
-                    "variants": "S214A, S214C",
-                    "disease": "ERD, Lung Cancer",
+                    "variants": "S214A; S214C",
+                    "disease": "Lung cancer;                                  Erdheim–Chester disease",
                     "drugs": "Sorafenib"
                 },
                 {
                     "gene": "BRAF",
                     "variants": "Fusions",
-                    "disease": "Ovarian Cancer, Spindle Cell Neoplasms",
-                    "drugs": "Paclitaxel + Selumetinib, Sorafenib + Temsirolimus"
+                    "disease": "Ovarian cancer;                                 Spindle cell neoplasms",
+                    "drugs": "Paclitaxel + Selumetinib; Sorafenib + Temsirolimus"
                 },
                 {
                     "gene": "BRAF",
-                    "variants": "K601E, L579Q/R/S/V",
+                    "variants": "K601E; L579Q/R/S/V",
                     "disease": "Melanoma",
-                    "drugs": "Trametinib, TAK-733"
+                    "drugs": "Trametinib; TAK-733"
                 },
                 {
                     "gene": "EGFR",
-                    "variants": "Exon 19 deletions/insertions A763_Y764insFQEA, EGFR-KDD, L858R, T790M",
-                    "disease": "Lung Cancer",
+                    "variants": "Exon 19 deletions/insertions, A763_Y764insFQEA, EGFR-KDD, L858R, T790M",
+                    "disease": "Lung cancer",
                     "drugs": "First, Second and Third generation EGFR TKIs"
                 },
                 {
                     "gene": "EGFR",
                     "variants": "S492R",
-                    "disease": "Colorectal Cancer",
+                    "disease": "Colorectal cancer",
                     "drugs": "Panitumumab"
                 },
                 {
                     "gene": "ERBB2",
-                    "variants": "Amplification, Activating mutations, S618_S634indel, V659E",
-                    "disease": "Breast Cancer, Lung Cancer",
-                    "drugs": "Neratinib, Trastuzumab + Lapatinib, Dacomitinib, Afatinib, Lapatinib"
+                    "variants": "Amplification; Activating mutations",
+                    "disease": "Breast cancer",
+                    "drugs": "Neratinib, Trastuzumab + Lapatinib; Neratinib"
+                },
+                {
+                    "gene": "ERBB2",
+                    "variants": "S618_S634indel; V659E",
+                    "disease": "Lung cancer",
+                    "drugs": "Dacomitinib, Afatinib; Lapatinib"
                 },
                 {
                     "gene": "ERCC2",
@@ -225,15 +255,15 @@ angular.module('oncokbStaticApp')
                 },
                 {
                     "gene": "FGFR1",
-                    "variants": "Amplification, BCR-FGFR1 Fusion",
+                    "variants": "Amplification; BCR-FGFR1 Fusion",
                     "disease": "Multiple tumor types",
-                    "drugs": "Dovitinib, Ponatinib, AZD4547"
+                    "drugs": "Dovitinib, AZD4547; Ponatinib"
                 },
                 {
                     "gene": "FGFR2",
-                    "variants": "Amplification, Fusions",
+                    "variants": "Amplification; Fusions",
                     "disease": "Multiple tumor types",
-                    "drugs": "Dovitinib, JNJ-42756493"
+                    "drugs": "Dovitinib; JNJ-42756493"
                 },
                 {
                     "gene": "FGFR3",
@@ -244,19 +274,25 @@ angular.module('oncokbStaticApp')
                 {
                     "gene": "FLT3",
                     "variants": "FLT3-ITD",
-                    "disease": "AML",
+                    "disease": "Acute myeloid leukemia",
                     "drugs": "Sorafenib"
                 },
                 {
+                    "gene": "IDH1",
+                    "variants": "R132C/G/S/H/L/P",
+                    "disease": "Acute myeloid leukemia",
+                    "drugs": "AG-120"
+                },
+                {
                     "gene": "IDH2",
-                    "variants": "R140Q + 13 activating mutations",
-                    "disease": "Hematological Tumors",
+                    "variants": "R140 and R172 mutations",
+                    "disease": "Hematological tumors",
                     "drugs": "AG-221"
                 },
                 {
                     "gene": "JAK2",
                     "variants": "PCM1-JAK2 Fusion",
-                    "disease": "CEL",
+                    "disease": "Chronic eosinophilic leukemia",
                     "drugs": "Ruxolitinib"
                 },
                 {
@@ -268,73 +304,79 @@ angular.module('oncokbStaticApp')
                 {
                     "gene": "KRAS",
                     "variants": "Activating mutations",
-                    "disease": "Lung Cancer, Ovarian Cancer",
+                    "disease": "Lung cancer, Ovarian cancer",
                     "drugs": "MEK inhibitor combinations"
                 },
                 {
                     "gene": "MAP2K1",
-                    "variants": "Q56_V60del + 10 specific missense mt",
+                    "variants": "Q56_V60del + 10 specific missense mutations",
                     "disease": "Multiple cancer types",
                     "drugs": "MEK and ERK inhibitors"
                 },
                 {
                     "gene": "MET",
                     "variants": "Exon 14 skipping mutations",
-                    "disease": "Lung Cancer",
+                    "disease": "Lung cancer",
                     "drugs": "Capmatinib, Cabozantinib"
                 },
                 {
                     "gene": "MTOR",
                     "variants": "E2014K",
-                    "disease": "Bladder Cancer",
+                    "disease": "Bladder cancer",
                     "drugs": "Everolimus"
                 },
                 {
                     "gene": "NRAS",
                     "variants": "Activating mutations",
-                    "disease": "Melanoma, Thyroid Cancer",
+                    "disease": "Melanoma, Thyroid cancer",
                     "drugs": "MEK inhibitors (monotherapy/combinations)"
                 },
                 {
                     "gene": "NTRK1",
                     "variants": "Fusions",
-                    "disease": "All Tumors",
+                    "disease": "All cancer types",
                     "drugs": "LOXO-101"
                 },
                 {
                     "gene": "PDGFRA",
-                    "variants": "BCR-PDGFRA, D842V",
-                    "disease": "CML, GIST",
-                    "drugs": "Imatinib, Sorafenib"
+                    "variants": "BCR-PDGFRA; D842V",
+                    "disease": "Chronic myeloid leukemia;       Gastrointestinal stromal tumor",
+                    "drugs": "Imatinib; Sorafenib"
                 },
                 {
                     "gene": "PIK3CA",
                     "variants": "Activating mutations",
-                    "disease": "Breast Cancer",
+                    "disease": "Breast cancer",
                     "drugs": "Apelisib"
                 },
                 {
                     "gene": "PTCH1",
-                    "variants": "Truncating Mutations",
-                    "disease": "BCC, Medulloblastoma",
-                    "drugs": "Sonidegib, Vismodegib"
+                    "variants": "Truncating mutations",
+                    "disease": "Basal cell carcinoma; Medulloblastoma",
+                    "drugs": "Sonidegib, Vismodegib; Sonidegib"
                 },
                 {
                     "gene": "PTEN",
                     "variants": "Inactivating mutations",
-                    "disease": "Endometrial Cancer",
+                    "disease": "Endometrial cancer",
                     "drugs": "Olaparib"
                 },
                 {
                     "gene": "RICTOR",
                     "variants": "Amplification",
-                    "disease": "Lung Cancer",
+                    "disease": "Lung cancer",
                     "drugs": "AZD2014, CC-223, MLN0128"
                 },
                 {
+                    "gene": "RET",
+                    "variants": "Fusions",
+                    "disease": "Lung cancer",
+                    "drugs": "Vandetinib"
+                },
+                {
                     "gene": "ROS1",
-                    "variants": "TFG-ROS1",
-                    "disease": "IMT",
+                    "variants": "TFG-ROS1 Fusion",
+                    "disease": "Inflammatory myofibroblastic tumor",
                     "drugs": "Crizotinib"
                 }
             ];
@@ -353,8 +395,8 @@ angular.module('oncokbStaticApp')
                 DTColumnDefBuilder.newColumnDef(3)
             ];
 
-            $scope.clickGene = function(gene) {
-              $location.path('/gene/' + gene);
+            $scope.clickGene = function (gene) {
+                $location.path('/gene/' + gene);
             };
         });
 

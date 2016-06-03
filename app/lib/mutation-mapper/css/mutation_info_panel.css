@@ -1,10 +1,15 @@
 span.mutation-type-info {
 	padding-right: 10px;
+	display: inline-block;
+	line-height: 2.5em;
+}
+
+.mutation-type-info-link {
+	cursor: pointer;
 }
 
 div.mutation-info-panel-container {
-	padding-top: 10px;
-	padding-bottom: 15px;
+	padding-bottom: 10px;
 }
 
 div.mutation-info-panel-content {
@@ -18,20 +23,23 @@ span.mutation-type-count {
 span.missense_mutation_count {
 	background-color: #008000;
 	font-weight: bold;
-        border-radius: 10px;
+	border-radius: 10px;
 }
 span.trunc_mutation_count {
-	background-color: #FF0000;
-	font-weight: bold;
-        border-radius: 10px;
-}
-span.inframe_mutation_count {
 	background-color: #000000;
 	font-weight: bold;
-        border-radius: 10px;
+	border-radius: 10px;
+}
+span.inframe_mutation_count {
+	background-color: #8B4513;
+	font-weight: bold;
+	border-radius: 10px;
 }
 span.other_mutation_count {
-	background-color: #808080;
+	background-color: #8B00C9;
 	font-weight: bold;
-        border-radius: 10px;
+	border-radius: 10px;
+}
+span.mutation-type-label {
+	font-weight: normal;
 }

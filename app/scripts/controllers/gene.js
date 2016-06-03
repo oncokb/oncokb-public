@@ -46,7 +46,7 @@ angular.module('oncokbStaticApp')
                         options: {
                             servletName: $(".url-mutation-aligner-service").val() ||
                                     "http://www.cbioportal.org/getMutationAligner.json",
-                            initMode: "lazy"
+                            initMode: "full"
                         }
                     }
 
@@ -117,12 +117,12 @@ angular.module('oncokbStaticApp')
                                                                     shortNames.push(item1.short_name.substring(0, item1.short_name.indexOf("(") - 1));
                                                                     fullNames.push(item1.name);
                                                                     //insert new line symbol to label content based on study name length
-                                                                   if(item1.name.length < 40) {
+                                                                    if (item1.name.length < 40) {
                                                                         tempNames.push(item1.name);
-                                                                    } else if (item1.name.length < 60){
+                                                                    } else if (item1.name.length < 60) {
                                                                         tempIndex = item1.name.indexOf("(TCGA,");
                                                                         tempNames.push(item1.name.substring(0, tempIndex) + '<br>' + item1.name.substring(tempIndex));
-                                                                    } else{
+                                                                    } else {
                                                                         tempIndex = item1.name.indexOf("(TCGA,");
                                                                         tempString = item1.name.substring(0, tempIndex).trim();
                                                                         secondIndex = tempString.lastIndexOf(" ");
@@ -138,6 +138,8 @@ angular.module('oncokbStaticApp')
 
                                                         plots(studies, shortNames, fullNames, frequencies, hoverInfo);
                                                     });
+                                        } else {
+                                            $scope.status.moreInfo = true;
                                         }
 
 
@@ -147,9 +149,11 @@ angular.module('oncokbStaticApp')
 
             function plots(studies, shortNames, fullNames, frequencies, hoverInfo) {
                 //get the max length of the study short name
-                var maxLengthStudy = "", colors = [];
+                var maxLengthStudy = "", colors = [], boldedNames = [];
+                 
                 for (var i = 0; i < shortNames.length; i++) {
                     colors.push('#1c75cd');
+                    boldedNames.push(shortNames[i]);
                     if (shortNames[i].length > maxLengthStudy.length)
                         maxLengthStudy = shortNames[i];
                 }
@@ -162,7 +166,7 @@ angular.module('oncokbStaticApp')
 
 
                 var trace = {
-                    x: shortNames,
+                    x: boldedNames,
                     y: frequencies,
                     type: 'bar',
                     text: hoverInfo,
@@ -217,11 +221,19 @@ angular.module('oncokbStaticApp')
                     mutationMapperConstructor(newMutationData, true);
                     colors.fill('#1c75cd');
                     colors[tempIndex] = '#064885';
+                    for (var i = 0; i < shortNames.length; i++) {
+                        boldedNames[i] = shortNames[i];
+                    }
+
+                    boldedNames[tempIndex] = "<b>" + boldedNames[tempIndex] + "</b>";
                     Plotly.redraw('histogramDiv', data, layout, {displayModeBar: false});
 
                     $(".mutation-details-filter-reset").click(function () {
                         //show all of the data again
                         colors.fill('#1c75cd');
+                        for (var i = 0; i < shortNames.length; i++) {
+                            boldedNames[i] = shortNames[i];
+                        }
                         Plotly.redraw('histogramDiv', data, layout, {displayModeBar: false});
                     });
 
@@ -351,37 +363,37 @@ angular.module('oncokbStaticApp')
             $scope.view = {};
             $scope.view.levelColors = $rootScope.data.levelColors;
             $scope.view.clinicalTableOptions = {
-              hasBootstrap: true,
-              "aoColumns": [
-                {"sType": "num-html"},
-                null,
-                null,
-                {asSorting: ['asc', 'desc']},
-                {
-                  "sType": "num-html",
-                  asSorting: ['desc', 'asc']
-                }
-              ],
-              paging: false,
-              scrollCollapse: true,
-              scrollY: 500,
-              sDom: "ft",
-              aaSorting: [[3, 'asc'], [0, 'asc']]
-            };
-            $scope.view.biologicalTableOptions = {
                 hasBootstrap: true,
                 "aoColumns": [
-                  {"sType": "num-html"},
-                  {asSorting: ['desc', 'asc']},
-                  null,
-                  {"sType": "num-html",
-                    asSorting: ['desc', 'asc']}
+                    {"sType": "num-html"},
+                    null,
+                    null,
+                    {asSorting: ['asc', 'desc']},
+                    {
+                        "sType": "num-html",
+                        asSorting: ['desc', 'asc']
+                    }
                 ],
                 paging: false,
                 scrollCollapse: true,
                 scrollY: 500,
                 sDom: "ft",
-                aaSorting: [ [1,'desc'], [0,'asc']]
+                aaSorting: [[3, 'asc'], [0, 'asc']]
+            };
+            $scope.view.biologicalTableOptions = {
+                hasBootstrap: true,
+                "aoColumns": [
+                    {"sType": "num-html"},
+                    {asSorting: ['desc', 'asc']},
+                    null,
+                    {"sType": "num-html",
+                        asSorting: ['desc', 'asc']}
+                ],
+                paging: false,
+                scrollCollapse: true,
+                scrollY: 500,
+                sDom: "ft",
+                aaSorting: [[1, 'desc'], [0, 'asc']]
             };
             $rootScope.view.subNavItems = [{content: $scope.gene}];
 
@@ -438,10 +450,10 @@ angular.module('oncokbStaticApp')
 
 
                         if (uniqueAnnotatedVariants.length > 0) {
-                          $rootScope.view.subNavItems = [
-                            {content: $scope.gene},
-                            {content: uniqueAnnotatedVariants.length + ' annotated variant' + (uniqueAnnotatedVariants.length > 1 ? 's' : '')}
-                          ];
+                            $rootScope.view.subNavItems = [
+                                {content: $scope.gene},
+                                {content: uniqueAnnotatedVariants.length + ' annotated variant' + (uniqueAnnotatedVariants.length > 1 ? 's' : '')}
+                            ];
                         }
 
                         $scope.annoatedVariantsCount = uniqueAnnotatedVariants.length;
