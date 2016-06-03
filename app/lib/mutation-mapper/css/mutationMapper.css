@@ -35,7 +35,7 @@
  * 3D visualizer panel
  */
 .mutation-3d-container {
-	width: 400px;
+	width: 430px;
 	font-family: verdana, arial, sans-serif;
 	font-size: 12px;
 	position: fixed;
@@ -50,6 +50,21 @@
 	padding: 5px 10px 10px;
 	-moz-border-radius: 15px;
 	-webkit-border-radius: 15px;
+	/* fix for bootstrap 3 */
+	box-sizing: content-box;
+}
+.mutation-3d-container .ui-resizable-w {
+	width: 16px;
+	height: 90%;
+}
+.mutation-3d-container .ui-resizable-s {
+	left: 32px;
+	height: 16px;
+	width: 90%;
+}
+.mutation-3d-container .ui-resizable-sw {
+	height: 32px;
+	width: 32px;
 }
 .mutation-3d-vis-header {
 	padding-bottom: 5px;
@@ -94,10 +109,6 @@
 .mutation-3d-loop {
 	font-weight: bold;
 	color: #888888;
-}
-.mutation-3d-tied {
-	color: #800080;
-	font-weight: bold;
 }
 .mutation-3d-highlighted {
 	color: #FFDD00;
@@ -203,15 +214,19 @@
 	font-weight: bold;
 }
 .trunc_mutation {
-	color: #FF0000;
-	font-weight: bold;
-}
-.inframe_mutation {
 	color: #000000;
 	font-weight: bold;
 }
+.inframe_mutation {
+	color: #8B4513;
+	font-weight: bold;
+}
 .other_mutation {
-	color: #808080;
+	color: #8B00C9;
+	font-weight: bold;
+}
+.default_mutation {
+	color: #BB0000;
 	font-weight: bold;
 }
 .uniform_mutation {
@@ -270,7 +285,6 @@
 }
 .mutation-details-content {
 	font-size: 12px;
-        margin-left: 20px;
 }
 .mutation-details-content h4,
 .mutation-3d-container h4 {
@@ -534,6 +548,52 @@
 	padding-top: 5px;
 	font-size: 90%;
 }
+span.mutation-type-info {
+	padding-right: 10px;
+	display: inline-block;
+	line-height: 2.5em;
+}
+
+.mutation-type-info-link {
+	cursor: pointer;
+}
+
+div.mutation-info-panel-container {
+	padding-bottom: 10px;
+}
+
+div.mutation-info-panel-content {
+	padding-left: 30px;
+}
+
+span.mutation-type-count {
+	padding: 5px;
+	color: #EFEFEF;
+}
+span.missense_mutation_count {
+	background-color: #008000;
+	font-weight: bold;
+	border-radius: 10px;
+}
+span.trunc_mutation_count {
+	background-color: #000000;
+	font-weight: bold;
+	border-radius: 10px;
+}
+span.inframe_mutation_count {
+	background-color: #8B4513;
+	font-weight: bold;
+	border-radius: 10px;
+}
+span.other_mutation_count {
+	background-color: #8B00C9;
+	font-weight: bold;
+	border-radius: 10px;
+}
+span.mutation-type-label {
+	font-weight: normal;
+}
+
 /*
  * Copyright (c) 2015 Memorial Sloan-Kettering Cancer Center.
  *
@@ -634,6 +694,27 @@
 	padding-left:5px;
 	padding-right:5px;
 }
+.mutation-table-container .valid {
+	background: #CCFFCC;
+	color: #000000;
+	padding-left: 5px;
+	padding-right: 5px;
+	font-weight: bold;
+}
+.mutation-table-container .somatic {
+	background: #CCFFFF;
+	color: #000000;
+	padding-left: 5px;
+	padding-right: 5px;
+	font-weight: bold;
+}
+.mutation-table-container .germline {
+	background: #FFFFCC;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-weight: bold;
+}
 .mutation-table-container .mutation-table-protein-change {
 	font-weight: bold;
 	font-style: italic;
@@ -711,5 +792,3 @@ table.display tr.odd.mutation-table-highlight td {
 .pancan_mutations_histogram_thumbnail {
         float: left;
 }
-
-

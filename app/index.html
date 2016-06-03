@@ -60,7 +60,7 @@
     <div class="container nav-container">
       <div class="navbar-header">
         <div data-toggle="collapse" data-target=".navbar-collapse" class="nav-toggle menu-toggle"
-             ng-class="{open: toggled}" ng-click="toggleMenu()">
+             ng-class="{open: toggled && !menuOff}" ng-click="toggleMenu()">
           <span></span>
           <span></span>
           <span></span>
@@ -71,13 +71,14 @@
         </div>
         <span class="navbar-brand"><a href="#/"><img class="logo-brand" src="resources/images/oncokb-lg.png"/></a></span>
       </div>
-      <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-          <li ng-class="{ active: isActive('/')}"><a href="#/"><span>Home</span></a></li>
-          <li ng-class="{ active: isActive('/about')}"><a href="#/about"><span>About OncoKB</span></a></li>
-          <li ng-class="{ active: isActive('/team')}"><a href="#/team"><span>Team</span></a></li>
-          <li ng-class="{ active: isActive('/levels')}"><a href="#/levels"><span>Levels of Evidence</span></a></li>
-          <li ng-class="{ active: isActive('/actionableGenes')}"><a href="#/actionableGenes"><span>Actionable Genes</span></a></li>
+      <div id="menu" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav" ng-class="{hidden: toggled && menuOff}">
+          <li ng-click="switchMenu()" ng-class="{ active: isActive('/')}"><a href="#/"><span>Home</span></a></li>
+          <li ng-click="switchMenu()" ng-class="{ active: isActive('/about')}"><a href="#/about"><span>About</span></a></li>
+          <li ng-click="switchMenu()" ng-class="{ active: isActive('/team')}"><a href="#/team"><span>Team</span></a></li>
+          <li ng-click="switchMenu()" ng-class="{ active: isActive('/levels')}"><a href="#/levels"><span>Levels of Evidence</span></a></li>
+          <li ng-click="switchMenu()" ng-class="{ active: isActive('/actionableGenes')}"><a href="#/actionableGenes"><span>Actionable Genes</span></a></li>
+          <li ng-click="switchMenu()" ng-class="{ active: isActive('/news')}"><a href="#/news"><span>News</span></a></li>
           <!--<li ng-class="{ active: isActive('/api')}"><a href="#/api">API</a></li>-->
         </ul>
         <div class="pull-right" ng-class="{hidden: toggled}">
@@ -109,8 +110,7 @@
 <div class="footer">
   <div class="container">
     <div class="row footer-row-1">
-      <p>DISCLAIMER: OncoKB is intended for research purposes only and should not be used for patient care.</p>
-      <p>LICENSE: The information on this site cannot be copied, redistributed, or used for commercial purposes without permission.</p>
+      <p>OncoKB is intended for research purposes only. Its information cannot be copied, redistributed, or used commercially. See<a href="#/terms" target="_blank">Usage Terms.</a></p>
       <div class="">
         <a href="http://mskcc.org" class="">MSK <i class="fa fa-external-link"></i></a>
         <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology" class="">CMO <i
@@ -128,6 +128,7 @@
           <a href="mailto:team@oncokb.org" target="_top">Contact us</a>
           <a href="https://twitter.com/OncoKB" target="_blank">Twitter</a>
         </div>
+          <p style="margin-top: -30px">Last update: June 6, 2016</p>
       </div>
       <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12 mskcc-footer-logo0-wrapper">
         <a class="logo" href="http://mskcc.org" title="Memorial Sloan Kettering Cancer Center">
@@ -207,6 +208,7 @@
 <script src="scripts/controllers/quest.js"></script>
 <script src="scripts/controllers/genes.js"></script>
 <script src="scripts/controllers/actionalGenes.js"></script>
+<script src="scripts/controllers/news.js"></script>
 <script src="scripts/directives/qtip.js"></script>
 <script src="scripts/directives/main-level.js"></script>
 <script src="scripts/controllers/about.js"></script>

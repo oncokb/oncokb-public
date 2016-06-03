@@ -60,7 +60,7 @@
             </ul>
             <div class="tab-content">
                 <div id="clinicalVariants" class="tab-pane fade" ng-class="{'in active': clinicalVariants.length > 0}" ng-if="clinicalVariants.length > 0">
-
+                    <p class="noteAlign">If you notice any mistakes or missing variants / citations, please send an email to <a href="mailto:feedback@oncokb.org?subject=OncoKB Feedback">feedback@oncokb.org.</a></p>
                     <table id="clinicalTable" class="row-border hover"
                            datatable="ng" dt-options="view.clinicalTableOptions"
                            dt-instance="meta.clinicalTable">
@@ -70,7 +70,7 @@
                                 <th>Cancer Type</th>
                                 <th>Drug(s)</th>
                                 <th>Level</th>
-                                <th>Evidence</th>
+                                <th>Citations</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -94,7 +94,7 @@
 
                 </div>
                 <div id="annotatedVariants" class="tab-pane fade" ng-class="{'in active': clinicalVariants.length === 0 && annoatedVariants.length > 0}"  ng-if="annoatedVariants.length > 0">
-
+                    <p class="noteAlign">If you notice any mistakes or missing variants / citations, please send an email to <a href="mailto:feedback@oncokb.org?subject=OncoKB Feedback">feedback@oncokb.org.</a></p>
                     <table id="annotatedTable" class="row-border hover"
                            datatable="ng" dt-options="view.biologicalTableOptions"
                            dt-instance="meta.biologicalTable">
@@ -103,7 +103,7 @@
                                 <th>Variant</th>
                                 <th>Oncogenic</th>
                                 <th>Mutation Effect</th>
-                                <th>Evidence</th>
+                                <th>Citations</th>
 
                             </tr>
                         </thead>

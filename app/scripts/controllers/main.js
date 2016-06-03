@@ -16,6 +16,13 @@ angular.module('oncokbStaticApp')
     $scope.toggled = false;
     $scope.toggleMenu = function() {
       $scope.toggled = !$scope.toggled;
+      $scope.menuOff = false;
+    };
+    $scope.menuOff = false;
+    $scope.switchMenu = function() {
+      $scope.menuOff = true;
+      $("#menu").removeClass("in");
+      $("#menu").attr("aria-expanded", "false");
     };
 
     $scope.tabs = {

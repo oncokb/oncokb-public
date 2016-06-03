@@ -141,6 +141,11 @@ a:hover, a:focus {
   width: 30px;
 }
 
+.bgStyle{
+    background: transparent;
+    box-shadow: none
+}
+
 
 /* Include styles for each page */
 @import "home";
