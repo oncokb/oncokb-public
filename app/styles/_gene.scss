@@ -74,9 +74,10 @@
     }
   }
   .noteAlign{
+      max-width: 700px;
       font-style: italic;
       font-size:12px;
-      position:relative; 
+      position:relative;
       top:40px;
       z-index: 100
   }
