@@ -381,7 +381,6 @@ angular.module('oncokbStaticApp')
                 paging: false,
                 scrollCollapse: true,
                 scrollY: 500,
-                scrollX: true,
                 sDom: "ft",
                 aaSorting: [[3, 'asc'], [0, 'asc']]
             };
@@ -397,7 +396,6 @@ angular.module('oncokbStaticApp')
                 paging: false,
                 scrollCollapse: true,
                 scrollY: 500,
-                scrollX: true,
                 sDom: "ft",
                 aaSorting: [[1, 'desc'], [0, 'asc']]
             };

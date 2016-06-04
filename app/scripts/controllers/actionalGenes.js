@@ -385,7 +385,6 @@ angular.module('oncokbStaticApp')
             $scope.biologicalDT.dtOptions = {
                 paging: false,
                 scrollY: 481,
-                scrollX: true,
                 scrollCollapse: true,
                 hasBootstrap: true
             };
