@@ -16,15 +16,31 @@ angular.module('oncokbStaticApp')
     $scope.toggled = false;
     $scope.toggleMenu = function() {
       $scope.toggled = !$scope.toggled;
-      $scope.menuOff = false;
-    };
-    $scope.menuOff = false;
-    $scope.switchMenu = function() {
-      $scope.menuOff = true;
-      $("#menu").removeClass("in");
-      $("#menu").attr("aria-expanded", "false");
     };
 
+    $scope.menuExist = $('#menu').is(':visible');
+    
+    var rtime;
+    var timeout = false;
+    var delta = 500;
+    $(window).resize(function() {
+        rtime = new Date();
+        if (timeout === false) {
+            timeout = true;
+            setTimeout(resizeend, delta);
+        }
+    });
+
+    function resizeend() {
+        if (new Date() - rtime < delta) {
+            setTimeout(resizeend, delta);
+        } else {
+            timeout = false;
+            $scope.menuExist = $('#menu').is(':visible');
+            $scope.$apply();
+        }               
+    }
+    
     $scope.tabs = {
       'apiSummary': {
         name: 'Summary',
