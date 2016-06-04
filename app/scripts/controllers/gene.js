@@ -108,7 +108,7 @@ angular.module('oncokbStaticApp')
                                                 frequencies.push(item.frequency);
                                                 hoverInfo.push(item.frequency + "% of patients have annotated " + $scope.gene + " mutation");
                                             });
-                                            var tempIndex = 0, tempString = "", secondIndex = 0;
+                                            
                                             api.getStudies(studies.join())
                                                     .then(function (studyInfo) {
                                                         studies.forEach(function (item) {
@@ -116,26 +116,14 @@ angular.module('oncokbStaticApp')
                                                                 if (item1.id === item) {
                                                                     shortNames.push(item1.short_name.substring(0, item1.short_name.indexOf("(") - 1));
                                                                     fullNames.push(item1.name);
-                                                                    //insert new line symbol to label content based on study name length
-                                                                    if (item1.name.length < 40) {
-                                                                        tempNames.push(item1.name);
-                                                                    } else if (item1.name.length < 60) {
-                                                                        tempIndex = item1.name.indexOf("(TCGA,");
-                                                                        tempNames.push(item1.name.substring(0, tempIndex) + '<br>' + item1.name.substring(tempIndex));
-                                                                    } else {
-                                                                        tempIndex = item1.name.indexOf("(TCGA,");
-                                                                        tempString = item1.name.substring(0, tempIndex).trim();
-                                                                        secondIndex = tempString.lastIndexOf(" ");
-                                                                        tempNames.push(item1.name.substring(0, secondIndex) + '<br>' + item1.name.substring(secondIndex));
-                                                                    }
                                                                 }
                                                             });
                                                         });
 
                                                         _.each(hoverInfo, function (item, index) {
-                                                            hoverInfo[index] = item + "<br> in " + tempNames[index];
+                                                            hoverInfo[index] = autoBreakLines(item + " in " + fullNames[index]);
                                                         });
-
+                                                        console.log(hoverInfo);
                                                         plots(studies, shortNames, fullNames, frequencies, hoverInfo);
                                                     });
                                         } else {
@@ -146,7 +134,23 @@ angular.module('oncokbStaticApp')
                                     });
                         });
             }
-
+            function autoBreakLines(rawText){
+                //insert new line symbol to label content
+                var words = rawText.split(" ");
+                var finalString = "", currentLength = 0;
+                for(var i = 0;i < words.length;i++){
+                    if(currentLength + words[i].length < 38){
+                        finalString += words[i] + " ";
+                        currentLength += words[i].length + 1;
+                    }else{
+                        finalString = finalString.trim();
+                        finalString += "<br>" + words[i] + " ";
+                        currentLength = words[i].length + 1;
+                    }
+                   
+                }
+                return finalString;
+            }
             function plots(studies, shortNames, fullNames, frequencies, hoverInfo) {
                 //get the max length of the study short name
                 var maxLengthStudy = "", colors = [], boldedNames = [];
@@ -164,7 +168,7 @@ angular.module('oncokbStaticApp')
                     histogramWidth = 100 + 50 * frequencies.length;
                 }
 
-
+              
                 var trace = {
                     x: boldedNames,
                     y: frequencies,
@@ -377,6 +381,7 @@ angular.module('oncokbStaticApp')
                 paging: false,
                 scrollCollapse: true,
                 scrollY: 500,
+                scrollX: true,
                 sDom: "ft",
                 aaSorting: [[3, 'asc'], [0, 'asc']]
             };
@@ -392,6 +397,7 @@ angular.module('oncokbStaticApp')
                 paging: false,
                 scrollCollapse: true,
                 scrollY: 500,
+                scrollX: true,
                 sDom: "ft",
                 aaSorting: [[1, 'desc'], [0, 'asc']]
             };
