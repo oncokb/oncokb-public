@@ -59,8 +59,8 @@
   <div class="navbar navbar-inverse navbar-fixed-top" class="" role="navigation">
     <div class="container nav-container">
       <div class="navbar-header">
-        <div data-toggle="collapse" data-target=".navbar-collapse" class="nav-toggle menu-toggle"
-             ng-class="{open: toggled && !menuOff}" ng-click="toggleMenu()">
+        <div id="menu"  data-toggle="collapse" data-target=".navbar-collapse" class="nav-toggle menu-toggle"
+             ng-class="{open: toggled}" ng-click="toggleMenu()">
           <span></span>
           <span></span>
           <span></span>
@@ -71,16 +71,25 @@
         </div>
         <span class="navbar-brand"><a href="#/"><img class="logo-brand" src="resources/images/oncokb-lg.png"/></a></span>
       </div>
-      <div id="menu" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav" ng-class="{hidden: toggled && menuOff}">
-          <li ng-click="switchMenu()" ng-class="{ active: isActive('/')}"><a href="#/"><span>Home</span></a></li>
-          <li ng-click="switchMenu()" ng-class="{ active: isActive('/about')}"><a href="#/about"><span>About</span></a></li>
-          <li ng-click="switchMenu()" ng-class="{ active: isActive('/team')}"><a href="#/team"><span>Team</span></a></li>
-          <li ng-click="switchMenu()" ng-class="{ active: isActive('/levels')}"><a href="#/levels"><span>Levels of Evidence</span></a></li>
-          <li ng-click="switchMenu()" ng-class="{ active: isActive('/actionableGenes')}"><a href="#/actionableGenes"><span>Actionable Genes</span></a></li>
-          <li ng-click="switchMenu()" ng-class="{ active: isActive('/news')}"><a href="#/news"><span>News</span></a></li>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav" ng-if="menuExist">
+          <li ng-click="toggleMenu()" ng-class="{ active: isActive('/')}"><a data-toggle="collapse" data-target=".navbar-collapse" href="#/"><span>Home</span></a></li>
+          <li ng-click="toggleMenu()" ng-class="{ active: isActive('/about')}"><a data-toggle="collapse" data-target=".navbar-collapse" href="#/about"><span>About</span></a></li>
+          <li ng-click="toggleMenu()" ng-class="{ active: isActive('/team')}"><a data-toggle="collapse" data-target=".navbar-collapse" href="#/team"><span>Team</span></a></li>
+          <li ng-click="toggleMenu()" ng-class="{ active: isActive('/levels')}"><a data-toggle="collapse" data-target=".navbar-collapse" href="#/levels"><span>Levels of Evidence</span></a></li>
+          <li ng-click="toggleMenu()" ng-class="{ active: isActive('/actionableGenes')}"><a data-toggle="collapse" data-target=".navbar-collapse" href="#/actionableGenes"><span>Actionable Genes</span></a></li>
+          <li ng-click="toggleMenu()" ng-class="{ active: isActive('/news')}"><a data-toggle="collapse" data-target=".navbar-collapse" href="#/news"><span>News</span></a></li>
           <!--<li ng-class="{ active: isActive('/api')}"><a href="#/api">API</a></li>-->
         </ul>
+        <ul class="nav navbar-nav" ng-if="!menuExist">
+          <li ng-class="{ active: isActive('/')}"><a href="#/"><span>Home</span></a></li>
+          <li ng-class="{ active: isActive('/about')}"><a href="#/about"><span>About</span></a></li>
+          <li ng-class="{ active: isActive('/team')}"><a href="#/team"><span>Team</span></a></li>
+          <li ng-class="{ active: isActive('/levels')}"><a href="#/levels"><span>Levels of Evidence</span></a></li>
+          <li ng-class="{ active: isActive('/actionableGenes')}"><a href="#/actionableGenes"><span>Actionable Genes</span></a></li>
+          <li ng-class="{ active: isActive('/news')}"><a href="#/news"><span>News</span></a></li>
+          <li ng-class="{ active: isActive('/api')}"><a href="#/api">API</a></li>
+        </ul>  
         <div class="pull-right" ng-class="{hidden: toggled}">
           <span><a href="http://mskcc.org"><img class="mskcc-logo"
                                                 src="resources/images/MSKLogo_fff.png"/></a></span>
