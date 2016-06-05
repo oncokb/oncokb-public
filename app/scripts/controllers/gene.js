@@ -108,7 +108,7 @@ angular.module('oncokbStaticApp')
                                                 frequencies.push(item.frequency);
                                                 hoverInfo.push(item.frequency + "% of patients have annotated " + $scope.gene + " mutation");
                                             });
-                                            
+
                                             api.getStudies(studies.join())
                                                     .then(function (studyInfo) {
                                                         studies.forEach(function (item) {
@@ -119,12 +119,21 @@ angular.module('oncokbStaticApp')
                                                                 }
                                                             });
                                                         });
+                                                        if (fullNames.length > 3) {
+                                                            _.each(hoverInfo, function (item, index) {
+                                                                hoverInfo[index] = autoBreakLines(item + " in " + fullNames[index]);
+                                                            });
 
-                                                        _.each(hoverInfo, function (item, index) {
-                                                            hoverInfo[index] = autoBreakLines(item + " in " + fullNames[index]);
-                                                        });
-                                                        console.log(hoverInfo);
-                                                        plots(studies, shortNames, fullNames, frequencies, hoverInfo);
+                                                            plots(studies, shortNames, fullNames, frequencies, hoverInfo);
+                                                        } else {
+                                                            var infoList = '<br/><ul class="fa-ul">';
+                                                            _.each(hoverInfo, function (item, index) {
+                                                                infoList += '<li><i class="fa fa-circle iconSize"></i> ' + item + ' in ' + fullNames[index] + '</li>';
+                                                            });
+                                                            infoList += '</ul>';
+                                                            $("#histogramDiv").append(infoList);
+                                                        }
+
                                                     });
                                         } else {
                                             $scope.status.moreInfo = true;
@@ -134,27 +143,27 @@ angular.module('oncokbStaticApp')
                                     });
                         });
             }
-            function autoBreakLines(rawText){
+            function autoBreakLines(rawText) {
                 //insert new line symbol to label content
                 var words = rawText.split(" ");
                 var finalString = "", currentLength = 0;
-                for(var i = 0;i < words.length;i++){
-                    if(currentLength + words[i].length < 38){
+                for (var i = 0; i < words.length; i++) {
+                    if (currentLength + words[i].length < 38) {
                         finalString += words[i] + " ";
                         currentLength += words[i].length + 1;
-                    }else{
+                    } else {
                         finalString = finalString.trim();
                         finalString += "<br>" + words[i] + " ";
                         currentLength = words[i].length + 1;
                     }
-                   
+
                 }
                 return finalString;
             }
             function plots(studies, shortNames, fullNames, frequencies, hoverInfo) {
                 //get the max length of the study short name
                 var maxLengthStudy = "", colors = [], boldedNames = [];
-                 
+
                 for (var i = 0; i < shortNames.length; i++) {
                     colors.push('#1c75cd');
                     boldedNames.push(shortNames[i]);
@@ -168,7 +177,7 @@ angular.module('oncokbStaticApp')
                     histogramWidth = 100 + 50 * frequencies.length;
                 }
 
-              
+
                 var trace = {
                     x: boldedNames,
                     y: frequencies,
@@ -249,7 +258,7 @@ angular.module('oncokbStaticApp')
                 if (!updateFlag) {
                     //load the template when first load the page
                     $("#templateDiv").load("views/mutationMapperTemplates.html", function () {
-                        $scope.studyName = "across Cancer Types";
+                        $scope.studyName = "across 20 Disease Specific Studies";
                         // init mutation mapper
                         mutationMapper = new MutationMapper(options);
                         mutationMapper.init();
@@ -318,7 +327,7 @@ angular.module('oncokbStaticApp')
                     resetFlag = false;
                     $scope.clinicalVariantsCount = uniqueClinicVariants.length;
                     $scope.annoatedVariantsCount = uniqueAnnotatedVariants.length;
-                    $scope.studyName = "across Cancer Types";
+                    $scope.studyName = "across 20 Disease Specific Studies";
                 } else {
                     proteinChanges = _.uniq(proteinChanges);
                     var regexString = "";

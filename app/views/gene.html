@@ -38,11 +38,34 @@
 
     <div class="row" ng-if="mutationMapperFlag">
         <div class="col-lg-12 col-md-12">
-            <div class="mutation-mapper-title"><span>Annotated Mutation Distribution {{studyName}}</span></div>
+            <div class="mutation-mapper-title"><span>Annotated Mutation Distribution {{studyName}} <span ng-if="studyName.indexOf('Disease Specific Studies') > 0 " ><i class="fa fa-circle"
+               qtip classes="gene-evidence-qtip"
+               my="bottom center"
+               at="top center"
+               qtip-content='<ul class="fa-ul">
+                <li><i class="fa fa-angle-right iconSize"></i> Cervical Squamous Cell Carcinoma and Endocervical Adenocarcinoma (TCGA, Provisional)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Kidney Renal Papillary Cell Carcinoma (TCGA, Provisional)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Liver Hepatocellular Carcinoma (TCGA, Provisional)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Sarcoma (TCGA, Provisional)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Skin Cutaneous Melanoma (TCGA, Provisional)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Colorectal Adenocarcinoma (TCGA, Nature 2012)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Head and Neck Squamous Cell Carcinoma (TCGA, Nature 2015)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Kidney Chromophobe (TCGA, Cancer Cell 2014)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Kidney Renal Clear Cell Carcinoma (TCGA, Nature 2013)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Lung Adenocarcinoma (TCGA, Nature 2014)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Lung Squamous Cell Carcinoma (TCGA, Nature 2012)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Ovarian Serous Cystadenocarcinoma (TCGA, Nature 2011)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Stomach Adenocarcinoma (TCGA, Nature 2014)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Papillary Thyroid Carcinoma (TCGA, Cell 2014)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Uterine Corpus Endometrioid Carcinoma (TCGA, Nature 2013)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Prostate Adenocarcinoma (TCGA, Cell 2015)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Breast Invasive Carcinoma (TCGA, Cell 2015)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Bladder Urothelial Carcinoma (TCGA, Nature 2014)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Testicular Germ Cell Cancer (TCGA, Provisional)</li>
+                <li><i class="fa fa-angle-right iconSize"></i> Merged Cohort of LGG and GBM (TCGA, 2016)</li>
+             </ul>'></i></span></span></div>
             <div id="templateDiv"></div>
             <div id="mutation_details"></div>
-
-
         </div>
     </div>
 
