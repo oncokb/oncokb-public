@@ -43,10 +43,6 @@ angular
         templateUrl: 'views/team.html',
         controller: 'MainCtrl'
       })
-      .when('/api', {
-        templateUrl: 'views/api.html',
-        controller: 'MainCtrl'
-      })
       .when('/gene/:geneName', {
         templateUrl: 'views/gene.html',
         controller: 'GeneCtrl',
