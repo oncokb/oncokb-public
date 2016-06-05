@@ -34,4 +34,8 @@ and open the template in the editor.
       border-color: $dark-blue;
       font-size: 14px;
     }
+    input[type=search]:focus {
+      border-bottom-color: $orange;
+      box-shadow: 0 1px 0 0 $orange;
+    }
 }

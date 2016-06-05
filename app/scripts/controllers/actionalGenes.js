@@ -9,7 +9,7 @@ angular.module('oncokbStaticApp')
         .controller('actionableGenesCtrl', function ($scope, $location, DTColumnDefBuilder) {
             $scope.level1Genes = [
                 {
-                    "gene": "ABL",
+                    "gene": "ABL1",
                     "variants": "BCR-ABL Fusion",
                     "disease": "Chronic myeloid leukemia,         Acute lymphoblastic leukemia",
                     "drugs": "Imatinib"
@@ -386,7 +386,33 @@ angular.module('oncokbStaticApp')
                 paging: false,
                 scrollY: 481,
                 scrollCollapse: true,
-                hasBootstrap: true
+                hasBootstrap: true,
+                columnDefs: [
+                  { responsivePriority: 1, targets: 0 },
+                  { responsivePriority: 2, targets: 1 },
+                  { responsivePriority: 3, targets: 2 }
+                ],
+                responsive: {
+                  details: {
+                    display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                    type: '',
+                    renderer: function(api, rowIdx, columns) {
+                      var data = $.map(columns, function(col, i) {
+                        return col.hidden ?
+                        '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                        '<td>' + col.title + ':' + '</td> ' +
+                        '<td>' + col.data + '</td>' +
+                        '</tr>' :
+                          '';
+                      }).join('');
+
+                      return data ?
+                        $('<table/>').append(data) :
+                        false;
+
+                    }
+                  }
+                }
             };
             $scope.biologicalDT.dtColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(0),

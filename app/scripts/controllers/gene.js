@@ -387,11 +387,35 @@ angular.module('oncokbStaticApp')
                         asSorting: ['desc', 'asc']
                     }
                 ],
+                columnDefs: [
+                  { responsivePriority: 1, targets: 0 },
+                  { responsivePriority: 2, targets: 3 }
+                ],
                 paging: false,
                 scrollCollapse: true,
                 scrollY: 500,
                 sDom: "ft",
-                aaSorting: [[3, 'asc'], [0, 'asc']]
+                aaSorting: [[3, 'asc'], [0, 'asc']],
+                responsive: {
+                  details: {
+                    display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                    type: '',
+                    renderer: function ( api, rowIdx, columns ) {
+                      var data = $.map( columns, function ( col, i ) {
+                        return col.hidden ?
+                        '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+                        '<td>'+col.title+':'+'</td> '+
+                        '<td>'+col.data+'</td>'+
+                        '</tr>' :
+                          '';
+                      } ).join('');
+
+                      return data ?
+                        $('<table/>').append( data ) :
+                        false;
+                    }
+                  }
+                }
             };
             $scope.view.biologicalTableOptions = {
                 hasBootstrap: true,
@@ -406,7 +430,33 @@ angular.module('oncokbStaticApp')
                 scrollCollapse: true,
                 scrollY: 500,
                 sDom: "ft",
-                aaSorting: [[1, 'desc'], [0, 'asc']]
+                aaSorting: [[1, 'desc'], [0, 'asc']],
+                columnDefs: [
+                  { responsivePriority: 1, targets: 0 },
+                  { responsivePriority: 2, targets: 1 },
+                  { responsivePriority: 3, targets: 2 }
+                ],
+                responsive: {
+                  details: {
+                    display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                    type: '',
+                    renderer: function(api, rowIdx, columns) {
+                      var data = $.map(columns, function(col, i) {
+                        return col.hidden ?
+                        '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                        '<td>' + col.title + ':' + '</td> ' +
+                        '<td>' + col.data + '</td>' +
+                        '</tr>' :
+                          '';
+                      }).join('');
+
+                      return data ?
+                        $('<table/>').append(data) :
+                        false;
+
+                    }
+                  }
+                }
             };
             $rootScope.view.subNavItems = [{content: $scope.gene}];
 
