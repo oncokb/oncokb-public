@@ -36,7 +36,33 @@ angular.module('oncokbStaticApp')
         aTargets: 2,
         asSorting: ['desc', 'asc']
       }
-      ]
+      ],
+      columnDefs: [
+        { responsivePriority: 1, targets: 0 },
+        { responsivePriority: 2, targets: 1 },
+        { responsivePriority: 3, targets: 2 }
+      ],
+      responsive: {
+        details: {
+          display: $.fn.dataTable.Responsive.display.childRowImmediate,
+          type: '',
+          renderer: function(api, rowIdx, columns) {
+            var data = $.map(columns, function(col, i) {
+              return col.hidden ?
+              '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+              '<td>' + col.title + ':' + '</td> ' +
+              '<td>' + col.data + '</td>' +
+              '</tr>' :
+                '';
+            }).join('');
+
+            return data ?
+              $('<table/>').append(data) :
+              false;
+
+          }
+        }
+      }
     };
 
     api.getNumbers('genes')

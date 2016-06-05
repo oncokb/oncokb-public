@@ -16,13 +16,17 @@
     width: 100%;
     text-align: center;
     font-weight: 500;
+    margin-top: 10px;
   }
 
   .mutation-mapper-title {
     position: absolute;
     top: 0;
     font-weight: 500;
-    max-width: calc(100% - 300px);
+    max-width: 400px;
+    @media only screen and (min-width: 500px) {
+      max-width: calc(100% - 300px);
+    }
   }
 
   .gene-table {
@@ -56,6 +60,7 @@
 
   .mutation-details-content {
     margin-left: 0;
+    min-width: 200px;
   }
 
   input.diagram-y-axis-limit-input {
@@ -78,7 +83,7 @@
       font-style: italic;
       font-size:12px;
       position:relative;
-      top:40px;
+      top:10px;
       z-index: 100
   }
   .iconSize{

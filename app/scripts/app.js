@@ -25,8 +25,8 @@ angular
   .constant('_', window._)
   .constant('apiLink', 'legacy-api/')
   .constant('publicApiLink', 'public-api/v1/')
-  // .constant('apiLink', 'http://localhost:8080/oncokb-api/api/')
-  // .constant('publicApiLink', 'http://localhost:8080/oncokb-api/api/public/v1/')
+  // .constant('apiLink', 'http://localhost:8080/oncokb/legacy-api/')
+  // .constant('publicApiLink', 'http://localhost:8080/oncokb/public-api/v1/')
   // .constant('apiLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/')
   // .constant('publicApiLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/public/v1/')
   .config(function($routeProvider) {
@@ -47,11 +47,6 @@ angular
         templateUrl: 'views/gene.html',
         controller: 'GeneCtrl',
         controllerAs: 'gene'
-      })
-      .when('/quest', {
-        templateUrl: 'views/quest.html',
-        controller: 'QuestCtrl',
-        controllerAs: 'quest'
       })
       .when('/genes', {
         templateUrl: 'views/genes.html',
@@ -179,4 +174,17 @@ angular.module('oncokbStaticApp').run(
 NProgress.start();
 angular.element(document).ready(function() {
   angular.bootstrap(document, ['oncokbStaticApp']);
+});
+angular.element(document).on('show.bs.tab', '.nav-tabs-responsive [data-toggle="tab"]', function(e) {
+  var $target = $(e.target);
+  var $tabs = $target.closest('.nav-tabs-responsive');
+  var $current = $target.closest('li');
+  var $parent = $current.closest('li.dropdown');
+  $current = $parent.length > 0 ? $parent : $current;
+  var $next = $current.next();
+  var $prev = $current.prev();
+
+  $tabs.find('>li').removeClass('next prev');
+  $prev.addClass('prev');
+  $next.addClass('next');
 });

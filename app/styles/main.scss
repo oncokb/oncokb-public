@@ -31,6 +31,10 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
 div.dataTables_length label, div.dataTables_filter label {
   font-size: 14px;
 }
+
+table.dataTable tbody td.child {
+  padding: 8px 0 8px 20px;
+}
 /* ------------------------ */
 
 /*Overide bootstrap styles*/
@@ -47,6 +51,9 @@ div.dataTables_length label, div.dataTables_filter label {
   max-height: 370px;
 }
 
+.dataTables_filter > label {
+  display: inline-flex;
+}
 /* ----------------------- */
 
 a:hover, a:focus {
@@ -82,7 +89,7 @@ a:hover, a:focus {
   width: 100%;
 }
 
-.about, .team, .level-page, .license {
+.about, .team, .level-page, .license, .news {
   margin: auto;
   h5 {
     font-weight: 700;
@@ -134,6 +141,16 @@ a:hover, a:focus {
   }
 }
 
+.qtip-gene-evidence {
+  max-width: 600px;
+  ul {
+    margin-bottom: 0;
+    li {
+      margin: 3px 0;
+    }
+  }
+}
+
 .old-browser-warning {
   background: red;
   color: white;
@@ -151,10 +168,10 @@ a:hover, a:focus {
     box-shadow: none
 }
 
-
 /* Include styles for each page */
 @import "home";
 @import "genes";
 @import "gene";
 @import "team";
 @import "actionable";
+@import "respTabs";
