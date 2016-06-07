@@ -75,7 +75,7 @@ angular.module('oncokbStaticApp')
                 }
             };
             var mutationMapper = null, mutationDiagram = null;
-            var resetFlag = false;
+            var resetFlag = false, previousChosenIndex = -1;
 
             //fetch portal alteration data for histogram and construct the histogram with plotly.js
             function fetchHistogramData() {
@@ -223,32 +223,38 @@ angular.module('oncokbStaticApp')
                 var myPlot = document.getElementById("histogramDiv");
                 myPlot.on('plotly_click', function (eventData) {
                     resetFlag = false;
-                    var tempIndex = shortNames.indexOf(eventData.points[0].x);
-                    var tempValue = studies[tempIndex];
-                    $scope.studyName = "for " + fullNames[tempIndex];
-                    var newMutationData = [];
-                    newMutationData = mutationData.filter(function (item) {
-                        return item.cancerStudy == tempValue;
-                    });
+                    var tempIndex = shortNames.indexOf(eventData.points[0].x);  
+                    if (tempIndex !== -1 && previousChosenIndex !== tempIndex) {  
+                        previousChosenIndex = tempIndex;
+                        var tempValue = studies[tempIndex];
+                        $scope.studyName = "for " + fullNames[tempIndex];
+                        var newMutationData = [];
+                        newMutationData = mutationData.filter(function (item) {
+                            return item.cancerStudy == tempValue;
+                        });
 
-                    mutationMapperConstructor(newMutationData, true);
-                    colors.fill('#1c75cd');
-                    colors[tempIndex] = '#064885';
-                    for (var i = 0; i < shortNames.length; i++) {
-                        boldedNames[i] = shortNames[i];
-                    }
-
-                    boldedNames[tempIndex] = "<b>" + boldedNames[tempIndex] + "</b>";
-                    Plotly.redraw('histogramDiv', data, layout, {displayModeBar: false});
-
-                    $(".mutation-details-filter-reset").click(function () {
-                        //show all of the data again
+                        mutationMapperConstructor(newMutationData, true);
                         colors.fill('#1c75cd');
+                        colors[tempIndex] = '#064885';
                         for (var i = 0; i < shortNames.length; i++) {
                             boldedNames[i] = shortNames[i];
                         }
+
+                        boldedNames[tempIndex] = "<b>" + boldedNames[tempIndex] + "</b>";
                         Plotly.redraw('histogramDiv', data, layout, {displayModeBar: false});
-                    });
+
+                        $(".mutation-details-filter-reset").click(function () {
+                            //show all of the data again
+                            colors.fill('#1c75cd');
+                            for (var i = 0; i < shortNames.length; i++) {
+                                boldedNames[i] = shortNames[i];
+                            }
+                            Plotly.redraw('histogramDiv', data, layout, {displayModeBar: false});
+                        });
+                    }
+
+
+
 
                 });
 
@@ -275,7 +281,8 @@ angular.module('oncokbStaticApp')
                                     updateTable("deselect");
                                 });
 
-                                $(".mutation-details-filter-reset").click(function () {
+                                $(".mutation-details-filter-reset").click(function () { 
+                                    previousChosenIndex = -1;
                                     resetFlag = true;
                                 });
 
@@ -388,8 +395,8 @@ angular.module('oncokbStaticApp')
                     }
                 ],
                 columnDefs: [
-                  { responsivePriority: 1, targets: 0 },
-                  { responsivePriority: 2, targets: 3 }
+                    {responsivePriority: 1, targets: 0},
+                    {responsivePriority: 2, targets: 3}
                 ],
                 paging: false,
                 scrollCollapse: true,
@@ -397,24 +404,24 @@ angular.module('oncokbStaticApp')
                 sDom: "ft",
                 aaSorting: [[3, 'asc'], [0, 'asc']],
                 responsive: {
-                  details: {
-                    display: $.fn.dataTable.Responsive.display.childRowImmediate,
-                    type: '',
-                    renderer: function ( api, rowIdx, columns ) {
-                      var data = $.map( columns, function ( col, i ) {
-                        return col.hidden ?
-                        '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
-                        '<td>'+col.title+':'+'</td> '+
-                        '<td>'+col.data+'</td>'+
-                        '</tr>' :
-                          '';
-                      } ).join('');
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                        type: '',
+                        renderer: function (api, rowIdx, columns) {
+                            var data = $.map(columns, function (col, i) {
+                                return col.hidden ?
+                                        '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                        '<td>' + col.title + ':' + '</td> ' +
+                                        '<td>' + col.data + '</td>' +
+                                        '</tr>' :
+                                        '';
+                            }).join('');
 
-                      return data ?
-                        $('<table/>').append( data ) :
-                        false;
+                            return data ?
+                                    $('<table/>').append(data) :
+                                    false;
+                        }
                     }
-                  }
                 }
             };
             $scope.view.biologicalTableOptions = {
@@ -432,30 +439,30 @@ angular.module('oncokbStaticApp')
                 sDom: "ft",
                 aaSorting: [[1, 'desc'], [0, 'asc']],
                 columnDefs: [
-                  { responsivePriority: 1, targets: 0 },
-                  { responsivePriority: 2, targets: 1 },
-                  { responsivePriority: 3, targets: 2 }
+                    {responsivePriority: 1, targets: 0},
+                    {responsivePriority: 2, targets: 1},
+                    {responsivePriority: 3, targets: 2}
                 ],
                 responsive: {
-                  details: {
-                    display: $.fn.dataTable.Responsive.display.childRowImmediate,
-                    type: '',
-                    renderer: function(api, rowIdx, columns) {
-                      var data = $.map(columns, function(col, i) {
-                        return col.hidden ?
-                        '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                        '<td>' + col.title + ':' + '</td> ' +
-                        '<td>' + col.data + '</td>' +
-                        '</tr>' :
-                          '';
-                      }).join('');
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                        type: '',
+                        renderer: function (api, rowIdx, columns) {
+                            var data = $.map(columns, function (col, i) {
+                                return col.hidden ?
+                                        '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                        '<td>' + col.title + ':' + '</td> ' +
+                                        '<td>' + col.data + '</td>' +
+                                        '</tr>' :
+                                        '';
+                            }).join('');
 
-                      return data ?
-                        $('<table/>').append(data) :
-                        false;
+                            return data ?
+                                    $('<table/>').append(data) :
+                                    false;
 
+                        }
                     }
-                  }
                 }
             };
             $rootScope.view.subNavItems = [{content: $scope.gene}];
