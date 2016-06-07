@@ -223,8 +223,8 @@ angular.module('oncokbStaticApp')
                 var myPlot = document.getElementById("histogramDiv");
                 myPlot.on('plotly_click', function (eventData) {
                     resetFlag = false;
-                    var tempIndex = shortNames.indexOf(eventData.points[0].x);  
-                    if (tempIndex !== -1 && previousChosenIndex !== tempIndex) {  
+                    var tempIndex = shortNames.indexOf(eventData.points[0].x);
+                    if (tempIndex !== -1 && previousChosenIndex !== tempIndex) {
                         previousChosenIndex = tempIndex;
                         var tempValue = studies[tempIndex];
                         $scope.studyName = "for " + fullNames[tempIndex];
@@ -252,10 +252,6 @@ angular.module('oncokbStaticApp')
                             Plotly.redraw('histogramDiv', data, layout, {displayModeBar: false});
                         });
                     }
-
-
-
-
                 });
 
             }
@@ -281,7 +277,7 @@ angular.module('oncokbStaticApp')
                                     updateTable("deselect");
                                 });
 
-                                $(".mutation-details-filter-reset").click(function () { 
+                                $(".mutation-details-filter-reset").click(function () {
                                     previousChosenIndex = -1;
                                     resetFlag = true;
                                 });
