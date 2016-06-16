@@ -1630,9 +1630,10 @@ var PileupUtil = (function()
 	 * Converts the provided mutation data into a list of Pileup instances.
 	 *
 	 * @param mutationColl  collection of Mutation models (MutationCollection)
+	 * @param converter     [optional] custom pileup converter function
 	 * @return {Array}      a list of pileup mutations
 	 */
-	function convertToPileups(mutationColl)
+	function convertToPileups(mutationColl, converter)
 	{
 		// remove redundant mutations by sid
 		mutationColl = removeRedundantMutations(mutationColl);
@@ -1665,19 +1666,12 @@ var PileupUtil = (function()
 		_.each(_.keys(mutations), function(key) {
 			var pileup = {};
 
-			pileup.pileupId = PileupUtil.nextId();
-			pileup.mutations = mutations[key];
-			pileup.count = mutations[key].length;
-			pileup.location = parseInt(key);
-			pileup.label = generateLabel(mutations[key]);
-	        // The following calculates dist of mutations by cancer type
-	        pileup.stats = _.chain(mutations[key])
-	            .groupBy(function(mut) { return mut.get("cancerType"); })
-	            .sortBy(function(stat) { return -stat.length; })
-	            .reduce(function(seed, o) {
-	                seed.push({ cancerType: o[0].get("cancerType"), count: o.length });
-	                return seed;
-	            }, []).value();
+			if (_.isFunction(converter)) {
+				pileup = converter(mutations, key);
+			}
+			else {
+				pileup = initPileup(mutations, key);
+			}
 
 			pileupList.push(new Pileup(pileup));
 		});
@@ -1696,6 +1690,29 @@ var PileupUtil = (function()
 		});
 
 		return pileupList;
+	}
+
+	function initPileup(mutations, location)
+	{
+		var pileup = {};
+
+		pileup.pileupId = PileupUtil.nextId();
+		pileup.mutations = mutations[location];
+		pileup.count = mutations[location].length;
+		pileup.location = parseInt(location);
+		pileup.label = generateLabel(mutations[location]);
+
+		// TODO can we separate this in the cbioportal codebase as a custom converter?
+		// The following calculates dist of mutations by cancer type
+		pileup.stats = _.chain(mutations[location])
+			.groupBy(function(mut) { return mut.get("cancerType"); })
+			.sortBy(function(stat) { return -stat.length; })
+			.reduce(function(seed, o) {
+				seed.push({ cancerType: o[0].get("cancerType"), count: o.length });
+				return seed;
+			}, []).value();
+
+		return pileup;
 	}
 
 	// TODO first remove by mutationSid, and then remove by patientId
@@ -1810,6 +1827,7 @@ var PileupUtil = (function()
 		nextId: nextId,
 		mapToMutations: mapToMutations,
 		convertToPileups: convertToPileups,
+		initPileup: initPileup,
 		countMutations: countMutations,
 		getPileupMutations: getPileupMutations,
 		getMutationTypeMap: generateTypeMap,
@@ -9453,7 +9471,7 @@ var MutationDiagramView = Backbone.View.extend({
 
 		// create a data object
 		var diagramData = {
-			pileups: PileupUtil.convertToPileups(mutationColl),
+			mutations: mutationColl,
 			sequence: sequenceData
 		};
 
@@ -15728,6 +15746,17 @@ function MutationDetailsTable(options, gene, mutationUtil, dataProxies, dataMana
 				// set the data table instance as soon as the table is initialized
 				self.setDataTable(this);
 
+				// 508 compliance: add a title to each of the checkboxes provided by
+				// the ColVis library. As the offending checkboxes don't become visible
+				// until the button is clicked, bind it to the click event
+				$(oSettings.nTableWrapper).find(".ColVis_MasterButton").one("click", function() {
+					jQuery.each($(".ColVis_radio"), function(key, value) {
+						// title is the first sibling's text
+						var title = $(value).siblings(':first').text();
+						$(value).children(':first').attr('title', title);
+					});
+				});
+
 				// trigger corresponding event
 				_dispatcher.trigger(
 					MutationDetailsEvents.MUTATION_TABLE_INITIALIZED,
@@ -15907,19 +15936,15 @@ function MutationDetailsTable(options, gene, mutationUtil, dataProxies, dataMana
 				var tip = _options.columns[colName].tip;
 				var opts = {};
 
-				// merge qTip options with the provided options object
-				if(_.isObject(tip))
-				{
-					jQuery.extend(true, opts, qTipOptionsHeader, tip);
-				}
-				// if not an object, then assuming it is a string,
-				// just update the content
-				else
+				// if string, convert to an object
+				if(_.isString(tip))
 				{
 					//$(this).attr("alt", tip);
-					qTipOptionsHeader.content = tip;
-					opts = qTipOptionsHeader;
+					tip = {content: tip};
 				}
+
+				// merge qTip options with the provided options object
+				jQuery.extend(true, opts, qTipOptionsHeader, tip);
 
 				//$(this).qtip(opts);
 				cbio.util.addTargetedQTip(this, opts);
@@ -16103,7 +16128,7 @@ MutationDetailsTable.prototype.constructor = MutationDetailsTable;
  *
  * @param geneSymbol    hugo gene symbol
  * @param options       visual options object
- * @param data          object: {pileups: collection of Pileup instances,
+ * @param data          object: {mutations: a MutationCollection instance,
  *                               sequence: sequence data as a JSON object}
  * @param dataProxies   all available data proxies
  * @constructor
@@ -16127,8 +16152,9 @@ function MutationDiagram(geneSymbol, options, data, dataProxies)
 	self.dataProxies = dataProxies;
 	self.geneSymbol = geneSymbol; // hugo gene symbol
 	self.data = data; // processed initial (unfiltered) data
-	self.pileups = (data == null) ? null : data.pileups; // current pileups (updated after each filtering)
-
+	self.pileups = (data == null) ? null : // current pileups (updated after each filtering)
+		PileupUtil.convertToPileups(data.mutations, options.pileupConverter);
+	self.initialPileups = self.pileups;
 	self.highlighted = {}; // map of highlighted data points (initially empty)
 	self.multiSelect = false; // indicates if multiple lollipop selection is active
 
@@ -16249,6 +16275,7 @@ MutationDiagram.prototype.defaultOpts = {
 	yAxisAutoAdjust: true,      // indicates whether to adjust max y-axis value after plot update
 	animationDuration: 1000,    // transition duration (in ms) used for highlight animations
 	fadeDuration: 1500,         // transition duration (in ms) used for fade animations
+	pileupConverter: false,
 	/**
 	 * Default lollipop tooltip function.
 	 *
@@ -16370,7 +16397,7 @@ MutationDiagram.prototype.updateGlobals = function(options)
 	var self = this;
 	options = options || self.options;
 
-	var pileups = self.data.pileups; // initial pileup data
+	var pileups = self.initialPileups; // initial pileup data
 
 	// in case auto adjust is enabled,
 	// use current pileup data instead of the initial pileup data
@@ -16417,7 +16444,7 @@ MutationDiagram.prototype.initDiagram = function()
 	// calculate bounds & save a reference for future access
 	var bounds = self.bounds = self.calcBounds(self.options);
 
-	self.mutationPileupMap = PileupUtil.mapToMutations(self.data.pileups);
+	self.mutationPileupMap = PileupUtil.mapToMutations(self.initialPileups);
 
 	// init svg container
 	var svg = self.createSvg(container,
@@ -16472,13 +16499,13 @@ MutationDiagram.prototype.drawDiagram = function (svg, bounds, options, data)
 {
 	var self = this;
 	var sequenceLength = parseInt(data.sequence["length"]);
+	var pileups = self.initialPileups || PileupUtil.convertToPileups(data.mutations, options.pileupConverter);
 
-	var maxCount = self.maxCount = self.calcMaxCount(data.pileups);
+	var maxCount = self.maxCount = self.calcMaxCount(pileups);
 	var xMax = self.xMax = self.calcXMax(options, data);
 	var yMax = self.yMax = self.calcYMax(options, maxCount);
 
 	var regions = data.sequence.regions;
-	var pileups = data.pileups;
 	var seqTooltip = self.generateSequenceTooltip(data);
 
 	var xScale = self.xScale = self.xScaleFn(bounds, xMax);
@@ -17480,19 +17507,21 @@ MutationDiagram.prototype.calcSequenceBounds = function (bounds, options)
  * the provided data set is a subset of the original data. If the number of
  * mutations is the same, then returns false.
  *
- * @param pileupData  an array of piled up mutations
+ * @param mutationColl  a MutationCollection instance
  * @return {boolean}  true if the diagram is filtered, false otherwise
  */
-MutationDiagram.prototype.updatePlot = function(pileupData)
+MutationDiagram.prototype.updatePlot = function(mutationColl)
 {
 	var self = this;
 	var pileups = self.pileups;
 
 	// TODO for a safer update, verify the provided data
+	var pileupData = [];
 
 	// update current data & pileups
-	if (pileupData)
+	if (mutationColl)
 	{
+		pileupData = PileupUtil.convertToPileups(mutationColl, self.options.pileupConverter);
 		self.pileups = pileups = pileupData;
 		self.mutationPileupMap = PileupUtil.mapToMutations(pileups);
 	}
@@ -17603,7 +17632,7 @@ MutationDiagram.prototype.resetPlot = function()
 {
 	var self = this;
 
-	self.updatePlot(self.data.pileups);
+	self.updatePlot(self.data.mutations);
 
 	// trigger corresponding event
 	self.dispatcher.trigger(
@@ -17955,7 +17984,7 @@ MutationDiagram.prototype.isFiltered = function()
 	var filtered = false;
 
 	if (PileupUtil.countMutations(self.pileups) <
-	    PileupUtil.countMutations(self.data.pileups))
+	    PileupUtil.countMutations(self.initialPileups))
 	{
 		filtered = true;
 	}
@@ -17979,7 +18008,7 @@ MutationDiagram.prototype.getInitialMaxY = function()
 
 	if (!self.initialYMax)
 	{
-		var maxCount = self.calcMaxCount(self.data.pileups);
+		var maxCount = self.calcMaxCount(self.initialPileups);
 		self.initialYMax = self.calcYMax(self.options, maxCount);
 	}
 
@@ -21801,7 +21830,7 @@ function MutationDiagramController(mutationDiagram, mutationTable, infoPanelView
 		if (mutationDiagram !== null)
 		{
 			var mutationData = new MutationCollection(currentMutations);
-			mutationDiagram.updatePlot(PileupUtil.convertToPileups(mutationData));
+			mutationDiagram.updatePlot(mutationData);
 		}
 	}
 
@@ -21814,16 +21843,14 @@ function MutationDiagramController(mutationDiagram, mutationTable, infoPanelView
 
 			if (_.size(mutations) > 0)
 			{
-				mutationDiagram.updatePlot(PileupUtil.convertToPileups(
-					new MutationCollection(mutations)));
+				mutationDiagram.updatePlot(new MutationCollection(mutations));
 			}
 			// if all the mutations of this type are already filtered out,
 			// then show all mutations of this type
 			else
 			{
 				mutations = infoPanelView.initialMapByType[mutationType];
-				mutationDiagram.updatePlot(PileupUtil.convertToPileups(
-					new MutationCollection(mutations)));
+				mutationDiagram.updatePlot(new MutationCollection(mutations));
 			}
 		}
 	}

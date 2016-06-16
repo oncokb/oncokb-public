@@ -98,7 +98,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="x in clinicalVariants">
-                                <td>{{ x.variant}}</td>
+                                <td>{{ x.variant.name}}</td>
                                 <td>{{ x.cancerType}}</td>
                                 <td>
                                     <span ng-repeat="drugItem in x.drug">
@@ -132,7 +132,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="y in annoatedVariants">
-                                <td>{{ y.variant}}</td>
+                                <td>{{ y.variant.name}}</td>
                                 <td>{{ displayOncogenic(y.oncogenic)}}</td>
                                 <td>{{ y.mutationEffect}}</td>
                                 <td>

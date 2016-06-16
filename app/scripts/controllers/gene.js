@@ -12,7 +12,7 @@ angular.module('oncokbStaticApp')
         .controller('GeneCtrl', function ($scope, $rootScope, $routeParams, $location, $route, api, $timeout, DTColumnDefBuilder, utils) {
 
             //fetch the mutation mapper from api and construct the graph from mutation mapper library
-            var mutationData = [], uniqueClinicVariants = [], uniqueAnnotatedVariants = [];
+            var mutationData = [], uniqueClinicVariants = [], uniqueAnnotatedVariants = [], fakeSamplesCount = [], tempIndex = -1, tempFakeIndex = -1;
 
             // customized settings for main mapper
             var geneList = [$routeParams.geneName];
@@ -55,9 +55,22 @@ angular.module('oncokbStaticApp')
                     mutationTable: false,
                     vis3d: false,
                     mutationDiagram: {
-                        elWidth: $('.wrapper>.navbar>.container').width() - 20 //When initialize mutation mapper, gene html hasn't been loaded yet. Only navbar is available.
+                        elWidth: $('.wrapper>.navbar>.container').width() - 20, //When initialize mutation mapper, gene html hasn't been loaded yet. Only navbar is available.
+                        pileupConverter: function (mutations, location)
+                        {
+                            var pileup = PileupUtil.initPileup(mutations, location);
+                            if (!singleStudyFlag) {
+                                tempIndex = _.map(fakeSamplesCount, function (item) {
+                                    return item.location;
+                                }).indexOf(pileup.location);
+                                if (tempIndex !== -1) {
+                                    pileup.count = pileup.count - fakeSamplesCount[tempIndex].count;
+                                }
+                            }
+                            return pileup;
+                        }
                     },
-                    mutationSummary: false
+                    mutationSummary: false,
                 },
                 render: {
                     mutationDetails: {
@@ -75,7 +88,7 @@ angular.module('oncokbStaticApp')
                 }
             };
             var mutationMapper = null, mutationDiagram = null;
-            var resetFlag = false, previousChosenIndex = -1;
+            var resetFlag = false, previousChosenIndex = -1, singleStudyFlag = false;
 
             //fetch portal alteration data for histogram and construct the histogram with plotly.js
             function fetchHistogramData() {
@@ -223,6 +236,7 @@ angular.module('oncokbStaticApp')
                 var myPlot = document.getElementById("histogramDiv");
                 myPlot.on('plotly_click', function (eventData) {
                     resetFlag = false;
+                    singleStudyFlag = true;
                     var tempIndex = shortNames.indexOf(eventData.points[0].x);
                     if (tempIndex !== -1 && previousChosenIndex !== tempIndex) {
                         previousChosenIndex = tempIndex;
@@ -246,6 +260,7 @@ angular.module('oncokbStaticApp')
                         $(".mutation-details-filter-reset").click(function () {
                             //show all of the data again
                             colors.fill('#1c75cd');
+                            singleStudyFlag = false;
                             for (var i = 0; i < shortNames.length; i++) {
                                 boldedNames[i] = shortNames[i];
                             }
@@ -280,6 +295,7 @@ angular.module('oncokbStaticApp')
                                 $(".mutation-details-filter-reset").click(function () {
                                     previousChosenIndex = -1;
                                     resetFlag = true;
+                                    singleStudyFlag = false;
                                 });
 
                                 mutationDiagram.dispatcher.on(MutationDetailsEvents.DIAGRAM_PLOT_UPDATED, function () {
@@ -294,7 +310,7 @@ angular.module('oncokbStaticApp')
                     });
                 } else {
                     //update lollipop from the chosen study in the histogram
-                    mutationDiagram.updatePlot(PileupUtil.convertToPileups(new MutationCollection(mutationData)));
+                    mutationDiagram.updatePlot((new MutationCollection(mutationData)));
                 }
 
 
@@ -492,7 +508,7 @@ angular.module('oncokbStaticApp')
                     .then(function (clinicalVariants) {
                         $scope.clinicalVariants = clinicalVariants.data.data;
                         uniqueClinicVariants = _.uniq(_.map($scope.clinicalVariants, function (item) {
-                            return item.variant;
+                            return item.variant.name;
                         }));
                         $scope.clinicalVariantsCount = uniqueClinicVariants.length;
                     });
@@ -510,10 +526,16 @@ angular.module('oncokbStaticApp')
                         // });
 
                         $scope.annoatedVariants = biologicalVariants.data.data;
+
                         uniqueAnnotatedVariants = _.uniq(_.map($scope.annoatedVariants, function (item) {
-                            return item.variant;
+                            return item.variant.name;
                         }));
 
+                        var allMissenseVariants = _.uniq(_.map($scope.annoatedVariants, function (item) {
+                            if (item.variant.consequence !== null && item.variant.consequence.term === 'missense_variant') {
+                                return item.variant;
+                            }
+                        }));
 
                         if (uniqueAnnotatedVariants.length > 0) {
                             $rootScope.view.subNavItems = [
@@ -521,7 +543,33 @@ angular.module('oncokbStaticApp')
                                 {content: uniqueAnnotatedVariants.length + ' annotated variant' + (uniqueAnnotatedVariants.length > 1 ? 's' : '')}
                             ];
                         }
+                        if (allMissenseVariants.length > 0) {
+                            _.each(allMissenseVariants, function (item, index) {
+                                if (item !== undefined) {
+                                    mutationData.push({
+                                        cancerStudy: "fakeStudy",
+                                        geneSymbol: $scope.gene,
+                                        caseId: "fakeSample" + index,
+                                        proteinChange: item.name,
+                                        mutationType: "Missense_Mutation",
+                                        proteinPosStart: item.proteinStart,
+                                        proteinPosEnd: item.proteinEnd,
+                                        mutationSid: "fakeSigID" + index,
+                                        mutationId: "fakeID" + index
+                                    });
+                                    tempFakeIndex = _.map(fakeSamplesCount, function (fakeItem) {
+                                        return fakeItem.location;
+                                    }).indexOf(item.proteinStart);
+                                    if (tempFakeIndex === -1) {
+                                        fakeSamplesCount.push({location: item.proteinStart, count: 1});
+                                    } else {
+                                        fakeSamplesCount[tempFakeIndex].count++;
+                                    }
 
+                                }
+
+                            });
+                        }
                         $scope.annoatedVariantsCount = uniqueAnnotatedVariants.length;
                     });
 
@@ -566,6 +614,7 @@ angular.module('oncokbStaticApp')
                                 });
                                 count++;
                             });
+
                             mutationMapperConstructor(mutationData, false);
                         }
                     });

@@ -219,7 +219,7 @@ angular.module('oncokbStaticApp')
                 },
                 {
                     "gene": "BRAF",
-                    "variants": "K601E; L579Q/R/S/V",
+                    "variants": "K601E; L597Q/R/S/V",
                     "disease": "Melanoma",
                     "drugs": "Trametinib; TAK-733"
                 },
