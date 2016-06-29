@@ -64,13 +64,9 @@ angular.module('oncokbStaticApp')
         });
     };
 
-    $scope.searchConfirmed = function(event) {
-      if(event && event.type && $scope.content.selectedGene.hugoSymbol) {
-        if(event.type ==='keypress' && event.keyCode === 13) {
-          $location.path('/gene/' + $scope.content.selectedGene.hugoSymbol);
-        }else if(event.type ==='click') {
-          $location.path('/gene/' + $scope.content.selectedGene.hugoSymbol);
-        }
+    $scope.searchConfirmed = function() {
+      if($scope.content.selectedGene.hugoSymbol) {
+        $location.path('/gene/' + $scope.content.selectedGene.hugoSymbol);
       }
     };
 

@@ -59,7 +59,7 @@
           <div class="input-group">
             <input type="search" class="form-control" placeholder="Search Gene"
                    ng-model="content.selectedGene"
-                   ng-keypress="searchConfirmed($event)"
+                   typeahead-on-select="searchConfirmed($event)"
                    uib-typeahead="gene as gene.hugoSymbol for gene in searchKeyUp($viewValue)">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button"
