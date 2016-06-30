@@ -99,7 +99,7 @@
                         <tbody>
                             <tr ng-repeat="x in clinicalVariants">
                                 <td>{{ x.variant.name}}</td>
-                                <td>{{ x.cancerType}}</td>
+                                <td>{{ x.cancerType.cancerType}}</td>
                                 <td>
                                     <span ng-repeat="drugItem in x.drug">
                                         <span>{{drugItem}}<br ng-if="$index < x.drug.length - 1" /></span>

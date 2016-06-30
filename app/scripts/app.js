@@ -143,12 +143,12 @@ angular.module('oncokbStaticApp').run(
           var levels = {}, levels = {};
           _.each(result.data, function(item) {
             if (item.level) {
-              var match = item.level.match(/(\d)+/);
-              if (_.isArray(match) && match.length > 0) {
-                if (!levels.hasOwnProperty(match[0])) {
-                  levels[match[0].toString()] = [];
+              var match = item.level.match(/LEVEL_(R?\d)+/);
+              if (_.isArray(match) && match.length > 1) {
+                if (!levels.hasOwnProperty(match[1])) {
+                  levels[match[1].toString()] = [];
                 }
-                levels[match[0].toString()] = _.union(levels[match[0]], item.genes);
+                levels[match[1].toString()] = _.union(levels[match[1]], item.genes);
               }
             }
           });
