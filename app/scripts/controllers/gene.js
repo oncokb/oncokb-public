@@ -396,15 +396,19 @@ angular.module('oncokbStaticApp')
             $scope.view.levelColors = $rootScope.data.levelColors;
             $scope.view.clinicalTableOptions = {
                 hasBootstrap: true,
-                "aoColumns": [
-                    {"sType": "num-html"},
-                    null,
-                    null,
-                    {asSorting: ['asc', 'desc']},
-                    {
-                        "sType": "num-html",
-                        asSorting: ['desc', 'asc']
-                    }
+                aoColumnDefs: [{
+                  aTargets: 0,
+                  sType: 'num-html',
+                  asSorting: ['desc', 'asc']
+                }, {
+                  aTargets: 3,
+                  sType: 'level-html',
+                  asSorting: ['desc', 'asc']
+                }, {
+                  aTargets: 4,
+                  sType: 'num-html',
+                  asSorting: ['desc', 'asc']
+                }
                 ],
                 columnDefs: [
                     {responsivePriority: 1, targets: 0},
@@ -655,8 +659,8 @@ angular.module('oncokbStaticApp')
 //apply datatable options here
 jQuery.extend(jQuery.fn.dataTableExt.oSort, {
     "num-html-pre": function (a) {
-        var x = String(a).replace(/(?!^-)[^0-9.]/g, "");
-        return parseFloat(x);
+      var x = String(a).replace(/(?!^-)[^0-9.]/g, "");
+      return parseFloat(x);
     },
     "num-html-asc": function (a, b) {
         return ((a < b) ? -1 : ((a > b) ? 1 : 0));
@@ -664,4 +668,34 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
     "num-html-desc": function (a, b) {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
+});
+jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+  "level-html-pre": function (a) {
+    var s = $(a).text();
+    return s;
+  },
+  "level-html-asc": function(a, b) {
+    var levels = ['3B', '3A', '2B', '2A', 'R1', '1'];
+    var _a = levels.indexOf(a);
+    var _b = levels.indexOf(b);
+    if (_a === -1) {
+      return 1;
+    }
+    if (_b === -1) {
+      return -1;
+    }
+    return _a - _b;
+  },
+  "level-html-desc": function(a, b) {
+    var levels = ['3B', '3A', '2B', '2A','R1', '1'];
+    var _a = levels.indexOf(a);
+    var _b = levels.indexOf(b);
+    if (_a === -1) {
+      return 1;
+    }
+    if (_b === -1) {
+      return -1;
+    }
+    return _b - _a;
+  }
 });

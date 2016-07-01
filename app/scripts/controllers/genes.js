@@ -79,30 +79,3 @@ angular.module('oncokbStaticApp')
         $scope.meta.genes = [];
       });
   });
-
-jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-  "level-asc": function(a, b) {
-    var levels = ['3B', '3A', '2B', '2A', '1'];
-    var _a = levels.indexOf(a);
-    var _b = levels.indexOf(b);
-    if (_a === -1) {
-      return 1;
-    }
-    if (_b === -1) {
-      return -1;
-    }
-    return _a - _b;
-  },
-  "level-desc": function(a, b) {
-    var levels = ['3B', '3A', '2B', '2A', '1'];
-    var _a = levels.indexOf(a);
-    var _b = levels.indexOf(b);
-    if (_a === -1) {
-      return 1;
-    }
-    if (_b === -1) {
-      return -1;
-    }
-    return _b - _a;
-  }
-});
