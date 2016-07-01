@@ -7,7 +7,7 @@
  * # qtip
  */
 angular.module('oncokbStaticApp')
-  .directive('qtip', function(api) {
+  .directive('qtip', function(api, $rootScope) {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
@@ -71,28 +71,7 @@ angular.module('oncokbStaticApp')
           options.content = '<img src="resources/images/loader.gif" />';
           options.events = {
             show: function(event, qtipApi) {
-              var content = '';
-              switch (attrs.number) {
-                case '1':
-                  content = '<span>FDA-approved biomarker and drug in this indication</span>';
-                  break;
-                case '2a':
-                  content = '<span>Standard-of-care biomarker and drug in this indication but not FDA-approved*.</span>';
-                  break;
-                case '2b':
-                  content = '<span>FDA-approved biomarker and drug in another indication, but not FDA or NCCN compendium-listed for this indication</span>';
-                  break;
-                case '3a':
-                  content = '<span>Clinical evidence links biomarker to drug response in this indication but neither biomarker or drug are FDA-approved or NCCN compendium-listed</span>';
-                  break;
-                case '3b':
-                  content = '<span>Clinical evidence links biomarker to drug response in another indication but neither biomarker or drug are FDA-approved or NCCN compendium-listed</span>';
-                  break;
-                case '4':
-                  content = '<span>Preclinical evidence associates this biomarker to drug response, where the biomarker and drug are NOT FDA-approved or NCCN compendium-listed</span>';
-                  break;
-
-              }
+              var content = $rootScope.meta.levelsDescHtml[attrs.number.toString().toUpperCase()] || '';
 
               qtipApi.set({
                 'content.text': content,

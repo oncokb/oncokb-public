@@ -356,18 +356,6 @@ angular.module('oncokbStaticApp')
                     "drugs": "Sonidegib, Vismodegib; Sonidegib"
                 },
                 {
-                    "gene": "PTEN",
-                    "variants": "Inactivating mutations",
-                    "disease": "Endometrial cancer",
-                    "drugs": "Olaparib"
-                },
-                {
-                    "gene": "RICTOR",
-                    "variants": "Amplification",
-                    "disease": "Lung cancer",
-                    "drugs": "AZD2014, CC-223, MLN0128"
-                },
-                {
                     "gene": "RET",
                     "variants": "Fusions",
                     "disease": "Lung cancer",

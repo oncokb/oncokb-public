@@ -1,0 +1,9 @@
+.news {
+  ul { padding-left:20px; list-style:none; }
+  li { margin-bottom:10px; }
+  li:before {
+    font-family: 'FontAwesome';
+    content: '\f0a4';
+    margin:0 5px 0 -15px;
+  }
+}
