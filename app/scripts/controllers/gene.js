@@ -444,7 +444,7 @@ angular.module('oncokbStaticApp')
                 hasBootstrap: true,
                 "aoColumns": [
                     {"sType": "num-html"},
-                    {asSorting: ['desc', 'asc']},
+                    {"sType": "oncogenic-html", asSorting: ['desc', 'asc']},
                     null,
                     {"sType": "num-html",
                         asSorting: ['desc', 'asc']}
@@ -688,5 +688,32 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
     }else if (b === -1) {
       return -1;
     }else return b - a;
+  }
+});
+
+jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+  "oncogenic-html-asc": function(a, b) {
+    var levels = ['Unknown', 'Likely Neutral', 'Likely', 'Yes'];
+    var _a = levels.indexOf(a);
+    var _b = levels.indexOf(b);
+    if (_a === -1) {
+      return 1;
+    }
+    if (_b === -1) {
+      return -1;
+    }
+    return _a - _b;
+  },
+  "oncogenic-html-desc": function(a, b) {
+    var levels = ['Unknown', 'Likely Neutral', 'Likely', 'Yes'];
+    var _a = levels.indexOf(a);
+    var _b = levels.indexOf(b);
+    if (_a === -1) {
+      return 1;
+    }
+    if (_b === -1) {
+      return -1;
+    }
+    return _b - _a;
   }
 });
