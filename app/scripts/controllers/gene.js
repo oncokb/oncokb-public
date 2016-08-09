@@ -672,30 +672,21 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
 jQuery.extend(jQuery.fn.dataTableExt.oSort, {
   "level-html-pre": function (a) {
     var s = $(a).text();
-    return s;
+    var levels = ['3B', '3A', '2B', '2A', 'R1', '1'];
+    return levels.indexOf(s);
   },
   "level-html-asc": function(a, b) {
-    var levels = ['3B', '3A', '2B', '2A', 'R1', '1'];
-    var _a = levels.indexOf(a);
-    var _b = levels.indexOf(b);
-    if (_a === -1) {
+    if (a === -1) {
       return 1;
-    }
-    if (_b === -1) {
+    }else if (b === -1) {
       return -1;
-    }
-    return _a - _b;
+    }else return a - b;
   },
   "level-html-desc": function(a, b) {
-    var levels = ['3B', '3A', '2B', '2A','R1', '1'];
-    var _a = levels.indexOf(a);
-    var _b = levels.indexOf(b);
-    if (_a === -1) {
+    if (a === -1) {
       return 1;
-    }
-    if (_b === -1) {
+    }else if (b === -1) {
       return -1;
-    }
-    return _b - _a;
+    }else return b - a;
   }
 });
