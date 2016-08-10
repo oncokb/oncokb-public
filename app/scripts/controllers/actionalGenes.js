@@ -162,7 +162,7 @@ angular.module('oncokbStaticApp')
               },
               {
                 "gene": "KIT",
-                "variants": "Y578C, V530I, V560D, V560del, K642E, V559D, L576P, M541L, D419del, K550_W557del, P551_E554del, Y553N, V555_L576del, V555_V559del, W557_K558del, V559G, V559del, V560G, E554_V559del, K558N, V559C, I563_L576del, V569_L576del, Y570H, P573_D579del, P577_W582insPYD, D579del, I653T, N822H, P838L, K558_V559del, M552_W557del, Y553_K558del, V559_V560del, T574insTQLPYD",
+                "variants": "K642E, L576P",
                 "disease": "Melanoma",
                 "drugs": "Imatinib"
               },
@@ -342,12 +342,6 @@ angular.module('oncokbStaticApp')
                 "variants": "PCM1-JAK2 Fusion",
                 "disease": "Leukemia",
                 "drugs": "Ruxolitinib"
-              },
-              {
-                "gene": "KIT",
-                "variants": "L576P",
-                "disease": "Melanoma",
-                "drugs": "Dasatinib, Nilotinib"
               },
               {
                 "gene": "KRAS",
