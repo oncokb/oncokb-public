@@ -418,7 +418,7 @@ angular.module('oncokbStaticApp')
                 scrollCollapse: true,
                 scrollY: 500,
                 sDom: "ft",
-                aaSorting: [[3, 'asc'], [0, 'asc']],
+                aaSorting: [[3, 'desc'], [0, 'asc']],
                 responsive: {
                     details: {
                         display: $.fn.dataTable.Responsive.display.childRowImmediate,
