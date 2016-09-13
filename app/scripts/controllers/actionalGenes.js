@@ -27,9 +27,9 @@ angular.module('oncokbStaticApp')
           treatments: [],
           numOfGenes: 0,
           numOfVariants: 0
-        },
+        }
       }
-    }
+    };
     $scope.status = {
       loading: {
         level: {
@@ -52,6 +52,7 @@ angular.module('oncokbStaticApp')
         {responsivePriority: 3, targets: 2, "width": "30%"},
         {responsivePriority: 4, targets: 3, "width": "20%"}
       ],
+      aaSorting: [[0, 'asc'], [1, 'asc'], [2, 'asc'], [3, 'asc']],
       responsive: {
         details: {
           display: $.fn.dataTable.Responsive.display.childRowImmediate,
