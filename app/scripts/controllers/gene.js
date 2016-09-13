@@ -238,7 +238,9 @@ angular.module('oncokbStaticApp')
                     resetFlag = false;
                     singleStudyFlag = true;
                     var tempIndex = shortNames.indexOf(eventData.points[0].x);
-                    if (tempIndex !== -1 && previousChosenIndex !== tempIndex) {
+                    if(previousChosenIndex === tempIndex){
+                      $('.mutation-details-filter-reset').trigger('click');
+                    }else{
                         previousChosenIndex = tempIndex;
                         var tempValue = studies[tempIndex];
                         $scope.studyName = "for " + fullNames[tempIndex];
