@@ -3,10 +3,10 @@
         <div>
             <div class="align-style">
                 <div style="float:left"> <h2 style="color: #008D14;" >Level 1</h2></div>
-                <div style="float:left;margin-top:5px;margin-left:15px"><h3>FDA-approved: 10 Genes</h3></div>
+                <div style="float:left;margin-top:5px;margin-left:15px"><h3>FDA-approved: {{data.levels.one.numOfGenes}} Genes, {{data.levels.one.numOfVariants}} Variants</h3></div>
             </div>
 
-            <table datatable="ng" class="row-border hover" dt-options="biologicalDT.dtOptions"
+            <table ng-show="!!!status.loading.level.one"  datatable="ng" class="row-border hover" dt-options="biologicalDT.dtOptions"
                    dt-columns="biologicalDT.dtColumnDefs">
                 <thead>
                     <tr>
@@ -17,7 +17,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="x in level1Genes">
+                    <tr ng-repeat="x in data.levels.one.treatments">
                         <td ng-click="clickGene(x.gene)">{{x.gene}}</td>
                         <td>{{x.variants}}</td>
                         <td>{{x.disease}}</td>
@@ -25,14 +25,16 @@
                     </tr>
                 </tbody>
             </table>
+          <img ng-show="!!status.loading.level.one" src="resources/images/loader.gif">
         </div>
         <hr id="level2">
         <div  class="align-style">
             <div style="float:left"> <h2 style="color: #019192;" >Level 2</h2></div>
-            <div style="float:left;margin-top:5px;margin-left:15px"><h3>Standard-of-care: 11 Genes</h3></div>
+            <div style="float:left;margin-top:5px;margin-left:15px"><h3>Standard-of-care: {{data.levels.two.numOfGenes}} Genes, {{data.levels.two.numOfVariants}} Variants</h3></div>
         </div>
 
-        <table datatable="ng" class="row-border hover" dt-options="biologicalDT.dtOptions"
+        <table ng-show="!!!status.loading.level.two"  datatable="ng" class="row-border hover"
+               dt-options="biologicalDT.dtOptions"
                dt-columns="biologicalDT.dtColumnDefs">
             <thead>
                 <tr>
@@ -43,7 +45,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="x in level2Genes">
+                <tr ng-repeat="x in data.levels.two.treatments">
                     <td ng-click="clickGene(x.gene)">{{x.gene}}</td>
                     <td>{{x.variants}}</td>
                     <td>{{x.disease}}</td>
@@ -51,13 +53,15 @@
                 </tr>
             </tbody>
         </table>
+      <img ng-show="!!status.loading.level.two" src="resources/images/loader.gif">
         <hr id="level3">
         <div  class="align-style">
             <div style="float:left"> <h2 style="color: #794C87;" >Level 3</h2></div>
-            <div style="float:left;margin-top:5px;margin-left:15px"><h3>Clinical evidence: 24 Genes</h3></div>
+            <div style="float:left;margin-top:5px;margin-left:15px"><h3>Clinical evidence: {{data.levels.three.numOfGenes}} Genes, {{data.levels.three.numOfVariants}} Variants</h3></div>
         </div>
 
-        <table datatable="ng" class="row-border hover" dt-options="biologicalDT.dtOptions"
+        <table ng-show="!!!status.loading.level.three" datatable="ng" class="row-border hover"
+               dt-options="biologicalDT.dtOptions"
                dt-columns="biologicalDT.dtColumnDefs">
             <thead>
                 <tr>
@@ -68,7 +72,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="x in level3Genes">
+                <tr ng-repeat="x in data.levels.three.treatments">
                     <td ng-click="clickGene(x.gene)">{{x.gene}}</td>
                     <td>{{x.variants}}</td>
                     <td>{{x.disease}}</td>
@@ -76,6 +80,7 @@
                 </tr>
             </tbody>
         </table>
+      <img ng-show="!!status.loading.level.three" src="resources/images/loader.gif">
     </div>
 </div>
 
