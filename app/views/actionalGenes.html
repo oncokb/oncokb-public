@@ -19,6 +19,7 @@
             <th>Variants</th>
             <th>Disease</th>
             <th>Drugs</th>
+            <th>Citations</th>
           </tr>
           </thead>
           <tbody>
@@ -27,6 +28,14 @@
             <td>{{x.variants}}</td>
             <td>{{x.disease}}</td>
             <td>{{x.drugs}}</td>
+            <td>
+              <span
+                ng-show="x.citations.length > 0"
+                class="gene-evidence-td-span"
+                qtip qtip-type="geneEvidence"
+                number="{{x.citations.join(',')}}">
+                {{x.citations.length + (x.citations.length + x.citations.length > 1 ? ' references' : ' reference')}}</span>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -55,6 +64,7 @@
             <th>Variants</th>
             <th>Disease</th>
             <th>Drugs</th>
+            <th>Citations</th>
           </tr>
           </thead>
           <tbody>
@@ -63,6 +73,14 @@
             <td>{{x.variants}}</td>
             <td>{{x.disease}}</td>
             <td>{{x.drugs}}</td>
+            <td>
+              <span
+                ng-show="x.citations.length > 0"
+                class="gene-evidence-td-span"
+                qtip qtip-type="geneEvidence"
+                number="{{x.citations.join(',')}}">
+                {{x.citations.length + (x.citations.length + x.citations.length > 1 ? ' references' : ' reference')}}</span>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -93,6 +111,7 @@
             <th>Variants</th>
             <th>Disease</th>
             <th>Drugs</th>
+            <th>Citations</th>
           </tr>
           </thead>
           <tbody>
@@ -101,6 +120,14 @@
             <td>{{x.variants}}</td>
             <td>{{x.disease}}</td>
             <td>{{x.drugs}}</td>
+            <td>
+              <span
+                ng-show="x.citations.length > 0"
+                class="gene-evidence-td-span"
+                qtip qtip-type="geneEvidence"
+                number="{{x.citations.join(',')}}">
+                {{x.citations.length + (x.citations.length + x.citations.length > 1 ? ' references' : ' reference')}}</span>
+            </td>
           </tr>
           </tbody>
         </table>

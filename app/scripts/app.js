@@ -223,6 +223,71 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
       return -1;
     }
     return _b - _a;
+  },
+  "num-html-pre": function (a) {
+    a = '<span>' + a + '</span>';
+    var x = String($(a).text()).replace(/(?!^-)[^0-9.]/g, "");
+    return x ? parseFloat(x) : Infinity;
+  },
+  "num-html-asc": function (a, b) {
+    // if(a === Infinity) {
+    //   return b;
+    // }
+    // if(b === Infinity) {
+    //   return a;
+    // }
+    return a < b;
+  },
+  "num-html-desc": function (a, b) {
+    // if(a === Infinity) {
+    //   return b;
+    // }
+    // if(b === Infinity) {
+    //   return a;
+    // }
+    return a > b;
+  },
+  "level-html-pre": function (a) {
+    var s = $(a).text();
+    var levels = ['3B', '3A', '2B', '2A', 'R1', '1'];
+    return levels.indexOf(s);
+  },
+  "level-html-asc": function(a, b) {
+    if (a === -1) {
+      return 1;
+    }else if (b === -1) {
+      return -1;
+    }else return a - b;
+  },
+  "level-html-desc": function(a, b) {
+    if (a === -1) {
+      return 1;
+    }else if (b === -1) {
+      return -1;
+    }else return b - a;
+  },
+  "oncogenic-html-asc": function(a, b) {
+    var levels = ['Unknown', 'Likely Neutral', 'Likely', 'Yes'];
+    var _a = levels.indexOf(a);
+    var _b = levels.indexOf(b);
+    if (_a === -1) {
+      return 1;
+    }
+    if (_b === -1) {
+      return -1;
+    }
+    return _a - _b;
+  },
+  "oncogenic-html-desc": function(a, b) {
+    var levels = ['Unknown', 'Likely Neutral', 'Likely', 'Yes'];
+    var _a = levels.indexOf(a);
+    var _b = levels.indexOf(b);
+    if (_a === -1) {
+      return 1;
+    }
+    if (_b === -1) {
+      return -1;
+    }
+    return _b - _a;
   }
 });
-

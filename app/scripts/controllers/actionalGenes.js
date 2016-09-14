@@ -48,9 +48,10 @@ angular.module('oncokbStaticApp')
       hasBootstrap: true,
       columnDefs: [
         {responsivePriority: 1, targets: 0, "width": "10%"},
-        {responsivePriority: 2, targets: 1, "width": "40%"},
-        {responsivePriority: 3, targets: 2, "width": "30%"},
-        {responsivePriority: 4, targets: 3, "width": "20%"}
+        {responsivePriority: 2, targets: 1, "width": "25%"},
+        {responsivePriority: 3, targets: 2, "width": "25%"},
+        {responsivePriority: 4, targets: 3, "width": "20%"},
+        {responsivePriority: 5, targets: 4, "width": "20%", type: 'num-html'}
       ],
       aaSorting: [[0, 'asc'], [1, 'asc'], [2, 'asc'], [3, 'asc']],
       responsive: {
@@ -79,7 +80,8 @@ angular.module('oncokbStaticApp')
       DTColumnDefBuilder.newColumnDef(0),
       DTColumnDefBuilder.newColumnDef(1),
       DTColumnDefBuilder.newColumnDef(2),
-      DTColumnDefBuilder.newColumnDef(3)
+      DTColumnDefBuilder.newColumnDef(3),
+      DTColumnDefBuilder.newColumnDef(4)
     ];
 
     $scope.clickGene = function(gene) {
@@ -121,7 +123,8 @@ angular.module('oncokbStaticApp')
               }
               if (_.isArray(treatment.alterations)) {
                 _.each(treatment.alterations, function(alt) {
-                  variants[alt] = true;
+                  var id = treatment.gene + '-' + alt;
+                  variants[id] = true;
                 });
               }
             });
@@ -131,6 +134,10 @@ angular.module('oncokbStaticApp')
               numOfGenes: Object.keys(genes).length,
               numOfVariants: Object.keys(variants).length
             };
+            // _.each(treatments, function(treatment) {
+            //   var log = [level.url, treatment.gene, treatment.variants, treatment.disease, treatment.drugs, treatment.citations.join(', ')];
+            //   console.log(log.join('\t'));
+            // });
             $scope.status.loading.level[level.loadingStatus] = false;
           } catch (error) {
             $scope.status.loading.level[level.loadingStatus] = false;
@@ -157,7 +164,10 @@ angular.module('oncokbStaticApp')
               return treatment.drugs.map(function(drug) {
                 return drug.drugName;
               }).sort().join('+');
-            }).sort().join(', ')
+            }).sort().join(', '),
+            citations: _.uniq(item.articles.map(function(art) {
+              return art.pmid;
+            })).sort()
           });
         })
       }
