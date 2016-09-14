@@ -40,8 +40,8 @@ angular.module('oncokbStaticApp')
       }
     };
 
-    $scope.biologicalDT = {};
-    $scope.biologicalDT.dtOptions = {
+    $scope.actionableGenesDT = {};
+    $scope.actionableGenesDT.dtOptions = {
       paging: false,
       scrollY: 481,
       scrollCollapse: true,
@@ -75,7 +75,7 @@ angular.module('oncokbStaticApp')
         }
       }
     };
-    $scope.biologicalDT.dtColumnDefs = [
+    $scope.actionableGenesDT.dtColumnDefs = [
       DTColumnDefBuilder.newColumnDef(0),
       DTColumnDefBuilder.newColumnDef(1),
       DTColumnDefBuilder.newColumnDef(2),
