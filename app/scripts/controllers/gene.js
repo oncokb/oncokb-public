@@ -445,11 +445,11 @@ angular.module('oncokbStaticApp')
             $scope.view.biologicalTableOptions = {
                 hasBootstrap: true,
                 "aoColumns": [
-                    {"sType": "num-html"},
+                    {"sType": "num-html",  asSorting: ['asc', 'desc']},
                     {"sType": "oncogenic-html", asSorting: ['desc', 'asc']},
                     null,
                     {"sType": "num-html",
-                        asSorting: ['desc', 'asc']}
+                        asSorting: ['asc', 'desc']}
                 ],
                 paging: false,
                 scrollCollapse: true,
@@ -657,65 +657,3 @@ angular.module('oncokbStaticApp')
             };
 
         });
-
-//apply datatable options here
-jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-    "num-html-pre": function (a) {
-      var x = String(a).replace(/(?!^-)[^0-9.]/g, "");
-      return parseFloat(x);
-    },
-    "num-html-asc": function (a, b) {
-        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-    },
-    "num-html-desc": function (a, b) {
-        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-    }
-});
-jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-  "level-html-pre": function (a) {
-    var s = $(a).text();
-    var levels = ['3B', '3A', '2B', '2A', 'R1', '1'];
-    return levels.indexOf(s);
-  },
-  "level-html-asc": function(a, b) {
-    if (a === -1) {
-      return 1;
-    }else if (b === -1) {
-      return -1;
-    }else return a - b;
-  },
-  "level-html-desc": function(a, b) {
-    if (a === -1) {
-      return 1;
-    }else if (b === -1) {
-      return -1;
-    }else return b - a;
-  }
-});
-
-jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-  "oncogenic-html-asc": function(a, b) {
-    var levels = ['Unknown', 'Likely Neutral', 'Likely', 'Yes'];
-    var _a = levels.indexOf(a);
-    var _b = levels.indexOf(b);
-    if (_a === -1) {
-      return 1;
-    }
-    if (_b === -1) {
-      return -1;
-    }
-    return _a - _b;
-  },
-  "oncogenic-html-desc": function(a, b) {
-    var levels = ['Unknown', 'Likely Neutral', 'Likely', 'Yes'];
-    var _a = levels.indexOf(a);
-    var _b = levels.indexOf(b);
-    if (_a === -1) {
-      return 1;
-    }
-    if (_b === -1) {
-      return -1;
-    }
-    return _b - _a;
-  }
-});
