@@ -29,11 +29,11 @@ angular.module('oncokbStaticApp')
         return null;
       },
       searchGene: function(query, exactMatch) {
-        if(!_.isBoolean(exactMatch)) {
+        if (!_.isBoolean(exactMatch)) {
           exactMatch = false;
         }
         return $http.get(publicApiLink + 'search/gene?query=' + query +
-          '&exactMatch='+exactMatch.toString());
+          '&exactMatch=' + exactMatch.toString());
       },
       getGenes: function() {
         return $http.get(publicApiLink + 'genes/');
@@ -53,20 +53,26 @@ angular.module('oncokbStaticApp')
         return $http.get(publicApiLink + 'search/variants/biological?hugoSymbol=' + hugoSymbol);
       },
       getPortalAlterationSampleCount: function(hugoSymbol) {
-        if(hugoSymbol) {
+        if (hugoSymbol) {
           return $http.get(apiLink + "portalAlterationSampleCount?hugoSymbol=" + hugoSymbol);
-        }else {
+        } else {
           return $http.get(apiLink + "portalAlterationSampleCount");
         }
       },
       getMutationMapperData: function(hugoSymbol) {
         return $http.get(apiLink + "mutationMapperData?hugoSymbol=" + hugoSymbol);
       },
-      getStudies: function(studies){
-          return $http.get("http://www.cbioportal.org/api/studies?study_ids=" + studies);
+      getStudies: function(studies) {
+        return $http.get("http://www.cbioportal.org/api/studies?study_ids=" + studies);
       },
-      getpumbedArticle: function(pumbedID){
-          return $http.get("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=" + pumbedID);
+      getpumbedArticle: function(pumbedID) {
+        return $http.get("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=" + pumbedID);
+      },
+      getTreatmentsBylevel: function(level) {
+        if (_.isUndefined(level)) {
+          return null;
+        }
+        return $http.get(apiLink + "evidence.json?levels=" + level);
       }
     };
   });
