@@ -150,7 +150,9 @@ angular.module('oncokbStaticApp')
             alterations: item.alterations.map(function(alt) {
               return alt.alteration;
             }).sort(),
-            disease: item.oncoTreeType.subtype || item.oncoTreeType.cancerType || 'NA',
+            disease: _.isObject(item.oncoTreeType) ?
+              (item.oncoTreeType.subtype ||
+              item.oncoTreeType.cancerType || 'NA') : 'NA',
             drugs: item.treatments.map(function(treatment) {
               return treatment.drugs.map(function(drug) {
                 return drug.drugName;
