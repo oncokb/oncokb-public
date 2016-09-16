@@ -12,11 +12,9 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
 @import "layout";
 @import "nav";
 
-
 .content {
   margin-bottom: 20px;
 }
-
 
 /* ID styles*/
 #genesDownload a {
@@ -35,6 +33,7 @@ div.dataTables_length label, div.dataTables_filter label {
 table.dataTable tbody td.child {
   padding: 8px 0 8px 20px;
 }
+
 /* ------------------------ */
 
 /*Overide bootstrap styles*/
@@ -54,6 +53,7 @@ table.dataTable tbody td.child {
 .dataTables_filter > label {
   display: inline-flex;
 }
+
 /* ----------------------- */
 
 a:hover, a:focus {
@@ -127,8 +127,8 @@ a:hover, a:focus {
   }
 }
 
-.referenceStyle{
-    white-space: nowrap;
+.referenceStyle {
+  white-space: nowrap;
 }
 
 .level-page {
@@ -138,6 +138,9 @@ a:hover, a:focus {
 
   .btn:hover, .btn-large:hover {
     background-color: $dark-blue;
+  }
+  .btn:hover, .btn:focus, .btn.focus {
+    color: #fff;
   }
 }
 
@@ -155,17 +158,22 @@ a:hover, a:focus {
   background: red;
   color: white;
 }
+
 #levelDownload {
   margin-bottom: 10px;
+  .btn-sm {
+    height: 30px;
+  }
 }
-#custom_mutation_details_template .mutation-details-loader>img{
+
+#custom_mutation_details_template .mutation-details-loader > img {
   margin: auto;
   width: 30px;
 }
 
-.bgStyle{
-    background: transparent;
-    box-shadow: none
+.bgStyle {
+  background: transparent;
+  box-shadow: none
 }
 
 /* Include styles for each page */
