@@ -176,6 +176,34 @@ a:hover, a:focus {
   box-shadow: none
 }
 
+.level-1 {
+  color: $level-1;
+}
+.level-2A {
+  color: $level-2A;
+}
+.level-2B {
+  color: $level-2B;
+}
+.level-3A {
+  color: $level-3A;
+}
+.level-3B {
+  color: $level-3B;
+}
+.level-4 {
+  color: $level-4;
+}
+.level-R1 {
+  color: $level-R1;
+}
+.level-R2 {
+  color: $level-R2;
+}
+.level-R3 {
+  color: $level-R3;
+}
+
 /* Include styles for each page */
 @import "home";
 @import "genes";
