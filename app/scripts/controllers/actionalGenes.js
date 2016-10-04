@@ -146,13 +146,16 @@ angular.module('oncokbStaticApp')
     }
 
     function getTreatments(metadata) {
-      var treatments = [];
+      var treatments = [], tempStr = '';
       if (_.isArray(metadata)) {
         _.each(metadata, function(item) {
           treatments.push({
             gene: item.gene.hugoSymbol || 'NA',
             variants: item.alterations.map(function(alt) {
-              return alt.alteration;
+              tempStr = alt.alteration.trim();
+              if(tempStr.length > 0){
+                return tempStr;
+              }
             }).sort().join(', ') || 'NA',
             alterations: item.alterations.map(function(alt) {
               return alt.alteration;
