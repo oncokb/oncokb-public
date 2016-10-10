@@ -32,7 +32,11 @@ angular.module('oncokbStaticApp')
             'max-height': 300
           },
           show: 'mouseover',
-          hide: false
+          hide: {
+            event: hideEvent,
+            fixed: true,
+            delay: 100
+          }
         };
 
         if (type === 'geneEvidence') {
