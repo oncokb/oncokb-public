@@ -13,7 +13,7 @@ angular.module('oncokbStaticApp')
       insertSourceLink: function (str) {
         if (typeof str === 'string' && str) {
           var regex = [/PMID:\s*([0-9]+,*\s*)+/ig, /NCT[0-9]+/ig],
-            links = ['http://www.ncbi.nlm.nih.gov/pubmed/',
+            links = ['https://www.ncbi.nlm.nih.gov/pubmed/',
               'http://clinicaltrials.gov/show/'];
           for (var j = 0, regexL = regex.length; j < regexL; j++) {
             var result = str.match(regex[j]);

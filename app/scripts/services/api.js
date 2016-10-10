@@ -66,7 +66,7 @@ angular.module('oncokbStaticApp')
         return $http.get("http://www.cbioportal.org/api-legacy/studies?study_ids=" + studies);
       },
       getpumbedArticle: function(pumbedID) {
-        return $http.get("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=" + pumbedID);
+        return $http.get("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=" + pumbedID);
       },
       getTreatmentsBylevel: function(level) {
         if (_.isUndefined(level)) {
