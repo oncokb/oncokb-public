@@ -120,10 +120,30 @@ a:hover, a:focus {
 }
 
 .gene-evidence-qtip {
-  min-width: 500px;
-  .qtip-content {
+  max-width: 600px;
+  ul.list-group {
+    max-height: 200px;
     overflow-y: auto;
-    max-height: 300px;
+    margin-bottom: 0;
+  }
+  .list-group-item {
+    border: 0;
+    padding: 5px;
+    line-height: 16px;
+    a {
+      color: $dark-blue;
+    }
+  }
+  .list-group-item:not(:first-child) {
+    border-top: 1px solid #d0d0d0;
+  }
+  .list-group-item:last-child {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .list-group-item:first-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 }
 
@@ -141,16 +161,6 @@ a:hover, a:focus {
   }
   .btn:hover, .btn:focus, .btn.focus {
     color: #fff;
-  }
-}
-
-.qtip-gene-evidence {
-  max-width: 600px;
-  ul {
-    margin-bottom: 0;
-    li {
-      margin: 3px 0;
-    }
   }
 }
 

@@ -28,15 +28,11 @@ angular.module('oncokbStaticApp')
             viewport: $(window)
           },
           style: {
-            classes: 'qtip-light qtip-rounded qtip-gene-evidence',
+            classes: 'qtip-light qtip-shadow gene-evidence-qtip',
             'max-height': 300
           },
           show: 'mouseover',
-          hide: {
-            event: hideEvent,
-            fixed: true,
-            delay: 100
-          }
+          hide: false
         };
 
         if (type === 'geneEvidence') {
@@ -47,11 +43,11 @@ angular.module('oncokbStaticApp')
                 var articlesData = articles.data.result;
                 var content = '';
                 if (articlesData !== undefined && articlesData.uids.length > 0) {
-                  content = '<ul class="list-group" style="margin-bottom: 5px">';
+                  content = '<ul class="list-group">';
 
                   articlesData.uids.forEach(function(uid) {
                     var articleContent = articlesData[uid];
-                    content += '<li class="list-group-item" style="width: 100%"><a href="http://www.ncbi.nlm.nih.gov/pubmed/' + uid + '" target="_blank"><b>' + articleContent.title + '</b></a>';
+                    content += '<li class="list-group-item" style="width: 100%"><a href="https://www.ncbi.nlm.nih.gov/pubmed/' + uid + '" target="_blank"><b>' + articleContent.title + '</b></a>';
                     if (articleContent.authors !== undefined) {
                       content += '<br/><span>' + articleContent.authors[0].name + ' et al. ' + articleContent.source + '. ' + (new Date(articleContent.pubdate)).getFullYear() + '</span></li>';
                     }
@@ -60,7 +56,7 @@ angular.module('oncokbStaticApp')
                 }
                 qtipApi.set({
                   'content.text': content,
-                  'style.classes': 'qtip-light qtip-rounded gene-evidence-qtip'
+                  'style.classes': 'qtip-light qtip-shadow gene-evidence-qtip'
                 });
 
                 qtipApi.reposition(event, false);
@@ -75,7 +71,7 @@ angular.module('oncokbStaticApp')
 
               qtipApi.set({
                 'content.text': content,
-                'style.classes': 'qtip-light qtip-rounded'
+                'style.classes': 'qtip-light qtip-shadow'
               });
 
               qtipApi.reposition(event, false);
