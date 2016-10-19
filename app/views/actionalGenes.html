@@ -136,6 +136,53 @@
         <img src="resources/images/loader.gif">
       </div>
     </div>
+    <div>
+      <hr id="level4">
+
+      <div class="col-md-12 align-style">
+        <div>
+          <div style="float:left"><h2 class="level-4">Level 4</h2></div>
+          <div style="float:left;margin-top:5px;margin-left:15px"><h3>Clinical evidence:
+            {{data.levels.four.numOfGenes}}
+            Genes, {{data.levels.four.numOfVariants}} Variants</h3></div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <table datatable="ng" class="row-border hover"
+               dt-options="actionableGenesDT.dtOptions"
+               dt-columns="actionableGenesDT.dtColumnDefs">
+          <thead>
+          <tr>
+            <th>Gene</th>
+            <th>Variants</th>
+            <th>Disease</th>
+            <th>Drugs</th>
+            <th>Citations</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="x in data.levels.three.treatments">
+            <td ng-click="clickGene(x.gene)">{{x.gene}}</td>
+            <td>{{x.variants}}</td>
+            <td>{{x.disease}}</td>
+            <td>{{x.drugs}}</td>
+            <td>
+              <span
+                ng-show="x.citations.length > 0"
+                class="gene-evidence-td-span"
+                qtip qtip-type="geneEvidence"
+                number="{{x.citations.join(',')}}">
+                {{x.citations.length + (x.citations.length + x.citations.length > 1 ? ' references' : ' reference')}}</span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-12 loading-div" ng-show="!!status.loading.level.three">
+        <img src="resources/images/loader.gif">
+      </div>
+    </div>
   </div>
 </div>
 

@@ -103,6 +103,10 @@ angular.module('oncokbStaticApp')
         url: 'LEVEL_3A',
         variable: 'three',
         loadingStatus: 'three'
+      }, {
+        url: 'LEVEL_4',
+        variable: 'four',
+        loadingStatus: 'four'
       }];
       _.each(levels, function(level) {
         $scope.status.loading.level[level.loadingStatus] = true;
