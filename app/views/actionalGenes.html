@@ -162,7 +162,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr ng-repeat="x in data.levels.three.treatments">
+          <tr ng-repeat="x in data.levels.four.treatments">
             <td ng-click="clickGene(x.gene)">{{x.gene}}</td>
             <td>{{x.variants}}</td>
             <td>{{x.disease}}</td>
@@ -179,7 +179,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-md-12 loading-div" ng-show="!!status.loading.level.three">
+      <div class="col-md-12 loading-div" ng-show="!!status.loading.level.four">
         <img src="resources/images/loader.gif">
       </div>
     </div>
