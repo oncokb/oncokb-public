@@ -22,7 +22,7 @@ and open the template in the editor.
     }
     .align-style{
         position:relative;
-        top:40px
+        top:20px
     }
     .green-color{
         color:green
@@ -33,6 +33,7 @@ and open the template in the editor.
     input[type=search] {
       border-color: $dark-blue;
       font-size: 14px;
+      margin-bottom: 0;
     }
     input[type=search]:focus {
       border-bottom-color: $orange;
