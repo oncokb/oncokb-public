@@ -88,7 +88,7 @@ angular.module('oncokbStaticApp')
                 }
             };
             var mutationMapper = null, mutationDiagram = null;
-            var resetFlag = false, previousChosenIndex = -1, singleStudyFlag = false;
+            var resetFlag = false, previousChosenIndex = -1, singleStudyFlag = false, currentMax = $(".diagram-y-axis-limit-input").val();
 
             //fetch portal alteration data for histogram and construct the histogram with plotly.js
             function fetchHistogramData() {
@@ -303,8 +303,12 @@ angular.module('oncokbStaticApp')
                                 mutationDiagram.dispatcher.on(MutationDetailsEvents.DIAGRAM_PLOT_UPDATED, function () {
                                     if (resetFlag)
                                         updateTable("reset");
-                                    else
+                                    else if($(".diagram-y-axis-limit-input").val() !== currentMax){
+                                        currentMax = $(".diagram-y-axis-limit-input").val();
+                                    }else{
                                         updateTable("plotUpdate");
+                                    }
+
                                 });
                             });
                         });
@@ -320,7 +324,6 @@ angular.module('oncokbStaticApp')
 
             //get the chosen mutation data from the lollipop and update the table
             function updateTable(type) {
-
                 var proteinChanges = [];
                 if (type === "plotUpdate") {
                     var pileUpValues = mutationDiagram.pileups;
@@ -538,26 +541,54 @@ angular.module('oncokbStaticApp')
                         }));
 
                         var allMissenseVariants = _.uniq(_.map($scope.annoatedVariants, function (item) {
-                            if (item.variant.consequence !== null && item.variant.consequence.term === 'missense_variant') {
-                                return item.variant;
-                            }
+                            return item.variant;
                         }));
-
                         if (uniqueAnnotatedVariants.length > 0) {
                             $rootScope.view.subNavItems = [
                                 {content: $scope.gene},
                                 {content: uniqueAnnotatedVariants.length + ' annotated variant' + (uniqueAnnotatedVariants.length > 1 ? 's' : '')}
                             ];
                         }
+                        var mutationType = '';
                         if (allMissenseVariants.length > 0) {
                             _.each(allMissenseVariants, function (item, index) {
                                 if (item !== undefined) {
+                                    if(_.isNull(item.consequence)){
+                                      mutationType = 'other';
+                                    }else{
+                                      switch(item.consequence.term){
+                                        case 'inframe_insertion':
+                                          mutationType = 'in_frame_ins';
+                                          break;
+                                        case 'inframe_deletion':
+                                          mutationType = 'in_frame_del';
+                                          break;
+                                        case 'frameshift_variant':
+                                          mutationType = 'frameshift';
+                                          break;
+                                        case 'splice_region_variant':
+                                          mutationType = 'splice_site';
+                                          break;
+                                        case 'feature_truncation':
+                                        case 'stop_gained':
+                                        case 'stop_lost':
+                                        case 'initiator_codon_variant':
+                                          mutationType = 'truncating';
+                                          break;
+                                        case 'any':
+                                        case 'synonymous_variant':
+                                          mutationType = 'other';
+                                          break;
+                                        default:
+                                          mutationType =  item.consequence.term;
+                                      }
+                                    }
                                     mutationData.push({
                                         cancerStudy: "fakeStudy",
                                         geneSymbol: $scope.gene,
                                         caseId: "fakeSample" + index,
                                         proteinChange: item.name,
-                                        mutationType: "Missense_Mutation",
+                                        mutationType: mutationType,
                                         proteinPosStart: item.proteinStart,
                                         proteinPosEnd: item.proteinEnd,
                                         mutationSid: "fakeSigID" + index,
@@ -607,6 +638,7 @@ angular.module('oncokbStaticApp')
                         if ($scope.mutationMapperFlag) {
                             var count = 1;
                             mutationMapperInfo.data.forEach(function (item) {
+
                                 mutationData.push({
                                     cancerStudy: item.cancerStudy,
                                     geneSymbol: item.gene.hugoSymbol,
