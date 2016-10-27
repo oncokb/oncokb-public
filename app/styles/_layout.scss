@@ -110,20 +110,35 @@
   }
 }
 
-@media (max-width: 900px) and (min-width: 800px){
+@media (min-width: $range-min-width) {
+  .navbar-nav > li > a {
+    padding: 15px 12px;
+  }
+}
+
+@media (max-width: $range-max-sm-width) and (min-width: 870px) {
   .navbar-nav > li > a {
     padding: 15px 6px;
   }
 }
 
-@media (max-width: 800px) and (min-width: $range-min-sm-width) {
+@media (max-width: 839px) {
+  .mskcc-icon {
+    display: none;
+  }
+  .mskcc-logo {
+    display: none;
+  }
+}
+
+@media (max-width: 870px) and (min-width: $range-min-sm-width) {
   .navbar-nav > li > a {
     padding: 15px 0px;
   }
-  .navbar-nav > li > a > span{
+  .navbar-nav > li > a > span {
     padding: 0 3px;
   }
-  .navbar-nav > li:not(:last-child) > a > span{
+  .navbar-nav > li:not(:last-child) > a > span {
     border-right: 1px solid $darker-blue;
   }
 }
@@ -140,7 +155,7 @@
   }
 }
 
-@media (max-width: $range-max-width) and (min-width: $range-min-sm-width) {
+@media (max-width: $range-max-width) and (min-width: 840px) {
   .mskcc-icon {
     display: block;
   }

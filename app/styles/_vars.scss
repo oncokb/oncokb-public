@@ -2,7 +2,7 @@
     VARIABLES
 \*------------------------------------*/
 
-$font-sans:  "Gotham SSm A", "Gotham SSm B", "Helvetica Neueu", Helvetica, Arial, sans-serif;
+$font-sans: "Gotham SSm A", "Gotham SSm B", "Helvetica Neueu", Helvetica, Arial, sans-serif;
 $font-serif: Georgia, "Times New Roman", serif;
 
 /* ----- Responsive Size & Breakpoint Variables ----- */
@@ -10,8 +10,8 @@ $font-serif: Georgia, "Times New Roman", serif;
 // Bootstrap breakpoints for reference (not overrides)
 //$orange: $gsk-accent;
 $lg-width: 1230px;
-$width: 993px;
-$sm-width: 768px;
+$width: 1060px;
+$sm-width: 780px;
 $range-min-lg-width: $lg-width;
 $range-max-width: $lg-width - 1;
 $range-min-width: $width;
@@ -19,6 +19,9 @@ $range-max-sm-width: $width - 1;
 $range-min-sm-width: $sm-width;
 $range-max-xm-width: $sm-width - 1;
 
+$screen-sm: $sm-width;
+$screen-md: $sm-width;
+$screen-lg: $width;
 /* ----- Color Variables ----- */
 
 // brand colors
@@ -119,75 +122,69 @@ $mslf-blue: $dark-blue;
 
 $quote-neutral: #656565;
 
-
 /* Segment Map
   see example use in _content-tile.scss, _landing-page-hero.scss... */
 
 $segments: (
   (segmentSlug: pc,
-  segmentColor: $pc,
-  segmentBackground: $pc-background,
-  segmentEdge: $pc-edge,
-  segmentOver: $pc-over,
-  segmentAccent: $pc-accent,
-  segmentColorAlt: $pc,
-  segmentColorAltOver: $pc-over,
-  segmentTitle: "For Adult Patients"),
-
+    segmentColor: $pc,
+    segmentBackground: $pc-background,
+    segmentEdge: $pc-edge,
+    segmentOver: $pc-over,
+    segmentAccent: $pc-accent,
+    segmentColorAlt: $pc,
+    segmentColorAltOver: $pc-over,
+    segmentTitle: "For Adult Patients"),
   (segmentSlug: pd,
-  segmentColor: $pd,
-  segmentBackground: $pd-background,
-  segmentEdge: $pd-edge,
-  segmentOver: $pd-over,
-  segmentAccent: $pd-accent,
-  segmentColorAlt: $pd-accent,
-  segmentColorAltOver: darken($pd-accent,20%),
-  segmentTitle: "For Pediatric Patients"),
-
+    segmentColor: $pd,
+    segmentBackground: $pd-background,
+    segmentEdge: $pd-edge,
+    segmentOver: $pd-over,
+    segmentAccent: $pd-accent,
+    segmentColorAlt: $pd-accent,
+    segmentColorAltOver: darken($pd-accent, 20%),
+    segmentTitle: "For Pediatric Patients"),
   (segmentSlug: rs,
-  segmentColor: $rs,
-  segmentBackground: $rs-background,
-  segmentEdge: $rs-edge,
-  segmentOver: $rs-over,
-  segmentAccent: $rs-accent,
-  segmentColorAlt: $rs,
-  segmentColorAltOver: $rs-over,
-  segmentTitle: "For Research Scientists"),
-
+    segmentColor: $rs,
+    segmentBackground: $rs-background,
+    segmentEdge: $rs-edge,
+    segmentOver: $rs-over,
+    segmentAccent: $rs-accent,
+    segmentColorAlt: $rs,
+    segmentColorAltOver: $rs-over,
+    segmentTitle: "For Research Scientists"),
   (segmentSlug: hp,
-  segmentColor: $hp,
-  segmentBackground: $hp-background,
-  segmentEdge: $hp-edge,
-  segmentOver: $hp-over,
-  segmentAccent: $hp-accent,
-  segmentAccentAlt: $hp-accent-alt,
-  segmentColorAlt: $hp,
-  segmentColorAltOver: $hp-over,
-  segmentTitle: "For Healthcare Professionals"),
-
+    segmentColor: $hp,
+    segmentBackground: $hp-background,
+    segmentEdge: $hp-edge,
+    segmentOver: $hp-over,
+    segmentAccent: $hp-accent,
+    segmentAccentAlt: $hp-accent-alt,
+    segmentColorAlt: $hp,
+    segmentColorAltOver: $hp-over,
+    segmentTitle: "For Healthcare Professionals"),
   (segmentSlug: gsk,
-  segmentColor: $gsk,
-  segmentBackground: $gsk-background,
-  segmentEdge: $gsk-edge,
-  segmentOver: $gsk-over,
-  segmentAccent: $gsk-accent,
-  segmentTitle: "Gerstner Sloan Kettering",
-  segmentPageAction: $gsk-segmentPageAction,
-  segmentButtonHover: $gsk-btn-over,
-  segmentColorAlt: $gsk,
-  segmentColorAltOver: $gsk-over,
-  segmentNavigationEdge: $gsk-navigation-edge)
+    segmentColor: $gsk,
+    segmentBackground: $gsk-background,
+    segmentEdge: $gsk-edge,
+    segmentOver: $gsk-over,
+    segmentAccent: $gsk-accent,
+    segmentTitle: "Gerstner Sloan Kettering",
+    segmentPageAction: $gsk-segmentPageAction,
+    segmentButtonHover: $gsk-btn-over,
+    segmentColorAlt: $gsk,
+    segmentColorAltOver: $gsk-over,
+    segmentNavigationEdge: $gsk-navigation-edge)
 );
-
 
 /* ----- Bootstrap Variable Overrides ----- */
 
-$brand-primary  : $brand-color;
-$btn-primary-bg : $brand-primary;
-$text-color   : $main-text;
-$link-color   : $brand-primary;
-$btn-info   : $medium-blue;
-$btn-info-bg  : $btn-info;
+$brand-primary: $brand-color;
+$btn-primary-bg: $brand-primary;
+$text-color: $main-text;
+$link-color: $brand-primary;
+$btn-info: $medium-blue;
+$btn-info-bg: $btn-info;
 $input-color-placeholder: $main-text;
 
 $bootstrap-sass-asset-helper: false;

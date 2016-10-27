@@ -1,11 +1,13 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 $fa-font-path: "../bower_components/font-awesome/fonts";
+
+@import "vars";
+
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 @import "font-awesome/scss/font-awesome.scss";
 // endbower
 
-@import "vars";
 @import "mixins";
 @import "typography";
 @import "font";
@@ -54,6 +56,33 @@ table.dataTable tbody td.child {
   display: inline-flex;
 }
 
+/* ----------------------- */
+
+/*Overide materialize styles*/
+input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+  border-bottom: 1px solid $orange;
+  box-shadow: 0 1px 0 0 $orange;
+}
+
+input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* ----------------------- */
+
+/*Overide Swagger-UI styles*/
+.swagger-ui .operation .content .headers .name, .swagger-ui .operation .content .parameters {
+  .name {
+    width: 15%;
+  }
+  .value {
+    width: 25%;
+  }
+  .desc {
+    width: 35%;
+  }
+}
 /* ----------------------- */
 
 a:hover, a:focus {
@@ -189,27 +218,35 @@ a:hover, a:focus {
 .level-1 {
   color: $level-1;
 }
+
 .level-2A {
   color: $level-2A;
 }
+
 .level-2B {
   color: $level-2B;
 }
+
 .level-3A {
   color: $level-3A;
 }
+
 .level-3B {
   color: $level-3B;
 }
+
 .level-4 {
   color: $level-4;
 }
+
 .level-R1 {
   color: $level-R1;
 }
+
 .level-R2 {
   color: $level-R2;
 }
+
 .level-R3 {
   color: $level-R3;
 }
@@ -222,3 +259,4 @@ a:hover, a:focus {
 @import "actionable";
 @import "respTabs";
 @import "news";
+@import "dataAccess";
