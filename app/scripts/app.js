@@ -20,7 +20,8 @@ angular
     'ui.router',
     'datatables',
     'datatables.bootstrap',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'swaggerUi'
   ])
   .constant('_', window._)
   .constant('apiLink', 'legacy-api/')
@@ -72,6 +73,11 @@ angular
         templateUrl: 'views/news.html',
         controller: 'NewsCtrl',
         controllerAs: 'news'
+      })
+      .when('/dataAccess', {
+        templateUrl: 'views/dataaccess.html',
+        controller: 'DataaccessCtrl',
+        controllerAs: 'dataAccess'
       })
       .otherwise({
         redirectTo: '/'
