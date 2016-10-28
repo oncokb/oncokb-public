@@ -26,7 +26,7 @@
                 padding-top: 20px;
                 font-weight: bold;
                 font-size: 35px;
-                border-bottom: 1px solid $orange;
+                border-bottom: 1px solid $secondary-color;
             }
             .category {
             }
@@ -38,7 +38,7 @@
     }
 
     .number.gene > a:hover {
-        color: $dark-blue;
+        color: $primary-color;
     }
 
     .has-inside-grid {
@@ -51,7 +51,7 @@
         font-weight: normal;
         text-align: center;
         .level-1 {
-            color: $orange;
+            color: $secondary-color;
             font-weight: 500;
         }
         .level-2 {
@@ -107,7 +107,7 @@
             border-top-right-radius: 0;
         }
         input[type=search]:focus {
-            border-color: $orange;
+            border-color: $secondary-color;
         }
         .row {
             margin-bottom: 40px;

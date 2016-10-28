@@ -13,7 +13,7 @@
     padding: 5px 15px;
   }
   a:hover {
-    background-color: $orange;
+    background-color: $secondary-color;
     border-bottom: 1px solid #b3b3a6;
     color: white;
   }
@@ -28,7 +28,7 @@
 }
 
 .navbar-header {
-  background-color: $dark-blue;
+  background-color: $primary-color;
   .logo-brand {
     height: 38px;
   }
@@ -47,7 +47,7 @@
 }
 
 .navbar-inverse {
-  background-color: $dark-blue;
+  background-color: $primary-color;
   border: 0;
   webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -78,8 +78,8 @@
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus {
-  border-bottom: 3px solid $orange;
-  background-color: $dark-blue;
+  border-bottom: 3px solid $secondary-color;
+  background-color: $primary-color;
 }
 
 .navbar-inverse .navbar-nav > li > a {
@@ -88,8 +88,8 @@
 
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-  border-bottom: 3px solid $orange;
-  background-color: $dark-blue;
+  border-bottom: 3px solid $secondary-color;
+  background-color: $primary-color;
 }
 
 .navbar-toggle {
@@ -133,7 +133,7 @@
   span.item {
     font-size: 22px;
     color: white;
-    border-right: 1px solid $dark-blue;
+    border-right: 1px solid $primary-color;
     padding: 0 10px;
   }
   span.item:first-child {
@@ -146,13 +146,13 @@
     height: 29px;
     width: 100%;
     margin: 0;
-    border-color: $dark-blue;
+    border-color: $primary-color;
     color: #fff;
     font-size: 14px;
   }
   input[type=text]:focus {
-    border-bottom-color: $orange;
-    box-shadow: 0 1px 0 0 $orange;
+    border-bottom-color: $secondary-color;
+    box-shadow: 0 1px 0 0 $secondary-color;
   }
   .subNav-sxn-1, .subNav-sxn-2 {
     padding-left: 0;

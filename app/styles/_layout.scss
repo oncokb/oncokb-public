@@ -6,10 +6,11 @@
 
 @media only screen and (min-width: $range-min-width) {
   .container {
-    width: 90%;
+    width: 95%;
+    max-width: 1400px;
   }
-  .about, .team, .actionable-genes, .license, .news {
-    width: 90%;
+  .about, .team, .actionable-genes, .license, .news, .data-access  {
+    width: 95%;
   }
   .level-page {
     width: 80%;
@@ -23,7 +24,7 @@
   .container {
     width: 100%;
   }
-  .about, .team, .level-page, .actionable-genes, .license, .news {
+  .about, .team, .level-page, .actionable-genes, .license, .news, .data-access {
     width: 100%;
   }
   .about .about-poster {
@@ -69,7 +70,7 @@
     display: block;
   }
   .navbar-brand {
-    padding: 15px 10px 15px 25px;
+    padding: 15px 10px 15px 15px;
   }
   .main-oncokb-header {
     margin-top: 10px;
@@ -95,6 +96,9 @@
   .footer {
     height: $footer-height;
   }
+  .navbar-brand {
+    padding: 15px 10px 15px 0;
+  }
 }
 
 @media (min-width: $range-min-width) {
@@ -107,6 +111,9 @@
   }
   .footer {
     height: $footer-height;
+  }
+  .navbar-brand {
+    padding: 15px 10px;
   }
 }
 
@@ -149,9 +156,6 @@
   }
   .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
     margin-left: 0;
-  }
-  .navbar-brand {
-    padding: 15px 10px;
   }
 }
 

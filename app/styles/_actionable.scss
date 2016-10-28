@@ -9,7 +9,6 @@ and open the template in the editor.
 */
 
 .actionable-genes {
-    margin: auto;
     table tbody td:first-child {
         text-decoration: underline;
     }
@@ -31,13 +30,8 @@ and open the template in the editor.
         float:left
     }
     input[type=search] {
-      border-color: $dark-blue;
       font-size: 14px;
       margin-bottom: 0;
-    }
-    input[type=search]:focus {
-      border-bottom-color: $orange;
-      box-shadow: 0 1px 0 0 $orange;
     }
     .loading-div {
       text-align: center;

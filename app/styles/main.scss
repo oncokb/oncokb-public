@@ -4,6 +4,7 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
 @import "vars";
 
 // bower:scss
+@import "materialize/sass/materialize.scss";
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 @import "font-awesome/scss/font-awesome.scss";
 // endbower
@@ -40,7 +41,7 @@ table.dataTable tbody td.child {
 
 /*Overide bootstrap styles*/
 .btn-info {
-  background-color: $dark-blue;
+  background-color: $primary-color;
   border: 0;
 }
 
@@ -60,8 +61,8 @@ table.dataTable tbody td.child {
 
 /*Overide materialize styles*/
 input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: 1px solid $orange;
-  box-shadow: 0 1px 0 0 $orange;
+  border-bottom: 1px solid $secondary-color;
+  box-shadow: 0 1px 0 0 $secondary-color;
 }
 
 input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
@@ -83,6 +84,7 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
     width: 35%;
   }
 }
+
 /* ----------------------- */
 
 a:hover, a:focus {
@@ -110,7 +112,7 @@ a:hover, a:focus {
   margin-top: 20px;
 }
 
-.floatRight {
+.float-right {
   float: right;
 }
 
@@ -118,7 +120,7 @@ a:hover, a:focus {
   width: 100%;
 }
 
-.about, .team, .level-page, .license, .news {
+.about, .team, .level-page, .license, .news, .actionable-genes, .data-access {
   margin: auto;
   h5 {
     font-weight: 700;
@@ -160,7 +162,7 @@ a:hover, a:focus {
     padding: 5px;
     line-height: 16px;
     a {
-      color: $dark-blue;
+      color: $primary-color;
     }
   }
   .list-group-item:not(:first-child) {
@@ -180,29 +182,23 @@ a:hover, a:focus {
   white-space: nowrap;
 }
 
-.level-page {
-  .btn, .btn-large {
-    background-color: $dark-blue;
-  }
-
-  .btn:hover, .btn-large:hover {
-    background-color: $dark-blue;
-  }
-  .btn:hover, .btn:focus, .btn.focus {
-    color: #fff;
-  }
-}
-
 .old-browser-warning {
   background: red;
   color: white;
 }
 
-#levelDownload {
+.btn.download, .btn-large.download, .btn-sm.download,
+.btn.download:hover, .btn-large.download, .btn-sm.download:hover {
+  background-color: $primary-color;
+}
+
+.btn:hover, .btn:focus, .btn.focus {
+  color: #fff;
+}
+
+.btn.btn-sm {
   margin-bottom: 10px;
-  .btn-sm {
-    height: 30px;
-  }
+  height: 30px;
 }
 
 #custom_mutation_details_template .mutation-details-loader > img {

@@ -8,8 +8,8 @@ $font-serif: Georgia, "Times New Roman", serif;
 /* ----- Responsive Size & Breakpoint Variables ----- */
 
 // Bootstrap breakpoints for reference (not overrides)
-//$orange: $gsk-accent;
-$lg-width: 1230px;
+//$secondary-color: $gsk-accent;
+$lg-width: 1270px;
 $width: 1060px;
 $sm-width: 780px;
 $range-min-lg-width: $lg-width;
@@ -19,11 +19,12 @@ $range-max-sm-width: $width - 1;
 $range-min-sm-width: $sm-width;
 $range-max-xm-width: $sm-width - 1;
 
+/* ----- Overwrite Bootstrap Variables ----- */
 $screen-sm: $sm-width;
 $screen-md: $sm-width;
 $screen-lg: $width;
-/* ----- Color Variables ----- */
 
+/* ----- Color Variables ----- */
 // brand colors
 $darker-blue: #064785;
 $dark-blue: #1c75cd;
@@ -36,9 +37,9 @@ $brand-accent: #38657f;
 $brand-background: #b0e5fc;
 $no-segment-background: #d8f3fe;
 
-$orange: #FF9900;
-$danger-dark: #bd1426;
-$warning-yellow: #e09600;
+$oncokb-orange: #FF9900;
+$oncokb-danger-dark: #bd1426;
+$oncokb-warning-yellow: #e09600;
 
 // neutrals & text colors
 $pure-white: #fff;
@@ -121,6 +122,10 @@ $mslf-magenta: $pc-accent;
 $mslf-blue: $dark-blue;
 
 $quote-neutral: #656565;
+
+/* ----- Overwrite Material Variables ----- */
+$primary-color: $dark-blue;
+$secondary-color: $oncokb-orange;
 
 /* Segment Map
   see example use in _content-tile.scss, _landing-page-hero.scss... */
