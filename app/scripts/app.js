@@ -127,6 +127,7 @@ angular.module('oncokbStaticApp').run(
       }, {content: '3800 Variants'}, {content: '333 Tumor Types'}]
     };
     $rootScope.data = {
+      version: '1.5',
       levelColors: {
         '1': '#33A02C',
         '2A': '#1F78B4',
