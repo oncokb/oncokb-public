@@ -2,15 +2,16 @@
   <div class="data-access">
     <div class="header">
       <h3 class="title">OncoKB Data Access and API
-        <span style="font-size: 15px; color: grey;">(Data Version v{{data.version}})</span>
+        <span style="font-size: 15px; color: grey;">(Data Version v{{data.version}})<br/>
+          <a ng-href="{{swaggerUrl}}" target="_blank">Swagger URL: {{swaggerUrl}}</a></span>
       </h3>
       <div class="float-right top-download">
-        <a class="btn btn-sm download waves-effect waves-light" href="" download><i
+        <a class="btn btn-sm download waves-effect waves-light" ng-href="{{apiLink}}utils/allAnnotatedVariants.txt" download><i
           class="fa  fa-cloud-download"></i> All Variants</a>
-        <a class="btn btn-sm download waves-effect waves-light" href="" download><i
+        <a class="btn btn-sm download waves-effect waves-light" ng-href="{{apiLink}}utils/allActionableGenes.txt" download><i
           class="fa  fa-cloud-download"></i> All Actionable Genes</a>
       </div>
     </div>
-    <div class="swagger" swagger-ui url="'http://localhost:8080/oncokb/api/v1/v2/api-docs'" api-explorer="true"></div>
+    <div class="swagger" swagger-ui url="swaggerUrl" api-explorer="true"></div>
   </div>
 </div>

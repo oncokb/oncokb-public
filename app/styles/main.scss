@@ -73,15 +73,30 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
 /* ----------------------- */
 
 /*Overide Swagger-UI styles*/
-.swagger-ui .operation .content .headers .name, .swagger-ui .operation .content .parameters {
-  .name {
-    width: 15%;
+
+.swagger-ui {
+  .operation.get .content {
+    .parameters {
+      .name {
+        width: 15%;
+      }
+      .value {
+        width: 25%;
+      }
+      .desc {
+        width: 35%;
+      }
+    }
   }
-  .value {
-    width: 25%;
-  }
-  .desc {
-    width: 35%;
+  .operation.post .content {
+    .parameters {
+      .name {
+        width: 15%;
+      }
+      .value {
+        width: 20%;
+      }
+    }
   }
 }
 

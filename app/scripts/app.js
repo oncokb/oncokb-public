@@ -24,12 +24,16 @@ angular
     'swaggerUi'
   ])
   .constant('_', window._)
-  .constant('apiLink', 'legacy-api/')
+  .constant('marked', window.marked)
+  .constant('legacyLink', 'legacy-api/')
   .constant('publicApiLink', 'public-api/v1/')
-  // .constant('apiLink', 'http://localhost:8080/oncokb/legacy-api/')
+  .constant('apiLink', 'api/v1/')
+  // .constant('legacyLink', 'http://localhost:8080/oncokb/legacy-api/')
   // .constant('publicApiLink', 'http://localhost:8080/oncokb/public-api/v1/')
-  // .constant('apiLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/')
+  // .constant('apiLink', 'http://localhost:8080/oncokb/api/v1/')
+  // .constant('legacyLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/')
   // .constant('publicApiLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/public/v1/')
+  // .constant('apiLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/v1/')
   .config(function($routeProvider) {
     $routeProvider
       .when('/', {
@@ -85,7 +89,8 @@ angular
   });
 
 angular.module('oncokbStaticApp').run(
-  function($timeout, $rootScope, $location, _, api) {
+  function($timeout, $rootScope, $location, _, api, swaggerModules, markedSwagger,
+  apiLink) {
 
     $rootScope.meta = {
       levelsDesc: {
@@ -184,6 +189,8 @@ angular.module('oncokbStaticApp').run(
         $.extend(true, $rootScope.view.subNavItems, $rootScope.meta.view.subNavItems);
       }
     });
+
+    swaggerModules.add(swaggerModules.PARSE, markedSwagger);
   })
 ;
 

@@ -8,10 +8,7 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-  .controller('DataaccessCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('DataaccessCtrl', function ($scope, apiLink) {
+    $scope.apiLink = apiLink;
+    $scope.swaggerUrl = apiLink + 'v2/api-docs';
   });

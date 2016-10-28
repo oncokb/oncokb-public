@@ -9,14 +9,16 @@
     font-size: 14px;
   }
   .swagger-ui .operation .content label {
-    height: 30px;
-    line-height: 30px;
+    height: 20px;
   }
   .header {
     width: 100%;
     display: inline-table;
     .title {
       float: left;
+      a, a:hover {
+        color: grey;
+      }
     }
     .top-download {
       height: 30px;
@@ -27,6 +29,15 @@
   .swagger {
     .api-name {
       display: none;
+    }
+  }
+  input[type=text] {
+    margin-bottom: 0;
+    height: 20px;
+  }
+  .swagger-ui {
+    table td {
+      padding: 10px 5px 5px 5px;
     }
   }
 }
