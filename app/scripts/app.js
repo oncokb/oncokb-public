@@ -267,7 +267,7 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
     }else return b - a;
   },
   "oncogenic-html-asc": function(a, b) {
-    var levels = ['Unknown', 'Likely Neutral', 'Likely', 'Yes'];
+    var levels = ['Inconclusive', 'Likely Neutral', 'Likely', 'Yes'];
     var _a = levels.indexOf(a);
     var _b = levels.indexOf(b);
     if (_a === -1) {
@@ -279,7 +279,7 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
     return _a - _b;
   },
   "oncogenic-html-desc": function(a, b) {
-    var levels = ['Unknown', 'Likely Neutral', 'Likely', 'Yes'];
+    var levels = ['Inconclusive', 'Likely Neutral', 'Likely', 'Yes'];
     var _a = levels.indexOf(a);
     var _b = levels.indexOf(b);
     if (_a === -1) {
