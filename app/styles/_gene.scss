@@ -2,6 +2,9 @@
 
 .gene {
   margin-top: 50px;
+  .top {
+    font-size: 15px;
+  }
   .gene-background-info-wrapper {
     font-style: italic;
     .gene-more-info-icon, .gene-less-info-icon {
@@ -10,6 +13,15 @@
   }
   .gene-background-info-wrapper:hover, .gene-background-info-wrapper:focus {
     cursor: pointer;
+  }
+
+  .gene-addition {
+    margin-bottom: 20px;
+    font-size: 17px;
+    .isoform {
+      font-size: 15px;
+      color: grey;
+    }
   }
 
   .histogram-title {
@@ -78,15 +90,15 @@
       height: 24px;
     }
   }
-  .noteAlign{
-      max-width: 700px;
-      font-style: italic;
-      font-size:12px;
-      position:relative;
-      top:10px;
-      z-index: 100
+  .noteAlign {
+    max-width: 700px;
+    font-style: italic;
+    font-size: 12px;
+    position: relative;
+    top: 10px;
+    z-index: 100
   }
-  .iconSize{
-      font-size:10px;
+  .iconSize {
+    font-size: 10px;
   }
 }
