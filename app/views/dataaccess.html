@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="data-access">
+    <div class="header">
+      <h3 class="title">Data Download</h3>
+      <div style="margin-bottom: 10px">OncoKB annotations are fully available for download. Please review the <a href="#/terms"><u>usage terms</u></a> before downloading.</div>
+      <div class="top-download">
+        <a class="btn btn-sm download waves-effect waves-light" ng-href="{{apiLink}}utils/allAnnotatedVariants.txt"
+           download><i
+          class="fa  fa-cloud-download"></i> All Variants</a>
+        <a class="btn btn-sm download waves-effect waves-light" ng-href="{{apiLink}}utils/allActionableVariants.txt"
+           download><i
+          class="fa  fa-cloud-download"></i> Actionable Variants</a>
+      </div>
+      <h3 class="title">Data API</h3>
+    </div>
+    <div class="swagger" swagger-ui url="swaggerUrl" api-explorer="true"></div>
+  </div>
+</div>

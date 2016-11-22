@@ -9,10 +9,10 @@
   <!-- build:css(.) styles/vendor.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/datatables/media/css/jquery.dataTables.css" />
-  <link rel="stylesheet" href="bower_components/materialize/bin/materialize.css" />
-  <link rel="stylesheet" href="bower_components/Materialize/bin/materialize.css" />
+  <link rel="stylesheet" href="bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.css" />
   <link rel="stylesheet" href="bower_components/nprogress/nprogress.css" />
   <link rel="stylesheet" href="bower_components/qtip2/jquery.qtip.css" />
+  <link rel="stylesheet" href="bower_components/angular-swagger-ui/dist/css/swagger-ui.min.css" />
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -78,6 +78,7 @@
           <li ng-click="toggled=false" ng-class="{ active: isActive('/team')}"><a data-toggle="collapse" data-target=".in" href="#/team"><span>Team</span></a></li>
           <li ng-click="toggled=false" ng-class="{ active: isActive('/levels')}"><a data-toggle="collapse" data-target=".in" href="#/levels"><span>Levels of Evidence</span></a></li>
           <li ng-click="toggled=false" ng-class="{ active: isActive('/actionableGenes')}"><a data-toggle="collapse" data-target=".in" href="#/actionableGenes"><span>Actionable Genes</span></a></li>
+          <li ng-click="toggled=false" ng-class="{ active: isActive('/dataAccess')}"><a data-toggle="collapse" data-target=".in" href="#/dataAccess"><span>Data Access</span></a></li>
           <li ng-click="toggled=false" ng-class="{ active: isActive('/news')}"><a data-toggle="collapse" data-target=".in" href="#/news"><span>News</span></a></li>
         </ul>
         <div class="pull-right" ng-class="{hidden: toggled}">
@@ -127,8 +128,9 @@
           <a href="#/terms" class="">Usage Terms</a>
           <a href="mailto:team@oncokb.org" target="_top">Contact us</a>
           <a href="https://twitter.com/OncoKB" target="_blank">Twitter</a>
+          <a href="#/dataAccess">API</a>
         </div>
-          <p style="margin-top: -30px"><a href="#/news" class="">Last update: October 24, 2016</a></p>
+          <p style="margin-top: -30px"><a href="#/news" class="">Last update: {{data.lastUpdate}}</a></p>
       </div>
       <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12 mskcc-footer-logo0-wrapper">
         <a class="logo" href="http://mskcc.org" title="Memorial Sloan Kettering Cancer Center">
@@ -185,7 +187,6 @@
 <script src="bower_components/d3/d3.js"></script>
 <script src="bower_components/FileSaver/FileSaver.js"></script>
 <script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
-<script src="bower_components/Materialize/bin/materialize.js"></script>
 <script src="bower_components/nprogress/nprogress.js"></script>
 <script src="bower_components/plotlyjs/plotly.js"></script>
 <script src="bower_components/ev-emitter/ev-emitter.js"></script>
@@ -193,6 +194,8 @@
 <script src="bower_components/qtip2/jquery.qtip.js"></script>
 <script src="bower_components/qtip2/basic/jquery.qtip.js"></script>
 <script src="bower_components/string/dist/string.min.js"></script>
+<script src="bower_components/angular-swagger-ui/dist/scripts/swagger-ui.min.js"></script>
+<script src="bower_components/marked/lib/marked.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -216,6 +219,8 @@
 <script src="scripts/services/api.js"></script>
 <script src="scripts/controllers/license.js"></script>
 <script src="scripts/services/utils.js"></script>
+<script src="scripts/controllers/dataaccess.js"></script>
+<script src="scripts/services/markedSwagger.js"></script>
 <!-- endbuild -->
 </body>
 </html>
