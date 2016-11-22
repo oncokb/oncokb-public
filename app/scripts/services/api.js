@@ -8,7 +8,7 @@
  * Factory in the oncokbStaticApp.
  */
 angular.module('oncokbStaticApp')
-  .factory('api', function($http, apiLink, publicApiLink) {
+  .factory('api', function($http, legacyLink, publicApiLink) {
     // Service logic
     // ...
 
@@ -54,13 +54,13 @@ angular.module('oncokbStaticApp')
       },
       getPortalAlterationSampleCount: function(hugoSymbol) {
         if (hugoSymbol) {
-          return $http.get(apiLink + "portalAlterationSampleCount?hugoSymbol=" + hugoSymbol);
+          return $http.get(legacyLink + "portalAlterationSampleCount?hugoSymbol=" + hugoSymbol);
         } else {
-          return $http.get(apiLink + "portalAlterationSampleCount");
+          return $http.get(legacyLink + "portalAlterationSampleCount");
         }
       },
       getMutationMapperData: function(hugoSymbol) {
-        return $http.get(apiLink + "mutationMapperData?hugoSymbol=" + hugoSymbol);
+        return $http.get(legacyLink + "mutationMapperData?hugoSymbol=" + hugoSymbol);
       },
       getStudies: function(studies) {
         return $http.get("http://www.cbioportal.org/api-legacy/studies?study_ids=" + studies);
@@ -72,7 +72,7 @@ angular.module('oncokbStaticApp')
         if (_.isUndefined(level)) {
           return null;
         }
-        return $http.get(apiLink + "evidence.json?levels=" + level);
+        return $http.get(legacyLink + "evidence.json?levels=" + level);
       }
     };
   });

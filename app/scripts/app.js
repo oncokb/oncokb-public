@@ -20,15 +20,20 @@ angular
     'ui.router',
     'datatables',
     'datatables.bootstrap',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'swaggerUi'
   ])
   .constant('_', window._)
-  .constant('apiLink', 'legacy-api/')
+  .constant('marked', window.marked)
+  .constant('legacyLink', 'legacy-api/')
   .constant('publicApiLink', 'public-api/v1/')
-  // .constant('apiLink', 'http://localhost:8080/oncokb/legacy-api/')
+  .constant('apiLink', 'api/v1/')
+  // .constant('legacyLink', 'http://localhost:8080/oncokb/legacy-api/')
   // .constant('publicApiLink', 'http://localhost:8080/oncokb/public-api/v1/')
-  // .constant('apiLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/')
+  // .constant('apiLink', 'http://localhost:8080/oncokb/api/v1/')
+  // .constant('legacyLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/')
   // .constant('publicApiLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/public/v1/')
+  // .constant('apiLink', 'http://dashi.cbio.mskcc.org:38080/beta/api/v1/')
   .config(function($routeProvider) {
     $routeProvider
       .when('/', {
@@ -73,13 +78,19 @@ angular
         controller: 'NewsCtrl',
         controllerAs: 'news'
       })
+      .when('/dataAccess', {
+        templateUrl: 'views/dataaccess.html',
+        controller: 'DataaccessCtrl',
+        controllerAs: 'dataAccess'
+      })
       .otherwise({
         redirectTo: '/'
       });
   });
 
 angular.module('oncokbStaticApp').run(
-  function($timeout, $rootScope, $location, _, api) {
+  function($timeout, $rootScope, $location, _, api, swaggerModules, markedSwagger,
+  apiLink) {
 
     $rootScope.meta = {
       levelsDesc: {
@@ -121,6 +132,8 @@ angular.module('oncokbStaticApp').run(
       }, {content: '3800 Variants'}, {content: '333 Tumor Types'}]
     };
     $rootScope.data = {
+      lastUpdate: 'November 22, 2016',
+      version: '1.6',
       levelColors: {
         '1': '#33A02C',
         '2A': '#1F78B4',
@@ -177,6 +190,8 @@ angular.module('oncokbStaticApp').run(
         $.extend(true, $rootScope.view.subNavItems, $rootScope.meta.view.subNavItems);
       }
     });
+
+    swaggerModules.add(swaggerModules.PARSE, markedSwagger);
   })
 ;
 
@@ -201,7 +216,7 @@ angular.element(document).on('show.bs.tab', '.nav-tabs-responsive [data-toggle="
 
 jQuery.extend(jQuery.fn.dataTableExt.oSort, {
   "level-asc": function(a, b) {
-    var levels = ['3B', '3A', '2B', '2A', 'R1', '1'];
+    var levels = ['4', '3B', '3A', '2B', '2A', 'R1', '1'];
     var _a = levels.indexOf(a);
     var _b = levels.indexOf(b);
     if (_a === -1) {
@@ -213,7 +228,7 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
     return _a - _b;
   },
   "level-desc": function(a, b) {
-    var levels = ['3B', '3A', '2B', '2A','R1', '1'];
+    var levels = ['4', '3B', '3A', '2B', '2A','R1', '1'];
     var _a = levels.indexOf(a);
     var _b = levels.indexOf(b);
     if (_a === -1) {
@@ -249,7 +264,7 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
   },
   "level-html-pre": function (a) {
     var s = $(a).text();
-    var levels = ['3B', '3A', '2B', '2A', 'R1', '1'];
+    var levels = ['4', '3B', '3A', '2B', '2A', 'R1', '1'];
     return levels.indexOf(s);
   },
   "level-html-asc": function(a, b) {

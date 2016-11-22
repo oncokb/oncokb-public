@@ -15,7 +15,7 @@
     cursor: pointer;
   }
   .level-item:hover {
-    border-bottom-color: $dark-blue;
+    border-bottom-color: $primary-color;
   }
   .table tbody td:first-child {
     text-decoration: underline;
@@ -24,11 +24,11 @@
     cursor: pointer;
   }
   input[type=search] {
-    border-color: $dark-blue;
+    border-color: $primary-color;
     font-size: 14px;
   }
   input[type=search]:focus {
-    border-bottom-color: $orange;
-    box-shadow: 0 1px 0 0 $orange;
+    border-bottom-color: $secondary-color;
+    box-shadow: 0 1px 0 0 $secondary-color;
   }
 }

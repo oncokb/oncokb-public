@@ -94,7 +94,7 @@ angular.module('oncokbStaticApp')
             function fetchHistogramData() {
                 api.getPortalAlterationSampleCount()
                         .then(function (totalCounts) {
-                            api.getPortalAlterationSampleCount($scope.gene)
+                            api.getPortalAlterationSampleCount($scope.gene.hugoSymbol)
                                     .then(function (countsByGene) {
                                         $scope.altFreFlag = (countsByGene.data.length > 0 ? true : false);
                                         if ($scope.altFreFlag) {
@@ -119,7 +119,7 @@ angular.module('oncokbStaticApp')
                                             results.forEach(function (item) {
                                                 studies.push(item.study);
                                                 frequencies.push(item.frequency);
-                                                hoverInfo.push(item.frequency + "% of patients have annotated " + $scope.gene + " mutation");
+                                                hoverInfo.push(item.frequency + "% of patients have annotated " + $scope.gene.hugoSymbol + " mutation");
                                             });
 
                                             api.getStudies(studies.join())
@@ -383,7 +383,9 @@ angular.module('oncokbStaticApp')
                 $scope.$apply();
             }
 
-            $scope.gene = $routeParams.geneName;
+            $scope.gene = {
+              hugoSymbol: $routeParams.geneName
+            };
             $scope.meta = {};
             $scope.meta.clinicalTable = {};
             $scope.meta.biologicalTable = {};
@@ -486,15 +488,15 @@ angular.module('oncokbStaticApp')
                     }
                 }
             };
-            $rootScope.view.subNavItems = [{content: $scope.gene}];
+            $rootScope.view.subNavItems = [{content: $scope.gene.hugoSymbol}];
 
             api.getNumbers('gene', $routeParams.geneName)
                     .then(function (result) {
                         var content = result.data;
                         if (content) {
-                            $scope.gene = content.data.gene.hugoSymbol;
-                            $route.updateParams({geneName: $scope.gene});
-                            var subNavItems = [{content: $scope.gene}];
+                            $scope.gene = content.data.gene;
+                            $route.updateParams({geneName: $scope.gene.hugoSymbol});
+                            var subNavItems = [{content: $scope.gene.hugoSymbol}];
 
                             if (content.data.highestLevel) {
                                 $scope.meta.highestLevel = content.data.highestLevel.replace('LEVEL_', '');
@@ -513,7 +515,7 @@ angular.module('oncokbStaticApp')
                     });
 
             //clinical variants table and annotated variants table
-            api.getClinicalVariantByGene($scope.gene)
+            api.getClinicalVariantByGene($scope.gene.hugoSymbol)
                     .then(function (clinicalVariants) {
                         $scope.clinicalVariants = clinicalVariants.data.data;
                         uniqueClinicVariants = _.uniq(_.map($scope.clinicalVariants, function (item) {
@@ -522,7 +524,7 @@ angular.module('oncokbStaticApp')
                         $scope.clinicalVariantsCount = uniqueClinicVariants.length;
                     });
 
-            api.getBiologicalVariantByGene($scope.gene)
+            api.getBiologicalVariantByGene($scope.gene.hugoSymbol)
                     .then(function (biologicalVariants) {
                         // var numofOncogenicVariants = 0;
                         //
@@ -545,7 +547,7 @@ angular.module('oncokbStaticApp')
                         }));
                         if (uniqueAnnotatedVariants.length > 0) {
                             $rootScope.view.subNavItems = [
-                                {content: $scope.gene},
+                                {content: $scope.gene.hugoSymbol},
                                 {content: uniqueAnnotatedVariants.length + ' annotated variant' + (uniqueAnnotatedVariants.length > 1 ? 's' : '')}
                             ];
                         }
@@ -585,7 +587,7 @@ angular.module('oncokbStaticApp')
                                     }
                                     mutationData.push({
                                         cancerStudy: "fakeStudy",
-                                        geneSymbol: $scope.gene,
+                                        geneSymbol: $scope.gene.hugoSymbol,
                                         caseId: "fakeSample" + index,
                                         proteinChange: item.name,
                                         mutationType: mutationType,
@@ -610,7 +612,7 @@ angular.module('oncokbStaticApp')
                         $scope.annoatedVariantsCount = uniqueAnnotatedVariants.length;
                     });
 
-            api.getGeneSummary($scope.gene)
+            api.getGeneSummary($scope.gene.hugoSymbol)
                     .then(function (result) {
                         var content = result.data;
                         $scope.meta.geneSummary = content.data.length > 0 ? utils.insertSourceLink(content.data[0].description) : '';
@@ -619,7 +621,7 @@ angular.module('oncokbStaticApp')
                         $scope.meta.geneSummary = '';
                     });
 
-            api.getGeneBackground($scope.gene)
+            api.getGeneBackground($scope.gene.hugoSymbol)
                     .then(function (result) {
                         var content = result.data;
                         if (content.data.length > 0) {

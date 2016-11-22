@@ -6,10 +6,11 @@
 
 @media only screen and (min-width: $range-min-width) {
   .container {
-    width: 90%;
+    width: 95%;
+    max-width: 1400px;
   }
-  .about, .team, .actionable-genes, .license, .news {
-    width: 90%;
+  .about, .team, .actionable-genes, .license, .news, .data-access  {
+    width: 95%;
   }
   .level-page {
     width: 80%;
@@ -23,7 +24,7 @@
   .container {
     width: 100%;
   }
-  .about, .team, .level-page, .actionable-genes, .license, .news {
+  .about, .team, .level-page, .actionable-genes, .license, .news, .data-access {
     width: 100%;
   }
   .about .about-poster {
@@ -69,7 +70,7 @@
     display: block;
   }
   .navbar-brand {
-    padding: 15px 10px 15px 25px;
+    padding: 15px 10px 15px 15px;
   }
   .main-oncokb-header {
     margin-top: 10px;
@@ -95,6 +96,9 @@
   .footer {
     height: $footer-height;
   }
+  .navbar-brand {
+    padding: 15px 10px 15px 0;
+  }
 }
 
 @media (min-width: $range-min-width) {
@@ -108,22 +112,40 @@
   .footer {
     height: $footer-height;
   }
+  .navbar-brand {
+    padding: 15px 10px;
+  }
 }
 
-@media (max-width: 900px) and (min-width: 800px){
+@media (min-width: $range-min-width) {
+  .navbar-nav > li > a {
+    padding: 15px 12px;
+  }
+}
+
+@media (max-width: $range-max-sm-width) and (min-width: 870px) {
   .navbar-nav > li > a {
     padding: 15px 6px;
   }
 }
 
-@media (max-width: 800px) and (min-width: $range-min-sm-width) {
+@media (max-width: 839px) {
+  .mskcc-icon {
+    display: none;
+  }
+  .mskcc-logo {
+    display: none;
+  }
+}
+
+@media (max-width: 870px) and (min-width: $range-min-sm-width) {
   .navbar-nav > li > a {
     padding: 15px 0px;
   }
-  .navbar-nav > li > a > span{
+  .navbar-nav > li > a > span {
     padding: 0 3px;
   }
-  .navbar-nav > li:not(:last-child) > a > span{
+  .navbar-nav > li:not(:last-child) > a > span {
     border-right: 1px solid $darker-blue;
   }
 }
@@ -135,12 +157,9 @@
   .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
     margin-left: 0;
   }
-  .navbar-brand {
-    padding: 15px 10px;
-  }
 }
 
-@media (max-width: $range-max-width) and (min-width: $range-min-sm-width) {
+@media (max-width: $range-max-width) and (min-width: 840px) {
   .mskcc-icon {
     display: block;
   }
