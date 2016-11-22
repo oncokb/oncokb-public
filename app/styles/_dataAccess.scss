@@ -15,15 +15,14 @@
     width: 100%;
     display: inline-table;
     .title {
-      float: left;
+
+    }
+    .swagger {
+      font-size: 15px;
+      color: grey;
       a, a:hover {
         color: grey;
       }
-    }
-    .top-download {
-      height: 30px;
-      margin-top: 20px;
-      margin-bottom: 10px;
     }
   }
   .swagger {

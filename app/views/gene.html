@@ -2,29 +2,16 @@
 
     <div class="row top">
         <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[altFreFlag == true]">
-            <span class="gene-title">{{gene.hugoSymbol}}
-              <!--<span style="font-size: 16px">-->
-                <!--<span ng-if="gene.tsg || gene.oncogene">-->
-                  <!--<span ng-if="gene.oncogene">Oncogene</span>-->
-                  <!--<span ng-if="gene.tsg && gene.oncogene"></span>-->
-                  <!--<span ng-if="gene.tsg">Tumor Suppressor</span>-->
-                <!--</span>-->
-                <!--<span ng-if="gene.tsg || gene.oncogene">-->
-                  <!--<span ng-if="gene.curatedIsoform">{{gene.curatedIsoform}}</span>-->
-                  <!--<span ng-if="gene.curatedIsoform && gene.curatedRefSeq"></span>-->
-                  <!--<span ng-if="gene.curatedRefSeq">{{gene.curatedRefSeq}}</span>-->
-                <!--</span>-->
-              <!--</span>-->
-            </span><br/>
+            <span class="gene-title">{{gene.hugoSymbol}}</span><br/>
             <div class="gene-addition">
-              <div ng-if="status.hasLevel">
-                Highest level of evidence: <span ng-style="setColor(meta.highestLevel)"><b>Level {{meta.highestLevel}}</b></span>
-              </div>
               <div ng-if="gene.tsg || gene.oncogene">
-                Gene type:
-                <b><span ng-if="gene.oncogene">Oncogene</span>
+                <b>
+                <span ng-if="gene.oncogene">Oncogene</span>
                 <span ng-if="gene.tsg && gene.oncogene">, </span>
                 <span ng-if="gene.tsg">Tumor Suppressor</span></b>
+              </div>
+              <div ng-if="status.hasLevel">
+                <b>Highest level of evidence: <span ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</b></span>
               </div>
               <div ng-if="gene.tsg || gene.oncogene" class="isoform">
                 <span ng-if="gene.curatedIsoform">Isoform: {{gene.curatedIsoform}}</span>
