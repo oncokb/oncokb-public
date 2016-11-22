@@ -132,8 +132,8 @@ angular.module('oncokbStaticApp').run(
       }, {content: '3800 Variants'}, {content: '333 Tumor Types'}]
     };
     $rootScope.data = {
-      lastUpdate: 'October 24, 2016',
-      version: '1.5',
+      lastUpdate: 'November 22, 2016',
+      version: '1.6',
       levelColors: {
         '1': '#33A02C',
         '2A': '#1F78B4',
@@ -216,7 +216,7 @@ angular.element(document).on('show.bs.tab', '.nav-tabs-responsive [data-toggle="
 
 jQuery.extend(jQuery.fn.dataTableExt.oSort, {
   "level-asc": function(a, b) {
-    var levels = ['3B', '3A', '2B', '2A', 'R1', '1'];
+    var levels = ['4', '3B', '3A', '2B', '2A', 'R1', '1'];
     var _a = levels.indexOf(a);
     var _b = levels.indexOf(b);
     if (_a === -1) {
@@ -228,7 +228,7 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
     return _a - _b;
   },
   "level-desc": function(a, b) {
-    var levels = ['3B', '3A', '2B', '2A','R1', '1'];
+    var levels = ['4', '3B', '3A', '2B', '2A','R1', '1'];
     var _a = levels.indexOf(a);
     var _b = levels.indexOf(b);
     if (_a === -1) {
@@ -264,7 +264,7 @@ jQuery.extend(jQuery.fn.dataTableExt.oSort, {
   },
   "level-html-pre": function (a) {
     var s = $(a).text();
-    var levels = ['3B', '3A', '2B', '2A', 'R1', '1'];
+    var levels = ['4', '3B', '3A', '2B', '2A', 'R1', '1'];
     return levels.indexOf(s);
   },
   "level-html-asc": function(a, b) {
