@@ -7,21 +7,21 @@
  * # mainLevel
  */
 angular.module('oncokbStaticApp')
-  .directive('mainLevel', function () {
-    return {
-      templateUrl: 'views/mainLevel.html',
-      restrict: 'E',
-      scope: {
-        level: '=',
-        geneCount: '=',
-        color: '=',
-        desc: '=',
-        class: '='
-      },
-      link: function postLink(scope, element, attrs) {
-        scope.status = {
-          open: false
+    .directive('mainLevel', function() {
+        return {
+            templateUrl: 'views/mainLevel.html',
+            restrict: 'E',
+            scope: {
+                level: '=',
+                geneCount: '=',
+                color: '=',
+                desc: '=',
+                class: '='
+            },
+            link: function postLink(scope) {
+                scope.status = {
+                    open: false
+                };
+            }
         };
-      }
-    };
-  });
+    });

@@ -8,6 +8,6 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-  .controller('NewsCtrl', function ($scope, $rootScope, $location) {
-      
-  });
+    .controller('NewsCtrl', function() {
+
+    });
