@@ -1,4 +1,5 @@
-# oncokb-static
+# OncoKB Public Website
+Repository for OncoKB public website front-end module.
 
 This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
 version 0.11.1.
@@ -18,3 +19,22 @@ Run `grunt` for building and `grunt serve` for preview.
 ## Testing
 
 Running `grunt test` will run the unit tests with karma.
+
+##Coding Rules
+Because of the similarity of the project, we follow jhipster requirement.
+To ensure consistency throughout the source code, keep these rules in mind as you are working:
+
+* All files must follow the [.editorconfig file](http://editorconfig.org/) located at the root of the project.
+* Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
+* AngularJS files **must follow** [John Papa's Angular 1 style guide] (https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md).
+
+License
+--------------------
+
+OncoKB free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+A public instance of OncoKB (http://oncokb.org) is hosted and maintained by Memorial Sloan Kettering Cancer Center. It provides access to all curators in MSKCC knowledgebase team.
+
+If you are interested in coordinating the development of new features, please contact team@oncokb.org.

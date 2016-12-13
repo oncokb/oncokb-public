@@ -8,6 +8,6 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-  .controller('AboutCtrl', function () {
+    .controller('AboutCtrl', function() {
 
-  });
+    });
