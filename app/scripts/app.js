@@ -30,9 +30,9 @@ angular
     .constant('MutationMapper', window.MutationMapper)
     .constant('MutationCollection', window.MutationCollection)
     .constant('Plotly', window.Plotly)
-    .constant('legacyLink', 'http://localhost:8080/oncokb/legacy-api/')
-    .constant('publicApiLink', 'http://localhost:8080/oncokb/public-api/v1/')
-    .constant('apiLink', 'http://localhost:8080/oncokb/api/v1/')
+    .constant('legacyLink', 'legacy-api/')
+    .constant('publicApiLink', 'public-api/v1/')
+    .constant('apiLink', 'api/v1/')
     .config(function($routeProvider) {
         $routeProvider
             .when('/', {
