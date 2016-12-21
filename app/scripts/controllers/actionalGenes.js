@@ -151,7 +151,7 @@ angular.module('oncokbStaticApp')
             var treatments = [];
             if (_.isArray(metadata)) {
                 _.each(metadata, function(item) {
-                    treatments.push({
+                    var treatment = {
                         gene: item.gene.hugoSymbol || 'NA',
                         variants: item.alterations.map(function(alt) {
                             return alt.alteration;
@@ -167,10 +167,18 @@ angular.module('oncokbStaticApp')
                                 return drug.drugName;
                             }).sort().join('+');
                         }).sort().join(', '),
-                        citations: _.uniq(item.articles.map(function(art) {
-                            return art.pmid;
-                        })).sort()
-                    });
+                        articles: item.articles
+                    };
+
+                    treatment.pmids = _.map(_.uniq(_.filter(item.articles, function(article) {
+                        return !isNaN(article.pmid);
+                    })), function(item) {
+                        return item.pmid;
+                    }).sort();
+                    treatment.abstracts = _.uniq(_.filter(item.articles, function(article) {
+                        return _.isString(article.abstract);
+                    })).sort();
+                    treatments.push(treatment);
                 });
             }
             return treatments;

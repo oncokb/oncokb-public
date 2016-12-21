@@ -348,7 +348,7 @@ angular.module('oncokbStaticApp')
                 }
                 resetFlag = false;
                 $scope.clinicalVariantsCount = uniqueClinicVariants.length;
-                $scope.annoatedVariantsCount = uniqueAnnotatedVariants.length;
+                $scope.annotatedVariantsCount = uniqueAnnotatedVariants.length;
                 $scope.studyName = 'across 20 Disease Specific Studies';
             } else {
                 proteinChanges = _.uniq(proteinChanges);
@@ -378,7 +378,7 @@ angular.module('oncokbStaticApp')
                         tempCount++;
                     }
                 });
-                $scope.annoatedVariantsCount = tempCount;
+                $scope.annotatedVariantsCount = tempCount;
             }
             $scope.$apply();
         }
@@ -527,23 +527,17 @@ angular.module('oncokbStaticApp')
 
         api.getBiologicalVariantByGene($scope.gene.hugoSymbol)
             .then(function(biologicalVariants) {
-                // var numofOncogenicVariants = 0;
-                //
-                // _.each(biologicalVariants.data.data, function (item) {
-                //     if (item.oncogenic) {
-                //         if (item.oncogenic.toLowerCase().indexOf('oncogenic') !== -1) {
-                //             numofOncogenicVariants++;
-                //         }
-                //     }
-                // });
+                $scope.annotatedVariants = _.map(biologicalVariants.data.data, function(item) {
+                    item.abstracts = item.oncogenicAbstracts.concat(item.mutationEffectAbstracts);
+                    item.pmids = item.oncogenicPmids.concat(item.mutationEffectPmids);
+                    return item;
+                });
 
-                $scope.annoatedVariants = biologicalVariants.data.data;
-
-                uniqueAnnotatedVariants = _.uniq(_.map($scope.annoatedVariants, function(item) {
+                uniqueAnnotatedVariants = _.uniq(_.map($scope.annotatedVariants, function(item) {
                     return item.variant.name;
                 }));
 
-                var allMissenseVariants = _.uniq(_.map($scope.annoatedVariants, function(item) {
+                var allMissenseVariants = _.uniq(_.map($scope.annotatedVariants, function(item) {
                     return item.variant;
                 }));
                 if (uniqueAnnotatedVariants.length > 0) {
@@ -611,7 +605,7 @@ angular.module('oncokbStaticApp')
                         }
                     });
                 }
-                $scope.annoatedVariantsCount = uniqueAnnotatedVariants.length;
+                $scope.annotatedVariantsCount = uniqueAnnotatedVariants.length;
             });
 
         api.getGeneSummary($scope.gene.hugoSymbol)
@@ -688,5 +682,19 @@ angular.module('oncokbStaticApp')
                     $scope.meta.clinicalTable.DataTable.columns.adjust().draw();
                 }
             }, 160);
+        };
+
+        $scope.getNumOfRefsAnnotatedVariant = function(item) {
+            var numOfPmids = item.mutationEffectPmids.length +
+                item.oncogenicPmids.length +
+                item.mutationEffectAbstracts.length +
+                item.oncogenicAbstracts.length;
+            return numOfPmids + (numOfPmids > 1 ? ' references' : ' reference');
+        };
+
+        $scope.getNumOfRefsClinicalVariant = function(item) {
+            var numOfPmids = item.drugPmids.length +
+                item.drugAbstracts.length;
+            return numOfPmids + (numOfPmids > 1 ? ' references' : ' reference');
         };
     });
