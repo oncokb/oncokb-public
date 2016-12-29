@@ -30,11 +30,12 @@
             <td>{{x.drugs}}</td>
             <td>
               <span
-                ng-show="x.citations.length > 0"
+                ng-show="x.articles.length > 0"
                 class="gene-evidence-td-span"
                 qtip qtip-type="geneEvidence"
-                number="{{x.citations.join(',')}}">
-                {{x.citations.length + (x.citations.length + x.citations.length > 1 ? ' references' : ' reference')}}</span>
+                pmids="x.pmids"
+                abstracts="x.abstracts">
+                {{x.articles.length + (x.articles.length + x.articles.length > 1 ? ' references' : ' reference')}}</span>
             </td>
           </tr>
           </tbody>
@@ -75,11 +76,12 @@
             <td>{{x.drugs}}</td>
             <td>
               <span
-                ng-show="x.citations.length > 0"
+                ng-show="x.articles.length > 0"
                 class="gene-evidence-td-span"
                 qtip qtip-type="geneEvidence"
-                number="{{x.citations.join(',')}}">
-                {{x.citations.length + (x.citations.length + x.citations.length > 1 ? ' references' : ' reference')}}</span>
+                pmids="x.pmids"
+                abstracts="x.abstracts">
+                {{x.articles.length + (x.articles.length + x.articles.length > 1 ? ' references' : ' reference')}}</span>
             </td>
           </tr>
           </tbody>
@@ -122,11 +124,12 @@
             <td>{{x.drugs}}</td>
             <td>
               <span
-                ng-show="x.citations.length > 0"
+                ng-show="x.articles.length > 0"
                 class="gene-evidence-td-span"
                 qtip qtip-type="geneEvidence"
-                number="{{x.citations.join(',')}}">
-                {{x.citations.length + (x.citations.length + x.citations.length > 1 ? ' references' : ' reference')}}</span>
+                pmids="x.pmids"
+                abstracts="x.abstracts">
+                {{x.articles.length + (x.articles.length + x.articles.length > 1 ? ' references' : ' reference')}}</span>
             </td>
           </tr>
           </tbody>
@@ -169,11 +172,12 @@
             <td>{{x.drugs}}</td>
             <td>
               <span
-                ng-show="x.citations.length > 0"
+                ng-show="x.articles.length > 0"
                 class="gene-evidence-td-span"
                 qtip qtip-type="geneEvidence"
-                number="{{x.citations.join(',')}}">
-                {{x.citations.length + (x.citations.length + x.citations.length > 1 ? ' references' : ' reference')}}</span>
+                pmids="x.pmids"
+                abstracts="x.abstracts">
+                {{x.articles.length + (x.articles.length + x.articles.length > 1 ? ' references' : ' reference')}}</span>
             </td>
           </tr>
           </tbody>

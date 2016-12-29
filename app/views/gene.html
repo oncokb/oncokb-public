@@ -4,60 +4,62 @@
         <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[altFreFlag == true]">
             <span class="gene-title">{{gene.hugoSymbol}}</span><br/>
             <div class="gene-addition">
-              <div ng-if="gene.tsg || gene.oncogene">
-                <b>
-                <span ng-if="gene.oncogene">Oncogene</span>
-                <span ng-if="gene.tsg && gene.oncogene">, </span>
-                <span ng-if="gene.tsg">Tumor Suppressor</span></b>
-              </div>
-              <div ng-if="status.hasLevel">
-                <b>Highest level of evidence: <span ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</b></span>
-              </div>
-              <div ng-if="gene.tsg || gene.oncogene" class="isoform">
-                <span ng-if="gene.curatedIsoform">Isoform: {{gene.curatedIsoform}}</span>
-                <span ng-if="gene.curatedIsoform && gene.curatedRefSeq"> </span>
-                <span ng-if="gene.curatedRefSeq">RefSeq: {{gene.curatedRefSeq}}</span>
-              </div>
+                <div ng-if="gene.tsg || gene.oncogene">
+                    <b>
+                        <span ng-if="gene.oncogene">Oncogene</span>
+                        <span ng-if="gene.tsg && gene.oncogene">, </span>
+                        <span ng-if="gene.tsg">Tumor Suppressor</span></b>
+                </div>
+                <div ng-if="status.hasLevel">
+                    <b>Highest level of evidence: <span ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</b></span>
+                </div>
+                <div ng-if="gene.tsg || gene.oncogene" class="isoform">
+                    <span ng-if="gene.curatedIsoform">Isoform: {{gene.curatedIsoform}}</span>
+                    <span ng-if="gene.curatedIsoform && gene.curatedRefSeq"> </span>
+                    <span ng-if="gene.curatedRefSeq">RefSeq: {{gene.curatedRefSeq}}</span>
+                </div>
             </div>
 
             <p ng-if="status.hasSummary" ng-bind-html="meta.geneSummary"></p>
-          <p class="gene-background-info-wrapper">
+            <p class="gene-background-info-wrapper">
             <span class="gene-more-info"
                   ng-click="status.moreInfo = !status.moreInfo"
                   ng-if="status.hasBackground"
                   ng-class="{'hide': !!status.moreInfo}">
               See {{gene.hugoSymbol}} background<i class="fa fa-arrow-circle-o-down gene-more-info-icon"></i>
             </span>
-            <span class="gene-less-info"
-                  ng-class="{'hide': !status.moreInfo}"
-                  ng-click="status.moreInfo = !status.moreInfo">
+                <span class="gene-less-info"
+                      ng-class="{'hide': !status.moreInfo}"
+                      ng-click="status.moreInfo = !status.moreInfo">
               Hide {{gene.hugoSymbol}} background<i
-              class="fa fa-arrow-circle-o-up gene-less-info-icon"></i>
+                    class="fa fa-arrow-circle-o-up gene-less-info-icon"></i>
             </span>
-          </p>
-          <p ng-if="status.hasBackground" ng-class="{'hide': !status.moreInfo}" ng-bind-html="meta.geneBackground"></p>
+            </p>
+            <p ng-if="status.hasBackground" ng-class="{'hide': !status.moreInfo}"
+               ng-bind-html="meta.geneBackground"></p>
         </div>
 
         <div class="col-lg-6 col-md-6" ng-if="altFreFlag">
-          <div class="histogram-title">
-            Tumor Types with {{gene.hugoSymbol}} Mutations
-            <i class="fa fa-question-circle-o"
-               qtip
-               my="bottom center"
-               at="top center"
-               qtip-content="Currently, the mutation frequency does not take into account copy number changes or chromosomal translocations"></i>
-          </div>
-          <div id="histogramDiv"></div>
+            <div class="histogram-title">
+                Tumor Types with {{gene.hugoSymbol}} Mutations
+                <i class="fa fa-question-circle-o"
+                   qtip
+                   my="bottom center"
+                   at="top center"
+                   qtip-content="Currently, the mutation frequency does not take into account copy number changes or chromosomal translocations"></i>
+            </div>
+            <div id="histogramDiv"></div>
         </div>
     </div>
 
     <div class="row" ng-if="mutationMapperFlag">
         <div class="col-lg-12 col-md-12">
-            <div class="mutation-mapper-title"><span>Annotated Mutation Distribution {{studyName}} <span ng-if="studyName.indexOf('Disease Specific Studies') > 0 " ><i class="fa fa-question-circle-o"
-               qtip classes="qtip-light qtip-rounded"
-               my="bottom center"
-               at="top center"
-               qtip-content='<ul class="list-group">
+            <div class="mutation-mapper-title"><span>Annotated Mutation Distribution {{studyName}} <span
+                ng-if="studyName.indexOf('Disease Specific Studies') > 0 "><i class="fa fa-question-circle-o"
+                                                                              qtip classes="qtip-light qtip-rounded"
+                                                                              my="bottom center"
+                                                                              at="top center"
+                                                                              qtip-content='<ul class="list-group">
                 <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=blca_tcga_pub">Bladder Urothelial Carcinoma (TCGA, Nature 2014)</a></li>
                 <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=brca_tcga_pub2015">Breast Invasive Carcinoma (TCGA, Cell 2015)</a></li>
                 <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=cesc_tcga">Cervical Squamous Cell Carcinoma and Endocervical Adenocarcinoma (TCGA, Provisional)</a></li>
@@ -87,77 +89,94 @@
     <div class="row gene-table">
         <div class="col-lg-12 col-md-12">
 
-            <ul class="nav nav-tabs nav-tabs-responsive" ng-if="clinicalVariants.length > 0 || annoatedVariants.length > 0" role="tablist">
+            <ul class="nav nav-tabs nav-tabs-responsive"
+                ng-if="clinicalVariants.length > 0 || annotatedVariants.length > 0" role="tablist">
                 <li ng-class="{'in active': clinicalVariants.length > 0}" ng-if="clinicalVariants.length > 0"
                     ng-click="tabl2eClicked('clinical')"><a data-toggle="tab" href="#clinicalVariants">
-                  Clinically Relevant Variant{{clinicalVariantsCount>1?'s':''}} ({{clinicalVariantsCount}})</a></li>
-              <li role="presentation" class="next" ng-class="{'in active': clinicalVariants.length === 0 && annoatedVariants.length > 0}"
-                  ng-if="annoatedVariants.length > 0" ng-click="tableClicked('annotated')">
-                <a data-toggle="tab" href="#annotatedVariants">All Annotated Variant{{annoatedVariantsCount>1?'s':''}} ({{annoatedVariantsCount}})</a></li>
+                    Clinically Relevant Variant{{clinicalVariantsCount>1?'s':''}} ({{clinicalVariantsCount}})</a></li>
+                <li role="presentation" class="next"
+                    ng-class="{'in active': clinicalVariants.length === 0 && annotatedVariants.length > 0}"
+                    ng-if="annotatedVariants.length > 0" ng-click="tableClicked('annotated')">
+                    <a data-toggle="tab" href="#annotatedVariants">All Annotated
+                        Variant{{annotatedVariantsCount>1?'s':''}} ({{annotatedVariantsCount}})</a></li>
 
             </ul>
             <div class="tab-content">
-                <div id="clinicalVariants" class="tab-pane fade" ng-class="{'in active': clinicalVariants.length > 0}" ng-if="clinicalVariants.length > 0">
-                    <p class="noteAlign">If you notice any mistakes or missing variants / citations, please send an email to <a href="mailto:feedback@oncokb.org?subject=OncoKB Feedback">feedback@oncokb.org.</a></p>
+                <div id="clinicalVariants" class="tab-pane fade" ng-class="{'in active': clinicalVariants.length > 0}"
+                     ng-if="clinicalVariants.length > 0">
+                    <p class="noteAlign">If you notice any mistakes or missing variants / citations, please send an
+                        email to <a href="mailto:feedback@oncokb.org?subject=OncoKB Feedback">feedback@oncokb.org.</a>
+                    </p>
                     <table id="clinicalTable" class="row-border hover"
                            datatable="ng" dt-options="view.clinicalTableOptions"
                            dt-instance="meta.clinicalTable">
                         <thead>
-                            <tr>
-                                <th>Variant</th>
-                                <th>Cancer Type</th>
-                                <th>Drug(s)</th>
-                                <th>Level</th>
-                                <th>Citations</th>
-                            </tr>
+                        <tr>
+                            <th>Variant</th>
+                            <th>Cancer Type</th>
+                            <th>Drug(s)</th>
+                            <th>Level</th>
+                            <th>Citations</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="x in clinicalVariants">
-                                <td>{{ x.variant.name}}</td>
-                                <td>{{ x.cancerType.subtype || x.cancerType.cancerType}}</td>
-                                <td>
+                        <tr ng-repeat="x in clinicalVariants">
+                            <td>{{ x.variant.name}}</td>
+                            <td>{{ x.cancerType.subtype || x.cancerType.cancerType}}</td>
+                            <td>
                                     <span ng-repeat="drugItem in x.drug">
-                                        <span>{{drugItem}}<br ng-if="$index < x.drug.length - 1" /></span>
+                                        <span>{{drugItem}}<br ng-if="$index < x.drug.length - 1"/></span>
                                     </span>
-                                </td>
-                                <td><span qtip qtip-type="geneLevel" number="{{x.level}}">{{ x.level.toUpperCase()}}</span></td>
-                                <td>
-                                    <span class="referenceStyle" style="visibility: {{(x.drugPmids.length > 0 ? 'visible' : 'hidden')}} "
-                                          qtip qtip-type="geneEvidence" number="{{x.drugPmids.join()}}">{{x.drugPmids.length + (x.drugPmids.length > 1 ? ' references' : ' reference')}} </span>
+                            </td>
+                            <td><span qtip qtip-type="geneLevel" number="{{x.level}}">{{ x.level.toUpperCase()}}</span>
+                            </td>
+                            <td>
+                                <span class="referenceStyle"
+                                      qtip qtip-type="geneEvidence"
+                                      abstracts="x.drugAbstracts"
+                                      pmids="x.drugPmids">
+                                {{getNumOfRefsClinicalVariant(x)}} </span>
 
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
 
                 </div>
-                <div id="annotatedVariants" class="tab-pane fade" ng-class="{'in active': clinicalVariants.length === 0 && annoatedVariants.length > 0}"  ng-if="annoatedVariants.length > 0">
-                    <p class="noteAlign">If you notice any mistakes or missing variants / citations, please send an email to <a href="mailto:feedback@oncokb.org?subject=OncoKB Feedback">feedback@oncokb.org.</a></p>
+                <div id="annotatedVariants" class="tab-pane fade"
+                     ng-class="{'in active': clinicalVariants.length === 0 && annotatedVariants.length > 0}"
+                     ng-if="annotatedVariants.length > 0">
+                    <p class="noteAlign">If you notice any mistakes or missing variants / citations, please send an
+                        email to <a href="mailto:feedback@oncokb.org?subject=OncoKB Feedback">feedback@oncokb.org.</a>
+                    </p>
                     <table id="annotatedTable" class="row-border hover"
                            datatable="ng" dt-options="view.biologicalTableOptions"
                            dt-instance="meta.biologicalTable">
                         <thead>
-                            <tr>
-                                <th>Variant</th>
-                                <th>Oncogenic</th>
-                                <th>Mutation Effect</th>
-                                <th>Citations</th>
+                        <tr>
+                            <th>Variant</th>
+                            <th>Oncogenic</th>
+                            <th>Mutation Effect</th>
+                            <th>Citations</th>
 
-                            </tr>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="y in annoatedVariants">
-                                <td>{{ y.variant.name}}</td>
-                                <td>{{ displayOncogenic(y.oncogenic)}}</td>
-                                <td>{{ y.mutationEffect}}</td>
-                                <td>
-                                    <span
-                                        class="gene-evidence-td-span"
-                                        style="visibility: {{(y.mutationEffectPmids.concat(y.oncogenicPmids).length > 0 ? 'visible' : 'hidden')}} "
-                                        qtip qtip-type="geneEvidence" number="{{y.mutationEffectPmids.concat(y.oncogenicPmids).join()}}">{{y.mutationEffectPmids.concat(y.oncogenicPmids).length + (y.mutationEffectPmids.concat(y.oncogenicPmids).length > 1 ? ' references' : ' reference')}}</span>
-                                </td>
+                        <tr ng-repeat="y in annotatedVariants">
+                            <td>{{ y.variant.name}}</td>
+                            <td>{{ displayOncogenic(y.oncogenic)}}</td>
+                            <td>{{ y.mutationEffect}}</td>
+                            <td>
+                                <span
+                                    class="gene-evidence-td-span"
+                                    qtip qtip-type="geneEvidence"
+                                    abstracts="y.abstracts"
+                                    pmids="y.pmids"
+                                >
+                                {{getNumOfRefsAnnotatedVariant(y)}}</span>
+                            </td>
 
-                            </tr>
+                        </tr>
                         </tbody>
                     </table>
 
@@ -170,12 +189,12 @@
 <script type="text/template" id="custom_mutation_details_template">
     <div class='mutation-3d-container'></div>
     <div class='mutation-details-loader'>
-    <div class="col-xs-6"></div>
-    <div class="col-xs-1"><img src='{{loaderImage}}'/></div>
-    <div class="col-xs-5"></div>
+        <div class="col-xs-6"></div>
+        <div class="col-xs-1"><img src='{{loaderImage}}'/></div>
+        <div class="col-xs-5"></div>
     </div>
     <div class='mutation-details-content'>
-    {{mainContent}}
+        {{mainContent}}
     </div>
 </script>
 <!-- Customized Mutation Table components -->
