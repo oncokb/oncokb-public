@@ -689,12 +689,12 @@ angular.module('oncokbStaticApp')
                 item.oncogenicPmids.length +
                 item.mutationEffectAbstracts.length +
                 item.oncogenicAbstracts.length;
-            return numOfPmids + (numOfPmids > 1 ? ' references' : ' reference');
+            return numOfPmids === 0 ? '' : (numOfPmids + (numOfPmids > 1 ? ' references' : ' reference'));
         };
 
         $scope.getNumOfRefsClinicalVariant = function(item) {
             var numOfPmids = item.drugPmids.length +
                 item.drugAbstracts.length;
-            return numOfPmids + (numOfPmids > 1 ? ' references' : ' reference');
+            return numOfPmids === 0 ? '' : (numOfPmids + (numOfPmids > 1 ? ' references' : ' reference'));
         };
     });
