@@ -549,7 +549,7 @@ angular.module('oncokbStaticApp')
                 var mutationType = '';
                 if (allMissenseVariants.length > 0) {
                     _.each(allMissenseVariants, function(item, index) {
-                        if (item !== undefined) {
+                        if (item !== undefined && !(/fusion/i).test(item.alteration)) {
                             if (_.isNull(item.consequence)) {
                                 mutationType = 'other';
                             } else {
