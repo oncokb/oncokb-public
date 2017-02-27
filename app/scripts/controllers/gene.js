@@ -697,4 +697,8 @@ angular.module('oncokbStaticApp')
                 item.drugAbstracts.length;
             return numOfPmids === 0 ? '' : (numOfPmids + (numOfPmids > 1 ? ' references' : ' reference'));
         };
+
+        $scope.getCancerTypeName = function(cancerType) {
+            return utils.getCancerTypeNameFromOncoTreeType(cancerType);
+        };
     });
