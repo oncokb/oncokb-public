@@ -8,7 +8,7 @@
  * Factory in the oncokbStaticApp.
  */
 angular.module('oncokbStaticApp')
-    .factory('utils', function() {
+    .factory('utils', function(_) {
         return {
             insertSourceLink: function(str) {
                 if (typeof str === 'string' && str) {
@@ -42,6 +42,14 @@ angular.module('oncokbStaticApp')
                     str = '';
                 }
                 return str;
+            },
+            getCancerTypeNameFromOncoTreeType: function(oncoTreeType) {
+                return _.isObject(oncoTreeType) ?
+                    (oncoTreeType.name ||
+                    (oncoTreeType.mainType &&
+                    oncoTreeType.mainType.name ?
+                        oncoTreeType.mainType.name : 'NA') ||
+                    'NA') : 'NA';
             }
         };
     });

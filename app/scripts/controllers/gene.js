@@ -509,7 +509,12 @@ angular.module('oncokbStaticApp')
                     fetchHistogramData();
                 } else {
                     console.log('no such gene existed ');
-                    $location.path('/genes');
+                    if (/[a-z]/.test($routeParams.geneName)) {
+                        $location.path('/gene/' +
+                            $routeParams.geneName.toUpperCase());
+                    }else{
+                        $location.path('/genes');
+                    }
                 }
             }, function(error) {
                 console.log('oppos error happened ', error);
@@ -611,7 +616,12 @@ angular.module('oncokbStaticApp')
         api.getGeneSummary($scope.gene.hugoSymbol)
             .then(function(result) {
                 var content = result.data;
-                $scope.meta.geneSummary = content.data.length > 0 ? utils.insertSourceLink(content.data[0].description) : '';
+                if (content && content.data) {
+                    $scope.meta.geneSummary =
+                        utils.insertSourceLink(content.data[0].description);
+                } else {
+                    $scope.meta.geneSummary = '';
+                }
                 $scope.status.hasSummary = true;
             }, function() {
                 $scope.meta.geneSummary = '';
@@ -620,7 +630,7 @@ angular.module('oncokbStaticApp')
         api.getGeneBackground($scope.gene.hugoSymbol)
             .then(function(result) {
                 var content = result.data;
-                if (content.data.length > 0) {
+                if (content && content.data) {
                     $scope.meta.geneBackground = utils.insertSourceLink(content.data[0].description);
                     $scope.status.hasBackground = true;
                 } else {
@@ -696,5 +706,9 @@ angular.module('oncokbStaticApp')
             var numOfPmids = item.drugPmids.length +
                 item.drugAbstracts.length;
             return numOfPmids === 0 ? '' : (numOfPmids + (numOfPmids > 1 ? ' references' : ' reference'));
+        };
+
+        $scope.getCancerTypeName = function(cancerType) {
+            return utils.getCancerTypeNameFromOncoTreeType(cancerType);
         };
     });

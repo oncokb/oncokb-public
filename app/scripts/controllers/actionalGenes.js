@@ -8,6 +8,7 @@ angular.module('oncokbStaticApp')
     .controller('actionableGenesCtrl', function($scope, $location,
                                                 DTColumnDefBuilder,
                                                 _,
+                                                utils,
                                                 api) {
         $scope.data = {
             levels: {
@@ -159,9 +160,7 @@ angular.module('oncokbStaticApp')
                         alterations: item.alterations.map(function(alt) {
                             return alt.alteration;
                         }).sort(),
-                        disease: _.isObject(item.oncoTreeType) ?
-                            (item.oncoTreeType.subtype ||
-                            item.oncoTreeType.cancerType || 'NA') : 'NA',
+                        disease: utils.getCancerTypeNameFromOncoTreeType(item.oncoTreeType),
                         drugs: item.treatments.map(function(treatment) {
                             return treatment.drugs.map(function(drug) {
                                 return drug.drugName;
