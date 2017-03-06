@@ -5,10 +5,11 @@
             <span class="gene-title">{{gene.hugoSymbol}}</span><br/>
             <div class="gene-addition">
                 <div ng-if="gene.tsg || gene.oncogene">
-                    <b>
+                    <b style="display: inline-flex">
                         <span ng-if="gene.oncogene">Oncogene</span>
-                        <span ng-if="gene.tsg && gene.oncogene">, </span>
-                        <span ng-if="gene.tsg">Tumor Suppressor</span></b>
+                        <span ng-if="gene.tsg && gene.oncogene" style="margin-right: 5px">,</span>
+                        <span ng-if="gene.tsg">Tumor Suppressor</span>
+                    </b>
                 </div>
                 <div ng-if="status.hasLevel">
                     <b>Highest level of evidence: <span ng-style="setColor(meta.highestLevel)">Level {{meta.highestLevel}}</b></span>
