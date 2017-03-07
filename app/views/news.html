@@ -20,9 +20,28 @@
         <h3>March 07, 2017</h3>
         <div>
             <ul>
-                <li>Added "Oncogene" or "Tumor Suppressor" annotation to many genes.</li>
-                <li>Updated information about Actionable Genes.</li>
+                <li>Expanded selection of genes with Oncogene or Tumor Suppressor annotation.</li>
                 <li>Level 4 actionable genes are now accessible from the home page.</li>
+                <li>Updated Actionable Genes
+                    <div class="row">
+                        <table class="table">
+                            <thead>
+                            <th class="col-lg-2 col-sm-2 col-xs-3">Level</th>
+                            <th class="col-lg-10 col-sm-10 col-xs-9">Update</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="(key, value) in data.updatedActionableGenes['03072017']">
+                                <td>{{key}}</td>
+                                <td>
+                                    <ul>
+                                        <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
             </ul>
         </div>
         <h3>December 29, 2016</h3>
