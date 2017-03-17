@@ -66,8 +66,8 @@ angular.module('oncokbStaticApp')
 
         api.getNumbers('genes')
             .then(function(content) {
-                if (content && content.data && _.isArray(content.data.data)) {
-                    $scope.meta.genes = _.map(content.data.data, function(item) {
+                if (content && _.isArray(content.data)) {
+                    $scope.meta.genes = _.map(content.data, function(item) {
                         var _hLevel = _.isString(item.highestLevel) ? (item.highestLevel.replace('LEVEL_', '')).replace('NULL', '') : undefined;
                         return {
                             gene: item.gene.hugoSymbol,
