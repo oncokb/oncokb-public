@@ -147,14 +147,12 @@ angular.module('oncokbStaticApp').run(
 
         api.getNumbers('main')
             .success(function(result) {
-                if (result.meta.code === 200) {
-                    $rootScope.meta.numbers.main = {
-                        gene: result.gene,
-                        alteration: result.alteration,
-                        tumorType: result.tumorType,
-                        drug: result.drug,
-                    };
-                }
+                $rootScope.meta.numbers.main = {
+                    gene: result.gene,
+                    alteration: result.alteration,
+                    tumorType: result.tumorType,
+                    drug: result.drug,
+                };
             });
 
         api.getNumbers('levels')
