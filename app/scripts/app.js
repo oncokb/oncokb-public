@@ -149,19 +149,19 @@ angular.module('oncokbStaticApp').run(
             .success(function(result) {
                 if (result.meta.code === 200) {
                     $rootScope.meta.numbers.main = {
-                        gene: result.data.gene,
-                        alteration: result.data.alteration,
-                        tumorType: result.data.tumorType,
-                        drug: result.data.drug,
+                        gene: result.gene,
+                        alteration: result.alteration,
+                        tumorType: result.tumorType,
+                        drug: result.drug,
                     };
                 }
             });
 
         api.getNumbers('levels')
             .success(function(result) {
-                if (result.meta.code === 200 && _.isArray(result.data)) {
+                if (_.isArray(result)) {
                     var levels = {};
-                    _.each(result.data, function(item) {
+                    _.each(result, function(item) {
                         if (item.level) {
                             var match = item.level.match(/LEVEL_(R?\d)+/);
                             if (_.isArray(match) && match.length > 1) {

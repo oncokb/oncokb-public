@@ -433,10 +433,10 @@ angular.module('oncokbStaticApp')
                     renderer: function(api, rowIdx, columns) {
                         var data = $.map(columns, function(col) {
                             return col.hidden ?
-                            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                            '<td>' + col.title + ':</td> ' +
-                            '<td>' + col.data + '</td>' +
-                            '</tr>' :
+                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                '<td>' + col.title + ':</td> ' +
+                                '<td>' + col.data + '</td>' +
+                                '</tr>' :
                                 '';
                         }).join('');
 
@@ -475,10 +475,10 @@ angular.module('oncokbStaticApp')
                     renderer: function(api, rowIdx, columns) {
                         var data = $.map(columns, function(col) {
                             return col.hidden ?
-                            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                            '<td>' + col.title + ':</td> ' +
-                            '<td>' + col.data + '</td>' +
-                            '</tr>' :
+                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                '<td>' + col.title + ':</td> ' +
+                                '<td>' + col.data + '</td>' +
+                                '</tr>' :
                                 '';
                         }).join('');
 
@@ -495,12 +495,12 @@ angular.module('oncokbStaticApp')
             .then(function(result) {
                 var content = result.data;
                 if (content) {
-                    $scope.gene = content.data.gene;
+                    $scope.gene = content.gene;
                     $route.updateParams({geneName: $scope.gene.hugoSymbol});
                     var subNavItems = [{content: $scope.gene.hugoSymbol}];
 
-                    if (content.data.highestLevel) {
-                        $scope.meta.highestLevel = content.data.highestLevel.replace('LEVEL_', '');
+                    if (content.highestLevel) {
+                        $scope.meta.highestLevel = content.highestLevel.replace('LEVEL_', '');
                         $scope.status.hasLevel = true;
                     }
 
@@ -512,7 +512,7 @@ angular.module('oncokbStaticApp')
                     if (/[a-z]/.test($routeParams.geneName)) {
                         $location.path('/gene/' +
                             $routeParams.geneName.toUpperCase());
-                    }else{
+                    } else {
                         $location.path('/genes');
                     }
                 }
@@ -523,7 +523,7 @@ angular.module('oncokbStaticApp')
         // clinical variants table and annotated variants table
         api.getClinicalVariantByGene($scope.gene.hugoSymbol)
             .then(function(clinicalVariants) {
-                $scope.clinicalVariants = clinicalVariants.data.data;
+                $scope.clinicalVariants = clinicalVariants.data;
                 uniqueClinicVariants = _.uniq(_.map($scope.clinicalVariants, function(item) {
                     return item.variant.name;
                 }));
@@ -532,7 +532,7 @@ angular.module('oncokbStaticApp')
 
         api.getBiologicalVariantByGene($scope.gene.hugoSymbol)
             .then(function(biologicalVariants) {
-                $scope.annotatedVariants = _.map(biologicalVariants.data.data, function(item) {
+                $scope.annotatedVariants = _.map(biologicalVariants.data, function(item) {
                     item.abstracts = item.oncogenicAbstracts.concat(item.mutationEffectAbstracts);
                     item.pmids = item.oncogenicPmids.concat(item.mutationEffectPmids);
                     return item;
@@ -616,9 +616,9 @@ angular.module('oncokbStaticApp')
         api.getGeneSummary($scope.gene.hugoSymbol)
             .then(function(result) {
                 var content = result.data;
-                if (content && content.data) {
+                if (_.isArray(content)) {
                     $scope.meta.geneSummary =
-                        utils.insertSourceLink(content.data[0].description);
+                        utils.insertSourceLink(content[0].description);
                 } else {
                     $scope.meta.geneSummary = '';
                 }
@@ -630,8 +630,8 @@ angular.module('oncokbStaticApp')
         api.getGeneBackground($scope.gene.hugoSymbol)
             .then(function(result) {
                 var content = result.data;
-                if (content && content.data) {
-                    $scope.meta.geneBackground = utils.insertSourceLink(content.data[0].description);
+                if (_.isArray(content)) {
+                    $scope.meta.geneBackground = utils.insertSourceLink(content[0].description);
                     $scope.status.hasBackground = true;
                 } else {
                     $scope.meta.geneBackground = '';
