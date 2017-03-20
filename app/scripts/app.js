@@ -31,7 +31,7 @@ angular
     .constant('MutationCollection', window.MutationCollection)
     .constant('Plotly', window.Plotly)
     .constant('legacyLink', 'legacy-api/')
-    .constant('publicApiLink', 'public-api/v1/')
+    .constant('privateApiLink', 'api/private/')
     .constant('apiLink', 'api/v1/')
     .config(function($routeProvider) {
         $routeProvider
