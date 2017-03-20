@@ -8,18 +8,18 @@
  * Factory in the oncokbStaticApp.
  */
 angular.module('oncokbStaticApp')
-    .factory('api', function($http, legacyLink, publicApiLink, _) {
+    .factory('api', function($http, legacyLink, privateApiLink, apiLink, _) {
         return {
             getNumbers: function(type, hugoSymbol) {
                 if (type === 'main') {
-                    return $http.get(publicApiLink + 'numbers/main/');
+                    return $http.get(privateApiLink + 'utils/numbers/main/');
                 } else if (type === 'genes') {
-                    return $http.get(publicApiLink + 'numbers/genes/');
+                    return $http.get(privateApiLink + 'utils/numbers/genes/');
                 } else if (type === 'gene') {
-                    return $http.get(publicApiLink + 'numbers/gene/' +
+                    return $http.get(privateApiLink + 'utils/numbers/gene/' +
                         hugoSymbol);
                 } else if (type === 'levels') {
-                    return $http.get(publicApiLink + 'numbers/levels/');
+                    return $http.get(privateApiLink + 'utils/numbers/levels/');
                 }
                 return null;
             },
@@ -27,28 +27,27 @@ angular.module('oncokbStaticApp')
                 if (!_.isBoolean(exactMatch)) {
                     exactMatch = false;
                 }
-                return $http.get(publicApiLink + 'search/gene?query=' + query +
-                    '&exactMatch=' + exactMatch.toString());
+                return $http.get(apiLink + 'genes/lookup?query=' + query);
             },
             getGenes: function() {
-                return $http.get(publicApiLink + 'genes/');
+                return $http.get(apiLink + 'genes/');
             },
             getGeneSummary: function(hugoSymbol) {
-                return $http.get(publicApiLink +
-                    'search/evidences?hugoSymbol=' + hugoSymbol +
-                    '&type=GENE_SUMMARY');
+                return $http.get(apiLink +
+                    'evidences/lookup?hugoSymbol=' + hugoSymbol +
+                    '&evidenceType=GENE_SUMMARY');
             },
             getGeneBackground: function(hugoSymbol) {
-                return $http.get(publicApiLink +
-                    'search/evidences?hugoSymbol=' + hugoSymbol +
-                    '&type=GENE_BACKGROUND');
+                return $http.get(apiLink +
+                    'evidences/lookup?hugoSymbol=' + hugoSymbol +
+                    '&evidenceType=GENE_BACKGROUND');
             },
             getClinicalVariantByGene: function(hugoSymbol) {
-                return $http.get(publicApiLink +
+                return $http.get(privateApiLink +
                     'search/variants/clinical?hugoSymbol=' + hugoSymbol);
             },
             getBiologicalVariantByGene: function(hugoSymbol) {
-                return $http.get(publicApiLink +
+                return $http.get(privateApiLink +
                     'search/variants/biological?hugoSymbol=' + hugoSymbol);
             },
             getPortalAlterationSampleCount: function(hugoSymbol) {
