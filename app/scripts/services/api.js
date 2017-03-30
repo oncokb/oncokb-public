@@ -35,12 +35,12 @@ angular.module('oncokbStaticApp')
             getGeneSummary: function(hugoSymbol) {
                 return $http.get(apiLink +
                     'evidences/lookup?hugoSymbol=' + hugoSymbol +
-                    '&evidenceType=GENE_SUMMARY');
+                    '&evidenceTypes=GENE_SUMMARY');
             },
             getGeneBackground: function(hugoSymbol) {
                 return $http.get(apiLink +
                     'evidences/lookup?hugoSymbol=' + hugoSymbol +
-                    '&evidenceType=GENE_BACKGROUND');
+                    '&evidenceTypes=GENE_BACKGROUND');
             },
             getClinicalVariantByGene: function(hugoSymbol) {
                 return $http.get(privateApiLink +
