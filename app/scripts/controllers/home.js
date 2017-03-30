@@ -25,7 +25,7 @@ angular.module('oncokbStaticApp')
                         var content = [];
                         if (isNaN(query)) {
                             query = query.toString().toLowerCase();
-                            content = result.data.data.sort(function(a, b) {
+                            content = result.data.sort(function(a, b) {
                                 var _a = a.hugoSymbol.toString().toLowerCase();
                                 var _b = b.hugoSymbol.toString().toLowerCase();
 
@@ -38,7 +38,7 @@ angular.module('oncokbStaticApp')
                                 return _a.indexOf(query) - _b.indexOf(query);
                             });
                         } else {
-                            content = result.data.data.sort();
+                            content = result.data.sort();
                         }
 
                         return content.slice(0, 10);

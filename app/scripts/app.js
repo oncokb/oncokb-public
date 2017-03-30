@@ -31,7 +31,7 @@ angular
     .constant('MutationCollection', window.MutationCollection)
     .constant('Plotly', window.Plotly)
     .constant('legacyLink', 'legacy-api/')
-    .constant('publicApiLink', 'public-api/v1/')
+    .constant('privateApiLink', 'api/private/')
     .constant('apiLink', 'api/v1/')
     .config(function($routeProvider) {
         $routeProvider
@@ -147,21 +147,19 @@ angular.module('oncokbStaticApp').run(
 
         api.getNumbers('main')
             .success(function(result) {
-                if (result.meta.code === 200) {
-                    $rootScope.meta.numbers.main = {
-                        gene: result.data.gene,
-                        alteration: result.data.alteration,
-                        tumorType: result.data.tumorType,
-                        drug: result.data.drug,
-                    };
-                }
+                $rootScope.meta.numbers.main = {
+                    gene: result.gene,
+                    alteration: result.alteration,
+                    tumorType: result.tumorType,
+                    drug: result.drug,
+                };
             });
 
         api.getNumbers('levels')
             .success(function(result) {
-                if (result.meta.code === 200 && _.isArray(result.data)) {
+                if (_.isArray(result)) {
                     var levels = {};
-                    _.each(result.data, function(item) {
+                    _.each(result, function(item) {
                         if (item.level) {
                             var match = item.level.match(/LEVEL_(R?\d)+/);
                             if (_.isArray(match) && match.length > 1) {
