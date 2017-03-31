@@ -58,7 +58,7 @@
 <script type="text/ng-template" id="mainSearchTemplate.html">
     <div class="main-search-template">
         <div><span ng-bind-html="match.model.hugoSymbol | uibTypeaheadHighlight:query"></span> (Entrez Gene: <span ng-bind-html="match.model.entrezGeneId | uibTypeaheadHighlight:query"></span>)</div>
-        <div ng-if="match.model.geneAliases" class="alias">
+        <div ng-if="match.model.geneAliases && match.model.geneAliases.length > 0" class="alias">
             <span>Also known as </span>
             <span ng-repeat="alias in match.model.geneAliases"><span ng-bind-html="alias | uibTypeaheadHighlight:query"></span><span ng-if="!$last">,</span>
               </span>

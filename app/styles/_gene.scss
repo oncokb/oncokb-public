@@ -22,6 +22,12 @@
       font-size: 15px;
       color: grey;
     }
+      .alias {
+          font-size: 15px;
+          .comma {
+              margin-right: 3px;
+          }
+      }
   }
 
   .histogram-title {
