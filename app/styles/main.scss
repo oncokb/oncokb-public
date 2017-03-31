@@ -193,6 +193,17 @@ a:hover, a:focus {
   }
 }
 
+.main-search-template {
+    margin: 3px 5px;
+    padding: 3px 5px;
+    .alias {
+        font-size: 13px;
+        color: grey;
+        font-style: italic;
+        font-weight: 200;
+    }
+}
+
 .referenceStyle {
   white-space: nowrap;
 }

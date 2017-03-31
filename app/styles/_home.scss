@@ -68,10 +68,10 @@
     .logo-wrapper {
         margin: 0 auto;
         @media screen and (max-width: $range-max-xm-width) {
-          width: 200px;
-          img {
             width: 200px;
-          }
+            img {
+                width: 200px;
+            }
         }
         @media screen and (max-width: $range-max-sm-width) and (min-width: $range-min-sm-width) {
             width: 320px;
@@ -127,6 +127,15 @@
             border-top-left-radius: 0;
             border-top-right-radius: 0;
             text-align: left;
+
+            li.active {
+                color: white;
+                background-color: $dark-blue;
+                cursor: pointer;
+                .alias {
+                    color: white;
+                }
+            }
 
         }
         ::-webkit-input-placeholder {

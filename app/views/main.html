@@ -46,6 +46,7 @@
           <div class="col-lg-3 col-md-3 col-sm-6 col-md-6">
             <div class="item"><span class="number">{{content.main.drug}}</span><br/><span
               class="category">Drugs</span></div>
+
           </div>
         </div>
         <div class="col-lg-2 col-md-2"></div>
@@ -59,7 +60,9 @@
             <input type="search" class="form-control" placeholder="Search Gene"
                    ng-model="content.selectedGene"
                    typeahead-on-select="searchConfirmed($event)"
-                   uib-typeahead="gene as gene.hugoSymbol for gene in searchKeyUp($viewValue)">
+                   uib-typeahead="gene.hugoSymbol as gene for gene in searchKeyUp($viewValue)"
+                   typeahead-template-url="mainSearchTemplate.html"
+            >
             <span class="input-group-btn">
               <button class="btn btn-default" type="button"
                       ng-click="searchConfirmed($event)"
