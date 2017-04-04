@@ -56,20 +56,12 @@
       <div class="row">
         <div class="col-lg-2 col-md-2"></div>
         <div class="col-lg-8 col-md-8">
-          <div class="input-group">
             <input type="search" class="form-control" placeholder="Search Gene"
                    ng-model="content.selectedGene"
                    typeahead-on-select="searchConfirmed($event)"
                    uib-typeahead="gene.hugoSymbol as gene for gene in searchKeyUp($viewValue)"
                    typeahead-template-url="mainSearchTemplate.html"
             >
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button"
-                      ng-click="searchConfirmed($event)"
-                      ng-disabled="!content.selectedGene.hasOwnProperty('hugoSymbol')"><i class="fa fa-search"></i></button>
-            </span>
-          </div>
-          <!--<input type="search" placeholder="Search Gene"/>-->
         </div>
         <div class="col-lg-2 col-md-2"></div>
       </div>
