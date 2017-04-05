@@ -176,6 +176,7 @@ a:hover, a:focus {
     border: 0;
     padding: 5px;
     line-height: 16px;
+    display: inline-block;
     a {
       color: $primary-color;
     }
@@ -191,6 +192,18 @@ a:hover, a:focus {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
   }
+}
+
+.main-search-template {
+    margin: 3px 5px;
+    padding: 3px 5px;
+    .alias {
+        font-size: 13px;
+        color: grey;
+        font-style: italic;
+        font-weight: 200;
+        line-height: 15px;
+    }
 }
 
 .referenceStyle {

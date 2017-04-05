@@ -17,6 +17,34 @@
                 data-toggle="modal" data-target="#myModal" href="">low-volume email list</a></b> for updates.
             </p>
         </div>
+        <h3>April 05, 2017</h3>
+        <div>
+            <ul>
+                <li>Curation of 58 additional genes.</li>
+                <li>Gene alias information added to gene page and search box.</li>
+                <li>API Envelope structure removed.</li>
+                <li>Updated Actionable Genes
+                    <div class="row">
+                        <table class="table">
+                            <thead>
+                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
+                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="(key, value) in data.updatedActionableGenes['04052017']">
+                                <td>{{key}}</td>
+                                <td>
+                                    <ul>
+                                        <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+            </ul>
+        </div>
         <h3>March 07, 2017</h3>
         <div>
             <ul>
@@ -26,8 +54,8 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-2 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-10 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
+                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['03072017']">
