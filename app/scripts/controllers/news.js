@@ -37,6 +37,32 @@ angular.module('oncokbStaticApp')
                     'PIK3CA - Oncogenic Mutations - Breast Cancer - Alpelisib+Fulvestrant (<b>moved to Level 3A</b>)',
                     'IDH1 - R132 variants - Chondrosarcoma - AG-120 (<b>moved from Level 3A to 4</b>)'
                 ]
+            },
+            '04052017': {
+                'Level 1': [
+                    'BRCA1/2 – Oncogenic Mutations – Ovarian Cancer – Niraparib FDA approval added',
+                    'BRCA1/2 – Oncogenic Mutations – Ovarian Cancer - Rucaparib (new publication added)',
+                    'Updated variants for KIT - Gastrointestinal Stromal Tumor - Imatinib, Sunitinib, Regorafenib'
+                ],
+                'Level 2': [
+                    'Updated variants for KIT - Gastrointestinal Stromal Tumor – Nilotinib, Dasatinib, Sorafenib',
+                    'Updated variants for KIT – Thymic cancer – Sunitinib, Sorafenib'
+                ],
+                'Level 3': [
+                    'BRAF V600 – Colorectal Cancer - Encorafenib + Binimetinib + Cetuximab (new association)',
+                    'FGFR1 – Amplification – Lung Squamous Cell Carcinoma – AZD4547, Debio1347 (new abstract added)',
+                    'FGFR2 - Fusions – Cholangiocarcinoma – BGJ398, Debio1347 (new abstract added)',
+                    'Updated variants for FGFR3 – Bladder cancer - JNJ-42756493, Debio1347',
+                    'PIK3CA – Oncogenic mutations – Breast cancer – Updated treatments and evidence'
+                ],
+                'Level 4': [
+                    'BRAF V600 – Colorectal Cancer - Radiation + Trametinib + Fluorouracil (new association)',
+                    'Updated variants for FGFR3 – Breast cancer - Debio1347',
+                    'KRAS – Wildtype – Updated treatments and evidence',
+                    'KRAS – Oncogenic mtuations - Updated treatments and evidence',
+                    'PIK3CA – Oncogenic mutations – Breast cancer – Updated treatments and evidence',
+                    'PTEN – Oncogenic mutations – Breast cancer – Updated treatments and evidence'
+                ]
             }
         };
     });
