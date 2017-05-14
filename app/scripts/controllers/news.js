@@ -41,7 +41,7 @@ angular.module('oncokbStaticApp')
             '04052017': {
                 'Level 1': [
                     'BRCA1/2 – Oncogenic Mutations – Ovarian Cancer – Niraparib FDA approval added',
-                    'BRCA1/2 – Oncogenic Mutations – Ovarian Cancer - Rucaparib (new publication added)',
+                    'BRCA1/2 – Oncogenic Mutations – Ovarian Cancer - Rucaparib (<b>new publication added</b>)',
                     'Updated variants for KIT - Gastrointestinal Stromal Tumor - Imatinib, Sunitinib, Regorafenib'
                 ],
                 'Level 2': [
@@ -49,14 +49,14 @@ angular.module('oncokbStaticApp')
                     'Updated variants for KIT – Thymic cancer – Sunitinib, Sorafenib'
                 ],
                 'Level 3': [
-                    'BRAF V600 – Colorectal Cancer - Encorafenib + Binimetinib + Cetuximab (new association)',
-                    'FGFR1 – Amplification – Lung Squamous Cell Carcinoma – AZD4547, Debio1347 (new abstract added)',
-                    'FGFR2 - Fusions – Cholangiocarcinoma – BGJ398, Debio1347 (new abstract added)',
+                    'BRAF V600 – Colorectal Cancer - Encorafenib + Binimetinib + Cetuximab (<b>new association</b>)',
+                    'FGFR1 – Amplification – Lung Squamous Cell Carcinoma – AZD4547, Debio1347 (<b>new abstract added</b>)',
+                    'FGFR2 - Fusions – Cholangiocarcinoma – BGJ398, Debio1347 (<b>new abstract added</b>)',
                     'Updated variants for FGFR3 – Bladder cancer - JNJ-42756493, Debio1347',
                     'PIK3CA – Oncogenic mutations – Breast cancer – Updated treatments and evidence'
                 ],
                 'Level 4': [
-                    'BRAF V600 – Colorectal Cancer - Radiation + Trametinib + Fluorouracil (new association)',
+                    'BRAF V600 – Colorectal Cancer - Radiation + Trametinib + Fluorouracil (<b>new association</b>)',
                     'Updated variants for FGFR3 – Breast cancer - Debio1347',
                     'KRAS – Wildtype – Updated treatments and evidence',
                     'KRAS – Oncogenic mtuations - Updated treatments and evidence',
