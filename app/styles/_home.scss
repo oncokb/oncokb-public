@@ -193,6 +193,15 @@
         }
     }
 
+    .citation {
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 0;
+        a {
+            font-weight: bold;
+        }
+    }
+
     #canvas-container {
         width: 100%;
         position: relative;
