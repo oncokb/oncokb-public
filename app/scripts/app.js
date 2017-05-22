@@ -142,7 +142,10 @@ angular.module('oncokbStaticApp').run(
                 // 'R2': '#F79A92',
                 // 'R3': '#FCD6D3',
                 'Other': 'grey'
-            }
+            },
+            citationURL: 'When using OncoKB, please cite: ' +
+            '<a href="http://ascopubs.org/doi/full/10.1200/PO.17.00011" ' +
+            'target="_blank">Chakravarty D. et al., JCO PO 2017</a>'
         };
 
         api.getNumbers('main')
