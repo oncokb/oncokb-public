@@ -2,7 +2,8 @@
   <div class="data-access">
     <div class="header">
       <h3 class="title">Data Download</h3>
-      <div style="margin-bottom: 10px">OncoKB annotations are fully available for download. Please review the <a href="#/terms"><u>usage terms</u></a> before downloading.</div>
+      <div >OncoKB annotations are fully available for download. Please review the <a href="#/terms"><u>usage terms</u></a> before downloading.</div>
+      <div ng-bind-html="data.citationURL" style="margin-bottom: 10px"></div>
       <div class="top-download">
         <a class="btn btn-sm download waves-effect waves-light" ng-href="{{apiLink}}utils/allAnnotatedVariants.txt"
            download><i
