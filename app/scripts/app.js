@@ -129,8 +129,8 @@ angular.module('oncokbStaticApp').run(
             }, {content: '3800 Variants'}, {content: '333 Tumor Types'}]
         };
         $rootScope.data = {
-            lastUpdate: 'May 15, 2017',
-            version: '1.10',
+            lastUpdate: 'May 25, 2017',
+            version: '1.10.patch.1',
             levelColors: {
                 '1': '#33A02C',
                 '2A': '#1F78B4',
@@ -142,7 +142,10 @@ angular.module('oncokbStaticApp').run(
                 // 'R2': '#F79A92',
                 // 'R3': '#FCD6D3',
                 'Other': 'grey'
-            }
+            },
+            citationURL: 'When using OncoKB, please cite: ' +
+            '<a href="http://ascopubs.org/doi/full/10.1200/PO.17.00011" ' +
+            'target="_blank">Chakravarty et al., JCO PO 2017</a>'
         };
 
         api.getNumbers('main')

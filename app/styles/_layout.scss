@@ -47,7 +47,7 @@
 }
 
 @media (max-width: $range-max-xm-width) {
-  $footer-height: 315px;
+  $footer-height: 340px;
   .wrapper {
     /* Negative indent footer by its height */
     margin: 0 auto (-$footer-height);
@@ -86,7 +86,7 @@
 }
 
 @media (max-width: $range-max-sm-width) and (min-width: $range-min-sm-width) {
-  $footer-height: 255px;
+  $footer-height: 280px;
   .wrapper {
     /* Negative indent footer by its height */
     margin: 0 auto (-$footer-height);
@@ -102,7 +102,7 @@
 }
 
 @media (min-width: $range-min-width) {
-  $footer-height: 150px;
+  $footer-height: 175px;
   .wrapper {
     /* Negative indent footer by its height */
     margin: 0 auto (-$footer-height);
@@ -223,4 +223,7 @@ body {
   .mskcc {
     padding: 0;
   }
+    .citation {
+        margin-bottom: 10px;
+    }
 }

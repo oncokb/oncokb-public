@@ -8,8 +8,10 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-    .controller('NewsCtrl', function($scope) {
-        $scope.data = {};
+    .controller('NewsCtrl', function($scope, $rootScope) {
+        $scope.data = {
+            citationURL: $rootScope.data.citationURL
+        };
         $scope.data.updatedActionableGenes = {
             '03072017': {
                 'Level 1': [
