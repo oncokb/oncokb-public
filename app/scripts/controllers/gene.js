@@ -616,7 +616,7 @@ angular.module('oncokbStaticApp')
         api.getGeneSummary($scope.gene.hugoSymbol)
             .then(function(result) {
                 var content = result.data;
-                if (_.isArray(content)) {
+                if (_.isArray(content) && content.length > 0) {
                     $scope.meta.geneSummary =
                         utils.insertSourceLink(content[0].description);
                 } else {
@@ -630,7 +630,7 @@ angular.module('oncokbStaticApp')
         api.getGeneBackground($scope.gene.hugoSymbol)
             .then(function(result) {
                 var content = result.data;
-                if (_.isArray(content)) {
+                if (_.isArray(content) && content.length > 0) {
                     $scope.meta.geneBackground = utils.insertSourceLink(content[0].description);
                     $scope.status.hasBackground = true;
                 } else {
