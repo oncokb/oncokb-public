@@ -1,125 +1,182 @@
 <!doctype html>
 <html class="no-js">
 <head>
-  <meta charset="utf-8">
-  <title>OncoKB</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width">
-  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-  <!-- build:css(.) styles/vendor.css -->
-  <!-- bower:css -->
-  <link rel="stylesheet" href="bower_components/datatables/media/css/jquery.dataTables.css" />
-  <link rel="stylesheet" href="bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.css" />
-  <link rel="stylesheet" href="bower_components/nprogress/nprogress.css" />
-  <link rel="stylesheet" href="bower_components/qtip2/jquery.qtip.css" />
-  <link rel="stylesheet" href="bower_components/angular-swagger-ui/dist/css/swagger-ui.min.css" />
-  <!-- endbower -->
-  <!-- endbuild -->
+    <meta charset="utf-8">
+    <title>OncoKB</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/datatables/media/css/jquery.dataTables.css"/>
+    <link rel="stylesheet" href="bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.css"/>
+    <link rel="stylesheet" href="bower_components/nprogress/nprogress.css"/>
+    <link rel="stylesheet" href="bower_components/qtip2/jquery.qtip.css"/>
+    <link rel="stylesheet" href="bower_components/angular-swagger-ui/dist/css/swagger-ui.min.css"/>
+    <!-- endbower -->
+    <!-- endbuild -->
 
-  <!-- build:css styles/mutationMapper.css -->
-  <link rel="stylesheet" href="lib/mutation-mapper/css/jquery-ui-1.10.3.custom.css"/>
-  <link rel="stylesheet" href="lib/mutation-mapper/css/mutationMapper.css"/>
-  <link rel="stylesheet" href="lib/mutation-mapper/css/mutation_info_panel.css"/>
-  <!-- endbuild -->
+    <!-- build:css styles/mutationMapper.css -->
+    <link rel="stylesheet" href="lib/mutation-mapper/css/jquery-ui-1.10.3.custom.css"/>
+    <link rel="stylesheet" href="lib/mutation-mapper/css/mutationMapper.css"/>
+    <link rel="stylesheet" href="lib/mutation-mapper/css/mutation_info_panel.css"/>
+    <!-- endbuild -->
 
-  <!-- build:css(.tmp) styles/oncokb.css -->
-  <link rel="stylesheet" href="styles/main.css">
-  <!-- endbuild -->
+    <!-- build:css(.tmp) styles/oncokb.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
 
-  <!-- Favicon configs from Real Favicon Generator -->
-  <link rel="apple-touch-icon" sizes="57x57" href="resources/images/favicon/apple-touch-icon-57x57.png?v=rMM202dQYX">
-  <link rel="apple-touch-icon" sizes="60x60" href="resources/images/favicon/apple-touch-icon-60x60.png?v=rMM202dQYX">
-  <link rel="apple-touch-icon" sizes="72x72" href="resources/images/favicon/apple-touch-icon-72x72.png?v=rMM202dQYX">
-  <link rel="apple-touch-icon" sizes="76x76" href="resources/images/favicon/apple-touch-icon-76x76.png?v=rMM202dQYX">
-  <link rel="apple-touch-icon" sizes="114x114" href="resources/images/favicon/apple-touch-icon-114x114.png?v=rMM202dQYX">
-  <link rel="apple-touch-icon" sizes="120x120" href="resources/images/favicon/apple-touch-icon-120x120.png?v=rMM202dQYX">
-  <link rel="apple-touch-icon" sizes="144x144" href="resources/images/favicon/apple-touch-icon-144x144.png?v=rMM202dQYX">
-  <link rel="apple-touch-icon" sizes="152x152" href="resources/images/favicon/apple-touch-icon-152x152.png?v=rMM202dQYX">
-  <link rel="apple-touch-icon" sizes="180x180" href="resources/images/favicon/apple-touch-icon-180x180.png?v=rMM202dQYX">
-  <link rel="icon" href="resources/images/favicon/favicon.ico?v=rMM202dQYX">
-  <link rel="icon" type="image/png" href="resources/images/favicon/favicon-32x32.png?v=rMM202dQYX" sizes="32x32">
-  <link rel="icon" type="image/png" href="resources/images/favicon/favicon-194x194.png?v=rMM202dQYX" sizes="194x194">
-  <link rel="icon" type="image/png" href="resources/images/favicon/favicon-96x96.png?v=rMM202dQYX" sizes="96x96">
-  <link rel="icon" type="image/png" href="resources/images/favicon/android-chrome-192x192.png?v=rMM202dQYX" sizes="192x192">
-  <link rel="icon" type="image/png" href="resources/images/favicon/favicon-16x16.png?v=rMM202dQYX" sizes="16x16">
-  <link rel="manifest" href="resources/images/favicon/manifest.json?v=rMM202dQYX">
-  <link rel="mask-icon" href="resources/images/favicon/safari-pinned-tab.svg?v=rMM202dQYX" color="#1c75cd">
-  <link rel="shortcut icon" href="resources/images/favicon/favicon.ico?v=rMM202dQYX">
-  <meta name="msapplication-TileColor" content="#2d89ef">
-  <meta name="msapplication-TileImage" content="resources/images/favicon/mstile-144x144.png?v=rMM202dQYX">
-  <meta name="theme-color" content="#ffffff">
+    <!-- Favicon configs from Real Favicon Generator -->
+    <link rel="apple-touch-icon" sizes="57x57" href="resources/images/favicon/apple-touch-icon-57x57.png?v=rMM202dQYX">
+    <link rel="apple-touch-icon" sizes="60x60" href="resources/images/favicon/apple-touch-icon-60x60.png?v=rMM202dQYX">
+    <link rel="apple-touch-icon" sizes="72x72" href="resources/images/favicon/apple-touch-icon-72x72.png?v=rMM202dQYX">
+    <link rel="apple-touch-icon" sizes="76x76" href="resources/images/favicon/apple-touch-icon-76x76.png?v=rMM202dQYX">
+    <link rel="apple-touch-icon" sizes="114x114"
+          href="resources/images/favicon/apple-touch-icon-114x114.png?v=rMM202dQYX">
+    <link rel="apple-touch-icon" sizes="120x120"
+          href="resources/images/favicon/apple-touch-icon-120x120.png?v=rMM202dQYX">
+    <link rel="apple-touch-icon" sizes="144x144"
+          href="resources/images/favicon/apple-touch-icon-144x144.png?v=rMM202dQYX">
+    <link rel="apple-touch-icon" sizes="152x152"
+          href="resources/images/favicon/apple-touch-icon-152x152.png?v=rMM202dQYX">
+    <link rel="apple-touch-icon" sizes="180x180"
+          href="resources/images/favicon/apple-touch-icon-180x180.png?v=rMM202dQYX">
+    <link rel="icon" href="resources/images/favicon/favicon.ico?v=rMM202dQYX">
+    <link rel="icon" type="image/png" href="resources/images/favicon/favicon-32x32.png?v=rMM202dQYX" sizes="32x32">
+    <link rel="icon" type="image/png" href="resources/images/favicon/favicon-194x194.png?v=rMM202dQYX" sizes="194x194">
+    <link rel="icon" type="image/png" href="resources/images/favicon/favicon-96x96.png?v=rMM202dQYX" sizes="96x96">
+    <link rel="icon" type="image/png" href="resources/images/favicon/android-chrome-192x192.png?v=rMM202dQYX"
+          sizes="192x192">
+    <link rel="icon" type="image/png" href="resources/images/favicon/favicon-16x16.png?v=rMM202dQYX" sizes="16x16">
+    <link rel="manifest" href="resources/images/favicon/manifest.json?v=rMM202dQYX">
+    <link rel="mask-icon" href="resources/images/favicon/safari-pinned-tab.svg?v=rMM202dQYX" color="#1c75cd">
+    <link rel="shortcut icon" href="resources/images/favicon/favicon.ico?v=rMM202dQYX">
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="msapplication-TileImage" content="resources/images/favicon/mstile-144x144.png?v=rMM202dQYX">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body ng-controller="MainCtrl as ctrl">
 <!--[if lte IE 9]>
 <p class="old-browser-warning">You are using an old version of Internet Explorer. For better performance, we recommend
-  using <b>Google Chrome, Firefox, Safari, or Internet Explorer 10 or above to visit this web site.</p>
+    using <b>Google Chrome, Firefox, Safari, or Internet Explorer 10 or above to visit this web site.</p>
 <![endif]-->
 
 <script type="text/ng-template" id="mainSearchTemplate.html">
-    <div class="main-search-template">
-        <div><span ng-bind-html="match.model.hugoSymbol | uibTypeaheadHighlight:query"></span> <span
-            ng-if="match.model.entrezGeneId > 0">(Entrez Gene: <span
-            ng-bind-html="match.model.entrezGeneId | uibTypeaheadHighlight:query"></span>)</span></div>
-        <div ng-if="match.model.geneAliases && match.model.geneAliases.length > 0" class="alias">
-            <span>Also known as </span>
-            <span ng-repeat="alias in match.model.geneAliases"><span
-                ng-bind-html="alias | uibTypeaheadHighlight:query"></span><span ng-if="!$last">,</span>
+    <div class="main-search-template" ng-controller="MainCtrl">
+        <div ng-switch="match.model.queryType">
+            <div ng-switch-when="gene">
+                <div><span ng-bind-html="match.model.gene.hugoSymbol | uibTypeaheadHighlight:query"></span> <span
+                    ng-if="match.model.gene.entrezGeneId > 0">(Entrez Gene: <span
+                    ng-bind-html="match.model.gene.entrezGeneId | uibTypeaheadHighlight:query"></span>)</span>
+                    <span class="main-search-annotation"
+                          ng-if="match.model.highestSensitiveLevel || match.model.highestResistanceLevel">
+                        Highest level of evidence:
+                            <span ng-if="match.model.highestSensitiveLevel"
+                                  ng-style="getLevelColor(match.model.highestSensitiveLevel)">
+                                Level {{match.model.highestSensitiveLevel}}</span>
+                            <span ng-if="match.model.highestResistanceLevel"
+                                  ng-style="getLevelColor(match.model.highestResistanceLevel)">
+                                Level {{match.model.highestResistanceLevel}}</span>
+                    </span>
+                </div>
+                <div ng-if="match.model.gene.geneAliases && match.model.gene.geneAliases.length > 0" class="main-search-alias">
+                    <span>Also known as </span>
+                    <span ng-repeat="alias in match.model.gene.geneAliases"><span
+                        ng-bind-html="alias | uibTypeaheadHighlight:query"></span><span ng-if="!$last">,</span>
               </span>
+                </div>
+            </div>
+            <div ng-switch-when="variant" class="main-search-variant">
+                <div class="match">
+                    <div class="main-search-gene-variant">
+                        <span>{{match.model.gene.hugoSymbol}}</span> /
+                        <span
+                            ng-bind-html="(match.model.variant.name ? match.model.variant.name : match.model.variant.alteration) | uibTypeaheadHighlight:query"></span>
+                    </div>
+                    <i class="oncogenic-icon-image"
+                       ng-class="getIconClass(match.model.oncogenicity, match.model.highestSensitiveLevel, match.model.highestResistanceLevel, match.model.vus)"/>
+                    <span class="no-annotation" ng-if="!match.model.variantExist">Not annotated by OncoKB</span>
+                </div>
+                <div class="main-search-annotation">
+                    <span ng-if="match.model.annotation">{{match.model.annotation}}</span>
+                </div>
+            </div>
         </div>
     </div>
 </script>
 
 <div class="wrapper">
-  <div class="navbar navbar-inverse navbar-fixed-top" class="" role="navigation">
-    <div class="container nav-container">
-      <div class="navbar-header">
-        <div id="menu"  data-toggle="collapse" data-target=".navbar-collapse" class="nav-toggle menu-toggle"
-             ng-class="{open: toggled}" ng-click="toggled = !toggled">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <b>Menu</b>
-        </div>
-        <span class="navbar-brand"><a href="#/"><img class="logo-brand" src="resources/images/oncokb-lg.png"/></a></span>
-      </div>
-      <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-          <li ng-click="toggled=false" ng-class="{ active: isActive('/')}"><a data-toggle="collapse" data-target=".in" href="#/"><span>Home</span></a></li>
-          <li ng-click="toggled=false" ng-class="{ active: isActive('/about')}"><a data-toggle="collapse" data-target=".in" href="#/about"><span>About</span></a></li>
-          <li ng-click="toggled=false" ng-class="{ active: isActive('/team')}"><a data-toggle="collapse" data-target=".in" href="#/team"><span>Team</span></a></li>
-          <li ng-click="toggled=false" ng-class="{ active: isActive('/levels')}"><a data-toggle="collapse" data-target=".in" href="#/levels"><span>Levels of Evidence</span></a></li>
-          <li ng-click="toggled=false" ng-class="{ active: isActive('/actionableGenes')}"><a data-toggle="collapse" data-target=".in" href="#/actionableGenes"><span>Actionable Genes</span></a></li>
-          <li ng-click="toggled=false" ng-class="{ active: isActive('/dataAccess')}"><a data-toggle="collapse" data-target=".in" href="#/dataAccess"><span>Data Access</span></a></li>
-          <li ng-click="toggled=false" ng-class="{ active: isActive('/news')}"><a data-toggle="collapse" data-target=".in" href="#/news"><span>News</span></a></li>
-        </ul>
-        <div class="pull-right" ng-class="{hidden: toggled}">
+    <div class="navbar navbar-inverse navbar-fixed-top" class="" role="navigation">
+        <div class="container nav-container">
+            <div class="navbar-header">
+                <div id="menu" data-toggle="collapse" data-target=".navbar-collapse" class="nav-toggle menu-toggle"
+                     ng-class="{open: toggled}" ng-click="toggled = !toggled">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <b>Menu</b>
+                </div>
+                <span class="navbar-brand"><a href="#/"><img class="logo-brand"
+                                                             src="resources/images/oncokb-lg.png"/></a></span>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/')}"><a data-toggle="collapse"
+                                                                                        data-target=".in"
+                                                                                        href="#/"><span>Home</span></a>
+                    </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/about')}"><a data-toggle="collapse"
+                                                                                             data-target=".in"
+                                                                                             href="#/about"><span>About</span></a>
+                    </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/team')}"><a data-toggle="collapse"
+                                                                                            data-target=".in"
+                                                                                            href="#/team"><span>Team</span></a>
+                    </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/levels')}"><a data-toggle="collapse"
+                                                                                              data-target=".in"
+                                                                                              href="#/levels"><span>Levels of Evidence</span></a>
+                    </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/actionableGenes')}"><a
+                        data-toggle="collapse" data-target=".in" href="#/actionableGenes"><span>Actionable Genes</span></a>
+                    </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/dataAccess')}"><a data-toggle="collapse"
+                                                                                                  data-target=".in"
+                                                                                                  href="#/dataAccess"><span>Data Access</span></a>
+                    </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/news')}"><a data-toggle="collapse"
+                                                                                            data-target=".in"
+                                                                                            href="#/news"><span>News</span></a>
+                    </li>
+                </ul>
+                <div class="pull-right" ng-class="{hidden: toggled}">
           <span><a href="http://mskcc.org"><img class="mskcc-logo"
                                                 src="resources/images/MSKLogo_fff.png"/></a></span>
-          <span><a href="http://mskcc.org"><img class="mskcc-icon"
-                                                src="resources/images/MSKIcon_fff.png"/></a></span>
+                    <span><a href="http://mskcc.org"><img class="mskcc-icon"
+                                                          src="resources/images/MSKIcon_fff.png"/></a></span>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="subNavWrapper" ng-class="{'sub-nav-block': view.currentPage==='gene'}">
-      <div class="container">
-        <div class="subNav">
-          <!-- In order to use last child css style, add div wrapper -->
-          <div ng-show="view.subNavItems.length > 0"
-               class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12 subNav-sxn-1">
+        <div class="subNavWrapper" ng-class="{'sub-nav-block': view.currentPage==='genes'}">
+            <div class="container">
+                <div class="subNav">
+                    <!-- In order to use last child css style, add div wrapper -->
+                    <div ng-show="view.subNavItems.length > 0"
+                         class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12 subNav-sxn-1">
             <span ng-repeat="item in view.subNavItems" class="item">
               <span ng-if="!item.link">{{item.content}}</span>
               <a ng-if="item.link" ng-href="{{item.link}}" target="_self">{{item.content}}</a>
             </span>
-          </div>
+                    </div>
 
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <div class="content" ng-view=""></div>
+    <div class="content" ng-view=""></div>
 </div>
 <div class="footer">
   <div class="container">
@@ -161,13 +218,20 @@
 </div>
 
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-76620102-2', 'auto');
-  ga('send', 'pageview');
+    ga('create', 'UA-76620102-2', 'auto');
+    ga('send', 'pageview');
 </script>
 
 <!-- build:js(.) scripts/vendor.js -->
@@ -182,7 +246,8 @@
 <script src="bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/colreorder/angular-datatables.colreorder.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/columnfilter/angular-datatables.columnfilter.js"></script>
-<script src="bower_components/angular-datatables/dist/plugins/light-columnfilter/angular-datatables.light-columnfilter.js"></script>
+<script
+    src="bower_components/angular-datatables/dist/plugins/light-columnfilter/angular-datatables.light-columnfilter.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/colvis/angular-datatables.colvis.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/fixedcolumns/angular-datatables.fixedcolumns.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/fixedheader/angular-datatables.fixedheader.js"></script>

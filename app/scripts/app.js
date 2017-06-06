@@ -47,7 +47,7 @@ angular
                 templateUrl: 'views/team.html',
                 controller: 'MainCtrl'
             })
-            .when('/gene/:geneName', {
+            .when('/genes/:geneName', {
                 templateUrl: 'views/gene.html',
                 controller: 'GeneCtrl',
                 controllerAs: 'gene'
@@ -143,9 +143,9 @@ angular.module('oncokbStaticApp').run(
                 '3A': '#984EA3',
                 '3B': '#BE98CE',
                 '4': '#424242',
-                // 'R1': '#EE3424',
-                // 'R2': '#F79A92',
-                // 'R3': '#FCD6D3',
+                'R1': '#EE3424',
+                'R2': '#F79A92',
+                'R3': '#FCD6D3',
                 'Other': 'grey'
             },
             citationURL: 'When using OncoKB, please cite: ' +
