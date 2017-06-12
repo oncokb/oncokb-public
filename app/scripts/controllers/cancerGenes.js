@@ -22,10 +22,13 @@ angular.module('oncokbStaticApp')
             },
             scrollY: 500,
             scrollCollapse: true,
-            aaSorting: [[1, 'desc'], [2, 'desc'], [0, 'asc']]
+            aaSorting: [[1, 'desc'], [2, 'asc'], [0, 'asc']]
         };
 
         function displayConvert(obj, keys) {
+            if (obj.oncokbAnnotated === true) {
+                obj.occurrenceCount += 1;
+            }
             _.each(keys, function(key) {
                 if (obj[key] === true) obj[key] = 'Yes';
                 else obj[key] = 'No';
