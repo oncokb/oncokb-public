@@ -82,6 +82,11 @@ angular
                 controller: 'DataaccessCtrl',
                 controllerAs: 'dataAccess'
             })
+            .when('/cancerGenes', {
+                templateUrl: 'views/cancerGenes.html',
+                controller: 'CancerGenesCtrl',
+                controllerAs: 'cancerGenes'
+            })
             .otherwise({
                 redirectTo: '/'
             });

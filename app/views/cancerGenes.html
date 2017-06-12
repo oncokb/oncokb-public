@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="cancerGenes">
+        <table datatable="ng" dt-options="dt.dtOptions"
+               class="table row-border hover">
+            <thead>
+            <tr>
+                <th>Hugo Symbol</th>
+                <th>OncoKB Annotated</th>
+                <th># of occurence within resources</th>
+                <th>MSK-IMPACT</th>
+                <th>MSK-HEME</th>
+                <th>FOUNDATION ONE</th>
+                <th>FOUNDATION ONE HEME</th>
+                <th>Vogelstein</th>
+                <th>SANGER CGC(05/30/2017)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="x in cancerGeneList">
+                <td><a href="/#/gene/{{x.hugoSymbol}}">{{x.hugoSymbol}}</a></td>
+                <td>{{x.oncokbAnnotated}}</td>
+                <td>{{x.occurrenceCount}}</td>
+                <td>{{x.foundation}}</td>
+                <td>{{x.foundationHeme}}</td>
+                <td>{{x.mskimpact}}</td>
+                <td>{{x.mskheme}}</td>
+                <td>{{x.vogelstein}}</td>
+                <td>{{x.sangerCGC}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

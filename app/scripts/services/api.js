@@ -72,6 +72,9 @@ angular.module('oncokbStaticApp')
                     return null;
                 }
                 return $http.get(legacyLink + 'evidence.json?levels=' + level);
+            },
+            getCancerGeneList: function() {
+                return $http.get(apiLink  + 'utils/cancerGeneList');
             }
         };
     });
