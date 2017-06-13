@@ -7,12 +7,48 @@
                 <th>Hugo Symbol</th>
                 <th># of occurence within resources</th>
                 <th>OncoKB Annotated</th>
-                <th>MSK-IMPACT</th>
-                <th>MSK-HEME</th>
-                <th>FOUNDATION ONE</th>
-                <th>FOUNDATION ONE HEME</th>
-                <th>Vogelstein</th>
-                <th>SANGER CGC (05/30/2017)</th>
+                <th>MSK-IMPACT
+                    <i class="fa fa-question-circle-o"
+                       qtip
+                       my="bottom center"
+                       at="top center"
+                       qtip-content="Gene exists in MSK-IMPACT resource"></i>
+                </th>
+                <th>MSK-HEME
+                    <i class="fa fa-question-circle-o"
+                       qtip
+                       my="bottom center"
+                       at="top center"
+                       qtip-content="Gene exists in MSK-HEME resource"></i>
+                </th>
+                <th>FOUNDATION ONE
+                    <i class="fa fa-question-circle-o"
+                       qtip
+                       my="bottom center"
+                       at="top center"
+                       qtip-content="Gene exists in FOUNDATION ONE resource"></i>
+                </th>
+                <th>FOUNDATION ONE HEME
+                    <i class="fa fa-question-circle-o"
+                       qtip
+                       my="bottom center"
+                       at="top center"
+                       qtip-content="Gene exists in FOUNDATION ONE HEME resource"></i>
+                </th>
+                <th>Vogelstein
+                    <i class="fa fa-question-circle-o"
+                       qtip
+                       my="bottom center"
+                       at="top center"
+                       qtip-content="Gene exists in Vogelstein resource"></i>
+                </th>
+                <th>SANGER CGC (05/30/2017)
+                    <i class="fa fa-question-circle-o"
+                       qtip
+                       my="bottom center"
+                       at="top center"
+                       qtip-content="Gene exists in SANGER CGC (05/30/2017) resource"></i>
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -24,7 +60,11 @@
                         <span ng-switch-when="Yes">
                             <a href="/#/gene/{{x.hugoSymbol}}">Yes</a>
                         </span>
-                        <span ng-switch-when="No">No</span>
+                        <span ng-switch-when="No">
+                            No <a href="mailto:feedback@oncokb.org?subject=Suggest to annotate {{x.hugoSymbol}}" title="suggest to annotate this gene"
+                                  qtip qtip-content="Suggest to annotate {{x.hugoSymbol}}" my="bottom center"
+                                  at="top center"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+                        </span>
                     </span>
                 </td>
                 <td>{{x.foundation}}</td>

@@ -21,6 +21,7 @@ angular.module('oncokbStaticApp')
                 loadingRecords: '<img src="resources/images/loader.gif">'
             },
             scrollY: 500,
+            scrollX: 200,
             scrollCollapse: true,
             aaSorting: [[1, 'desc'], [2, 'asc'], [0, 'asc']]
         };
