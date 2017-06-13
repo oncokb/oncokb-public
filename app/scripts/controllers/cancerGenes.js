@@ -30,8 +30,7 @@ angular.module('oncokbStaticApp')
                 obj.occurrenceCount += 1;
             }
             _.each(keys, function(key) {
-                if (obj[key] === true) obj[key] = 'Yes';
-                else obj[key] = 'No';
+                obj[key] = obj[key] === true ? 'Yes' : 'No';
             });
             return obj;
         }
@@ -39,7 +38,7 @@ angular.module('oncokbStaticApp')
             .then(function(content) {
                 var tempData = content.data;
                 _.each(tempData, function(item) {
-                    item = displayConvert(item, ['oncokbAnnotated', 'foundation', 'foundationHeme', 'mskimpact', 'mskheme', 'vogelstein', 'sangerCGC']);
+                    item = displayConvert(item, ['oncokbAnnotated', 'foundation', 'foundationHeme', 'mSKImpact', 'mSKHeme', 'vogelstein', 'sangerCGC']);
                 });
                 $scope.cancerGeneList = tempData;
             }, function() {
