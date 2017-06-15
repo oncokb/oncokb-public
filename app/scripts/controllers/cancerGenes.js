@@ -21,7 +21,7 @@ angular.module('oncokbStaticApp')
                 loadingRecords: '<img src="resources/images/loader.gif">'
             },
             scrollY: 500,
-            scrollX: 200,
+            scrollX: "100%",
             scrollCollapse: true,
             aaSorting: [[1, 'desc'], [2, 'asc'], [0, 'asc']]
         };
@@ -36,6 +36,7 @@ angular.module('oncokbStaticApp')
             return obj;
         }
         $scope.fetchedDate = '05/30/2017';
+        $scope.doneLoading = false;
         api.getCancerGeneList()
             .then(function(content) {
                 api.getGenes().then(function(response) {
@@ -70,8 +71,22 @@ angular.module('oncokbStaticApp')
                         }
                     });
                     $scope.cancerGeneList = tempData;
+                    $scope.doneLoading = true;
                 }, function() {
                 });
             }, function() {
             });
+        $scope.download = function() {
+            var tempArr = ['Hugo Symbol', '# of occurence within resources', 'OncoKB Annotated', 'OncoKB Oncogene', 'OncoKB TSG', 'MSK-IMPACT', 'MSK-HEME', 'FOUNDATION ONE', 'FOUNDATION ONE HEME', 'Vogelstein', 'SANGER CGC'];
+            var content = [tempArr.join('\t')];
+            _.each($scope.cancerGeneList, function(item) {
+                tempArr = [item.hugoSymbol, item.occurrenceCount, item.oncokbAnnotated, item.oncogene, item.tsg, item.foundation,
+                    item.foundationHeme, item.mSKImpact, item.mSKHeme, item.vogelstein, item.sangerCGC];
+                content.push(tempArr.join('\t'));
+            });
+            var blob = new Blob([content.join('\n')], {
+                type: "text/plain;charset=utf-8;",
+            });
+            saveAs(blob, "CancerGenesList.txt");
+        }
     });
