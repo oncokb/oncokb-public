@@ -35,13 +35,43 @@ angular.module('oncokbStaticApp')
             });
             return obj;
         }
+        $scope.fetchedDate = '05/30/2017';
         api.getCancerGeneList()
             .then(function(content) {
-                var tempData = content.data;
-                _.each(tempData, function(item) {
-                    item = displayConvert(item, ['oncokbAnnotated', 'foundation', 'foundationHeme', 'mSKImpact', 'mSKHeme', 'vogelstein', 'sangerCGC']);
+                api.getGenes().then(function(response) {
+                    var geneTypeMapping = {};
+                    _.each(response.data, function(gene) {
+                        if (gene.oncogene) {
+                            if (gene.tsg) {
+                                geneTypeMapping[gene.hugoSymbol] = 'Both';
+                            } else {
+                                geneTypeMapping[gene.hugoSymbol] = 'Oncogene';
+                            }
+                        } else if (gene.tsg) {
+                            geneTypeMapping[gene.hugoSymbol] = 'TSG';
+                        }
+                    });
+                    var tempData = content.data;
+                    _.each(tempData, function(item) {
+                        item = displayConvert(item, ['oncokbAnnotated', 'foundation', 'foundationHeme', 'mSKImpact', 'mSKHeme', 'vogelstein', 'sangerCGC']);
+                        switch(geneTypeMapping[item.hugoSymbol]) {
+                        case 'Oncogene':
+                            item.oncogene = 'Yes';
+                            break;
+                        case 'TSG':
+                            item.tsg = 'Yes';
+                            break;
+                        case 'Both':
+                            item.oncogene = 'Yes';
+                            item.tsg = 'Yes';
+                            break;
+                        default:
+                            break;
+                        }
+                    });
+                    $scope.cancerGeneList = tempData;
+                }, function() {
                 });
-                $scope.cancerGeneList = tempData;
             }, function() {
             });
     });

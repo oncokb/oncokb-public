@@ -7,47 +7,49 @@
                 <th>Hugo Symbol</th>
                 <th># of occurence within resources</th>
                 <th>OncoKB Annotated</th>
+                <th>OncoKB Oncogene</th>
+                <th>OncoKB TSG</th>
                 <th>MSK-IMPACT
                     <i class="fa fa-question-circle-o"
                        qtip
                        my="bottom center"
                        at="top center"
-                       qtip-content="Gene exists in MSK-IMPACT resource"></i>
+                       qtip-content="Gene exists in MSK-IMPACT resource ({{fetchedDate}})"></i>
                 </th>
                 <th>MSK-HEME
                     <i class="fa fa-question-circle-o"
                        qtip
                        my="bottom center"
                        at="top center"
-                       qtip-content="Gene exists in MSK-HEME resource"></i>
+                       qtip-content="Gene exists in MSK-HEME resource ({{fetchedDate}})"></i>
                 </th>
                 <th>FOUNDATION ONE
                     <i class="fa fa-question-circle-o"
                        qtip
                        my="bottom center"
                        at="top center"
-                       qtip-content="Gene exists in FOUNDATION ONE resource"></i>
+                       qtip-content="Gene exists in FOUNDATION ONE resource ({{fetchedDate}})"></i>
                 </th>
                 <th>FOUNDATION ONE HEME
                     <i class="fa fa-question-circle-o"
                        qtip
                        my="bottom center"
                        at="top center"
-                       qtip-content="Gene exists in FOUNDATION ONE HEME resource"></i>
+                       qtip-content="Gene exists in FOUNDATION ONE HEME resource ({{fetchedDate}})"></i>
                 </th>
                 <th>Vogelstein
                     <i class="fa fa-question-circle-o"
                        qtip
                        my="bottom center"
                        at="top center"
-                       qtip-content="Gene exists in Vogelstein resource"></i>
+                       qtip-content="Gene exists in Vogelstein resource ({{fetchedDate}})"></i>
                 </th>
-                <th>SANGER CGC (05/30/2017)
+                <th>SANGER CGC
                     <i class="fa fa-question-circle-o"
                        qtip
                        my="bottom center"
                        at="top center"
-                       qtip-content="Gene exists in SANGER CGC (05/30/2017) resource"></i>
+                       qtip-content="Gene exists in SANGER CGC resource ({{fetchedDate}})"></i>
                 </th>
             </tr>
             </thead>
@@ -67,6 +69,8 @@
                         </span>
                     </span>
                 </td>
+                <td>{{x.oncogene}}</td>
+                <td>{{x.tsg}}</td>
                 <td>{{x.foundation}}</td>
                 <td>{{x.foundationHeme}}</td>
                 <td>{{x.mSKImpact}}</td>
