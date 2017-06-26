@@ -138,7 +138,7 @@ angular.module('oncokbStaticApp')
                                         studies.forEach(function(item) {
                                             studyInfo.data.forEach(function(item1) {
                                                 if (item1.id === item) {
-                                                    shortNames.push(item1.short_name.substring(0, item1.short_name.indexOf('(') - 1));
+                                                    shortNames.push(item1.short_name.indexOf('(') !== -1 ? item1.short_name.substring(0, item1.short_name.indexOf('(') - 1) : item1.short_name);
                                                     fullNames.push(item1.name);
                                                 }
                                             });
@@ -284,7 +284,7 @@ angular.module('oncokbStaticApp')
             } else {
                 // load the template when first load the page
                 $('#templateDiv').load('views/mutationMapperTemplates.html', function() {
-                    $scope.studyName = 'across 20 Disease Specific Studies';
+                    $scope.studyName = 'across 21 Disease Specific Studies';
                     // init mutation mapper
                     mutationMapper = new MutationMapper(options);
                     mutationMapper.init();
@@ -349,7 +349,7 @@ angular.module('oncokbStaticApp')
                 resetFlag = false;
                 $scope.clinicalVariantsCount = uniqueClinicVariants.length;
                 $scope.annotatedVariantsCount = uniqueAnnotatedVariants.length;
-                $scope.studyName = 'across 20 Disease Specific Studies';
+                $scope.studyName = 'across 21 Disease Specific Studies';
             } else {
                 proteinChanges = _.uniq(proteinChanges);
                 var regexString = '';
