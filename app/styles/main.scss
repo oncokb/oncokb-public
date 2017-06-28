@@ -275,6 +275,10 @@ a:hover, a:focus {
   color: $level-R3;
 }
 
+.loading-style {
+  margin-left: 50%;
+  margin-top: 20%;
+}
 /* Include styles for each page */
 @import "home";
 @import "genes";
