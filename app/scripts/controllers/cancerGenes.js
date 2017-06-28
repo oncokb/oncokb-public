@@ -73,7 +73,6 @@ angular.module('oncokbStaticApp')
         }, function(error) {
             $scope.cancerGeneList = [];
             $scope.doneLoading = true;
-            console.log('Error happened', error);
         });
         $scope.download = function() {
             var tempArr = ['Hugo Symbol', '# of occurence within resources', 'OncoKB Annotated', 'OncoKB Oncogene', 'OncoKB TSG', 'MSK-IMPACT', 'MSK-HEME', 'FOUNDATION ONE', 'FOUNDATION ONE HEME', 'Vogelstein', 'SANGER CGC'];
