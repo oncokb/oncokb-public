@@ -1,6 +1,9 @@
 <div class="container">
-    <button style="margin-bottom: -80px" class="btn btn-sm download waves-effect waves-light" ng-click="download()" ng-if="doneLoading"><i class="fa  fa-cloud-download"></i> Cancer Genes List</button>
-    <div class="cancerGenes">
+    <div ng-if="!doneLoading" class="loading-style">
+        <img src="resources/images/loader.gif">
+    </div>
+    <div class="cancerGenes" ng-show="doneLoading">
+        <button style="margin-bottom: -80px" class="btn btn-sm download waves-effect waves-light" ng-click="download()"><i class="fa  fa-cloud-download"></i> Cancer Genes List</button>
         <table datatable="ng" dt-options="dt.dtOptions"
                class="table row-border hover">
             <thead>

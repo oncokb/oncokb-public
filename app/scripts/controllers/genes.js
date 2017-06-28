@@ -14,7 +14,7 @@ angular.module('oncokbStaticApp')
         $scope.clickGene = function(gene) {
             $location.path('/gene/' + gene);
         };
-
+        $scope.doneLoading = false;
         // DataTable initialization & options
         $scope.dt = {};
         $scope.dt.dtOptions = {
@@ -78,7 +78,9 @@ angular.module('oncokbStaticApp')
                 } else {
                     $scope.meta.genes = [];
                 }
+                $scope.doneLoading = true;
             }, function() {
                 $scope.meta.genes = [];
+                $scope.doneLoading = true;
             });
     });

@@ -11,7 +11,7 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-    .controller('CancerGenesCtrl', function($scope, _, api) {
+    .controller('CancerGenesCtrl', function($scope, _, api, $q) {
         // DataTable initialization & options
         $scope.dt = {};
         $scope.dt.dtOptions = {
@@ -37,45 +37,43 @@ angular.module('oncokbStaticApp')
         }
         $scope.fetchedDate = '05/30/2017';
         $scope.doneLoading = false;
-        api.getCancerGeneList()
-            .then(function(content) {
-                api.getGenes().then(function(response) {
-                    var geneTypeMapping = {};
-                    _.each(response.data, function(gene) {
-                        if (gene.oncogene) {
-                            if (gene.tsg) {
-                                geneTypeMapping[gene.hugoSymbol] = 'Both';
-                            } else {
-                                geneTypeMapping[gene.hugoSymbol] = 'Oncogene';
-                            }
-                        } else if (gene.tsg) {
-                            geneTypeMapping[gene.hugoSymbol] = 'TSG';
-                        }
-                    });
-                    var tempData = content.data;
-                    _.each(tempData, function(item) {
-                        item = displayConvert(item, ['oncokbAnnotated', 'foundation', 'foundationHeme', 'mSKImpact', 'mSKHeme', 'vogelstein', 'sangerCGC']);
-                        switch(geneTypeMapping[item.hugoSymbol]) {
-                        case 'Oncogene':
-                            item.oncogene = 'Yes';
-                            break;
-                        case 'TSG':
-                            item.tsg = 'Yes';
-                            break;
-                        case 'Both':
-                            item.oncogene = 'Yes';
-                            item.tsg = 'Yes';
-                            break;
-                        default:
-                            break;
-                        }
-                    });
-                    $scope.cancerGeneList = tempData;
-                    $scope.doneLoading = true;
-                }, function() {
-                });
-            }, function() {
+        $q.all([api.getGenes(), api.getCancerGeneList()]).then(function(result) {
+            var geneTypeMapping = {};
+            _.each(result[0].data, function(gene) {
+                if (gene.oncogene) {
+                    if (gene.tsg) {
+                        geneTypeMapping[gene.hugoSymbol] = 'Both';
+                    } else {
+                        geneTypeMapping[gene.hugoSymbol] = 'Oncogene';
+                    }
+                } else if (gene.tsg) {
+                    geneTypeMapping[gene.hugoSymbol] = 'TSG';
+                }
             });
+            var tempData = result[1].data;
+            _.each(tempData, function(item) {
+                item = displayConvert(item, ['oncokbAnnotated', 'foundation', 'foundationHeme', 'mSKImpact', 'mSKHeme', 'vogelstein', 'sangerCGC']);
+                switch(geneTypeMapping[item.hugoSymbol]) {
+                case 'Oncogene':
+                    item.oncogene = 'Yes';
+                    break;
+                case 'TSG':
+                    item.tsg = 'Yes';
+                    break;
+                case 'Both':
+                    item.oncogene = 'Yes';
+                    item.tsg = 'Yes';
+                    break;
+                default:
+                    break;
+                }
+            });
+            $scope.cancerGeneList = tempData;
+            $scope.doneLoading = true;
+        }, function(error) {
+            $scope.cancerGeneList = [];
+            $scope.doneLoading = true;
+        });
         $scope.download = function() {
             var tempArr = ['Hugo Symbol', '# of occurence within resources', 'OncoKB Annotated', 'OncoKB Oncogene', 'OncoKB TSG', 'MSK-IMPACT', 'MSK-HEME', 'FOUNDATION ONE', 'FOUNDATION ONE HEME', 'Vogelstein', 'SANGER CGC'];
             var content = [tempArr.join('\t')];

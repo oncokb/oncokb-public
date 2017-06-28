@@ -9,7 +9,7 @@
             {{data.levels.one.numOfVariants}} Variants</h3></div>
         </div>
       </div>
-      <div class="col-md-12">
+      <div class="col-md-12" ng-if="!status.loading.level.one">
         <table datatable="ng" class="row-border hover"
                dt-options="actionableGenesDT.dtOptions"
                dt-columns="actionableGenesDT.dtColumnDefs">
@@ -55,7 +55,7 @@
             Genes, {{data.levels.two.numOfVariants}} Variants</h3></div>
         </div>
       </div>
-      <div class="col-md-12">
+      <div class="col-md-12" ng-if="!status.loading.level.two">
         <table datatable="ng" class="row-border hover"
                dt-options="actionableGenesDT.dtOptions"
                dt-columns="actionableGenesDT.dtColumnDefs">
@@ -103,7 +103,7 @@
         </div>
       </div>
 
-      <div class="col-md-12">
+      <div class="col-md-12" ng-if="!status.loading.level.three">
         <table datatable="ng" class="row-border hover"
                dt-options="actionableGenesDT.dtOptions"
                dt-columns="actionableGenesDT.dtColumnDefs">
@@ -151,7 +151,7 @@
         </div>
       </div>
 
-      <div class="col-md-12">
+      <div class="col-md-12" ng-if="!status.loading.level.four">
         <table datatable="ng" class="row-border hover"
                dt-options="actionableGenesDT.dtOptions"
                dt-columns="actionableGenesDT.dtColumnDefs">
