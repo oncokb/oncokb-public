@@ -129,10 +129,11 @@
             border-top-left-radius: 0;
             border-top-right-radius: 0;
             text-align: left;
-
+            max-height: 230px;
+            overflow-y: scroll;
             li.active {
                 color: white;
-                background-color: $dark-blue;
+                background-color: $oncokb-orange;
                 cursor: pointer;
                 .alias {
                     color: white;
@@ -154,6 +155,13 @@
 
         :-ms-input-placeholder {
             text-align: center;
+        }
+
+        .loading {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            color: $oncokb-orange;
         }
     }
 

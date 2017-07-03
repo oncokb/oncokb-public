@@ -12,7 +12,7 @@ angular.module('oncokbStaticApp')
         $scope.meta = {};
 
         $scope.clickGene = function(gene) {
-            $location.path('/gene/' + gene);
+            $location.path('/genes/' + gene);
         };
         $scope.doneLoading = false;
         // DataTable initialization & options

@@ -105,8 +105,8 @@ angular.module('oncokbStaticApp')
                 .then(function(totalCounts) {
                     api.getPortalAlterationSampleCount($scope.gene.hugoSymbol)
                         .then(function(countsByGene) {
-                            $scope.altFreFlag = countsByGene.data.length > 0;
-                            if ($scope.altFreFlag) {
+                            $scope.meta.altFreFlag = countsByGene.data.length > 0;
+                            if ($scope.meta.altFreFlag) {
                                 var studies = [];
                                 var results = [];
                                 var shortNames = [];
@@ -386,18 +386,21 @@ angular.module('oncokbStaticApp')
         $scope.gene = {
             hugoSymbol: $routeParams.geneName
         };
-        $scope.meta = {};
-        $scope.meta.clinicalTable = {};
-        $scope.meta.biologicalTable = {};
+        $scope.meta = {
+            clinicalTable: {},
+            biologicalTable: {},
+            showGeneAddition: true,
+            altFreFlag: true,
+            highestLevels: []
+        };
+
         $scope.status = {
             hasSummary: false,
             hasBackground: false,
-            hasLevel: false,
             moreInfo: false,
             getClinicalEvidence: false,
             getBiologicalEvidence: false,
         };
-        $scope.altFreFlag = true;
         $scope.mutationMapperFlag = true;
         $scope.view = {};
         $scope.view.levelColors = $rootScope.data.levelColors;
@@ -496,21 +499,26 @@ angular.module('oncokbStaticApp')
                 var content = result.data;
                 if (content) {
                     $scope.gene = content.gene;
+                    if ($scope.gene.hugoSymbol.toLowerCase() === 'other biomarkers') {
+                        $scope.meta.showGeneAddition = false;
+                        $scope.meta.altFreFlag = false;
+                    }
                     $route.updateParams({geneName: $scope.gene.hugoSymbol});
                     var subNavItems = [{content: $scope.gene.hugoSymbol}];
 
-                    if (content.highestLevel) {
-                        $scope.meta.highestLevel = content.highestLevel.replace('LEVEL_', '');
-                        $scope.status.hasLevel = true;
+                    if (content.highestSensitiveLevel) {
+                        $scope.meta.highestLevels.push(content.highestSensitiveLevel.replace('LEVEL_', ''));
                     }
-
+                    if (content.highestResistanceLevel) {
+                        $scope.meta.highestLevels.push(content.highestResistanceLevel.replace('LEVEL_', ''));
+                    }
                     $rootScope.view.subNavItems = subNavItems;
 
                     fetchHistogramData();
                 } else {
                     console.log('no such gene existed ');
                     if (/[a-z]/.test($routeParams.geneName)) {
-                        $location.path('/gene/' +
+                        $location.path('/genes/' +
                             $routeParams.geneName.toUpperCase());
                     } else {
                         $location.path('/genes');
@@ -673,12 +681,7 @@ angular.module('oncokbStaticApp')
             return item;
         };
 
-        $scope.setColor = function(level) {
-            if ($scope.view.levelColors.hasOwnProperty(level)) {
-                return {color: $scope.view.levelColors[level]};
-            }
-            return {color: $scope.view.levelColors.other};
-        };
+        $scope.getLevelColor = utils.getLevelColor;
 
         $scope.tableClicked = function(type) {
             // Bootstrap fade in has 150ms transition time. DataTable only can gets width after the transition.

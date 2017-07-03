@@ -8,7 +8,7 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-    .controller('MainCtrl', function($scope, $rootScope, $location) {
+    .controller('MainCtrl', function($scope, $rootScope, $location, utils, _) {
         $scope.isActive = function(viewLocation) {
             return viewLocation === $location.path();
         };
@@ -316,5 +316,51 @@ angular.module('oncokbStaticApp')
             }
         };
 
+        $scope.getLevelColor = utils.getLevelColor;
+
+        $scope.getIconClass = function(oncogenicity, sl, rl, isVUS) {
+            var iconType = ['', 'unknown-oncogenic'];
+
+            if (rl) {
+                if (sl) {
+                    iconType[0] = 'level' + sl + 'R';
+                } else if (rl) {
+                    iconType[0] = 'level' + rl;
+                }
+            } else if (sl) {
+                iconType[0] = 'level' + sl;
+            }
+
+            switch (oncogenicity) {
+            case 'Likely Neutral':
+                iconType[1] = 'likely-neutral';
+                break;
+            case 'Unknown':
+                iconType[1] = 'unknown-oncogenic';
+                break;
+            case 'Inconclusive':
+                iconType[1] = 'unknown-oncogenic';
+                break;
+            case 'Predicted Oncogenic':
+                iconType[1] = 'oncogenic';
+                break;
+            case 'Likely Oncogenic':
+                iconType[1] = 'oncogenic';
+                break;
+            case 'Oncogenic':
+                iconType[1] = 'oncogenic';
+                break;
+            default:
+                iconType[1] = 'no-info-oncogenic';
+                break;
+            }
+
+            if (iconType[1] === 'no-info-oncogenic' &&
+                _.isBoolean(isVUS) && isVUS) {
+                iconType[1] = 'vus';
+            }
+
+            return iconType.join(' ');
+        };
         NProgress.done();
     });

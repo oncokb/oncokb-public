@@ -56,12 +56,18 @@
       <div class="row">
         <div class="col-lg-2 col-md-2"></div>
         <div class="col-lg-8 col-md-8">
-            <input type="search" class="form-control" placeholder="Search Gene"
-                   ng-model="content.selectedGene"
+            <input type="search" class="form-control" placeholder="Search Gene / Variant"
+                   ng-model="content.selectedItem"
                    typeahead-on-select="searchConfirmed($event)"
-                   uib-typeahead="gene.hugoSymbol as gene for gene in searchKeyUp($viewValue)"
+                   uib-typeahead="item for item in searchKeyUp($viewValue)"
                    typeahead-template-url="mainSearchTemplate.html"
+                   typeahead-wait-ms="200"
+                   typeahead-loading="content.loadingSearchResult"
+                   typeahead-min-length="2"
             >
+            <div class="loading" ng-if="content.loadingSearchResult">
+                <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+            </div>
         </div>
         <div class="col-lg-2 col-md-2"></div>
       </div>

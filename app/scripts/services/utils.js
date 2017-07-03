@@ -8,7 +8,7 @@
  * Factory in the oncokbStaticApp.
  */
 angular.module('oncokbStaticApp')
-    .factory('utils', function(_) {
+    .factory('utils', function(_, $rootScope) {
         return {
             insertSourceLink: function(str) {
                 if (typeof str === 'string' && str) {
@@ -50,6 +50,14 @@ angular.module('oncokbStaticApp')
                     oncoTreeType.mainType.name ?
                         oncoTreeType.mainType.name : 'NA') ||
                     'NA') : 'NA';
+            },
+            getLevelColor: function(level) {
+                if (level) {
+                    if ($rootScope.data.levelColors.hasOwnProperty(level)) {
+                        return {color: $rootScope.data.levelColors[level]};
+                    }
+                }
+                return {color: $rootScope.data.levelColors.Other};
             }
         };
     });
