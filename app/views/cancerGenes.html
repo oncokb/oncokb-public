@@ -64,7 +64,7 @@
                 <td>
                     <span ng-switch on="x.oncokbAnnotated">
                         <span ng-switch-when="Yes">
-                            <a href="#/gene/{{x.hugoSymbol}}">Yes</a>
+                            <a href="#/genes/{{x.hugoSymbol}}">Yes</a>
                         </span>
                         <span ng-switch-when="No">
                             No <a href="mailto:feedback@oncokb.org?subject=Annotation suggestion for {{x.hugoSymbol}}&&body=Thank you for using the Cancer Gene Page feedback feature.%0A Please provide the following information for {{x.hugoSymbol}} curation:%0A%0AEvidence:%0APMIDs:%0AAbstracts:" title="suggest to annotate this gene"
