@@ -107,4 +107,15 @@
   .iconSize {
     font-size: 10px;
   }
+  .table tbody td:first-child {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .table tbody td:first-child:hover {
+    color: #1c75cd;
+  }
+  .loadingOpacity {
+    opacity: 0.2;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+  }
 }

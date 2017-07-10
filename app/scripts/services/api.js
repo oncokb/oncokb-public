@@ -36,8 +36,8 @@ angular.module('oncokbStaticApp')
                 }
                 return $http.get(apiLink + 'genes/lookup?query=' + query);
             },
-            searchVariant: function(query) {
-                return $http.get(apiLink + 'variants/lookup?variant=' + query);
+            variantLookup: function(hugoSymbol, variant) {
+                return $http.get(apiLink + 'variants/lookup?hugoSymbol=' + hugoSymbol + '&variant=' + variant);
             },
             getGenes: function() {
                 return $http.get(apiLink + 'genes/');
@@ -72,7 +72,7 @@ angular.module('oncokbStaticApp')
                     'mutationMapperData?hugoSymbol=' + hugoSymbol);
             },
             getStudies: function(studies) {
-                return $http.get('http://www.cbioportal.org/api-legacy/studies?study_ids=' + studies);
+                return $http.get('http://www.cbioportal.org/api-legacy/studies');
             },
             getpumbedArticle: function(pumbedID) {
                 return $http.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=' + pumbedID);
@@ -85,6 +85,12 @@ angular.module('oncokbStaticApp')
             },
             getCancerGeneList: function() {
                 return $http.get(apiLink  + 'utils/cancerGeneList');
+            },
+            searchVariant: function(hugoSymbol, variant, source, queryType) {
+                return $http.get(apiLink + 'search?hugoSymbol=' + hugoSymbol + '&variant=' + variant + '&source=' + source + '&queryType=' + queryType);
+            },
+            searchVariantList: function(params) {
+                return $http.post(apiLink + 'variants/lookup', params);
             }
         };
     });
