@@ -336,6 +336,9 @@ angular.module('oncokbStaticApp')
                     var mutations = ele.datum().mutations;
                     _.each(mutations, function(item) {
                         proteinChanges.push(item.attributes.proteinChange);
+                        if (['truncating', 'Nonsense_Mutation', 'Nonstop_Mutation', 'frameshift', 'Frame_Shift_Del', 'Frame_Shift_Ins', 'Splice_Site'].indexOf(item.attributes.mutationType) !== -1) {
+                            proteinChanges.push('truncating');
+                        }
                     });
                 });
             }
