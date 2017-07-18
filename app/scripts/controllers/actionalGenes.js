@@ -88,7 +88,7 @@ angular.module('oncokbStaticApp')
         ];
 
         $scope.clickGene = function(gene) {
-            $location.path('/genes/' + gene);
+            $location.path('/gene/' + gene);
         };
 
         getTreatmentsMetadata();

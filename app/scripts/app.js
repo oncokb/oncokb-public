@@ -47,7 +47,7 @@ angular
                 templateUrl: 'views/team.html',
                 controller: 'MainCtrl'
             })
-            .when('/genes/:geneName', {
+            .when('/gene/:geneName', {
                 templateUrl: 'views/gene.html',
                 controller: 'GeneCtrl',
                 controllerAs: 'gene'
