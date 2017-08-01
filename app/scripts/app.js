@@ -57,6 +57,11 @@ angular
                 controller: 'GenesCtrl',
                 controllerAs: 'genes'
             })
+            .when('/gene/:geneName/variant/:variantName', {
+                templateUrl: 'views/gene.html',
+                controller: 'GeneCtrl',
+                controllerAs: 'gene'
+            })
             .when('/about', {
                 templateUrl: 'views/about.html',
                 controller: 'AboutCtrl',

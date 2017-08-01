@@ -1,8 +1,10 @@
 <div class="gene container" ng-if="gene.hugoSymbol.length > 0">
 
     <div class="row top">
-        <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]">
-            <span class="gene-title">{{gene.hugoSymbol}}</span><br/>
+        <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="!variant.name">
+            <div>
+                <span class="gene-title">{{gene.hugoSymbol}}</span><br/>
+            </div>
             <div class="gene-addition" ng-if="meta.showGeneAddition">
                 <div ng-if="gene.tsg || gene.oncogene">
                     <b style="display: inline-flex">
@@ -14,7 +16,7 @@
                 <div ng-if="meta.highestLevels.length > 0">
                     <b>Highest level of evidence:
                         <span ng-repeat="level in meta.highestLevels" ng-style="getLevelColor(level)">Level {{level}}<span
-                            ng-if="$index < meta.highestLevels.length - 1">, </span></span></b>
+                                ng-if="$index < meta.highestLevels.length - 1">, </span></span></b>
                 </div>
                 <div ng-if="gene.geneAliases && gene.geneAliases.length > 0" class="alias">
                     <span>Also known as </span>
@@ -27,31 +29,88 @@
                     <span ng-if="gene.curatedRefSeq">RefSeq: {{gene.curatedRefSeq}}</span>
                 </div>
             </div>
-
             <p ng-if="status.hasSummary" ng-bind-html="meta.geneSummary"></p>
             <div ng-if="status.hasBackground">
                 <p class="gene-background-info-wrapper">
-            <span class="gene-more-info"
-                  ng-click="status.moreInfo = !status.moreInfo"
-                  ng-if="status.hasBackground"
-                  ng-class="{'hide': !!status.moreInfo}">
-              See {{gene.hugoSymbol}} background<i class="fa fa-arrow-circle-o-down gene-more-info-icon"></i>
-            </span>
+                    <span class="gene-more-info"
+                          ng-click="status.moreInfo = !status.moreInfo"
+                          ng-if="status.hasBackground"
+                          ng-class="{'hide': !!status.moreInfo}">
+                      See {{gene.hugoSymbol}} background<i class="fa fa-arrow-circle-o-down gene-more-info-icon"></i>
+                    </span>
                     <span class="gene-less-info"
                           ng-class="{'hide': !status.moreInfo}"
                           ng-click="status.moreInfo = !status.moreInfo">
-              Hide {{gene.hugoSymbol}} background<i
-                        class="fa fa-arrow-circle-o-up gene-less-info-icon"></i>
-            </span>
+                            Hide {{gene.hugoSymbol}} background<i class="fa fa-arrow-circle-o-up gene-less-info-icon"></i>
+                    </span>
                 </p>
-                <p ng-class="{'hide': !status.moreInfo}"
-                   ng-bind-html="meta.geneBackground"></p>
+                <p ng-class="{'hide': !status.moreInfo}" ng-bind-html="meta.geneBackground"></p>
             </div>
         </div>
+        <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="variant.name">
+            <div ng-if="variant.name">
+                <span class="gene-title"><a href="#/gene/{{gene.hugoSymbol}}" style="color:black;" uib-tooltip-placement="top" uib-tooltip="All Variants">{{gene.hugoSymbol}}</a> {{variant.displayName}}</span>
+            </div>
+            <div ng-if="displayVariantInfo()">
+                <b>
+                    <span ng-if="variant.oncogenic">
+                        <span>{{variant.oncogenic}}</span>
+                        <span style="font-size:18px">&middot;</span>
+                    </span>
+                    <span ng-if="variant.mutationEffect">
+                        <span>{{variant.mutationEffect}}</span>
+                        <span ng-if="variant.pmids.length > 0" class="gene-evidence-td-span" qtip qtip-type="geneEvidence" pmids="variant.pmids"><i class="fa fa-book" aria-hidden="true"></i></span>,
+                    </span>
+                    <span ng-if="variant.highestLevel">
+                        <span ng-bind-html="variant.highestLevel"></span>
+                    </span>
+                </b>
+            </div>
+            <p ng-if="status.hasSummary" ng-bind-html="meta.geneSummary + (displayVariantInfo() ? ' ' + variant.mutationSummary : '')"></p>
+            <p class="gene-background-info-wrapper">
+                    <span class="gene-more-info"
+                          ng-click="variant.displayGeneInfo = !variant.displayGeneInfo"
+                          ng-class="{'hide': !!variant.displayGeneInfo}">
+                      See additional {{gene.hugoSymbol}} information<i class="fa fa-arrow-circle-o-down gene-more-info-icon"></i>
+                    </span>
+                <span class="gene-less-info"
+                      ng-class="{'hide': !variant.displayGeneInfo}"
+                      ng-click="variant.displayGeneInfo = !variant.displayGeneInfo">
+                            Hide additional {{gene.hugoSymbol}} information<i class="fa fa-arrow-circle-o-up gene-less-info-icon"></i>
+                    </span>
+            </p>
+            <div ng-show="variant.displayGeneInfo">
+                <div class="gene-addition" ng-if="meta.showGeneAddition">
+                    <div ng-if="gene.tsg || gene.oncogene">
+                        <b style="display: inline-flex">
+                            <span ng-if="gene.oncogene">Oncogene</span>
+                            <span ng-if="gene.tsg && gene.oncogene" style="margin-right: 5px">,</span>
+                            <span ng-if="gene.tsg">Tumor Suppressor</span>
+                        </b>
+                    </div>
+                    <div ng-if="meta.highestLevels.length > 0">
+                        <b>Highest level of gene evidence:
+                            <span ng-repeat="level in meta.highestLevels" ng-style="getLevelColor(level)">Level {{level}}<span
+                                    ng-if="$index < meta.highestLevels.length - 1">, </span></span></b>
+                    </div>
+                    <div ng-if="gene.geneAliases && gene.geneAliases.length > 0" class="alias">
+                        <span>Also known as </span>
+                        <span ng-repeat="alias in gene.geneAliases">{{alias}}
+                        <span ng-if="!$last" class="comma">,</span></span>
+                    </div>
+                    <div ng-if="gene.tsg || gene.oncogene" class="isoform">
+                        <span ng-if="gene.curatedIsoform">Isoform: {{gene.curatedIsoform}}</span>
+                        <span ng-if="gene.curatedIsoform && gene.curatedRefSeq"> </span>
+                        <span ng-if="gene.curatedRefSeq">RefSeq: {{gene.curatedRefSeq}}</span>
+                    </div>
+                </div>
+                <p ng-bind-html="meta.geneBackground"></p>
+            </div>
 
+        </div>
         <div class="col-lg-6 col-md-6" ng-if="meta.altFreFlag">
-            <div class="histogram-title">
-                Tumor Types with {{gene.hugoSymbol}} Mutations
+            <div class="histogram-title" ng-show="meta.title">
+                Tumor Types with {{gene.hugoSymbol + ' ' + variant.name}} Mutations
                 <i class="fa fa-question-circle-o"
                    qtip
                    my="bottom center"
@@ -90,16 +149,14 @@
                 <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=stad_tcga_pub">Stomach Adenocarcinoma (TCGA, Nature 2014)</a></li>
                 <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=tgct_tcga">Testicular Germ Cell Cancer (TCGA, Provisional)</a></li>
                 <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=ucec_tcga_pub">Uterine Corpus Endometrioid Carcinoma (TCGA, Nature 2013)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=msk_impact_2017">MSK-IMPACT Clinical Sequencing Cohort (MSKCC, Nat Med 2017)</a></li>
              </ul>'></i></span></span></div>
             <div id="templateDiv"></div>
             <div id="mutation_details"></div>
         </div>
     </div>
 
-    <div class="row gene-table">
-        <div class="col-lg-12 col-md-12">
-
+    <div class="row gene-table" ng-class="{'loadingOpacity': variant.loadingRelevantAlts}">
+        <div class="col-lg-12 col-md-12" ng-if="!variant.name">
             <ul class="nav nav-tabs nav-tabs-responsive"
                 ng-if="clinicalVariants.length > 0 || annotatedVariants.length > 0" role="tablist">
                 <li ng-class="{'in active': clinicalVariants.length > 0}" ng-if="clinicalVariants.length > 0"
@@ -118,7 +175,7 @@
                     <p class="noteAlign">If you notice any mistakes or missing variants / citations, please send an
                         email to <a href="mailto:feedback@oncokb.org?subject=OncoKB Feedback">feedback@oncokb.org.</a>
                     </p>
-                    <table id="clinicalTable" class="row-border hover"
+                    <table id="clinicalTable" class="table row-border hover"
                            datatable="ng" dt-options="view.clinicalTableOptions"
                            dt-instance="meta.clinicalTable">
                         <thead>
@@ -132,7 +189,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="x in clinicalVariants">
-                            <td>{{ x.variant.name}}</td>
+                            <td ng-click="clickVariant(x.variant.name)">{{x.variant.name}}</td>
                             <td>{{ getCancerTypeName(x.cancerType)}}</td>
                             <td>
                                     <span ng-repeat="drugItem in x.drug">
@@ -160,7 +217,7 @@
                     <p class="noteAlign">If you notice any mistakes or missing variants / citations, please send an
                         email to <a href="mailto:feedback@oncokb.org?subject=OncoKB Feedback">feedback@oncokb.org.</a>
                     </p>
-                    <table id="annotatedTable" class="row-border hover"
+                    <table id="annotatedTable" class="table row-border hover"
                            datatable="ng" dt-options="view.biologicalTableOptions"
                            dt-instance="meta.biologicalTable">
                         <thead>
@@ -174,7 +231,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="y in annotatedVariants">
-                            <td>{{ y.variant.name}}</td>
+                            <td ng-click="clickVariant(y.variant.name)">{{y.variant.name}}</td>
                             <td>{{ displayOncogenic(y.oncogenic)}}</td>
                             <td>{{ y.mutationEffect}}</td>
                             <td>
@@ -193,6 +250,42 @@
 
                 </div>
             </div>
+        </div>
+        <div class="col-lg-12 col-md-12" ng-if="variant.name">
+            <table id="clinicalTable" class="table row-border hover"
+                   datatable="ng" dt-options="view.clinicalTableOptions"
+                   dt-instance="meta.clinicalTable">
+                <thead>
+                <tr>
+                    <th>Variant</th>
+                    <th>Cancer Type</th>
+                    <th>Drug(s)</th>
+                    <th>Level</th>
+                    <th>Citations</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="x in clinicalVariants">
+                    <td ng-click="clickVariant(x.variant.name)">{{x.variant.name}}</td>
+                    <td>{{ getCancerTypeName(x.cancerType)}}</td>
+                    <td>
+                                    <span ng-repeat="drugItem in x.drug">
+                                        <span>{{drugItem}}<br ng-if="$index < x.drug.length - 1"/></span>
+                                    </span>
+                    </td>
+                    <td><span qtip qtip-type="geneLevel" number="{{x.level}}">{{ x.level.toUpperCase()}}</span>
+                    </td>
+                    <td>
+                                <span class="referenceStyle"
+                                      qtip qtip-type="geneEvidence"
+                                      abstracts="x.drugAbstracts"
+                                      pmids="x.drugPmids">
+                                {{getNumOfRefsClinicalVariant(x)}} </span>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
