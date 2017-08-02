@@ -9,12 +9,6 @@ and open the template in the editor.
 */
 
 .actionable-genes {
-    table tbody td:first-child {
-        text-decoration: underline;
-    }
-    table tbody td:first-child:hover {
-        cursor: pointer;
-    }
     .target-style{
         margin-top:-80px;
         padding-top:80px;
@@ -36,5 +30,14 @@ and open the template in the editor.
     .loading-div {
       text-align: center;
       margin-top: 20px;
+    }
+
+    table tbody td:first-child, td.variant a {
+        text-decoration: underline;
+        color: black;
+    }
+    table tbody td:first-child:hover, td.variant a:hover {
+        text-decoration: underline;
+        color: $primary-color;
     }
 }

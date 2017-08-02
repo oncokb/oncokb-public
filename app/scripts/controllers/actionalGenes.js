@@ -91,6 +91,12 @@ angular.module('oncokbStaticApp')
             $location.path('/gene/' + gene);
         };
 
+        $scope.getVariantsLink = function(gene, variants) {
+            return _.map(variants.split(','), function(variant) {
+                return utils.getVariantCellContent(gene, variant);
+            }).join(', ');
+        };
+
         getTreatmentsMetadata();
 
         function getTreatmentsMetadata() {
@@ -155,10 +161,10 @@ angular.module('oncokbStaticApp')
                     var treatment = {
                         gene: item.gene.hugoSymbol || 'NA',
                         variants: item.alterations.map(function(alt) {
-                            return alt.alteration;
+                            return alt.name ? alt.name : alt.alteration;
                         }).sort().join(', ') || 'NA',
                         alterations: item.alterations.map(function(alt) {
-                            return alt.alteration;
+                            return alt.name ? alt.name : alt.alteration;
                         }).sort(),
                         disease: utils.getCancerTypeNameFromOncoTreeType(item.oncoTreeType),
                         drugs: item.treatments.map(function(treatment) {
