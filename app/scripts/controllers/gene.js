@@ -99,12 +99,12 @@ angular.module('oncokbStaticApp')
             }
         };
         $scope.variant = {
-            name: $routeParams.variantName,
+            name: $routeParams.variantName ? decodeURIComponent($routeParams.variantName) : '',
             oncogenic: '',
             mutationEffect: '',
             highestLevel: '',
             mutationSummary: '',
-            displayName: $routeParams.variantName,
+            displayName: $routeParams.variantName ? decodeURIComponent($routeParams.variantName) : '',
             relevantVariants: [],
             loadingRelevantAlts: false,
             generalMutations: ['Oncogenic Mutations', 'Gain-of-function Mutations', 'Loss-of-function Mutations', 'Switch-of-function Mutations', 'Likely Oncogenic Mutations', 'Likely Gain-of-function Mutations', 'Likely Loss-of-function Mutations', 'Likely Switch-of-function Mutations'],
@@ -561,11 +561,7 @@ angular.module('oncokbStaticApp')
                     api.searchVariantList(variantList).then(function(result) {
                         _.each(result.data, function(relevantItems) {
                             _.each(relevantItems, function(item) {
-                                if(/\s/.test(item.name)) {
-                                    relevantAlts.push('(' + item.name + ')');
-                                } else {
-                                    relevantAlts.push(item.name);
-                                }
+                                relevantAlts.push(item.name);
                             });
                         });
                         relevantAlts = _.uniq(relevantAlts);
@@ -591,10 +587,10 @@ angular.module('oncokbStaticApp')
         function updateTablesTemp(proteinChanges) {
             var regexString = _.uniq(proteinChanges).join('|');
             if (_.isObject($scope.meta.clinicalTable) && $scope.meta.clinicalTable.DataTable) {
-                $scope.meta.clinicalTable.DataTable.column(0).search(regexString, true).draw();
+                $scope.meta.clinicalTable.DataTable.column(0).search(regexString, true, false).draw();
             }
             if (_.isObject($scope.meta.biologicalTable) && $scope.meta.biologicalTable.DataTable) {
-                $scope.meta.biologicalTable.DataTable.column(0).search(regexString, true).draw();
+                $scope.meta.biologicalTable.DataTable.column(0).search(regexString, true, false).draw();
             }
             var tempCount = 0;
             var regexp = new RegExp(regexString, 'i');
@@ -834,14 +830,14 @@ angular.module('oncokbStaticApp')
             return utils.getVariantCellContent($scope.gene.hugoSymbol, variantName);
         };
 
-        $scope.displayVariantInfo = function() {
+        $scope.isGeneralMutation = function() {
             if (!$scope.variant.name) return false;
             for(var i = 0; i < $scope.variant.generalMutations.length; i++) {
                 if (stringMatch($scope.variant.name, $scope.variant.generalMutations[i])) {
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         };
 
         function stringMatch(a, b) {
@@ -852,9 +848,13 @@ angular.module('oncokbStaticApp')
 
         jQuery.extend(jQuery.fn.dataTableExt.oSort, {
             'variant-html-asc': function(a, b) {
+                a = $(a).text();
+                b = $(b).text();
                 return $scope.variant.relevantVariants.indexOf(a.toUpperCase()) - $scope.variant.relevantVariants.indexOf(b.toUpperCase());
             },
             'variant-html-desc': function(a, b) {
+                a = $(a).text();
+                b = $(b).text();
                 return $scope.variant.relevantVariants.indexOf(b.toUpperCase()) - $scope.variant.relevantVariants.indexOf(a.toUpperCase());
             }
         });

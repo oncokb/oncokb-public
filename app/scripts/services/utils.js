@@ -52,12 +52,13 @@ angular.module('oncokbStaticApp')
                     'NA') : 'NA';
             },
             getVariantCellContent: function(geneName, variantName) {
-                if (geneName && variantName && variantName.indexOf('/') === -1) {
-                    geneName = geneName.trim();
-                    variantName = variantName.trim();
-                    return '<a href="#/gene/' + geneName + '/variant/' + variantName + '">' + variantName + '</a>';
+                geneName = geneName.trim();
+                variantName = variantName.trim();
+                var formattedVariantName = variantName;
+                if (/\//.test(variantName)) {
+                    formattedVariantName = encodeURIComponent(encodeURIComponent(formattedVariantName));
                 }
-                return '<span>' + variantName + '</span>';
+                return '<a href="#/gene/' + geneName + '/variant/' + formattedVariantName + '">' + variantName + '</a>';
             },
             getLevelColor: function(level) {
                 if (level) {

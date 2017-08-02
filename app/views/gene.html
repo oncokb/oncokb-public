@@ -51,7 +51,7 @@
             <div ng-if="variant.name">
                 <span class="gene-title"><a href="#/gene/{{gene.hugoSymbol}}" uib-tooltip-placement="top" uib-tooltip="All Variants">{{gene.hugoSymbol}}</a> {{variant.displayName}}</span>
             </div>
-            <div ng-if="displayVariantInfo()">
+            <div ng-if="!isGeneralMutation()">
                 <b>
                     <span ng-if="variant.oncogenic">
                         <span>{{variant.oncogenic}}</span>
@@ -66,7 +66,7 @@
                     </span>
                 </b>
             </div>
-            <p ng-if="status.hasSummary" ng-bind-html="meta.geneSummary + (displayVariantInfo() ? ' ' + variant.mutationSummary : '')"></p>
+            <p ng-if="status.hasSummary" ng-bind-html="meta.geneSummary + (!isGeneralMutation() ? ' ' + variant.mutationSummary : '')"></p>
             <p class="gene-background-info-wrapper">
                     <span class="gene-more-info"
                           ng-click="variant.displayGeneInfo = !variant.displayGeneInfo"
@@ -156,7 +156,7 @@
     </div>
 
     <div class="row gene-table" ng-class="{'loadingOpacity': variant.loadingRelevantAlts}">
-        <div class="col-lg-12 col-md-12" ng-if="!variant.name">
+        <div class="col-lg-12 col-md-12" ng-if="!variant.name || isGeneralMutation()">
             <ul class="nav nav-tabs nav-tabs-responsive"
                 ng-if="clinicalVariants.length > 0 || annotatedVariants.length > 0" role="tablist">
                 <li ng-class="{'in active': clinicalVariants.length > 0}" ng-if="clinicalVariants.length > 0"
@@ -247,12 +247,11 @@
                         </tr>
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
-        <div class="col-lg-12 col-md-12" ng-if="variant.name">
-            <table id="clinicalTable" class="table row-border hover"
+        <div class="col-lg-12 col-md-12" ng-if="variant.name && !isGeneralMutation()">
+            <table id="clinicalTableVariantPage" class="table row-border hover"
                    datatable="ng" dt-options="view.clinicalTableOptions"
                    dt-instance="meta.clinicalTable">
                 <thead>
