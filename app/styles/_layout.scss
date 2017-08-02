@@ -129,7 +129,7 @@
   }
 }
 
-@media (max-width: 839px) {
+@media (max-width: 979px) {
   .mskcc-icon {
     display: none;
   }
@@ -138,7 +138,7 @@
   }
 }
 
-@media (max-width: 870px) and (min-width: $range-min-sm-width) {
+@media (max-width: 910px) and (min-width: $range-min-sm-width) {
   .navbar-nav > li > a {
     padding: 15px 0px;
   }
@@ -159,7 +159,7 @@
   }
 }
 
-@media (max-width: $range-max-width) and (min-width: 840px) {
+@media (max-width: $range-max-width) and (min-width: 980px) {
   .mskcc-icon {
     display: block;
   }
