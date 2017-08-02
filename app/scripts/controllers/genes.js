@@ -49,10 +49,10 @@ angular.module('oncokbStaticApp')
                     renderer: function(api, rowIdx, columns) {
                         var data = $.map(columns, function(col) {
                             return col.hidden ?
-                            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                            '<td>' + col.title + ':</td> ' +
-                            '<td>' + col.data + '</td>' +
-                            '</tr>' :
+                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                '<td>' + col.title + ':</td> ' +
+                                '<td>' + col.data + '</td>' +
+                                '</tr>' :
                                 '';
                         }).join('');
 
@@ -68,7 +68,22 @@ angular.module('oncokbStaticApp')
             .then(function(content) {
                 if (content && _.isArray(content.data)) {
                     $scope.meta.genes = _.map(content.data, function(item) {
-                        var _hLevel = _.isString(item.highestLevel) ? (item.highestLevel.replace('LEVEL_', '')).replace('NULL', '') : undefined;
+                        var levels = ['4', '3B', '3A', '2B', '2A', 'R1', '1'];
+                        var _index = -1;
+                        var __index = -1;
+                        if (_.isString(item.highestSensitiveLevel)) {
+                            __index = levels.indexOf(item.highestSensitiveLevel.replace('LEVEL_', ''));
+                            if (__index > _index) {
+                                _index = __index;
+                            }
+                        }
+                        if (_.isString(item.highestResistenceLevel)) {
+                            __index = levels.indexOf(item.highestSensitiveLevel.replace('LEVEL_', ''));
+                            if (__index > _index) {
+                                _index = __index;
+                            }
+                        }
+                        var _hLevel = _index === -1 ? '' : levels[_index];
                         return {
                             gene: item.gene.hugoSymbol,
                             level: _hLevel,
