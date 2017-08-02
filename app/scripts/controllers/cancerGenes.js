@@ -15,15 +15,16 @@ angular.module('oncokbStaticApp')
         // DataTable initialization & options
         $scope.dt = {};
         $scope.dt.dtOptions = {
-            paging: false,
+            paging: true,
             hasBootstrap: true,
             language: {
                 loadingRecords: '<img src="resources/images/loader.gif">'
             },
+            pagingType: 'numbers',
             scrollY: 500,
-            scrollX: "100%",
             scrollCollapse: true,
-            aaSorting: [[1, 'desc'], [2, 'asc'], [0, 'asc']]
+            aaSorting: [[1, 'desc'], [2, 'asc'], [0, 'asc']],
+            responsive: true
         };
 
         function displayConvert(obj, keys) {

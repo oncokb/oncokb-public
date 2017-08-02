@@ -37,6 +37,9 @@ table.dataTable tbody td.child {
   padding: 8px 0 8px 20px;
 }
 
+div.dataTables_filter input {
+    width: calc(100% - 60px);
+}
 /* ------------------------ */
 
 /*Overide bootstrap styles*/
@@ -50,7 +53,7 @@ table.dataTable tbody td.child {
 }
 
 .navbar-fixed-top .navbar-collapse, .navbar-fixed-bottom .navbar-collapse {
-  max-height: 370px;
+  max-height: 400px;
 }
 
 .dataTables_filter > label {
@@ -142,6 +145,27 @@ a:hover, a:focus {
   }
 }
 
+.cancerGenes {
+    .title {
+        span {
+            font-size: 30px;
+            font-family: inherit;
+            font-weight: 500;
+            line-height: 1.1;
+            color: inherit;
+            float: left;
+            line-height: 50px;
+        }
+        button {
+            height: 30px;
+            margin: 10px;
+            float: right;
+        }
+    }
+    table {
+        font-size: 12px;
+    }
+}
 .about {
   .about-title {
     font-size: 30px;
