@@ -49,7 +49,7 @@
         </div>
         <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="variant.name">
             <div ng-if="variant.name">
-                <span class="gene-title"><a href="#/gene/{{gene.hugoSymbol}}" style="color:black;" uib-tooltip-placement="top" uib-tooltip="All Variants">{{gene.hugoSymbol}}</a> {{variant.displayName}}</span>
+                <span class="gene-title"><a href="#/gene/{{gene.hugoSymbol}}" uib-tooltip-placement="top" uib-tooltip="All Variants">{{gene.hugoSymbol}}</a> {{variant.displayName}}</span>
             </div>
             <div ng-if="displayVariantInfo()">
                 <b>
@@ -189,7 +189,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="x in clinicalVariants">
-                            <td ng-click="clickVariant(x.variant.name)">{{x.variant.name}}</td>
+                            <td ng-bind-html="getVariantCellContent(x.variant.name)"></td>
                             <td>{{ getCancerTypeName(x.cancerType)}}</td>
                             <td>
                                     <span ng-repeat="drugItem in x.drug">
@@ -231,7 +231,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="y in annotatedVariants">
-                            <td ng-click="clickVariant(y.variant.name)">{{y.variant.name}}</td>
+                            <td ng-bind-html="getVariantCellContent(y.variant.name)"></td>
                             <td>{{ displayOncogenic(y.oncogenic)}}</td>
                             <td>{{ y.mutationEffect}}</td>
                             <td>
@@ -266,7 +266,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="x in clinicalVariants">
-                    <td ng-click="clickVariant(x.variant.name)">{{x.variant.name}}</td>
+                    <td ng-bind-html="getVariantCellContent(x.variant.name)"></td>
                     <td>{{ getCancerTypeName(x.cancerType)}}</td>
                     <td>
                                     <span ng-repeat="drugItem in x.drug">

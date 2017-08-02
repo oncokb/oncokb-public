@@ -72,9 +72,15 @@
     }
   }
 
-  .gene-title {
-    font-size: 40px;
-  }
+    .gene-title {
+        font-size: 40px;
+        a {
+            color: black;
+        }
+        a:hover {
+            color: $primary-color;
+        }
+    }
 
   .mutation-details-content {
     margin-left: 0;
@@ -107,13 +113,14 @@
   .iconSize {
     font-size: 10px;
   }
-  .table tbody td:first-child {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  .table tbody td:first-child:hover {
-    color: #1c75cd;
-  }
+    .table tbody td:first-child a {
+        text-decoration: underline;
+        color: black;
+    }
+    .table tbody td:first-child a:hover {
+        text-decoration: underline;
+        color: $primary-color;
+    }
   .loadingOpacity {
     opacity: 0.2;
     filter: alpha(opacity=50); /* For IE8 and earlier */

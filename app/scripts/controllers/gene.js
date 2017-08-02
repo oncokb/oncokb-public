@@ -830,8 +830,8 @@ angular.module('oncokbStaticApp')
             return utils.getCancerTypeNameFromOncoTreeType(cancerType);
         };
 
-        $scope.clickVariant = function(variantName) {
-            $location.path('/gene/' + $scope.gene.hugoSymbol + '/variant/' + variantName);
+        $scope.getVariantCellContent = function(variantName) {
+            return utils.getVariantCellContent($scope.gene.hugoSymbol, variantName);
         };
 
         $scope.displayVariantInfo = function() {

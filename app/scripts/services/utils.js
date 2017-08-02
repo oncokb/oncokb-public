@@ -51,6 +51,14 @@ angular.module('oncokbStaticApp')
                         oncoTreeType.mainType.name : 'NA') ||
                     'NA') : 'NA';
             },
+            getVariantCellContent: function(geneName, variantName) {
+                if (geneName && variantName && variantName.indexOf('/') === -1) {
+                    geneName = geneName.trim();
+                    variantName = variantName.trim();
+                    return '<a href="#/gene/' + geneName + '/variant/' + variantName + '">' + variantName + '</a>';
+                }
+                return '<span>' + variantName + '</span>';
+            },
             getLevelColor: function(level) {
                 if (level) {
                     if ($rootScope.data.levelColors.hasOwnProperty(level)) {
