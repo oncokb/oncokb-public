@@ -53,14 +53,15 @@
             </div>
             <div ng-if="!isGeneralMutation()">
                 <b>
-                    <span ng-if="variant.oncogenic">
-                        <span>{{variant.oncogenic}}</span>
-                        <span style="font-size:18px">&middot;</span>
-                    </span>
+                    <span ng-if="variant.oncogenic">{{variant.oncogenic}}</span>
+                    <span ng-if="variant.oncogenic && variant.mutationEffect" style="font-size:18px">&middot;</span>
                     <span ng-if="variant.mutationEffect">
                         <span>{{variant.mutationEffect}}</span>
-                        <span ng-if="variant.pmids.length > 0" class="gene-evidence-td-span" qtip qtip-type="geneEvidence" pmids="variant.pmids"><i class="fa fa-book" aria-hidden="true"></i></span>,
                     </span>
+                    <span ng-if="variant.pmids && variant.pmids.length > 0" class="gene-evidence-td-span" qtip
+                          qtip-type="geneEvidence" pmids="variant.pmids"><i class="fa fa-book"
+                                                                            aria-hidden="true"></i></span>
+                    <span ng-if="(variant.oncogenic || variant.mutationEffect) && variant.highestLevel">,</span>
                     <span ng-if="variant.highestLevel">
                         <span ng-bind-html="variant.highestLevel"></span>
                     </span>
