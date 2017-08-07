@@ -11,10 +11,20 @@ OncoKB is relying on Sass. You will need to first install Ruby and Compass:
 ```
 gem install compass
 ```
+## Install project
+1. Install npm and bower globally
+2. Go to oncokb-public root directory
+3. npm install
+4. bower install
 
-## Build & development
-
-Run `grunt` for building and `grunt serve` for preview.
+## Build and development
+1. Set legacyLink, privateApiLink and apiLink in app/scripts/app.js to proper values to fetch data. For example, public oncokb api could be used as below: 
+```
+.constant('legacyLink', 'http://oncokb.org/legacy-api/')
+.constant('privateApiLink', 'http://oncokb.org/api/private/')
+.constant('apiLink', 'http://oncokb.org/api/v1/')
+```
+2. Run `grunt` for building and `grunt serve` for preview.
 
 ## Testing
 
