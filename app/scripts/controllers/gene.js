@@ -130,7 +130,7 @@ angular.module('oncokbStaticApp')
                     var tempHighestLevel = '';
                     var levels = ['4', '3B', '3A', '2B', '2A', 'R1', '1'];
                     $scope.clinicalVariants = _.filter(clinicalVariants.data, function(item) {
-                        if (!$scope.variant.highestLevel && stringMatch(item.variant.name, $scope.variant.name) && levels.indexOf(item.level) > levels.indexOf(tempHighestLevel)) {
+                        if (!$scope.variant.highestLevel && $scope.variant.relevantVariants.indexOf(item.variant.name.toUpperCase()) !== -1 && levels.indexOf(item.level) > levels.indexOf(tempHighestLevel)) {
                             tempHighestLevel = item.level;
                         }
                         return $scope.variant.relevantVariants.indexOf(item.variant.name.toUpperCase()) !== -1;
