@@ -85,6 +85,10 @@
   .mutation-details-content {
     margin-left: 0;
     min-width: 200px;
+      .mutation-diagram-toolbar-buttons button:hover{
+          color: white;
+          background-color: $oncokb-orange;
+      }
   }
 
   input.diagram-y-axis-limit-input {
