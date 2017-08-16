@@ -1,7 +1,7 @@
 <div class="gene container" ng-if="gene.hugoSymbol.length > 0">
 
     <div class="row top">
-        <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="!variant.name">
+        <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="meta.inGenePage">
             <div>
                 <span class="gene-title">{{gene.hugoSymbol}}</span><br/>
             </div>
@@ -34,7 +34,6 @@
                 <p class="gene-background-info-wrapper">
                     <span class="gene-more-info"
                           ng-click="status.moreInfo = !status.moreInfo"
-                          ng-if="status.hasBackground"
                           ng-class="{'hide': !!status.moreInfo}">
                       See {{gene.hugoSymbol}} background<i class="fa fa-arrow-circle-o-down gene-more-info-icon"></i>
                     </span>
@@ -47,10 +46,10 @@
                 <p ng-class="{'hide': !status.moreInfo}" ng-bind-html="meta.geneBackground"></p>
             </div>
         </div>
-        <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="variant.name">
+        <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="meta.inVariantPage">
             <div ng-if="variant.name">
                 <span class="gene-title">
-                    <a ng-if="gene.hugoSymbol !== 'Other Biomarkers'" href="#/gene/{{gene.hugoSymbol}}" uib-tooltip-placement="top" uib-tooltip="All Variants">{{gene.hugoSymbol}}</a> {{variant.displayName}}</span>
+                    <a ng-if="!meta.isOtherBiomarkers" href="#/gene/{{gene.hugoSymbol}}" uib-tooltip-placement="top" uib-tooltip="All Variants">{{gene.hugoSymbol}}</a> {{variant.displayName}}</span>
             </div>
             <div ng-if="!isGeneralMutation()">
                 <b>
@@ -73,12 +72,18 @@
                     <span class="gene-more-info"
                           ng-click="variant.displayGeneInfo = !variant.displayGeneInfo"
                           ng-class="{'hide': !!variant.displayGeneInfo}">
-                      See additional {{gene.hugoSymbol}} information<i class="fa fa-arrow-circle-o-down gene-more-info-icon"></i>
+                        See additional
+                        <span ng-if="!meta.isOtherBiomarkers">{{gene.hugoSymbol}}</span>
+                        <span ng-if="meta.isOtherBiomarkers">{{variant.name}}</span>
+                        information<i class="fa fa-arrow-circle-o-down gene-more-info-icon"></i>
                     </span>
                 <span class="gene-less-info"
                       ng-class="{'hide': !variant.displayGeneInfo}"
                       ng-click="variant.displayGeneInfo = !variant.displayGeneInfo">
-                            Hide additional {{gene.hugoSymbol}} information<i class="fa fa-arrow-circle-o-up gene-less-info-icon"></i>
+                            Hide additional
+                        <span ng-if="!meta.isOtherBiomarkers">{{gene.hugoSymbol}}</span>
+                        <span ng-if="meta.isOtherBiomarkers">{{variant.name}}</span>
+                    information<i class="fa fa-arrow-circle-o-up gene-less-info-icon"></i>
                     </span>
             </p>
             <div ng-show="variant.displayGeneInfo">

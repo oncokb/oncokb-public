@@ -47,6 +47,12 @@ angular.module('oncokbStaticApp')
                     'evidences/lookup?hugoSymbol=' + hugoSymbol +
                     '&evidenceTypes=GENE_SUMMARY');
             },
+            getMutationEffect: function(hugoSymbol, variant) {
+                return $http.get(apiLink +
+                    'evidences/lookup?hugoSymbol=' + hugoSymbol +
+                    '&variant=' + variant +
+                    '&evidenceTypes=MUTATION_EFFECT');
+            },
             getGeneBackground: function(hugoSymbol) {
                 return $http.get(apiLink +
                     'evidences/lookup?hugoSymbol=' + hugoSymbol +
@@ -84,7 +90,7 @@ angular.module('oncokbStaticApp')
                 return $http.get(legacyLink + 'evidence.json?levels=' + level);
             },
             getCancerGeneList: function() {
-                return $http.get(apiLink  + 'utils/cancerGeneList');
+                return $http.get(apiLink + 'utils/cancerGeneList');
             },
             searchVariant: function(hugoSymbol, variant, source, queryType) {
                 return $http.get(apiLink + 'search?hugoSymbol=' + hugoSymbol + '&variant=' + variant + '&source=' + source + '&queryType=' + queryType);
