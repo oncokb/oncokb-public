@@ -98,19 +98,6 @@ angular.module('oncokbStaticApp')
                 }
             }
         };
-        $scope.variant = {
-            name: $routeParams.variantName ? decodeURIComponent($routeParams.variantName) : '',
-            oncogenic: '',
-            mutationEffect: '',
-            highestLevel: '',
-            mutationSummary: '',
-            displayName: $routeParams.variantName ? decodeURIComponent($routeParams.variantName) : '',
-            relevantVariants: [],
-            loadingRelevantAlts: false,
-            generalMutations: ['Oncogenic Mutations', 'Gain-of-function Mutations', 'Loss-of-function Mutations', 'Switch-of-function Mutations', 'Likely Oncogenic Mutations', 'Likely Gain-of-function Mutations', 'Likely Loss-of-function Mutations', 'Likely Switch-of-function Mutations'],
-            displayGeneInfo: false,
-            pmids: []
-        };
 
         function fetchTableData() {
             // clinical variants table and annotated variants table
@@ -139,7 +126,7 @@ angular.module('oncokbStaticApp')
                         $scope.variant.highestLevel = '<span class="level-' + tempHighestLevel + '">Level ' + tempHighestLevel + '</span>';
                     }
                     $scope.annotatedVariants = _.filter(tempAnnotatedVariants, function(item) {
-                        if (stringMatch(item.variant.name, $scope.variant.name)) {
+                        if (stringMatch(item.variant.name, $scope.variant.name) || stringMatch(item.variant.alteration, $scope.variant.name)) {
                             $scope.variant.oncogenic = item.oncogenic;
                             $scope.variant.mutationEffect = item.mutationEffect;
                             $scope.variant.pmids = item.pmids;
@@ -248,7 +235,27 @@ angular.module('oncokbStaticApp')
                     fetchGraphData(graphDataResult);
                 });
             });
+
+            // Get mutation effect(ME) if is Other Biomarkers
+            // Use ME description as gene summary, additional info as background
+            if ($scope.meta.isOtherBiomarkers && $scope.meta.inVariantPage) {
+                $scope.meta.showGeneAddition = false;
+                api.getMutationEffect($scope.gene.hugoSymbol, $scope.variant.name)
+                    .then(function(result) {
+                        var content = result.data;
+                        if (_.isArray(content) && content.length > 0) {
+                            $scope.meta.geneSummary = content[0].description;
+                            $scope.meta.geneBackground = content[0].additionalInfo;
+                            $scope.status.hasBackground = $scope.meta.geneBackground ? true : false;
+                        } else {
+                            $scope.meta.geneBackground = '';
+                        }
+                    }, function() {
+                        $scope.status.hasBackground = false;
+                    });
+            }
         }
+
         function fetchGraphData(result) {
             var generalMutation = false;
             if ($scope.variant.name) {
@@ -556,7 +563,10 @@ angular.module('oncokbStaticApp')
                     var relevantAlts = tempProteinChanges;
                     var variantList = [];
                     _.each(tempProteinChanges, function(proteinChange) {
-                        variantList.push({hugoSymbol: $scope.gene.hugoSymbol, variant: proteinChange});
+                        variantList.push({
+                            hugoSymbol: $scope.gene.hugoSymbol,
+                            variant: proteinChange
+                        });
                     });
                     api.searchVariantList(variantList).then(function(result) {
                         _.each(result.data, function(relevantItems) {
@@ -584,6 +594,7 @@ angular.module('oncokbStaticApp')
                 $scope.$apply();
             }
         }
+
         function updateTablesTemp(proteinChanges) {
             var regexString = _.uniq(proteinChanges).join('|');
             if (_.isObject($scope.meta.clinicalTable) && $scope.meta.clinicalTable.DataTable) {
@@ -610,8 +621,31 @@ angular.module('oncokbStaticApp')
             $scope.annotatedVariantsCount = tempCount;
         }
 
+        function stringMatch(a, b) {
+            if (!a && !b && a === b) {
+                return true;
+            }
+            if (a && b) {
+                return a.toUpperCase() === b.toUpperCase();
+            }
+            return false;
+        }
+
         $scope.gene = {
             hugoSymbol: $routeParams.geneName
+        };
+        $scope.variant = {
+            name: $routeParams.variantName ? decodeURIComponent($routeParams.variantName) : '',
+            oncogenic: '',
+            mutationEffect: '',
+            highestLevel: '',
+            mutationSummary: '',
+            displayName: $routeParams.variantName ? decodeURIComponent($routeParams.variantName) : '',
+            relevantVariants: [],
+            loadingRelevantAlts: false,
+            generalMutations: ['Oncogenic Mutations', 'Gain-of-function Mutations', 'Loss-of-function Mutations', 'Switch-of-function Mutations', 'Likely Oncogenic Mutations', 'Likely Gain-of-function Mutations', 'Likely Loss-of-function Mutations', 'Likely Switch-of-function Mutations'],
+            displayGeneInfo: false,
+            pmids: []
         };
         $scope.meta = {
             clinicalTable: {},
@@ -619,7 +653,10 @@ angular.module('oncokbStaticApp')
             showGeneAddition: true,
             altFreFlag: true,
             highestLevels: [],
-            title: false
+            title: false,
+            isOtherBiomarkers: false,
+            inGenePage: false,
+            inVariantPage: false
         };
 
         $scope.status = {
@@ -681,7 +718,10 @@ angular.module('oncokbStaticApp')
         $scope.view.biologicalTableOptions = {
             hasBootstrap: true,
             aoColumns: [
-                {sType: $scope.variant.name ? 'variant-html' : 'num-html', asSorting: ['asc', 'desc']},
+                {
+                    sType: $scope.variant.name ? 'variant-html' : 'num-html',
+                    asSorting: ['asc', 'desc']
+                },
                 {sType: 'oncogenic-html', asSorting: ['desc', 'asc']},
                 null,
                 {
@@ -722,14 +762,21 @@ angular.module('oncokbStaticApp')
         };
         $rootScope.view.subNavItems = [{content: $scope.gene.hugoSymbol}];
 
+        if ($routeParams.geneName) {
+            if ($routeParams.variantName) {
+                $scope.meta.inVariantPage = true;
+            } else {
+                $scope.meta.inGenePage = true;
+            }
+        }
+
         api.getNumbers('gene', $routeParams.geneName)
             .then(function(result) {
                 var content = result.data;
                 if (content) {
                     $scope.gene = content.gene;
                     if ($scope.gene.hugoSymbol.toLowerCase() === 'other biomarkers') {
-                        $scope.meta.showGeneAddition = false;
-                        $scope.meta.altFreFlag = false;
+                        $scope.meta.isOtherBiomarkers = true;
                     }
                     $route.updateParams({geneName: $scope.gene.hugoSymbol});
                     var subNavItems = [{content: $scope.gene.hugoSymbol}];
@@ -831,20 +878,16 @@ angular.module('oncokbStaticApp')
         };
 
         $scope.isGeneralMutation = function() {
-            if (!$scope.variant.name) return false;
-            for(var i = 0; i < $scope.variant.generalMutations.length; i++) {
+            if (!$scope.variant.name) {
+                return false;
+            }
+            for (var i = 0; i < $scope.variant.generalMutations.length; i++) {
                 if (stringMatch($scope.variant.name, $scope.variant.generalMutations[i])) {
                     return true;
                 }
             }
             return false;
         };
-
-        function stringMatch(a, b) {
-            if (!a && !b && a === b) return true;
-            if (a && b) return a.toUpperCase() === b.toUpperCase();
-            return false;
-        }
 
         jQuery.extend(jQuery.fn.dataTableExt.oSort, {
             'variant-html-asc': function(a, b) {
