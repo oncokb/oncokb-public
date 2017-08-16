@@ -49,7 +49,8 @@
         </div>
         <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="variant.name">
             <div ng-if="variant.name">
-                <span class="gene-title"><a href="#/gene/{{gene.hugoSymbol}}" uib-tooltip-placement="top" uib-tooltip="All Variants">{{gene.hugoSymbol}}</a> {{variant.displayName}}</span>
+                <span class="gene-title">
+                    <a ng-if="gene.hugoSymbol !== 'Other Biomarkers'" href="#/gene/{{gene.hugoSymbol}}" uib-tooltip-placement="top" uib-tooltip="All Variants">{{gene.hugoSymbol}}</a> {{variant.displayName}}</span>
             </div>
             <div ng-if="!isGeneralMutation()">
                 <b>

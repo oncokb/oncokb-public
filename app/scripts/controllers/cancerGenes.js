@@ -20,9 +20,9 @@ angular.module('oncokbStaticApp')
             language: {
                 loadingRecords: '<img src="resources/images/loader.gif">'
             },
+            pageLength: 15,
+            lengthMenu: [[15, 30, 50, 100, -1], [15, 30, 50, 100, "All"]],
             pagingType: 'numbers',
-            scrollY: 500,
-            scrollCollapse: true,
             aaSorting: [[1, 'desc'], [2, 'asc'], [0, 'asc']],
             responsive: true
         };
@@ -36,6 +36,7 @@ angular.module('oncokbStaticApp')
             });
             return obj;
         }
+
         $scope.fetchedDate = '05/30/2017';
         $scope.doneLoading = false;
         $q.all([api.getGenes(), api.getCancerGeneList()]).then(function(result) {
@@ -54,7 +55,7 @@ angular.module('oncokbStaticApp')
             var tempData = result[1].data;
             _.each(tempData, function(item) {
                 item = displayConvert(item, ['oncokbAnnotated', 'foundation', 'foundationHeme', 'mSKImpact', 'mSKHeme', 'vogelstein', 'sangerCGC']);
-                switch(geneTypeMapping[item.hugoSymbol]) {
+                switch (geneTypeMapping[item.hugoSymbol]) {
                 case 'Oncogene':
                     item.oncogene = 'Yes';
                     break;
