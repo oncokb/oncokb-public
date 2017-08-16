@@ -1,5 +1,23 @@
 /* Styles for cancer gene list page */
 
 .cancerGenes {
-  font-size: 14px;
+    .title {
+        span {
+            font-size: 30px;
+            font-family: inherit;
+            font-weight: 500;
+            line-height: 1.1;
+            color: inherit;
+            float: left;
+            line-height: 50px;
+        }
+        button {
+            height: 30px;
+            margin: 10px;
+            float: right;
+        }
+    }
+    table {
+        font-size: 14px;
+    }
 }
