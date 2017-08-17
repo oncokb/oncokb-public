@@ -193,7 +193,11 @@ angular.module('oncokbStaticApp').run(
         });
         $rootScope.$on('$routeChangeSuccess', function() {
             var path = $location.path().split('/') || [];
-            $rootScope.view.currentPage = path.length > 2 ? path[1] : '';
+            if (path.length === 5 && path[3] === 'variant') {
+                $rootScope.view.currentPage = 'variant';
+            } else {
+                $rootScope.view.currentPage = path.length > 2 ? path[1] : '';
+            }
             if (!$rootScope.view.subNavItems || $rootScope.view.subNavItems.length === 0) {
                 $.extend(true, $rootScope.view.subNavItems, $rootScope.meta.view.subNavItems);
             }
