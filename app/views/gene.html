@@ -2,9 +2,6 @@
 
     <div class="row top">
         <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="meta.inGenePage">
-            <div>
-                <span class="gene-title">{{gene.hugoSymbol}}</span><br/>
-            </div>
             <div class="gene-addition" ng-if="meta.showGeneAddition">
                 <div ng-if="gene.tsg || gene.oncogene">
                     <b style="display: inline-flex">
@@ -47,7 +44,6 @@
             </div>
         </div>
         <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="meta.inVariantPage">
-            <span class="gene-title"><a ng-if="!meta.isOtherBiomarkers" href="#/gene/{{gene.hugoSymbol}}" uib-tooltip-placement="top" uib-tooltip="All Variants">{{gene.hugoSymbol}}</a> {{variant.displayName}}</span>
             <div ng-if="!isGeneralMutation()">
                 <b>
                     <span ng-if="variant.oncogenic">{{variant.oncogenic}}</span>

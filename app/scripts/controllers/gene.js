@@ -127,13 +127,18 @@ angular.module('oncokbStaticApp')
                     }
                     $scope.annotatedVariants = _.filter(tempAnnotatedVariants, function(item) {
                         if (stringMatch(item.variant.name, $scope.variant.name) || stringMatch(item.variant.alteration, $scope.variant.name)) {
-                            $scope.variant.oncogenic = item.oncogenic;
                             $scope.variant.mutationEffect = item.mutationEffect;
                             $scope.variant.pmids = item.pmids;
                         }
                         return $scope.variant.relevantVariants.indexOf(item.variant.name.toUpperCase()) !== -1;
                     });
-                    $scope.variant.mutationSummary = result[2].data.variantSummary;
+                    if (!$scope.variant.mutationEffect) {
+                        // handle this in the future
+                    }
+                    if (result[2] && result[2].data) {
+                        $scope.variant.mutationSummary = result[2].data.variantSummary;
+                        $scope.variant.oncogenic = result[2].data.oncogenic;
+                    }
                 } else {
                     $scope.clinicalVariants = clinicalVariants.data;
                     $scope.annotatedVariants = tempAnnotatedVariants;
@@ -151,10 +156,15 @@ angular.module('oncokbStaticApp')
                 var allMissenseVariants = _.uniq(_.map($scope.annotatedVariants, function(item) {
                     return item.variant;
                 }));
-                if (uniqueAnnotatedVariants.length > 0 && $scope.meta.inGenePage) {
+                if ($scope.meta.inGenePage && uniqueAnnotatedVariants.length > 0) {
                     $rootScope.view.subNavItems = [
                         {content: $scope.gene.hugoSymbol},
                         {content: uniqueAnnotatedVariants.length + ' annotated variant' + (uniqueAnnotatedVariants.length > 1 ? 's' : '')}
+                    ];
+                } else if ($scope.meta.inVariantPage) {
+                    $rootScope.view.subNavItems = [
+                        {content: $scope.gene.hugoSymbol, link: '#/gene/' + $scope.gene.hugoSymbol},
+                        {content: $scope.variant.name}
                     ];
                 }
                 var mutationType = '';
