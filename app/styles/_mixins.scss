@@ -445,3 +445,10 @@
   }
 
 }
+
+@mixin header-transition($second) {
+    -webkit-transition: all $second ease;
+    -moz-transition: all $second ease;
+    -o-transition: all $second ease;
+    transition: all $second ease;
+}

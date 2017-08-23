@@ -210,6 +210,16 @@ angular.module('oncokbStaticApp').run(
 NProgress.start();
 angular.element(document).ready(function() {
     angular.bootstrap(document, ['oncokbStaticApp']);
+
+    // Attach scrollTop event from jQuery
+    var navObject = jQuery.find('.navbar.navbar-fixed-top');
+    jQuery(window).scroll(function() {
+        if ($(this).scrollTop() === 0) {
+            $(navObject).removeClass('scrolled-box');
+        } else if (!$(navObject).hasClass('scrolled-box')) {
+            $(navObject).addClass('scrolled-box');
+        }
+    });
 });
 angular.element(document).on('show.bs.tab', '.nav-tabs-responsive [data-toggle="tab"]', function(e) {
     var $target = $(e.target);
