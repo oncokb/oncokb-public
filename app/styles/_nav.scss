@@ -50,7 +50,7 @@
 .navbar-inverse {
   background-color: $primary-color;
   border: 0;
-  @include header-transition(1s);
+  @include header-transition(all, 1s);
 }
 
 .scrolled-box {
@@ -125,7 +125,6 @@
 }
 
 .subNavWrapper {
-  @include header-transition(1s);
   background-color: white;
   display: none;
 }
@@ -142,7 +141,7 @@
   span.item {
     font-size: 24px;
     padding: 0 10px;
-    @include header-transition(1s);
+    @include header-transition(all, 1s);
   }
   span.item:first-child {
     padding-left: 0;
@@ -168,7 +167,7 @@
   }
   .subNav-sxn-1 a {
     color: black;
-    @include header-transition(0.5s);
+    @include header-transition(color, 0.5s);
   }
   .subNav-sxn-1 a:hover {
     cursor: pointer;

@@ -446,9 +446,9 @@
 
 }
 
-@mixin header-transition($second) {
-    -webkit-transition: all $second ease;
-    -moz-transition: all $second ease;
-    -o-transition: all $second ease;
-    transition: all $second ease;
+@mixin header-transition($type, $second) {
+    -webkit-transition: $type $second ease;
+    -moz-transition: $type $second ease;
+    -o-transition: $type $second ease;
+    transition: $type $second ease;
 }
