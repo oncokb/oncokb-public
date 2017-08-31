@@ -30,6 +30,18 @@
   .about .about-process {
     width: 100%;
   }
+  .scrolled-box {
+    .subNav {
+      span.item {
+        font-size: 20px;
+      }
+    }
+  }
+  .subNav {
+    span.item {
+      font-size: 20px;
+    }
+  }
 }
 
 @media (min-width: $range-min-sm-width) {
@@ -44,6 +56,18 @@
       }
     }
   }
+    .scrolled-box {
+        .subNav {
+            span.item {
+                font-size: 22px;
+            }
+        }
+    }
+    .subNav {
+        span.item {
+            font-size: 24px;
+        }
+    }
 }
 
 @media (max-width: $range-max-xm-width) {
