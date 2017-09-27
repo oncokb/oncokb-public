@@ -269,12 +269,11 @@ angular.module('oncokbStaticApp')
         }
 
         function fetchGraphData() {
-            var apiCallsForGraph = [api.getPortalAlterationSampleCount(), api.getStudies(), api.getMutationMapperData($routeParams.geneName)];
+            var apiCallsForGraph = [api.getPortalAlterationSampleCount(), api.getMutationMapperData($routeParams.geneName)];
             $q.all(apiCallsForGraph).then(function(result) {
                 var generalMutation = false;
                 var totalCounts = result[0];
-                var studyInfo = result[1];
-                var mutationMapperInfo = result[2];
+                var mutationMapperInfo = result[1];
                 var tempMutationMapperInfo;
 
                 if ($scope.meta.inVariantPage) {
@@ -317,14 +316,18 @@ angular.module('oncokbStaticApp')
                     var frequencies = [];
                     var fullNames = [];
                     var hoverInfo = [];
+                    var infoList = '<br/><ul class="fa-ul">';
                     for (var i = 0; i < countsByGene.length; i++) {
                         for (var j = 0; j < totalCounts.data.length; j++) {
                             if (totalCounts.data[j][0] === countsByGene[i][0]) {
-                                results.push({
-                                    study: countsByGene[i][0],
-                                    frequency: (100 * countsByGene[i][1] / totalCounts.data[j][1]).toFixed(1),
-                                    note: '(' + countsByGene[i][1] + ' samples)'
-                                });
+                                if (totalCounts.data[j][1] > 50) {
+                                    results.push({
+                                        study: countsByGene[i][0],
+                                        frequency: (100 * countsByGene[i][1] / totalCounts.data[j][1]).toFixed(1),
+                                        numerator: countsByGene[i][1],
+                                        denomerator: totalCounts.data[j][1]
+                                    });
+                                }
                                 break;
                             }
                         }
@@ -334,33 +337,26 @@ angular.module('oncokbStaticApp')
                     });
                     results.forEach(function(item) {
                         studies.push(item.study);
+                        var shortName = item.study.substring(16).replace(/cancer|tumor|of/gi, '').replace(/_/g, ' ').trim();
+                        var fullName = 'MSK-IMPACT ' + item.study.substring(16).replace(/_/g, ' ').trim();
+                        shortNames.push(shortName);
+                        fullNames.push(fullName);
                         frequencies.push(item.frequency);
-                        if ($scope.meta.inGenePage) {
-                            hoverInfo.push((item.frequency < 0.001 ? '<0.1' : item.frequency) + '% of patients ' + ' have annotated ' + $scope.gene.hugoSymbol + ' mutation');
-                        } else if ($scope.meta.inVariantPage) {
-                            hoverInfo.push((item.frequency < 0.001 ? '<0.1' : item.frequency) + '% of patients ' + item.note + ' have annotated ' + $scope.gene.hugoSymbol + ' ' + $scope.variant.name + ' mutation');
+                        if (results.length > 3) {
+                            hoverInfo.push(fullName + '<br>' + 'Mutation Frequency: ' +  (item.frequency < 0.001 ? '<0.1' : item.frequency) + '% (' + item.numerator + '/' + item.denomerator + ')');
+                        } else {
+                            infoList += '<li><i class="fa fa-circle iconSize"></i> ' + (item.frequency < 0.001 ? '<0.1' : item.frequency) + '% (' + item.numerator + '/' + item.denomerator + ') have annotated ';
+                            if ($scope.meta.inGenePage) {
+                                infoList += $scope.gene.hugoSymbol;
+                            } else if ($scope.meta.inVariantPage) {
+                                infoList += $scope.gene.hugoSymbol + ' ' + $scope.variant.name;
+                            }
+                            infoList += ' mutation in ' + fullName + '</li><br/>';
                         }
                     });
-
-                    studies.forEach(function(item) {
-                        studyInfo.data.forEach(function(item1) {
-                            if (item1.id === item) {
-                                shortNames.push(item1.short_name.indexOf('(') !== -1 ? item1.short_name.substring(0, item1.short_name.indexOf('(') - 1) : item1.short_name);
-                                fullNames.push(item1.name);
-                            }
-                        });
-                    });
-                    if (fullNames.length > 3) {
-                        _.each(hoverInfo, function(item, index) {
-                            hoverInfo[index] = autoBreakLines(item + ' in ' + fullNames[index]);
-                        });
-
+                    if (results.length > 3) {
                         plots(studies, shortNames, fullNames, frequencies, hoverInfo);
                     } else {
-                        var infoList = '<br/><ul class="fa-ul">';
-                        _.each(hoverInfo, function(item, index) {
-                            infoList += '<li><i class="fa fa-circle iconSize"></i> ' + item + ' in ' + fullNames[index] + '</li>';
-                        });
                         infoList += '</ul>';
                         $('#histogramDiv').append(infoList);
                     }
@@ -451,7 +447,7 @@ angular.module('oncokbStaticApp')
                 },
                 xaxis: {
                     tickfont: {
-                        size: Math.max(Math.min(260 / maxLengthStudy.length, 15, 180 / shortNames.length), 6)
+                        size: Math.max(Math.min(260 / maxLengthStudy.length, 15, 180 / shortNames.length), 10)
                     },
                     tickangle: 30,
                     fixedrange: true
@@ -462,7 +458,7 @@ angular.module('oncokbStaticApp')
                     t: 10,
                 }
             };
-
+            layout.xaxis.tickangle = 300/layout.xaxis.tickfont.size;
             Plotly.newPlot('histogramDiv', data, layout, {displayModeBar: false});
             var myPlot = document.getElementById('histogramDiv');
             myPlot.on('plotly_click', function(eventData) {
@@ -474,7 +470,7 @@ angular.module('oncokbStaticApp')
                 } else {
                     previousChosenIndex = tempIndex;
                     var tempValue = studies[tempIndex];
-                    $scope.studyName = 'for ' + fullNames[tempIndex];
+                    $scope.studyName = fullNames[tempIndex];
                     var newMutationData = [];
                     newMutationData = mutationData.filter(function(item) {
                         return item.cancerStudy === tempValue;
@@ -502,7 +498,7 @@ angular.module('oncokbStaticApp')
                 }
             });
         }
-
+        $scope.studyName = 'MSK-IMPACT Clinical Sequencing Cohort (MSKCC, Nat Med 2017)';
         function mutationMapperConstructor(mutationData, updateFlag) {
             if (updateFlag) {
                 // update lollipop from the chosen study in the histogram
@@ -510,7 +506,6 @@ angular.module('oncokbStaticApp')
             } else {
                 // load the template when first load the page
                 $('#templateDiv').load('views/mutationMapperTemplates.html', function() {
-                    $scope.studyName = 'across 20 Disease Specific Studies';
                     // init mutation mapper
                     mutationMapper = new MutationMapper(options);
                     mutationMapper.init();
@@ -603,7 +598,7 @@ angular.module('oncokbStaticApp')
                 resetFlag = false;
                 $scope.clinicalVariantsCount = uniqueClinicVariants.length;
                 $scope.annotatedVariantsCount = uniqueAnnotatedVariants.length;
-                $scope.studyName = 'across 20 Disease Specific Studies';
+                $scope.studyName = 'MSK-IMPACT Clinical Sequencing Cohort (MSKCC, Nat Med 2017)';
                 $scope.$apply();
             }
         }
