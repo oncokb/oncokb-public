@@ -115,7 +115,7 @@
                    qtip
                    my="bottom center"
                    at="top center"
-                   qtip-content="Currently, the mutation frequency does not take into account copy number changes or chromosomal translocations"></i>
+                   qtip-content="Currently, the mutation frequency histogram does not take into account cancer types that have less than 50 samples"></i>
             </div>
             <div id="histogramDiv"></div>
         </div>
@@ -123,33 +123,8 @@
 
     <div class="row" ng-if="mutationMapperFlag">
         <div class="col-lg-12 col-md-12">
-            <div class="mutation-mapper-title"><span>Annotated Mutation Distribution {{studyName}} <span
-                ng-if="studyName.indexOf('Disease Specific Studies') > 0 "><i class="fa fa-question-circle-o"
-                                                                              qtip classes="qtip-light qtip-rounded"
-                                                                              my="bottom center"
-                                                                              at="top center"
-                                                                              qtip-content='<ul class="list-group">
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=blca_tcga_pub">Bladder Urothelial Carcinoma (TCGA, Nature 2014)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=brca_tcga_pub2015">Breast Invasive Carcinoma (TCGA, Cell 2015)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=cesc_tcga">Cervical Squamous Cell Carcinoma and Endocervical Adenocarcinoma (TCGA, Provisional)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=coadread_tcga_pub">Colorectal Adenocarcinoma (TCGA, Nature 2012)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=hnsc_tcga_pub">Head and Neck Squamous Cell Carcinoma (TCGA, Nature 2015)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=kich_tcga_pub">Kidney Chromophobe (TCGA, Cancer Cell 2014)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=kirc_tcga_pub">Kidney Renal Clear Cell Carcinoma (TCGA, Nature 2013)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=kirc_tcga">Kidney Renal Papillary Cell Carcinoma (TCGA, Provisional)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=lihc_tcga">Liver Hepatocellular Carcinoma (TCGA, Provisional)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=luad_tcga_pub">Lung Adenocarcinoma (TCGA, Nature 2014)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=lusc_tcga_pub">Lung Squamous Cell Carcinoma (TCGA, Nature 2012)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=lgggbm_tcga_pub">Merged Cohort of LGG and GBM (TCGA, 2016)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=ov_tcga_pub">Ovarian Serous Cystadenocarcinoma (TCGA, Nature 2011)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=thca_tcga_pub">Papillary Thyroid Carcinoma (TCGA, Cell 2014)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=prad_tcga_pub">Prostate Adenocarcinoma (TCGA, Cell 2015)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=sarc_tcga">Sarcoma (TCGA, Provisional)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=skcm_tcga">Skin Cutaneous Melanoma (TCGA, Provisional)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=stad_tcga_pub">Stomach Adenocarcinoma (TCGA, Nature 2014)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=tgct_tcga">Testicular Germ Cell Cancer (TCGA, Provisional)</a></li>
-                <li><img src="resources/images/nci.png"/> <span><a target="_blank" href="http://www.cbioportal.org/study.do?cancer_study_id=ucec_tcga_pub">Uterine Corpus Endometrioid Carcinoma (TCGA, Nature 2013)</a></li>
-             </ul>'></i></span></span></div>
+            <div class="mutation-mapper-title"><span>Annotated Mutation Distribution in <a ng-if="studyName.indexOf('(') !== -1" href="http://www.cbioportal.org/study?id=msk_impact_2017#summary" target="_blank">{{studyName}}</a>
+                <span ng-if="studyName.indexOf('(') === -1">{{studyName}}</span></span></div>
             <div id="templateDiv"></div>
             <div id="mutation_details"></div>
         </div>
