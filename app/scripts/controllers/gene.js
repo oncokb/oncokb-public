@@ -638,7 +638,6 @@ angular.module('oncokbStaticApp')
             }
             return false;
         }
-
         $scope.gene = {
             hugoSymbol: $routeParams.geneName
         };
@@ -666,7 +665,13 @@ angular.module('oncokbStaticApp')
             inGenePage: false,
             inVariantPage: false
         };
-
+        if ($routeParams.geneName) {
+            if ($routeParams.variantName) {
+                $scope.meta.inVariantPage = true;
+            } else {
+                $scope.meta.inGenePage = true;
+            }
+        }
         $scope.status = {
             hasSummary: false,
             hasBackground: false,
@@ -769,14 +774,6 @@ angular.module('oncokbStaticApp')
             }
         };
         $rootScope.view.subNavItems = [{content: $scope.gene.hugoSymbol}];
-
-        if ($routeParams.geneName) {
-            if ($routeParams.variantName) {
-                $scope.meta.inVariantPage = true;
-            } else {
-                $scope.meta.inGenePage = true;
-            }
-        }
 
         api.getNumbers('gene', $routeParams.geneName)
             .then(function(result) {
