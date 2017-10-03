@@ -110,12 +110,12 @@
         </div>
         <div class="col-lg-6 col-md-6" ng-if="meta.altFreFlag">
             <div class="histogram-title" ng-show="meta.title">
-                Tumor Types with {{gene.hugoSymbol + ' ' + variant.name}} Mutations
+                Cancer Types with {{gene.hugoSymbol + ' ' + variant.name}} Mutations
                 <i class="fa fa-question-circle-o"
                    qtip
                    my="bottom center"
                    at="top center"
-                   qtip-content="Currently, the mutation frequency does not take into account copy number changes or chromosomal translocations or cancer types with fewer than 50 samples in <a target='_blank' href='http://www.cbioportal.org/study?id=msk_impact_2017#summary'>MSK-IMPACT Clinical Sequencing Cohort</a> <a href='https://www.ncbi.nlm.nih.gov/pubmed/28481359' target='_blank'>(MSKCC, Nat Med 2017)</a>"></i>
+                   qtip-content="Currently, the mutation frequency does not take into account copy number changes, chromosomal translocations or cancer types with fewer than 50 samples in <a target='_blank' href='http://www.cbioportal.org/study?id=msk_impact_2017#summary'>MSK-IMPACT Clinical Sequencing Cohort</a> (<a href='https://www.ncbi.nlm.nih.gov/pubmed/28481359' target='_blank'>Zehir et al., Nature Medicine, 2017</a>)"></i>
             </div>
             <div id="histogramDiv"></div>
         </div>
@@ -124,7 +124,7 @@
     <div class="row" ng-if="mutationMapperFlag">
         <div class="col-lg-12 col-md-12">
             <div class="mutation-mapper-title"><span>Annotated Mutation Distribution in <span ng-if="studyName.indexOf('Cohort') !== -1"><a href="http://www.cbioportal.org/study?id=msk_impact_2017#summary" target="_blank">{{studyName}}</a>
-                <a href="https://www.ncbi.nlm.nih.gov/pubmed/28481359" target="_blank">(MSKCC, Nat Med 2017)</a></span>
+                (<a href="https://www.ncbi.nlm.nih.gov/pubmed/28481359" target="_blank">Zehir et al., Nature Medicine, 2017</a>)</span>
                 <span ng-if="studyName.indexOf('Cohort') === -1">{{studyName}}</span></span></div>
             <div id="templateDiv"></div>
             <div id="mutation_details"></div>
