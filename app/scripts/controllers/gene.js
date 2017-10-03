@@ -343,7 +343,7 @@ angular.module('oncokbStaticApp')
                         fullNames.push(fullName);
                         frequencies.push(item.frequency);
                         if (results.length > 3) {
-                            hoverInfo.push(fullName + '<br>' + 'Mutation Frequency: ' +  (item.frequency < 0.001 ? '<0.1' : item.frequency) + '% (' + item.numerator + '/' + item.denomerator + ')<br>MSK-IMPACT Clinical Sequencing Cohort');
+                            hoverInfo.push(fullName + '<br>' + 'Mutation frequency: ' +  (item.frequency < 0.001 ? '<0.1' : item.frequency) + '% (' + item.numerator + '/' + item.denomerator + ')<br><span style="font-size:10px">MSK Clinical Sequencing Cohort (Zehir et al. 2017)</span>');
                         } else {
                             infoList += '<li><i class="fa fa-circle iconSize"></i> ' + (item.frequency < 0.001 ? '<0.1' : item.frequency) + '% (' + item.numerator + '/' + item.denomerator + ') have annotated ';
                             if ($scope.meta.inGenePage) {
