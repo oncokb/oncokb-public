@@ -338,12 +338,12 @@ angular.module('oncokbStaticApp')
                     results.forEach(function(item) {
                         studies.push(item.study);
                         var shortName = item.study.substring(16).replace(/cancer|tumor|of/gi, '').replace(/_/g, ' ').trim();
-                        var fullName = 'MSK-IMPACT ' + item.study.substring(16).replace(/_/g, ' ').trim();
+                        var fullName = item.study.substring(16).replace(/_/g, ' ').trim();
                         shortNames.push(shortName);
                         fullNames.push(fullName);
                         frequencies.push(item.frequency);
                         if (results.length > 3) {
-                            hoverInfo.push(fullName + '<br>' + 'Mutation Frequency: ' +  (item.frequency < 0.001 ? '<0.1' : item.frequency) + '% (' + item.numerator + '/' + item.denomerator + ')');
+                            hoverInfo.push(fullName + '<br>' + 'Mutation Frequency: ' +  (item.frequency < 0.001 ? '<0.1' : item.frequency) + '% (' + item.numerator + '/' + item.denomerator + ')<br>MSK-IMPACT Clinical Sequencing Cohort');
                         } else {
                             infoList += '<li><i class="fa fa-circle iconSize"></i> ' + (item.frequency < 0.001 ? '<0.1' : item.frequency) + '% (' + item.numerator + '/' + item.denomerator + ') have annotated ';
                             if ($scope.meta.inGenePage) {
@@ -351,7 +351,7 @@ angular.module('oncokbStaticApp')
                             } else if ($scope.meta.inVariantPage) {
                                 infoList += $scope.gene.hugoSymbol + ' ' + $scope.variant.name;
                             }
-                            infoList += ' mutation in ' + fullName + '</li><br/>';
+                            infoList += ' mutation in MSK-IMPACT ' + fullName + '</li><br/>';
                         }
                     });
                     if (results.length > 3) {
@@ -447,7 +447,7 @@ angular.module('oncokbStaticApp')
                 },
                 xaxis: {
                     tickfont: {
-                        size: Math.max(Math.min(260 / maxLengthStudy.length, 15, 180 / shortNames.length), 10)
+                        size: 10
                     },
                     tickangle: 30,
                     fixedrange: true
@@ -458,6 +458,9 @@ angular.module('oncokbStaticApp')
                     t: 10,
                 }
             };
+            if (maxLengthStudy.length > 0 && shortNames.length > 0) {
+                layout.xaxis.tickfont.size = Math.max(Math.min(260 / maxLengthStudy.length, 15, 180 / shortNames.length), 10);
+            }
             layout.xaxis.tickangle = 300/layout.xaxis.tickfont.size;
             Plotly.newPlot('histogramDiv', data, layout, {displayModeBar: false});
             var myPlot = document.getElementById('histogramDiv');
@@ -470,7 +473,7 @@ angular.module('oncokbStaticApp')
                 } else {
                     previousChosenIndex = tempIndex;
                     var tempValue = studies[tempIndex];
-                    $scope.studyName = fullNames[tempIndex];
+                    $scope.studyName = 'MSK-IMPACT ' + fullNames[tempIndex];
                     var newMutationData = [];
                     newMutationData = mutationData.filter(function(item) {
                         return item.cancerStudy === tempValue;
@@ -498,7 +501,7 @@ angular.module('oncokbStaticApp')
                 }
             });
         }
-        $scope.studyName = 'MSK-IMPACT Clinical Sequencing Cohort (MSKCC, Nat Med 2017)';
+        $scope.studyName = 'MSK-IMPACT Clinical Sequencing Cohort';
         function mutationMapperConstructor(mutationData, updateFlag) {
             if (updateFlag) {
                 // update lollipop from the chosen study in the histogram
@@ -598,7 +601,7 @@ angular.module('oncokbStaticApp')
                 resetFlag = false;
                 $scope.clinicalVariantsCount = uniqueClinicVariants.length;
                 $scope.annotatedVariantsCount = uniqueAnnotatedVariants.length;
-                $scope.studyName = 'MSK-IMPACT Clinical Sequencing Cohort (MSKCC, Nat Med 2017)';
+                $scope.studyName = 'MSK-IMPACT Clinical Sequencing Cohort';
                 $scope.$apply();
             }
         }
