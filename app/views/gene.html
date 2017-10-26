@@ -17,8 +17,7 @@
                 </div>
                 <div ng-if="gene.geneAliases && gene.geneAliases.length > 0" class="alias">
                     <span>Also known as </span>
-                    <span ng-repeat="alias in gene.geneAliases">{{alias}}
-                        <span ng-if="!$last" class="comma">,</span></span>
+                    <span ng-repeat="alias in gene.geneAliases">{{alias}}<span ng-if="!$last" class="comma">,</span></span>
                 </div>
                 <div ng-if="gene.tsg || gene.oncogene" class="isoform">
                     <span ng-if="gene.curatedIsoform">Isoform: {{gene.curatedIsoform}}</span>
@@ -95,8 +94,7 @@
                     </div>
                     <div ng-if="gene.geneAliases && gene.geneAliases.length > 0" class="alias">
                         <span>Also known as </span>
-                        <span ng-repeat="alias in gene.geneAliases">{{alias}}
-                        <span ng-if="!$last" class="comma">,</span></span>
+                        <span ng-repeat="alias in gene.geneAliases">{{alias}}<span ng-if="!$last" class="comma">,</span></span>
                     </div>
                     <div ng-if="gene.tsg || gene.oncogene" class="isoform">
                         <span ng-if="gene.curatedIsoform">Isoform: {{gene.curatedIsoform}}</span>
