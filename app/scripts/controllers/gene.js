@@ -607,7 +607,10 @@ angular.module('oncokbStaticApp')
         }
 
         function updateTablesTemp(proteinChanges) {
-            var regexString = _.uniq(proteinChanges).join('|');
+            var tempProteinChanges = _.map(_.uniq(proteinChanges), function(proteinChange) {
+                return proteinChange.replace(/\*/g, '\\*');
+            });
+            var regexString = tempProteinChanges.join('|');
             if (_.isObject($scope.meta.clinicalTable) && $scope.meta.clinicalTable.DataTable) {
                 $scope.meta.clinicalTable.DataTable.column(0).search(regexString, true, false).draw();
             }
