@@ -56,6 +56,11 @@ div.dataTables_filter input {
   max-height: 400px;
 }
 
+.nav-search-li {
+    width: 50px;
+    display: block;
+}
+
 .dataTables_filter > label {
   display: inline-flex;
 }
@@ -291,3 +296,4 @@ a:hover, a:focus {
 @import "license";
 @import "cancerGenes";
 @import "searchBox";
+@import "searchIcon";

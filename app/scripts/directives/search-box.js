@@ -20,7 +20,9 @@ angular.module('oncokbStaticApp')
 
                 scope.searchConfirmed = function() {
                     if (scope.content.selectedItem) {
-                        $location.path(scope.content.selectedItem.link);
+                        var link = scope.content.selectedItem.link;
+                        scope.content.selectedItem = undefined;
+                        $location.path(link);
                     }
                 };
 
