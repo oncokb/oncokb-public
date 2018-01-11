@@ -61,50 +61,6 @@
     using <b>Google Chrome, Firefox, Safari, or Internet Explorer 10 or above to visit this web site.</p>
 <![endif]-->
 
-<script type="text/ng-template" id="mainSearchTemplate.html">
-    <div class="main-search-template" ng-controller="MainCtrl">
-        <div ng-switch="match.model.queryType">
-            <div ng-switch-when="gene">
-                <div><span ng-bind-html="match.model.gene.hugoSymbol | uibTypeaheadHighlight:query"></span> <span
-                    ng-if="match.model.gene.entrezGeneId > 0">(Entrez Gene: <span
-                    ng-bind-html="match.model.gene.entrezGeneId | uibTypeaheadHighlight:query"></span>)</span>
-                    <span class="main-search-annotation"
-                          ng-if="match.model.highestSensitiveLevel || match.model.highestResistanceLevel">
-                        Highest level of evidence:
-                            <span ng-if="match.model.highestSensitiveLevel"
-                                  ng-style="getLevelColor(match.model.highestSensitiveLevel)">
-                                Level {{match.model.highestSensitiveLevel}}</span>
-                            <span ng-if="match.model.highestResistanceLevel"
-                                  ng-style="getLevelColor(match.model.highestResistanceLevel)">
-                                Level {{match.model.highestResistanceLevel}}</span>
-                    </span>
-                </div>
-                <div ng-if="match.model.gene.geneAliases && match.model.gene.geneAliases.length > 0" class="main-search-alias">
-                    <span>Also known as </span>
-                    <span ng-repeat="alias in match.model.gene.geneAliases"><span
-                        ng-bind-html="alias | uibTypeaheadHighlight:query"></span><span ng-if="!$last">,</span>
-              </span>
-                </div>
-            </div>
-            <div ng-switch-when="variant" class="main-search-variant">
-                <div class="match">
-                    <div class="main-search-gene-variant">
-                        <span>{{match.model.gene.hugoSymbol}}</span> /
-                        <span
-                            ng-bind-html="(match.model.variant.name ? match.model.variant.name : match.model.variant.alteration) | uibTypeaheadHighlight:query"></span>
-                    </div>
-                    <i class="oncogenic-icon-image"
-                       ng-class="getIconClass(match.model.oncogenicity, match.model.highestSensitiveLevel, match.model.highestResistanceLevel, match.model.vus)"/>
-                    <span class="no-annotation" ng-if="!match.model.variantExist">Not annotated by OncoKB</span>
-                </div>
-                <div class="main-search-annotation">
-                    <span ng-if="match.model.annotation">{{match.model.annotation}}</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
 <div class="wrapper">
     <div class="navbar navbar-inverse navbar-fixed-top" class="" role="navigation">
         <div class="container nav-container">
@@ -306,6 +262,7 @@
 <script src="scripts/services/utils.js"></script>
 <script src="scripts/controllers/dataaccess.js"></script>
 <script src="scripts/services/markedSwagger.js"></script>
+<script src="scripts/directives/searchbox.js"></script>
 <!-- endbuild -->
 </body>
 </html>

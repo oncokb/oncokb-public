@@ -1,0 +1,58 @@
+<script type="text/ng-template" id="searchBoxTemplate.html">
+    <div class="search-box-template" ng-controller="MainCtrl">
+        <div ng-switch="match.model.queryType">
+            <div ng-switch-when="gene">
+                <div><span ng-bind-html="match.model.gene.hugoSymbol | uibTypeaheadHighlight:query"></span> <span
+                    ng-if="match.model.gene.entrezGeneId > 0">(Entrez Gene: <span
+                    ng-bind-html="match.model.gene.entrezGeneId | uibTypeaheadHighlight:query"></span>)</span>
+                    <span class="search-box-annotation"
+                          ng-if="match.model.highestSensitiveLevel || match.model.highestResistanceLevel">
+                        Highest level of evidence:
+                            <span ng-if="match.model.highestSensitiveLevel"
+                                  ng-style="getLevelColor(match.model.highestSensitiveLevel)">
+                                Level {{match.model.highestSensitiveLevel}}</span>
+                            <span ng-if="match.model.highestResistanceLevel"
+                                  ng-style="getLevelColor(match.model.highestResistanceLevel)">
+                                Level {{match.model.highestResistanceLevel}}</span>
+                    </span>
+                </div>
+                <div ng-if="match.model.gene.geneAliases && match.model.gene.geneAliases.length > 0" class="search-box-alias">
+                    <span>Also known as </span>
+                    <span ng-repeat="alias in match.model.gene.geneAliases"><span
+                        ng-bind-html="alias | uibTypeaheadHighlight:query"></span><span ng-if="!$last">,</span>
+              </span>
+                </div>
+            </div>
+            <div ng-switch-when="variant" class="search-box-variant">
+                <div class="match">
+                    <div class="search-box-gene-variant">
+                        <span>{{match.model.gene.hugoSymbol}}</span> /
+                        <span
+                            ng-bind-html="(match.model.variant.name ? match.model.variant.name : match.model.variant.alteration) | uibTypeaheadHighlight:query"></span>
+                    </div>
+                    <i class="oncogenic-icon-image"
+                       ng-class="getIconClass(match.model.oncogenicity, match.model.highestSensitiveLevel, match.model.highestResistanceLevel, match.model.vus)"/>
+                    <span class="no-annotation" ng-if="!match.model.variantExist">Not annotated by OncoKB</span>
+                </div>
+                <div class="search-box-annotation">
+                    <span ng-if="match.model.annotation">{{match.model.annotation}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<div class="search-box">
+    <input type="search" class="form-control" placeholder="Search Gene / Variant"
+           ng-model="content.selectedItem"
+           typeahead-on-select="searchConfirmed($event)"
+           uib-typeahead="item for item in searchKeyUp($viewValue)"
+           typeahead-template-url="searchBoxTemplate.html"
+           typeahead-wait-ms="200"
+           typeahead-loading="content.loadingSearchResult"
+           typeahead-min-length="2"
+    >
+    <div class="loading" ng-if="content.loadingSearchResult">
+        <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+    </div>
+</div>
