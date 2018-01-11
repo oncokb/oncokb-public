@@ -15,36 +15,7 @@ angular.module('oncokbStaticApp')
             hoveredCount: '',
             main: $rootScope.meta.numbers.main,
             levels: $rootScope.meta.numbers.levels,
-            matchedGenes: [],
-            selectedGene: '',
-            loadingSearchResult: false
-        };
-
-        $scope.searchKeyUp = function(query) {
-            return api.blurSearch(query)
-                .then(function(resp) {
-                    var result = resp;
-                    if (_.isObject(resp)) {
-                        result = resp.data;
-                    }
-                    _.each(result, function(item) {
-                        if (item.highestSensitiveLevel) {
-                            item.highestSensitiveLevel = item.highestSensitiveLevel.replace('LEVEL_', '');
-                        }
-                        if (item.highestResistanceLevel) {
-                            item.highestResistanceLevel = item.highestResistanceLevel.replace('LEVEL_', '');
-                        }
-                    });
-                    return result;
-                }, function() {
-
-                });
-        };
-
-        $scope.searchConfirmed = function() {
-            if ($scope.content.selectedItem) {
-                $location.path($scope.content.selectedItem.link);
-            }
+            matchedGenes: []
         };
 
         $scope.getGeneCountForLevel = function(level) {
