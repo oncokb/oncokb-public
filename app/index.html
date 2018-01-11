@@ -111,6 +111,7 @@
                                                                                             data-target=".in"
                                                                                             href="#/news"><span>News</span></a>
                     </li>
+                    <li ng-class="{hidden: toggled}" class="nav-search-li"><search-icon></search-icon></li>
                 </ul>
                 <div class="pull-right" ng-class="{hidden: toggled}">
           <span><a href="http://mskcc.org"><img class="mskcc-logo"
@@ -262,7 +263,8 @@
 <script src="scripts/services/utils.js"></script>
 <script src="scripts/controllers/dataaccess.js"></script>
 <script src="scripts/services/markedSwagger.js"></script>
-<script src="scripts/directives/searchbox.js"></script>
+<script src="scripts/directives/search-box.js"></script>
+<script src="scripts/directives/search-icon.js"></script>
 <!-- endbuild -->
 </body>
 </html>

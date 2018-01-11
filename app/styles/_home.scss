@@ -7,6 +7,10 @@
         font-weight: bold;
     }
 
+    search-box .dropdown-menu {
+        width: calc(100% - 30px);
+    }
+
     .logo {
         .row {
             margin-bottom: 0;
