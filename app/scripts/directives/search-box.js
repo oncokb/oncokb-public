@@ -11,7 +11,9 @@ angular.module('oncokbStaticApp')
         return {
             templateUrl: 'views/searchBox.html',
             restrict: 'E',
-            scope: {},
+            scope: {
+                searchConfirmedEvent: '='
+            },
             link: function postLink(scope, element, attrs) {
                 scope.content = {
                     selectedGene: '',
@@ -23,6 +25,9 @@ angular.module('oncokbStaticApp')
                         var link = scope.content.selectedItem.link;
                         scope.content.selectedItem = undefined;
                         $location.path(link);
+                        if (angular.isFunction(scope.searchConfirmedEvent)) {
+                            scope.searchConfirmedEvent();
+                        }
                     }
                 };
 
