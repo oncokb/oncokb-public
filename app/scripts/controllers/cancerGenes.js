@@ -80,8 +80,8 @@ angular.module('oncokbStaticApp')
             var tempArr = ['Hugo Symbol', '# of occurence within resources', 'OncoKB Annotated', 'OncoKB Oncogene', 'OncoKB TSG', 'MSK-IMPACT', 'MSK-HEME', 'FOUNDATION ONE', 'FOUNDATION ONE HEME', 'Vogelstein', 'SANGER CGC'];
             var content = [tempArr.join('\t')];
             _.each($scope.cancerGeneList, function(item) {
-                tempArr = [item.hugoSymbol, item.occurrenceCount, item.oncokbAnnotated, item.oncogene, item.tsg, item.foundation,
-                    item.foundationHeme, item.mSKImpact, item.mSKHeme, item.vogelstein, item.sangerCGC];
+                tempArr = [item.hugoSymbol, item.occurrenceCount, item.oncokbAnnotated, item.oncogene, item.tsg, item.mSKImpact, item.mSKHeme, item.foundation,
+                    item.foundationHeme, item.vogelstein, item.sangerCGC];
                 content.push(tempArr.join('\t'));
             });
             var blob = new Blob([content.join('\n')], {
