@@ -65,6 +65,16 @@ angular.module('oncokbStaticApp')
                     'PIK3CA – Oncogenic mutations – Breast cancer – Updated treatments and evidence',
                     'PTEN – Oncogenic mutations – Breast cancer – Updated treatments and evidence'
                 ]
+            },
+            '02022018': {
+                'Level 1': [
+                    'November 6 2017, <a target="_blank" ' +
+                    'href="https://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/ucm583931.htm">' +
+                    'the FDA approved vemurafenib</a> for treatment of patients with Erdheim-Chester disease (histiocytosis) who harbor BRAF V600 mutations'
+                ],
+                'Level 3': [
+                    'HRAS - Oncogenic mutations - Head and Neck Squamous Cell Carcinoma - Tipifarnib (<b>moved from Level 4 to 3A only for HNSCC</b>)'
+                ]
             }
         };
     });
