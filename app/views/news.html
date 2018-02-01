@@ -18,6 +18,36 @@
             </p>
             <p ng-bind-html="data.citationURL"></p>
         </div>
+        <h3>February 2, 2018</h3>
+        <div>
+            <ul>
+                <li>Updated Actionable Genes
+                    <div class="row">
+                        <table class="table">
+                            <thead>
+                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
+                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="(key, value) in data.updatedActionableGenes['02022018']">
+                                <td>{{key}}</td>
+                                <td>
+                                    <ul>
+                                        <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+                <li>Addition of a new gene: KLF5 (<a target="_blank"
+                                                     href="https://www.ncbi.nlm.nih.gov/pubmed/28963353">Zhang et al.,
+                    Cancer Discovery, 2017</a>)
+                </li>
+                <li>Addition of new variants and updates to existing variants</li>
+            </ul>
+        </div>
         <h3>October 26, 2017</h3>
         <div>
             <ul>
@@ -26,7 +56,8 @@
                                                                             href='http://www.cbioportal.org/study?id=msk_impact_2017#summary'>MSK-IMPACT
                     Clinical Sequencing Cohort</a> (<a href='https://www.ncbi.nlm.nih.gov/pubmed/28481359'
                                                        target='_blank'>Zehir
-                    et al., Nature Medicine, 2017</a>)</li>
+                    et al., Nature Medicine, 2017</a>)
+                </li>
             </ul>
         </div>
         <h3>August 17, 2017</h3>
