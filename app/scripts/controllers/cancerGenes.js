@@ -23,10 +23,11 @@ angular.module('oncokbStaticApp')
             pageLength: 15,
             lengthMenu: [[15, 30, 50, 100, -1], [15, 30, 50, 100, 'All']],
             pagingType: 'numbers',
-            aaSorting: [[8, 'desc'], [0, 'asc'], [1, 'desc']],
+            aaSorting: [[9, 'desc'], [0, 'asc'], [1, 'desc']],
             columns: [
-                {type: 'html'},
+                {type: 'html', orderSequence: ['asc', 'desc']},
                 {type: 'html', orderSequence: ['desc', 'asc']},
+                {type: 'string', orderSequence: ['desc', 'asc']},
                 {type: 'string', orderSequence: ['desc', 'asc']},
                 {type: 'string', orderSequence: ['desc', 'asc']},
                 {type: 'string', orderSequence: ['desc', 'asc']},

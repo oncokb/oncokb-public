@@ -24,11 +24,17 @@
         <div class="row">
             <div class="col-lg-12">
                 <table datatable="ng" dt-options="dt.dtOptions"
-                       class="table row-border hover">
+                       class="table row-border hover" cellspacing="0" width="100%">
                     <thead>
                     <tr>
                         <th>Hugo Symbol</th>
                         <th>OncoKB Annotated</th>
+                        <th>Oncogene /TSG
+                            <i class="fa fa-question-circle-o"
+                               qtip
+                               my="bottom center"
+                               at="top center"
+                               qtip-content="As categorised by OncoKB"></i></th>
                         <th>MSK-IMPACT
                             <i class="fa fa-question-circle-o"
                                qtip
@@ -80,27 +86,29 @@
                             <span ng-switch-when="Yes">
                                 <a href="#/gene/{{x.hugoSymbol}}">{{x.hugoSymbol}}</a>
                             </span>
-                            <span ng-switch-when="No">
-                                {{x.hugoSymbol}}
-                                <a
-                                    href="mailto:feedback@oncokb.org?subject=Annotation suggestion for {{x.hugoSymbol}}&&body=Thank you for using the Cancer Gene Page feedback feature.%0A Please provide the following information for {{x.hugoSymbol}} curation:%0A%0AEvidence:%0APMIDs:%0AAbstracts:"
-                                    title="suggest to annotate this gene"
-                                    qtip qtip-content="Suggest to annotate {{x.hugoSymbol}}" my="bottom center"
-                                    at="top center" style="margin-left: 5px;"><i class="fa fa-envelope-o"
-                                                                                 aria-hidden="true"></i></a>
+                            <span ng-switch-when="No">{{x.hugoSymbol}}
                             </span>
                         </td>
                         <td>
-                            <span ng-if="x.oncogene === 'Yes'">
-                                <i class="fa fa-check-square-o"></i>Oncogene
-                            </span>
-                            <br ng-if="x.oncogene === 'Yes' && x.tsg === 'Yes'">
-                            <span ng-if="x.tsg === 'Yes'">
-                                <i class="fa fa-check-square-o"></i>TSG
-                            </span>
-                            <span ng-if="x.oncogene !== 'Yes' && x.tsg !== 'Yes' && x.oncokbAnnotated === 'Yes'">
+                    <span ng-switch on="x.oncokbAnnotated">
+                        <span ng-switch-when="Yes">
+                            <a href="#/gene/{{x.hugoSymbol}}" style="color: #000;">
                                 <i class="fa fa-check"></i>
-                            </span>
+                            </a>
+                        </span>
+                        <span ng-switch-when="No">
+                            <a
+                            href="mailto:feedback@oncokb.org?subject=Annotation suggestion for {{x.hugoSymbol}}&&body=Thank you for using the Cancer Gene Page feedback feature.%0A Please provide the following information for {{x.hugoSymbol}} curation:%0A%0AEvidence:%0APMIDs:%0AAbstracts:"
+                            title="suggest to annotate this gene"
+                            qtip qtip-content="Suggest to annotate {{x.hugoSymbol}}" my="bottom center"
+                            at="top center"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+                        </span>
+                    </span>
+                        </td>
+                        <td>
+                            <span ng-if="x.oncogene === 'Yes'">Oncogene</span>
+                            <br ng-if="x.oncogene === 'Yes' && x.tsg === 'Yes'">
+                            <span ng-if="x.tsg === 'Yes'">TSG</span>
                         </td>
                         <td ng-repeat="column in columnOrder" ng-switch on="x[column]">
                             <span ng-switch-when="Yes"><i class="fa fa-check"></i></span>
