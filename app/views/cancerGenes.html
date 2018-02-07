@@ -17,20 +17,24 @@
                 <div>The following genes are considered to be cancer genes by OncoKB, based on their inclusion in
                     various different sequencing panels, the Sanger Cancer Gene Census, or
                     <a href="http://science.sciencemag.org/content/339/6127/1546.full">
-                        Vogelstein et al. (2013)</a>.</div>
+                        Vogelstein et al. (2013)</a>.
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
                 <table datatable="ng" dt-options="dt.dtOptions"
-                       class="table row-border hover">
+                       class="table row-border hover" cellspacing="0" width="100%">
                     <thead>
                     <tr>
                         <th>Hugo Symbol</th>
-                        <th># of Resources</th>
                         <th>OncoKB Annotated</th>
-                        <th>OncoKB Oncogene</th>
-                        <th>OncoKB TSG</th>
+                        <th>Oncogene /TSG
+                            <i class="fa fa-question-circle-o"
+                               qtip
+                               my="bottom center"
+                               at="top center"
+                               qtip-content="As categorised by OncoKB"></i></th>
                         <th>MSK-IMPACT
                             <i class="fa fa-question-circle-o"
                                qtip
@@ -45,19 +49,19 @@
                                at="top center"
                                qtip-content="Gene exists in MSK-HEME resource ({{fetchedDate}})"></i>
                         </th>
-                        <th>FOUNDATION ONE
+                        <th>Foundation One
                             <i class="fa fa-question-circle-o"
                                qtip
                                my="bottom center"
                                at="top center"
-                               qtip-content="Gene exists in FOUNDATION ONE resource ({{fetchedDate}})"></i>
+                               qtip-content="Gene exists in Foundation One resource ({{fetchedDate}})"></i>
                         </th>
-                        <th>FOUNDATION ONE HEME
+                        <th>Foundation One Heme
                             <i class="fa fa-question-circle-o"
                                qtip
                                my="bottom center"
                                at="top center"
-                               qtip-content="Gene exists in FOUNDATION ONE HEME resource ({{fetchedDate}})"></i>
+                               qtip-content="Gene exists in Foundation One Heme resource ({{fetchedDate}})"></i>
                         </th>
                         <th>Vogelstein
                             <i class="fa fa-question-circle-o"
@@ -66,26 +70,34 @@
                                at="top center"
                                qtip-content="Gene exists in Vogelstein resource ({{fetchedDate}})"></i>
                         </th>
-                        <th>SANGER CGC
+                        <th>Sanger CGC
                             <i class="fa fa-question-circle-o"
                                qtip
                                my="bottom center"
                                at="top center"
                                qtip-content="Gene exists in SANGER CGC resource ({{fetchedDate}})"></i>
                         </th>
+                        <th># of Resources</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="x in cancerGeneList">
-                        <td>{{x.hugoSymbol}}</td>
-                        <td>{{x.occurrenceCount}}</td>
+                        <td ng-switch on="x.oncokbAnnotated">
+                            <span ng-switch-when="Yes">
+                                <a href="#/gene/{{x.hugoSymbol}}">{{x.hugoSymbol}}</a>
+                            </span>
+                            <span ng-switch-when="No">{{x.hugoSymbol}}
+                            </span>
+                        </td>
                         <td>
                     <span ng-switch on="x.oncokbAnnotated">
                         <span ng-switch-when="Yes">
-                            <a href="#/gene/{{x.hugoSymbol}}">Yes</a>
+                            <a href="#/gene/{{x.hugoSymbol}}" style="color: #000;">
+                                <i class="fa fa-check"></i>
+                            </a>
                         </span>
                         <span ng-switch-when="No">
-                            No <a
+                            <a
                             href="mailto:feedback@oncokb.org?subject=Annotation suggestion for {{x.hugoSymbol}}&&body=Thank you for using the Cancer Gene Page feedback feature.%0A Please provide the following information for {{x.hugoSymbol}} curation:%0A%0AEvidence:%0APMIDs:%0AAbstracts:"
                             title="suggest to annotate this gene"
                             qtip qtip-content="Suggest to annotate {{x.hugoSymbol}}" my="bottom center"
@@ -93,14 +105,15 @@
                         </span>
                     </span>
                         </td>
-                        <td>{{x.oncogene}}</td>
-                        <td>{{x.tsg}}</td>
-                        <td>{{x.mSKImpact}}</td>
-                        <td>{{x.mSKHeme}}</td>
-                        <td>{{x.foundation}}</td>
-                        <td>{{x.foundationHeme}}</td>
-                        <td>{{x.vogelstein}}</td>
-                        <td>{{x.sangerCGC}}</td>
+                        <td>
+                            <span ng-if="x.oncogene === 'Yes'">Oncogene</span>
+                            <br ng-if="x.oncogene === 'Yes' && x.tsg === 'Yes'">
+                            <span ng-if="x.tsg === 'Yes'">TSG</span>
+                        </td>
+                        <td ng-repeat="column in columnOrder" ng-switch on="x[column]">
+                            <span ng-switch-when="Yes"><i class="fa fa-check"></i></span>
+                        </td>
+                        <td>{{x.occurrenceCount}}</td>
                     </tr>
                     </tbody>
                 </table>
