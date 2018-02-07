@@ -21,9 +21,21 @@ angular.module('oncokbStaticApp')
                 loadingRecords: '<img src="resources/images/loader.gif">'
             },
             pageLength: 15,
-            lengthMenu: [[15, 30, 50, 100, -1], [15, 30, 50, 100, "All"]],
+            lengthMenu: [[15, 30, 50, 100, -1], [15, 30, 50, 100, 'All']],
             pagingType: 'numbers',
-            aaSorting: [[1, 'desc'], [2, 'asc'], [0, 'asc']],
+            aaSorting: [[9, 'desc'], [0, 'asc'], [1, 'desc']],
+            columns: [
+                {type: 'html', orderSequence: ['asc', 'desc']},
+                {type: 'html', orderSequence: ['desc', 'asc']},
+                {type: 'string', orderSequence: ['desc', 'asc']},
+                {type: 'string', orderSequence: ['desc', 'asc']},
+                {type: 'string', orderSequence: ['desc', 'asc']},
+                {type: 'string', orderSequence: ['desc', 'asc']},
+                {type: 'string', orderSequence: ['desc', 'asc']},
+                {type: 'string', orderSequence: ['desc', 'asc']},
+                {type: 'string', orderSequence: ['desc', 'asc']},
+                {type: 'number', orderSequence: ['desc', 'asc']}
+            ],
             responsive: true
         };
 
@@ -39,6 +51,8 @@ angular.module('oncokbStaticApp')
 
         $scope.fetchedDate = '05/30/2017';
         $scope.doneLoading = false;
+        $scope.columnOrder = ['mSKImpact', 'mSKHeme', 'foundation', 'foundationHeme', 'vogelstein', 'sangerCGC'];
+
         $q.all([api.getGenes(), api.getCancerGeneList()]).then(function(result) {
             var geneTypeMapping = {};
             _.each(result[0].data, function(gene) {
@@ -77,7 +91,7 @@ angular.module('oncokbStaticApp')
             $scope.doneLoading = true;
         });
         $scope.download = function() {
-            var tempArr = ['Hugo Symbol', '# of occurence within resources', 'OncoKB Annotated', 'OncoKB Oncogene', 'OncoKB TSG', 'MSK-IMPACT', 'MSK-HEME', 'FOUNDATION ONE', 'FOUNDATION ONE HEME', 'Vogelstein', 'SANGER CGC'];
+            var tempArr = ['Hugo Symbol', '# of occurence within resources', 'OncoKB Annotated', 'OncoKB Oncogene', 'OncoKB TSG', 'MSK-IMPACT', 'MSK-HEME', 'Foundation One', 'Foundation One Heme', 'Vogelstein', 'Sanger CGC'];
             var content = [tempArr.join('\t')];
             _.each($scope.cancerGeneList, function(item) {
                 tempArr = [item.hugoSymbol, item.occurrenceCount, item.oncokbAnnotated, item.oncogene, item.tsg, item.mSKImpact, item.mSKHeme, item.foundation,
@@ -85,8 +99,8 @@ angular.module('oncokbStaticApp')
                 content.push(tempArr.join('\t'));
             });
             var blob = new Blob([content.join('\n')], {
-                type: "text/plain;charset=utf-8;",
+                type: 'text/plain;charset=utf-8;',
             });
-            saveAs(blob, "CancerGenesList.txt");
-        }
+            saveAs(blob, 'CancerGenesList.txt');
+        };
     });
