@@ -9,7 +9,7 @@ $font-serif: Georgia, "Times New Roman", serif;
 
 // Bootstrap breakpoints for reference (not overrides)
 //$secondary-color: $gsk-accent;
-$lg-width: 1400px;
+$lg-width: 1320px;
 $width: 1200px;
 $sm-width: 920px;
 $range-min-lg-width: $lg-width;
@@ -18,6 +18,11 @@ $range-min-width: $width;
 $range-max-sm-width: $width - 1;
 $range-min-sm-width: $sm-width;
 $range-max-xm-width: $sm-width - 1;
+
+/* All other project specified variatbles */
+$nav-brand: 165px;
+$nav-pull-right-width-sm: 63px;
+$nav-pull-right-width-lg: 251px;
 
 /* ----- Overwrite Bootstrap Variables ----- */
 $screen-sm: $sm-width;
