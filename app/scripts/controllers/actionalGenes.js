@@ -11,30 +11,62 @@ angular.module('oncokbStaticApp')
                                                 utils,
                                                 api) {
         $scope.data = {
-            levels: {
-                one: {
+            levels: [
+                {
+                    key: 'one',
+                    title: '1',
+                    titleStyleClass: 'level-1',
+                    description: 'FDA-approved',
                     treatments: [],
                     numOfGenes: 0,
                     numOfVariants: 0
                 },
-                two: {
+                {
+                    key: 'two',
+                    title: '2',
+                    titleStyleClass: 'level-2A',
+                    description: 'Standard care',
                     treatments: [],
                     numOfGenes: 0,
                     numOfVariants: 0
                 },
-                three: {
+                {
+                    key: 'three',
+                    title: '3',
+                    titleStyleClass: 'level-3A',
+                    description: 'Clinical evidence',
+                    treatments: [],
+                    numOfGenes: 0,
+                    numOfVariants: 0
+                },
+                {
+                    key: 'four',
+                    title: '4',
+                    titleStyleClass: 'level-4',
+                    description: 'Biological evidence',
+                    treatments: [],
+                    numOfGenes: 0,
+                    numOfVariants: 0
+                },
+                {
+                    key: 'r1',
+                    title: 'R1',
+                    titleStyleClass: 'level-R1',
+                    description: 'Standard care resistance',
                     treatments: [],
                     numOfGenes: 0,
                     numOfVariants: 0
                 }
-            }
+            ]
         };
         $scope.status = {
             loading: {
                 level: {
                     one: false,
                     two: false,
-                    three: false
+                    three: false,
+                    four: false,
+                    r1: false
                 }
             }
         };
@@ -116,6 +148,10 @@ angular.module('oncokbStaticApp')
                 url: 'LEVEL_4',
                 variable: 'four',
                 loadingStatus: 'four'
+            }, {
+                url: 'LEVEL_R1',
+                variable: 'r1',
+                loadingStatus: 'r1'
             }];
             _.each(levels, function(level) {
                 $scope.status.loading.level[level.loadingStatus] = true;
@@ -142,16 +178,26 @@ angular.module('oncokbStaticApp')
                             }
                         });
 
-                        $scope.data.levels[level.variable] = {
-                            treatments: treatments,
-                            numOfGenes: Object.keys(genes).length,
-                            numOfVariants: Object.keys(variants).length
-                        };
+                        var _levelData = getLevelInDataByKey(level.variable);
+                        if (_levelData) {
+                            _levelData.treatments = treatments;
+                            _levelData.numOfGenes = Object.keys(genes).length;
+                            _levelData.numOfVariants = Object.keys(variants).length;
+                        }
                         $scope.status.loading.level[level.loadingStatus] = false;
                     } catch (error) {
                         $scope.status.loading.level[level.loadingStatus] = false;
                     }
                 });
+        }
+
+        function getLevelInDataByKey(key) {
+            for (var i = 0; i < $scope.data.levels.length; i++) {
+                if ($scope.data.levels[i].key === key) {
+                    return $scope.data.levels[i];
+                }
+            }
+            return undefined;
         }
 
         function getTreatments(metadata) {
