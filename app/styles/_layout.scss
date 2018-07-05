@@ -46,7 +46,7 @@
 
 @media (min-width: $range-min-sm-width) {
   .main-oncokb-header {
-    margin-top: 40px;
+    margin-top: 20px;
     .tag-line {
       .level-1 {
         font-size: 20px;
@@ -142,18 +142,21 @@
 }
 
 @media (min-width: $range-min-width) {
-  .navbar-nav > li > a, .search-icon .search-icon-rect{
+  .navbar-nav > li > a, .search-icon .search-icon-rect {
     padding: 15px 12px;
   }
 }
 
 @media (max-width: $range-max-sm-width) and (min-width: $range-min-sm-width) {
   .navbar-nav > li > a, .search-icon .search-icon-rect {
-    padding: 15px 6px;
+    padding: 15px 10px;
   }
 }
 
 @media (max-width: 1025px) {
+  .navbar-nav {
+    width: calc(100% - 165px);
+  }
   .mskcc-icon {
     display: none;
   }
@@ -167,9 +170,9 @@
     padding: 15px 0px;
   }
   .navbar-nav > li > a > span {
-    padding: 0 3px;
+    padding: 0 5px;
   }
-  .navbar-nav > li:not(:last-child) > a > span {
+  .navbar-nav > li:not(:nth-child(6)) > a > span {
     border-right: 1px solid $darker-blue;
   }
 }
@@ -184,6 +187,9 @@
 }
 
 @media (max-width: $range-max-width) and (min-width: 1025px) {
+  .navbar-nav {
+    width: calc(100% - 165px - 63px);
+  }
   .mskcc-icon {
     display: block;
   }
@@ -193,6 +199,9 @@
 }
 
 @media (min-width: $range-min-lg-width) {
+  .navbar-nav {
+    width: calc(100% - 165px - 251px);
+  }
   .mskcc-logo {
     display: block;
   }
@@ -233,6 +242,12 @@ body {
   }
   a:last-child {
     border: 0;
+  }
+  .warning-usage-terms {
+      font-size: 12px;
+      .usage-terms-linkout {
+          color: $oncokb-orange;
+      }
   }
   .footer-row-2 {
     line-height: 50px;
