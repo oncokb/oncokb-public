@@ -77,10 +77,13 @@ angular
                 controller: 'LicenseCtrl',
                 controllerAs: 'license'
             })
-            .when('/news', {
+            .when('/updates', {
                 templateUrl: 'views/news.html',
                 controller: 'NewsCtrl',
                 controllerAs: 'news'
+            })
+            .when('/news', {
+                redirectTo: '/updates'
             })
             .when('/dataAccess', {
                 templateUrl: 'views/dataaccess.html',

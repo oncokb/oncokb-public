@@ -81,18 +81,6 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li ng-click="toggled=false" ng-class="{ active: isActive('/')}"><a data-toggle="collapse"
-                                                                                        data-target=".in"
-                                                                                        href="#/"><span>Home</span></a>
-                    </li>
-                    <li ng-click="toggled=false" ng-class="{ active: isActive('/about')}"><a data-toggle="collapse"
-                                                                                             data-target=".in"
-                                                                                             href="#/about"><span>About</span></a>
-                    </li>
-                    <li ng-click="toggled=false" ng-class="{ active: isActive('/team')}"><a data-toggle="collapse"
-                                                                                            data-target=".in"
-                                                                                            href="#/team"><span>Team</span></a>
-                    </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/levels')}"><a data-toggle="collapse"
                                                                                               data-target=".in"
                                                                                               href="#/levels"><span>Levels of Evidence</span></a>
@@ -100,29 +88,43 @@
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/actionableGenes')}"><a
                         data-toggle="collapse" data-target=".in" href="#/actionableGenes"><span>Actionable Genes</span></a>
                     </li>
-                    <li ng-click="toggled=false" ng-class="{ active: isActive('/cancerGenes')}"><a data-toggle="collapse"
-                                                                                                   data-target=".in"
-                                                                                                   href="#/cancerGenes"><span>Cancer Genes</span></a>
-                    </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/dataAccess')}"><a data-toggle="collapse"
                                                                                                   data-target=".in"
                                                                                                   href="#/dataAccess"><span>Data Access</span></a>
                     </li>
-                    <li ng-click="toggled=false" ng-class="{ active: isActive('/news')}"><a data-toggle="collapse"
-                                                                                            data-target=".in"
-                                                                                            href="#/news"><span>News</span></a>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/updates')}"><a data-toggle="collapse"
+                                                                                                  data-target=".in"
+                                                                                                  href="#/updates"><span>News</span></a>
                     </li>
-                    <li ng-class="{hidden: toggled}" class="nav-search-li"><search-icon></search-icon></li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/terms')}"><a data-toggle="collapse"
+                                                                                             data-target=".in"
+                                                                                             href="#/terms"><span>Usage Terms</span></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"><span>More <div class="caret"></div></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#/cancerGenes">OncoKB Cancer Gene List</a></li>
+                            <li><a href="#/about">About</a></li>
+                            <li><a href="#/team">Team</a></li>
+                        </ul>
+                    </li>
+                    </li>
+                    <li ng-class="{hidden: toggled}" class="nav-search-li" style="float: right">
+                        <search-icon></search-icon>
+                    </li>
                 </ul>
                 <div class="pull-right" ng-class="{hidden: toggled}">
-          <span><a href="http://mskcc.org"><img class="mskcc-logo"
-                                                src="resources/images/MSKLogo_fff.png"/></a></span>
+                    <span><a href="http://mskcc.org"><img class="mskcc-logo"
+                                                          src="resources/images/MSKLogo_fff.png"/></a></span>
                     <span><a href="http://mskcc.org"><img class="mskcc-icon"
                                                           src="resources/images/MSKIcon_fff.png"/></a></span>
                 </div>
             </div>
         </div>
-        <div class="subNavWrapper" ng-class="{'sub-nav-block': view.currentPage === 'gene' || view.currentPage === 'variant'}">
+        <div class="subNavWrapper"
+             ng-class="{'sub-nav-block': view.currentPage === 'gene' || view.currentPage === 'variant'}">
             <div class="container">
                 <div class="subNav">
                     <!-- In order to use last child css style, add div wrapper -->
@@ -143,7 +145,7 @@
 <div class="footer">
   <div class="container">
     <div class="row footer-row-1">
-        <p>OncoKB is intended for research purposes only. Please review the <a href="#/terms"><u>usage terms</u></a>
+        <p class="warning-usage-terms">OncoKB is intended for research purposes only. Please review the <a href="#/terms"><u class="usage-terms-linkout">usage terms</u></a>
             before continuing.</p>
       <div class="citation" ng-bind-html="data.citationURL"></div>
       <div class="">
@@ -160,11 +162,11 @@
       <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
         <div class="">
           <a href="#/terms" class="">Usage Terms</a>
-          <a href="mailto:team@oncokb.org" target="_top">Contact us</a>
+          <a href="mailto:contact@oncokb.org" target="_top">Contact us</a>
           <a href="https://twitter.com/OncoKB" target="_blank">Twitter</a>
           <a href="#/dataAccess">API</a>
         </div>
-          <p style="margin-top: -30px"><a href="#/news" class="">Last update: {{data.lastUpdate}}</a></p>
+          <p style="margin-top: -30px"><a href="#/updates" class="">Last update: {{data.lastUpdate}}</a></p>
       </div>
       <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12 mskcc-footer-logo0-wrapper">
         <a class="logo" href="http://mskcc.org" title="Memorial Sloan Kettering Cancer Center">
