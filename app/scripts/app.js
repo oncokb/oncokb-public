@@ -78,12 +78,12 @@ angular
                 controllerAs: 'license'
             })
             .when('/updates', {
+                redirectTo: '/news'
+            })
+            .when('/news', {
                 templateUrl: 'views/news.html',
                 controller: 'NewsCtrl',
                 controllerAs: 'news'
-            })
-            .when('/news', {
-                redirectTo: '/updates'
             })
             .when('/dataAccess', {
                 templateUrl: 'views/dataaccess.html',
@@ -142,8 +142,8 @@ angular.module('oncokbStaticApp').run(
             }, {content: '3855 Variants'}, {content: '60 Tumor Types'}]
         };
         $rootScope.data = {
-            lastUpdate: 'April 4, 2018',
-            version: '1.13_patch_2',
+            lastUpdate: 'July 12, 2018',
+            version: '1.14',
             levelColors: {
                 '1': '#33A02C',
                 '2A': '#1F78B4',
