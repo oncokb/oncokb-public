@@ -75,6 +75,108 @@ angular.module('oncokbStaticApp')
                 'Level 3': [
                     'HRAS - Oncogenic mutations - Head and Neck Squamous Cell Carcinoma - Tipifarnib (<b>moved from Level 4 to 3A only for HNSCC</b>)'
                 ]
+            },
+            '07122018': {
+                'Level 1': [
+                    'March 30 2017, <a target="_blank" ' +
+                    'href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm549683.htm">' +
+                    'the FDA approved osimertinib</a> for treatment of patients with metastatic epidermal growth factor receptor (EGFR) T790M mutation-positive non-small cell lung cancer (NSCLC), whose disease has progressed on or after EGFR tyrosine kinase inhibitor (TKI) therapy',
+                    'May 4 2018, <a target="_blank" ' +
+                    'href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm606708.htm">' +
+                    'the FDA approved the combination of dabrafenib plus trametinib</a> for treatment of patients with locally advanced or metastatic anaplastic thyroid cancer with BRAF V600E mutation and with no satisfactory locoregional treatment options',
+                    'June 27 2018, <a target="_blank" ' +
+                    'href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm611981.htm">' +
+                    'the FDA approved the combination of encorafenib plus binimetinib</a> for patients with BRAF V600E- or V600K-mutant metastatic and/or unresectable melanoma',
+
+                ],
+                'Level 3': [
+                    'EGFR - Exon 20 insertions - Non-small cell lung cancer -  Poziotinib (<b>added as new association</b>)',
+                    'ALK - G1202R - Non-small cell lung cancer - Lorlatinib (<b>added as new association</b>)',
+                    'KIT - D816 mutations - Mastocytosis - Avapritinib (<b>added as new association</b>)',
+                    'MTOR - E2014K, E2419K - Bladder cancer -  Everolimus (<b>updated association</b>)',
+                    'MTOR - L1460P, L2209V, L2427Q - Renal cell carcinoma - Temsirolimus (<b>updated association</b>)',
+                    'MTOR - Q2223K -Renal cell carcinoma - Everolimus (<b>updated association</b>)'
+                ]
             }
         };
+        $scope.data.newlyAddedLevelFour = [
+            {
+                "gene": "ATM",
+                "mutation": "Oncogenic Mutations",
+                "tumorType": "Prostate Cancer",
+                "drug": "Olaparib"
+            },
+            {
+                "gene": "BRAF",
+                "mutation": "D287H, D594A, D594G, D594H, D594N, F595L, G464E, G464V, G466A, G466E, G466V, G469A, G469E, G469R, G469V, G596D, G596R, K601N, K601T, L597Q, L597V, N581I, N581S, S467L, V459L",
+                "tumorType": "All Tumors",
+                "drug": "PLX8394"
+            },
+            {
+                "gene": "CDKN2A",
+                "mutation": "Oncogenic Mutations",
+                "tumorType": "All Tumors",
+                "drug": "Abemaciclib, Palbociclib, Ribociclib"
+            },
+            {
+                "gene": "EGFR",
+                "mutation": "A289V, R108K, T263P",
+                "tumorType": "Glioma",
+                "drug": "Lapatinib"
+            },
+            {
+                "gene": "EGFR",
+                "mutation": "Amplification",
+                "tumorType": "Glioma",
+                "drug": "Lapatinib"
+            },
+            {
+                "gene": "EWSR1",
+                "mutation": "EWSR1-FLI1 Fusion",
+                "tumorType": "Ewing Sarcoma",
+                "drug": "TK216"
+            },
+            {
+                "gene": "FGFR1",
+                "mutation": "Oncogenic Mutations",
+                "tumorType": "All Tumors",
+                "drug": "AZD4547, BGJ398, Debio1347, Erdafitinib"
+            },
+            {
+                "gene": "FGFR2",
+                "mutation": "Oncogenic Mutations",
+                "tumorType": "All Tumors",
+                "drug": "AZD4547, BGJ398, Debio1347, Erdafitinib"
+            },
+            {
+                "gene": "KRAS",
+                "mutation": "Oncogenic Mutations",
+                "tumorType": "All Tumors",
+                "drug": "KO-947, LY3214996, Ravoxertinib, Ulixertinib"
+            },
+            {
+                "gene": "MTOR",
+                "mutation": "Oncogenic Mutations",
+                "tumorType": "All Tumors",
+                "drug": "Everolimus, Temsirolimus"
+            },
+            {
+                "gene": "NF1",
+                "mutation": "Oncogenic Mutations",
+                "tumorType": "All Tumors",
+                "drug": "Cobimetinib, Trametinib"
+            },
+            {
+                "gene": "PTEN",
+                "mutation": "Oncogenic Mutations",
+                "tumorType": "All Tumors",
+                "drug": "AZD8186, GSK2636771"
+            },
+            {
+                "gene": "SMARCB1",
+                "mutation": "Oncogenic Mutations",
+                "tumorType": "All Tumors",
+                "drug": "Tazemetostat"
+            }
+        ];
     });
