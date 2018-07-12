@@ -264,5 +264,9 @@ body {
   }
     .citation {
         margin-bottom: 10px;
+      a {
+        color: $oncokb-orange;
+        text-decoration: underline;
+      }
     }
 }
