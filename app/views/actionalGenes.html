@@ -1,15 +1,15 @@
 <div class="container" id="level1">
   <div class="actionable-genes">
-    <div>
+    <div ng-repeat="level in data.levels">
       <div class="col-md-12 align-style">
         <div>
-          <div style="float:left"><h2 class="level-1">Level 1</h2></div>
-          <div style="float:left;margin-top:5px;margin-left:15px"><h3>FDA-approved: {{data.levels.one.numOfGenes}}
+          <div style="float:left"><h2 class="{{level.titleStyleClass}}">Level {{level.title}}</h2></div>
+          <div style="float:left;margin-top:5px;margin-left:15px"><h3>{{level.description}}: {{level.numOfGenes}}
             Genes,
-            {{data.levels.one.numOfVariants}} Variants</h3></div>
+            {{level.numOfVariants}} Variants</h3></div>
         </div>
       </div>
-      <div class="col-md-12" ng-if="!status.loading.level.one">
+      <div class="col-md-12" ng-if="!status.loading.level[level.key]">
         <table datatable="ng" class="row-border hover"
                dt-options="actionableGenesDT.dtOptions"
                dt-columns="actionableGenesDT.dtColumnDefs">
@@ -23,7 +23,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr ng-repeat="x in data.levels.one.treatments">
+          <tr ng-repeat="x in level.treatments">
             <td ng-click="clickGene(x.gene)">{{x.gene}}</td>
               <td class="variant" ng-bind-html="getVariantsLink(x.gene, x.variants)"></td>
             <td>{{x.disease}}</td>
@@ -42,148 +42,7 @@
         </table>
       </div>
 
-      <div class="col-md-12 loading-div" ng-show="!!status.loading.level.one">
-        <img src="resources/images/loader.gif">
-      </div>
-    </div>
-    <div>
-      <hr id="level2">
-      <div class="col-md-12 align-style">
-        <div>
-          <div style="float:left"><h2 class="level-2A">Level 2</h2></div>
-          <div style="float:left;margin-top:5px;margin-left:15px"><h3>Standard care: {{data.levels.two.numOfGenes}}
-            Genes, {{data.levels.two.numOfVariants}} Variants</h3></div>
-        </div>
-      </div>
-      <div class="col-md-12" ng-if="!status.loading.level.two">
-        <table datatable="ng" class="row-border hover"
-               dt-options="actionableGenesDT.dtOptions"
-               dt-columns="actionableGenesDT.dtColumnDefs">
-          <thead>
-          <tr>
-            <th>Gene</th>
-            <th>Variants</th>
-            <th>Disease</th>
-            <th>Drugs</th>
-            <th>Citations</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr ng-repeat="x in data.levels.two.treatments">
-            <td ng-click="clickGene(x.gene)">{{x.gene}}</td>
-            <td class="variant" ng-bind-html="getVariantsLink(x.gene, x.variants)"></td>
-            <td>{{x.disease}}</td>
-            <td>{{x.drugs}}</td>
-            <td>
-              <span
-                ng-show="x.articles.length > 0"
-                class="gene-evidence-td-span"
-                qtip qtip-type="geneEvidence"
-                pmids="x.pmids"
-                abstracts="x.abstracts">
-                {{x.articles.length + (x.articles.length + x.articles.length > 1 ? ' references' : ' reference')}}</span>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div ng-show="!!status.loading.level.two" class="col-md-12 loading-div">
-        <img src="resources/images/loader.gif">
-      </div>
-    </div>
-    <div>
-      <hr id="level3">
-
-      <div class="col-md-12 align-style">
-        <div>
-          <div style="float:left"><h2 class="level-3A">Level 3</h2></div>
-          <div style="float:left;margin-top:5px;margin-left:15px"><h3>Clinical evidence:
-            {{data.levels.three.numOfGenes}}
-            Genes, {{data.levels.three.numOfVariants}} Variants</h3></div>
-        </div>
-      </div>
-
-      <div class="col-md-12" ng-if="!status.loading.level.three">
-        <table datatable="ng" class="row-border hover"
-               dt-options="actionableGenesDT.dtOptions"
-               dt-columns="actionableGenesDT.dtColumnDefs">
-          <thead>
-          <tr>
-            <th>Gene</th>
-            <th>Variants</th>
-            <th>Disease</th>
-            <th>Drugs</th>
-            <th>Citations</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr ng-repeat="x in data.levels.three.treatments">
-            <td ng-click="clickGene(x.gene)">{{x.gene}}</td>
-              <td class="variant" ng-bind-html="getVariantsLink(x.gene, x.variants)"></td>
-            <td>{{x.disease}}</td>
-            <td>{{x.drugs}}</td>
-            <td>
-              <span
-                ng-show="x.articles.length > 0"
-                class="gene-evidence-td-span"
-                qtip qtip-type="geneEvidence"
-                pmids="x.pmids"
-                abstracts="x.abstracts">
-                {{x.articles.length + (x.articles.length + x.articles.length > 1 ? ' references' : ' reference')}}</span>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="col-md-12 loading-div" ng-show="!!status.loading.level.three">
-        <img src="resources/images/loader.gif">
-      </div>
-    </div>
-    <div>
-      <hr id="level4">
-
-      <div class="col-md-12 align-style">
-        <div>
-          <div style="float:left"><h2 class="level-4">Level 4</h2></div>
-          <div style="float:left;margin-top:5px;margin-left:15px"><h3>Biological evidence:
-            {{data.levels.four.numOfGenes}}
-            Genes, {{data.levels.four.numOfVariants}} Variants</h3></div>
-        </div>
-      </div>
-
-      <div class="col-md-12" ng-if="!status.loading.level.four">
-        <table datatable="ng" class="row-border hover"
-               dt-options="actionableGenesDT.dtOptions"
-               dt-columns="actionableGenesDT.dtColumnDefs">
-          <thead>
-          <tr>
-            <th>Gene</th>
-            <th>Variants</th>
-            <th>Disease</th>
-            <th>Drugs</th>
-            <th>Citations</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr ng-repeat="x in data.levels.four.treatments">
-            <td ng-click="clickGene(x.gene)">{{x.gene}}</td>
-              <td class="variant" ng-bind-html="getVariantsLink(x.gene, x.variants)"></td>
-            <td>{{x.disease}}</td>
-            <td>{{x.drugs}}</td>
-            <td>
-              <span
-                ng-show="x.articles.length > 0"
-                class="gene-evidence-td-span"
-                qtip qtip-type="geneEvidence"
-                pmids="x.pmids"
-                abstracts="x.abstracts">
-                {{x.articles.length + (x.articles.length + x.articles.length > 1 ? ' references' : ' reference')}}</span>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="col-md-12 loading-div" ng-show="!!status.loading.level.four">
+      <div class="col-md-12 loading-div" ng-show="!!status.loading.level[level.key]">
         <img src="resources/images/loader.gif">
       </div>
     </div>

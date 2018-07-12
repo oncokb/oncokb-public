@@ -22,6 +22,12 @@
     border-bottom: 1px solid #b3b3a6;
     color: #fff;
   }
+  .navbar-nav {
+    width: auto;
+  }
+  .navbar-nav > li > .dropdown-menu {
+    padding-bottom: 0;
+  }
 }
 
 .navbar-nav {
@@ -37,7 +43,7 @@
         float: right;
         right: 65px;
         .search-box input[type=search] {
-            width: calc(100% - 65px);
+            width: calc(100% - 100px);
             float: right;
         }
     }
@@ -79,6 +85,23 @@
   line-height: 37px;
 }
 
+.navbar-inverse .navbar-nav > li > .dropdown-menu {
+  border: 0;
+  padding-top: 0;
+}
+
+.navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover,
+.navbar-inverse .navbar-nav .open .dropdown-menu > li > a:focus {
+  background-color: $secondary-color;
+  border-bottom: 1px solid #b3b3a6;
+  color: white;
+}
+
+.navbar-inverse .navbar-nav > li > .dropdown-menu > li > a {
+  padding: 5px 20px;
+  line-height: 30px;
+}
+
 .navbar-inverse .navbar-brand {
   color: #fff;
 }
@@ -91,8 +114,14 @@
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus {
-  border-bottom: 3px solid $secondary-color;
   background-color: $primary-color;
+}
+
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a:focus {
+  background-color: white;
+  color: $oncokb-orange;
 }
 
 .navbar-inverse .navbar-nav > li > a {
@@ -101,7 +130,6 @@
 
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-  border-bottom: 3px solid $secondary-color;
   background-color: $primary-color;
 }
 
