@@ -71,7 +71,7 @@
 }
 
 @media (max-width: $range-max-xm-width) {
-  $footer-height: 340px;
+  $footer-height: 300px;
   .wrapper {
     /* Negative indent footer by its height */
     margin: 0 auto (-$footer-height);
@@ -110,7 +110,7 @@
 }
 
 @media (max-width: $range-max-sm-width) and (min-width: $range-min-sm-width) {
-  $footer-height: 280px;
+  $footer-height: 180px;
   .wrapper {
     /* Negative indent footer by its height */
     margin: 0 auto (-$footer-height);
@@ -126,7 +126,7 @@
 }
 
 @media (min-width: $range-min-width) {
-  $footer-height: 175px;
+  $footer-height: 180px;
   .wrapper {
     /* Negative indent footer by its height */
     margin: 0 auto (-$footer-height);
