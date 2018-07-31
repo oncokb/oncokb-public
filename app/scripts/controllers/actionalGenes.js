@@ -18,8 +18,9 @@ angular.module('oncokbStaticApp')
                     titleStyleClass: 'level-1',
                     description: 'FDA-approved',
                     treatments: [],
+                    treatmentsBlackList: [],
                     numOfGenes: 0,
-                    numOfVariants: 0
+                    numOfAlterations: 0
                 },
                 {
                     key: 'two',
@@ -27,8 +28,20 @@ angular.module('oncokbStaticApp')
                     titleStyleClass: 'level-2A',
                     description: 'Standard care',
                     treatments: [],
+                    treatmentsBlackList: [
+                        'KIT-D816A, D816E, D816F, D816G, D816H, D816N, D816V, D816Y-Melanoma-Imatinib',
+                        'KIT-D816A, D816E, D816F, D816G, D816H, D816N, D816V, D816Y-Thymic Tumor-Sunitinib, Sorafenib',
+                        'KIT-D816-Melanoma-Imatinib',
+                        'KIT-D816-Thymic Tumor-Sunitinib, Sorafenib',
+                        'KIT-Exon 17 mutations-Melanoma-Imatinib',
+                        'KIT-Exon 17 mutations-Thymic Tumor-Sunitinib, Sorafenib',
+                        'KIT-T670I-Melanoma-Imatinib',
+                        'KIT-T670I-Thymic Tumor-Sunitinib, Sorafenib',
+                        'KIT-V654A-Melanoma-Imatinib',
+                        'KIT-V654A-Thymic Tumor-Sunitinib, Sorafenib'
+                    ],
                     numOfGenes: 0,
-                    numOfVariants: 0
+                    numOfAlterations: 0
                 },
                 {
                     key: 'three',
@@ -37,7 +50,7 @@ angular.module('oncokbStaticApp')
                     description: 'Clinical evidence',
                     treatments: [],
                     numOfGenes: 0,
-                    numOfVariants: 0
+                    numOfAlterations: 0
                 },
                 {
                     key: 'four',
@@ -46,7 +59,7 @@ angular.module('oncokbStaticApp')
                     description: 'Biological evidence',
                     treatments: [],
                     numOfGenes: 0,
-                    numOfVariants: 0
+                    numOfAlterations: 0
                 },
                 {
                     key: 'r1',
@@ -55,7 +68,7 @@ angular.module('oncokbStaticApp')
                     description: 'Standard care resistance',
                     treatments: [],
                     numOfGenes: 0,
-                    numOfVariants: 0
+                    numOfAlterations: 0
                 }
             ]
         };
@@ -79,15 +92,9 @@ angular.module('oncokbStaticApp')
             hasBootstrap: true,
             columnDefs: [
                 {responsivePriority: 1, targets: 0, width: '10%'},
-                {responsivePriority: 2, targets: 1, width: '25%'},
+                {responsivePriority: 2, targets: 1, width: '35%'},
                 {responsivePriority: 3, targets: 2, width: '25%'},
-                {responsivePriority: 4, targets: 3, width: '20%'},
-                {
-                    responsivePriority: 5,
-                    targets: 4,
-                    width: '20%',
-                    type: 'num-html'
-                }
+                {responsivePriority: 4, targets: 3, width: '30%'}
             ],
             aaSorting: [[0, 'asc'], [1, 'asc'], [2, 'asc'], [3, 'asc']],
             responsive: {
@@ -97,10 +104,10 @@ angular.module('oncokbStaticApp')
                     renderer: function(api, rowIdx, columns) {
                         var data = $.map(columns, function(col) {
                             return col.hidden ?
-                            '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                            '<td>' + col.title + ':</td> ' +
-                            '<td>' + col.data + '</td>' +
-                            '</tr>' :
+                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                '<td>' + col.title + ':</td> ' +
+                                '<td>' + col.data + '</td>' +
+                                '</tr>' :
                                 '';
                         }).join('');
 
@@ -115,17 +122,16 @@ angular.module('oncokbStaticApp')
             DTColumnDefBuilder.newColumnDef(0),
             DTColumnDefBuilder.newColumnDef(1),
             DTColumnDefBuilder.newColumnDef(2),
-            DTColumnDefBuilder.newColumnDef(3),
-            DTColumnDefBuilder.newColumnDef(4)
+            DTColumnDefBuilder.newColumnDef(3)
         ];
 
         $scope.clickGene = function(gene) {
             $location.path('/gene/' + gene);
         };
 
-        $scope.getVariantsLink = function(gene, variants) {
-            return _.map(variants.split(','), function(variant) {
-                return utils.getVariantCellContent(gene, variant);
+        $scope.getAlterationsLink = function(gene, alterations) {
+            return _.map(alterations.split(','), function(alteration) {
+                return utils.getAlterationCellContent(gene, alteration);
             }).join(', ');
         };
 
@@ -165,24 +171,22 @@ angular.module('oncokbStaticApp')
                     try {
                         var treatments = getTreatments(result.data[0]);
                         var genes = {};
-                        var variants = {};
+                        var alterations = {};
                         _.each(treatments, function(treatment) {
                             if (treatment.gene) {
                                 genes[treatment.gene] = true;
                             }
-                            if (_.isArray(treatment.alterations)) {
-                                _.each(treatment.alterations, function(alt) {
-                                    var id = treatment.gene + '-' + alt;
-                                    variants[id] = true;
-                                });
-                            }
+                            _.each(treatment.alterations.split(','), function(alt) {
+                                var id = treatment.gene + '-' + alt.trim();
+                                alterations[id] = true;
+                            });
                         });
 
                         var _levelData = getLevelInDataByKey(level.variable);
                         if (_levelData) {
-                            _levelData.treatments = treatments;
+                            _levelData.treatments = mergeTreatments(treatments, _levelData.treatmentsBlackList);
                             _levelData.numOfGenes = Object.keys(genes).length;
-                            _levelData.numOfVariants = Object.keys(variants).length;
+                            _levelData.numOfAlterations = Object.keys(alterations).length;
                         }
                         $scope.status.loading.level[level.loadingStatus] = false;
                     } catch (error) {
@@ -206,33 +210,63 @@ angular.module('oncokbStaticApp')
                 _.each(metadata, function(item) {
                     var treatment = {
                         gene: item.gene.hugoSymbol || 'NA',
-                        variants: item.alterations.map(function(alt) {
-                            return alt.name ? alt.name : alt.alteration;
-                        }).sort().join(', ') || 'NA',
                         alterations: item.alterations.map(function(alt) {
                             return alt.name ? alt.name : alt.alteration;
-                        }).sort(),
+                        }).sort().join(', ') || 'NA',
                         disease: utils.getCancerTypeNameFromOncoTreeType(item.oncoTreeType),
                         drugs: item.treatments.map(function(treatment) {
                             return treatment.drugs.map(function(drug) {
                                 return drug.drugName;
                             }).sort().join('+');
-                        }).sort().join(', '),
-                        articles: item.articles
+                        }).sort().join(', ')
                     };
-
-                    treatment.pmids = _.map(_.uniq(_.filter(item.articles, function(article) {
-                        return !isNaN(article.pmid);
-                    })), function(item) {
-                        return item.pmid;
-                    }).sort();
-                    treatment.abstracts = _.uniq(_.filter(item.articles, function(article) {
-                        return _.isString(article.abstract);
-                    })).sort();
                     treatments.push(treatment);
                 });
             }
             return treatments;
+        }
+
+        function mergeTreatments(treatments, treatmentsBlackList) {
+            var map = {};
+            var mergedTreatments = [];
+            _.each(treatments, function(treatment) {
+                var _key = treatment.gene + treatment.alterations + treatment.disease;
+
+                if (!map.hasOwnProperty(_key)) {
+                    map[_key] = [];
+                }
+                map[_key].push(treatment);
+            });
+            _.each(map, function(treatments) {
+                var _treatment = treatments[0];
+                _treatment.drugs = treatments.map(function(t) {
+                    return t.drugs;
+                }).join(', ');
+                var _treatmentsBlackList = treatmentsBlackList || [];
+                var _key = [_treatment.gene, _treatment.alterations, _treatment.disease, _treatment.drugs].join('-');
+                if (_treatmentsBlackList.indexOf(_key) == -1) {
+                    mergedTreatments.push(_treatment);
+                }
+            });
+
+            map = {};
+            _.each(mergedTreatments, function(treatment) {
+                var _key = treatment.gene + treatment.disease + treatment.drugs;
+
+                if (!map.hasOwnProperty(_key)) {
+                    map[_key] = [];
+                }
+                map[_key].push(treatment);
+            });
+            mergedTreatments = [];
+            _.each(map, function(treatments) {
+                var _treatment = treatments[0];
+                _treatment.alterations = treatments.map(function(t) {
+                    return t.alterations;
+                }).join(', ');
+                mergedTreatments.push(_treatment);
+            });
+            return mergedTreatments;
         }
     });
 

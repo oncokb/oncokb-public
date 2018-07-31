@@ -6,7 +6,7 @@
           <div style="float:left"><h2 class="{{level.titleStyleClass}}">Level {{level.title}}</h2></div>
           <div style="float:left;margin-top:5px;margin-left:15px"><h3>{{level.description}}: {{level.numOfGenes}}
             Genes,
-            {{level.numOfVariants}} Variants</h3></div>
+            {{level.numOfAlterations}} Alterations</h3></div>
         </div>
       </div>
       <div class="col-md-12" ng-if="!status.loading.level[level.key]">
@@ -16,27 +16,17 @@
           <thead>
           <tr>
             <th>Gene</th>
-            <th>Variants</th>
+            <th>Alterations</th>
             <th>Disease</th>
             <th>Drugs</th>
-            <th>Citations</th>
           </tr>
           </thead>
           <tbody>
           <tr ng-repeat="x in level.treatments">
             <td ng-click="clickGene(x.gene)">{{x.gene}}</td>
-              <td class="variant" ng-bind-html="getVariantsLink(x.gene, x.variants)"></td>
+              <td class="alteration" ng-bind-html="getAlterationsLink(x.gene, x.alterations)"></td>
             <td>{{x.disease}}</td>
             <td>{{x.drugs}}</td>
-            <td>
-              <span
-                ng-show="x.articles.length > 0"
-                class="gene-evidence-td-span"
-                qtip qtip-type="geneEvidence"
-                pmids="x.pmids"
-                abstracts="x.abstracts">
-                {{x.articles.length + (x.articles.length + x.articles.length > 1 ? ' references' : ' reference')}}</span>
-            </td>
           </tr>
           </tbody>
         </table>
