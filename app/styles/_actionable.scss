@@ -32,11 +32,11 @@ and open the template in the editor.
       margin-top: 20px;
     }
 
-    table tbody td:first-child, td.variant a {
+    table tbody td:first-child, td.alteration a {
         text-decoration: underline;
         color: black;
     }
-    table tbody td:first-child:hover, td.variant a:hover {
+    table tbody td:first-child:hover, td.alteration a:hover {
         text-decoration: underline;
         color: $primary-color;
     }

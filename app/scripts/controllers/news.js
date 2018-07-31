@@ -15,8 +15,8 @@ angular.module('oncokbStaticApp')
         $scope.data.updatedActionableGenes = {
             '03072017': {
                 'Level 1': [
-                    'Updated variants for EGFR - Non-Small Cell Lung Cancer - EGFR TKIs',
-                    'Updated variants for KIT - Gastrointestinal Stromal Tumor - Imatinib, Sunitinib, Regorafenib'
+                    'Updated alterations for EGFR - Non-Small Cell Lung Cancer - EGFR TKIs',
+                    'Updated alterations for KIT - Gastrointestinal Stromal Tumor - Imatinib, Sunitinib, Regorafenib'
                 ],
                 'Level 2': [
                     'CDK4 - Amplification - Well-Differentiated Liposarcoma/Dedifferentiated Liposarcoma - Palbociclib, Abemaciclib (<b>disease changed from Soft Tissue Sarcoma and Abemaciclib added</b>)',
@@ -34,32 +34,32 @@ angular.module('oncokbStaticApp')
                     'PIK3CA - Oncogenic Mutations - Breast Cancer - Alpelisib+Fulvestrant, Buparlisib+Fulvestrant, Copanlisib, GDC0077, Serabelisib, Fulvestrant+Taselisib (<b>new drugs added</b>)'
                 ],
                 'Level 4': [
-                    'EGFR variants - Glioma - Erlotinib (<b>removed</b>)',
+                    'EGFR alterations - Glioma - Erlotinib (<b>removed</b>)',
                     'MDM2 - Amplification - Liposarcoma - DS-3032b (<b>moved to Level 3A</b>)',
                     'PIK3CA - Oncogenic Mutations - Breast Cancer - Alpelisib+Fulvestrant (<b>moved to Level 3A</b>)',
-                    'IDH1 - R132 variants - Chondrosarcoma - AG-120 (<b>moved from Level 3A to 4</b>)'
+                    'IDH1 - R132 alterations - Chondrosarcoma - AG-120 (<b>moved from Level 3A to 4</b>)'
                 ]
             },
             '04052017': {
                 'Level 1': [
                     'BRCA1/2 – Oncogenic Mutations – Ovarian Cancer – Niraparib FDA approval added',
                     'BRCA1/2 – Oncogenic Mutations – Ovarian Cancer - Rucaparib (<b>new publication added</b>)',
-                    'Updated variants for KIT - Gastrointestinal Stromal Tumor - Imatinib, Sunitinib, Regorafenib'
+                    'Updated alterations for KIT - Gastrointestinal Stromal Tumor - Imatinib, Sunitinib, Regorafenib'
                 ],
                 'Level 2': [
-                    'Updated variants for KIT - Gastrointestinal Stromal Tumor – Nilotinib, Dasatinib, Sorafenib',
-                    'Updated variants for KIT – Thymic cancer – Sunitinib, Sorafenib'
+                    'Updated alterations for KIT - Gastrointestinal Stromal Tumor – Nilotinib, Dasatinib, Sorafenib',
+                    'Updated alterations for KIT – Thymic cancer – Sunitinib, Sorafenib'
                 ],
                 'Level 3': [
                     'BRAF V600 – Colorectal Cancer - Encorafenib + Binimetinib + Cetuximab (<b>new association</b>)',
                     'FGFR1 – Amplification – Lung Squamous Cell Carcinoma – AZD4547, Debio1347 (<b>new abstract added</b>)',
                     'FGFR2 - Fusions – Cholangiocarcinoma – BGJ398, Debio1347 (<b>new abstract added</b>)',
-                    'Updated variants for FGFR3 – Bladder cancer - JNJ-42756493, Debio1347',
+                    'Updated alterations for FGFR3 – Bladder cancer - JNJ-42756493, Debio1347',
                     'PIK3CA – Oncogenic mutations – Breast cancer – Updated treatments and evidence'
                 ],
                 'Level 4': [
                     'BRAF V600 – Colorectal Cancer - Radiation + Trametinib + Fluorouracil (<b>new association</b>)',
-                    'Updated variants for FGFR3 – Breast cancer - Debio1347',
+                    'Updated alterations for FGFR3 – Breast cancer - Debio1347',
                     'KRAS – Wildtype – Updated treatments and evidence',
                     'KRAS – Oncogenic mtuations - Updated treatments and evidence',
                     'PIK3CA – Oncogenic mutations – Breast cancer – Updated treatments and evidence',
