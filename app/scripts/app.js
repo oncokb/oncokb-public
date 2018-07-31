@@ -57,10 +57,13 @@ angular
                 controller: 'GenesCtrl',
                 controllerAs: 'genes'
             })
-            .when('/gene/:geneName/variant/:variantName', {
+            .when('/gene/:geneName/alteration/:alterationName', {
                 templateUrl: 'views/gene.html',
                 controller: 'GeneCtrl',
                 controllerAs: 'gene'
+            })
+            .when('/gene/:geneName/variant/:alterationName', {
+                redirectTo: '/gene/:geneName/alteration/:alterationName'
             })
             .when('/about', {
                 templateUrl: 'views/about.html',
@@ -196,8 +199,8 @@ angular.module('oncokbStaticApp').run(
         });
         $rootScope.$on('$routeChangeSuccess', function() {
             var path = $location.path().split('/') || [];
-            if (path.length === 5 && path[3] === 'variant') {
-                $rootScope.view.currentPage = 'variant';
+            if (path.length === 5 && path[3] === 'alteration') {
+                $rootScope.view.currentPage = 'alteration';
             } else {
                 $rootScope.view.currentPage = path.length > 2 ? path[1] : '';
             }

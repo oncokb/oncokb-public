@@ -51,15 +51,15 @@ angular.module('oncokbStaticApp')
                         oncoTreeType.mainType.name : 'NA') ||
                     'NA') : 'NA';
             },
-            getVariantCellContent: function(geneName, variantName) {
-                if (geneName && variantName) {
+            getAlterationCellContent: function(geneName, alterationName) {
+                if (geneName && alterationName) {
                     geneName = geneName.trim();
-                    variantName = variantName.trim();
-                    var formattedVariantName = variantName;
-                    if (/\//.test(variantName)) {
+                    alterationName = alterationName.trim();
+                    var formattedVariantName = alterationName;
+                    if (/\//.test(alterationName)) {
                         formattedVariantName = encodeURIComponent(encodeURIComponent(formattedVariantName));
                     }
-                    return '<a href="#/gene/' + geneName + '/variant/' + formattedVariantName + '">' + variantName + '</a>';
+                    return '<a href="#/gene/' + geneName + '/alteration/' + formattedVariantName + '">' + alterationName + '</a>';
                 } else {
                     return '';
                 }

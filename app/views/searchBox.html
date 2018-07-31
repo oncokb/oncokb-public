@@ -23,9 +23,9 @@
               </span>
                 </div>
             </div>
-            <div ng-switch-when="variant" class="search-box-variant">
+            <div ng-switch-when="variant" class="search-box-alteration">
                 <div class="match">
-                    <div class="search-box-gene-variant">
+                    <div class="search-box-gene-alteration">
                         <span>{{match.model.gene.hugoSymbol}}</span> /
                         <span
                             ng-bind-html="(match.model.variant.name ? match.model.variant.name : match.model.variant.alteration) | uibTypeaheadHighlight:query"></span>
@@ -43,7 +43,7 @@
 </script>
 
 <div class="search-box">
-    <input type="search" class="form-control" placeholder="Search Gene / Variant"
+    <input type="search" class="form-control" placeholder="Search Gene / Alteration"
            ng-model="content.selectedItem"
            typeahead-on-select="searchConfirmed($event)"
            uib-typeahead="item for item in searchKeyUp($viewValue)"
