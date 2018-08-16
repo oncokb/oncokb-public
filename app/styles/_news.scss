@@ -23,4 +23,11 @@
             font-size: 12px;
         }
     }
+  .newly-added-genes {
+    display: flex;
+    flex-wrap: wrap;
+    .gene {
+      margin: 5px;
+    }
+  }
 }

@@ -97,6 +97,13 @@ angular.module('oncokbStaticApp')
                     'MTOR - L1460P, L2209V, L2427Q - Renal cell carcinoma - Temsirolimus (<b>updated association</b>)',
                     'MTOR - Q2223K -Renal cell carcinoma - Everolimus (<b>updated association</b>)'
                 ]
+            },
+            '08172018': {
+                'Level 1': [
+                    'July 20, 2018: <a target="_blank" ' +
+                    'href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm614128.htm">' +
+                    'the FDA approved ivosidenib</a> for adult patients with relapsed or refractory acute myeloid leukemia (AML) with a susceptible IDH1 mutation as detected by an FDA-approved test.',
+                ]
             }
         };
         $scope.data.newlyAddedLevelFour = [
@@ -179,4 +186,7 @@ angular.module('oncokbStaticApp')
                 'drug': 'Tazemetostat'
             }
         ];
+        $scope.data.newlyAddedGenes = {
+            '08172018': ['ACTG1', 'ARHGEF28', 'ARID3A', 'ARID3B', 'ARID3C', 'ARID4A', 'ARID4B', 'ARID5A', 'ATP6AP1', 'ATP6V1B2', 'ATXN2', 'BACH2', 'BCL11B', 'BCORL1', 'BCR', 'BTG1', 'CD28', 'CD58', 'CIITA', 'CRBN', 'CUX1', 'DDX3X', 'DTX1', 'DUSP22', 'EGR1', 'EP400', 'ESCO2', 'ETNK1', 'FANCD2', 'FAS', 'FBXO11', 'FURIN', 'GNA12', 'GNA13', 'GNB1', 'GTF2I', 'HDAC1', 'HDAC4', 'HDAC7', 'HIF1A', 'HIST1H1B', 'HIST1H1D']
+        };
     });
