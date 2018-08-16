@@ -42,43 +42,43 @@
                 <p ng-class="{'hide': !status.moreInfo}" ng-bind-html="meta.geneBackground"></p>
             </div>
         </div>
-        <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="meta.inVariantPage">
+        <div ng-class="{true:'col-lg-6 col-md-6', false:'col-lg-12 col-md-12'}[meta.altFreFlag == true]" ng-if="meta.inAlterationPage">
             <div ng-if="!isGeneralMutation()">
                 <b>
-                    <span ng-if="variant.oncogenic">{{variant.oncogenic}}</span>
-                    <span ng-if="variant.oncogenic && variant.mutationEffect" style="font-size:18px">&middot;</span>
-                    <span ng-if="variant.mutationEffect">
-                        <span>{{variant.mutationEffect}}</span>
+                    <span ng-if="alteration.oncogenic">{{alteration.oncogenic}}</span>
+                    <span ng-if="alteration.oncogenic && alteration.mutationEffect" style="font-size:18px">&middot;</span>
+                    <span ng-if="alteration.mutationEffect">
+                        <span>{{alteration.mutationEffect}}</span>
                     </span>
-                    <span ng-if="variant.pmids && variant.pmids.length > 0" class="gene-evidence-td-span" qtip
-                          qtip-type="geneEvidence" pmids="variant.pmids"><i class="fa fa-book"
+                    <span ng-if="alteration.pmids && alteration.pmids.length > 0" class="gene-evidence-td-span" qtip
+                          qtip-type="geneEvidence" pmids="alteration.pmids"><i class="fa fa-book"
                                                                             aria-hidden="true"></i></span>
-                    <span ng-if="(variant.oncogenic || variant.mutationEffect) && variant.highestLevel">,</span>
-                    <span ng-if="variant.highestLevel">
-                        <span ng-bind-html="variant.highestLevel"></span>
+                    <span ng-if="(alteration.oncogenic || alteration.mutationEffect) && alteration.highestLevel">,</span>
+                    <span ng-if="alteration.highestLevel">
+                        <span ng-bind-html="alteration.highestLevel"></span>
                     </span>
                 </b>
             </div>
-            <p ng-if="status.hasSummary" ng-bind-html="meta.geneSummary + (!isGeneralMutation() ? ' ' + variant.mutationSummary : '')"></p>
+            <p ng-if="status.hasSummary" ng-bind-html="meta.geneSummary + (!isGeneralMutation() ? ' ' + alteration.mutationSummary : '')"></p>
             <p class="gene-background-info-wrapper">
                     <span class="gene-more-info"
-                          ng-click="variant.displayGeneInfo = !variant.displayGeneInfo"
-                          ng-class="{'hide': !!variant.displayGeneInfo}">
+                          ng-click="alteration.displayGeneInfo = !alteration.displayGeneInfo"
+                          ng-class="{'hide': !!alteration.displayGeneInfo}">
                         See additional
                         <span ng-if="!meta.isOtherBiomarkers">{{gene.hugoSymbol}}</span>
-                        <span ng-if="meta.isOtherBiomarkers">{{variant.name}}</span>
+                        <span ng-if="meta.isOtherBiomarkers">{{alteration.name}}</span>
                         information<i class="fa fa-arrow-circle-o-down gene-more-info-icon"></i>
                     </span>
                 <span class="gene-less-info"
-                      ng-class="{'hide': !variant.displayGeneInfo}"
-                      ng-click="variant.displayGeneInfo = !variant.displayGeneInfo">
+                      ng-class="{'hide': !alteration.displayGeneInfo}"
+                      ng-click="alteration.displayGeneInfo = !alteration.displayGeneInfo">
                             Hide additional
                         <span ng-if="!meta.isOtherBiomarkers">{{gene.hugoSymbol}}</span>
-                        <span ng-if="meta.isOtherBiomarkers">{{variant.name}}</span>
+                        <span ng-if="meta.isOtherBiomarkers">{{alteration.name}}</span>
                     information<i class="fa fa-arrow-circle-o-up gene-less-info-icon"></i>
                     </span>
             </p>
-            <div ng-show="variant.displayGeneInfo">
+            <div ng-show="alteration.displayGeneInfo">
                 <div class="gene-addition" ng-if="meta.showGeneAddition">
                     <div ng-if="gene.tsg || gene.oncogene">
                         <b style="display: inline-flex">
@@ -108,7 +108,7 @@
         </div>
         <div class="col-lg-6 col-md-6" ng-if="meta.altFreFlag">
             <div class="histogram-title" ng-show="meta.title">
-                Cancer Types with {{gene.hugoSymbol + ' ' + variant.name}} Mutations
+                Cancer Types with {{gene.hugoSymbol + ' ' + alteration.name}} Mutations
                 <i class="fa fa-question-circle-o"
                    qtip
                    my="bottom center"
@@ -129,24 +129,24 @@
         </div>
     </div>
 
-    <div class="row gene-table" ng-class="{'loadingOpacity': variant.loadingRelevantAlts}">
+    <div class="row gene-table" ng-class="{'loadingOpacity': alteration.loadingRelevantAlts}">
         <div class="col-lg-12 col-md-12" ng-if="meta.inGenePage || isGeneralMutation()">
             <ul class="nav nav-tabs nav-tabs-responsive"
-                ng-if="clinicalVariants.length > 0 || annotatedVariants.length > 0" role="tablist">
-                <li ng-class="{'in active': clinicalVariants.length > 0}" ng-if="clinicalVariants.length > 0"
-                    ng-click="tabl2eClicked('clinical')"><a data-toggle="tab" href="#clinicalVariants">
-                    Clinically Relevant Variant{{clinicalVariantsCount>1?'s':''}} ({{clinicalVariantsCount}})</a></li>
+                ng-if="clinicalAlterations.length > 0 || annotatedAlterations.length > 0" role="tablist">
+                <li ng-class="{'in active': clinicalAlterations.length > 0}" ng-if="clinicalAlterations.length > 0"
+                    ng-click="tabl2eClicked('clinical')"><a data-toggle="tab" href="#clinicalAlterations">
+                    Clinically Relevant Alteration{{clinicalAlterationsCount>1?'s':''}} ({{clinicalAlterationsCount}})</a></li>
                 <li role="presentation" class="next"
-                    ng-class="{'in active': clinicalVariants.length === 0 && annotatedVariants.length > 0}"
-                    ng-if="annotatedVariants.length > 0" ng-click="tableClicked('annotated')">
-                    <a data-toggle="tab" href="#annotatedVariants">All Annotated
-                        Variant{{annotatedVariantsCount>1?'s':''}} ({{annotatedVariantsCount}})</a></li>
+                    ng-class="{'in active': clinicalAlterations.length === 0 && annotatedAlterations.length > 0}"
+                    ng-if="annotatedAlterations.length > 0" ng-click="tableClicked('annotated')">
+                    <a data-toggle="tab" href="#annotatedAlterations">All Annotated
+                        Alteration{{annotatedAlterationsCount>1?'s':''}} ({{annotatedAlterationsCount}})</a></li>
 
             </ul>
             <div class="tab-content">
-                <div id="clinicalVariants" class="tab-pane fade" ng-class="{'in active': clinicalVariants.length > 0}"
-                     ng-if="clinicalVariants.length > 0">
-                    <p class="noteAlign">If you notice any mistakes or missing variants / citations, please send an
+                <div id="clinicalAlterations" class="tab-pane fade" ng-class="{'in active': clinicalAlterations.length > 0}"
+                     ng-if="clinicalAlterations.length > 0">
+                    <p class="noteAlign">If you notice any mistakes or missing alterations / citations, please send an
                         email to <a href="mailto:contact@oncokb.org?subject=OncoKB Feedback">feedback@oncokb.org.</a>
                     </p>
                     <table id="clinicalTable" class="table row-border hover"
@@ -154,7 +154,7 @@
                            dt-instance="meta.clinicalTable">
                         <thead>
                         <tr>
-                            <th>Variant</th>
+                            <th>Alteration</th>
                             <th>Cancer Type</th>
                             <th>Drug(s)</th>
                             <th>Level</th>
@@ -162,8 +162,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="x in clinicalVariants">
-                            <td ng-bind-html="getVariantCellContent(x.variant.name)"></td>
+                        <tr ng-repeat="x in clinicalAlterations">
+                            <td ng-bind-html="getAlterationCellContent(x.variant.name)"></td>
                             <td>{{ getCancerTypeName(x.cancerType)}}</td>
                             <td>
                                     <span ng-repeat="drugItem in x.drug">
@@ -177,7 +177,7 @@
                                       qtip qtip-type="geneEvidence"
                                       abstracts="x.drugAbstracts"
                                       pmids="x.drugPmids">
-                                {{getNumOfRefsClinicalVariant(x)}} </span>
+                                {{getNumOfRefsClinicalAlteration(x)}} </span>
 
                             </td>
                         </tr>
@@ -185,10 +185,10 @@
                     </table>
 
                 </div>
-                <div id="annotatedVariants" class="tab-pane fade"
-                     ng-class="{'in active': clinicalVariants.length === 0 && annotatedVariants.length > 0}"
-                     ng-if="annotatedVariants.length > 0">
-                    <p class="noteAlign">If you notice any mistakes or missing variants / citations, please send an
+                <div id="annotatedAlterations" class="tab-pane fade"
+                     ng-class="{'in active': clinicalAlterations.length === 0 && annotatedAlterations.length > 0}"
+                     ng-if="annotatedAlterations.length > 0">
+                    <p class="noteAlign">If you notice any mistakes or missing alterations / citations, please send an
                         email to <a href="mailto:contact@oncokb.org?subject=OncoKB Feedback">feedback@oncokb.org.</a>
                     </p>
                     <table id="annotatedTable" class="table row-border hover"
@@ -196,7 +196,7 @@
                            dt-instance="meta.biologicalTable">
                         <thead>
                         <tr>
-                            <th>Variant</th>
+                            <th>Alteration</th>
                             <th>Oncogenic</th>
                             <th>Mutation Effect</th>
                             <th>Citations</th>
@@ -204,8 +204,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="y in annotatedVariants">
-                            <td ng-bind-html="getVariantCellContent(y.variant.name)"></td>
+                        <tr ng-repeat="y in annotatedAlterations">
+                            <td ng-bind-html="getAlterationCellContent(y.variant.name)"></td>
                             <td>{{ displayOncogenic(y.oncogenic)}}</td>
                             <td>{{ y.mutationEffect}}</td>
                             <td>
@@ -215,7 +215,7 @@
                                     abstracts="y.abstracts"
                                     pmids="y.pmids"
                                 >
-                                {{getNumOfRefsAnnotatedVariant(y)}}</span>
+                                {{getNumOfRefsAnnotatedAlteration(y)}}</span>
                             </td>
 
                         </tr>
@@ -224,13 +224,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-12 col-md-12" ng-if="meta.inVariantPage && !isGeneralMutation() && clinicalVariants.length > 0">
+        <div class="col-lg-12 col-md-12" ng-if="meta.inAlterationPage && !isGeneralMutation() && clinicalAlterations.length > 0">
             <table id="clinicalTableVariantPage" class="table row-border hover"
                    datatable="ng" dt-options="view.clinicalTableOptions"
                    dt-instance="meta.clinicalTable">
                 <thead>
                 <tr>
-                    <th>Variant</th>
+                    <th>Alteration</th>
                     <th>Cancer Type</th>
                     <th>Drug(s)</th>
                     <th>Level</th>
@@ -238,8 +238,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="x in clinicalVariants">
-                    <td ng-bind-html="getVariantCellContent(x.variant.name)"></td>
+                <tr ng-repeat="x in clinicalAlterations">
+                    <td ng-bind-html="getAlterationCellContent(x.variant.name)"></td>
                     <td>{{ getCancerTypeName(x.cancerType)}}</td>
                     <td>
                                     <span ng-repeat="drugItem in x.drug">
@@ -253,7 +253,7 @@
                                       qtip qtip-type="geneEvidence"
                                       abstracts="x.drugAbstracts"
                                       pmids="x.drugPmids">
-                                {{getNumOfRefsClinicalVariant(x)}} </span>
+                                {{getNumOfRefsClinicalAlteration(x)}} </span>
 
                     </td>
                 </tr>

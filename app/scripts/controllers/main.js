@@ -66,10 +66,10 @@ angular.module('oncokbStaticApp')
                             description: 'The summary type',
                             members: [{
                                 name: 'full',
-                                description: 'Gene summary + variant summary'
+                                description: 'Gene summary + alteration summary'
                             }, {
-                                name: 'variant',
-                                description: 'Variant summary which includes oncogenic, drugs information.'
+                                name: 'alteration',
+                                description: 'Alteration summary which includes oncogenic, drugs information.'
                             }]
                         }
                     ]
@@ -82,7 +82,7 @@ angular.module('oncokbStaticApp')
                             attr: 'queries',
                             name: 'queries',
                             type: 'Array',
-                            description: 'This is the list of requesting variants. The list item is object which includes hugoSymbol, alteration, tumorType and id. "id" is a option parameter you can use to identify the query. The id will be included in response. Other parameters\' description are described in GET - Specific summary section.'
+                            description: 'This is the list of requesting alterations. The list item is object which includes hugoSymbol, alteration, tumorType and id. "id" is a option parameter you can use to identify the query. The id will be included in response. Other parameters\' description are described in GET - Specific summary section.'
                         },
                         {
                             attr: 'source',
@@ -104,10 +104,10 @@ angular.module('oncokbStaticApp')
                             description: 'The summary type',
                             members: [{
                                 name: 'full',
-                                description: 'Gene summary + variant summary'
+                                description: 'Gene summary + alteration summary'
                             }, {
-                                name: 'variant',
-                                description: 'Variant summary which includes oncogenic, drugs information.'
+                                name: 'alteration',
+                                description: 'Alteration summary which includes oncogenic, drugs information.'
                             }]
                         }
                     ]
@@ -153,7 +153,7 @@ angular.module('oncokbStaticApp')
                             attr: 'consequence',
                             name: 'consequence',
                             type: 'String',
-                            description: 'Multiple consequences are separated by comma. For each variant pair, it could has multiple consequences, separated by plus.'
+                            description: 'Multiple consequences are separated by comma. For each alteration pair, it could has multiple consequences, separated by plus.'
                         },
                         {
                             attr: 'evidenceType',
@@ -237,7 +237,7 @@ angular.module('oncokbStaticApp')
                             attr: 'queries',
                             name: 'queries',
                             type: 'Array',
-                            description: 'This is the list of requesting variants. The list item is object which includes hugoSymbol, alteration, tumorType, consequence and id. "id" is a option parameter you can use to identify the query. The id will be included in response. Other parameters\' description are described in GET - Specific evidence section.'
+                            description: 'This is the list of requesting alterations. The list item is object which includes hugoSymbol, alteration, tumorType, consequence and id. "id" is a option parameter you can use to identify the query. The id will be included in response. Other parameters\' description are described in GET - Specific evidence section.'
                         },
                         {
                             attr: 'evidenceType',
