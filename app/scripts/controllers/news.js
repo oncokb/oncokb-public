@@ -15,8 +15,8 @@ angular.module('oncokbStaticApp')
         $scope.data.updatedActionableGenes = {
             '03072017': {
                 'Level 1': [
-                    'Updated variants for EGFR - Non-Small Cell Lung Cancer - EGFR TKIs',
-                    'Updated variants for KIT - Gastrointestinal Stromal Tumor - Imatinib, Sunitinib, Regorafenib'
+                    'Updated alterations for EGFR - Non-Small Cell Lung Cancer - EGFR TKIs',
+                    'Updated alterations for KIT - Gastrointestinal Stromal Tumor - Imatinib, Sunitinib, Regorafenib'
                 ],
                 'Level 2': [
                     'CDK4 - Amplification - Well-Differentiated Liposarcoma/Dedifferentiated Liposarcoma - Palbociclib, Abemaciclib (<b>disease changed from Soft Tissue Sarcoma and Abemaciclib added</b>)',
@@ -34,32 +34,32 @@ angular.module('oncokbStaticApp')
                     'PIK3CA - Oncogenic Mutations - Breast Cancer - Alpelisib+Fulvestrant, Buparlisib+Fulvestrant, Copanlisib, GDC0077, Serabelisib, Fulvestrant+Taselisib (<b>new drugs added</b>)'
                 ],
                 'Level 4': [
-                    'EGFR variants - Glioma - Erlotinib (<b>removed</b>)',
+                    'EGFR alterations - Glioma - Erlotinib (<b>removed</b>)',
                     'MDM2 - Amplification - Liposarcoma - DS-3032b (<b>moved to Level 3A</b>)',
                     'PIK3CA - Oncogenic Mutations - Breast Cancer - Alpelisib+Fulvestrant (<b>moved to Level 3A</b>)',
-                    'IDH1 - R132 variants - Chondrosarcoma - AG-120 (<b>moved from Level 3A to 4</b>)'
+                    'IDH1 - R132 alterations - Chondrosarcoma - AG-120 (<b>moved from Level 3A to 4</b>)'
                 ]
             },
             '04052017': {
                 'Level 1': [
                     'BRCA1/2 – Oncogenic Mutations – Ovarian Cancer – Niraparib FDA approval added',
                     'BRCA1/2 – Oncogenic Mutations – Ovarian Cancer - Rucaparib (<b>new publication added</b>)',
-                    'Updated variants for KIT - Gastrointestinal Stromal Tumor - Imatinib, Sunitinib, Regorafenib'
+                    'Updated alterations for KIT - Gastrointestinal Stromal Tumor - Imatinib, Sunitinib, Regorafenib'
                 ],
                 'Level 2': [
-                    'Updated variants for KIT - Gastrointestinal Stromal Tumor – Nilotinib, Dasatinib, Sorafenib',
-                    'Updated variants for KIT – Thymic cancer – Sunitinib, Sorafenib'
+                    'Updated alterations for KIT - Gastrointestinal Stromal Tumor – Nilotinib, Dasatinib, Sorafenib',
+                    'Updated alterations for KIT – Thymic cancer – Sunitinib, Sorafenib'
                 ],
                 'Level 3': [
                     'BRAF V600 – Colorectal Cancer - Encorafenib + Binimetinib + Cetuximab (<b>new association</b>)',
                     'FGFR1 – Amplification – Lung Squamous Cell Carcinoma – AZD4547, Debio1347 (<b>new abstract added</b>)',
                     'FGFR2 - Fusions – Cholangiocarcinoma – BGJ398, Debio1347 (<b>new abstract added</b>)',
-                    'Updated variants for FGFR3 – Bladder cancer - JNJ-42756493, Debio1347',
+                    'Updated alterations for FGFR3 – Bladder cancer - JNJ-42756493, Debio1347',
                     'PIK3CA – Oncogenic mutations – Breast cancer – Updated treatments and evidence'
                 ],
                 'Level 4': [
                     'BRAF V600 – Colorectal Cancer - Radiation + Trametinib + Fluorouracil (<b>new association</b>)',
-                    'Updated variants for FGFR3 – Breast cancer - Debio1347',
+                    'Updated alterations for FGFR3 – Breast cancer - Debio1347',
                     'KRAS – Wildtype – Updated treatments and evidence',
                     'KRAS – Oncogenic mtuations - Updated treatments and evidence',
                     'PIK3CA – Oncogenic mutations – Breast cancer – Updated treatments and evidence',
@@ -96,6 +96,13 @@ angular.module('oncokbStaticApp')
                     'MTOR - E2014K, E2419K - Bladder cancer -  Everolimus (<b>updated association</b>)',
                     'MTOR - L1460P, L2209V, L2427Q - Renal cell carcinoma - Temsirolimus (<b>updated association</b>)',
                     'MTOR - Q2223K -Renal cell carcinoma - Everolimus (<b>updated association</b>)'
+                ]
+            },
+            '08172018': {
+                'Level 1': [
+                    'July 20, 2018: <a target="_blank" ' +
+                    'href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm614128.htm">' +
+                    'the FDA approved ivosidenib</a> for adult patients with relapsed or refractory acute myeloid leukemia (AML) with a susceptible IDH1 mutation as detected by an FDA-approved test.',
                 ]
             }
         };
@@ -179,4 +186,7 @@ angular.module('oncokbStaticApp')
                 'drug': 'Tazemetostat'
             }
         ];
+        $scope.data.newlyAddedGenes = {
+            '08172018': ['ACTG1', 'ARHGEF28', 'ARID3A', 'ARID3B', 'ARID3C', 'ARID4A', 'ARID4B', 'ARID5A', 'ATP6AP1', 'ATP6V1B2', 'ATXN2', 'BACH2', 'BCL11B', 'BCORL1', 'BCR', 'BTG1', 'CD28', 'CD58', 'CIITA', 'CRBN', 'CUX1', 'DDX3X', 'DTX1', 'DUSP22', 'EGR1', 'EP400', 'ESCO2', 'ETNK1', 'FANCD2', 'FAS', 'FBXO11', 'FURIN', 'GNA12', 'GNA13', 'GNB1', 'GTF2I', 'HDAC1', 'HDAC4', 'HDAC7', 'HIF1A', 'HIST1H1B', 'HIST1H1D']
+        };
     });

@@ -26,9 +26,9 @@ angular.module('oncokbStaticApp')
             blurSearch: function(query) {
                 return $http.get(privateApiLink + 'search/typeahead?limit=100&query=' + query);
             },
-            generalSearch: function(hugoSymbol, variant) {
+            generalSearch: function(hugoSymbol, alteration) {
                 return $http.get(apiLink + 'search?hugoSymbol=' +
-                    hugoSymbol + '&variant=' + variant);
+                    hugoSymbol + '&alteration=' + alteration);
             },
             searchGene: function(query, exactMatch) {
                 if (!_.isBoolean(exactMatch)) {
@@ -36,8 +36,8 @@ angular.module('oncokbStaticApp')
                 }
                 return $http.get(apiLink + 'genes/lookup?query=' + query);
             },
-            variantLookup: function(hugoSymbol, variant) {
-                return $http.get(apiLink + 'variants/lookup?hugoSymbol=' + hugoSymbol + '&variant=' + variant);
+            alterationLookup: function(hugoSymbol, alteration) {
+                return $http.get(apiLink + 'variants/lookup?hugoSymbol=' + hugoSymbol + '&variant=' + alteration);
             },
             getGenes: function() {
                 return $http.get(apiLink + 'genes/');
@@ -47,10 +47,10 @@ angular.module('oncokbStaticApp')
                     'evidences/lookup?hugoSymbol=' + hugoSymbol +
                     '&evidenceTypes=GENE_SUMMARY');
             },
-            getMutationEffect: function(hugoSymbol, variant) {
+            getMutationEffect: function(hugoSymbol, alteration) {
                 return $http.get(apiLink +
                     'evidences/lookup?hugoSymbol=' + hugoSymbol +
-                    '&variant=' + variant +
+                    '&variant=' + alteration +
                     '&evidenceTypes=MUTATION_EFFECT');
             },
             getGeneBackground: function(hugoSymbol) {
@@ -58,11 +58,11 @@ angular.module('oncokbStaticApp')
                     'evidences/lookup?hugoSymbol=' + hugoSymbol +
                     '&evidenceTypes=GENE_BACKGROUND');
             },
-            getClinicalVariantByGene: function(hugoSymbol) {
+            getClinicalAlterationByGene: function(hugoSymbol) {
                 return $http.get(privateApiLink +
                     'search/variants/clinical?hugoSymbol=' + hugoSymbol);
             },
-            getBiologicalVariantByGene: function(hugoSymbol) {
+            getBiologicalAlterationByGene: function(hugoSymbol) {
                 return $http.get(privateApiLink +
                     'search/variants/biological?hugoSymbol=' + hugoSymbol);
             },
@@ -89,10 +89,10 @@ angular.module('oncokbStaticApp')
             getCancerGeneList: function() {
                 return $http.get(apiLink + 'utils/cancerGeneList');
             },
-            searchVariant: function(hugoSymbol, variant, source, queryType) {
-                return $http.get(apiLink + 'search?hugoSymbol=' + hugoSymbol + '&variant=' + variant + '&source=' + source + '&queryType=' + queryType);
+            searchAlteration: function(hugoSymbol, alteration, source, queryType) {
+                return $http.get(apiLink + 'search?hugoSymbol=' + hugoSymbol + '&variant=' + alteration + '&source=' + source + '&queryType=' + queryType);
             },
-            searchVariantList: function(params) {
+            searchAlterationList: function(params) {
                 return $http.post(apiLink + 'variants/lookup', params);
             }
         };
