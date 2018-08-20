@@ -11,6 +11,11 @@
         content: '\f0a4';
         margin: 0 5px 0 -15px;
     }
+    ul.bullet li:before {
+      content: '\f111';
+      font-size: 8px;
+      vertical-align: 20%;
+    }
     .table {
         ul {
             padding-left: 17px;
@@ -23,4 +28,11 @@
             font-size: 12px;
         }
     }
+  .newly-added-genes {
+    display: flex;
+    flex-wrap: wrap;
+    .gene {
+      margin: 5px;
+    }
+  }
 }

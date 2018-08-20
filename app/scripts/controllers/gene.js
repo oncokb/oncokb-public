@@ -14,8 +14,8 @@ angular.module('oncokbStaticApp')
                                      Plotly, MutationMapper, MutationCollection, $q) {
         // fetch the mutation mapper from api and construct the graph from mutation mapper library
         var mutationData = [];
-        var uniqueClinicVariants = [];
-        var uniqueAnnotatedVariants = [];
+        var uniqueClinicAlterations = [];
+        var uniqueAnnotatedAlterations = [];
         var fakeSamplesCount = [];
         var tempIndex = -1;
         var tempFakeIndex = -1;
@@ -100,76 +100,76 @@ angular.module('oncokbStaticApp')
         };
 
         function fetchTableData() {
-            // clinical variants table and annotated variants table
-            var apiCallsForTable = [api.getClinicalVariantByGene($scope.gene.hugoSymbol), api.getBiologicalVariantByGene($scope.gene.hugoSymbol)];
-            if ($scope.meta.inVariantPage) {
-                apiCallsForTable.push(api.searchVariant($routeParams.geneName, $scope.variant.name, 'oncotree', 'regular'));
+            // clinical alterations table and annotated alterations table
+            var apiCallsForTable = [api.getClinicalAlterationByGene($scope.gene.hugoSymbol), api.getBiologicalAlterationByGene($scope.gene.hugoSymbol)];
+            if ($scope.meta.inAlterationPage) {
+                apiCallsForTable.push(api.searchAlteration($routeParams.geneName, $scope.alteration.name, 'oncotree', 'regular'));
             }
             $q.all(apiCallsForTable).then(function(result) {
-                var clinicalVariants = result[0];
-                var biologicalVariants = result[1];
-                var tempAnnotatedVariants = _.map(biologicalVariants.data, function(item) {
+                var clinicalAlterations = result[0];
+                var biologicalAlterations = result[1];
+                var tempAnnotatedAlterations = _.map(biologicalAlterations.data, function(item) {
                     item.abstracts = item.oncogenicAbstracts.concat(item.mutationEffectAbstracts);
                     item.pmids = item.oncogenicPmids.concat(item.mutationEffectPmids);
                     return item;
                 });
-                if ($scope.meta.inVariantPage) {
+                if ($scope.meta.inAlterationPage) {
                     var tempHighestLevel = '';
                     var levels = ['4', '3B', '3A', '2B', '2A', 'R1', '1'];
-                    $scope.clinicalVariants = _.filter(clinicalVariants.data, function(item) {
-                        if (!$scope.variant.highestLevel && $scope.variant.relevantVariants.indexOf(item.variant.name.toUpperCase()) !== -1 && levels.indexOf(item.level) > levels.indexOf(tempHighestLevel)) {
+                    $scope.clinicalAlterations = _.filter(clinicalAlterations.data, function(item) {
+                        if (!$scope.alteration.highestLevel && $scope.alteration.relevantAlterations.indexOf(item.variant.name.toUpperCase()) !== -1 && levels.indexOf(item.level) > levels.indexOf(tempHighestLevel)) {
                             tempHighestLevel = item.level;
                         }
-                        return $scope.variant.relevantVariants.indexOf(item.variant.name.toUpperCase()) !== -1;
+                        return $scope.alteration.relevantAlterations.indexOf(item.variant.name.toUpperCase()) !== -1;
                     });
                     if (tempHighestLevel) {
-                        $scope.variant.highestLevel = '<span class="level-' + tempHighestLevel + '">Level ' + tempHighestLevel + '</span>';
+                        $scope.alteration.highestLevel = '<span class="level-' + tempHighestLevel + '">Level ' + tempHighestLevel + '</span>';
                     }
-                    $scope.annotatedVariants = _.filter(tempAnnotatedVariants, function(item) {
-                        if (stringMatch(item.variant.name, $scope.variant.name) || stringMatch(item.variant.alteration, $scope.variant.name)) {
-                            $scope.variant.mutationEffect = item.mutationEffect;
-                            $scope.variant.pmids = item.pmids;
+                    $scope.annotatedAlterations = _.filter(tempAnnotatedAlterations, function(item) {
+                        if (stringMatch(item.variant.name, $scope.alteration.name) || stringMatch(item.variant.alteration, $scope.alteration.name)) {
+                            $scope.alteration.mutationEffect = item.mutationEffect;
+                            $scope.alteration.pmids = item.pmids;
                         }
-                        return $scope.variant.relevantVariants.indexOf(item.variant.name.toUpperCase()) !== -1;
+                        return $scope.alteration.relevantAlterations.indexOf(item.variant.name.toUpperCase()) !== -1;
                     });
-                    if (!$scope.variant.mutationEffect) {
+                    if (!$scope.alteration.mutationEffect) {
                         // handle this in the future
                     }
                     if (result[2] && result[2].data) {
-                        $scope.variant.mutationSummary = result[2].data.variantSummary;
-                        $scope.variant.oncogenic = result[2].data.oncogenic;
+                        $scope.alteration.mutationSummary = result[2].data.variantSummary;
+                        $scope.alteration.oncogenic = result[2].data.oncogenic;
                     }
                 } else {
-                    $scope.clinicalVariants = clinicalVariants.data;
-                    $scope.annotatedVariants = tempAnnotatedVariants;
+                    $scope.clinicalAlterations = clinicalAlterations.data;
+                    $scope.annotatedAlterations = tempAnnotatedAlterations;
                 }
 
-                uniqueClinicVariants = _.uniq(_.map($scope.clinicalVariants, function(item) {
+                uniqueClinicAlterations = _.uniq(_.map($scope.clinicalAlterations, function(item) {
                     return item.variant.name;
                 }));
-                $scope.clinicalVariantsCount = uniqueClinicVariants.length;
+                $scope.clinicalAlterationsCount = uniqueClinicAlterations.length;
 
-                uniqueAnnotatedVariants = _.uniq(_.map($scope.annotatedVariants, function(item) {
+                uniqueAnnotatedAlterations = _.uniq(_.map($scope.annotatedAlterations, function(item) {
                     return item.variant.name;
                 }));
 
-                var allMissenseVariants = _.uniq(_.map($scope.annotatedVariants, function(item) {
+                var allMissenseAlterations = _.uniq(_.map($scope.annotatedAlterations, function(item) {
                     return item.variant;
                 }));
-                if ($scope.meta.inGenePage && uniqueAnnotatedVariants.length > 0) {
+                if ($scope.meta.inGenePage && uniqueAnnotatedAlterations.length > 0) {
                     $rootScope.view.subNavItems = [
                         {content: $scope.gene.hugoSymbol},
-                        {content: uniqueAnnotatedVariants.length + ' annotated variant' + (uniqueAnnotatedVariants.length > 1 ? 's' : '')}
+                        {content: uniqueAnnotatedAlterations.length + ' annotated alteration' + (uniqueAnnotatedAlterations.length > 1 ? 's' : '')}
                     ];
-                } else if ($scope.meta.inVariantPage) {
+                } else if ($scope.meta.inAlterationPage) {
                     $rootScope.view.subNavItems = [
                         {content: $scope.gene.hugoSymbol, link: '#/gene/' + $scope.gene.hugoSymbol},
-                        {content: $scope.variant.name}
+                        {content: $scope.alteration.name}
                     ];
                 }
                 var mutationType = '';
-                if (allMissenseVariants.length > 0 && $scope.meta.inGenePage) {
-                    _.each(allMissenseVariants, function(item, index) {
+                if (allMissenseAlterations.length > 0 && $scope.meta.inGenePage) {
+                    _.each(allMissenseAlterations, function(item, index) {
                         if (item !== undefined && !(/fusion/i).test(item.alteration)) {
                             if (_.isNull(item.consequence)) {
                                 mutationType = 'other';
@@ -226,17 +226,17 @@ angular.module('oncokbStaticApp')
                         }
                     });
                 }
-                $scope.annotatedVariantsCount = uniqueAnnotatedVariants.length;
+                $scope.annotatedAlterationsCount = uniqueAnnotatedAlterations.length;
             });
         }
 
         // fetch, filter and restructure histogram and mutation mapper related data
         function fetchData() {
-            if ($scope.meta.inVariantPage) {
-                api.variantLookup($routeParams.geneName, $scope.variant.name).then(function(result) {
-                    $scope.variant.relevantVariants = _.map(result.data, function(item) {
-                        if (!stringMatch(item.alteration, item.name) && (stringMatch(item.alteration, $scope.variant.name) || stringMatch(item.name, $scope.variant.name))) {
-                            $scope.variant.displayName = item.name + ' (' + item.alteration + ')';
+            if ($scope.meta.inAlterationPage) {
+                api.alterationLookup($routeParams.geneName, $scope.alteration.name).then(function(result) {
+                    $scope.alteration.relevantAlterations = _.map(result.data, function(item) {
+                        if (!stringMatch(item.alteration, item.name) && (stringMatch(item.alteration, $scope.alteration.name) || stringMatch(item.name, $scope.alteration.name))) {
+                            $scope.alteration.displayName = item.name + ' (' + item.alteration + ')';
                         }
                         return item.name.toUpperCase();
                     });
@@ -250,9 +250,9 @@ angular.module('oncokbStaticApp')
 
             // Get mutation effect(ME) if is Other Biomarkers
             // Use ME description as gene summary, additional info as background
-            if ($scope.meta.isOtherBiomarkers && $scope.meta.inVariantPage) {
+            if ($scope.meta.isOtherBiomarkers && $scope.meta.inAlterationPage) {
                 $scope.meta.showGeneAddition = false;
-                api.getMutationEffect($scope.gene.hugoSymbol, $scope.variant.name)
+                api.getMutationEffect($scope.gene.hugoSymbol, $scope.alteration.name)
                     .then(function(result) {
                         var content = result.data;
                         if (_.isArray(content) && content.length > 0) {
@@ -276,20 +276,20 @@ angular.module('oncokbStaticApp')
                 var mutationMapperInfo = result[1];
                 var tempMutationMapperInfo;
 
-                if ($scope.meta.inVariantPage) {
-                    for (var i = 0; i < $scope.variant.generalMutations.length; i++) {
-                        if (stringMatch($scope.variant.generalMutations[i], $scope.variant.name)) {
+                if ($scope.meta.inAlterationPage) {
+                    for (var i = 0; i < $scope.alteration.generalMutations.length; i++) {
+                        if (stringMatch($scope.alteration.generalMutations[i], $scope.alteration.name)) {
                             generalMutation = true;
                             break;
                         }
                     }
                     if (generalMutation) {
                         tempMutationMapperInfo = _.filter(mutationMapperInfo.data, function(item) {
-                            return $scope.variant.relevantVariants.indexOf(item.proteinChange.toUpperCase()) !== -1;
+                            return $scope.alteration.relevantAlterations.indexOf(item.proteinChange.toUpperCase()) !== -1;
                         });
                     } else {
                         tempMutationMapperInfo = _.filter(mutationMapperInfo.data, function(item) {
-                            return stringMatch(item.proteinChange, $scope.variant.name);
+                            return stringMatch(item.proteinChange, $scope.alteration.name);
                         });
                     }
                 } else {
@@ -348,8 +348,8 @@ angular.module('oncokbStaticApp')
                             infoList += '<li><i class="fa fa-circle iconSize"></i> ' + (item.frequency < 0.001 ? '<0.1' : item.frequency) + '% (' + item.numerator + '/' + item.denomerator + ') have annotated ';
                             if ($scope.meta.inGenePage) {
                                 infoList += $scope.gene.hugoSymbol;
-                            } else if ($scope.meta.inVariantPage) {
-                                infoList += $scope.gene.hugoSymbol + ' ' + $scope.variant.name;
+                            } else if ($scope.meta.inAlterationPage) {
+                                infoList += $scope.gene.hugoSymbol + ' ' + $scope.alteration.name;
                             }
                             infoList += ' mutation in MSK-IMPACT ' + fullName + '</li><br/>';
                         }
@@ -569,17 +569,17 @@ angular.module('oncokbStaticApp')
                     updateTablesTemp(proteinChanges);
                     $scope.$apply();
                 } else {
-                    $scope.variant.loadingRelevantAlts = true;
+                    $scope.alteration.loadingRelevantAlts = true;
                     var tempProteinChanges = _.uniq(proteinChanges);
                     var relevantAlts = tempProteinChanges;
-                    var variantList = [];
+                    var alterationList = [];
                     _.each(tempProteinChanges, function(proteinChange) {
-                        variantList.push({
+                        alterationList.push({
                             hugoSymbol: $scope.gene.hugoSymbol,
-                            variant: proteinChange
+                            alteration: proteinChange
                         });
                     });
-                    api.searchVariantList(variantList).then(function(result) {
+                    api.searchAlterationList(alterationList).then(function(result) {
                         _.each(result.data, function(relevantItems) {
                             _.each(relevantItems, function(item) {
                                 relevantAlts.push(item.name);
@@ -587,7 +587,7 @@ angular.module('oncokbStaticApp')
                         });
                         relevantAlts = _.uniq(relevantAlts);
                         updateTablesTemp(relevantAlts);
-                        $scope.variant.loadingRelevantAlts = false;
+                        $scope.alteration.loadingRelevantAlts = false;
                     });
                 }
             }
@@ -599,8 +599,8 @@ angular.module('oncokbStaticApp')
                     $scope.meta.biologicalTable.DataTable.column(0).search('').draw();
                 }
                 resetFlag = false;
-                $scope.clinicalVariantsCount = uniqueClinicVariants.length;
-                $scope.annotatedVariantsCount = uniqueAnnotatedVariants.length;
+                $scope.clinicalAlterationsCount = uniqueClinicAlterations.length;
+                $scope.annotatedAlterationsCount = uniqueAnnotatedAlterations.length;
                 $scope.studyName = 'MSK-IMPACT Clinical Sequencing Cohort';
                 $scope.$apply();
             }
@@ -619,20 +619,20 @@ angular.module('oncokbStaticApp')
             }
             var tempCount = 0;
             var regexp = new RegExp(regexString, 'i');
-            _.each(uniqueClinicVariants, function(item) {
+            _.each(uniqueClinicAlterations, function(item) {
                 if (regexp.test(item)) {
                     tempCount++;
                 }
             });
-            $scope.clinicalVariantsCount = tempCount;
+            $scope.clinicalAlterationsCount = tempCount;
 
             tempCount = 0;
-            _.each(uniqueAnnotatedVariants, function(item) {
+            _.each(uniqueAnnotatedAlterations, function(item) {
                 if (regexp.test(item)) {
                     tempCount++;
                 }
             });
-            $scope.annotatedVariantsCount = tempCount;
+            $scope.annotatedAlterationsCount = tempCount;
         }
 
         function stringMatch(a, b) {
@@ -647,14 +647,14 @@ angular.module('oncokbStaticApp')
         $scope.gene = {
             hugoSymbol: $routeParams.geneName
         };
-        $scope.variant = {
-            name: $routeParams.variantName ? decodeURIComponent($routeParams.variantName) : '',
+        $scope.alteration = {
+            name: $routeParams.alterationName ? decodeURIComponent($routeParams.alterationName) : '',
             oncogenic: '',
             mutationEffect: '',
             highestLevel: '',
             mutationSummary: '',
-            displayName: $routeParams.variantName ? decodeURIComponent($routeParams.variantName) : '',
-            relevantVariants: [],
+            displayName: $routeParams.alterationName ? decodeURIComponent($routeParams.alterationName) : '',
+            relevantAlterations: [],
             loadingRelevantAlts: false,
             generalMutations: ['Oncogenic Mutations', 'Gain-of-function Mutations', 'Loss-of-function Mutations', 'Switch-of-function Mutations', 'Likely Oncogenic Mutations', 'Likely Gain-of-function Mutations', 'Likely Loss-of-function Mutations', 'Likely Switch-of-function Mutations'],
             displayGeneInfo: false,
@@ -669,11 +669,11 @@ angular.module('oncokbStaticApp')
             title: false,
             isOtherBiomarkers: false,
             inGenePage: false,
-            inVariantPage: false
+            inAlterationPage: false
         };
         if ($routeParams.geneName) {
-            if ($routeParams.variantName) {
-                $scope.meta.inVariantPage = true;
+            if ($routeParams.alterationName) {
+                $scope.meta.inAlterationPage = true;
             } else {
                 $scope.meta.inGenePage = true;
             }
@@ -692,7 +692,7 @@ angular.module('oncokbStaticApp')
             hasBootstrap: true,
             aoColumnDefs: [{
                 aTargets: 0,
-                sType: $scope.meta.inVariantPage ? 'variant-html' : 'num-html',
+                sType: $scope.meta.inAlterationPage ? 'alteration-html' : 'num-html',
                 asSorting: ['desc', 'asc']
             }, {
                 aTargets: 3,
@@ -712,7 +712,7 @@ angular.module('oncokbStaticApp')
             scrollCollapse: true,
             scrollY: 500,
             sDom: 'ft',
-            aaSorting: $scope.meta.inVariantPage ? [[0, 'asc'], [3, 'desc']] : [[3, 'desc'], [0, 'asc']],
+            aaSorting: $scope.meta.inAlterationPage ? [[0, 'asc'], [3, 'desc']] : [[3, 'desc'], [0, 'asc']],
             responsive: {
                 details: {
                     display: $.fn.dataTable.Responsive.display.childRowImmediate,
@@ -738,7 +738,7 @@ angular.module('oncokbStaticApp')
             hasBootstrap: true,
             aoColumns: [
                 {
-                    sType: $scope.meta.inVariantPage ? 'variant-html' : 'num-html',
+                    sType: $scope.meta.inAlterationPage ? 'alteration-html' : 'num-html',
                     asSorting: ['asc', 'desc']
                 },
                 {sType: 'oncogenic-html', asSorting: ['desc', 'asc']},
@@ -752,7 +752,7 @@ angular.module('oncokbStaticApp')
             scrollCollapse: true,
             scrollY: 500,
             sDom: 'ft',
-            aaSorting: $scope.meta.inVariantPage ? [[0, 'asc'], [1, 'desc']] : [[1, 'desc'], [0, 'asc']],
+            aaSorting: $scope.meta.inAlterationPage ? [[0, 'asc'], [1, 'desc']] : [[1, 'desc'], [0, 'asc']],
             columnDefs: [
                 {responsivePriority: 1, targets: 0},
                 {responsivePriority: 2, targets: 1},
@@ -866,7 +866,7 @@ angular.module('oncokbStaticApp')
             }, 160);
         };
 
-        $scope.getNumOfRefsAnnotatedVariant = function(item) {
+        $scope.getNumOfRefsAnnotatedAlteration = function(item) {
             var numOfPmids = item.mutationEffectPmids.length +
                 item.oncogenicPmids.length +
                 item.mutationEffectAbstracts.length +
@@ -874,7 +874,7 @@ angular.module('oncokbStaticApp')
             return numOfPmids === 0 ? '' : (numOfPmids + (numOfPmids > 1 ? ' references' : ' reference'));
         };
 
-        $scope.getNumOfRefsClinicalVariant = function(item) {
+        $scope.getNumOfRefsClinicalAlteration = function(item) {
             var numOfPmids = item.drugPmids.length +
                 item.drugAbstracts.length;
             return numOfPmids === 0 ? '' : (numOfPmids + (numOfPmids > 1 ? ' references' : ' reference'));
@@ -884,16 +884,16 @@ angular.module('oncokbStaticApp')
             return utils.getCancerTypeNameFromOncoTreeType(cancerType);
         };
 
-        $scope.getVariantCellContent = function(variantName) {
-            return utils.getVariantCellContent($scope.gene.hugoSymbol, variantName);
+        $scope.getAlterationCellContent = function(alterationName) {
+            return utils.getAlterationCellContent($scope.gene.hugoSymbol, alterationName);
         };
 
         $scope.isGeneralMutation = function() {
             if ($scope.meta.inGenePage) {
                 return false;
             }
-            for (var i = 0; i < $scope.variant.generalMutations.length; i++) {
-                if (stringMatch($scope.variant.name, $scope.variant.generalMutations[i])) {
+            for (var i = 0; i < $scope.alteration.generalMutations.length; i++) {
+                if (stringMatch($scope.alteration.name, $scope.alteration.generalMutations[i])) {
                     return true;
                 }
             }
@@ -901,15 +901,15 @@ angular.module('oncokbStaticApp')
         };
 
         jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-            'variant-html-asc': function(a, b) {
+            'alteration-html-asc': function(a, b) {
                 a = $(a).text();
                 b = $(b).text();
-                return $scope.variant.relevantVariants.indexOf(a.toUpperCase()) - $scope.variant.relevantVariants.indexOf(b.toUpperCase());
+                return $scope.alteration.relevantAlterations.indexOf(a.toUpperCase()) - $scope.alteration.relevantAlterations.indexOf(b.toUpperCase());
             },
-            'variant-html-desc': function(a, b) {
+            'alteration-html-desc': function(a, b) {
                 a = $(a).text();
                 b = $(b).text();
-                return $scope.variant.relevantVariants.indexOf(b.toUpperCase()) - $scope.variant.relevantVariants.indexOf(a.toUpperCase());
+                return $scope.alteration.relevantAlterations.indexOf(b.toUpperCase()) - $scope.alteration.relevantAlterations.indexOf(a.toUpperCase());
             }
         });
     });

@@ -124,7 +124,7 @@
             </div>
         </div>
         <div class="subNavWrapper"
-             ng-class="{'sub-nav-block': view.currentPage === 'gene' || view.currentPage === 'variant'}">
+             ng-class="{'sub-nav-block': view.currentPage === 'gene' || view.currentPage === 'alteration'}">
             <div class="container">
                 <div class="subNav">
                     <!-- In order to use last child css style, add div wrapper -->
@@ -132,7 +132,7 @@
                          class="pull-left col-md-9 col-lg-9 col-sm-12 col-xs-12 subNav-sxn-1">
             <span ng-repeat="item in view.subNavItems" class="item">
               <span ng-if="!item.link">{{item.content}}</span>
-              <a ng-if="item.link" ng-href="{{item.link}}" target="_self" uib-tooltip-placement="top" uib-tooltip="All Variants">{{item.content}}</a>
+              <a ng-if="item.link" ng-href="{{item.link}}" target="_self" uib-tooltip-placement="top" uib-tooltip="All Alterations">{{item.content}}</a>
             </span>
                     </div>
 
