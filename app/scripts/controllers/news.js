@@ -90,12 +90,12 @@ angular.module('oncokbStaticApp')
 
                 ],
                 'Level 3': [
-                    'EGFR - Exon 20 insertions - Non-small cell lung cancer -  Poziotinib (<b>added as new association</b>)',
+                    'EGFR - Exon 20 insertions - Non-small cell lung cancer - Poziotinib (<b>added as new association</b>)',
                     'ALK - G1202R - Non-small cell lung cancer - Lorlatinib (<b>added as new association</b>)',
                     'KIT - D816 mutations - Mastocytosis - Avapritinib (<b>added as new association</b>)',
-                    'MTOR - E2014K, E2419K - Bladder cancer -  Everolimus (<b>updated association</b>)',
+                    'MTOR - E2014K, E2419K - Bladder cancer - Everolimus (<b>updated association</b>)',
                     'MTOR - L1460P, L2209V, L2427Q - Renal cell carcinoma - Temsirolimus (<b>updated association</b>)',
-                    'MTOR - Q2223K -Renal cell carcinoma - Everolimus (<b>updated association</b>)'
+                    'MTOR - Q2223K - Renal cell carcinoma - Everolimus (<b>updated association</b>)'
                 ]
             },
             '08172018': {
@@ -103,6 +103,11 @@ angular.module('oncokbStaticApp')
                     'July 20, 2018: <a target="_blank" ' +
                     'href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm614128.htm">' +
                     'the FDA approved ivosidenib</a> for adult patients with relapsed or refractory acute myeloid leukemia (AML) with a susceptible IDH1 mutation as detected by an FDA-approved test.',
+                ]
+            },
+            '10012018': {
+                'Level 3': [
+                    'RET - Oncogenic Mutations - Medullary Thyroid Cancer - LOXO-292 (<b>added as new association</b>)',
                 ]
             }
         };
@@ -187,6 +192,7 @@ angular.module('oncokbStaticApp')
             }
         ];
         $scope.data.newlyAddedGenes = {
-            '08172018': ['ACTG1', 'ARHGEF28', 'ARID3A', 'ARID3B', 'ARID3C', 'ARID4A', 'ARID4B', 'ARID5A', 'ATP6AP1', 'ATP6V1B2', 'ATXN2', 'BACH2', 'BCL11B', 'BCORL1', 'BCR', 'BTG1', 'CD28', 'CD58', 'CIITA', 'CRBN', 'CUX1', 'DDX3X', 'DTX1', 'DUSP22', 'EGR1', 'EP400', 'ESCO2', 'ETNK1', 'FANCD2', 'FAS', 'FBXO11', 'FURIN', 'GNA12', 'GNA13', 'GNB1', 'GTF2I', 'HDAC1', 'HDAC4', 'HDAC7', 'HIF1A', 'HIST1H1B', 'HIST1H1D']
+            '08172018': ['ACTG1', 'ARHGEF28', 'ARID3A', 'ARID3B', 'ARID3C', 'ARID4A', 'ARID4B', 'ARID5A', 'ATP6AP1', 'ATP6V1B2', 'ATXN2', 'BACH2', 'BCL11B', 'BCORL1', 'BCR', 'BTG1', 'CD28', 'CD58', 'CIITA', 'CRBN', 'CUX1', 'DDX3X', 'DTX1', 'DUSP22', 'EGR1', 'EP400', 'ESCO2', 'ETNK1', 'FANCD2', 'FAS', 'FBXO11', 'FURIN', 'GNA12', 'GNA13', 'GNB1', 'GTF2I', 'HDAC1', 'HDAC4', 'HDAC7', 'HIF1A', 'HIST1H1B', 'HIST1H1D'],
+            '10012018': ['HIST1H1E','SETD6','SETD5','SETD7','SETDB2','SETDB1','SETD4','SETD3','SETD1B','U2AF2','TET3','NFE2','IRF8','IRF1','IKZF3','JARID2','NCSTN','HIST1H2BO','HIST1H2AC','HIST1H2BG','HIST1H2BJ','HIST1H2BK','HIST1H2BC','HIST1H2AG','HIST1H2AL','HIST1H2AM','TYK2']
         };
     });
