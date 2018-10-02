@@ -40,9 +40,6 @@ angular.module('oncokbStaticApp')
         };
 
         function displayConvert(obj, keys) {
-            if (obj.oncokbAnnotated === true) {
-                obj.occurrenceCount += 1;
-            }
             _.each(keys, function(key) {
                 obj[key] = obj[key] === true ? 'Yes' : 'No';
             });
