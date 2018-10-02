@@ -6,9 +6,9 @@
         <div class="row" style="margin-bottom: 0;">
             <div class="col-lg-12 title">
                 <span>OncoKB Cancer Gene List</span>
-                <button class="btn btn-sm download waves-effect waves-light"
-                        ng-click="download()"><i class="fa  fa-cloud-download"></i> Cancer Gene List
-                </button>
+                <a class="btn btn-sm download waves-effect waves-light"
+                   ng-href="{{apiLink}}utils/cancerGeneList.txt"
+                   download> <i class="fa  fa-cloud-download"></i> Cancer Gene List</a>
             </div>
         </div>
         <div class="row" style="margin-bottom: 0;">

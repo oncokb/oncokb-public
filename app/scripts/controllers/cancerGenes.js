@@ -11,7 +11,7 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-    .controller('CancerGenesCtrl', function($scope, _, api, $q) {
+    .controller('CancerGenesCtrl', function($scope, _, api, $q, apiLink) {
         // DataTable initialization & options
         $scope.dt = {};
         $scope.dt.dtOptions = {
@@ -90,17 +90,5 @@ angular.module('oncokbStaticApp')
             $scope.cancerGeneList = [];
             $scope.doneLoading = true;
         });
-        $scope.download = function() {
-            var tempArr = ['Hugo Symbol', '# of occurence within resources', 'OncoKB Annotated', 'OncoKB Oncogene', 'OncoKB TSG', 'MSK-IMPACT', 'MSK-HEME', 'Foundation One', 'Foundation One Heme', 'Vogelstein', 'Sanger CGC'];
-            var content = [tempArr.join('\t')];
-            _.each($scope.cancerGeneList, function(item) {
-                tempArr = [item.hugoSymbol, item.occurrenceCount, item.oncokbAnnotated, item.oncogene, item.tsg, item.mSKImpact, item.mSKHeme, item.foundation,
-                    item.foundationHeme, item.vogelstein, item.sangerCGC];
-                content.push(tempArr.join('\t'));
-            });
-            var blob = new Blob([content.join('\n')], {
-                type: 'text/plain;charset=utf-8;',
-            });
-            saveAs(blob, 'CancerGenesList.txt');
-        };
+        $scope.apiLink = apiLink;
     });
