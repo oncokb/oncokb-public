@@ -3920,14 +3920,14 @@ var MutationDetailsUtil = function(mutations)
 		var summary = "[";
 		var rate;
         var germlineDenominator = mutationCount.numCases;
-                
+
 		if (mutationCount.numGermline > 0)
 		{
             if (mutationCount.numGermlineCases !== undefined)
             {
                 if (mutationCount.numGermlineCases > 0) {
                     germlineDenominator = mutationCount.numGermlineCases;
-                }                        
+                }
             }
 			rate = (mutationCount.numGermline / germlineDenominator) * 100;
 			summary += "Germline Mutation Rate: " + rate.toFixed(1) + "%, ";
@@ -9481,9 +9481,7 @@ var MutationDiagramView = Backbone.View.extend({
 		if (sequenceData == null)
 		{
 			// TODO use PfamDataProxy instance!!
-			$.getJSON("getPfamSequence.json",
-			{geneSymbol: self.geneSymbol},
-				function(data) {
+            MutationMapperPfamGetter(self.hugoSymbol, function(data) {
 					if (data)
 					{
 						mutationDiagram.updateSequenceData(data[0]);
@@ -10034,23 +10032,23 @@ var MutationSummaryView = Backbone.View.extend({
         var mutationUtil = self.model.mutationProxy.getMutationUtil();
         var gene = self.model.geneSymbol;
         var cases = self.model.sampleArray;
-        var numGermlineCases = 0;            
+        var numGermlineCases = 0;
         var summary = "";
-                    
+
         if(cases.length > 0) {
             var mutationCount = mutationUtil.countMutations(gene, cases);
-                        
+
             for (var i = 0; i < clinicalGermlineData.length; i++) {
                 var clinicalData = clinicalGermlineData[i];
                 if (clinicalData.attr_val === "YES") {
                     numGermlineCases++;
                 }
             }
-                        
+
             mutationCount.numGermlineCases = numGermlineCases;
             summary = mutationUtil.generateSummary(mutationCount);
         }
-                    
+
         return summary;
     }
 });
@@ -11008,7 +11006,6 @@ var RegionTipView = Backbone.View.extend({
 	{
 		// pass variables in using Underscore.js template
 		var variables = {identifier: this.model.identifier,
-			type: this.model.type.toLowerCase(),
 			description: this.model.description,
 			start: this.model.start,
 			end: this.model.end,
@@ -12729,49 +12726,7 @@ function PfamDataProxy(options)
 
 	function getPfamData(servletParams, callback)
 	{
-		// TODO allow more than one gene at a time? (see MutationDataProxy)
-		var gene = servletParams.geneSymbol;
-
-		if (gene == null)
-		{
-			// no gene symbol provided, nothing to retrieve
-			callback(null);
-			return;
-		}
-
-		// retrieve data from the server if not cached
-		if (_pfamDataCache[gene] == undefined)
-		{
-			if (self.isFullInit())
-			{
-				callback(null);
-				return;
-			}
-
-			// process & cache the raw data
-			var processData = function(data) {
-				_pfamDataCache[gene] = data;
-
-				// forward the processed data to the provided callback function
-				callback(data);
-			};
-
-			// retrieve data from the servlet
-			var ajaxOpts = {
-				type: "POST",
-				url: _options.servletName,
-				data: servletParams,
-				success: processData,
-				dataType: "json"
-			};
-
-			self.requestData(ajaxOpts);
-		}
-		else
-		{
-			// data is already cached, just forward it
-			callback(_pfamDataCache[gene]);
-		}
+        MutationMapperPfamGetter(servletParams.geneSymbol, callback);
 	}
 
 	// override required base functions
@@ -16306,7 +16261,6 @@ MutationDiagram.prototype.defaultOpts = {
 	 */
 	regionTipFn: function (element, region, maProxy) {
 		var model = {identifier: region.metadata.identifier,
-			type: region.type,
 			description: region.metadata.description,
 			start: region.metadata.start,
 			end: region.metadata.end,
@@ -19880,7 +19834,7 @@ function PancanMutationHistogram(byProteinPosData, byGeneData, cancer_study_meta
         bykeyword: generate_cancer_study2datum(bykeyword_data),
         bygene: generate_cancer_study2datum(bygene_data)
     };
-    
+
     var commonKeys = _.intersection( _.keys(cancer_study2datum.bykeyword), _.keys(cancer_study2datum.bygene) );
     bykeyword_data = [];
     bygene_data = [];
@@ -19912,7 +19866,7 @@ function PancanMutationHistogram(byProteinPosData, byGeneData, cancer_study_meta
 
         bygene_datum.count = new_count;
     });
-    
+
     var totalByGene = _.reduce(bygene_data, function(memo, datum){ return memo + datum.count; }, 0);
     var totalByKeyword = _.reduce(bykeyword_data, function(memo, datum){ return memo + datum.count; }, 0);
     var totalSequenced = _.reduce(cancer_study2meta_data, function(memo, datum){ return memo + datum.num_sequenced_samples; }, 0);
@@ -20220,7 +20174,7 @@ function PancanMutationHistogram(byProteinPosData, byGeneData, cancer_study_meta
         var percent = (d.frequency * 100).toFixed(1)+'%';
         return (_.template("<span><b>{{percent}}</b> (<b>{{count}}</b> of {{total}} sequenced samples)</span>"))({percent: percent, count: count, total: total});
     }
-    
+
     function countText(bykeyword, bygene, total) {
         return "<p style='color: " + googlered + "; margin-bottom:0;'>"
                 + keyword  + ": "  + qtip_template(bykeyword, total) + "</p>"
@@ -21257,14 +21211,11 @@ function MutationDetailsController(
 					return;
 				}
 
-				// get the first sequence from the response
-				var sequence = sequenceData[0];
-
 				// get annotation data in any case
 				dataManager.getData("variantAnnotation",
                     {mutations: data},
                     function(params, data) {
-	                    init(sequence, params.mutations);
+	                    init(sequenceData, params.mutations);
                     });
 
 			});
@@ -22212,4 +22163,56 @@ function MutationMapper(options)
 	this.init = init;
 	this.getView = function() {return _mutationDetailsView;};
 	this.getController = function() {return _mutationDetailsController;};
+}
+
+
+function MutationMapperPfamGetter(hugoSymbol, callback) {
+    var colors = [
+        "#2dcf00", "#ff5353", "#5b5bff", "#ebd61d", "#ba21e0",
+        "#ff9c42", "#ff7dff", "#b9264f", "#baba21", "#c48484",
+        "#1f88a7", "#cafeb8", "#4a9586", "#ceb86c", "#0e180f"
+    ];
+
+    $.getJSON("https://www.genomenexus.org//ensembl/canonical-transcript/hgnc/" + hugoSymbol,
+        {isoformOverrideSource: 'mskcc'},
+        function(data) {
+            var pfamIds = _.map(data.pfamDomains, 'pfamDomainId');
+            $.ajax({
+                type: "POST",
+                url: 'https://www.genomenexus.org/pfam/domain',
+                contentType: "application/json",
+                data: JSON.stringify(pfamIds),
+                dataType: "json",
+                success: function(domains) {
+                    var domains = _.groupBy(domains, function(domain) {
+                        return domain.pfamAccession;
+                    });
+                    callback({
+                        length: data.proteinLength,
+                        metadata: {
+                            identifier: ''
+                        },
+                        regions: _.map(data.pfamDomains.sort(function(a, b) {
+                            return a.pfamDomainStart - b.pfamDomainStart;
+                        }), function(pfamDomain, index) {
+                            var domain = domains[pfamDomain.pfamDomainId][0];
+                            return {
+                                metadata: {
+                                    start: pfamDomain.pfamDomainStart,
+                                    end: pfamDomain.pfamDomainEnd,
+                                    description: domain.description,
+                                    accession: domain.pfamAccession,
+                                    identifier: domain.name
+                                },
+                                colour: colors[index % colors.length],
+                                text: domain.name
+                            };
+                        })
+                    });
+                },
+                error: function() {
+                    callback({});
+                }
+            });
+        });
 }
