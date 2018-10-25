@@ -69,6 +69,15 @@ angular.module('oncokbStaticApp')
                     treatments: [],
                     numOfGenes: 0,
                     numOfAlterations: 0
+                },
+                {
+                    key: 'r2',
+                    title: 'R2',
+                    titleStyleClass: 'level-R2',
+                    description: 'Clinical evidence of resistance',
+                    treatments: [],
+                    numOfGenes: 0,
+                    numOfAlterations: 0
                 }
             ]
         };
@@ -158,6 +167,10 @@ angular.module('oncokbStaticApp')
                 url: 'LEVEL_R1',
                 variable: 'r1',
                 loadingStatus: 'r1'
+            }, {
+                url: 'LEVEL_R2',
+                variable: 'r2',
+                loadingStatus: 'r2'
             }];
             _.each(levels, function(level) {
                 $scope.status.loading.level[level.loadingStatus] = true;
