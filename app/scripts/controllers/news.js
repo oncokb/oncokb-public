@@ -109,6 +109,13 @@ angular.module('oncokbStaticApp')
                 'Level 3': [
                     'RET - Oncogenic Mutations - Medullary Thyroid Cancer - LOXO-292 (<b>added as new association</b>)',
                 ]
+            },
+            '10262018': {
+                'Level 1': [
+                    'Sept 27, 2018: <a target="_blank" ' +
+                    'href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm621967.htm">' +
+                    'the FDA approved dacomitinib</a> for the frontline treatment of patients with metastatic non-small cell lung cancer with EGFR exon 19 deletion or exon 21 L858R substitution mutations.'
+                ]
             }
         };
         $scope.data.newlyAddedLevelFour = [
@@ -193,6 +200,7 @@ angular.module('oncokbStaticApp')
         ];
         $scope.data.newlyAddedGenes = {
             '08172018': ['ACTG1', 'ARHGEF28', 'ARID3A', 'ARID3B', 'ARID3C', 'ARID4A', 'ARID4B', 'ARID5A', 'ATP6AP1', 'ATP6V1B2', 'ATXN2', 'BACH2', 'BCL11B', 'BCORL1', 'BCR', 'BTG1', 'CD28', 'CD58', 'CIITA', 'CRBN', 'CUX1', 'DDX3X', 'DTX1', 'DUSP22', 'EGR1', 'EP400', 'ESCO2', 'ETNK1', 'FANCD2', 'FAS', 'FBXO11', 'FURIN', 'GNA12', 'GNA13', 'GNB1', 'GTF2I', 'HDAC1', 'HDAC4', 'HDAC7', 'HIF1A', 'HIST1H1B', 'HIST1H1D'],
-            '10012018': ['HIST1H1E','SETD6','SETD5','SETD7','SETDB2','SETDB1','SETD4','SETD3','SETD1B','U2AF2','TET3','NFE2','IRF8','IRF1','IKZF3','JARID2','NCSTN','HIST1H2BO','HIST1H2AC','HIST1H2BG','HIST1H2BJ','HIST1H2BK','HIST1H2BC','HIST1H2AG','HIST1H2AL','HIST1H2AM','TYK2']
+            '10012018': ['HIST1H1E','SETD6','SETD5','SETD7','SETDB2','SETDB1','SETD4','SETD3','SETD1B','U2AF2','TET3','NFE2','IRF8','IRF1','IKZF3','JARID2','NCSTN','HIST1H2BO','HIST1H2AC','HIST1H2BG','HIST1H2BJ','HIST1H2BK','HIST1H2BC','HIST1H2AG','HIST1H2AL','HIST1H2AM','TYK2'],
+            '10262018': ['P2RY8','NT5C2','TRAF5','TRAF3','PTPN2','PTPN1','STAG1','PDS5B','PCBP1'],
         };
     });
