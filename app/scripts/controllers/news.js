@@ -111,10 +111,9 @@ angular.module('oncokbStaticApp')
                 ]
             },
             '10262018': {
-                'Level 1': [
-                    'Sept 27, 2018: <a target="_blank" ' +
-                    'href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm621967.htm">' +
-                    'the FDA approved dacomitinib</a> for the frontline treatment of patients with metastatic non-small cell lung cancer with EGFR exon 19 deletion or exon 21 L858R substitution mutations.'
+                'Level 4': [
+                    'ALK - C1156Y, G1269A, I1171N, L1196M - Non-Small Cell Lung Cancer - Lorlatinib',
+                    'EGFR - D761Y - Non-Small Cell Lung Cancer - Osimertinib'
                 ]
             }
         };
