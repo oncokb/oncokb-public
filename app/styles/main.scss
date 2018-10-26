@@ -3,11 +3,9 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
 
 @import "vars";
 
-// bower:scss
-@import "materialize/sass/materialize.scss";
-@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
-@import "font-awesome/scss/font-awesome.scss";
-// endbower
+@import "../../bower_components/materialize/sass/materialize.scss";
+@import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+@import "../../bower_components/font-awesome/scss/font-awesome.scss";
 
 @import "mixins";
 @import "typography";
