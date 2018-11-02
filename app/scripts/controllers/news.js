@@ -115,7 +115,12 @@ angular.module('oncokbStaticApp')
                     'ALK - C1156Y, G1269A, I1171N, L1196M - Non-Small Cell Lung Cancer - Lorlatinib',
                     'EGFR - D761Y - Non-Small Cell Lung Cancer - Osimertinib'
                 ]
-            }
+            },
+            '11022018': {
+                'Level 2': [
+                    'RET - Fusions - Non-Small Cell Lung Cancer - LOXO-292 (<b>added as new association</b>)',
+                ]
+            },
         };
         $scope.data.newlyAddedLevelFour = [
             {
