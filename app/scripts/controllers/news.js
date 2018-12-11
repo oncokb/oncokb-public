@@ -121,6 +121,25 @@ angular.module('oncokbStaticApp')
                     'RET - Fusions - Non-Small Cell Lung Cancer - LOXO-292 (<b>added as new association</b>)',
                 ]
             },
+            '12142018': {
+                'Level 1': [
+                    'November 26, 2018: <a target="_blank" ' +
+                    'href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm626720.htm">' +
+                    'the FDA approved larotrectinib</a> for adult and pediatric patients with solid tumors that have an NTRK1, -2, or -3 gene fusion without a known acquired resistance mutation.'
+                ],
+                'Level 2': [
+                    'BRCA1/2 - Oncogenic Mutations - Breast Cancer - Talazoparib (<b>new association</b>)',
+                    'RET - Fusions - Non-Small Cell Lung Cancer - BLU-667 (<b>new association</b>)'
+                ],
+                'Level 3': [
+                    'BRAF - V600E - Colorectal Cancer - Encorafenib + Binimetinib + Cetuximab (<b>new association</b>)',
+                    'ERBB2 - Oncogenic Mutations - Non-Small Cell Lung Cancer - Ado-trastuzumab Emtansine (<b>new association</b>)',
+                    'RET - Oncogenic Mutations - Medullary Thyroid Cancer - BLU-667 (<b>new association</b>)',
+                ],
+                'Level 4': [
+                    'KDM6A - Oncogenic Mutations - Bladder Cancer - EZH2 inhibitors (<b>new association</b>)',
+                ]
+            },
         };
         $scope.data.newlyAddedLevelFour = [
             {
@@ -206,5 +225,6 @@ angular.module('oncokbStaticApp')
             '08172018': ['ACTG1', 'ARHGEF28', 'ARID3A', 'ARID3B', 'ARID3C', 'ARID4A', 'ARID4B', 'ARID5A', 'ATP6AP1', 'ATP6V1B2', 'ATXN2', 'BACH2', 'BCL11B', 'BCORL1', 'BCR', 'BTG1', 'CD28', 'CD58', 'CIITA', 'CRBN', 'CUX1', 'DDX3X', 'DTX1', 'DUSP22', 'EGR1', 'EP400', 'ESCO2', 'ETNK1', 'FANCD2', 'FAS', 'FBXO11', 'FURIN', 'GNA12', 'GNA13', 'GNB1', 'GTF2I', 'HDAC1', 'HDAC4', 'HDAC7', 'HIF1A', 'HIST1H1B', 'HIST1H1D'],
             '10012018': ['HIST1H1E','SETD6','SETD5','SETD7','SETDB2','SETDB1','SETD4','SETD3','SETD1B','U2AF2','TET3','NFE2','IRF8','IRF1','IKZF3','JARID2','NCSTN','HIST1H2BO','HIST1H2AC','HIST1H2BG','HIST1H2BJ','HIST1H2BK','HIST1H2BC','HIST1H2AG','HIST1H2AL','HIST1H2AM','TYK2'],
             '10262018': ['NT5C2','P2RY8','PCBP1','PDS5B','PTPN1','PTPN2 ','STAG1','TRAF3','TRAF5'],
+            '12142018': ['KSR2','LCK','LTB','MGAM','MOB3B','MPEG1','NCOR2','PIGA','PLCG1','POT1','ROBO1','RUNX1T1','SAMHD1','SETD1A','SGK1','SMC1A','SMC3','SMG1','SP140','STAT6','TBL1XR1','UBR5','VAV1','VAV2','XBP1'],
         };
     });
