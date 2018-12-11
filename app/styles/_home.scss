@@ -92,10 +92,8 @@
     }
 
     .main-level {
-        margin-bottom: 15px;
         .button {
             margin: auto;
-            width: 160px;
             font-weight: bold;
             text-align: center;
         }
@@ -122,6 +120,12 @@
         .level-4 {
             color: $level-4;
         }
+        .level-R1 {
+          color: $level-R1;
+        }
+        .level-R2 {
+          color: $level-R2;
+        }
         .hoverStyle a:hover {
             color: #1c75cd;
         }
@@ -129,7 +133,6 @@
 
     .citation {
         text-align: center;
-        margin-bottom: 0;
         a {
             font-weight: bold;
         }
