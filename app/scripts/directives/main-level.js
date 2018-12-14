@@ -14,7 +14,6 @@ angular.module('oncokbStaticApp')
             scope: {
                 level: '=',
                 geneCount: '=',
-                color: '=',
                 desc: '=',
                 class: '='
             },
