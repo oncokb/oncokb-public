@@ -139,6 +139,11 @@ angular.module('oncokbStaticApp')
         getTreatmentsMetadata();
 
         function getTreatmentsMetadata() {
+            $scope.status.loading = true;
+            ajaxGetTreatments();
+        }
+
+        function ajaxGetTreatments() {
             var levels = [{
                 url: 'LEVEL_1',
                 variable: 'one'
@@ -158,15 +163,11 @@ angular.module('oncokbStaticApp')
                 url: 'LEVEL_R2',
                 variable: 'r2'
             }];
-            $scope.status.loading = true;
-            ajaxGetTreatments();
-        }
-
-        function ajaxGetTreatments() {
             api.getEvidencesBylevel()
                 .then(function(result) {
                     try {
-                        _.each(result, function(content, level) {
+                        _.each(result.data, function(content, levelOfEvidence) {
+                            var level = _.find(levels, function(_level){ return _level.url === levelOfEvidence;});
                             var treatments = getTreatments(content);
                             var genes = {};
                             var alterations = {};
