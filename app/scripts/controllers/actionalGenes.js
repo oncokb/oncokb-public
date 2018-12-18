@@ -82,15 +82,7 @@ angular.module('oncokbStaticApp')
             ]
         };
         $scope.status = {
-            loading: {
-                level: {
-                    one: false,
-                    two: false,
-                    three: false,
-                    four: false,
-                    r1: false
-                }
-            }
+            loading: false
         };
 
         $scope.actionableGenesDT = {};
@@ -149,61 +141,55 @@ angular.module('oncokbStaticApp')
         function getTreatmentsMetadata() {
             var levels = [{
                 url: 'LEVEL_1',
-                variable: 'one',
-                loadingStatus: 'one'
+                variable: 'one'
             }, {
                 url: 'LEVEL_2A',
-                variable: 'two',
-                loadingStatus: 'two'
+                variable: 'two'
             }, {
                 url: 'LEVEL_3A',
-                variable: 'three',
-                loadingStatus: 'three'
+                variable: 'three'
             }, {
                 url: 'LEVEL_4',
-                variable: 'four',
-                loadingStatus: 'four'
+                variable: 'four'
             }, {
                 url: 'LEVEL_R1',
-                variable: 'r1',
-                loadingStatus: 'r1'
+                variable: 'r1'
             }, {
                 url: 'LEVEL_R2',
-                variable: 'r2',
-                loadingStatus: 'r2'
+                variable: 'r2'
             }];
-            _.each(levels, function(level) {
-                $scope.status.loading.level[level.loadingStatus] = true;
-                ajaxGetTreatments(level);
-            });
+            $scope.status.loading = true;
+            ajaxGetTreatments();
         }
 
-        function ajaxGetTreatments(level) {
-            api.getTreatmentsBylevel(level.url)
+        function ajaxGetTreatments() {
+            api.getEvidencesBylevel()
                 .then(function(result) {
                     try {
-                        var treatments = getTreatments(result.data[0]);
-                        var genes = {};
-                        var alterations = {};
-                        _.each(treatments, function(treatment) {
-                            if (treatment.gene) {
-                                genes[treatment.gene] = true;
-                            }
-                            _.each(treatment.alterations.split(','), function(alt) {
-                                var id = treatment.gene + '-' + alt.trim();
-                                alterations[id] = true;
+                        _.each(result, function(content, level) {
+                            var treatments = getTreatments(content);
+                            var genes = {};
+                            var alterations = {};
+                            _.each(treatments, function(treatment) {
+                                if (treatment.gene) {
+                                    genes[treatment.gene] = true;
+                                }
+                                _.each(treatment.alterations.split(','), function(alt) {
+                                    var id = treatment.gene + '-' + alt.trim();
+                                    alterations[id] = true;
+                                });
                             });
-                        });
 
-                        var _levelData = getLevelInDataByKey(level.variable);
-                        if (_levelData) {
-                            _levelData.treatments = mergeTreatments(treatments, _levelData.treatmentsBlackList);
-                            _levelData.numOfGenes = Object.keys(genes).length;
-                            _levelData.numOfAlterations = Object.keys(alterations).length;
-                        }
-                        $scope.status.loading.level[level.loadingStatus] = false;
+                            var _levelData = getLevelInDataByKey(level.variable);
+                            if (_levelData) {
+                                _levelData.treatments = mergeTreatments(treatments, _levelData.treatmentsBlackList);
+                                _levelData.numOfGenes = Object.keys(genes).length;
+                                _levelData.numOfAlterations = Object.keys(alterations).length;
+                            }
+                        });
+                        $scope.status.loading = false;
                     } catch (error) {
-                        $scope.status.loading.level[level.loadingStatus] = false;
+                        $scope.status.loading = false;
                     }
                 });
         }

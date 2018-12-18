@@ -1,6 +1,9 @@
 <div class="container" id="level1">
   <div class="actionable-genes">
-    <div ng-repeat="level in data.levels">
+      <div ng-if="status.loading" class="loading-style">
+          <img src="resources/images/loader.gif">
+      </div>
+    <div ng-repeat="level in data.levels" ng-show="!status.loading">
       <div class="col-md-12 align-style">
         <div>
           <div style="float:left"><h2 class="{{level.titleStyleClass}}">Level {{level.title}}</h2></div>
@@ -9,7 +12,7 @@
             {{level.numOfAlterations}} Alterations</h3></div>
         </div>
       </div>
-      <div class="col-md-12" ng-if="!status.loading.level[level.key]">
+      <div class="col-md-12">
         <table datatable="ng" class="row-border hover"
                dt-options="actionableGenesDT.dtOptions"
                dt-columns="actionableGenesDT.dtColumnDefs">
@@ -30,10 +33,6 @@
           </tr>
           </tbody>
         </table>
-      </div>
-
-      <div class="col-md-12 loading-div" ng-show="!!status.loading.level[level.key]">
-        <img src="resources/images/loader.gif">
       </div>
     </div>
   </div>
