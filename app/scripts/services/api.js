@@ -80,11 +80,8 @@ angular.module('oncokbStaticApp')
             getpumbedArticle: function(pumbedID) {
                 return $http.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=' + pumbedID);
             },
-            getTreatmentsBylevel: function(level) {
-                if (_.isUndefined(level)) {
-                    return null;
-                }
-                return $http.get(legacyLink + 'evidence.json?levels=' + level);
+            getEvidencesBylevel: function() {
+                return $http.get(privateApiLink + 'utils/evidences/levels');
             },
             getCancerGeneList: function() {
                 return $http.get(apiLink + 'utils/cancerGeneList');
