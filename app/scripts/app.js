@@ -104,7 +104,7 @@ angular
 
         $locationProvider.html5Mode({
             enabled: true,
-            requireBase: localStorage.getItem('basePath') === undefined ? '/' : (localStorage.getItem('basePath') + '/')
+            requireBase: false
         });
     });
 
@@ -222,12 +222,12 @@ NProgress.start();
 angular.element(document).ready(function() {
     angular.bootstrap(document, ['oncokbStaticApp']);
 
-    // if(localStorage.getItem("basePath") !== undefined ) {
-    //     var $injector = angular.element(document).injector();
-    //
-    //     var $location = $injector.get('$location');
-    //     $location.path(localStorage.getItem("basePath"));
-    // }
+    if(localStorage.getItem("basePath") !== undefined ) {
+        var $injector = angular.element(document).injector();
+
+        var $location = $injector.get('$location');
+        $location.path(localStorage.getItem("basePath"));
+    }
 
     // Attach scrollTop event from jQuery
     var navObject = jQuery.find('.navbar.navbar-fixed-top');
