@@ -163,7 +163,7 @@ angular.module('oncokbStaticApp')
                     ];
                 } else if ($scope.meta.inAlterationPage) {
                     $rootScope.view.subNavItems = [
-                        {content: $scope.gene.hugoSymbol, link: '#/gene/' + $scope.gene.hugoSymbol},
+                        {content: $scope.gene.hugoSymbol, link: '/gene/' + $scope.gene.hugoSymbol},
                         {content: $scope.alteration.name}
                     ];
                 }

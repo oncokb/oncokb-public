@@ -33,7 +33,7 @@ angular
     .constant('legacyLink', 'legacy-api/')
     .constant('privateApiLink', 'api/private/')
     .constant('apiLink', 'api/v1/')
-    .config(function($routeProvider) {
+    .config(function($routeProvider, $locationProvider) {
         $routeProvider
             .when('/', {
                 templateUrl: 'views/main.html',
@@ -101,6 +101,8 @@ angular
             .otherwise({
                 redirectTo: '/'
             });
+
+        $locationProvider.html5Mode(true);
     });
 
 angular.module('oncokbStaticApp').run(
@@ -141,7 +143,7 @@ angular.module('oncokbStaticApp').run(
         $rootScope.meta.view = {
             subNavItems: [{
                 content: '477 Genes',
-                link: '#/genes'
+                link: '/genes'
             }, {content: '3855 Variants'}, {content: '60 Tumor Types'}]
         };
         $rootScope.data = {
@@ -216,6 +218,13 @@ angular.module('oncokbStaticApp').run(
 NProgress.start();
 angular.element(document).ready(function() {
     angular.bootstrap(document, ['oncokbStaticApp']);
+
+    if(localStorage.getItem("basePath") !== undefined ) {
+        var $injector = angular.element(document).injector();
+
+        var $location = $injector.get('$location');
+        $location.path(localStorage.getItem("basePath"));
+    }
 
     // Attach scrollTop event from jQuery
     var navObject = jQuery.find('.navbar.navbar-fixed-top');

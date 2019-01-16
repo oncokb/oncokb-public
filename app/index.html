@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>OncoKB</title>
+    <base href="/">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -76,38 +77,38 @@
                     <b>Menu</b>
                 </div>
                 <search-icon class="menu-toggle-search-icon"></search-icon>
-                <span class="navbar-brand"><a href="#/"><img class="logo-brand"
+                <span class="navbar-brand"><a href="/"><img class="logo-brand"
                                                              src="resources/images/oncokb-lg.png"/></a></span>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/levels')}"><a data-toggle="collapse"
                                                                                               data-target=".in"
-                                                                                              href="#/levels"><span>Levels of Evidence</span></a>
+                                                                                              href="/levels"><span>Levels of Evidence</span></a>
                     </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/actionableGenes')}"><a
-                        data-toggle="collapse" data-target=".in" href="#/actionableGenes"><span>Actionable Genes</span></a>
+                        data-toggle="collapse" data-target=".in" href="/actionableGenes"><span>Actionable Genes</span></a>
                     </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/dataAccess')}"><a data-toggle="collapse"
                                                                                                   data-target=".in"
-                                                                                                  href="#/dataAccess"><span>Data Access</span></a>
+                                                                                                  href="/dataAccess"><span>Data Access</span></a>
                     </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/news')}"><a data-toggle="collapse"
                                                                                                   data-target=".in"
-                                                                                                  href="#/news"><span>News</span></a>
+                                                                                                  href="/news"><span>News</span></a>
                     </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/terms')}"><a data-toggle="collapse"
                                                                                              data-target=".in"
-                                                                                             href="#/terms"><span>Usage Terms</span></a>
+                                                                                             href="/terms"><span>Usage Terms</span></a>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true"
                            aria-expanded="false"><span>More <div class="caret"></div></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#/cancerGenes">OncoKB Cancer Gene List</a></li>
-                            <li><a href="#/about">About</a></li>
-                            <li><a href="#/team">Team</a></li>
+                            <li><a href="/cancerGenes">OncoKB Cancer Gene List</a></li>
+                            <li><a href="/about">About</a></li>
+                            <li><a href="/team">Team</a></li>
                         </ul>
                     </li>
                     </li>
@@ -145,7 +146,7 @@
 <div class="footer">
   <div class="container">
     <div class="row footer-row-1">
-        <p class="warning-usage-terms">OncoKB is intended for research purposes only. Please review the <a href="#/terms"><u class="usage-terms-linkout">usage terms</u></a>
+        <p class="warning-usage-terms">OncoKB is intended for research purposes only. Please review the <a href="/terms"><u class="usage-terms-linkout">usage terms</u></a>
             before continuing.</p>
       <div class="citation" ng-bind-html="data.citationURL"></div>
       <div class="">
@@ -161,12 +162,12 @@
     <div class="row footer-row-2">
       <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
         <div class="">
-          <a href="#/terms" class="">Usage Terms</a>
+          <a href="/terms" class="">Usage Terms</a>
           <a href="mailto:contact@oncokb.org" target="_top">Contact us</a>
           <a href="https://twitter.com/OncoKB" target="_blank">Twitter</a>
-          <a href="#/dataAccess">API</a>
+          <a href="/dataAccess">API</a>
         </div>
-          <p style="margin-top: -30px"><a href="#/news" class="">Last update: {{data.lastUpdate}}</a></p>
+          <p style="margin-top: -30px"><a href="/news" class="">Last update: {{data.lastUpdate}}</a></p>
       </div>
       <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12 mskcc-footer-logo0-wrapper">
         <a class="logo" href="http://mskcc.org" title="Memorial Sloan Kettering Cancer Center">
