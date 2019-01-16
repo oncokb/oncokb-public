@@ -59,7 +59,7 @@ angular.module('oncokbStaticApp')
                     if (/\//.test(alterationName)) {
                         formattedVariantName = encodeURIComponent(encodeURIComponent(formattedVariantName));
                     }
-                    return '<a href="/gene/' + geneName + '/alteration/' + formattedVariantName + '">' + alterationName + '</a>';
+                    return '<a href="gene/' + geneName + '/alteration/' + formattedVariantName + '">' + alterationName + '</a>';
                 } else {
                     return '';
                 }

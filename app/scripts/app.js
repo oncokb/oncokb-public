@@ -226,6 +226,8 @@ angular.element(document).ready(function() {
         var $injector = angular.element(document).injector();
 
         var $location = $injector.get('$location');
+        console.log('before',$location.path());
+        console.log('after',localStorage.getItem("basePath"));
         $location.path(localStorage.getItem("basePath"));
     }
 

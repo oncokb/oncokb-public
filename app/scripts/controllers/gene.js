@@ -163,7 +163,7 @@ angular.module('oncokbStaticApp')
                     ];
                 } else if ($scope.meta.inAlterationPage) {
                     $rootScope.view.subNavItems = [
-                        {content: $scope.gene.hugoSymbol, link: '/gene/' + $scope.gene.hugoSymbol},
+                        {content: $scope.gene.hugoSymbol, link: 'gene/' + $scope.gene.hugoSymbol},
                         {content: $scope.alteration.name}
                     ];
                 }
@@ -804,10 +804,10 @@ angular.module('oncokbStaticApp')
                 } else {
                     console.log('no such gene existed ');
                     if (/[a-z]/.test($routeParams.geneName)) {
-                        $location.path('/gene/' +
+                        $location.path('gene/' +
                             $routeParams.geneName.toUpperCase());
                     } else {
-                        $location.path('/genes');
+                        $location.path('genes');
                     }
                 }
             }, function(error) {
