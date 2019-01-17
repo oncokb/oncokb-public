@@ -84,7 +84,7 @@
                     <tr ng-repeat="x in cancerGeneList">
                         <td ng-switch on="x.oncokbAnnotated">
                             <span ng-switch-when="Yes">
-                                <a href="/gene/{{x.hugoSymbol}}">{{x.hugoSymbol}}</a>
+                                <a href="gene/{{x.hugoSymbol}}">{{x.hugoSymbol}}</a>
                             </span>
                             <span ng-switch-when="No">{{x.hugoSymbol}}
                             </span>
@@ -92,7 +92,7 @@
                         <td>
                     <span ng-switch on="x.oncokbAnnotated">
                         <span ng-switch-when="Yes">
-                            <a href="/gene/{{x.hugoSymbol}}" style="color: #000;">
+                            <a href="gene/{{x.hugoSymbol}}" style="color: #000;">
                                 <i class="fa fa-check"></i>
                             </a>
                         </span>
