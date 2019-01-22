@@ -77,7 +77,7 @@ angular.module('oncokbStaticApp')
                                 _index = __index;
                             }
                         }
-                        if (_.isString(item.highestResistenceLevel)) {
+                        if (_.isString(item.highestResistanceLevel)) {
                             __index = levels.indexOf(item.highestSensitiveLevel.replace('LEVEL_', ''));
                             if (__index > _index) {
                                 _index = __index;
