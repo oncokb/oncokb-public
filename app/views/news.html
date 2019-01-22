@@ -19,6 +19,38 @@
             </p>
             <p ng-bind-html="data.citationURL"></p>
         </div>
+        <h3>January 24, 2018</h3>
+        <div>
+            <ul>
+                <li>Updated Actionable Genes
+                    <div class="row">
+                        <table class="table">
+                            <thead>
+                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
+                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="(key, value) in data.updatedActionableGenes['01242019']">
+                                <td>{{key}}</td>
+                                <td>
+                                    <ul>
+                                        <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+
+                <li>Addition of {{data.newlyAddedGenes['01242019'].length}} new heme-associated genes:
+                    <div class="newly-added-genes">
+                        <span class="gene" ng-repeat="hugo in data.newlyAddedGenes['01242019']"><a
+                            href="#/gene/{{hugo}}">{{hugo}}</a></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
 
         <h3>December 14, 2018</h3>
         <div>
