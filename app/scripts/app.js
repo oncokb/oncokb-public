@@ -145,8 +145,8 @@ angular.module('oncokbStaticApp').run(
             }, {content: '3855 Variants'}, {content: '60 Tumor Types'}]
         };
         $rootScope.data = {
-            lastUpdate: 'December 14, 2018',
-            version: '1.18',
+            lastUpdate: 'January 24, 2019',
+            version: '1.19',
             levelColors: {
                 '1': '#33A02C',
                 '2A': '#1F78B4',
@@ -161,7 +161,7 @@ angular.module('oncokbStaticApp').run(
             },
             citationURL: 'When using OncoKB, please cite: ' +
             '<a href="http://ascopubs.org/doi/full/10.1200/PO.17.00011" ' +
-            'target="_blank">Chakravarty et al., JCO PO 2017</a>'
+            'target="_blank">Chakravarty et al., JCO PO 2017</a>.'
         };
 
         api.getNumbers('main')
