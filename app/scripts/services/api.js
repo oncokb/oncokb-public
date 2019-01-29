@@ -7,6 +7,20 @@
  * # api
  * Factory in the oncokbStaticApp.
  */
+angular.module('oncokbStaticApp').factory('errorHttpInterceptor', ['$q', 'Sentry', function($q, Sentry) {
+    return {
+        responseError: function responseError(rejection) {
+            Sentry.captureException(new Error('HTTP response error'), {
+                extra: {
+                    config: rejection.config,
+                    status: rejection.status
+                }
+            });
+            return $q.reject(rejection);
+        }
+    };
+}]);
+
 angular.module('oncokbStaticApp')
     .factory('api', function($q, $http, legacyLink, privateApiLink, apiLink, _) {
         return {
