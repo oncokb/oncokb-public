@@ -34,7 +34,7 @@ angular
     .constant('legacyLink', 'legacy-api/')
     .constant('privateApiLink', 'api/private/')
     .constant('apiLink', 'api/v1/')
-    .config(function($routeProvider, $provide, $httpProvider, Sentry) {
+    .config(function($routeProvider, $provide, $httpProvider, Sentry, $location) {
         $routeProvider
             .when('/', {
                 templateUrl: 'views/main.html',
@@ -103,13 +103,15 @@ angular
                 redirectTo: '/'
             });
 
-        $provide.decorator('$exceptionHandler', function() {
-            return function(exception) {
-                Sentry.captureException(exception);
-            };
-        });
+        if($location.host() !== 'localhost') {
+            $provide.decorator('$exceptionHandler', function() {
+                return function(exception) {
+                    Sentry.captureException(exception);
+                };
+            });
 
-        $httpProvider.interceptors.push('errorHttpInterceptor');
+            $httpProvider.interceptors.push('errorHttpInterceptor');
+        }
     });
 
 angular.module('oncokbStaticApp').run(
