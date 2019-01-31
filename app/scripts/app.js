@@ -34,7 +34,8 @@ angular
     .constant('legacyLink', 'legacy-api/')
     .constant('privateApiLink', 'api/private/')
     .constant('apiLink', 'api/v1/')
-    .config(function($routeProvider, $provide, $httpProvider, Sentry, $location) {
+    .constant('onLocalhost', location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    .config(function($routeProvider, $provide, $httpProvider, Sentry, onLocalhost) {
         $routeProvider
             .when('/', {
                 templateUrl: 'views/main.html',
@@ -103,7 +104,7 @@ angular
                 redirectTo: '/'
             });
 
-        if($location.host() !== 'localhost') {
+        if(!onLocalhost) {
             $provide.decorator('$exceptionHandler', function() {
                 return function(exception) {
                     Sentry.captureException(exception);
