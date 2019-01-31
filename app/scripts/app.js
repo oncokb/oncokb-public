@@ -30,10 +30,11 @@ angular
     .constant('MutationMapper', window.MutationMapper)
     .constant('MutationCollection', window.MutationCollection)
     .constant('Plotly', window.Plotly)
+    .constant('Sentry', window.Sentry)
     .constant('legacyLink', 'legacy-api/')
     .constant('privateApiLink', 'api/private/')
     .constant('apiLink', 'api/v1/')
-    .config(function($routeProvider) {
+    .config(function($routeProvider, $provide, $httpProvider, Sentry, $location) {
         $routeProvider
             .when('/', {
                 templateUrl: 'views/main.html',
@@ -101,6 +102,16 @@ angular
             .otherwise({
                 redirectTo: '/'
             });
+
+        if($location.host() !== 'localhost') {
+            $provide.decorator('$exceptionHandler', function() {
+                return function(exception) {
+                    Sentry.captureException(exception);
+                };
+            });
+
+            $httpProvider.interceptors.push('errorHttpInterceptor');
+        }
     });
 
 angular.module('oncokbStaticApp').run(
