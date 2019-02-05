@@ -57,13 +57,16 @@ angular
                 controller: 'GenesCtrl',
                 controllerAs: 'genes'
             })
-            .when('/gene/:geneName/alteration/:alterationName', {
+            .when('/gene/:geneName/:alterationName', {
                 templateUrl: 'views/gene.html',
                 controller: 'GeneCtrl',
                 controllerAs: 'gene'
             })
+            .when('/gene/:geneName/alteration/:alterationName', {
+                redirectTo: '/gene/:geneName/:alterationName'
+            })
             .when('/gene/:geneName/variant/:alterationName', {
-                redirectTo: '/gene/:geneName/alteration/:alterationName'
+                redirectTo: '/gene/:geneName/:alterationName'
             })
             .when('/about', {
                 templateUrl: 'views/about.html',
