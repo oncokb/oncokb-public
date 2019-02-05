@@ -11,7 +11,7 @@
 angular.module('oncokbStaticApp')
     .controller('GeneCtrl', function($scope, $rootScope, $routeParams, $location, $route, api, $timeout,
                                      DTColumnDefBuilder, utils, _, MutationDetailsEvents, PileupUtil,
-                                     Plotly, MutationMapper, MutationCollection, $q) {
+                                     Plotly, MutationMapper, MutationCollection, $q, $window) {
         // fetch the mutation mapper from api and construct the graph from mutation mapper library
         var mutationData = [];
         var uniqueClinicAlterations = [];
@@ -674,8 +674,10 @@ angular.module('oncokbStaticApp')
         if ($routeParams.geneName) {
             if ($routeParams.alterationName) {
                 $scope.meta.inAlterationPage = true;
+                $window.document.title = $routeParams.geneName + ' ' + $routeParams.alterationName;
             } else {
                 $scope.meta.inGenePage = true;
+                $window.document.title = $routeParams.geneName;
             }
         }
         $scope.status = {
