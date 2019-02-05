@@ -14,6 +14,8 @@ module.exports = function(grunt) {
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
 
+    var sass = require('node-sass');
+
     // Configurable paths for the application
     var appConfig = {
         app: require('./bower.json').appPath || 'app',
@@ -39,13 +41,13 @@ module.exports = function(grunt) {
                     livereload: '<%= connect.options.livereload %>'
                 }
             },
+            sass: {
+                files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+                tasks: ['sass', 'postcss']
+            },
             jsTest: {
                 files: ['test/spec/{,*/}*.js'],
                 tasks: ['newer:eslint:test', 'karma']
-            },
-            compass: {
-                files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                tasks: ['compass:server', 'postcss']
             },
             gruntfile: {
                 files: ['Gruntfile.js']
@@ -194,30 +196,14 @@ module.exports = function(grunt) {
         },
 
         // Compiles Sass to CSS and generates necessary files if requested
-        compass: {
+        sass: {
             options: {
-                sassDir: '<%= yeoman.app %>/styles',
-                cssDir: '.tmp/styles',
-                generatedImagesDir: '.tmp/resources/imagesgenerated',
-                imagesDir: '<%= yeoman.app %>/resources/images',
-                javascriptsDir: '<%= yeoman.app %>/scripts',
-                fontsDir: '<%= yeoman.app %>/styles/fonts',
-                importPath: './bower_components',
-                httpImagesPath: '/resources/images',
-                httpGeneratedImagesPath: '/resources/imagesgenerated',
-                httpFontsPath: '/styles/fonts',
-                relativeAssets: false,
-                assetCacheBuster: false,
-                raw: 'Sass::Script::Number.precision = 10\n'
+                implementation: sass,
+                sourceMap: true
             },
             dist: {
-                options: {
-                    generatedImagesDir: '<%= yeoman.dist %>/resources/imagesgenerated'
-                }
-            },
-            server: {
-                options: {
-                    sourcemap: true
+                files: {
+                    '.tmp/styles/main.css': '<%= yeoman.app %>/styles/main.scss'
                 }
             }
         },
@@ -401,14 +387,8 @@ module.exports = function(grunt) {
 
         // Run some tasks in parallel to speed up the build process
         concurrent: {
-            server: [
-                'compass:server'
-            ],
-            test: [
-                'compass'
-            ],
             dist: [
-                'compass:dist',
+                'sass',
                 'imagemin',
                 'svgmin'
             ]
@@ -431,7 +411,7 @@ module.exports = function(grunt) {
         grunt.task.run([
             'clean:server',
             'wiredep',
-            'concurrent:server',
+            'sass',
             'postcss:server',
             'connect:livereload',
             'watch'
@@ -446,7 +426,6 @@ module.exports = function(grunt) {
     grunt.registerTask('test', [
         'clean:server',
         'wiredep',
-        'concurrent:test',
         'postcss',
         'connect:test',
         'karma'
