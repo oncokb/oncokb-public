@@ -804,7 +804,6 @@ angular.module('oncokbStaticApp')
 
                     fetchData();
                 } else {
-                    console.log('no such gene existed ');
                     if (/[a-z]/.test($routeParams.geneName)) {
                         $location.path('gene/' +
                             $routeParams.geneName.toUpperCase());
@@ -812,8 +811,8 @@ angular.module('oncokbStaticApp')
                         $location.path('genes');
                     }
                 }
-            }, function(error) {
-                console.log('oppos error happened ', error);
+            }, function() {
+
             });
 
         api.getGeneSummary($scope.gene.hugoSymbol)
@@ -856,13 +855,10 @@ angular.module('oncokbStaticApp')
 
         $scope.tableClicked = function(type) {
             // Bootstrap fade in has 150ms transition time. DataTable only can gets width after the transition.
-            console.log('clicked');
             $timeout(function() {
                 if (type === 'annotated' && $scope.meta.biologicalTable && $scope.meta.biologicalTable.DataTable) {
-                    console.log('biologicalTable adjusted.');
                     $scope.meta.biologicalTable.DataTable.columns.adjust().draw();
                 } else if (type === 'clinical' && $scope.meta.clinicalTable && $scope.meta.clinicalTable.DataTable) {
-                    console.log('clinical adjusted.');
                     $scope.meta.clinicalTable.DataTable.columns.adjust().draw();
                 }
             }, 160);

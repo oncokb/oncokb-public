@@ -247,15 +247,6 @@ NProgress.start();
 angular.element(document).ready(function() {
     angular.bootstrap(document, ['oncokbStaticApp']);
 
-    // if(localStorage.getItem("basePath") !== undefined ) {
-    //     var $injector = angular.element(document).injector();
-    //
-    //     var $location = $injector.get('$location');
-    //     console.log('before',$location.path());
-    //     console.log('after',localStorage.getItem("basePath"));
-    //     $location.path(localStorage.getItem("basePath"));
-    // }
-
     // Attach scrollTop event from jQuery
     var navObject = jQuery.find('.navbar.navbar-fixed-top');
     jQuery(window).scroll(function() {
