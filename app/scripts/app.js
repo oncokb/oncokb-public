@@ -231,7 +231,9 @@ angular.module('oncokbStaticApp').run(
                 $.extend(true, $rootScope.view.subNavItems, $rootScope.meta.view.subNavItems);
             }
 
-            $window.document.title = current.$$route.title ? current.$$route.title : 'OncoKB';
+            if(current && current.$$route) {
+                $window.document.title = current.$$route.title ? current.$$route.title : 'OncoKB';
+            }
         });
 
         swaggerModules.add(swaggerModules.PARSE, markedSwagger);
