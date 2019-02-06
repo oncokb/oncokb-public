@@ -111,9 +111,6 @@ angular
                 templateUrl: 'views/cancerGenes.html',
                 controller: 'CancerGenesCtrl',
                 controllerAs: 'cancerGenes'
-            })
-            .otherwise({
-                redirectTo: '/'
             });
 
         if(!onLocalhost) {
