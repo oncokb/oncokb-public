@@ -167,29 +167,34 @@ angular.module('oncokbStaticApp')
                 .then(function(result) {
                     try {
                         _.each(result.data, function(content, levelOfEvidence) {
-                            var level = _.find(levels, function(_level){ return _level.url === levelOfEvidence;});
-                            var treatments = getTreatments(content);
-                            var genes = {};
-                            var alterations = {};
-                            _.each(treatments, function(treatment) {
-                                if (treatment.gene) {
-                                    genes[treatment.gene] = true;
-                                }
-                                _.each(treatment.alterations.split(','), function(alt) {
-                                    var id = treatment.gene + '-' + alt.trim();
-                                    alterations[id] = true;
-                                });
+                            var level = _.find(levels, function(_level) {
+                                return _level.url === levelOfEvidence;
                             });
+                            if (level !== undefined) {
+                                var treatments = getTreatments(content);
+                                var genes = {};
+                                var alterations = {};
+                                _.each(treatments, function(treatment) {
+                                    if (treatment.gene) {
+                                        genes[treatment.gene] = true;
+                                    }
+                                    _.each(treatment.alterations.split(','), function(alt) {
+                                        var id = treatment.gene + '-' + alt.trim();
+                                        alterations[id] = true;
+                                    });
+                                });
 
-                            var _levelData = getLevelInDataByKey(level.variable);
-                            if (_levelData) {
-                                _levelData.treatments = mergeTreatments(treatments, _levelData.treatmentsBlackList);
-                                _levelData.numOfGenes = Object.keys(genes).length;
-                                _levelData.numOfAlterations = Object.keys(alterations).length;
+                                var _levelData = getLevelInDataByKey(level.variable);
+                                if (_levelData) {
+                                    _levelData.treatments = mergeTreatments(treatments, _levelData.treatmentsBlackList);
+                                    _levelData.numOfGenes = Object.keys(genes).length;
+                                    _levelData.numOfAlterations = Object.keys(alterations).length;
+                                }
                             }
                         });
                         $scope.status.loading = false;
                     } catch (error) {
+                        console.error(error);
                         $scope.status.loading = false;
                     }
                 });
