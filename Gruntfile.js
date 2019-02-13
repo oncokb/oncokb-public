@@ -230,7 +230,7 @@ module.exports = function(grunt) {
                 flow: {
                     html: {
                         steps: {
-                            js: ['concat', 'uglify'],
+                            js: ['concat'],
                             css: ['cssmin']
                         },
                         post: {}
@@ -266,15 +266,22 @@ module.exports = function(grunt) {
         //     }
         //   }
         // },
-        // uglify: {
-        //   dist: {
-        //     files: {
-        //       '<%= yeoman.dist %>/scripts/scripts.js': [
-        //         '<%= yeoman.dist %>/scripts/scripts.js'
-        //       ]
-        //     }
-        //   }
-        // },
+        uglify: {
+          dist: {
+             files: [{
+                expand: true,
+                src: ['<%= yeoman.dist %>/scripts/vendor.js'],
+                dest: '<%= yeoman.dist %>/scripts/',
+                cwd: '.',
+                rename: function (dst, src) {
+                    // To keep the source js files and make new files as `*.min.js`:
+                    // return dst + '/' + src.replace('.js', '.min.js');
+                    // Or to override to src:
+                    return src;
+                }
+            }]
+          }
+        },
         // concat: {
         //   dist: {}
         // },
@@ -442,7 +449,7 @@ module.exports = function(grunt) {
         'copy:dist',
         'cdnify',
         'cssmin',
-        'uglify',
+        'uglify:dist',
         'filerev',
         'usemin',
         'htmlmin'
