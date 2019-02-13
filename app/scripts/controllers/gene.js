@@ -43,21 +43,21 @@ angular.module('oncokbStaticApp')
                 pfamProxy: {
                     options: {
                         servletName: $('.url-pfam-service').val() ||
-                        'http://www.cbioportal.org/getPfamSequence.json',
+                        'https://www.cbioportal.org/getPfamSequence.json',
                         initMode: 'lazy'
                     }
                 },
                 pdbProxy: {
                     options: {
                         servletName: $('.url-pdb-service').val() ||
-                        'http://www.cbioportal.org/get3dPdb.json',
+                        'https://www.cbioportal.org/get3dPdb.json',
                         initMode: 'lazy'
                     }
                 },
                 mutationAlignerProxy: {
                     options: {
                         servletName: $('.url-mutation-aligner-service').val() ||
-                        'http://www.cbioportal.org/getMutationAligner.json',
+                        'https://www.cbioportal.org/getMutationAligner.json',
                         initMode: 'full'
                     }
                 }
