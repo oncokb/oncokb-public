@@ -1,10 +1,10 @@
-<div class="container" id="level1">
+<div class="container" data-target=".actionable-genes" data-spy="scroll" >
   <div class="actionable-genes">
       <div ng-if="status.loading" class="loading-style">
           <img src="resources/images/loader.gif">
       </div>
     <div ng-repeat="level in data.levels" ng-show="!status.loading">
-      <div class="col-md-12 align-style">
+      <div class="col-md-12 align-style" id="level{{level.title}}">
         <div>
           <div style="float:left"><h2 class="{{level.titleStyleClass}}">Level {{level.title}}</h2></div>
           <div style="float:left;margin-top:5px;margin-left:15px"><h3>{{level.description}}: {{level.numOfGenes}}
