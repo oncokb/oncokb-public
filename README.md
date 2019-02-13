@@ -20,9 +20,9 @@ gem install compass
 ## Build and development
 1. Set legacyLink, privateApiLink and apiLink in app/scripts/app.js to proper values to fetch data. For example, public oncokb api could be used as below: 
 ```
-.constant('legacyLink', 'http://oncokb.org/legacy-api/')
-.constant('privateApiLink', 'http://oncokb.org/api/private/')
-.constant('apiLink', 'http://oncokb.org/api/v1/')
+.constant('legacyLink', 'https://oncokb.org/legacy-api/')
+.constant('privateApiLink', 'https://oncokb.org/api/private/')
+.constant('apiLink', 'https://oncokb.org/api/v1/')
 ```
 2. Run `grunt` for building and `grunt serve` for preview.
 
@@ -45,6 +45,6 @@ OncoKB free software: you can redistribute it and/or modify it under the terms o
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
-A public instance of OncoKB (http://oncokb.org) is hosted and maintained by Memorial Sloan Kettering Cancer Center. It provides access to all curators in MSKCC knowledgebase team.
+A public instance of OncoKB (https://oncokb.org) is hosted and maintained by Memorial Sloan Kettering Cancer Center. It provides access to all curators in MSKCC knowledgebase team.
 
 If you are interested in coordinating the development of new features, please contact team@oncokb.org.

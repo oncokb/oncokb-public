@@ -7,7 +7,7 @@
             <div class="col-lg-12 title">
                 <span>OncoKB Cancer Gene List</span>
                 <a class="btn btn-sm download waves-effect waves-light"
-                   ng-href="{{apiLink}}utils/cancerGeneList.txt"
+                   ng-href="{{apiLink}}utils/cancerGeneList.txt" target="_self"
                    download> <i class="fa  fa-cloud-download"></i> Cancer Gene List</a>
             </div>
         </div>
@@ -84,7 +84,7 @@
                     <tr ng-repeat="x in cancerGeneList">
                         <td ng-switch on="x.oncokbAnnotated">
                             <span ng-switch-when="Yes">
-                                <a href="#/gene/{{x.hugoSymbol}}">{{x.hugoSymbol}}</a>
+                                <a href="gene/{{x.hugoSymbol}}">{{x.hugoSymbol}}</a>
                             </span>
                             <span ng-switch-when="No">{{x.hugoSymbol}}
                             </span>
@@ -92,7 +92,7 @@
                         <td>
                     <span ng-switch on="x.oncokbAnnotated">
                         <span ng-switch-when="Yes">
-                            <a href="#/gene/{{x.hugoSymbol}}" style="color: #000;">
+                            <a href="gene/{{x.hugoSymbol}}" style="color: #000;">
                                 <i class="fa fa-check"></i>
                             </a>
                         </span>
