@@ -22192,7 +22192,9 @@ function MutationMapperPfamGetter(hugoSymbol, callback) {
                         metadata: {
                             identifier: ''
                         },
-                        regions: _.map(data.pfamDomains.sort(function(a, b) {
+                        regions: _.map(data.pfamDomains.filter(function(pfamDomain) {
+                            return domains.hasOwnProperty(pfamDomain.pfamDomainId) && domains[pfamDomain.pfamDomainId].length > 0;
+                        }).sort(function(a, b) {
                             return a.pfamDomainStart - b.pfamDomainStart;
                         }), function(pfamDomain, index) {
                             var domain = domains[pfamDomain.pfamDomainId][0];
