@@ -35,17 +35,19 @@ angular
     .constant('privateApiLink', 'api/private/')
     .constant('apiLink', 'api/v1/')
     .constant('onLocalhost', location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-    .config(function($routeProvider, $provide, $httpProvider, Sentry, onLocalhost) {
+    .config(function($routeProvider, $provide, $httpProvider, Sentry, onLocalhost, $locationProvider) {
         $routeProvider
             .when('/', {
                 templateUrl: 'views/main.html',
                 controller: 'HomeCtrl'
             })
             .when('/levels', {
+                title: 'Levels of Evidence',
                 templateUrl: 'views/levels.html',
                 controller: 'MainCtrl'
             })
             .when('/team', {
+                title: 'OncoKB Team',
                 templateUrl: 'views/team.html',
                 controller: 'MainCtrl'
             })
@@ -55,29 +57,36 @@ angular
                 controllerAs: 'gene'
             })
             .when('/genes', {
+                title: 'All curated genes',
                 templateUrl: 'views/genes.html',
                 controller: 'GenesCtrl',
                 controllerAs: 'genes'
             })
-            .when('/gene/:geneName/alteration/:alterationName', {
+            .when('/gene/:geneName/:alterationName', {
                 templateUrl: 'views/gene.html',
                 controller: 'GeneCtrl',
                 controllerAs: 'gene'
             })
+            .when('/gene/:geneName/alteration/:alterationName', {
+                redirectTo: '/gene/:geneName/:alterationName'
+            })
             .when('/gene/:geneName/variant/:alterationName', {
-                redirectTo: '/gene/:geneName/alteration/:alterationName'
+                redirectTo: '/gene/:geneName/:alterationName'
             })
             .when('/about', {
+                title: 'About OncoKB',
                 templateUrl: 'views/about.html',
                 controller: 'AboutCtrl',
                 controllerAs: 'about'
             })
             .when('/actionableGenes', {
+                title: 'Actionable Genes, Alterations, Diseases, and Drugs',
                 templateUrl: 'views/actionalGenes.html',
                 controller: 'actionableGenesCtrl',
                 controllerAs: 'actionableGenes'
             })
             .when('/terms', {
+                title: 'Usage Terms',
                 templateUrl: 'views/license.html',
                 controller: 'LicenseCtrl',
                 controllerAs: 'license'
@@ -86,16 +95,19 @@ angular
                 redirectTo: '/news'
             })
             .when('/news', {
+                title: 'Latest News',
                 templateUrl: 'views/news.html',
                 controller: 'NewsCtrl',
                 controllerAs: 'news'
             })
             .when('/dataAccess', {
+                title: 'Access OncoKB Data',
                 templateUrl: 'views/dataaccess.html',
                 controller: 'DataaccessCtrl',
                 controllerAs: 'dataAccess'
             })
             .when('/cancerGenes', {
+                title: 'OncoKB Cancer Gene List',
                 templateUrl: 'views/cancerGenes.html',
                 controller: 'CancerGenesCtrl',
                 controllerAs: 'cancerGenes'
@@ -113,10 +125,12 @@ angular
 
             $httpProvider.interceptors.push('errorHttpInterceptor');
         }
+
+        $locationProvider.html5Mode(true);
     });
 
 angular.module('oncokbStaticApp').run(
-    function($timeout, $rootScope, $location, _, api, swaggerModules, markedSwagger) {
+    function($timeout, $rootScope, $location, _, api, swaggerModules, markedSwagger, $window) {
         $rootScope.meta = {
             levelsDesc: {
                 '1': 'FDA-recognized biomarker predictive of response to an FDA-approved drug in this indication',
@@ -153,7 +167,7 @@ angular.module('oncokbStaticApp').run(
         $rootScope.meta.view = {
             subNavItems: [{
                 content: '477 Genes',
-                link: '#/genes'
+                link: '/genes'
             }, {content: '3855 Variants'}, {content: '60 Tumor Types'}]
         };
         $rootScope.data = {
@@ -209,7 +223,7 @@ angular.module('oncokbStaticApp').run(
         $rootScope.$on('$routeChangeStart', function() {
             $rootScope.view.subNavItems = [];
         });
-        $rootScope.$on('$routeChangeSuccess', function() {
+        $rootScope.$on('$routeChangeSuccess', function(event, current) {
             var path = $location.path().split('/') || [];
             if (path.length === 5 && path[3] === 'alteration') {
                 $rootScope.view.currentPage = 'alteration';
@@ -218,6 +232,10 @@ angular.module('oncokbStaticApp').run(
             }
             if (!$rootScope.view.subNavItems || $rootScope.view.subNavItems.length === 0) {
                 $.extend(true, $rootScope.view.subNavItems, $rootScope.meta.view.subNavItems);
+            }
+
+            if(current && current.$$route) {
+                $window.document.title = current.$$route.title ? current.$$route.title : 'OncoKB';
             }
         });
 

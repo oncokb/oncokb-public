@@ -11,7 +11,7 @@
 angular.module('oncokbStaticApp')
     .controller('GeneCtrl', function($scope, $rootScope, $routeParams, $location, $route, api, $timeout,
                                      DTColumnDefBuilder, utils, _, MutationDetailsEvents, PileupUtil,
-                                     Plotly, MutationMapper, MutationCollection, $q) {
+                                     Plotly, MutationMapper, MutationCollection, $q, $window) {
         // fetch the mutation mapper from api and construct the graph from mutation mapper library
         var mutationData = [];
         var uniqueClinicAlterations = [];
@@ -163,7 +163,7 @@ angular.module('oncokbStaticApp')
                     ];
                 } else if ($scope.meta.inAlterationPage) {
                     $rootScope.view.subNavItems = [
-                        {content: $scope.gene.hugoSymbol, link: '#/gene/' + $scope.gene.hugoSymbol},
+                        {content: $scope.gene.hugoSymbol, link: 'gene/' + $scope.gene.hugoSymbol},
                         {content: $scope.alteration.name}
                     ];
                 }
@@ -674,8 +674,10 @@ angular.module('oncokbStaticApp')
         if ($routeParams.geneName) {
             if ($routeParams.alterationName) {
                 $scope.meta.inAlterationPage = true;
+                $window.document.title = $routeParams.geneName + ' ' + $routeParams.alterationName;
             } else {
                 $scope.meta.inGenePage = true;
+                $window.document.title = $routeParams.geneName;
             }
         }
         $scope.status = {
@@ -802,16 +804,15 @@ angular.module('oncokbStaticApp')
 
                     fetchData();
                 } else {
-                    console.log('no such gene existed ');
                     if (/[a-z]/.test($routeParams.geneName)) {
-                        $location.path('/gene/' +
+                        $location.path('gene/' +
                             $routeParams.geneName.toUpperCase());
                     } else {
-                        $location.path('/genes');
+                        $location.path('genes');
                     }
                 }
-            }, function(error) {
-                console.log('oppos error happened ', error);
+            }, function() {
+
             });
 
         api.getGeneSummary($scope.gene.hugoSymbol)
@@ -854,13 +855,10 @@ angular.module('oncokbStaticApp')
 
         $scope.tableClicked = function(type) {
             // Bootstrap fade in has 150ms transition time. DataTable only can gets width after the transition.
-            console.log('clicked');
             $timeout(function() {
                 if (type === 'annotated' && $scope.meta.biologicalTable && $scope.meta.biologicalTable.DataTable) {
-                    console.log('biologicalTable adjusted.');
                     $scope.meta.biologicalTable.DataTable.columns.adjust().draw();
                 } else if (type === 'clinical' && $scope.meta.clinicalTable && $scope.meta.clinicalTable.DataTable) {
-                    console.log('clinical adjusted.');
                     $scope.meta.clinicalTable.DataTable.columns.adjust().draw();
                 }
             }, 160);
