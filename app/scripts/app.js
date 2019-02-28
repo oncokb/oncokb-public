@@ -167,13 +167,13 @@ angular.module('oncokbStaticApp').run(
         };
         $rootScope.meta.view = {
             subNavItems: [{
-                content: '477 Genes',
+                content: '595 Genes',
                 link: '/genes'
-            }, {content: '3855 Variants'}, {content: '60 Tumor Types'}]
+            }, {content: '4472 Variants'}, {content: '38 Tumor Types'}]
         };
         $rootScope.data = {
-            lastUpdate: 'January 24, 2019',
-            version: '1.19',
+            lastUpdate: 'February 28, 2019',
+            version: '1.19_patch_1',
             levelColors: {
                 '1': '#33A02C',
                 '2A': '#1F78B4',
