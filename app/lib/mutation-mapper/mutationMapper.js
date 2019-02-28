@@ -69,7 +69,7 @@ var DataTableUtil = (function()
 	{
 		var map = {};
 
-		_.each(_.pairs(columns), function(pair, index)
+		_.each(_.toPairs(columns), function(pair, index)
 		{
 			var name = pair[0];
 			var options = pair[1];
@@ -227,7 +227,7 @@ var DataTableUtil = (function()
 	{
 		var columnRenderers = [];
 
-		_.each(_.pairs(renderers), function(pair) {
+		_.each(_.toPairs(renderers), function(pair) {
 			var columnName = pair[0];
 			var renderFn = pair[1];
 
@@ -270,7 +270,7 @@ var DataTableUtil = (function()
 
 		// iterate over list of renderers
 		// (assuming each column has its corresponding renderer)
-		_.each(_.pairs(columnRender), function(pair) {
+		_.each(_.toPairs(columnRender), function(pair) {
 			var columnName = pair[0];
 			var renderFn = pair[1];
 			var sortFn = columnSort[columnName];
@@ -336,7 +336,7 @@ var DataTableUtil = (function()
 
 		// now process columnData ("mData") functions
 		// (this will override prev definition, if any)
-		_.each(_.pairs(columnData), function(pair) {
+		_.each(_.toPairs(columnData), function(pair) {
 			var columnName = pair[0];
 			var mDataFn = pair[1];
 			var columnIdx = indexMap[columnName];
@@ -367,7 +367,7 @@ var DataTableUtil = (function()
 		var columnOpts = [];
 
 		// set column options
-		_.each(_.pairs(columns), function(pair) {
+		_.each(_.toPairs(columns), function(pair) {
 			var name = pair[0];
 			var column = pair[1];
 
@@ -4281,7 +4281,7 @@ var MutationDetailsUtil = function(mutations)
 				var value = mutations[i].get(dataField);
 
 				if (value &&
-				    !_.contains(excludeList, value))
+				    !_.includes(excludeList, value))
 				{
 					if (valueCountMap[value] === undefined)
 					{
@@ -4293,7 +4293,7 @@ var MutationDetailsUtil = function(mutations)
 			}
 		}
 
-		var pairs = _.pairs(valueCountMap);
+		var pairs = _.toPairs(valueCountMap);
 
 		pairs.sort(function(a, b) {
 			return (b[1] - a[1]);
@@ -5769,7 +5769,7 @@ function RequestQueue(options)
 	{
 		// get the first element from the queue
 		var element = _.first(_queryQueue);
-		_queryQueue = _.rest(_queryQueue);
+		_queryQueue = _.drop(_queryQueue);
 
 		// still elements in queue
 		if (element)
@@ -6264,7 +6264,7 @@ var VepParser = (function()
 		{
 			hgvspShort = hgvsp.substr(hgvsp.indexOf(":")+1);
 
-			_.each(_.pairs(_aa3to1), function(pair, idx) {
+			_.each(_.toPairs(_aa3to1), function(pair, idx) {
 				hgvspShort = hgvspShort.replace(new RegExp(pair[0], 'g'), pair[1]);
 			});
 
@@ -13338,7 +13338,7 @@ function AdvancedDataTable(options)
 	 */
 	self._addSortFunctions = function()
 	{
-		_.each(_.pairs(self._options.customSort), function(pair) {
+		_.each(_.toPairs(self._options.customSort), function(pair) {
 			var fnName = pair[0];
 			var sortFn = pair[1];
 

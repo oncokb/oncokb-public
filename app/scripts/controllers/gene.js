@@ -303,7 +303,7 @@ angular.module('oncokbStaticApp')
                         studyCountMapping[item.cancerStudy].push(item.sampleId);
                     }
                 });
-                var countsByGene = _.map(_.pairs(studyCountMapping), function(item) {
+                var countsByGene = _.map(_.toPairs(studyCountMapping), function(item) {
                     return [item[0], _.uniq(item[1]).length];
                 });
 
