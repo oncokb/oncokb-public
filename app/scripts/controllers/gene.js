@@ -480,7 +480,7 @@ angular.module('oncokbStaticApp')
                     });
 
                     mutationMapperConstructor(newMutationData, true);
-                    colors.fill('#1c75cd');
+                    _.fill(colors, '#1c75cd');
                     colors[tempIndex] = '#064885';
                     for (var i = 0; i < shortNames.length; i++) {
                         boldedNames[i] = shortNames[i];
@@ -491,7 +491,7 @@ angular.module('oncokbStaticApp')
 
                     $('.mutation-details-filter-reset').click(function() {
                         // show all of the data again
-                        colors.fill('#1c75cd');
+                        _.fill(colors, '#1c75cd');
                         singleStudyFlag = false;
                         for (var i = 0; i < shortNames.length; i++) {
                             boldedNames[i] = shortNames[i];
