@@ -119,6 +119,7 @@ angular
         if(!onLocalhost) {
             $provide.decorator('$exceptionHandler', function() {
                 return function(exception) {
+                    console.log(exception);
                     Sentry.captureException(exception);
                 };
             });
