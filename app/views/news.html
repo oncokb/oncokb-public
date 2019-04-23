@@ -19,6 +19,64 @@
             </p>
             <p ng-bind-html="data.citationURL"></p>
         </div>
+
+        <h3>April 25, 2019</h3>
+        <div>
+            <ul>
+                <li>New Heme Therapeutic Associations
+                    <div class="row">
+                        <table class="table">
+                            <thead>
+                            <th class="col-lg-1 col-sm-2 col-xs-2">LEVEL</th>
+                            <th class="col-lg-1 col-sm-2 col-xs-2">GENE</th>
+                            <th class="col-lg-4 col-sm-4 col-xs-4">MUTATION</th>
+                            <th class="col-lg-4 col-sm-2 col-xs-4">TUMOR TYPE</th>
+                            <th class="col-lg-2 col-sm-2 col-xs-2">DRUG</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in data.newlyAddedHemeTherapeuticsAssociations">
+                                <td>{{item.level}}</td>
+                                <td>{{item.gene}}</td>
+                                <td>{{item.mutation}}</td>
+                                <td>{{item.tumorType}}</td>
+                                <td>{{item.drug}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+
+                <li>Updated Actionable Alterations for Solid Tumors
+                    <div class="row">
+                        <table class="table">
+                            <thead>
+                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
+                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="(key, value) in data.updatedActionableGenes['04252019']">
+                                <td>{{key}}</td>
+                                <td>
+                                    <ul>
+                                        <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+
+                <li>Addition of {{data.newlyAddedGenes['04252019'].length}} new heme- or fusion-associated genes:
+                    <div class="newly-added-genes">
+                        <span class="gene" ng-repeat="hugo in data.newlyAddedGenes['04252019']"><a
+                            href="gene/{{hugo}}">{{hugo}}</a></span>
+                    </div>
+                </li>
+                <li>Standardization of therapeutic names with NCI dictionary</li>
+            </ul>
+        </div>
+
         <h3>January 24, 2019</h3>
         <div>
             <ul>

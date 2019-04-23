@@ -147,6 +147,15 @@ angular.module('oncokbStaticApp')
                     'the FDA approved lorlatinib</a> for patients with anaplastic lymphoma kinase (ALK)-positive metastatic non-small cell lung cancer (NSCLC) whose disease has progressed on crizotinib and at least one other ALK inhibitor or whose disease has progressed on alectinib or ceritinib for metastatic disease.'
                 ]
             },
+            '04252019': {
+                'Level 1': [
+                    'PDGFB - COL1A1-PDGFB Fusion - Dermatofibrosarcoma Protuberans - Imatinib (<b>now listed under PDGFB</b>)'
+                ],
+                'Level 4': [
+                    'MET - Fusions - All Tumors - Crizotinib (<b>new association</b>)',
+                    'CDK12 - Truncating Mutations - All Tumors - Pembrolizumab, Nivolumab, Cemiplimab (<b>new association</b>)',
+                ],
+            },
         };
         $scope.data.newlyAddedLevelFour = [
             {
@@ -228,11 +237,119 @@ angular.module('oncokbStaticApp')
                 'drug': 'Tazemetostat'
             }
         ];
+        $scope.data.newlyAddedHemeTherapeuticsAssociations = [
+            {
+                'level': 1,
+                'gene': 'ABL1',
+                'mutation': 'BCR-ABL1 Fusion',
+                'tumorType': 'B-Lymphoblastic Leukemia/ Lymphoma',
+                'drug': 'Ponatinib'
+            },
+            {
+                'level': 1,
+                'gene': 'ABL1',
+                'mutation': 'BCR-ABL1 Fusion',
+                'tumorType': 'Chronic Myelogenous Leukemia',
+                'drug': 'Bosutinib'
+            },
+            {
+                'level': 1,
+                'gene': 'ABL1',
+                'mutation': 'T315I',
+                'tumorType': 'B-Lymphoblastic Leukemia /Lymphoma, Chronic Myelogenous Leukemia',
+                'drug': 'Ponatinib'
+            },
+            {
+                'level': 1,
+                'gene': 'FLT3',
+                'mutation': 'Internal tandem duplication',
+                'tumorType': 'Acute Myeloid Leukemia',
+                'drug': 'Gilteritinib'
+            },
+            {
+                'level': 1,
+                'gene': 'FLT3',
+                'mutation': 'Oncogenic Mutations',
+                'tumorType': 'Acute Myeloid Leukemia',
+                'drug': 'Midostaurin + High Dose Chemotherapy'
+            },
+            {
+                'level': '2A',
+                'gene': 'ABL1',
+                'mutation': 'BCR-ABL1 Fusion',
+                'tumorType': 'B-Lymphoblastic Leukemia /Lymphoma',
+                'drug': 'Bosutinib, Nilotinib'
+            },
+            {
+                'level': '2A',
+                'gene': 'ABL1',
+                'mutation': 'E255K, E255V, F317C, F317I, F317L, F317V, F359C, F359I, F359V, T315A, Y253H',
+                'tumorType': 'B-Lymphoblastic Leukemia /Lymphoma, Chronic Myelogenous Leukemia',
+                'drug': 'Bosutinib'
+            },
+            {
+                'level': '2A',
+                'gene': 'ABL1',
+                'mutation': 'E255K, E255V, F359C, F359I, F359V, Y253H',
+                'tumorType': 'B-Lymphoblastic Leukemia/ Lymphoma, Chronic Myelogenous Leukemia',
+                'drug': 'Dasatinib'
+            },
+            {
+                'level': '2A',
+                'gene': 'ABL1',
+                'mutation': 'F317C, F317I, F317L, F317V, T315A, V299L',
+                'tumorType': 'B-Lymphoblastic Leukemia/ Lymphoma, Chronic Myelogenous Leukemia',
+                'drug': 'Nilotinib'
+            },
+            {
+                'level': '3A',
+                'gene': 'ABL1',
+                'mutation': 'BCR-ABL1 Fusion',
+                'tumorType': 'Chronic Myelogenous Leukemia',
+                'drug': 'Asciminib'
+            },
+            {
+                'level': '3A',
+                'gene': 'FLT3',
+                'mutation': 'Internal tandem duplication',
+                'tumorType': 'Acute Myeloid Leukemia',
+                'drug': 'Crenolanib, Quizartinib'
+            },
+            {
+                'level': 4,
+                'gene': 'SF3B1',
+                'mutation': 'Oncogenic mutations',
+                'tumorType': 'Acute Myeloid Leukemia, Chronic Myelomonocytic Leukemia, Myelodysplastic Syndromes',
+                'drug': 'H3B-8800'
+            },
+            {
+                'level': 4,
+                'gene': 'SRSF2',
+                'mutation': 'Oncogenic mutations',
+                'tumorType': 'Acute Myeloid Leukemia, Chronic Myelomonocytic Leukemia, Myelodysplastic Syndromes',
+                'drug': 'H3B-8800'
+            },
+            {
+                'level': 4,
+                'gene': 'U2AF1',
+                'mutation': 'Oncogenic mutations',
+                'tumorType': 'Acute Myeloid Leukemia, Chronic Myelomonocytic Leukemia, Myelodysplastic Syndromes',
+                'drug': 'H3B-8800'
+            },
+            {
+                'level': 4,
+                'gene': 'ZRSR2',
+                'mutation': 'Oncogenic mutations',
+                'tumorType': 'Acute Myeloid Leukemia, Chronic Myelomonocytic Leukemia, Myelodysplastic Syndromes',
+                'drug': 'H3B-8800'
+            },
+        ];
         $scope.data.newlyAddedGenes = {
             '08172018': ['ACTG1', 'ARHGEF28', 'ARID3A', 'ARID3B', 'ARID3C', 'ARID4A', 'ARID4B', 'ARID5A', 'ATP6AP1', 'ATP6V1B2', 'ATXN2', 'BACH2', 'BCL11B', 'BCORL1', 'BCR', 'BTG1', 'CD28', 'CD58', 'CIITA', 'CRBN', 'CUX1', 'DDX3X', 'DTX1', 'DUSP22', 'EGR1', 'EP400', 'ESCO2', 'ETNK1', 'FANCD2', 'FAS', 'FBXO11', 'FURIN', 'GNA12', 'GNA13', 'GNB1', 'GTF2I', 'HDAC1', 'HDAC4', 'HDAC7', 'HIF1A', 'HIST1H1B', 'HIST1H1D'],
             '10012018': ['HIST1H1E','SETD6','SETD5','SETD7','SETDB2','SETDB1','SETD4','SETD3','SETD1B','U2AF2','TET3','NFE2','IRF8','IRF1','IKZF3','JARID2','NCSTN','HIST1H2BO','HIST1H2AC','HIST1H2BG','HIST1H2BJ','HIST1H2BK','HIST1H2BC','HIST1H2AG','HIST1H2AL','HIST1H2AM','TYK2'],
             '10262018': ['NT5C2','P2RY8','PCBP1','PDS5B','PTPN1','PTPN2 ','STAG1','TRAF3','TRAF5'],
             '12142018': ['KSR2','LCK','LTB','MGAM','MOB3B','MPEG1','NCOR2','PIGA','PLCG1','POT1','ROBO1','RUNX1T1','SAMHD1','SETD1A','SGK1','SMC1A','SMC3','SMG1','SP140','STAT6','TBL1XR1','UBR5','VAV1','VAV2','XBP1'],
             '01242019': ['ECT2L','RELN','TAL1','MLLT10','TLX3','TLX1','TRA','TRB','TRD','TRG','EPOR','ABL2','MECOM','DEK','RBM15','BCL9'],
+            '04252019': ['ATF1','CCNB3','CMTR2','CREB1','CXORF67','DDIT3','ETAA1','ETV5','FEV','FLI1','IL3','KAT6A','KBTBD4','KLF2','LMO2','LZTR1','MAF','MAFB','NR4A3','NRG1','NUP98','PDGFB','PGBD5','PHF6','PRKACA','SETBP1','SLFN11','SPRTN','SS18','TCL1A','TCL1B','TFE3','TRIP13','USP8','YY1'],
         };
     });
