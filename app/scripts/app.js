@@ -133,6 +133,7 @@ angular
 angular.module('oncokbStaticApp').run(
     function($timeout, $rootScope, $location, _, api, swaggerModules, markedSwagger, $window) {
         $rootScope.meta = {
+            clinicalTableSearchKeyWord: '',
             levelsDesc: {
                 '1': 'FDA-recognized biomarker predictive of response to an FDA-approved drug in this indication',
                 '2A': 'Standard of care biomarker predictive of response to an FDA-approved drug in this indication',
