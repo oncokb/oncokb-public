@@ -151,7 +151,7 @@
                     </p>
                     <table id="clinicalTable" class="table row-border hover"
                            datatable="ng" dt-options="view.clinicalTableOptions"
-                           dt-instance="meta.clinicalTable">
+                           dt-instance="clinicalTableInstanceCallback">
                         <thead>
                         <tr>
                             <th>Alteration</th>
@@ -189,7 +189,7 @@
                      ng-class="{'in active': clinicalAlterations.length === 0 && annotatedAlterations.length > 0}"
                      ng-if="annotatedAlterations.length > 0">
                     <p class="noteAlign">If you notice any mistakes or missing alterations / citations, please send an
-                        email to <a href="mailto:contact@oncokb.org?subject=OncoKB Feedback">onctanct@oncokb.org.</a>
+                        email to <a href="mailto:contact@oncokb.org?subject=OncoKB Feedback">contact@oncokb.org.</a>
                     </p>
                     <table id="annotatedTable" class="table row-border hover"
                            datatable="ng" dt-options="view.biologicalTableOptions"
@@ -227,7 +227,7 @@
         <div class="col-lg-12 col-md-12" ng-if="meta.inAlterationPage && !isGeneralMutation() && clinicalAlterations.length > 0">
             <table id="clinicalTableVariantPage" class="table row-border hover"
                    datatable="ng" dt-options="view.clinicalTableOptions"
-                   dt-instance="meta.clinicalTable">
+                   dt-instance="clinicalTableInstanceCallback">
                 <thead>
                 <tr>
                     <th>Alteration</th>
