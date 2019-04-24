@@ -27,11 +27,11 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-2">LEVEL</th>
-                            <th class="col-lg-1 col-sm-2 col-xs-2">GENE</th>
-                            <th class="col-lg-4 col-sm-4 col-xs-4">MUTATION</th>
-                            <th class="col-lg-4 col-sm-2 col-xs-4">TUMOR TYPE</th>
-                            <th class="col-lg-2 col-sm-2 col-xs-2">DRUG</th>
+                            <th class="col-xs-1">LEVEL</th>
+                            <th class="col-xs-1">GENE</th>
+                            <th class="col-xs-4">MUTATION</th>
+                            <th class="col-xs-4">TUMOR TYPE</th>
+                            <th class="col-xs-2">DRUG</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="item in data.newlyAddedHemeTherapeuticsAssociations">
@@ -73,7 +73,7 @@
                             href="gene/{{hugo}}">{{hugo}}</a></span>
                     </div>
                 </li>
-                <li>Standardization of therapeutic names with NCI dictionary</li>
+                <li>Standardization of therapeutic names with <a target="_blank" href="https://ncit.nci.nih.gov/ncitbrowser/">NCI dictionary</a></li>
             </ul>
         </div>
 
@@ -340,10 +340,10 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-2">GENE</th>
-                            <th class="col-lg-5 col-sm-4 col-xs-4">MUTATION</th>
-                            <th class="col-lg-2 col-sm-2 col-xs-3">TUMOR TYPE</th>
-                            <th class="col-lg-4 col-sm-4 col-xs-3">DRUG</th>
+                            <th class="col-xs-1">GENE</th>
+                            <th class="col-xs-5">MUTATION</th>
+                            <th class="col-xs-2">TUMOR TYPE</th>
+                            <th class="col-xs-3">DRUG</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="item in data.newlyAddedLevelFour">
