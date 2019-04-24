@@ -21,6 +21,7 @@ angular
         'datatables',
         'datatables.bootstrap',
         'ui.bootstrap',
+        'ngTable',
         'swaggerUi'
     ])
     .constant('_', window._)
