@@ -28,7 +28,7 @@
                     <div class="search-box-gene-alteration">
                         <span>{{match.model.gene.hugoSymbol}}</span> /
                         <span
-                            ng-bind-html="variant[0].name | uibTypeaheadHighlight:query"></span>
+                            ng-bind-html="match.model.variants[0].name | uibTypeaheadHighlight:query"></span>
                     </div>
                     <i class="oncogenic-icon-image"
                        ng-class="getIconClass(match.model.oncogenicity, match.model.highestSensitiveLevel, match.model.highestResistanceLevel, match.model.vus)"/>
