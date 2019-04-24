@@ -14,7 +14,18 @@ angular.module('oncokbStaticApp')
             scope: {
                 searchConfirmedEvent: '='
             },
-            link: function postLink(scope, element, attrs) {
+            link: function postLink(scope) {
+                function getAllVariantsName(variants) {
+                    return variants ? variants.map(function(variant) {
+                        return variant.name;
+                    }).join(', ') : '';
+                }
+
+                function getAllTumorTypesName(tumorTypes) {
+                    return tumorTypes ? tumorTypes.map(function(tumorType) {
+                        return tumorType.name ? tumorType.name : (tumorType.mainType ? tumorType.mainType.name : '');
+                    }).join(', ') : '';
+                }
                 scope.content = {
                     selectedGene: '',
                     loadingSearchResult: false
@@ -23,11 +34,11 @@ angular.module('oncokbStaticApp')
                 scope.searchConfirmed = function() {
                     if (scope.content.selectedItem) {
                         var link = scope.content.selectedItem.link;
-                        scope.content.selectedItem = undefined;
-                        $location.path(link);
                         if (angular.isFunction(scope.searchConfirmedEvent)) {
-                            scope.searchConfirmedEvent();
+                            scope.searchConfirmedEvent(scope.content.selectedItem);
                         }
+                        $location.path(link);
+                        scope.content.selectedItem = undefined;
                     }
                 };
 
@@ -45,6 +56,8 @@ angular.module('oncokbStaticApp')
                                 if (item.highestResistanceLevel) {
                                     item.highestResistanceLevel = item.highestResistanceLevel.replace('LEVEL_', '');
                                 }
+                                item.variantsName = getAllVariantsName(item.variants);
+                                item.tumorTypesName = getAllTumorTypesName(item.tumorTypes);
                             });
                             return result;
                         }, function() {
