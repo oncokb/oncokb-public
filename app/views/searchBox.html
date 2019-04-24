@@ -28,7 +28,7 @@
                     <div class="search-box-gene-alteration">
                         <span>{{match.model.gene.hugoSymbol}}</span> /
                         <span
-                            ng-bind-html="(match.model.variant.name ? match.model.variant.name : match.model.variant.alteration) | uibTypeaheadHighlight:query"></span>
+                            ng-bind-html="match.model.variants[0].name | uibTypeaheadHighlight:query"></span>
                     </div>
                     <i class="oncogenic-icon-image"
                        ng-class="getIconClass(match.model.oncogenicity, match.model.highestSensitiveLevel, match.model.highestResistanceLevel, match.model.vus)"/>
@@ -36,6 +36,24 @@
                 </div>
                 <div class="search-box-annotation">
                     <span ng-if="match.model.annotation">{{match.model.annotation}}</span>
+                </div>
+            </div>
+            <div ng-switch-when="drug">
+                <div class="match">
+                    <div class="search-box-gene-alteration">
+                        <span ng-bind-html="match.model.drug.drugName | uibTypeaheadHighlight:query"></span>
+                    </div>
+                </div>
+                <div class="search-box-annotation">
+                    <span>The drug is <span ng-if="match.model.highestSensitiveLevel"
+                                            ng-style="getLevelColor(match.model.highestSensitiveLevel)">
+                                Level {{match.model.highestSensitiveLevel}}</span><span
+                        ng-if="match.model.highestResistanceLevel"
+                        ng-style="getLevelColor(match.model.highestResistanceLevel)">
+                                Level {{match.model.highestResistanceLevel}}</span> in {{match.model.gene.hugoSymbol}} <span
+                        ng-if="match.model.variants.length > 1">({{match.model.variantsName}})</span><span
+                        ng-if="match.model.variants.length === 1">{{match.model.variantsName}}</span> {{match.model.tumorTypesName}}
+                    </span>
                 </div>
             </div>
         </div>

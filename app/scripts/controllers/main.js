@@ -13,6 +13,12 @@ angular.module('oncokbStaticApp')
             return viewLocation === $location.path();
         };
 
+        $scope.searchConfirmedEvent = function(record) {
+            if(record.drug) {
+                $rootScope.meta.clinicalTableSearchKeyWord = record.drug.drugName;
+            }
+        };
+
         $scope.tabs = {
             apiSummary: {
                 name: 'Summary',

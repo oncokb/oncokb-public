@@ -736,6 +736,13 @@ angular.module('oncokbStaticApp')
                 }
             }
         };
+
+        $scope.clinicalTableInstanceCallback = function(dtInstance) {
+            if($rootScope.meta.clinicalTableSearchKeyWord) {
+                dtInstance.DataTable.search($rootScope.meta.clinicalTableSearchKeyWord).draw();
+                $rootScope.meta.clinicalTableSearchKeyWord = '';
+            }
+        };
         $scope.view.biologicalTableOptions = {
             hasBootstrap: true,
             aoColumns: [
