@@ -67,7 +67,7 @@ angular.module('oncokbStaticApp')
                 item = displayConvert(item, ['oncokbAnnotated', 'foundation', 'foundationHeme', 'mSKImpact', 'mSKHeme', 'vogelstein', 'sangerCGC']);
                 if (item.oncogene) {
                     if (item.tsg) {
-                        item.geneType = 'Oncogene /TSG';
+                        item.geneType = 'Oncogene/TSG';
                     } else {
                         item.geneType = 'Oncogene';
                     }

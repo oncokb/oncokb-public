@@ -149,7 +149,7 @@ angular.module('oncokbStaticApp')
             },
             '04252019': {
                 'Level 1': [
-                    'PDGFB - COL1A1-PDGFB Fusion - Dermatofibrosarcoma Protuberans - Imatinib (<b>now listed under PDGFB</b>)'
+                    'PDGFB - COL1A1-PDGFB Fusion - Dermatofibrosarcoma Protuberans - Imatinib (<b>new association</b>)'
                 ],
                 'Level 4': [
                     'MET - Fusions - All Tumors - Crizotinib (<b>new association</b>)',
@@ -242,7 +242,7 @@ angular.module('oncokbStaticApp')
                 'level': 1,
                 'gene': 'ABL1',
                 'mutation': 'BCR-ABL1 Fusion',
-                'tumorType': 'B-Lymphoblastic Leukemia/ Lymphoma',
+                'tumorType': 'B-Lymphoblastic Leukemia/Lymphoma',
                 'drug': 'Ponatinib'
             },
             {
@@ -256,7 +256,7 @@ angular.module('oncokbStaticApp')
                 'level': 1,
                 'gene': 'ABL1',
                 'mutation': 'T315I',
-                'tumorType': 'B-Lymphoblastic Leukemia /Lymphoma, Chronic Myelogenous Leukemia',
+                'tumorType': 'B-Lymphoblastic Leukemia/Lymphoma, Chronic Myelogenous Leukemia',
                 'drug': 'Ponatinib'
             },
             {
@@ -277,28 +277,28 @@ angular.module('oncokbStaticApp')
                 'level': '2A',
                 'gene': 'ABL1',
                 'mutation': 'BCR-ABL1 Fusion',
-                'tumorType': 'B-Lymphoblastic Leukemia /Lymphoma',
+                'tumorType': 'B-Lymphoblastic Leukemia/Lymphoma',
                 'drug': 'Bosutinib, Nilotinib'
             },
             {
                 'level': '2A',
                 'gene': 'ABL1',
                 'mutation': 'E255K, E255V, F317C, F317I, F317L, F317V, F359C, F359I, F359V, T315A, Y253H',
-                'tumorType': 'B-Lymphoblastic Leukemia /Lymphoma, Chronic Myelogenous Leukemia',
+                'tumorType': 'B-Lymphoblastic Leukemia/Lymphoma, Chronic Myelogenous Leukemia',
                 'drug': 'Bosutinib'
             },
             {
                 'level': '2A',
                 'gene': 'ABL1',
                 'mutation': 'E255K, E255V, F359C, F359I, F359V, Y253H',
-                'tumorType': 'B-Lymphoblastic Leukemia/ Lymphoma, Chronic Myelogenous Leukemia',
+                'tumorType': 'B-Lymphoblastic Leukemia/Lymphoma, Chronic Myelogenous Leukemia',
                 'drug': 'Dasatinib'
             },
             {
                 'level': '2A',
                 'gene': 'ABL1',
                 'mutation': 'F317C, F317I, F317L, F317V, T315A, V299L',
-                'tumorType': 'B-Lymphoblastic Leukemia/ Lymphoma, Chronic Myelogenous Leukemia',
+                'tumorType': 'B-Lymphoblastic Leukemia/Lymphoma, Chronic Myelogenous Leukemia',
                 'drug': 'Nilotinib'
             },
             {
