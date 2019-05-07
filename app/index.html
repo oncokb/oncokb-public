@@ -90,32 +90,36 @@
                 <ul class="nav navbar-nav">
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/levels')}"><a data-toggle="collapse"
                                                                                               data-target=".in"
-                                                                                              href="levels"><span>Levels of Evidence</span></a>
+                                                                                              href="levels">Levels of
+                        Evidence</a>
                     </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/actionableGenes')}"><a
-                        data-toggle="collapse" data-target=".in" href="actionableGenes"><span>Actionable Genes</span></a>
+                        data-toggle="collapse" data-target=".in"
+                        href="actionableGenes"><span>Actionable Genes</span></a>
                     </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/cancerGenes')}"><a href="cancerGenes"
+                                                                                                   data-toggle="collapse"
+                                                                                                   data-target=".in">Cancer
+                        Genes</a></li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/dataAccess')}"><a data-toggle="collapse"
                                                                                                   data-target=".in"
-                                                                                                  href="dataAccess"><span>Data Access</span></a>
+                                                                                                  href="dataAccess">Data
+                        Access</a>
                     </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/about')}"><a href="about"
+                                                                                             data-toggle="collapse"
+                                                                                             data-target=".in">About</a>
+                    </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/team')}"><a data-toggle="collapse"
+                                                                                            data-target=".in"
+                                                                                            href="team">Team</a></li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/news')}"><a data-toggle="collapse"
-                                                                                                  data-target=".in"
-                                                                                                  href="news"><span>News</span></a>
+                                                                                            data-target=".in"
+                                                                                            href="news">News</a>
                     </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/terms')}"><a data-toggle="collapse"
                                                                                              data-target=".in"
-                                                                                             href="terms"><span>Usage Terms</span></a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-haspopup="true"
-                           aria-expanded="false"><span>More <div class="caret"></div></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="cancerGenes">OncoKB Cancer Gene List</a></li>
-                            <li><a href="about">About</a></li>
-                            <li><a href="team">Team</a></li>
-                        </ul>
+                                                                                             href="terms">Terms</a>
                     </li>
                     </li>
                     <li ng-class="{hidden: toggled}" class="nav-search-li" style="float: right">
