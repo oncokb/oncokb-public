@@ -29,6 +29,13 @@
             font-size: 12px;
         }
     }
+
+  .table.heme-table {
+    th, td {
+      vertical-align: middle;
+      text-align: center;
+    }
+  }
   .newly-added-genes {
     display: flex;
     flex-wrap: wrap;
