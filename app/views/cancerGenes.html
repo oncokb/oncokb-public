@@ -80,7 +80,7 @@
         <div class="row" style="margin-bottom: 0;">
             <div class="col-lg-12">
                 <div style="display: flex; flex-direction: row-reverse; align-items: baseline">
-                    <input type="text" id="search" style="width: 150px;">
+                    <input type="text" id="search" style="width: 150px;" ng-model="data.searchTerm" ng-change="updateSearchTerm()">
                     <label for="search" style="font-size: 14px; margin-right: 5px;">Search:</label>
                 </div>
             </div>
@@ -139,6 +139,7 @@
                             <span ng-if="x.sangerCGC === 'Yes'"><i class="fa fa-check"></i></span>
                         </td>
                         <td data-title="'# of Sources'"
+                            filter="{occurrenceCount:'number'}"
                             sortable="'occurrenceCount'">
                             {{x.occurrenceCount}}
                         </td>

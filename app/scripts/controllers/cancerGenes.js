@@ -20,32 +20,6 @@ angular.module('oncokbStaticApp')
             });
             return obj;
         }
-        // DataTable initialization & options
-        $scope.dt = {};
-        $scope.dt.dtOptions = {
-            paging: true,
-            hasBootstrap: true,
-            language: {
-                loadingRecords: '<img src="resources/images/loader.gif">'
-            },
-            pageLength: 15,
-            lengthMenu: [[15, 30, 50, 100, -1], [15, 30, 50, 100, 'All']],
-            pagingType: 'numbers',
-            aaSorting: [[9, 'desc'], [0, 'asc'], [1, 'desc']],
-            columns: [
-                {type: 'html', orderSequence: ['asc', 'desc']},
-                {type: 'html', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'number', orderSequence: ['desc', 'asc']}
-            ],
-            responsive: true
-        };
 
         $scope.fetchedDate = '05/07/2019';
         $scope.sources = ['oncokbAnnotated', 'foundation', 'foundationHeme', 'mSKImpact', 'mSKHeme', 'vogelstein', 'sangerCGC'];
@@ -55,6 +29,10 @@ angular.module('oncokbStaticApp')
         }, {total: 0});
 
         $scope.doneLoading = true;
+        
+        $scope.data = {
+            searchTerm: ''
+        };
 
         function getNgTable(data) {
             return new NgTableParams({
@@ -65,6 +43,10 @@ angular.module('oncokbStaticApp')
                 dataset: data
             });
         }
+
+        $scope.updateSearchTerm = function() {
+            $scope.tableParams.filter({$: $scope.data.searchTerm});
+        };
 
         api.getCancerGeneList().then(function(result) {
             var tempData = result.data;
