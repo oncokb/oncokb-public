@@ -20,7 +20,7 @@
             <p ng-bind-html="data.citationURL"></p>
         </div>
 
-        <h3>MAY 9, 2019</h3>
+        <h3>May 9, 2019</h3>
         <div>
             <ul>
                 <li>Updated Actionable Genes for Solid Tumors
@@ -44,23 +44,116 @@
                     </div>
                 </li>
 
-                <li>New Heme Therapeutic Associations
+                <li>Addition of Actionable Genes for Hematologic Malignancies
                     <div class="row">
-                        <table class="table">
+                        <table class="table heme-table">
                             <thead>
-                            <th class="col-xs-1">LEVEL</th>
-                            <th class="col-xs-1">GENE</th>
-                            <th class="col-xs-4">MUTATION</th>
-                            <th class="col-xs-4">TUMOR TYPE</th>
-                            <th class="col-xs-2">DRUG</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-1">Gene</th>
+                            <th class="col-xs-4">Mutation</th>
+                            <th class="col-xs-4">Tumor Type</th>
+                            <th class="col-xs-2">Drug</th>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="item in data.newlyAddedHemeTherapeuticsAssociations">
-                                <td>{{item.level}}</td>
-                                <td>{{item.gene}}</td>
-                                <td>{{item.mutation}}</td>
-                                <td>{{item.tumorType}}</td>
-                                <td>{{item.drug}}</td>
+                            <!-- Level 1 -->
+                            <tr>
+                                <td rowspan="5">1</td>
+                                <td rowspan="3">ABL1</td>
+                                <td rowspan="2">BCR-ABL1 fusion</td>
+                                <td>B-Lymphoblastic Leukemia/Lymphoma (BLL)</td>
+                                <td>Ponatinib</td>
+                            </tr>
+                            <tr>
+                                <td>Chronic Myelogenous Leukemia (CML)</td>
+                                <td>Bosutinib</td>
+                            </tr>
+                            <tr>
+                                <td>T315I</td>
+                                <td>BLL, CML</td>
+                                <td>Ponatinib</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">FLT3</td>
+                                <td>Internal tandem duplications (ITD)</td>
+                                <td rowspan="2">Acute Myeloid Leukemia (AML)</td>
+                                <td>Gilteritinib</td>
+                            </tr>
+                            <tr>
+                                <td>Oncogenic Mutations</td>
+                                <td>Midostaurin + High Dose Chemotherapy</td>
+                            </tr>
+
+                            <!-- Level R1 -->
+                            <tr>
+                                <td>R1</td>
+                                <td>ABL1</td>
+                                <td>T315I</td>
+                                <td>BLL, CML</td>
+                                <td>Imatinib, Dasatinib, Nilotinib, Bosutinib</td>
+                            </tr>
+
+                            <!-- Level 2A -->
+                            <tr>
+                                <td rowspan="4">2A</td>
+                                <td rowspan="4">ABL1</td>
+                                <td>BCR-ABL1 fusion</td>
+                                <td>BLL</td>
+                                <td>Bosutinib, Nilotinib</td>
+                            </tr>
+                            <tr>
+                                <td>E255K, E255V, F317C, F317I, F317L, F317V, F359C, F359I, F359V, T315A, Y253H</td>
+                                <td rowspan="3">BLL, CML</td>
+                                <td>Bosutinib</td>
+                            </tr>
+                            <tr>
+                                <td>E255K, E255V, F359C, F359I, F359V, Y253H</td>
+                                <td>Dasatinib</td>
+                            </tr>
+                            <tr>
+                                <td>F317C, F317I, F317L, F317V, T315A, V299L</td>
+                                <td>Nilotinib</td>
+                            </tr>
+
+                            <!-- Level 3A-->
+                            <tr>
+                                <td rowspan="4">3A</td>
+                                <td rowspan="3">ABL1</td>
+                                <td>BCR-ABL1 fusion</td>
+                                <td>CML</td>
+                                <td>Asciminib</td>
+                            </tr>
+                            <tr>
+                                <td>E255K, E255V, F359C, F359I, F359V, Y253H</td>
+                                <td rowspan="2">BLL, CML</td>
+                                <td>Dasatinib</td>
+                            </tr>
+                            <tr>
+                                <td>F317C, F317I, F317L, F317V, T315A, V299L</td>
+                                <td>Nilotinib</td>
+                            </tr>
+                            <tr>
+                                <td>FLT3</td>
+                                <td>ITD</td>
+                                <td>AML</td>
+                                <td>Crenolanib, Quizartinib</td>
+                            </tr>
+
+                            <!-- Level 4 -->
+                            <tr>
+                                <td rowspan="4">4</td>
+                                <td>SF3B1</td>
+                                <td rowspan="4">Oncogenic Mutations</td>
+                                <td rowspan="4">AML, Chronic Myelomonocytic Leukemia (CMML), Myelodysplastic Syndrome (MDS)</td>
+                                <td rowspan="4">H3B-8800</td>
+                            </tr>
+                            <tr>
+                                <td>SRSF2</td>
+                            </tr>
+                            <tr>
+                                <td>U2AF1</td>
+                            </tr>
+                            <tr>
+                                <td>ZRSR2</td>
                             </tr>
                             </tbody>
                         </table>
@@ -73,7 +166,9 @@
                             href="gene/{{hugo}}">{{hugo}}</a></span>
                     </div>
                 </li>
-                <li>Standardization of therapeutic names with <a target="_blank" href="https://ncit.nci.nih.gov/ncitbrowser/">NCI thesaurus</a></li>
+                <li>Standardization of therapeutic names with <a target="_blank"
+                                                                 href="https://ncit.nci.nih.gov/ncitbrowser/">NCI
+                    thesaurus</a></li>
 
             </ul>
         </div>
@@ -341,10 +436,10 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-xs-1">GENE</th>
-                            <th class="col-xs-5">MUTATION</th>
-                            <th class="col-xs-2">TUMOR TYPE</th>
-                            <th class="col-xs-3">DRUG</th>
+                            <th class="col-xs-1">Gene</th>
+                            <th class="col-xs-5">Mutation</th>
+                            <th class="col-xs-2">Tumor Type</th>
+                            <th class="col-xs-3">Drug</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="item in data.newlyAddedLevelFour">
