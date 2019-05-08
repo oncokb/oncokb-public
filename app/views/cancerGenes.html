@@ -13,7 +13,7 @@
            qtip
            my="bottom center"
            at="top center"
-           qtip-content="Gene is part of the <a href='https://www.mskcc.org/msk-impact' target='_blank'>MSK-IMPACT panel</a> ({{numOfGenes.mSKImpact}} genes)"></i>
+           qtip-content="Gene is part of the <a href='https://www.mskcc.org/msk-impact' target='_blank'>MSK-IMPACT panel</a> ({{numOfGenes.mSKImpact}} genes, {{fetchedDate}})"></i>
     </script>
     <script type="text/ng-template" id="mskHeme.html">
         <span>MSK-IMPACT Heme</span>
@@ -21,7 +21,7 @@
            qtip
            my="bottom center"
            at="top center"
-           qtip-content="Gene is part of the <a href='https://www.mskcc.org/msk-impact' target='_blank'>MSK-IMPACT Heme and HemePACT panels</a> ({{numOfGenes.mSKHeme}} genes)"></i>
+           qtip-content="Gene is part of the <a href='https://www.mskcc.org/msk-impact' target='_blank'>MSK-IMPACT Heme and HemePACT panels</a> ({{numOfGenes.mSKHeme}} genes, {{fetchedDate}})"></i>
     </script>
     <script type="text/ng-template" id="foundationOne.html">
         <span>Foundation One CDx</span>
@@ -37,7 +37,7 @@
            qtip
            my="bottom center"
            at="top center"
-           qtip-content="Gene exists in Foundation One Heme resource ({{numOfGenes.foundation}} genes, {{fetchedDate}})"></i>
+           qtip-content="Gene is part of the <a href='https://www.foundationmedicineasia.com/dam/assets/pdf/FOneHeme_Current_GeneList.pdf' target='_blank'>FoundationOne Heme panel</a> ({{numOfGenes.foundationHeme}} genes, {{fetchedDate}})"></i>
     </script>
     <script type="text/ng-template" id="vogelstein.html">
         <span>Vogelstein et al. 2013</span>

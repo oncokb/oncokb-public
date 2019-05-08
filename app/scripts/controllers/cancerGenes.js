@@ -11,7 +11,7 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-    .controller('CancerGenesCtrl', function($scope, _, api, $q, apiLink, NgTableParams) {
+    .controller('CancerGenesCtrl', function($rootScope, $scope, _, api, $q, apiLink, NgTableParams) {
 
 
         function displayConvert(obj, keys) {
@@ -29,9 +29,10 @@ angular.module('oncokbStaticApp')
         }, {total: 0});
 
         $scope.doneLoading = true;
-        
+
         $scope.data = {
-            searchTerm: ''
+            searchTerm: '',
+            lastUpdate: $rootScope.data.lastUpdate
         };
 
         function getNgTable(data) {
