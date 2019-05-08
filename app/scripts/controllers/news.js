@@ -147,9 +147,11 @@ angular.module('oncokbStaticApp')
                     'the FDA approved lorlatinib</a> for patients with anaplastic lymphoma kinase (ALK)-positive metastatic non-small cell lung cancer (NSCLC) whose disease has progressed on crizotinib and at least one other ALK inhibitor or whose disease has progressed on alectinib or ceritinib for metastatic disease.'
                 ]
             },
-            '04252019': {
+            '05092019': {
                 'Level 1': [
-                    'PDGFB - COL1A1-PDGFB Fusion - Dermatofibrosarcoma Protuberans - Imatinib (<b>new association</b>)'
+                    'April 12, 2019: <a target="_blank" ' +
+                    'href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-erdafitinib-metastatic-urothelial-carcinoma">' +
+                    'the FDA approved erdafitinib</a> for patients with locally advanced or metastatic urothelial carcinoma, with susceptible FGFR3 or FGFR2 genetic alterations (FGFR2 Fusions, FGFR3 Fusions or FGFR3 R248C, S249C, G370C, Y373C mutations), that has progressed during or following platinum-containing chemotherapy.'
                 ],
                 'Level 4': [
                     'MET - Fusions - All Tumors - Crizotinib (<b>new association</b>)',
@@ -343,6 +345,13 @@ angular.module('oncokbStaticApp')
                 'tumorType': 'Acute Myeloid Leukemia, Chronic Myelomonocytic Leukemia, Myelodysplastic Syndromes',
                 'drug': 'H3B-8800'
             },
+            {
+                'level': 'R1',
+                'gene': 'ABL1',
+                'mutation': 'T315I',
+                'tumorType': 'B-Lymphoblastic Leukemia/Lymphoma, Chronic Myelogenous Leukemia',
+                'drug': 'Imatinib, Dasatinib, Nilotinib, Bosutinib'
+            },
         ];
         $scope.data.newlyAddedGenes = {
             '08172018': ['ACTG1', 'ARHGEF28', 'ARID3A', 'ARID3B', 'ARID3C', 'ARID4A', 'ARID4B', 'ARID5A', 'ATP6AP1', 'ATP6V1B2', 'ATXN2', 'BACH2', 'BCL11B', 'BCORL1', 'BCR', 'BTG1', 'CD28', 'CD58', 'CIITA', 'CRBN', 'CUX1', 'DDX3X', 'DTX1', 'DUSP22', 'EGR1', 'EP400', 'ESCO2', 'ETNK1', 'FANCD2', 'FAS', 'FBXO11', 'FURIN', 'GNA12', 'GNA13', 'GNB1', 'GTF2I', 'HDAC1', 'HDAC4', 'HDAC7', 'HIF1A', 'HIST1H1B', 'HIST1H1D'],
@@ -350,6 +359,6 @@ angular.module('oncokbStaticApp')
             '10262018': ['NT5C2','P2RY8','PCBP1','PDS5B','PTPN1','PTPN2 ','STAG1','TRAF3','TRAF5'],
             '12142018': ['KSR2','LCK','LTB','MGAM','MOB3B','MPEG1','NCOR2','PIGA','PLCG1','POT1','ROBO1','RUNX1T1','SAMHD1','SETD1A','SGK1','SMC1A','SMC3','SMG1','SP140','STAT6','TBL1XR1','UBR5','VAV1','VAV2','XBP1'],
             '01242019': ['ECT2L','RELN','TAL1','MLLT10','TLX3','TLX1','TRA','TRB','TRD','TRG','EPOR','ABL2','MECOM','DEK','RBM15','BCL9'],
-            '04252019': ['ATF1','CCNB3','CMTR2','CREB1','CXORF67','DDIT3','ETAA1','ETV5','FEV','FLI1','IL3','KAT6A','KBTBD4','KLF2','LMO2','LZTR1','MAF','MAFB','NR4A3','NRG1','NUP98','PDGFB','PGBD5','PHF6','PRKACA','SETBP1','SLFN11','SPRTN','SS18','TCL1A','TCL1B','TFE3','TRIP13','USP8','YY1'],
+            '05092019': ['ATF1','CCNB3','CMTR2','CREB1','CTR9','CXORF67','DDIT3','ETAA1','ETV5','FEV','FLI1','IL3','KAT6A','KBTBD4','KLF2','LMO2','LZTR1','MAF','MAFB','NR4A3','NRG1','NUP98','PDGFB','PGBD5','PHF6','PRKACA','SETBP1','SLFN11','SPRTN','SS18','TCL1A','TCL1B','TFE3','TRIP13','USP8','YY1','ZNRF3'],
         };
     });

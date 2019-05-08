@@ -13,23 +13,23 @@
            qtip
            my="bottom center"
            at="top center"
-           qtip-content="Gene exists in MSK-IMPACT resource ({{fetchedDate}})"></i>
+           qtip-content="Gene is part of the <a href='https://www.mskcc.org/msk-impact' target='_blank'>MSK-IMPACT panel</a> ({{numOfGenes.mSKImpact}} genes, {{fetchedDate}})"></i>
     </script>
     <script type="text/ng-template" id="mskHeme.html">
-        <span>MSK-HEME</span>
+        <span>MSK-IMPACT Heme</span>
         <i class="fa fa-question-circle-o"
            qtip
            my="bottom center"
            at="top center"
-           qtip-content="Gene exists in MSK-HEME resource ({{fetchedDate}})"></i>
+           qtip-content="Gene is part of the <a href='https://www.mskcc.org/msk-impact' target='_blank'>MSK-IMPACT Heme and HemePACT panels</a> ({{numOfGenes.mSKHeme}} genes, {{fetchedDate}})"></i>
     </script>
     <script type="text/ng-template" id="foundationOne.html">
-        <span>Foundation One</span>
+        <span>Foundation One CDx</span>
         <i class="fa fa-question-circle-o"
            qtip
            my="bottom center"
            at="top center"
-           qtip-content="Gene exists in Foundation One resource ({{fetchedDate}})"></i>
+           qtip-content="Gene is part of the <a href='https://www.accessdata.fda.gov/cdrh_docs/pdf17/P170019C.pdf' target='_blank'>FoundationOne CDx panel</a> ({{numOfGenes.foundation}} genes, {{fetchedDate}})"></i>
     </script>
     <script type="text/ng-template" id="foundationOneHeme.html">
         <span>Foundation One Heme</span>
@@ -37,23 +37,23 @@
            qtip
            my="bottom center"
            at="top center"
-           qtip-content="Gene exists in Foundation One Heme resource ({{fetchedDate}})"></i>
+           qtip-content="Gene is part of the <a href='https://www.foundationmedicineasia.com/dam/assets/pdf/FOneHeme_Current_GeneList.pdf' target='_blank'>FoundationOne Heme panel</a> ({{numOfGenes.foundationHeme}} genes, {{fetchedDate}})"></i>
     </script>
     <script type="text/ng-template" id="vogelstein.html">
-        <span>Vogelstein</span>
+        <span>Vogelstein et al. 2013</span>
         <i class="fa fa-question-circle-o"
            qtip
            my="bottom center"
            at="top center"
-           qtip-content="Gene exists in Vogelstein resource ({{fetchedDate}})"></i>
+           qtip-content="Gene is part of the <a href='https://science.sciencemag.org/content/339/6127/1546.full' target='_blank'>Vogelstein et al. cancer gene list</a> ({{numOfGenes.vogelstein}} genes, Science 2013)"></i>
     </script>
     <script type="text/ng-template" id="sangerCGC.html">
-        <span>Sanger CGC</span>
+        <span>Cancer Gene Census</span>
         <i class="fa fa-question-circle-o"
            qtip
            my="bottom center"
            at="top center"
-           qtip-content="Gene exists in SANGER CGC resource ({{fetchedDate}})"></i>
+           qtip-content="Gene is part of the <a href='https://cancer.sanger.ac.uk/census' target='_blank'>Cancer Gene Census</a> ({{numOfGenes.sangerCGC}} genes, {{fetchedDate}})"></i>
     </script>
     <div ng-if="doneLoading" class="loading-style">
         <img src="resources/images/loader.gif">
@@ -67,9 +67,9 @@
                    download> <i class="fa  fa-cloud-download"></i> Cancer Gene List</a>
             </div>
         </div>
-        <div class="row" style="margin-bottom: 0;">
+        <div class="row">
             <div class="col-lg-12">
-                <div style="margin-bottom: 10px">{{numOfGenes}} genes, last update {{data.lastUpdate}}</div>
+                <div style="margin-bottom: 10px">{{numOfGenes.total}} genes, last update {{data.lastUpdate}}</div>
                 <div>The following genes are considered to be cancer genes by OncoKB, based on their inclusion in
                     various different sequencing panels, the Sanger Cancer Gene Census, or
                     <a href="http://science.sciencemag.org/content/339/6127/1546.full">
@@ -77,9 +77,17 @@
                 </div>
             </div>
         </div>
+        <div class="row" style="margin-bottom: 0;">
+            <div class="col-lg-12">
+                <div style="display: flex; flex-direction: row-reverse; align-items: baseline">
+                    <input type="text" id="search" style="width: 150px;" ng-model="data.searchTerm" ng-change="updateSearchTerm()">
+                    <label for="search" style="font-size: 14px; margin-right: 5px;">Search:</label>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-12">
-                <table ng-table="tableParams" class="table table-bordered table-striped" show-filter="true">
+                <table ng-table="tableParams" class="table table-bordered table-striped" show-filter="false">
                     <tr ng-repeat="x in $data">
                         <td data-title="'Hugo Symbol'" filter="{hugoSymbol:'text'}" sortable="'hugoSymbol'">
                             <span ng-if="x.oncokbAnnotated === 'Yes'">
@@ -130,7 +138,8 @@
                             sortable="'sangerCGC'">
                             <span ng-if="x.sangerCGC === 'Yes'"><i class="fa fa-check"></i></span>
                         </td>
-                        <td data-title="'# of Resources'"
+                        <td data-title="'# of Sources'"
+                            filter="{occurrenceCount:'number'}"
                             sortable="'occurrenceCount'">
                             {{x.occurrenceCount}}
                         </td>
