@@ -23,7 +23,7 @@
         <h3>MAY 9, 2019</h3>
         <div>
             <ul>
-                <li>Updated Actionable Alterations for Solid Tumors
+                <li>Updated Actionable Genes for Solid Tumors
                     <div class="row">
                         <table class="table">
                             <thead>
@@ -43,14 +43,6 @@
                         </table>
                     </div>
                 </li>
-
-                <li>Addition of {{data.newlyAddedGenes['05092019'].length}} new heme- or fusion-associated genes:
-                    <div class="newly-added-genes">
-                        <span class="gene" ng-repeat="hugo in data.newlyAddedGenes['05092019']"><a
-                            href="gene/{{hugo}}">{{hugo}}</a></span>
-                    </div>
-                </li>
-                <li>Standardization of therapeutic names with <a target="_blank" href="https://ncit.nci.nih.gov/ncitbrowser/">NCI Thesaurus</a></li>
 
                 <li>New Heme Therapeutic Associations
                     <div class="row">
@@ -74,6 +66,15 @@
                         </table>
                     </div>
                 </li>
+
+                <li>Addition of {{data.newlyAddedGenes['05092019'].length}} new heme- or fusion-associated genes:
+                    <div class="newly-added-genes">
+                        <span class="gene" ng-repeat="hugo in data.newlyAddedGenes['05092019']"><a
+                            href="gene/{{hugo}}">{{hugo}}</a></span>
+                    </div>
+                </li>
+                <li>Standardization of therapeutic names with <a target="_blank" href="https://ncit.nci.nih.gov/ncitbrowser/">NCI thesaurus</a></li>
+
             </ul>
         </div>
 
