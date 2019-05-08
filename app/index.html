@@ -1,14 +1,14 @@
 <!doctype html>
 <html class="no-js">
 <head>
-    <base href="/" />
+    <base href="/"/>
     <meta charset="utf-8">
     <title>OncoKB</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <script src="https://browser.sentry-cdn.com/4.5.3/bundle.min.js" crossorigin="anonymous"></script>
     <script>
-        Sentry.init({ dsn: 'https://8806866da2014ae09843293eae9e1286@sentry.io/1382470' });
+        Sentry.init({dsn: 'https://8806866da2014ae09843293eae9e1286@sentry.io/1382470'});
     </script>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="bower_components/angular-swagger-ui/dist/css/swagger-ui.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
+
+    <link rel="stylesheet" href="https://unpkg.com/ng-table@4.0.0/bundles/ng-table.min.css"/>
 
     <!-- build:css styles/mutationMapper.css -->
     <link rel="stylesheet" href="lib/mutation-mapper/css/jquery-ui-1.10.3.custom.css"/>
@@ -88,32 +90,37 @@
                 <ul class="nav navbar-nav">
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/levels')}"><a data-toggle="collapse"
                                                                                               data-target=".in"
-                                                                                              href="levels"><span>Levels of Evidence</span></a>
+                                                                                              href="levels"><span>Levels of
+                        Evidence</span></a>
                     </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/actionableGenes')}"><a
-                        data-toggle="collapse" data-target=".in" href="actionableGenes"><span>Actionable Genes</span></a>
+                        data-toggle="collapse" data-target=".in"
+                        href="actionableGenes"><span><span>Actionable Genes</span></span></a>
                     </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/cancerGenes')}"><a href="cancerGenes"
+                                                                                                   data-toggle="collapse"
+                                                                                                   data-target=".in"><span>Cancer
+                        Genes</span></a></li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/dataAccess')}"><a data-toggle="collapse"
                                                                                                   data-target=".in"
-                                                                                                  href="dataAccess"><span>Data Access</span></a>
+                                                                                                  href="dataAccess"><span>Data
+                        Access</span></a>
+                    </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/about')}"><a href="about"
+                                                                                             data-toggle="collapse"
+                                                                                             data-target=".in"><span>About</span></a>
+                    </li>
+                    <li ng-click="toggled=false" ng-class="{ active: isActive('/team')}"><a data-toggle="collapse"
+                                                                                            data-target=".in"
+                                                                                            href="team"><span>Team</span></a>
                     </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/news')}"><a data-toggle="collapse"
-                                                                                                  data-target=".in"
-                                                                                                  href="news"><span>News</span></a>
+                                                                                            data-target=".in"
+                                                                                            href="news"><span>News</span></a>
                     </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/terms')}"><a data-toggle="collapse"
                                                                                              data-target=".in"
-                                                                                             href="terms"><span>Usage Terms</span></a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-haspopup="true"
-                           aria-expanded="false"><span>More <div class="caret"></div></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="cancerGenes">OncoKB Cancer Gene List</a></li>
-                            <li><a href="about">About</a></li>
-                            <li><a href="team">Team</a></li>
-                        </ul>
+                                                                                             href="terms"><span>Terms</span></a>
                     </li>
                     </li>
                     <li ng-class="{hidden: toggled}" class="nav-search-li" style="float: right">
@@ -122,9 +129,9 @@
                 </ul>
                 <div class="pull-right" ng-class="{hidden: toggled}">
                     <span><a href="https://mskcc.org"><img class="mskcc-logo"
-                                                          src="resources/images/MSKLogo_fff.png"/></a></span>
+                                                           src="resources/images/MSKLogo_fff.png"/></a></span>
                     <span><a href="https://mskcc.org"><img class="mskcc-icon"
-                                                          src="resources/images/MSKIcon_fff.png"/></a></span>
+                                                           src="resources/images/MSKIcon_fff.png"/></a></span>
                 </div>
             </div>
         </div>
@@ -275,6 +282,7 @@
 <script src="scripts/directives/search-box.js"></script>
 <script src="scripts/directives/search-icon.js"></script>
 <!-- endbuild -->
+<script src="https://unpkg.com/ng-table@4.0.0/bundles/ng-table.min.js"></script>
 </body>
 </html>
 

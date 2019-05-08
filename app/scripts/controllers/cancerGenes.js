@@ -11,33 +11,8 @@
  * Controller of the oncokbStaticApp
  */
 angular.module('oncokbStaticApp')
-    .controller('CancerGenesCtrl', function($scope, _, api, $q, apiLink) {
-        // DataTable initialization & options
-        $scope.dt = {};
-        $scope.dt.dtOptions = {
-            paging: true,
-            hasBootstrap: true,
-            language: {
-                loadingRecords: '<img src="resources/images/loader.gif">'
-            },
-            pageLength: 15,
-            lengthMenu: [[15, 30, 50, 100, -1], [15, 30, 50, 100, 'All']],
-            pagingType: 'numbers',
-            aaSorting: [[9, 'desc'], [0, 'asc'], [1, 'desc']],
-            columns: [
-                {type: 'html', orderSequence: ['asc', 'desc']},
-                {type: 'html', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'string', orderSequence: ['desc', 'asc']},
-                {type: 'number', orderSequence: ['desc', 'asc']}
-            ],
-            responsive: true
-        };
+    .controller('CancerGenesCtrl', function($rootScope, $scope, _, api, $q, apiLink, NgTableParams) {
+
 
         function displayConvert(obj, keys) {
             _.each(keys, function(key) {
@@ -46,46 +21,59 @@ angular.module('oncokbStaticApp')
             return obj;
         }
 
-        $scope.fetchedDate = '05/30/2017';
-        $scope.doneLoading = false;
-        $scope.columnOrder = ['mSKImpact', 'mSKHeme', 'foundation', 'foundationHeme', 'vogelstein', 'sangerCGC'];
+        $scope.fetchedDate = '05/07/2019';
+        $scope.sources = ['oncokbAnnotated', 'foundation', 'foundationHeme', 'mSKImpact', 'mSKHeme', 'vogelstein', 'sangerCGC'];
+        $scope.numOfGenes = _.reduce($scope.sources, function(acc, next) {
+            acc[next] = 0;
+            return acc;
+        }, {total: 0});
 
-        $q.all([api.getGenes(), api.getCancerGeneList()]).then(function(result) {
-            var geneTypeMapping = {};
-            _.each(result[0].data, function(gene) {
-                if (gene.oncogene) {
-                    if (gene.tsg) {
-                        geneTypeMapping[gene.hugoSymbol] = 'Both';
-                    } else {
-                        geneTypeMapping[gene.hugoSymbol] = 'Oncogene';
-                    }
-                } else if (gene.tsg) {
-                    geneTypeMapping[gene.hugoSymbol] = 'TSG';
-                }
+        $scope.doneLoading = true;
+
+        $scope.data = {
+            searchTerm: '',
+            lastUpdate: $rootScope.data.lastUpdate
+        };
+
+        function getNgTable(data) {
+            return new NgTableParams({
+                sorting: {occurrenceCount: 'desc', hugoSymbol: 'asc', oncokbAnnotated: 'desc'},
+                count: 15
+            }, {
+                counts: [15, 30, 50, 100],
+                dataset: data
             });
-            var tempData = result[1].data;
+        }
+
+        $scope.updateSearchTerm = function() {
+            $scope.tableParams.filter({$: $scope.data.searchTerm});
+        };
+
+        api.getCancerGeneList().then(function(result) {
+            var tempData = result.data;
             _.each(tempData, function(item) {
-                item = displayConvert(item, ['oncokbAnnotated', 'foundation', 'foundationHeme', 'mSKImpact', 'mSKHeme', 'vogelstein', 'sangerCGC']);
-                switch (geneTypeMapping[item.hugoSymbol]) {
-                case 'Oncogene':
-                    item.oncogene = 'Yes';
-                    break;
-                case 'TSG':
-                    item.tsg = 'Yes';
-                    break;
-                case 'Both':
-                    item.oncogene = 'Yes';
-                    item.tsg = 'Yes';
-                    break;
-                default:
-                    break;
+                item = displayConvert(item, $scope.sources);
+                if (item.oncogene) {
+                    if (item.tsg) {
+                        item.geneType = 'Oncogene/TSG';
+                    } else {
+                        item.geneType = 'Oncogene';
+                    }
+                } else if (item.tsg) {
+                    item.geneType = 'TSG';
                 }
             });
-            $scope.cancerGeneList = tempData;
-            $scope.doneLoading = true;
+            _.each($scope.sources, function(key) {
+                $scope.numOfGenes[key] = _.filter(tempData, function(item) {
+                    return item[key] === 'Yes';
+                }).length;
+            });
+            $scope.tableParams  = getNgTable(tempData);
+            $scope.numOfGenes.total = tempData.length;
+            $scope.doneLoading = false;
         }, function(error) {
-            $scope.cancerGeneList = [];
-            $scope.doneLoading = true;
+            $scope.tableParams  = getNgTable([]);
+            $scope.doneLoading = false;
         });
         $scope.apiLink = apiLink;
     });
