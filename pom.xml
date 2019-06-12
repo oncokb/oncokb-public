@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.oncokb</groupId>
     <artifactId>oncokb-public-website</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <packaging>jar</packaging>
 
     <build>
