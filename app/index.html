@@ -18,7 +18,13 @@
     <link rel="stylesheet" href="bower_components/nprogress/nprogress.css" />
     <link rel="stylesheet" href="bower_components/qtip2/jquery.qtip.css" />
     <link rel="stylesheet" href="bower_components/angular-swagger-ui/dist/css/swagger-ui.min.css" />
+    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
     <!-- endbower -->
+
+    <!-- themes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
+
     <!-- endbuild -->
 
     <link rel="stylesheet" href="https://unpkg.com/ng-table@4.0.0/bundles/ng-table.min.css"/>
@@ -116,7 +122,7 @@
                     </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/news')}"><a data-toggle="collapse"
                                                                                             data-target=".in"
-                                                                                            href="news"><span>News</span></a>
+                                                                                              href="news"><span>News</span></a>
                     </li>
                     <li ng-click="toggled=false" ng-class="{ active: isActive('/terms')}"><a data-toggle="collapse"
                                                                                              data-target=".in"
@@ -229,8 +235,6 @@
 <script src="bower_components/angular-datatables/dist/plugins/tabletools/angular-datatables.tabletools.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/buttons/angular-datatables.buttons.js"></script>
 <script src="bower_components/angular-datatables/dist/plugins/select/angular-datatables.select.js"></script>
-<script src="bower_components/materialize/bin/materialize.js"></script>
-<script src="bower_components/angular-materialize/src/angular-materialize.js"></script>
 <script src="bower_components/angular-resource/angular-resource.js"></script>
 <script src="bower_components/angular-route/angular-route.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
@@ -253,6 +257,7 @@
 <script src="bower_components/marked/lib/marked.js"></script>
 <script src="bower_components/Blob/Blob.js"></script>
 <script src="bower_components/lodash/lodash.js"></script>
+<script src="bower_components/angular-ui-select/dist/select.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -281,6 +286,7 @@
 <script src="scripts/services/markedSwagger.js"></script>
 <script src="scripts/directives/search-box.js"></script>
 <script src="scripts/directives/search-icon.js"></script>
+<script src="scripts/directives/action-button.js"></script>
 <!-- endbuild -->
 <script src="https://unpkg.com/ng-table@4.0.0/bundles/ng-table.min.js"></script>
 </body>

@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+"use strict"
 
 angular.module('oncokbStaticApp')
     .controller('actionableGenesCtrl', function($scope, $location,
                                                 DTColumnDefBuilder,
                                                 _,
                                                 utils,
+                                                NgTableParams,
                                                 api) {
         $scope.data = {
             levels: [
@@ -79,7 +76,12 @@ angular.module('oncokbStaticApp')
                     numOfGenes: 0,
                     numOfAlterations: 0
                 }
-            ]
+            ],
+            tumorTypes: ['NSCLC', 'Melanoma']
+        };
+
+        $scope.filters = {
+            tumorType: ''
         };
         $scope.status = {
             loading: false
@@ -163,6 +165,18 @@ angular.module('oncokbStaticApp')
                 url: 'LEVEL_R2',
                 variable: 'r2'
             }];
+
+
+            function getNgTable(data) {
+                return new NgTableParams({
+                    sorting: {hugoSymbol: 'asc'},
+                    count: 5
+                }, {
+                    counts: [5, 15, 30, 50, 100],
+                    dataset: data
+                });
+            }
+
             api.getEvidencesBylevel()
                 .then(function(result) {
                     try {
@@ -192,6 +206,8 @@ angular.module('oncokbStaticApp')
                                 }
                             }
                         });
+
+                        $scope.tableParams  = getNgTable($scope.data.levels[0].treatments);
                         $scope.status.loading = false;
                     } catch (error) {
                         console.error(error);

@@ -16,12 +16,12 @@ angular
         'ngRoute',
         'ngSanitize',
         'ngTouch',
-        'ui.materialize',
         'ui.router',
         'datatables',
         'datatables.bootstrap',
         'ui.bootstrap',
         'ngTable',
+        'ui.select',
         'swaggerUi'
     ])
     .constant('_', window._)

@@ -3,7 +3,6 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
 
 @import "vars";
 
-@import "../../bower_components/materialize/sass/materialize.scss";
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 @import "../../bower_components/font-awesome/scss/font-awesome.scss";
 
@@ -63,20 +62,6 @@ div.dataTables_filter input {
   display: inline-flex;
 }
 
-/* ----------------------- */
-
-/*Overide materialize styles*/
-input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: 1px solid $secondary-color;
-  box-shadow: 0 1px 0 0 $secondary-color;
-}
-
-input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-
-/* ----------------------- */
 
 /*Overide Swagger-UI styles*/
 
@@ -139,6 +124,14 @@ a:hover, a:focus {
 
 .img-full {
   width: 100%;
+}
+
+.level-page {
+  .responsive-img {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+  }
 }
 
 .about, .team, .level-page, .license, .news, .actionable-genes, .data-access {
@@ -217,19 +210,6 @@ a:hover, a:focus {
   color: white;
 }
 
-.btn.download, .btn-large.download, .btn-sm.download,
-.btn.download:hover, .btn-large.download, .btn-sm.download:hover {
-  background-color: $primary-color;
-}
-
-.btn:hover, .btn:focus, .btn.focus {
-  color: #fff;
-}
-
-.btn.btn-sm {
-  margin-bottom: 10px;
-  height: 30px;
-}
 
 #custom_mutation_details_template .mutation-details-loader > img {
   margin: auto;

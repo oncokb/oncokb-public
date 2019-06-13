@@ -9,6 +9,30 @@ and open the template in the editor.
 */
 
 .actionable-genes {
+    .flex-row {
+      display: flex;
+      margin-bottom: 10px !important;
+    }
+
+  .col-sm-2, .col-xs-4 {
+    &:first-child {
+      padding-left: 0 !important;
+    }
+
+    &:not(:first-child) {
+      padding-left: 5px !important;
+    }
+  }
+
+  .col-sm-2, .col-xs-4 {
+    &:last-child {
+      padding-right: 0 !important;
+    }
+
+    &:not(:last-child) {
+      padding-right: 5px !important;
+    }
+  }
     .target-style{
         margin-top:-80px;
         padding-top:80px;
@@ -23,10 +47,6 @@ and open the template in the editor.
     .left-float{
         float:left
     }
-    input[type=search] {
-      font-size: 14px;
-      margin-bottom: 0;
-    }
     .loading-div {
       text-align: center;
       margin-top: 20px;
@@ -40,4 +60,39 @@ and open the template in the editor.
         text-decoration: underline;
         color: $primary-color;
     }
+
+  .main-level {
+    .level-name {
+      font-size: 16px;
+    }
+    .level-desc {
+      font-size: 12px;
+      color: black;
+    }
+    .gene-number {
+      font-size: 13px;
+    }
+    .level-1 {
+      color: $level-1;
+      //border-image: url('/resources/images/level-1-40px.png') 0 0 0 40 stretch;
+    }
+    .level-2 {
+      color: $level-2A;
+    }
+    .level-3 {
+      color: $level-3A;
+    }
+    .level-4 {
+      color: $level-4;
+    }
+    .level-R1 {
+      color: $level-R1;
+    }
+    .level-R2 {
+      color: $level-R2;
+    }
+    .hoverStyle a:hover {
+      color: #1c75cd;
+    }
+  }
 }
