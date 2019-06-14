@@ -6,8 +6,8 @@
         <div ng-show="!status.loading" style="margin: auto; max-width: 1000px;">
             <div class="row">
                 <action-button class="col-sm-2 col-xs-4" ng-repeat="level in meta.levelButtons"
-                               selected="!!filters.levels[level.level]"
-                               ng-click="filters.levels[level.level]= !filters.levels[level.level]">
+                               selected="!!filters.level[level.level]"
+                               ng-click="filters.level[level.level]= !filters.level[level.level]">
                     <main-level level="level.level"
                                 gene-count="data.genes.levels[level.level] ? data.genes.levels[level.level].length : 0"
                                 class="level.className"

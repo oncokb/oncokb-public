@@ -6,6 +6,7 @@ angular.module('oncokbStaticApp')
                                                 _,
                                                 utils,
                                                 NgTableParams,
+                                                $routeParams,
                                                 api) {
         $scope.data = {
             genes: {
@@ -42,8 +43,8 @@ angular.module('oncokbStaticApp')
                     return record.drugs.includes(newFilter.drug.name);
                 });
             }
-            if (newFilter.levels) {
-                var validLevelFilters = _.reduce(newFilter.levels, function(acc, status, level) {
+            if (newFilter.level) {
+                var validLevelFilters = _.reduce(newFilter.level, function(acc, status, level) {
                     if (status) {
                         acc.push(level);
                     }
@@ -113,7 +114,20 @@ angular.module('oncokbStaticApp')
                             }
                         });
 
-                        updateTreatments($scope.data.treatments);
+                        if ($routeParams.filterType && $routeParams.filter) {
+                            if ($scope.filters[$routeParams.filterType] === undefined) {
+                                $scope.filters[$routeParams.filterType] = {};
+                            }
+                            if ($routeParams.filterType === 'level') {
+                                $scope.filters.levels[$routeParams.filter] = true;
+                            } else {
+                                $scope.filters[$routeParams.filterType] = {
+                                    name: $routeParams.filter
+                                };
+                            }
+                        } else {
+                            updateTreatments($scope.data.treatments);
+                        }
                         $scope.status.loading = false;
                     } catch (error) {
                         console.error(error);

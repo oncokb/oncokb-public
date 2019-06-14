@@ -86,7 +86,7 @@ angular
                 controller: 'actionableGenesCtrl',
                 controllerAs: 'actionableGenes'
             })
-            .when('/actionableGenes/{filterType}', {
+            .when('/actionableGenes/:filterType/:filter', {
                 title: 'Actionable Genes, Alterations, Diseases, and Drugs',
                 templateUrl: 'views/actionalGenes.html',
                 controller: 'actionableGenesCtrl',
