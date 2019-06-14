@@ -1,78 +1,89 @@
-<div class="container" data-target=".actionable-genes" data-spy="scroll">
-    <div class="actionable-genes">
+<div class="actionable-genes">
+    <div class="fixed-filter">
+        <div class="container">
+            <div style="display: flex;">
+                <div style="display: flex; flex-direction: column; width: 100%; margin: auto;max-width: 1000px;">
+                    <div class="row">
+                        <action-button class="col-sm-2 col-xs-4" ng-repeat="level in meta.levelButtons"
+                                       selected="!!filters.level[level.level]"
+                                       ng-click="filters.level[level.level]= !filters.level[level.level]">
+                            <main-level level="level.level"
+                                        gene-count="data.genes.levels[level.level] ? data.genes.levels[level.level].length : 0"
+                                        class="level.className"
+                                        desc="level.desc"
+                                        disable-href="true"></main-level>
+                        </action-button>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 col-xs-12">
+                            <div class="input-group" style="width: 100%;">
+                                <ui-select ng-model="filters.disease" theme="bootstrap" style="width: 100%;">
+                                    <ui-select-match placeholder="{{data.tumorTypes.length}} curated tumor types"
+                                                     allow-clear="true">
+                                        {{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                        repeat="item in data.tumorTypes | filter: $select.search | orderBy:'count':true ">
+                                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default">
+                                    <span class="fa fa-sort"></span>
+                                  </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-xs-12">
+                            <div class="input-group" style="width: 100%">
+                                <ui-select ng-model="filters.gene" theme="bootstrap" style="width: 100%;">
+                                    <ui-select-match placeholder="{{data.genes.total.length}} actionable genes"
+                                                     allow-clear="true">
+                                        {{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                        repeat="item in data.genes.total | filter: $select.search | orderBy: 'count':true">
+                                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default">
+                                    <span class="fa fa-sort"></span>
+                                  </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-xs-12">
+                            <div class="input-group" style="width: 100%">
+                                <ui-select ng-model="filters.drug" theme="bootstrap" style="width: 100%;">
+                                    <ui-select-match placeholder="{{data.drugs.length}} drugs" allow-clear="true">
+                                        {{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                        repeat="item in data.drugs | filter: $select.search | orderBy:'count':true">
+                                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default">
+                                    <span class="fa fa-sort"></span>
+                                  </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="container result-table">
         <div ng-if="status.loading" class="loading-style">
             <img src="resources/images/loader.gif">
         </div>
         <div ng-show="!status.loading" style="margin: auto; max-width: 1000px;">
-            <div class="row">
-                <action-button class="col-sm-2 col-xs-4" ng-repeat="level in meta.levelButtons"
-                               selected="!!filters.level[level.level]"
-                               ng-click="filters.level[level.level]= !filters.level[level.level]">
-                    <main-level level="level.level"
-                                gene-count="data.genes.levels[level.level] ? data.genes.levels[level.level].length : 0"
-                                class="level.className"
-                                desc="level.desc"
-                                disable-href="true"></main-level>
-                </action-button>
-            </div>
-            <div class="row">
-                <div class="col-sm-4 col-xs-4">
-                    <div class="input-group" style="width: 100%;">
-                        <ui-select ng-model="filters.disease" theme="bootstrap" style="width: 100%;">
-                            <ui-select-match placeholder="{{data.tumorTypes.length}} curated tumor types">
-                                {{$select.selected.name}}
-                            </ui-select-match>
-                            <ui-select-choices
-                                repeat="item in data.tumorTypes | filter: $select.search | orderBy:'count':true ">
-                                <div ng-bind-html="item.name | highlight: $select.search"></div>
-                            </ui-select-choices>
-                        </ui-select>
-
-                        <span class="input-group-btn" ng-show="!!filters.disease">
-                      <button type="button" ng-click="filters.disease = undefined" class="btn btn-default">
-                        <span class="fa fa-times"></span>
-                      </button>
-                    </span>
-                    </div>
-                </div>
-                <div class="col-sm-4 col-xs-4">
-                    <div class="input-group" style="width: 100%">
-                        <ui-select ng-model="filters.gene" theme="bootstrap" style="width: 100%;">
-                            <ui-select-match placeholder="{{data.genes.total.length}} actionable genes">
-                                {{$select.selected.name}}
-                            </ui-select-match>
-                            <ui-select-choices
-                                repeat="item in data.genes.total | filter: $select.search | orderBy: 'count':true">
-                                <div ng-bind-html="item.name | highlight: $select.search"></div>
-                            </ui-select-choices>
-                        </ui-select>
-
-                        <span class="input-group-btn" ng-show="!!filters.gene">
-                  <button type="button" ng-click="filters.gene = undefined" class="btn btn-default">
-                    <span class="fa fa-times"></span>
-                  </button>
-                </span>
-                    </div>
-                </div>
-                <div class="col-sm-4 col-xs-4">
-                    <div class="input-group" style="width: 100%">
-                        <ui-select ng-model="filters.drug" theme="bootstrap" style="width: 100%;">
-                            <ui-select-match placeholder="{{data.drugs.length}} drugs">{{$select.selected.name}}
-                            </ui-select-match>
-                            <ui-select-choices
-                                repeat="item in data.drugs | filter: $select.search | orderBy:'count':true">
-                                <div ng-bind-html="item.name | highlight: $select.search"></div>
-                            </ui-select-choices>
-                        </ui-select>
-
-                        <span class="input-group-btn" ng-show="!!filters.drug">
-                  <button type="button" ng-click="filters.drug = undefined" class="btn btn-default">
-                    <span class="fa fa-times"></span>
-                  </button>
-                </span>
-                    </div>
-                </div>
-            </div>
 
             <div>
                 <table ng-table="tableParams" class="table table-bordered table-striped" show-filter="false">

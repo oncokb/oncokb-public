@@ -71,6 +71,9 @@
 }
 @media (min-width: $range-max-xm-width)  {
   .actionable-genes {
+    .result-table {
+      margin-top: 140px
+    }
     .col-sm-2, .col-sm-4 {
       &:first-child {
         padding-left: 15px !important;
@@ -128,6 +131,11 @@
       .level-2 {
         font-size: 13px;
       }
+    }
+  }
+  .actionable-genes {
+    .result-table {
+      margin-top: 280px
     }
   }
 }

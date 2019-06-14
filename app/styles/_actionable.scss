@@ -9,60 +9,68 @@ and open the template in the editor.
 */
 
 .actionable-genes {
-    .row {
-      margin-bottom: 15px !important;
+  button:focus {
+    outline: 0 !important;
+  }
+
+  .fixed-filter {
+    display: block;
+    top: 70px;
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 5;
+    background: white;
+    padding-top: 15px;
+  }
+
+  .row {
+    margin-bottom: 15px !important;
+  }
+
+  .ui-select-match {
+    .glyphicon-remove {
+      line-height: 18px !important;
     }
-    .target-style{
-        margin-top:-80px;
-        padding-top:80px;
+
+    a:focus {
+      text-decoration: none !important;
+      outline: 0 !important;
     }
-    .align-style{
-        position:relative;
-        top:20px
-    }
-    .green-color{
-        color:green
-    }
-    .left-float{
-        float:left
-    }
-    .loading-div {
-      text-align: center;
-      margin-top: 20px;
-    }
+  }
+
+  .ui-select-choices {
+    width: 90%;
+  }
+
+  .ui-select-match-text.ui-select-allow-clear > span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ui-select-choices-row > span {
+    white-space: normal !important;
+    word-break: break-word;
+  }
+
+  .loading-div {
+    text-align: center;
+    margin-top: 20px;
+  }
 
   .main-level {
     .level-name {
       font-size: 16px;
     }
+
     .level-desc {
       font-size: 12px;
       color: black;
     }
+
     .gene-number {
       font-size: 13px;
-    }
-    .level-1 {
-      color: $level-1;
-      //border-image: url('/resources/images/level-1-40px.png') 0 0 0 40 stretch;
-    }
-    .level-2 {
-      color: $level-2A;
-    }
-    .level-3 {
-      color: $level-3A;
-    }
-    .level-4 {
-      color: $level-4;
-    }
-    .level-R1 {
-      color: $level-R1;
-    }
-    .level-R2 {
-      color: $level-R2;
-    }
-    .hoverStyle a:hover {
-      color: #1c75cd;
     }
   }
 }
