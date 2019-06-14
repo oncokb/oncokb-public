@@ -11,7 +11,9 @@ angular.module('oncokbStaticApp')
         return {
             templateUrl: 'views/actionButton.html',
             restrict: 'E',
-            scope: {},
+            scope: {
+                selected:'='
+            },
             transclude: true,
             link: function postLink(scope) {
                 scope.data = {

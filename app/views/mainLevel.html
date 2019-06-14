@@ -1,12 +1,18 @@
-<div class="main-level">
-    <a href="actionableGenes/#level{{level}}">
-  <div class="button">
-    <span ng-class="class" class="level-name">Level {{level}}</span><br/>
-    <div class="hoverStyle">
-      <span class="level-desc">{{desc}}</span><br/>
-      <span ng-class="class" class="gene-number">{{geneCount}} Genes
-        <!--<i class="fa fa-plus-circle"></i>-->
-      </span>
+<script type="text/ng-template" id="main-level-content">
+    <div style="display: flex;flex-direction: column" class="button">
+        <span ng-class="class" class="level-name">Level {{level}}</span>
+        <div class="hoverStyle" style="display: flex; flex-direction: column;">
+            <span class="level-desc">{{desc}}</span>
+            <span ng-class="class" class="gene-number">{{geneCount}} Genes</span>
+        </div>
     </div>
-  </div></a>
+</script>
+
+<div class="main-level">
+    <div ng-if="!disableHref">
+        <a href="actionableGenes/#level{{level}}">
+            <ng-include src="'main-level-content'"></ng-include>
+        </a>
+    </div>
+    <ng-include src="'main-level-content'"  ng-if="disableHref"></ng-include>
 </div>

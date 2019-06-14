@@ -32,9 +32,9 @@ angular
     .constant('MutationCollection', window.MutationCollection)
     .constant('Plotly', window.Plotly)
     .constant('Sentry', window.Sentry)
-    .constant('legacyLink', 'legacy-api/')
-    .constant('privateApiLink', 'api/private/')
-    .constant('apiLink', 'api/v1/')
+    .constant('legacyLink', 'http://oncokb.org/legacy-api/')
+    .constant('privateApiLink', 'http://oncokb.org/api/private/')
+    .constant('apiLink', 'http://oncokb.org/api/v1/')
     .constant('onLocalhost', location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     .config(function($routeProvider, $provide, $httpProvider, Sentry, onLocalhost, $locationProvider) {
         $routeProvider
@@ -86,6 +86,12 @@ angular
                 controller: 'actionableGenesCtrl',
                 controllerAs: 'actionableGenes'
             })
+            .when('/actionableGenes/{filterType}', {
+                title: 'Actionable Genes, Alterations, Diseases, and Drugs',
+                templateUrl: 'views/actionalGenes.html',
+                controller: 'actionableGenesCtrl',
+                controllerAs: 'actionableGenes'
+            })
             .when('/terms', {
                 title: 'Usage Terms',
                 templateUrl: 'views/license.html',
@@ -128,7 +134,7 @@ angular
             $httpProvider.interceptors.push('errorHttpInterceptor');
         }
 
-        $locationProvider.html5Mode(true);
+        $locationProvider.html5Mode(false);
     });
 
 angular.module('oncokbStaticApp').run(
@@ -163,7 +169,32 @@ angular.module('oncokbStaticApp').run(
                     drug: 0,
                 },
                 levels: {}
-            }
+            },
+            levelButtons: [{
+                level: '1',
+                className: 'level-1',
+                desc: 'FDA-approved'
+            }, {
+                level: '2',
+                className: 'level-2',
+                desc: 'Standard care'
+            }, {
+                level: '3',
+                className: 'level-3',
+                desc: 'Clinical evidence'
+            }, {
+                level: '4',
+                className: 'level-4',
+                desc: 'Biological evidence'
+            }, {
+                level: 'R1',
+                className: 'level-R1',
+                desc: 'Standard care'
+            }, {
+                level: 'R2',
+                className: 'level-R2',
+                desc: 'Clinical evidence'
+            }]
         };
 
         $rootScope.view = {

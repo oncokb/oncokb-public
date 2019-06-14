@@ -15,7 +15,13 @@ angular.module('oncokbStaticApp')
                 level: '=',
                 geneCount: '=',
                 desc: '=',
-                class: '='
+                class: '=',
+                disableHref: '=?'
+            },
+            controller: function($scope) {
+                if($scope.disableHref === undefined) {
+                    $scope.disableHref = false;
+                }
             },
             link: function postLink(scope) {
                 scope.status = {
