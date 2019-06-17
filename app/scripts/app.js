@@ -32,9 +32,9 @@ angular
     .constant('MutationCollection', window.MutationCollection)
     .constant('Plotly', window.Plotly)
     .constant('Sentry', window.Sentry)
-    .constant('legacyLink', 'http://oncokb.org/legacy-api/')
-    .constant('privateApiLink', 'http://oncokb.org/api/private/')
-    .constant('apiLink', 'http://oncokb.org/api/v1/')
+    .constant('legacyLink', 'legacy-api/')
+    .constant('privateApiLink', 'api/private/')
+    .constant('apiLink', 'api/v1/')
     .constant('onLocalhost', location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     .config(function($routeProvider, $provide, $httpProvider, Sentry, onLocalhost, $locationProvider) {
         $routeProvider
@@ -134,7 +134,7 @@ angular
             $httpProvider.interceptors.push('errorHttpInterceptor');
         }
 
-        $locationProvider.html5Mode(false);
+        $locationProvider.html5Mode(true);
     });
 
 angular.module('oncokbStaticApp').run(
