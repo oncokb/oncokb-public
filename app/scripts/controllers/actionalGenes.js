@@ -189,12 +189,18 @@ angular.module('oncokbStaticApp')
                 });
             });
 
-            $scope.data.genes.total = reduceObject2Array(genes.total);
             $scope.data.genes.levels = _.mapValues(genes.levels, function(gene) {
                 return reduceObject2Array(gene);
             });
-            $scope.data.drugs = reduceObject2Array(drugs);
-            $scope.data.tumorTypes = reduceObject2Array(tumorTypes);
+            if (!$scope.filters.gene) {
+                $scope.data.genes.total = reduceObject2Array(genes.total);
+            }
+            if (!$scope.filters.drug) {
+                $scope.data.drugs = reduceObject2Array(drugs);
+            }
+            if (!$scope.filters.disease) {
+                $scope.data.tumorTypes = reduceObject2Array(tumorTypes);
+            }
         }
 
         function getTreatments(metadata) {
