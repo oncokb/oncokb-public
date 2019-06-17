@@ -23,16 +23,16 @@
                                         {{$select.selected.name}}
                                     </ui-select-match>
                                     <ui-select-choices
-                                        repeat="item in data.tumorTypes | filter: $select.search | orderBy:'count':true ">
+                                        repeat="item in data.tumorTypes | filter: $select.search | orderBy:'name' ">
                                         <div ng-bind-html="item.name | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
 
-                                <span class="input-group-btn">
-                                  <button type="button" class="btn btn-default">
-                                    <span class="fa fa-sort"></span>
-                                  </button>
-                                </span>
+<!--                                <span class="input-group-btn">-->
+<!--                                  <button type="button" class="btn btn-default">-->
+<!--                                    <span class="fa fa-sort"></span>-->
+<!--                                  </button>-->
+<!--                                </span>-->
                             </div>
                         </div>
                         <div class="col-sm-4 col-xs-12">
@@ -43,16 +43,16 @@
                                         {{$select.selected.name}}
                                     </ui-select-match>
                                     <ui-select-choices
-                                        repeat="item in data.genes.total | filter: $select.search | orderBy: 'count':true">
+                                        repeat="item in data.genes.total | filter: $select.search | orderBy: 'name'">
                                         <div ng-bind-html="item.name | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
 
-                                <span class="input-group-btn">
-                                  <button type="button" class="btn btn-default">
-                                    <span class="fa fa-sort"></span>
-                                  </button>
-                                </span>
+<!--                                <span class="input-group-btn">-->
+<!--                                  <button type="button" class="btn btn-default">-->
+<!--                                    <span class="fa fa-sort"></span>-->
+<!--                                  </button>-->
+<!--                                </span>-->
                             </div>
                         </div>
                         <div class="col-sm-4 col-xs-12">
@@ -62,15 +62,15 @@
                                         {{$select.selected.name}}
                                     </ui-select-match>
                                     <ui-select-choices
-                                        repeat="item in data.drugs | filter: $select.search | orderBy:'count':true">
+                                        repeat="item in data.drugs | filter: $select.search | orderBy:'name'">
                                         <div ng-bind-html="item.name | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
-                                <span class="input-group-btn">
-                                  <button type="button" class="btn btn-default">
-                                    <span class="fa fa-sort"></span>
-                                  </button>
-                                </span>
+<!--                                <span class="input-group-btn">-->
+<!--                                  <button type="button" class="btn btn-default">-->
+<!--                                    <span class="fa fa-sort"></span>-->
+<!--                                  </button>-->
+<!--                                </span>-->
                             </div>
                         </div>
                     </div>

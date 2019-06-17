@@ -1,12 +1,3 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/*
-    Created on : May 24, 2016, 3:17:05 PM
-    Author     : jiaojiao
-*/
 
 .actionable-genes {
   button:focus {
@@ -39,16 +30,27 @@ and open the template in the editor.
     }
   }
 
-  .ui-select-choices {
-    width: 90%;
+  .ui-select-multiple input.ui-select-search {
+    width: 100% !important;
+    position: absolute;
   }
 
-  .ui-select-match-text.ui-select-allow-clear > span {
-    white-space: nowrap;
+  .ui-select-match-text {
+    display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 90%;
+
+    span {
+      display: inline !important;
+    }
+
+    &.ui-select-allow-clear {
+      padding-right: 0;
+    }
   }
 
+  // let the matched results shift to second row if the text is too long
   .ui-select-choices-row > span {
     white-space: normal !important;
     word-break: break-word;
