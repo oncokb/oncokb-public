@@ -4,6 +4,26 @@
     outline: 0 !important;
   }
 
+  .btn-default.active, .btn-default:hover  {
+    background-color: rgba(141, 192, 219, .25) !important;
+    border-color: rgba(141, 192, 219, .25) !important;
+  }
+
+  .btn-default:not(.active):focus {
+    background-color: #fff !important;
+    border-color: #ccc !important;
+  }
+
+  .filter {
+    display: flex;
+    align-items: center;
+  }
+
+  .reset-filter:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
   .fixed-filter {
     display: block;
     top: 70px;

@@ -1,0 +1,8 @@
+<div
+    style="border-radius: 5px;font-size: 13px;display: flex;align-content: center;margin: 0 5px; border: 1px solid black"
+    ng-style="{'color': color, 'border-color':color}">
+    <span style="margin: 5px 10px 5px 10px;">{{content}}</span>
+    <span ng-click="removeClick()"
+          style="padding-left: 5px;margin: 5px 5px 5px 0;border-left: 1px dashed;cursor: pointer;"
+          ng-style="{'border-color':color}"><i class="fa fa-times-circle"></i></span>
+</div>

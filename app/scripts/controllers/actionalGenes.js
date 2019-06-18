@@ -1,9 +1,10 @@
 "use strict"
 
 angular.module('oncokbStaticApp')
-    .controller('actionableGenesCtrl', function($scope, $location,
+    .controller('actionableGenesCtrl', function($rootScope, $scope, $location,
                                                 DTColumnDefBuilder,
                                                 _,
+                                                pluralize,
                                                 utils,
                                                 NgTableParams,
                                                 $routeParams,
@@ -16,6 +17,7 @@ angular.module('oncokbStaticApp')
                 }, {}),
                 total: []
             },
+            levelColors: $rootScope.data.levelColors,
             tumorTypes: [],
             drugs: [],
             treatments: []
@@ -23,6 +25,7 @@ angular.module('oncokbStaticApp')
         $scope.allTreatmetns = [];
         $scope.filters = {};
         $scope.status = {
+            hasFilter: false,
             loading: false
         };
 
@@ -31,7 +34,7 @@ angular.module('oncokbStaticApp')
         };
 
         $scope.$watch('filters', function(newFilter) {
-            var filteredResult = _.cloneDeep($scope.allTreatmetns);
+            var filteredResult = _.cloneDeep($scope.data.treatments);
             if (newFilter.disease) {
                 filteredResult = _.filter(filteredResult, ['disease', newFilter.disease.name]);
             }
@@ -43,13 +46,8 @@ angular.module('oncokbStaticApp')
                     return record.drugs.includes(newFilter.drug.name);
                 });
             }
-            if (newFilter.level) {
-                var validLevelFilters = _.reduce(newFilter.level, function(acc, status, level) {
-                    if (status) {
-                        acc.push(level);
-                    }
-                    return acc;
-                }, []);
+            if (newFilter.levels) {
+                var validLevelFilters = getEnabledLevels(newFilter);
                 // Don't filter if no level selected.
                 if (validLevelFilters.length > 0) {
                     filteredResult = _.filter(filteredResult, function(record) {
@@ -57,12 +55,37 @@ angular.module('oncokbStaticApp')
                     });
                 }
             }
-            updateTreatments(filteredResult);
+            $scope.filterResults = getStats(filteredResult);
+            $scope.tableParams = getNgTable(filteredResult);
+            $scope.status.hasFilter = _.keys(newFilter).length !== 0 && (getEnabledLevels(newFilter).length > 0 || newFilter.disease || newFilter.gene || newFilter.drug);
         }, true);
 
-        function updateTreatments(treatments) {
-            updateStats(treatments);
-            $scope.tableParams = getNgTable(treatments);
+        $scope.resetFilters = function() {
+            $scope.filters = {};
+        };
+
+        $scope.getUniqueFilteredLevels = function() {
+            $scope.filters = {};
+        };
+
+        $scope.getFilteredResultStatement = function() {
+            return `Showing ${$scope.filterResults.treatments.length} biomarker-drug ${pluralize('association', $scope.filterResults.treatments.length)} (${$scope.filterResults.genes.total.length} ${pluralize('gene', $scope.filterResults.genes.total.length)}, ${$scope.filterResults.tumorTypes.length} ${pluralize('tumor type', $scope.filterResults.tumorTypes.length)}, ${$scope.filterResults.levels.length} ${pluralize('level', $scope.filterResults.levels.length)} of evidence)`;
+        };
+
+        $scope.pluralizeString = function(string, number) {
+            return pluralize(string, number);
+        };
+
+        function getEnabledLevels(filters) {
+            if (!filters.levels) {
+                return [];
+            }
+            return _.reduce(filters.levels, function(acc, status, level) {
+                if (status) {
+                    acc.push(level);
+                }
+                return acc;
+            }, []);
         }
 
         function getTreatmentsMetadata() {
@@ -104,29 +127,34 @@ angular.module('oncokbStaticApp')
             api.getEvidencesBylevel()
                 .then(function(result) {
                     try {
+                        let treatments = [];
                         _.forEach(result.data, function(content, levelOfEvidence) {
                             var level = _.find(levels, function(_level) {
                                 return _level.url === levelOfEvidence;
                             });
                             if (level !== undefined) {
-                                $scope.data.treatments = $scope.data.treatments.concat(getTreatments(content));
-                                $scope.allTreatmetns = $scope.data.treatments;
+                                treatments = treatments.concat(getTreatments(content));
                             }
                         });
 
+                        $scope.data = getStats(treatments);
                         if ($routeParams.filterType && $routeParams.filter) {
-                            if ($scope.filters[$routeParams.filterType] === undefined) {
-                                $scope.filters[$routeParams.filterType] = {};
-                            }
                             if ($routeParams.filterType === 'level') {
-                                $scope.filters.level[$routeParams.filter] = true;
+                                if ($scope.filters.levels === undefined) {
+                                    $scope.filters.levels = {};
+                                }
+                                $scope.filters.levels[$routeParams.filter] = true;
                             } else {
+                                if ($scope.filters[$routeParams.filterType] === undefined) {
+                                    $scope.filters[$routeParams.filterType] = {};
+                                }
                                 $scope.filters[$routeParams.filterType] = {
                                     name: $routeParams.filter
                                 };
                             }
                         } else {
-                            updateTreatments($scope.data.treatments);
+                            $scope.filterResults = $scope.data;
+                            $scope.tableParams = getNgTable($scope.data.treatments);
                         }
                         $scope.status.loading = false;
                     } catch (error) {
@@ -150,7 +178,7 @@ angular.module('oncokbStaticApp')
             return _.replace(level, new RegExp('[AB]'), '');
         }
 
-        function updateStats(treatments) {
+        function getStats(treatments) {
             var genes = {
                 levels: {},
                 total: {}
@@ -189,18 +217,19 @@ angular.module('oncokbStaticApp')
                 });
             });
 
-            $scope.data.genes.levels = _.mapValues(genes.levels, function(gene) {
+            var geneLeveles = _.mapValues(genes.levels, function(gene) {
                 return reduceObject2Array(gene);
             });
-            if (!$scope.filters.gene) {
-                $scope.data.genes.total = reduceObject2Array(genes.total);
-            }
-            if (!$scope.filters.drug) {
-                $scope.data.drugs = reduceObject2Array(drugs);
-            }
-            if (!$scope.filters.disease) {
-                $scope.data.tumorTypes = reduceObject2Array(tumorTypes);
-            }
+            return {
+                genes: {
+                    levels: geneLeveles,
+                    total: reduceObject2Array(genes.total)
+                },
+                levels: _.keys(geneLeveles),
+                treatments: treatments,
+                drugs: reduceObject2Array(drugs),
+                tumorTypes: reduceObject2Array(tumorTypes)
+            };
         }
 
         function getTreatments(metadata) {

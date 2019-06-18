@@ -5,8 +5,8 @@
                 <div style="display: flex; flex-direction: column; width: 100%; margin: auto;max-width: 1000px;">
                     <div class="row">
                         <action-button class="col-sm-2 col-xs-4" ng-repeat="level in meta.levelButtons"
-                                       selected="!!filters.level[level.level]"
-                                       ng-click="filters.level[level.level]= !filters.level[level.level]">
+                                       selected="!!filters.levels[level.level]"
+                                       ng-click="filters.levels[level.level]= !filters.levels[level.level]">
                             <main-level level="level.level"
                                         gene-count="data.genes.levels[level.level] ? data.genes.levels[level.level].length : 0"
                                         class="level.className"
@@ -18,7 +18,7 @@
                         <div class="col-sm-4 col-xs-12">
                             <div class="input-group" style="width: 100%;">
                                 <ui-select ng-model="filters.disease" theme="bootstrap" style="width: 100%;">
-                                    <ui-select-match placeholder="{{data.tumorTypes.length}} curated tumor types"
+                                    <ui-select-match placeholder="{{data.tumorTypes.length}} curated {{pluralizeString('tumor type', data.tumorTypes.length)}}"
                                                      allow-clear="true">
                                         {{$select.selected.name}}
                                     </ui-select-match>
@@ -27,18 +27,12 @@
                                         <div ng-bind-html="item.name | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
-
-<!--                                <span class="input-group-btn">-->
-<!--                                  <button type="button" class="btn btn-default">-->
-<!--                                    <span class="fa fa-sort"></span>-->
-<!--                                  </button>-->
-<!--                                </span>-->
                             </div>
                         </div>
                         <div class="col-sm-4 col-xs-12">
                             <div class="input-group" style="width: 100%">
                                 <ui-select ng-model="filters.gene" theme="bootstrap" style="width: 100%;">
-                                    <ui-select-match placeholder="{{data.genes.total.length}} actionable genes"
+                                    <ui-select-match placeholder="{{data.genes.total.length}} actionable {{pluralizeString('gene', data.genes.total.length)}}"
                                                      allow-clear="true">
                                         {{$select.selected.name}}
                                     </ui-select-match>
@@ -47,18 +41,12 @@
                                         <div ng-bind-html="item.name | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
-
-<!--                                <span class="input-group-btn">-->
-<!--                                  <button type="button" class="btn btn-default">-->
-<!--                                    <span class="fa fa-sort"></span>-->
-<!--                                  </button>-->
-<!--                                </span>-->
                             </div>
                         </div>
                         <div class="col-sm-4 col-xs-12">
                             <div class="input-group" style="width: 100%">
                                 <ui-select ng-model="filters.drug" theme="bootstrap" style="width: 100%;">
-                                    <ui-select-match placeholder="{{data.drugs.length}} drugs" allow-clear="true">
+                                    <ui-select-match placeholder="{{data.drugs.length}} {{pluralizeString('drug', data.drugs.length)}}" allow-clear="true">
                                         {{$select.selected.name}}
                                     </ui-select-match>
                                     <ui-select-choices
@@ -66,12 +54,13 @@
                                         <div ng-bind-html="item.name | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
-<!--                                <span class="input-group-btn">-->
-<!--                                  <button type="button" class="btn btn-default">-->
-<!--                                    <span class="fa fa-sort"></span>-->
-<!--                                  </button>-->
-<!--                                </span>-->
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="display: flex; justify-content: space-between;">
+                            <span>{{getFilteredResultStatement()}}</span>
+                            <span ng-show="status.hasFilter" ng-click="resetFilters()" class="reset-filter"><a>Reset filters</a></span>
                         </div>
                     </div>
                 </div>
