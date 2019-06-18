@@ -32,6 +32,7 @@ angular
     .constant('MutationCollection', window.MutationCollection)
     .constant('Plotly', window.Plotly)
     .constant('Sentry', window.Sentry)
+    .constant('pluralize', window.pluralize)
     .constant('legacyLink', 'legacy-api/')
     .constant('privateApiLink', 'api/private/')
     .constant('apiLink', 'api/v1/')
