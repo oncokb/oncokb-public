@@ -197,8 +197,4 @@ $btn-info: $medium-blue;
 $btn-info-bg: $btn-info;
 $input-color-placeholder: $main-text;
 
-$bootstrap-sass-asset-helper: false;
-// [converter] Asset helpers such as Sprockets and Node.js Mincer do not resolve relative paths
-$icon-font-path: "../../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
-
 $container-large-desktop: 1200px;
