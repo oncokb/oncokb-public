@@ -59,7 +59,7 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12" style="display: flex; justify-content: space-between;">
-                            <span>{{getFilteredResultStatement()}}</span>
+                            <span ng-bind-html="getFilteredResultStatement()"></span>
                             <span ng-show="status.hasFilter" ng-click="resetFilters()" class="reset-filter"><a>Reset filters</a></span>
                         </div>
                     </div>
