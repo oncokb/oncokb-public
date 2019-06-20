@@ -52,7 +52,7 @@ angular.module('oncokbStaticApp')
                 // Don't filter if no level selected.
                 if (validLevelFilters.length > 0) {
                     filteredResult = _.filter(filteredResult, function(record) {
-                        return validLevelFilters.includes(match2KeyLevel(record.level));
+                        return validLevelFilters.includes($scope.match2KeyLevel(record.level));
                     });
                 }
             }
@@ -175,9 +175,9 @@ angular.module('oncokbStaticApp')
             }, []);
         }
 
-        function match2KeyLevel(level) {
+        $scope.match2KeyLevel = function(level) {
             return _.replace(level, new RegExp('[AB]'), '');
-        }
+        };
 
         function getStats(treatments) {
             var genes = {
@@ -188,7 +188,7 @@ angular.module('oncokbStaticApp')
             var drugs = {};
 
             _.forEach(treatments, function(treatment) {
-                var level = match2KeyLevel(treatment.level);
+                var level = $scope.match2KeyLevel(treatment.level);
                 var gene = treatment.gene;
                 var tumorType = treatment.disease;
                 if (genes.levels[level] === undefined) {
