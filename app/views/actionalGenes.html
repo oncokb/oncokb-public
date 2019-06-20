@@ -1,4 +1,8 @@
 <div class="actionable-genes">
+    <div ng-if="status.loading" class="loading-style">
+        <img src="resources/images/loader.gif">
+    </div>
+    <div ng-show="!status.loading" >
     <div class="fixed-filter">
         <div class="container">
             <div style="display: flex;">
@@ -17,7 +21,7 @@
                     <div class="row">
                         <div class="col-sm-4 col-xs-12">
                             <div class="input-group" style="width: 100%;">
-                                <ui-select ng-model="filters.disease" theme="bootstrap" style="width: 100%;">
+                                <ui-select ng-model="filters.tumorType" theme="bootstrap" style="width: 100%;">
                                     <ui-select-match placeholder="{{data.tumorTypes.length}} curated {{pluralizeString('tumor type', data.tumorTypes.length)}}"
                                                      allow-clear="true">
                                         {{$select.selected.name}}
@@ -69,10 +73,7 @@
         </div>
     </div>
     <div class="container result-table">
-        <div ng-if="status.loading" class="loading-style">
-            <img src="resources/images/loader.gif">
-        </div>
-        <div ng-show="!status.loading" style="margin: auto; max-width: 1000px;">
+        <div style="margin: auto; max-width: 1000px;">
 
             <div>
                 <table ng-table="tableParams" class="table table-bordered table-striped" show-filter="false">
@@ -87,8 +88,8 @@
                         <td data-title="'Alterations'" filter="{alterations:'text'}" sortable="'alterations'">
                             <span>{{x.alterations.join(', ') || 'NA'}}</span>
                         </td>
-                        <td data-title="'Tumor Type'" filter="{disease:'text'}" sortable="'disease'">
-                            <span>{{x.disease}}</span>
+                        <td data-title="'Tumor Type'" filter="{tumorType:'text'}" sortable="'tumorType'">
+                            <span>{{x.tumorType}}</span>
                         </td>
                         <td data-title="'Drugs'" filter="{drugs:'text'}" sortable="'drugs'">
                             <span>{{x.drugs}}</span>
@@ -97,6 +98,7 @@
                 </table>
             </div>
         </div>
+    </div>
     </div>
 </div>
 

@@ -36,8 +36,8 @@ angular.module('oncokbStaticApp')
 
         $scope.$watch('filters', function(newFilter) {
             var filteredResult = _.cloneDeep($scope.data.treatments);
-            if (newFilter.disease) {
-                filteredResult = _.filter(filteredResult, ['disease', newFilter.disease.name]);
+            if (newFilter.tumorType) {
+                filteredResult = _.filter(filteredResult, ['tumorType', newFilter.tumorType.name]);
             }
             if (newFilter.gene) {
                 filteredResult = _.filter(filteredResult, ['gene', newFilter.gene.name]);
@@ -60,14 +60,14 @@ angular.module('oncokbStaticApp')
             if(!newFilter.drug) {
                 $scope.data.drugs = $scope.filterResults.drugs;
             }
-            if(!newFilter.disease) {
+            if(!newFilter.tumorType) {
                 $scope.data.tumorTypes = $scope.filterResults.tumorTypes;
             }
             if(!newFilter.gene) {
                 $scope.data.genes.total = $scope.filterResults.genes.total;
             }
             $scope.tableParams = getNgTable(filteredResult);
-            $scope.status.hasFilter = _.keys(newFilter).length !== 0 && (getEnabledLevels(newFilter).length > 0 || newFilter.disease || newFilter.gene || newFilter.drug);
+            $scope.status.hasFilter = _.keys(newFilter).length !== 0 && (getEnabledLevels(newFilter).length > 0 || newFilter.tumorType || newFilter.gene || newFilter.drug);
         }, true);
 
         $scope.resetFilters = function() {
@@ -199,7 +199,7 @@ angular.module('oncokbStaticApp')
             _.forEach(treatments, function(treatment) {
                 var level = $scope.match2KeyLevel(treatment.level);
                 var gene = treatment.gene;
-                var tumorType = treatment.disease;
+                var tumorType = treatment.tumorType;
                 if (genes.levels[level] === undefined) {
                     genes.levels[level] = {};
                 }
@@ -252,7 +252,7 @@ angular.module('oncokbStaticApp')
                         alterations: item.alterations.map(function(alt) {
                             return alt.name ? alt.name : alt.alteration;
                         }).sort(),
-                        disease: utils.getCancerTypeNameFromOncoTreeType(item.oncoTreeType),
+                        tumorType: utils.getCancerTypeNameFromOncoTreeType(item.oncoTreeType),
                         treatments: item.treatments,
                         drugs: item.treatments.map(function(treatment) {
                             return treatment.drugs.map(function(drug) {

@@ -82,13 +82,13 @@ angular
                 controllerAs: 'about'
             })
             .when('/actionableGenes', {
-                title: 'Actionable Genes, Alterations, Diseases, and Drugs',
+                title: 'Actionable Genes, Alterations, Tumor Types, and Drugs',
                 templateUrl: 'views/actionalGenes.html',
                 controller: 'actionableGenesCtrl',
                 controllerAs: 'actionableGenes'
             })
             .when('/actionableGenes/:filterType/:filter', {
-                title: 'Actionable Genes, Alterations, Diseases, and Drugs',
+                title: 'Actionable Genes, Alterations, Tumor Types, and Drugs',
                 templateUrl: 'views/actionalGenes.html',
                 controller: 'actionableGenesCtrl',
                 controllerAs: 'actionableGenes'
@@ -212,8 +212,10 @@ angular.module('oncokbStaticApp').run(
             version: '1.20',
             levelColors: {
                 '1': '#33A02C',
+                '2': '#1F78B4',
                 '2A': '#1F78B4',
                 '2B': '#80B1D3',
+                '3': '#984EA3',
                 '3A': '#984EA3',
                 '3B': '#BE98CE',
                 '4': '#424242',
