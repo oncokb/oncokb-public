@@ -164,7 +164,7 @@ angular.module('oncokbStaticApp')
                     'May 24, 2019: <a target="_blank" ' +
                     'href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-alpelisib-metastatic-breast-cancer">The FDA approved PI(3)-kinase alpha selective inhibitor alpelisib</a> in combination with fulvestrant, to treat patients with HR+/ HER2- PIK3CA-mutant advanced or metastatic breast cancer.',
                 ],
-                '4': [
+                '2': [
                     'BRAF - V600E - Colorectal Cancer - Encorafenib + Binimetinib + Cetuximab (<b>previously level 3A</b>)',
                     'ERBB2 - Amplification - Uterine Serous Carcinoma - Trastuzumab + Carboplatin-Paclitaxel (<b>previously level 2B</b>)',
                 ],
