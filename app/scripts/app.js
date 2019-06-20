@@ -16,12 +16,12 @@ angular
         'ngRoute',
         'ngSanitize',
         'ngTouch',
-        'ui.materialize',
         'ui.router',
         'datatables',
         'datatables.bootstrap',
         'ui.bootstrap',
         'ngTable',
+        'ui.select',
         'swaggerUi'
     ])
     .constant('_', window._)
@@ -32,6 +32,7 @@ angular
     .constant('MutationCollection', window.MutationCollection)
     .constant('Plotly', window.Plotly)
     .constant('Sentry', window.Sentry)
+    .constant('pluralize', window.pluralize)
     .constant('legacyLink', 'legacy-api/')
     .constant('privateApiLink', 'api/private/')
     .constant('apiLink', 'api/v1/')
@@ -81,7 +82,13 @@ angular
                 controllerAs: 'about'
             })
             .when('/actionableGenes', {
-                title: 'Actionable Genes, Alterations, Diseases, and Drugs',
+                title: 'Actionable Genes, Alterations, Tumor Types, and Drugs',
+                templateUrl: 'views/actionalGenes.html',
+                controller: 'actionableGenesCtrl',
+                controllerAs: 'actionableGenes'
+            })
+            .when('/actionableGenes/:filterType/:filter', {
+                title: 'Actionable Genes, Alterations, Tumor Types, and Drugs',
                 templateUrl: 'views/actionalGenes.html',
                 controller: 'actionableGenesCtrl',
                 controllerAs: 'actionableGenes'
@@ -163,7 +170,32 @@ angular.module('oncokbStaticApp').run(
                     drug: 0,
                 },
                 levels: {}
-            }
+            },
+            levelButtons: [{
+                level: '1',
+                className: 'level-1',
+                desc: 'FDA-approved'
+            }, {
+                level: '2',
+                className: 'level-2',
+                desc: 'Standard care'
+            }, {
+                level: '3',
+                className: 'level-3',
+                desc: 'Clinical evidence'
+            }, {
+                level: '4',
+                className: 'level-4',
+                desc: 'Biological evidence'
+            }, {
+                level: 'R1',
+                className: 'level-R1',
+                desc: 'Standard care'
+            }, {
+                level: 'R2',
+                className: 'level-R2',
+                desc: 'Clinical evidence'
+            }]
         };
 
         $rootScope.view = {
@@ -176,12 +208,14 @@ angular.module('oncokbStaticApp').run(
             }, {content: '4472 Variants'}, {content: '38 Tumor Types'}]
         };
         $rootScope.data = {
-            lastUpdate: 'May 9, 2019',
-            version: '1.20',
+            lastUpdate: 'June 21, 2019',
+            version: '1.21',
             levelColors: {
                 '1': '#33A02C',
+                '2': '#1F78B4',
                 '2A': '#1F78B4',
                 '2B': '#80B1D3',
+                '3': '#984EA3',
                 '3A': '#984EA3',
                 '3B': '#BE98CE',
                 '4': '#424242',

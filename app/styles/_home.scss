@@ -37,12 +37,12 @@
         }
     }
 
-    .number.gene > a {
+    .number > a {
         color: black;
-    }
-
-    .number.gene > a:hover {
+      cursor: pointer;
+      &:hover{
         color: $primary-color;
+      }
     }
 
     .has-inside-grid {

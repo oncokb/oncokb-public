@@ -136,7 +136,9 @@ angular.module('oncokbStaticApp')
                         // handle this in the future
                     }
                     if (result[2] && result[2].data) {
-                        $scope.alteration.mutationSummary = result[2].data.variantSummary;
+                        if (!$scope.meta.isOtherBiomarkers) {
+                            $scope.alteration.mutationSummary = result[2].data.variantSummary;
+                        }
                         $scope.alteration.oncogenic = result[2].data.oncogenic;
                     }
                 } else {

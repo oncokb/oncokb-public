@@ -20,6 +20,38 @@
             <p ng-bind-html="data.citationURL"></p>
         </div>
 
+        <h3>June 21, 2019</h3>
+        <div>
+            <ul>
+                <li>Improved Actionable Genes page</li>
+                <li>Updated the Cancer Genes list which now consists of 1039 genes (no longer referring to the <a
+                    href="https://cancer.sanger.ac.uk/cosmic/census?tier=2" target="_blank">Cancer Gene Census Tier 2
+                    genes</a>)
+                </li>
+                <li>Updated therapeutic implications for 3 genes in 3 solid tumor types
+                    <div class="row">
+                        <table class="table">
+                            <thead>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-lg-11 col-sm-11 col-xs-11">Update</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="(key, value) in data.updatedActionableGenes['06212019']">
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
+                                <td>
+                                    <ul>
+                                        <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+
         <h3>May 9, 2019</h3>
         <div>
             <ul>
@@ -27,12 +59,12 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-11">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['05092019']">
-                                <td>{{key}}</td>
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
                                 <td>
                                     <ul>
                                         <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
@@ -143,7 +175,9 @@
                                 <td rowspan="4">4</td>
                                 <td>SF3B1</td>
                                 <td rowspan="4">Oncogenic Mutations</td>
-                                <td rowspan="4">AML, Chronic Myelomonocytic Leukemia (CMML), Myelodysplastic Syndrome (MDS)</td>
+                                <td rowspan="4">AML, Chronic Myelomonocytic Leukemia (CMML), Myelodysplastic Syndrome
+                                    (MDS)
+                                </td>
                                 <td rowspan="4">H3B-8800</td>
                             </tr>
                             <tr>
@@ -180,12 +214,12 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-11">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['01242019']">
-                                <td>{{key}}</td>
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
                                 <td>
                                     <ul>
                                         <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
@@ -216,12 +250,12 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-11">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['12142018']">
-                                <td>{{key}}</td>
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
                                 <td>
                                     <ul>
                                         <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
@@ -248,12 +282,12 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-11">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['11022018']">
-                                <td>{{key}}</td>
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
                                 <td>
                                     <ul>
                                         <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
@@ -278,12 +312,12 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-11">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['10262018']">
-                                <td>{{key}}</td>
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
                                 <td>
                                     <ul>
                                         <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
@@ -327,12 +361,12 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-11">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['10012018']">
-                                <td>{{key}}</td>
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
                                 <td>
                                     <ul>
                                         <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
@@ -370,12 +404,12 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-11">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['08172018']">
-                                <td>{{key}}</td>
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
                                 <td>
                                     <ul>
                                         <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
@@ -416,12 +450,12 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-11">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['07122018']">
-                                <td>{{key}}</td>
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
                                 <td>
                                     <ul>
                                         <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
@@ -462,12 +496,12 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-11">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['02022018']">
-                                <td>{{key}}</td>
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
                                 <td>
                                     <ul>
                                         <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
@@ -576,12 +610,12 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-11">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['04052017']">
-                                <td>{{key}}</td>
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
                                 <td>
                                     <ul>
                                         <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>
@@ -603,12 +637,12 @@
                     <div class="row">
                         <table class="table">
                             <thead>
-                            <th class="col-lg-1 col-sm-2 col-xs-3">Level</th>
-                            <th class="col-lg-11 col-sm-10 col-xs-9">Update</th>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-11">Update</th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="(key, value) in data.updatedActionableGenes['03072017']">
-                                <td>{{key}}</td>
+                                <td>{{['2','3'].indexOf(key) > -1 ? key+'A':key}}</td>
                                 <td>
                                     <ul>
                                         <li ng-repeat="item in value"><span ng-bind-html="item"></span></li>

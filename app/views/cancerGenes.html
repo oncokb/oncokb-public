@@ -48,12 +48,12 @@
            qtip-content="Gene is part of the published <a href='https://science.sciencemag.org/content/339/6127/1546.full' target='_blank'>Vogelstein et al. Science, 2013</a> cancer gene list ({{numOfGenes.vogelstein}} genes, 03/29/2013)"></i>
     </script>
     <script type="text/ng-template" id="sangerCGC.html">
-        <span>Cancer Gene Census</span>
+        <span>Cancer Gene Census Tier 1</span>
         <i class="fa fa-question-circle-o"
            qtip
            my="bottom center"
            at="top center"
-           qtip-content="Gene is part of the <a href='https://cancer.sanger.ac.uk/census' target='_blank'>Cancer Gene Census</a> ({{numOfGenes.sangerCGC}} genes, {{fetchedDate}})"></i>
+           qtip-content="Gene is part of the <a href='https://cancer.sanger.ac.uk/cosmic/census?tier=1' target='_blank'>Cancer Gene Census Tier 1</a> ({{numOfGenes.sangerCGC}} genes, v89 - 15th May 2019)"></i>
     </script>
     <div ng-if="doneLoading" class="loading-style">
         <img src="resources/images/loader.gif">
@@ -62,7 +62,7 @@
         <div class="row" style="margin-bottom: 0;">
             <div class="col-lg-12 title">
                 <span>OncoKB Cancer Gene List</span>
-                <a class="btn btn-sm download waves-effect waves-light"
+                <a class="btn btn-primary btn-sm download"
                    ng-href="{{apiLink}}utils/cancerGeneList.txt" target="_self"
                    download> <i class="fa  fa-cloud-download"></i> Cancer Gene List</a>
             </div>
@@ -79,8 +79,8 @@
         </div>
         <div class="row" style="margin-bottom: 0;">
             <div class="col-lg-12">
-                <div style="display: flex; flex-direction: row-reverse; align-items: baseline">
-                    <input type="text" id="search" style="width: 150px;" ng-model="data.searchTerm" ng-change="updateSearchTerm()">
+                <div style="display: flex; flex-direction: row-reverse; align-items: baseline;margin-bottom: 10px;">
+                    <input class="form-control" type="text" id="search" style="width: 150px;" ng-model="data.searchTerm" ng-change="updateSearchTerm()">
                     <label for="search" style="font-size: 14px; margin-right: 5px;">Search:</label>
                 </div>
             </div>
