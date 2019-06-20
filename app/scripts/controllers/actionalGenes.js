@@ -109,6 +109,7 @@ angular.module('oncokbStaticApp')
                 count: 500
             }, {
                 counts: [10, 50, 100, 500],
+                defaultSort: 'asc',
                 dataset: data
             });
         }
