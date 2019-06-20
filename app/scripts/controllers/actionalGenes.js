@@ -57,6 +57,15 @@ angular.module('oncokbStaticApp')
                 }
             }
             $scope.filterResults = getStats(filteredResult);
+            if(!newFilter.drug) {
+                $scope.data.drugs = $scope.filterResults.drugs;
+            }
+            if(!newFilter.disease) {
+                $scope.data.tumorTypes = $scope.filterResults.tumorTypes;
+            }
+            if(!newFilter.gene) {
+                $scope.data.genes.total = $scope.filterResults.genes.total;
+            }
             $scope.tableParams = getNgTable(filteredResult);
             $scope.status.hasFilter = _.keys(newFilter).length !== 0 && (getEnabledLevels(newFilter).length > 0 || newFilter.disease || newFilter.gene || newFilter.drug);
         }, true);
