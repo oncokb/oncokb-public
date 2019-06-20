@@ -23,8 +23,9 @@ angular.module('oncokbStaticApp')
             drugs: [],
             treatments: []
         };
-        $scope.allTreatmetns = [];
-        $scope.filters = {};
+        $scope.filters = {
+            levels: {}
+        };
         $scope.status = {
             hasFilter: false,
             loading: false
@@ -66,16 +67,28 @@ angular.module('oncokbStaticApp')
             if(!newFilter.gene) {
                 $scope.data.genes.total = $scope.filterResults.genes.total;
             }
+            if (newFilter.gene || newFilter.tumorType || newFilter.drug) {
+                $scope.data.genes.levels = $scope.filterResults.genes.levels;
+            }
             $scope.tableParams = getNgTable(filteredResult);
             $scope.status.hasFilter = _.keys(newFilter).length !== 0 && (getEnabledLevels(newFilter).length > 0 || newFilter.tumorType || newFilter.gene || newFilter.drug);
+            if (!newFilter.gene && !newFilter.tumorType && !newFilter.drug) {
+                $scope.data.genes.levels = getStats(_.cloneDeep($scope.data.treatments)).genes.levels;
+            }
         }, true);
 
-        $scope.resetFilters = function() {
-            $scope.filters = {};
+        $scope.buttonShouldBeDisabled = function(level) {
+            return $scope.data.genes.levels[level] ? ($scope.data.genes.levels[level].length === 0) : !$scope.filters.levels[level];
         };
 
-        $scope.getUniqueFilteredLevels = function() {
-            $scope.filters = {};
+        $scope.clickLevelButtonEvent = function(level) {
+            $scope.filters.levels[level] = !$scope.filters.levels[level];
+        };
+
+        $scope.resetFilters = function() {
+            $scope.filters = {
+                levels: {}
+            };
         };
 
         $scope.getFilteredResultStatement = function() {
@@ -84,6 +97,16 @@ angular.module('oncokbStaticApp')
 
         $scope.pluralizeString = function(string, number) {
             return pluralize(string, number);
+        };
+
+        $scope.getHugoSymbolLinkout = function(gene) {
+            return utils.getHugoSymbolLinkout(gene);
+        };
+
+        $scope.getAlterationCellContent = function(hugoSymbol, alterations) {
+            return alterations.map(function(alteration) {
+                return utils.getAlterationCellContent(hugoSymbol, alteration);
+            }).join(', ');
         };
 
         function getEnabledLevels(filters) {

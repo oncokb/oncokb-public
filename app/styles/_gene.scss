@@ -18,9 +18,13 @@
   .gene-addition {
     margin-bottom: 20px;
     font-size: 17px;
-    .isoform {
+    .sub-info {
       font-size: 15px;
       color: grey;
+      a {
+        color: grey;
+        text-decoration: none;
+      }
     }
       .alias {
           font-size: 15px;

@@ -17,12 +17,18 @@
                 </div>
                 <div ng-if="gene.geneAliases && gene.geneAliases.length > 0" class="alias">
                     <span>Also known as </span>
-                    <span ng-repeat="alias in gene.geneAliases">{{alias}}<span ng-if="!$last" class="comma">,</span></span>
+                    <span ng-repeat="alias in gene.geneAliases">{{alias}}<span ng-if="!$last"
+                                                                               class="comma">,</span></span>
                 </div>
-                <div ng-if="gene.curatedIsoform || gene.curatedRefSeq" class="isoform">
-                    <span ng-if="gene.curatedIsoform">Isoform: {{gene.curatedIsoform}}</span>
-                    <span ng-if="gene.curatedIsoform && gene.curatedRefSeq"> </span>
-                    <span ng-if="gene.curatedRefSeq">RefSeq: {{gene.curatedRefSeq}}</span>
+                <div class="sub-info">
+                    <span>Gene ID: <a href="https://www.ncbi.nlm.nih.gov/gene/{{gene.entrezGeneId}}" target="_blank">{{gene.entrezGeneId}}</a></span>
+                    <span ng-if="gene.curatedIsoform || gene.curatedRefSeq">
+                        <span ng-if="gene.curatedIsoform">Isoform: <a
+                            href="https://www.ensembl.org/id/{{gene.curatedIsoform}}" target="_blank">{{gene.curatedIsoform}}</a></span>
+                        <span ng-if="gene.curatedIsoform && gene.curatedRefSeq"> </span>
+                        <span ng-if="gene.curatedRefSeq">RefSeq: <a
+                            href="https://www.ncbi.nlm.nih.gov/nuccore/{{gene.curatedRefSeq}}" target="_blank">{{gene.curatedRefSeq}}</a></span>
+                    </span>
                 </div>
             </div>
             <p ng-if="status.hasSummary" ng-bind-html="meta.geneSummary"></p>
@@ -88,16 +94,22 @@
                     <div ng-if="meta.highestLevels.length > 0">
                         <b>Highest level of gene evidence:
                             <span ng-repeat="level in meta.highestLevels" ng-style="getLevelColor(level)">Level {{level}}<span
-                                    ng-if="$index < meta.highestLevels.length - 1">, </span></span></b>
+                                ng-if="$index < meta.highestLevels.length - 1">, </span></span></b>
                     </div>
                     <div ng-if="gene.geneAliases && gene.geneAliases.length > 0" class="alias">
                         <span>Also known as </span>
                         <span ng-repeat="alias in gene.geneAliases">{{alias}}<span ng-if="!$last" class="comma">,</span></span>
                     </div>
-                    <div ng-if="gene.tsg || gene.oncogene" class="isoform">
-                        <span ng-if="gene.curatedIsoform">Isoform: {{gene.curatedIsoform}}</span>
-                        <span ng-if="gene.curatedIsoform && gene.curatedRefSeq"> </span>
-                        <span ng-if="gene.curatedRefSeq">RefSeq: {{gene.curatedRefSeq}}</span>
+                    <div class="sub-info">
+                        <span>Gene ID: <a href="https://www.ncbi.nlm.nih.gov/gene/{{gene.entrezGeneId}}"
+                                          target="_blank">{{gene.entrezGeneId}}</a></span>
+                        <span ng-if="gene.curatedIsoform || gene.curatedRefSeq">
+                            <span ng-if="gene.curatedIsoform">Isoform: <a
+                                href="https://www.ensembl.org/id/{{gene.curatedIsoform}}" target="_blank">{{gene.curatedIsoform}}</a></span>
+                            <span ng-if="gene.curatedIsoform && gene.curatedRefSeq"> </span>
+                            <span ng-if="gene.curatedRefSeq">RefSeq: <a
+                                href="https://www.ncbi.nlm.nih.gov/nuccore/{{gene.curatedRefSeq}}" target="_blank">{{gene.curatedRefSeq}}</a></span>
+                        </span>
                     </div>
                 </div>
                 <p ng-bind-html="meta.geneBackground"></p>

@@ -12,7 +12,9 @@ angular.module('oncokbStaticApp')
             templateUrl: 'views/actionButton.html',
             restrict: 'E',
             scope: {
-                selected:'='
+                selected:'=',
+                disabled:'=',
+                clickEvent: '&'
             },
             transclude: true,
             link: function postLink(scope) {

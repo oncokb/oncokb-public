@@ -35,6 +35,9 @@ div.dataTables_length label, div.dataTables_filter label {
   font-size: 14px;
 }
 
+table {
+  font-size: 14px;
+}
 table.dataTable tbody td.child {
   padding: 8px 0 8px 20px;
 }
@@ -199,6 +202,10 @@ a:hover, a:focus {
             color: white;
         }
     }
+}
+
+.title {
+  margin-top: 10px;
 }
 
 .referenceStyle {

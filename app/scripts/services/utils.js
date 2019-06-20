@@ -51,6 +51,13 @@ angular.module('oncokbStaticApp')
                         oncoTreeType.mainType.name : 'NA') ||
                     'NA') : 'NA';
             },
+            getHugoSymbolLinkout: function(hugoSymbol) {
+                if (hugoSymbol) {
+                    return '<a href="gene/' + hugoSymbol + '">' + hugoSymbol + '</a>';
+                } else {
+                    return '';
+                }
+            },
             getAlterationCellContent: function(geneName, alterationName) {
                 if (geneName && alterationName) {
                     geneName = geneName.trim();
