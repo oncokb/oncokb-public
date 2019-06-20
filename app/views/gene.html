@@ -60,21 +60,19 @@
                 </b>
             </div>
             <p ng-if="status.hasSummary" ng-bind-html="meta.geneSummary + (!isGeneralMutation() ? ' ' + alteration.mutationSummary : '')"></p>
-            <p class="gene-background-info-wrapper">
+            <p class="gene-background-info-wrapper" ng-if="!meta.isOtherBiomarkers">
                     <span class="gene-more-info"
                           ng-click="alteration.displayGeneInfo = !alteration.displayGeneInfo"
                           ng-class="{'hide': !!alteration.displayGeneInfo}">
                         See additional
-                        <span ng-if="!meta.isOtherBiomarkers">{{gene.hugoSymbol}}</span>
-                        <span ng-if="meta.isOtherBiomarkers">{{alteration.name}}</span>
+                        <span>{{gene.hugoSymbol}}</span>
                         information<i class="fa fa-arrow-circle-o-down gene-more-info-icon"></i>
                     </span>
                 <span class="gene-less-info"
                       ng-class="{'hide': !alteration.displayGeneInfo}"
                       ng-click="alteration.displayGeneInfo = !alteration.displayGeneInfo">
                             Hide additional
-                        <span ng-if="!meta.isOtherBiomarkers">{{gene.hugoSymbol}}</span>
-                        <span ng-if="meta.isOtherBiomarkers">{{alteration.name}}</span>
+                        <span>{{gene.hugoSymbol}}</span>
                     information<i class="fa fa-arrow-circle-o-up gene-less-info-icon"></i>
                     </span>
             </p>
