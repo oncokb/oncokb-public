@@ -2,15 +2,16 @@
     VARIABLES
 \*------------------------------------*/
 
-$font-sans: "Gotham SSm A", "Gotham SSm B", "Helvetica Neueu", Helvetica, Arial, sans-serif;
-$font-serif: Georgia, "Times New Roman", serif;
+$font-sans: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
+$font-serif: serif;
 
 /* ----- Responsive Size & Breakpoint Variables ----- */
 
 // Bootstrap breakpoints for reference (not overrides)
 //$secondary-color: $gsk-accent;
 $lg-width: 1450px;
-$width: 1210px;
+$width: 1150px;
+$semi-sm-width: 979px;
 $sm-width: 980px;
 $range-min-lg-width: $lg-width;
 $range-max-width: $lg-width - 1;
@@ -196,9 +197,5 @@ $link-color: $brand-primary;
 $btn-info: $medium-blue;
 $btn-info-bg: $btn-info;
 $input-color-placeholder: $main-text;
-
-$bootstrap-sass-asset-helper: false;
-// [converter] Asset helpers such as Sprockets and Node.js Mincer do not resolve relative paths
-$icon-font-path: "../../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 
 $container-large-desktop: 1200px;

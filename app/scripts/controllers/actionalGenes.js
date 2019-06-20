@@ -1,146 +1,140 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+"use strict"
 
 angular.module('oncokbStaticApp')
-    .controller('actionableGenesCtrl', function($scope, $location,
+    .controller('actionableGenesCtrl', function($rootScope, $scope, $location,
+                                                $sce,
                                                 DTColumnDefBuilder,
                                                 _,
+                                                pluralize,
                                                 utils,
+                                                NgTableParams,
+                                                $routeParams,
                                                 api) {
         $scope.data = {
-            levels: [
-                {
-                    key: 'one',
-                    title: '1',
-                    titleStyleClass: 'level-1',
-                    description: 'FDA-approved',
-                    treatments: [],
-                    treatmentsBlackList: [],
-                    numOfGenes: 0,
-                    numOfAlterations: 0
-                },
-                {
-                    key: 'two',
-                    title: '2',
-                    titleStyleClass: 'level-2A',
-                    description: 'Standard care',
-                    treatments: [],
-                    treatmentsBlackList: [
-                        'KIT-D816A, D816E, D816F, D816G, D816H, D816N, D816V, D816Y-Melanoma-Imatinib',
-                        'KIT-D816A, D816E, D816F, D816G, D816H, D816N, D816V, D816Y-Thymic Tumor-Sunitinib, Sorafenib',
-                        'KIT-D816-Melanoma-Imatinib',
-                        'KIT-D816-Thymic Tumor-Sunitinib, Sorafenib',
-                        'KIT-Exon 17 mutations-Melanoma-Imatinib',
-                        'KIT-Exon 17 mutations-Thymic Tumor-Sunitinib, Sorafenib',
-                        'KIT-T670I-Melanoma-Imatinib',
-                        'KIT-T670I-Thymic Tumor-Sunitinib, Sorafenib',
-                        'KIT-V654A-Melanoma-Imatinib',
-                        'KIT-V654A-Thymic Tumor-Sunitinib, Sorafenib'
-                    ],
-                    numOfGenes: 0,
-                    numOfAlterations: 0
-                },
-                {
-                    key: 'three',
-                    title: '3',
-                    titleStyleClass: 'level-3A',
-                    description: 'Clinical evidence',
-                    treatments: [],
-                    numOfGenes: 0,
-                    numOfAlterations: 0
-                },
-                {
-                    key: 'four',
-                    title: '4',
-                    titleStyleClass: 'level-4',
-                    description: 'Biological evidence',
-                    treatments: [],
-                    numOfGenes: 0,
-                    numOfAlterations: 0
-                },
-                {
-                    key: 'r1',
-                    title: 'R1',
-                    titleStyleClass: 'level-R1',
-                    description: 'Standard care resistance',
-                    treatments: [],
-                    numOfGenes: 0,
-                    numOfAlterations: 0
-                },
-                {
-                    key: 'r2',
-                    title: 'R2',
-                    titleStyleClass: 'level-R2',
-                    description: 'Clinical evidence of resistance',
-                    treatments: [],
-                    numOfGenes: 0,
-                    numOfAlterations: 0
-                }
-            ]
+            genes: {
+                levels: _.reduce($scope.meta.levelButtons, function(current, next) {
+                    current[next.level] = [];
+                    return current;
+                }, {}),
+                total: []
+            },
+            levelColors: $rootScope.data.levelColors,
+            tumorTypes: [],
+            drugs: [],
+            treatments: []
+        };
+        $scope.filters = {
+            levels: {}
         };
         $scope.status = {
+            hasFilter: false,
             loading: false
         };
-
-        $scope.actionableGenesDT = {};
-        $scope.actionableGenesDT.dtOptions = {
-            paging: false,
-            scrollY: 481,
-            scrollCollapse: true,
-            hasBootstrap: true,
-            columnDefs: [
-                {responsivePriority: 1, targets: 0, width: '10%'},
-                {responsivePriority: 2, targets: 1, width: '35%'},
-                {responsivePriority: 3, targets: 2, width: '25%'},
-                {responsivePriority: 4, targets: 3, width: '30%'}
-            ],
-            aaSorting: [[0, 'asc'], [1, 'asc'], [2, 'asc'], [3, 'asc']],
-            responsive: {
-                details: {
-                    display: $.fn.dataTable.Responsive.display.childRowImmediate,
-                    type: '',
-                    renderer: function(api, rowIdx, columns) {
-                        var data = $.map(columns, function(col) {
-                            return col.hidden ?
-                                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                                '<td>' + col.title + ':</td> ' +
-                                '<td>' + col.data + '</td>' +
-                                '</tr>' :
-                                '';
-                        }).join('');
-
-                        return data ?
-                            $('<table/>').append(data) :
-                            false;
-                    }
-                }
-            }
-        };
-        $scope.actionableGenesDT.dtColumnDefs = [
-            DTColumnDefBuilder.newColumnDef(0),
-            DTColumnDefBuilder.newColumnDef(1),
-            DTColumnDefBuilder.newColumnDef(2),
-            DTColumnDefBuilder.newColumnDef(3)
-        ];
 
         $scope.clickGene = function(gene) {
             $location.path('/gene/' + gene);
         };
 
-        $scope.getAlterationsLink = function(gene, alterations) {
-            return _.map(alterations.split(','), function(alteration) {
-                return utils.getAlterationCellContent(gene, alteration);
+        $scope.$watch('filters', function(newFilter) {
+            var filteredResult = _.cloneDeep($scope.data.treatments);
+            if (newFilter.tumorType) {
+                filteredResult = _.filter(filteredResult, ['tumorType', newFilter.tumorType.name]);
+            }
+            if (newFilter.gene) {
+                filteredResult = _.filter(filteredResult, ['gene', newFilter.gene.name]);
+            }
+            if (newFilter.drug) {
+                filteredResult = _.filter(filteredResult, function(record) {
+                    return record.drugs.includes(newFilter.drug.name);
+                });
+            }
+            if (newFilter.levels) {
+                var validLevelFilters = getEnabledLevels(newFilter);
+                // Don't filter if no level selected.
+                if (validLevelFilters.length > 0) {
+                    filteredResult = _.filter(filteredResult, function(record) {
+                        return validLevelFilters.includes($scope.match2KeyLevel(record.level));
+                    });
+                }
+            }
+            $scope.filterResults = getStats(filteredResult);
+            if(!newFilter.drug) {
+                $scope.data.drugs = $scope.filterResults.drugs;
+            }
+            if(!newFilter.tumorType) {
+                $scope.data.tumorTypes = $scope.filterResults.tumorTypes;
+            }
+            if(!newFilter.gene) {
+                $scope.data.genes.total = $scope.filterResults.genes.total;
+            }
+            if (newFilter.gene || newFilter.tumorType || newFilter.drug) {
+                $scope.data.genes.levels = $scope.filterResults.genes.levels;
+            }
+            $scope.tableParams = getNgTable(filteredResult);
+            $scope.status.hasFilter = _.keys(newFilter).length !== 0 && (getEnabledLevels(newFilter).length > 0 || newFilter.tumorType || newFilter.gene || newFilter.drug);
+            if (!newFilter.gene && !newFilter.tumorType && !newFilter.drug) {
+                $scope.data.genes.levels = getStats(_.cloneDeep($scope.data.treatments)).genes.levels;
+            }
+        }, true);
+
+        $scope.buttonShouldBeDisabled = function(level) {
+            return $scope.data.genes.levels[level] ? ($scope.data.genes.levels[level].length === 0) : !$scope.filters.levels[level];
+        };
+
+        $scope.clickLevelButtonEvent = function(level) {
+            $scope.filters.levels[level] = !$scope.filters.levels[level];
+        };
+
+        $scope.resetFilters = function() {
+            $scope.filters = {
+                levels: {}
+            };
+        };
+
+        $scope.getFilteredResultStatement = function() {
+            return $sce.trustAsHtml(`<span style="font-weight: bold;">Showing ${$scope.filterResults.treatments.length} biomarker-drug ${pluralize('association', $scope.filterResults.treatments.length)}</span> (${$scope.filterResults.genes.total.length} ${pluralize('gene', $scope.filterResults.genes.total.length)}, ${$scope.filterResults.tumorTypes.length} ${pluralize('tumor type', $scope.filterResults.tumorTypes.length)}, ${$scope.filterResults.levels.length} ${pluralize('level', $scope.filterResults.levels.length)} of evidence)`);
+        };
+
+        $scope.pluralizeString = function(string, number) {
+            return pluralize(string, number);
+        };
+
+        $scope.getHugoSymbolLinkout = function(gene) {
+            return utils.getHugoSymbolLinkout(gene);
+        };
+
+        $scope.getAlterationCellContent = function(hugoSymbol, alterations) {
+            return alterations.map(function(alteration) {
+                return utils.getAlterationCellContent(hugoSymbol, alteration);
             }).join(', ');
         };
 
-        getTreatmentsMetadata();
+        function getEnabledLevels(filters) {
+            if (!filters.levels) {
+                return [];
+            }
+            return _.reduce(filters.levels, function(acc, status, level) {
+                if (status) {
+                    acc.push(level);
+                }
+                return acc;
+            }, []);
+        }
 
         function getTreatmentsMetadata() {
             $scope.status.loading = true;
             ajaxGetTreatments();
+        }
+
+        function getNgTable(data) {
+            return new NgTableParams({
+                sorting: {level: 'asc', gene: 'asc'},
+                count: 500
+            }, {
+                counts: [10, 50, 100, 500],
+                defaultSort: 'asc',
+                dataset: data
+            });
         }
 
         function ajaxGetTreatments() {
@@ -163,35 +157,39 @@ angular.module('oncokbStaticApp')
                 url: 'LEVEL_R2',
                 variable: 'r2'
             }];
+
             api.getEvidencesBylevel()
                 .then(function(result) {
                     try {
-                        _.each(result.data, function(content, levelOfEvidence) {
+                        let treatments = [];
+                        _.forEach(result.data, function(content, levelOfEvidence) {
                             var level = _.find(levels, function(_level) {
                                 return _level.url === levelOfEvidence;
                             });
                             if (level !== undefined) {
-                                var treatments = getTreatments(content);
-                                var genes = {};
-                                var alterations = {};
-                                _.each(treatments, function(treatment) {
-                                    if (treatment.gene) {
-                                        genes[treatment.gene] = true;
-                                    }
-                                    _.each(treatment.alterations.split(','), function(alt) {
-                                        var id = treatment.gene + '-' + alt.trim();
-                                        alterations[id] = true;
-                                    });
-                                });
-
-                                var _levelData = getLevelInDataByKey(level.variable);
-                                if (_levelData) {
-                                    _levelData.treatments = mergeTreatments(treatments, _levelData.treatmentsBlackList);
-                                    _levelData.numOfGenes = Object.keys(genes).length;
-                                    _levelData.numOfAlterations = Object.keys(alterations).length;
-                                }
+                                treatments = treatments.concat(getTreatments(content));
                             }
                         });
+
+                        $scope.data = getStats(treatments);
+                        if ($routeParams.filterType && $routeParams.filter) {
+                            if ($routeParams.filterType === 'level') {
+                                if ($scope.filters.levels === undefined) {
+                                    $scope.filters.levels = {};
+                                }
+                                $scope.filters.levels[$routeParams.filter] = true;
+                            } else {
+                                if ($scope.filters[$routeParams.filterType] === undefined) {
+                                    $scope.filters[$routeParams.filterType] = {};
+                                }
+                                $scope.filters[$routeParams.filterType] = {
+                                    name: $routeParams.filter
+                                };
+                            }
+                        } else {
+                            $scope.filterResults = $scope.data;
+                            $scope.tableParams = getNgTable($scope.data.treatments);
+                        }
                         $scope.status.loading = false;
                     } catch (error) {
                         console.error(error);
@@ -200,29 +198,90 @@ angular.module('oncokbStaticApp')
                 });
         }
 
-        function getLevelInDataByKey(key) {
-            for (var i = 0; i < $scope.data.levels.length; i++) {
-                if ($scope.data.levels[i].key === key) {
-                    return $scope.data.levels[i];
+        function reduceObject2Array(data) {
+            return _.reduce(data, function(acc, data, key) {
+                acc.push({
+                    name: key,
+                    count: data
+                });
+                return acc;
+            }, []);
+        }
+
+        $scope.match2KeyLevel = function(level) {
+            return _.replace(level, new RegExp('[AB]'), '');
+        };
+
+        function getStats(treatments) {
+            var genes = {
+                levels: {},
+                total: {}
+            };
+            var tumorTypes = {};
+            var drugs = {};
+
+            _.forEach(treatments, function(treatment) {
+                var level = $scope.match2KeyLevel(treatment.level);
+                var gene = treatment.gene;
+                var tumorType = treatment.tumorType;
+                if (genes.levels[level] === undefined) {
+                    genes.levels[level] = {};
                 }
-            }
-            return undefined;
+                if (genes.levels[level][gene] === undefined) {
+                    genes.levels[level][gene] = 0;
+                }
+                if (genes.total[gene] === undefined) {
+                    genes.total[gene] = 0;
+                }
+                genes.levels[level][gene]++;
+                genes.total[gene]++;
+
+                if (tumorTypes[tumorType] === undefined) {
+                    tumorTypes[tumorType] = 0;
+                }
+                tumorTypes[tumorType]++;
+
+                _.forEach(treatment.treatments, function(treatment) {
+                    _.forEach(treatment.drugs, function(drug) {
+                        if (drugs[drug.drugName] === undefined) {
+                            drugs[drug.drugName] = 0;
+                        }
+                        drugs[drug.drugName]++;
+                    });
+                });
+            });
+
+            var geneLeveles = _.mapValues(genes.levels, function(gene) {
+                return reduceObject2Array(gene);
+            });
+            return {
+                genes: {
+                    levels: geneLeveles,
+                    total: reduceObject2Array(genes.total)
+                },
+                levels: _.keys(geneLeveles),
+                treatments: treatments,
+                drugs: reduceObject2Array(drugs),
+                tumorTypes: reduceObject2Array(tumorTypes)
+            };
         }
 
         function getTreatments(metadata) {
             var treatments = [];
             if (_.isArray(metadata)) {
-                _.each(metadata, function(item) {
+                _.forEach(metadata, function(item) {
                     var treatment = {
+                        level: item.levelOfEvidence.replace('LEVEL_', ''),
                         gene: item.gene.hugoSymbol || 'NA',
                         alterations: item.alterations.map(function(alt) {
                             return alt.name ? alt.name : alt.alteration;
-                        }).sort().join(', ') || 'NA',
-                        disease: utils.getCancerTypeNameFromOncoTreeType(item.oncoTreeType),
+                        }).sort(),
+                        tumorType: utils.getCancerTypeNameFromOncoTreeType(item.oncoTreeType),
+                        treatments: item.treatments,
                         drugs: item.treatments.map(function(treatment) {
                             return treatment.drugs.map(function(drug) {
                                 return drug.drugName;
-                            }).sort().join('+');
+                            }).sort().join(' + ');
                         }).sort().join(', ')
                     };
                     treatments.push(treatment);
@@ -231,47 +290,6 @@ angular.module('oncokbStaticApp')
             return treatments;
         }
 
-        function mergeTreatments(treatments, treatmentsBlackList) {
-            var map = {};
-            var mergedTreatments = [];
-            _.each(treatments, function(treatment) {
-                var _key = treatment.gene + treatment.alterations + treatment.disease;
-
-                if (!map.hasOwnProperty(_key)) {
-                    map[_key] = [];
-                }
-                map[_key].push(treatment);
-            });
-            _.each(map, function(treatments) {
-                var _treatment = treatments[0];
-                _treatment.drugs = treatments.map(function(t) {
-                    return t.drugs;
-                }).join(', ');
-                var _treatmentsBlackList = treatmentsBlackList || [];
-                var _key = [_treatment.gene, _treatment.alterations, _treatment.disease, _treatment.drugs].join('-');
-                if (_treatmentsBlackList.indexOf(_key) == -1) {
-                    mergedTreatments.push(_treatment);
-                }
-            });
-
-            map = {};
-            _.each(mergedTreatments, function(treatment) {
-                var _key = treatment.gene + treatment.disease + treatment.drugs;
-
-                if (!map.hasOwnProperty(_key)) {
-                    map[_key] = [];
-                }
-                map[_key].push(treatment);
-            });
-            mergedTreatments = [];
-            _.each(map, function(treatments) {
-                var _treatment = treatments[0];
-                _treatment.alterations = treatments.map(function(t) {
-                    return t.alterations;
-                }).join(', ');
-                mergedTreatments.push(_treatment);
-            });
-            return mergedTreatments;
-        }
+        getTreatmentsMetadata();
     });
 
