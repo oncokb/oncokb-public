@@ -196,7 +196,7 @@
   }
 }
 
-@media (max-width: 1050px) and (min-width: $range-min-sm-width) {
+@media (max-width: $semi-sm-width) and (min-width: $range-min-sm-width) {
   .navbar-nav > li > a, .search-icon .search-icon-rect {
     padding: 15px 0px;
   }
