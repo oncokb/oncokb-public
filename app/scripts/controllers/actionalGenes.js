@@ -131,7 +131,7 @@ angular.module('oncokbStaticApp')
                 sorting: {level: 'asc', gene: 'asc'},
                 count: 500
             }, {
-                counts: [10, 50, 100, 500],
+                counts: [],
                 defaultSort: 'asc',
                 dataset: data
             });
