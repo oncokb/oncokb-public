@@ -740,6 +740,7 @@ angular.module('oncokbStaticApp')
         };
 
         $scope.clinicalTableInstanceCallback = function(dtInstance) {
+            $scope.meta.clinicalTable = dtInstance;
             if($rootScope.meta.clinicalTableSearchKeyWord) {
                 dtInstance.DataTable.search($rootScope.meta.clinicalTableSearchKeyWord).draw();
                 $rootScope.meta.clinicalTableSearchKeyWord = '';
