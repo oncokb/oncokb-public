@@ -578,7 +578,7 @@ angular.module('oncokbStaticApp')
                     _.each(tempProteinChanges, function(proteinChange) {
                         alterationList.push({
                             hugoSymbol: $scope.gene.hugoSymbol,
-                            alteration: proteinChange
+                            variant: proteinChange
                         });
                     });
                     api.searchAlterationList(alterationList).then(function(result) {
