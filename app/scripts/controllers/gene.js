@@ -26,6 +26,8 @@ angular.module('oncokbStaticApp')
         var singleStudyFlag = false;
         var currentMax = $('.diagram-y-axis-limit-input').val();
 
+        var mutationMapperUpdateFlag = '';
+
         // customized settings for main mapper
         var geneList = [$routeParams.geneName];
         var options = {
@@ -480,7 +482,7 @@ angular.module('oncokbStaticApp')
                     newMutationData = mutationData.filter(function(item) {
                         return item.cancerStudy === tempValue;
                     });
-
+                    mutationMapperUpdateFlag = "histogram";
                     mutationMapperConstructor(newMutationData, true);
                     _.fill(colors, '#1c75cd');
                     colors[tempIndex] = '#064885';
@@ -534,12 +536,14 @@ angular.module('oncokbStaticApp')
                             });
 
                             mutationDiagram.dispatcher.on(MutationDetailsEvents.DIAGRAM_PLOT_UPDATED, function() {
-                                if (resetFlag) {
-                                    updateTable('reset');
-                                } else if ($('.diagram-y-axis-limit-input').val() === currentMax) {
-                                    updateTable('plotUpdate');
-                                } else {
-                                    currentMax = $('.diagram-y-axis-limit-input').val();
+                                if (mutationMapperUpdateFlag !== 'table') {
+                                    if (resetFlag) {
+                                        updateTable('reset');
+                                    } else if ($('.diagram-y-axis-limit-input').val() === currentMax) {
+                                        updateTable('plotUpdate');
+                                    } else {
+                                        currentMax = $('.diagram-y-axis-limit-input').val();
+                                    }
                                 }
                             });
                         });
@@ -739,13 +743,43 @@ angular.module('oncokbStaticApp')
             }
         };
 
+        function updateMutationMapperByKeyword(keyword) {
+            mutationMapperUpdateFlag = "table";
+            var newMutationData = [];
+            if (keyword) {
+                keyword = keyword.toLowerCase();
+                newMutationData = mutationData.filter(function(item) {
+                    return item.geneSymbol.toLowerCase().includes(keyword) || item.proteinChange.toLowerCase().includes(keyword);
+                });
+            } else {
+                newMutationData = mutationData;
+            }
+            mutationMapperConstructor(newMutationData, true);
+        }
+
+        var datatableSearchTimeout;
         $scope.clinicalTableInstanceCallback = function(dtInstance) {
             $scope.meta.clinicalTable = dtInstance;
-            if($rootScope.meta.clinicalTableSearchKeyWord) {
+            if ($rootScope.meta.clinicalTableSearchKeyWord) {
                 dtInstance.DataTable.search($rootScope.meta.clinicalTableSearchKeyWord).draw();
                 $rootScope.meta.clinicalTableSearchKeyWord = '';
             }
+            dtInstance.DataTable.on('search.dt', function() {
+                // //number of filtered rows
+                // console.log($scope.meta.clinicalTable.DataTable.rows( { filter : 'applied'} ).nodes().length);
+                // //filtered rows data as arrays
+                // console.log($scope.meta.clinicalTable.DataTable.rows( { filter : 'applied'} ).data());
+
+                if(datatableSearchTimeout !== undefined) {
+                    clearTimeout(datatableSearchTimeout);
+                }
+                datatableSearchTimeout = setTimeout(function() {
+                    updateMutationMapperByKeyword($scope.meta.clinicalTable.DataTable.search());
+                    console.log('ran');
+                }, 500);
+            });
         };
+
         $scope.view.biologicalTableOptions = {
             hasBootstrap: true,
             aoColumns: [
