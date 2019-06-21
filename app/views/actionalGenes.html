@@ -1,12 +1,11 @@
-<div class="actionable-genes">
-    <div ng-if="status.loading" class="loading-style">
-        <img src="resources/images/loader.gif">
-    </div>
-    <div ng-show="!status.loading" >
-    <div class="fixed-filter">
-        <div class="container">
-            <div style="display: flex;">
-                <div style="display: flex; flex-direction: column; width: 100%; margin: auto;max-width: 1000px;">
+<div class="container">
+    <div class="actionable-genes">
+        <div ng-if="status.loading" class="loading-style">
+            <img src="resources/images/loader.gif">
+        </div>
+        <div ng-show="!status.loading">
+            <div class="fixed-filter container">
+                <div class="actionable-genes">
                     <div class="row">
                         <action-button class="col-sm-2 col-xs-4" ng-repeat="level in meta.levelButtons"
                                        disabled="buttonShouldBeDisabled(level.level)"
@@ -23,8 +22,9 @@
                         <div class="col-sm-4 col-xs-12">
                             <div class="input-group" style="width: 100%">
                                 <ui-select ng-model="filters.gene" theme="bootstrap" style="width: 100%;">
-                                    <ui-select-match placeholder="{{data.genes.total.length}} actionable {{pluralizeString('gene', data.genes.total.length)}}"
-                                                     allow-clear="true">
+                                    <ui-select-match
+                                        placeholder="{{data.genes.total.length}} actionable {{pluralizeString('gene', data.genes.total.length)}}"
+                                        allow-clear="true">
                                         {{$select.selected.name}}
                                     </ui-select-match>
                                     <ui-select-choices
@@ -37,8 +37,9 @@
                         <div class="col-sm-4 col-xs-12">
                             <div class="input-group" style="width: 100%;">
                                 <ui-select ng-model="filters.tumorType" theme="bootstrap" style="width: 100%;">
-                                    <ui-select-match placeholder="{{data.tumorTypes.length}} curated {{pluralizeString('tumor type', data.tumorTypes.length)}}"
-                                                     allow-clear="true">
+                                    <ui-select-match
+                                        placeholder="{{data.tumorTypes.length}} curated {{pluralizeString('tumor type', data.tumorTypes.length)}}"
+                                        allow-clear="true">
                                         {{$select.selected.name}}
                                     </ui-select-match>
                                     <ui-select-choices
@@ -51,7 +52,9 @@
                         <div class="col-sm-4 col-xs-12">
                             <div class="input-group" style="width: 100%">
                                 <ui-select ng-model="filters.drug" theme="bootstrap" style="width: 100%;">
-                                    <ui-select-match placeholder="{{data.drugs.length}} {{pluralizeString('drug', data.drugs.length)}}" allow-clear="true">
+                                    <ui-select-match
+                                        placeholder="{{data.drugs.length}} {{pluralizeString('drug', data.drugs.length)}}"
+                                        allow-clear="true">
                                         {{$select.selected.name}}
                                     </ui-select-match>
                                     <ui-select-choices
@@ -69,38 +72,31 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-        </div>
-    </div>
-    <div class="container result-table">
-        <div style="margin: auto; max-width: 1000px;">
-
-            <div>
-                <table ng-table="tableParams" class="table table-bordered table-striped" show-filter="false">
-                    <tr ng-repeat="x in $data">
-                        <td data-title="'Level'" filter="{level:'text'}" sortable="'level'">
+            <div class="result-table row">
+                <div class="col-xs-12">
+                    <table ng-table="tableParams" class="table table-bordered table-striped" show-filter="false">
+                        <tr ng-repeat="x in $data">
+                            <td data-title="'Level'" filter="{level:'text'}" sortable="'level'">
                             <span class="gene-column"><i class="level-icon-image"
-                                     ng-class="'level-' + match2KeyLevel(x.level)"></i></span>
-                        </td>
-                        <td data-title="'Gene'" filter="{gene:'text'}" sortable="'gene'">
-                            <span ng-bind-html="getHugoSymbolLinkout(x.gene)"></span>
-                        </td>
-                        <td data-title="'Alterations'" filter="{alterations:'text'}" sortable="'alterations'">
-                            <span ng-bind-html="getAlterationCellContent(x.gene, x.alterations)"></span>
-                        </td>
-                        <td data-title="'Tumor Type'" filter="{tumorType:'text'}" sortable="'tumorType'">
-                            <span>{{x.tumorType}}</span>
-                        </td>
-                        <td data-title="'Drugs'" filter="{drugs:'text'}" sortable="'drugs'">
-                            <span>{{x.drugs}}</span>
-                        </td>
-                    </tr>
-                </table>
+                                                         ng-class="'level-' + match2KeyLevel(x.level)"></i></span>
+                            </td>
+                            <td data-title="'Gene'" filter="{gene:'text'}" sortable="'gene'">
+                                <span ng-bind-html="getHugoSymbolLinkout(x.gene)"></span>
+                            </td>
+                            <td data-title="'Alterations'" filter="{alterations:'text'}" sortable="'alterations'">
+                                <span ng-bind-html="getAlterationCellContent(x.gene, x.alterations)"></span>
+                            </td>
+                            <td data-title="'Tumor Type'" filter="{tumorType:'text'}" sortable="'tumorType'">
+                                <span>{{x.tumorType}}</span>
+                            </td>
+                            <td data-title="'Drugs'" filter="{drugs:'text'}" sortable="'drugs'">
+                                <span>{{x.drugs}}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </div>
-
-
