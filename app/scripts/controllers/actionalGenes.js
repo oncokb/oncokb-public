@@ -177,7 +177,7 @@ angular.module('oncokbStaticApp')
                                 if ($scope.filters.levels === undefined) {
                                     $scope.filters.levels = {};
                                 }
-                                $scope.filters.levels[$routeParams.filter] = true;
+                                $scope.filters.levels[$scope.match2KeyLevel($routeParams.filter)] = true;
                             } else {
                                 if ($scope.filters[$routeParams.filterType] === undefined) {
                                     $scope.filters[$routeParams.filterType] = {};
