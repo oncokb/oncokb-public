@@ -26,8 +26,6 @@ angular.module('oncokbStaticApp')
         var singleStudyFlag = false;
         var currentMax = $('.diagram-y-axis-limit-input').val();
 
-        var mutationMapperUpdateFlag = '';
-
         // customized settings for main mapper
         var geneList = [$routeParams.geneName];
         var options = {
@@ -482,7 +480,6 @@ angular.module('oncokbStaticApp')
                     newMutationData = mutationData.filter(function(item) {
                         return item.cancerStudy === tempValue;
                     });
-                    mutationMapperUpdateFlag = "histogram";
                     mutationMapperConstructor(newMutationData, true);
                     _.fill(colors, '#1c75cd');
                     colors[tempIndex] = '#064885';
@@ -523,10 +520,10 @@ angular.module('oncokbStaticApp')
                             mutationDiagram = diagram;
                             // still need to work on the click mutation type panel event
                             mutationDiagram.dispatcher.on(MutationDetailsEvents.LOLLIPOP_SELECTED, function() {
-                                updateTable('select');
+                                updateTableFromMutationMapper('select');
                             });
                             mutationDiagram.dispatcher.on(MutationDetailsEvents.LOLLIPOP_DESELECTED, function() {
-                                updateTable('deselect');
+                                updateTableFromMutationMapper('deselect');
                             });
 
                             $('.mutation-details-filter-reset').click(function() {
@@ -536,14 +533,13 @@ angular.module('oncokbStaticApp')
                             });
 
                             mutationDiagram.dispatcher.on(MutationDetailsEvents.DIAGRAM_PLOT_UPDATED, function() {
-                                if (mutationMapperUpdateFlag !== 'table') {
-                                    if (resetFlag) {
-                                        updateTable('reset');
-                                    } else if ($('.diagram-y-axis-limit-input').val() === currentMax) {
-                                        updateTable('plotUpdate');
-                                    } else {
-                                        currentMax = $('.diagram-y-axis-limit-input').val();
-                                    }
+                                if (resetFlag) {
+                                    updateTableFromMutationMapper('reset');
+                                    resetFilter();
+                                } else if ($('.diagram-y-axis-limit-input').val() === currentMax) {
+                                    updateTableFromMutationMapper('plotUpdate');
+                                } else {
+                                    currentMax = $('.diagram-y-axis-limit-input').val();
                                 }
                             });
                         });
@@ -552,8 +548,19 @@ angular.module('oncokbStaticApp')
             }
         }
 
+        function resetFilter() {
+            // Remove the table search keywords
+            $rootScope.meta.clinicalTableSearchKeyWord = '';
+            if ($scope.meta.clinicalTable && $scope.meta.clinicalTable.DataTable.search()) {
+                $scope.meta.clinicalTable.DataTable.search('').draw();
+            }
+            if ($scope.meta.biologicalTable && $scope.meta.biologicalTable.DataTable.search()) {
+                $scope.meta.biologicalTable.DataTable.search('').draw();
+            }
+        }
+
         // get the chosen mutation data from the lollipop and update the table
-        function updateTable(type) {
+        function updateTableFromMutationMapper(type) {
             var proteinChanges = [];
             if (type === 'plotUpdate') {
                 var pileUpValues = mutationDiagram.pileups;
@@ -744,12 +751,11 @@ angular.module('oncokbStaticApp')
         };
 
         function updateMutationMapperByKeyword(keyword) {
-            mutationMapperUpdateFlag = "table";
             var newMutationData = [];
             if (keyword) {
                 keyword = keyword.toLowerCase();
                 newMutationData = mutationData.filter(function(item) {
-                    return item.geneSymbol.toLowerCase().includes(keyword) || item.proteinChange.toLowerCase().includes(keyword);
+                    return item.geneSymbol.toLowerCase().includes(keyword) || item.proteinChange.toLowerCase().includes(keyword) || item.proteinChange.toLowerCase().includes(keyword);
                 });
             } else {
                 newMutationData = mutationData;
@@ -758,26 +764,32 @@ angular.module('oncokbStaticApp')
         }
 
         var datatableSearchTimeout;
+
+        // Register search event
+        // We don't use default dtInstance.DataTable.on('search.dt') because it will be triggered whenever the search(**) is called which can be used by lollipop and bar charts
+        function registerFilterEventOnMutationMapperFromTable(dtInstance, id) {
+            $(id + ' .dataTables_filter').keyup(function() {
+                if (datatableSearchTimeout !== undefined) {
+                    clearTimeout(datatableSearchTimeout);
+                }
+                datatableSearchTimeout = setTimeout(function() {
+                    updateMutationMapperByKeyword(dtInstance.search());
+                }, 500);
+            });
+        }
+
         $scope.clinicalTableInstanceCallback = function(dtInstance) {
             $scope.meta.clinicalTable = dtInstance;
             if ($rootScope.meta.clinicalTableSearchKeyWord) {
                 dtInstance.DataTable.search($rootScope.meta.clinicalTableSearchKeyWord).draw();
                 $rootScope.meta.clinicalTableSearchKeyWord = '';
             }
-            dtInstance.DataTable.on('search.dt', function() {
-                // //number of filtered rows
-                // console.log($scope.meta.clinicalTable.DataTable.rows( { filter : 'applied'} ).nodes().length);
-                // //filtered rows data as arrays
-                // console.log($scope.meta.clinicalTable.DataTable.rows( { filter : 'applied'} ).data());
+            registerFilterEventOnMutationMapperFromTable($scope.meta.clinicalTable.DataTable, '#clinicalAlterations');
+        };
 
-                if(datatableSearchTimeout !== undefined) {
-                    clearTimeout(datatableSearchTimeout);
-                }
-                datatableSearchTimeout = setTimeout(function() {
-                    updateMutationMapperByKeyword($scope.meta.clinicalTable.DataTable.search());
-                    console.log('ran');
-                }, 500);
-            });
+        $scope.biologicalTableInstanceCallback = function(dtInstance) {
+            $scope.meta.biologicalTable = dtInstance;
+            registerFilterEventOnMutationMapperFromTable($scope.meta.biologicalTable.DataTable, '#annotatedAlterations');
         };
 
         $scope.view.biologicalTableOptions = {
