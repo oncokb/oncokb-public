@@ -3,6 +3,8 @@
 angular.module('oncokbStaticApp')
     .controller('actionableGenesCtrl', function($rootScope, $scope, $location,
                                                 $sce,
+                                                $q,
+                                                $timeout,
                                                 DTColumnDefBuilder,
                                                 _,
                                                 pluralize,
@@ -23,13 +25,52 @@ angular.module('oncokbStaticApp')
             drugs: [],
             treatments: []
         };
+        $scope.filterResults = {
+            genes: {
+                levels: _.reduce($scope.meta.levelButtons, function(current, next) {
+                    current[next.level] = [];
+                    return current;
+                }, {}),
+                total: []
+            },
+            levels: [],
+            levelColors: $rootScope.data.levelColors,
+            tumorTypes: [],
+            drugs: [],
+            treatments: []
+        };
         $scope.filters = {
             levels: {}
         };
         $scope.status = {
+            pasting: true,
             hasFilter: false,
             loading: false
         };
+
+        $scope.tumorTypeFilter = '';
+        $scope.tumorTypeFilterShouldSelect = function ($item, $model, $label, $event) {
+            $scope.filters.tumorType = $item || $scope.tumorTypeFilter;
+        };
+
+        $scope.$watch('tumorTypeFilter', function(newFilter) {
+            if (!$scope.tumorTypeFilter) {
+                delete $scope.filters.tumorType;
+            }
+            if ($scope.status.pasting) {
+                $scope.filters.tumorType = newFilter;
+                $scope.status.pasting = false;
+            }
+        });
+
+        $scope.tumorTypeFilterEnterKeyPressed = function($event) {
+            var keyCode = $event.which || $event.keyCode;
+            if (keyCode === 13) {
+                $scope.tumorTypeFilterShouldSelect();
+            }
+        };
+
+        $scope.tumorTypes = [];
 
         $scope.clickGene = function(gene) {
             $location.path('/gene/' + gene);
@@ -37,9 +78,26 @@ angular.module('oncokbStaticApp')
 
         $scope.$watch('filters', function(newFilter) {
             var filteredResult = _.cloneDeep($scope.data.treatments);
+            var deferred = $q.defer();
             if (newFilter.tumorType) {
-                filteredResult = _.filter(filteredResult, ['tumorType', newFilter.tumorType.name]);
+                api.findRelevantTumorTypes(newFilter.tumorType.name)
+                    .then(function(tumorTypes) {
+                        filteredResult = _.filter(filteredResult, function(record) {
+                            return _.find(tumorTypes.data, function(tumorType) {
+                                return tumorType.name ? tumorType.name === record.tumorType : tumorType.mainType.name === record.tumorType;
+                            });
+                        });
+                    }, function() {
+                        filteredResult = _.filter(filteredResult, ['tumorType', newFilter.tumorType.name]);
+                    })
+                    .finally(function() {
+                        deferred.resolve();
+                    });
+            } else {
+                deferred.resolve();
             }
+
+            deferred.promise.finally(function() {
             if (newFilter.gene) {
                 filteredResult = _.filter(filteredResult, ['gene', newFilter.gene.name]);
             }
@@ -75,6 +133,7 @@ angular.module('oncokbStaticApp')
             if (!newFilter.gene && !newFilter.tumorType && !newFilter.drug) {
                 $scope.data.genes.levels = getStats(_.cloneDeep($scope.data.treatments)).genes.levels;
             }
+            });
         }, true);
 
         $scope.buttonShouldBeDisabled = function(level) {
@@ -89,6 +148,7 @@ angular.module('oncokbStaticApp')
             $scope.filters = {
                 levels: {}
             };
+            $scope.tumorTypeFilter = '';
         };
 
         $scope.getFilteredResultStatement = function() {
@@ -121,9 +181,30 @@ angular.module('oncokbStaticApp')
             }, []);
         }
 
+        function getAllMainTypes() {
+            var deferred = $q.defer();
+            api.getAllMainTypes()
+                .then(function(response) {
+                    $scope.tumorTypes = $scope.tumorTypes.concat(response.data.filter(function(record) {
+                        return !record.trim().endsWith("NOS");
+                    }).map(function(mainType) {
+                        return {
+                            type: 'Main Type',
+                            name: mainType
+                        };
+                    }));
+                    deferred.resolve();
+                }, function() {
+                    deferred.resolve();
+                });
+            return deferred.promise;
+        }
+
         function getTreatmentsMetadata() {
             $scope.status.loading = true;
-            ajaxGetTreatments();
+            $q.all([ajaxGetTreatments(), getAllMainTypes()]).finally(function() {
+                $scope.status.loading = false;
+            });
         }
 
         function getNgTable(data) {
@@ -138,6 +219,7 @@ angular.module('oncokbStaticApp')
         }
 
         function ajaxGetTreatments() {
+            var deferred = $q.defer();
             var levels = [{
                 url: 'LEVEL_1',
                 variable: 'one'
@@ -188,14 +270,22 @@ angular.module('oncokbStaticApp')
                             }
                         } else {
                             $scope.filterResults = $scope.data;
+                            var tempTTs = $scope.tumorTypes.concat($scope.filterResults.tumorTypes.map(function(tumorType) {
+                                return {
+                                    type: 'curated',
+                                    name: tumorType.name
+                                };
+                            }));
+                            $scope.tumorTypes = _.uniqBy(tempTTs, 'name');
                             $scope.tableParams = getNgTable($scope.data.treatments);
                         }
-                        $scope.status.loading = false;
+                        deferred.resolve();
                     } catch (error) {
-                        console.error(error);
-                        $scope.status.loading = false;
+                        deferred.reject(error);
                     }
                 });
+
+            return deferred.promise;
         }
 
         function reduceObject2Array(data) {
