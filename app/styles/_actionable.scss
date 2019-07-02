@@ -1,7 +1,20 @@
-
+$tumor-type-search-input-color: #777;
 .actionable-genes {
   button:focus {
     outline: 0 !important;
+  }
+
+  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: $tumor-type-search-input-color;
+  opacity: 1; /* Firefox */
+}
+
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: $tumor-type-search-input-color;
+  }
+
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    color: $tumor-type-search-input-color;
   }
 
   .btn-default.active, .btn-default:not([disabled]):hover {
