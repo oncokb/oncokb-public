@@ -100,6 +100,15 @@ angular.module('oncokbStaticApp')
             getCancerGeneList: function() {
                 return $http.get(apiLink + 'utils/cancerGeneList');
             },
+            findRelevantTumorTypes: function(tumorType) {
+                return $http.get(privateApiLink + 'utils/relevantTumorTypes?tumorType=' + tumorType);
+            },
+            getAllMainTypes: function() {
+                return $http.get(privateApiLink + 'utils/oncotree/mainTypes');
+            },
+            getAllSubtypes: function() {
+                return $http.get(privateApiLink + 'utils/oncotree/subtypes');
+            },
             searchAlteration: function(hugoSymbol, alteration, source, queryType) {
                 return $http.get(apiLink + 'search?hugoSymbol=' + hugoSymbol + '&variant=' + alteration + '&source=' + source + '&queryType=' + queryType);
             },
