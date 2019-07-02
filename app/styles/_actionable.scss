@@ -136,6 +136,18 @@
     word-break: break-word;
   }
 
+  .tumor-type-typeahead > ul.dropdown-menu {
+    width: 100%;
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    > li > a{
+      word-break: break-word;
+      white-space: normal;
+    }
+  }
+
   .loading-div {
     text-align: center;
     margin-top: 20px;
