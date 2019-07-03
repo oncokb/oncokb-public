@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-sm-4 col-xs-12">
                             <div class="input-group tumor-type-typeahead" style="width: 100%;">
-                                <input type="text" class="form-control" ng-model="tumorTypeFilter" placeholder="Enter Tumor Types" uib-typeahead="item.name for item in tumorTypes | filter:$viewValue:stateComparator | orderBy: 'name'"
+                                <input type="text" class="form-control" ng-model="tumorTypeFilter" placeholder="Enter Tumor Type" uib-typeahead="item.name for item in tumorTypes | filter:$viewValue:stateComparator | orderBy: 'name'"
                                        typeahead-min-length="3" typeahead-on-select="tumorTypeFilterShouldSelect($item, $model, $label, $event)" ng-keypress="tumorTypeFilterEnterKeyPressed($event, $item)"  ng-paste="status.pasting=true" typeahead-focus-first="false"/>
                             </div>
                         </div>
