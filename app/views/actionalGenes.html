@@ -57,8 +57,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-12" style="display: flex; justify-content: space-between;">
-                            <span ng-bind-html="getFilteredResultStatement()"></span>
+                        <div class="col-xs-12" style="display: flex; justify-content: space-between; align-items: center">
+                            <div style="display: flex; align-items: center">
+                                <span ng-bind-html="getFilteredResultStatement()" style="margin-right: 5px;"></span>
+                                <button class="btn btn-primary btn-xs download"
+                                    ng-click="downloadFilteredAssociations()"
+                                    download><i
+                                class="fa  fa-cloud-download"></i> Associations</button>
+                            </div>
                             <span ng-show="status.hasFilter" ng-click="resetFilters()" class="reset-filter"><a>Reset filters</a></span>
                         </div>
                     </div>
