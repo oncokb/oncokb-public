@@ -84,10 +84,10 @@
                             <td data-title="'Alterations'" filter="{alterations:'text'}" sortable="'alterations'">
                                 <span ng-bind-html="getAlterationCellContent(x.gene, x.alterations)"></span>
                             </td>
-                            <td data-title="'Tumor Type'" filter="{tumorType:'text'}" sortable="'tumorType'">
+                            <td data-title="'Tumor Type'" filter="{tumorType:'text'}" sortable="'tumorType'" class="min-column-width">
                                 <span>{{x.tumorType}}</span>
                             </td>
-                            <td data-title="'Drugs'" filter="{drugs:'text'}" sortable="'drugs'">
+                            <td data-title="'Drugs'" filter="{drugs:'text'}" sortable="'drugs'" class="min-column-width">
                                 <span>{{x.drugs}}</span>
                             </td>
                         </tr>
