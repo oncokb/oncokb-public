@@ -48,28 +48,6 @@ angular.module('oncokbStaticApp')
             loading: false
         };
 
-        $scope.tumorTypeFilter = '';
-        $scope.tumorTypeFilterShouldSelect = function ($item, $model, $label, $event) {
-            $scope.filters.tumorType = $item || $scope.tumorTypeFilter;
-        };
-
-        $scope.$watch('tumorTypeFilter', function(newFilter) {
-            if (!$scope.tumorTypeFilter) {
-                delete $scope.filters.tumorType;
-            }
-            if ($scope.status.pasting) {
-                $scope.filters.tumorType = newFilter;
-                $scope.status.pasting = false;
-            }
-        });
-
-        $scope.tumorTypeFilterEnterKeyPressed = function($event) {
-            var keyCode = $event.which || $event.keyCode;
-            if (keyCode === 13) {
-                $scope.tumorTypeFilterShouldSelect();
-            }
-        };
-
         $scope.tumorTypes = [];
 
         $scope.clickGene = function(gene) {
@@ -148,7 +126,6 @@ angular.module('oncokbStaticApp')
             $scope.filters = {
                 levels: {}
             };
-            $scope.tumorTypeFilter = '';
         };
 
         $scope.getFilteredResultStatement = function() {
@@ -169,6 +146,19 @@ angular.module('oncokbStaticApp')
             }).join(', ');
         };
 
+        $scope.downloadFilteredAssociations = function() {
+            var content = [['Level', 'Gene', 'Alterations', 'Tumor Type', 'Drugs'].join('\t')];
+            var fileName = 'oncokb_biomarker_drug_associations.tsv';
+
+            _.each($scope.tableParams.data, function(item) {
+                content.push([item.level, item.gene, item.alterations.join(', '), item.tumorType, item.drugs].join('\t'));
+            });
+            var blob = new Blob([content.join('\n')], {
+                type: 'text/plain;charset=utf-8;',
+            });
+            saveAs(blob, fileName);
+        };
+
         function getEnabledLevels(filters) {
             if (!filters.levels) {
                 return [];
@@ -185,14 +175,14 @@ angular.module('oncokbStaticApp')
             var deferred = $q.defer();
             api.getAllMainTypes()
                 .then(function(response) {
-                    $scope.tumorTypes = $scope.tumorTypes.concat(response.data.filter(function(record) {
+                    $scope.tumorTypes = _.uniqBy($scope.tumorTypes.concat(response.data.filter(function(record) {
                         return !record.trim().endsWith("NOS");
                     }).map(function(mainType) {
                         return {
                             type: 'Main Type',
                             name: mainType
                         };
-                    }));
+                    })), 'name');
                     deferred.resolve();
                 }, function() {
                     deferred.resolve();
