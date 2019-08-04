@@ -20,6 +20,119 @@
             <p ng-bind-html="data.citationURL"></p>
         </div>
 
+        <h3>August 4, 2019</h3>
+        <div>
+            <ul>
+                <li>Updated therapeutic implications - 7 new heme associations
+                    <div class="row">
+                        <table class="table heme-table">
+                            <thead>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-1">Gene</th>
+                            <th class="col-xs-2">Mutation</th>
+                            <th class="col-xs-2">Tumor Type</th>
+                            <th class="col-xs-2">Drug</th>
+                            <th class="col-xs-4">Evidence</th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>2A</td>
+                                <td>BRAF</td>
+                                <td>V600E</td>
+                                <td>Hairy Cell Leukemia</td>
+                                <td>Vemurafenib</td>
+                                <td>Listing in 3.2019 Hairy Cell Leukemia NCCN (PMID: 26352686)</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="6">3A</td>
+                                <td>ARAF</td>
+                                <td rowspan="6">Oncogenic mutations</td>
+                                <td rowspan="6">Histiocytic and Dendritic Cell Neoplasms</td>
+                                <td rowspan="6">Cobimetinib</td>
+                                <td rowspan="6">PMID: 30867592</td>
+                            </tr>
+                            <tr>
+                                <td>BRAF</td>
+                            </tr>
+                            <tr>
+                                <td>RAF1</td>
+                            </tr>
+                            <tr>
+                                <td>NRAS</td>
+                            </tr>
+                            <tr>
+                                <td>KRAS</td>
+                            </tr>
+                            <tr>
+                                <td>MAP2K2</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+                <li>Changed annotation:
+                    <div class="row">
+                        <table class="table heme-table">
+                            <thead>
+                            <th class="col-md-1 col-xs-1">Gene</th>
+                            <th class="col-md-1 col-xs-1">Mutation</th>
+                            <th class="col-md-2 col-xs-1">Tumor Type</th>
+                            <th class="col-md-1 col-xs-1">Drug</th>
+                            <th class="col-md-2 col-xs-1">Previous Level</th>
+                            <th class="col-md-2 col-xs-1">Current Level</th>
+                            <th class="col-md-3 col-xs-6">Reason</th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td rowspan="8">BRAF</td>
+                                <td>D287H</td>
+                                <td rowspan="8">All Tumors</td>
+                                <td rowspan="8">PLX8394</td>
+                                <td rowspan="8">4</td>
+                                <td rowspan="8">No level</td>
+                                <td rowspan="8">
+                                    <div>Re-review of PMID</div>
+                                    <div>PMID: 28783719</div>
+                                    <br/>
+                                    <div>BRAF class III mutants are not necessarily sensitive to dimer disrupter RAF
+                                        inhibitor PLX8394
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>D594</td>
+                            </tr>
+                            <tr>
+                                <td>F595L</td>
+                            </tr>
+                            <tr>
+                                <td>G466</td>
+                            </tr>
+                            <tr>
+                                <td>G596</td>
+                            </tr>
+                            <tr>
+                                <td>N581</td>
+                            </tr>
+                            <tr>
+                                <td>S467L</td>
+                            </tr>
+                            <tr>
+                                <td>V459L</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+                <li>Addition of {{data.newlyAddedGenes['08022019'].length}} new genes:
+                    <div class="newly-added-genes">
+                        <span class="gene" ng-repeat="hugo in data.newlyAddedGenes['08022019']"><a
+                            href="gene/{{hugo}}">{{hugo}}</a></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
         <h3>June 21, 2019</h3>
         <div>
             <ul>
