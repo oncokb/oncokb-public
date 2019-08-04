@@ -257,5 +257,6 @@ angular.module('oncokbStaticApp')
             '12142018': ['KSR2', 'LCK', 'LTB', 'MGAM', 'MOB3B', 'MPEG1', 'NCOR2', 'PIGA', 'PLCG1', 'POT1', 'ROBO1', 'RUNX1T1', 'SAMHD1', 'SETD1A', 'SGK1', 'SMC1A', 'SMC3', 'SMG1', 'SP140', 'STAT6', 'TBL1XR1', 'UBR5', 'VAV1', 'VAV2', 'XBP1'],
             '01242019': ['ECT2L', 'RELN', 'TAL1', 'MLLT10', 'TLX3', 'TLX1', 'TRA', 'TRB', 'TRD', 'TRG', 'EPOR', 'ABL2', 'MECOM', 'DEK', 'RBM15', 'BCL9'],
             '05092019': ['ATF1', 'CCNB3', 'CMTR2', 'CREB1', 'CTR9', 'CXORF67', 'DDIT3', 'ETAA1', 'ETV5', 'FEV', 'FLI1', 'IL3', 'KAT6A', 'KBTBD4', 'KLF2', 'LMO2', 'LZTR1', 'MAF', 'MAFB', 'NR4A3', 'NRG1', 'NUP98', 'PDGFB', 'PGBD5', 'PHF6', 'PRKACA', 'SETBP1', 'SLFN11', 'SPRTN', 'SS18', 'TCL1A', 'TCL1B', 'TFE3', 'TRIP13', 'USP8', 'YY1', 'ZNRF3'],
+            '08022019': ['ATXN7', 'MTAP', 'SERPINB3', 'SERPINB4'],
         };
     });
