@@ -32,7 +32,10 @@
                     </div>
                     <i class="oncogenic-icon-image"
                        ng-class="getIconClass(match.model.oncogenicity, match.model.highestSensitiveLevel, match.model.highestResistanceLevel, match.model.vus)"/>
-                    <span class="no-annotation" ng-if="!match.model.variantExist">Not annotated by OncoKB</span>
+                    <span class="no-annotation" ng-if="!match.model.variantExist">
+                        <span>Not annotated by OncoKB</span>
+                        <suggest-curation suggestion="query"></suggest-curation>
+                    </span>
                 </div>
                 <div class="search-box-annotation">
                     <span ng-if="match.model.annotation">{{match.model.annotation}}</span>
@@ -60,8 +63,8 @@
     </div>
 </script>
 
-<div class="search-box">
-    <input type="search" class="form-control" placeholder="Search Gene / Alteration / Drug"
+<div class="search-box" ng-init="noResultMatched">
+    <input type="search" class="form-control" ng-class="noResultMatched ? 'no-result': ''" placeholder="Search Gene / Alteration / Drug"
            ng-model="content.selectedItem"
            typeahead-on-select="searchConfirmed($event)"
            uib-typeahead="item for item in searchKeyUp($viewValue)"
@@ -69,8 +72,14 @@
            typeahead-wait-ms="200"
            typeahead-loading="content.loadingSearchResult"
            typeahead-min-length="2"
+           typeahead-no-results="noResultMatched"
     >
     <div class="loading" ng-if="content.loadingSearchResult">
         <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+    </div>
+    <div ng-if="noResultMatched"
+         class="no-result-info">
+        <span>No result found, please send us an email if you would like {{content.currentQuery}} to be curated.</span>
+        <suggest-curation suggestion="content.currentQuery"></suggest-curation>
     </div>
 </div>
