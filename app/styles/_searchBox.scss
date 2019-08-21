@@ -1,17 +1,22 @@
+$border-radius: 5px;
+$padding: 6px 12px;
+$input-border: 1px solid #ccc;
+$box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+
 .search-box {
     input[type=search] {
         text-align: left;
         display: block;
         width: 100%;
         height: 50px;
-        padding: 6px 12px;
+        padding: $padding;
         font-size: 20px;
         line-height: 1.428571429;
         color: #555555;
         background: #fff none;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        border: $input-border;
+        border-radius: $border-radius;
+        box-shadow: $box-shadow;
         margin-bottom: 0;
         transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     }
@@ -19,9 +24,17 @@
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
         border-color: $secondary-color;
     }
-    input[type=search][aria-expanded=true] {
+    input[type=search][aria-expanded=true], input[type=search].no-result {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
+    }
+    .no-result-info {
+      background: white;
+      border-radius: 0 0 $border-radius $border-radius;
+      padding: $padding;
+      border: $input-border;
+      border-top: 0;
+      box-shadow: $box-shadow;
     }
     .row {
         margin-bottom: 40px;

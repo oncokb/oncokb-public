@@ -27,6 +27,7 @@ angular.module('oncokbStaticApp')
                     }).join(', ') : '';
                 }
                 scope.content = {
+                    currentQuery: '',
                     selectedGene: '',
                     loadingSearchResult: false
                 };
@@ -43,6 +44,7 @@ angular.module('oncokbStaticApp')
                 };
 
                 scope.searchKeyUp = function(query) {
+                    scope.content.currentQuery = query;
                     return api.blurSearch(query)
                         .then(function(resp) {
                             var result = resp;
