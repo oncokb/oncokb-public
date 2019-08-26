@@ -1,8 +1,9 @@
 package org.mskcc.cbio.oncokb.config;
 
 import org.mskcc.cbio.oncokb.security.*;
-import org.mskcc.cbio.oncokb.security.jwt.*;
+import org.mskcc.cbio.oncokb.security.uuid.*;
 
+import org.mskcc.cbio.oncokb.security.uuid.UUIDConfigurer;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
@@ -95,7 +96,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @formatter:on
     }
 
-    private JWTConfigurer securityConfigurerAdapter() {
-        return new JWTConfigurer(tokenProvider);
+//    private JWTConfigurer securityConfigurerAdapter() {
+//        return new JWTConfigurer(tokenProvider);
+//    }
+
+    private UUIDConfigurer securityConfigurerAdapter() {
+        return new UUIDConfigurer(tokenProvider);
     }
 }

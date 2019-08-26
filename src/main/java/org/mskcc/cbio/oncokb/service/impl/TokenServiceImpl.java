@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.service.TokenService;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.repository.TokenRepository;
@@ -9,8 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Token}.
@@ -63,6 +66,17 @@ public class TokenServiceImpl implements TokenService {
     public Optional<Token> findOne(Long id) {
         log.debug("Request to get Token : {}", id);
         return tokenRepository.findById(id);
+    }
+
+
+    @Override
+    public Optional<Token> findByToken(String token) {
+        return tokenRepository.findByToken(token);
+    }
+
+    @Override
+    public List<Token> findByUserIsCurrentUser() {
+        return tokenRepository.findByUserIsCurrentUser().stream().filter(token -> token.getExpiration().isAfter(LocalDate.now())).collect(Collectors.toList());
     }
 
     /**

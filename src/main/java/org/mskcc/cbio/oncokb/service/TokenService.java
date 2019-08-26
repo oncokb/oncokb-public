@@ -1,7 +1,9 @@
 package org.mskcc.cbio.oncokb.service;
 
 import org.mskcc.cbio.oncokb.domain.Token;
+import org.mskcc.cbio.oncokb.domain.User;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +36,9 @@ public interface TokenService {
      */
     Optional<Token> findOne(Long id);
 
+    Optional<Token> findByToken(String token);
+
+    List<Token> findByUserIsCurrentUser();
     /**
      * Delete the "id" token.
      *

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data  repository for the Token entity.
@@ -16,4 +17,5 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     @Query("select token from Token token where token.user.login = ?#{principal.username}")
     List<Token> findByUserIsCurrentUser();
 
+    Optional<Token> findByToken(String token);
 }
