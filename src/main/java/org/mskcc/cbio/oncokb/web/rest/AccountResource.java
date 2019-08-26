@@ -8,6 +8,7 @@ import org.mskcc.cbio.oncokb.service.MailService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.*;
 import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndPasswordVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
@@ -15,6 +16,7 @@ import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +42,9 @@ public class AccountResource {
     private final UserRepository userRepository;
 
     private final UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     private final MailService mailService;
 
@@ -103,7 +108,7 @@ public class AccountResource {
     @GetMapping("/account")
     public UserDTO getAccount() {
         return userService.getUserWithAuthorities()
-            .map(UserDTO::new)
+            .map(user -> userMapper.userToUserDTO(user))
             .orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
 
@@ -125,8 +130,8 @@ public class AccountResource {
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
-        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey(), userDTO.getImageUrl());
+        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail()
+            , userDTO.getJobTitle(), userDTO.getLangKey(), userDTO.getImageUrl());
     }
 
     /**

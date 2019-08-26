@@ -75,6 +75,20 @@ export const SettingsPage = (props: IUserSettingsProps) => {
               }}
               value={props.account.email}
             />
+            {/* Job Title */}
+            <AvField
+              className="form-control"
+              name="jobTitle"
+              label="Job Title"
+              id="jobTitle"
+              placeholder="Your job title"
+              validate={{
+                required: { value: true, errorMessage: 'Required.' },
+                minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
+                maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
+              }}
+              value={props.account.jobTitle}
+            />
             <Button color="primary" type="submit">
               Save
             </Button>

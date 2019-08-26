@@ -54,6 +54,17 @@ export const RegisterPage = (props: IRegisterProps) => {
                 maxLength: { value: 254, errorMessage: 'Your email cannot be longer than 50 characters.' }
               }}
             />
+            {/* Job Title */}
+            <AvField
+              name="jobTitle"
+              label="Job Title"
+              placeholder="Your job title"
+              validate={{
+                required: { value: true, errorMessage: 'Required.' },
+                minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
+                maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
+              }}
+            />
             <AvField
               name="firstPassword"
               label="New password"

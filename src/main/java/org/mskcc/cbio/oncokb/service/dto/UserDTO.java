@@ -4,6 +4,7 @@ import org.mskcc.cbio.oncokb.config.Constants;
 
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -31,6 +32,8 @@ public class UserDTO {
     @Size(max = 50)
     private String lastName;
 
+    private String jobTitle;
+
     @Email
     @Size(min = 5, max = 254)
     private String email;
@@ -57,7 +60,7 @@ public class UserDTO {
         // Empty constructor needed for Jackson.
     }
 
-    public UserDTO(User user) {
+    public UserDTO(User user, UserDetails userDetails) {
         this.id = user.getId();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
@@ -73,6 +76,9 @@ public class UserDTO {
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
+        if(userDetails != null) {
+            this.jobTitle = userDetails.getJobTitle();
+        }
     }
 
     public Long getId() {
@@ -113,6 +119,14 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
     public String getImageUrl() {
@@ -186,6 +200,7 @@ public class UserDTO {
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
+            ", jobTitle=" + jobTitle +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
             ", langKey='" + langKey + '\'' +

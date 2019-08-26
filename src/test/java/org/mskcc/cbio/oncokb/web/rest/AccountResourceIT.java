@@ -398,7 +398,7 @@ public class AccountResourceIT {
         assertThat(testUser4.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
         testUser4.get().setActivated(true);
-        userService.updateUser((new UserDTO(testUser4.get())));
+        userService.updateUser((new UserDTO(testUser4.get(), null)));
 
         // Register 4th (already activated) user
         restMvc.perform(

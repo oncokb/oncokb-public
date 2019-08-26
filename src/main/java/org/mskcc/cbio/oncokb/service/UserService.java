@@ -3,16 +3,20 @@ package org.mskcc.cbio.oncokb.service;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.service.util.RandomUtil;
 import org.mskcc.cbio.oncokb.web.rest.errors.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,14 +41,20 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final UserDetailsRepository userDetailsRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
 
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    @Autowired
+    private UserMapper userMapper;
+
+    public UserService(UserRepository userRepository, UserDetailsRepository userDetailsRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
         this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
@@ -118,6 +128,12 @@ public class UserService {
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(newUser);
+        userDetails.setJobTitle(userDTO.getJobTitle());
+        userDetailsRepository.save(userDetails);
+
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -173,7 +189,14 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(
+        String firstName
+        , String lastName
+        , String email
+        , String jobTitle
+        , String langKey
+        , String imageUrl
+    ) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -183,6 +206,8 @@ public class UserService {
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
                 this.clearUserCaches(user);
+
+                getUpdatedUserDetails(user, jobTitle);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -216,9 +241,23 @@ public class UserService {
                     .forEach(managedAuthorities::add);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
-                return user;
-            })
-            .map(UserDTO::new);
+
+                return new UserDTO(user, getUpdatedUserDetails(user, userDTO.getJobTitle()));
+            });
+    }
+
+    private UserDetails getUpdatedUserDetails(User user, String jobTitle) {
+        Optional<UserDetails> userDetails= userDetailsRepository.findOneByUser(user);
+        if(userDetails.isPresent()) {
+            userDetails.get().setJobTitle(jobTitle);
+            return userDetails.get();
+        }else{
+            UserDetails newUserDetails = new UserDetails();
+            newUserDetails.setJobTitle(jobTitle);
+            newUserDetails.setUser(user);
+            userDetailsRepository.save(newUserDetails);
+            return newUserDetails;
+        }
     }
 
     public void deleteUser(String login) {
@@ -246,7 +285,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
+        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(user -> userMapper.userToUserDTO(user));
     }
 
     @Transactional(readOnly = true)
