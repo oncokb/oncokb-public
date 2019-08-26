@@ -1,0 +1,30 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "",
+  "relationships": [
+    {
+      "relationshipName": "token",
+      "otherEntityName": "token",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "accessIp",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "resource",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20190826144658",
+  "dto": "no",
+  "searchEngine": false,
+  "service": "no",
+  "entityTableName": "token_stats",
+  "databaseType": "sql",
+  "jpaMetamodelFiltering": false,
+  "pagination": "no"
+}
