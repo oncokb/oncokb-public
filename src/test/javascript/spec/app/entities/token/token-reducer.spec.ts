@@ -21,6 +21,7 @@ import { IToken, defaultValue } from 'app/shared/model/token.model';
 describe('Entities reducer tests', () => {
   function isEmpty(element): boolean {
     if (element instanceof Array) {
+      return element.length === 0;
     } else {
       return Object.keys(element).length === 0;
     }
