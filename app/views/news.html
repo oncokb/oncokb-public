@@ -20,6 +20,47 @@
             <p ng-bind-html="data.citationURL"></p>
         </div>
 
+        <h3>August 28, 2019</h3>
+        <div>
+            <ul>
+                <li>Updated therapeutic implications - 1 new heme association
+                    <div class="row">
+                        <table class="table heme-table">
+                            <thead>
+                            <th class="col-xs-1">Level</th>
+                            <th class="col-xs-2">Gene</th>
+                            <th class="col-xs-2">Mutation</th>
+                            <th class="col-xs-2">Tumor Type</th>
+                            <th class="col-xs-2">Drug</th>
+                            <th class="col-xs-3">Evidence</th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>3A</td>
+                                <td>EZH2</td>
+                                <td>Oncogenic Mutations</td>
+                                <td>Follicular Lymphoma</td>
+                                <td>Tazemetostat</td>
+                                <td>
+                                    <a
+                                        href="https://library.ehaweb.org/eha/2018/stockholm/214434/gilles.salles.interim.update.from.a.phase.2.multicenter.study.of.tazemetostat.html?f=topic=1574*media=3%27"
+                                        target="_blank">Abstract:
+                                        Morschhauser et al. Abstract# S100, EHA 2018.</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+                <li>Addition of {{data.newlyAddedGenes['08282019'].length}} new genes:
+                    <div class="newly-added-genes">
+                        <span class="gene" ng-repeat="hugo in data.newlyAddedGenes['08282019']"><a
+                            href="gene/{{hugo}}">{{hugo}}</a></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
         <h3>August 4, 2019</h3>
         <div>
             <ul>
