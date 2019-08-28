@@ -8,7 +8,7 @@
     "baseName": "oncokb",
     "packageName": "org.mskcc.cbio.oncokb",
     "packageFolder": "org/mskcc/cbio/oncokb",
-    "serverPort": "8080",
+    "serverPort": "9090",
     "authenticationType": "jwt",
     "cacheProvider": "ehcache",
     "enableHibernateCache": true,

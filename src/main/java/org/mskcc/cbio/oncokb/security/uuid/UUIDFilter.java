@@ -34,6 +34,7 @@ public class UUIDFilter extends GenericFilterBean {
         if (StringUtils.hasText(uuid) && this.tokenProvider.validateToken(uuid)) {
             Authentication authentication = this.tokenProvider.getAuthentication(uuid);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+//            this.tokenProvider.addAccessRecord(uuid, servletRequest.getRemoteAddr());
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

@@ -71,7 +71,7 @@ spring:
     cache: false
 
 server:
-  port: 8080
+  port: 9090
 
 # ===================================================================
 # JHipster specific properties
@@ -101,7 +101,7 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://127.0.0.1:8080
+    base-url: http://127.0.0.1:9090
   metrics:
     logs: # Reports metrics in the logs
       enabled: false

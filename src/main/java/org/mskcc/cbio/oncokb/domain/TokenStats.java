@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * A TokenStats.
@@ -26,6 +27,9 @@ public class TokenStats implements Serializable {
 
     @Column(name = "resource")
     private String resource;
+
+    @Column(name = "access_time")
+    private LocalDate accessTime;
 
     @ManyToOne
     @JsonIgnoreProperties("tokenStats")
@@ -66,6 +70,19 @@ public class TokenStats implements Serializable {
         this.resource = resource;
     }
 
+    public LocalDate getAccessTime() {
+        return accessTime;
+    }
+
+    public TokenStats accessTime(LocalDate accessTime) {
+        this.accessTime = accessTime;
+        return this;
+    }
+
+    public void setAccessTime(LocalDate accessTime) {
+        this.accessTime = accessTime;
+    }
+
     public Token getToken() {
         return token;
     }
@@ -102,6 +119,7 @@ public class TokenStats implements Serializable {
             "id=" + getId() +
             ", accessIp='" + getAccessIp() + "'" +
             ", resource='" + getResource() + "'" +
+            ", accessTime='" + getAccessTime() + "'" +
             "}";
     }
 }

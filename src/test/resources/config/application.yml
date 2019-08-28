@@ -91,7 +91,7 @@ jhipster:
       queue-size: 512
   mail:
     from: test@localhost
-    base-url: http://127.0.0.1:8080
+    base-url: http://127.0.0.1:9090
   security:
     authentication:
       jwt:

@@ -104,6 +104,12 @@ export class TokenStatsUpdate extends React.Component<ITokenStatsUpdateProps, IT
                   <AvField id="token-stats-resource" type="text" name="resource" />
                 </AvGroup>
                 <AvGroup>
+                  <Label id="accessTimeLabel" for="token-stats-accessTime">
+                    Access Time
+                  </Label>
+                  <AvField id="token-stats-accessTime" type="date" className="form-control" name="accessTime" />
+                </AvGroup>
+                <AvGroup>
                   <Label for="token-stats-token">Token</Label>
                   <AvInput id="token-stats-token" type="select" className="form-control" name="token.id">
                     <option value="" key="0" />

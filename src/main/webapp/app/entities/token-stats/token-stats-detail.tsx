@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 // tslint:disable-next-line:no-unused-variable
-import { ICrudGetAction } from 'react-jhipster';
+import { ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -36,6 +36,12 @@ export class TokenStatsDetail extends React.Component<ITokenStatsDetailProps> {
               <span id="resource">Resource</span>
             </dt>
             <dd>{tokenStatsEntity.resource}</dd>
+            <dt>
+              <span id="accessTime">Access Time</span>
+            </dt>
+            <dd>
+              <TextFormat value={tokenStatsEntity.accessTime} type="date" format={APP_LOCAL_DATE_FORMAT} />
+            </dd>
             <dt>Token</dt>
             <dd>{tokenStatsEntity.token ? tokenStatsEntity.token.id : ''}</dd>
           </dl>

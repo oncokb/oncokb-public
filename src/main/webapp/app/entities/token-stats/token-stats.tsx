@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
 // tslint:disable-next-line:no-unused-variable
-import { ICrudGetAllAction } from 'react-jhipster';
+import { ICrudGetAllAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -38,6 +38,7 @@ export class TokenStats extends React.Component<ITokenStatsProps> {
                   <th>ID</th>
                   <th>Access Ip</th>
                   <th>Resource</th>
+                  <th>Access Time</th>
                   <th>Token</th>
                   <th />
                 </tr>
@@ -52,6 +53,9 @@ export class TokenStats extends React.Component<ITokenStatsProps> {
                     </td>
                     <td>{tokenStats.accessIp}</td>
                     <td>{tokenStats.resource}</td>
+                    <td>
+                      <TextFormat type="date" value={tokenStats.accessTime} format={APP_LOCAL_DATE_FORMAT} />
+                    </td>
                     <td>{tokenStats.token ? <Link to={`token/${tokenStats.token.id}`}>{tokenStats.token.id}</Link> : ''}</td>
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">

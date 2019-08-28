@@ -5,9 +5,11 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.mskcc.cbio.oncokb.domain.Token;
+import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.TokenRepository;
+import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.service.TokenService;
@@ -46,6 +48,9 @@ public class TokenProvider implements InitializingBean {
 
     @Autowired
     private TokenRepository tokenRepository;
+
+    @Autowired
+    private TokenStatsRepository tokenStatsRepository;
 
     @Autowired
     private AuthorityRepository authorityRepository;
@@ -117,5 +122,24 @@ public class TokenProvider implements InitializingBean {
             log.trace("JWT token compact of handler are invalid trace: {}", e);
         }
         return false;
+    }
+
+    public TokenStats addAccessRecord(String uuid, String accessIp) {
+        Optional<Token> tokenOptional = tokenRepository.findByToken(uuid);
+
+        if (tokenOptional.isPresent()) {
+            Token token = tokenOptional.get();
+            // When the token is used for each thread, we should record the usage
+            TokenStats tokenStats = new TokenStats();
+            tokenStats.setToken(token);
+
+            tokenStats.setAccessIp(accessIp);
+            tokenStats.setAccessTime(LocalDate.now());
+
+            tokenStatsRepository.save(tokenStats);
+
+            return tokenStats;
+        }
+        return null;
     }
 }

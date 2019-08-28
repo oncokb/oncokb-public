@@ -9,7 +9,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://oncokb-mysql:3306/oncokb?useUnicode=true&characterEncoding=utf8&useSSL=false
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     ports:
-      - 8080:8080
+      - 9090:9090
   oncokb-mysql:
     extends:
       file: mysql.yml

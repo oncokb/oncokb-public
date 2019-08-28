@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 import static org.mskcc.cbio.oncokb.web.rest.TestUtil.createFormattingConversionService;
@@ -39,6 +41,10 @@ public class TokenStatsResourceIT {
 
     private static final String DEFAULT_RESOURCE = "AAAAAAAAAA";
     private static final String UPDATED_RESOURCE = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_ACCESS_TIME = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_ACCESS_TIME = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_ACCESS_TIME = LocalDate.ofEpochDay(-1L);
 
     @Autowired
     private TokenStatsRepository tokenStatsRepository;
@@ -86,7 +92,8 @@ public class TokenStatsResourceIT {
     public static TokenStats createEntity(EntityManager em) {
         TokenStats tokenStats = new TokenStats()
             .accessIp(DEFAULT_ACCESS_IP)
-            .resource(DEFAULT_RESOURCE);
+            .resource(DEFAULT_RESOURCE)
+            .accessTime(DEFAULT_ACCESS_TIME);
         return tokenStats;
     }
     /**
@@ -98,7 +105,8 @@ public class TokenStatsResourceIT {
     public static TokenStats createUpdatedEntity(EntityManager em) {
         TokenStats tokenStats = new TokenStats()
             .accessIp(UPDATED_ACCESS_IP)
-            .resource(UPDATED_RESOURCE);
+            .resource(UPDATED_RESOURCE)
+            .accessTime(UPDATED_ACCESS_TIME);
         return tokenStats;
     }
 
@@ -124,6 +132,7 @@ public class TokenStatsResourceIT {
         TokenStats testTokenStats = tokenStatsList.get(tokenStatsList.size() - 1);
         assertThat(testTokenStats.getAccessIp()).isEqualTo(DEFAULT_ACCESS_IP);
         assertThat(testTokenStats.getResource()).isEqualTo(DEFAULT_RESOURCE);
+        assertThat(testTokenStats.getAccessTime()).isEqualTo(DEFAULT_ACCESS_TIME);
     }
 
     @Test
@@ -158,7 +167,8 @@ public class TokenStatsResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(tokenStats.getId().intValue())))
             .andExpect(jsonPath("$.[*].accessIp").value(hasItem(DEFAULT_ACCESS_IP.toString())))
-            .andExpect(jsonPath("$.[*].resource").value(hasItem(DEFAULT_RESOURCE.toString())));
+            .andExpect(jsonPath("$.[*].resource").value(hasItem(DEFAULT_RESOURCE.toString())))
+            .andExpect(jsonPath("$.[*].accessTime").value(hasItem(DEFAULT_ACCESS_TIME.toString())));
     }
     
     @Test
@@ -173,7 +183,8 @@ public class TokenStatsResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(tokenStats.getId().intValue()))
             .andExpect(jsonPath("$.accessIp").value(DEFAULT_ACCESS_IP.toString()))
-            .andExpect(jsonPath("$.resource").value(DEFAULT_RESOURCE.toString()));
+            .andExpect(jsonPath("$.resource").value(DEFAULT_RESOURCE.toString()))
+            .andExpect(jsonPath("$.accessTime").value(DEFAULT_ACCESS_TIME.toString()));
     }
 
     @Test
@@ -198,7 +209,8 @@ public class TokenStatsResourceIT {
         em.detach(updatedTokenStats);
         updatedTokenStats
             .accessIp(UPDATED_ACCESS_IP)
-            .resource(UPDATED_RESOURCE);
+            .resource(UPDATED_RESOURCE)
+            .accessTime(UPDATED_ACCESS_TIME);
 
         restTokenStatsMockMvc.perform(put("/api/token-stats")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -211,6 +223,7 @@ public class TokenStatsResourceIT {
         TokenStats testTokenStats = tokenStatsList.get(tokenStatsList.size() - 1);
         assertThat(testTokenStats.getAccessIp()).isEqualTo(UPDATED_ACCESS_IP);
         assertThat(testTokenStats.getResource()).isEqualTo(UPDATED_RESOURCE);
+        assertThat(testTokenStats.getAccessTime()).isEqualTo(UPDATED_ACCESS_TIME);
     }
 
     @Test
