@@ -1,6 +1,6 @@
 version: '2'
 services:
-  oncokb-mysql:
+  oncokb-public-gateway-mysql:
     image: mysql:8.0.16
     # volumes:
     #     - ~/volumes/jhipster/oncokb/mysql/:/var/lib/mysql/

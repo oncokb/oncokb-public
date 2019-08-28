@@ -72,7 +72,8 @@ public class V1Resource {
     @RequestMapping("/**")
     public String proxy(@RequestBody(required = false) String body, HttpMethod method, HttpServletRequest request)
         throws URISyntaxException {
-        URI uri = new URI(applicationProperties.getApiPod() + ":" + request.getRequestURI());
+        URI uri = new URI("http://" + applicationProperties.getApiPod() + ":" + applicationProperties.getApiPodPort() + request.getRequestURI());
+        log.info(uri.getPath());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         String contentType = request.getHeader("Content-Type");

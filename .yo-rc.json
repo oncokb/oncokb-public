@@ -33,6 +33,15 @@
     "enableTranslation": false,
     "blueprints": [],
     "clientFramework": "react",
-    "clientTheme": "none"
+    "clientTheme": "none",
+    "appsFolders": ["public-gateway"],
+    "directoryPath": "../",
+    "dockerRepositoryName": "oncokb-public-gateway",
+    "dockerPushCommand": "docker push",
+    "kubernetesNamespace": "default",
+    "kubernetesServiceType": "Ingress",
+    "ingressDomain": "localhost",
+    "monitoring": "no",
+    "istio": false
   }
 }

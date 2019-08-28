@@ -151,3 +151,4 @@ jhipster:
 
 application:
   api-pod: 'oncokb-core'
+  api-pod-port: 8888
