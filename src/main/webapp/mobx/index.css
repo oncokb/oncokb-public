@@ -1,0 +1,23 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', Georgia, sans-serif, serif;
+}
+
+.rc-tooltip {
+  opacity: 1 !important;
+}
+
+.btn-default {
+  background: rgba(0, 0, 0, 0.06);
+  font-size: 85%;
+}
+
+.badge {
+  font-size: 85%;
+}

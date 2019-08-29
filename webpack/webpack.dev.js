@@ -13,11 +13,14 @@ const commonConfig = require('./webpack.common.js');
 
 const ENV = 'development';
 
-module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
+module.exports = (options) => webpackMerge(commonConfig({
+  env: ENV,
+  app: options.app
+}), {
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
-    './src/main/webapp/app/index'
+    './src/main/webapp/' + options.app + '/index'
   ],
   output: {
     path: utils.root('target/classes/static/'),
