@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import { shallow } from 'enzyme';
 
-import { PrivateRouteComponent, hasAnyAuthority } from 'app/shared/auth/private-route';
+import { PrivateRouteComponent, hasAnyAuthority } from 'app-backup/shared/auth/private-route';
 
 const TestComp = () => <div>Test</div>;
 

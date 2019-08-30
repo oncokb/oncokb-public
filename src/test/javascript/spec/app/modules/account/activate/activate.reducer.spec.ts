@@ -4,8 +4,8 @@ import sinon from 'sinon';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 
-import { SUCCESS, FAILURE, REQUEST } from 'app/shared/reducers/action-type.util';
-import activate, { ACTION_TYPES, activateAction, reset } from 'app/modules/account/activate/activate.reducer';
+import { SUCCESS, FAILURE, REQUEST } from 'app-backup/shared/reducers/action-type.util';
+import activate, { ACTION_TYPES, activateAction, reset } from 'app-backup/modules/account/activate/activate.reducer';
 
 describe('Activate reducer tests', () => {
   it('should return the initial state', () => {

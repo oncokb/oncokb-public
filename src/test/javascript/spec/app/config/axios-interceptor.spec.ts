@@ -1,7 +1,7 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import setupAxiosInterceptors from 'app/config/axios-interceptor';
+import setupAxiosInterceptors from 'app-backup/config/axios-interceptor';
 
 describe('Axios Interceptor', () => {
   describe('setupAxiosInterceptors', () => {

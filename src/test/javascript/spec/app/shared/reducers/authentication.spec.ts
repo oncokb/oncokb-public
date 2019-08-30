@@ -1,4 +1,4 @@
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { REQUEST, SUCCESS, FAILURE } from 'app-backup/shared/reducers/action-type.util';
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
@@ -13,7 +13,7 @@ import authentication, {
   clearAuthentication,
   logout,
   clearAuthToken
-} from 'app/shared/reducers/authentication';
+} from 'app-backup/shared/reducers/authentication';
 
 describe('Authentication reducer tests', () => {
   function isAccountEmpty(state): boolean {

@@ -3,7 +3,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import * as toastify from 'react-toastify'; // synthetic default import doesn't work here due to mocking.
 import sinon from 'sinon';
 
-import notificationMiddleware from 'app/config/notification-middleware';
+import notificationMiddleware from 'app-backup/config/notification-middleware';
 
 describe('Notification Middleware', () => {
   let store;

@@ -1,39 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import 'typeface-open-sans';
 
-import DevTools from './config/devtools';
-import initStore from './config/store';
-import setupAxiosInterceptors from './config/axios-interceptor';
-import { clearAuthentication } from './shared/reducers/authentication';
-import ErrorBoundary from './shared/error/error-boundary';
-import AppComponent from './app';
-import { loadIcons } from './config/icon-loader';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import App from './App';
+import './index.css';
+import registerServiceWorker from './registerServiceWorker';
 
-const devTools = process.env.NODE_ENV === 'development' ? <DevTools /> : null;
+import 'bootstrap/dist/css/bootstrap.css';
+import 'cbioportal-frontend-commons/styles.css';
+import 'font-awesome/css/font-awesome.css';
 
-const store = initStore();
-
-const actions = bindActionCreators({ clearAuthentication }, store.dispatch);
-setupAxiosInterceptors(() => actions.clearAuthentication('login.error.unauthorized'));
-
-loadIcons();
-
-const rootEl = document.getElementById('root');
-
-const render = Component =>
-  ReactDOM.render(
-    <ErrorBoundary>
-      <Provider store={store}>
-        <div>
-          {/* If this slows down the app in dev disable it and enable when required  */}
-          {devTools}
-          <Component />
-        </div>
-      </Provider>
-    </ErrorBoundary>,
-    rootEl
-  );
-
-render(AppComponent);
+ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
+registerServiceWorker();

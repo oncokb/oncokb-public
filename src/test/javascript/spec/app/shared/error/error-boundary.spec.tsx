@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 
-import ErrorBoundary from 'app/shared/error/error-boundary';
+import ErrorBoundary from 'app-backup/shared/error/error-boundary';
 
 const ErrorComp = () => {
   throw new Error('test');

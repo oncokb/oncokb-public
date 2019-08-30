@@ -4,7 +4,7 @@ import axios from 'axios';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
-import { REQUEST, FAILURE, SUCCESS } from 'app/shared/reducers/action-type.util';
+import { REQUEST, FAILURE, SUCCESS } from 'app-backup/shared/reducers/action-type.util';
 import administration, {
   ACTION_TYPES,
   systemHealth,
@@ -15,7 +15,7 @@ import administration, {
   getConfigurations,
   getEnv,
   getAudits
-} from 'app/modules/administration/administration.reducer';
+} from 'app-backup/modules/administration/administration.reducer';
 
 describe('Administration reducer tests', () => {
   function isEmpty(element): boolean {

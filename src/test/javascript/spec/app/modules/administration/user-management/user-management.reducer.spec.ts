@@ -4,7 +4,7 @@ import axios from 'axios';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { REQUEST, SUCCESS, FAILURE } from 'app-backup/shared/reducers/action-type.util';
 import userManagement, {
   ACTION_TYPES,
   getUsers,
@@ -14,8 +14,8 @@ import userManagement, {
   updateUser,
   deleteUser,
   reset
-} from 'app/modules/administration/user-management/user-management.reducer';
-import { defaultValue } from 'app/shared/model/user.model';
+} from 'app-backup/modules/administration/user-management/user-management.reducer';
+import { defaultValue } from 'app-backup/shared/model/user.model';
 
 describe('User management reducer tests', () => {
   function isEmpty(element): boolean {

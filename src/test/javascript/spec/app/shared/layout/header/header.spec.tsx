@@ -4,9 +4,9 @@ import { shallow } from 'enzyme';
 import LoadingBar from 'react-redux-loading-bar';
 import { Navbar, Nav } from 'reactstrap';
 
-import { Home, Brand } from 'app/shared/layout/header/header-components';
-import { AdminMenu, EntitiesMenu, AccountMenu } from 'app/shared/layout/menus';
-import Header from 'app/shared/layout/header/header';
+import { Home, Brand } from 'app-backup/shared/layout/header/header-components';
+import { AdminMenu, EntitiesMenu, AccountMenu } from 'app-backup/shared/layout/menus';
+import Header from 'app-backup/shared/layout/header/header';
 
 describe('Header', () => {
   let mountedWrapper;

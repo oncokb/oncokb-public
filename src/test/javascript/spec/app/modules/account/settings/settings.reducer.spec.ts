@@ -1,12 +1,12 @@
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { REQUEST, SUCCESS, FAILURE } from 'app-backup/shared/reducers/action-type.util';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
 
-import account, { ACTION_TYPES, saveAccountSettings, reset } from 'app/modules/account/settings/settings.reducer';
-import { ACTION_TYPES as authActionTypes } from 'app/shared/reducers/authentication';
+import account, { ACTION_TYPES, saveAccountSettings, reset } from 'app-backup/modules/account/settings/settings.reducer';
+import { ACTION_TYPES as authActionTypes } from 'app-backup/shared/reducers/authentication';
 
 describe('Settings reducer tests', () => {
   describe('Common tests', () => {

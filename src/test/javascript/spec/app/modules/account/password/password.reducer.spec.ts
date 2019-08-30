@@ -4,8 +4,8 @@ import sinon from 'sinon';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import password, { ACTION_TYPES, savePassword, reset } from 'app/modules/account/password/password.reducer';
+import { REQUEST, SUCCESS, FAILURE } from 'app-backup/shared/reducers/action-type.util';
+import password, { ACTION_TYPES, savePassword, reset } from 'app-backup/modules/account/password/password.reducer';
 
 describe('Password reducer tests', () => {
   describe('Common tests', () => {

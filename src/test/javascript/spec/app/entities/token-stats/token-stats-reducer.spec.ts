@@ -13,9 +13,9 @@ import reducer, {
   getEntity,
   updateEntity,
   reset
-} from 'app/entities/token-stats/token-stats.reducer';
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { ITokenStats, defaultValue } from 'app/shared/model/token-stats.model';
+} from 'app-backup/entities/token-stats/token-stats.reducer';
+import { REQUEST, SUCCESS, FAILURE } from 'app-backup/shared/reducers/action-type.util';
+import { ITokenStats, defaultValue } from 'app-backup/shared/model/token-stats.model';
 
 // tslint:disable no-invalid-template-strings
 describe('Entities reducer tests', () => {

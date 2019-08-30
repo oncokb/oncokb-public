@@ -4,8 +4,8 @@ import sinon from 'sinon';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 
-import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
-import register, { ACTION_TYPES, handleRegister, reset } from 'app/modules/account/register/register.reducer';
+import { FAILURE, REQUEST, SUCCESS } from 'app-backup/shared/reducers/action-type.util';
+import register, { ACTION_TYPES, handleRegister, reset } from 'app-backup/modules/account/register/register.reducer';
 
 describe('Creating account tests', () => {
   const initialState = {
