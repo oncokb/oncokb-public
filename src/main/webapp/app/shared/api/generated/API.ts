@@ -1,4 +1,7 @@
+/* tslint:disable */
+import { Storage } from 'react-jhipster';
 import * as request from 'superagent';
+import { AUTH_TOKEN_KEY } from 'app/store/AuthenticationStore';
 
 type CallbackHandler = (err: any, res?: request.Response) => void;
 export type KeyAndPasswordVM = {
@@ -162,6 +165,10 @@ export default class API {
       req.set(key, headers[key]);
     });
 
+    const token = Storage.local.get(AUTH_TOKEN_KEY) || Storage.session.get(AUTH_TOKEN_KEY);
+    if (token) {
+      req.set('Authorization', `Bearer ${token}`);
+    }
     if (body) {
       req.send(body);
     }

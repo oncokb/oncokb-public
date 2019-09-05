@@ -35,6 +35,7 @@ class Home extends React.Component<IHomeProps> {
     return (
       <div>
         <AsyncTypeahead
+          id={'mainSearch'}
           isLoading={this.searchOptions.isPending}
           options={this.searchOptions.result}
           labelKey={(option: TypeaheadSearchResp) => `${option.link} ${option.annotation}`}
