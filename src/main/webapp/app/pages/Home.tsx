@@ -3,7 +3,7 @@ import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import { remoteData } from 'cbioportal-frontend-commons';
 import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
-import { Treatment, TypeaheadSearchResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { TypeaheadSearchResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import autobind from 'autobind-decorator';
 
@@ -17,16 +17,17 @@ class Home extends React.Component<IHomeProps> {
 
   readonly searchOptions = remoteData<TypeaheadSearchResp[]>({
     await: () => [],
-    invoke: () => {
+    invoke: async () => {
       return oncokbPrivateClient.searchTypeAheadGetUsingGET({
         query: this.keyword
       });
-    }
+    },
+    default: []
   });
 
   @autobind
   @action
-  onSearch(keyword) {
+  onSearch(keyword: string) {
     this.keyword = keyword;
   }
 

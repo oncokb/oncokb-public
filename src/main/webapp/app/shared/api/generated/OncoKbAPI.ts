@@ -1,3 +1,4 @@
+/* tslint:disable */
 import * as request from 'superagent';
 
 type CallbackHandler = (err: any, res?: request.Response) => void;
