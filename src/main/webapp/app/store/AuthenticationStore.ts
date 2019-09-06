@@ -49,7 +49,7 @@ class AuthenticationStore {
 
   @autobind
   @action
-  public login(username: string, password: string) {
+  public async login(username: string, password: string) {
     this.loading = true;
     client
       .authorizeUsingPOST({
