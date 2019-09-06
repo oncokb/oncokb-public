@@ -47,8 +47,11 @@ class Main extends React.Component<IMainPage> {
       <BrowserRouter>
         <div className="Main">
           <Header
-            isAuthenticated={this.props.authenticationStore.isAuthenticated}
-            isAdmin={this.isAuthorized(this.props.authenticationStore.account.authorities, [AUTHORITIES.ADMIN])}
+            isAuthenticated={this.props.authenticationStore.account && this.props.authenticationStore.isAuthenticated}
+            isAdmin={
+              this.props.authenticationStore.account &&
+              this.isAuthorized(this.props.authenticationStore.account.authorities, [AUTHORITIES.ADMIN])
+            }
             ribbonEnv={''}
             isInProduction={false}
             isSwaggerEnabled
@@ -71,7 +74,10 @@ class Main extends React.Component<IMainPage> {
                 path="/account"
                 authenticationStore={this.props.authenticationStore}
                 component={Account}
-                isAuthorized={this.isAuthorized(this.props.authenticationStore.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.USER])}
+                isAuthorized={
+                  this.props.authenticationStore.account &&
+                  this.isAuthorized(this.props.authenticationStore.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.USER])
+                }
               />
               <Route exact path="/" component={HomePage} />
               <Route exact path="/about" component={About} />

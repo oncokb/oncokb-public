@@ -175,7 +175,7 @@
     "prefer-template": false,
     "quotemark": [false, "double", "avoid-escape"],
     "return-undefined": true,
-    "semicolon": [true, "always"],
+    "semicolon": false,
     "space-before-function-paren": [
       false,
       {
