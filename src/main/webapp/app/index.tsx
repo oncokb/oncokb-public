@@ -10,5 +10,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'cbioportal-frontend-commons/styles.css';
 import 'font-awesome/css/font-awesome.css';
 
+import { loadIcons } from './config/icon-loader';
+loadIcons();
+
 ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
 registerServiceWorker();

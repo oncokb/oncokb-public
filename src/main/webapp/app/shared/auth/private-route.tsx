@@ -30,7 +30,7 @@ export const PrivateRoute = inject('authenticationStore')(
           <Redirect
             to={{
               pathname: '/login',
-              search: props.location.search,
+              search: props.location!.search,
               state: { from: props.location }
             }}
           />

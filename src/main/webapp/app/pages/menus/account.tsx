@@ -1,7 +1,7 @@
 import React from 'react';
-
-import { NavDropdown } from './menu-components';
+import NavDropdown from './menu-components';
 import MenuItem from 'app/pages/menus/menu-item';
+import { observer } from 'mobx-react';
 
 const accountMenuItemsAuthenticated = (
   <>
@@ -34,4 +34,4 @@ export const AccountMenu = ({ isAuthenticated = false }) => (
   </NavDropdown>
 );
 
-export default AccountMenu;
+export default observer(AccountMenu);

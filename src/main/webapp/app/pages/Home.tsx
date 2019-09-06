@@ -22,6 +22,9 @@ class Home extends React.Component<IHomeProps> {
         query: this.keyword
       });
     },
+    onError: () => {
+      // TODO:
+    },
     default: []
   });
 

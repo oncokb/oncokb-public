@@ -13,7 +13,7 @@ import { RegisterPage } from 'app/components/account/register';
 import { observer, inject } from 'mobx-react';
 import { PrivateRoute } from 'app/shared/auth/private-route';
 import { AUTHORITIES } from '../../app-backup/config/constants';
-import { Login } from 'app/components/login/login';
+import Login from 'app/components/login/login';
 import { Logout } from 'app/components/login/logout';
 
 // tslint:disable:space-in-parens
@@ -31,9 +31,6 @@ export interface IMainPage {
 @observer
 class Main extends React.Component<IMainPage> {
   public isAuthorized(userAuthorities: string[], hasAnyAuthorities: string[]) {
-    if (hasAnyAuthorities === undefined) {
-      return true;
-    }
     if (userAuthorities && userAuthorities.length !== 0) {
       if (hasAnyAuthorities.length === 0) {
         return true;

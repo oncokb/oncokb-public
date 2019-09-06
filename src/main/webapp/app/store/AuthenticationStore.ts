@@ -1,8 +1,8 @@
-import { observable } from 'mobx';
+import { observable, IReactionDisposer, reaction, action } from 'mobx';
 import { Storage } from 'react-jhipster';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
-import { UserDTO } from 'app/shared/api/generated/API';
+import { UserDTO, UUIDToken } from 'app/shared/api/generated/API';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -15,37 +15,70 @@ export const ACTION_TYPES = {
 export const AUTH_TOKEN_KEY = 'oncokb-authenticationToken';
 
 class AuthenticationStore {
-  @observable rememberMe = false;
+  @observable rememberMe = true;
   @observable loading = false;
   @observable isAuthenticated = false;
   @observable loginSuccess = false;
   @observable loginError = false; // Errors returned from server side
+  @observable loginErrorMessage = ''; // Errors returned from server side
   @observable showModalLogin = false;
-  @observable account: UserDTO = {} as UserDTO;
+  @observable account: UserDTO;
   @observable errorMessage = ''; // Errors returned from server side
   @observable redirectMessage = '';
   @observable sessionHasBeenFetched = false;
   @observable idToken = '';
   @observable logoutUrl = '';
 
-  constructor() {}
+  @observable userName = '';
+  @observable password = '';
+
+  private reactionDisposers: IReactionDisposer[] = [];
+
+  constructor() {
+    this.reactionDisposers.push(reaction(() => this.idToken, () => this.getAccount(), true));
+  }
 
   @autobind
-  public async login(username: string, password: string) {
-    this.loading = true;
-    const result = await client.authorizeUsingPOST({ loginVm: { username, password, rememberMe: false } });
+  public async getAccount() {
+    const account = await client.getAccountUsingGET({});
+    if (account) {
+      this.account = account;
+      this.isAuthenticated = true;
+    }
+  }
 
+  @autobind
+  @action
+  public login(username: string, password: string) {
+    this.loading = true;
+    client
+      .authorizeUsingPOST({
+        loginVm: {
+          username,
+          password,
+          rememberMe: this.rememberMe
+        }
+      })
+      .then(this.loginSuccessCallback, this.loginErrorCallback);
+  }
+
+  @action.bound
+  loginSuccessCallback(result: UUIDToken) {
     const jwt = result.id_token;
     if (this.rememberMe) {
       Storage.local.set(AUTH_TOKEN_KEY, jwt);
     } else {
       Storage.session.set(AUTH_TOKEN_KEY, jwt);
     }
-
-    this.account = await client.getAccountUsingGET({});
-    this.isAuthenticated = true;
+    this.idToken = jwt;
     this.loginSuccess = true;
     this.loading = false;
+  }
+
+  @action.bound
+  loginErrorCallback(error: Error) {
+    this.loginError = true;
+    this.loginErrorMessage = error.message;
   }
 
   public clearAuthToken() {
@@ -55,14 +88,15 @@ class AuthenticationStore {
     if (Storage.session.get(AUTH_TOKEN_KEY)) {
       Storage.session.remove(AUTH_TOKEN_KEY);
     }
+    this.idToken = '';
   }
 
+  @autobind
+  @action
   public logout() {
     this.clearAuthToken();
-  }
-
-  public clearAuthentication() {
-    this.clearAuthToken();
+    this.isAuthenticated = false;
+    this.loginSuccess = false;
   }
 }
 

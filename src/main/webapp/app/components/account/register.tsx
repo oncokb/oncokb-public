@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Row, Col, Alert, Button } from 'reactstrap';
-import PasswordStrengthBar from '../../../app-backup/shared/layout/password/password-strength-bar';
+import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 
 export type IRegisterProps = {
   handleRegister: (username: string, email: string, password: string) => void;

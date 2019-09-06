@@ -1,6 +1,8 @@
 import React from 'react';
 import AuthenticationStore from 'app/store/AuthenticationStore';
+import { inject } from 'mobx-react';
 
+@inject('authenticationStore')
 export class Logout extends React.Component<{ authenticationStore: AuthenticationStore }> {
   componentDidMount() {
     this.props.authenticationStore.logout();

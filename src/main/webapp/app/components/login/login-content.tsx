@@ -12,7 +12,7 @@ export interface ILoginModalProps {
 
 @observer
 class LoginContent extends React.Component<ILoginModalProps> {
-  handleSubmit = (event: any, errors: any, { username, password }) => {
+  handleSubmit = (event: any, errors: any, { username, password }: { username: string; password: string }) => {
     const { handleLogin } = this.props;
     handleLogin(username, password);
   };
