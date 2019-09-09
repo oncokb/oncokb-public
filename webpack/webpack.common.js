@@ -47,7 +47,7 @@ module.exports = options => ({
     ],
     modules: ['node_modules'],
     alias: {
-      app: utils.root('src/main/webapp/' + options.app + '/')
+      app: utils.root('src/main/webapp/app/')
     }
   },
   module: {
@@ -55,7 +55,7 @@ module.exports = options => ({
       {
         test: /\.tsx?$/,
         use: getTsLoaderRule(options.env),
-        include: [utils.root('./src/main/webapp/' + options.app)],
+        include: [utils.root('./src/main/webapp/app')],
         exclude: [utils.root('node_modules')]
       },
       {
