@@ -72,7 +72,9 @@ public class V1Resource {
     @RequestMapping("/**")
     public String proxy(@RequestBody(required = false) String body, HttpMethod method, HttpServletRequest request)
         throws URISyntaxException {
-        URI uri = new URI("http://" + applicationProperties.getApiPod() + ":" + applicationProperties.getApiPodPort() + request.getRequestURI());
+//        URI uri = new URI("http://" + applicationProperties.getApiPod() + ":" + applicationProperties.getApiPodPort() + request.getRequestURI());
+        String queryString = request.getQueryString();
+        URI uri = new URI("http://" + applicationProperties.getApiPod() + ":" + applicationProperties.getApiPodPort() + "/oncokb-public" + request.getRequestURI() + (queryString == null ? "" : "?" + queryString));
         log.info(uri.getPath());
 
         HttpHeaders httpHeaders = new HttpHeaders();

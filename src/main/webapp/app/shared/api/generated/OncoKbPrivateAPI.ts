@@ -1,5 +1,7 @@
 /* tslint:disable */
 import * as request from 'superagent';
+import { AUTH_TOKEN_KEY } from 'app/store/AuthenticationStore';
+import { Storage } from 'react-jhipster';
 
 type CallbackHandler = (err: any, res?: request.Response) => void;
 export type TreatmentDrug = {
@@ -638,6 +640,11 @@ export default class OncoKbPrivateAPI {
 
     if (body) {
       req.send(body);
+    }
+
+    const token = Storage.local.get(AUTH_TOKEN_KEY) || Storage.session.get(AUTH_TOKEN_KEY);
+    if (token) {
+      req.set('Authorization', `Bearer ${token}`);
     }
 
     if (typeof body === 'object' && !(body.constructor.name === 'Buffer')) {

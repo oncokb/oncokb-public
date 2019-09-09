@@ -39,6 +39,8 @@ public interface TokenService {
     Optional<Token> findByToken(String token);
 
     List<Token> findByUserIsCurrentUser();
+
+    List<Token> findByUser(User user);
     /**
      * Delete the "id" token.
      *

@@ -13,7 +13,7 @@ const Login = inject('authenticationStore')((props: ILoginProps) => {
   const handleLogin = (username: string, password: string, rememberMe = false) => props.authenticationStore.login(username, password);
 
   const { from } = props.location.state || { from: { pathname: '/', search: location.search } };
-  if (props.authenticationStore.isAuthenticated) {
+  if (props.authenticationStore.isUserAuthenticated) {
     props.authenticationStore.loginError = false;
     return <Redirect to={from} />;
   }

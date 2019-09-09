@@ -1,8 +1,10 @@
-import { observable, IReactionDisposer, reaction, action } from 'mobx';
+import { observable, IReactionDisposer, reaction, action, computed } from 'mobx';
 import { Storage } from 'react-jhipster';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
 import { UserDTO, UUIDToken } from 'app/shared/api/generated/API';
+import { AUTHORITIES } from '../../app-backup/config/constants';
+import * as _ from 'lodash';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -45,6 +47,11 @@ class AuthenticationStore {
       this.account = account;
       this.isAuthenticated = true;
     }
+  }
+
+  @computed
+  get isUserAuthenticated() {
+    return this.isAuthenticated && _.intersection([AUTHORITIES.ADMIN, AUTHORITIES.USER], this.account.authorities).length > 0;
   }
 
   @autobind

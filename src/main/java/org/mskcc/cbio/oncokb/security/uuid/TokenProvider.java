@@ -4,6 +4,7 @@ import io.github.jhipster.config.JHipsterProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.domain.User;
@@ -11,6 +12,7 @@ import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.TokenRepository;
 import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.service.TokenService;
 import org.mskcc.cbio.oncokb.service.UserService;
@@ -29,6 +31,8 @@ import javax.swing.text.html.Option;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,6 +44,7 @@ public class TokenProvider implements InitializingBean {
     private static final String AUTHORITIES_KEY = "auth";
 
     private static final int EXPIRATION_TIME_IN_DAYS = 30;
+    private static final int EXPIRATION_TIME_IN_MINUTES = 10;
 
     private Key key;
 
@@ -81,22 +86,43 @@ public class TokenProvider implements InitializingBean {
 //                .getTokenValidityInSecondsForRememberMe();
     }
 
-    public String createToken(Authentication authentication) {
+    private Token getNewToken(Set<Authority> authorities) {
         Token token = new Token();
-        LocalDate currentTime = LocalDate.now();
-        LocalDate expirationTime = currentTime.plusDays(EXPIRATION_TIME_IN_DAYS);
-        token.setCreation(currentTime);
-        token.setExpiration(expirationTime);
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime expirationTime = authorities.stream().filter(
+            authority -> authority.getName().equalsIgnoreCase(AuthoritiesConstants.PUBLIC_WEBSITE)).count() > 0 ?
+            LocalDateTime.now().plusMinutes(EXPIRATION_TIME_IN_MINUTES) : currentTime.plusHours(24 * EXPIRATION_TIME_IN_DAYS);
+        token.setCreation(currentTime.toLocalDate());
+        token.setExpiration(expirationTime.toLocalDate());
 
         token.setToken(UUID.randomUUID().toString());
+        return token;
+    }
 
+    public String createToken(Authentication authentication) {
         Optional<User> userOptional = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        Token token = getNewToken(userOptional.get().getAuthorities());
         token.setUser(userOptional.get());
         tokenRepository.save(token);
         return token.getToken();
     }
 
-
+    public Optional<String> getPubWebToken() {
+        Optional<User> user = userRepository.findOneByEmailIgnoreCase("user@localhost");
+        if (user.isPresent()) {
+            Token userToken = new Token();
+            List<Token> tokenList = tokenRepository.findByUser(user.get());
+            if (tokenList.isEmpty()) {
+                Token newToken = getNewToken(user.get().getAuthorities());
+                newToken.setUser(user.get());
+                userToken = tokenRepository.save(newToken);
+            } else {
+                userToken = tokenList.iterator().next();
+            }
+            return Optional.of(userToken.getToken());
+        }
+        return Optional.empty();
+    }
 
     public Authentication getAuthentication(String token) {
         Optional<Token> tokenOptional = tokenRepository.findByToken(token);
@@ -113,7 +139,7 @@ public class TokenProvider implements InitializingBean {
     public boolean validateToken(String tokenValue) {
         try {
             Optional<Token> token = tokenRepository.findByToken(tokenValue);
-            if(token.isPresent() && token.get().getExpiration().isAfter(LocalDate.now())) {
+            if (token.isPresent() && token.get().getExpiration().isAfter(LocalDate.now())) {
                 return true;
             }
             return false;

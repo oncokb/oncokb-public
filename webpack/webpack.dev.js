@@ -19,7 +19,8 @@ module.exports = (options) => webpackMerge(commonConfig({
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
-    './src/main/webapp/app/index'
+    './src/main/webapp/app/serverConfigs.js',
+    './src/main/webapp/app/index',
   ],
   output: {
     path: utils.root('target/classes/static/'),
@@ -52,7 +53,7 @@ module.exports = (options) => webpackMerge(commonConfig({
         '/h2-console',
         '/auth'
       ],
-      target: `http${options.tls ? 's' : ''}://localhost:9090`,
+      target: `http${options.tls ? 's' : ''}://localhost:9095`,
       secure: false,
       changeOrigin: options.tls
     }],

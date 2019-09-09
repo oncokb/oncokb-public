@@ -10,7 +10,7 @@ import { observer } from 'mobx-react';
 import { AccountMenu } from 'app/pages/menus';
 
 export interface IHeaderProps {
-  isAuthenticated: boolean;
+  isUserAuthenticated: boolean;
   isAdmin: boolean;
   ribbonEnv: string;
   isInProduction: boolean;
@@ -38,7 +38,10 @@ class Header extends React.Component<IHeaderProps> {
                 <LinkContainer exact to="/about" className="mr-auto">
                   <Nav.Link>About</Nav.Link>
                 </LinkContainer>
-                <AccountMenu isAuthenticated={this.props.isAuthenticated} />
+                <LinkContainer exact to="/dataAccess" className="mr-auto">
+                  <Nav.Link>Data Access</Nav.Link>
+                </LinkContainer>
+                <AccountMenu isAuthenticated={this.props.isUserAuthenticated} />
               </Nav>
             </Navbar.Collapse>
           </Container>

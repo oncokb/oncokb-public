@@ -79,6 +79,11 @@ public class TokenServiceImpl implements TokenService {
         return tokenRepository.findByUserIsCurrentUser().stream().filter(token -> token.getExpiration().isAfter(LocalDate.now())).collect(Collectors.toList());
     }
 
+    @Override
+    public List<Token> findByUser(User user) {
+        return tokenRepository.findByUser(user).stream().filter(token -> token.getExpiration().isAfter(LocalDate.now())).collect(Collectors.toList());
+    }
+
     /**
      * Delete the token by id.
      *

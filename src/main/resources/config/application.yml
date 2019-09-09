@@ -150,5 +150,7 @@ jhipster:
 # ===================================================================
 
 application:
-  api-pod: 'oncokb-core'
-  api-pod-port: 8888
+  #  api-pod: 'oncokb-core'
+  #  api-pod-port: 8888
+  api-pod: 'localhost'
+  api-pod-port: 8080
