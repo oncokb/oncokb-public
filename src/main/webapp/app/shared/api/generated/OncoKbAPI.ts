@@ -859,11 +859,6 @@ export default class OncoKbAPI {
       req.set('Content-Type', 'application/json');
     }
 
-    const token = Storage.local.get(AUTH_TOKEN_KEY) || Storage.session.get(AUTH_TOKEN_KEY);
-    if (token) {
-      req.set('Authorization', `Bearer ${token}`);
-    }
-
     if (Object.keys(form).length > 0) {
       req.type('form');
       req.send(form);

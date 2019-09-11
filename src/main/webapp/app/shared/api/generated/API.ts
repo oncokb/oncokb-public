@@ -165,10 +165,6 @@ export default class API {
       req.set(key, headers[key]);
     });
 
-    const token = Storage.local.get(AUTH_TOKEN_KEY) || Storage.session.get(AUTH_TOKEN_KEY);
-    if (token) {
-      req.set('Authorization', `Bearer ${token}`);
-    }
     if (body) {
       req.send(body);
     }

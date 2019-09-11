@@ -642,11 +642,6 @@ export default class OncoKbPrivateAPI {
       req.send(body);
     }
 
-    const token = Storage.local.get(AUTH_TOKEN_KEY) || Storage.session.get(AUTH_TOKEN_KEY);
-    if (token) {
-      req.set('Authorization', `Bearer ${token}`);
-    }
-
     if (typeof body === 'object' && !(body.constructor.name === 'Buffer')) {
       req.set('Content-Type', 'application/json');
     }
