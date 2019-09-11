@@ -4,12 +4,10 @@ import * as superagent from 'superagent';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './App';
-import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'cbioportal-frontend-commons/styles.css';
 import 'font-awesome/css/font-awesome.css';
+import './index.scss';
 
 import { loadIcons } from './config/icon-loader';
 import { assignPublicToken } from 'app/indexUtils';

@@ -111,7 +111,14 @@ class AuthenticationStore {
 
     // Revert back to public website token
     assignPublicToken();
-    this.getAccount().then();
+    this.getAccount().then(
+      () => {
+        return;
+      },
+      () => {
+        return;
+      }
+    );
   }
 }
 

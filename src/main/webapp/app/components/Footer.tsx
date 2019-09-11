@@ -4,46 +4,75 @@ import { Link } from 'react-router-dom';
 
 import MskccLogo from './MskccLogo';
 
-import './Footer.css';
+import styles from './Footer.module.scss';
+import indexStyles from '../index.module.scss';
+import { CitationText } from 'app/components/CitationText';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-class Footer extends React.Component<{}> {
+class Footer extends React.Component<{ lastUpdate: string }> {
   public get externalLinkIcon() {
-    return <i className="fa fa-external-link" />;
+    return <FontAwesomeIcon icon={'external-link-alt'} />;
   }
 
   public get externalLinks() {
     return (
-      <div>
-        <a href="https://www.mskcc.org" target="_blank">
-          MSK {this.externalLinkIcon}
-        </a>
-        <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology" target="_blank">
-          CMO {this.externalLinkIcon}
-        </a>
-        <a href="https://www.genomenexus.org" target="_blank">
-          Genome Nexus {this.externalLinkIcon}
-        </a>
-        <a href="https://www.cbioportal.org" target="_blank">
-          cBioPortal {this.externalLinkIcon}
-        </a>
-      </div>
+      <>
+        <div className={'mb-2'}>
+          OncoKB is intended for research purposes only. Please review the{' '}
+          <Link to={'/terms'}>
+            <u className={indexStyles.orange}>usage terms</u>
+          </Link>
+          before continuing.
+        </div>
+        <div className={'mb-2'}>
+          <CitationText highlightLinkout={true} />
+        </div>
+        <div className={styles.footerAList}>
+          <a href="https://www.mskcc.org" target="_blank">
+            MSK {this.externalLinkIcon}
+          </a>
+          <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology" target="_blank">
+            CMO {this.externalLinkIcon}
+          </a>
+          <a href="http://www.questdiagnostics.com/home.html" target="_blank">
+            Quest Diagnostics {this.externalLinkIcon}/>
+          </a>
+          <a href="https://www.cbioportal.org" target="_blank">
+            cBioPortal {this.externalLinkIcon}
+          </a>
+          <a href="http://oncotree.mskcc.org" target="_blank">
+            OncoTree {this.externalLinkIcon}
+          </a>
+        </div>
+      </>
     );
   }
 
   public get internalLinks() {
     return (
-      <div>
-        <Link to="/about">About</Link>
-        <a href="mailto:info@msk-insight.org" target="_top">
-          Contact Us
-        </a>
-      </div>
+      <>
+        <div className={styles.footerAList}>
+          <Link to="/terms">Usage Terms</Link>
+          <a href="mailto:contact@oncokb.org" target="_blank">
+            Contact us
+          </a>
+          <a href="https://twitter.com/OncoKB" target="_blank">
+            Twitter
+          </a>
+          <a href="api/v1/swagger-ui.html" target="_blank">
+            API
+          </a>
+        </div>
+        <div className={styles.footerAList}>
+          <Link to="/news">Last update: {this.props.lastUpdate}</Link>
+        </div>
+      </>
     );
   }
 
   public render() {
     return (
-      <footer className="mskcc-footer bg-mskcc-footer d-none d-md-block">
+      <footer className={styles.footer}>
         <Container>
           <Row className="text-center">
             <Col>{this.externalLinks}</Col>

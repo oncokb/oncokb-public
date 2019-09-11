@@ -1,0 +1,13 @@
+@import 'variables';
+html {
+  font-size: $oncokb-font-font-size;
+
+  div {
+    font-size: $oncokb-font-font-size;
+  }
+}
+@import '~bootstrap/scss/bootstrap';
+
+.orange {
+  color: $oncokb-orange;
+}

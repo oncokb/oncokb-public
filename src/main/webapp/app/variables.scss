@@ -1,0 +1,7 @@
+@import '~oncokb-styles/scss/vars';
+$oncokb-font-font-size: 14px;
+
+// Overwrite the bootstrap defaults
+$font-family-sans-serif: 'Helvetica Neue', Helvetica, Verdana, Arial, sans-serif, serif;
+$blue: $oncokb-dark-blue;
+$orange: $oncokb-orange;
