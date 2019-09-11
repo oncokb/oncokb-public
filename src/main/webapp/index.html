@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en" dir="ltr">
+<html class="no-js" lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <base href="/" />
     <meta charset="utf-8">
@@ -71,14 +71,27 @@
     <noscript>
         <h1>You must enable javascript to view this page.</h1>
     </noscript>
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+
+      window.PUB_WEB_TOKEN = /*[[${@tokenProvider.getPubWebToken()}]]*/ '';
+
+      // settings for local test
+      if (!window.PUB_WEB_TOKEN && localStorage.pubWebToken) {
+        window.PUB_WEB_TOKEN = localStorage.pubWebToken;
+      }
+
+      /*]]>*/
+
+    </script>
     <script type="text/javascript" language="javascript">
         window.onload=function() {
             setTimeout(showError, 4000);
-        }
+        };
         function showError() {
-            var errorElm = document.getElementById("jhipster-error");
+            var errorElm = document.getElementById('jhipster-error');
             if (errorElm && errorElm.style) {
-                errorElm.style.display = "block";
+                errorElm.style.display = 'block';
             }
         }
     </script>

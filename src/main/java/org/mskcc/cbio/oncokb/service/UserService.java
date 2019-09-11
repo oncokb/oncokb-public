@@ -303,6 +303,11 @@ public class UserService {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
+    @Transactional(readOnly = true)
+    public Optional<User> getUserWithAuthoritiesByEmailIgnoreCase(String email) {
+        return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email);
+    }
+
     /**
      * Not activated users should be automatically deleted after 3 days.
      * <p>

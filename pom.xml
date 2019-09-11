@@ -435,6 +435,25 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <echo>Move index.html to template folder for thymeleaf</echo>
+                                <move quiet="true" file="${basedir}/target/classes/static/index.html" todir="${basedir}/target/classes/templates"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- jhipster-needle-maven-add-plugin -->
         </plugins>
         <pluginManagement>

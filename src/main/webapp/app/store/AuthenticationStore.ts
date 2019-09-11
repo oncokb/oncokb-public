@@ -5,6 +5,7 @@ import client from 'app/shared/api/clientInstance';
 import { UserDTO, UUIDToken } from 'app/shared/api/generated/API';
 import { AUTHORITIES } from '../../app-backup/config/constants';
 import * as _ from 'lodash';
+import { assignPublicToken } from 'app/indexUtils';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -98,12 +99,19 @@ class AuthenticationStore {
     this.idToken = '';
   }
 
+  public hasStoredToken() {
+    return Storage.local.get(AUTH_TOKEN_KEY) || Storage.session.get(AUTH_TOKEN_KEY);
+  }
+
   @autobind
   @action
   public logout() {
     this.clearAuthToken();
-    this.isAuthenticated = false;
     this.loginSuccess = false;
+
+    // Revert back to public website token
+    assignPublicToken();
+    this.getAccount().then();
   }
 }
 

@@ -36,7 +36,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component
+@Component("tokenProvider")
 public class TokenProvider implements InitializingBean {
 
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
@@ -52,7 +52,7 @@ public class TokenProvider implements InitializingBean {
     private UserRepository userRepository;
 
     @Autowired
-    private TokenRepository tokenRepository;
+    private TokenService tokenService;
 
     @Autowired
     private TokenStatsRepository tokenStatsRepository;
@@ -100,32 +100,32 @@ public class TokenProvider implements InitializingBean {
     }
 
     public String createToken(Authentication authentication) {
-        Optional<User> userOptional = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
         Token token = getNewToken(userOptional.get().getAuthorities());
         token.setUser(userOptional.get());
-        tokenRepository.save(token);
+        tokenService.save(token);
         return token.getToken();
     }
 
-    public Optional<String> getPubWebToken() {
-        Optional<User> user = userRepository.findOneByEmailIgnoreCase("user@localhost");
+    public String getPubWebToken() {
+        Optional<User> user = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("user@localhost");
         if (user.isPresent()) {
             Token userToken = new Token();
-            List<Token> tokenList = tokenRepository.findByUser(user.get());
+            List<Token> tokenList = tokenService.findByUser(user.get());
             if (tokenList.isEmpty()) {
                 Token newToken = getNewToken(user.get().getAuthorities());
                 newToken.setUser(user.get());
-                userToken = tokenRepository.save(newToken);
+                userToken = tokenService.save(newToken);
             } else {
                 userToken = tokenList.iterator().next();
             }
-            return Optional.of(userToken.getToken());
+            return userToken.getToken();
         }
-        return Optional.empty();
+        return null;
     }
 
     public Authentication getAuthentication(String token) {
-        Optional<Token> tokenOptional = tokenRepository.findByToken(token);
+        Optional<Token> tokenOptional = tokenService.findByToken(token);
 
         Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(tokenOptional.get().getUser().getLogin());
         Collection<? extends GrantedAuthority> authorities =
@@ -138,7 +138,7 @@ public class TokenProvider implements InitializingBean {
 
     public boolean validateToken(String tokenValue) {
         try {
-            Optional<Token> token = tokenRepository.findByToken(tokenValue);
+            Optional<Token> token = tokenService.findByToken(tokenValue);
             if (token.isPresent() && token.get().getExpiration().isAfter(LocalDate.now())) {
                 return true;
             }
@@ -151,7 +151,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     public TokenStats addAccessRecord(String uuid, String accessIp) {
-        Optional<Token> tokenOptional = tokenRepository.findByToken(uuid);
+        Optional<Token> tokenOptional = tokenService.findByToken(uuid);
 
         if (tokenOptional.isPresent()) {
             Token token = tokenOptional.get();

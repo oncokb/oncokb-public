@@ -59,16 +59,6 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         this.tokenProvider = tokenProvider;
     }
 
-    @Bean(name = "pubWebConfiguration")
-    public PubWebConfiguration pubWebConfiguration() {
-        PubWebConfiguration pubWebConfiguration = new PubWebConfiguration();
-        Optional<String> tokenString = tokenProvider.getPubWebToken();
-        if (tokenString.isPresent()) {
-            pubWebConfiguration.setPublicWebsiteToken(tokenString.get());
-        }
-        return pubWebConfiguration;
-    }
-
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         if (env.getActiveProfiles().length != 0) {

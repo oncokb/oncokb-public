@@ -121,7 +121,7 @@ module.exports = options => ({
       { from: './src/main/webapp/robots.txt', to: 'robots.txt' }
     ]),
     new HtmlWebpackPlugin({
-      template: './src/main/webapp/index.html',
+      template: '!!html-loader!./src/main/webapp/index.html',
       chunksSortMode: 'dependency',
       inject: 'body'
     }),
