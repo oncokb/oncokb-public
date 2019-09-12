@@ -35,7 +35,24 @@ module.exports = webpackMerge(commonConfig({
         loader: 'stripcomment-loader'
       },
       {
+        test: /\.module\.scss$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 2,
+              localIdentName: '[name]__[local]__[hash:base64:5]'
+            }
+          },
+          'sass-loader',
+          utils.sassResourcesLoader
+        ]
+      },
+      {
         test: /\.(sa|sc|c)ss$/,
+        exclude: /\.module\.scss$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -44,11 +61,11 @@ module.exports = webpackMerge(commonConfig({
             }
           },
           'css-loader',
-          'postcss-loader',
-          {
+          'postcss-loader', {
             loader: 'sass-loader',
-            options: { implementation: sass }
-          }
+            options: { sourceMap: false }
+          },
+          utils.sassResourcesLoader
         ]
       }
     ]

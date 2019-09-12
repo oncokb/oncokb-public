@@ -9,6 +9,7 @@ import fileDownload from 'js-file-download';
 import { Button, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CitationText } from 'app/components/CitationText';
+import classnames from 'classnames';
 
 enum DOWNLOAD_TYPE {
   ALL_CURATED_GENES,
@@ -102,14 +103,18 @@ export default class DataAccessPage extends React.Component<{ authenticationStor
         <div>
           <CitationText />
         </div>
-        <div className="top-download">
-          <Button size={'sm'} className={'mr-1'} onClick={() => this.downloadData(DOWNLOAD_TYPE.ALL_CURATED_GENES, 'allCuratedGenes.txt')}>
+        <div>
+          <Button
+            size={'sm'}
+            className={classnames('mr-1', 'mb-1')}
+            onClick={() => this.downloadData(DOWNLOAD_TYPE.ALL_CURATED_GENES, 'allCuratedGenes.txt')}
+          >
             <FontAwesomeIcon icon={'cloud-download-alt'} className={'mr-1'} fixedWidth />
             All Curated Genes
           </Button>
           <Button
             size={'sm'}
-            className={'mr-1'}
+            className={classnames('mr-1', 'mb-1')}
             onClick={() => this.downloadData(DOWNLOAD_TYPE.ALL_ANNOTATED_VARIANTS, 'allAnnotatedVariants.txt')}
           >
             <FontAwesomeIcon icon={'cloud-download-alt'} className={'mr-1'} fixedWidth />
@@ -117,7 +122,7 @@ export default class DataAccessPage extends React.Component<{ authenticationStor
           </Button>
           <Button
             size={'sm'}
-            className={'mr-1'}
+            className={classnames('mr-1', 'mb-1')}
             onClick={() => this.downloadData(DOWNLOAD_TYPE.ALL_ACTIONABLE_ALTERATIONS, 'allActionableVariants.txt')}
           >
             <FontAwesomeIcon icon={'cloud-download-alt'} className={'mr-1'} fixedWidth />

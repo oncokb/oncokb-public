@@ -1,0 +1,21 @@
+@include media-breakpoint-up(xs) {
+  $footer-height: 18rem;
+  .view-wrapper {
+    margin: 0 auto - ($footer-height);
+    padding: $view-wrapper-default-p-y 0 ($footer-height + $view-wrapper-default-p-y);
+  }
+  .footer {
+    height: $footer-height;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  $footer-height: 12rem;
+  .view-wrapper {
+    margin: 0 auto - ($footer-height);
+    padding: $view-wrapper-default-p-y 0 ($footer-height + $view-wrapper-default-p-y);
+  }
+  .footer {
+    height: $footer-height;
+  }
+}

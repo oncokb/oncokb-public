@@ -1,4 +1,3 @@
-@import 'variables';
 html {
   font-size: $oncokb-font-font-size;
 
@@ -6,7 +5,20 @@ html {
     font-size: $oncokb-font-font-size;
   }
 }
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.Main {
+  min-height: 100%;
+  position: relative;
+}
+
 @import '~bootstrap/scss/bootstrap';
+@import 'layout';
 
 .orange {
   color: $oncokb-orange;

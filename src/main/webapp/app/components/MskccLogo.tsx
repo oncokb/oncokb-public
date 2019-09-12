@@ -5,7 +5,7 @@ import mskLogo from '../resources/images/MSKLogo_fff.png';
 class MskccLogo extends React.Component<{ imageHeight?: number; className?: string }> {
   public render() {
     return (
-      <a href="http://mskcc.org" target="_blank" className={this.props.className}>
+      <a href="http://mskcc.org" target="_blank" className={this.props.className} style={{ display: 'block' }}>
         <img
           alt="mskcc-logo"
           src={mskLogo}

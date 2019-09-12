@@ -39,7 +39,8 @@ module.exports = (options) => webpackMerge(commonConfig({
               localIdentName:'[name]__[local]__[hash:base64:5]'
             }
           },
-          'sass-loader'
+          'sass-loader',
+          utils.sassResourcesLoader
         ]
 
       },
@@ -49,7 +50,8 @@ module.exports = (options) => webpackMerge(commonConfig({
         use: ['style-loader', 'css-loader', 'postcss-loader', {
             loader: 'sass-loader',
             options: { sourceMap: true }
-          }
+          },
+          utils.sassResourcesLoader
         ]
       }
     ]

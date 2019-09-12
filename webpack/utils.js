@@ -1,7 +1,15 @@
 const path = require('path');
 
 module.exports = {
-  root
+  root,
+  sassResourcesLoader:  {
+    loader:'sass-resources-loader',
+    options: {
+      resources:[
+        './src/main/webapp/app/variables.scss'
+      ]
+    }
+  }
 };
 
 const _root = path.resolve(__dirname, '..');

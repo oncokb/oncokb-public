@@ -8,6 +8,7 @@ import styles from './Footer.module.scss';
 import indexStyles from '../index.module.scss';
 import { CitationText } from 'app/components/CitationText';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classnames from 'classnames';
 
 class Footer extends React.Component<{ lastUpdate: string }> {
   public get externalLinkIcon() {
@@ -19,15 +20,15 @@ class Footer extends React.Component<{ lastUpdate: string }> {
       <>
         <div className={'mb-2'}>
           OncoKB is intended for research purposes only. Please review the{' '}
-          <Link to={'/terms'}>
-            <u className={indexStyles.orange}>usage terms</u>
-          </Link>
+          <Link to={'/terms'} className={indexStyles.orange}>
+            usage terms
+          </Link>{' '}
           before continuing.
         </div>
         <div className={'mb-2'}>
           <CitationText highlightLinkout={true} />
         </div>
-        <div className={styles.footerAList}>
+        <div className={classnames(styles.footerAList, 'mb-2')}>
           <a href="https://www.mskcc.org" target="_blank">
             MSK {this.externalLinkIcon}
           </a>
@@ -35,7 +36,7 @@ class Footer extends React.Component<{ lastUpdate: string }> {
             CMO {this.externalLinkIcon}
           </a>
           <a href="http://www.questdiagnostics.com/home.html" target="_blank">
-            Quest Diagnostics {this.externalLinkIcon}/>
+            Quest Diagnostics {this.externalLinkIcon}
           </a>
           <a href="https://www.cbioportal.org" target="_blank">
             cBioPortal {this.externalLinkIcon}
@@ -51,7 +52,7 @@ class Footer extends React.Component<{ lastUpdate: string }> {
   public get internalLinks() {
     return (
       <>
-        <div className={styles.footerAList}>
+        <div className={classnames(styles.footerAList, 'mb-2')}>
           <Link to="/terms">Usage Terms</Link>
           <a href="mailto:contact@oncokb.org" target="_blank">
             Contact us
@@ -63,7 +64,7 @@ class Footer extends React.Component<{ lastUpdate: string }> {
             API
           </a>
         </div>
-        <div className={styles.footerAList}>
+        <div className={classnames(styles.footerAList, 'mb-2')}>
           <Link to="/news">Last update: {this.props.lastUpdate}</Link>
         </div>
       </>
@@ -72,19 +73,19 @@ class Footer extends React.Component<{ lastUpdate: string }> {
 
   public render() {
     return (
-      <footer className={styles.footer}>
+      <footer className={classnames('footer', styles.footer)}>
         <Container>
           <Row className="text-center">
             <Col>{this.externalLinks}</Col>
           </Row>
           <Row className="text-center">
-            <Col md className="m-auto">
+            <Col lg md={12}>
               {this.internalLinks}
             </Col>
-            <Col md className="m-auto">
-              <MskccLogo imageHeight={50} />
+            <Col lg md={12}>
+              <MskccLogo imageHeight={50} className="mb-2" />
             </Col>
-            <Col md className="m-auto">
+            <Col lg md={12}>
               <div>&copy; 2019 Memorial Sloan Kettering Cancer Center</div>
             </Col>
           </Row>

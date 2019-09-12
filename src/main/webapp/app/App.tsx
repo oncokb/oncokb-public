@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Main from './pages/Main';
+import Main from './Main';
 import AppStore, { IAppConfig } from 'app/store/AppStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Provider } from 'mobx-react';
@@ -18,11 +18,9 @@ class App extends React.Component {
 
   public render() {
     return (
-      <div className="App">
-        <Provider {...this.stores}>
-          <Main {...this.stores} />
-        </Provider>
-      </div>
+      <Provider {...this.stores}>
+        <Main {...this.stores} />
+      </Provider>
     );
   }
 }
