@@ -17,8 +17,32 @@ export interface IHeaderProps {
   isSwaggerEnabled: boolean;
 }
 
+type SubpageLink = {
+  title: string;
+  link: string;
+};
+
 @observer
 class Header extends React.Component<IHeaderProps> {
+  private subPages: SubpageLink[] = [
+    { title: 'Levels of Evidence', link: 'levels' },
+    { title: 'Actionable Genes', link: 'actionableGenes' },
+    { title: 'Cancer Genes', link: 'cnacerGenes' },
+    { title: 'Data Access', link: 'dataAccess' },
+    { title: 'About', link: 'about' },
+    { title: 'Team', link: 'team' },
+    { title: 'News', link: 'news' },
+    { title: 'Terms', link: 'terms' }
+  ];
+
+  getLink(page: SubpageLink) {
+    return (
+      <LinkContainer exact to={`/${page.link}`} key={page.title} className={'mr-auto'}>
+        <Nav.Link>{page.title}</Nav.Link>
+      </LinkContainer>
+    );
+  }
+
   public render() {
     return (
       <header className="sticky-top">
@@ -26,21 +50,13 @@ class Header extends React.Component<IHeaderProps> {
           <Container>
             <Navbar.Brand>
               <Link to="/" className="brand-title-link">
-                <img className="logo-brand" width={100} src={oncokbImg} alt={'OncoKB'} />
+                <img height={38} src={oncokbImg} alt={'OncoKB'} />
               </Link>
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse>
-              <Nav className="d-flex">
-                <LinkContainer exact to="/">
-                  <Nav.Link>Home</Nav.Link>
-                </LinkContainer>
-                <LinkContainer exact to="/about" className="mr-auto">
-                  <Nav.Link>About</Nav.Link>
-                </LinkContainer>
-                <LinkContainer exact to="/dataAccess" className="mr-auto">
-                  <Nav.Link>Data Access</Nav.Link>
-                </LinkContainer>
+              <Nav className="">
+                {this.subPages.map(page => this.getLink(page))}
                 <AccountMenu isAuthenticated={this.props.isUserAuthenticated} />
               </Nav>
             </Navbar.Collapse>

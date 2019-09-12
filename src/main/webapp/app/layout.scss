@@ -4,6 +4,13 @@
     margin: 0 auto - ($footer-height);
     padding: $view-wrapper-default-p-y 0 ($footer-height + $view-wrapper-default-p-y);
   }
+  .navbar-nav > a {
+    padding: 0 0.25rem 0.25rem 0.25rem;
+    &,
+    #account-menu {
+      margin: 0.25rem 0;
+    }
+  }
   .footer {
     height: $footer-height;
   }
@@ -17,5 +24,13 @@
   }
   .footer {
     height: $footer-height;
+  }
+  .navbar-nav > a {
+    padding: 1rem 0.875rem;
+
+    &,
+    #account-menu {
+      margin: 0;
+    }
   }
 }
