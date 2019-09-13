@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
 import fileDownload from 'js-file-download';
-import { Button, Container } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CitationText } from 'app/components/CitationText';
 import classnames from 'classnames';
@@ -60,7 +60,7 @@ export default class DataAccessPage extends React.Component<{ authenticationStor
       );
     }
     return (
-      <Container>
+      <>
         <h6>
           By using OncoKB data, you are agreeing to the OncoKB{' '}
           <a href="terms">
@@ -129,7 +129,7 @@ export default class DataAccessPage extends React.Component<{ authenticationStor
             Actionable Alterations
           </Button>
         </div>
-      </Container>
+      </>
     );
   }
 }

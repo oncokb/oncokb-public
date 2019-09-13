@@ -1,15 +1,16 @@
 @include media-breakpoint-up(xs) {
   $footer-height: 18rem;
   .view-wrapper {
-    margin: 0 auto - ($footer-height);
+    margin: 0 0 -1 * $footer-height 0;
     padding: $view-wrapper-default-p-y 0 ($footer-height + $view-wrapper-default-p-y);
   }
   .navbar-nav > a {
     padding: 0 0.25rem 0.25rem 0.25rem;
-    &,
-    #account-menu {
-      margin: 0.25rem 0;
-    }
+    margin: 0.25rem 0;
+  }
+  #account-menu > a {
+    padding: 0 0.25rem 0.25rem 0.25rem;
+    margin: 0.25rem 0;
   }
   .footer {
     height: $footer-height;
@@ -25,12 +26,9 @@
   .footer {
     height: $footer-height;
   }
-  .navbar-nav > a {
-    padding: 1rem 0.875rem;
-
-    &,
-    #account-menu {
-      margin: 0;
-    }
+  .navbar-nav > a,
+  #account-menu > a {
+    padding: 1rem 0.875rem !important;
+    margin: 0;
   }
 }

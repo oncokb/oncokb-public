@@ -8,6 +8,7 @@ import { observer, inject } from 'mobx-react';
 import { AUTHORITIES } from '../app-backup/config/constants';
 import AppRouts from 'app/routes';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
+import { Container } from 'react-bootstrap';
 
 export interface IMainPage {
   appStore: AppStore;
@@ -34,14 +35,13 @@ class Main extends React.Component<IMainPage> {
           <div
             className={'view-wrapper'}
             style={{
-              marginLeft: '2rem',
-              marginRight: '2rem',
-              paddingTop: 20,
               fontSize: '1.25rem',
               color: '#2c3e50'
             }}
           >
-            <AppRouts />
+            <Container>
+              <AppRouts />
+            </Container>
           </div>
           <Footer lastUpdate={new Date().getDate().toString()} />
         </div>

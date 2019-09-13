@@ -25,10 +25,17 @@ body,
 }
 
 .navbar-nav > a {
-  line-height: 2.5rem;
+  line-height: 2.75rem;
+  border-bottom: 0.25rem solid $primary;
+
   &.active {
-    border-bottom: 0.25rem solid $oncokb-orange;
+    border-bottom-color: $oncokb-orange;
   }
+}
+
+#account-menu {
+  line-height: 2.75rem;
+  border-bottom: 0.25rem $primary;
 }
 
 .navbar-nav .nav-link {

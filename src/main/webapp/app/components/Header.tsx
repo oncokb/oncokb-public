@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 import oncokbImg from '../resources/images/oncokb-lg.png';
 
-import './Header.css';
 import { observer } from 'mobx-react';
 import { AccountMenu } from 'app/pages/menus';
 
@@ -46,16 +45,16 @@ class Header extends React.Component<IHeaderProps> {
   public render() {
     return (
       <header className="sticky-top">
-        <Navbar bg="mskcc-header" expand="lg" className="navbar-dark main-navbar">
+        <Navbar bg="primary" expand="lg" className="navbar-dark main-navbar">
           <Container>
             <Navbar.Brand>
-              <Link to="/" className="brand-title-link">
+              <Link to="/">
                 <img height={38} src={oncokbImg} alt={'OncoKB'} />
               </Link>
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse>
-              <Nav className="">
+              <Nav>
                 {this.subPages.map(page => this.getLink(page))}
                 <AccountMenu isAuthenticated={this.props.isUserAuthenticated} />
               </Nav>

@@ -10,8 +10,24 @@ $orange: $oncokb-orange;
 $primary: $blue;
 $secondary: $orange;
 
+$grid-breakpoints: (
+  xs: 0,
+  sm: 980px,
+  md: 980px,
+  lg: 1150px,
+  xl: 1450px
+) !default;
+
+$container-max-widths: (
+  sm: 970px,
+  md: 970px,
+  lg: 1100px,
+  xl: 1400px
+) !default;
+
 // nav overwrite
 $navbar-brand-height: 5rem;
+$navbar-brand-padding-y: 1rem;
 //$navbar-padding-x:0;
 $navbar-padding-y: 0;
 $nav-tabs-link-active-border-color: $orange;
