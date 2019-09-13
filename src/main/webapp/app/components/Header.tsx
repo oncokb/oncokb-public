@@ -7,6 +7,7 @@ import oncokbImg from '../resources/images/oncokb-lg.png';
 
 import { observer } from 'mobx-react';
 import { AccountMenu } from 'app/pages/menus';
+import WindowStore from 'app/store/WindowStore';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -14,6 +15,7 @@ export interface IHeaderProps {
   ribbonEnv: string;
   isInProduction: boolean;
   isSwaggerEnabled: boolean;
+  windowStore: WindowStore;
 }
 
 type SubpageLink = {
@@ -46,7 +48,7 @@ class Header extends React.Component<IHeaderProps> {
     return (
       <header className="sticky-top">
         <Navbar bg="primary" expand="lg" className="navbar-dark main-navbar">
-          <Container>
+          <Container fluid={!this.props.windowStore.isXLscreen}>
             <Navbar.Brand>
               <Link to="/">
                 <img height={38} src={oncokbImg} alt={'OncoKB'} />

@@ -12,17 +12,17 @@ $secondary: $orange;
 
 $grid-breakpoints: (
   xs: 0,
-  sm: 980px,
-  md: 980px,
-  lg: 1150px,
+  sm: 576px,
+  md: 768px,
+  lg: 980px,
   xl: 1450px
 ) !default;
 
 $container-max-widths: (
-  sm: 970px,
-  md: 970px,
-  lg: 1100px,
-  xl: 1400px
+  sm: 576px,
+  md: 768px,
+  lg: 980px,
+  xl: 1450px
 ) !default;
 
 // nav overwrite

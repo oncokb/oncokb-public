@@ -2,20 +2,15 @@ import * as React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Footer from './components/Footer';
 import Header from './components/Header';
-import AppStore from 'app/store/AppStore';
-import AuthenticationStore from 'app/store/AuthenticationStore';
-import { observer, inject } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { AUTHORITIES } from '../app-backup/config/constants';
 import AppRouts from 'app/routes';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { Container } from 'react-bootstrap';
+import { Stores } from 'app/App';
 
-export interface IMainPage {
-  appStore: AppStore;
-  authenticationStore: AuthenticationStore;
-}
+export type IMainPage = Stores;
 
-@inject('appStore', 'authenticationStore')
 @observer
 class Main extends React.Component<IMainPage> {
   public render() {
@@ -31,6 +26,7 @@ class Main extends React.Component<IMainPage> {
             ribbonEnv={''}
             isInProduction={false}
             isSwaggerEnabled
+            windowStore={this.props.windowStore}
           />
           <div
             className={'view-wrapper'}
@@ -39,7 +35,7 @@ class Main extends React.Component<IMainPage> {
               color: '#2c3e50'
             }}
           >
-            <Container>
+            <Container fluid={!this.props.windowStore.isXLscreen}>
               <AppRouts />
             </Container>
           </div>
