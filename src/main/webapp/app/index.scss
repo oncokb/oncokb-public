@@ -38,3 +38,10 @@ body,
   padding-left: $navbar-nav-link-padding-x;
   padding-right: $navbar-nav-link-padding-x;
 }
+
+.team {
+  ul {
+    padding-left: 0;
+    list-style-type: none;
+  }
+}
