@@ -15,6 +15,7 @@ import { inject } from 'mobx-react';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { TermsPage } from 'app/pages/TermsPage';
 import { TeamPage } from 'app/pages/TeamPage';
+import { NewsPage } from 'app/pages/NewsPage';
 
 // tslint:disable:space-in-parens
 const Account = Loadable({
@@ -32,6 +33,7 @@ const AppRouts = inject('authenticationStore')((props: { authenticationStore?: A
       <ErrorBoundaryRoute path="/dataAccess" component={DataAccessPage} />
       <ErrorBoundaryRoute path="/terms" component={TermsPage} />
       <ErrorBoundaryRoute path="/team" component={TeamPage} />
+      <ErrorBoundaryRoute path="/news" component={NewsPage} />
       <PrivateRoute
         path="/account"
         authenticationStore={props.authenticationStore!}

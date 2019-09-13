@@ -45,3 +45,50 @@ body,
     list-style-type: none;
   }
 }
+
+.news {
+  ul {
+    padding-left: 30px;
+    list-style: none;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  li:before {
+    font-family: 'FontAwesome';
+    content: '\f0a4';
+    margin: 0 0.5rem 0 -1rem;
+  }
+
+  ul.bullet li:before {
+    content: '\f111';
+    vertical-align: 20%;
+  }
+
+  .table th {
+    border-top: none;
+  }
+
+  //.table {
+  //  margin-bottom: 0;
+  //  ul {
+  //    padding-left: 17px;
+  //    list-style: none;
+  //  }
+  //  li {
+  //    margin-bottom: 0;
+  //  }
+  //  li:before {
+  //    font-size: 12px;
+  //  }
+  //}
+  //
+  //.table.heme-table {
+  //  th, td {
+  //    vertical-align: middle;
+  //    text-align: center;
+  //  }
+  //}
+}
