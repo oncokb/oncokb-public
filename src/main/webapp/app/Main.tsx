@@ -28,13 +28,7 @@ class Main extends React.Component<IMainPage> {
             isSwaggerEnabled
             windowStore={this.props.windowStore}
           />
-          <div
-            className={'view-wrapper'}
-            style={{
-              fontSize: '1.25rem',
-              color: '#2c3e50'
-            }}
-          >
+          <div className={'view-wrapper'}>
             <Container fluid={!this.props.windowStore.isXLscreen}>
               <AppRouts />
             </Container>

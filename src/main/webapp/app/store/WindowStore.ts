@@ -31,7 +31,7 @@ class WindowStore {
 
   @computed
   get isXLscreen() {
-    const result = this.size.width >= GRID_BREAKPOINTS.XL;
+    const result = this.size.width > GRID_BREAKPOINTS.XL;
     console.log(result);
     return result;
   }

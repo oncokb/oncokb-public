@@ -1,9 +1,17 @@
-@include media-breakpoint-up(xs) {
-  $footer-height: 18rem;
+@mixin sticky-footer($footer-height) {
   .view-wrapper {
-    margin: 0 0 -1 * $footer-height 0;
+    margin: 0 auto (-$footer-height);
     padding: $view-wrapper-default-p-y 0 ($footer-height + $view-wrapper-default-p-y);
   }
+  .footer {
+    height: $footer-height;
+  }
+}
+
+@include media-breakpoint-up(xs) {
+  $footer-height: 18rem;
+  @include sticky-footer($footer-height);
+
   .navbar-nav > a {
     padding: 0 0.25rem 0.25rem 0.25rem;
     margin: 0.25rem 0;
@@ -12,31 +20,17 @@
     padding: 0 0.25rem 0.25rem 0.25rem;
     margin: 0.25rem 0;
   }
-  .footer {
-    height: $footer-height;
-  }
 }
 
 @include media-breakpoint-up(md) {
-  $footer-height: 18rem;
-  .view-wrapper {
-    margin: 0 auto - ($footer-height);
-    padding: $view-wrapper-default-p-y 0 ($footer-height + $view-wrapper-default-p-y);
-  }
-  .footer {
-    height: $footer-height;
-  }
+  $footer-height: 16rem;
+  @include sticky-footer($footer-height);
 }
 
 @include media-breakpoint-up(lg) {
   $footer-height: 12rem;
-  .view-wrapper {
-    margin: 0 auto - ($footer-height);
-    padding: $view-wrapper-default-p-y 0 ($footer-height + $view-wrapper-default-p-y);
-  }
-  .footer {
-    height: $footer-height;
-  }
+  @include sticky-footer($footer-height);
+
   .navbar-nav > a,
   #account-menu > a {
     padding: 1rem 0.5rem !important;
