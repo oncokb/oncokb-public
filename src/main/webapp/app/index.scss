@@ -48,12 +48,12 @@ body,
 
 .news {
   ul {
-    padding-left: 30px;
+    padding-left: 2rem;
     list-style: none;
   }
 
   li {
-    margin-bottom: 10px;
+    margin-bottom: 0.75rem;
   }
 
   li:before {
@@ -64,11 +64,33 @@ body,
 
   ul.bullet li:before {
     content: '\f111';
+    font-size: 0.5rem;
     vertical-align: 20%;
   }
 
-  .table th {
-    border-top: none;
+  .table {
+    margin-bottom: 0;
+
+    ul {
+      padding-left: 1rem;
+      list-style: none;
+    }
+
+    li {
+      margin-bottom: 0;
+    }
+
+    li:before {
+      font-size: 0.875rem;
+    }
+
+    th {
+      border-top: none;
+    }
+  }
+
+  img {
+    width: 100%;
   }
 
   //.table {

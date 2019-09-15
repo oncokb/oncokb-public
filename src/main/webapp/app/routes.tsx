@@ -15,7 +15,7 @@ import { inject } from 'mobx-react';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { TermsPage } from 'app/pages/TermsPage';
 import { TeamPage } from 'app/pages/TeamPage';
-import { NewsPage } from 'app/pages/NewsPage';
+import { NewsPage } from 'app/pages/newsPage/NewsPage';
 
 // tslint:disable:space-in-parens
 const Account = Loadable({
