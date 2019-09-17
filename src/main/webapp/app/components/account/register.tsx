@@ -104,12 +104,12 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     return (
       <div>
         <Row className="justify-content-center">
-          <Col md="8">
+          <Col md="6">
             <h1 id="register-title">Registration</h1>
           </Col>
         </Row>
         <Row className="justify-content-center">
-          <Col md="8">
+          <Col md="6">
             <AvForm id="register-form" onValidSubmit={this.handleValidSubmit}>
               <AvField
                 name="username"

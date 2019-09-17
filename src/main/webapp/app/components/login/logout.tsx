@@ -4,6 +4,7 @@ import { inject } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import { Redirect } from 'react-router-dom';
+import { Row } from 'react-bootstrap';
 
 @inject('authenticationStore')
 @observer
@@ -31,9 +32,9 @@ export class Logout extends React.Component<{ authenticationStore: Authenticatio
       return <Redirect to={'/'} />;
     } else {
       return (
-        <div className="p-5">
+        <Row className="justify-content-center">
           <h4>Logged out successfully!</h4>
-        </div>
+        </Row>
       );
     }
   }
