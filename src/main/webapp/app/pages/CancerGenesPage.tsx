@@ -305,7 +305,7 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
       return Promise.resolve(
         _.reduce(
           this.cancerGenes.result,
-          (acc, cancerGene) => {
+          (cancerGenesAcc, cancerGene) => {
             const sourceKeys: (keyof CancerGene)[] = [
               'oncokbAnnotated',
               'mSKImpact',
@@ -315,22 +315,22 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
               'vogelstein',
               'sangerCGC'
             ];
-            acc.push({
+            cancerGenesAcc.push({
               ...cancerGene,
               numOfSources: _.reduce(
                 sourceKeys,
-                (acc, next) => {
+                (numOfSourcesAcc, next) => {
                   if (cancerGene[next]) {
-                    acc++;
+                    numOfSourcesAcc++;
                   }
-                  return acc;
+                  return numOfSourcesAcc;
                 },
                 0
               ),
               geneType: getGeneType(cancerGene.oncogene, cancerGene.tsg),
               annotated: !!annotatedGenes[cancerGene.entrezGeneId]
             });
-            return acc;
+            return cancerGenesAcc;
           },
           [] as ExtendCancerGene[]
         )

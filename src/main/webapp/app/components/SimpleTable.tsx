@@ -20,7 +20,7 @@ export const SimpleTable = (props: SimpleTableProps) => {
   return (
     <Table>
       <thead>
-        <tr className="row">
+        <tr>
           {props.columns.map(column => (
             <th key={column.name}>{column.name}</th>
           ))}
