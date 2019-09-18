@@ -8,6 +8,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 import 'font-awesome/css/font-awesome.css';
 import './index.scss';
+import 'react-table/react-table.css';
 
 import { loadIcons } from './config/icon-loader';
 import { assignPublicToken } from 'app/indexUtils';

@@ -16,6 +16,7 @@ import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { TermsPage } from 'app/pages/TermsPage';
 import { TeamPage } from 'app/pages/TeamPage';
 import { NewsPage } from 'app/pages/newsPage/NewsPage';
+import CancerGenesPage from 'app/pages/CancerGenesPage';
 
 // tslint:disable:space-in-parens
 const Account = Loadable({
@@ -34,6 +35,7 @@ const AppRouts = inject('authenticationStore')((props: { authenticationStore?: A
       <ErrorBoundaryRoute path="/terms" component={TermsPage} />
       <ErrorBoundaryRoute path="/team" component={TeamPage} />
       <ErrorBoundaryRoute path="/news" component={NewsPage} />
+      <ErrorBoundaryRoute path="/cancerGenes" component={CancerGenesPage} />
       <PrivateRoute
         path="/account"
         authenticationStore={props.authenticationStore!}

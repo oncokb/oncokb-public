@@ -28,7 +28,7 @@ class Header extends React.Component<IHeaderProps> {
   private subPages: SubpageLink[] = [
     { title: 'Levels of Evidence', link: 'levels' },
     { title: 'Actionable Genes', link: 'actionableGenes' },
-    { title: 'Cancer Genes', link: 'cnacerGenes' },
+    { title: 'Cancer Genes', link: 'cancerGenes' },
     { title: 'Data Access', link: 'dataAccess' },
     { title: 'About', link: 'about' },
     { title: 'Team', link: 'team' },
