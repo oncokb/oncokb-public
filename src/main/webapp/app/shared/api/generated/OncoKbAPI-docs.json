@@ -24,6 +24,10 @@
       "description": "OncoKB Drugs"
     },
     {
+      "name": "Genesets",
+      "description": "Genesets curated by OncoKB"
+    },
+    {
       "name": "Annotations",
       "description": "Providing annotation services"
     },
@@ -483,7 +487,7 @@
             "description": "Structural variant type",
             "required": true,
             "type": "string",
-            "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION"]
+            "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION", "UNKNOWN"]
           },
           {
             "name": "isFunctionalFusion",
@@ -1075,6 +1079,54 @@
         }
       }
     },
+    "/genesets": {
+      "get": {
+        "tags": ["Genesets"],
+        "summary": "genesetsGet",
+        "description": "Get list of currently curated genesets.",
+        "operationId": "genesetsGetUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Geneset"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/genesets/{uuid}": {
+      "get": {
+        "tags": ["Genesets"],
+        "summary": "genesetsUuidGet",
+        "description": "Find geneset by uuid",
+        "operationId": "genesetsUuidGetUsingGET",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Geneset UUID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Geneset"
+            }
+          }
+        }
+      }
+    },
     "/info": {
       "get": {
         "tags": ["Info"],
@@ -1197,7 +1249,7 @@
             "description": "Structural Variant Type.",
             "required": false,
             "type": "string",
-            "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION"]
+            "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION", "UNKNOWN"]
           },
           {
             "name": "consequence",
@@ -1722,7 +1774,7 @@
         },
         "svType": {
           "type": "string",
-          "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION"]
+          "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION", "UNKNOWN"]
         },
         "tumorType": {
           "type": "string"
@@ -1870,7 +1922,8 @@
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
-            "LEVEL_Dx3"
+            "LEVEL_Dx3",
+            "NO"
           ]
         },
         "tumorType": {
@@ -1881,78 +1934,44 @@
     "TumorType": {
       "type": "object",
       "properties": {
-        "NCI": {
-          "type": "array",
-          "description": "NCI Thesaurus Code(s).",
-          "items": {
-            "type": "string"
-          }
-        },
-        "UMLS": {
-          "type": "array",
-          "description": "Concept Unique Identifier(s).",
-          "items": {
-            "type": "string"
-          }
-        },
         "children": {
           "type": "object",
-          "description": "List of all available children tumor types.",
           "additionalProperties": {
             "$ref": "#/definitions/TumorType"
           }
         },
         "code": {
-          "type": "string",
-          "description": "Unique identifier representing OncoTree tumor types."
+          "type": "string"
         },
         "color": {
-          "type": "string",
-          "description": "Tumor type color."
-        },
-        "deprecated": {
-          "type": "boolean",
-          "example": false,
-          "description": "The indicater whether this code has been deprecated."
-        },
-        "history": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "type": "string"
         },
         "id": {
           "type": "integer",
-          "format": "int32",
-          "description": "the numarical identifier of tumor type."
+          "format": "int32"
         },
         "level": {
           "type": "integer",
-          "format": "int32",
-          "description": "-1"
-        },
-        "links": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Link"
-          }
+          "format": "int32"
         },
         "mainType": {
           "$ref": "#/definitions/MainType"
         },
         "name": {
-          "type": "string",
-          "description": "Tumor type name."
+          "type": "string"
         },
         "parent": {
-          "type": "string",
-          "description": "The parent node code."
+          "type": "string"
         },
         "tissue": {
+          "type": "string"
+        },
+        "tumorForm": {
           "type": "string",
-          "description": "The tissue this tumor type belongs to."
+          "enum": ["SOLID", "LIQUID"]
         }
-      }
+      },
+      "description": "OncoTree Detailed Cancer Type"
     },
     "Gene": {
       "type": "object",
@@ -1971,6 +1990,12 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        },
+        "genesets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Geneset"
           }
         },
         "hugoSymbol": {
@@ -2121,6 +2146,10 @@
           "type": "string",
           "format": "date-time"
         },
+        "lastReview": {
+          "type": "string",
+          "format": "date-time"
+        },
         "levelOfEvidence": {
           "type": "string",
           "enum": [
@@ -2139,14 +2168,56 @@
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
-            "LEVEL_Dx3"
+            "LEVEL_Dx3",
+            "NO"
+          ]
+        },
+        "liquidPropagationLevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_0",
+            "LEVEL_1",
+            "LEVEL_2A",
+            "LEVEL_2B",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_R3",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "NO"
           ]
         },
         "oncoTreeType": {
           "$ref": "#/definitions/TumorType"
         },
-        "propagation": {
-          "type": "string"
+        "solidPropagationLevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_0",
+            "LEVEL_1",
+            "LEVEL_2A",
+            "LEVEL_2B",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_R3",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "NO"
+          ]
         },
         "subtype": {
           "type": "string"
@@ -2156,6 +2227,9 @@
           "items": {
             "$ref": "#/definitions/Treatment"
           }
+        },
+        "uuid": {
+          "type": "string"
         }
       }
     },
@@ -2176,7 +2250,7 @@
         },
         "structuralVariantType": {
           "type": "string",
-          "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION"]
+          "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION", "UNKNOWN"]
         },
         "tumorType": {
           "type": "string"
@@ -2225,7 +2299,8 @@
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
-            "LEVEL_Dx3"
+            "LEVEL_Dx3",
+            "NO"
           ]
         },
         "highestPrognosticImplicationLevel": {
@@ -2246,7 +2321,8 @@
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
-            "LEVEL_Dx3"
+            "LEVEL_Dx3",
+            "NO"
           ]
         },
         "highestResistanceLevel": {
@@ -2267,7 +2343,8 @@
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
-            "LEVEL_Dx3"
+            "LEVEL_Dx3",
+            "NO"
           ]
         },
         "highestSensitiveLevel": {
@@ -2288,7 +2365,8 @@
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
-            "LEVEL_Dx3"
+            "LEVEL_Dx3",
+            "NO"
           ]
         },
         "hotspot": {
@@ -2323,7 +2401,8 @@
               "LEVEL_Px3",
               "LEVEL_Dx1",
               "LEVEL_Dx2",
-              "LEVEL_Dx3"
+              "LEVEL_Dx3",
+              "NO"
             ]
           }
         },
@@ -2347,7 +2426,8 @@
               "LEVEL_Px3",
               "LEVEL_Dx1",
               "LEVEL_Dx2",
-              "LEVEL_Dx3"
+              "LEVEL_Dx3",
+              "NO"
             ]
           }
         },
@@ -2463,7 +2543,8 @@
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
-            "LEVEL_Dx3"
+            "LEVEL_Dx3",
+            "NO"
           ]
         }
       }
@@ -2571,7 +2652,8 @@
               "LEVEL_Px3",
               "LEVEL_Dx1",
               "LEVEL_Dx2",
-              "LEVEL_Dx3"
+              "LEVEL_Dx3",
+              "NO"
             ]
           }
         },
@@ -2646,15 +2728,17 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int32",
-          "description": "the numarical identifier of tumor type."
+          "format": "int32"
         },
         "name": {
+          "type": "string"
+        },
+        "tumorForm": {
           "type": "string",
-          "description": "Tumor type name."
+          "enum": ["SOLID", "LIQUID"]
         }
       },
-      "description": "General tumor type category."
+      "description": "OncoTree Cancer Type"
     },
     "OncoKBInfo": {
       "type": "object",
@@ -2760,7 +2844,8 @@
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
-            "LEVEL_Dx3"
+            "LEVEL_Dx3",
+            "NO"
           ]
         },
         "pmids": {
@@ -2900,7 +2985,8 @@
               "LEVEL_Px3",
               "LEVEL_Dx1",
               "LEVEL_Dx2",
-              "LEVEL_Dx3"
+              "LEVEL_Dx3",
+              "NO"
             ]
           }
         },
@@ -2993,6 +3079,27 @@
         }
       }
     },
+    "Geneset": {
+      "type": "object",
+      "properties": {
+        "genes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Gene"
+          }
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      }
+    },
     "Citations": {
       "type": "object",
       "properties": {
@@ -3007,20 +3114,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "Link": {
-      "type": "object",
-      "properties": {
-        "href": {
-          "type": "string"
-        },
-        "method": {
-          "type": "string"
-        },
-        "rel": {
-          "type": "string"
         }
       }
     }

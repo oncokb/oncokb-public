@@ -1,7 +1,5 @@
 /* tslint:disable */
 import * as request from 'superagent';
-import { AUTH_TOKEN_KEY } from 'app/store/AuthenticationStore';
-import { Storage } from 'react-jhipster';
 
 type CallbackHandler = (err: any, res?: request.Response) => void;
 export type TreatmentDrug = {
@@ -28,7 +26,7 @@ export type Query = {
 
   proteinStart: number;
 
-  svType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION';
+  svType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION' | 'UNKNOWN';
 
   tumorType: string;
 
@@ -123,7 +121,8 @@ export type VariantAnnotation = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   highestPrognosticImplicationLevel:
     | 'LEVEL_0'
@@ -141,7 +140,8 @@ export type VariantAnnotation = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   highestResistanceLevel:
     | 'LEVEL_0'
@@ -159,7 +159,8 @@ export type VariantAnnotation = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   highestSensitiveLevel:
     | 'LEVEL_0'
@@ -177,7 +178,8 @@ export type VariantAnnotation = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   hotspot: boolean;
 
@@ -204,6 +206,7 @@ export type VariantAnnotation = {
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
     | 'LEVEL_Dx3'
+    | 'NO'
   >;
 
   otherSignificantSensitiveLevels: Array<
@@ -223,6 +226,7 @@ export type VariantAnnotation = {
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
     | 'LEVEL_Dx3'
+    | 'NO'
   >;
 
   prognosticImplications: Array<Implication>;
@@ -285,7 +289,8 @@ export type Implication = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   tumorType: TumorType;
 };
@@ -322,7 +327,8 @@ export type LevelNumber = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 };
 export type Gene = {
   curatedIsoform: string;
@@ -333,6 +339,8 @@ export type Gene = {
 
   geneAliases: Array<string>;
 
+  genesets: Array<Geneset>;
+
   hugoSymbol: string;
 
   name: string;
@@ -342,25 +350,15 @@ export type Gene = {
   tsg: boolean;
 };
 export type TumorType = {
-  NCI: Array<string>;
-
-  UMLS: Array<string>;
-
   children: {};
 
   code: string;
 
   color: string;
 
-  deprecated: boolean;
-
-  history: Array<string>;
-
   id: number;
 
   level: number;
-
-  links: Array<Link>;
 
   mainType: MainType;
 
@@ -369,6 +367,8 @@ export type TumorType = {
   parent: string;
 
   tissue: string;
+
+  tumorForm: 'SOLID' | 'LIQUID';
 };
 export type ClinicalVariant = {
   cancerType: TumorType;
@@ -428,6 +428,8 @@ export type Evidence = {
 
   lastEdit: string;
 
+  lastReview: string;
+
   levelOfEvidence:
     | 'LEVEL_0'
     | 'LEVEL_1'
@@ -444,15 +446,54 @@ export type Evidence = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
+
+  liquidPropagationLevel:
+    | 'LEVEL_0'
+    | 'LEVEL_1'
+    | 'LEVEL_2A'
+    | 'LEVEL_2B'
+    | 'LEVEL_3A'
+    | 'LEVEL_3B'
+    | 'LEVEL_4'
+    | 'LEVEL_R1'
+    | 'LEVEL_R2'
+    | 'LEVEL_R3'
+    | 'LEVEL_Px1'
+    | 'LEVEL_Px2'
+    | 'LEVEL_Px3'
+    | 'LEVEL_Dx1'
+    | 'LEVEL_Dx2'
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   oncoTreeType: TumorType;
 
-  propagation: string;
+  solidPropagationLevel:
+    | 'LEVEL_0'
+    | 'LEVEL_1'
+    | 'LEVEL_2A'
+    | 'LEVEL_2B'
+    | 'LEVEL_3A'
+    | 'LEVEL_3B'
+    | 'LEVEL_4'
+    | 'LEVEL_R1'
+    | 'LEVEL_R2'
+    | 'LEVEL_R3'
+    | 'LEVEL_Px1'
+    | 'LEVEL_Px2'
+    | 'LEVEL_Px3'
+    | 'LEVEL_Dx1'
+    | 'LEVEL_Dx2'
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   subtype: string;
 
   treatments: Array<Treatment>;
+
+  uuid: string;
 };
 export type TypeaheadSearchResp = {
   annotation: string;
@@ -509,6 +550,8 @@ export type MainType = {
   id: number;
 
   name: string;
+
+  tumorForm: 'SOLID' | 'LIQUID';
 };
 export type VariantConsequence = {
   description: string;
@@ -553,7 +596,8 @@ export type IndicatorQueryTreatment = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   pmids: Array<string>;
 };
@@ -586,17 +630,19 @@ export type BiologicalVariant = {
 
   variant: Alteration;
 };
+export type Geneset = {
+  genes: Array<Gene>;
+
+  id: number;
+
+  name: string;
+
+  uuid: string;
+};
 export type Citations = {
   abstracts: Array<ArticleAbstract>;
 
   pmids: Array<string>;
-};
-export type Link = {
-  href: string;
-
-  method: string;
-
-  rel: string;
 };
 
 /**
@@ -605,7 +651,7 @@ export type Link = {
  * @param {(string)} [domainOrOptions] - The project domain.
  */
 export default class OncoKbPrivateAPI {
-  private domain: string = 'http://localhost:8080/oncokb-public';
+  private domain: string = '';
   private errorHandlers: CallbackHandler[] = [];
 
   constructor(domain?: string) {
@@ -1110,7 +1156,7 @@ export default class OncoKbPrivateAPI {
    * @method
    * @name OncoKbPrivateAPI#utilsEvidencesByLevelsGetUsingGET
    */
-  utilsEvidencesByLevelsGetUsingGET(parameters: { $queryParameters?: any; $domain?: string }): Promise<Array<{}>> {
+  utilsEvidencesByLevelsGetUsingGET(parameters: { $queryParameters?: any; $domain?: string }): Promise<{}> {
     return this.utilsEvidencesByLevelsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
       return response.body;
     });
@@ -1358,7 +1404,7 @@ export default class OncoKbPrivateAPI {
     body: MatchVariantRequest;
     $queryParameters?: any;
     $domain?: string;
-  }): Promise<Array<{}>> {
+  }): Promise<Array<MatchVariantResult>> {
     return this.validateVariantExamplePostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
       return response.body;
     });
@@ -1648,7 +1694,7 @@ export default class OncoKbPrivateAPI {
    * @method
    * @name OncoKbPrivateAPI#utilsOncoTreeMainTypesGetUsingGET
    */
-  utilsOncoTreeMainTypesGetUsingGET(parameters: { $queryParameters?: any; $domain?: string }): Promise<Array<{}>> {
+  utilsOncoTreeMainTypesGetUsingGET(parameters: { $queryParameters?: any; $domain?: string }): Promise<Array<MainType>> {
     return this.utilsOncoTreeMainTypesGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
       return response.body;
     });
@@ -1703,7 +1749,7 @@ export default class OncoKbPrivateAPI {
    * @method
    * @name OncoKbPrivateAPI#utilsOncoTreeSubtypesGetUsingGET
    */
-  utilsOncoTreeSubtypesGetUsingGET(parameters: { $queryParameters?: any; $domain?: string }): Promise<Array<{}>> {
+  utilsOncoTreeSubtypesGetUsingGET(parameters: { $queryParameters?: any; $domain?: string }): Promise<Array<TumorType>> {
     return this.utilsOncoTreeSubtypesGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
       return response.body;
     });
@@ -1771,7 +1817,11 @@ export default class OncoKbPrivateAPI {
    * @name OncoKbPrivateAPI#utilRelevantTumorTypesGetUsingGET
    * @param {string} tumorType - OncoTree tumor type name/main type/code
    */
-  utilRelevantTumorTypesGetUsingGET(parameters: { tumorType?: string; $queryParameters?: any; $domain?: string }): Promise<Array<{}>> {
+  utilRelevantTumorTypesGetUsingGET(parameters: {
+    tumorType?: string;
+    $queryParameters?: any;
+    $domain?: string;
+  }): Promise<Array<TumorType>> {
     return this.utilRelevantTumorTypesGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
       return response.body;
     });

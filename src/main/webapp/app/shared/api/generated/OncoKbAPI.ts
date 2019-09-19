@@ -1,7 +1,5 @@
 /* tslint:disable */
 import * as request from 'superagent';
-import { AUTH_TOKEN_KEY } from 'app/store/AuthenticationStore';
-import { Storage } from 'react-jhipster';
 
 type CallbackHandler = (err: any, res?: request.Response) => void;
 export type AnnotateMutationByGenomicChangeQuery = {
@@ -35,7 +33,7 @@ export type Query = {
 
   proteinStart: number;
 
-  svType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION';
+  svType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION' | 'UNKNOWN';
 
   tumorType: string;
 
@@ -125,30 +123,21 @@ export type Implication = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   tumorType: TumorType;
 };
 export type TumorType = {
-  NCI: Array<string>;
-
-  UMLS: Array<string>;
-
   children: {};
 
   code: string;
 
   color: string;
 
-  deprecated: boolean;
-
-  history: Array<string>;
-
   id: number;
 
   level: number;
-
-  links: Array<Link>;
 
   mainType: MainType;
 
@@ -157,6 +146,8 @@ export type TumorType = {
   parent: string;
 
   tissue: string;
+
+  tumorForm: 'SOLID' | 'LIQUID';
 };
 export type Gene = {
   curatedIsoform: string;
@@ -166,6 +157,8 @@ export type Gene = {
   entrezGeneId: number;
 
   geneAliases: Array<string>;
+
+  genesets: Array<Geneset>;
 
   hugoSymbol: string;
 
@@ -255,6 +248,8 @@ export type Evidence = {
 
   lastEdit: string;
 
+  lastReview: string;
+
   levelOfEvidence:
     | 'LEVEL_0'
     | 'LEVEL_1'
@@ -271,15 +266,54 @@ export type Evidence = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
+
+  liquidPropagationLevel:
+    | 'LEVEL_0'
+    | 'LEVEL_1'
+    | 'LEVEL_2A'
+    | 'LEVEL_2B'
+    | 'LEVEL_3A'
+    | 'LEVEL_3B'
+    | 'LEVEL_4'
+    | 'LEVEL_R1'
+    | 'LEVEL_R2'
+    | 'LEVEL_R3'
+    | 'LEVEL_Px1'
+    | 'LEVEL_Px2'
+    | 'LEVEL_Px3'
+    | 'LEVEL_Dx1'
+    | 'LEVEL_Dx2'
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   oncoTreeType: TumorType;
 
-  propagation: string;
+  solidPropagationLevel:
+    | 'LEVEL_0'
+    | 'LEVEL_1'
+    | 'LEVEL_2A'
+    | 'LEVEL_2B'
+    | 'LEVEL_3A'
+    | 'LEVEL_3B'
+    | 'LEVEL_4'
+    | 'LEVEL_R1'
+    | 'LEVEL_R2'
+    | 'LEVEL_R3'
+    | 'LEVEL_Px1'
+    | 'LEVEL_Px2'
+    | 'LEVEL_Px3'
+    | 'LEVEL_Dx1'
+    | 'LEVEL_Dx2'
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   subtype: string;
 
   treatments: Array<Treatment>;
+
+  uuid: string;
 };
 export type AnnotateStructuralVariantQuery = {
   functionalFusion: boolean;
@@ -290,7 +324,7 @@ export type AnnotateStructuralVariantQuery = {
 
   id: string;
 
-  structuralVariantType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION';
+  structuralVariantType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION' | 'UNKNOWN';
 
   tumorType: string;
 };
@@ -323,7 +357,8 @@ export type IndicatorQueryResp = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   highestPrognosticImplicationLevel:
     | 'LEVEL_0'
@@ -341,7 +376,8 @@ export type IndicatorQueryResp = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   highestResistanceLevel:
     | 'LEVEL_0'
@@ -359,7 +395,8 @@ export type IndicatorQueryResp = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   highestSensitiveLevel:
     | 'LEVEL_0'
@@ -377,7 +414,8 @@ export type IndicatorQueryResp = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   hotspot: boolean;
 
@@ -404,6 +442,7 @@ export type IndicatorQueryResp = {
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
     | 'LEVEL_Dx3'
+    | 'NO'
   >;
 
   otherSignificantSensitiveLevels: Array<
@@ -423,6 +462,7 @@ export type IndicatorQueryResp = {
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
     | 'LEVEL_Dx3'
+    | 'NO'
   >;
 
   prognosticImplications: Array<Implication>;
@@ -492,7 +532,8 @@ export type InfoLevel = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 };
 export type Drug = {
   drugName: string;
@@ -552,6 +593,7 @@ export type EvidenceQueryRes = {
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
     | 'LEVEL_Dx3'
+    | 'NO'
   >;
 
   oncoTreeTypes: Array<TumorType>;
@@ -592,6 +634,8 @@ export type MainType = {
   id: number;
 
   name: string;
+
+  tumorForm: 'SOLID' | 'LIQUID';
 };
 export type OncoKBInfo = {
   dataVersion: Version;
@@ -649,7 +693,8 @@ export type IndicatorQueryTreatment = {
     | 'LEVEL_Px3'
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
-    | 'LEVEL_Dx3';
+    | 'LEVEL_Dx3'
+    | 'NO';
 
   pmids: Array<string>;
 };
@@ -753,6 +798,7 @@ export type EvidenceQueries = {
     | 'LEVEL_Dx1'
     | 'LEVEL_Dx2'
     | 'LEVEL_Dx3'
+    | 'NO'
   >;
 
   queries: Array<Query>;
@@ -799,17 +845,19 @@ export type AnnotateMutationByHGVSgQuery = {
 
   tumorType: string;
 };
+export type Geneset = {
+  genes: Array<Gene>;
+
+  id: number;
+
+  name: string;
+
+  uuid: string;
+};
 export type Citations = {
   abstracts: Array<ArticleAbstract>;
 
   pmids: Array<string>;
-};
-export type Link = {
-  href: string;
-
-  method: string;
-
-  rel: string;
 };
 
 /**
@@ -1665,7 +1713,7 @@ export default class OncoKbAPI {
     entrezGeneIdA?: number;
     hugoSymbolB?: string;
     entrezGeneIdB?: number;
-    structuralVariantType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION';
+    structuralVariantType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION' | 'UNKNOWN';
     isFunctionalFusion: boolean;
     tumorType?: string;
     $queryParameters?: any;
@@ -1729,7 +1777,7 @@ export default class OncoKbAPI {
     entrezGeneIdA?: number;
     hugoSymbolB?: string;
     entrezGeneIdB?: number;
-    structuralVariantType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION';
+    structuralVariantType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION' | 'UNKNOWN';
     isFunctionalFusion: boolean;
     tumorType?: string;
     $queryParameters?: any;
@@ -1813,7 +1861,7 @@ export default class OncoKbAPI {
     entrezGeneIdA?: number;
     hugoSymbolB?: string;
     entrezGeneIdB?: number;
-    structuralVariantType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION';
+    structuralVariantType: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION' | 'UNKNOWN';
     isFunctionalFusion: boolean;
     tumorType?: string;
     $queryParameters?: any;
@@ -3029,6 +3077,127 @@ export default class OncoKbAPI {
       return response.body;
     });
   }
+  genesetsGetUsingGETURL(parameters: { $queryParameters?: any }): string {
+    let queryParameters: any = {};
+    let path = '/genesets';
+
+    if (parameters.$queryParameters) {
+      Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+        var parameter = parameters.$queryParameters[parameterName];
+        queryParameters[parameterName] = parameter;
+      });
+    }
+    let keys = Object.keys(queryParameters);
+    return (
+      this.domain + path + (keys.length > 0 ? '?' + keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&') : '')
+    );
+  }
+
+  /**
+   * Get list of currently curated genesets.
+   * @method
+   * @name OncoKbAPI#genesetsGetUsingGET
+   */
+  genesetsGetUsingGETWithHttpInfo(parameters: { $queryParameters?: any; $domain?: string }): Promise<request.Response> {
+    const domain = parameters.$domain ? parameters.$domain : this.domain;
+    const errorHandlers = this.errorHandlers;
+    const request = this.request;
+    let path = '/genesets';
+    let body: any;
+    let queryParameters: any = {};
+    let headers: any = {};
+    let form: any = {};
+    return new Promise(function(resolve, reject) {
+      headers['Accept'] = 'application/json';
+      headers['Content-Type'] = 'application/json';
+
+      if (parameters.$queryParameters) {
+        Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+          var parameter = parameters.$queryParameters[parameterName];
+          queryParameters[parameterName] = parameter;
+        });
+      }
+
+      request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+    });
+  }
+
+  /**
+   * Get list of currently curated genesets.
+   * @method
+   * @name OncoKbAPI#genesetsGetUsingGET
+   */
+  genesetsGetUsingGET(parameters: { $queryParameters?: any; $domain?: string }): Promise<Array<Geneset>> {
+    return this.genesetsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+      return response.body;
+    });
+  }
+  genesetsUuidGetUsingGETURL(parameters: { uuid: string; $queryParameters?: any }): string {
+    let queryParameters: any = {};
+    let path = '/genesets/{uuid}';
+
+    path = path.replace('{uuid}', parameters['uuid'] + '');
+
+    if (parameters.$queryParameters) {
+      Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+        var parameter = parameters.$queryParameters[parameterName];
+        queryParameters[parameterName] = parameter;
+      });
+    }
+    let keys = Object.keys(queryParameters);
+    return (
+      this.domain + path + (keys.length > 0 ? '?' + keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&') : '')
+    );
+  }
+
+  /**
+   * Find geneset by uuid
+   * @method
+   * @name OncoKbAPI#genesetsUuidGetUsingGET
+   * @param {string} uuid - Geneset UUID
+   */
+  genesetsUuidGetUsingGETWithHttpInfo(parameters: { uuid: string; $queryParameters?: any; $domain?: string }): Promise<request.Response> {
+    const domain = parameters.$domain ? parameters.$domain : this.domain;
+    const errorHandlers = this.errorHandlers;
+    const request = this.request;
+    let path = '/genesets/{uuid}';
+    let body: any;
+    let queryParameters: any = {};
+    let headers: any = {};
+    let form: any = {};
+    return new Promise(function(resolve, reject) {
+      headers['Accept'] = 'application/json';
+      headers['Content-Type'] = 'application/json';
+
+      path = path.replace('{uuid}', parameters['uuid'] + '');
+
+      if (parameters['uuid'] === undefined) {
+        reject(new Error('Missing required  parameter: uuid'));
+        return;
+      }
+
+      if (parameters.$queryParameters) {
+        Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+          var parameter = parameters.$queryParameters[parameterName];
+          queryParameters[parameterName] = parameter;
+        });
+      }
+
+      request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+    });
+  }
+
+  /**
+   * Find geneset by uuid
+   * @method
+   * @name OncoKbAPI#genesetsUuidGetUsingGET
+   * @param {string} uuid - Geneset UUID
+   */
+  genesetsUuidGetUsingGET(parameters: { uuid: string; $queryParameters?: any; $domain?: string }): Promise<Geneset> {
+    return this.genesetsUuidGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+      return response.body;
+    });
+  }
   infoGetUsingGETURL(parameters: { $queryParameters?: any }): string {
     let queryParameters: any = {};
     let path = '/info';
@@ -3255,7 +3424,7 @@ export default class OncoKbAPI {
     entrezGeneId?: number;
     variant?: string;
     variantType?: string;
-    svType?: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION';
+    svType?: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION' | 'UNKNOWN';
     consequence?: string;
     proteinStart?: number;
     proteinEnd?: number;
@@ -3379,7 +3548,7 @@ export default class OncoKbAPI {
     entrezGeneId?: number;
     variant?: string;
     variantType?: string;
-    svType?: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION';
+    svType?: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION' | 'UNKNOWN';
     consequence?: string;
     proteinStart?: number;
     proteinEnd?: number;
@@ -3513,7 +3682,7 @@ export default class OncoKbAPI {
     entrezGeneId?: number;
     variant?: string;
     variantType?: string;
-    svType?: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION';
+    svType?: 'DELETION' | 'TRANSLOCATION' | 'DUPLICATION' | 'INSERTION' | 'INVERSION' | 'FUSION' | 'UNKNOWN';
     consequence?: string;
     proteinStart?: number;
     proteinEnd?: number;

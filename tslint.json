@@ -12,13 +12,7 @@
       ]
     },
     "member-access": [false],
-    "member-ordering": [
-      true,
-      {
-        "order": "statics-first",
-        "alphabetize": false
-      }
-    ],
+    "member-ordering": false,
     "jsx-key": false,
     "no-any": false,
     "no-empty-interface": false,
@@ -130,7 +124,7 @@
       }
     ],
 
-    "align": [true, "parameters", "arguments", "statements"],
+    "align": [true, "parameters", "statements"],
     "array-type": [true, "array"],
     "arrow-parens": false,
     "arrow-return-shorthand": true,
