@@ -5,7 +5,7 @@ import { CancerGene, CuratedGene } from 'app/shared/api/generated/OncoKbAPI';
 import ReactTable from 'react-table';
 import { observer, inject } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
-import { GeneLink } from 'app/shared/utils/UrlUtils';
+import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import { SuggestCuration } from 'app/components/SuggestCuration';
 import { Row, Col, Button } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -63,7 +63,7 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
       Cell: (props: { original: ExtendCancerGene }) => {
-        return props.original.annotated ? <GeneLink hugoSymbol={props.original.hugoSymbol} /> : `${props.original.hugoSymbol}`;
+        return props.original.annotated ? <GenePageLink hugoSymbol={props.original.hugoSymbol} /> : `${props.original.hugoSymbol}`;
       }
     },
     {

@@ -4,19 +4,19 @@ import { LEVEL_BUTTON_DESCRIPTION } from 'app/config/constants';
 import pluralize from 'pluralize';
 import * as styles from './LevelButton.module.scss';
 import classnames from 'classnames';
-import _ from 'lodash';
+import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
 
-export interface LevelButton {
+type LevelButtonProps = {
   levelOfEvidence: string;
   numOfGenes: number;
   onClick: () => void;
   className?: string;
   active?: boolean;
   disabled?: boolean;
-}
+};
 
-export const LevelButton = (props: LevelButton) => {
-  let level = props.levelOfEvidence.replace('LEVEL_', '');
+export const LevelButton = (props: LevelButtonProps) => {
+  const level = levelOfEvidence2Level(props.levelOfEvidence);
   return (
     <Button
       variant="light"
