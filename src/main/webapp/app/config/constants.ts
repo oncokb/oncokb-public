@@ -43,5 +43,5 @@ export const LEVEL_BUTTON_DESCRIPTION = {
   R1: EVIDENCE_TYPE.STANDARD_CARE,
   R2: EVIDENCE_TYPE.CLINICAL_EVIDENCE
 };
-
+export const LEVELS = ['1', '2', '3', '4', 'R1', 'R2'];
 export const LEVEL_OF_EVIDENCE = ['LEVEL_1', 'LEVEL_2', 'LEVEL_3', 'LEVEL_4', 'LEVEL_R1', 'LEVEL_R2'];

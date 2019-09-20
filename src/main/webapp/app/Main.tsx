@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import { observer } from 'mobx-react';
@@ -15,27 +14,24 @@ export type IMainPage = Stores;
 class Main extends React.Component<IMainPage> {
   public render() {
     return (
-      <BrowserRouter>
-        <div className="Main">
-          <Header
-            isUserAuthenticated={this.props.authenticationStore.isUserAuthenticated}
-            isAdmin={
-              this.props.authenticationStore.account &&
-              isAuthorized(this.props.authenticationStore.account.authorities, [AUTHORITIES.ADMIN])
-            }
-            ribbonEnv={''}
-            isInProduction={false}
-            isSwaggerEnabled
-            windowStore={this.props.windowStore}
-          />
-          <div className={'view-wrapper'}>
-            <Container fluid={!this.props.windowStore.isXLscreen}>
-              <AppRouts />
-            </Container>
-          </div>
-          <Footer lastUpdate={new Date().getDate().toString()} />
+      <div className="Main">
+        <Header
+          isUserAuthenticated={this.props.authenticationStore.isUserAuthenticated}
+          isAdmin={
+            this.props.authenticationStore.account && isAuthorized(this.props.authenticationStore.account.authorities, [AUTHORITIES.ADMIN])
+          }
+          ribbonEnv={''}
+          isInProduction={false}
+          isSwaggerEnabled
+          windowStore={this.props.windowStore}
+        />
+        <div className={'view-wrapper'}>
+          <Container fluid={!this.props.windowStore.isXLscreen}>
+            <AppRouts />
+          </Container>
         </div>
-      </BrowserRouter>
+        <Footer lastUpdate={new Date().getDate().toString()} />
+      </div>
     );
   }
 }

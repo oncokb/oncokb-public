@@ -4,10 +4,9 @@ import { LEVEL_BUTTON_DESCRIPTION } from 'app/config/constants';
 import pluralize from 'pluralize';
 import * as styles from './LevelButton.module.scss';
 import classnames from 'classnames';
-import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
 
 type LevelButtonProps = {
-  levelOfEvidence: string;
+  level: string;
   numOfGenes: number;
   onClick: () => void;
   className?: string;
@@ -16,7 +15,6 @@ type LevelButtonProps = {
 };
 
 export const LevelButton = (props: LevelButtonProps) => {
-  const level = levelOfEvidence2Level(props.levelOfEvidence);
   return (
     <Button
       variant="light"
@@ -25,9 +23,9 @@ export const LevelButton = (props: LevelButtonProps) => {
       disabled={props.disabled}
       className={classnames(styles.levelButton, props.className)}
     >
-      <div className={`oncokb level-${level}`}>Level {level}</div>
-      <div>{LEVEL_BUTTON_DESCRIPTION[level]}</div>
-      <div className={`oncokb level-${level}`}>{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
+      <div className={`oncokb level-${props.level}`}>Level {props.level}</div>
+      <div>{LEVEL_BUTTON_DESCRIPTION[props.level]}</div>
+      <div className={`oncokb level-${props.level}`}>{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
     </Button>
   );
 };

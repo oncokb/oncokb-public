@@ -5,7 +5,7 @@ import { Col, Row, Button } from 'react-bootstrap';
 import classnames from 'classnames';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { remoteData } from 'cbioportal-frontend-commons';
-import { observable, computed, action } from 'mobx';
+import { observable, computed, action, reaction, IReactionDisposer } from 'mobx';
 import { Evidence, MainType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
@@ -19,9 +19,13 @@ import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Else, Then, If } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
-import { LEVEL_OF_EVIDENCE } from 'app/config/constants';
+import { LEVELS } from 'app/config/constants';
+import { RouterStore } from 'mobx-react-router';
+import AuthenticationStore from 'app/store/AuthenticationStore';
+import queryString from 'query-string';
 
 const COMPONENT_PADDING = ['pl-2', 'pr-2'];
+const QUERY_SEPARATOR_FOR_QUERY_STRING = 'comma';
 type Treatment = {
   level: string;
   hugoSymbol: string;
@@ -32,10 +36,22 @@ type Treatment = {
   drugs: string;
 };
 
+type ActionableGenesPageProps = {
+  authenticationStore: AuthenticationStore;
+  routing: RouterStore;
+};
+
+type HashQueries = {
+  levels?: string[];
+  hugoSymbol?: string;
+  tumorType?: string;
+  drug?: string;
+};
+
 type EvidencesByLevel = { [level: string]: Evidence[] };
 @inject('routing')
 @observer
-export default class ActionableGenesPage extends React.Component<{}> {
+export default class ActionableGenesPage extends React.Component<ActionableGenesPageProps> {
   @observable relevantTumorTypeSearchKeyword = '';
   @observable drugSearchKeyword = '';
   @observable geneSearchKeyword = '';
@@ -91,6 +107,47 @@ export default class ActionableGenesPage extends React.Component<{}> {
     default: []
   });
 
+  readonly reactions: IReactionDisposer[] = [];
+
+  constructor(props: Readonly<ActionableGenesPageProps>) {
+    super(props);
+    this.reactions.push(
+      reaction(
+        () => [props.routing.location.hash],
+        ([hash]) => {
+          const queryStrings = queryString.parse(hash, { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING }) as HashQueries;
+          if (queryStrings.levels) {
+            this.levelSelected = this.initLevelSelected();
+            (_.isArray(queryStrings.levels) ? queryStrings.levels : [queryStrings.levels]).forEach(
+              level => (this.levelSelected[level] = true)
+            );
+          }
+          if (queryStrings.hugoSymbol) {
+            this.geneSearchKeyword = queryStrings.hugoSymbol;
+          }
+          if (queryStrings.tumorType) {
+            this.relevantTumorTypeSearchKeyword = queryStrings.tumorType;
+          }
+          if (queryStrings.drug) {
+            this.drugSearchKeyword = queryStrings.drug;
+          }
+        },
+        { fireImmediately: true }
+      ),
+      reaction(
+        () => this.hashQueries,
+        newHash => {
+          const parsedHashQueryString = queryString.stringify(newHash, { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING });
+          window.location.hash = parsedHashQueryString;
+        }
+      )
+    );
+  }
+
+  componentWillUnmount(): void {
+    this.reactions.forEach(reaction => reaction());
+  }
+
   getDrugNameFromTreatment(drug: TreatmentDrug) {
     // @ts-ignore
     return drug.drugName;
@@ -100,7 +157,7 @@ export default class ActionableGenesPage extends React.Component<{}> {
     const treatments: Treatment[] = [];
     _.forEach(evidences, (item: Evidence) => {
       treatments.push({
-        level: _.replace(item.levelOfEvidence, new RegExp('[AB]'), ''),
+        level: levelOfEvidence2Level(item.levelOfEvidence),
         hugoSymbol: item.gene.hugoSymbol || 'NA',
         alterations: item.alterations
           .map(function(alt) {
@@ -136,13 +193,31 @@ export default class ActionableGenesPage extends React.Component<{}> {
 
   initLevelSelected(): { [level: string]: boolean } {
     return _.reduce(
-      LEVEL_OF_EVIDENCE,
+      LEVELS,
       (acc, level) => {
         acc[level] = false;
         return acc;
       },
       {} as { [level: string]: boolean }
     );
+  }
+
+  @computed
+  get hashQueries() {
+    let queryString: Partial<HashQueries> = {};
+    if (this.selectedLevels.length > 0) {
+      queryString.levels = this.selectedLevels;
+    }
+    if (this.geneSearchKeyword) {
+      queryString.hugoSymbol = this.geneSearchKeyword;
+    }
+    if (this.relevantTumorTypeSearchKeyword) {
+      queryString.tumorType = this.relevantTumorTypeSearchKeyword;
+    }
+    if (this.drugSearchKeyword) {
+      queryString.drug = this.drugSearchKeyword;
+    }
+    return queryString;
   }
 
   @computed
@@ -205,7 +280,7 @@ export default class ActionableGenesPage extends React.Component<{}> {
   @computed
   get levelNumbers() {
     const levelNumbers = _.reduce(
-      LEVEL_OF_EVIDENCE,
+      LEVELS,
       (acc, level) => {
         acc[level] = [];
         return acc;
@@ -307,7 +382,7 @@ export default class ActionableGenesPage extends React.Component<{}> {
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
       Cell: (props: { original: Treatment }) => {
-        return <i className={`oncokb level-icon level-${levelOfEvidence2Level(props.original.level)}`} />;
+        return <i className={`oncokb level-icon level-${props.original.level}`} />;
       }
     },
     {
@@ -367,10 +442,10 @@ export default class ActionableGenesPage extends React.Component<{}> {
         <Then>
           <>
             <Row style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }} className={'mb-2'}>
-              {LEVEL_OF_EVIDENCE.map(level => (
+              {LEVELS.map(level => (
                 <Col className={classnames(...COMPONENT_PADDING)} lg={2} xs={4} key={level}>
                   <LevelButton
-                    levelOfEvidence={level}
+                    level={level}
                     numOfGenes={this.levelNumbers[level]}
                     active={this.levelSelected[level]}
                     className="mb-2"
@@ -455,7 +530,7 @@ export default class ActionableGenesPage extends React.Component<{}> {
                   loading={this.relevantTumorTypes.isPending}
                   columns={this.columns}
                   showPagination={false}
-                  defaultPageSize={this.filteredTreatments.length}
+                  defaultPageSize={400}
                   defaultSorted={[
                     {
                       id: 'level',

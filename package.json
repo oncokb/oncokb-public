@@ -40,6 +40,7 @@
     "moment": "^2.24.0",
     "oncokb-styles": "^0.1.0",
     "pluralize": "^8.0.0",
+    "query-string": "^6.8.3",
     "react": "16.8.5",
     "react-bootstrap": "^1.0.0-beta.6",
     "react-bootstrap-typeahead": "^3.4.6",
@@ -48,11 +49,14 @@
     "react-if": "^3.4.3",
     "react-jhipster": "0.9.0",
     "react-loadable": "5.5.0",
+    "react-portal": "latest",
     "react-redux": "6.0.1",
     "react-redux-loading-bar": "4.2.0",
+    "react-router": "^4.3.1",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.3.1",
     "react-select": "^3.0.4",
+    "react-spinkit": "latest",
     "react-table": "^6.10.3",
     "react-toastify": "4.5.2",
     "react-transition-group": "2.7.0",
@@ -65,9 +69,7 @@
     "redux-thunk": "2.3.0",
     "tslib": "1.9.3",
     "typeface-open-sans": "^0.0.54",
-    "uuid": "3.3.2",
-    "react-portal": "latest",
-    "react-spinkit": "latest"
+    "uuid": "3.3.2"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.9",
