@@ -23,6 +23,7 @@ import { LEVELS } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import queryString from 'query-string';
+import fileDownload from 'js-file-download';
 
 const COMPONENT_PADDING = ['pl-2', 'pr-2'];
 const QUERY_SEPARATOR_FOR_QUERY_STRING = 'comma';
@@ -49,7 +50,7 @@ type HashQueries = {
 };
 
 type EvidencesByLevel = { [level: string]: Evidence[] };
-@inject('routing')
+@inject('routing', 'authenticationStore')
 @observer
 export default class ActionableGenesPage extends React.Component<ActionableGenesPageProps> {
   @observable relevantTumorTypeSearchKeyword = '';
@@ -372,6 +373,20 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
     this.geneSearchKeyword = '';
   }
 
+  @autobind
+  @action
+  downloadAssociation() {
+    if (this.props.authenticationStore.isUserAuthenticated) {
+      let content = [['Level', 'Gene', 'Alterations', 'Tumor Type', 'Drugs'].join('\t')];
+      _.each(this.filteredTreatments, item => {
+        content.push([item.level, item.hugoSymbol, item.alterations.join(', '), item.tumorType, item.drugs].join('\t'));
+      });
+      fileDownload(content.join('\n'), 'oncokb_biomarker_drug_associations.tsv');
+    } else {
+      this.props.routing.push('/login');
+    }
+  }
+
   private columns = [
     {
       id: 'level',
@@ -510,9 +525,9 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                 ${this.filteredTumorTypes.length} ${pluralize('tumor type', this.filteredTumorTypes.length)},
                 ${this.filteredLevels.length} ${pluralize('level of evidence', this.filteredLevels.length)})`}
                 </span>
-                <Button size={'sm'} className={classnames('ml-2', 'pt-1')} onClick={() => {}}>
+                <Button size={'sm'} className={classnames('ml-2', 'pt-1')} onClick={this.downloadAssociation}>
                   <FontAwesomeIcon icon={'cloud-download-alt'} className={'mr-1'} fixedWidth />
-                  Associations
+                  {pluralize('Association', this.filteredTreatments.length)}
                 </Button>
                 {this.treatmentsAreFiltered ? (
                   <Button variant="link" style={{ whiteSpace: 'nowrap' }} className={'ml-auto pr-0'} onClick={this.clearFilters}>

@@ -1,5 +1,5 @@
 import * as React from 'React';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import Login from 'app/components/login/login';
 import { Logout } from 'app/components/login/logout';
@@ -11,13 +11,14 @@ import { AUTHORITIES } from 'app/config/constants';
 import Home from 'app/pages/Home';
 import DataAccessPage from 'app/pages/DataAccessPage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { TermsPage } from 'app/pages/TermsPage';
 import { TeamPage } from 'app/pages/TeamPage';
 import { NewsPage } from 'app/pages/newsPage/NewsPage';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
 import ActionableGenesPage from 'app/pages/ActionableGenesPage';
+import { RouterStore } from 'mobx-react-router';
 
 // tslint:disable:space-in-parens
 const Account = Loadable({
@@ -25,7 +26,7 @@ const Account = Loadable({
   loading: () => <div>loading ...</div>
 });
 
-const AppRouts = inject('authenticationStore')((props: { authenticationStore?: AuthenticationStore }) => {
+const AppRouts = inject('authenticationStore', 'routing')((props: { authenticationStore?: AuthenticationStore; routing: RouterStore }) => {
   const HomePage = () => <Home content={'test'} />;
   return (
     <Switch>
@@ -41,6 +42,7 @@ const AppRouts = inject('authenticationStore')((props: { authenticationStore?: A
       <PrivateRoute
         path="/account"
         authenticationStore={props.authenticationStore!}
+        routing={props.routing}
         component={Account}
         isAuthorized={
           props.authenticationStore!.account &&

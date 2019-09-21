@@ -2,7 +2,7 @@ import * as React from 'react';
 import Main from './Main';
 import AppStore, { IAppConfig } from 'app/store/AppStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import { Provider } from 'mobx-react';
+import { Provider, observer } from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';
 import { RouterStore } from 'mobx-react-router';
 import { Router } from 'react-router';
@@ -16,9 +16,7 @@ export type Stores = {
   routing: RouterStore;
 };
 
-// TODO: need to include the browser history https://github.com/alisd23/mobx-react-router
-// const browserHistory = createBrowserHistory();
-
+@observer
 class App extends React.Component {
   readonly stores: Stores = {
     appStore: new AppStore(),
