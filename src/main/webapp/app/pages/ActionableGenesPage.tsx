@@ -22,7 +22,7 @@ import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { LEVELS } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import queryString from 'query-string';
+import * as QueryString from 'query-string';
 import fileDownload from 'js-file-download';
 
 const COMPONENT_PADDING = ['pl-2', 'pr-2'];
@@ -116,7 +116,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
       reaction(
         () => [props.routing.location.hash],
         ([hash]) => {
-          const queryStrings = queryString.parse(hash, { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING }) as HashQueries;
+          const queryStrings = QueryString.parse(hash, { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING }) as HashQueries;
           if (queryStrings.levels) {
             this.levelSelected = this.initLevelSelected();
             (_.isArray(queryStrings.levels) ? queryStrings.levels : [queryStrings.levels]).forEach(
@@ -138,7 +138,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
       reaction(
         () => this.hashQueries,
         newHash => {
-          const parsedHashQueryString = queryString.stringify(newHash, { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING });
+          const parsedHashQueryString = QueryString.stringify(newHash, { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING });
           window.location.hash = parsedHashQueryString;
         }
       )
@@ -146,7 +146,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
   }
 
   componentWillUnmount(): void {
-    this.reactions.forEach(reaction => reaction());
+    this.reactions.forEach(componentReaction => componentReaction());
   }
 
   getDrugNameFromTreatment(drug: TreatmentDrug) {
@@ -205,7 +205,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   @computed
   get hashQueries() {
-    let queryString: Partial<HashQueries> = {};
+    const queryString: Partial<HashQueries> = {};
     if (this.selectedLevels.length > 0) {
       queryString.levels = this.selectedLevels;
     }
@@ -377,7 +377,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
   @action
   downloadAssociation() {
     if (this.props.authenticationStore.isUserAuthenticated) {
-      let content = [['Level', 'Gene', 'Alterations', 'Tumor Type', 'Drugs'].join('\t')];
+      const content = [['Level', 'Gene', 'Alterations', 'Tumor Type', 'Drugs'].join('\t')];
       _.each(this.filteredTreatments, item => {
         content.push([item.level, item.hugoSymbol, item.alterations.join(', '), item.tumorType, item.drugs].join('\t'));
       });

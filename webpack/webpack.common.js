@@ -59,12 +59,12 @@ module.exports = options => ({
         exclude: [utils.root('node_modules')]
       },
       {
-        test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
+        test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot|ppt|pdf)$/i,
         loader: 'file-loader',
         options: {
           digest: 'hex',
           hash: 'sha512',
-          name: 'content/[hash].[ext]'
+          name: 'content/[name].[ext]'
         }
       },
       {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import LoginContent from 'app/components/login/login-content';
 import AuthenticationStore from 'app/store/AuthenticationStore';

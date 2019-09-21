@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { RouterStore } from 'mobx-react-router';
@@ -31,7 +31,7 @@ export const PrivateRoute = observer(({ component, authenticationStore, isAuthor
         <Redirect
           to={{
             pathname: '/login',
-            search: routing.location!.search,
+            search: routing.location.search,
             state: { from: routing.location }
           }}
         />
