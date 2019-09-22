@@ -8,9 +8,32 @@
   }
 }
 
+@mixin home-page-logo($size) {
+  @if $size == xs {
+    .home-page-logo {
+      width: 200px;
+    }
+    .home-page-logo-title {
+      font-size: 18px;
+    }
+  } @else if $size == md {
+    .home-page-logo {
+      width: 320px;
+    }
+  } @else if $size == lg {
+    .home-page-logo {
+      width: 400px;
+    }
+    .home-page-logo-title {
+      font-size: 20px;
+    }
+  }
+}
+
 @include media-breakpoint-up(xs) {
   $footer-height: 18rem;
   @include sticky-footer($footer-height);
+  @include home-page-logo(xs);
 
   .navbar-nav > a {
     padding: 0 0.25rem 0.25rem 0.25rem;
@@ -25,11 +48,13 @@
 @include media-breakpoint-up(md) {
   $footer-height: 16rem;
   @include sticky-footer($footer-height);
+  @include home-page-logo(md);
 }
 
 @include media-breakpoint-up(lg) {
   $footer-height: 12rem;
   @include sticky-footer($footer-height);
+  @include home-page-logo(lg);
 
   .navbar-nav > a,
   #account-menu > a {

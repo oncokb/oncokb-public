@@ -8,7 +8,7 @@ import { PrivateRoute } from 'app/shared/auth/private-route';
 import About from 'app/pages/About';
 import Loadable from 'react-loadable';
 import { AUTHORITIES } from 'app/config/constants';
-import Home from 'app/pages/Home';
+import HomePage from 'app/pages/HomePage';
 import DataAccessPage from 'app/pages/DataAccessPage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { inject } from 'mobx-react';
@@ -28,7 +28,6 @@ const Account = Loadable({
 });
 
 const AppRouts = inject('authenticationStore', 'routing')((props: { authenticationStore?: AuthenticationStore; routing?: RouterStore }) => {
-  const HomePage = () => <Home content={'test'} />;
   return (
     <Switch>
       <ErrorBoundaryRoute path="/login" component={Login} />

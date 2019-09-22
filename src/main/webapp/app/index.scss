@@ -16,6 +16,12 @@ body,
 @import '~bootstrap/scss/bootstrap';
 @import 'layout';
 
+.home {
+  .home-page-logo-title {
+    font-weight: 500;
+    color: $orange;
+  }
+}
 .orange {
   color: $oncokb-orange;
 }

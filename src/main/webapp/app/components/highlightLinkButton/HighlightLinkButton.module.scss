@@ -1,0 +1,13 @@
+:global(.btn).highlight {
+  padding-top: 1.5px;
+  font-weight: bold;
+  font-size: 2.5rem;
+  line-height: 2.5rem;
+  color: black;
+  border-radius: 0;
+  border-bottom: 1px solid $orange;
+  &:hover {
+    color: $primary;
+    text-decoration: none;
+  }
+}

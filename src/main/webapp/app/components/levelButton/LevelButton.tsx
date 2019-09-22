@@ -8,9 +8,10 @@ import classnames from 'classnames';
 type LevelButtonProps = {
   level: string;
   numOfGenes: number;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
   active?: boolean;
+  href?: string;
   disabled?: boolean;
 };
 
@@ -20,12 +21,16 @@ export const LevelButton = (props: LevelButtonProps) => {
       variant="light"
       onClick={props.onClick}
       active={props.active}
+      href={props.href}
       disabled={props.disabled}
-      className={classnames(styles.levelButton, props.className)}
+      className={classnames(props.href ? styles.levelButtonLink : styles.levelButton, props.className)}
     >
-      <div className={`oncokb level-${props.level}`}>Level {props.level}</div>
-      <div>{LEVEL_BUTTON_DESCRIPTION[props.level]}</div>
-      <div className={`oncokb level-${props.level}`}>{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
+      <div className={classnames(`oncokb level-${props.level}`, styles.levelName)}>Level {props.level}</div>
+      <div className={styles.levelDescription}>{LEVEL_BUTTON_DESCRIPTION[props.level]}</div>
+      <div className={classnames(`oncokb level-${props.level}`, styles.geneNumber)}>{`${props.numOfGenes} ${pluralize(
+        'Gene',
+        props.numOfGenes
+      )}`}</div>
     </Button>
   );
 };
