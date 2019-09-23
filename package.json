@@ -22,6 +22,7 @@
     "@types/react-table": "^6.8.1",
     "@types/seamless-immutable": "^7.1.10",
     "@types/superagent": "^4.1.1",
+    "@types/victory": "^31.0.22",
     "autobind-decorator": "^2.1.0",
     "availity-reactstrap-validation": "2.5.1",
     "axios": "0.19.0",
@@ -68,7 +69,8 @@
     "redux-thunk": "2.3.0",
     "tslib": "1.9.3",
     "typeface-open-sans": "^0.0.54",
-    "uuid": "3.3.2"
+    "uuid": "3.3.2",
+    "victory": "^31.0.22"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.9",

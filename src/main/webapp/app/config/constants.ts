@@ -53,3 +53,9 @@ export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
   'Likely Oncogenic': 'oncogenic',
   Oncogenic: 'oncogenic'
 };
+
+export enum EVIDENCE_TYPES {
+  GENE_SUMMARY = 'GENE_SUMMARY',
+  GENE_BACKGROUND = 'GENE_BACKGROUND',
+  MUTATION_EFFECT = 'MUTATION_EFFECT'
+}

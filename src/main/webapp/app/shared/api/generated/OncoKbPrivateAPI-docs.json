@@ -27,12 +27,19 @@
   "paths": {
     "/search/ncitDrugs": {
       "get": {
-        "tags": ["Drugs", "Search"],
+        "tags": [
+          "Drugs",
+          "Search"
+        ],
         "summary": "searchDrugGet",
         "description": "Find NCIT matches based on blur query. This is not for search OncoKB curated drugs. Please use drugs/lookup for that purpose.",
         "operationId": "searchDrugGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -78,12 +85,18 @@
     },
     "/search/treatments": {
       "get": {
-        "tags": ["Search"],
+        "tags": [
+          "Search"
+        ],
         "summary": "searchTreatmentsGet",
         "description": "Search to find treatments.",
         "operationId": "searchTreatmentsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "gene",
@@ -125,12 +138,18 @@
     },
     "/search/typeahead": {
       "get": {
-        "tags": ["Search"],
+        "tags": [
+          "Search"
+        ],
         "summary": "searchTypeAheadGet",
         "description": "Find matches based on blur query.",
         "operationId": "searchTypeAheadGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "query",
@@ -173,12 +192,18 @@
     },
     "/search/variants/biological": {
       "get": {
-        "tags": ["Search"],
+        "tags": [
+          "Search"
+        ],
         "summary": "searchVariantsBiologicalGet",
         "description": "Get annotated variants information for specified gene.",
         "operationId": "searchVariantsBiologicalGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "hugoSymbol",
@@ -212,12 +237,18 @@
     },
     "/search/variants/clinical": {
       "get": {
-        "tags": ["Search"],
+        "tags": [
+          "Search"
+        ],
         "summary": "searchVariantsClinicalGet",
         "description": "Get list of variant clinical information for specified gene.",
         "operationId": "searchVariantsClinicalGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "hugoSymbol",
@@ -251,12 +282,18 @@
     },
     "/utils/evidences/levels": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "utilsEvidencesByLevelsGet",
         "description": "Get the list of evidences by levels.",
         "operationId": "utilsEvidencesByLevelsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -278,12 +315,18 @@
     },
     "/utils/isHotspot": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "utilsHotspotMutationGet",
         "description": "Determine whether variant is hotspot mutation.",
         "operationId": "utilsHotspotMutationGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "hugoSymbol",
@@ -321,12 +364,18 @@
     },
     "/utils/match/variant": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "validateVariantExampleGet",
         "description": "Check if the genomic example will be mapped to OncoKB variant.",
         "operationId": "validateVariantExampleGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -375,12 +424,18 @@
         }
       },
       "post": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "validateVariantExamplePost",
         "description": "Check which OncoKB variants can be mapped on genomic examples.",
         "operationId": "validateVariantExamplePostUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -417,14 +472,64 @@
         }
       }
     },
+    "/utils/mutationMapperData": {
+      "get": {
+        "tags": [
+          "Utils"
+        ],
+        "summary": "utilMutationMapperDataGet",
+        "operationId": "utilMutationMapperDataGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hugoSymbol",
+            "in": "query",
+            "description": "hugoSymbol",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PortalAlteration"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/utils/numbers/gene/{hugoSymbol}": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "utilsNumbersGeneGet",
         "description": "Get gene related numbers",
         "operationId": "utilsNumbersGeneGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "hugoSymbol",
@@ -455,12 +560,18 @@
     },
     "/utils/numbers/genes/": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "utilsNumbersGenesGet",
         "description": "Get gene related numbers of all genes. This is for main page word cloud.",
         "operationId": "utilsNumbersGenesGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -485,12 +596,18 @@
     },
     "/utils/numbers/levels/": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "utilsNumbersLevelsGet",
         "description": "Get gene related numbers of all genes. This is for main page word cloud.",
         "operationId": "utilsNumbersLevelsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -515,12 +632,18 @@
     },
     "/utils/numbers/main/": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "utilsNumbersMainGet",
         "description": "Get numbers served for the main page dashboard.",
         "operationId": "utilsNumbersMainGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -542,12 +665,18 @@
     },
     "/utils/oncotree/mainTypes": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "utilsOncoTreeMainTypesGet",
         "description": "Get the full list of OncoTree Maintype.",
         "operationId": "utilsOncoTreeMainTypesGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -572,12 +701,18 @@
     },
     "/utils/oncotree/subtypes": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "utilsOncoTreeSubtypesGet",
         "description": "Get the full list of OncoTree Subtypes.",
         "operationId": "utilsOncoTreeSubtypesGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -600,14 +735,64 @@
         }
       }
     },
+    "/utils/portalAlterationSampleCount": {
+      "get": {
+        "tags": [
+          "Utils"
+        ],
+        "summary": "utilPortalAlterationSampleCountGet",
+        "operationId": "utilPortalAlterationSampleCountGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hugoSymbol",
+            "in": "query",
+            "description": "hugoSymbol",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PortalAlteration"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/utils/relevantTumorTypes": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "utilRelevantTumorTypesGet",
         "description": "Get the list of relevant tumor types.",
         "operationId": "utilRelevantTumorTypesGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "tumorType",
@@ -641,12 +826,18 @@
     },
     "/utils/suggestedVariants": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "utilsSuggestedVariantsGet",
         "description": "Get All Suggested Variants.",
         "operationId": "utilsSuggestedVariantsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -671,12 +862,18 @@
     },
     "/utils/validation/trials": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "validateTrials",
         "description": "Check if clinical trials are valid or not by nctId.",
         "operationId": "validateTrialsUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "nctIds",
@@ -711,12 +908,18 @@
     },
     "/utils/variantAnnotation": {
       "get": {
-        "tags": ["Utils"],
+        "tags": [
+          "Utils"
+        ],
         "summary": "utilVariantAnnotationGet",
         "description": "Get all the info for the query",
         "operationId": "utilVariantAnnotationGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "hugoSymbol",
@@ -816,7 +1019,15 @@
         },
         "svType": {
           "type": "string",
-          "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION", "UNKNOWN"]
+          "enum": [
+            "DELETION",
+            "TRANSLOCATION",
+            "DUPLICATION",
+            "INSERTION",
+            "INVERSION",
+            "FUSION",
+            "UNKNOWN"
+          ]
         },
         "tumorType": {
           "type": "string"
@@ -1367,7 +1578,10 @@
         },
         "tumorForm": {
           "type": "string",
-          "enum": ["SOLID", "LIQUID"]
+          "enum": [
+            "SOLID",
+            "LIQUID"
+          ]
         }
       },
       "description": "OncoTree Detailed Cancer Type"
@@ -1401,6 +1615,37 @@
         },
         "variant": {
           "$ref": "#/definitions/Alteration"
+        }
+      }
+    },
+    "PortalAlteration": {
+      "type": "object",
+      "properties": {
+        "alterationType": {
+          "type": "string"
+        },
+        "cancerStudy": {
+          "type": "string"
+        },
+        "cancerType": {
+          "type": "string"
+        },
+        "gene": {
+          "$ref": "#/definitions/Gene"
+        },
+        "proteinChange": {
+          "type": "string"
+        },
+        "proteinEndPosition": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "proteinStartPosition": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sampleId": {
+          "type": "string"
         }
       }
     },
@@ -1696,7 +1941,10 @@
         },
         "tumorForm": {
           "type": "string",
-          "enum": ["SOLID", "LIQUID"]
+          "enum": [
+            "SOLID",
+            "LIQUID"
+          ]
         }
       },
       "description": "OncoTree Cancer Type"

@@ -20,6 +20,7 @@ import CancerGenesPage from 'app/pages/CancerGenesPage';
 import ActionableGenesPage from 'app/pages/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
 import { LevelOfEvidencePage } from 'app/pages/LevelOfEvidencePage';
+import GenePage from 'app/pages/genePage/GenePage';
 
 // tslint:disable:space-in-parens
 const Account = Loadable({
@@ -40,6 +41,7 @@ const AppRouts = inject('authenticationStore', 'routing')((props: { authenticati
       <ErrorBoundaryRoute path="/cancerGenes" component={CancerGenesPage} />
       <ErrorBoundaryRoute path="/actionableGenes" component={ActionableGenesPage} />
       <ErrorBoundaryRoute path="/levels" component={LevelOfEvidencePage} />
+      <ErrorBoundaryRoute path="/gene/:hugoSymbol" component={GenePage} />
       <PrivateRoute
         path="/account"
         authenticationStore={props.authenticationStore!}

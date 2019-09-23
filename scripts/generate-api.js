@@ -7,6 +7,8 @@ const [node, script, folder, ...classNames] = process.argv;
 for (const className of classNames)
 {
 	const swagger = JSON.parse(fs.readFileSync(path.join(folder, `${className}-docs.json`)));
+	const tsEscape = '/* tslint:disable */';
 	const tsSourceCode = CodeGen.getTypescriptCode({className, swagger});
-	fs.writeFileSync(path.join(folder, `${className}.ts`), tsSourceCode);
+
+	fs.writeFileSync(path.join(folder, `${className}.ts`), `${tsEscape}\n${tsSourceCode}`);
 }

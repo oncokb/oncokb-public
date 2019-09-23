@@ -2,3 +2,4 @@ node_modules
 target
 package-lock.json
 .git
+src/main/webapp/app/shared/api/generated

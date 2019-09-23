@@ -63,12 +63,18 @@
   "paths": {
     "/annotate/copyNumberAlterations": {
       "get": {
-        "tags": ["Annotations"],
+        "tags": [
+          "Annotations"
+        ],
         "summary": "annotateCopyNumberAlterationsGet",
         "description": "Annotate copy number alteration.",
         "operationId": "annotateCopyNumberAlterationsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "hugoSymbol",
@@ -91,7 +97,12 @@
             "description": "Copy number alteration type",
             "required": true,
             "type": "string",
-            "enum": ["AMPLIFICATION", "DELETION", "GAIN", "LOSS"]
+            "enum": [
+              "AMPLIFICATION",
+              "DELETION",
+              "GAIN",
+              "LOSS"
+            ]
           },
           {
             "name": "tumorType",
@@ -117,12 +128,18 @@
         }
       },
       "post": {
-        "tags": ["Annotations"],
+        "tags": [
+          "Annotations"
+        ],
         "summary": "annotateCopyNumberAlterationsPost",
         "description": "Annotate copy number alterations.",
         "operationId": "annotateCopyNumberAlterationsPostUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -158,12 +175,18 @@
     },
     "/annotate/mutations/byGenomicChange": {
       "get": {
-        "tags": ["Annotations"],
+        "tags": [
+          "Annotations"
+        ],
         "summary": "annotateMutationsByGenomicChangeGet",
         "description": "Annotate mutation by genomic change.",
         "operationId": "annotateMutationsByGenomicChangeGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "genomicLocation",
@@ -196,12 +219,18 @@
         }
       },
       "post": {
-        "tags": ["Annotations"],
+        "tags": [
+          "Annotations"
+        ],
         "summary": "annotateMutationsByGenomicChangePost",
         "description": "Annotate mutations by genomic change.",
         "operationId": "annotateMutationsByGenomicChangePostUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -237,12 +266,18 @@
     },
     "/annotate/mutations/byHGVSg": {
       "get": {
-        "tags": ["Annotations"],
+        "tags": [
+          "Annotations"
+        ],
         "summary": "annotateMutationsByHGVSgGet",
         "description": "Annotate mutation by HGVSg.",
         "operationId": "annotateMutationsByHGVSgGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "hgvsg",
@@ -275,12 +310,18 @@
         }
       },
       "post": {
-        "tags": ["Annotations"],
+        "tags": [
+          "Annotations"
+        ],
         "summary": "annotateMutationsByHGVSgPost",
         "description": "Annotate mutations by genomic change.",
         "operationId": "annotateMutationsByHGVSgPostUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -316,12 +357,18 @@
     },
     "/annotate/mutations/byProteinChange": {
       "get": {
-        "tags": ["Annotations"],
+        "tags": [
+          "Annotations"
+        ],
         "summary": "annotateMutationsByProteinChangeGet",
         "description": "Annotate mutation by protein change.",
         "operationId": "annotateMutationsByProteinChangeGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "hugoSymbol",
@@ -403,12 +450,18 @@
         }
       },
       "post": {
-        "tags": ["Annotations"],
+        "tags": [
+          "Annotations"
+        ],
         "summary": "annotateMutationsByProteinChangePost",
         "description": "Annotate mutations by protein change.",
         "operationId": "annotateMutationsByProteinChangePostUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -444,12 +497,18 @@
     },
     "/annotate/structuralVariants": {
       "get": {
-        "tags": ["Annotations"],
+        "tags": [
+          "Annotations"
+        ],
         "summary": "annotateStructuralVariantsGet",
         "description": "Annotate structural variant.",
         "operationId": "annotateStructuralVariantsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "hugoSymbolA",
@@ -487,7 +546,15 @@
             "description": "Structural variant type",
             "required": true,
             "type": "string",
-            "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION", "UNKNOWN"]
+            "enum": [
+              "DELETION",
+              "TRANSLOCATION",
+              "DUPLICATION",
+              "INSERTION",
+              "INVERSION",
+              "FUSION",
+              "UNKNOWN"
+            ]
           },
           {
             "name": "isFunctionalFusion",
@@ -521,12 +588,18 @@
         }
       },
       "post": {
-        "tags": ["Annotations"],
+        "tags": [
+          "Annotations"
+        ],
         "summary": "annotateStructuralVariantsPost",
         "description": "Annotate structural variants.",
         "operationId": "annotateStructuralVariantsPostUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -562,12 +635,18 @@
     },
     "/classification/variants": {
       "get": {
-        "tags": ["Classification"],
+        "tags": [
+          "Classification"
+        ],
         "summary": "classificationVariantsGet",
         "description": "Get All OncoKB Variant Classification.",
         "operationId": "classificationVariantsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -583,12 +662,18 @@
     },
     "/drugs": {
       "get": {
-        "tags": ["Drugs"],
+        "tags": [
+          "Drugs"
+        ],
         "summary": "drugsGet",
         "description": "Get all curated drugs.",
         "operationId": "drugsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -604,12 +689,18 @@
     },
     "/drugs/lookup": {
       "get": {
-        "tags": ["Drugs"],
+        "tags": [
+          "Drugs"
+        ],
         "summary": "drugsLookupGet",
         "description": "Search drugs.",
         "operationId": "drugsLookupGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "name",
@@ -656,12 +747,18 @@
     },
     "/evidences": {
       "post": {
-        "tags": ["Evidences"],
+        "tags": [
+          "Evidences"
+        ],
         "summary": "evidencesUUIDsGet",
         "description": "Get specific evidences.",
         "operationId": "evidencesUUIDsGetUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -701,12 +798,18 @@
     },
     "/evidences/lookup": {
       "get": {
-        "tags": ["Evidences"],
+        "tags": [
+          "Evidences"
+        ],
         "summary": "evidencesLookupGet",
         "description": "Search evidences. Multi-queries are supported.",
         "operationId": "evidencesLookupGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "entrezGeneId",
@@ -809,12 +912,18 @@
         }
       },
       "post": {
-        "tags": ["Evidences"],
+        "tags": [
+          "Evidences"
+        ],
         "summary": "evidencesLookupPost",
         "description": "Search evidences.",
         "operationId": "evidencesLookupPostUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -848,12 +957,18 @@
     },
     "/evidences/{uuid}": {
       "get": {
-        "tags": ["Evidences"],
+        "tags": [
+          "Evidences"
+        ],
         "summary": "evidencesUUIDGet",
         "description": "Get specific evidence.",
         "operationId": "evidencesUUIDGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "uuid",
@@ -888,12 +1003,18 @@
     },
     "/genes": {
       "get": {
-        "tags": ["Genes"],
+        "tags": [
+          "Genes"
+        ],
         "summary": "genesGet",
         "description": "Get list of currently curated genes.",
         "operationId": "genesGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "fields",
@@ -918,12 +1039,18 @@
     },
     "/genes/lookup": {
       "get": {
-        "tags": ["Genes"],
+        "tags": [
+          "Genes"
+        ],
         "summary": "genesLookupGet",
         "description": "Search gene.",
         "operationId": "genesLookupGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "hugoSymbol",
@@ -970,12 +1097,18 @@
     },
     "/genes/{entrezGeneId}": {
       "get": {
-        "tags": ["Genes"],
+        "tags": [
+          "Genes"
+        ],
         "summary": "genesEntrezGeneIdGet",
         "description": "Get specific gene information.",
         "operationId": "genesEntrezGeneIdGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "entrezGeneId",
@@ -1005,12 +1138,18 @@
     },
     "/genes/{entrezGeneId}/evidences": {
       "get": {
-        "tags": ["Genes"],
+        "tags": [
+          "Genes"
+        ],
         "summary": "genesEntrezGeneIdEvidencesGet",
         "description": "Get list of evidences for specific gene.",
         "operationId": "genesEntrezGeneIdEvidencesGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "entrezGeneId",
@@ -1043,12 +1182,18 @@
     },
     "/genes/{entrezGeneId}/variants": {
       "get": {
-        "tags": ["Genes"],
+        "tags": [
+          "Genes"
+        ],
         "summary": "genesEntrezGeneIdVariantsGet",
         "description": "Get list of variants for specific gene.",
         "operationId": "genesEntrezGeneIdVariantsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "entrezGeneId",
@@ -1081,12 +1226,18 @@
     },
     "/genesets": {
       "get": {
-        "tags": ["Genesets"],
+        "tags": [
+          "Genesets"
+        ],
         "summary": "genesetsGet",
         "description": "Get list of currently curated genesets.",
         "operationId": "genesetsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1102,12 +1253,18 @@
     },
     "/genesets/{uuid}": {
       "get": {
-        "tags": ["Genesets"],
+        "tags": [
+          "Genesets"
+        ],
         "summary": "genesetsUuidGet",
         "description": "Find geneset by uuid",
         "operationId": "genesetsUuidGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "uuid",
@@ -1129,11 +1286,17 @@
     },
     "/info": {
       "get": {
-        "tags": ["Info"],
+        "tags": [
+          "Info"
+        ],
         "summary": "infoGet",
         "operationId": "infoGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1146,12 +1309,18 @@
     },
     "/levels": {
       "get": {
-        "tags": ["Levels"],
+        "tags": [
+          "Levels"
+        ],
         "summary": "levelsGet",
         "description": "Get all levels.",
         "operationId": "levelsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1164,12 +1333,18 @@
     },
     "/levels/resistance": {
       "get": {
-        "tags": ["Levels"],
+        "tags": [
+          "Levels"
+        ],
         "summary": "levelsResistanceGet",
         "description": "Get all resistance levels.",
         "operationId": "levelsResistanceGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1182,12 +1357,18 @@
     },
     "/levels/sensitive": {
       "get": {
-        "tags": ["Levels"],
+        "tags": [
+          "Levels"
+        ],
         "summary": "levelsSensitiveGet",
         "description": "Get all sensitive levels.",
         "operationId": "levelsSensitiveGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1200,12 +1381,18 @@
     },
     "/search": {
       "get": {
-        "tags": ["Search"],
+        "tags": [
+          "Search"
+        ],
         "summary": "searchGet",
         "description": "General search for possible combinations.",
         "operationId": "searchGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1249,7 +1436,15 @@
             "description": "Structural Variant Type.",
             "required": false,
             "type": "string",
-            "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION", "UNKNOWN"]
+            "enum": [
+              "DELETION",
+              "TRANSLOCATION",
+              "DUPLICATION",
+              "INSERTION",
+              "INVERSION",
+              "FUSION",
+              "UNKNOWN"
+            ]
           },
           {
             "name": "consequence",
@@ -1350,12 +1545,18 @@
         }
       },
       "post": {
-        "tags": ["Search"],
+        "tags": [
+          "Search"
+        ],
         "summary": "searchPost",
         "description": "General search for possible combinations.",
         "operationId": "searchPostUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -1395,12 +1596,19 @@
     },
     "/utils/allActionableVariants": {
       "get": {
-        "tags": ["Variants", "Utils"],
+        "tags": [
+          "Variants",
+          "Utils"
+        ],
         "summary": "utilsAllActionableVariantsGet",
         "description": "Get All Actionable Variants.",
         "operationId": "utilsAllActionableVariantsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1416,12 +1624,19 @@
     },
     "/utils/allActionableVariants.txt": {
       "get": {
-        "tags": ["Variants", "Utils"],
+        "tags": [
+          "Variants",
+          "Utils"
+        ],
         "summary": "utilsAllActionableVariantsTxtGet",
         "description": "Get All Actionable Variants in text file.",
         "operationId": "utilsAllActionableVariantsTxtGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1434,12 +1649,19 @@
     },
     "/utils/allAnnotatedVariants": {
       "get": {
-        "tags": ["Variants", "Utils"],
+        "tags": [
+          "Variants",
+          "Utils"
+        ],
         "summary": "utilsAllAnnotatedVariantsGet",
         "description": "Get All Annotated Variants.",
         "operationId": "utilsAllAnnotatedVariantsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1455,12 +1677,19 @@
     },
     "/utils/allAnnotatedVariants.txt": {
       "get": {
-        "tags": ["Variants", "Utils"],
+        "tags": [
+          "Variants",
+          "Utils"
+        ],
         "summary": "utilsAllAnnotatedVariantsTxtGet",
         "description": "Get All Annotated Variants in text file.",
         "operationId": "utilsAllAnnotatedVariantsTxtGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1473,12 +1702,19 @@
     },
     "/utils/allCuratedGenes": {
       "get": {
-        "tags": ["Genes", "Utils"],
+        "tags": [
+          "Genes",
+          "Utils"
+        ],
         "summary": "utilsAllCuratedGenesGet",
         "description": "Get list of genes OncoKB curated",
         "operationId": "utilsAllCuratedGenesGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1494,12 +1730,19 @@
     },
     "/utils/allCuratedGenes.txt": {
       "get": {
-        "tags": ["Genes", "Utils"],
+        "tags": [
+          "Genes",
+          "Utils"
+        ],
         "summary": "utilsAllCuratedGenesTxtGet",
         "description": "Get list of genes OncoKB curated in text file.",
         "operationId": "utilsAllCuratedGenesTxtGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1512,12 +1755,19 @@
     },
     "/utils/cancerGeneList": {
       "get": {
-        "tags": ["Genes", "Utils"],
+        "tags": [
+          "Genes",
+          "Utils"
+        ],
         "summary": "utilsCancerGeneListGet",
         "description": "Get cancer gene list",
         "operationId": "utilsCancerGeneListGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1533,12 +1783,19 @@
     },
     "/utils/cancerGeneList.txt": {
       "get": {
-        "tags": ["Genes", "Utils"],
+        "tags": [
+          "Genes",
+          "Utils"
+        ],
         "summary": "utilsCancerGeneListTxtGet",
         "description": "Get cancer gene list in text file.",
         "operationId": "utilsCancerGeneListTxtGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["*/*"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1551,12 +1808,18 @@
     },
     "/variants": {
       "get": {
-        "tags": ["Variants"],
+        "tags": [
+          "Variants"
+        ],
         "summary": "variantsGet",
         "description": "Get all annotated variants.",
         "operationId": "variantsGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "fields",
@@ -1581,12 +1844,18 @@
     },
     "/variants/lookup": {
       "get": {
-        "tags": ["Variants"],
+        "tags": [
+          "Variants"
+        ],
         "summary": "variantsLookupGet",
         "description": "Search for variants.",
         "operationId": "variantsLookupGetUsingGET",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "name": "entrezGeneId",
@@ -1668,12 +1937,18 @@
         }
       },
       "post": {
-        "tags": ["Variants"],
+        "tags": [
+          "Variants"
+        ],
         "summary": "variantsLookupPost",
         "description": "Search for variants.",
         "operationId": "variantsLookupPostUsingPOST",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -1774,7 +2049,15 @@
         },
         "svType": {
           "type": "string",
-          "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION", "UNKNOWN"]
+          "enum": [
+            "DELETION",
+            "TRANSLOCATION",
+            "DUPLICATION",
+            "INSERTION",
+            "INVERSION",
+            "FUSION",
+            "UNKNOWN"
+          ]
         },
         "tumorType": {
           "type": "string"
@@ -1968,7 +2251,10 @@
         },
         "tumorForm": {
           "type": "string",
-          "enum": ["SOLID", "LIQUID"]
+          "enum": [
+            "SOLID",
+            "LIQUID"
+          ]
         }
       },
       "description": "OncoTree Detailed Cancer Type"
@@ -2033,7 +2319,10 @@
     },
     "GeneEvidence": {
       "type": "object",
-      "required": ["evidenceId", "evidenceType"],
+      "required": [
+        "evidenceId",
+        "evidenceType"
+      ],
       "properties": {
         "articles": {
           "type": "array",
@@ -2250,7 +2539,15 @@
         },
         "structuralVariantType": {
           "type": "string",
-          "enum": ["DELETION", "TRANSLOCATION", "DUPLICATION", "INSERTION", "INVERSION", "FUSION", "UNKNOWN"]
+          "enum": [
+            "DELETION",
+            "TRANSLOCATION",
+            "DUPLICATION",
+            "INSERTION",
+            "INVERSION",
+            "FUSION",
+            "UNKNOWN"
+          ]
         },
         "tumorType": {
           "type": "string"
@@ -2735,7 +3032,10 @@
         },
         "tumorForm": {
           "type": "string",
-          "enum": ["SOLID", "LIQUID"]
+          "enum": [
+            "SOLID",
+            "LIQUID"
+          ]
         }
       },
       "description": "OncoTree Cancer Type"
@@ -3052,7 +3352,12 @@
       "properties": {
         "copyNameAlterationType": {
           "type": "string",
-          "enum": ["AMPLIFICATION", "DELETION", "GAIN", "LOSS"]
+          "enum": [
+            "AMPLIFICATION",
+            "DELETION",
+            "GAIN",
+            "LOSS"
+          ]
         },
         "gene": {
           "$ref": "#/definitions/QueryGene"
