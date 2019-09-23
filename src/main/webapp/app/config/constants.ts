@@ -45,3 +45,11 @@ export const LEVEL_BUTTON_DESCRIPTION = {
 };
 export const LEVELS = ['1', '2', '3', '4', 'R1', 'R2'];
 export const LEVEL_OF_EVIDENCE = ['LEVEL_1', 'LEVEL_2', 'LEVEL_3', 'LEVEL_4', 'LEVEL_R1', 'LEVEL_R2'];
+export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
+  'Likely Neutral': 'neutral',
+  Unknown: 'unknown',
+  Inconclusive: 'inconclusive',
+  'Predicted Oncogenic': 'oncogenic',
+  'Likely Oncogenic': 'oncogenic',
+  Oncogenic: 'oncogenic'
+};

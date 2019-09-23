@@ -4,7 +4,6 @@ import { observer, inject } from 'mobx-react';
 import { remoteData } from 'cbioportal-frontend-commons';
 import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
 import { LevelNumber, MainNumber, TypeaheadSearchResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import autobind from 'autobind-decorator';
 import { Row, Col } from 'react-bootstrap';
 import oncokbImg from '../resources/images/oncokb.png';
@@ -12,33 +11,29 @@ import { HomePageNumber } from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
 import { LEVELS } from 'app/config/constants';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
-import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
+import { getAllAlterationsName, getAllTumorTypesName, levelOfEvidence2Level } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import { CitationText } from 'app/components/CitationText';
 import _ from 'lodash';
+import { SearchOption, SearchOptionType } from 'app/components/searchOption/SearchOption';
+import AsyncSelect from 'react-select/async';
+import { components } from 'react-select';
+import { SuggestCuration } from 'app/components/SuggestCuration';
 
 interface IHomeProps {
   content: string;
   routing: RouterStore;
 }
 
+export type ExtendedTypeaheadSearchResp = TypeaheadSearchResp & {
+  alterationsName: string;
+  tumorTypesName: string;
+};
+
 @inject('routing')
 @observer
 class HomePage extends React.Component<IHomeProps> {
-  @observable keyword: string;
-
-  readonly searchOptions = remoteData<TypeaheadSearchResp[]>({
-    await: () => [],
-    invoke: async () => {
-      return oncokbPrivateClient.searchTypeAheadGetUsingGET({
-        query: this.keyword
-      });
-    },
-    onError: () => {
-      // TODO:
-    },
-    default: []
-  });
+  @observable keyword = '';
 
   readonly mainNumbers = remoteData<MainNumber>({
     await: () => [],
@@ -72,12 +67,6 @@ class HomePage extends React.Component<IHomeProps> {
     default: {}
   });
 
-  @autobind
-  @action
-  onSearch(keyword: string) {
-    this.keyword = keyword;
-  }
-
   levelOnClick(level: string) {
     this.props.routing.history.push(`/actionableGenes#level=${level}`);
   }
@@ -86,7 +75,53 @@ class HomePage extends React.Component<IHomeProps> {
     return this.levelNumbers.result[level] ? this.levelNumbers.result[level].genes.length : 0;
   }
 
+  @autobind
+  @action
+  async getOptions(keyword: string) {
+    this.keyword = keyword;
+    return _.reduce(
+      await oncokbPrivateClient.searchTypeAheadGetUsingGET({
+        query: keyword
+      }),
+      (acc, result) => {
+        acc.push({
+          tumorTypesName: getAllTumorTypesName(result.tumorTypes),
+          alterationsName: getAllAlterationsName(result.variants),
+          ...result
+        });
+        return acc;
+      },
+      [] as ExtendedTypeaheadSearchResp[]
+    );
+  }
+
   public render() {
+    const Option = (props: any) => {
+      return (
+        <>
+          <components.Option {...props}>
+            <SearchOption search={this.keyword} type={props.data.queryType as SearchOptionType} data={props.data}>
+              <components.Option {...props} />
+            </SearchOption>
+          </components.Option>
+        </>
+      );
+    };
+    const NoOptionsMessage = (props: any) => {
+      if (this.keyword) {
+        return (
+          <components.Option {...props}>
+            <span className="mr-2">No result found, please send us an email if you would like {this.keyword} to be curated.</span>
+            <SuggestCuration suggestion={this.keyword} />
+          </components.Option>
+        );
+      } else {
+        return null;
+      }
+    };
+
+    // @ts-ignore
+    // @ts-ignore
     return (
       <div className="home">
         <Row className="mb-5">
@@ -121,15 +156,42 @@ class HomePage extends React.Component<IHomeProps> {
         </Row>
         <Row className="mb-5">
           <Col md={8} className={'mx-auto'}>
-            <AsyncTypeahead
-              bsSize={'lg'}
-              id={'mainSearch'}
-              isLoading={this.searchOptions.isPending}
-              options={this.searchOptions.result}
-              labelKey={(option: TypeaheadSearchResp) => `${option.link} ${option.annotation}`}
-              onSearch={this.onSearch}
+            <AsyncSelect
               placeholder="Search Gene / Alteration / Drug"
-              renderMenuItemChildren={(option: TypeaheadSearchResp, props) => <div>{option.link}</div>}
+              components={{
+                Option,
+                DropdownIndicator: () => null,
+                IndicatorSeparator: () => null,
+                NoOptionsMessage
+              }}
+              styles={{
+                input: styles => {
+                  return {
+                    ...styles,
+                    lineHeight: '30px'
+                  };
+                },
+                placeholder: styles => {
+                  return {
+                    ...styles,
+                    width: '100%',
+                    lineHeight: '30px',
+                    textAlign: 'center'
+                  };
+                }
+              }}
+              isFocused={true}
+              defaultOptions={[] as ExtendedTypeaheadSearchResp[]}
+              menuIsOpen={!!this.keyword}
+              isClearable={true}
+              onChange={(value: ExtendedTypeaheadSearchResp, props) => {
+                this.props.routing.history.push(value.link);
+              }}
+              closeMenuOnSelect={false}
+              loadOptions={this.getOptions}
+              onInputChange={(keyword: string) => {
+                this.keyword = keyword;
+              }}
             />
           </Col>
         </Row>
