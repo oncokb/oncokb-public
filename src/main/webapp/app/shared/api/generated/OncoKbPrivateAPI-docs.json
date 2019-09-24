@@ -763,7 +763,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/PortalAlteration"
+                "$ref": "#/definitions/CancerTypeCount"
               }
             }
           },
@@ -1142,6 +1142,18 @@
           }
         },
         "tumorType": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CancerTypeCount": {
+      "type": "object",
+      "properties": {
+        "cancerType": {
+          "type": "string"
+        },
+        "count": {
           "type": "integer",
           "format": "int32"
         }

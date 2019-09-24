@@ -96,6 +96,12 @@ export type MainNumber = {
         'tumorType': number
 
 };
+export type CancerTypeCount = {
+    'cancerType': string
+
+        'count': number
+
+};
 export type VariantAnnotation = {
     'alleleExist': boolean
 
@@ -1798,7 +1804,7 @@ export default class OncoKbPrivateAPI {
             'hugoSymbol' ? : string,
             $queryParameters ? : any,
                 $domain ? : string
-        }): Promise < Array < PortalAlteration >
+        }): Promise < Array < CancerTypeCount >
         > {
             return this.utilPortalAlterationSampleCountGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;

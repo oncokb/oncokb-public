@@ -4,7 +4,15 @@ import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { observable, computed } from 'mobx';
 import { Alteration, Evidence, IndicatorQueryResp, VariantSearchQuery, Gene } from 'app/shared/api/generated/OncoKbAPI';
 import { EVIDENCE_TYPES } from 'app/config/constants';
-import { BiologicalVariant, ClinicalVariant, GeneNumber, PortalAlteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  BiologicalVariant,
+  CancerTypeCount,
+  ClinicalVariant,
+  GeneNumber,
+  PortalAlteration
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
+import _ from 'lodash';
+import { BarChartDatum } from 'app/components/barChart/BarChart';
 
 interface IAnnotationStore {
   hugoSymbol: string;
@@ -77,7 +85,7 @@ export class AnnotationStore {
       });
     },
     default: {
-      gene: null as Gene,
+      gene: {} as Gene,
       alteration: 0,
       highestSensitiveLevel: '',
       highestResistanceLevel: '',
@@ -128,11 +136,9 @@ export class AnnotationStore {
     default: []
   });
 
-  readonly portalAlterationSampleCount = remoteData<PortalAlteration[]>({
+  readonly portalAlterationSampleCount = remoteData<CancerTypeCount[]>({
     invoke: async () => {
-      return privateClient.utilPortalAlterationSampleCountGetUsingGET({
-        hugoSymbol: this.hugoSymbol
-      });
+      return privateClient.utilPortalAlterationSampleCountGetUsingGET({});
     },
     default: []
   });
@@ -146,6 +152,29 @@ export class AnnotationStore {
     default: []
   });
 
+  @computed
+  get barChartData() {
+    const groupedCanerTypeCounts = _.groupBy(this.mutationMapperData.result, 'cancerType');
+    const cancerGroups = _.keyBy(this.portalAlterationSampleCount.result.sort((a, b) => (a.count > b.count ? -1 : 1)), 'cancerType');
+    return _.reduce(
+      groupedCanerTypeCounts,
+      (acc, next: PortalAlteration[], cancerType) => {
+        const numUniqSampleCountsInCancerType = _.uniq(next.map(item => item.sampleId)).length;
+        if (cancerGroups[cancerType] && cancerGroups[cancerType].count > 50) {
+          acc.push({
+            x: cancerType,
+            y: (100 * numUniqSampleCountsInCancerType) / cancerGroups[cancerType].count,
+            overlay: ''
+          } as BarChartDatum);
+        }
+        return acc;
+      },
+      [] as BarChartDatum[]
+    )
+      .sort((a, b) => (a.y > b.y ? -1 : 1))
+      .splice(0, 15);
+  }
+
   readonly alterationsSearchResult = remoteData<Alteration[][]>({
     invoke: async () => {
       const result = await apiClient.variantsLookupPostUsingPOST({
@@ -155,9 +184,4 @@ export class AnnotationStore {
     },
     default: []
   });
-
-  @computed
-  get geneIsValid() {
-    return this.gene.isComplete && !!this.gene.result;
-  }
 }

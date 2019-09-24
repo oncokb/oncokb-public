@@ -10,6 +10,8 @@ import styles from './GenePage.module.scss';
 import { levelOfEvidence2Level, reduceJoin } from 'app/shared/utils/Utils';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
+import BarChart from 'app/components/barChart/BarChart';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -187,7 +189,30 @@ export default class GenePage extends React.Component<{}> {
                     )}
                   </div>
                 </Col>
-                <Col lg={6} xs={12} />
+                <Col lg={6} xs={12} className={'d-flex flex-column align-items-center'}>
+                  <div>
+                    <b>Cancer Types with {this.hugoSymbol} Mutations</b>
+                    <DefaultTooltip
+                      overlay={() => (
+                        <div style={{ maxWidth: 300 }}>
+                          Currently, the mutation frequency does not take into account copy number changes, chromosomal translocations or
+                          cancer types with fewer than 50 samples in{' '}
+                          <a target="_blank" href="http://www.cbioportal.org/study?id=msk_impact_2017#summary">
+                            MSK-IMPACT Clinical Sequencing Cohort
+                          </a>{' '}
+                          (
+                          <a href="https://www.ncbi.nlm.nih.gov/pubmed/28481359" target="_blank">
+                            Zehir et al., Nature Medicine, 2017
+                          </a>
+                          )
+                        </div>
+                      )}
+                    >
+                      <i className="fa fa-question-circle-o ml-2" />
+                    </DefaultTooltip>
+                  </div>
+                  <BarChart data={this.store.barChartData} width={500} height={300} filters={[]} />
+                </Col>
               </Row>
             </Then>
             <Else>
