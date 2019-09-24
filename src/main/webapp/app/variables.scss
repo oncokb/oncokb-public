@@ -27,14 +27,4 @@ $container-max-widths: (
   xl: 1450px
 ) !default;
 
-// nav overwrite
-$navbar-brand-height: 5rem;
-$navbar-brand-padding-y: 1rem;
-//$navbar-padding-x:0;
-$navbar-padding-y: 0;
-$nav-tabs-link-active-border-color: $orange;
-$navbar-dark-color: white; // We do not use different color to emphasize whether the tab is selected
-$nav-link-padding-y: 0;
-$navbar-nav-link-padding-x: 0.25rem;
-
 $view-wrapper-default-p-y: 2rem;

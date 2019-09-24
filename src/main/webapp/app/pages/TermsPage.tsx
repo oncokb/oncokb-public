@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import './TermsPage.scss';
 import { Link } from 'react-router-dom';
-import { PAGE_ROUTE } from 'app/config/constants';
+import { ONCOKB_CONTACT_EMAIL, PAGE_ROUTE } from 'app/config/constants';
 
 export const TermsPage = () => {
   return (
@@ -22,8 +22,8 @@ export const TermsPage = () => {
             reliance on information contained in this site or other sites that may be linked to from our site. This information is not
             intended as a substitute for medical professional help or advice. A physician should always be consulted for any health problem
             or medical condition. Inquiries about the content should be directed to
-            <a href="mailto:contact@oncokb.org" target="_top">
-              contact@oncokb.org
+            <a href={`mailto:${ONCOKB_CONTACT_EMAIL}`} target="_top">
+              {ONCOKB_CONTACT_EMAIL}
             </a>
             .
           </p>

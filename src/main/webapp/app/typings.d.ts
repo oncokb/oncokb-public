@@ -13,3 +13,4 @@ declare module '*.png' {
 }
 
 declare module 'availity-reactstrap-validation';
+declare module 'react-responsive-tabs';

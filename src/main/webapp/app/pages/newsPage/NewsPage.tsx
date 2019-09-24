@@ -2,6 +2,7 @@ import * as React from 'react';
 import { CitationText } from 'app/components/CitationText';
 import { getNewsList, getNewsTitle, NewsList } from 'app/pages/newsPage/NewsList';
 import { NEWS_BY_DATE } from 'app/pages/newsPage/NewsPageContent';
+import { ONCOKB_CONTACT_EMAIL } from 'app/config/constants';
 
 export const NewsPage = () => {
   return (
@@ -9,8 +10,9 @@ export const NewsPage = () => {
       <div>
         <p>
           While we aim to keep the information up to date and correct, there will inevitably be gaps or mistakes. Please help us to identify
-          any issues by <b>sending an email to</b> <a href="mailto:contact@oncokb.org?subject=OncoKB Feedback">contact@oncokb.org</a>, or
-          use the feedback button that appears next to alterations in cBioPortal.
+          any issues by <b>sending an email to</b>{' '}
+          <a href={`mailto:${ONCOKB_CONTACT_EMAIL}?subject=OncoKB Feedback`}>{ONCOKB_CONTACT_EMAIL}</a>, or use the feedback button that
+          appears next to alterations in cBioPortal.
         </p>
         <p>
           <b>Stay tuned</b> for future data updates (improved annotations, new alterations), as well as new features. You can follow us on

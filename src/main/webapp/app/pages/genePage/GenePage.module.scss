@@ -25,3 +25,10 @@
   color: $grey;
   padding: 0 0.25rem;
 }
+
+.tab {
+}
+
+:global(.RRT__panel).panel {
+  border-width: 1px 0 0;
+}

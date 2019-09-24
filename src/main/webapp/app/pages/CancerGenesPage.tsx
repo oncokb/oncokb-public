@@ -1,19 +1,21 @@
 import React from 'react';
 import apiClient from '../shared/api/oncokbClientInstance';
-import { remoteData, DefaultTooltip } from 'cbioportal-frontend-commons';
+import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
 import { CancerGene, CuratedGene } from 'app/shared/api/generated/OncoKbAPI';
-import ReactTable from 'react-table';
-import { observer, inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import { SuggestCuration } from 'app/components/SuggestCuration';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import fileDownload from 'js-file-download';
-import { action, observable, computed } from 'mobx';
+import { action, observable } from 'mobx';
 import * as _ from 'lodash';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Redirect } from 'react-router-dom';
+import TableWithSearchBox, { SearchColumn } from 'app/components/tableWithSearchBox/TableWithSearchBox';
+import { filterByKeyword, getDefaultColumnDefinition } from 'app/shared/utils/Utils';
+import { TABLE_COLUMN_KEY } from 'app/config/constants';
 
 const InfoIcon = (props: { overlay: string | JSX.Element }) => {
   return (
@@ -49,19 +51,14 @@ type ExtendCancerGene = CancerGene & {
 @inject('authenticationStore')
 @observer
 export default class CancerGenesPage extends React.Component<{ authenticationStore: AuthenticationStore }> {
-  @observable searchKeyword = '';
   @observable needsRedirect = false;
 
   private fetchedDate = '05/07/2019';
 
-  private columns = [
+  private columns: SearchColumn<ExtendCancerGene>[] = [
     {
-      id: 'hugoSymbol',
-      Header: <span>Hugo Symbol</span>,
-      accessor: 'hugoSymbol',
-      minWidth: 100,
-      defaultSortDesc: false,
-      sortMethod: defaultSortMethod,
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
+      onFilter: (data: ExtendCancerGene, keyword) => filterByKeyword(data.hugoSymbol, keyword),
       Cell: (props: { original: ExtendCancerGene }) => {
         return props.original.annotated ? <GenePageLink hugoSymbol={props.original.hugoSymbol} /> : `${props.original.hugoSymbol}`;
       }
@@ -93,6 +90,7 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
       ),
       minWidth: 120,
       accessor: 'geneType',
+      onFilter: (data: ExtendCancerGene, keyword) => filterByKeyword(data.geneType, keyword),
       sortMethod: (a: string, b: string) => a.localeCompare(b)
     },
     {
@@ -271,6 +269,7 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
       Header: () => '# of Sources',
       style: { textAlign: 'center' },
       sortable: true,
+      onFilter: (data: ExtendCancerGene, keyword) => filterByKeyword(data.numOfSources.toString(), keyword),
       accessor: 'numOfSources'
     }
   ];
@@ -339,20 +338,6 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
     default: []
   });
 
-  @computed
-  get filteredData() {
-    return this.extendedCancerGene.result.filter(extendedCancerGene => {
-      return (
-        extendedCancerGene.hugoSymbol.toLowerCase().startsWith(this.searchKeyword) ||
-        extendedCancerGene.geneType.toLowerCase().startsWith(this.searchKeyword) ||
-        extendedCancerGene.numOfSources
-          .toString()
-          .toLowerCase()
-          .startsWith(this.searchKeyword)
-      );
-    });
-  }
-
   @action
   downloadData() {
     if (this.props.authenticationStore.isUserAuthenticated) {
@@ -401,25 +386,11 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
           </Col>
         </Row>
         <Row>
-          <Col className="col-auto ml-auto">
-            <input
-              onChange={(event: any) => {
-                this.searchKeyword = event.target.value.toLowerCase();
-              }}
-              className="form-control input-sm"
-              type="text"
-              placeholder="Search ..."
-            />
-          </Col>
-        </Row>
-        <Row className="mt-2">
           <Col>
-            <ReactTable
-              data={this.filteredData}
-              loading={this.extendedCancerGene.isPending}
+            <TableWithSearchBox
+              data={this.extendedCancerGene.result}
               columns={this.columns}
-              showPagination={true}
-              defaultSortDesc={true}
+              isLoading={this.extendedCancerGene.isPending}
               defaultSorted={[
                 {
                   id: 'numOfSources',
@@ -434,7 +405,6 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
                   desc: true
                 }
               ]}
-              className="-striped -highlight"
             />
           </Col>
         </Row>

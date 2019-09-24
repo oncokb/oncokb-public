@@ -9,6 +9,7 @@ import indexStyles from '../index.module.scss';
 import { CitationText } from 'app/components/CitationText';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classnames from 'classnames';
+import { ONCOKB_CONTACT_EMAIL } from 'app/config/constants';
 
 class Footer extends React.Component<{ lastUpdate: string }> {
   public get externalLinkIcon() {
@@ -54,7 +55,7 @@ class Footer extends React.Component<{ lastUpdate: string }> {
       <>
         <div className={classnames(styles.footerAList, 'mb-2')}>
           <Link to="/terms">Usage Terms</Link>
-          <a href="mailto:contact@oncokb.org" target="_blank">
+          <a href={`mailto:${ONCOKB_CONTACT_EMAIL}`} target="_blank">
             Contact us
           </a>
           <a href="https://twitter.com/OncoKB" target="_blank">

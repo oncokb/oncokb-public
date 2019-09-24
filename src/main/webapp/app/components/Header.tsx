@@ -55,7 +55,7 @@ class Header extends React.Component<IHeaderProps> {
 
   public render() {
     return (
-      <header className="sticky-top">
+      <header className="sticky-top header">
         <Navbar bg="primary" expand="lg" className="navbar-dark main-navbar">
           <Container fluid={!this.props.windowStore.isXLscreen}>
             <Navbar.Brand onClick={() => this.updateActiveKey('/')}>

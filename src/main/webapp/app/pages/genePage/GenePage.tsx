@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { AnnotationStore } from 'app/store/AnnotationStore';
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { If, Else, Then } from 'react-if';
 import { Redirect } from 'react-router';
 import { Row, Col, Button } from 'react-bootstrap';
@@ -12,6 +12,9 @@ import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import BarChart from 'app/components/barChart/BarChart';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import pluralize from 'pluralize';
+import { ReportIssue } from 'app/components/ReportIssue';
+import Tabs from 'react-responsive-tabs';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -41,40 +44,59 @@ const getHighestLevelStrings = (highestSensitiveLevel: string | undefined, highe
   return <>{reduceJoin(levels, ', ')}</>;
 };
 
-type GeneInfo = {
+type GeneInfoProps = {
   gene: Gene;
   highestSensitiveLevel: string | undefined;
   highestResistanceLevel: string | undefined;
 };
 
-const GeneInfo: React.FunctionComponent<GeneInfo> = props => {
+type GeneInfoItem = {
+  key: string;
+  element: JSX.Element | string;
+};
+
+type AdditionalInfoItem = {
+  key: string;
+  element: React.ReactNode | string;
+};
+
+const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   const gene = props.gene;
-  const info: (JSX.Element | string)[] = [];
+  const info: GeneInfoItem[] = [];
 
   // gene type
   if (gene.oncogene || gene.tsg) {
-    info.push(
-      <div className={styles.highlightGeneInfo}>
-        <b>{getGeneTypeSentence(gene.oncogene, gene.tsg)}</b>
-      </div>
-    );
+    info.push({
+      key: 'geneType',
+      element: (
+        <div className={styles.highlightGeneInfo}>
+          <b>{getGeneTypeSentence(gene.oncogene, gene.tsg)}</b>
+        </div>
+      )
+    });
   }
 
   // highest LoE
   if (props.highestResistanceLevel || props.highestSensitiveLevel) {
-    info.push(
-      <div className={styles.highlightGeneInfo}>
-        <b>Highest level of evidence: {getHighestLevelStrings(props.highestSensitiveLevel, props.highestResistanceLevel)}</b>
-      </div>
-    );
+    info.push({
+      key: 'loe',
+      element: (
+        <div className={styles.highlightGeneInfo}>
+          <b>Highest level of evidence: {getHighestLevelStrings(props.highestSensitiveLevel, props.highestResistanceLevel)}</b>
+        </div>
+      )
+    });
   }
 
   if (gene.geneAliases.length > 0) {
-    info.push(<div>{`Also known as ${gene.geneAliases.join(', ')}`}</div>);
+    info.push({
+      key: 'aliases',
+      element: <div>{`Also known as ${gene.geneAliases.join(', ')}`}</div>
+    });
   }
 
   const additionalInfo: React.ReactNode[] = [
-    <span>
+    <span key="geneId">
       Gene ID:{' '}
       <Button className={styles.geneAdditionalInfoButton} variant="link" href={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}>
         {gene.entrezGeneId}
@@ -83,7 +105,7 @@ const GeneInfo: React.FunctionComponent<GeneInfo> = props => {
   ];
   if (gene.curatedIsoform) {
     additionalInfo.push(
-      <span>
+      <span key="isoform">
         Isoform:{' '}
         <Button className={styles.geneAdditionalInfoButton} variant="link" href={`https://www.ensembl.org/id/${gene.curatedIsoform}`}>
           {gene.curatedIsoform}
@@ -93,7 +115,7 @@ const GeneInfo: React.FunctionComponent<GeneInfo> = props => {
   }
   if (gene.curatedRefSeq) {
     additionalInfo.push(
-      <span>
+      <span key="refSeq">
         RefSeq:{' '}
         <Button
           className={styles.geneAdditionalInfoButton}
@@ -106,18 +128,26 @@ const GeneInfo: React.FunctionComponent<GeneInfo> = props => {
     );
   }
 
-  info.push(<div className={styles.geneAdditionalInfo}>{reduceJoin(additionalInfo, '')}</div>);
+  info.push({
+    key: 'additionalInfo',
+    element: <div className={styles.geneAdditionalInfo}>{additionalInfo}</div>
+  });
 
   return (
     <>
       {info.map(record => (
-        <Row>
-          <Col>{record}</Col>
+        <Row key={record.key}>
+          <Col>{record.element}</Col>
         </Row>
       ))}
     </>
   );
 };
+
+enum TAB_KEYS {
+  'CLINICAL',
+  'BIOLOGICAL'
+}
 
 const GeneBackground: React.FunctionComponent<{
   show: boolean;
@@ -161,11 +191,61 @@ export default class GenePage extends React.Component<{}> {
     this.showGeneBackground = !this.showGeneBackground;
   }
 
+  getTabContent(key: TAB_KEYS) {
+    return <ReportIssue />;
+  }
+
+  @computed
+  get tabs() {
+    const tabs: { title: string; key: TAB_KEYS }[] = [];
+    if (this.store.clinicalAlterations.result.length > 0) {
+      tabs.push({
+        key: TAB_KEYS.CLINICAL,
+        title: `Clinically Relevant ${pluralize('Alteration', this.store.clinicalAlterations.result.length)} (${
+          this.store.clinicalAlterations.result.length
+        })`
+      });
+    }
+    if (this.store.biologicalAlterations.result.length > 0) {
+      tabs.push({
+        key: TAB_KEYS.BIOLOGICAL,
+        title: `All Annotated ${pluralize('Alteration', this.store.biologicalAlterations.result.length)} (${
+          this.store.biologicalAlterations.result.length
+        })`
+      });
+    }
+    return tabs.map(tab => {
+      return {
+        title: tab.title,
+        getContent: () => this.getTabContent(tab.key),
+        /* Optional parameters */
+        key: tab.key,
+        tabClassName: styles.tab,
+        panelClassName: styles.panel
+      };
+    });
+  }
+
+  @computed
+  get pageShouldBeRendered() {
+    return (
+      this.store.gene.isComplete &&
+      this.store.geneNumber.isComplete &&
+      this.store.clinicalAlterations.isComplete &&
+      this.store.biologicalAlterations.isComplete
+    );
+  }
+
+  @computed
+  get tabDefaultActiveKey() {
+    return this.store.clinicalAlterations.result.length > 0 ? TAB_KEYS.CLINICAL : TAB_KEYS.BIOLOGICAL;
+  }
+
   render() {
     return (
       <If condition={!!this.hugoSymbol}>
         <Then>
-          <If condition={this.store.gene.isComplete && this.store.geneNumber.isComplete}>
+          <If condition={this.pageShouldBeRendered}>
             <Then>
               <Row>
                 <Col lg={6} xs={12}>
@@ -216,6 +296,11 @@ export default class GenePage extends React.Component<{}> {
               </Row>
               <Row>
                 <Col>{/*<LollipopPlot />*/}</Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Tabs items={this.tabs} transform={false} />
+                </Col>
               </Row>
             </Then>
             <Else>

@@ -22,27 +22,54 @@ body,
     color: $orange;
   }
 }
+
 .orange {
   color: $oncokb-orange;
 }
 
-.navbar-nav > a {
-  line-height: 2.75rem;
-  border-bottom: 0.25rem solid $primary;
+.header {
+  .navbar-brand {
+  }
 
-  &.active {
-    border-bottom-color: $oncokb-orange;
+  .navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+
+    .nav-link {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .navbar-nav {
+      & > a {
+        line-height: 2.75rem;
+        border-bottom: 0.25rem solid $primary;
+
+        &.active {
+          border-bottom-color: $oncokb-orange;
+        }
+      }
+
+      & .nav-link {
+        padding-left: $navbar-nav-link-padding-x;
+        padding-right: $navbar-nav-link-padding-x;
+      }
+    }
+  }
+
+  .nav-link {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .navbar-dark .navbar-nav .nav-link {
+    color: white;
   }
 }
 
 #account-menu {
   line-height: 2.75rem;
   border-bottom: 0.25rem $primary;
-}
-
-.navbar-nav .nav-link {
-  padding-left: $navbar-nav-link-padding-x;
-  padding-right: $navbar-nav-link-padding-x;
 }
 
 .team {

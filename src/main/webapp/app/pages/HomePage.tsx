@@ -181,7 +181,9 @@ class HomePage extends React.Component<IHomeProps> {
               menuIsOpen={!!this.keyword}
               isClearable={true}
               onChange={(value: ExtendedTypeaheadSearchResp, props) => {
-                this.props.routing.history.push(value.link);
+                if (value) {
+                  this.props.routing.history.push(value.link);
+                }
               }}
               closeMenuOnSelect={false}
               loadOptions={this.getOptions}

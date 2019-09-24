@@ -1,5 +1,7 @@
 import { OncoKBInfo, Gene } from 'app/shared/api/generated/OncoKbAPI';
 import { MainNumber } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
+import { GenePageLink } from 'app/shared/utils/UrlUtils';
 
 const config = {
   VERSION: process.env.VERSION
@@ -26,10 +28,20 @@ export const APP_LOCAL_DATETIME_FORMAT_Z = 'YYYY-MM-DDTHH:mm Z';
 export const APP_WHOLE_NUMBER_FORMAT = '0,0';
 export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
 
+export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
 export const GRID_BREAKPOINTS = {
   LG: 980,
   XL: 1450
 };
+
+export enum ONCOGENICITY {
+  ONCOGENIC = 'Oncogenic',
+  LIKELY_ONCOGENIC = 'Likely Oncogenic',
+  PREDICTED_ONCOGENIC = 'Predicted Oncogenic',
+  LIKELY_NEUTRAL = 'Likely Neutral',
+  INCONCLUSIVE = 'Inconclusive',
+  UNKNOWN = 'Unknown'
+}
 
 const EVIDENCE_TYPE = {
   FDA_APPROVED: 'FDA-approved',
@@ -49,12 +61,12 @@ export const LEVEL_BUTTON_DESCRIPTION = {
 export const LEVELS = ['1', '2', '3', '4', 'R1', 'R2'];
 export const LEVEL_OF_EVIDENCE = ['LEVEL_1', 'LEVEL_2', 'LEVEL_3', 'LEVEL_4', 'LEVEL_R1', 'LEVEL_R2'];
 export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
-  'Likely Neutral': 'neutral',
-  Unknown: 'unknown',
-  Inconclusive: 'inconclusive',
-  'Predicted Oncogenic': 'oncogenic',
-  'Likely Oncogenic': 'oncogenic',
-  Oncogenic: 'oncogenic'
+  [ONCOGENICITY.LIKELY_NEUTRAL]: 'neutral',
+  [ONCOGENICITY.UNKNOWN]: 'unknown',
+  [ONCOGENICITY.INCONCLUSIVE]: 'inconclusive',
+  [ONCOGENICITY.PREDICTED_ONCOGENIC]: 'oncogenic',
+  [ONCOGENICITY.LIKELY_ONCOGENIC]: 'oncogenic',
+  [ONCOGENICITY.ONCOGENIC]: 'oncogenic'
 };
 
 export enum EVIDENCE_TYPES {
@@ -108,4 +120,14 @@ export enum PAGE_ROUTE {
   NEWS = '/news',
   LEVELS = '/levels',
   ACCOUNT = '/account'
+}
+
+export enum TABLE_COLUMN_KEY {
+  HUGO_SYMBOL = 'HUGO_SYMBOL',
+  ALTERATION = 'ALTERATION',
+  TUMOR_TYPE = 'TUMOR_TYPE',
+  DRUGS = 'DRUGS',
+  LEVEL = 'LEVEL',
+  CITATIONS = 'CITATIONS',
+  ONCOGENICITY = 'ONCOGENICITY'
 }

@@ -1,3 +1,5 @@
+import { ONCOGENICITY } from 'app/config/constants';
+
 export function defaultSortMethod(a: any, b: any): number {
   // force null and undefined to the bottom
   a = a === null || a === undefined ? -Infinity : a;
@@ -19,32 +21,20 @@ export function defaultSortMethod(a: any, b: any): number {
   return 0;
 }
 
-export function defaultStringArraySortMethod(a: string[], b: string[]): number {
-  return defaultSortMethod(a.join(), b.join());
+const oncogenicityOrder = ['Oncogenic', 'Likely Oncogenic', 'Likely Neutral', 'Inconclusive', 'Unknown'];
+
+export function oncogenicitySortMethod(a: ONCOGENICITY, b: ONCOGENICITY) {
+  return sortByArrayIndexAsc(oncogenicityOrder.indexOf(a), oncogenicityOrder.indexOf(b));
 }
 
-export function defaultArraySortMethod<U extends number | string>(a: (U | null)[], b: (U | null)[]): number {
-  let result = 0;
-
-  const loopLength = Math.min(a.length, b.length);
-
-  for (let i = 0; i < loopLength; i++) {
-    result = defaultSortMethod(a[i], b[i]);
-
-    if (result !== 0) {
-      break;
-    }
+export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {
+  if (aIndex === bIndex) {
+    return 0;
+  } else if (aIndex === -1) {
+    return 1;
+  } else if (bIndex === -1) {
+    return -1;
+  } else {
+    return aIndex - bIndex;
   }
-
-  if (result === 0) {
-    if (a.length < b.length) {
-      // result = (asc ? -1 : 1);
-      result = -1;
-    } else if (a.length > b.length) {
-      // result = (asc ? 1 : -1);
-      result = 1;
-    }
-  }
-
-  return result;
 }

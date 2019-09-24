@@ -1,15 +1,15 @@
 import React from 'react';
-import { observer, inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { remoteData } from 'cbioportal-frontend-commons';
-import { observable, computed, action, reaction, IReactionDisposer } from 'mobx';
+import { action, computed, IReactionDisposer, observable, reaction } from 'mobx';
 import { Evidence, MainType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
-import { getCancerTypeNameFromOncoTreeType, levelOfEvidence2Level } from 'app/shared/utils/Utils';
+import { getCancerTypeNameFromOncoTreeType, getDefaultColumnDefinition, levelOfEvidence2Level } from 'app/shared/utils/Utils';
 import { TreatmentDrug } from 'app/shared/api/generated/OncoKbAPI';
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
@@ -17,9 +17,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactTable from 'react-table';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
-import { Else, Then, If } from 'react-if';
+import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
-import { LEVELS } from 'app/config/constants';
+import { LEVELS, TABLE_COLUMN_KEY } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import * as QueryString from 'query-string';
@@ -389,25 +389,14 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   private columns = [
     {
-      id: 'level',
-      Header: <span>Level</span>,
-      accessor: 'level',
-      style: { justifyContent: 'center', display: 'flex', alignItems: 'center' },
-      minWidth: 70,
-      defaultSortDesc: false,
-      sortMethod: defaultSortMethod,
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
       Cell: (props: { original: Treatment }) => {
         return <i className={`oncokb level-icon level-${props.original.level}`} />;
       }
     },
     {
-      id: 'hugoSymbol',
-      Header: <span>Gene</span>,
-      accessor: 'hugoSymbol',
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
       style: { whiteSpace: 'normal' },
-      minWidth: 100,
-      defaultSortDesc: false,
-      sortMethod: defaultSortMethod,
       Cell: (props: { original: Treatment }) => {
         return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
       }
@@ -427,24 +416,16 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
       }
     },
     {
-      id: 'tumorType',
-      Header: <span>Tumor Type</span>,
-      accessor: 'tumorType',
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
       minWidth: 300,
-      defaultSortDesc: false,
-      sortMethod: defaultSortMethod,
       Cell: (props: { original: Treatment }) => {
         return <span>{props.original.tumorType}</span>;
       }
     },
     {
-      id: 'drugs',
-      Header: <span>Drugs</span>,
-      accessor: 'drugs',
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
       minWidth: 300,
       style: { whiteSpace: 'normal' },
-      defaultSortDesc: false,
-      sortMethod: defaultSortMethod,
       Cell: (props: { original: Treatment }) => {
         return <span>{props.original.drugs}</span>;
       }
