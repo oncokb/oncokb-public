@@ -47,6 +47,7 @@ const AppRouts = inject('authenticationStore', 'routing')((props: { authenticati
       <PrivateRoute
         path={PAGE_ROUTE.ACCOUNT}
         authenticationStore={props.authenticationStore!}
+        // @ts-ignore
         routing={props.routing!}
         component={Account}
         isAuthorized={

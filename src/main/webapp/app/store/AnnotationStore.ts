@@ -3,7 +3,7 @@ import apiClient from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { observable, computed } from 'mobx';
 import { Alteration, Evidence, IndicatorQueryResp, VariantSearchQuery, Gene } from 'app/shared/api/generated/OncoKbAPI';
-import { EVIDENCE_TYPES } from 'app/config/constants';
+import { DEFAULT_GENE, EVIDENCE_TYPES } from 'app/config/constants';
 import {
   BiologicalVariant,
   CancerTypeCount,
@@ -95,7 +95,7 @@ export class AnnotationStore {
       });
     },
     default: {
-      gene: {} as Gene,
+      gene: DEFAULT_GENE,
       alteration: 0,
       highestSensitiveLevel: '',
       highestResistanceLevel: '',

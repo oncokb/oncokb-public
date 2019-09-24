@@ -109,7 +109,6 @@ class HomePage extends React.Component<IHomeProps> {
     };
 
     // @ts-ignore
-    // @ts-ignore
     return (
       <div className="home">
         <Row className="mb-5">
@@ -143,6 +142,7 @@ class HomePage extends React.Component<IHomeProps> {
               </Col>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
+                  href={PAGE_ROUTE.ACTIONABLE_GENE}
                   number={this.props.appStore.mainNumbers.result.drug}
                   title={`${pluralize('Drug', this.props.appStore.mainNumbers.result.drug)}`}
                 />

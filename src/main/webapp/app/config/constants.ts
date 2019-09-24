@@ -1,4 +1,4 @@
-import { OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
+import { OncoKBInfo, Gene } from 'app/shared/api/generated/OncoKbAPI';
 import { MainNumber } from 'app/shared/api/generated/OncoKbPrivateAPI';
 
 const config = {
@@ -79,6 +79,18 @@ export const DEFAULT_MAIN_NUMBERS: MainNumber = {
   tumorType: 0,
   drug: 0,
   level: []
+};
+
+export const DEFAULT_GENE: Gene = {
+  curatedIsoform: '',
+  curatedRefSeq: '',
+  entrezGeneId: -1,
+  geneAliases: [],
+  genesets: [],
+  hugoSymbol: '',
+  name: '',
+  oncogene: false,
+  tsg: false
 };
 
 export enum PAGE_ROUTE {
