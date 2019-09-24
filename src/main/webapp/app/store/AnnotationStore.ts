@@ -19,12 +19,22 @@ interface IAnnotationStore {
   alteration: string;
 }
 
-const getRequestParams = (hugoSymbol: string, alteration: string) => {
+export type RequestParams = {
+  entrezGeneId?: number;
+  hugoSymbol?: string;
+  variant?: string;
+  variantType?: string;
+  consequence?: string;
+  proteinStart?: number;
+  proteinEnd?: number;
+  hgvs?: string;
+  fields?: string;
+};
+
+const getRequestParams = (hugoSymbol: string, alteration?: string): RequestParams => {
   const params = {};
-  if (hugoSymbol) {
-    params['hugoSymbol'] = hugoSymbol;
-  }
-  if (hugoSymbol) {
+  params['hugoSymbol'] = hugoSymbol;
+  if (alteration) {
     params['variant'] = alteration;
   }
   return params;

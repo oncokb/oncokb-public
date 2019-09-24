@@ -19,7 +19,7 @@ enum GENE_TYPE_DESC {
 }
 
 const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
-  let geneTypes = [];
+  const geneTypes = [];
   if (oncogene) {
     geneTypes.push(GENE_TYPE_DESC.ONCOGENE);
   } else if (tsg) {
@@ -29,7 +29,7 @@ const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
 };
 
 const getHighestLevelStrings = (highestSensitiveLevel: string | undefined, highestResistanceLevel: string | undefined) => {
-  let levels: React.ReactNode[] = [];
+  const levels: React.ReactNode[] = [];
   if (highestSensitiveLevel) {
     const level = levelOfEvidence2Level(highestSensitiveLevel);
     levels.push(<span className={`oncokb level-${level}`}>Level {level}</span>);
@@ -52,7 +52,7 @@ const GeneInfo: React.FunctionComponent<GeneInfo> = props => {
   const info: (JSX.Element | string)[] = [];
 
   // gene type
-  if (gene.oncogene !== undefined || gene.tsg !== undefined) {
+  if (gene.oncogene || gene.tsg) {
     info.push(
       <div className={styles.highlightGeneInfo}>
         <b>{getGeneTypeSentence(gene.oncogene, gene.tsg)}</b>
@@ -213,6 +213,9 @@ export default class GenePage extends React.Component<{}> {
                   </div>
                   <BarChart data={this.store.barChartData} width={500} height={300} filters={[]} />
                 </Col>
+              </Row>
+              <Row>
+                <Col>{/*<LollipopPlot />*/}</Col>
               </Row>
             </Then>
             <Else>

@@ -4,8 +4,6 @@ import React from 'react';
 import { ONCOGENICITY_CLASS_NAMES } from 'app/config/constants';
 import classnames from 'classnames';
 import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
-import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 
 export function getCancerTypeNameFromOncoTreeType(oncoTreeType: TumorType): string {
   return oncoTreeType.name || oncoTreeType.mainType.name || 'NA';
