@@ -3,7 +3,7 @@ import { observable, action } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { remoteData } from 'cbioportal-frontend-commons';
 import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
-import { LevelNumber, MainNumber, TypeaheadSearchResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { LevelNumber, TypeaheadSearchResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import autobind from 'autobind-decorator';
 import { Row, Col } from 'react-bootstrap';
 import oncokbImg from '../resources/images/oncokb.png';
@@ -19,10 +19,12 @@ import { SearchOption, SearchOptionType } from 'app/components/searchOption/Sear
 import AsyncSelect from 'react-select/async';
 import { components } from 'react-select';
 import { SuggestCuration } from 'app/components/SuggestCuration';
+import AppStore from 'app/store/AppStore';
 
 interface IHomeProps {
   content: string;
   routing: RouterStore;
+  appStore: AppStore;
 }
 
 export type ExtendedTypeaheadSearchResp = TypeaheadSearchResp & {
@@ -30,24 +32,10 @@ export type ExtendedTypeaheadSearchResp = TypeaheadSearchResp & {
   tumorTypesName: string;
 };
 
-@inject('routing')
+@inject('routing', 'appStore')
 @observer
 class HomePage extends React.Component<IHomeProps> {
   @observable keyword = '';
-
-  readonly mainNumbers = remoteData<MainNumber>({
-    await: () => [],
-    invoke: async () => {
-      return oncokbPrivateClient.utilsNumbersMainGetUsingGET({});
-    },
-    default: {
-      gene: 0,
-      alteration: 0,
-      tumorType: 0,
-      drug: 0,
-      level: []
-    }
-  });
 
   readonly levelNumbers = remoteData<{ [level: string]: LevelNumber }>({
     await: () => [],
@@ -134,22 +122,28 @@ class HomePage extends React.Component<IHomeProps> {
           <Col md={8} className={'mx-auto'}>
             <Row>
               <Col xs={12} md={6} lg={3}>
-                <HomePageNumber number={this.mainNumbers.result.gene} title={`${pluralize('Gene', this.mainNumbers.result.gene)}`} />
-              </Col>
-              <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
-                  number={this.mainNumbers.result.alteration}
-                  title={`${pluralize('Alteration', this.mainNumbers.result.alteration)}`}
+                  number={this.props.appStore.mainNumbers.result.gene}
+                  title={`${pluralize('Gene', this.props.appStore.mainNumbers.result.gene)}`}
                 />
               </Col>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
-                  number={this.mainNumbers.result.tumorType}
-                  title={`${pluralize('Tumor Type', this.mainNumbers.result.tumorType)}`}
+                  number={this.props.appStore.mainNumbers.result.alteration}
+                  title={`${pluralize('Alteration', this.props.appStore.mainNumbers.result.alteration)}`}
                 />
               </Col>
               <Col xs={12} md={6} lg={3}>
-                <HomePageNumber number={this.mainNumbers.result.drug} title={`${pluralize('Drug', this.mainNumbers.result.drug)}`} />
+                <HomePageNumber
+                  number={this.props.appStore.mainNumbers.result.tumorType}
+                  title={`${pluralize('Tumor Type', this.props.appStore.mainNumbers.result.tumorType)}`}
+                />
+              </Col>
+              <Col xs={12} md={6} lg={3}>
+                <HomePageNumber
+                  number={this.props.appStore.mainNumbers.result.drug}
+                  title={`${pluralize('Drug', this.props.appStore.mainNumbers.result.drug)}`}
+                />
               </Col>
             </Row>
           </Col>

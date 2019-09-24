@@ -5,7 +5,7 @@ import Login from 'app/components/login/login';
 import { Logout } from 'app/components/login/logout';
 import { RegisterPage } from 'app/components/account/register';
 import { PrivateRoute } from 'app/shared/auth/private-route';
-import About from 'app/pages/About';
+import { AboutPage } from 'app/pages/AboutPage';
 import Loadable from 'react-loadable';
 import { AUTHORITIES } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
@@ -35,13 +35,15 @@ const AppRouts = inject('authenticationStore', 'routing')((props: { authenticati
       <ErrorBoundaryRoute path="/logout" component={Logout} />
       <ErrorBoundaryRoute path="/register" component={RegisterPage} />
       <ErrorBoundaryRoute path="/dataAccess" component={DataAccessPage} />
-      <ErrorBoundaryRoute path="/terms" component={TermsPage} />
-      <ErrorBoundaryRoute path="/team" component={TeamPage} />
-      <ErrorBoundaryRoute path="/news" component={NewsPage} />
       <ErrorBoundaryRoute path="/cancerGenes" component={CancerGenesPage} />
       <ErrorBoundaryRoute path="/actionableGenes" component={ActionableGenesPage} />
-      <ErrorBoundaryRoute path="/levels" component={LevelOfEvidencePage} />
       <ErrorBoundaryRoute path="/gene/:hugoSymbol" component={GenePage} />
+      <Route exact path="/" component={HomePage} />
+      <Route exact path="/about" component={AboutPage} />
+      <Route exact path="/terms" component={TermsPage} />
+      <Route exact path="/team" component={TeamPage} />
+      <Route exact path="/news" component={NewsPage} />
+      <Route exact path="/levels" component={LevelOfEvidencePage} />
       <PrivateRoute
         path="/account"
         authenticationStore={props.authenticationStore!}
@@ -52,8 +54,6 @@ const AppRouts = inject('authenticationStore', 'routing')((props: { authenticati
           isAuthorized(props.authenticationStore!.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.USER])
         }
       />
-      <Route exact path="/" component={HomePage} />
-      <Route exact path="/about" component={About} />
     </Switch>
   );
 });

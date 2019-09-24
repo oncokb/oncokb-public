@@ -31,7 +31,7 @@ class Main extends React.Component<IMainPage> {
             <AppRouts />
           </Container>
         </div>
-        <Footer lastUpdate={new Date().getDate().toString()} />
+        <Footer lastUpdate={this.props.appStore.appInfo.result.dataVersion.date} />
       </div>
     );
   }

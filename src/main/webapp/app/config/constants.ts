@@ -1,3 +1,6 @@
+import { OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
+import { MainNumber } from 'app/shared/api/generated/OncoKbPrivateAPI';
+
 const config = {
   VERSION: process.env.VERSION
 };
@@ -59,3 +62,21 @@ export enum EVIDENCE_TYPES {
   GENE_BACKGROUND = 'GENE_BACKGROUND',
   MUTATION_EFFECT = 'MUTATION_EFFECT'
 }
+
+export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
+  dataVersion: {
+    date: '',
+    version: ''
+  },
+  levels: [],
+  ncitVersion: '',
+  oncoTreeVersion: ''
+};
+
+export const DEFAULT_MAIN_NUMBERS: MainNumber = {
+  gene: 0,
+  alteration: 0,
+  tumorType: 0,
+  drug: 0,
+  level: []
+};
