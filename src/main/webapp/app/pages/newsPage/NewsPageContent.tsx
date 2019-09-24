@@ -7,6 +7,9 @@ import BiologicalImg from '../../resources/images/cbioportal-biological.png';
 import ERBBImg from '../../resources/images/ERBB.png';
 import { ElementType, SimpleTable } from 'app/components/SimpleTable';
 import { NewlyAddedGeneType } from 'app/pages/newsPage/NewlyAddedGenesListItem';
+import { Link } from 'react-router-dom';
+import { PAGE_ROUTE } from 'app/config/constants';
+import { AlterationPageLink, GenePageLink, MSILink } from 'app/shared/utils/UrlUtils';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -374,7 +377,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '12142018': {
     priorityNews: [
       <span>
-        Inclusion of <a href="gene/NTRK1">NTRK1</a> and <a href="gene/NTRK3">NTRK3</a> Level R2 alterations to the Actionable Genes page
+        Inclusion of <GenePageLink hugoSymbol={'NTRK1'} /> and <GenePageLink hugoSymbol={'NTRK3'} /> Level R2 alterations to the Actionable
+        Genes page
       </span>
     ],
     newlyAddedGenes: [
@@ -482,8 +486,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     priorityNews: [
       <span>
-        Level <a href="actionableGenes">R2</a> alterations in <a href="gene/ALK">ALK</a>, <a href="gene/EGFR">EGFR</a>, and{' '}
-        <a href="gene/MET">MET</a> are now included in the <a href="actionableGenes">Actionable Genes</a> page
+        Level <Link to={PAGE_ROUTE.ACTIONABLE_GENE}>R2</Link> alterations in <GenePageLink hugoSymbol={'ALK'} />{' '}
+        <GenePageLink hugoSymbol={'EGFR'} /> <GenePageLink hugoSymbol={'MET'} /> are now included in the{' '}
+        <Link to={PAGE_ROUTE.ACTIONABLE_GENE}>Actionable Genes</Link> page
       </span>
     ],
     newlyAddedGenes: ['NT5C2', 'P2RY8', 'PCBP1', 'PDS5B', 'PTPN1', 'PTPN2 ', 'STAG1', 'TRAF3', 'TRAF5'],
@@ -751,9 +756,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm569366.htm">
           the FDA approved nivolumab
         </a>{' '}
-        for treatment of patients with mismatch repair deficient (MMR-D) and{' '}
-        <a href="gene/Other Biomarkers/alteration/MSI-H">microsatellite instability high (MSI-H)</a> metastatic colorectal cancer that has
-        progressed following treatment with a fluoropyrimidine, oxaliplatin and irinotecan.
+        for treatment of patients with mismatch repair deficient (MMR-D) and <MSILink /> metastatic colorectal cancer that has progressed
+        following treatment with a fluoropyrimidine, oxaliplatin and irinotecan.
       </span>,
       <span>
         August 1, 2017:{' '}
@@ -761,42 +765,33 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           the FDA approved enasidenib
         </a>{' '}
         for treatment of patients with relapsed or refractory
-        <a href="gene/IDH2">IDH2-mutant</a> Acute Myeloid Leukemia (AML).
+        <GenePageLink hugoSymbol={'IDH2'} content={'IDH2-mutant'} /> Acute Myeloid Leukemia (AML).
       </span>,
       <span>
         June 22, 2017:{' '}
         <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm564331.htm">
           the FDA approved combination dabrafenib + trametinib
         </a>{' '}
-        for treatment of patients with
-        <a href="gene/BRAF/alteration/V600E">BRAF V600E</a> mutant metastatic NSCLC.
+        for treatment of patients with <AlterationPageLink hugoSymbol={'BRAF'} alteration={'V600E'} showGene={true} /> mutant metastatic
+        NSCLC.
       </span>,
       <span>
         May 23, 2017:{' '}
         <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm560040.htm">
           the FDA approved pembrolizumab
         </a>{' '}
-        for treatment of patients with unresectable or metastatic,{' '}
-        <a href="gene/Other Biomarkers/alteration/MSI-H">microsatellite instability-high (MSI-H)</a> or mismatch repair deficient (MMR-D)
-        solid tumors.
+        for treatment of patients with unresectable or metastatic, <MSILink /> or mismatch repair deficient (MMR-D) solid tumors.
       </span>
     ]
   },
   '08022017': {
     news: [
       <span>
-        Introduced a curated list of{' '}
-        <a href="cancerGenes" className="">
-          cancer genes
-        </a>
-        .
+        Introduced a curated list of <Link to={PAGE_ROUTE.CANCER_GENES}>cancer genes</Link>.
       </span>,
       <span>
         Addition of gene-alterations pages with alteration level annotation.{' '}
-        <a href="gene/BRAF/alteration/V600E" target="_blank">
-          e.g. BRAF V600E
-        </a>
-        .
+        <AlterationPageLink hugoSymbol={'BRAF'} alteration={'V600E'} content={'e.g. BRAF V600E'} />.
       </span>,
       <>
         <span style={{ marginLeft: '-0.25rem' }}>Improved search box that queries genes and alterations.</span>
@@ -949,7 +944,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         All OncoKB alterations and their annotations can now be{' '}
-        <a href="dataAccess"> batch downloaded or accessed programmatically via our API.</a>
+        <Link to={PAGE_ROUTE.DATA_ACCESS}> batch downloaded or accessed programmatically via our API.</Link>
       </span>,
       <span>Oncogene and tumor suppressor gene annotations have been added.</span>,
       <span>Alterations with inconclusive supporting data have now been included.</span>

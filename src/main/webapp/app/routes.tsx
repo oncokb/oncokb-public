@@ -7,7 +7,7 @@ import { RegisterPage } from 'app/components/account/register';
 import { PrivateRoute } from 'app/shared/auth/private-route';
 import { AboutPage } from 'app/pages/AboutPage';
 import Loadable from 'react-loadable';
-import { AUTHORITIES } from 'app/config/constants';
+import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
 import DataAccessPage from 'app/pages/DataAccessPage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -31,21 +31,21 @@ const Account = Loadable({
 const AppRouts = inject('authenticationStore', 'routing')((props: { authenticationStore?: AuthenticationStore; routing?: RouterStore }) => {
   return (
     <Switch>
-      <ErrorBoundaryRoute path="/login" component={Login} />
-      <ErrorBoundaryRoute path="/logout" component={Logout} />
-      <ErrorBoundaryRoute path="/register" component={RegisterPage} />
-      <ErrorBoundaryRoute path="/dataAccess" component={DataAccessPage} />
-      <ErrorBoundaryRoute path="/cancerGenes" component={CancerGenesPage} />
-      <ErrorBoundaryRoute path="/actionableGenes" component={ActionableGenesPage} />
+      <ErrorBoundaryRoute path={PAGE_ROUTE.LOGIN} component={Login} />
+      <ErrorBoundaryRoute path={PAGE_ROUTE.LOGOUT} component={Logout} />
+      <ErrorBoundaryRoute path={PAGE_ROUTE.REGISTER} component={RegisterPage} />
+      <ErrorBoundaryRoute path={PAGE_ROUTE.DATA_ACCESS} component={DataAccessPage} />
+      <ErrorBoundaryRoute path={PAGE_ROUTE.CANCER_GENES} component={CancerGenesPage} />
+      <ErrorBoundaryRoute path={PAGE_ROUTE.ACTIONABLE_GENE} component={ActionableGenesPage} />
       <ErrorBoundaryRoute path="/gene/:hugoSymbol" component={GenePage} />
-      <Route exact path="/" component={HomePage} />
-      <Route exact path="/about" component={AboutPage} />
-      <Route exact path="/terms" component={TermsPage} />
-      <Route exact path="/team" component={TeamPage} />
-      <Route exact path="/news" component={NewsPage} />
-      <Route exact path="/levels" component={LevelOfEvidencePage} />
+      <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
+      <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
+      <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
+      <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage} />
+      <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
+      <Route exact path={PAGE_ROUTE.LEVELS} component={LevelOfEvidencePage} />
       <PrivateRoute
-        path="/account"
+        path={PAGE_ROUTE.ACCOUNT}
         authenticationStore={props.authenticationStore!}
         routing={props.routing!}
         component={Account}

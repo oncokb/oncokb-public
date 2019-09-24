@@ -6,8 +6,24 @@
   color: black;
   border-radius: 0;
   border-bottom: 1px solid $orange;
-  &:hover {
+
+  > a {
+    color: black;
+  }
+}
+
+:global(.btn).withHref > a {
+  &:hover,
+  &:focus {
     color: $primary;
+    text-decoration: none;
+  }
+}
+
+:global(.btn).withoutHref {
+  &:hover,
+  &:focus {
+    color: black;
     text-decoration: none;
   }
 }

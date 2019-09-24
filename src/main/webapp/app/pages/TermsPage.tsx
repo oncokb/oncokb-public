@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import './TermsPage.scss';
+import { Link } from 'react-router-dom';
+import { PAGE_ROUTE } from 'app/config/constants';
 
 export const TermsPage = () => {
   return (
@@ -28,7 +30,7 @@ export const TermsPage = () => {
 
           <p>
             You may view the content contained on https://oncokb.org solely for your own personal or research purposes. You may not use any
-            part of the <a href="https://oncokb.org">https://oncokb.org</a> content (“Content”) for any commercial purpose, including the
+            part of the <Link to={PAGE_ROUTE.HOME}>https://oncokb.org</Link> content (“Content”) for any commercial purpose, including the
             distribution, licensing or sale of the Content to any other person or entity, whether alone or in combination with other
             materials, or the incorporation of the Content into any commercial product. You may copy, reproduce, or create derivative works
             of the Content only if:

@@ -9,7 +9,7 @@ import { Row, Col } from 'react-bootstrap';
 import oncokbImg from '../resources/images/oncokb.png';
 import { HomePageNumber } from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
-import { LEVELS } from 'app/config/constants';
+import { LEVELS, PAGE_ROUTE } from 'app/config/constants';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
 import { getAllAlterationsName, getAllTumorTypesName, levelOfEvidence2Level } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
@@ -123,6 +123,7 @@ class HomePage extends React.Component<IHomeProps> {
             <Row>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
+                  href={'/cancerGenes'}
                   number={this.props.appStore.mainNumbers.result.gene}
                   title={`${pluralize('Gene', this.props.appStore.mainNumbers.result.gene)}`}
                 />
@@ -135,6 +136,7 @@ class HomePage extends React.Component<IHomeProps> {
               </Col>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
+                  href={PAGE_ROUTE.ACTIONABLE_GENE}
                   number={this.props.appStore.mainNumbers.result.tumorType}
                   title={`${pluralize('Tumor Type', this.props.appStore.mainNumbers.result.tumorType)}`}
                 />

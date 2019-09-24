@@ -80,3 +80,20 @@ export const DEFAULT_MAIN_NUMBERS: MainNumber = {
   drug: 0,
   level: []
 };
+
+export enum PAGE_ROUTE {
+  LOGIN = '/login',
+  LOGOUT = '/logout',
+  REGISTER = '/register',
+  DATA_ACCESS = '/dataAccess',
+  CANCER_GENES = '/cancerGenes',
+  ACTIONABLE_GENE = '/actionableGenes',
+  GENE = '/gene',
+  HOME = '/',
+  ABOUT = '/about',
+  TERMS = '/terms',
+  TEAM = '/team',
+  NEWS = '/news',
+  LEVELS = '/levels',
+  ACCOUNT = '/account'
+}
