@@ -9,7 +9,12 @@ import { action, computed, IReactionDisposer, observable, reaction } from 'mobx'
 import { Evidence, MainType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
-import { getCancerTypeNameFromOncoTreeType, getDefaultColumnDefinition, levelOfEvidence2Level } from 'app/shared/utils/Utils';
+import {
+  getCancerTypeNameFromOncoTreeType,
+  getDefaultColumnDefinition,
+  levelOfEvidence2Level,
+  OncoKBLevelIcon
+} from 'app/shared/utils/Utils';
 import { TreatmentDrug } from 'app/shared/api/generated/OncoKbAPI';
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
@@ -391,7 +396,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
       Cell: (props: { original: Treatment }) => {
-        return <i className={`oncokb level-icon level-${props.original.level}`} />;
+        return <OncoKBLevelIcon level={props.original.level} />;
       }
     },
     {

@@ -1,7 +1,5 @@
 import { OncoKBInfo, Gene } from 'app/shared/api/generated/OncoKbAPI';
 import { MainNumber } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
-import { GenePageLink } from 'app/shared/utils/UrlUtils';
 
 const config = {
   VERSION: process.env.VERSION

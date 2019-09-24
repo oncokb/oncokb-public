@@ -20,7 +20,6 @@ export function defaultSortMethod(a: any, b: any): number {
   // returning 0 or undefined will use any subsequent column sorting methods or the row index as a tiebreaker
   return 0;
 }
-
 const oncogenicityOrder = ['Oncogenic', 'Likely Oncogenic', 'Likely Neutral', 'Inconclusive', 'Unknown'];
 
 export function oncogenicitySortMethod(a: ONCOGENICITY, b: ONCOGENICITY) {

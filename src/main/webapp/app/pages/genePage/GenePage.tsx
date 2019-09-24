@@ -1,13 +1,19 @@
 import React from 'react';
-import { observer, inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { AnnotationStore } from 'app/store/AnnotationStore';
-import { observable, action, computed } from 'mobx';
-import { If, Else, Then } from 'react-if';
+import { action, computed, observable } from 'mobx';
+import { Else, If, Then } from 'react-if';
 import { Redirect } from 'react-router';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import styles from './GenePage.module.scss';
-import { levelOfEvidence2Level, reduceJoin } from 'app/shared/utils/Utils';
+import {
+  getCancerTypeNameFromOncoTreeType,
+  getDefaultColumnDefinition,
+  levelOfEvidence2Level,
+  OncoKBLevelIcon,
+  reduceJoin
+} from 'app/shared/utils/Utils';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import BarChart from 'app/components/barChart/BarChart';
@@ -15,6 +21,11 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import pluralize from 'pluralize';
 import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
+import { TABLE_COLUMN_KEY } from 'app/config/constants';
+import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
+import AppStore from 'app/store/AppStore';
+import TableWithSearchBox from 'app/components/tableWithSearchBox/TableWithSearchBox';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -35,11 +46,19 @@ const getHighestLevelStrings = (highestSensitiveLevel: string | undefined, highe
   const levels: React.ReactNode[] = [];
   if (highestSensitiveLevel) {
     const level = levelOfEvidence2Level(highestSensitiveLevel);
-    levels.push(<span className={`oncokb level-${level}`}>Level {level}</span>);
+    levels.push(
+      <span className={`oncokb level-${level}`} key="highestSensitiveLevel">
+        Level {level}
+      </span>
+    );
   }
   if (highestResistanceLevel) {
     const level = levelOfEvidence2Level(highestResistanceLevel);
-    levels.push(<span className={`oncokb level-${level}`}>Level {level}</span>);
+    levels.push(
+      <span className={`oncokb level-${level}`} key="highestResistanceLevel">
+        Level {level}
+      </span>
+    );
   }
   return <>{reduceJoin(levels, ', ')}</>;
 };
@@ -53,11 +72,6 @@ type GeneInfoProps = {
 type GeneInfoItem = {
   key: string;
   element: JSX.Element | string;
-};
-
-type AdditionalInfoItem = {
-  key: string;
-  element: React.ReactNode | string;
 };
 
 const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
@@ -167,14 +181,49 @@ const GeneBackground: React.FunctionComponent<{
   );
 };
 
-@inject('routing')
+@inject('appStore')
 @observer
-export default class GenePage extends React.Component<{}> {
+export default class GenePage extends React.Component<{ appStore: AppStore }, {}> {
   @observable hugoSymbol: string;
   @observable alteration: string;
   @observable showGeneBackground = false;
 
   private store: AnnotationStore;
+
+  private clinicalTableColumns = [
+    {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+      Cell: (props: { original: ClinicalVariant }) => {
+        return <AlterationPageLink hugoSymbol={this.hugoSymbol} alteration={props.original.variant.name} />;
+      }
+    },
+    {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
+      Cell: (props: { original: ClinicalVariant }) => {
+        return <span>{getCancerTypeNameFromOncoTreeType(props.original.cancerType)}</span>;
+      }
+    },
+    {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
+      Cell: (props: { original: ClinicalVariant }) => {
+        return <span>{reduceJoin(props.original.drug, <br />)}</span>;
+      }
+    },
+    {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+      accessor: 'level',
+      Cell: (props: { original: ClinicalVariant }) => {
+        return <OncoKBLevelIcon level={props.original.level} />;
+      }
+    },
+    {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+      Cell: (props: { original: ClinicalVariant }) => {
+        const numOfReferences = props.original.drugAbstracts.length + props.original.drugPmids.length;
+        return `${numOfReferences} ${pluralize('reference', numOfReferences)}`;
+      }
+    }
+  ];
 
   constructor(props: any) {
     super(props);
@@ -191,8 +240,36 @@ export default class GenePage extends React.Component<{}> {
     this.showGeneBackground = !this.showGeneBackground;
   }
 
+  getTable(key: TAB_KEYS) {
+    if (key === TAB_KEYS.CLINICAL) {
+      return (
+        <TableWithSearchBox
+          data={this.store.clinicalAlterations.result}
+          columns={this.clinicalTableColumns}
+          isLoading={this.store.clinicalAlterations.isPending}
+          defaultSorted={[
+            {
+              id: TABLE_COLUMN_KEY.LEVEL,
+              desc: false
+            },
+            {
+              id: TABLE_COLUMN_KEY.ALTERATION,
+              desc: false
+            }
+          ]}
+        />
+      );
+    }
+    return <span />;
+  }
+
   getTabContent(key: TAB_KEYS) {
-    return <ReportIssue />;
+    return (
+      <div>
+        <ReportIssue />
+        {this.getTable(key)}
+      </div>
+    );
   }
 
   @computed

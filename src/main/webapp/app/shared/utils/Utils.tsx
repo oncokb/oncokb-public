@@ -5,8 +5,8 @@ import { ONCOGENICITY_CLASS_NAMES, TABLE_COLUMN_KEY } from 'app/config/constants
 import classnames from 'classnames';
 import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
-import { GenePageLink } from 'app/shared/utils/UrlUtils';
-import { Column, TableCellRenderer } from 'react-table';
+import { TableCellRenderer } from 'react-table';
+import { LevelWithDescription } from 'app/components/LevelWithDescription';
 
 export function getCancerTypeNameFromOncoTreeType(oncoTreeType: TumorType): string {
   return oncoTreeType.name || oncoTreeType.mainType.name || 'NA';
@@ -14,6 +14,10 @@ export function getCancerTypeNameFromOncoTreeType(oncoTreeType: TumorType): stri
 
 export function levelOfEvidence2Level(levelOfEvidence: string) {
   return trimLevelOfEvidenceSubversion(levelOfEvidence).replace('LEVEL_', '');
+}
+
+export function level2LevelOfEvidence(level: string) {
+  return `LEVEL_${level}`;
 }
 
 export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
@@ -76,8 +80,16 @@ export const OncoKBAnnotationIcon: React.FunctionComponent<{
   );
 };
 
-export const reduceJoin = (data: React.ReactNode[], separator: string) => {
+export const reduceJoin = (data: React.ReactNode[], separator: string | JSX.Element) => {
   return data.reduce((prev, curr) => [prev, separator, curr]);
+};
+
+export const OncoKBLevelIcon: React.FunctionComponent<{
+  level: string;
+  withDescription?: boolean;
+}> = ({ level, withDescription = true }) => {
+  const oncokbIcon = <i className={`oncokb level-icon level-${level}`} />;
+  return withDescription ? <LevelWithDescription level={level}>{oncokbIcon}</LevelWithDescription> : oncokbIcon;
 };
 
 export function getDefaultColumnDefinition<T>(
@@ -156,13 +168,4 @@ export function getDefaultColumnDefinition<T>(
 
 export function filterByKeyword(value: string, keyword: string): boolean {
   return value.toLowerCase().includes(keyword);
-}
-
-export function getRenderContentByColumnKey(columnKey: TABLE_COLUMN_KEY, value: string) {
-  switch (columnKey) {
-    case TABLE_COLUMN_KEY.HUGO_SYMBOL:
-      return <GenePageLink hugoSymbol={value} />;
-    default:
-      return true;
-  }
 }
