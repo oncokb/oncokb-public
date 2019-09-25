@@ -8,7 +8,9 @@ import { Button, Col, Row } from 'react-bootstrap';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import styles from './GenePage.module.scss';
 import {
+  filterByKeyword,
   getCancerTypeNameFromOncoTreeType,
+  getCenterAlignStyle,
   getDefaultColumnDefinition,
   levelOfEvidence2Level,
   OncoKBLevelIcon,
@@ -22,10 +24,11 @@ import pluralize from 'pluralize';
 import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import { TABLE_COLUMN_KEY } from 'app/config/constants';
-import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { BiologicalVariant, ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
-import TableWithSearchBox from 'app/components/tableWithSearchBox/TableWithSearchBox';
+import TableWithSearchBox, { SearchColumn } from 'app/components/tableWithSearchBox/TableWithSearchBox';
+import _ from 'lodash';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -190,21 +193,24 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
 
   private store: AnnotationStore;
 
-  private clinicalTableColumns = [
+  private clinicalTableColumns: SearchColumn<ClinicalVariant>[] = [
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+      onFilter: (data: ClinicalVariant, keyword) => filterByKeyword(data.variant.name, keyword),
       Cell: (props: { original: ClinicalVariant }) => {
         return <AlterationPageLink hugoSymbol={this.hugoSymbol} alteration={props.original.variant.name} />;
       }
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
+      onFilter: (data: ClinicalVariant, keyword) => filterByKeyword(getCancerTypeNameFromOncoTreeType(data.cancerType), keyword),
       Cell: (props: { original: ClinicalVariant }) => {
         return <span>{getCancerTypeNameFromOncoTreeType(props.original.cancerType)}</span>;
       }
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
+      onFilter: (data: ClinicalVariant, keyword) => _.some(data.drug, (drug: string) => drug.toLowerCase().includes(keyword)),
       Cell: (props: { original: ClinicalVariant }) => {
         return <span>{reduceJoin(props.original.drug, <br />)}</span>;
       }
@@ -220,6 +226,33 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
       Cell: (props: { original: ClinicalVariant }) => {
         const numOfReferences = props.original.drugAbstracts.length + props.original.drugPmids.length;
+        return `${numOfReferences} ${pluralize('reference', numOfReferences)}`;
+      }
+    }
+  ];
+  private biologicalTableColumns: SearchColumn<BiologicalVariant>[] = [
+    {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+      onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.variant.name, keyword),
+      Cell: (props: { original: BiologicalVariant }) => {
+        return <AlterationPageLink hugoSymbol={this.hugoSymbol} alteration={props.original.variant.name} />;
+      }
+    },
+    {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ONCOGENICITY),
+      onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.oncogenic, keyword),
+      style: getCenterAlignStyle()
+    },
+    {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
+      onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.mutationEffect, keyword),
+      style: getCenterAlignStyle()
+    },
+    {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+      style: getCenterAlignStyle(),
+      Cell: (props: { original: BiologicalVariant }) => {
+        const numOfReferences = props.original.mutationEffectAbstracts.length + props.original.mutationEffectPmids.length;
         return `${numOfReferences} ${pluralize('reference', numOfReferences)}`;
       }
     }
@@ -246,10 +279,30 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
         <TableWithSearchBox
           data={this.store.clinicalAlterations.result}
           columns={this.clinicalTableColumns}
+          pageSize={10}
           isLoading={this.store.clinicalAlterations.isPending}
           defaultSorted={[
             {
               id: TABLE_COLUMN_KEY.LEVEL,
+              desc: false
+            },
+            {
+              id: TABLE_COLUMN_KEY.ALTERATION,
+              desc: false
+            }
+          ]}
+        />
+      );
+    } else if (key === TAB_KEYS.BIOLOGICAL) {
+      return (
+        <TableWithSearchBox
+          data={this.store.biologicalAlterations.result}
+          columns={this.biologicalTableColumns}
+          pageSize={10}
+          isLoading={this.store.biologicalAlterations.isPending}
+          defaultSorted={[
+            {
+              id: TABLE_COLUMN_KEY.ONCOGENICITY,
               desc: false
             },
             {
@@ -371,10 +424,10 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                   <BarChart data={this.store.barChartData} width={500} height={300} filters={[]} />
                 </Col>
               </Row>
-              <Row>
+              <Row className={'mt-2'}>
                 <Col>{/*<LollipopPlot />*/}</Col>
               </Row>
-              <Row>
+              <Row className={'mt-2'}>
                 <Col>
                   <Tabs items={this.tabs} transform={false} />
                 </Col>

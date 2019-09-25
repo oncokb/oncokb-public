@@ -1,4 +1,4 @@
-import { ONCOGENICITY } from 'app/config/constants';
+import { MUTATION_EFFECT, ONCOGENICITY } from 'app/config/constants';
 
 export function defaultSortMethod(a: any, b: any): number {
   // force null and undefined to the bottom
@@ -20,10 +20,33 @@ export function defaultSortMethod(a: any, b: any): number {
   // returning 0 or undefined will use any subsequent column sorting methods or the row index as a tiebreaker
   return 0;
 }
-const oncogenicityOrder = ['Oncogenic', 'Likely Oncogenic', 'Likely Neutral', 'Inconclusive', 'Unknown'];
+
+const oncogenicityOrder = [
+  ONCOGENICITY.ONCOGENIC,
+  ONCOGENICITY.LIKELY_ONCOGENIC,
+  ONCOGENICITY.LIKELY_NEUTRAL,
+  ONCOGENICITY.INCONCLUSIVE,
+  ONCOGENICITY.UNKNOWN
+];
+const mutationEffectOrder = [
+  MUTATION_EFFECT.GAIN_OF_FUNCTION,
+  MUTATION_EFFECT.LIKELY_GAIN_OF_FUNCTION,
+  MUTATION_EFFECT.LOSS_OF_FUNCTION,
+  MUTATION_EFFECT.LIKELY_LOSS_OF_FUNCTION,
+  MUTATION_EFFECT.NEUTRAL,
+  MUTATION_EFFECT.LIKELY_NEUTRAL,
+  MUTATION_EFFECT.SWITCH_OF_FUNCTION,
+  MUTATION_EFFECT.LIKELY_SWITCH_OF_FUNCTION,
+  MUTATION_EFFECT.INCONCLUSIVE,
+  MUTATION_EFFECT.UNKNOWN
+];
 
 export function oncogenicitySortMethod(a: ONCOGENICITY, b: ONCOGENICITY) {
   return sortByArrayIndexAsc(oncogenicityOrder.indexOf(a), oncogenicityOrder.indexOf(b));
+}
+
+export function mutationEffectSortMethod(a: MUTATION_EFFECT, b: MUTATION_EFFECT) {
+  return sortByArrayIndexAsc(mutationEffectOrder.indexOf(a), mutationEffectOrder.indexOf(b));
 }
 
 export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {

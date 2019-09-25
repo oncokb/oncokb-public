@@ -11,6 +11,9 @@ interface ITableWithSearchBox<T> {
   data: T[];
   columns: SearchColumn<T>[];
   isLoading: boolean;
+  pageSize?: number;
+  style?: object;
+  showPagination?: boolean;
   defaultSorted: SortingRule[];
 }
 
@@ -50,7 +53,9 @@ export default class TableWithSearchBox<T> extends React.Component<ITableWithSea
             data={this.filteredData}
             loading={this.props.isLoading}
             columns={this.props.columns}
-            showPagination={true}
+            pageSize={this.props.pageSize || 20}
+            showPagination={this.props.showPagination === undefined ? true : this.props.showPagination}
+            style={this.props.style}
             defaultSortDesc={true}
             defaultSorted={this.props.defaultSorted}
             className="-striped -highlight"

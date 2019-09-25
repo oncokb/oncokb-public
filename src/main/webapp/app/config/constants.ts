@@ -41,6 +41,19 @@ export enum ONCOGENICITY {
   UNKNOWN = 'Unknown'
 }
 
+export enum MUTATION_EFFECT {
+  GAIN_OF_FUNCTION = 'Gain-of-function',
+  LIKELY_GAIN_OF_FUNCTION = 'Likely Gain-of-function',
+  LOSS_OF_FUNCTION = 'Loss-of-function',
+  LIKELY_LOSS_OF_FUNCTION = 'Likely Loss-of-function',
+  SWITCH_OF_FUNCTION = 'Switch-of-function',
+  LIKELY_SWITCH_OF_FUNCTION = 'Likely Switch-of-function',
+  NEUTRAL = 'Neutral',
+  LIKELY_NEUTRAL = 'Likely Neutral',
+  INCONCLUSIVE = 'Inconclusive',
+  UNKNOWN = 'Unknown'
+}
+
 const EVIDENCE_TYPE = {
   FDA_APPROVED: 'FDA-approved',
   STANDARD_CARE: 'Standard care',
@@ -127,5 +140,6 @@ export enum TABLE_COLUMN_KEY {
   DRUGS = 'DRUGS',
   LEVEL = 'LEVEL',
   CITATIONS = 'CITATIONS',
-  ONCOGENICITY = 'ONCOGENICITY'
+  ONCOGENICITY = 'ONCOGENICITY',
+  MUTATION_EFFECT = 'MUTATION_EFFECT'
 }

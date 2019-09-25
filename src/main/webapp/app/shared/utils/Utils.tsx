@@ -4,7 +4,7 @@ import React from 'react';
 import { ONCOGENICITY_CLASS_NAMES, TABLE_COLUMN_KEY } from 'app/config/constants';
 import classnames from 'classnames';
 import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
+import { defaultSortMethod, mutationEffectSortMethod, oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 import { TableCellRenderer } from 'react-table';
 import { LevelWithDescription } from 'app/components/LevelWithDescription';
 
@@ -136,7 +136,7 @@ export function getDefaultColumnDefinition<T>(
     case TABLE_COLUMN_KEY.DRUGS:
       return {
         id: TABLE_COLUMN_KEY.DRUGS,
-        Header: <span>Drug(s)</span>,
+        Header: <span>Drug</span>,
         accessor: 'drugs',
         minWidth: 100,
         defaultSortDesc: false,
@@ -149,23 +149,53 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'level',
         minWidth: 100,
         defaultSortDesc: false,
-        style: { justifyContent: 'center', display: 'flex', alignItems: 'center' },
+        style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod
       };
     case TABLE_COLUMN_KEY.CITATIONS:
       return {
         id: TABLE_COLUMN_KEY.CITATIONS,
-        Header: <span>Citation(s)</span>,
+        Header: <span>Citation</span>,
         accessor: 'citations',
         minWidth: 100,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod
       };
+    case TABLE_COLUMN_KEY.CITATIONS:
+      return {
+        id: TABLE_COLUMN_KEY.CITATIONS,
+        Header: <span>Citation</span>,
+        accessor: 'citations',
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortMethod: defaultSortMethod
+      };
+    case TABLE_COLUMN_KEY.ONCOGENICITY:
+      return {
+        id: TABLE_COLUMN_KEY.ONCOGENICITY,
+        Header: <span>Oncogenic</span>,
+        accessor: 'oncogenic',
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortMethod: oncogenicitySortMethod
+      };
+    case TABLE_COLUMN_KEY.MUTATION_EFFECT:
+      return {
+        id: TABLE_COLUMN_KEY.MUTATION_EFFECT,
+        Header: <span>Mutation Effect</span>,
+        accessor: 'mutationEffect',
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortMethod: mutationEffectSortMethod
+      };
     default:
-      undefined;
+      return undefined;
   }
 }
 
+export function getCenterAlignStyle() {
+  return { justifyContent: 'center', display: 'flex', alignItems: 'center' };
+}
 export function filterByKeyword(value: string, keyword: string): boolean {
   return value.toLowerCase().includes(keyword);
 }
