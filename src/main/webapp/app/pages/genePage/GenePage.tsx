@@ -27,8 +27,10 @@ import { TABLE_COLUMN_KEY } from 'app/config/constants';
 import { BiologicalVariant, ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
-import TableWithSearchBox, { SearchColumn } from 'app/components/tableWithSearchBox/TableWithSearchBox';
+import OncoKBTable, { SearchColumn } from 'app/components/OncoKBTable/OncoKBTable';
 import _ from 'lodash';
+import { MutationMapper, TrackName } from 'react-mutation-mapper';
+import { MskimpactLink } from 'app/components/MskimpactLink';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -189,7 +191,7 @@ const GeneBackground: React.FunctionComponent<{
 export default class GenePage extends React.Component<{ appStore: AppStore }, {}> {
   @observable hugoSymbol: string;
   @observable alteration: string;
-  @observable showGeneBackground = false;
+  @observable showGeneBackground = true;
 
   private store: AnnotationStore;
 
@@ -276,11 +278,10 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
   getTable(key: TAB_KEYS) {
     if (key === TAB_KEYS.CLINICAL) {
       return (
-        <TableWithSearchBox
+        <OncoKBTable
           data={this.store.clinicalAlterations.result}
           columns={this.clinicalTableColumns}
-          pageSize={10}
-          isLoading={this.store.clinicalAlterations.isPending}
+          loading={this.store.clinicalAlterations.isPending}
           defaultSorted={[
             {
               id: TABLE_COLUMN_KEY.LEVEL,
@@ -295,11 +296,10 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
       );
     } else if (key === TAB_KEYS.BIOLOGICAL) {
       return (
-        <TableWithSearchBox
+        <OncoKBTable
           data={this.store.biologicalAlterations.result}
           columns={this.biologicalTableColumns}
-          pageSize={10}
-          isLoading={this.store.biologicalAlterations.isPending}
+          loading={this.store.biologicalAlterations.isPending}
           defaultSorted={[
             {
               id: TABLE_COLUMN_KEY.ONCOGENICITY,
@@ -375,10 +375,10 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
     return (
       <If condition={!!this.hugoSymbol}>
         <Then>
-          <If condition={this.pageShouldBeRendered}>
-            <Then>
+          {this.pageShouldBeRendered ? (
+            <>
               <Row>
-                <Col lg={6} xs={12}>
+                <Col lg={8} xs={12}>
                   <div className="">
                     <GeneInfo
                       gene={this.store.gene.result!}
@@ -399,44 +399,49 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                     )}
                   </div>
                 </Col>
-                <Col lg={6} xs={12} className={'d-flex flex-column align-items-center'}>
+                <Col lg={4} xs={12} className={'d-flex flex-column align-items-center'}>
                   <div>
                     <b>Cancer Types with {this.hugoSymbol} Mutations</b>
                     <DefaultTooltip
                       overlay={() => (
                         <div style={{ maxWidth: 300 }}>
                           Currently, the mutation frequency does not take into account copy number changes, chromosomal translocations or
-                          cancer types with fewer than 50 samples in{' '}
-                          <a target="_blank" href="http://www.cbioportal.org/study?id=msk_impact_2017#summary">
-                            MSK-IMPACT Clinical Sequencing Cohort
-                          </a>{' '}
-                          (
-                          <a href="https://www.ncbi.nlm.nih.gov/pubmed/28481359" target="_blank">
-                            Zehir et al., Nature Medicine, 2017
-                          </a>
-                          )
+                          cancer types with fewer than 50 samples in <MskimpactLink />
                         </div>
                       )}
                     >
                       <i className="fa fa-question-circle-o ml-2" />
                     </DefaultTooltip>
                   </div>
-                  <BarChart data={this.store.barChartData} width={500} height={300} filters={[]} />
+                  <BarChart data={this.store.barChartData} height={300} filters={[]} />
                 </Col>
               </Row>
-              <Row className={'mt-2'}>
-                <Col>{/*<LollipopPlot />*/}</Col>
-              </Row>
-              <Row className={'mt-2'}>
+              <Row className={'mt-5'}>
                 <Col>
-                  <Tabs items={this.tabs} transform={false} />
+                  <h6>
+                    Annotated Mutation Distribution in <MskimpactLink />
+                  </h6>
+                </Col>
+                <Col>
+                  <MutationMapper
+                    hugoSymbol={this.store.gene.result!.hugoSymbol}
+                    entrezGeneId={this.store.gene.result!.entrezGeneId}
+                    tracks={[TrackName.OncoKB, TrackName.CancerHotspots, TrackName.PTM]}
+                    data={this.store.mutationMapperDataExternal.result}
+                    mutationTable={
+                      <Row className={'mt-2'}>
+                        <Col>
+                          <Tabs items={this.tabs} transform={false} />
+                        </Col>
+                      </Row>
+                    }
+                  />
                 </Col>
               </Row>
-            </Then>
-            <Else>
-              <LoadingIndicator size={'big'} center={true} isLoading={this.store.gene.isPending || this.store.geneNumber.isPending} />
-            </Else>
-          </If>
+            </>
+          ) : (
+            <LoadingIndicator size={'big'} center={true} isLoading={this.store.gene.isPending || this.store.geneNumber.isPending} />
+          )}
         </Then>
         <Else>
           <Redirect to={'/'} />

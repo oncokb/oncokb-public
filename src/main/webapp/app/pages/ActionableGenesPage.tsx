@@ -29,6 +29,7 @@ import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import * as QueryString from 'query-string';
 import fileDownload from 'js-file-download';
+import OncoKBTable from 'app/components/OncoKBTable/OncoKBTable';
 
 const COMPONENT_PADDING = ['pl-2', 'pr-2'];
 const QUERY_SEPARATOR_FOR_QUERY_STRING = 'comma';
@@ -526,12 +527,11 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
             </Row>
             <Row className="mt-2">
               <Col>
-                <ReactTable
+                <OncoKBTable
+                  disableSearch={true}
                   data={this.filteredTreatments}
                   loading={this.relevantTumorTypes.isPending}
                   columns={this.columns}
-                  showPagination={false}
-                  defaultPageSize={400}
                   defaultSorted={[
                     {
                       id: 'level',
@@ -542,9 +542,6 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                       desc: false
                     }
                   ]}
-                  style={{
-                    height: 500
-                  }}
                   className="-striped -highlight"
                 />
               </Col>

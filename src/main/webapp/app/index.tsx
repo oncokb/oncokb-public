@@ -11,6 +11,7 @@ import './index.scss';
 import 'react-table/react-table.css';
 import 'oncokb-styles/dist/oncokb.css';
 import 'react-responsive-tabs/styles.css';
+import 'react-mutation-mapper/dist/styles.css';
 
 import { loadIcons } from './config/icon-loader';
 import { assignPublicToken } from 'app/indexUtils';

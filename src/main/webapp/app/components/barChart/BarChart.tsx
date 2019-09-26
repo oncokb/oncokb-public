@@ -18,15 +18,15 @@ export type BarChartDatum = {
 
 export interface IBarChartProps {
   data: BarChartDatum[];
-  width: number;
-  height: number;
-  filters: string[];
+  width?: number;
+  height?: number;
+  filters?: string[];
   windowStore?: WindowStore;
   onUserSelection?: (dataBins: BarChartDatum[]) => void;
 }
 
 // const VICTORY_THEME = generateTheme();
-const TILT_ANGLE = 40;
+const TILT_ANGLE = 90;
 
 @inject('windowStore')
 @observer
@@ -39,6 +39,11 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
 
   @observable
   private toolTipModel: string | null = null;
+
+  public static defaultProps = {
+    filters: [],
+    height: 300
+  };
 
   /*
    * Supplies the BarPlot with the event handlers needed to record when the mouse enters
@@ -82,7 +87,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
   }
 
   @computed
-  get rightPadding(): number {
+  get bottomPadding(): number {
     const MIN_PADDING = 10; // used when tickFormat is empty
     const padding =
       _.max(
@@ -92,8 +97,14 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
           const fontSize = `14px`;
           const textHeight = getTextHeight(content, fontFamily, fontSize);
           const textWidth = getTextWidth(content, fontFamily, fontSize);
-          const textDiagonal = getTextDiagonal(textHeight, textWidth);
-          return 10 + textDiagonal * Math.cos((Math.PI * TILT_ANGLE) / 180);
+          if (TILT_ANGLE % 180 === 0) {
+            return MIN_PADDING;
+          } else if (TILT_ANGLE % 90 === 0) {
+            return textWidth;
+          } else {
+            const textDiagonal = getTextDiagonal(textHeight, textWidth);
+            return 10 + textDiagonal * Math.cos((Math.PI * TILT_ANGLE) / 180);
+          }
         })
       ) || MIN_PADDING;
     return padding;
@@ -115,13 +126,13 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 height: this.props.height
               }
             }}
-            padding={{ left: 40, right: this.rightPadding, top: 10, bottom: 150 }}
+            padding={{ left: 70, right: 10, top: 10, bottom: this.bottomPadding }}
           >
             <VictoryAxis
               style={{
                 tickLabels: {
                   angle: TILT_ANGLE,
-                  verticalAnchor: 'start',
+                  verticalAnchor: 'middle',
                   textAnchor: 'start'
                 },
                 axisLabel: {
@@ -141,7 +152,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
               style={{
                 data: {
                   fill: (d: BarChartDatum) =>
-                    this.isDataBinSelected(d, this.props.filters) || this.props.filters.length === 0 ? COLOR_BLUE : COLOR_GREY
+                    this.isDataBinSelected(d, this.props.filters!) || this.props.filters!.length === 0 ? COLOR_BLUE : COLOR_GREY
                 }
               }}
               data={this.props.data}

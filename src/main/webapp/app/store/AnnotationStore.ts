@@ -13,6 +13,7 @@ import {
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
+import { Mutation } from 'react-mutation-mapper';
 
 interface IAnnotationStore {
   hugoSymbol: string;
@@ -130,6 +131,27 @@ export class AnnotationStore {
       });
     },
     default: []
+  });
+
+  readonly mutationMapperDataExternal = remoteData<Mutation[]>({
+    await: () => [this.biologicalAlterations],
+    invoke: () => {
+      return Promise.resolve(
+        this.biologicalAlterations.result.map(alteration => {
+          return {
+            gene: {
+              hugoGeneSymbol: this.hugoSymbol
+            },
+            proteinChange: alteration.variant.alteration,
+            proteinPosEnd: alteration.variant.proteinEnd,
+            proteinPosStart: alteration.variant.proteinStart,
+            referenceAllele: alteration.variant.refResidues,
+            variantAllele: alteration.variant.variantResidues,
+            mutationType: alteration.variant.consequence.term
+          };
+        })
+      );
+    }
   });
 
   readonly searchResult = remoteData<IndicatorQueryResp>({

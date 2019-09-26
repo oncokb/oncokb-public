@@ -13,9 +13,10 @@ import { action, observable } from 'mobx';
 import * as _ from 'lodash';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Redirect } from 'react-router-dom';
-import TableWithSearchBox, { SearchColumn } from 'app/components/tableWithSearchBox/TableWithSearchBox';
+import OncoKBTable, { SearchColumn } from 'app/components/OncoKBTable/OncoKBTable';
 import { filterByKeyword, getDefaultColumnDefinition } from 'app/shared/utils/Utils';
 import { TABLE_COLUMN_KEY } from 'app/config/constants';
+import AppStore from 'app/store/AppStore';
 
 const InfoIcon = (props: { overlay: string | JSX.Element }) => {
   return (
@@ -48,9 +49,9 @@ type ExtendCancerGene = CancerGene & {
   geneType: string;
 };
 
-@inject('authenticationStore')
+@inject('authenticationStore', 'appStore')
 @observer
-export default class CancerGenesPage extends React.Component<{ authenticationStore: AuthenticationStore }> {
+export default class CancerGenesPage extends React.Component<{ authenticationStore: AuthenticationStore; appStore: AppStore }> {
   @observable needsRedirect = false;
 
   private fetchedDate = '05/07/2019';
@@ -376,7 +377,7 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
         <Row>
           <Col>
             <div>
-              {this.cancerGenes.result.length} genes, last update {`***`}
+              {this.cancerGenes.result.length} genes, last update {this.props.appStore.appInfo.result.dataVersion.date}
             </div>
             <div>
               The following genes are considered to be cancer genes by OncoKB, based on their inclusion in various different sequencing
@@ -387,10 +388,10 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
         </Row>
         <Row>
           <Col>
-            <TableWithSearchBox
+            <OncoKBTable
               data={this.extendedCancerGene.result}
               columns={this.columns}
-              isLoading={this.extendedCancerGene.isPending}
+              loading={this.extendedCancerGene.isPending}
               defaultSorted={[
                 {
                   id: 'numOfSources',
