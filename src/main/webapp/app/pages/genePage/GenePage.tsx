@@ -27,10 +27,11 @@ import { TABLE_COLUMN_KEY } from 'app/config/constants';
 import { BiologicalVariant, ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
-import OncoKBTable, { SearchColumn } from 'app/components/OncoKBTable/OncoKBTable';
+import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import _ from 'lodash';
 import { MutationMapper, TrackName } from 'react-mutation-mapper';
 import { MskimpactLink } from 'app/components/MskimpactLink';
+import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -279,7 +280,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
     if (key === TAB_KEYS.CLINICAL) {
       return (
         <OncoKBTable
-          data={this.store.clinicalAlterations.result}
+          data={this.store.filteredClinicalAlterations}
           columns={this.clinicalTableColumns}
           loading={this.store.clinicalAlterations.isPending}
           defaultSorted={[
@@ -297,7 +298,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
     } else if (key === TAB_KEYS.BIOLOGICAL) {
       return (
         <OncoKBTable
-          data={this.store.biologicalAlterations.result}
+          data={this.store.filteredBiologicalAlterations}
           columns={this.biologicalTableColumns}
           loading={this.store.biologicalAlterations.isPending}
           defaultSorted={[
@@ -332,7 +333,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
       tabs.push({
         key: TAB_KEYS.CLINICAL,
         title: `Clinically Relevant ${pluralize('Alteration', this.store.clinicalAlterations.result.length)} (${
-          this.store.clinicalAlterations.result.length
+          this.store.filteredClinicalAlterations.length
         })`
       });
     }
@@ -340,7 +341,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
       tabs.push({
         key: TAB_KEYS.BIOLOGICAL,
         title: `All Annotated ${pluralize('Alteration', this.store.biologicalAlterations.result.length)} (${
-          this.store.biologicalAlterations.result.length
+          this.store.filteredBiologicalAlterations.length
         })`
       });
     }
@@ -371,6 +372,10 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
     return this.store.clinicalAlterations.result.length > 0 ? TAB_KEYS.CLINICAL : TAB_KEYS.BIOLOGICAL;
   }
 
+  componentWillUnmount(): void {
+    this.store.destroy();
+  }
+
   render() {
     return (
       <If condition={!!this.hugoSymbol}>
@@ -378,7 +383,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
           {this.pageShouldBeRendered ? (
             <>
               <Row>
-                <Col lg={8} xs={12}>
+                <Col xl={8} lg={6} xs={12}>
                   <div className="">
                     <GeneInfo
                       gene={this.store.gene.result!}
@@ -399,7 +404,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                     )}
                   </div>
                 </Col>
-                <Col lg={4} xs={12} className={'d-flex flex-column align-items-center'}>
+                <Col xl={4} lg={6} xs={12} className={'d-flex flex-column align-items-center'}>
                   <div>
                     <b>Cancer Types with {this.hugoSymbol} Mutations</b>
                     <DefaultTooltip
@@ -417,25 +422,25 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                 </Col>
               </Row>
               <Row className={'mt-5'}>
-                <Col>
+                <Col xs={12}>
                   <h6>
                     Annotated Mutation Distribution in <MskimpactLink />
                   </h6>
                 </Col>
-                <Col>
-                  <MutationMapper
+                <Col xs={12}>
+                  <OncokbMutationMapper
                     hugoSymbol={this.store.gene.result!.hugoSymbol}
                     entrezGeneId={this.store.gene.result!.entrezGeneId}
                     tracks={[TrackName.OncoKB, TrackName.CancerHotspots, TrackName.PTM]}
                     data={this.store.mutationMapperDataExternal.result}
-                    mutationTable={
-                      <Row className={'mt-2'}>
-                        <Col>
-                          <Tabs items={this.tabs} transform={false} />
-                        </Col>
-                      </Row>
-                    }
+                    filters={this.store.oncogenicityFilters}
+                    onFilterChange={this.store.onToggleFilter}
                   />
+                </Col>
+              </Row>
+              <Row className={'mt-2'}>
+                <Col>
+                  <Tabs items={this.tabs} transform={false} />
                 </Col>
               </Row>
             </>

@@ -263,6 +263,8 @@ export type ClinicalVariant = {
 
         'level': string
 
+        'oncogenic': string
+
         'variant': Alteration
 
 };

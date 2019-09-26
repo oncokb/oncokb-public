@@ -29,7 +29,7 @@ import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import * as QueryString from 'query-string';
 import fileDownload from 'js-file-download';
-import OncoKBTable from 'app/components/OncoKBTable/OncoKBTable';
+import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 
 const COMPONENT_PADDING = ['pl-2', 'pr-2'];
 const QUERY_SEPARATOR_FOR_QUERY_STRING = 'comma';

@@ -13,7 +13,7 @@ import { action, observable } from 'mobx';
 import * as _ from 'lodash';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Redirect } from 'react-router-dom';
-import OncoKBTable, { SearchColumn } from 'app/components/OncoKBTable/OncoKBTable';
+import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import { filterByKeyword, getDefaultColumnDefinition } from 'app/shared/utils/Utils';
 import { TABLE_COLUMN_KEY } from 'app/config/constants';
 import AppStore from 'app/store/AppStore';

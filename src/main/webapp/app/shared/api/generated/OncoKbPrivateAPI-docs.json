@@ -1625,6 +1625,9 @@
         "level": {
           "type": "string"
         },
+        "oncogenic": {
+          "type": "string"
+        },
         "variant": {
           "$ref": "#/definitions/Alteration"
         }

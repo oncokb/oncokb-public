@@ -1,7 +1,7 @@
 import { remoteData } from 'cbioportal-frontend-commons';
 import apiClient from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import { observable, computed } from 'mobx';
+import { observable, computed, IReactionDisposer, reaction, action } from 'mobx';
 import { Alteration, Evidence, IndicatorQueryResp, VariantSearchQuery, Gene } from 'app/shared/api/generated/OncoKbAPI';
 import { DEFAULT_GENE, EVIDENCE_TYPES } from 'app/config/constants';
 import {
@@ -14,6 +14,8 @@ import {
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
 import { Mutation } from 'react-mutation-mapper';
+import autobind from 'autobind-decorator';
+import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 
 interface IAnnotationStore {
   hugoSymbol: string;
@@ -45,10 +47,29 @@ export class AnnotationStore {
   @observable hugoSymbol: string;
   @observable alteration: string;
   @observable alterationsQuery: VariantSearchQuery[] = [];
+  @observable oncogenicityFilterStatus: { [oncogenicity: string]: boolean } = {};
+
+  readonly reactions: IReactionDisposer[] = [];
 
   constructor(props: IAnnotationStore) {
     this.hugoSymbol = props.hugoSymbol;
     this.alteration = props.alteration;
+    this.reactions.push(
+      reaction(
+        () => [this.uniqOncogenicity],
+        ([oncogenicities]) => {
+          this.oncogenicityFilterStatus = _.reduce(
+            oncogenicities,
+            (acc, oncogenicity) => {
+              acc[oncogenicity] = false;
+              return acc;
+            },
+            {}
+          );
+        },
+        { fireImmediately: true }
+      )
+    );
   }
 
   readonly gene = remoteData<Gene>({
@@ -184,6 +205,12 @@ export class AnnotationStore {
     default: []
   });
 
+  @autobind
+  @action
+  onToggleFilter(filterKey: string) {
+    this.oncogenicityFilterStatus[filterKey] = !this.oncogenicityFilterStatus[filterKey];
+  }
+
   @computed
   get barChartData() {
     const groupedCanerTypeCounts = _.groupBy(this.mutationMapperData.result, 'cancerType');
@@ -205,6 +232,64 @@ export class AnnotationStore {
     )
       .sort((a, b) => (a.y > b.y ? -1 : 1))
       .splice(0, 15);
+  }
+
+  @computed
+  get uniqOncogenicity() {
+    return _.uniq(this.biologicalAlterations.result.map(alteration => alteration.oncogenic));
+  }
+
+  @computed
+  get oncogenicityFilters() {
+    return this.uniqOncogenicity.sort(oncogenicitySortMethod).map(oncogenicity => {
+      return {
+        name: oncogenicity,
+        isSelected: this.oncogenicityFilterStatus[oncogenicity]
+      };
+    });
+  }
+
+  @computed
+  get filteredOncogenicities() {
+    return _.reduce(
+      this.oncogenicityFilterStatus,
+      (acc, status, oncogenicity) => {
+        if (status) {
+          acc.push(oncogenicity);
+        }
+        return acc;
+      },
+      [] as string[]
+    );
+  }
+
+  @computed
+  get isFiltered() {
+    return this.filteredOncogenicities.length > 0;
+  }
+
+  @computed
+  get filteredClinicalAlterations() {
+    if (this.isFiltered) {
+      return this.clinicalAlterations.result.filter(alteration => this.filteredOncogenicities.includes(alteration.oncogenic));
+    } else {
+      return this.clinicalAlterations.result;
+    }
+  }
+
+  @computed
+  get filteredBiologicalAlterations() {
+    if (this.isFiltered) {
+      return this.biologicalAlterations.result.filter(alteration => this.filteredOncogenicities.includes(alteration.oncogenic));
+    } else {
+      return this.biologicalAlterations.result;
+    }
+  }
+
+  destroy() {
+    for (const reaction of this.reactions) {
+      reaction();
+    }
   }
 
   readonly alterationsSearchResult = remoteData<Alteration[][]>({
