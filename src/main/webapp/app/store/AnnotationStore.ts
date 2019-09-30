@@ -1,7 +1,7 @@
 import { remoteData } from 'cbioportal-frontend-commons';
 import apiClient from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import { observable, computed, IReactionDisposer, reaction, action } from 'mobx';
+import { observable, computed, IReactionDisposer, action } from 'mobx';
 import { Alteration, Evidence, IndicatorQueryResp, VariantSearchQuery, Gene } from 'app/shared/api/generated/OncoKbAPI';
 import { DEFAULT_GENE, EVIDENCE_TYPES } from 'app/config/constants';
 import {
@@ -14,8 +14,6 @@ import {
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
 import { Mutation } from 'react-mutation-mapper';
-import autobind from 'autobind-decorator';
-import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 
 interface IAnnotationStore {
   hugoSymbol: string;
@@ -47,29 +45,29 @@ export class AnnotationStore {
   @observable hugoSymbol: string;
   @observable alteration: string;
   @observable alterationsQuery: VariantSearchQuery[] = [];
-  @observable oncogenicityFilterStatus: { [oncogenicity: string]: boolean } = {};
+  @observable oncogenicityFilters: string[] = [];
 
   readonly reactions: IReactionDisposer[] = [];
 
   constructor(props: IAnnotationStore) {
     this.hugoSymbol = props.hugoSymbol;
     this.alteration = props.alteration;
-    this.reactions.push(
-      reaction(
-        () => [this.uniqOncogenicity],
-        ([oncogenicities]) => {
-          this.oncogenicityFilterStatus = _.reduce(
-            oncogenicities,
-            (acc, oncogenicity) => {
-              acc[oncogenicity] = false;
-              return acc;
-            },
-            {}
-          );
-        },
-        { fireImmediately: true }
-      )
-    );
+    // this.reactions.push(
+    //   reaction(
+    //     () => [this.uniqOncogenicity],
+    //     ([oncogenicities]) => {
+    //       this.oncogenicityFilterStatus = _.reduce(
+    //         oncogenicities,
+    //         (acc, oncogenicity) => {
+    //           acc[oncogenicity] = false;
+    //           return acc;
+    //         },
+    //         {}
+    //       );
+    //     },
+    //     { fireImmediately: true }
+    //   )
+    // );
   }
 
   readonly gene = remoteData<Gene>({
@@ -156,7 +154,7 @@ export class AnnotationStore {
 
   readonly mutationMapperDataExternal = remoteData<Mutation[]>({
     await: () => [this.biologicalAlterations],
-    invoke: () => {
+    invoke: async () => {
       return Promise.resolve(
         this.biologicalAlterations.result.map(alteration => {
           return {
@@ -205,10 +203,9 @@ export class AnnotationStore {
     default: []
   });
 
-  @autobind
-  @action
+  @action.bound
   onToggleFilter(filterKey: string) {
-    this.oncogenicityFilterStatus[filterKey] = !this.oncogenicityFilterStatus[filterKey];
+    this.oncogenicityFilters = _.xor(this.oncogenicityFilters, [filterKey]);
   }
 
   @computed
@@ -240,38 +237,14 @@ export class AnnotationStore {
   }
 
   @computed
-  get oncogenicityFilters() {
-    return this.uniqOncogenicity.sort(oncogenicitySortMethod).map(oncogenicity => {
-      return {
-        name: oncogenicity,
-        isSelected: this.oncogenicityFilterStatus[oncogenicity]
-      };
-    });
-  }
-
-  @computed
-  get filteredOncogenicities() {
-    return _.reduce(
-      this.oncogenicityFilterStatus,
-      (acc, status, oncogenicity) => {
-        if (status) {
-          acc.push(oncogenicity);
-        }
-        return acc;
-      },
-      [] as string[]
-    );
-  }
-
-  @computed
   get isFiltered() {
-    return this.filteredOncogenicities.length > 0;
+    return this.oncogenicityFilters.length > 0;
   }
 
   @computed
   get filteredClinicalAlterations() {
     if (this.isFiltered) {
-      return this.clinicalAlterations.result.filter(alteration => this.filteredOncogenicities.includes(alteration.oncogenic));
+      return this.clinicalAlterations.result.filter(alteration => this.oncogenicityFilters.includes(alteration.oncogenic));
     } else {
       return this.clinicalAlterations.result;
     }
@@ -280,7 +253,7 @@ export class AnnotationStore {
   @computed
   get filteredBiologicalAlterations() {
     if (this.isFiltered) {
-      return this.biologicalAlterations.result.filter(alteration => this.filteredOncogenicities.includes(alteration.oncogenic));
+      return this.biologicalAlterations.result.filter(alteration => this.oncogenicityFilters.includes(alteration.oncogenic));
     } else {
       return this.biologicalAlterations.result;
     }

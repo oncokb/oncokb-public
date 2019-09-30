@@ -7,6 +7,9 @@ import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { defaultSortMethod, mutationEffectSortMethod, oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 import { TableCellRenderer } from 'react-table';
 import { LevelWithDescription } from 'app/components/LevelWithDescription';
+import pluralize from 'pluralize';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import { CitationTooltip } from 'app/components/CitationTooltip';
 
 export function getCancerTypeNameFromOncoTreeType(oncoTreeType: TumorType): string {
   return oncoTreeType.name || oncoTreeType.mainType.name || 'NA';
@@ -102,6 +105,7 @@ export function getDefaultColumnDefinition<T>(
       minWidth: number;
       style?: object;
       defaultSortDesc: boolean;
+      Cell?: TableCellRenderer;
       sortMethod: typeof defaultSortMethod;
     }
   | undefined {
@@ -159,7 +163,21 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'citations',
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
+        Cell: (props: any) => {
+          const numOfReferences = props.original.drugAbstracts.length + props.original.drugPmids.length;
+          return (
+            <div>
+              <DefaultTooltip
+                placement="left"
+                trigger={['hover', 'focus']}
+                overlay={() => <CitationTooltip pmids={props.original.drugPmids} abstracts={props.original.drugAbstracts} />}
+              >
+                <span>{`${numOfReferences} ${pluralize('reference', numOfReferences)}`}</span>
+              </DefaultTooltip>
+            </div>
+          );
+        }
       };
     case TABLE_COLUMN_KEY.CITATIONS:
       return {
@@ -196,6 +214,7 @@ export function getDefaultColumnDefinition<T>(
 export function getCenterAlignStyle() {
   return { justifyContent: 'center', display: 'flex', alignItems: 'center' };
 }
+
 export function filterByKeyword(value: string, keyword: string): boolean {
   return value.toLowerCase().includes(keyword);
 }

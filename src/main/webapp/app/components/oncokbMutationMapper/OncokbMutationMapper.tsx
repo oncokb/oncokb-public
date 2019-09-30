@@ -2,6 +2,10 @@ import { MutationMapperProps, MutationMapper } from 'react-mutation-mapper';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { Form } from 'react-bootstrap';
+import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
+import { observable, action } from 'mobx';
+import _ from 'lodash';
+import autobind from 'autobind-decorator';
 
 export type filter = {
   name: string;
@@ -9,15 +13,36 @@ export type filter = {
 };
 
 export interface IOncokbMutationMapperProps extends MutationMapperProps {
-  onInit?: (mutationMapper: OncokbMutationMapper) => void;
-  filters?: filter[];
+  oncogenicities: string[];
   onFilterChange?: (oncogenicity: string) => void;
-  percentChecked?: boolean;
-  onScaleToggle?: (checked: boolean) => void;
 }
 
+type TOncogenicityFilterStatus = { [oncogenicity: string]: boolean };
 @observer
 export class OncokbMutationMapper extends MutationMapper<IOncokbMutationMapperProps> {
+  @observable oncogenicityFilterStatus: TOncogenicityFilterStatus = {};
+
+  @autobind
+  @action
+  onToggleFilter(filterKey: string) {
+    this.oncogenicityFilterStatus[filterKey] = !this.oncogenicityFilterStatus[filterKey];
+    if (this.props.onFilterChange) {
+      this.props.onFilterChange(filterKey);
+    }
+  }
+
+  constructor(props: IOncokbMutationMapperProps, context: any) {
+    super(props, context);
+    this.oncogenicityFilterStatus = _.reduce(
+      props.oncogenicities,
+      (acc, oncogenicity) => {
+        acc[oncogenicity] = false;
+        return acc;
+      },
+      {} as TOncogenicityFilterStatus
+    );
+  }
+
   protected get geneSummary(): JSX.Element | null {
     return null;
   }
@@ -27,19 +52,17 @@ export class OncokbMutationMapper extends MutationMapper<IOncokbMutationMapperPr
   }
   protected get mutationFilterPanel(): JSX.Element | null {
     return (
-      <>
-        {this.props.filters
-          ? this.props.filters.map(filter => (
-              <Form.Check
-                key={filter.name}
-                type="checkbox"
-                label={filter.name}
-                checked={filter.isSelected}
-                onChange={() => this.props.onFilterChange!(filter.name)}
-              />
-            ))
-          : null}
-      </>
+      <div>
+        {this.props.oncogenicities.sort(oncogenicitySortMethod).map(oncogenicity => (
+          <Form.Check
+            key={oncogenicity}
+            type="checkbox"
+            label={oncogenicity}
+            checked={this.oncogenicityFilterStatus[oncogenicity]}
+            onChange={() => this.onToggleFilter(oncogenicity)}
+          />
+        ))}
+      </div>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactTable, { Column, SortingRule, TableProps } from 'react-table';
+import ReactTable, { Column, TableProps } from 'react-table';
 import { observer } from 'mobx-react';
 import { observable, computed } from 'mobx';
 

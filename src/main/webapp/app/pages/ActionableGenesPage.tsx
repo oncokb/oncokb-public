@@ -19,7 +19,6 @@ import { TreatmentDrug } from 'app/shared/api/generated/OncoKbAPI';
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ReactTable from 'react-table';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Else, If, Then } from 'react-if';

@@ -29,9 +29,10 @@ import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
 import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import _ from 'lodash';
-import { MutationMapper, TrackName } from 'react-mutation-mapper';
+import { TrackName } from 'react-mutation-mapper';
 import { MskimpactLink } from 'app/components/MskimpactLink';
 import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
+import { CitationTooltip } from 'app/components/CitationTooltip';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -196,70 +197,81 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
 
   private store: AnnotationStore;
 
-  private clinicalTableColumns: SearchColumn<ClinicalVariant>[] = [
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
-      onFilter: (data: ClinicalVariant, keyword) => filterByKeyword(data.variant.name, keyword),
-      Cell: (props: { original: ClinicalVariant }) => {
-        return <AlterationPageLink hugoSymbol={this.hugoSymbol} alteration={props.original.variant.name} />;
+  @computed
+  get clinicalTableColumns(): SearchColumn<ClinicalVariant>[] {
+    return [
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+        onFilter: (data: ClinicalVariant, keyword) => filterByKeyword(data.variant.name, keyword),
+        Cell: (props: { original: ClinicalVariant }) => {
+          return <AlterationPageLink hugoSymbol={this.hugoSymbol} alteration={props.original.variant.name} />;
+        }
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
+        onFilter: (data: ClinicalVariant, keyword) => filterByKeyword(getCancerTypeNameFromOncoTreeType(data.cancerType), keyword),
+        Cell: (props: { original: ClinicalVariant }) => {
+          return <span>{getCancerTypeNameFromOncoTreeType(props.original.cancerType)}</span>;
+        }
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
+        onFilter: (data: ClinicalVariant, keyword) => _.some(data.drug, (drug: string) => drug.toLowerCase().includes(keyword)),
+        Cell: (props: { original: ClinicalVariant }) => {
+          return <span>{reduceJoin(props.original.drug, <br />)}</span>;
+        }
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+        accessor: 'level',
+        Cell: (props: { original: ClinicalVariant }) => {
+          return <OncoKBLevelIcon level={props.original.level} />;
+        }
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS)
       }
-    },
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
-      onFilter: (data: ClinicalVariant, keyword) => filterByKeyword(getCancerTypeNameFromOncoTreeType(data.cancerType), keyword),
-      Cell: (props: { original: ClinicalVariant }) => {
-        return <span>{getCancerTypeNameFromOncoTreeType(props.original.cancerType)}</span>;
+    ];
+  }
+
+  @computed
+  get biologicalTableColumns(): SearchColumn<BiologicalVariant>[] {
+    return [
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+        onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.variant.name, keyword),
+        Cell: (props: { original: BiologicalVariant }) => {
+          return <AlterationPageLink hugoSymbol={this.hugoSymbol} alteration={props.original.variant.name} />;
+        }
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ONCOGENICITY),
+        onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.oncogenic, keyword),
+        style: getCenterAlignStyle()
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
+        onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.mutationEffect, keyword),
+        style: getCenterAlignStyle()
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+        style: getCenterAlignStyle(),
+        Cell: (props: { original: BiologicalVariant }) => {
+          const numOfReferences = props.original.mutationEffectAbstracts.length + props.original.mutationEffectPmids.length;
+          return (
+            <DefaultTooltip
+              overlay={() => (
+                <CitationTooltip pmids={props.original.mutationEffectPmids} abstracts={props.original.mutationEffectAbstracts} />
+              )}
+            >
+              <span>{`${numOfReferences} ${pluralize('reference', numOfReferences)}`}</span>
+            </DefaultTooltip>
+          );
+        }
       }
-    },
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
-      onFilter: (data: ClinicalVariant, keyword) => _.some(data.drug, (drug: string) => drug.toLowerCase().includes(keyword)),
-      Cell: (props: { original: ClinicalVariant }) => {
-        return <span>{reduceJoin(props.original.drug, <br />)}</span>;
-      }
-    },
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-      accessor: 'level',
-      Cell: (props: { original: ClinicalVariant }) => {
-        return <OncoKBLevelIcon level={props.original.level} />;
-      }
-    },
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
-      Cell: (props: { original: ClinicalVariant }) => {
-        const numOfReferences = props.original.drugAbstracts.length + props.original.drugPmids.length;
-        return `${numOfReferences} ${pluralize('reference', numOfReferences)}`;
-      }
-    }
-  ];
-  private biologicalTableColumns: SearchColumn<BiologicalVariant>[] = [
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
-      onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.variant.name, keyword),
-      Cell: (props: { original: BiologicalVariant }) => {
-        return <AlterationPageLink hugoSymbol={this.hugoSymbol} alteration={props.original.variant.name} />;
-      }
-    },
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ONCOGENICITY),
-      onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.oncogenic, keyword),
-      style: getCenterAlignStyle()
-    },
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
-      onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.mutationEffect, keyword),
-      style: getCenterAlignStyle()
-    },
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
-      style: getCenterAlignStyle(),
-      Cell: (props: { original: BiologicalVariant }) => {
-        const numOfReferences = props.original.mutationEffectAbstracts.length + props.original.mutationEffectPmids.length;
-        return `${numOfReferences} ${pluralize('reference', numOfReferences)}`;
-      }
-    }
-  ];
+    ];
+  }
 
   constructor(props: any) {
     super(props);
@@ -433,7 +445,8 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                     entrezGeneId={this.store.gene.result!.entrezGeneId}
                     tracks={[TrackName.OncoKB, TrackName.CancerHotspots, TrackName.PTM]}
                     data={this.store.mutationMapperDataExternal.result}
-                    filters={this.store.oncogenicityFilters}
+                    // filters={this.store.oncogenicityFilters}
+                    oncogenicities={this.store.uniqOncogenicity}
                     onFilterChange={this.store.onToggleFilter}
                   />
                 </Col>
