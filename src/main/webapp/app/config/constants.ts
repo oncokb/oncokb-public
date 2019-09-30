@@ -1,5 +1,15 @@
 import { OncoKBInfo, Gene } from 'app/shared/api/generated/OncoKbAPI';
-import { MainNumber } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  ArticleAbstract,
+  Citations,
+  Implication,
+  IndicatorQueryTreatment,
+  MainNumber,
+  MutationEffectResp,
+  Query,
+  VariantAnnotation,
+  VariantAnnotationTumorType
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 
 const config = {
   VERSION: process.env.VERSION
@@ -83,9 +93,35 @@ export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
 export enum EVIDENCE_TYPES {
   GENE_SUMMARY = 'GENE_SUMMARY',
   GENE_BACKGROUND = 'GENE_BACKGROUND',
-  MUTATION_EFFECT = 'MUTATION_EFFECT'
+  MUTATION_EFFECT = 'MUTATION_EFFECT',
+  TUMOR_TYPE_SUMMARY = 'TUMOR_TYPE_SUMMARY',
+  GENE_TUMOR_TYPE_SUMMARY = 'GENE_TUMOR_TYPE_SUMMARY',
+  PROGNOSTIC_SUMMARY = 'PROGNOSTIC_SUMMARY',
+  DIAGNOSTIC_SUMMARY = 'DIAGNOSTIC_SUMMARY',
+  ONCOGENIC = 'ONCOGENIC',
+  VUS = 'VUS',
+  PROGNOSTIC_IMPLICATION = 'PROGNOSTIC_IMPLICATION',
+  DIAGNOSTIC_IMPLICATION = 'DIAGNOSTIC_IMPLICATION',
+  STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY = 'STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY',
+  STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE = 'STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE',
+  INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY = 'INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY',
+  INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE = 'INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE'
 }
 
+export const TREATMENT_EVIDENCE_TYPES = [
+  EVIDENCE_TYPES.STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY,
+  EVIDENCE_TYPES.STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE,
+  EVIDENCE_TYPES.INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY,
+  EVIDENCE_TYPES.INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE
+];
+
+// Defaults for margin spaces between sections
+export const DEFAULT_MARGIN_TOP_SM = 'mt-2';
+export const DEFAULT_MARGIN_TOP_LG = 'mt-3';
+export const DEFAULT_MARGIN_BOTTOM_SM = 'mb-2';
+export const DEFAULT_MARGIN_BOTTOM_LG = 'mb-3';
+
+// Defaults for the models
 export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
   dataVersion: {
     date: '',
@@ -116,6 +152,49 @@ export const DEFAULT_GENE: Gene = {
   tsg: false
 };
 
+export const DEFAULT_MUTATION_EFFECT = {
+  citations: {
+    abstracts: [],
+    pmids: []
+  },
+
+  description: '',
+
+  knownEffect: ''
+};
+
+export const DEFAULT_ANNOTATION: VariantAnnotation = {
+  alleleExist: false,
+  background: '',
+  dataVersion: '',
+  diagnosticImplications: [],
+  diagnosticSummary: '',
+  geneExist: false,
+  geneSummary: '',
+  highestDiagnosticImplicationLevel: 'NO',
+  highestPrognosticImplicationLevel: 'NO',
+  highestResistanceLevel: 'NO',
+  highestSensitiveLevel: 'NO',
+  hotspot: false,
+  lastUpdate: '',
+  mutationEffect: DEFAULT_MUTATION_EFFECT,
+  oncogenic: '',
+  otherSignificantResistanceLevels: [],
+  otherSignificantSensitiveLevels: [],
+  prognosticImplications: [],
+  prognosticSummary: '',
+  query: {} as Query,
+  treatments: [],
+  tumorTypeSummary: '',
+  tumorTypes: [],
+
+  variantExist: false,
+
+  variantSummary: '',
+
+  vus: false
+};
+
 export enum PAGE_ROUTE {
   LOGIN = '/login',
   LOGOUT = '/logout',
@@ -136,7 +215,9 @@ export enum PAGE_ROUTE {
 export enum TABLE_COLUMN_KEY {
   HUGO_SYMBOL = 'HUGO_SYMBOL',
   ALTERATION = 'ALTERATION',
+  ALTERATIONS = 'ALTERATIONS',
   TUMOR_TYPE = 'TUMOR_TYPE',
+  EVIDENCE_CANCER_TYPE = 'EVIDENCE_CANCER_TYPE',
   DRUGS = 'DRUGS',
   LEVEL = 'LEVEL',
   CITATIONS = 'CITATIONS',

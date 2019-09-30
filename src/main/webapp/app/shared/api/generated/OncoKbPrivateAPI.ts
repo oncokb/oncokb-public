@@ -1612,10 +1612,14 @@ export default class OncoKbPrivateAPI {
         });
     };
     utilsOncoTreeMainTypesGetUsingGETURL(parameters: {
+        'excludeSpecialTumorType' ? : boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/oncotree/mainTypes';
+        if (parameters['excludeSpecialTumorType'] !== undefined) {
+            queryParameters['excludeSpecialTumorType'] = parameters['excludeSpecialTumorType'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -1631,8 +1635,10 @@ export default class OncoKbPrivateAPI {
      * Get the full list of OncoTree Maintype.
      * @method
      * @name OncoKbPrivateAPI#utilsOncoTreeMainTypesGetUsingGET
+     * @param {boolean} excludeSpecialTumorType - Exclude special general tumor type
      */
     utilsOncoTreeMainTypesGetUsingGETWithHttpInfo(parameters: {
+        'excludeSpecialTumorType' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -1647,6 +1653,10 @@ export default class OncoKbPrivateAPI {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = 'application/json';
             headers['Content-Type'] = 'application/json';
+
+            if (parameters['excludeSpecialTumorType'] !== undefined) {
+                queryParameters['excludeSpecialTumorType'] = parameters['excludeSpecialTumorType'];
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -1664,8 +1674,10 @@ export default class OncoKbPrivateAPI {
      * Get the full list of OncoTree Maintype.
      * @method
      * @name OncoKbPrivateAPI#utilsOncoTreeMainTypesGetUsingGET
+     * @param {boolean} excludeSpecialTumorType - Exclude special general tumor type
      */
     utilsOncoTreeMainTypesGetUsingGET(parameters: {
+            'excludeSpecialTumorType' ? : boolean,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < MainType >

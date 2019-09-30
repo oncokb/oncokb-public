@@ -1,9 +1,9 @@
-import { TumorType } from 'app/shared/api/generated/OncoKbAPI';
+import { Citations, Evidence, TreatmentDrug, TumorType, Article } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
 import React from 'react';
 import { ONCOGENICITY_CLASS_NAMES, TABLE_COLUMN_KEY } from 'app/config/constants';
 import classnames from 'classnames';
-import { Alteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { Alteration, Treatment } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { defaultSortMethod, mutationEffectSortMethod, oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 import { TableCellRenderer } from 'react-table';
 import { LevelWithDescription } from 'app/components/LevelWithDescription';
@@ -15,8 +15,12 @@ export function getCancerTypeNameFromOncoTreeType(oncoTreeType: TumorType): stri
   return oncoTreeType.name || oncoTreeType.mainType.name || 'NA';
 }
 
-export function levelOfEvidence2Level(levelOfEvidence: string) {
-  return trimLevelOfEvidenceSubversion(levelOfEvidence).replace('LEVEL_', '');
+export function levelOfEvidence2Level(levelOfEvidence: string, trimSubversion: boolean = false) {
+  let level = levelOfEvidence.replace('LEVEL_', '');
+  if (trimSubversion) {
+    level = trimLevelOfEvidenceSubversion(level);
+  }
+  return level;
 }
 
 export function level2LevelOfEvidence(level: string) {
@@ -38,6 +42,29 @@ export function getAllTumorTypesName(tumorTypes: TumorType[]) {
         .sort()
         .join(', ')
     : '';
+}
+
+export function getDrugNameFromTreatment(drug: TreatmentDrug) {
+  // @ts-ignore
+  return drug.drugName;
+}
+
+export function getTreatmentNameFromEvidence(evidence: Evidence) {
+  return evidence.treatments.map(treatment => treatment.drugs.map(drug => getDrugNameFromTreatment(drug)).join(' + ')).join(', ');
+}
+
+export function articles2Citations(articles: Article[]): Citations {
+  return {
+    abstracts: articles
+      .filter(article => !!article.abstract)
+      .map(article => {
+        return {
+          abstract: article.abstract,
+          link: article.link
+        };
+      }),
+    pmids: articles.filter(article => !!article.pmid).map(article => article.pmid)
+  };
 }
 
 function getAnnotationLevelClassName(sensitiveLevel: string, resistanceLevel: string) {
@@ -128,20 +155,42 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortMethod: defaultSortMethod
       };
+    case TABLE_COLUMN_KEY.ALTERATIONS:
+      return {
+        id: TABLE_COLUMN_KEY.ALTERATION,
+        Header: <span>Alterations</span>,
+        accessor: 'alterations',
+        style: { whiteSpace: 'normal' },
+        minWidth: 100,
+        defaultSortDesc: false,
+        sortMethod: defaultSortMethod
+      };
     case TABLE_COLUMN_KEY.TUMOR_TYPE:
       return {
         id: TABLE_COLUMN_KEY.TUMOR_TYPE,
         Header: <span>Tumor Type</span>,
         accessor: 'cancerType',
-        minWidth: 100,
+        style: { whiteSpace: 'normal' },
+        minWidth: 150,
+        defaultSortDesc: false,
+        sortMethod: defaultSortMethod
+      };
+    case TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE:
+      return {
+        id: TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,
+        Header: <span>Level-associated cancer types</span>,
+        accessor: 'cancerTypes',
+        style: { whiteSpace: 'normal' },
+        minWidth: 150,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod
       };
     case TABLE_COLUMN_KEY.DRUGS:
       return {
         id: TABLE_COLUMN_KEY.DRUGS,
-        Header: <span>Drug</span>,
+        Header: <span>Drugs</span>,
         accessor: 'drugs',
+        style: { whiteSpace: 'normal' },
         minWidth: 100,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod
@@ -154,15 +203,19 @@ export function getDefaultColumnDefinition<T>(
         minWidth: 100,
         defaultSortDesc: false,
         style: getCenterAlignStyle(),
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
+        Cell: (props: any) => {
+          return <OncoKBLevelIcon level={props.original.level} withDescription={true} />;
+        }
       };
     case TABLE_COLUMN_KEY.CITATIONS:
       return {
         id: TABLE_COLUMN_KEY.CITATIONS,
-        Header: <span>Citation</span>,
+        Header: <span>Citations</span>,
         accessor: 'citations',
-        minWidth: 100,
+        minWidth: 50,
         defaultSortDesc: false,
+        style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
         Cell: (props: any) => {
           const numOfReferences = props.original.drugAbstracts.length + props.original.drugPmids.length;
@@ -173,20 +226,11 @@ export function getDefaultColumnDefinition<T>(
                 trigger={['hover', 'focus']}
                 overlay={() => <CitationTooltip pmids={props.original.drugPmids} abstracts={props.original.drugAbstracts} />}
               >
-                <span>{`${numOfReferences} ${pluralize('reference', numOfReferences)}`}</span>
+                <span>{numOfReferences}</span>
               </DefaultTooltip>
             </div>
           );
         }
-      };
-    case TABLE_COLUMN_KEY.CITATIONS:
-      return {
-        id: TABLE_COLUMN_KEY.CITATIONS,
-        Header: <span>Citation</span>,
-        accessor: 'citations',
-        minWidth: 100,
-        defaultSortDesc: false,
-        sortMethod: defaultSortMethod
       };
     case TABLE_COLUMN_KEY.ONCOGENICITY:
       return {
@@ -212,7 +256,7 @@ export function getDefaultColumnDefinition<T>(
 }
 
 export function getCenterAlignStyle() {
-  return { justifyContent: 'center', display: 'flex', alignItems: 'center' };
+  return { justifyContent: 'center', display: 'flex', alignItems: 'center', whiteSpace: 'normal' };
 }
 
 export function filterByKeyword(value: string, keyword: string): boolean {

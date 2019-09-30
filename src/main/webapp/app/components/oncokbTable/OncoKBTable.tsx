@@ -10,6 +10,7 @@ export type SearchColumn<T> = Column<T> & {
 interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   data: T[];
   disableSearch?: boolean;
+  minRows?: number;
   columns: SearchColumn<T>[];
 }
 
@@ -18,6 +19,7 @@ export default class OncoKBTable<T> extends React.Component<ITableWithSearchBox<
   @observable searchKeyword = '';
 
   public static defaultProps = {
+    minRows: 15,
     disableSearch: false,
     searchIconClassName: 'fa fa-search'
   };
@@ -56,11 +58,11 @@ export default class OncoKBTable<T> extends React.Component<ITableWithSearchBox<
         <div className="mt-2">
           <ReactTable
             showPagination={false}
-            minRows={this.filteredData.length > 15 ? 0 : 15}
+            minRows={this.filteredData.length > this.props.minRows! ? 0 : this.props.minRows!}
             defaultPageSize={1000}
             className="-striped -highlight"
             style={{
-              height: 500
+              height: this.props.minRows! * 35 + 50
             }}
             {...this.props}
             data={this.filteredData}

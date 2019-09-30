@@ -12,6 +12,8 @@ import _ from 'lodash';
 import {
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
+  getDrugNameFromTreatment,
+  getTreatmentNameFromEvidence,
   levelOfEvidence2Level,
   OncoKBLevelIcon
 } from 'app/shared/utils/Utils';
@@ -154,16 +156,11 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
     this.reactions.forEach(componentReaction => componentReaction());
   }
 
-  getDrugNameFromTreatment(drug: TreatmentDrug) {
-    // @ts-ignore
-    return drug.drugName;
-  }
-
   getTreatments(evidences: Evidence[]) {
     const treatments: Treatment[] = [];
     _.forEach(evidences, (item: Evidence) => {
       treatments.push({
-        level: levelOfEvidence2Level(item.levelOfEvidence),
+        level: levelOfEvidence2Level(item.levelOfEvidence, true),
         hugoSymbol: item.gene.hugoSymbol || 'NA',
         alterations: item.alterations
           .map(function(alt) {
@@ -176,22 +173,14 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
           _.reduce(
             item.treatments,
             (acc, treatment) => {
-              const result: string[] = treatment.drugs.map(drug => this.getDrugNameFromTreatment(drug));
+              const result: string[] = treatment.drugs.map(drug => getDrugNameFromTreatment(drug));
               // @ts-ignore
               return acc.concat(result);
             },
             []
           )
         ),
-        drugs: item.treatments
-          .map(treatment =>
-            treatment.drugs
-              .map(drug => this.getDrugNameFromTreatment(drug))
-              .sort()
-              .join(' + ')
-          )
-          .sort()
-          .join(', ')
+        drugs: getTreatmentNameFromEvidence(item)
       });
     });
     return treatments;
@@ -394,10 +383,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   private columns = [
     {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-      Cell: (props: { original: Treatment }) => {
-        return <OncoKBLevelIcon level={props.original.level} />;
-      }
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL)
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),

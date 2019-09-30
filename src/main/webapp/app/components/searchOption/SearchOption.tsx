@@ -21,12 +21,16 @@ const LevelString: React.FunctionComponent<{
     <>
       {' '}
       {props.highestSensitiveLevel ? (
-        <span className={`oncokb level-${levelOfEvidence2Level(props.highestSensitiveLevel)}`}>Level {props.highestSensitiveLevel} </span>
+        <span className={`oncokb level-${levelOfEvidence2Level(props.highestSensitiveLevel, true)}`}>
+          Level {props.highestSensitiveLevel}{' '}
+        </span>
       ) : (
         undefined
       )}
       {props.highestResistanceLevel ? (
-        <span className={`oncokb level-${levelOfEvidence2Level(props.highestResistanceLevel)}`}>Level {props.highestResistanceLevel}</span>
+        <span className={`oncokb level-${levelOfEvidence2Level(props.highestResistanceLevel, true)}`}>
+          Level {props.highestResistanceLevel}
+        </span>
       ) : (
         undefined
       )}

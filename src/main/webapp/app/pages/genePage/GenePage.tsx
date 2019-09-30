@@ -49,10 +49,14 @@ const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
   return geneTypes.join(', ');
 };
 
-const getHighestLevelStrings = (highestSensitiveLevel: string | undefined, highestResistanceLevel: string | undefined) => {
+export const getHighestLevelStrings = (
+  highestSensitiveLevel: string | undefined,
+  highestResistanceLevel: string | undefined,
+  separator: string | JSX.Element = ', '
+) => {
   const levels: React.ReactNode[] = [];
   if (highestSensitiveLevel) {
-    const level = levelOfEvidence2Level(highestSensitiveLevel);
+    const level = levelOfEvidence2Level(highestSensitiveLevel, false);
     levels.push(
       <span className={`oncokb level-${level}`} key="highestSensitiveLevel">
         Level {level}
@@ -60,14 +64,14 @@ const getHighestLevelStrings = (highestSensitiveLevel: string | undefined, highe
     );
   }
   if (highestResistanceLevel) {
-    const level = levelOfEvidence2Level(highestResistanceLevel);
+    const level = levelOfEvidence2Level(highestResistanceLevel, false);
     levels.push(
       <span className={`oncokb level-${level}`} key="highestResistanceLevel">
         Level {level}
       </span>
     );
   }
-  return <>{reduceJoin(levels, ', ')}</>;
+  return <>{reduceJoin(levels, separator)}</>;
 };
 
 type GeneInfoProps = {
@@ -191,8 +195,7 @@ const GeneBackground: React.FunctionComponent<{
 @inject('appStore')
 @observer
 export default class GenePage extends React.Component<{ appStore: AppStore }, {}> {
-  @observable hugoSymbol: string;
-  @observable alteration: string;
+  @observable hugoSymbolQuery: string;
   @observable showGeneBackground = true;
 
   private store: AnnotationStore;
@@ -204,7 +207,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
         onFilter: (data: ClinicalVariant, keyword) => filterByKeyword(data.variant.name, keyword),
         Cell: (props: { original: ClinicalVariant }) => {
-          return <AlterationPageLink hugoSymbol={this.hugoSymbol} alteration={props.original.variant.name} />;
+          return <AlterationPageLink hugoSymbol={this.store.hugoSymbol} alteration={props.original.variant.name} />;
         }
       },
       {
@@ -223,10 +226,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-        accessor: 'level',
-        Cell: (props: { original: ClinicalVariant }) => {
-          return <OncoKBLevelIcon level={props.original.level} />;
-        }
+        accessor: 'level'
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS)
@@ -241,7 +241,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
         onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.variant.name, keyword),
         Cell: (props: { original: BiologicalVariant }) => {
-          return <AlterationPageLink hugoSymbol={this.hugoSymbol} alteration={props.original.variant.name} />;
+          return <AlterationPageLink hugoSymbol={this.store.hugoSymbol} alteration={props.original.variant.name} />;
         }
       },
       {
@@ -265,7 +265,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                 <CitationTooltip pmids={props.original.mutationEffectPmids} abstracts={props.original.mutationEffectAbstracts} />
               )}
             >
-              <span>{`${numOfReferences} ${pluralize('reference', numOfReferences)}`}</span>
+              <span>{numOfReferences}</span>
             </DefaultTooltip>
           );
         }
@@ -275,10 +275,9 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
 
   constructor(props: any) {
     super(props);
-    this.hugoSymbol = props.match.params ? props.match.params.hugoSymbol : undefined;
+    this.hugoSymbolQuery = props.match.params ? props.match.params.hugoSymbol : undefined;
     this.store = new AnnotationStore({
-      hugoSymbol: this.hugoSymbol,
-      alteration: this.alteration
+      hugoSymbolQuery: this.hugoSymbolQuery
     });
   }
 
@@ -390,7 +389,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
 
   render() {
     return (
-      <If condition={!!this.hugoSymbol}>
+      <If condition={!!this.hugoSymbolQuery}>
         <Then>
           {this.pageShouldBeRendered ? (
             <>
@@ -407,7 +406,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                       <GeneBackground
                         className="mt-2"
                         show={this.showGeneBackground}
-                        hugoSymbol={this.hugoSymbol}
+                        hugoSymbol={this.store.hugoSymbol}
                         geneBackground={this.store.geneBackground.result}
                         onClick={this.toggleGeneBackground}
                       />
@@ -418,7 +417,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                 </Col>
                 <Col xl={4} lg={6} xs={12} className={'d-flex flex-column align-items-center'}>
                   <div>
-                    <b>Cancer Types with {this.hugoSymbol} Mutations</b>
+                    <b>Cancer Types with {this.store.hugoSymbol} Mutations</b>
                     <DefaultTooltip
                       overlay={() => (
                         <div style={{ maxWidth: 300 }}>

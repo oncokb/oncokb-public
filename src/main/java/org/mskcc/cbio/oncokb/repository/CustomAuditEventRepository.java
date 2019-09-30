@@ -1,6 +1,4 @@
-package org.mskcc.cbio.oncokb.repository;
-
-import org.mskcc.cbio.oncokb.config.Constants;
+package org.mskcc.cbio.oncokb.repository;import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.audit.AuditEventConverter;
 import org.mskcc.cbio.oncokb.domain.PersistentAuditEvent;
 

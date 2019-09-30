@@ -21,6 +21,7 @@ import ActionableGenesPage from 'app/pages/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
 import { LevelOfEvidencePage } from 'app/pages/LevelOfEvidencePage';
 import GenePage from 'app/pages/genePage/GenePage';
+import AlterationPage from 'app/pages/alterationPage/AlterationPage';
 
 // tslint:disable:space-in-parens
 const Account = Loadable({
@@ -37,7 +38,9 @@ const AppRouts = inject('authenticationStore', 'routing')((props: { authenticati
       <ErrorBoundaryRoute path={PAGE_ROUTE.DATA_ACCESS} component={DataAccessPage} />
       <ErrorBoundaryRoute path={PAGE_ROUTE.CANCER_GENES} component={CancerGenesPage} />
       <ErrorBoundaryRoute path={PAGE_ROUTE.ACTIONABLE_GENE} component={ActionableGenesPage} />
-      <ErrorBoundaryRoute path="/gene/:hugoSymbol" component={GenePage} />
+      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol" component={GenePage} />
+      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration" component={AlterationPage} />
+      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage} />
       <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
       <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
       <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />

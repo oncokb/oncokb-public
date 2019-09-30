@@ -677,6 +677,15 @@
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "name": "excludeSpecialTumorType",
+            "in": "query",
+            "description": "Exclude special general tumor type",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",

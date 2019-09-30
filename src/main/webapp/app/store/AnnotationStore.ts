@@ -2,22 +2,32 @@ import { remoteData } from 'cbioportal-frontend-commons';
 import apiClient from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { observable, computed, IReactionDisposer, action } from 'mobx';
-import { Alteration, Evidence, IndicatorQueryResp, VariantSearchQuery, Gene } from 'app/shared/api/generated/OncoKbAPI';
-import { DEFAULT_GENE, EVIDENCE_TYPES } from 'app/config/constants';
+import { Alteration, Evidence, IndicatorQueryResp, VariantSearchQuery, Gene, Citations } from 'app/shared/api/generated/OncoKbAPI';
+import { DEFAULT_GENE, EVIDENCE_TYPES, DEFAULT_ANNOTATION, TREATMENT_EVIDENCE_TYPES } from 'app/config/constants';
 import {
   BiologicalVariant,
   CancerTypeCount,
   ClinicalVariant,
   GeneNumber,
-  PortalAlteration
+  MainType,
+  PortalAlteration,
+  TumorType,
+  VariantAnnotation
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
 import { Mutation } from 'react-mutation-mapper';
+import {
+  articles2Citations,
+  getCancerTypeNameFromOncoTreeType,
+  getTreatmentNameFromEvidence,
+  levelOfEvidence2Level
+} from 'app/shared/utils/Utils';
 
 interface IAnnotationStore {
-  hugoSymbol: string;
-  alteration: string;
+  hugoSymbolQuery: string;
+  alterationQuery?: string;
+  tumorTypeQuery?: string;
 }
 
 export type RequestParams = {
@@ -32,58 +42,60 @@ export type RequestParams = {
   fields?: string;
 };
 
-const getRequestParams = (hugoSymbol: string, alteration?: string): RequestParams => {
+const getRequestParams = (hugoSymbol: string, alteration?: string, tumorType?: string): RequestParams => {
   const params = {};
   params['hugoSymbol'] = hugoSymbol;
   if (alteration) {
     params['variant'] = alteration;
   }
+  if (tumorType) {
+    params['tumorType'] = tumorType;
+  }
   return params;
 };
 
+export type TherapeuticImplication = {
+  level: string;
+  alterations: string;
+  drugs: string;
+  cancerTypes: string;
+  citations: Citations;
+};
+
 export class AnnotationStore {
-  @observable hugoSymbol: string;
-  @observable alteration: string;
-  @observable alterationsQuery: VariantSearchQuery[] = [];
+  @observable hugoSymbolQuery: string;
+  @observable alterationQuery: string;
+  @observable tumorTypeQuery: string;
   @observable oncogenicityFilters: string[] = [];
 
   readonly reactions: IReactionDisposer[] = [];
 
   constructor(props: IAnnotationStore) {
-    this.hugoSymbol = props.hugoSymbol;
-    this.alteration = props.alteration;
-    // this.reactions.push(
-    //   reaction(
-    //     () => [this.uniqOncogenicity],
-    //     ([oncogenicities]) => {
-    //       this.oncogenicityFilterStatus = _.reduce(
-    //         oncogenicities,
-    //         (acc, oncogenicity) => {
-    //           acc[oncogenicity] = false;
-    //           return acc;
-    //         },
-    //         {}
-    //       );
-    //     },
-    //     { fireImmediately: true }
-    //   )
-    // );
+    this.hugoSymbolQuery = props.hugoSymbolQuery;
+    if (props.alterationQuery) this.alterationQuery = props.alterationQuery;
+    if (props.tumorTypeQuery) this.tumorTypeQuery = props.tumorTypeQuery;
   }
 
   readonly gene = remoteData<Gene>({
     invoke: async () => {
       const genes = await apiClient.genesLookupGetUsingGET({
-        query: this.hugoSymbol
+        query: this.hugoSymbolQuery
       });
       return genes[0];
     },
-    default: undefined
+    default: DEFAULT_GENE
   });
+
+  // this is for easier access of the hugoSymbol from the gene call
+  @computed
+  get hugoSymbol() {
+    return this.gene.result.hugoSymbol;
+  }
 
   readonly geneSummary = remoteData<string | undefined>({
     invoke: async () => {
       const evidences = await apiClient.evidencesLookupGetUsingGET({
-        hugoSymbol: this.hugoSymbol,
+        hugoSymbol: this.hugoSymbolQuery,
         evidenceTypes: EVIDENCE_TYPES.GENE_SUMMARY
       });
       if (evidences.length > 0) {
@@ -97,7 +109,7 @@ export class AnnotationStore {
   readonly geneBackground = remoteData<string | undefined>({
     invoke: async () => {
       const evidences = await apiClient.evidencesLookupGetUsingGET({
-        hugoSymbol: this.hugoSymbol,
+        hugoSymbol: this.hugoSymbolQuery,
         evidenceTypes: EVIDENCE_TYPES.GENE_BACKGROUND
       });
       if (evidences.length > 0) {
@@ -111,7 +123,7 @@ export class AnnotationStore {
   readonly geneNumber = remoteData<GeneNumber>({
     invoke: async () => {
       return privateClient.utilsNumbersGeneGetUsingGET({
-        hugoSymbol: this.hugoSymbol
+        hugoSymbol: this.hugoSymbolQuery
       });
     },
     default: {
@@ -126,8 +138,8 @@ export class AnnotationStore {
   readonly mutationEffect = remoteData<Evidence[]>({
     invoke: async () => {
       return apiClient.evidencesLookupGetUsingGET({
-        hugoSymbol: this.hugoSymbol,
-        variant: this.alteration,
+        hugoSymbol: this.hugoSymbolQuery,
+        variant: this.alterationQuery,
         evidenceTypes: EVIDENCE_TYPES.MUTATION_EFFECT
       });
     },
@@ -137,7 +149,7 @@ export class AnnotationStore {
   readonly clinicalAlterations = remoteData<ClinicalVariant[]>({
     invoke: async () => {
       return privateClient.searchVariantsClinicalGetUsingGET({
-        hugoSymbol: this.hugoSymbol
+        hugoSymbol: this.hugoSymbolQuery
       });
     },
     default: []
@@ -146,7 +158,7 @@ export class AnnotationStore {
   readonly biologicalAlterations = remoteData<BiologicalVariant[]>({
     invoke: async () => {
       return privateClient.searchVariantsBiologicalGetUsingGET({
-        hugoSymbol: this.hugoSymbol
+        hugoSymbol: this.hugoSymbolQuery
       });
     },
     default: []
@@ -159,7 +171,7 @@ export class AnnotationStore {
         this.biologicalAlterations.result.map(alteration => {
           return {
             gene: {
-              hugoGeneSymbol: this.hugoSymbol
+              hugoGeneSymbol: this.hugoSymbolQuery
             },
             proteinChange: alteration.variant.alteration,
             proteinPosEnd: alteration.variant.proteinEnd,
@@ -173,19 +185,91 @@ export class AnnotationStore {
     }
   });
 
-  readonly searchResult = remoteData<IndicatorQueryResp>({
+  readonly allMainTypes = remoteData<MainType[]>({
+    await: () => [],
     invoke: async () => {
-      return apiClient.searchGetUsingGET(getRequestParams(this.hugoSymbol, this.alteration));
-    },
-    default: undefined
-  });
-
-  readonly matchedAlterationResult = remoteData<Alteration[]>({
-    invoke: async () => {
-      return apiClient.variantsLookupGetUsingGET(getRequestParams(this.hugoSymbol, this.alteration));
+      const result = await privateClient.utilsOncoTreeMainTypesGetUsingGET({
+        excludeSpecialTumorType: true
+      });
+      return result.sort();
     },
     default: []
   });
+
+  readonly allSubtype = remoteData<TumorType[]>({
+    await: () => [],
+    invoke: async () => {
+      const result = await privateClient.utilsOncoTreeSubtypesGetUsingGET({});
+      return result.sort();
+    },
+    default: []
+  });
+
+  readonly allTumorTypesOptions = remoteData<any>({
+    await: () => [this.allMainTypes, this.allSubtype],
+    invoke: async () => {
+      return Promise.resolve([
+        {
+          label: 'Cancer Type',
+          options: _.uniq(this.allMainTypes.result.filter(mainType => !mainType.name.endsWith('NOS')).map(mainType => mainType.name))
+            .sort()
+            .map(tumorType => {
+              return {
+                value: tumorType,
+                label: tumorType
+              };
+            })
+        },
+        {
+          label: 'Cancer Type Detailed',
+          options: _.uniq(this.allSubtype.result.map(subtype => subtype.name))
+            .sort()
+            .map(tumorType => {
+              return {
+                value: tumorType,
+                label: tumorType
+              };
+            })
+        }
+      ]);
+    },
+    default: []
+  });
+
+  readonly annotationResult = remoteData<VariantAnnotation>({
+    invoke: async () => {
+      return privateClient.utilVariantAnnotationGetUsingGET({
+        hugoSymbol: this.hugoSymbolQuery,
+        alteration: this.alterationQuery,
+        tumorType: this.tumorTypeQuery
+      });
+    },
+    default: DEFAULT_ANNOTATION
+  });
+
+  @computed
+  get therapeuticImplications(): TherapeuticImplication[] {
+    return _.reduce(
+      this.annotationResult.result.tumorTypes,
+      (acc, next) => {
+        const oncoTreeCancerType = getCancerTypeNameFromOncoTreeType(next.tumorType);
+        next.evidences.forEach(evidence => {
+          if (TREATMENT_EVIDENCE_TYPES.includes(evidence.evidenceType as EVIDENCE_TYPES)) {
+            const level = levelOfEvidence2Level(evidence.levelOfEvidence);
+            acc.push({
+              level: level,
+              alterations: evidence.alterations.map(alteration => alteration.name).join(', '),
+              drugs: getTreatmentNameFromEvidence(evidence),
+              cancerTypes: oncoTreeCancerType,
+              citations: articles2Citations(evidence.articles)
+            });
+          }
+        });
+        return acc;
+      },
+      [] as TherapeuticImplication[]
+    );
+  }
 
   readonly portalAlterationSampleCount = remoteData<CancerTypeCount[]>({
     invoke: async () => {
@@ -197,7 +281,7 @@ export class AnnotationStore {
   readonly mutationMapperData = remoteData<PortalAlteration[]>({
     invoke: async () => {
       return privateClient.utilMutationMapperDataGetUsingGET({
-        hugoSymbol: this.hugoSymbol
+        hugoSymbol: this.hugoSymbolQuery
       });
     },
     default: []
@@ -264,14 +348,4 @@ export class AnnotationStore {
       reaction();
     }
   }
-
-  readonly alterationsSearchResult = remoteData<Alteration[][]>({
-    invoke: async () => {
-      const result = await apiClient.variantsLookupPostUsingPOST({
-        body: this.alterationsQuery
-      });
-      return result as Alteration[][];
-    },
-    default: []
-  });
 }

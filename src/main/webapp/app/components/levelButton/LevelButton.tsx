@@ -4,9 +4,12 @@ import { LEVEL_BUTTON_DESCRIPTION } from 'app/config/constants';
 import pluralize from 'pluralize';
 import * as styles from './LevelButton.module.scss';
 import classnames from 'classnames';
+import { inject } from 'mobx-react';
+import { RouterStore } from 'mobx-react-router';
 
 type LevelButtonProps = {
   level: string;
+  routing?: RouterStore;
   numOfGenes: number;
   onClick?: () => void;
   className?: string;
@@ -15,11 +18,20 @@ type LevelButtonProps = {
   disabled?: boolean;
 };
 
-export const LevelButton = (props: LevelButtonProps) => {
+export const LevelButton = inject('routing')((props: LevelButtonProps) => {
+  const onClick = () => {
+    if (props.href) {
+      props.routing!.history.push(props.href);
+    }
+    if (props.onClick) {
+      props.onClick();
+    }
+  };
+
   return (
     <Button
       variant="light"
-      onClick={props.onClick}
+      onClick={onClick}
       active={props.active}
       href={props.href}
       disabled={props.disabled}
@@ -33,4 +45,4 @@ export const LevelButton = (props: LevelButtonProps) => {
       )}`}</div>
     </Button>
   );
-};
+});

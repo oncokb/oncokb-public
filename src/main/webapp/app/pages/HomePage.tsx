@@ -45,7 +45,7 @@ class HomePage extends React.Component<IHomeProps> {
         _.reduce(
           levelNumber,
           (acc, next) => {
-            acc[levelOfEvidence2Level(next.level)] = next;
+            acc[levelOfEvidence2Level(next.level, true)] = next;
             return acc;
           },
           {} as { [level: string]: LevelNumber }
