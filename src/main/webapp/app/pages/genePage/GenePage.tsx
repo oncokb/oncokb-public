@@ -397,7 +397,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                 <Col xl={8} lg={6} xs={12}>
                   <div className="">
                     <GeneInfo
-                      gene={this.store.gene.result!}
+                      gene={this.store.gene.result}
                       highestSensitiveLevel={this.store.geneNumber.result.highestSensitiveLevel}
                       highestResistanceLevel={this.store.geneNumber.result.highestResistanceLevel}
                     />
@@ -440,8 +440,8 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                 </Col>
                 <Col xs={12}>
                   <OncokbMutationMapper
-                    hugoSymbol={this.store.gene.result!.hugoSymbol}
-                    entrezGeneId={this.store.gene.result!.entrezGeneId}
+                    hugoSymbol={this.store.gene.result.hugoSymbol}
+                    entrezGeneId={this.store.gene.result.entrezGeneId}
                     tracks={[TrackName.OncoKB, TrackName.CancerHotspots, TrackName.PTM]}
                     data={this.store.mutationMapperDataExternal.result}
                     // filters={this.store.oncogenicityFilters}

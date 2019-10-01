@@ -2,7 +2,7 @@ import { remoteData } from 'cbioportal-frontend-commons';
 import apiClient from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { observable, computed, IReactionDisposer, action } from 'mobx';
-import { Alteration, Evidence, IndicatorQueryResp, VariantSearchQuery, Gene, Citations } from 'app/shared/api/generated/OncoKbAPI';
+import { Evidence, Gene, Citations } from 'app/shared/api/generated/OncoKbAPI';
 import { DEFAULT_GENE, EVIDENCE_TYPES, DEFAULT_ANNOTATION, TREATMENT_EVIDENCE_TYPES } from 'app/config/constants';
 import {
   BiologicalVariant,
@@ -222,14 +222,12 @@ export class AnnotationStore {
         },
         {
           label: 'Cancer Type Detailed',
-          options: _.uniq(this.allSubtype.result.map(subtype => subtype.name))
-            .sort()
-            .map(tumorType => {
-              return {
-                value: tumorType,
-                label: tumorType
-              };
-            })
+          options: _.sortBy(this.allSubtype.result, 'name').map(tumorType => {
+            return {
+              value: tumorType.code,
+              label: tumorType.name
+            };
+          })
         }
       ]);
     },

@@ -10,6 +10,7 @@ import { LevelWithDescription } from 'app/components/LevelWithDescription';
 import pluralize from 'pluralize';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { CitationTooltip } from 'app/components/CitationTooltip';
+import { AlterationPageLink, GenePageLink, TumorTypePageLink } from 'app/shared/utils/UrlUtils';
 
 export function getCancerTypeNameFromOncoTreeType(oncoTreeType: TumorType): string {
   return oncoTreeType.name || oncoTreeType.mainType.name || 'NA';
@@ -144,7 +145,10 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'hugoSymbol',
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
+        Cell: (props: { original: any }) => {
+          return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
+        }
       };
     case TABLE_COLUMN_KEY.ALTERATION:
       return {
@@ -153,7 +157,10 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'alteration',
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
+        Cell: (props: { original: any }) => {
+          return <AlterationPageLink hugoSymbol={props.original.hugoSymbol} alteration={props.original.alteration} />;
+        }
       };
     case TABLE_COLUMN_KEY.ALTERATIONS:
       return {
@@ -173,7 +180,16 @@ export function getDefaultColumnDefinition<T>(
         style: { whiteSpace: 'normal' },
         minWidth: 150,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
+        Cell: (props: { original: any }) => {
+          return (
+            <TumorTypePageLink
+              hugoSymbol={props.original.hugoSymbol}
+              alteration={props.original.alteration}
+              tumorType={props.original.tumorType}
+            />
+          );
+        }
       };
     case TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE:
       return {

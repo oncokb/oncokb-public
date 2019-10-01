@@ -28,6 +28,19 @@ export const AlterationPageLink: React.FunctionComponent<{
   );
 };
 
+export const TumorTypePageLink: React.FunctionComponent<{
+  hugoSymbol: string;
+  alteration: string;
+  tumorType: string;
+  content?: string;
+}> = props => {
+  return (
+    <Link to={`${PAGE_ROUTE.GENE}/${props.hugoSymbol}/${props.alteration}/${props.tumorType}`}>
+      {props.content ? props.content : props.tumorType}
+    </Link>
+  );
+};
+
 export const MSILink: React.FunctionComponent<{}> = () => {
   return <AlterationPageLink hugoSymbol={'Other Biomarkers'} alteration={'MSI-H'} content={'microsatellite instability high (MSI-H)'} />;
 };

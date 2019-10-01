@@ -163,6 +163,21 @@ export const DEFAULT_MUTATION_EFFECT = {
   knownEffect: ''
 };
 
+export const DEFAULT_QUERY = {
+  alteration: '',
+  alterationType: '',
+  consequence: '',
+  entrezGeneId: -1,
+  hgvs: '',
+  hugoSymbol: '',
+  id: '',
+  proteinEnd: -1,
+  proteinStart: -1,
+  svType: 'UNKNOWN' as 'UNKNOWN',
+  tumorType: '',
+  type: ''
+};
+
 export const DEFAULT_ANNOTATION: VariantAnnotation = {
   alleleExist: false,
   background: '',
@@ -183,7 +198,7 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
   otherSignificantSensitiveLevels: [],
   prognosticImplications: [],
   prognosticSummary: '',
-  query: {} as Query,
+  query: DEFAULT_QUERY,
   treatments: [],
   tumorTypeSummary: '',
   tumorTypes: [],

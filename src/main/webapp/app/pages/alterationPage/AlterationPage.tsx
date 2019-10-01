@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { AnnotationStore, TherapeuticImplication } from 'app/store/AnnotationStore';
-import { computed, observable, action, IReactionDisposer, reaction } from 'mobx';
+import { computed, action, IReactionDisposer, reaction } from 'mobx';
 import { Col, Row } from 'react-bootstrap';
 import AppStore from 'app/store/AppStore';
 import _ from 'lodash';
@@ -10,12 +10,10 @@ import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import { DEFAULT_MARGIN_BOTTOM_SM, DEFAULT_MARGIN_TOP_LG, TABLE_COLUMN_KEY } from 'app/config/constants';
 import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
-import { BiologicalVariant, IndicatorQueryTreatment } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { filterByKeyword, getCenterAlignStyle, getDefaultColumnDefinition, reduceJoin } from 'app/shared/utils/Utils';
-import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
+import { getDefaultColumnDefinition, reduceJoin } from 'app/shared/utils/Utils';
+import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
-import pluralize from 'pluralize';
 import { RouterStore } from 'mobx-react-router';
 import { getHighestLevelStrings } from '../genePage/GenePage';
 
@@ -99,18 +97,28 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
 
   @computed
   get tumorTypeSelectValue() {
-    return !!this.store.tumorTypeQuery
-      ? {
+    if (this.store.tumorTypeQuery) {
+      const matchedSubtype = _.find(this.store.allSubtype.result, tumorType => tumorType.code === this.store.tumorTypeQuery);
+      if (matchedSubtype) {
+        return {
+          label: matchedSubtype.name,
+          value: matchedSubtype.code
+        };
+      } else {
+        return {
           label: this.store.tumorTypeQuery,
           value: this.store.tumorTypeQuery
-        }
-      : null;
+        };
+      }
+    } else {
+      return null;
+    }
   }
 
   @autobind
   @action
   updateTumorTypeQuery(selectedOption: any) {
-    this.store.tumorTypeQuery = selectedOption ? selectedOption.label : '';
+    this.store.tumorTypeQuery = selectedOption ? selectedOption.value : '';
   }
 
   @computed
@@ -175,8 +183,8 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
   }
 
   componentWillUnmount(): void {
-    for (const reaction of this.reactions) {
-      reaction();
+    for (const reactionItem of this.reactions) {
+      reactionItem();
     }
     this.store.destroy();
   }
