@@ -63,6 +63,14 @@ class HomePage extends React.Component<IHomeProps> {
     return this.levelNumbers.result[level] ? this.levelNumbers.result[level].genes.length : 0;
   }
 
+  debouncedFetch = _.debounce((searchTerm, callback) => {
+    this.getOptions(searchTerm)
+      .then(result => {
+        return callback(result);
+      })
+      .catch((error: any) => callback(error, null));
+  }, 500);
+
   @autobind
   @action
   async getOptions(keyword: string) {
@@ -176,9 +184,10 @@ class HomePage extends React.Component<IHomeProps> {
                   };
                 }
               }}
+              nu
               isFocused={true}
               defaultOptions={[] as ExtendedTypeaheadSearchResp[]}
-              menuIsOpen={!!this.keyword}
+              menuIsOpen={true}
               isClearable={true}
               onChange={(value: ExtendedTypeaheadSearchResp, props) => {
                 if (value) {
@@ -186,7 +195,7 @@ class HomePage extends React.Component<IHomeProps> {
                 }
               }}
               closeMenuOnSelect={false}
-              loadOptions={this.getOptions}
+              loadOptions={this.debouncedFetch}
               onInputChange={(keyword: string) => {
                 this.keyword = keyword;
               }}
