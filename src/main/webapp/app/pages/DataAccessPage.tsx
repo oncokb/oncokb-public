@@ -10,6 +10,7 @@ import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CitationText } from 'app/components/CitationText';
 import classnames from 'classnames';
+import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 
 enum DOWNLOAD_TYPE {
   ALL_CURATED_GENES,
@@ -29,13 +30,13 @@ export default class DataAccessPage extends React.Component<{ authenticationStor
       let data;
       switch (downloadType) {
         case DOWNLOAD_TYPE.ALL_ACTIONABLE_ALTERATIONS:
-          data = await oncokbClient.utilsAllActionableVariantsGetUsingGET({});
+          data = await oncokbClient.utilsAllActionableVariantsTxtGetUsingGET({});
           break;
         case DOWNLOAD_TYPE.ALL_ANNOTATED_VARIANTS:
-          data = await oncokbClient.utilsAllAnnotatedVariantsGetUsingGET({});
+          data = await oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET({});
           break;
         case DOWNLOAD_TYPE.ALL_CURATED_GENES:
-          data = await oncokbClient.utilsAllCuratedGenesGetUsingGET({});
+          data = await oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({});
           break;
         default:
           break;

@@ -26,12 +26,33 @@ assignPublicToken();
 // @ts-ignore
 const query = superagent.Request.prototype.query;
 // @ts-ignore
+const end = superagent.Request.prototype.end;
+
+// @ts-ignore
 superagent.Request.prototype.query = function(queryParameters: any) {
   const token = Storage.local.get(AUTH_TOKEN_KEY) || Storage.session.get(AUTH_TOKEN_KEY);
   if (token) {
     this.set('Authorization', `Bearer ${token}`);
   }
   return query.call(this, queryParameters);
+};
+
+// @ts-ignore
+superagent.Request.prototype.end = function(callback) {
+  return end.call(this, (error: any, response: any) => {
+    // the swagger coden only returns response body
+    // But in the case of the text/plain, the response should come from the response.text
+    if (
+      response &&
+      response.statusCode === 200 &&
+      response.headers &&
+      response.headers['content-type'] &&
+      response.headers['content-type'].includes('text/plain;')
+    ) {
+      response.body = response.text;
+    }
+    callback(error, response);
+  });
 };
 
 ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);

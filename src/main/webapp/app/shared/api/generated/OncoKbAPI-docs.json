@@ -1635,7 +1635,7 @@
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/plain"
         ],
         "responses": {
           "200": {
@@ -1688,7 +1688,7 @@
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/plain"
         ],
         "responses": {
           "200": {
@@ -1741,7 +1741,7 @@
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/plain"
         ],
         "responses": {
           "200": {
@@ -1794,7 +1794,7 @@
           "application/json"
         ],
         "produces": [
-          "*/*"
+          "text/plain"
         ],
         "responses": {
           "200": {

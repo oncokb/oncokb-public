@@ -3653,7 +3653,7 @@ export default class OncoKbAPI {
         let headers: any = {};
         let form: any = {};
         return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
+            headers['Accept'] = 'text/plain';
             headers['Content-Type'] = 'application/json';
 
             if (parameters.$queryParameters) {
@@ -3778,7 +3778,7 @@ export default class OncoKbAPI {
         let headers: any = {};
         let form: any = {};
         return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
+            headers['Accept'] = 'text/plain';
             headers['Content-Type'] = 'application/json';
 
             if (parameters.$queryParameters) {
@@ -3903,7 +3903,7 @@ export default class OncoKbAPI {
         let headers: any = {};
         let form: any = {};
         return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
+            headers['Accept'] = 'text/plain';
             headers['Content-Type'] = 'application/json';
 
             if (parameters.$queryParameters) {
@@ -4028,7 +4028,7 @@ export default class OncoKbAPI {
         let headers: any = {};
         let form: any = {};
         return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
+            headers['Accept'] = 'text/plain';
             headers['Content-Type'] = 'application/json';
 
             if (parameters.$queryParameters) {
