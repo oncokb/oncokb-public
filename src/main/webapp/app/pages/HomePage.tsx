@@ -63,7 +63,8 @@ class HomePage extends React.Component<IHomeProps> {
     return this.levelNumbers.result[level] ? this.levelNumbers.result[level].genes.length : 0;
   }
 
-  debouncedFetch = _.debounce((searchTerm, callback) => {
+  // https://github.com/JedWatson/react-select/issues/614#issuecomment-244006496
+  private debouncedFetch = _.debounce((searchTerm, callback) => {
     this.getOptions(searchTerm)
       .then(result => {
         return callback(result);

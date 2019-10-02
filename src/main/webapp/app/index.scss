@@ -42,11 +42,16 @@ body,
 
     .navbar-nav {
       & > a {
+        color: white;
         line-height: 2.75rem;
         border-bottom: 0.25rem solid $primary;
 
         &.active {
           border-bottom-color: $oncokb-orange;
+        }
+
+        &:hover {
+          text-decoration: none;
         }
       }
 

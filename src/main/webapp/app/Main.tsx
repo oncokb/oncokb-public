@@ -7,9 +7,12 @@ import AppRouts from 'app/routes';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { Container } from 'react-bootstrap';
 import { Stores } from 'app/App';
+import { withRouter } from 'react-router';
 
 export type IMainPage = Stores;
 
+// @ts-ignore
+@withRouter
 @observer
 class Main extends React.Component<IMainPage> {
   public render() {
@@ -24,6 +27,7 @@ class Main extends React.Component<IMainPage> {
           isInProduction={false}
           isSwaggerEnabled
           windowStore={this.props.windowStore}
+          routing={this.props.routing}
         />
         <div className={'view-wrapper'}>
           <Container fluid={!this.props.windowStore.isXLscreen}>

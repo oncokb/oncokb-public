@@ -5,7 +5,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Provider, observer } from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';
 import { RouterStore } from 'mobx-react-router';
-import { Router } from 'react-router';
+import { Router, withRouter } from 'react-router';
 import { syncHistoryWithStore } from 'mobx-react-router';
 import { createBrowserHistory } from 'history';
 

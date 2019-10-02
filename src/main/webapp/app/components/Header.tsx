@@ -1,14 +1,17 @@
 import * as React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap';
 
 import oncokbImg from '../resources/images/oncokb-lg.png';
 
 import { observer } from 'mobx-react';
 import { AccountMenu } from 'app/pages/menus';
 import WindowStore from 'app/store/WindowStore';
-import { observable, action } from 'mobx';
+import { observable, action, reaction, IReactionDisposer } from 'mobx';
 import autobind from 'autobind-decorator';
+import { RouterStore } from 'mobx-react-router';
+import { withRouter } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -17,6 +20,7 @@ export interface IHeaderProps {
   isInProduction: boolean;
   isSwaggerEnabled: boolean;
   windowStore: WindowStore;
+  routing: RouterStore;
 }
 
 type SubpageLink = {
@@ -24,10 +28,10 @@ type SubpageLink = {
   link: string;
 };
 
+// @ts-ignore
+@withRouter
 @observer
 class Header extends React.Component<IHeaderProps> {
-  @observable pageActiveKey = '/';
-
   private subPages: SubpageLink[] = [
     { title: 'Levels of Evidence', link: 'levels' },
     { title: 'Actionable Genes', link: 'actionableGenes' },
@@ -41,16 +45,10 @@ class Header extends React.Component<IHeaderProps> {
 
   getLink(page: SubpageLink) {
     return (
-      <LinkContainer exact to={`/${page.link}`} key={page.title} className={'mr-auto'}>
-        <Nav.Link>{page.title}</Nav.Link>
-      </LinkContainer>
+      <NavLink to={`/${page.link}`} key={page.title} className={'mr-auto nav-item'}>
+        {page.title}
+      </NavLink>
     );
-  }
-
-  @autobind
-  @action
-  updateActiveKey(eventKey: any) {
-    this.pageActiveKey = eventKey;
   }
 
   public render() {
@@ -58,16 +56,14 @@ class Header extends React.Component<IHeaderProps> {
       <header className="sticky-top header">
         <Navbar bg="primary" expand="lg" className="navbar-dark main-navbar">
           <Container fluid={!this.props.windowStore.isXLscreen}>
-            <Navbar.Brand onClick={() => this.updateActiveKey('/')}>
-              <LinkContainer exact to="/">
-                <Nav.Link>
-                  <img height={38} src={oncokbImg} alt={'OncoKB'} />
-                </Nav.Link>
-              </LinkContainer>
+            <Navbar.Brand>
+              <NavLink to="/">
+                <img height={38} src={oncokbImg} alt={'OncoKB'} />
+              </NavLink>
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse>
-              <Nav activeKey={this.pageActiveKey} onSelect={this.updateActiveKey}>
+              <Nav>
                 {this.subPages.map(page => this.getLink(page))}
                 <AccountMenu isAuthenticated={this.props.isUserAuthenticated} />
               </Nav>
