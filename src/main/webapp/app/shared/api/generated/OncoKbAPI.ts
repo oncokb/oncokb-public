@@ -1429,7 +1429,7 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#annotateStructuralVariantsGetUsingGET
      * @param {string} hugoSymbolA - The gene symbol A used in Human Genome Organisation. Example: ABL1
      * @param {integer} entrezGeneIdA - The entrez gene ID A. (Higher priority than hugoSymbolA) Example: 25
-     * @param {string} hugoSymbolB - The gene symbol B used in Human Genome Organisation.Example: BCR 
+     * @param {string} hugoSymbolB - The gene symbol B used in Human Genome Organisation.Example: BCR
      * @param {integer} entrezGeneIdB - The entrez gene ID B. (Higher priority than hugoSymbolB) Example: 613
      * @param {string} structuralVariantType - Structural variant type
      * @param {boolean} isFunctionalFusion - Whether is functional fusion
@@ -1514,7 +1514,7 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#annotateStructuralVariantsGetUsingGET
      * @param {string} hugoSymbolA - The gene symbol A used in Human Genome Organisation. Example: ABL1
      * @param {integer} entrezGeneIdA - The entrez gene ID A. (Higher priority than hugoSymbolA) Example: 25
-     * @param {string} hugoSymbolB - The gene symbol B used in Human Genome Organisation.Example: BCR 
+     * @param {string} hugoSymbolB - The gene symbol B used in Human Genome Organisation.Example: BCR
      * @param {integer} entrezGeneIdB - The entrez gene ID B. (Higher priority than hugoSymbolB) Example: 613
      * @param {string} structuralVariantType - Structural variant type
      * @param {boolean} isFunctionalFusion - Whether is functional fusion

@@ -31,6 +31,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import * as QueryString from 'query-string';
 import fileDownload from 'js-file-download';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
+import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 
 const COMPONENT_PADDING = ['pl-2', 'pr-2'];
 const QUERY_SEPARATOR_FOR_QUERY_STRING = 'comma';
@@ -368,17 +369,12 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
   }
 
   @autobind
-  @action
   downloadAssociation() {
-    if (this.props.authenticationStore.isUserAuthenticated) {
-      const content = [['Level', 'Gene', 'Alterations', 'Tumor Type', 'Drugs'].join('\t')];
-      _.each(this.filteredTreatments, item => {
-        content.push([item.level, item.hugoSymbol, item.alterations.join(', '), item.tumorType, item.drugs].join('\t'));
-      });
-      fileDownload(content.join('\n'), 'oncokb_biomarker_drug_associations.tsv');
-    } else {
-      this.props.routing.push('/login');
-    }
+    const content = [['Level', 'Gene', 'Alterations', 'Tumor Type', 'Drugs'].join('\t')];
+    _.each(this.filteredTreatments, item => {
+      content.push([item.level, item.hugoSymbol, item.alterations.join(', '), item.tumorType, item.drugs].join('\t'));
+    });
+    return Promise.resolve(content.join('\n'));
   }
 
   private columns = [
@@ -497,10 +493,12 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                 ${this.filteredTumorTypes.length} ${pluralize('tumor type', this.filteredTumorTypes.length)},
                 ${this.filteredLevels.length} ${pluralize('level of evidence', this.filteredLevels.length)})`}
                 </span>
-                <Button size={'sm'} className={classnames('ml-2', 'pt-1')} onClick={this.downloadAssociation}>
-                  <FontAwesomeIcon icon={'cloud-download-alt'} className={'mr-1'} fixedWidth />
-                  {pluralize('Association', this.filteredTreatments.length)}
-                </Button>
+                <AuthDownloadButton
+                  className={classnames('ml-2', 'pt-1')}
+                  getDownloadData={this.downloadAssociation}
+                  fileName={'oncokb_biomarker_drug_associations.tsv'}
+                  buttonText={'Associations'}
+                />
                 {this.treatmentsAreFiltered ? (
                   <Button variant="link" style={{ whiteSpace: 'nowrap' }} className={'ml-auto pr-0'} onClick={this.clearFilters}>
                     Reset filters

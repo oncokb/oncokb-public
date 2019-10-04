@@ -16,6 +16,8 @@ import { CitationTooltip } from 'app/components/CitationTooltip';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { RouterStore } from 'mobx-react-router';
 import { getHighestLevelStrings } from '../genePage/GenePage';
+import styles from './AlterationPage.module.scss';
+import classnames from 'classnames';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -52,7 +54,7 @@ const AlterationInfo: React.FunctionComponent<{
   }
   return (
     <div className="mt-2">
-      <b>{reduceJoin(content, separator)}</b>
+      <h5>{reduceJoin(content, separator)}</h5>
     </div>
   );
 };
@@ -193,24 +195,47 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
     return (
       <>
         <div className="d-flex align-items-center">
-          <span style={{ fontSize: '2rem' }}>
+          <h2 className={styles.header}>
             <GenePageLink hugoSymbol={this.store.hugoSymbol} highlightContent={false} />
             {` ${this.store.alterationQuery}`}
-          </span>
-          <div style={{ width: 300 }}>
-            <Select
-              className={'ml-2'}
-              value={this.tumorTypeSelectValue}
-              placeholder="Search Tumor Type"
-              options={this.store.allTumorTypesOptions.result}
-              formatGroupLabel={this.formatGroupLabel}
-              isClearable={true}
-              onChange={(selectedOption: any) => this.updateTumorTypeQuery(selectedOption)}
-            />
-          </div>
+            <span className={classnames(styles.headerTumorTypeSelection, 'ml-2')}>
+              <Select
+                styles={{
+                  control: (base, state) => ({
+                    ...base,
+                    height: '30px',
+                    'min-height': '30px'
+                  }),
+                  dropdownIndicator: base => ({
+                    ...base,
+                    padding: 4
+                  }),
+                  clearIndicator: base => ({
+                    ...base,
+                    padding: 4
+                  }),
+                  valueContainer: base => ({
+                    ...base,
+                    padding: '0px 6px'
+                  }),
+                  input: base => ({
+                    ...base,
+                    margin: 0,
+                    padding: 0
+                  })
+                }}
+                value={this.tumorTypeSelectValue}
+                placeholder="Search Tumor Type"
+                options={this.store.allTumorTypesOptions.result}
+                formatGroupLabel={this.formatGroupLabel}
+                isClearable={true}
+                onChange={(selectedOption: any) => this.updateTumorTypeQuery(selectedOption)}
+              />
+            </span>
+          </h2>
         </div>
         {this.store.annotationResult.isPending ? (
-          <LoadingIndicator isLoading={true} centerRelativeToContainer={true} />
+          <LoadingIndicator isLoading={true} size={'big'} center={true} />
         ) : (
           <>
             <AlterationInfo
@@ -226,7 +251,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
                   <Col xs={12}>
                     <div>
                       <h6 style={{ color: 'grey' }}>{summary.title}</h6>
-                      <div style={{}}>{summary.content}</div>
+                      <div>{summary.content}</div>
                     </div>
                   </Col>
                 </Row>

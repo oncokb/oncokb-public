@@ -1,7 +1,7 @@
 import { Citations, Evidence, TreatmentDrug, TumorType, Article } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
 import React from 'react';
-import { ONCOGENICITY_CLASS_NAMES, TABLE_COLUMN_KEY } from 'app/config/constants';
+import { ONCOGENICITY_CLASS_NAMES, PAGE_ROUTE, TABLE_COLUMN_KEY } from 'app/config/constants';
 import classnames from 'classnames';
 import { Alteration, Treatment } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { defaultSortMethod, mutationEffectSortMethod, oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
@@ -277,4 +277,15 @@ export function getCenterAlignStyle() {
 
 export function filterByKeyword(value: string, keyword: string): boolean {
   return value.toLowerCase().includes(keyword);
+}
+
+export function getRouteFromPath(pathName: string) {
+  const segments = pathName.split('/');
+  return segments.length < 2 ? PAGE_ROUTE.HOME : `/${segments[1]}`;
+}
+
+export function getRedirectLoginState(pathName: string) {
+  return {
+    from: getRouteFromPath(pathName)
+  };
 }

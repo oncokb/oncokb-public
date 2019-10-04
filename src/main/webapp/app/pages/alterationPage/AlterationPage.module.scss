@@ -1,0 +1,13 @@
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.headerTumorTypeSelection {
+  width: 300px;
+  height: 80%;
+  & * {
+    font-size: 0.85em;
+    line-height: 0.9em;
+  }
+}

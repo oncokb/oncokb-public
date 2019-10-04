@@ -185,10 +185,9 @@ class HomePage extends React.Component<IHomeProps> {
                   };
                 }
               }}
-              nu
               isFocused={true}
               defaultOptions={[] as ExtendedTypeaheadSearchResp[]}
-              menuIsOpen={true}
+              menuIsOpen={!!this.keyword}
               isClearable={true}
               onChange={(value: ExtendedTypeaheadSearchResp, props) => {
                 if (value) {

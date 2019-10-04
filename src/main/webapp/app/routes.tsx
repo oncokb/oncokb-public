@@ -9,7 +9,6 @@ import { AboutPage } from 'app/pages/AboutPage';
 import Loadable from 'react-loadable';
 import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
-import DataAccessPage from 'app/pages/DataAccessPage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { inject } from 'mobx-react';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
@@ -22,6 +21,7 @@ import { RouterStore } from 'mobx-react-router';
 import { LevelOfEvidencePage } from 'app/pages/LevelOfEvidencePage';
 import GenePage from 'app/pages/genePage/GenePage';
 import AlterationPage from 'app/pages/alterationPage/AlterationPage';
+import { DataAccessPage } from './pages/DataAccessPage';
 
 // tslint:disable:space-in-parens
 const Account = Loadable({

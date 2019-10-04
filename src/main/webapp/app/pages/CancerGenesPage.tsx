@@ -1,22 +1,18 @@
 import React from 'react';
-import apiClient from '../shared/api/oncokbClientInstance';
 import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
 import { CancerGene, CuratedGene } from 'app/shared/api/generated/OncoKbAPI';
 import { inject, observer } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import { SuggestCuration } from 'app/components/SuggestCuration';
-import { Button, Col, Row } from 'react-bootstrap';
-import classnames from 'classnames';
-import fileDownload from 'js-file-download';
-import { action, observable } from 'mobx';
+import { Col, Row } from 'react-bootstrap';
 import * as _ from 'lodash';
-import AuthenticationStore from 'app/store/AuthenticationStore';
-import { Redirect } from 'react-router-dom';
 import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import { filterByKeyword, getDefaultColumnDefinition } from 'app/shared/utils/Utils';
 import { TABLE_COLUMN_KEY } from 'app/config/constants';
 import AppStore from 'app/store/AppStore';
+import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
+import oncokbClient from 'app/shared/api/oncokbClientInstance';
 
 const InfoIcon = (props: { overlay: string | JSX.Element }) => {
   return (
@@ -49,11 +45,9 @@ type ExtendCancerGene = CancerGene & {
   geneType: string;
 };
 
-@inject('authenticationStore', 'appStore')
+@inject('appStore')
 @observer
-export default class CancerGenesPage extends React.Component<{ authenticationStore: AuthenticationStore; appStore: AppStore }> {
-  @observable needsRedirect = false;
-
+export default class CancerGenesPage extends React.Component<{ appStore: AppStore }> {
   private fetchedDate = '05/07/2019';
 
   private columns: SearchColumn<ExtendCancerGene>[] = [
@@ -278,7 +272,7 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
   private readonly cancerGenes = remoteData<CancerGene[]>({
     await: () => [],
     invoke: async () => {
-      return apiClient.utilsCancerGeneListGetUsingGET({});
+      return oncokbClient.utilsCancerGeneListGetUsingGET({});
     },
     default: []
   });
@@ -286,7 +280,7 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
   private readonly annotatedGenes = remoteData<CuratedGene[]>({
     await: () => [],
     invoke: async () => {
-      return apiClient.utilsAllCuratedGenesGetUsingGET({});
+      return oncokbClient.utilsAllCuratedGenesGetUsingGET({});
     },
     default: []
   });
@@ -339,29 +333,7 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
     default: []
   });
 
-  @action
-  downloadData() {
-    if (this.props.authenticationStore.isUserAuthenticated) {
-      const data = apiClient.utilsAllCuratedGenesGetUsingGET({});
-      if (data) {
-        fileDownload(data.toString(), 'cancerGeneList.txt');
-      }
-    } else {
-      this.needsRedirect = true;
-    }
-  }
-
   render() {
-    if (this.needsRedirect) {
-      return (
-        <Redirect
-          to={{
-            pathname: '/login',
-            state: { from: 'dataAccess' }
-          }}
-        />
-      );
-    }
     return (
       <div className="cancerGenes">
         <Row>
@@ -369,9 +341,11 @@ export default class CancerGenesPage extends React.Component<{ authenticationSto
             <h2>OncoKB Cancer Gene List</h2>
           </Col>
           <Col className="col-auto">
-            <Button size={'sm'} className={classnames('ml-1')} onClick={() => this.downloadData()}>
-              <i className="fa fa-cloud-download" /> Cancer Gene List
-            </Button>
+            <AuthDownloadButton
+              fileName="cancerGeneList.tsv"
+              getDownloadData={() => oncokbClient.utilsCancerGeneListTxtGetUsingGET({})}
+              buttonText="Cancer Gene List"
+            />
           </Col>
         </Row>
         <Row>

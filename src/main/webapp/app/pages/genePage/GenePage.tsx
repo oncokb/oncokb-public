@@ -25,7 +25,7 @@ import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import { TABLE_COLUMN_KEY } from 'app/config/constants';
 import { BiologicalVariant, ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
+import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
 import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import _ from 'lodash';
@@ -44,7 +44,7 @@ const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
   if (oncogene) {
     geneTypes.push(GENE_TYPE_DESC.ONCOGENE);
   } else if (tsg) {
-    return geneTypes.push(GENE_TYPE_DESC.TUMOR_SUPPRESSOR);
+    geneTypes.push(GENE_TYPE_DESC.TUMOR_SUPPRESSOR);
   }
   return geneTypes.join(', ');
 };
@@ -94,8 +94,8 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
     info.push({
       key: 'geneType',
       element: (
-        <div className={styles.highlightGeneInfo}>
-          <b>{getGeneTypeSentence(gene.oncogene, gene.tsg)}</b>
+        <div>
+          <h5>{getGeneTypeSentence(gene.oncogene, gene.tsg)}</h5>
         </div>
       )
     });
@@ -106,8 +106,8 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
     info.push({
       key: 'loe',
       element: (
-        <div className={styles.highlightGeneInfo}>
-          <b>Highest level of evidence: {getHighestLevelStrings(props.highestSensitiveLevel, props.highestResistanceLevel)}</b>
+        <div>
+          <h5>Highest level of evidence: {getHighestLevelStrings(props.highestSensitiveLevel, props.highestResistanceLevel)}</h5>
         </div>
       )
     });
@@ -393,6 +393,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
         <Then>
           {this.pageShouldBeRendered ? (
             <>
+              <h2>{this.store.hugoSymbol}</h2>
               <Row>
                 <Col xl={8} lg={6} xs={12}>
                   <div className="">

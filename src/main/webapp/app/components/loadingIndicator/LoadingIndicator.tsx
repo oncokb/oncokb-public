@@ -3,10 +3,12 @@ import { If, Then } from 'react-if';
 import Spinner from 'react-spinkit';
 import classNames from 'classnames';
 import styles from './styles.module.scss';
+import { COLOR_BLUE } from 'app/config/theme';
 
 export interface ILoader {
   isLoading: boolean;
   style?: any;
+  color?: string;
   inline?: boolean;
   center?: boolean;
   centerRelativeToContainer?: boolean;
@@ -17,11 +19,13 @@ export interface ILoader {
 export default class LoadingIndicator extends React.Component<ILoader, {}> {
   public static defaultProps = {
     inline: true,
+    color: COLOR_BLUE,
     center: false,
     size: 'small'
   };
 
   public render() {
+    const color = this.props.size === 'small' ? COLOR_BLUE : 'white';
     const spinnerStyles = {
       [styles.small]: this.props.size === 'small',
       [styles.big]: this.props.size === 'big',
@@ -41,8 +45,9 @@ export default class LoadingIndicator extends React.Component<ILoader, {}> {
         <Then>
           <div className={classNames(parentStyles, this.props.className)} style={this.props.style || {}}>
             <Spinner
+              color={color}
               fadeIn="none"
-              className={classNames(styles.color, spinnerStyles)}
+              className={classNames(spinnerStyles)}
               style={{ display: 'inline-block' }}
               name="line-scale-pulse-out"
             />
