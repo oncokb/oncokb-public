@@ -196,7 +196,7 @@ const GeneBackground: React.FunctionComponent<{
 @observer
 export default class GenePage extends React.Component<{ appStore: AppStore }, {}> {
   @observable hugoSymbolQuery: string;
-  @observable showGeneBackground = true;
+  @observable showGeneBackground = false;
 
   private store: AnnotationStore;
 
@@ -393,10 +393,10 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
         <Then>
           {this.pageShouldBeRendered ? (
             <>
-              <h2>{this.store.hugoSymbol}</h2>
               <Row>
                 <Col xl={8} lg={6} xs={12}>
                   <div className="">
+                    <h2>{this.store.hugoSymbol}</h2>
                     <GeneInfo
                       gene={this.store.gene.result}
                       highestSensitiveLevel={this.store.geneNumber.result.highestSensitiveLevel}

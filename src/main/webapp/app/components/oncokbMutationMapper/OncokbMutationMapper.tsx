@@ -1,23 +1,30 @@
 import { MutationMapperProps, MutationMapper } from 'react-mutation-mapper';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, Button, Badge } from 'react-bootstrap';
 import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 import { observable, action } from 'mobx';
 import _ from 'lodash';
 import autobind from 'autobind-decorator';
+import styles from './oncokbMutationMapper.module.scss';
 
-export type filter = {
+export type Filter = {
   name: string;
   isSelected: boolean;
 };
 
+export type Oncogenicity = {
+  oncogenicity: string;
+  counts: number;
+};
+
 export interface IOncokbMutationMapperProps extends MutationMapperProps {
-  oncogenicities: string[];
+  oncogenicities: Oncogenicity[];
   onFilterChange?: (oncogenicity: string) => void;
 }
 
 type TOncogenicityFilterStatus = { [oncogenicity: string]: boolean };
+
 @observer
 export class OncokbMutationMapper extends MutationMapper<IOncokbMutationMapperProps> {
   @observable oncogenicityFilterStatus: TOncogenicityFilterStatus = {};
@@ -36,7 +43,7 @@ export class OncokbMutationMapper extends MutationMapper<IOncokbMutationMapperPr
     this.oncogenicityFilterStatus = _.reduce(
       props.oncogenicities,
       (acc, oncogenicity) => {
-        acc[oncogenicity] = false;
+        acc[oncogenicity.oncogenicity] = false;
         return acc;
       },
       {} as TOncogenicityFilterStatus
@@ -50,17 +57,20 @@ export class OncokbMutationMapper extends MutationMapper<IOncokbMutationMapperPr
   protected get mutationTable(): JSX.Element | null {
     return null;
   }
+
   protected get mutationFilterPanel(): JSX.Element | null {
     return (
       <div>
-        {this.props.oncogenicities.sort(oncogenicitySortMethod).map(oncogenicity => (
-          <Form.Check
-            key={oncogenicity}
-            type="checkbox"
-            label={oncogenicity}
-            checked={this.oncogenicityFilterStatus[oncogenicity]}
-            onChange={() => this.onToggleFilter(oncogenicity)}
-          />
+        {this.props.oncogenicities.map(oncogenicity => (
+          <div className="mb-2" key={oncogenicity.oncogenicity}>
+            <span
+              className={this.oncogenicityFilterStatus[oncogenicity.oncogenicity] ? styles.activeBadge : styles.badge}
+              onClick={() => this.onToggleFilter(oncogenicity.oncogenicity)}
+            >
+              {oncogenicity.counts}
+            </span>
+            <span>{oncogenicity.oncogenicity}</span>
+          </div>
         ))}
       </div>
     );

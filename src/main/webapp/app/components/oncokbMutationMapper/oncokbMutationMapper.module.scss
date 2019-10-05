@@ -1,0 +1,22 @@
+.activeBadge,
+.badge:hover {
+  color: white;
+  background-color: $primary;
+  cursor: pointer;
+}
+
+.badge {
+  color: $primary;
+  background-color: white;
+}
+
+.badge,
+.activeBadge {
+  border: 1px solid $primary;
+  border-radius: 10px;
+  padding: 2px 4px;
+  width: 40px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: center;
+}

@@ -197,7 +197,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
         <div className="d-flex align-items-center">
           <h2 className={styles.header}>
             <GenePageLink hugoSymbol={this.store.hugoSymbol} highlightContent={false} />
-            {` ${this.store.alterationQuery}`}
+            <span className={'ml-2'}>{` ${this.store.alterationQuery}`}</span>
             <span className={classnames(styles.headerTumorTypeSelection, 'ml-2')}>
               <Select
                 styles={{

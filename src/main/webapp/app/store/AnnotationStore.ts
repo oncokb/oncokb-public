@@ -23,6 +23,8 @@ import {
   getTreatmentNameFromEvidence,
   levelOfEvidence2Level
 } from 'app/shared/utils/Utils';
+import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
+import { Oncogenicity } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 
 interface IAnnotationStore {
   hugoSymbolQuery: string;
@@ -315,7 +317,20 @@ export class AnnotationStore {
 
   @computed
   get uniqOncogenicity() {
-    return _.uniq(this.biologicalAlterations.result.map(alteration => alteration.oncogenic));
+    const oncogenicities = _.groupBy(this.biologicalAlterations.result, 'oncogenic');
+    const keys = _.keys(oncogenicities).sort(oncogenicitySortMethod);
+    return _.reduce(
+      keys,
+      (acc, oncogenicity) => {
+        const datum = oncogenicities[oncogenicity];
+        acc.push({
+          oncogenicity,
+          counts: datum.length
+        });
+        return acc;
+      },
+      [] as Oncogenicity[]
+    );
   }
 
   @computed
