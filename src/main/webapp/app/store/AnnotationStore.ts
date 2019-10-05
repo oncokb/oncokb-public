@@ -69,6 +69,7 @@ export class AnnotationStore {
   @observable alterationQuery: string;
   @observable tumorTypeQuery: string;
   @observable oncogenicityFilters: string[] = [];
+  @observable selectedCancerTypes: string[] = [];
 
   readonly reactions: IReactionDisposer[] = [];
 
@@ -281,7 +282,7 @@ export class AnnotationStore {
   readonly mutationMapperData = remoteData<PortalAlteration[]>({
     invoke: async () => {
       return privateClient.utilMutationMapperDataGetUsingGET({
-        hugoSymbol: this.hugoSymbolQuery
+        hugoSymbol: this.hugoSymbol
       });
     },
     default: []
@@ -304,6 +305,7 @@ export class AnnotationStore {
           acc.push({
             x: cancerType,
             y: (100 * numUniqSampleCountsInCancerType) / cancerGroups[cancerType].count,
+            alterations: next,
             overlay: ''
           } as BarChartDatum);
         }
@@ -335,13 +337,34 @@ export class AnnotationStore {
 
   @computed
   get isFiltered() {
-    return this.oncogenicityFilters.length > 0;
+    return this.oncogenicityFilters.length > 0 || this.selectedCancerTypes.length > 0;
+  }
+
+  @computed
+  get filteredBarChartData() {
+    return this.selectedCancerTypes.length === 0
+      ? this.barChartData
+      : this.barChartData.filter(data => this.selectedCancerTypes.includes(data.x));
+  }
+
+  @computed
+  get filteredAlterationsByBarChart() {
+    return _.uniq(_.flatten(this.filteredBarChartData.map(data => data.alterations.map(alteration => alteration.proteinChange))));
   }
 
   @computed
   get filteredClinicalAlterations() {
     if (this.isFiltered) {
-      return this.clinicalAlterations.result.filter(alteration => this.oncogenicityFilters.includes(alteration.oncogenic));
+      return this.clinicalAlterations.result.filter(alteration => {
+        let isMatch = true;
+        if (this.oncogenicityFilters.length > 0 && !this.oncogenicityFilters.includes(alteration.oncogenic)) {
+          isMatch = false;
+        }
+        if (this.selectedCancerTypes.length > 0 && !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration)) {
+          isMatch = false;
+        }
+        return isMatch;
+      });
     } else {
       return this.clinicalAlterations.result;
     }
@@ -350,7 +373,16 @@ export class AnnotationStore {
   @computed
   get filteredBiologicalAlterations() {
     if (this.isFiltered) {
-      return this.biologicalAlterations.result.filter(alteration => this.oncogenicityFilters.includes(alteration.oncogenic));
+      return this.biologicalAlterations.result.filter(alteration => {
+        let isMatch = true;
+        if (this.oncogenicityFilters.length > 0 && !this.oncogenicityFilters.includes(alteration.oncogenic)) {
+          isMatch = false;
+        }
+        if (this.selectedCancerTypes.length > 0 && !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration)) {
+          isMatch = false;
+        }
+        return isMatch;
+      });
     } else {
       return this.biologicalAlterations.result;
     }

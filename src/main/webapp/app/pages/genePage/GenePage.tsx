@@ -430,7 +430,12 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                       <i className="fa fa-question-circle-o ml-2" />
                     </DefaultTooltip>
                   </div>
-                  <BarChart data={this.store.barChartData} height={300} filters={[]} />
+                  <BarChart
+                    data={this.store.barChartData}
+                    height={300}
+                    filters={this.store.selectedCancerTypes}
+                    onUserSelection={filters => (this.store.selectedCancerTypes = filters)}
+                  />
                 </Col>
               </Row>
               <Row className={'mt-5'}>
