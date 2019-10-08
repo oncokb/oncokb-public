@@ -107,6 +107,7 @@ public class TokenProvider implements InitializingBean {
         return token.getToken();
     }
 
+    // This method is used in the frontend thymeleaf parsing
     public String getPubWebToken() {
         Optional<User> user = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("user@localhost");
         if (user.isPresent()) {
