@@ -2,14 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
-// tslint:disable-next-line:no-unused-variable
 import { ICrudGetAllAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntities } from './token-stats.reducer';
 import { ITokenStats } from 'app/shared/model/token-stats.model';
-// tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
 export interface ITokenStatsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
@@ -32,7 +30,7 @@ export class TokenStats extends React.Component<ITokenStatsProps> {
         </h2>
         <div className="table-responsive">
           {tokenStatsList && tokenStatsList.length > 0 ? (
-            <Table responsive>
+            <Table responsive aria-describedby="token-stats-heading">
               <thead>
                 <tr>
                   <th>ID</th>

@@ -98,7 +98,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
 
 export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, message });
 
-export const getSession = () => async (dispatch, getState) => {
+export const getSession = () => (dispatch, getState) => {
   dispatch({
     type: ACTION_TYPES.GET_SESSION,
     payload: axios.get('api/account')

@@ -1,5 +1,4 @@
 package org.mskcc.cbio.oncokb.repository;
-
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;

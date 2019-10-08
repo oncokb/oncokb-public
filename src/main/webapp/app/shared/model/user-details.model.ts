@@ -1,8 +1,4 @@
-export const enum AccountType {
-  ACADEMIC = 'ACADEMIC',
-  COMMERCIAL = 'COMMERCIAL',
-  NONAFFILIATED = 'NONAFFILIATED'
-}
+import { AccountType } from 'app/shared/model/enumerations/account-type.model';
 
 export interface IUserDetails {
   id?: number;

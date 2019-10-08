@@ -47,7 +47,7 @@ export default () => next => action => {
               addErrorAlert('Server not reachable', 'error.server.not.reachable');
               break;
 
-            case 400:
+            case 400: {
               const headers = Object.entries(response.headers);
               let errorHeader = null;
               let entityKey = null;
@@ -79,7 +79,7 @@ export default () => next => action => {
                 addErrorAlert(data);
               }
               break;
-
+            }
             case 404:
               addErrorAlert('Not found', 'error.url.not.found');
               break;
@@ -92,6 +92,9 @@ export default () => next => action => {
               }
           }
         }
+      } else if (error && error.config && error.config.url === 'api/account' && error.config.method === 'get') {
+        /* eslint-disable no-console */
+        console.log('Authentication Error: Trying to access url api/account with GET.');
       } else if (error && error.message) {
         toast.error(error.message);
       } else {

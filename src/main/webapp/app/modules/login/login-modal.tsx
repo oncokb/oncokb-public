@@ -61,10 +61,10 @@ class LoginModal extends React.Component<ILoginModalProps> {
             </Row>
             <div className="mt-1">&nbsp;</div>
             <Alert color="warning">
-              <Link to="/reset/request">Did you forget your password?</Link>
+              <Link to="/account/reset/request">Did you forget your password?</Link>
             </Alert>
             <Alert color="warning">
-              <span>You don't have an account yet?</span> <Link to="/register">Register a new account</Link>
+              <span>You don&apos;t have an account yet?</span> <Link to="/account/register">Register a new account</Link>
             </Alert>
           </ModalBody>
           <ModalFooter>

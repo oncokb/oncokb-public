@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <property name="autoIncrement" value="true"/>
+        <property name="autoIncrement" value="true"/>
 
     <!--
         Added the entity UserDetails.
@@ -19,23 +19,18 @@
             <column name="account_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-
             <column name="job_title" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-
             <column name="company" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-
             <column name="city" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-
             <column name="country" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-
             <column name="address" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -44,7 +39,6 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-
     </changeSet>
 
     <changeSet id="20190826161330-1-relations" author="jhipster">

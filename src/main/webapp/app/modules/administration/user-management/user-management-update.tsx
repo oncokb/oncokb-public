@@ -24,6 +24,10 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
     return () => props.reset();
   }, []);
 
+  const handleClose = () => {
+    props.history.push('/admin/user-management');
+  };
+
   const saveUser = (event, values) => {
     if (isNew) {
       props.createUser(values);
@@ -31,10 +35,6 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
       props.updateUser(values);
     }
     handleClose();
-  };
-
-  const handleClose = () => {
-    props.history.push('/admin/user-management');
   };
 
   const isInvalid = false;
