@@ -1,4 +1,3 @@
-/* tslint:disable */
 import { Storage } from 'react-jhipster';
 import * as request from 'superagent';
 import { AUTH_TOKEN_KEY } from 'app/store/AuthenticationStore';

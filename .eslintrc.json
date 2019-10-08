@@ -3,5 +3,7 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "rules": {}
+  "rules": {
+    "@typescript-eslint/member-ordering": "off"
+  }
 }

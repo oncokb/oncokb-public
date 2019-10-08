@@ -3,9 +3,9 @@ import { Storage } from 'react-jhipster';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
 import { UserDTO, UUIDToken } from 'app/shared/api/generated/API';
-import { AUTHORITIES } from '../../app-backup/config/constants';
 import * as _ from 'lodash';
 import { assignPublicToken } from 'app/indexUtils';
+import { AUTHORITIES } from 'app/config/constants';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',

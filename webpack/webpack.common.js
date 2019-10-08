@@ -74,6 +74,9 @@ module.exports = options => ({
         test: /\.(j|t)sx?$/,
         enforce: 'pre',
         loader: 'eslint-loader',
+        options: {
+          emitWarning: true
+        },
         exclude: [utils.root('node_modules')]
       }
     ]

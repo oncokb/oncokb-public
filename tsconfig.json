@@ -24,6 +24,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/main/webapp/app", "src/test/javascript/spec"],
+  "include": ["src/main/webapp/app"],
   "exclude": ["node_modules"]
 }

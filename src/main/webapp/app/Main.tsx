@@ -2,12 +2,12 @@ import * as React from 'react';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import { observer } from 'mobx-react';
-import { AUTHORITIES } from '../app-backup/config/constants';
 import AppRouts from 'app/routes';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { Container } from 'react-bootstrap';
 import { Stores } from 'app/App';
 import { withRouter } from 'react-router';
+import { AUTHORITIES } from 'app/config/constants';
 
 export type IMainPage = Stores;
 
