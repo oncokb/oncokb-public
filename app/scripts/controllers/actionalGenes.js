@@ -176,7 +176,7 @@ angular.module('oncokbStaticApp')
             api.getAllMainTypes()
                 .then(function(response) {
                     $scope.tumorTypes = _.uniqBy($scope.tumorTypes.concat(response.data.filter(function(record) {
-                        return !record.trim().endsWith("NOS");
+                        return !record.name.trim().endsWith("NOS");
                     }).map(function(mainType) {
                         return {
                             type: 'Main Type',
