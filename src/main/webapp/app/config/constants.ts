@@ -221,7 +221,7 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
 export enum PAGE_ROUTE {
   LOGIN = '/login',
   LOGOUT = '/logout',
-  REGISTER = '/register',
+  REGISTER = '/account/register',
   DATA_ACCESS = '/dataAccess',
   CANCER_GENES = '/cancerGenes',
   ACTIONABLE_GENE = '/actionableGenes',

@@ -2,15 +2,15 @@ import * as React from 'react';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
 import { CitationText } from 'app/components/CitationText';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
+import { Link } from 'react-router-dom';
+import { PAGE_ROUTE } from 'app/config/constants';
 
 export const DataAccessPage: React.FunctionComponent<{}> = () => {
   return (
     <>
       <h6>
         By using OncoKB data, you are agreeing to the OncoKB{' '}
-        <a href="terms">
-          <u>usage terms</u>
-        </a>
+        <Link to={PAGE_ROUTE.TERMS}><u>usage terms</u></Link>
         .
       </h6>
       <div className={'mb-3'}>
