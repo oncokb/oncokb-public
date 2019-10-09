@@ -34,6 +34,12 @@ public class UserDTO {
 
     private String jobTitle;
 
+    private String company;
+
+    private String city;
+
+    private String country;
+
     @Email
     @Size(min = 5, max = 254)
     private String email;
@@ -78,6 +84,9 @@ public class UserDTO {
             .collect(Collectors.toSet());
         if(userDetails != null) {
             this.jobTitle = userDetails.getJobTitle();
+            this.company = userDetails.getCompany();
+            this.city = userDetails.getCity();
+            this.country = userDetails.getCountry();
         }
     }
 
@@ -127,6 +136,30 @@ public class UserDTO {
 
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getImageUrl() {
@@ -201,6 +234,9 @@ public class UserDTO {
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
             ", jobTitle=" + jobTitle +
+            ", company=" + company +
+            ", city=" + city +
+            ", country=" + country +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
             ", langKey='" + langKey + '\'' +

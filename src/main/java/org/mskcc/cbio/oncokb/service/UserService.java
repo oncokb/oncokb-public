@@ -131,6 +131,9 @@ public class UserService {
         UserDetails userDetails = new UserDetails();
         userDetails.setUser(newUser);
         userDetails.setJobTitle(userDTO.getJobTitle());
+        userDetails.setCompany(userDTO.getCompany());
+        userDetails.setCity(userDTO.getCity());
+        userDetails.setCountry(userDTO.getCountry());
         userDetailsRepository.save(userDetails);
 
         this.clearUserCaches(newUser);
@@ -193,6 +196,9 @@ public class UserService {
         , String lastName
         , String email
         , String jobTitle
+        , String company
+        , String city
+        , String country
         , String langKey
         , String imageUrl
     ) {
@@ -206,7 +212,7 @@ public class UserService {
                 user.setImageUrl(imageUrl);
                 this.clearUserCaches(user);
 
-                getUpdatedUserDetails(user, jobTitle);
+                getUpdatedUserDetails(user, jobTitle, company, city, country);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -241,18 +247,25 @@ public class UserService {
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
 
-                return new UserDTO(user, getUpdatedUserDetails(user, userDTO.getJobTitle()));
+                return new UserDTO(user, getUpdatedUserDetails(
+                    user, userDTO.getJobTitle(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
             });
     }
 
-    private UserDetails getUpdatedUserDetails(User user, String jobTitle) {
+    private UserDetails getUpdatedUserDetails(User user, String jobTitle, String company, String city, String country) {
         Optional<UserDetails> userDetails= userDetailsRepository.findOneByUser(user);
         if(userDetails.isPresent()) {
             userDetails.get().setJobTitle(jobTitle);
+            userDetails.get().setCompany(company);
+            userDetails.get().setCity(city);
+            userDetails.get().setCountry(country);
             return userDetails.get();
         }else{
             UserDetails newUserDetails = new UserDetails();
             newUserDetails.setJobTitle(jobTitle);
+            newUserDetails.setCompany(company);
+            newUserDetails.setCity(city);
+            newUserDetails.setCountry(country);
             newUserDetails.setUser(user);
             userDetailsRepository.save(newUserDetails);
             return newUserDetails;

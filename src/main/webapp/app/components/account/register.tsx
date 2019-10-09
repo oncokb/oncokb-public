@@ -49,7 +49,10 @@ export class RegisterPage extends React.Component<IRegisterProps> {
       login: values.username,
       password: values.firstPassword,
       email: values.email,
-      jobTitle: values.jobTitle
+      jobTitle: values.jobTitle,
+      company: values.company,
+      city: values.city,
+      country: values.country,
     };
 
     client
