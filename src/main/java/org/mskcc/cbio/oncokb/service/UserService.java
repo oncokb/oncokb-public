@@ -12,7 +12,6 @@ import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.service.util.RandomUtil;
-import org.mskcc.cbio.oncokb.web.rest.errors.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,7 +100,7 @@ public class UserService {
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
-                throw new LoginAlreadyUsedException();
+                throw new UsernameAlreadyUsedException();
             }
         });
         userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {

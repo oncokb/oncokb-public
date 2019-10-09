@@ -85,7 +85,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Tazemetostat',
         <a
           href="https://library.ehaweb.org/eha/2018/stockholm/214434/gilles.salles.interim.update.from.a.phase.2.multicenter.study.of.tazemetostat.html?f=topic=1574*media=3%27"
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
         >
           Abstract: Morschhauser et al. Abstract# S100, EHA 2018.
         </a>
@@ -127,7 +127,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'Improved Actionable Genes page',
       <span>
         Updated the Cancer Genes list which now consists of 1039 genes (no longer referring to the{' '}
-        <a href="https://cancer.sanger.ac.uk/cosmic/census?tier=2" target="_blank">
+        <a href="https://cancer.sanger.ac.uk/cosmic/census?tier=2" target="_blank" rel="noopener noreferrer">
           Cancer Gene Census Tier 2 genes
         </a>
         )
@@ -139,7 +139,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           PIK3CA - Oncogenic Mutations - Breast Cancer - Alpelisib (<b>previously level 3A</b>)<br />
           May 24, 2019:{' '}
           <a
-            target="_blank"
+            target="_blank" rel="noopener noreferrer"
             href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-alpelisib-metastatic-breast-cancer"
           >
             The FDA approved PI(3)-kinase alpha selective inhibitor alpelisib
@@ -161,7 +161,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         Standardization of therapeutic names with{' '}
-        <a target="_blank" href="https://ncit.nci.nih.gov/ncitbrowser/">
+        <a target="_blank" rel="noopener noreferrer" href="https://ncit.nci.nih.gov/ncitbrowser/">
           NCI thesaurus
         </a>
       </span>
@@ -320,7 +320,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           April 12, 2019:{' '}
           <a
-            target="_blank"
+            target="_blank" rel="noopener noreferrer"
             href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-erdafitinib-metastatic-urothelial-carcinoma"
           >
             the FDA approved erdafitinib
@@ -364,7 +364,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       '1': [
         <span>
           November 2, 2018:{' '}
-          <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm625027.htm">
+          <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm625027.htm">
             the FDA approved lorlatinib
           </a>{' '}
           for patients with anaplastic lymphoma kinase (ALK)-positive metastatic non-small cell lung cancer (NSCLC) whose disease has
@@ -413,7 +413,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       '1': [
         <span>
           November 26, 2018:{' '}
-          <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm626720.htm">
+          <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm626720.htm">
             the FDA approved larotrectinib
           </a>{' '}
           for adult and pediatric patients with solid tumors that have an NTRK1, -2, or -3 gene fusion without a known acquired resistance
@@ -459,24 +459,24 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         OncoTree updated from version{' '}
-        <a target="_blank" href="http://oncotree.mskcc.org/#/home?version=oncotree_2017_06_21">
+        <a target="_blank" rel="noopener noreferrer" href="http://oncotree.mskcc.org/#/home?version=oncotree_2017_06_21">
           2017_06_21
         </a>{' '}
         to version{' '}
-        <a target="_blank" href="http://oncotree.mskcc.org/#/home?version=oncotree_2018_06_15">
+        <a target="_blank" rel="noopener noreferrer" href="http://oncotree.mskcc.org/#/home?version=oncotree_2018_06_15">
           2018_06_15
         </a>
       </span>,
       <span>
         OncoKB is monitoring the following drugs that were granted{' '}
-        <a target="_blank" href="https://www.fda.gov/forpatients/approvals/fast/ucm405397.htm">
+        <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/forpatients/approvals/fast/ucm405397.htm">
           Breakthrough Therapy
         </a>{' '}
         designation by the FDA:
         <ul className="bullet" style={{ marginTop: '0.875rem' }}>
           <li>
             Oct 2, 2018:{' '}
-            <a target="_blank" href="https://www.onclive.com/web-exclusives/fda-grants-rucaparib-breakthrough-designation-for-mcrpc">
+            <a target="_blank" rel="noopener noreferrer" href="https://www.onclive.com/web-exclusives/fda-grants-rucaparib-breakthrough-designation-for-mcrpc">
               Rucarparib in adult patients with BRCA1/2-positive metastatic castration-resistant disease following at least 1 androgen
               receptor–directed therapy and taxane-based chemotherapy.
             </a>
@@ -504,14 +504,14 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         OncoKB is monitoring the following drugs that were granted{' '}
-        <a target="_blank" href="https://www.fda.gov/forpatients/approvals/fast/ucm405397.htm">
+        <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/forpatients/approvals/fast/ucm405397.htm">
           Breakthrough Therapy
         </a>{' '}
         designation by the FDA:
         <ul className="bullet" style={{ marginTop: '0.875rem' }}>
           <li>
             Sept 5, 2018:{' '}
-            <a target="_blank" href="https://www.onclive.com/web-exclusives/fda-grants-loxo292-breakthrough-designation-for-nsclc-mtc">
+            <a target="_blank" rel="noopener noreferrer" href="https://www.onclive.com/web-exclusives/fda-grants-loxo292-breakthrough-designation-for-nsclc-mtc">
               LOXO-292 for RET fusion–positive non–small cell lung cancer (NSCLC) or RET-mutant medullary thyroid cancer (MTC)
             </a>
           </li>
@@ -562,26 +562,26 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       <span>Updated layout of Actionable Genes table.</span>,
       <span>
         OncoKB is monitoring the following drugs that were granted{' '}
-        <a target="_blank" href="https://www.fda.gov/forpatients/approvals/fast/ucm405397.htm">
+        <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/forpatients/approvals/fast/ucm405397.htm">
           Breakthrough Therapy
         </a>{' '}
         designation by the FDA:
         <ul className="bullet" style={{ marginTop: '0.875rem' }}>
           <li>
             August 6, 2018:{' '}
-            <a target="_blank" href="http://www.ascopost.com/News/59131">
+            <a target="_blank" rel="noopener noreferrer" href="http://www.ascopost.com/News/59131">
               Lenvatinib Plus Pembrolizumab in non-MSI-H Endometrial Carcinoma
             </a>
           </li>
           <li>
             August 7, 2018:{' '}
-            <a target="_blank" href="http://www.ascopost.com/News/59138">
+            <a target="_blank" rel="noopener noreferrer" href="http://www.ascopost.com/News/59138">
               Quizartinib for Relapsed/Refractory FLT3-ITD AML
             </a>
           </li>
           <li>
             August 14, 2018:{' '}
-            <a target="_blank" href="http://www.ascopost.com/News/59160">
+            <a target="_blank" rel="noopener noreferrer" href="http://www.ascopost.com/News/59160">
               Encorafenib Plus Binimetinib and Cetuximab in BRAFV600E–Mutant Metastatic Colorectal Cancer
             </a>
           </li>
@@ -638,7 +638,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       '1': [
         <span>
           July 20, 2018:{' '}
-          <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm614128.htm">
+          <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm614128.htm">
             the FDA approved ivosidenib
           </a>{' '}
           for adult patients with relapsed or refractory acute myeloid leukemia (AML) with a susceptible IDH1 mutation as detected by an
@@ -661,7 +661,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       '1': [
         <span>
           April 18, 2018:{' '}
-          <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm605113.htm">
+          <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm605113.htm">
             the FDA approved osimertinib
           </a>{' '}
           for the first-line treatment of patients with metastatic non-small cell lung cancer (NSCLC) whose tumors have epidermal growth
@@ -669,7 +669,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
         <span>
           May 4, 2018:{' '}
-          <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm606708.htm">
+          <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm606708.htm">
             the FDA approved the combination of dabrafenib plus trametinib
           </a>{' '}
           for treatment of patients with locally advanced or metastatic anaplastic thyroid cancer with BRAF V600E mutation and with no
@@ -677,7 +677,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
         <span>
           June 27, 2018:{' '}
-          <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm611981.htm">
+          <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm611981.htm">
             the FDA approved the combination of encorafenib plus binimetinib
           </a>{' '}
           for patients with BRAF V600E- or V600K-mutant metastatic and/or unresectable melanoma.
@@ -709,7 +709,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         Addition of a new gene: KLF5 (
-        <a target="_blank" href="https://www.ncbi.nlm.nih.gov/pubmed/28963353">
+        <a target="_blank" rel="noopener noreferrer" href="https://www.ncbi.nlm.nih.gov/pubmed/28963353">
           Zhang et al., Cancer Discovery, 2017
         </a>
         ).
@@ -720,7 +720,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       '1': [
         <span>
           November 6, 2017:{' '}
-          <a target="_blank" href="https://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/ucm583931.htm">
+          <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/ucm583931.htm">
             the FDA approved vemurafenib
           </a>{' '}
           for treatment of patients with Erdheim-Chester disease (histiocytosis) who harbor BRAF V600 mutations.
@@ -738,11 +738,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       <span>Updates to Levels of Evidence 3A and 4.</span>,
       <span>
         Mutation frequency plots are now calculated based on{' '}
-        <a target="_blank" href="https://www.cbioportal.org/study?id=msk_impact_2017#summary">
+        <a target="_blank" rel="noopener noreferrer" href="https://www.cbioportal.org/study?id=msk_impact_2017#summary">
           MSK-IMPACT Clinical Sequencing Cohort
         </a>{' '}
         (
-        <a href="https://www.ncbi.nlm.nih.gov/pubmed/28481359" target="_blank">
+        <a href="https://www.ncbi.nlm.nih.gov/pubmed/28481359" target="_blank" rel="noopener noreferrer">
           Zehir et al., Nature Medicine, 2017
         </a>
         ).
@@ -753,7 +753,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         August 1, 2017:{' '}
-        <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm569366.htm">
+        <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm569366.htm">
           the FDA approved nivolumab
         </a>{' '}
         for treatment of patients with mismatch repair deficient (MMR-D) and <MSILink /> metastatic colorectal cancer that has progressed
@@ -761,7 +761,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       </span>,
       <span>
         August 1, 2017:{' '}
-        <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm569482.htm">
+        <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm569482.htm">
           the FDA approved enasidenib
         </a>{' '}
         for treatment of patients with relapsed or refractory
@@ -769,7 +769,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       </span>,
       <span>
         June 22, 2017:{' '}
-        <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm564331.htm">
+        <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm564331.htm">
           the FDA approved combination dabrafenib + trametinib
         </a>{' '}
         for treatment of patients with <AlterationPageLink hugoSymbol={'BRAF'} alteration={'V600E'} showGene={true} /> mutant metastatic
@@ -777,7 +777,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       </span>,
       <span>
         May 23, 2017:{' '}
-        <a target="_blank" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm560040.htm">
+        <a target="_blank" rel="noopener noreferrer" href="https://www.fda.gov/Drugs/InformationOnDrugs/ApprovedDrugs/ucm560040.htm">
           the FDA approved pembrolizumab
         </a>{' '}
         for treatment of patients with unresectable or metastatic, <MSILink /> or mismatch repair deficient (MMR-D) solid tumors.

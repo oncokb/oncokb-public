@@ -23,7 +23,7 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import pluralize from 'pluralize';
 import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
-import { TABLE_COLUMN_KEY } from 'app/config/constants';
+import { SM_TABLE_FIXED_HEIGHT, TABLE_COLUMN_KEY, THRESHOLD_TABLE_FIXED_HEIGHT } from 'app/config/constants';
 import { BiologicalVariant, ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
@@ -213,14 +213,14 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
         onFilter: (data: ClinicalVariant, keyword) => filterByKeyword(getCancerTypeNameFromOncoTreeType(data.cancerType), keyword),
-        Cell: (props: { original: ClinicalVariant }) => {
+        Cell(props: { original: ClinicalVariant }) {
           return <span>{getCancerTypeNameFromOncoTreeType(props.original.cancerType)}</span>;
         }
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
         onFilter: (data: ClinicalVariant, keyword) => _.some(data.drug, (drug: string) => drug.toLowerCase().includes(keyword)),
-        Cell: (props: { original: ClinicalVariant }) => {
+        Cell(props: { original: ClinicalVariant }) {
           return <span>{reduceJoin(props.original.drug, <br />)}</span>;
         }
       },
@@ -257,7 +257,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
         style: getCenterAlignStyle(),
-        Cell: (props: { original: BiologicalVariant }) => {
+        Cell(props: { original: BiologicalVariant }) {
           const numOfReferences = props.original.mutationEffectAbstracts.length + props.original.mutationEffectPmids.length;
           return (
             <DefaultTooltip
@@ -293,6 +293,9 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
         <OncoKBTable
           data={this.store.filteredClinicalAlterations}
           columns={this.clinicalTableColumns}
+          style={this.store.filteredBiologicalAlterations.length > THRESHOLD_TABLE_FIXED_HEIGHT ? {
+            height: SM_TABLE_FIXED_HEIGHT
+          }: undefined}
           loading={this.store.clinicalAlterations.isPending}
           defaultSorted={[
             {
@@ -311,6 +314,9 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
         <OncoKBTable
           data={this.store.filteredBiologicalAlterations}
           columns={this.biologicalTableColumns}
+          style={this.store.filteredBiologicalAlterations.length > THRESHOLD_TABLE_FIXED_HEIGHT ? {
+            height: SM_TABLE_FIXED_HEIGHT
+          }: undefined}
           loading={this.store.biologicalAlterations.isPending}
           defaultSorted={[
             {
@@ -450,7 +456,6 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                     entrezGeneId={this.store.gene.result.entrezGeneId}
                     tracks={[TrackName.OncoKB, TrackName.CancerHotspots, TrackName.PTM]}
                     data={this.store.mutationMapperDataExternal.result}
-                    // filters={this.store.oncogenicityFilters}
                     oncogenicities={this.store.uniqOncogenicity}
                     onFilterChange={this.store.onToggleFilter}
                   />

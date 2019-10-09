@@ -24,7 +24,7 @@ class AppStore {
 
   readonly mainNumbers = remoteData<MainNumber>({
     await: () => [],
-    invoke: async () => {
+    async invoke() {
       return oncokbPrivateClient.utilsNumbersMainGetUsingGET({});
     },
     default: DEFAULT_MAIN_NUMBERS

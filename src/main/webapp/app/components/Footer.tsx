@@ -30,19 +30,19 @@ class Footer extends React.Component<{ lastUpdate: string }> {
           <CitationText highlightLinkout={true} />
         </div>
         <div className={classnames(styles.footerAList, 'mb-2')}>
-          <a href="https://www.mskcc.org" target="_blank">
+          <a href="https://www.mskcc.org" target="_blank" rel="noopener noreferrer">
             MSK {this.externalLinkIcon}
           </a>
-          <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology" target="_blank">
+          <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology" target="_blank" rel="noopener noreferrer">
             CMO {this.externalLinkIcon}
           </a>
-          <a href="http://www.questdiagnostics.com/home.html" target="_blank">
+          <a href="http://www.questdiagnostics.com/home.html" target="_blank" rel="noopener noreferrer">
             Quest Diagnostics {this.externalLinkIcon}
           </a>
-          <a href="https://www.cbioportal.org" target="_blank">
+          <a href="https://www.cbioportal.org" target="_blank" rel="noopener noreferrer">
             cBioPortal {this.externalLinkIcon}
           </a>
-          <a href="http://oncotree.mskcc.org" target="_blank">
+          <a href="http://oncotree.mskcc.org" target="_blank" rel="noopener noreferrer">
             OncoTree {this.externalLinkIcon}
           </a>
         </div>
@@ -55,13 +55,13 @@ class Footer extends React.Component<{ lastUpdate: string }> {
       <>
         <div className={classnames(styles.footerAList, 'mb-2')}>
           <Link to="/terms">Usage Terms</Link>
-          <a href={`mailto:${ONCOKB_CONTACT_EMAIL}`} target="_blank">
+          <a href={`mailto:${ONCOKB_CONTACT_EMAIL}`} target="_blank" rel="noopener noreferrer">
             Contact us
           </a>
-          <a href="https://twitter.com/OncoKB" target="_blank">
+          <a href="https://twitter.com/OncoKB" target="_blank" rel="noopener noreferrer">
             Twitter
           </a>
-          <a href="api/v1/swagger-ui.html" target="_blank">
+          <a href="api/v1/swagger-ui.html" target="_blank" rel="noopener noreferrer">
             API
           </a>
         </div>
