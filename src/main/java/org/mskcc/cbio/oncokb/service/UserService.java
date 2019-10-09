@@ -4,6 +4,7 @@ import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
@@ -130,6 +131,7 @@ public class UserService {
 
         UserDetails userDetails = new UserDetails();
         userDetails.setUser(newUser);
+        userDetails.setLicenseType(userDTO.getLicenseType());
         userDetails.setJobTitle(userDTO.getJobTitle());
         userDetails.setCompany(userDTO.getCompany());
         userDetails.setCity(userDTO.getCity());
@@ -195,6 +197,7 @@ public class UserService {
         String firstName
         , String lastName
         , String email
+        , LicenseType licenseType
         , String jobTitle
         , String company
         , String city
@@ -212,7 +215,7 @@ public class UserService {
                 user.setImageUrl(imageUrl);
                 this.clearUserCaches(user);
 
-                getUpdatedUserDetails(user, jobTitle, company, city, country);
+                getUpdatedUserDetails(user, licenseType, jobTitle, company, city, country);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -248,13 +251,14 @@ public class UserService {
                 log.debug("Changed Information for User: {}", user);
 
                 return new UserDTO(user, getUpdatedUserDetails(
-                    user, userDTO.getJobTitle(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
+                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
             });
     }
 
-    private UserDetails getUpdatedUserDetails(User user, String jobTitle, String company, String city, String country) {
+    private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String company, String city, String country) {
         Optional<UserDetails> userDetails= userDetailsRepository.findOneByUser(user);
         if(userDetails.isPresent()) {
+            userDetails.get().setLicenseType(licenseType);
             userDetails.get().setJobTitle(jobTitle);
             userDetails.get().setCompany(company);
             userDetails.get().setCity(city);
@@ -262,6 +266,7 @@ public class UserService {
             return userDetails.get();
         }else{
             UserDetails newUserDetails = new UserDetails();
+            newUserDetails.setLicenseType(licenseType);
             newUserDetails.setJobTitle(jobTitle);
             newUserDetails.setCompany(company);
             newUserDetails.setCity(city);

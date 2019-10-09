@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 
-import org.mskcc.cbio.oncokb.domain.enumeration.AccountType;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 
 /**
  * A UserDetails.
@@ -23,8 +23,8 @@ public class UserDetails implements Serializable {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "account_type")
-    private AccountType accountType;
+    @Column(name = "license_type")
+    private LicenseType licenseType;
 
     @Column(name = "job_title")
     private String jobTitle;
@@ -42,7 +42,6 @@ public class UserDetails implements Serializable {
     private String address;
 
     @OneToOne
-    @MapsId
     @JoinColumn(unique = true)
     private User user;
 
@@ -55,17 +54,17 @@ public class UserDetails implements Serializable {
         this.id = id;
     }
 
-    public AccountType getAccountType() {
-        return accountType;
+    public LicenseType getLicenseType() {
+        return licenseType;
     }
 
-    public UserDetails accountType(AccountType accountType) {
-        this.accountType = accountType;
+    public UserDetails licenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
         return this;
     }
 
-    public void setAccountType(AccountType accountType) {
-        this.accountType = accountType;
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
     }
 
     public String getJobTitle() {
@@ -167,7 +166,7 @@ public class UserDetails implements Serializable {
     public String toString() {
         return "UserDetails{" +
             "id=" + getId() +
-            ", accountType='" + getAccountType() + "'" +
+            ", licenseType='" + getLicenseType() + "'" +
             ", jobTitle='" + getJobTitle() + "'" +
             ", company='" + getCompany() + "'" +
             ", city='" + getCity() + "'" +

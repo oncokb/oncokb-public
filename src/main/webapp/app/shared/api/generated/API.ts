@@ -48,6 +48,8 @@ export type ManagedUserVM = {
 
         'lastName': string
 
+        'licenseType': "ACADEMIC" | "COMMERCIAL" | "COMMERCIAL_RESEARCH" | "HOSPITAL"
+
         'login': string
 
         'password': string
@@ -140,13 +142,13 @@ export type UserDTO = {
 
         'lastName': string
 
+        'licenseType': "ACADEMIC" | "COMMERCIAL" | "COMMERCIAL_RESEARCH" | "HOSPITAL"
+
         'login': string
 
 };
 export type UserDetailsDTO = {
-    'accountType': "ACADEMIC" | "COMMERCIAL" | "NONAFFILIATED"
-
-        'address': string
+    'address': string
 
         'city': string
 
@@ -157,6 +159,8 @@ export type UserDetailsDTO = {
         'id': number
 
         'jobTitle': string
+
+        'licenseType': "ACADEMIC" | "COMMERCIAL" | "COMMERCIAL_RESEARCH" | "HOSPITAL"
 
         'userId': number
 

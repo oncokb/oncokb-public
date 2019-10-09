@@ -34,7 +34,9 @@
     "blueprints": [],
     "clientFramework": "react",
     "clientTheme": "none",
-    "appsFolders": ["public-gateway"],
+    "appsFolders": [
+      "public-gateway"
+    ],
     "directoryPath": "../",
     "dockerRepositoryName": "oncokb-public-gateway",
     "dockerPushCommand": "docker push",

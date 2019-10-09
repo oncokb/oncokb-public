@@ -134,6 +134,7 @@ public class AccountResource {
             userDTO.getFirstName(),
             userDTO.getLastName(),
             userDTO.getEmail(),
+            userDTO.getLicenseType(),
             userDTO.getJobTitle(),
             userDTO.getCompany(),
             userDTO.getCity(),

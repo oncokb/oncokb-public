@@ -2,9 +2,9 @@
     "name": "UserDetails",
     "fields": [
         {
-            "fieldName": "accountType",
-            "fieldType": "AccountType",
-            "fieldValues": "ACADEMIC,COMMERCIAL,NONAFFILIATED"
+            "fieldName": "licenseType",
+            "fieldType": "LicenseType",
+            "fieldValues": "ACADEMIC,COMMERCIAL,COMMERCIAL_RESEARCH,HOSPITAL"
         },
         {
             "fieldName": "jobTitle",

@@ -6,10 +6,10 @@ import autobind from 'autobind-decorator';
 
 
 export enum LicenseType {
-  ACADEMIC = 'academic',
-  COMMERCIAL_RESEARCH = 'commercial_research',
-  HOSPITAL = 'hospital',
-  COMMERCIAL = 'commercial',
+  ACADEMIC = 'ACADEMIC',
+  COMMERCIAL_RESEARCH = 'COMMERCIAL_RESEARCH',
+  HOSPITAL = 'HOSPITAL',
+  COMMERCIAL = 'COMMERCIAL',
 }
 
 type license = {
