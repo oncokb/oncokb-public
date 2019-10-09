@@ -30,15 +30,15 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.mskcc.cbio.oncokb.domain.enumeration.AccountType;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 /**
  * Integration tests for the {@link UserDetailsResource} REST controller.
  */
 @SpringBootTest(classes = OncokbApp.class)
 public class UserDetailsResourceIT {
 
-    private static final AccountType DEFAULT_ACCOUNT_TYPE = AccountType.ACADEMIC;
-    private static final AccountType UPDATED_ACCOUNT_TYPE = AccountType.COMMERCIAL;
+    private static final LicenseType DEFAULT_LICENSE_TYPE = LicenseType.ACADEMIC;
+    private static final LicenseType UPDATED_LICENSE_TYPE = LicenseType.COMMERCIAL;
 
     private static final String DEFAULT_JOB_TITLE = "AAAAAAAAAA";
     private static final String UPDATED_JOB_TITLE = "BBBBBBBBBB";
@@ -103,7 +103,7 @@ public class UserDetailsResourceIT {
      */
     public static UserDetails createEntity(EntityManager em) {
         UserDetails userDetails = new UserDetails()
-            .accountType(DEFAULT_ACCOUNT_TYPE)
+            .licenseType(DEFAULT_LICENSE_TYPE)
             .jobTitle(DEFAULT_JOB_TITLE)
             .company(DEFAULT_COMPANY)
             .city(DEFAULT_CITY)
@@ -119,7 +119,7 @@ public class UserDetailsResourceIT {
      */
     public static UserDetails createUpdatedEntity(EntityManager em) {
         UserDetails userDetails = new UserDetails()
-            .accountType(UPDATED_ACCOUNT_TYPE)
+            .licenseType(UPDATED_LICENSE_TYPE)
             .jobTitle(UPDATED_JOB_TITLE)
             .company(UPDATED_COMPANY)
             .city(UPDATED_CITY)
@@ -149,7 +149,7 @@ public class UserDetailsResourceIT {
         List<UserDetails> userDetailsList = userDetailsRepository.findAll();
         assertThat(userDetailsList).hasSize(databaseSizeBeforeCreate + 1);
         UserDetails testUserDetails = userDetailsList.get(userDetailsList.size() - 1);
-        assertThat(testUserDetails.getAccountType()).isEqualTo(DEFAULT_ACCOUNT_TYPE);
+        assertThat(testUserDetails.getLicenseType()).isEqualTo(DEFAULT_LICENSE_TYPE);
         assertThat(testUserDetails.getJobTitle()).isEqualTo(DEFAULT_JOB_TITLE);
         assertThat(testUserDetails.getCompany()).isEqualTo(DEFAULT_COMPANY);
         assertThat(testUserDetails.getCity()).isEqualTo(DEFAULT_CITY);
@@ -189,7 +189,7 @@ public class UserDetailsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userDetails.getId().intValue())))
-            .andExpect(jsonPath("$.[*].accountType").value(hasItem(DEFAULT_ACCOUNT_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].licenseType").value(hasItem(DEFAULT_LICENSE_TYPE.toString())))
             .andExpect(jsonPath("$.[*].jobTitle").value(hasItem(DEFAULT_JOB_TITLE.toString())))
             .andExpect(jsonPath("$.[*].company").value(hasItem(DEFAULT_COMPANY.toString())))
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY.toString())))
@@ -208,7 +208,7 @@ public class UserDetailsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(userDetails.getId().intValue()))
-            .andExpect(jsonPath("$.accountType").value(DEFAULT_ACCOUNT_TYPE.toString()))
+            .andExpect(jsonPath("$.licenseType").value(DEFAULT_LICENSE_TYPE.toString()))
             .andExpect(jsonPath("$.jobTitle").value(DEFAULT_JOB_TITLE.toString()))
             .andExpect(jsonPath("$.company").value(DEFAULT_COMPANY.toString()))
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY.toString()))
@@ -237,7 +237,7 @@ public class UserDetailsResourceIT {
         // Disconnect from session so that the updates on updatedUserDetails are not directly saved in db
         em.detach(updatedUserDetails);
         updatedUserDetails
-            .accountType(UPDATED_ACCOUNT_TYPE)
+            .licenseType(UPDATED_LICENSE_TYPE)
             .jobTitle(UPDATED_JOB_TITLE)
             .company(UPDATED_COMPANY)
             .city(UPDATED_CITY)
@@ -254,7 +254,7 @@ public class UserDetailsResourceIT {
         List<UserDetails> userDetailsList = userDetailsRepository.findAll();
         assertThat(userDetailsList).hasSize(databaseSizeBeforeUpdate);
         UserDetails testUserDetails = userDetailsList.get(userDetailsList.size() - 1);
-        assertThat(testUserDetails.getAccountType()).isEqualTo(UPDATED_ACCOUNT_TYPE);
+        assertThat(testUserDetails.getLicenseType()).isEqualTo(UPDATED_LICENSE_TYPE);
         assertThat(testUserDetails.getJobTitle()).isEqualTo(UPDATED_JOB_TITLE);
         assertThat(testUserDetails.getCompany()).isEqualTo(UPDATED_COMPANY);
         assertThat(testUserDetails.getCity()).isEqualTo(UPDATED_CITY);

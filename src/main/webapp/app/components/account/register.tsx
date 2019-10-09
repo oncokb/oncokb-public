@@ -49,6 +49,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
       login: values.username,
       password: values.firstPassword,
       email: values.email,
+      licenseType: this.selectedLicense,
       jobTitle: values.jobTitle,
       company: values.company,
       city: values.city,

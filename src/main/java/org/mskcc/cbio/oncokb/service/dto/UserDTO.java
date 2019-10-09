@@ -1,10 +1,12 @@
 package org.mskcc.cbio.oncokb.service.dto;
 
+import io.swagger.models.License;
 import org.mskcc.cbio.oncokb.config.Constants;
 
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -31,6 +33,8 @@ public class UserDTO {
 
     @Size(max = 50)
     private String lastName;
+
+    private LicenseType licenseType;
 
     private String jobTitle;
 
@@ -83,6 +87,7 @@ public class UserDTO {
             .map(Authority::getName)
             .collect(Collectors.toSet());
         if(userDetails != null) {
+            this.licenseType = userDetails.getLicenseType();
             this.jobTitle = userDetails.getJobTitle();
             this.company = userDetails.getCompany();
             this.city = userDetails.getCity();
@@ -128,6 +133,14 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public LicenseType getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
     }
 
     public String getJobTitle() {
@@ -233,6 +246,7 @@ public class UserDTO {
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
+            ", licenseType=" + licenseType +
             ", jobTitle=" + jobTitle +
             ", company=" + company +
             ", city=" + city +

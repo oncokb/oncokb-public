@@ -1765,6 +1765,15 @@
           "minLength": 0,
           "maxLength": 50
         },
+        "licenseType": {
+          "type": "string",
+          "enum": [
+            "ACADEMIC",
+            "COMMERCIAL",
+            "COMMERCIAL_RESEARCH",
+            "HOSPITAL"
+          ]
+        },
         "login": {
           "type": "string",
           "minLength": 1,
@@ -1966,6 +1975,15 @@
           "minLength": 0,
           "maxLength": 50
         },
+        "licenseType": {
+          "type": "string",
+          "enum": [
+            "ACADEMIC",
+            "COMMERCIAL",
+            "COMMERCIAL_RESEARCH",
+            "HOSPITAL"
+          ]
+        },
         "login": {
           "type": "string",
           "minLength": 1,
@@ -1978,14 +1996,6 @@
     "UserDetailsDTO": {
       "type": "object",
       "properties": {
-        "accountType": {
-          "type": "string",
-          "enum": [
-            "ACADEMIC",
-            "COMMERCIAL",
-            "NONAFFILIATED"
-          ]
-        },
         "address": {
           "type": "string"
         },
@@ -2004,6 +2014,15 @@
         },
         "jobTitle": {
           "type": "string"
+        },
+        "licenseType": {
+          "type": "string",
+          "enum": [
+            "ACADEMIC",
+            "COMMERCIAL",
+            "COMMERCIAL_RESEARCH",
+            "HOSPITAL"
+          ]
         },
         "userId": {
           "type": "integer",

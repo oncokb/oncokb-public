@@ -1,7 +1,7 @@
 package org.mskcc.cbio.oncokb.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
-import org.mskcc.cbio.oncokb.domain.enumeration.AccountType;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 
 /**
  * A DTO for the {@link org.mskcc.cbio.oncokb.domain.UserDetails} entity.
@@ -10,7 +10,7 @@ public class UserDetailsDTO implements Serializable {
 
     private Long id;
 
-    private AccountType accountType;
+    private LicenseType licenseType;
 
     private String jobTitle;
 
@@ -33,12 +33,12 @@ public class UserDetailsDTO implements Serializable {
         this.id = id;
     }
 
-    public AccountType getAccountType() {
-        return accountType;
+    public LicenseType getLicenseType() {
+        return licenseType;
     }
 
-    public void setAccountType(AccountType accountType) {
-        this.accountType = accountType;
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
     }
 
     public String getJobTitle() {
@@ -114,7 +114,7 @@ public class UserDetailsDTO implements Serializable {
     public String toString() {
         return "UserDetailsDTO{" +
             "id=" + getId() +
-            ", accountType='" + getAccountType() + "'" +
+            ", licenseType='" + getLicenseType() + "'" +
             ", jobTitle='" + getJobTitle() + "'" +
             ", company='" + getCompany() + "'" +
             ", city='" + getCity() + "'" +
