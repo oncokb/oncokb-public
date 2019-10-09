@@ -9,7 +9,7 @@ import { Col, Row } from 'react-bootstrap';
 import * as _ from 'lodash';
 import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import { filterByKeyword, getDefaultColumnDefinition } from 'app/shared/utils/Utils';
-import { TABLE_COLUMN_KEY } from 'app/config/constants';
+import { LG_TABLE_FIXED_HEIGHT, TABLE_COLUMN_KEY } from 'app/config/constants';
 import AppStore from 'app/store/AppStore';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
@@ -365,6 +365,9 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             <OncoKBTable
               data={this.extendedCancerGene.result}
               columns={this.columns}
+              style={{
+                height: LG_TABLE_FIXED_HEIGHT
+              }}
               loading={this.extendedCancerGene.isPending}
               defaultSorted={[
                 {

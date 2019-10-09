@@ -1,7 +1,7 @@
 import { Citations, Evidence, TreatmentDrug, TumorType, Article } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
 import React from 'react';
-import { ONCOGENICITY_CLASS_NAMES, PAGE_ROUTE, TABLE_COLUMN_KEY } from 'app/config/constants';
+import { GENERAL_ONCOGENICITY, ONCOGENICITY_CLASS_NAMES, PAGE_ROUTE, TABLE_COLUMN_KEY } from 'app/config/constants';
 import classnames from 'classnames';
 import { Alteration, Treatment } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { defaultSortMethod, mutationEffectSortMethod, oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
@@ -11,6 +11,12 @@ import pluralize from 'pluralize';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import { AlterationPageLink, GenePageLink, TumorTypePageLink } from 'app/shared/utils/UrlUtils';
+
+// Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
+// Likely Neutral will be converted to Neutral
+export function shortenOncogenicity(oncogenicity:string):string {
+  return GENERAL_ONCOGENICITY[oncogenicity];
+}
 
 export function getCancerTypeNameFromOncoTreeType(oncoTreeType: TumorType): string {
   return oncoTreeType.name || oncoTreeType.mainType.name || 'NA';
@@ -113,6 +119,22 @@ export const OncoKBAnnotationIcon: React.FunctionComponent<{
         props.className
       )}
     />
+  );
+};
+export const OncoKBOncogenicityIcon: React.FunctionComponent<{
+  oncogenicity: string;
+  isVus: boolean;
+  className?: string;
+}> = props => {
+  return (
+    <span style={{width: 16, marginTop: -3, marginLeft: 3}}>
+    <i
+      className={classnames(
+        `oncokb annotation-icon ${getAnnotationOncogenicityClassName(props.oncogenicity, props.isVus)} no-level`,
+        props.className
+      )}
+    />
+    </span>
   );
 };
 
