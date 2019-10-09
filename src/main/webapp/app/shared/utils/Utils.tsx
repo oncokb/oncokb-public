@@ -16,7 +16,15 @@ export function getCancerTypeNameFromOncoTreeType(oncoTreeType: TumorType): stri
   return oncoTreeType.name || oncoTreeType.mainType.name || 'NA';
 }
 
-export function levelOfEvidence2Level(levelOfEvidence: string, trimSubversion: boolean = false) {
+export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
+  return _.replace(levelOfEvidence, new RegExp('[AB]'), '');
+}
+
+export function getCenterAlignStyle() {
+  return { justifyContent: 'center', display: 'flex', alignItems: 'center', whiteSpace: 'normal' };
+}
+
+export function levelOfEvidence2Level(levelOfEvidence: string, trimSubversion = false) {
   let level = levelOfEvidence.replace('LEVEL_', '');
   if (trimSubversion) {
     level = trimLevelOfEvidenceSubversion(level);
@@ -26,10 +34,6 @@ export function levelOfEvidence2Level(levelOfEvidence: string, trimSubversion: b
 
 export function level2LevelOfEvidence(level: string) {
   return `LEVEL_${level}`;
-}
-
-export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
-  return _.replace(levelOfEvidence, new RegExp('[AB]'), '');
 }
 
 export function getAllAlterationsName(alterations: Alteration[]) {
@@ -46,6 +50,7 @@ export function getAllTumorTypesName(tumorTypes: TumorType[]) {
 }
 
 export function getDrugNameFromTreatment(drug: TreatmentDrug) {
+  // have to use ignore to escape the actual model structure. The swagger does not reflect the actually json structure
   // @ts-ignore
   return drug.drugName;
 }
@@ -146,7 +151,7 @@ export function getDefaultColumnDefinition<T>(
         minWidth: 100,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
-        Cell: (props: { original: any }) => {
+        Cell(props: { original: any }) {
           return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
         }
       };
@@ -158,7 +163,7 @@ export function getDefaultColumnDefinition<T>(
         minWidth: 100,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
-        Cell: (props: { original: any }) => {
+        Cell(props: { original: any }) {
           return <AlterationPageLink hugoSymbol={props.original.hugoSymbol} alteration={props.original.alteration} />;
         }
       };
@@ -181,7 +186,7 @@ export function getDefaultColumnDefinition<T>(
         minWidth: 150,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
-        Cell: (props: { original: any }) => {
+        Cell(props: { original: any }) {
           return (
             <TumorTypePageLink
               hugoSymbol={props.original.hugoSymbol}
@@ -220,7 +225,7 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
-        Cell: (props: any) => {
+        Cell(props: any) {
           return <OncoKBLevelIcon level={props.original.level} withDescription={true} />;
         }
       };
@@ -233,7 +238,7 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
-        Cell: (props: any) => {
+        Cell(props: any) {
           const numOfReferences = props.original.drugAbstracts.length + props.original.drugPmids.length;
           return (
             <div>
@@ -269,10 +274,6 @@ export function getDefaultColumnDefinition<T>(
     default:
       return undefined;
   }
-}
-
-export function getCenterAlignStyle() {
-  return { justifyContent: 'center', display: 'flex', alignItems: 'center', whiteSpace: 'normal' };
 }
 
 export function filterByKeyword(value: string, keyword: string): boolean {

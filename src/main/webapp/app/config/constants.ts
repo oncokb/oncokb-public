@@ -1,15 +1,7 @@
 import { OncoKBInfo, Gene } from 'app/shared/api/generated/OncoKbAPI';
-import {
-  ArticleAbstract,
-  Citations,
-  Implication,
-  IndicatorQueryTreatment,
-  MainNumber,
-  MutationEffectResp,
-  Query,
-  VariantAnnotation,
-  VariantAnnotationTumorType
-} from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { MainNumber, VariantAnnotation } from 'app/shared/api/generated/OncoKbPrivateAPI';
+
+/* eslint no-shadow: 0 */
 
 const config = {
   VERSION: process.env.VERSION

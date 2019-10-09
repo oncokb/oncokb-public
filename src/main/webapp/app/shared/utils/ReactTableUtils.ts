@@ -1,5 +1,17 @@
 import { MUTATION_EFFECT, ONCOGENICITY } from 'app/config/constants';
 
+export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {
+  if (aIndex === bIndex) {
+    return 0;
+  } else if (aIndex === -1) {
+    return 1;
+  } else if (bIndex === -1) {
+    return -1;
+  } else {
+    return aIndex - bIndex;
+  }
+}
+
 export function defaultSortMethod(a: any, b: any): number {
   // force null and undefined to the bottom
   a = a === null || a === undefined ? -Infinity : a;
@@ -47,16 +59,4 @@ export function oncogenicitySortMethod(a: ONCOGENICITY, b: ONCOGENICITY) {
 
 export function mutationEffectSortMethod(a: MUTATION_EFFECT, b: MUTATION_EFFECT) {
   return sortByArrayIndexAsc(mutationEffectOrder.indexOf(a), mutationEffectOrder.indexOf(b));
-}
-
-export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {
-  if (aIndex === bIndex) {
-    return 0;
-  } else if (aIndex === -1) {
-    return 1;
-  } else if (bIndex === -1) {
-    return -1;
-  } else {
-    return aIndex - bIndex;
-  }
 }

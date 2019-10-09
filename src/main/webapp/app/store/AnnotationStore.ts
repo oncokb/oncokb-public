@@ -190,7 +190,7 @@ export class AnnotationStore {
 
   readonly allMainTypes = remoteData<MainType[]>({
     await: () => [],
-    invoke: async () => {
+    async invoke() {
       const result = await privateClient.utilsOncoTreeMainTypesGetUsingGET({
         excludeSpecialTumorType: true
       });
@@ -201,7 +201,7 @@ export class AnnotationStore {
 
   readonly allSubtype = remoteData<TumorType[]>({
     await: () => [],
-    invoke: async () => {
+    async invoke() {
       const result = await privateClient.utilsOncoTreeSubtypesGetUsingGET({});
       return result.sort();
     },
@@ -258,7 +258,7 @@ export class AnnotationStore {
           if (TREATMENT_EVIDENCE_TYPES.includes(evidence.evidenceType as EVIDENCE_TYPES)) {
             const level = levelOfEvidence2Level(evidence.levelOfEvidence);
             acc.push({
-              level: level,
+              level,
               alterations: evidence.alterations.map(alteration => alteration.name).join(', '),
               drugs: getTreatmentNameFromEvidence(evidence),
               cancerTypes: oncoTreeCancerType,
@@ -273,7 +273,7 @@ export class AnnotationStore {
   }
 
   readonly portalAlterationSampleCount = remoteData<CancerTypeCount[]>({
-    invoke: async () => {
+    async invoke() {
       return privateClient.utilPortalAlterationSampleCountGetUsingGET({});
     },
     default: []

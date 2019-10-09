@@ -213,14 +213,14 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
         onFilter: (data: ClinicalVariant, keyword) => filterByKeyword(getCancerTypeNameFromOncoTreeType(data.cancerType), keyword),
-        Cell: (props: { original: ClinicalVariant }) => {
+        Cell(props: { original: ClinicalVariant }) {
           return <span>{getCancerTypeNameFromOncoTreeType(props.original.cancerType)}</span>;
         }
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
         onFilter: (data: ClinicalVariant, keyword) => _.some(data.drug, (drug: string) => drug.toLowerCase().includes(keyword)),
-        Cell: (props: { original: ClinicalVariant }) => {
+        Cell(props: { original: ClinicalVariant }) {
           return <span>{reduceJoin(props.original.drug, <br />)}</span>;
         }
       },
@@ -257,7 +257,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
         style: getCenterAlignStyle(),
-        Cell: (props: { original: BiologicalVariant }) => {
+        Cell(props: { original: BiologicalVariant }) {
           const numOfReferences = props.original.mutationEffectAbstracts.length + props.original.mutationEffectPmids.length;
           return (
             <DefaultTooltip

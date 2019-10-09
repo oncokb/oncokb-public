@@ -61,7 +61,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   }
 
   @action.bound
-  async successToRegistered() {
+  successToRegistered() {
     this.registerStatus = RegisterStatus.REGISTERED;
     // TODO: figure out whether you need to have manual activation process.
     // await this.props.authenticationStore.login(this.newAccount.login!, this.newAccount.password!);
@@ -188,8 +188,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
               <a className="alert-link"> sign in</a>
               <span>
                 , you can try the default accounts:
-                <br />- Administrator (login="admin" and password="admin")
-                <br />- User (login="user" and password="user").
+                <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
+                <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).
               </span>
             </Alert>
           </Col>

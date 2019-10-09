@@ -166,7 +166,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
-        Cell: (props: { original: TherapeuticImplication }) => {
+        Cell(props: { original: TherapeuticImplication }) {
           const numOfReferences = props.original.citations.abstracts.length + props.original.citations.pmids.length;
           return (
             <DefaultTooltip

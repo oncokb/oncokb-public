@@ -68,7 +68,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   readonly allMainTypes = remoteData<MainType[]>({
     await: () => [],
-    invoke: async () => {
+    async invoke() {
       const result = await privateClient.utilsOncoTreeMainTypesGetUsingGET({});
       return result.sort();
     },
@@ -91,7 +91,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   readonly evidencesByLevel = remoteData<EvidencesByLevel>({
     await: () => [],
-    invoke: async () => {
+    async invoke() {
       return await privateClient.utilsEvidencesByLevelsGetUsingGET({});
     },
     default: {}
@@ -175,10 +175,9 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
             item.treatments,
             (acc, treatment) => {
               const result: string[] = treatment.drugs.map(drug => getDrugNameFromTreatment(drug));
-              // @ts-ignore
               return acc.concat(result);
             },
-            []
+            [] as string[]
           )
         ),
         drugs: getTreatmentNameFromEvidence(item)
@@ -325,7 +324,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   @computed
   get drugSelectValue() {
-    return !!this.drugSearchKeyword
+    return this.drugSearchKeyword
       ? {
           label: this.drugSearchKeyword,
           value: this.drugSearchKeyword
@@ -335,7 +334,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   @computed
   get tumorTypeSelectValue() {
-    return !!this.relevantTumorTypeSearchKeyword
+    return this.relevantTumorTypeSearchKeyword
       ? {
           label: this.relevantTumorTypeSearchKeyword,
           value: this.relevantTumorTypeSearchKeyword
@@ -345,7 +344,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   @computed
   get geneSelectValue() {
-    return !!this.geneSearchKeyword
+    return this.geneSearchKeyword
       ? {
           label: this.geneSearchKeyword,
           value: this.geneSearchKeyword
@@ -384,7 +383,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
       style: { whiteSpace: 'normal' },
-      Cell: (props: { original: Treatment }) => {
+      Cell(props: { original: Treatment }) {
         return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
       }
     },
@@ -396,7 +395,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
       style: { whiteSpace: 'normal' },
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
-      Cell: (props: { original: Treatment }) => {
+      Cell(props: { original: Treatment }) {
         return props.original.alterations
           .map<React.ReactNode>(alteration => <AlterationPageLink hugoSymbol={props.original.hugoSymbol} alteration={alteration} />)
           .reduce((prev, curr) => [prev, ', ', curr]);
@@ -405,7 +404,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
       minWidth: 300,
-      Cell: (props: { original: Treatment }) => {
+      Cell(props: { original: Treatment }) {
         return <span>{props.original.tumorType}</span>;
       }
     },
@@ -413,7 +412,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
       minWidth: 300,
       style: { whiteSpace: 'normal' },
-      Cell: (props: { original: Treatment }) => {
+      Cell(props: { original: Treatment }) {
         return <span>{props.original.drugs}</span>;
       }
     }
