@@ -51,29 +51,29 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
    * Supplies the BarPlot with the event handlers needed to record when the mouse enters
    * or leaves a bar on the plot.
    */
-  private get barPlotEvents() {
-    const self = this;
+  @autobind
+  barPlotEvents() {
     return [
       {
         target: 'data',
         eventHandlers: {
-          onMouseEnter: () => {
+          onMouseEnter() {
             return [
               {
                 target: 'data',
-                mutation: (event: any) => {
-                  self.currentBarIndex = event.datum.eventKey;
-                  self.toolTipModel = self.props.data[self.currentBarIndex].x;
+                mutation(event: any) {
+                  this.currentBarIndex = event.datum.eventKey;
+                  this.toolTipModel = this.props.data[this.currentBarIndex].x;
                 }
               }
             ];
           },
-          onMouseLeave: () => {
+          onMouseLeave() {
             return [
               {
                 target: 'data',
-                mutation: () => {
-                  self.toolTipModel = null;
+                mutation() {
+                  this.toolTipModel = null;
                 }
               }
             ];

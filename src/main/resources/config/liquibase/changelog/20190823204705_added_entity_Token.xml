@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <property name="autoIncrement" value="true"/>
+        <property name="autoIncrement" value="true"/>
 
     <!--
         Added the entity Token.
@@ -19,22 +19,17 @@
             <column name="token" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-
             <column name="creation" type="date">
                 <constraints nullable="true" />
             </column>
-
             <column name="expiration" type="date">
                 <constraints nullable="true" />
             </column>
-
             <column name="user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-
     </changeSet>
 
     <changeSet id="20190823204705-1-relations" author="jhipster">

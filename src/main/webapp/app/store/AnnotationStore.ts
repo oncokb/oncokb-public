@@ -21,7 +21,8 @@ import {
   articles2Citations,
   getCancerTypeNameFromOncoTreeType,
   getTreatmentNameFromEvidence,
-  levelOfEvidence2Level
+  levelOfEvidence2Level,
+  shortenOncogenicity
 } from 'app/shared/utils/Utils';
 import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 import { Oncogenicity } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
@@ -190,7 +191,7 @@ export class AnnotationStore {
 
   readonly allMainTypes = remoteData<MainType[]>({
     await: () => [],
-    invoke: async () => {
+    async invoke() {
       const result = await privateClient.utilsOncoTreeMainTypesGetUsingGET({
         excludeSpecialTumorType: true
       });
@@ -201,7 +202,7 @@ export class AnnotationStore {
 
   readonly allSubtype = remoteData<TumorType[]>({
     await: () => [],
-    invoke: async () => {
+    async invoke() {
       const result = await privateClient.utilsOncoTreeSubtypesGetUsingGET({});
       return result.sort();
     },
@@ -258,7 +259,7 @@ export class AnnotationStore {
           if (TREATMENT_EVIDENCE_TYPES.includes(evidence.evidenceType as EVIDENCE_TYPES)) {
             const level = levelOfEvidence2Level(evidence.levelOfEvidence);
             acc.push({
-              level: level,
+              level,
               alterations: evidence.alterations.map(alteration => alteration.name).join(', '),
               drugs: getTreatmentNameFromEvidence(evidence),
               cancerTypes: oncoTreeCancerType,
@@ -273,7 +274,7 @@ export class AnnotationStore {
   }
 
   readonly portalAlterationSampleCount = remoteData<CancerTypeCount[]>({
-    invoke: async () => {
+    async invoke() {
       return privateClient.utilPortalAlterationSampleCountGetUsingGET({});
     },
     default: []
@@ -319,7 +320,20 @@ export class AnnotationStore {
 
   @computed
   get uniqOncogenicity() {
-    const oncogenicities = _.groupBy(this.biologicalAlterations.result, 'oncogenic');
+    const oncogenicities = _.groupBy(
+      _.reduce(
+        this.biologicalAlterations.result,
+        (acc, item) => {
+          acc.push({
+            ...item,
+            oncogenic: shortenOncogenicity(item.oncogenic)
+          });
+          return acc;
+        },
+        [] as BiologicalVariant[]
+      ),
+      'oncogenic'
+    );
     const keys = _.keys(oncogenicities).sort(oncogenicitySortMethod);
     return _.reduce(
       keys,
@@ -357,7 +371,7 @@ export class AnnotationStore {
     if (this.isFiltered) {
       return this.clinicalAlterations.result.filter(alteration => {
         let isMatch = true;
-        if (this.oncogenicityFilters.length > 0 && !this.oncogenicityFilters.includes(alteration.oncogenic)) {
+        if (this.oncogenicityFilters.length > 0 && !this.oncogenicityFilters.includes(shortenOncogenicity(alteration.oncogenic))) {
           isMatch = false;
         }
         if (this.selectedCancerTypes.length > 0 && !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration)) {
@@ -375,7 +389,7 @@ export class AnnotationStore {
     if (this.isFiltered) {
       return this.biologicalAlterations.result.filter(alteration => {
         let isMatch = true;
-        if (this.oncogenicityFilters.length > 0 && !this.oncogenicityFilters.includes(alteration.oncogenic)) {
+        if (this.oncogenicityFilters.length > 0 && !this.oncogenicityFilters.includes(shortenOncogenicity(alteration.oncogenic))) {
           isMatch = false;
         }
         if (this.selectedCancerTypes.length > 0 && !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration)) {

@@ -14,7 +14,7 @@ export default class PmidItem extends React.Component<PmidItemProps> {
   render() {
     return (
       <li key={this.props.pmid} className={styles.listGroupItem}>
-        <a href={getNCBIlink(`/pubmed/${this.props.pmid}`)} className={styles.listGroupItemTitle} target="_blank">
+        <a href={getNCBIlink(`/pubmed/${this.props.pmid}`)} className={styles.listGroupItemTitle} target="_blank" rel="noopener noreferrer">
           <b>{this.props.title}</b>
         </a>
         <div className={styles.listGroupItemContent}>

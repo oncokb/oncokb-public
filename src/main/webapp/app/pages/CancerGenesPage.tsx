@@ -9,7 +9,7 @@ import { Col, Row } from 'react-bootstrap';
 import * as _ from 'lodash';
 import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import { filterByKeyword, getDefaultColumnDefinition } from 'app/shared/utils/Utils';
-import { TABLE_COLUMN_KEY } from 'app/config/constants';
+import { LG_TABLE_FIXED_HEIGHT, TABLE_COLUMN_KEY } from 'app/config/constants';
 import AppStore from 'app/store/AppStore';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
@@ -54,7 +54,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
       onFilter: (data: ExtendCancerGene, keyword) => filterByKeyword(data.hugoSymbol, keyword),
-      Cell: (props: { original: ExtendCancerGene }) => {
+      Cell(props: { original: ExtendCancerGene }) {
         return props.original.annotated ? <GenePageLink hugoSymbol={props.original.hugoSymbol} /> : `${props.original.hugoSymbol}`;
       }
     },
@@ -71,7 +71,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
       style: { textAlign: 'center' },
       minWidth: 100,
       sortMethod: defaultSortMethod,
-      Cell: (props: { original: ExtendCancerGene }) => {
+      Cell(props: { original: ExtendCancerGene }) {
         return props.original.oncokbAnnotated ? <i className="fa fa-check" /> : <SuggestCuration suggestion={props.original.hugoSymbol} />;
       }
     },
@@ -97,7 +97,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             overlay={
               <span>
                 Gene is part of the{' '}
-                <a href="https://www.mskcc.org/msk-impact" target="_blank">
+                <a href="https://www.mskcc.org/msk-impact" target="_blank" rel="noopener noreferrer">
                   MSK-IMPACT panel
                 </a>{' '}
                 ({getPanelGeneCount(props.data, 'mSKImpact')} genes, {this.fetchedDate})
@@ -110,7 +110,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
       accessor: 'mSKImpact',
       style: { textAlign: 'center' },
       sortable: true,
-      Cell: (props: { original: ExtendCancerGene }) => {
+      Cell(props: { original: ExtendCancerGene }) {
         return props.original.mSKImpact ? <i className="fa fa-check" /> : '';
       }
     },
@@ -127,7 +127,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             overlay={
               <span>
                 Gene is part of the{' '}
-                <a href="https://www.mskcc.org/msk-impact" target="_blank">
+                <a href="https://www.mskcc.org/msk-impact" target="_blank" rel="noopener noreferrer">
                   MSK-IMPACT Heme and HemePACT panels
                 </a>{' '}
                 ({getPanelGeneCount(props.data, 'mSKHeme')} genes, {this.fetchedDate})
@@ -139,7 +139,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
       style: { textAlign: 'center' },
       accessor: 'mSKHeme',
       sortable: true,
-      Cell: (props: { original: ExtendCancerGene }) => {
+      Cell(props: { original: ExtendCancerGene }) {
         return props.original.mSKHeme ? <i className="fa fa-check" /> : '';
       }
     },
@@ -156,7 +156,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             overlay={
               <span>
                 Gene is part of the{' '}
-                <a href="https://www.accessdata.fda.gov/cdrh_docs/pdf17/P170019C.pdf" target="_blank">
+                <a href="https://www.accessdata.fda.gov/cdrh_docs/pdf17/P170019C.pdf" target="_blank" rel="noopener noreferrer">
                   FoundationOne CDx panel
                 </a>{' '}
                 ({getPanelGeneCount(props.data, 'foundation')} genes, {this.fetchedDate})
@@ -169,7 +169,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
       accessor: 'foundation',
       minWidth: 150,
       sortable: true,
-      Cell: (props: { original: ExtendCancerGene }) => {
+      Cell(props: { original: ExtendCancerGene }) {
         return props.original.foundation ? <i className="fa fa-check" /> : '';
       }
     },
@@ -186,7 +186,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             overlay={
               <span>
                 Gene is part of the{' '}
-                <a href="https://www.foundationmedicineasia.com/dam/assets/pdf/FOneHeme_Current_GeneList.pdf" target="_blank">
+                <a href="https://www.foundationmedicineasia.com/dam/assets/pdf/FOneHeme_Current_GeneList.pdf" target="_blank" rel="noopener noreferrer">
                   FoundationOne Heme panel
                 </a>{' '}
                 ({getPanelGeneCount(props.data, 'foundationHeme')} genes, {this.fetchedDate})
@@ -199,7 +199,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
       style: { textAlign: 'center' },
       accessor: 'foundationHeme',
       sortable: true,
-      Cell: (props: { original: ExtendCancerGene }) => {
+      Cell(props: { original: ExtendCancerGene }) {
         return props.original.foundationHeme ? <i className="fa fa-check" /> : '';
       }
     },
@@ -212,7 +212,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             overlay={
               <span>
                 Gene is part of the published{' '}
-                <a href="https://science.sciencemag.org/content/339/6127/1546.full" target="_blank">
+                <a href="https://science.sciencemag.org/content/339/6127/1546.full" target="_blank" rel="noopener noreferrer">
                   Vogelstein et al. Science, 2013
                 </a>{' '}
                 cancer gene list ({getPanelGeneCount(props.data, 'vogelstein')} genes, 03/29/2013)
@@ -225,7 +225,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
       minWidth: 200,
       accessor: 'vogelstein',
       sortable: true,
-      Cell: (props: { original: ExtendCancerGene }) => {
+      Cell(props: { original: ExtendCancerGene }) {
         return props.original.vogelstein ? <i className="fa fa-check" /> : '';
       }
     },
@@ -242,7 +242,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             overlay={
               <span>
                 Gene is part of the{' '}
-                <a href="https://cancer.sanger.ac.uk/cosmic/census?tier=1" target="_blank">
+                <a href="https://cancer.sanger.ac.uk/cosmic/census?tier=1" target="_blank" rel="noopener noreferrer">
                   Cancer Gene Census Tier 1
                 </a>{' '}
                 ({getPanelGeneCount(props.data, 'sangerCGC')} genes, v89 - 15th May 2019)
@@ -255,7 +255,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
       minWidth: 160,
       accessor: 'sangerCGC',
       sortable: true,
-      Cell: (props: { original: ExtendCancerGene }) => {
+      Cell(props: { original: ExtendCancerGene }) {
         return props.original.sangerCGC ? <i className="fa fa-check" /> : '';
       }
     },
@@ -271,7 +271,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
 
   private readonly cancerGenes = remoteData<CancerGene[]>({
     await: () => [],
-    invoke: async () => {
+    async invoke() {
       return oncokbClient.utilsCancerGeneListGetUsingGET({});
     },
     default: []
@@ -279,7 +279,7 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
 
   private readonly annotatedGenes = remoteData<CuratedGene[]>({
     await: () => [],
-    invoke: async () => {
+    async invoke() {
       return oncokbClient.utilsAllCuratedGenesGetUsingGET({});
     },
     default: []
@@ -365,6 +365,9 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             <OncoKBTable
               data={this.extendedCancerGene.result}
               columns={this.columns}
+              style={{
+                height: LG_TABLE_FIXED_HEIGHT
+              }}
               loading={this.extendedCancerGene.isPending}
               defaultSorted={[
                 {

@@ -40,18 +40,18 @@ export const NewsList = (props: NewsListProps) => {
     <>
       <h3>{getNewsTitle(date)}</h3>
       <div>
-        {!!newsData ? (
+        {newsData ? (
           <ul>
-            {!!newsData.priorityNews ? getNewsList(newsData.priorityNews) : undefined}
-            {!!newsData.updatedImplication ? <UpdatedTxImplListItem data={newsData.updatedImplication} /> : undefined}
-            {!!newsData.updatedImplicationInOldFormat ? (
+            {newsData.priorityNews ? getNewsList(newsData.priorityNews) : undefined}
+            {newsData.updatedImplication ? <UpdatedTxImplListItem data={newsData.updatedImplication} /> : undefined}
+            {newsData.updatedImplicationInOldFormat ? (
               <UpdatedTxImplOldFormatListItem data={newsData.updatedImplicationInOldFormat} />
             ) : (
               undefined
             )}
-            {!!newsData.changedAnnotation ? <ChangedAnnotationListItem data={newsData.changedAnnotation} /> : undefined}
+            {newsData.changedAnnotation ? <ChangedAnnotationListItem data={newsData.changedAnnotation} /> : undefined}
             {getNewlyAddGeneSection()}
-            {!!newsData.news ? getNewsList(newsData.news) : undefined}
+            {newsData.news ? getNewsList(newsData.news) : undefined}
           </ul>
         ) : (
           undefined

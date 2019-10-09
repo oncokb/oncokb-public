@@ -1,15 +1,7 @@
 import { OncoKBInfo, Gene } from 'app/shared/api/generated/OncoKbAPI';
-import {
-  ArticleAbstract,
-  Citations,
-  Implication,
-  IndicatorQueryTreatment,
-  MainNumber,
-  MutationEffectResp,
-  Query,
-  VariantAnnotation,
-  VariantAnnotationTumorType
-} from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { MainNumber, VariantAnnotation } from 'app/shared/api/generated/OncoKbPrivateAPI';
+
+/* eslint no-shadow: 0 */
 
 const config = {
   VERSION: process.env.VERSION
@@ -47,9 +39,20 @@ export enum ONCOGENICITY {
   LIKELY_ONCOGENIC = 'Likely Oncogenic',
   PREDICTED_ONCOGENIC = 'Predicted Oncogenic',
   LIKELY_NEUTRAL = 'Likely Neutral',
+  NEUTRAL = 'Neutral',
   INCONCLUSIVE = 'Inconclusive',
   UNKNOWN = 'Unknown'
 }
+
+export const GENERAL_ONCOGENICITY: { [key: string]: ONCOGENICITY } = {
+  [ONCOGENICITY.ONCOGENIC]: ONCOGENICITY.ONCOGENIC,
+  [ONCOGENICITY.LIKELY_ONCOGENIC]: ONCOGENICITY.ONCOGENIC,
+  [ONCOGENICITY.PREDICTED_ONCOGENIC]: ONCOGENICITY.ONCOGENIC,
+  [ONCOGENICITY.NEUTRAL]: ONCOGENICITY.NEUTRAL,
+  [ONCOGENICITY.LIKELY_NEUTRAL]: ONCOGENICITY.NEUTRAL,
+  [ONCOGENICITY.INCONCLUSIVE]: ONCOGENICITY.INCONCLUSIVE,
+  [ONCOGENICITY.UNKNOWN]: ONCOGENICITY.UNKNOWN
+};
 
 export enum MUTATION_EFFECT {
   GAIN_OF_FUNCTION = 'Gain-of-function',
@@ -82,6 +85,7 @@ export const LEVEL_BUTTON_DESCRIPTION = {
 export const LEVELS = ['1', '2', '3', '4', 'R1', 'R2'];
 export const LEVEL_OF_EVIDENCE = ['LEVEL_1', 'LEVEL_2', 'LEVEL_3', 'LEVEL_4', 'LEVEL_R1', 'LEVEL_R2'];
 export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
+  [ONCOGENICITY.NEUTRAL]: 'neutral',
   [ONCOGENICITY.LIKELY_NEUTRAL]: 'neutral',
   [ONCOGENICITY.UNKNOWN]: 'unknown',
   [ONCOGENICITY.INCONCLUSIVE]: 'inconclusive',
@@ -120,6 +124,10 @@ export const DEFAULT_MARGIN_TOP_SM = 'mt-2';
 export const DEFAULT_MARGIN_TOP_LG = 'mt-3';
 export const DEFAULT_MARGIN_BOTTOM_SM = 'mb-2';
 export const DEFAULT_MARGIN_BOTTOM_LG = 'mb-3';
+export const THRESHOLD_TABLE_FIXED_HEIGHT = 10;
+export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
+export const LG_TABLE_FIXED_HEIGHT = 500;
+export const SM_TABLE_FIXED_HEIGHT = 300;
 
 // Defaults for the models
 export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
@@ -213,7 +221,7 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
 export enum PAGE_ROUTE {
   LOGIN = '/login',
   LOGOUT = '/logout',
-  REGISTER = '/register',
+  REGISTER = '/account/register',
   DATA_ACCESS = '/dataAccess',
   CANCER_GENES = '/cancerGenes',
   ACTIONABLE_GENE = '/actionableGenes',

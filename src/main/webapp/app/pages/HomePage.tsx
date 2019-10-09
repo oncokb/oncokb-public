@@ -39,7 +39,7 @@ class HomePage extends React.Component<IHomeProps> {
 
   readonly levelNumbers = remoteData<{ [level: string]: LevelNumber }>({
     await: () => [],
-    invoke: async () => {
+    async invoke() {
       const levelNumber = await oncokbPrivateClient.utilsNumbersLevelsGetUsingGET({});
       return Promise.resolve(
         _.reduce(
@@ -117,7 +117,6 @@ class HomePage extends React.Component<IHomeProps> {
       }
     };
 
-    // @ts-ignore
     return (
       <div className="home">
         <Row className="mb-5">
@@ -170,13 +169,13 @@ class HomePage extends React.Component<IHomeProps> {
                 NoOptionsMessage
               }}
               styles={{
-                input: styles => {
+                input(styles) {
                   return {
                     ...styles,
                     lineHeight: '30px'
                   };
                 },
-                placeholder: styles => {
+                placeholder(styles) {
                   return {
                     ...styles,
                     width: '100%',

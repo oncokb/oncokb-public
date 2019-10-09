@@ -17,7 +17,7 @@ export const NewsPage = () => {
         <p>
           <b>Stay tuned</b> for future data updates (improved annotations, new alterations), as well as new features. You can follow us on
           Twitter (
-          <a href="https://twitter.com/OncoKB" target="_blank">
+          <a href="https://twitter.com/OncoKB" target="_blank" rel="noopener noreferrer">
             @OncoKB
           </a>
           ) or subscribe to our{' '}
@@ -81,11 +81,11 @@ export const NewsPage = () => {
         </p>
         <p>
           We have also <b>integrated information from OncoKB into the cBioPortal for Cancer Genomics</b>. When exploring alterations in{' '}
-          <a href="http://www.cbioportal.org/" target="_blank">
+          <a href="http://www.cbioportal.org/" target="_blank" rel="noopener noreferrer">
             cbioportal.org
           </a>
           , you will see annotations from OncoKB when available.{' '}
-          <a href="http://www.cbioportal.org/case.do?cancer_study_id=luad_tcga_pub&sample_id=TCGA-49-4494-01" target="_blank">
+          <a href="http://www.cbioportal.org/case.do?cancer_study_id=luad_tcga_pub&sample_id=TCGA-49-4494-01" target="_blank" rel="noopener noreferrer">
             Example of a lung cancer case.
           </a>
         </p>
