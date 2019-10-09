@@ -65,9 +65,6 @@ export class LicenseSelection extends React.Component<LicenseSelectionProps, {}>
               onClick={() => this.onSelectLicense(license.key)}
             >
               <div className={'d-flex align-items-center'}>
-                {/*{this.selectedLicense === license.key ? (*/}
-                {/*  <i className="fa fa-check-square mr-2"></i>*/}
-                {/*) : null}*/}
                 <span>{license.title}</span>
               </div>
             </Button>
