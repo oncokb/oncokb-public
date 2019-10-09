@@ -129,7 +129,7 @@ angular.module('oncokbStaticApp')
         };
 
         $scope.getFilteredResultStatement = function() {
-            return $sce.trustAsHtml(`<span style="font-weight: bold;">Showing ${$scope.filterResults.treatments.length} biomarker-drug ${pluralize('association', $scope.filterResults.treatments.length)}</span> (${$scope.filterResults.genes.total.length} ${pluralize('gene', $scope.filterResults.genes.total.length)}, ${$scope.filterResults.tumorTypes.length} ${pluralize('tumor type', $scope.filterResults.tumorTypes.length)}, ${$scope.filterResults.levels.length} ${pluralize('level', $scope.filterResults.levels.length)} of evidence)`);
+            return $sce.trustAsHtml('<span style="font-weight: bold;">Showing ' + $scope.filterResults.treatments.length + ' biomarker-drug ' + pluralize('association', $scope.filterResults.treatments.length) + '</span> ('+$scope.filterResults.genes.total.length+' ' + pluralize('gene', $scope.filterResults.genes.total.length) + ', '+$scope.filterResults.tumorTypes.length+' '+pluralize('tumor type', $scope.filterResults.tumorTypes.length)+', ' + $scope.filterResults.levels.length+' '+ pluralize('level', $scope.filterResults.levels.length) +' of evidence)');
         };
 
         $scope.pluralizeString = function(string, number) {
@@ -176,11 +176,11 @@ angular.module('oncokbStaticApp')
             api.getAllMainTypes()
                 .then(function(response) {
                     $scope.tumorTypes = _.uniqBy($scope.tumorTypes.concat(response.data.filter(function(record) {
-                        return !record.trim().endsWith("NOS");
+                        return !record.name.trim().endsWith("NOS");
                     }).map(function(mainType) {
                         return {
                             type: 'Main Type',
-                            name: mainType
+                            name: mainType.name
                         };
                     })), 'name');
                     deferred.resolve();
