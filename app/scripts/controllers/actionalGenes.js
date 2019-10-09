@@ -180,7 +180,7 @@ angular.module('oncokbStaticApp')
                     }).map(function(mainType) {
                         return {
                             type: 'Main Type',
-                            name: mainType
+                            name: mainType.name
                         };
                     })), 'name');
                     deferred.resolve();
