@@ -1,75 +1,49 @@
 import React from 'react';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col, Form } from 'react-bootstrap';
 import { observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 import autobind from 'autobind-decorator';
-
-
-export enum LicenseType {
-  ACADEMIC = 'ACADEMIC',
-  COMMERCIAL_RESEARCH = 'COMMERCIAL_RESEARCH',
-  HOSPITAL = 'HOSPITAL',
-  COMMERCIAL = 'COMMERCIAL',
-}
-
-type license = {
-  key: LicenseType,
-  title: string
-}
-
-const licenseTypes: license[] = [{
-  key: LicenseType.ACADEMIC,
-  title: 'Research use in an academic setting'
-}, {
-  key: LicenseType.COMMERCIAL_RESEARCH,
-  title: 'Research use in a commercial setting'
-}, {
-  key: LicenseType.HOSPITAL,
-  title: 'Annotation of patient reports in a hospital'
-}, {
-  key: LicenseType.COMMERCIAL,
-  title: 'Use in a commercial product'
-}];
+import { LICENSE_TYPES, LicenseType } from 'app/config/constants';
 
 export type LicenseSelectionProps = {
-  onSelectLicense: (key: LicenseType) => void
+  onSelectLicense: (key: LicenseType | undefined) => void
 }
 
 @observer
 export class LicenseSelection extends React.Component<LicenseSelectionProps, {}> {
-  @observable selectedLicense: LicenseType;
+  @observable selectedLicense: LicenseType | undefined;
 
   @autobind
   @action
   onSelectLicense(selectedLicense: LicenseType) {
-    this.selectedLicense = selectedLicense;
-    this.props.onSelectLicense(selectedLicense);
+    if (selectedLicense === this.selectedLicense) {
+      this.selectedLicense = undefined;
+    } else {
+      this.selectedLicense = selectedLicense;
+    }
+    this.props.onSelectLicense(this.selectedLicense);
   }
 
   render() {
     return (
-      <Row>
-        {licenseTypes.map(license => (
-          <Col
-            key={license.key}
-            xl={3}
-            xs={6}
-          >
-            <Button
-              active={this.selectedLicense === license.key}
-              style={{
-                width: 170
-              }}
-              variant={'outline-primary'}
-              className={'mb-2'}
-              onClick={() => this.onSelectLicense(license.key)}
+      <Row className={'d-flex flex-column'}>
+        <Col>
+          {LICENSE_TYPES.map((license, index) => (
+            <div className='primary'
+                 key={license.key}
+                 onClick={() => this.onSelectLicense(license.key)}
             >
-              <div className={'d-flex align-items-center'}>
-                <span>{license.title}</span>
-              </div>
-            </Button>
-          </Col>
-        ))}
+            <span className='mr-2'>
+              {this.selectedLicense === license.key ? (
+                <i className={'fa fa-check-circle'}></i>
+              ) : (
+                <i className={'fa fa-circle-o'}></i>
+              )}
+            </span>
+              <span>{license.title}</span>
+            </div>
+          ))}
+        </Col>
       </Row>
     );
   }

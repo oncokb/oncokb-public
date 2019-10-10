@@ -6,10 +6,7 @@ import { observer } from 'mobx-react';
 const accountMenuItemsAuthenticated = (
   <>
     <MenuItem icon="wrench" to="/account/settings">
-      Settings
-    </MenuItem>
-    <MenuItem icon="lock" to="/account/password">
-      Password
+      Account Settings
     </MenuItem>
     <MenuItem icon="sign-out-alt" to="/logout">
       Sign out

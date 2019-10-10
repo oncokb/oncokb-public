@@ -221,7 +221,6 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
 export enum PAGE_ROUTE {
   LOGIN = '/login',
   LOGOUT = '/logout',
-  REGISTER = '/account/register',
   DATA_ACCESS = '/dataAccess',
   CANCER_GENES = '/cancerGenes',
   ACTIONABLE_GENE = '/actionableGenes',
@@ -232,7 +231,9 @@ export enum PAGE_ROUTE {
   TEAM = '/team',
   NEWS = '/news',
   LEVELS = '/levels',
-  ACCOUNT = '/account'
+  ACCOUNT = '/account',
+  ACCOUNT_SETTINGS = '/account/settings',
+  ACCOUNT_PASSWORD_RESET = '/account/reset'
 }
 
 export enum TABLE_COLUMN_KEY {
@@ -246,4 +247,49 @@ export enum TABLE_COLUMN_KEY {
   CITATIONS = 'CITATIONS',
   ONCOGENICITY = 'ONCOGENICITY',
   MUTATION_EFFECT = 'MUTATION_EFFECT'
+}
+
+export enum LicenseType {
+  ACADEMIC = 'ACADEMIC',
+  COMMERCIAL_RESEARCH = 'COMMERCIAL_RESEARCH',
+  HOSPITAL = 'HOSPITAL',
+  COMMERCIAL = 'COMMERCIAL'
+}
+
+export type License = {
+  key: LicenseType;
+  title: string;
+};
+
+export const LICENSE_TYPES: License[] = [
+  {
+    key: LicenseType.ACADEMIC,
+    title: 'Research use in an academic setting'
+  },
+  {
+    key: LicenseType.COMMERCIAL_RESEARCH,
+    title: 'Research use in a commercial setting'
+  },
+  {
+    key: LicenseType.HOSPITAL,
+    title: 'Annotation of patient reports in a hospital'
+  },
+  {
+    key: LicenseType.COMMERCIAL,
+    title: 'Use in a commercial product'
+  }
+];
+
+export enum ACCOUNT_TITLES {
+  USER_NAME = 'Username',
+  FIRST_NAME = 'First Name',
+  LAST_NAME = 'Last Name',
+  NAME = 'Name',
+  EMAIL = 'Email',
+  POSITION = 'Position',
+  COMPANY = 'Company',
+  CITY = 'City',
+  COUNTRY = 'Country',
+  API_TOKEN = 'API Token',
+  LICENSE_TYPE = 'License'
 }

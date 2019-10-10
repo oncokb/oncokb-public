@@ -6,6 +6,7 @@ import { UserDTO, UUIDToken } from 'app/shared/api/generated/API';
 import * as _ from 'lodash';
 import { assignPublicToken } from 'app/indexUtils';
 import { AUTHORITIES } from 'app/config/constants';
+import { remoteData } from 'cbioportal-frontend-commons';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -25,7 +26,6 @@ class AuthenticationStore {
   @observable loginError = false; // Errors returned from server side
   @observable loginErrorMessage = ''; // Errors returned from server side
   @observable showModalLogin = false;
-  @observable account: UserDTO;
   @observable errorMessage = ''; // Errors returned from server side
   @observable redirectMessage = '';
   @observable sessionHasBeenFetched = false;
@@ -35,24 +35,36 @@ class AuthenticationStore {
   @observable userName = '';
   @observable password = '';
 
-  private reactionDisposers: IReactionDisposer[] = [];
-
   constructor() {
-    this.reactionDisposers.push(reaction(() => this.idToken, () => this.getAccount(), true));
-  }
-
-  @autobind
-  public async getAccount() {
-    const account = await client.getAccountUsingGET({});
-    if (account) {
-      this.account = account;
-      this.isAuthenticated = true;
+    const existedToken = this.getStoredToken();
+    if (existedToken) {
+      this.idToken = existedToken;
     }
   }
 
+  readonly account = remoteData<UserDTO | undefined>({
+    invoke: () => {
+      if (this.idToken) {
+        return client.getAccountUsingGET({});
+      } else {
+        return Promise.resolve(undefined);
+      }
+    },
+    onResult: account => {
+      if (account) {
+        this.isAuthenticated = true;
+      }
+    },
+    default: undefined
+  });
+
   @computed
   get isUserAuthenticated() {
-    return this.isAuthenticated && _.intersection([AUTHORITIES.ADMIN, AUTHORITIES.USER], this.account.authorities).length > 0;
+    return (
+      this.isAuthenticated &&
+      this.account.result !== undefined &&
+      _.intersection([AUTHORITIES.ADMIN, AUTHORITIES.USER], this.account.result.authorities).length > 0
+    );
   }
 
   @autobind
@@ -96,10 +108,9 @@ class AuthenticationStore {
     if (Storage.session.get(AUTH_TOKEN_KEY)) {
       Storage.session.remove(AUTH_TOKEN_KEY);
     }
-    this.idToken = '';
   }
 
-  public hasStoredToken() {
+  public getStoredToken() {
     return Storage.local.get(AUTH_TOKEN_KEY) || Storage.session.get(AUTH_TOKEN_KEY);
   }
 
@@ -107,18 +118,10 @@ class AuthenticationStore {
   @action
   public logout() {
     this.clearAuthToken();
+    this.idToken = '';
     this.loginSuccess = false;
-
     // Revert back to public website token
     assignPublicToken();
-    this.getAccount().then(
-      () => {
-        return;
-      },
-      () => {
-        return;
-      }
-    );
   }
 }
 
