@@ -22,7 +22,7 @@ class LoginContent extends React.Component<ILoginModalProps> {
 
     return (
       <Row className="justify-content-center">
-        <Col md="6">
+        <Col lg="6">
           <AvForm onSubmit={this.handleSubmit}>
             <Row>
               <Col md="12">

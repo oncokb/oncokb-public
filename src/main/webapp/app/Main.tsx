@@ -21,7 +21,8 @@ class Main extends React.Component<IMainPage> {
         <Header
           isUserAuthenticated={this.props.authenticationStore.isUserAuthenticated}
           isAdmin={
-            this.props.authenticationStore.account && isAuthorized(this.props.authenticationStore.account.authorities, [AUTHORITIES.ADMIN])
+            this.props.authenticationStore.isUserAuthenticated &&
+            isAuthorized(this.props.authenticationStore.account.result!.authorities, [AUTHORITIES.ADMIN])
           }
           ribbonEnv={''}
           isInProduction={false}
@@ -32,7 +33,7 @@ class Main extends React.Component<IMainPage> {
         <div className={'view-wrapper'}>
           <Container fluid={!this.props.windowStore.isXLscreen}>
             <span>Current pathname: {this.props.routing.location.pathname}</span>
-            <AppRouts />
+            <AppRouts authenticationStore={this.props.authenticationStore} routing={this.props.routing}/>
           </Container>
         </div>
         <Footer lastUpdate={this.props.appStore.appInfo.result.dataVersion.date} />

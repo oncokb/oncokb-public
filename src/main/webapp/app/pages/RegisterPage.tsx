@@ -5,12 +5,13 @@ import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 import { inject, observer } from 'mobx-react';
 import { action, observable } from 'mobx';
 import autobind from 'autobind-decorator';
-import { Redirect, Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import client from 'app/shared/api/clientInstance';
 import { ManagedUserVM } from 'app/shared/api/generated/API';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import { LicenseSelection, LicenseType } from 'app/components/licenseSelection/LicenseSelection';
-import { PAGE_ROUTE } from 'app/config/constants';
+import { LicenseSelection } from 'app/components/licenseSelection/LicenseSelection';
+import { ACCOUNT_TITLES, LicenseType, PAGE_ROUTE } from 'app/config/constants';
+import { getAccountInfoTitle, getSectionClassName } from './account/AccountUtils';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -36,11 +37,10 @@ export type IRegisterProps = {
 export class RegisterPage extends React.Component<IRegisterProps> {
   @observable password = '';
   @observable registerStatus: RegisterStatus = RegisterStatus.NA;
-  @observable selectedLicense: LicenseType;
+  @observable selectedLicense: LicenseType|undefined;
 
   private redirectTimeoutInSecond = 5;
   private newAccount: Partial<ManagedUserVM>;
-  private sectionClassName = 'justify-content-center border-top py-3';
 
   @autobind
   @action
@@ -53,7 +53,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
       jobTitle: values.jobTitle,
       company: values.company,
       city: values.city,
-      country: values.country,
+      country: values.country
     };
 
     client
@@ -89,10 +89,13 @@ export class RegisterPage extends React.Component<IRegisterProps> {
       return (
         <div>
           <div>To support the future development and maintenance of OncoKB, we have introduced license fees for clinical
-            and commercial use. The fee will depend on the type of use and size of company.</div>
-          <div className='mt-2'>In order to be granted access to downloadable content and our API, your company will need a license. If
+            and commercial use. The fee will depend on the type of use and size of company.
+          </div>
+          <div className='mt-2'>In order to be granted access to downloadable content and our API, your company will
+            need a license. If
             your company already has one, we will grant you access. Otherwise, we will contact you to discuss your needs
-            and license terms. Please see the <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>.</div>
+            and license terms. Please see the <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>.
+          </div>
         </div>
       );
     }
@@ -100,7 +103,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   @autobind
   @action
-  onSelectLicense(license: LicenseType) {
+  onSelectLicense(license: LicenseType|undefined) {
     this.selectedLicense = license;
   }
 
@@ -135,12 +138,11 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
     return (
       <Row className="justify-content-center">
-        <Col lg={9}>
-          <h1 id="register-title">Registration</h1>
+        <Col lg="6">
           <AvForm id="register-form" onValidSubmit={this.handleValidSubmit}>
-            <Row className={this.sectionClassName}>
+            <Row className={getSectionClassName(true)}>
               <Col md='3'>
-                <h5>License</h5>
+                <h5>Choose License</h5>
               </Col>
               <Col md="9">
                 <LicenseSelection onSelectLicense={this.onSelectLicense}/>
@@ -148,19 +150,19 @@ export class RegisterPage extends React.Component<IRegisterProps> {
             </Row>
             {this.selectedLicense ? (
               <>
-                <Row className={this.sectionClassName}>
+                <Row className={getSectionClassName()}>
                   <Col md="9" className={'ml-auto'}>
                     {this.getLicenseAdditionalInfo(this.selectedLicense)}
                   </Col>
                 </Row>
-                <Row className={this.sectionClassName}>
+                <Row className={getSectionClassName()}>
                   <Col md='3'>
                     <h5>Account</h5>
                   </Col>
                   <Col md="9">
                     <AvField
                       name="username"
-                      label="Username"
+                      label={getAccountInfoTitle(ACCOUNT_TITLES.USER_NAME, this.selectedLicense)}
                       validate={{
                         required: { value: true, errorMessage: 'Your username is required.' },
                         pattern: {
@@ -172,8 +174,24 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       }}
                     />
                     <AvField
+                      name="firstName"
+                      label={getAccountInfoTitle(ACCOUNT_TITLES.FIRST_NAME, this.selectedLicense)}
+                      validate={{
+                        required: { value: true, errorMessage: 'Your first name is required.' },
+                        minLength: { value: 1, errorMessage: 'Your first can not be empty' },
+                      }}
+                    />
+                    <AvField
+                      name="LastName"
+                      label={getAccountInfoTitle(ACCOUNT_TITLES.LAST_NAME, this.selectedLicense)}
+                      validate={{
+                        required: { value: true, errorMessage: 'Your last name is required.' },
+                        minLength: { value: 1, errorMessage: 'Your last name can not be empty' },
+                      }}
+                    />
+                    <AvField
                       name="email"
-                      label={`${this.selectedLicense === LicenseType.ACADEMIC ? 'Institution' : 'Company'} email`}
+                      label={getAccountInfoTitle(ACCOUNT_TITLES.EMAIL, this.selectedLicense)}
                       type="email"
                       validate={{
                         required: { value: true, errorMessage: 'Your email is required.' },
@@ -217,7 +235,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     />
                   </Col>
                 </Row>
-                <Row className={this.sectionClassName}>
+                <Row className={getSectionClassName()}>
                   <Col md='3'>
                     <h5>Company</h5>
                   </Col>
@@ -225,7 +243,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     {/* Job Title */}
                     <AvField
                       name="jobTitle"
-                      label="Position"
+                      label={getAccountInfoTitle(ACCOUNT_TITLES.POSITION, this.selectedLicense)}
                       validate={{
                         required: { value: true, errorMessage: 'Required.' },
                         minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
@@ -235,7 +253,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     {/* Company */}
                     <AvField
                       name="company"
-                      label={`${this.selectedLicense === LicenseType.ACADEMIC ? 'Institution / University' : 'Company'}`}
+                      label={getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.selectedLicense)}
                       validate={{
                         required: { value: true, errorMessage: 'Required.' },
                         minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
@@ -245,7 +263,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     {/* City */}
                     <AvField
                       name="city"
-                      label="City"
+                      label={getAccountInfoTitle(ACCOUNT_TITLES.CITY, this.selectedLicense)}
                       validate={{
                         required: { value: true, errorMessage: 'Required.' },
                         minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
@@ -255,7 +273,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     {/* Country */}
                     <AvField
                       name="country"
-                      label="Country"
+                      label={getAccountInfoTitle(ACCOUNT_TITLES.COUNTRY, this.selectedLicense)}
                       validate={{
                         required: { value: true, errorMessage: 'Required.' },
                         minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },

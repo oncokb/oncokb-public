@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import Login from 'app/components/login/login';
 import { Logout } from 'app/components/login/logout';
-import { RegisterPage } from 'app/components/account/register';
+import { RegisterPage } from 'app/pages/RegisterPage';
 import { PrivateRoute } from 'app/shared/auth/private-route';
 import { AboutPage } from 'app/pages/AboutPage';
 import Loadable from 'react-loadable';
@@ -22,14 +22,14 @@ import { LevelOfEvidencePage } from 'app/pages/LevelOfEvidencePage';
 import GenePage from 'app/pages/genePage/GenePage';
 import AlterationPage from 'app/pages/alterationPage/AlterationPage';
 import { DataAccessPage } from './pages/DataAccessPage';
+import { AccountPage } from 'app/pages/AccountPage';
 
-// tslint:disable:space-in-parens
 const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/pages/menus/account.tsx'),
   loading: () => <div>loading ...</div>
 });
 
-const AppRouts = inject('authenticationStore', 'routing')((props: { authenticationStore?: AuthenticationStore; routing?: RouterStore }) => {
+const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: RouterStore }) => {
   return (
     <Switch>
       <ErrorBoundaryRoute path={PAGE_ROUTE.LOGIN} component={Login} />
@@ -41,6 +41,9 @@ const AppRouts = inject('authenticationStore', 'routing')((props: { authenticati
       <ErrorBoundaryRoute exact path="/gene/:hugoSymbol" component={GenePage} />
       <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration" component={AlterationPage} />
       <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage} />
+      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage} />
+      <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_SETTINGS} component={AccountPage} />
+      {/*<ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET} component={AccountPage} />*/}
       <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
       <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
       <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
@@ -54,11 +57,12 @@ const AppRouts = inject('authenticationStore', 'routing')((props: { authenticati
         routing={props.routing!}
         component={Account}
         isAuthorized={
-          props.authenticationStore!.account &&
-          isAuthorized(props.authenticationStore!.account.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.USER])
+          props.authenticationStore.account.isComplete &&
+          props.authenticationStore.account.result !== undefined &&
+          isAuthorized(props.authenticationStore.account.result.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.USER])
         }
       />
     </Switch>
   );
-});
+};
 export default AppRouts;
