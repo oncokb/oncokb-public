@@ -232,6 +232,7 @@ export enum PAGE_ROUTE {
   NEWS = '/news',
   LEVELS = '/levels',
   ACCOUNT = '/account',
+  REGISTER = '/account/register',
   ACCOUNT_SETTINGS = '/account/settings',
   ACCOUNT_PASSWORD_RESET = '/account/reset'
 }
