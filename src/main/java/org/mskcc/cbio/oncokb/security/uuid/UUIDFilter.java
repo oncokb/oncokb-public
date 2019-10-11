@@ -11,6 +11,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Filters incoming requests and installs a Spring Security principal if a header corresponding to a valid user is
@@ -30,8 +31,8 @@ public class UUIDFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
         throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        String uuid = resolveToken(httpServletRequest);
-        if (StringUtils.hasText(uuid) && this.tokenProvider.validateToken(uuid)) {
+        UUID uuid = resolveToken(httpServletRequest);
+        if (uuid != null && this.tokenProvider.validateToken(uuid)) {
             Authentication authentication = this.tokenProvider.getAuthentication(uuid);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 //            this.tokenProvider.addAccessRecord(uuid, servletRequest.getRemoteAddr());
@@ -39,10 +40,10 @@ public class UUIDFilter extends GenericFilterBean {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private String resolveToken(HttpServletRequest request){
+    private UUID resolveToken(HttpServletRequest request){
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+            return UUID.fromString(bearerToken.substring(7));
         }
         return null;
     }

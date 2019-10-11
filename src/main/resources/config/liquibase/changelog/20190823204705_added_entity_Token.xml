@@ -16,13 +16,13 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="token" type="varchar(255)">
+            <column name="token" type="${uuidType}">
                 <constraints nullable="true" />
             </column>
-            <column name="creation" type="date">
+            <column name="creation" type="datetime">
                 <constraints nullable="true" />
             </column>
-            <column name="expiration" type="date">
+            <column name="expiration" type="datetime">
                 <constraints nullable="true" />
             </column>
             <column name="user_id" type="bigint">
@@ -30,6 +30,8 @@
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
+        <dropDefaultValue tableName="token" columnName="creation" columnDataType="datetime"/>
+        <dropDefaultValue tableName="token" columnName="expiration" columnDataType="datetime"/>
     </changeSet>
 
     <changeSet id="20190823204705-1-relations" author="jhipster">
@@ -52,8 +54,8 @@
                   tableName="token">
             <column name="id" type="numeric"/>
             <column name="token" type="string"/>
-            <column name="creation" type="date"/>
-            <column name="expiration" type="date"/>
+            <column name="creation" type="datetime"/>
+            <column name="expiration" type="datetime"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

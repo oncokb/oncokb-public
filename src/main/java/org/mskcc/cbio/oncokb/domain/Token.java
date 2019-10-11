@@ -2,11 +2,13 @@ package org.mskcc.cbio.oncokb.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.Instant;
+import java.util.UUID;
 
 /**
  * A Token.
@@ -22,14 +24,15 @@ public class Token implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "token")
-    private String token;
+    @Type(type = "uuid-char")
+    @Column(name = "token", length = 36)
+    private UUID token;
 
     @Column(name = "creation")
-    private LocalDate creation;
+    private Instant creation;
 
     @Column(name = "expiration")
-    private LocalDate expiration;
+    private Instant expiration;
 
     @ManyToOne
     @JsonIgnoreProperties("tokens")
@@ -44,42 +47,42 @@ public class Token implements Serializable {
         this.id = id;
     }
 
-    public String getToken() {
+    public UUID getToken() {
         return token;
     }
 
-    public Token token(String token) {
+    public Token token(UUID token) {
         this.token = token;
         return this;
     }
 
-    public void setToken(String token) {
+    public void setToken(UUID token) {
         this.token = token;
     }
 
-    public LocalDate getCreation() {
+    public Instant getCreation() {
         return creation;
     }
 
-    public Token creation(LocalDate creation) {
+    public Token creation(Instant creation) {
         this.creation = creation;
         return this;
     }
 
-    public void setCreation(LocalDate creation) {
+    public void setCreation(Instant creation) {
         this.creation = creation;
     }
 
-    public LocalDate getExpiration() {
+    public Instant getExpiration() {
         return expiration;
     }
 
-    public Token expiration(LocalDate expiration) {
+    public Token expiration(Instant expiration) {
         this.expiration = expiration;
         return this;
     }
 
-    public void setExpiration(LocalDate expiration) {
+    public void setExpiration(Instant expiration) {
         this.expiration = expiration;
     }
 

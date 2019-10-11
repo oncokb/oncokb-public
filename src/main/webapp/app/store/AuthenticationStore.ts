@@ -2,7 +2,7 @@ import { observable, IReactionDisposer, reaction, action, computed } from 'mobx'
 import { Storage } from 'react-jhipster';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
-import { UserDTO, UUIDToken } from 'app/shared/api/generated/API';
+import { UserDTO } from 'app/shared/api/generated/API';
 import * as _ from 'lodash';
 import { assignPublicToken } from 'app/indexUtils';
 import { AUTHORITIES } from 'app/config/constants';
@@ -16,7 +16,8 @@ export const ACTION_TYPES = {
   ERROR_MESSAGE: 'authentication/ERROR_MESSAGE'
 };
 
-export const AUTH_TOKEN_KEY = 'oncokb-authenticationToken';
+export const AUTH_UER_TOKEN_KEY = 'oncokb-user-token';
+export const AUTH_WEBSITE_TOKEN_KEY = 'oncokb-webiste-token';
 
 class AuthenticationStore {
   @observable rememberMe = true;
@@ -83,14 +84,14 @@ class AuthenticationStore {
   }
 
   @action.bound
-  loginSuccessCallback(result: UUIDToken) {
-    const jwt = result.id_token;
+  loginSuccessCallback(result: string) {
+    const uuid = result;
     if (this.rememberMe) {
-      Storage.local.set(AUTH_TOKEN_KEY, jwt);
+      Storage.local.set(AUTH_UER_TOKEN_KEY, uuid);
     } else {
-      Storage.session.set(AUTH_TOKEN_KEY, jwt);
+      Storage.session.set(AUTH_UER_TOKEN_KEY, uuid);
     }
-    this.idToken = jwt;
+    this.idToken = uuid;
     this.loginSuccess = true;
     this.loading = false;
   }
@@ -102,16 +103,16 @@ class AuthenticationStore {
   }
 
   public clearAuthToken() {
-    if (Storage.local.get(AUTH_TOKEN_KEY)) {
-      Storage.local.remove(AUTH_TOKEN_KEY);
+    if (Storage.local.get(AUTH_UER_TOKEN_KEY)) {
+      Storage.local.remove(AUTH_UER_TOKEN_KEY);
     }
-    if (Storage.session.get(AUTH_TOKEN_KEY)) {
-      Storage.session.remove(AUTH_TOKEN_KEY);
+    if (Storage.session.get(AUTH_UER_TOKEN_KEY)) {
+      Storage.session.remove(AUTH_UER_TOKEN_KEY);
     }
   }
 
   public getStoredToken() {
-    return Storage.local.get(AUTH_TOKEN_KEY) || Storage.session.get(AUTH_TOKEN_KEY);
+    return Storage.local.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_WEBSITE_TOKEN_KEY);
   }
 
   @autobind

@@ -1,6 +1,6 @@
 import { ACCOUNT_TITLES, License, LICENSE_TYPES, LicenseType } from 'app/config/constants';
 
-export function getSectionClassName(theFirst: boolean = false) {
+export function getSectionClassName(theFirst = false) {
   return `justify-content-center ${theFirst ? 'pb-3' : 'border-top py-3'}`;
 }
 

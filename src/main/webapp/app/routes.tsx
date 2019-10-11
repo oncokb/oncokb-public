@@ -43,7 +43,6 @@ const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: Ro
       <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage} />
       <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage} />
       <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_SETTINGS} component={AccountPage} />
-      {/*<ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET} component={AccountPage} />*/}
       <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
       <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
       <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
@@ -52,9 +51,9 @@ const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: Ro
       <Route exact path={PAGE_ROUTE.LEVELS} component={LevelOfEvidencePage} />
       <PrivateRoute
         path={PAGE_ROUTE.ACCOUNT}
-        authenticationStore={props.authenticationStore!}
+        authenticationStore={props.authenticationStore}
         // @ts-ignore
-        routing={props.routing!}
+        routing={props.routing}
         component={Account}
         isAuthorized={
           props.authenticationStore.account.isComplete &&

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Controller to authenticate users.
@@ -42,7 +43,7 @@ public class UserUUIDController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<UUIDToken> authorize(@Valid @RequestBody LoginVM loginVM) {
+    public ResponseEntity<UUID> authorize(@Valid @RequestBody LoginVM loginVM) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
             new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
@@ -51,7 +52,7 @@ public class UserUUIDController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         List<Token> tokenList = tokenService.findByUserIsCurrentUser();
-        String uuid;
+        UUID uuid;
         if (tokenList.size() > 0) {
             uuid = tokenList.iterator().next().getToken();
         } else {
@@ -60,7 +61,7 @@ public class UserUUIDController {
         }
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(UUIDFilter.AUTHORIZATION_HEADER, "Bearer " + uuid);
-        return new ResponseEntity<>(new UUIDToken(uuid), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(uuid, httpHeaders, HttpStatus.OK);
     }
 
     /**

@@ -20,9 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mskcc.cbio.oncokb.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,16 +37,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = OncokbApp.class)
 public class TokenResourceIT {
 
-    private static final String DEFAULT_TOKEN = "AAAAAAAAAA";
-    private static final String UPDATED_TOKEN = "BBBBBBBBBB";
+    private static final UUID DEFAULT_TOKEN = UUID.randomUUID();
+    private static final UUID UPDATED_TOKEN = UUID.randomUUID();
 
-    private static final LocalDate DEFAULT_CREATION = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_CREATION = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_CREATION = LocalDate.ofEpochDay(-1L);
+    private static final Instant DEFAULT_CREATION = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_CREATION = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant SMALLER_CREATION = Instant.ofEpochMilli(-1L);
 
-    private static final LocalDate DEFAULT_EXPIRATION = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_EXPIRATION = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_EXPIRATION = LocalDate.ofEpochDay(-1L);
+    private static final Instant DEFAULT_EXPIRATION = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_EXPIRATION = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant SMALLER_EXPIRATION = Instant.ofEpochMilli(-1L);
 
     @Autowired
     private TokenRepository tokenRepository;
