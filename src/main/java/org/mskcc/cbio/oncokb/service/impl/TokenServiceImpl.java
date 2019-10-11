@@ -10,9 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -70,18 +72,18 @@ public class TokenServiceImpl implements TokenService {
 
 
     @Override
-    public Optional<Token> findByToken(String token) {
+    public Optional<Token> findByToken(UUID token) {
         return tokenRepository.findByToken(token);
     }
 
     @Override
     public List<Token> findByUserIsCurrentUser() {
-        return tokenRepository.findByUserIsCurrentUser().stream().filter(token -> token.getExpiration().isAfter(LocalDate.now())).collect(Collectors.toList());
+        return tokenRepository.findByUserIsCurrentUser().stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
     }
 
     @Override
     public List<Token> findByUser(User user) {
-        return tokenRepository.findByUser(user).stream().filter(token -> token.getExpiration().isAfter(LocalDate.now())).collect(Collectors.toList());
+        return tokenRepository.findByUser(user).stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
     }
 
     /**

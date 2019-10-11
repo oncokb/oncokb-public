@@ -749,7 +749,8 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/UUIDToken"
+              "type": "string",
+              "format": "uuid"
             }
           },
           "201": {
@@ -1805,18 +1806,19 @@
       "properties": {
         "creation": {
           "type": "string",
-          "format": "date"
+          "format": "date-time"
         },
         "expiration": {
           "type": "string",
-          "format": "date"
+          "format": "date-time"
         },
         "id": {
           "type": "integer",
           "format": "int64"
         },
         "token": {
-          "type": "string"
+          "type": "string",
+          "format": "uuid"
         },
         "user": {
           "$ref": "#/definitions/User"
@@ -1846,15 +1848,6 @@
         }
       },
       "title": "TokenStats"
-    },
-    "UUIDToken": {
-      "type": "object",
-      "properties": {
-        "id_token": {
-          "type": "string"
-        }
-      },
-      "title": "UUIDToken"
     },
     "User": {
       "type": "object",

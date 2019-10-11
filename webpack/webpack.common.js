@@ -75,7 +75,8 @@ module.exports = options => ({
         enforce: 'pre',
         loader: 'eslint-loader',
         options: {
-          emitWarning: true
+          emitWarning: false,
+          emitError: false,
         },
         exclude: [utils.root('node_modules')]
       }

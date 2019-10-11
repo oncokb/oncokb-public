@@ -30,6 +30,7 @@ import org.springframework.util.StringUtils;
 import javax.swing.text.html.Option;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -88,18 +89,18 @@ public class TokenProvider implements InitializingBean {
 
     private Token getNewToken(Set<Authority> authorities) {
         Token token = new Token();
-        LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime expirationTime = authorities.stream().filter(
+        Instant currentTime = Instant.now();
+        Instant expirationTime = authorities.stream().filter(
             authority -> authority.getName().equalsIgnoreCase(AuthoritiesConstants.PUBLIC_WEBSITE)).count() > 0 ?
-            LocalDateTime.now().plusMinutes(EXPIRATION_TIME_IN_MINUTES) : currentTime.plusHours(24 * EXPIRATION_TIME_IN_DAYS);
-        token.setCreation(currentTime.toLocalDate());
-        token.setExpiration(expirationTime.toLocalDate());
+            Instant.now().plusSeconds(60 * EXPIRATION_TIME_IN_MINUTES) : currentTime.plusSeconds(60 * 24 * EXPIRATION_TIME_IN_DAYS);
+        token.setCreation(currentTime);
+        token.setExpiration(expirationTime);
 
-        token.setToken(UUID.randomUUID().toString());
+        token.setToken(UUID.randomUUID());
         return token;
     }
 
-    public String createToken(Authentication authentication) {
+    public UUID createToken(Authentication authentication) {
         Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
         Token token = getNewToken(userOptional.get().getAuthorities());
         token.setUser(userOptional.get());
@@ -108,7 +109,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     // This method is used in the frontend thymeleaf parsing
-    public String getPubWebToken() {
+    public UUID getPubWebToken() {
         Optional<User> user = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("user@localhost");
         if (user.isPresent()) {
             Token userToken = new Token();
@@ -125,7 +126,7 @@ public class TokenProvider implements InitializingBean {
         return null;
     }
 
-    public Authentication getAuthentication(String token) {
+    public Authentication getAuthentication(UUID token) {
         Optional<Token> tokenOptional = tokenService.findByToken(token);
 
         Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(tokenOptional.get().getUser().getLogin());
@@ -137,10 +138,10 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(user.get().getLogin(), token, authorities);
     }
 
-    public boolean validateToken(String tokenValue) {
+    public boolean validateToken(UUID tokenValue) {
         try {
             Optional<Token> token = tokenService.findByToken(tokenValue);
-            if (token.isPresent() && token.get().getExpiration().isAfter(LocalDate.now())) {
+            if (token.isPresent() && token.get().getExpiration().isAfter(Instant.now())) {
                 return true;
             }
             return false;
@@ -151,7 +152,7 @@ public class TokenProvider implements InitializingBean {
         return false;
     }
 
-    public TokenStats addAccessRecord(String uuid, String accessIp) {
+    public TokenStats addAccessRecord(UUID uuid, String accessIp) {
         Optional<Token> tokenOptional = tokenService.findByToken(uuid);
 
         if (tokenOptional.isPresent()) {

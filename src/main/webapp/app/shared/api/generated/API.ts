@@ -85,10 +85,6 @@ export type TokenStats = {
         'token': Token
 
 };
-export type UUIDToken = {
-    'id_token': string
-
-};
 export type User = {
     'activated': boolean
 
@@ -1381,7 +1377,7 @@ export default class API {
         'loginVm': LoginVM,
         $queryParameters ? : any,
         $domain ? : string
-    }): Promise < UUIDToken > {
+    }): Promise < string > {
         return this.authorizeUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });

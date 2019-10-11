@@ -3,7 +3,7 @@ import { AvField, AvForm } from 'availity-reactstrap-validation';
 import { Alert, Button, Col, Row } from 'reactstrap';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 import { inject, observer } from 'mobx-react';
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import autobind from 'autobind-decorator';
 import { Link, Redirect } from 'react-router-dom';
 import client from 'app/shared/api/clientInstance';
@@ -37,7 +37,8 @@ export type IRegisterProps = {
 export class RegisterPage extends React.Component<IRegisterProps> {
   @observable password = '';
   @observable registerStatus: RegisterStatus = RegisterStatus.NA;
-  @observable selectedLicense: LicenseType|undefined;
+  @observable registerError: any;
+  @observable selectedLicense: LicenseType | undefined;
 
   private redirectTimeoutInSecond = 5;
   private newAccount: Partial<ManagedUserVM>;
@@ -48,6 +49,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     this.newAccount = {
       login: values.username,
       password: values.firstPassword,
+      firstName: values.firstName,
+      lastName: values.lastName,
       email: values.email,
       licenseType: this.selectedLicense,
       jobTitle: values.jobTitle,
@@ -77,8 +80,26 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   }
 
   @action.bound
-  failedToRegistered() {
+  failedToRegistered(error: any) {
     this.registerStatus = RegisterStatus.NOT_SUCCESS;
+    this.registerError = error;
+  }
+
+  getErrorMessage(additionalInfo = '') {
+    return (additionalInfo ? `${additionalInfo}, w` : 'W') + 'e were not able to create an account for you.';
+  }
+
+  @computed
+  get errorRegisterMessage() {
+    if (this.registerError &&
+      this.registerError.response &&
+      this.registerError.response.body &&
+      this.registerError.response.body.title
+    ) {
+      return this.getErrorMessage(this.registerError.response.body.title);
+    } else {
+      return this.getErrorMessage();
+    }
   }
 
   getLicenseAdditionalInfo(licenseType: LicenseType) {
@@ -103,7 +124,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   @autobind
   @action
-  onSelectLicense(license: LicenseType|undefined) {
+  onSelectLicense(license: LicenseType | undefined) {
     this.selectedLicense = license;
   }
 
@@ -131,7 +152,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     if (this.registerStatus === RegisterStatus.NOT_SUCCESS) {
       return (
         <div>
-          <Alert color="danger">Something wrong happened, we were able to create an account for you.</Alert>
+          <Alert color="danger">{this.errorRegisterMessage}</Alert>
         </div>
       );
     }
@@ -178,15 +199,15 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       label={getAccountInfoTitle(ACCOUNT_TITLES.FIRST_NAME, this.selectedLicense)}
                       validate={{
                         required: { value: true, errorMessage: 'Your first name is required.' },
-                        minLength: { value: 1, errorMessage: 'Your first can not be empty' },
+                        minLength: { value: 1, errorMessage: 'Your first can not be empty' }
                       }}
                     />
                     <AvField
-                      name="LastName"
+                      name="lastName"
                       label={getAccountInfoTitle(ACCOUNT_TITLES.LAST_NAME, this.selectedLicense)}
                       validate={{
                         required: { value: true, errorMessage: 'Your last name is required.' },
-                        minLength: { value: 1, errorMessage: 'Your last name can not be empty' },
+                        minLength: { value: 1, errorMessage: 'Your last name can not be empty' }
                       }}
                     />
                     <AvField

@@ -25,17 +25,12 @@ export const PrivateRoute = observer(({ component, authenticationStore, isAuthor
     if (!authenticationStore.sessionHasBeenFetched) {
       return <div />;
     } else {
-      return authenticationStore.isAuthenticated ? (
-        checkAuthorities(props)
-      ) : (
-        <Redirect
-          to={{
-            pathname: '/login',
-            search: routing.location.search,
-            state: { from: routing.location }
-          }}
-        />
-      );
+      if(authenticationStore.isAuthenticated) {
+        return checkAuthorities(props)
+      }else {
+        window.location.reload();
+        return null;
+      }
     }
   };
 
