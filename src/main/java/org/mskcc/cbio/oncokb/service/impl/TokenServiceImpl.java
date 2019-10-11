@@ -83,6 +83,11 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public List<Token> findByUser(User user) {
+        return tokenRepository.findByUser(user);
+    }
+
+    @Override
+    public List<Token> findValidByUser(User user) {
         return tokenRepository.findByUser(user).stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
     }
 
