@@ -110,7 +110,7 @@ public class TokenProvider implements InitializingBean {
 
     // This method is used in the frontend thymeleaf parsing
     public UUID getPubWebToken() {
-        Optional<User> user = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("user@localhost");
+        Optional<User> user = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("public_website@localhost");
         if (user.isPresent()) {
             Token userToken = new Token();
             List<Token> tokenList = tokenService.findByUser(user.get());
@@ -120,6 +120,14 @@ public class TokenProvider implements InitializingBean {
                 userToken = tokenService.save(newToken);
             } else {
                 userToken = tokenList.iterator().next();
+                if (userToken.getExpiration().isBefore(Instant.now())) {
+                    // I want to update the token associated with public website once it's expired
+                    Token newToken = getNewToken(user.get().getAuthorities());
+                    userToken.setToken(newToken.getToken());
+                    userToken.setCreation(newToken.getCreation());
+                    userToken.setExpiration(newToken.getExpiration());
+                    tokenService.save(userToken);
+                }
             }
             return userToken.getToken();
         }
