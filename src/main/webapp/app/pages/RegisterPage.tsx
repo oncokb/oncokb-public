@@ -83,6 +83,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   failedToRegistered(error: any) {
     this.registerStatus = RegisterStatus.NOT_SUCCESS;
     this.registerError = error;
+    window.scrollTo(0, 0);
   }
 
   getErrorMessage(additionalInfo = '') {
@@ -149,17 +150,14 @@ export class RegisterPage extends React.Component<IRegisterProps> {
       );
     }
 
-    if (this.registerStatus === RegisterStatus.NOT_SUCCESS) {
-      return (
-        <div>
-          <Alert color="danger">{this.errorRegisterMessage}</Alert>
-        </div>
-      );
-    }
-
     return (
       <Row className="justify-content-center">
         <Col lg="6">
+          {this.registerStatus === RegisterStatus.NOT_SUCCESS ? (
+            <div>
+              <Alert color="danger">{this.errorRegisterMessage}</Alert>
+            </div>
+          ) : null}
           <AvForm id="register-form" onValidSubmit={this.handleValidSubmit}>
             <Row className={getSectionClassName(true)}>
               <Col md='3'>

@@ -12,7 +12,7 @@ export interface ILoginProps {
 }
 
 const Login = inject('authenticationStore', 'routing')((props: ILoginProps) => {
-  const handleLogin = (username: string, password: string, rememberMe = false) => props.authenticationStore.login(username, password);
+  const handleLogin = (username: string, password: string, rememberMe = false) => props.authenticationStore.login(username, password, rememberMe);
 
   const { from } = props.routing.location.state || { from: { pathname: '/', search: location.search } };
   if (props.authenticationStore.isUserAuthenticated) {
