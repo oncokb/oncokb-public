@@ -70,8 +70,9 @@ class AuthenticationStore {
 
   @autobind
   @action
-  public login(username: string, password: string) {
+  public login(username: string, password: string, rememberMe = false) {
     this.loading = true;
+    this.rememberMe = rememberMe;
     client
       .authorizeUsingPOST({
         loginVm: {

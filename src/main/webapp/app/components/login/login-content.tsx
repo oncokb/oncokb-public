@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Button, Alert, Row, Col } from 'reactstrap';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
+import { Button, Alert, Row, Col, Label } from 'reactstrap';
+import { AvForm, AvField, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
@@ -12,9 +12,9 @@ export interface ILoginModalProps {
 
 @observer
 class LoginContent extends React.Component<ILoginModalProps> {
-  handleSubmit = (event: any, errors: any, { username, password }: { username: string; password: string }) => {
+  handleSubmit = (event: any, errors: any, { username, password, rememberMe = false }: { username: string; password: string, rememberMe: boolean }) => {
     const { handleLogin } = this.props;
-    handleLogin(username, password);
+    handleLogin(username, password, rememberMe);
   };
 
   render() {
@@ -49,6 +49,11 @@ class LoginContent extends React.Component<ILoginModalProps> {
                   required
                   errorMessage="Password cannot be empty!"
                 />
+                <AvGroup check>
+                  <Label check>
+                    <AvInput type="checkbox" name="rememberMe" /> Remember Me
+                  </Label>
+                </AvGroup>
               </Col>
             </Row>
             <div className="mt-1">&nbsp;</div>
@@ -56,7 +61,8 @@ class LoginContent extends React.Component<ILoginModalProps> {
               <Link to="/account/reset/request">Did you forget your password?</Link>
             </Alert>
             <Alert color="warning">
-              <span>You don&apos;t have an account yet?</span> <Link to="/account/register">Register a new account</Link>
+              <span>You don&apos;t have an account yet?</span> <Link to="/account/register">Register a new
+              account</Link>
             </Alert>
             <Button color="primary" type="submit">
               Sign in
