@@ -236,7 +236,7 @@ export enum PAGE_ROUTE {
   ACCOUNT_ACTIVATE = '/account/activate',
   ACCOUNT_SETTINGS = '/account/settings',
   ACCOUNT_PASSWORD_RESET_REQUEST = '/account/reset/request',
-  ACCOUNT_PASSWORD_RESET_FINISH = '/account/reset/finish:key'
+  ACCOUNT_PASSWORD_RESET_FINISH = '/account/reset/finish'
 }
 
 export enum TABLE_COLUMN_KEY {
