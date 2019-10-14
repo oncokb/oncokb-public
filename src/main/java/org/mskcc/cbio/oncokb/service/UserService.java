@@ -119,7 +119,11 @@ public class UserService {
         newUser.setLastName(userDTO.getLastName());
         newUser.setEmail(userDTO.getEmail().toLowerCase());
         newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
+        if (userDTO.getLangKey() == null) {
+            newUser.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+        } else {
+            newUser.setLangKey(userDTO.getLangKey());
+        }
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
