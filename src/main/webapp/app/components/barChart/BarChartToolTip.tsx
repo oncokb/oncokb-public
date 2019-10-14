@@ -48,15 +48,7 @@ export default class BarChartToolTip extends React.Component<BarChartToolTipProp
     }
 
     return (
-      <Popover
-        className={classnames('cbioTooltip')}
-        positionLeft={this.positionLeft}
-        positionTop={this.props.mousePosition.y - VERTICAL_OFFSET}
-        style={{ width: WIDTH }}
-        placement={this.placement}
-      >
-        <div>{this.props.content}</div>
-      </Popover>
+      <div></div>
     );
   }
 }

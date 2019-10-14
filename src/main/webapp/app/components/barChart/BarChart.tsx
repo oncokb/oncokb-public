@@ -22,15 +22,14 @@ export interface IBarChartProps {
   data: BarChartDatum[];
   width?: number;
   height?: number;
-  filters?: string[];
-  windowStore?: WindowStore;
+  filters: string[];
+  windowStore: WindowStore;
   onUserSelection?: (filters: string[]) => void;
 }
 
 // const VICTORY_THEME = generateTheme();
 const TILT_ANGLE = 90;
 
-@inject('windowStore')
 @observer
 export default class BarChart extends React.Component<IBarChartProps, {}> {
   @observable.ref
@@ -123,13 +122,13 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
           <VictoryChart
             containerComponent={
               <VictorySelectionContainer
-                // containerRef={(ref: any) => this.svgContainer = ref}
                 selectionDimension="x"
                 onSelection={(points: any, bounds: any, props: any) => {
                   if (this.props.onUserSelection) {
                     const filters = _.uniq(
                       _.flatten(points.map((point: any) => point.data.map((dataPoint: any) => dataPoint.xName)))
-                    ) as string[];
+                    );
+                    // @ts-ignore
                     this.props.onUserSelection(filters);
                   }
                 }}
@@ -179,7 +178,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
               style={{
                 data: {
                   fill: (d: BarChartDatum) =>
-                    this.isDataBinSelected(d, this.props.filters!) || this.props.filters!.length === 0 ? COLOR_BLUE : COLOR_GREY
+                    this.isDataBinSelected(d, this.props.filters) || this.props.filters.length === 0 ? COLOR_BLUE : COLOR_GREY
                 }
               }}
               data={this.props.data}
@@ -190,7 +189,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
         {ReactDOM.createPortal(
           <BarChartToolTip
             mousePosition={this.mousePosition}
-            windowWidth={this.props.windowStore!.size.width}
+            windowWidth={this.props.windowStore.size.width}
             content={this.toolTipModel ? this.toolTipModel : ''}
             totalBars={this.props.data.length}
             currentBarIndex={this.currentBarIndex}
