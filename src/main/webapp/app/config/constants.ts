@@ -235,7 +235,8 @@ export enum PAGE_ROUTE {
   REGISTER = '/account/register',
   ACCOUNT_ACTIVATE = '/account/activate',
   ACCOUNT_SETTINGS = '/account/settings',
-  ACCOUNT_PASSWORD_RESET = '/account/reset'
+  ACCOUNT_PASSWORD_RESET_REQUEST = '/account/reset/request',
+  ACCOUNT_PASSWORD_RESET_FINISH = '/account/reset/finish:key'
 }
 
 export enum TABLE_COLUMN_KEY {
@@ -294,4 +295,9 @@ export enum ACCOUNT_TITLES {
   COUNTRY = 'Country',
   API_TOKEN = 'API Token',
   LICENSE_TYPE = 'License'
+}
+
+export enum API_CALL_STATUS {
+  SUCCESSFUL,
+  FAILURE
 }

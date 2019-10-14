@@ -24,6 +24,7 @@ import AlterationPage from 'app/pages/alterationPage/AlterationPage';
 import { DataAccessPage } from './pages/DataAccessPage';
 import { AccountPage } from 'app/pages/AccountPage';
 import ActivateAccount from 'app/components/account/ActivateAccount';
+import { PasswordResetInit } from 'app/components/account/PasswordResetInit';
 
 const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/pages/menus/account.tsx'),
@@ -50,7 +51,9 @@ const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: Ro
       <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage} />
       <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
       <Route exact path={PAGE_ROUTE.LEVELS} component={LevelOfEvidencePage} />
-      <Route exact path={PAGE_ROUTE.ACCOUNT_ACTIVATE} component={ActivateAccount} />
+      <ErrorBoundaryRoute exact path={PAGE_ROUTE.ACCOUNT_ACTIVATE} component={ActivateAccount} />
+      <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST} component={PasswordResetInit} />
+      {/*<ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH} component={PasswordResetFinish} />*/}
       <PrivateRoute
         path={PAGE_ROUTE.ACCOUNT}
         authenticationStore={props.authenticationStore}

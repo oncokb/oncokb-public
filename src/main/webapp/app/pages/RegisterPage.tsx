@@ -12,6 +12,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import { LicenseSelection } from 'app/components/licenseSelection/LicenseSelection';
 import { ACCOUNT_TITLES, LicenseType, PAGE_ROUTE } from 'app/config/constants';
 import { getAccountInfoTitle, getSectionClassName } from './account/AccountUtils';
+import SmallPageContainer from 'app/components/SmallComponentContainer';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -151,168 +152,166 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     }
 
     return (
-      <Row className="justify-content-center">
-        <Col lg="6">
-          {this.registerStatus === RegisterStatus.NOT_SUCCESS ? (
-            <div>
-              <Alert color="danger">{this.errorRegisterMessage}</Alert>
-            </div>
+      <SmallPageContainer>
+        {this.registerStatus === RegisterStatus.NOT_SUCCESS ? (
+          <div>
+            <Alert color="danger">{this.errorRegisterMessage}</Alert>
+          </div>
+        ) : null}
+        <AvForm id="register-form" onValidSubmit={this.handleValidSubmit}>
+          <Row className={getSectionClassName(true)}>
+            <Col md='3'>
+              <h5>Choose License</h5>
+            </Col>
+            <Col md="9">
+              <LicenseSelection onSelectLicense={this.onSelectLicense}/>
+            </Col>
+          </Row>
+          {this.selectedLicense ? (
+            <>
+              <Row className={getSectionClassName()}>
+                <Col md="9" className={'ml-auto'}>
+                  {this.getLicenseAdditionalInfo(this.selectedLicense)}
+                </Col>
+              </Row>
+              <Row className={getSectionClassName()}>
+                <Col md='3'>
+                  <h5>Account</h5>
+                </Col>
+                <Col md="9">
+                  <AvField
+                    name="username"
+                    label={getAccountInfoTitle(ACCOUNT_TITLES.USER_NAME, this.selectedLicense)}
+                    validate={{
+                      required: { value: true, errorMessage: 'Your username is required.' },
+                      pattern: {
+                        value: '^[_.@A-Za-z0-9-]*$',
+                        errorMessage: 'Your username can only contain letters and digits.'
+                      },
+                      minLength: { value: 1, errorMessage: 'Your username is required to be at least 1 character.' },
+                      maxLength: { value: 50, errorMessage: 'Your username cannot be longer than 50 characters.' }
+                    }}
+                  />
+                  <AvField
+                    name="firstName"
+                    label={getAccountInfoTitle(ACCOUNT_TITLES.FIRST_NAME, this.selectedLicense)}
+                    validate={{
+                      required: { value: true, errorMessage: 'Your first name is required.' },
+                      minLength: { value: 1, errorMessage: 'Your first can not be empty' }
+                    }}
+                  />
+                  <AvField
+                    name="lastName"
+                    label={getAccountInfoTitle(ACCOUNT_TITLES.LAST_NAME, this.selectedLicense)}
+                    validate={{
+                      required: { value: true, errorMessage: 'Your last name is required.' },
+                      minLength: { value: 1, errorMessage: 'Your last name can not be empty' }
+                    }}
+                  />
+                  <AvField
+                    name="email"
+                    label={getAccountInfoTitle(ACCOUNT_TITLES.EMAIL, this.selectedLicense)}
+                    type="email"
+                    validate={{
+                      required: { value: true, errorMessage: 'Your email is required.' },
+                      minLength: { value: 5, errorMessage: 'Your email is required to be at least 5 characters.' },
+                      maxLength: { value: 254, errorMessage: 'Your email cannot be longer than 50 characters.' }
+                    }}
+                  />
+                  <AvField
+                    name="firstPassword"
+                    label="New password"
+                    placeholder={'New password'}
+                    type="password"
+                    onChange={this.updatePassword}
+                    validate={{
+                      required: { value: true, errorMessage: 'Your password is required.' },
+                      minLength: { value: 4, errorMessage: 'Your password is required to be at least 4 characters.' },
+                      maxLength: { value: 50, errorMessage: 'Your password cannot be longer than 50 characters.' }
+                    }}
+                  />
+                  <PasswordStrengthBar password={this.password}/>
+                  <AvField
+                    name="secondPassword"
+                    label="New password confirmation"
+                    placeholder="Confirm the new password"
+                    type="password"
+                    validate={{
+                      required: { value: true, errorMessage: 'Your confirmation password is required.' },
+                      minLength: {
+                        value: 4,
+                        errorMessage: 'Your confirmation password is required to be at least 4 characters.'
+                      },
+                      maxLength: {
+                        value: 50,
+                        errorMessage: 'Your confirmation password cannot be longer than 50 characters.'
+                      },
+                      match: {
+                        value: 'firstPassword',
+                        errorMessage: 'The password and its confirmation do not match!'
+                      }
+                    }}
+                  />
+                </Col>
+              </Row>
+              <Row className={getSectionClassName()}>
+                <Col md='3'>
+                  <h5>Company</h5>
+                </Col>
+                <Col md="9">
+                  {/* Job Title */}
+                  <AvField
+                    name="jobTitle"
+                    label={getAccountInfoTitle(ACCOUNT_TITLES.POSITION, this.selectedLicense)}
+                    validate={{
+                      required: { value: true, errorMessage: 'Required.' },
+                      minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
+                      maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
+                    }}
+                  />
+                  {/* Company */}
+                  <AvField
+                    name="company"
+                    label={getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.selectedLicense)}
+                    validate={{
+                      required: { value: true, errorMessage: 'Required.' },
+                      minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
+                      maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
+                    }}
+                  />
+                  {/* City */}
+                  <AvField
+                    name="city"
+                    label={getAccountInfoTitle(ACCOUNT_TITLES.CITY, this.selectedLicense)}
+                    validate={{
+                      required: { value: true, errorMessage: 'Required.' },
+                      minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
+                      maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
+                    }}
+                  />
+                  {/* Country */}
+                  <AvField
+                    name="country"
+                    label={getAccountInfoTitle(ACCOUNT_TITLES.COUNTRY, this.selectedLicense)}
+                    validate={{
+                      required: { value: true, errorMessage: 'Required.' },
+                      minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
+                      maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
+                    }}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col md={9} className={'ml-auto'}>
+                  <Button id="register-submit" color="primary" type="submit">
+                    Register
+                  </Button>
+                </Col>
+              </Row>
+            </>
           ) : null}
-          <AvForm id="register-form" onValidSubmit={this.handleValidSubmit}>
-            <Row className={getSectionClassName(true)}>
-              <Col md='3'>
-                <h5>Choose License</h5>
-              </Col>
-              <Col md="9">
-                <LicenseSelection onSelectLicense={this.onSelectLicense}/>
-              </Col>
-            </Row>
-            {this.selectedLicense ? (
-              <>
-                <Row className={getSectionClassName()}>
-                  <Col md="9" className={'ml-auto'}>
-                    {this.getLicenseAdditionalInfo(this.selectedLicense)}
-                  </Col>
-                </Row>
-                <Row className={getSectionClassName()}>
-                  <Col md='3'>
-                    <h5>Account</h5>
-                  </Col>
-                  <Col md="9">
-                    <AvField
-                      name="username"
-                      label={getAccountInfoTitle(ACCOUNT_TITLES.USER_NAME, this.selectedLicense)}
-                      validate={{
-                        required: { value: true, errorMessage: 'Your username is required.' },
-                        pattern: {
-                          value: '^[_.@A-Za-z0-9-]*$',
-                          errorMessage: 'Your username can only contain letters and digits.'
-                        },
-                        minLength: { value: 1, errorMessage: 'Your username is required to be at least 1 character.' },
-                        maxLength: { value: 50, errorMessage: 'Your username cannot be longer than 50 characters.' }
-                      }}
-                    />
-                    <AvField
-                      name="firstName"
-                      label={getAccountInfoTitle(ACCOUNT_TITLES.FIRST_NAME, this.selectedLicense)}
-                      validate={{
-                        required: { value: true, errorMessage: 'Your first name is required.' },
-                        minLength: { value: 1, errorMessage: 'Your first can not be empty' }
-                      }}
-                    />
-                    <AvField
-                      name="lastName"
-                      label={getAccountInfoTitle(ACCOUNT_TITLES.LAST_NAME, this.selectedLicense)}
-                      validate={{
-                        required: { value: true, errorMessage: 'Your last name is required.' },
-                        minLength: { value: 1, errorMessage: 'Your last name can not be empty' }
-                      }}
-                    />
-                    <AvField
-                      name="email"
-                      label={getAccountInfoTitle(ACCOUNT_TITLES.EMAIL, this.selectedLicense)}
-                      type="email"
-                      validate={{
-                        required: { value: true, errorMessage: 'Your email is required.' },
-                        minLength: { value: 5, errorMessage: 'Your email is required to be at least 5 characters.' },
-                        maxLength: { value: 254, errorMessage: 'Your email cannot be longer than 50 characters.' }
-                      }}
-                    />
-                    <AvField
-                      name="firstPassword"
-                      label="New password"
-                      placeholder={'New password'}
-                      type="password"
-                      onChange={this.updatePassword}
-                      validate={{
-                        required: { value: true, errorMessage: 'Your password is required.' },
-                        minLength: { value: 4, errorMessage: 'Your password is required to be at least 4 characters.' },
-                        maxLength: { value: 50, errorMessage: 'Your password cannot be longer than 50 characters.' }
-                      }}
-                    />
-                    <PasswordStrengthBar password={this.password}/>
-                    <AvField
-                      name="secondPassword"
-                      label="New password confirmation"
-                      placeholder="Confirm the new password"
-                      type="password"
-                      validate={{
-                        required: { value: true, errorMessage: 'Your confirmation password is required.' },
-                        minLength: {
-                          value: 4,
-                          errorMessage: 'Your confirmation password is required to be at least 4 characters.'
-                        },
-                        maxLength: {
-                          value: 50,
-                          errorMessage: 'Your confirmation password cannot be longer than 50 characters.'
-                        },
-                        match: {
-                          value: 'firstPassword',
-                          errorMessage: 'The password and its confirmation do not match!'
-                        }
-                      }}
-                    />
-                  </Col>
-                </Row>
-                <Row className={getSectionClassName()}>
-                  <Col md='3'>
-                    <h5>Company</h5>
-                  </Col>
-                  <Col md="9">
-                    {/* Job Title */}
-                    <AvField
-                      name="jobTitle"
-                      label={getAccountInfoTitle(ACCOUNT_TITLES.POSITION, this.selectedLicense)}
-                      validate={{
-                        required: { value: true, errorMessage: 'Required.' },
-                        minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
-                        maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
-                      }}
-                    />
-                    {/* Company */}
-                    <AvField
-                      name="company"
-                      label={getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.selectedLicense)}
-                      validate={{
-                        required: { value: true, errorMessage: 'Required.' },
-                        minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
-                        maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
-                      }}
-                    />
-                    {/* City */}
-                    <AvField
-                      name="city"
-                      label={getAccountInfoTitle(ACCOUNT_TITLES.CITY, this.selectedLicense)}
-                      validate={{
-                        required: { value: true, errorMessage: 'Required.' },
-                        minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
-                        maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
-                      }}
-                    />
-                    {/* Country */}
-                    <AvField
-                      name="country"
-                      label={getAccountInfoTitle(ACCOUNT_TITLES.COUNTRY, this.selectedLicense)}
-                      validate={{
-                        required: { value: true, errorMessage: 'Required.' },
-                        minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
-                        maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
-                      }}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={9} className={'ml-auto'}>
-                    <Button id="register-submit" color="primary" type="submit">
-                      Register
-                    </Button>
-                  </Col>
-                </Row>
-              </>
-            ) : null}
-          </AvForm>
-        </Col>
-      </Row>
+        </AvForm>
+      </SmallPageContainer>
     );
   }
 }

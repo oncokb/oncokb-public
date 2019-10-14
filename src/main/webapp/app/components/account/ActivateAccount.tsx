@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { PAGE_ROUTE } from 'app/config/constants';
 import { inject, observer } from 'mobx-react';
 import { Col, Row } from 'react-bootstrap';
+import SmallPageContainer from '../SmallComponentContainer';
 
 @inject('routing')
 @observer
@@ -41,7 +42,7 @@ export default class ActivateAccount extends React.Component<{
   getSuccessfulMessage = () => {
     return (
       <div style={{ color: 'success' }}>
-        <strong>Your user account has been activated.</strong> Please
+        <strong>Your user account has been activated.</strong> Please{' '}
         <Link to={PAGE_ROUTE.LOGIN}>
           sign in
         </Link>
@@ -62,13 +63,11 @@ export default class ActivateAccount extends React.Component<{
 
   render() {
     return (
-      <Row className="justify-content-center">
-        <Col lg="6">
+      <SmallPageContainer>
         {this.activateAccount.isPending ? <LoadingIndicator isLoading={true}/> : null}
         {this.activateAccount.isComplete ? this.getSuccessfulMessage() : null}
         {this.activateAccount.isError ? this.getFailureMessage() : null}
-        </Col>
-      </Row>
+      </SmallPageContainer>
     );
   }
 };
