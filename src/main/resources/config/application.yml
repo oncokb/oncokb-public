@@ -134,7 +134,7 @@ jhipster:
     from: oncokb@localhost
   swagger:
     default-include-pattern: /api/.*
-    title: oncokb API
+    title: OncoKB API
     description: oncokb API documentation
     version: 0.0.1
     terms-of-service-url:

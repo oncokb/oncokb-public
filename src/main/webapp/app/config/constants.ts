@@ -233,6 +233,7 @@ export enum PAGE_ROUTE {
   LEVELS = '/levels',
   ACCOUNT = '/account',
   REGISTER = '/account/register',
+  ACCOUNT_ACTIVATE = '/account/activate',
   ACCOUNT_SETTINGS = '/account/settings',
   ACCOUNT_PASSWORD_RESET = '/account/reset'
 }
