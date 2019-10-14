@@ -33,7 +33,7 @@ export class PasswordResetInit extends React.Component<{}> {
       <SmallPageContainer>
         <h1>Reset your password</h1>
         <Alert variant={'warning'}>
-          <p>Enter the email address you used to register</p>
+          <span>Enter the email address you used to register</span>
         </Alert>
         {this.resetStatus === API_CALL_STATUS.SUCCESSFUL ? (
           <Alert variant='success'>
