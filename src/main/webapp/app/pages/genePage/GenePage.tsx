@@ -33,6 +33,7 @@ import { TrackName } from 'react-mutation-mapper';
 import { MskimpactLink } from 'app/components/MskimpactLink';
 import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import { CitationTooltip } from 'app/components/CitationTooltip';
+import WindowStore from 'app/store/WindowStore';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -192,9 +193,9 @@ const GeneBackground: React.FunctionComponent<{
   );
 };
 
-@inject('appStore')
+@inject('appStore', 'windowStore')
 @observer
-export default class GenePage extends React.Component<{ appStore: AppStore }, {}> {
+export default class GenePage extends React.Component<{ appStore: AppStore, windowStore: WindowStore }, {}> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground = false;
 
@@ -440,6 +441,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore }, {}
                     data={this.store.barChartData}
                     height={300}
                     filters={this.store.selectedCancerTypes}
+                    windowStore={this.props.windowStore}
                     onUserSelection={filters => (this.store.selectedCancerTypes = filters)}
                   />
                 </Col>
