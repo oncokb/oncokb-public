@@ -100,12 +100,29 @@ public class TokenProvider implements InitializingBean {
         return token;
     }
 
-    public UUID createToken(Authentication authentication) {
+    public UUID createToken() {
         Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
         Token token = getNewToken(userOptional.get().getAuthorities());
         token.setUser(userOptional.get());
         tokenService.save(token);
         return token.getToken();
+    }
+
+    public UUID updateToken() {
+        Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
+        if (userOptional.isPresent()) {
+            List<Token> tokenList = tokenService.findByUser(userOptional.get());
+            tokenList.forEach(token -> {
+                // Invalid all tokens
+                if (token.getExpiration().isAfter(Instant.now())) {
+                    token.setExpiration(Instant.now());
+                    tokenService.save(token);
+                }
+            });
+            return createToken();
+        } else {
+            return null;
+        }
     }
 
     // This method is used in the frontend thymeleaf parsing

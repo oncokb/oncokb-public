@@ -59,6 +59,22 @@ class AuthenticationStore {
     default: undefined
   });
 
+  @autobind
+  @action
+  generateIdToken() {
+    return new Promise((resolve, reject) => {
+      client
+        .changeTokenUsingPOST({})
+        .then((newToken: string) => {
+          this.updateIdToken(newToken);
+          resolve(this.idToken);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
   @computed
   get isUserAuthenticated() {
     return (
@@ -87,14 +103,19 @@ class AuthenticationStore {
   @action.bound
   loginSuccessCallback(result: string) {
     const uuid = result;
-    if (this.rememberMe) {
-      Storage.local.set(AUTH_UER_TOKEN_KEY, uuid);
-    } else {
-      Storage.session.set(AUTH_UER_TOKEN_KEY, uuid);
-    }
-    this.idToken = uuid;
+    this.updateIdToken(uuid);
     this.loginSuccess = true;
     this.loading = false;
+  }
+
+  @action
+  updateIdToken(newToken: string) {
+    if (this.rememberMe) {
+      Storage.local.set(AUTH_UER_TOKEN_KEY, newToken);
+    } else {
+      Storage.session.set(AUTH_UER_TOKEN_KEY, newToken);
+    }
+    this.idToken = newToken;
   }
 
   @action.bound
