@@ -9,6 +9,7 @@ import client from 'app/shared/api/clientInstance';
 import { ACCOUNT_TITLES, LicenseType, PAGE_ROUTE } from 'app/config/constants';
 import { getAccountInfoTitle, getLicenseTitle, getSectionClassName } from 'app/pages/account/AccountUtils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import classnames from 'classnames';
 
 
 export type IRegisterProps = {
@@ -112,9 +113,9 @@ export class AccountPage extends React.Component<IRegisterProps> {
                 <div>
                   <span>{this.props.authenticationStore.idToken}</span>
                   <DefaultTooltip
-                    overlay={'Get a new token'}
+                    overlay={this.enableRegenerateToken ? 'Get a new token' : 'You cannot regenerate the token at the moment, please try again later.'}
                   >
-                    <i className='fa fa-refresh ml-2'
+                    <i className={classnames('fa fa-refresh ml-2', this.enableRegenerateToken ? '' : 'disabled')}
                        onClick={this.regenerateToken}
                     ></i>
                   </DefaultTooltip>
