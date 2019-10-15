@@ -57,7 +57,7 @@ public class UserUUIDController {
             uuid = tokenList.iterator().next().getToken();
         } else {
 
-            uuid = tokenProvider.createToken(authentication);
+            uuid = tokenProvider.createToken();
         }
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(UUIDFilter.AUTHORIZATION_HEADER, "Bearer " + uuid);
