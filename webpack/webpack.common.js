@@ -46,7 +46,9 @@ module.exports = options => ({
       '.js', '.jsx', '.ts', '.tsx', '.json'
     ],
     modules: ['node_modules'],
-    alias: utils.mapTypescriptAliasToWebpackAlias()
+    alias: utils.mapTypescriptAliasToWebpackAlias({
+      'react-dom': '@hot-loader/react-dom'
+    })
   },
   module: {
     rules: [
@@ -118,6 +120,7 @@ module.exports = options => ({
       { from: './src/main/webapp//swagger-ui/', to: 'swagger-ui' },
       { from: './src/main/webapp/content/', to: 'content' },
       { from: './src/main/webapp/app/resources/images/favicon/favicon.ico', to: 'favicon.ico' },
+      { from: './src/main/webapp/app/resources/images/oncokb.png', to: 'content' },
       { from: './src/main/webapp/manifest.webapp', to: 'manifest.webapp' },
       // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
       { from: './src/main/webapp/robots.txt', to: 'robots.txt' }

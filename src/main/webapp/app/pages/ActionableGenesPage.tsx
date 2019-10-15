@@ -25,7 +25,7 @@ import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
-import { LEVELS, LG_TABLE_FIXED_HEIGHT, TABLE_COLUMN_KEY } from 'app/config/constants';
+import { LEVEL_BUTTON_DESCRIPTION, LEVELS, LG_TABLE_FIXED_HEIGHT, TABLE_COLUMN_KEY } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import * as QueryString from 'query-string';
@@ -429,6 +429,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                   <LevelButton
                     level={level}
                     numOfGenes={this.levelNumbers[level]}
+                    description={LEVEL_BUTTON_DESCRIPTION[level]}
                     active={this.levelSelected[level]}
                     className="mb-2"
                     disabled={this.levelNumbers[level] === 0}

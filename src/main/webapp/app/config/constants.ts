@@ -301,3 +301,29 @@ export enum API_CALL_STATUS {
   SUCCESSFUL,
   FAILURE
 }
+
+export enum TERM_DEFINITION {
+  IS_ACADEMIC_GROUP = 'IS_ACADEMIC_GROUP',
+  ONLY_ACADEMIC_USAGE = 'ONLY_ACADEMIC_USAGE',
+  NO_COMPANY_USAGE = 'NO_COMPANY_USAGE',
+  OK_WITH_TERMS_OF_USE = 'OK_WITH_TERMS_OF_USE'
+}
+
+export const ACADEMIC_TERMS = [
+  {
+    key: TERM_DEFINITION.IS_ACADEMIC_GROUP,
+    description: 'I confirm that I am a student or employee at the academic institution specified above.'
+  },
+  {
+    key: TERM_DEFINITION.ONLY_ACADEMIC_USAGE,
+    description: 'I agree that my use of OncoKB is solely for research or educational purposes.'
+  },
+  {
+    key: TERM_DEFINITION.NO_COMPANY_USAGE,
+    description: 'I confirm that I will NOT use OncoKB data for use in medical reports or in an electronic health care system.'
+  },
+  {
+    key: TERM_DEFINITION.OK_WITH_TERMS_OF_USE,
+    description: 'I have read and agree with the OncoKB Terms of Use.'
+  }
+];

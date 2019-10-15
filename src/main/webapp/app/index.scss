@@ -130,25 +130,36 @@ body,
   img {
     width: 100%;
   }
+}
 
-  //.table {
-  //  margin-bottom: 0;
-  //  ul {
-  //    padding-left: 17px;
-  //    list-style: none;
-  //  }
-  //  li {
-  //    margin-bottom: 0;
-  //  }
-  //  li:before {
-  //    font-size: 12px;
-  //  }
-  //}
-  //
-  //.table.heme-table {
-  //  th, td {
-  //    vertical-align: middle;
-  //    text-align: center;
-  //  }
-  //}
+.registerPage {
+  .form-check {
+    padding-left: 0;
+  }
+
+  fieldset.form-group {
+    margin-bottom: 0;
+  }
+}
+
+input[type='checkbox'] {
+  display: none;
+} /* to hide the checkbox itself */
+input[type='checkbox'] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+}
+
+input[type='checkbox'] + label:before {
+  content: '\f10c';
+} /* unchecked icon */
+input[type='checkbox'] + label:before {
+  letter-spacing: 10px;
+} /* space between checkbox and label */
+
+input[type='checkbox']:checked + label:before {
+  content: '\f058';
+} /* checked icon */
+input[type='checkbox']:checked + label:before {
+  letter-spacing: 10px;
 }
