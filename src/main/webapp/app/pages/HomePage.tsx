@@ -3,13 +3,13 @@ import { observable, action } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { remoteData } from 'cbioportal-frontend-commons';
 import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
-import { LevelNumber, TypeaheadSearchResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { Gene, LevelNumber, TypeaheadSearchResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import autobind from 'autobind-decorator';
 import { Row, Col } from 'react-bootstrap';
 import oncokbImg from '../resources/images/oncokb.png';
 import { HomePageNumber } from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
-import { LEVELS, PAGE_ROUTE } from 'app/config/constants';
+import { LEVEL_BUTTON_DESCRIPTION, LEVELS, PAGE_ROUTE } from 'app/config/constants';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
 import { getAllAlterationsName, getAllTumorTypesName, levelOfEvidence2Level } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
@@ -37,6 +37,46 @@ export type ExtendedTypeaheadSearchResp = TypeaheadSearchResp & {
 class HomePage extends React.Component<IHomeProps> {
   @observable keyword = '';
 
+  private levelGadgets: {
+    title?: string,
+    description: string,
+    level: string,
+    linkoutLevel: string,
+    combinedLevels: string[]
+  }[] = [
+    {
+      level: '1',
+      description: LEVEL_BUTTON_DESCRIPTION['1'],
+      linkoutLevel: '1',
+      combinedLevels: ['1']
+    },
+    {
+      level: '2',
+      description: LEVEL_BUTTON_DESCRIPTION['2'],
+      linkoutLevel: '2',
+      combinedLevels: ['2']
+    },
+    {
+      level: '3',
+      description: LEVEL_BUTTON_DESCRIPTION['3'],
+      linkoutLevel: '3',
+      combinedLevels: ['3']
+    },
+    {
+      level: '4',
+      description: LEVEL_BUTTON_DESCRIPTION['4'],
+      linkoutLevel: '4',
+      combinedLevels: ['4']
+    },
+    {
+      level: 'R1',
+      description: 'Resistance',
+      title: 'Level R1/R2',
+      linkoutLevel: 'R1,R2',
+      combinedLevels: ['R1', 'R2']
+    }
+  ];
+
   readonly levelNumbers = remoteData<{ [level: string]: LevelNumber }>({
     await: () => [],
     async invoke() {
@@ -55,12 +95,11 @@ class HomePage extends React.Component<IHomeProps> {
     default: {}
   });
 
-  levelOnClick(level: string) {
-    this.props.routing.history.push(`/actionableGenes#level=${level}`);
-  }
-
-  getLevelNumber(level: string) {
-    return this.levelNumbers.result[level] ? this.levelNumbers.result[level].genes.length : 0;
+  getLevelNumber(levels: string[]) {
+    return _.uniq(_.reduce(levels, (acc, level) => {
+      acc.push(...(this.levelNumbers.result[level] ? this.levelNumbers.result[level].genes : []));
+      return acc;
+    }, [] as Gene[])).length;
   }
 
   // https://github.com/JedWatson/react-select/issues/614#issuecomment-244006496
@@ -202,16 +241,20 @@ class HomePage extends React.Component<IHomeProps> {
           </Col>
         </Row>
         <Row className="mb-5">
-          {LEVELS.map(level => (
-            <Col xs={12} sm={6} lg={2} key={level}>
+          <Col xs={0} lg={1}></Col>
+          {this.levelGadgets.map(levelGadget => (
+            <Col xs={12} sm={6} lg={2} key={levelGadget.level} className='px-0'>
               <LevelButton
-                level={level}
-                numOfGenes={this.getLevelNumber(level)}
+                level={levelGadget.level}
+                numOfGenes={this.getLevelNumber(levelGadget.combinedLevels)}
+                description={levelGadget.description}
+                title={levelGadget.title}
                 className="mb-2"
-                href={`/actionableGenes#levels=${level}`}
+                href={`/actionableGenes#levels=${levelGadget.linkoutLevel}`}
               />
             </Col>
           ))}
+          <Col xs={0} lg={1}></Col>
         </Row>
         <Row className="mb-3">
           <Col className={'d-flex justify-content-center'}>

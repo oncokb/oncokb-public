@@ -1,18 +1,18 @@
 import React from 'react';
-import { AvField, AvForm } from 'availity-reactstrap-validation';
-import { Alert, Button, Col, Row } from 'reactstrap';
+import { AvField, AvForm, AvCheckboxGroup, AvCheckbox} from 'availity-reactstrap-validation';
+import { Alert, Button, Col, Row, Label } from 'reactstrap';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 import { inject, observer } from 'mobx-react';
-import { action, observable, computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import { Link, Redirect } from 'react-router-dom';
 import client from 'app/shared/api/clientInstance';
 import { ManagedUserVM } from 'app/shared/api/generated/API';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import { LicenseSelection } from 'app/components/licenseSelection/LicenseSelection';
-import { ACCOUNT_TITLES, LicenseType, PAGE_ROUTE } from 'app/config/constants';
+import { ACADEMIC_TERMS, ACCOUNT_TITLES, LICENSE_TYPES, LicenseType, PAGE_ROUTE } from 'app/config/constants';
 import { getAccountInfoTitle, getSectionClassName } from './account/AccountUtils';
 import SmallPageContainer from 'app/components/SmallComponentContainer';
+import Form from 'react-bootstrap/Form';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -48,7 +48,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   @action
   handleValidSubmit(event: any, values: any) {
     this.newAccount = {
-      login: values.username,
+      login: values.email,
       password: values.firstPassword,
       firstName: values.firstName,
       lastName: values.lastName,
@@ -152,7 +152,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     }
 
     return (
-      <SmallPageContainer>
+      <SmallPageContainer className={'registerPage'}>
         {this.registerStatus === RegisterStatus.NOT_SUCCESS ? (
           <div>
             <Alert color="danger">{this.errorRegisterMessage}</Alert>
@@ -160,11 +160,29 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         ) : null}
         <AvForm id="register-form" onValidSubmit={this.handleValidSubmit}>
           <Row className={getSectionClassName(true)}>
+            <Col>
+              <b>OncoKB data is freely accessible for research use in the academic setting. To support the future development and maintenance of OncoKB, we have introduced license fees for clinical and commercial use. See our <Link to={PAGE_ROUTE.TERMS}>usage terms</Link> for further information.</b>
+            </Col>
+          </Row>
+          <Row className={getSectionClassName(false)}>
             <Col md='3'>
               <h5>Choose License</h5>
             </Col>
             <Col md="9">
-              <LicenseSelection onSelectLicense={this.onSelectLicense}/>
+              {LICENSE_TYPES.map((license, index) => (
+                <div className='primary'
+                     key={license.key}
+                     onClick={() => this.onSelectLicense(license.key)}
+                >
+                  <Form.Check
+                    className={'px-0'}
+                    type="checkbox"
+                    label={license.title}
+                    readOnly
+                    checked={this.selectedLicense === license.key}
+                  />
+                </div>
+              ))}
             </Col>
           </Row>
           {this.selectedLicense ? (
@@ -180,35 +198,6 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 </Col>
                 <Col md="9">
                   <AvField
-                    name="username"
-                    label={getAccountInfoTitle(ACCOUNT_TITLES.USER_NAME, this.selectedLicense)}
-                    validate={{
-                      required: { value: true, errorMessage: 'Your username is required.' },
-                      pattern: {
-                        value: '^[_.@A-Za-z0-9-]*$',
-                        errorMessage: 'Your username can only contain letters and digits.'
-                      },
-                      minLength: { value: 1, errorMessage: 'Your username is required to be at least 1 character.' },
-                      maxLength: { value: 50, errorMessage: 'Your username cannot be longer than 50 characters.' }
-                    }}
-                  />
-                  <AvField
-                    name="firstName"
-                    label={getAccountInfoTitle(ACCOUNT_TITLES.FIRST_NAME, this.selectedLicense)}
-                    validate={{
-                      required: { value: true, errorMessage: 'Your first name is required.' },
-                      minLength: { value: 1, errorMessage: 'Your first can not be empty' }
-                    }}
-                  />
-                  <AvField
-                    name="lastName"
-                    label={getAccountInfoTitle(ACCOUNT_TITLES.LAST_NAME, this.selectedLicense)}
-                    validate={{
-                      required: { value: true, errorMessage: 'Your last name is required.' },
-                      minLength: { value: 1, errorMessage: 'Your last name can not be empty' }
-                    }}
-                  />
-                  <AvField
                     name="email"
                     label={getAccountInfoTitle(ACCOUNT_TITLES.EMAIL, this.selectedLicense)}
                     type="email"
@@ -219,8 +208,27 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     }}
                   />
                   <AvField
+                    name="firstName"
+                    autoComplete='given-name'
+                    label={getAccountInfoTitle(ACCOUNT_TITLES.FIRST_NAME, this.selectedLicense)}
+                    validate={{
+                      required: { value: true, errorMessage: 'Your first name is required.' },
+                      minLength: { value: 1, errorMessage: 'Your first can not be empty' }
+                    }}
+                  />
+                  <AvField
+                    name="lastName"
+                    autoComplete='family-name'
+                    label={getAccountInfoTitle(ACCOUNT_TITLES.LAST_NAME, this.selectedLicense)}
+                    validate={{
+                      required: { value: true, errorMessage: 'Your last name is required.' },
+                      minLength: { value: 1, errorMessage: 'Your last name can not be empty' }
+                    }}
+                  />
+                  <AvField
                     name="firstPassword"
                     label="New password"
+                    autoComplete='new-password'
                     placeholder={'New password'}
                     type="password"
                     onChange={this.updatePassword}
@@ -234,6 +242,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                   <AvField
                     name="secondPassword"
                     label="New password confirmation"
+                    autoComplete='new-password'
                     placeholder="Confirm the new password"
                     type="password"
                     validate={{
@@ -256,7 +265,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
               </Row>
               <Row className={getSectionClassName()}>
                 <Col md='3'>
-                  <h5>Company</h5>
+                  <h5>{getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.selectedLicense)}</h5>
                 </Col>
                 <Col md="9">
                   {/* Job Title */}
@@ -300,6 +309,31 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     }}
                   />
                 </Col>
+              </Row>
+              {this.selectedLicense === LicenseType.ACADEMIC ? (
+                <>
+                  <Row className={getSectionClassName()}>
+                    <Col md='9' className={'ml-auto'}>
+                      In order to be granted access to downloadable content and our API, please
+                      agree to the following terms:
+                    </Col>
+                  </Row>
+                  <Row className={getSectionClassName()}>
+                    <Col md='3'>
+                      <h5>Terms</h5>
+                    </Col>
+                    <Col md='9'>
+                      {ACADEMIC_TERMS.map(term => (
+                        <AvCheckboxGroup name={term.key} required key={term.key}
+                                         errorMessage={'You have to accept the term'}>
+                          <AvCheckbox label={term.description} value={term.key}/>
+                        </AvCheckboxGroup>
+                      ))}
+                    </Col>
+                  </Row>
+                </>
+              ) : null}
+              <Row>
               </Row>
               <Row>
                 <Col md={9} className={'ml-auto'}>

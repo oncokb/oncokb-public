@@ -5,6 +5,8 @@ import { AvForm, AvField, AvGroup, AvInput } from 'availity-reactstrap-validatio
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import SmallPageContainer from '../SmallComponentContainer';
+import { getAccountInfoTitle } from 'app/pages/account/AccountUtils';
+import { ACCOUNT_TITLES } from 'app/config/constants';
 
 export interface ILoginModalProps {
   loginError: boolean;
@@ -34,11 +36,12 @@ class LoginContent extends React.Component<ILoginModalProps> {
             </Col>
             <Col md="12">
               <AvField
-                name="username"
-                label="Username"
-                placeholder="Your username"
+                name="email"
+                label='Email'
+                placeholder="Your email address"
+                type="email"
                 required
-                errorMessage="Username cannot be empty!"
+                errorMessage="Email cannot be empty!"
                 autoFocus
               />
               <AvField

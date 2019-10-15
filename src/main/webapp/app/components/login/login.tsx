@@ -11,7 +11,7 @@ export interface ILoginProps {
   routing: RouterStore;
 }
 
-const Login = inject('authenticationStore', 'routing')((props: ILoginProps) => {
+const Login = inject('authenticationStore', 'routing')(observer((props: ILoginProps) => {
   const handleLogin = (username: string, password: string, rememberMe = false) => props.authenticationStore.login(username, password, rememberMe);
 
   const { from } = props.routing.location.state || { from: { pathname: '/', search: location.search } };
@@ -20,6 +20,6 @@ const Login = inject('authenticationStore', 'routing')((props: ILoginProps) => {
     return <Redirect to={from} />;
   }
   return <LoginContent handleLogin={handleLogin} loginError={props.authenticationStore.loginError} />;
-});
+}));
 
-export default observer(Login);
+export default Login;
