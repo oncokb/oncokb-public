@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,12 +29,13 @@ public class SecurityUtilsUnitTest {
     }
 
     @Test
-    public void testgetCurrentUserJWT() {
+    public void testgetCurrentUserToken() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "token"));
         SecurityContextHolder.setContext(securityContext);
-        Optional<String> jwt = SecurityUtils.getCurrentUserJWT();
-        assertThat(jwt).contains("token");
+        Optional<UUID> token = SecurityUtils.getCurrentUserToken();
+        assertThat(token).isNotEmpty();
+        assertThat(token.get().toString()).contains("token");
     }
 
     @Test

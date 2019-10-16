@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Utility class for Spring Security.
@@ -41,11 +42,11 @@ public final class SecurityUtils {
      *
      * @return the JWT of the current user.
      */
-    public static Optional<String> getCurrentUserJWT() {
+    public static Optional<UUID> getCurrentUserToken() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
-            .filter(authentication -> authentication.getCredentials() instanceof String)
-            .map(authentication -> (String) authentication.getCredentials());
+            .filter(authentication -> authentication.getCredentials() instanceof UUID)
+            .map(authentication -> (UUID) authentication.getCredentials());
     }
 
     /**

@@ -1,4 +1,6 @@
 node_modules
 target
 package-lock.json
+.yo-rc.json
 .git
+src/main/webapp/app/shared/api/generated

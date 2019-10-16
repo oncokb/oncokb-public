@@ -1,0 +1,30 @@
+@import '~oncokb-styles/scss/vars';
+
+$oncokb-font-font-size: 14px;
+
+/* Overwrite the bootstrap defaults */
+$font-family-sans-serif: 'Helvetica Neue', Helvetica, Verdana, Arial, sans-serif, serif;
+// color overwrite
+$blue: $oncokb-dark-blue;
+$orange: $oncokb-orange;
+$grey: #808080; // grey
+$light-grey: #d3d3d3; // light grey
+$primary: $blue;
+$secondary: $orange;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 980px,
+  xl: 1450px
+) !default;
+
+$container-max-widths: (
+  sm: 576px,
+  md: 768px,
+  lg: 980px,
+  xl: 1450px
+) !default;
+
+$view-wrapper-default-p-y: 2rem;

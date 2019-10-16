@@ -3,8 +3,15 @@ package org.mskcc.cbio.oncokb.config;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
+import org.mskcc.cbio.oncokb.domain.Token;
+import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.service.TokenService;
+import org.mskcc.cbio.oncokb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.*;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
@@ -18,10 +25,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.*;
+import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 
 import static java.net.URLDecoder.decode;
@@ -38,9 +47,16 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
 
     private final JHipsterProperties jHipsterProperties;
 
-    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties) {
+    private final TokenProvider tokenProvider;
+
+    public WebConfigurer(
+        Environment env,
+        JHipsterProperties jHipsterProperties,
+        TokenProvider tokenProvider
+    ) {
         this.env = env;
         this.jHipsterProperties = jHipsterProperties;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override

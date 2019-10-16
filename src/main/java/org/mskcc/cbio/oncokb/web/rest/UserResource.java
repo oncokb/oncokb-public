@@ -7,6 +7,7 @@ import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.LoginAlreadyUsedException;
@@ -17,6 +18,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -66,6 +68,9 @@ public class UserResource {
     private String applicationName;
 
     private final UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     private final UserRepository userRepository;
 
@@ -171,7 +176,7 @@ public class UserResource {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(
             userService.getUserWithAuthoritiesByLogin(login)
-                .map(UserDTO::new));
+                .map(user -> userMapper.userToUserDTO(user)));
     }
 
     /**
@@ -184,6 +189,7 @@ public class UserResource {
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
+        // TODO: token, token_stats, user_details need to be deleted in order to delete the user
         userService.deleteUser(login);
         return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName,  "A user is deleted with identifier " + login, login)).build();
     }

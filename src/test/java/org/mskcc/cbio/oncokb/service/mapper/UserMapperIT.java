@@ -3,6 +3,8 @@ package org.mskcc.cbio.oncokb.service.mapper;
 
 import org.mskcc.cbio.oncokb.OncokbApp;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +32,7 @@ public class UserMapperIT {
     private UserMapper userMapper;
 
     private User user;
+    private UserDetails userDetails;
     private UserDTO userDto;
 
     @BeforeEach
@@ -44,7 +47,14 @@ public class UserMapperIT {
         user.setImageUrl("image_url");
         user.setLangKey("en");
 
-        userDto = new UserDTO(user);
+        userDetails = new UserDetails();
+        userDetails.setLicenseType(LicenseType.ACADEMIC);
+        userDetails.setJobTitle("Engineer");
+        userDetails.setCompany("MSK");
+        userDetails.setCity("NYC");
+        userDetails.setCountry("USA");
+
+        userDto = new UserDTO(user, userDetails);
     }
 
     @Test

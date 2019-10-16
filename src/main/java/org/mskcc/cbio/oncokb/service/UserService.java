@@ -3,16 +3,20 @@ package org.mskcc.cbio.oncokb.service;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.service.util.RandomUtil;
-import org.mskcc.cbio.oncokb.web.rest.errors.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,14 +41,20 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final UserDetailsRepository userDetailsRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
 
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    @Autowired
+    private UserMapper userMapper;
+
+    public UserService(UserRepository userRepository, UserDetailsRepository userDetailsRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
         this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
@@ -91,7 +101,7 @@ public class UserService {
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
-                throw new LoginAlreadyUsedException();
+                throw new UsernameAlreadyUsedException();
             }
         });
         userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
@@ -109,7 +119,11 @@ public class UserService {
         newUser.setLastName(userDTO.getLastName());
         newUser.setEmail(userDTO.getEmail().toLowerCase());
         newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
+        if (userDTO.getLangKey() == null) {
+            newUser.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+        } else {
+            newUser.setLangKey(userDTO.getLangKey());
+        }
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
@@ -118,6 +132,16 @@ public class UserService {
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(newUser);
+        userDetails.setLicenseType(userDTO.getLicenseType());
+        userDetails.setJobTitle(userDTO.getJobTitle());
+        userDetails.setCompany(userDTO.getCompany());
+        userDetails.setCity(userDTO.getCity());
+        userDetails.setCountry(userDTO.getCountry());
+        userDetailsRepository.save(userDetails);
+
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -173,7 +197,18 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(
+        String firstName
+        , String lastName
+        , String email
+        , LicenseType licenseType
+        , String jobTitle
+        , String company
+        , String city
+        , String country
+        , String langKey
+        , String imageUrl
+    ) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -183,6 +218,8 @@ public class UserService {
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
                 this.clearUserCaches(user);
+
+                getUpdatedUserDetails(user, licenseType, jobTitle, company, city, country);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -216,9 +253,32 @@ public class UserService {
                     .forEach(managedAuthorities::add);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
-                return user;
-            })
-            .map(UserDTO::new);
+
+                return new UserDTO(user, getUpdatedUserDetails(
+                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
+            });
+    }
+
+    private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String company, String city, String country) {
+        Optional<UserDetails> userDetails= userDetailsRepository.findOneByUser(user);
+        if(userDetails.isPresent()) {
+            userDetails.get().setLicenseType(licenseType);
+            userDetails.get().setJobTitle(jobTitle);
+            userDetails.get().setCompany(company);
+            userDetails.get().setCity(city);
+            userDetails.get().setCountry(country);
+            return userDetails.get();
+        }else{
+            UserDetails newUserDetails = new UserDetails();
+            newUserDetails.setLicenseType(licenseType);
+            newUserDetails.setJobTitle(jobTitle);
+            newUserDetails.setCompany(company);
+            newUserDetails.setCity(city);
+            newUserDetails.setCountry(country);
+            newUserDetails.setUser(user);
+            userDetailsRepository.save(newUserDetails);
+            return newUserDetails;
+        }
     }
 
     public void deleteUser(String login) {
@@ -246,7 +306,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
+        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(user -> userMapper.userToUserDTO(user));
     }
 
     @Transactional(readOnly = true)
@@ -262,6 +322,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> getUserWithAuthoritiesByEmailIgnoreCase(String email) {
+        return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email);
     }
 
     /**

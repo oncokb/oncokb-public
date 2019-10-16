@@ -54,13 +54,13 @@ case "`uname`" in
   CYGWIN*) cygwin=true ;;
   MINGW*) mingw=true;;
   Darwin*) darwin=true
-    # Use /usr/libexec/java_home if available, otherwise fall back to /Library/Java/Home
+    # Use /usr/libexec/java_home if available, otherwise fall back to /Library/Java/HomePage
     # See https://developer.apple.com/library/mac/qa/qa1170/_index.html
     if [ -z "$JAVA_HOME" ]; then
       if [ -x "/usr/libexec/java_home" ]; then
         export JAVA_HOME="`/usr/libexec/java_home`"
       else
-        export JAVA_HOME="/Library/Java/Home"
+        export JAVA_HOME="/Library/Java/HomePage"
       fi
     fi
     ;;
@@ -212,9 +212,9 @@ else
       echo "Couldn't find .mvn/wrapper/maven-wrapper.jar, downloading it ..."
     fi
     if [ -n "$MVNW_REPOURL" ]; then
-      jarUrl="$MVNW_REPOURL/io/takari/maven-wrapper/0.5.4/maven-wrapper-0.5.4.jar"
+      jarUrl="$MVNW_REPOURL/io/takari/maven-wrapper/0.5.5/maven-wrapper-0.5.5.jar"
     else
-      jarUrl="https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/0.5.4/maven-wrapper-0.5.4.jar"
+      jarUrl="https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/0.5.5/maven-wrapper-0.5.5.jar"
     fi
     while IFS="=" read key value; do
       case "$key" in (wrapperUrl) jarUrl="$value"; break ;;
@@ -246,7 +246,7 @@ else
         else
             curl --user $MVNW_USERNAME:$MVNW_PASSWORD -o "$wrapperJarPath" "$jarUrl" -f
         fi
-        
+
     else
         if [ "$MVNW_VERBOSE" = true ]; then
           echo "Falling back to using Java to download"

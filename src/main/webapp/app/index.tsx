@@ -1,39 +1,58 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import 'typeface-open-sans';
+import * as superagent from 'superagent';
 
-import DevTools from './config/devtools';
-import initStore from './config/store';
-import setupAxiosInterceptors from './config/axios-interceptor';
-import { clearAuthentication } from './shared/reducers/authentication';
-import ErrorBoundary from './shared/error/error-boundary';
-import AppComponent from './app';
-import { loadIcons } from './config/icon-loader';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import App from './App';
+import registerServiceWorker from './registerServiceWorker';
 
-const devTools = process.env.NODE_ENV === 'development' ? <DevTools /> : null;
+import 'font-awesome/css/font-awesome.css';
+import './index.scss';
+import 'react-table/react-table.css';
+import 'oncokb-styles/dist/oncokb.css';
+import 'react-responsive-tabs/styles.css';
+import 'react-mutation-mapper/dist/styles.css';
 
-const store = initStore();
+import { assignPublicToken } from 'app/indexUtils';
+import { AUTH_UER_TOKEN_KEY, AUTH_WEBSITE_TOKEN_KEY } from 'app/store/AuthenticationStore';
+import { Storage } from 'react-jhipster';
 
-const actions = bindActionCreators({ clearAuthentication }, store.dispatch);
-setupAxiosInterceptors(() => actions.clearAuthentication('login.error.unauthorized'));
+assignPublicToken();
 
-loadIcons();
+// Manually attach token to
+// @ts-ignore
+const query = superagent.Request.prototype.query;
+// @ts-ignore
+const end = superagent.Request.prototype.end;
 
-const rootEl = document.getElementById('root');
+// @ts-ignore
+superagent.Request.prototype.query = function(queryParameters: any) {
+  const token =
+    Storage.local.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_WEBSITE_TOKEN_KEY);
+  if (token) {
+    this.set('Authorization', `Bearer ${token}`);
+  }
+  return query.call(this, queryParameters);
+};
 
-const render = Component =>
-  ReactDOM.render(
-    <ErrorBoundary>
-      <Provider store={store}>
-        <div>
-          {/* If this slows down the app in dev disable it and enable when required  */}
-          {devTools}
-          <Component />
-        </div>
-      </Provider>
-    </ErrorBoundary>,
-    rootEl
-  );
+// @ts-ignore
+superagent.Request.prototype.end = function(callback) {
+  return end.call(this, (error: any, response: any) => {
+    // the swagger coden only returns response body
+    // But in the case of the text/plain, the response should come from the response.text
+    if (
+      response &&
+      response.statusCode === 200 &&
+      response.headers &&
+      response.headers['content-type'] &&
+      response.headers['content-type'].includes('text/plain;')
+    ) {
+      response.body = response.text;
+    }
 
-render(AppComponent);
+    callback(error, response);
+  });
+};
+
+ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
+registerServiceWorker();

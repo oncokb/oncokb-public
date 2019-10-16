@@ -5,6 +5,7 @@ import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.env.MockEnvironment;
@@ -39,6 +40,8 @@ public class WebConfigurerTest {
 
     private JHipsterProperties props;
 
+    private TokenProvider tokenProvider;
+
     @BeforeEach
     public void setup() {
         servletContext = spy(new MockServletContext());
@@ -49,8 +52,9 @@ public class WebConfigurerTest {
 
         env = new MockEnvironment();
         props = new JHipsterProperties();
+        tokenProvider = new TokenProvider(props);
 
-        webConfigurer = new WebConfigurer(env, props);
+        webConfigurer = new WebConfigurer(env, props, tokenProvider);
     }
 
     @Test

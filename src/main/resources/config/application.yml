@@ -98,6 +98,9 @@ spring:
         size: 2
   thymeleaf:
     mode: HTML
+  output:
+    ansi:
+      console-available: true
 
 server:
   servlet:
@@ -131,7 +134,7 @@ jhipster:
     from: oncokb@localhost
   swagger:
     default-include-pattern: /api/.*
-    title: oncokb API
+    title: OncoKB API
     description: oncokb API documentation
     version: 0.0.1
     terms-of-service-url:
@@ -149,4 +152,8 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  #  api-pod: 'oncokb-core'
+  #  api-pod-port: 8888
+  api-pod: 'localhost'
+  api-pod-port: 8080

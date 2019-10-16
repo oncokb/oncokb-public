@@ -46,9 +46,9 @@ module.exports = options => ({
       '.js', '.jsx', '.ts', '.tsx', '.json'
     ],
     modules: ['node_modules'],
-    alias: {
-      app: utils.root('src/main/webapp/app/')
-    }
+    alias: utils.mapTypescriptAliasToWebpackAlias({
+      'react-dom': '@hot-loader/react-dom'
+    })
   },
   module: {
     rules: [
@@ -59,12 +59,12 @@ module.exports = options => ({
         exclude: [utils.root('node_modules')]
       },
       {
-        test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
+        test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot|ppt|pdf)$/i,
         loader: 'file-loader',
         options: {
           digest: 'hex',
           hash: 'sha512',
-          name: 'content/[hash].[ext]'
+          name: 'content/[name].[ext]'
         }
       },
       {
@@ -73,9 +73,13 @@ module.exports = options => ({
         loader: 'source-map-loader'
       },
       {
-        test: /\.tsx?$/,
+        test: /\.(j|t)sx?$/,
         enforce: 'pre',
-        loader: 'tslint-loader',
+        loader: 'eslint-loader',
+        options: {
+          emitWarning: false,
+          emitError: false,
+        },
         exclude: [utils.root('node_modules')]
       }
     ]
@@ -99,7 +103,7 @@ module.exports = options => ({
       'process.env': {
         NODE_ENV: `'${options.env}'`,
         // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
-        VERSION: `'${process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'UNKNOWN'}'`,
+        VERSION: `'${process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'DEV'}'`,
         DEBUG_INFO_ENABLED: options.env === 'development',
         // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
         // If this URL is left empty (""), then it will be relative to the current context.
@@ -108,20 +112,20 @@ module.exports = options => ({
         SERVER_API_URL: `''`
       }
     }),
-    new ForkTsCheckerWebpackPlugin({ tslint: true }),
+    new ForkTsCheckerWebpackPlugin({ eslint: true }),
     new CopyWebpackPlugin([
       { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
       { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
       { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
       { from: './src/main/webapp//swagger-ui/', to: 'swagger-ui' },
       { from: './src/main/webapp/content/', to: 'content' },
-      { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
+      { from: './src/main/webapp/content/images/favicon/favicon.ico', to: 'favicon.ico' },
       { from: './src/main/webapp/manifest.webapp', to: 'manifest.webapp' },
       // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
       { from: './src/main/webapp/robots.txt', to: 'robots.txt' }
     ]),
     new HtmlWebpackPlugin({
-      template: './src/main/webapp/index.html',
+      template: '!!html-loader!./src/main/webapp/index.html',
       chunksSortMode: 'dependency',
       inject: 'body'
     }),
