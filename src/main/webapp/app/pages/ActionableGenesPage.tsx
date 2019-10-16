@@ -14,7 +14,7 @@ import {
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
   getTreatmentNameFromEvidence,
-  levelOfEvidence2Level,
+  levelOfEvidence2Level
 } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';

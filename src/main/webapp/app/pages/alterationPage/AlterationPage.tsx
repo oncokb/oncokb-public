@@ -140,12 +140,13 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
   get alterationSummaries() {
     const orderedSummaries = [SummaryKey.GENE_SUMMARY, SummaryKey.ALTERATION_SUMMARY];
     return this.getSummaries(orderedSummaries);
-
   }
 
   @computed
   get tumorTypeSummaries() {
-    const orderedSummaries = this.store.tumorTypeQuery ? [SummaryKey.TUMOR_TYPE_SUMMARY, SummaryKey.DIAGNOSTIC_SUMMARY, SummaryKey.PROGNOSTIC_SUMMARY] : [];
+    const orderedSummaries = this.store.tumorTypeQuery
+      ? [SummaryKey.TUMOR_TYPE_SUMMARY, SummaryKey.DIAGNOSTIC_SUMMARY, SummaryKey.PROGNOSTIC_SUMMARY]
+      : [];
     return this.getSummaries(orderedSummaries);
   }
 
@@ -216,27 +217,23 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
           <GenePageLink hugoSymbol={this.store.hugoSymbol} highlightContent={false}/>
           <span className={'ml-2'}>{` ${this.store.alterationQuery}`}</span>
         </h2>
-        {this.store.annotationResult.isPending ? (
-          <LoadingIndicator isLoading={true} size={'big'} center={true}/>
-        ) : (
-          <>
-            <AlterationInfo
-              oncogenicity={this.store.annotationResult.result.oncogenic}
-              mutationEffect={this.store.annotationResult.result.mutationEffect.knownEffect}
-              isVus={this.store.annotationResult.result.vus}
-              highestSensitiveLevel={this.store.annotationResult.result.highestSensitiveLevel}
-              highestResistanceLevel={this.store.annotationResult.result.highestResistanceLevel}
-            />
-            <Row>
-              <Col>
-                {this.alterationSummaries.map(summary => {
-                  return <div className={DEFAULT_MARGIN_BOTTOM_SM}>{summary.content}</div>;
-                })}
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <div className="d-flex align-items-center">
+        <AlterationInfo
+          oncogenicity={this.store.annotationResult.result.oncogenic}
+          mutationEffect={this.store.annotationResult.result.mutationEffect.knownEffect}
+          isVus={this.store.annotationResult.result.vus}
+          highestSensitiveLevel={this.store.annotationResult.result.highestSensitiveLevel}
+          highestResistanceLevel={this.store.annotationResult.result.highestResistanceLevel}
+        />
+        <Row>
+          <Col>
+            {this.alterationSummaries.map(summary => {
+              return <div className={DEFAULT_MARGIN_BOTTOM_SM}>{summary.content}</div>;
+            })}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <div className="d-flex align-items-center">
                   <span className={classnames(styles.headerTumorTypeSelection, 'mr-2')}>
                     <Select
                       styles={{
@@ -271,45 +268,45 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
                       onChange={(selectedOption: any) => this.updateTumorTypeQuery(selectedOption)}
                     />
                   </span>
-                  <InfoIcon overlay="For tumor type specific information, please select a tumor type from the dropdown"
-                            placement="top"
-                            style={{ fontSize: '0.6rem' }}/>
-                </div>
-              </Col>
-            </Row>
-            {this.store.tumorTypeQuery ? (
-              <Row>
-                <Col>
-                  {this.tumorTypeSummaries.map(summary => {
-                    return <div className={DEFAULT_MARGIN_BOTTOM_SM}>{summary.content}</div>;
-                  })}
-                </Col>
-              </Row>
-            ) : null}
-            {this.store.therapeuticImplications.length > 0 ? (
-              <Row>
-                <Col>
-                  <OncoKBTable
-                    data={this.store.therapeuticImplications}
-                    columns={this.therapeuticTableColumns}
-                    loading={this.store.annotationResult.isPending}
-                    disableSearch={true}
-                    defaultSorted={[
-                      {
-                        id: TABLE_COLUMN_KEY.LEVEL,
-                        desc: false
-                      },
-                      {
-                        id: TABLE_COLUMN_KEY.ALTERATION,
-                        desc: false
-                      }
-                    ]}
-                  />
-                </Col>
-              </Row>
-            ) : null}
-          </>
-        )}
+              <InfoIcon
+                overlay="For tumor type specific information, please select a tumor type from the dropdown"
+                placement="top"
+                style={{ fontSize: '0.6rem' }}
+              />
+            </div>
+          </Col>
+        </Row>
+        {this.store.tumorTypeQuery ? (
+          <Row>
+            <Col>
+              {this.tumorTypeSummaries.map(summary => {
+                return <div className={DEFAULT_MARGIN_BOTTOM_SM}>{summary.content}</div>;
+              })}
+            </Col>
+          </Row>
+        ) : null}
+        {this.store.therapeuticImplications.length > 0 ? (
+          <Row>
+            <Col>
+              <OncoKBTable
+                data={this.store.therapeuticImplications}
+                columns={this.therapeuticTableColumns}
+                loading={this.store.annotationResult.isPending}
+                disableSearch={true}
+                defaultSorted={[
+                  {
+                    id: TABLE_COLUMN_KEY.LEVEL,
+                    desc: false
+                  },
+                  {
+                    id: TABLE_COLUMN_KEY.ALTERATION,
+                    desc: false
+                  }
+                ]}
+              />
+            </Col>
+          </Row>
+        ) : null}
       </SmallPageContainer>
     );
   }
