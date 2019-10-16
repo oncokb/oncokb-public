@@ -1,10 +1,10 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
-import SearchOneImg from '../../resources/images/search_advanced_1.png';
-import SearchTwoImg from '../../resources/images/search_advanced_2.png';
-import ClinicalImg from '../../resources/images/cbioportal-clinical.png';
-import BiologicalImg from '../../resources/images/cbioportal-biological.png';
-import ERBBImg from '../../resources/images/ERBB.png';
+import SearchOneImg from 'content/images/search_advanced_1.png';
+import SearchTwoImg from 'content/images/search_advanced_2.png';
+import ClinicalImg from 'content/images/cbioportal-clinical.png';
+import BiologicalImg from 'content/images/cbioportal-biological.png';
+import ERBBImg from 'content/images/ERBB.png';
 import { ElementType, SimpleTable, SimpleTableCell } from 'app/components/SimpleTable';
 import { NewlyAddedGeneType } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { Link } from 'react-router-dom';

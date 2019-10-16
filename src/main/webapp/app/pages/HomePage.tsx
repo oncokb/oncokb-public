@@ -6,7 +6,7 @@ import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
 import { Gene, LevelNumber, TypeaheadSearchResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import autobind from 'autobind-decorator';
 import { Row, Col } from 'react-bootstrap';
-import oncokbImg from '../resources/images/oncokb.png';
+import oncokbImg from 'content/images/oncokb.png';
 import { HomePageNumber } from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
 import { LEVEL_BUTTON_DESCRIPTION, LEVELS, PAGE_ROUTE } from 'app/config/constants';

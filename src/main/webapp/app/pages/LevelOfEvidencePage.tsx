@@ -2,9 +2,9 @@ import React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import classnames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import oncokbImg from '../resources/images/level.jpg';
-import oncokbImgPpt from '../resources/files/LevelsOfEvidence.ppt';
-import oncokbImgPdf from '../resources/files/LevelsOfEvidence.pdf';
+import oncokbImg from 'content/images/level.jpg';
+import oncokbImgPpt from 'content/files/LevelsOfEvidence.ppt';
+import oncokbImgPdf from 'content/files/LevelsOfEvidence.pdf';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 
 export const LevelOfEvidencePage = () => {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap';
 
-import oncokbImg from '../resources/images/oncokb-lg.png';
+import oncokbImg from 'content/images/oncokb-lg.png';
 
 import { observer } from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';

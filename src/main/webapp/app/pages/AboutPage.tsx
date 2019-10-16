@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
-import questImg from '../resources/images/quest.png';
-import processImg from '../resources/images/process.jpg';
+import questImg from 'content/images/quest.png';
+import processImg from 'content/images/process.jpg';
 import AppStore from 'app/store/AppStore';
 import { inject } from 'mobx-react';
 import { CitationText } from 'app/components/CitationText';
