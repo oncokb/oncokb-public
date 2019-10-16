@@ -20,8 +20,8 @@ import javax.validation.Valid;
 /**
  * Controller to authenticate users.
  */
-@RestController
-@RequestMapping("/api")
+//@RestController
+//@RequestMapping("/api")
 public class UserJWTController {
 
     private final TokenProvider tokenProvider;

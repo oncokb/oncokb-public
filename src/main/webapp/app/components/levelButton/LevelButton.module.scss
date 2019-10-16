@@ -1,0 +1,31 @@
+.levelName {
+  font-size: 1em;
+}
+
+.levelDescription {
+  font-size: 0.7em;
+}
+
+.geneNumber {
+  font-size: 0.8em;
+}
+
+:global(.btn).levelButton {
+  border: 1px solid $light-grey;
+  background-color: white;
+  border-radius: 0.5rem;
+  width: 100%;
+  font-size: 1.2rem;
+}
+
+:global(.btn).levelButtonLink {
+  border: 0;
+  background-color: white;
+  width: 100%;
+  font-size: 1.6rem;
+  font-weight: 700;
+
+  &:hover {
+    background-color: white;
+  }
+}

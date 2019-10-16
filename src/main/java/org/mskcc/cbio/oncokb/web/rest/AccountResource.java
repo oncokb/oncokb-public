@@ -4,10 +4,12 @@ package org.mskcc.cbio.oncokb.web.rest;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
+import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.MailService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.*;
 import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndPasswordVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
@@ -15,6 +17,7 @@ import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,13 +44,19 @@ public class AccountResource {
 
     private final UserService userService;
 
+    @Autowired
+    private UserMapper userMapper;
+
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    private final TokenProvider tokenProvider;
+
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, TokenProvider tokenProvider) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.tokenProvider = tokenProvider;
     }
 
     /**
@@ -103,7 +112,7 @@ public class AccountResource {
     @GetMapping("/account")
     public UserDTO getAccount() {
         return userService.getUserWithAuthorities()
-            .map(UserDTO::new)
+            .map(user -> userMapper.userToUserDTO(user))
             .orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
 
@@ -125,8 +134,18 @@ public class AccountResource {
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
-        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey(), userDTO.getImageUrl());
+        userService.updateUser(
+            userDTO.getFirstName(),
+            userDTO.getLastName(),
+            userDTO.getEmail(),
+            userDTO.getLicenseType(),
+            userDTO.getJobTitle(),
+            userDTO.getCompany(),
+            userDTO.getCity(),
+            userDTO.getCountry(),
+            userDTO.getLangKey(),
+            userDTO.getImageUrl()
+        );
     }
 
     /**
@@ -141,6 +160,20 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
+    }
+
+    /**
+     * {@code POST  /account/change-token} : changes the current user's token.
+     * @return the new token
+     */
+    @PostMapping(path = "/account/change-token")
+    public UUID changeToken() {
+        Optional<UUID> token = SecurityUtils.getCurrentUserToken();
+        if (token.isPresent()) {
+            return tokenProvider.updateToken();
+        } else {
+            throw new AccountResourceException("No user was found with this token");
+        }
     }
 
     /**

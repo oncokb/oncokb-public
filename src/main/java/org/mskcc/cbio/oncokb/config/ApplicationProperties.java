@@ -10,5 +10,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
+    private String apiPod;
+    private Integer apiPodPort;
 
+    public String getApiPod() {
+        return apiPod;
+    }
+
+    public void setApiPod(String apiPod) {
+        this.apiPod = apiPod;
+    }
+
+    public Integer getApiPodPort() {
+        return apiPodPort;
+    }
+
+    public void setApiPodPort(Integer apiPodPort) {
+        this.apiPodPort = apiPodPort;
+    }
 }

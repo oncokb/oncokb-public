@@ -1,9 +1,12 @@
 package org.mskcc.cbio.oncokb.service.dto;
 
+import io.swagger.models.License;
 import org.mskcc.cbio.oncokb.config.Constants;
 
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -31,6 +34,16 @@ public class UserDTO {
     @Size(max = 50)
     private String lastName;
 
+    private LicenseType licenseType;
+
+    private String jobTitle;
+
+    private String company;
+
+    private String city;
+
+    private String country;
+
     @Email
     @Size(min = 5, max = 254)
     private String email;
@@ -57,7 +70,7 @@ public class UserDTO {
         // Empty constructor needed for Jackson.
     }
 
-    public UserDTO(User user) {
+    public UserDTO(User user, UserDetails userDetails) {
         this.id = user.getId();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
@@ -73,6 +86,13 @@ public class UserDTO {
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
+        if(userDetails != null) {
+            this.licenseType = userDetails.getLicenseType();
+            this.jobTitle = userDetails.getJobTitle();
+            this.company = userDetails.getCompany();
+            this.city = userDetails.getCity();
+            this.country = userDetails.getCountry();
+        }
     }
 
     public Long getId() {
@@ -113,6 +133,46 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public LicenseType getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getImageUrl() {
@@ -186,6 +246,11 @@ public class UserDTO {
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
+            ", licenseType=" + licenseType +
+            ", jobTitle=" + jobTitle +
+            ", company=" + company +
+            ", city=" + city +
+            ", country=" + country +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
             ", langKey='" + langKey + '\'' +

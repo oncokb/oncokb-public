@@ -5,15 +5,16 @@ const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-const path = require('path');
-const sass = require('sass');
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'production';
 
-module.exports = webpackMerge(commonConfig({ env: ENV }), {
+module.exports = webpackMerge(commonConfig({
+  env: ENV,
+  app: 'app'
+}), {
   // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
   mode: ENV,
   entry: {
@@ -32,7 +33,24 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         loader: 'stripcomment-loader'
       },
       {
+        test: /\.module\.scss$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 2,
+              localIdentName: '[name]__[local]__[hash:base64:5]'
+            }
+          },
+          'sass-loader',
+          utils.sassResourcesLoader
+        ]
+      },
+      {
         test: /\.(sa|sc|c)ss$/,
+        exclude: /\.module\.scss$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -41,11 +59,11 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             }
           },
           'css-loader',
-          'postcss-loader',
-          {
+          'postcss-loader', {
             loader: 'sass-loader',
-            options: { implementation: sass }
-          }
+            options: { sourceMap: false }
+          },
+          utils.sassResourcesLoader
         ]
       }
     ]

@@ -2,8 +2,11 @@ package org.mskcc.cbio.oncokb.service.mapper;
 
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -17,6 +20,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UserMapper {
+    @Autowired
+    UserDetailsRepository userDetailsRepository;
 
     public List<UserDTO> usersToUserDTOs(List<User> users) {
         return users.stream()
@@ -26,7 +31,8 @@ public class UserMapper {
     }
 
     public UserDTO userToUserDTO(User user) {
-        return new UserDTO(user);
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
+        return new UserDTO(user, userDetails.isPresent() ? userDetails.get() : null);
     }
 
     public List<User> userDTOsToUsers(List<UserDTO> userDTOs) {
