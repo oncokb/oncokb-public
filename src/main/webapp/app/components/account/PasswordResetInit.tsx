@@ -16,13 +16,16 @@ export class PasswordResetInit extends React.Component<{}> {
   @action
   resetPassword(event: any, values: any) {
     if (values.email) {
-      client.requestPasswordResetUsingPOST({
-        mail: values.email
-      }).then(() => {
-        this.resetStatus = API_CALL_STATUS.SUCCESSFUL;
-      }).catch(() => {
-        this.resetStatus = API_CALL_STATUS.FAILURE;
-      });
+      client
+        .requestPasswordResetUsingPOST({
+          mail: values.email
+        })
+        .then(() => {
+          this.resetStatus = API_CALL_STATUS.SUCCESSFUL;
+        })
+        .catch(() => {
+          this.resetStatus = API_CALL_STATUS.FAILURE;
+        });
     } else {
       this.resetStatus = API_CALL_STATUS.FAILURE;
     }
@@ -36,12 +39,10 @@ export class PasswordResetInit extends React.Component<{}> {
           <span>Enter the email address you used to register</span>
         </Alert>
         {this.resetStatus === API_CALL_STATUS.SUCCESSFUL ? (
-          <Alert variant='success'>
-            Check your emails for details on how to reset your password.
-          </Alert>
+          <Alert variant="success">Check your emails for details on how to reset your password.</Alert>
         ) : null}
         {this.resetStatus === API_CALL_STATUS.FAILURE ? (
-          <Alert variant='danger'>
+          <Alert variant="danger">
             <strong>Email address isn&apos;t registered!</strong> Please check and try again
           </Alert>
         ) : null}

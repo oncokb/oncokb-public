@@ -125,9 +125,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 selectionDimension="x"
                 onSelection={(points: any, bounds: any, props: any) => {
                   if (this.props.onUserSelection) {
-                    const filters = _.uniq(
-                      _.flatten(points.map((point: any) => point.data.map((dataPoint: any) => dataPoint.xName)))
-                    );
+                    const filters = _.uniq(_.flatten(points.map((point: any) => point.data.map((dataPoint: any) => dataPoint.xName))));
                     // @ts-ignore
                     this.props.onUserSelection(filters);
                   }

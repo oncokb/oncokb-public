@@ -5,7 +5,7 @@ import React from 'react';
 import pluralize from 'pluralize';
 import * as _ from 'lodash';
 
-export const UpdatedTxImplOldFormatListItem = (props: { data: { [level: string]: ElementType[] }, key: string }) => {
+export const UpdatedTxImplOldFormatListItem = (props: { data: { [level: string]: ElementType[] }; key: string }) => {
   const rows = _.reduce(
     props.data,
     (acc, next, key) => {
@@ -19,11 +19,13 @@ export const UpdatedTxImplOldFormatListItem = (props: { data: { [level: string]:
           },
           {
             key: `${key}-level-${level}-list`,
-            content: <ul key={level}>
-              {next.map((cell: ElementType, index) => (
-                <li key={`${key}-${level}-list-${index}`}>{cell}</li>
-              ))}
-            </ul>
+            content: (
+              <ul key={level}>
+                {next.map((cell: ElementType, index) => (
+                  <li key={`${key}-${level}-list-${index}`}>{cell}</li>
+                ))}
+              </ul>
+            )
           }
         ]
       });
@@ -35,7 +37,7 @@ export const UpdatedTxImplOldFormatListItem = (props: { data: { [level: string]:
     <li>
       Updated therapeutic {pluralize('implication', rows.length)}
       <Row>
-        <SimpleTable columns={UPDATED_IMPLICATION_OLD_FORMAT_COLUMNS} rows={rows}/>
+        <SimpleTable columns={UPDATED_IMPLICATION_OLD_FORMAT_COLUMNS} rows={rows} />
       </Row>
     </li>
   );

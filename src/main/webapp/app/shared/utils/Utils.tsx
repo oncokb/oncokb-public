@@ -14,7 +14,7 @@ import { AlterationPageLink, GenePageLink, TumorTypePageLink } from 'app/shared/
 
 // Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
 // Likely Neutral will be converted to Neutral
-export function shortenOncogenicity(oncogenicity:string):string {
+export function shortenOncogenicity(oncogenicity: string): string {
   return GENERAL_ONCOGENICITY[oncogenicity];
 }
 
@@ -127,13 +127,13 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
   className?: string;
 }> = props => {
   return (
-    <span style={{width: 16, marginTop: -3, marginLeft: 3}}>
-    <i
-      className={classnames(
-        `oncokb annotation-icon ${getAnnotationOncogenicityClassName(props.oncogenicity, props.isVus)} no-level`,
-        props.className
-      )}
-    />
+    <span style={{ width: 16, marginTop: -3, marginLeft: 3 }}>
+      <i
+        className={classnames(
+          `oncokb annotation-icon ${getAnnotationOncogenicityClassName(props.oncogenicity, props.isVus)} no-level`,
+          props.className
+        )}
+      />
     </span>
   );
 };

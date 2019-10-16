@@ -195,7 +195,7 @@ const GeneBackground: React.FunctionComponent<{
 
 @inject('appStore', 'windowStore')
 @observer
-export default class GenePage extends React.Component<{ appStore: AppStore, windowStore: WindowStore }, {}> {
+export default class GenePage extends React.Component<{ appStore: AppStore; windowStore: WindowStore }, {}> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground = false;
 
@@ -294,9 +294,13 @@ export default class GenePage extends React.Component<{ appStore: AppStore, wind
         <OncoKBTable
           data={this.store.filteredClinicalAlterations}
           columns={this.clinicalTableColumns}
-          style={this.store.filteredBiologicalAlterations.length > THRESHOLD_TABLE_FIXED_HEIGHT ? {
-            height: SM_TABLE_FIXED_HEIGHT
-          }: undefined}
+          style={
+            this.store.filteredBiologicalAlterations.length > THRESHOLD_TABLE_FIXED_HEIGHT
+              ? {
+                  height: SM_TABLE_FIXED_HEIGHT
+                }
+              : undefined
+          }
           loading={this.store.clinicalAlterations.isPending}
           defaultSorted={[
             {
@@ -315,9 +319,13 @@ export default class GenePage extends React.Component<{ appStore: AppStore, wind
         <OncoKBTable
           data={this.store.filteredBiologicalAlterations}
           columns={this.biologicalTableColumns}
-          style={this.store.filteredBiologicalAlterations.length > THRESHOLD_TABLE_FIXED_HEIGHT ? {
-            height: SM_TABLE_FIXED_HEIGHT
-          }: undefined}
+          style={
+            this.store.filteredBiologicalAlterations.length > THRESHOLD_TABLE_FIXED_HEIGHT
+              ? {
+                  height: SM_TABLE_FIXED_HEIGHT
+                }
+              : undefined
+          }
           loading={this.store.biologicalAlterations.isPending}
           defaultSorted={[
             {

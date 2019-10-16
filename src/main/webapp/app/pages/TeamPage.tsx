@@ -13,7 +13,11 @@ export const TeamPage = () => {
               Marie Josée and Henry R. Kravis Center for Molecular Oncology
             </a>{' '}
             at Memorial Sloan Kettering Cancer Center. Disclosure of conflicts of interest of all OncoKB contributors is available{' '}
-            <a href="https://docs.google.com/spreadsheets/d/1FaOIvQmLXA7Z9rM_WkgP9QPbfkDHoTLKEUGlr0G2UT0/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://docs.google.com/spreadsheets/d/1FaOIvQmLXA7Z9rM_WkgP9QPbfkDHoTLKEUGlr0G2UT0/edit?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               here.
             </a>
           </p>

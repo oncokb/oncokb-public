@@ -10,7 +10,7 @@ import { RouterStore } from 'mobx-react-router';
 type LevelButtonProps = {
   level: string;
   routing?: RouterStore;
-  title?:string;
+  title?: string;
   numOfGenes: number;
   description: string;
   onClick?: () => void;
@@ -39,7 +39,9 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
       disabled={props.disabled}
       className={classnames(props.href ? styles.levelButtonLink : styles.levelButton, props.className)}
     >
-      <div className={classnames(`oncokb level-${props.level}`, styles.levelName)}>{props.title ? props.title : `Level ${props.level}`}</div>
+      <div className={classnames(`oncokb level-${props.level}`, styles.levelName)}>
+        {props.title ? props.title : `Level ${props.level}`}
+      </div>
       <div className={styles.levelDescription}>{props.description}</div>
       <div className={classnames(`oncokb level-${props.level}`, styles.geneNumber)}>{`${props.numOfGenes} ${pluralize(
         'Gene',

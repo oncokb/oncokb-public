@@ -47,8 +47,6 @@ export default class BarChartToolTip extends React.Component<BarChartToolTipProp
       return null;
     }
 
-    return (
-      <div></div>
-    );
+    return <div></div>;
   }
 }

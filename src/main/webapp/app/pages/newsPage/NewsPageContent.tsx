@@ -85,7 +85,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Tazemetostat',
         <a
           href="https://library.ehaweb.org/eha/2018/stockholm/214434/gilles.salles.interim.update.from.a.phase.2.multicenter.study.of.tazemetostat.html?f=topic=1574*media=3%27"
-          target="_blank" rel="noopener noreferrer"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           Abstract: Morschhauser et al. Abstract# S100, EHA 2018.
         </a>
@@ -139,7 +140,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           PIK3CA - Oncogenic Mutations - Breast Cancer - Alpelisib (<b>previously level 3A</b>)<br />
           May 24, 2019:{' '}
           <a
-            target="_blank" rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
             href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-alpelisib-metastatic-breast-cancer"
           >
             The FDA approved PI(3)-kinase alpha selective inhibitor alpelisib
@@ -172,13 +174,13 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <Row>
           <table className="table">
             <thead>
-            <tr>
-              <th className="col-xs-1">Level</th>
-              <th className="col-xs-1">Gene</th>
-              <th className="col-xs-4">Mutation</th>
-              <th className="col-xs-4">Tumor Type</th>
-              <th className="col-xs-2">Drug</th>
-            </tr>
+              <tr>
+                <th className="col-xs-1">Level</th>
+                <th className="col-xs-1">Gene</th>
+                <th className="col-xs-4">Mutation</th>
+                <th className="col-xs-4">Tumor Type</th>
+                <th className="col-xs-2">Drug</th>
+              </tr>
             </thead>
             <tbody>
               <tr>
@@ -322,7 +324,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           April 12, 2019:{' '}
           <a
-            target="_blank" rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
             href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-erdafitinib-metastatic-urothelial-carcinoma"
           >
             the FDA approved erdafitinib
@@ -478,7 +481,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <ul className="bullet" style={{ marginTop: '0.875rem' }}>
           <li>
             Oct 2, 2018:{' '}
-            <a target="_blank" rel="noopener noreferrer" href="https://www.onclive.com/web-exclusives/fda-grants-rucaparib-breakthrough-designation-for-mcrpc">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.onclive.com/web-exclusives/fda-grants-rucaparib-breakthrough-designation-for-mcrpc"
+            >
               Rucarparib in adult patients with BRCA1/2-positive metastatic castration-resistant disease following at least 1 androgen
               receptor–directed therapy and taxane-based chemotherapy.
             </a>
@@ -513,7 +520,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <ul className="bullet" style={{ marginTop: '0.875rem' }}>
           <li>
             Sept 5, 2018:{' '}
-            <a target="_blank" rel="noopener noreferrer" href="https://www.onclive.com/web-exclusives/fda-grants-loxo292-breakthrough-designation-for-nsclc-mtc">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.onclive.com/web-exclusives/fda-grants-loxo292-breakthrough-designation-for-nsclc-mtc"
+            >
               LOXO-292 for RET fusion–positive non–small cell lung cancer (NSCLC) or RET-mutant medullary thyroid cancer (MTC)
             </a>
           </li>
@@ -654,17 +665,20 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       <span>
         New Level 4 associations have been added:
         <Row>
-          <SimpleTable columns={NEWLY_ADDED_LEVEL_FOUR_COLUMNS} rows={NEWLY_ADDED_LEVEL_FOUR.map((record, index) => {
-            return {
-              key: `NEWLY_ADDED_LEVEL_FOUR-${index}`,
-              content: record.map((subItem, subIndex) => {
-                return {
-                  key: `NEWLY_ADDED_LEVEL_FOUR-${index}-${subIndex}`,
-                  content: subItem
-                };
-              })
-            };
-          })}/>
+          <SimpleTable
+            columns={NEWLY_ADDED_LEVEL_FOUR_COLUMNS}
+            rows={NEWLY_ADDED_LEVEL_FOUR.map((record, index) => {
+              return {
+                key: `NEWLY_ADDED_LEVEL_FOUR-${index}`,
+                content: record.map((subItem, subIndex) => {
+                  return {
+                    key: `NEWLY_ADDED_LEVEL_FOUR-${index}-${subIndex}`,
+                    content: subItem
+                  };
+                })
+              };
+            })}
+          />
         </Row>
       </span>,
       <span>Inclusion of Level R1 actionable alterations in Actionable Genes</span>

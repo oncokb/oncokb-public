@@ -34,8 +34,9 @@ export default class AccountMenu extends React.Component<{ isAuthenticated: bool
   render() {
     return (
       <Dropdown as={NavItem}>
-        <Dropdown.Toggle id={'account-menu'} as={NavLink} onFocus={() => this.menuOpened = !this.menuOpened}>
-          <i className={'fa fa-user mr-1'}/>Account
+        <Dropdown.Toggle id={'account-menu'} as={NavLink} onFocus={() => (this.menuOpened = !this.menuOpened)}>
+          <i className={'fa fa-user mr-1'} />
+          Account
         </Dropdown.Toggle>
         <Dropdown.Menu show={this.menuOpened}>
           {this.props.isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}
@@ -43,4 +44,4 @@ export default class AccountMenu extends React.Component<{ isAuthenticated: bool
       </Dropdown>
     );
   }
-};
+}
