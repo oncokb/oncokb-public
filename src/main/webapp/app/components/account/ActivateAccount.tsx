@@ -14,9 +14,9 @@ import SmallPageContainer from '../SmallComponentContainer';
 @inject('routing')
 @observer
 export default class ActivateAccount extends React.Component<{
-  routing: RouterStore
+  routing: RouterStore;
 }> {
-  @observable activateKey:string;
+  @observable activateKey: string;
 
   constructor(props: Readonly<{ routing: RouterStore }>) {
     super(props);
@@ -29,11 +29,11 @@ export default class ActivateAccount extends React.Component<{
 
   readonly activateAccount = remoteData<any>({
     invoke: () => {
-      if(this.activateKey) {
+      if (this.activateKey) {
         return client.activateAccountUsingGET({
           key: this.activateKey
         });
-      }else{
+      } else {
         return Promise.reject('The key is empty');
       }
     }
@@ -42,11 +42,7 @@ export default class ActivateAccount extends React.Component<{
   getSuccessfulMessage = () => {
     return (
       <div style={{ color: 'success' }}>
-        <strong>Your user account has been activated.</strong> Please{' '}
-        <Link to={PAGE_ROUTE.LOGIN}>
-          sign in
-        </Link>
-        .
+        <strong>Your user account has been activated.</strong> Please <Link to={PAGE_ROUTE.LOGIN}>sign in</Link>.
       </div>
     );
   };
@@ -54,9 +50,10 @@ export default class ActivateAccount extends React.Component<{
   getFailureMessage = () => {
     return (
       <div style={{ color: 'danger' }}>
-        <strong>Your user could not be
-          activated{this.activateAccount.error ? ` due to ${this.activateAccount.error.message}` : ''}.</strong> Please
-        use the registration form to sign up.
+        <strong>
+          Your user could not be activated{this.activateAccount.error ? ` due to ${this.activateAccount.error.message}` : ''}.
+        </strong>{' '}
+        Please use the registration form to sign up.
       </div>
     );
   };
@@ -64,10 +61,10 @@ export default class ActivateAccount extends React.Component<{
   render() {
     return (
       <SmallPageContainer>
-        {this.activateAccount.isPending ? <LoadingIndicator isLoading={true}/> : null}
+        {this.activateAccount.isPending ? <LoadingIndicator isLoading={true} /> : null}
         {this.activateAccount.isComplete ? this.getSuccessfulMessage() : null}
         {this.activateAccount.isError ? this.getFailureMessage() : null}
       </SmallPageContainer>
     );
   }
-};
+}

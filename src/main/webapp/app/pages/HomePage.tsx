@@ -38,11 +38,11 @@ class HomePage extends React.Component<IHomeProps> {
   @observable keyword = '';
 
   private levelGadgets: {
-    title?: string,
-    description: string,
-    level: string,
-    linkoutLevel: string,
-    combinedLevels: string[]
+    title?: string;
+    description: string;
+    level: string;
+    linkoutLevel: string;
+    combinedLevels: string[];
   }[] = [
     {
       level: '1',
@@ -96,10 +96,16 @@ class HomePage extends React.Component<IHomeProps> {
   });
 
   getLevelNumber(levels: string[]) {
-    return _.uniq(_.reduce(levels, (acc, level) => {
-      acc.push(...(this.levelNumbers.result[level] ? this.levelNumbers.result[level].genes : []));
-      return acc;
-    }, [] as Gene[])).length;
+    return _.uniq(
+      _.reduce(
+        levels,
+        (acc, level) => {
+          acc.push(...(this.levelNumbers.result[level] ? this.levelNumbers.result[level].genes : []));
+          return acc;
+        },
+        [] as Gene[]
+      )
+    ).length;
   }
 
   // https://github.com/JedWatson/react-select/issues/614#issuecomment-244006496
@@ -243,7 +249,7 @@ class HomePage extends React.Component<IHomeProps> {
         <Row className="mb-5">
           <Col xs={0} lg={1}></Col>
           {this.levelGadgets.map(levelGadget => (
-            <Col xs={12} sm={6} lg={2} key={levelGadget.level} className='px-0'>
+            <Col xs={12} sm={6} lg={2} key={levelGadget.level} className="px-0">
               <LevelButton
                 level={levelGadget.level}
                 numOfGenes={this.getLevelNumber(levelGadget.combinedLevels)}

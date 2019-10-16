@@ -48,10 +48,12 @@ export const NewsPage = () => {
         <h3>{getNewsTitle('08172017')}</h3>
         <div>
           <b>The following FDA-approvals have been incorporated into the Actionable Genes table:</b>
-          <ul>{getNews({
-            key: 'news-08172017',
-            content: NEWS_BY_DATE['08172017'].news
-          })}</ul>
+          <ul>
+            {getNews({
+              key: 'news-08172017',
+              content: NEWS_BY_DATE['08172017'].news
+            })}
+          </ul>
         </div>
 
         <NewsList date={'08022017'} />
@@ -68,10 +70,12 @@ export const NewsPage = () => {
         <h3>{getNewsTitle('07062016')}</h3>
         <div>
           <b>Improved clinical annotations:</b>
-          <ul>{getNews({
-            key: 'news-07062016',
-            content: NEWS_BY_DATE['07062016'].news
-          })}</ul>
+          <ul>
+            {getNews({
+              key: 'news-07062016',
+              content: NEWS_BY_DATE['07062016'].news
+            })}
+          </ul>
         </div>
       </div>
       <h3>Jun 6, 2016</h3>
@@ -91,7 +95,11 @@ export const NewsPage = () => {
             cbioportal.org
           </a>
           , you will see annotations from OncoKB when available.{' '}
-          <a href="http://www.cbioportal.org/case.do?cancer_study_id=luad_tcga_pub&sample_id=TCGA-49-4494-01" target="_blank" rel="noopener noreferrer">
+          <a
+            href="http://www.cbioportal.org/case.do?cancer_study_id=luad_tcga_pub&sample_id=TCGA-49-4494-01"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Example of a lung cancer case.
           </a>
         </p>

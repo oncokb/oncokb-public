@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvField, AvForm, AvCheckboxGroup, AvCheckbox} from 'availity-reactstrap-validation';
+import { AvField, AvForm, AvCheckboxGroup, AvCheckbox } from 'availity-reactstrap-validation';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 import { inject, observer } from 'mobx-react';
 import { action, computed, observable } from 'mobx';
@@ -94,11 +94,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   @computed
   get errorRegisterMessage() {
-    if (this.registerError &&
-      this.registerError.response &&
-      this.registerError.response.body &&
-      this.registerError.response.body.title
-    ) {
+    if (this.registerError && this.registerError.response && this.registerError.response.body && this.registerError.response.body.title) {
       return this.getErrorMessage(this.registerError.response.body.title);
     } else {
       return this.getErrorMessage();
@@ -107,18 +103,18 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   getLicenseAdditionalInfo(licenseType: LicenseType) {
     if (licenseType === LicenseType.ACADEMIC) {
-      return <div>OncoKB data is freely accessible for research use in the academic setting. Please register below for
-        access.</div>;
+      return <div>OncoKB data is freely accessible for research use in the academic setting. Please register below for access.</div>;
     } else {
       return (
         <div>
-          <div>To support the future development and maintenance of OncoKB, we have introduced license fees for clinical
-            and commercial use. The fee will depend on the type of use and size of company.
+          <div>
+            To support the future development and maintenance of OncoKB, we have introduced license fees for clinical and commercial use.
+            The fee will depend on the type of use and size of company.
           </div>
-          <div className='mt-2'>In order to be granted access to downloadable content and our API, your company will
-            need a license. If
-            your company already has one, we will grant you access. Otherwise, we will contact you to discuss your needs
-            and license terms. Please see the <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>.
+          <div className="mt-2">
+            In order to be granted access to downloadable content and our API, your company will need a license. If your company already has
+            one, we will grant you access. Otherwise, we will contact you to discuss your needs and license terms. Please see the{' '}
+            <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>.
           </div>
         </div>
       );
@@ -138,15 +134,14 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   render() {
     if (this.registerStatus === RegisterStatus.READY_REDIRECT) {
-      return <Redirect to={'/'}/>;
+      return <Redirect to={'/'} />;
     }
 
     if (this.registerStatus === RegisterStatus.REGISTERED) {
       return (
         <div>
           <Alert variant="info">
-            New account has been created, the page will be redirected to your account page
-            in {this.redirectTimeoutInSecond}s
+            New account has been created, the page will be redirected to your account page in {this.redirectTimeoutInSecond}s
           </Alert>
         </div>
       );
@@ -162,22 +157,23 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         <AvForm id="register-form" onValidSubmit={this.handleValidSubmit}>
           <Row className={getSectionClassName(true)}>
             <Col xs={12}>
-              <b>OncoKB data is freely accessible for research use in the academic setting. To support the future development and maintenance of OncoKB, we have introduced license fees for clinical and commercial use. See our <Link to={PAGE_ROUTE.TERMS}>usage terms</Link> for further information.</b>
+              <b>
+                OncoKB data is freely accessible for research use in the academic setting. To support the future development and maintenance
+                of OncoKB, we have introduced license fees for clinical and commercial use. See our{' '}
+                <Link to={PAGE_ROUTE.TERMS}>usage terms</Link> for further information.
+              </b>
             </Col>
             <Col xs={12}>
-              <img width='100%' src={licenseModel} alt={'OncoKB License Model'} />
+              <img width="100%" src={licenseModel} alt={'OncoKB License Model'} />
             </Col>
           </Row>
           <Row className={getSectionClassName(false)}>
-            <Col md='3'>
+            <Col md="3">
               <h5>Choose License</h5>
             </Col>
             <Col md="9">
               {LICENSE_TYPES.map((license, index) => (
-                <div className='primary'
-                     key={license.key}
-                     onClick={() => this.onSelectLicense(license.key)}
-                >
+                <div className="primary" key={license.key} onClick={() => this.onSelectLicense(license.key)}>
                   <Form.Check
                     className={'px-0'}
                     type="checkbox"
@@ -197,7 +193,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 </Col>
               </Row>
               <Row className={getSectionClassName()}>
-                <Col md='3'>
+                <Col md="3">
                   <h5>Account</h5>
                 </Col>
                 <Col md="9">
@@ -213,7 +209,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                   />
                   <AvField
                     name="firstName"
-                    autoComplete='given-name'
+                    autoComplete="given-name"
                     label={getAccountInfoTitle(ACCOUNT_TITLES.FIRST_NAME, this.selectedLicense)}
                     validate={{
                       required: { value: true, errorMessage: 'Your first name is required.' },
@@ -222,7 +218,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                   />
                   <AvField
                     name="lastName"
-                    autoComplete='family-name'
+                    autoComplete="family-name"
                     label={getAccountInfoTitle(ACCOUNT_TITLES.LAST_NAME, this.selectedLicense)}
                     validate={{
                       required: { value: true, errorMessage: 'Your last name is required.' },
@@ -232,7 +228,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                   <AvField
                     name="firstPassword"
                     label="New password"
-                    autoComplete='new-password'
+                    autoComplete="new-password"
                     placeholder={'New password'}
                     type="password"
                     onChange={this.updatePassword}
@@ -242,11 +238,11 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       maxLength: { value: 50, errorMessage: 'Your password cannot be longer than 50 characters.' }
                     }}
                   />
-                  <PasswordStrengthBar password={this.password}/>
+                  <PasswordStrengthBar password={this.password} />
                   <AvField
                     name="secondPassword"
                     label="New password confirmation"
-                    autoComplete='new-password'
+                    autoComplete="new-password"
                     placeholder="Confirm the new password"
                     type="password"
                     validate={{
@@ -268,7 +264,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 </Col>
               </Row>
               <Row className={getSectionClassName()}>
-                <Col md='3'>
+                <Col md="3">
                   <h5>{getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.selectedLicense)}</h5>
                 </Col>
                 <Col md="9">
@@ -317,28 +313,25 @@ export class RegisterPage extends React.Component<IRegisterProps> {
               {this.selectedLicense === LicenseType.ACADEMIC ? (
                 <>
                   <Row className={getSectionClassName()}>
-                    <Col md='9' className={'ml-auto'}>
-                      In order to be granted access to downloadable content and our API, please
-                      agree to the following terms:
+                    <Col md="9" className={'ml-auto'}>
+                      In order to be granted access to downloadable content and our API, please agree to the following terms:
                     </Col>
                   </Row>
                   <Row className={getSectionClassName()}>
-                    <Col md='3'>
+                    <Col md="3">
                       <h5>Terms</h5>
                     </Col>
-                    <Col md='9'>
+                    <Col md="9">
                       {ACADEMIC_TERMS.map(term => (
-                        <AvCheckboxGroup name={term.key} required key={term.key}
-                                         errorMessage={'You have to accept the term'}>
-                          <AvCheckbox label={term.description} value={term.key}/>
+                        <AvCheckboxGroup name={term.key} required key={term.key} errorMessage={'You have to accept the term'}>
+                          <AvCheckbox label={term.description} value={term.key} />
                         </AvCheckboxGroup>
                       ))}
                     </Col>
                   </Row>
                 </>
               ) : null}
-              <Row>
-              </Row>
+              <Row></Row>
               <Row>
                 <Col md={9} className={'ml-auto'}>
                   <Button id="register-submit" variant="primary" type="submit">

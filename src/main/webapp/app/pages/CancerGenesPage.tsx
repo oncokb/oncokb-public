@@ -186,7 +186,11 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             overlay={
               <span>
                 Gene is part of the{' '}
-                <a href="https://www.foundationmedicineasia.com/dam/assets/pdf/FOneHeme_Current_GeneList.pdf" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://www.foundationmedicineasia.com/dam/assets/pdf/FOneHeme_Current_GeneList.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   FoundationOne Heme panel
                 </a>{' '}
                 ({getPanelGeneCount(props.data, 'foundationHeme')} genes, {this.fetchedDate})

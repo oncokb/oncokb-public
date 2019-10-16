@@ -8,16 +8,9 @@ import _ from 'lodash';
 import Select from 'react-select';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
-import {
-  DEFAULT_MARGIN_BOTTOM_SM,
-  TABLE_COLUMN_KEY, THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT
-} from 'app/config/constants';
+import { DEFAULT_MARGIN_BOTTOM_SM, TABLE_COLUMN_KEY, THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT } from 'app/config/constants';
 import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
-import {
-  getDefaultColumnDefinition,
-  OncoKBOncogenicityIcon,
-  reduceJoin
-} from 'app/shared/utils/Utils';
+import { getDefaultColumnDefinition, OncoKBOncogenicityIcon, reduceJoin } from 'app/shared/utils/Utils';
 import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
@@ -57,10 +50,7 @@ const AlterationInfo: React.FunctionComponent<{
     content.push(
       <>
         <span key="oncogenicity">{props.oncogenicity}</span>
-        <OncoKBOncogenicityIcon
-          oncogenicity={props.oncogenicity}
-          isVus={props.isVus}
-        />
+        <OncoKBOncogenicityIcon oncogenicity={props.oncogenicity} isVus={props.isVus} />
       </>
     );
   }
@@ -189,8 +179,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
           const numOfReferences = props.original.citations.abstracts.length + props.original.citations.pmids.length;
           return (
             <DefaultTooltip
-              overlay={() => <CitationTooltip pmids={props.original.citations.pmids}
-                                              abstracts={props.original.citations.abstracts}/>}
+              overlay={() => <CitationTooltip pmids={props.original.citations.pmids} abstracts={props.original.citations.abstracts} />}
             >
               <span>{numOfReferences}</span>
             </DefaultTooltip>
@@ -215,14 +204,10 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
     return (
       <SmallPageContainer>
         <h2 className={'d-flex align-items-center'}>
-          <GenePageLink hugoSymbol={this.store.hugoSymbol} highlightContent={false}/>
+          <GenePageLink hugoSymbol={this.store.hugoSymbol} highlightContent={false} />
           <span className={'ml-2'}>{` ${this.store.alterationQuery}`}</span>
-          <div className='ml-auto d-flex align-items-center'>
-            <InfoIcon
-              overlay='Select a tumor type for more precise result'
-              placement='top'
-              style={{fontSize:'0.6rem'}}
-            />
+          <div className="ml-auto d-flex align-items-center">
+            <InfoIcon overlay="Select a tumor type for more precise result" placement="top" style={{ fontSize: '0.6rem' }} />
             <span className={classnames(styles.headerTumorTypeSelection, 'ml-2')}>
               <Select
                 styles={{
@@ -256,11 +241,11 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
                 isClearable={true}
                 onChange={(selectedOption: any) => this.updateTumorTypeQuery(selectedOption)}
               />
-          </span>
+            </span>
           </div>
         </h2>
         {this.store.annotationResult.isPending ? (
-          <LoadingIndicator isLoading={true} size={'big'} center={true}/>
+          <LoadingIndicator isLoading={true} size={'big'} center={true} />
         ) : (
           <>
             <AlterationInfo
@@ -273,11 +258,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
             <Row>
               <Col>
                 {this.summaries.map(summary => {
-                  return (
-                    <div className={DEFAULT_MARGIN_BOTTOM_SM}>
-                      {summary.content}
-                    </div>
-                  );
+                  return <div className={DEFAULT_MARGIN_BOTTOM_SM}>{summary.content}</div>;
                 })}
               </Col>
             </Row>

@@ -16,7 +16,7 @@ export interface ILoginProps {
 const LoginContent: React.FunctionComponent<{
   loginError: boolean;
   handleLogin: Function;
-}> = (props) => {
+}> = props => {
   return (
     <SmallPageContainer>
       <AvForm onSubmit={props.handleLogin}>
@@ -31,7 +31,7 @@ const LoginContent: React.FunctionComponent<{
           <Col md="12">
             <AvField
               name="email"
-              label='Email'
+              label="Email"
               placeholder="Your email address"
               type="email"
               required
@@ -48,7 +48,7 @@ const LoginContent: React.FunctionComponent<{
             />
             <AvGroup check>
               <label>
-                <AvInput type="checkbox" name="rememberMe"/> Remember Me
+                <AvInput type="checkbox" name="rememberMe" /> Remember Me
               </label>
             </AvGroup>
           </Col>
@@ -58,8 +58,7 @@ const LoginContent: React.FunctionComponent<{
           <Link to="/account/reset/request">Did you forget your password?</Link>
         </Alert>
         <Alert variant="warning">
-          <span>You don&apos;t have an account yet?</span> <Link to="/account/register">Register a new
-          account</Link>
+          <span>You don&apos;t have an account yet?</span> <Link to="/account/register">Register a new account</Link>
         </Alert>
         <Button variant="primary" type="submit">
           Sign in
@@ -72,17 +71,20 @@ const LoginContent: React.FunctionComponent<{
 @inject('authenticationStore', 'routing')
 @observer
 export default class LoginPage extends React.Component<ILoginProps> {
-
   @action
-  handleLogin = (event: any, errors: any, { email, password, rememberMe = false }: { email: string; password: string, rememberMe: boolean }) => {
+  handleLogin = (
+    event: any,
+    errors: any,
+    { email, password, rememberMe = false }: { email: string; password: string; rememberMe: boolean }
+  ) => {
     this.props.authenticationStore.login(email, password, rememberMe);
   };
 
   render() {
     const { from } = this.props.routing.location.state || { from: { pathname: '/', search: location.search } };
     if (this.props.authenticationStore.isUserAuthenticated) {
-      return <Redirect to={from}/>;
+      return <Redirect to={from} />;
     }
-    return <LoginContent loginError={this.props.authenticationStore.loginError} handleLogin={this.handleLogin}/>;
+    return <LoginContent loginError={this.props.authenticationStore.loginError} handleLogin={this.handleLogin} />;
   }
 }

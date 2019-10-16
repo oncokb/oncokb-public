@@ -19,13 +19,16 @@ const getNewsList = (data: SimpleTableCell[]) => {
   return data.map((element: SimpleTableCell) => <li key={element.key}>{element.content}</li>);
 };
 
-export const getNews = (news: { key: string, content: ElementType[] | undefined }) => {
-  const data = (news && news.content) ? news.content.map((newsItem, index) => {
-    return {
-      key: `${news.key}-${index}`,
-      content: newsItem
-    };
-  }) : [];
+export const getNews = (news: { key: string; content: ElementType[] | undefined }) => {
+  const data =
+    news && news.content
+      ? news.content.map((newsItem, index) => {
+          return {
+            key: `${news.key}-${index}`,
+            content: newsItem
+          };
+        })
+      : [];
   return getNewsList(data);
 };
 
@@ -57,39 +60,52 @@ export const NewsList = (props: NewsListProps) => {
               key: `priority-news-${date}`,
               content: newsData.priorityNews
             })}
-            {newsData.updatedImplication ?
-              <UpdatedTxImplListItem data={newsData.updatedImplication.map((item, index) => {
-                return {
-                  key: `updatedImplication-${date}-${index}`,
-                  content: item.map((subItem, subIndex) => {
-                    return {
-                      key: `updatedImplication-${date}-${index}-${subIndex}`,
-                      content: subItem
-                    };
-                  })
-                };
-              })}/> : undefined}
-            {newsData.updatedImplicationInOldFormat ? (
-              <UpdatedTxImplOldFormatListItem data={newsData.updatedImplicationInOldFormat} key={`UpdatedTxImplOldFormatListItem-${date}`}/>
+            {newsData.updatedImplication ? (
+              <UpdatedTxImplListItem
+                data={newsData.updatedImplication.map((item, index) => {
+                  return {
+                    key: `updatedImplication-${date}-${index}`,
+                    content: item.map((subItem, subIndex) => {
+                      return {
+                        key: `updatedImplication-${date}-${index}-${subIndex}`,
+                        content: subItem
+                      };
+                    })
+                  };
+                })}
+              />
             ) : (
               undefined
             )}
-            {newsData.changedAnnotation ?
-              <ChangedAnnotationListItem data={newsData.changedAnnotation.map((item, index) => {
-                return {
-                  key: `changedAnnotation-${date}-${index}`,
-                  content: item.map((subItem, subIndex) => {
-                    return {
-                      key: `changedAnnotation-${date}-${index}-${subIndex}`,
-                      content: subItem
-                    };
-                  })
-                };
-              })}/> : undefined}
+            {newsData.updatedImplicationInOldFormat ? (
+              <UpdatedTxImplOldFormatListItem
+                data={newsData.updatedImplicationInOldFormat}
+                key={`UpdatedTxImplOldFormatListItem-${date}`}
+              />
+            ) : (
+              undefined
+            )}
+            {newsData.changedAnnotation ? (
+              <ChangedAnnotationListItem
+                data={newsData.changedAnnotation.map((item, index) => {
+                  return {
+                    key: `changedAnnotation-${date}-${index}`,
+                    content: item.map((subItem, subIndex) => {
+                      return {
+                        key: `changedAnnotation-${date}-${index}-${subIndex}`,
+                        content: subItem
+                      };
+                    })
+                  };
+                })}
+              />
+            ) : (
+              undefined
+            )}
             {getNewlyAddGeneSection()}
             {getNews({
               key: `news-${date}`,
-              content: newsData.news ? newsData.news:[]
+              content: newsData.news ? newsData.news : []
             })}
           </ul>
         ) : (

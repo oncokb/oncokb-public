@@ -10,7 +10,9 @@ export const DataAccessPage: React.FunctionComponent<{}> = () => {
     <>
       <h6>
         By using OncoKB data, you are agreeing to the OncoKB{' '}
-        <Link to={PAGE_ROUTE.TERMS}><u>usage terms</u></Link>
+        <Link to={PAGE_ROUTE.TERMS}>
+          <u>usage terms</u>
+        </Link>
         .
       </h6>
       <div className={'mb-3'}>
