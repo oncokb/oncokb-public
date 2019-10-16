@@ -57,7 +57,7 @@ export default class OncoKBTable<T> extends React.Component<ITableWithSearchBox<
           <ReactTable
             showPagination={false}
             pageSize={this.filteredData.length === 0 ? 1 : this.filteredData.length}
-            className="-striped -highlight"
+            className={'-striped -highlight oncokbReactTable'}
             {...this.props}
             data={this.filteredData}
           />

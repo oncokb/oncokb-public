@@ -10,7 +10,7 @@ const accountMenuItemsAuthenticated = (
     <MenuItem icon="wrench" to="/account/settings">
       Account Settings
     </MenuItem>
-    <MenuItem icon="sign-out-alt" to="/logout">
+    <MenuItem icon="sign-out" to="/logout">
       Sign out
     </MenuItem>
   </>
@@ -18,10 +18,10 @@ const accountMenuItemsAuthenticated = (
 
 const accountMenuItems = (
   <>
-    <MenuItem id="login-item" icon="sign-in-alt" to="/login">
+    <MenuItem id="login-item" icon="sign-in" to="/login">
       Sign in
     </MenuItem>
-    <MenuItem icon="sign-in-alt" to="/account/register">
+    <MenuItem icon="sign-in" to="/account/register">
       Register
     </MenuItem>
   </>

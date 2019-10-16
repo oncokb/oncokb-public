@@ -5,7 +5,7 @@ import { RouterStore } from 'mobx-react-router';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
 import SmallPageContainer from 'app/components/SmallComponentContainer';
-import { AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { AvCheckbox, AvCheckboxGroup, AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 
 export interface ILoginProps {
@@ -23,7 +23,7 @@ const LoginContent: React.FunctionComponent<{
         <Row>
           <Col md="12">
             {props.loginError ? (
-              <Alert color="danger">
+              <Alert variant="danger">
                 <strong>Failed to sign in!</strong> Please check your credentials and try again.
               </Alert>
             ) : null}
@@ -46,11 +46,9 @@ const LoginContent: React.FunctionComponent<{
               required
               errorMessage="Password cannot be empty!"
             />
-            <AvGroup check>
-              <label>
-                <AvInput type="checkbox" name="rememberMe" /> Remember Me
-              </label>
-            </AvGroup>
+            <AvCheckboxGroup name='rememberMe'>
+              <AvCheckbox label='Remember Me' value='rememberMe' />
+            </AvCheckboxGroup>
           </Col>
         </Row>
         <div className="mt-1">&nbsp;</div>
@@ -75,9 +73,9 @@ export default class LoginPage extends React.Component<ILoginProps> {
   handleLogin = (
     event: any,
     errors: any,
-    { email, password, rememberMe = false }: { email: string; password: string; rememberMe: boolean }
+    { email, password, rememberMe = [] }: { email: string; password: string; rememberMe: string[] }
   ) => {
-    this.props.authenticationStore.login(email, password, rememberMe);
+    this.props.authenticationStore.login(email, password, rememberMe.includes('rememberMe'));
   };
 
   render() {

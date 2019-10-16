@@ -91,6 +91,7 @@ class AuthenticationStore {
   @action
   public login(username: string, password: string, rememberMe = false) {
     this.loading = true;
+    this.loginError = false;
     this.rememberMe = rememberMe;
     client
       .authorizeUsingPOST({
@@ -125,6 +126,7 @@ class AuthenticationStore {
   loginErrorCallback(error: Error) {
     this.loginError = true;
     this.loginErrorMessage = error.message;
+    this.logout();
   }
 
   public clearAuthToken() {

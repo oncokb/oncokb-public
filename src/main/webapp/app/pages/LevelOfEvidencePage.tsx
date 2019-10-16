@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import classnames from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import oncokbImg from 'content/images/level.jpg';
 import oncokbImgPpt from 'content/files/LevelsOfEvidence.ppt';
 import oncokbImgPdf from 'content/files/LevelsOfEvidence.pdf';
@@ -13,11 +12,11 @@ export const LevelOfEvidencePage = () => {
       <Row>
         <Col className={'d-flex justify-content-end'}>
           <Button size={'sm'} className={classnames('ml-1')} href={oncokbImgPpt}>
-            <FontAwesomeIcon icon={'cloud-download-alt'} className={'mr-1'} fixedWidth />
+            <i className={'fa fa-cloud-download mr-1'} />
             Download Slide
           </Button>
           <DownloadButton size={'sm'} className={classnames('ml-1')} href={oncokbImgPdf}>
-            <FontAwesomeIcon icon={'cloud-download-alt'} className={'mr-1'} fixedWidth />
+            <i className={'fa fa-cloud-download mr-1'} />
             Download PDF
           </DownloadButton>
         </Col>

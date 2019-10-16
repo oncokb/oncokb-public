@@ -7,13 +7,12 @@ import MskccLogo from './MskccLogo';
 import styles from './Footer.module.scss';
 import indexStyles from '../index.module.scss';
 import { CitationText } from 'app/components/CitationText';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classnames from 'classnames';
 import { ONCOKB_CONTACT_EMAIL } from 'app/config/constants';
 
 class Footer extends React.Component<{ lastUpdate: string }> {
   public get externalLinkIcon() {
-    return <FontAwesomeIcon icon={'external-link-alt'} />;
+    return <i className={'fa external-link-alt'} />;
   }
 
   public get externalLinks() {
