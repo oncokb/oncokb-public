@@ -10,7 +10,7 @@ import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import {
   DEFAULT_MARGIN_BOTTOM_SM,
-  TABLE_COLUMN_KEY, THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT,
+  TABLE_COLUMN_KEY, THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT
 } from 'app/config/constants';
 import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import {
@@ -25,6 +25,8 @@ import { RouterStore } from 'mobx-react-router';
 import { getHighestLevelStrings } from '../genePage/GenePage';
 import styles from './AlterationPage.module.scss';
 import classnames from 'classnames';
+import SmallPageContainer from 'app/components/SmallComponentContainer';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -96,7 +98,8 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
       reaction(
         () => this.store.tumorTypeQuery,
         newTumorType => {
-          const tumorTypeSection = this.store.tumorTypeQuery ? `/${this.store.tumorTypeQuery}` : '';
+          let tumorTypeSection = this.store.tumorTypeQuery.replace('/', '%2F');
+          tumorTypeSection = tumorTypeSection ? `/${tumorTypeSection}` : '';
           this.props.routing.history.replace(`/gene/${this.store.hugoSymbol}/${this.store.alterationQuery}${tumorTypeSection}`);
         }
       )
@@ -197,16 +200,6 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
     ];
   }
 
-  @computed
-  get summaryLargeWidth() {
-    return this.store.therapeuticImplications.length > 0 ? (this.store.therapeuticImplications.length > THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT ? 4 : 6) : 12;
-  }
-
-  @computed
-  get treatmentLargeWidth() {
-    return this.store.therapeuticImplications.length > 0 ? (12 - this.summaryLargeWidth) : 0;
-  }
-
   formatGroupLabel(data: any) {
     return <span>{data.label}</span>;
   }
@@ -220,11 +213,16 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
 
   render() {
     return (
-      <>
-        <div className="d-flex align-items-center">
-          <h2 className={styles.header}>
-            <GenePageLink hugoSymbol={this.store.hugoSymbol} highlightContent={false}/>
-            <span className={'ml-2'}>{` ${this.store.alterationQuery}`}</span>
+      <SmallPageContainer>
+        <h2 className={'d-flex align-items-center'}>
+          <GenePageLink hugoSymbol={this.store.hugoSymbol} highlightContent={false}/>
+          <span className={'ml-2'}>{` ${this.store.alterationQuery}`}</span>
+          <div className='ml-auto d-flex align-items-center'>
+            <InfoIcon
+              overlay='Select a tumor type for more precise result'
+              placement='top'
+              style={{fontSize:'0.6rem'}}
+            />
             <span className={classnames(styles.headerTumorTypeSelection, 'ml-2')}>
               <Select
                 styles={{
@@ -258,9 +256,9 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
                 isClearable={true}
                 onChange={(selectedOption: any) => this.updateTumorTypeQuery(selectedOption)}
               />
-            </span>
-          </h2>
-        </div>
+          </span>
+          </div>
+        </h2>
         {this.store.annotationResult.isPending ? (
           <LoadingIndicator isLoading={true} size={'big'} center={true}/>
         ) : (
@@ -273,7 +271,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
               highestResistanceLevel={this.store.annotationResult.result.highestResistanceLevel}
             />
             <Row>
-              <Col lg={this.summaryLargeWidth} xs={12}>
+              <Col>
                 {this.summaries.map(summary => {
                   return (
                     <div className={DEFAULT_MARGIN_BOTTOM_SM}>
@@ -282,8 +280,10 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
                   );
                 })}
               </Col>
-              {this.store.therapeuticImplications.length > 0 ? (
-                <Col lg={this.treatmentLargeWidth} xs={12}>
+            </Row>
+            {this.store.therapeuticImplications.length > 0 ? (
+              <Row>
+                <Col>
                   <OncoKBTable
                     data={this.store.therapeuticImplications}
                     columns={this.therapeuticTableColumns}
@@ -301,11 +301,11 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
                     ]}
                   />
                 </Col>
-              ) : null}
-            </Row>
+              </Row>
+            ) : null}
           </>
         )}
-      </>
+      </SmallPageContainer>
     );
   }
 }
