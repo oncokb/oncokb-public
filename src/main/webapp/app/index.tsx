@@ -13,12 +13,9 @@ import 'oncokb-styles/dist/oncokb.css';
 import 'react-responsive-tabs/styles.css';
 import 'react-mutation-mapper/dist/styles.css';
 
-import { loadIcons } from './config/icon-loader';
 import { assignPublicToken } from 'app/indexUtils';
 import { AUTH_UER_TOKEN_KEY, AUTH_WEBSITE_TOKEN_KEY } from 'app/store/AuthenticationStore';
 import { Storage } from 'react-jhipster';
-
-loadIcons();
 
 assignPublicToken();
 
@@ -30,7 +27,8 @@ const end = superagent.Request.prototype.end;
 
 // @ts-ignore
 superagent.Request.prototype.query = function(queryParameters: any) {
-  const token = Storage.local.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_WEBSITE_TOKEN_KEY);
+  const token =
+    Storage.local.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_WEBSITE_TOKEN_KEY);
   if (token) {
     this.set('Authorization', `Bearer ${token}`);
   }
@@ -52,13 +50,9 @@ superagent.Request.prototype.end = function(callback) {
       response.body = response.text;
     }
 
-    // If the code is 401, which means the token has expired, we need to refresh the page
-    if (response && response.statusCode === 401) {
-      window.location.reload();
-    }
     callback(error, response);
   });
 };
 
-ReactDOM.render(<App/>, document.getElementById('root') as HTMLElement);
+ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
 registerServiceWorker();

@@ -25,10 +25,9 @@ export const PrivateRoute = observer(({ component, authenticationStore, isAuthor
     if (!authenticationStore.sessionHasBeenFetched) {
       return <div />;
     } else {
-      if(authenticationStore.isAuthenticated) {
-        return checkAuthorities(props)
-      }else {
-        window.location.reload();
+      if (authenticationStore.isAuthenticated) {
+        return checkAuthorities(props);
+      } else {
         return null;
       }
     }
