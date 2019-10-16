@@ -41,7 +41,7 @@ body,
     }
 
     .navbar-nav {
-      & > a {
+      & > .nav-item {
         color: white;
         line-height: 2.75rem;
         border-bottom: 0.25rem solid $primary;

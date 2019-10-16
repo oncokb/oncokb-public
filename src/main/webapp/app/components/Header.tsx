@@ -5,13 +5,13 @@ import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap';
 import oncokbImg from '../resources/images/oncokb-lg.png';
 
 import { observer } from 'mobx-react';
-import { AccountMenu } from 'app/pages/menus';
 import WindowStore from 'app/store/WindowStore';
 import { observable, action, reaction, IReactionDisposer } from 'mobx';
 import autobind from 'autobind-decorator';
 import { RouterStore } from 'mobx-react-router';
 import { withRouter } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import AccountMenu from 'app/pages/menus/account';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;

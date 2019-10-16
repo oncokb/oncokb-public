@@ -1,5 +1,4 @@
 import React from 'react';
-import { Col, Row } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
 import { action, computed, observable } from 'mobx';
 import autobind from 'autobind-decorator';
@@ -10,6 +9,7 @@ import { ACCOUNT_TITLES, LicenseType, PAGE_ROUTE } from 'app/config/constants';
 import { getAccountInfoTitle, getLicenseTitle, getSectionClassName } from 'app/pages/account/AccountUtils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import classnames from 'classnames';
+import { Row, Col } from 'react-bootstrap';
 
 
 export type IRegisterProps = {

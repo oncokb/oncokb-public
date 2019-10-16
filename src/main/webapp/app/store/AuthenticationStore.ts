@@ -56,6 +56,9 @@ class AuthenticationStore {
         this.isAuthenticated = true;
       }
     },
+    onError: () => {
+      this.updateIdToken('');
+    },
     default: undefined
   });
 

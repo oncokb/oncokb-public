@@ -1,7 +1,7 @@
 import * as React from 'React';
 import { Route, Switch } from 'react-router-dom';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
-import Login from 'app/components/login/login';
+import Login from 'app/components/login/LoginPage';
 import { Logout } from 'app/components/login/logout';
 import { RegisterPage } from 'app/pages/RegisterPage';
 import { PrivateRoute } from 'app/shared/auth/private-route';

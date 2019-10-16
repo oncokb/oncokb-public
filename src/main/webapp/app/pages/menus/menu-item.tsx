@@ -1,8 +1,8 @@
 import React from 'react';
-import { DropdownItem } from 'reactstrap';
 import { NavLink as Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import DropdownItem from 'react-bootstrap/DropdownItem';
 
 export interface IMenuItem {
   icon: IconProp;
@@ -15,7 +15,7 @@ export default class MenuItem extends React.Component<IMenuItem> {
     const { to, icon, id, children } = this.props;
 
     return (
-      <DropdownItem tag={Link} to={to} id={id}>
+      <DropdownItem as={Link} to={to} id={id}>
         <FontAwesomeIcon icon={icon} fixedWidth className={'mr-1'} /> {children}
       </DropdownItem>
     );

@@ -1,7 +1,9 @@
 import React from 'react';
-import NavDropdown from './menu-components';
 import MenuItem from 'app/pages/menus/menu-item';
 import { observer } from 'mobx-react';
+import { Dropdown, NavItem } from 'react-bootstrap';
+import NavLink from 'react-bootstrap/NavLink';
+import { observable } from 'mobx';
 
 const accountMenuItemsAuthenticated = (
   <>
@@ -25,10 +27,20 @@ const accountMenuItems = (
   </>
 );
 
-export const AccountMenu = ({ isAuthenticated = false }) => (
-  <NavDropdown icon="user" name="Account" id="account-menu">
-    {isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}
-  </NavDropdown>
-);
+@observer
+export default class AccountMenu extends React.Component<{ isAuthenticated: boolean }> {
+  @observable menuOpened = false;
 
-export default observer(AccountMenu);
+  render() {
+    return (
+      <Dropdown as={NavItem}>
+        <Dropdown.Toggle id={'account-menu'} as={NavLink} onFocus={() => this.menuOpened = !this.menuOpened}>
+          <i className={'fa fa-user mr-1'}/>Account
+        </Dropdown.Toggle>
+        <Dropdown.Menu show={this.menuOpened}>
+          {this.props.isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}
+        </Dropdown.Menu>
+      </Dropdown>
+    );
+  }
+};
