@@ -3228,10 +3228,10 @@ cbioportal-frontend-commons@^0.0.19:
     svg2pdf.js "^1.3.3"
     url "^0.11.0"
 
-cbioportal-frontend-commons@^0.0.21:
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/cbioportal-frontend-commons/-/cbioportal-frontend-commons-0.0.21.tgz#29744db60121357d70433baed280dc3b96799a4b"
-  integrity sha512-5Ij3F8xgrHIrJf/es4g2yz1oNpzPYUA7XMPPKxyWJkZ+UayqcRQ1UTSQVnWfela6RmIhN0Ie7LrhqyXaIm6LpQ==
+cbioportal-frontend-commons@^0.0.23:
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/cbioportal-frontend-commons/-/cbioportal-frontend-commons-0.0.23.tgz#1bd3f2d2a59f5b9b718eb66e862e9ca374a22cf8"
+  integrity sha512-6jdSgduNDCiJuXW05Of/eC6V3JVrEUcOWtao/tex0PdG6nAV0F5H+QeVIkiQ6GVF21LSrB9Loc+vrVklXOmWXQ==
   dependencies:
     autobind-decorator "^2.1.0"
     babel-polyfill "^6.22.0"
@@ -12370,13 +12370,13 @@ react-motion@^0.5.2:
     prop-types "^15.5.8"
     raf "^3.1.0"
 
-react-mutation-mapper@^0.3.0-beta.5:
-  version "0.3.0-beta.5"
-  resolved "https://registry.yarnpkg.com/react-mutation-mapper/-/react-mutation-mapper-0.3.0-beta.5.tgz#eea4d9a94414a3e43a1251d2b5cbe95c93de5514"
-  integrity sha512-MqcFrFSwCfYcQFjxS581X3D+XKCqSYural4dS1OUVnLPIennmHAUVzx0usZAXX1vh1ykI7ZbEumuWJ17knrRFA==
+react-mutation-mapper@^0.3.0-beta.10:
+  version "0.3.0-beta.10"
+  resolved "https://registry.yarnpkg.com/react-mutation-mapper/-/react-mutation-mapper-0.3.0-beta.10.tgz#7bc7d1dcda28bacb70e57188c34027ee30c7b869"
+  integrity sha512-Nqq/LriwunDOjEKKiAJAP9QeCPg70JuwI9/AU5UdTGK+z5sKW4rQZYcFCWhaYu9rNMY1TUMYjQwohH7nXZZy5A==
   dependencies:
     autobind-decorator "^2.4.0"
-    cbioportal-frontend-commons "^0.0.21"
+    cbioportal-frontend-commons "^0.0.23"
     classnames "^2.2.6"
     jquery "^3.3.1"
     lodash "^4.17.11"
