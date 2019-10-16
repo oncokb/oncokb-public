@@ -1,6 +1,5 @@
 import React from 'react';
 import { AvField, AvForm, AvCheckboxGroup, AvCheckbox} from 'availity-reactstrap-validation';
-import { Alert, Button, Col, Row, Label } from 'reactstrap';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 import { inject, observer } from 'mobx-react';
 import { action, computed, observable } from 'mobx';
@@ -13,6 +12,7 @@ import { ACADEMIC_TERMS, ACCOUNT_TITLES, LICENSE_TYPES, LicenseType, PAGE_ROUTE 
 import { getAccountInfoTitle, getSectionClassName } from './account/AccountUtils';
 import SmallPageContainer from 'app/components/SmallComponentContainer';
 import Form from 'react-bootstrap/Form';
+import { Alert, Row, Col, Button } from 'react-bootstrap';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -143,7 +143,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     if (this.registerStatus === RegisterStatus.REGISTERED) {
       return (
         <div>
-          <Alert color="info">
+          <Alert variant="info">
             New account has been created, the page will be redirected to your account page
             in {this.redirectTimeoutInSecond}s
           </Alert>
@@ -155,7 +155,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
       <SmallPageContainer className={'registerPage'}>
         {this.registerStatus === RegisterStatus.NOT_SUCCESS ? (
           <div>
-            <Alert color="danger">{this.errorRegisterMessage}</Alert>
+            <Alert variant="danger">{this.errorRegisterMessage}</Alert>
           </div>
         ) : null}
         <AvForm id="register-form" onValidSubmit={this.handleValidSubmit}>
@@ -337,7 +337,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
               </Row>
               <Row>
                 <Col md={9} className={'ml-auto'}>
-                  <Button id="register-submit" color="primary" type="submit">
+                  <Button id="register-submit" variant="primary" type="submit">
                     Register
                   </Button>
                 </Col>

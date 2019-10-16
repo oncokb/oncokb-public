@@ -5,7 +5,7 @@ import { UpdatedTxImplListItem } from 'app/pages/newsPage/UpdatedTxImplListItem'
 import { NewlyAddedGenesListItem, NewlyAddedGenesListItemProps } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { ChangedAnnotationListItem } from 'app/pages/newsPage/ChangedAnnotatonListItem';
 import { UpdatedTxImplOldFormatListItem } from 'app/pages/newsPage/UpdatedTxImplOldFormatListItem';
-import { ElementType } from 'app/components/SimpleTable';
+import { ElementType, SimpleTableCell, SimpleTableRow, SimpleTableRows } from 'app/components/SimpleTable';
 
 export type NewsListProps = {
   date: string;
@@ -15,8 +15,18 @@ export const getNewsTitle = (date: string) => {
   return moment(date, 'MMDDYYYY').format('MMMM D, YYYY');
 };
 
-export const getNewsList = (data: ElementType[]) => {
-  return data.map((element: string | JSX.Element) => <li key={element.toString()}>{element}</li>);
+const getNewsList = (data: SimpleTableCell[]) => {
+  return data.map((element: SimpleTableCell) => <li key={element.key}>{element.content}</li>);
+};
+
+export const getNews = (news: { key: string, content: ElementType[] | undefined }) => {
+  const data = (news && news.content) ? news.content.map((newsItem, index) => {
+    return {
+      key: `${news.key}-${index}`,
+      content: newsItem
+    };
+  }) : [];
+  return getNewsList(data);
 };
 
 export const NewsList = (props: NewsListProps) => {
@@ -36,22 +46,51 @@ export const NewsList = (props: NewsListProps) => {
       return undefined;
     }
   };
+
   return (
     <>
       <h3>{getNewsTitle(date)}</h3>
       <div>
         {newsData ? (
           <ul>
-            {newsData.priorityNews ? getNewsList(newsData.priorityNews) : undefined}
-            {newsData.updatedImplication ? <UpdatedTxImplListItem data={newsData.updatedImplication} /> : undefined}
+            {getNews({
+              key: `priority-news-${date}`,
+              content: newsData.priorityNews
+            })}
+            {newsData.updatedImplication ?
+              <UpdatedTxImplListItem data={newsData.updatedImplication.map((item, index) => {
+                return {
+                  key: `updatedImplication-${date}-${index}`,
+                  content: item.map((subItem, subIndex) => {
+                    return {
+                      key: `updatedImplication-${date}-${index}-${subIndex}`,
+                      content: subItem
+                    };
+                  })
+                };
+              })}/> : undefined}
             {newsData.updatedImplicationInOldFormat ? (
-              <UpdatedTxImplOldFormatListItem data={newsData.updatedImplicationInOldFormat} />
+              <UpdatedTxImplOldFormatListItem data={newsData.updatedImplicationInOldFormat} key={`UpdatedTxImplOldFormatListItem-${date}`}/>
             ) : (
               undefined
             )}
-            {newsData.changedAnnotation ? <ChangedAnnotationListItem data={newsData.changedAnnotation} /> : undefined}
+            {newsData.changedAnnotation ?
+              <ChangedAnnotationListItem data={newsData.changedAnnotation.map((item, index) => {
+                return {
+                  key: `changedAnnotation-${date}-${index}`,
+                  content: item.map((subItem, subIndex) => {
+                    return {
+                      key: `changedAnnotation-${date}-${index}-${subIndex}`,
+                      content: subItem
+                    };
+                  })
+                };
+              })}/> : undefined}
             {getNewlyAddGeneSection()}
-            {newsData.news ? getNewsList(newsData.news) : undefined}
+            {getNews({
+              key: `news-${date}`,
+              content: newsData.news ? newsData.news:[]
+            })}
           </ul>
         ) : (
           undefined

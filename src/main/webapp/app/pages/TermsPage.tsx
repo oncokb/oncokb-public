@@ -14,7 +14,7 @@ export const TermsPage = () => {
       </Row>
       <Row>
         <Col>
-          <p>
+          <div>
             OncoKB is a precision oncology knowledge base maintained by Memorial Sloan Kettering Cancer Center (MSK). MSK reserves the right
             to update https://oncokb.org at any time without notice. MSK makes no warranties or representations, express or implied, with
             respect to any of the content, including as to the present accuracy, completeness, timeliness, adequacy, or usefulness of any of
@@ -26,9 +26,9 @@ export const TermsPage = () => {
               {ONCOKB_CONTACT_EMAIL}
             </a>
             .
-          </p>
+          </div>
 
-          <p>
+          <div>
             You may view the content contained on https://oncokb.org solely for your own personal or research purposes. You may not use any
             part of the <Link to={PAGE_ROUTE.HOME}>https://oncokb.org</Link> content (“Content”) for any commercial purpose, including the
             distribution, licensing or sale of the Content to any other person or entity, whether alone or in combination with other
@@ -55,7 +55,7 @@ export const TermsPage = () => {
                 </ul>
               </li>
             </ul>
-          </p>
+          </div>
         </Col>
       </Row>
     </div>

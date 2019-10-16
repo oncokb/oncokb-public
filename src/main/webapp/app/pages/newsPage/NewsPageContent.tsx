@@ -5,7 +5,7 @@ import SearchTwoImg from '../../resources/images/search_advanced_2.png';
 import ClinicalImg from '../../resources/images/cbioportal-clinical.png';
 import BiologicalImg from '../../resources/images/cbioportal-biological.png';
 import ERBBImg from '../../resources/images/ERBB.png';
-import { ElementType, SimpleTable } from 'app/components/SimpleTable';
+import { ElementType, SimpleTable, SimpleTableCell } from 'app/components/SimpleTable';
 import { NewlyAddedGeneType } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { Link } from 'react-router-dom';
 import { PAGE_ROUTE } from 'app/config/constants';
@@ -172,11 +172,13 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <Row>
           <table className="table">
             <thead>
+            <tr>
               <th className="col-xs-1">Level</th>
               <th className="col-xs-1">Gene</th>
               <th className="col-xs-4">Mutation</th>
               <th className="col-xs-4">Tumor Type</th>
               <th className="col-xs-2">Drug</th>
+            </tr>
             </thead>
             <tbody>
               <tr>
@@ -652,7 +654,17 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       <span>
         New Level 4 associations have been added:
         <Row>
-          <SimpleTable columns={NEWLY_ADDED_LEVEL_FOUR_COLUMNS} rows={NEWLY_ADDED_LEVEL_FOUR} />
+          <SimpleTable columns={NEWLY_ADDED_LEVEL_FOUR_COLUMNS} rows={NEWLY_ADDED_LEVEL_FOUR.map((record, index) => {
+            return {
+              key: `NEWLY_ADDED_LEVEL_FOUR-${index}`,
+              content: record.map((subItem, subIndex) => {
+                return {
+                  key: `NEWLY_ADDED_LEVEL_FOUR-${index}-${subIndex}`,
+                  content: subItem
+                };
+              })
+            };
+          })}/>
         </Row>
       </span>,
       <span>Inclusion of Level R1 actionable alterations in Actionable Genes</span>
