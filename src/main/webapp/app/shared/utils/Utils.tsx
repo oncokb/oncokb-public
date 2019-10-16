@@ -224,7 +224,7 @@ export function getDefaultColumnDefinition<T>(
         Header: <span>Level-associated cancer types</span>,
         accessor: 'cancerTypes',
         style: { whiteSpace: 'normal' },
-        minWidth: 150,
+        minWidth: 110,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod
       };
@@ -243,7 +243,7 @@ export function getDefaultColumnDefinition<T>(
         id: TABLE_COLUMN_KEY.LEVEL,
         Header: <span>Level</span>,
         accessor: 'level',
-        minWidth: 50,
+        minWidth: 70,
         defaultSortDesc: false,
         style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
@@ -256,7 +256,7 @@ export function getDefaultColumnDefinition<T>(
         id: TABLE_COLUMN_KEY.CITATIONS,
         Header: <span>Citations</span>,
         accessor: 'citations',
-        minWidth: 80,
+        minWidth: 90,
         defaultSortDesc: false,
         style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,

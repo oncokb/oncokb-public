@@ -15,12 +15,9 @@ import {
   getDrugNameFromTreatment,
   getTreatmentNameFromEvidence,
   levelOfEvidence2Level,
-  OncoKBLevelIcon
 } from 'app/shared/utils/Utils';
-import { TreatmentDrug } from 'app/shared/api/generated/OncoKbAPI';
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Else, If, Then } from 'react-if';
@@ -29,7 +26,6 @@ import { LEVEL_BUTTON_DESCRIPTION, LEVELS, LG_TABLE_FIXED_HEIGHT, TABLE_COLUMN_K
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import * as QueryString from 'query-string';
-import fileDownload from 'js-file-download';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 

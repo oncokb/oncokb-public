@@ -8,7 +8,11 @@ import _ from 'lodash';
 import Select from 'react-select';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
-import { DEFAULT_MARGIN_BOTTOM_SM, TABLE_COLUMN_KEY, THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT } from 'app/config/constants';
+import {
+  DEFAULT_MARGIN_BOTTOM_SM,
+  TABLE_COLUMN_KEY,
+  THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT
+} from 'app/config/constants';
 import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import { getDefaultColumnDefinition, OncoKBOncogenicityIcon, reduceJoin } from 'app/shared/utils/Utils';
 import { GenePageLink } from 'app/shared/utils/UrlUtils';
@@ -50,7 +54,7 @@ const AlterationInfo: React.FunctionComponent<{
     content.push(
       <>
         <span key="oncogenicity">{props.oncogenicity}</span>
-        <OncoKBOncogenicityIcon oncogenicity={props.oncogenicity} isVus={props.isVus} />
+        <OncoKBOncogenicityIcon oncogenicity={props.oncogenicity} isVus={props.isVus}/>
       </>
     );
   }
@@ -133,15 +137,19 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
   }
 
   @computed
-  get summaries() {
+  get alterationSummaries() {
     const orderedSummaries = [SummaryKey.GENE_SUMMARY, SummaryKey.ALTERATION_SUMMARY];
+    return this.getSummaries(orderedSummaries);
 
-    if (this.store.tumorTypeQuery) {
-      orderedSummaries.push(...[SummaryKey.TUMOR_TYPE_SUMMARY, SummaryKey.DIAGNOSTIC_SUMMARY, SummaryKey.PROGNOSTIC_SUMMARY]);
-    } else {
-      orderedSummaries.push(SummaryKey.DIAGNOSTIC_SUMMARY);
-    }
+  }
 
+  @computed
+  get tumorTypeSummaries() {
+    const orderedSummaries = this.store.tumorTypeQuery ? [SummaryKey.TUMOR_TYPE_SUMMARY, SummaryKey.DIAGNOSTIC_SUMMARY, SummaryKey.PROGNOSTIC_SUMMARY] : [];
+    return this.getSummaries(orderedSummaries);
+  }
+
+  getSummaries(orderedSummaries: string[]) {
     return _.reduce(
       orderedSummaries,
       (acc, next) => {
@@ -179,7 +187,8 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
           const numOfReferences = props.original.citations.abstracts.length + props.original.citations.pmids.length;
           return (
             <DefaultTooltip
-              overlay={() => <CitationTooltip pmids={props.original.citations.pmids} abstracts={props.original.citations.abstracts} />}
+              overlay={() => <CitationTooltip pmids={props.original.citations.pmids}
+                                              abstracts={props.original.citations.abstracts}/>}
             >
               <span>{numOfReferences}</span>
             </DefaultTooltip>
@@ -204,48 +213,11 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
     return (
       <SmallPageContainer>
         <h2 className={'d-flex align-items-center'}>
-          <GenePageLink hugoSymbol={this.store.hugoSymbol} highlightContent={false} />
+          <GenePageLink hugoSymbol={this.store.hugoSymbol} highlightContent={false}/>
           <span className={'ml-2'}>{` ${this.store.alterationQuery}`}</span>
-          <div className="ml-auto d-flex align-items-center">
-            <InfoIcon overlay="Select a tumor type for more precise result" placement="top" style={{ fontSize: '0.6rem' }} />
-            <span className={classnames(styles.headerTumorTypeSelection, 'ml-2')}>
-              <Select
-                styles={{
-                  control: (base, state) => ({
-                    ...base,
-                    height: '30px',
-                    'min-height': '30px'
-                  }),
-                  dropdownIndicator: base => ({
-                    ...base,
-                    padding: 4
-                  }),
-                  clearIndicator: base => ({
-                    ...base,
-                    padding: 4
-                  }),
-                  valueContainer: base => ({
-                    ...base,
-                    padding: '0px 6px'
-                  }),
-                  input: base => ({
-                    ...base,
-                    margin: 0,
-                    padding: 0
-                  })
-                }}
-                value={this.tumorTypeSelectValue}
-                placeholder="Select Tumor Type"
-                options={this.store.allTumorTypesOptions.result}
-                formatGroupLabel={this.formatGroupLabel}
-                isClearable={true}
-                onChange={(selectedOption: any) => this.updateTumorTypeQuery(selectedOption)}
-              />
-            </span>
-          </div>
         </h2>
         {this.store.annotationResult.isPending ? (
-          <LoadingIndicator isLoading={true} size={'big'} center={true} />
+          <LoadingIndicator isLoading={true} size={'big'} center={true}/>
         ) : (
           <>
             <AlterationInfo
@@ -257,11 +229,63 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
             />
             <Row>
               <Col>
-                {this.summaries.map(summary => {
+                {this.alterationSummaries.map(summary => {
                   return <div className={DEFAULT_MARGIN_BOTTOM_SM}>{summary.content}</div>;
                 })}
               </Col>
             </Row>
+            <Row>
+              <Col>
+                <div className="d-flex align-items-center">
+                  <span className={classnames(styles.headerTumorTypeSelection, 'mr-2')}>
+                    <Select
+                      styles={{
+                        control: (base, state) => ({
+                          ...base,
+                          height: '30px',
+                          'min-height': '30px'
+                        }),
+                        dropdownIndicator: base => ({
+                          ...base,
+                          padding: 4
+                        }),
+                        clearIndicator: base => ({
+                          ...base,
+                          padding: 4
+                        }),
+                        valueContainer: base => ({
+                          ...base,
+                          padding: '0px 6px'
+                        }),
+                        input: base => ({
+                          ...base,
+                          margin: 0,
+                          padding: 0
+                        })
+                      }}
+                      value={this.tumorTypeSelectValue}
+                      placeholder="Select a tumor type"
+                      options={this.store.allTumorTypesOptions.result}
+                      formatGroupLabel={this.formatGroupLabel}
+                      isClearable={true}
+                      onChange={(selectedOption: any) => this.updateTumorTypeQuery(selectedOption)}
+                    />
+                  </span>
+                  <InfoIcon overlay="For tumor type specific information, please select a tumor type from the dropdown"
+                            placement="top"
+                            style={{ fontSize: '0.6rem' }}/>
+                </div>
+              </Col>
+            </Row>
+            {this.store.tumorTypeQuery ? (
+              <Row>
+                <Col>
+                  {this.tumorTypeSummaries.map(summary => {
+                    return <div className={DEFAULT_MARGIN_BOTTOM_SM}>{summary.content}</div>;
+                  })}
+                </Col>
+              </Row>
+            ) : null}
             {this.store.therapeuticImplications.length > 0 ? (
               <Row>
                 <Col>

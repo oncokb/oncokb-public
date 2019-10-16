@@ -1,6 +1,5 @@
 import { Button, ButtonProps } from 'react-bootstrap';
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classnames from 'classnames';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -51,7 +50,7 @@ export class AuthDownloadButton extends React.Component<IAuthDownloadButton> {
           <LoadingIndicator isLoading={true} size={'small'} color="white" inline={false} />
         ) : (
           <>
-            <FontAwesomeIcon icon={'cloud-download-alt'} className={'mr-1'} fixedWidth />
+            <i className={'fa fa-cloud-download mr-1'} />
             {buttonText}
           </>
         )}

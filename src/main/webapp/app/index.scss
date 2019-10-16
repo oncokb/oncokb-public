@@ -132,14 +132,12 @@ body,
   }
 }
 
-.registerPage {
-  .form-check {
-    padding-left: 0;
-  }
+.form-check {
+  padding-left: 0;
+}
 
-  fieldset.form-group {
-    margin-bottom: 0;
-  }
+fieldset.form-group {
+  margin-bottom: 0;
 }
 
 input[type='checkbox'] {
@@ -162,4 +160,32 @@ input[type='checkbox']:checked + label:before {
 } /* checked icon */
 input[type='checkbox']:checked + label:before {
   letter-spacing: 10px;
+}
+
+// Overwrite react-table styles
+.ReactTable {
+  .-sort-desc {
+    box-shadow: none !important;
+
+    &:before {
+      font-family: FontAwesome;
+      content: '\f0dd';
+      float: right;
+    }
+  }
+
+  .-sort-asc {
+    box-shadow: none !important;
+
+    &:before {
+      font-family: FontAwesome;
+      content: '\f0de';
+      float: right;
+    }
+  }
+
+  .rt-thead .rt-resizable-header-content {
+    white-space: normal;
+    word-break: break-all;
+  }
 }
