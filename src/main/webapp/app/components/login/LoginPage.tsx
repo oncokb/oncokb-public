@@ -46,8 +46,8 @@ const LoginContent: React.FunctionComponent<{
               required
               errorMessage="Password cannot be empty!"
             />
-            <AvCheckboxGroup name='rememberMe'>
-              <AvCheckbox label='Remember Me' value='rememberMe' />
+            <AvCheckboxGroup name="rememberMe">
+              <AvCheckbox label="Remember Me" value="rememberMe" />
             </AvCheckboxGroup>
           </Col>
         </Row>

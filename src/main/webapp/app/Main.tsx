@@ -32,7 +32,6 @@ class Main extends React.Component<IMainPage> {
         />
         <div className={'view-wrapper'}>
           <Container fluid={!this.props.windowStore.isXLscreen}>
-            <span>Current pathname: {this.props.routing.location.pathname}</span>
             <AppRouts authenticationStore={this.props.authenticationStore} routing={this.props.routing} />
           </Container>
         </div>
