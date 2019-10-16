@@ -1,9 +1,9 @@
 import React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import classnames from 'classnames';
-import oncokbImg from 'content/images/level.jpg';
-import oncokbImgPpt from 'content/files/LevelsOfEvidence.ppt';
-import oncokbImgPdf from 'content/files/LevelsOfEvidence.pdf';
+import oncokbImg from 'content/images/level_v2.jpg';
+import oncokbImgPpt from 'content/files/levelOfEvidence/v2/LevelsOfEvidence.ppt';
+import oncokbImgPdf from 'content/files/levelOfEvidence/v2/LevelsOfEvidence.pdf';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 
 export const LevelOfEvidencePage = () => {
@@ -23,7 +23,7 @@ export const LevelOfEvidencePage = () => {
       </Row>
       <Row>
         <Col className={'d-flex justify-content-center'}>
-          <img style={{ maxWidth: 800, width: '100%' }} src={oncokbImg} />
+          <img style={{ maxWidth: 600, width: '100%' }} src={oncokbImg} />
         </Col>
       </Row>
     </div>
