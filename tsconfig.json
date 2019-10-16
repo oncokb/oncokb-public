@@ -18,12 +18,13 @@
     "checkJs": false,
     "baseUrl": "./",
     "paths": {
-      "app/*": ["src/main/webapp/app/*"]
+      "app/*": ["src/main/webapp/app/*"],
+      "content/*": ["src/main/webapp/content/*"]
     },
     "importHelpers": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/main/webapp/app"],
+  "include": ["src/main/webapp/app", "src/main/webapp/content"],
   "exclude": ["node_modules"]
 }

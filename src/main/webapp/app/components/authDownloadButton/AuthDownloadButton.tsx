@@ -44,7 +44,7 @@ export class AuthDownloadButton extends React.Component<IAuthDownloadButton> {
   };
 
   render() {
-    const { routing, authenticationStore, buttonText, ...rest } = this.props;
+    const { routing, authenticationStore, buttonText, getDownloadData, fileName, ...rest } = this.props;
     return (
       <Button size={'sm'} className={classnames('mr-1', 'mb-1')} onClick={this.onClick} {...rest}>
         {this.downloading ? (
