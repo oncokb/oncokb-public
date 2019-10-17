@@ -24,7 +24,7 @@
     "availity-reactstrap-validation": "2.5.1",
     "axios": "0.19.0",
     "bootstrap": "4.3.1",
-    "cbioportal-frontend-commons": "^0.0.19",
+    "cbioportal-frontend-commons": "^0.0.23",
     "classnames": "^2.2.6",
     "font-awesome": "^4.7.0",
     "history": "^4.10.1",

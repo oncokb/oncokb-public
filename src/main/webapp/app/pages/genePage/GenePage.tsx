@@ -29,11 +29,14 @@ import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
 import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import _ from 'lodash';
-import { TrackName } from 'react-mutation-mapper';
 import { MskimpactLink } from 'app/components/MskimpactLink';
 import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import WindowStore from 'app/store/WindowStore';
+import { DataFilterType, onFilterOptionSelect } from "react-mutation-mapper";
+import {
+  CANCER_TYPE_FILTER_ID
+} from "app/components/oncokbMutationMapper/FilterUtils";
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -450,7 +453,15 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
                     height={300}
                     filters={this.store.selectedCancerTypes}
                     windowStore={this.props.windowStore}
-                    onUserSelection={filters => (this.store.selectedCancerTypes = filters)}
+                    onUserSelection={selectedCancerTypes =>
+                      this.store.mutationMapperStore && this.store.mutationMapperStore.result ?
+                        onFilterOptionSelect(
+                          selectedCancerTypes,
+                          false,
+                          this.store.mutationMapperStore.result.dataStore,
+                          DataFilterType.CANCER_TYPE,
+                          CANCER_TYPE_FILTER_ID): undefined
+                    }
                   />
                 </Col>
               </Row>
@@ -462,12 +473,9 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
                 </Col>
                 <Col xs={12}>
                   <OncokbMutationMapper
-                    hugoSymbol={this.store.gene.result.hugoSymbol}
-                    entrezGeneId={this.store.gene.result.entrezGeneId}
-                    tracks={[TrackName.OncoKB, TrackName.CancerHotspots, TrackName.PTM]}
-                    data={this.store.mutationMapperDataExternal.result}
+                    {...this.store.mutationMapperProps.result}
+                    store={this.store.mutationMapperStore.result}
                     oncogenicities={this.store.uniqOncogenicity}
-                    onFilterChange={this.store.onToggleFilter}
                   />
                 </Col>
               </Row>
