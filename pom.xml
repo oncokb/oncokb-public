@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>oncokb</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.alpha.0</version>
     <packaging>jar</packaging>
     <name>OncoKB</name>
 
@@ -564,7 +564,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>cbioportal/oncokb-public-gateway:0.0.1-2</image>
+                            <image>cbioportal/oncokb-public-gateway:0.0.alpha.0</image>
                         </to>
                         <container>
                             <entrypoint>

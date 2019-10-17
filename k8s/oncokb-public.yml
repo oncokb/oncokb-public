@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oncokb-public
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oncokb-public
+      version: 'v1'
+  template:
+    metadata:
+      labels:
+        app: oncokb-public
+        version: 'v1'
+    spec:
+      containers:
+        - name: oncokb-public
+          image: cbioportal/oncokb-public-gateway:0.0.alpha.0
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: JAVA_OPTS
+              value: ' -Xmx256m -Xms256m'
+          envFrom:
+            - configMapRef:
+                name: oncokb-public
+          resources:
+            requests:
+              memory: '512Mi'
+              cpu: '500m'
+            limits:
+              memory: '1Gi'
+              cpu: '1'
+          ports:
+            - name: http
+              containerPort: 9090
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oncokb-public
+  namespace: default
+  labels:
+    app: oncokb-public
+spec:
+  selector:
+    app: oncokb-public
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 9090
