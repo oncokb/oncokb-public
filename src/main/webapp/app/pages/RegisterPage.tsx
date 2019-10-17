@@ -164,7 +164,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
               </b>
             </Col>
             <Col xs={12}>
-              <img width="100%" src={licenseModel} alt={'OncoKB License Model'} />
+              <img style={{ maxHeight: 200, width: '100%' }} src={licenseModel} alt={'OncoKB License Model'}/>
             </Col>
           </Row>
           <Row className={getSectionClassName(false)}>
@@ -176,7 +176,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 <div className="primary" key={license.key} onClick={() => this.onSelectLicense(license.key)}>
                   <Form.Check
                     className={'px-0'}
-                    type="checkbox"
+                    type="radio"
                     label={license.title}
                     readOnly
                     checked={this.selectedLicense === license.key}
