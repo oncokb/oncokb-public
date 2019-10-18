@@ -153,5 +153,5 @@ jhipster:
 # ===================================================================
 
 application:
-  #  api-proxy-url: 'http://oncokb-core:8888'
-  api-proxy-url: 'http://localhost:8080/oncokb-public'
+  api-proxy-url: 'http://oncokb-core:8888'
+#  api-proxy-url: 'http://localhost:8080/oncokb-public'
