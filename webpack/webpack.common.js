@@ -127,6 +127,21 @@ module.exports = options => ({
     new HtmlWebpackPlugin({
       template: '!!html-loader!./src/main/webapp/index.html',
       chunksSortMode: 'dependency',
+      minify: {
+        removeComments: true,
+        removeCommentsFromCDATA: true,
+        removeCDATASectionsFromCDATA: true,
+        collapseWhitespace: true,
+        conservativeCollapse: true,
+        removeAttributeQuotes: true,
+        useShortDoctype: true,
+        keepClosingSlash: true,
+        // we use TerserPlugin for the purpose, and it has side effect of removing CDATA section
+        minifyJS: false,
+        minifyCSS: true,
+        removeScriptTypeAttributes: true,
+        removeStyleTypeAttributes: true
+      },
       inject: 'body'
     }),
     new BaseHrefWebpackPlugin({ baseHref: '/' }),

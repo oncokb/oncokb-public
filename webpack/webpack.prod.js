@@ -74,6 +74,7 @@ module.exports = webpackMerge(commonConfig({
       new TerserPlugin({
         cache: true,
         parallel: true,
+        // exclude: './src/main/webapp/index.html',
         // sourceMap: true, // Enable source maps. Please note that this will slow down the build
         terserOptions: {
           ecma: 6,
@@ -115,7 +116,9 @@ module.exports = webpackMerge(commonConfig({
       ]
     }),
     new webpack.LoaderOptionsPlugin({
-      minimize: true,
+      // The default was true
+      // But it forces HtmlWebpackPlugin to minimize the JS which has side effect of removing CDATA section
+      minimize: false,
       debug: false
     }),
     new WorkboxPlugin.GenerateSW({
