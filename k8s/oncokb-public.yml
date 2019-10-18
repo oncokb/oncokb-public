@@ -22,17 +22,17 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: JAVA_OPTS
-              value: ' -Xmx256m -Xms256m'
+              value: '-Xmx750m -Xms256m'
           envFrom:
             - configMapRef:
                 name: oncokb-public
           resources:
             requests:
-              memory: '512Mi'
-              cpu: '500m'
+              memory: 2Gi
+              cpu: 500m
             limits:
-              memory: '1Gi'
-              cpu: '1'
+              memory: 3Gi
+              cpu: 750m
           ports:
             - name: http
               containerPort: 9090
