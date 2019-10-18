@@ -16,9 +16,9 @@ import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/api")
-public class V1Resource {
+public class ApiProxy {
 
-    private final Logger log = LoggerFactory.getLogger(V1Resource.class);
+    private final Logger log = LoggerFactory.getLogger(ApiProxy.class);
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -27,8 +27,7 @@ public class V1Resource {
     public String proxy(@RequestBody(required = false) String body, HttpMethod method, HttpServletRequest request)
         throws URISyntaxException {
         String queryString = request.getQueryString();
-        URI uri = new URI("http://" + applicationProperties.getApiPod() + ":" + applicationProperties.getApiPodPort() + request.getRequestURI() + (queryString == null ? "" : "?" + queryString));
-//        URI uri = new URI("http://" + applicationProperties.getApiPod() + ":" + applicationProperties.getApiPodPort() + "/oncokb-public" + request.getRequestURI() + (queryString == null ? "" : "?" + queryString));
+        URI uri = new URI(applicationProperties.getApiProxyUrl() + request.getRequestURI() + (queryString == null ? "" : "?" + queryString));
         log.info(uri.getPath());
 
         HttpHeaders httpHeaders = new HttpHeaders();

@@ -87,7 +87,7 @@ export function initDefaultMutationMapperStore(props: MutationMapperProps) {
   return new DefaultMutationMapperStore(
     {
       entrezGeneId: props.entrezGeneId, // entrezGeneId is required to display uniprot id
-      hugoGeneSymbol: props.hugoSymbol ? props.hugoSymbol! : ''
+      hugoGeneSymbol: props.hugoSymbol ? props.hugoSymbol : ''
     },
     {
       annotationFields: props.annotationFields,
