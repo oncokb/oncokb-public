@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oncokb-core-mysql
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oncokb-core-mysql
+  template:
+    metadata:
+      labels:
+        app: oncokb-core-mysql
+    spec:
+      volumes:
+        - name: data
+          emptyDir: {}
+      containers:
+        - name: mysql
+          image: mysql:5
+          env:
+          envFrom:
+            - configMapRef:
+                name: oncokb-core-local
+          args:
+            - --lower_case_table_names=1
+            - --skip-ssl
+            - --character_set_server=utf8mb4
+            - --explicit_defaults_for_timestamp
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oncokb-core-mysql
+  namespace: default
+spec:
+  selector:
+    app: oncokb-core-mysql
+  ports:
+    - port: 3306
