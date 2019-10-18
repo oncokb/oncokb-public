@@ -177,7 +177,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:
 
 ```
-$ docker image tag oncokb cbioportal/oncokb-public-gateway
+$ docker image tag oncokb cbioportal/oncokb-public
 $ docker push oncokb-public-gateway/oncokb-public-gateway
 ```
 

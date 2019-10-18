@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: oncokb-public
-          image: cbioportal/oncokb-public-gateway:0.0.alpha.0
+          image: cbioportal/oncokb-public:0.0.alpha.0
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
@@ -28,10 +28,10 @@ spec:
                 name: oncokb-public
           resources:
             requests:
-              memory: 2Gi
+              memory: 1Gi
               cpu: 500m
             limits:
-              memory: 3Gi
+              memory: 2Gi
               cpu: 750m
           ports:
             - name: http
