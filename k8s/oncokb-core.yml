@@ -16,7 +16,7 @@ spec:
       run: oncokb-core
   strategy:
     rollingUpdate:
-      maxSurge: 3
+      maxSurge: 2
       maxUnavailable: 1
     type: RollingUpdate
   template:
@@ -61,7 +61,7 @@ spec:
               "-jar",
               "/webapp-runner.jar",
               "--proxy-base-url",
-              "https://oncokb.org",
+              "https://beta.oncokb.org",
               "--enable-compression",
               "--expand-war",
               "--port",
