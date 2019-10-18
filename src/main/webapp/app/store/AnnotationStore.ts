@@ -1,4 +1,13 @@
 import { remoteData } from 'cbioportal-frontend-commons';
+import {
+  DataFilterType,
+  DefaultMutationMapperStore,
+  Mutation,
+  MutationMapper,
+  MutationMapperProps,
+  MutationMapperStore,
+  TrackName
+} from 'react-mutation-mapper';
 import apiClient from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { observable, computed, IReactionDisposer, action } from 'mobx';
@@ -16,7 +25,6 @@ import {
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
-import { Mutation } from 'react-mutation-mapper';
 import {
   articles2Citations,
   getCancerTypeNameFromOncoTreeType,
@@ -26,6 +34,15 @@ import {
 } from 'app/shared/utils/Utils';
 import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 import { Oncogenicity } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
+import { OncokbMutation } from 'app/components/oncokbMutationMapper/OncokbMutation';
+import {
+  applyCancerTypeFilter,
+  applyOncogenicityFilter,
+  findCancerTypeFilter,
+  findOncogenicityFilter,
+  findPositionFilter,
+  ONCOGENICITY_FILTER_TYPE
+} from 'app/components/oncokbMutationMapper/FilterUtils';
 
 interface IAnnotationStore {
   hugoSymbolQuery: string;
@@ -65,12 +82,95 @@ export type TherapeuticImplication = {
   citations: Citations;
 };
 
+// TODO import this function from "react-mutation-mapper"
+export function initDefaultMutationMapperStore(props: MutationMapperProps) {
+  return new DefaultMutationMapperStore(
+    {
+      entrezGeneId: props.entrezGeneId, // entrezGeneId is required to display uniprot id
+      hugoGeneSymbol: props.hugoSymbol ? props.hugoSymbol! : ''
+    },
+    {
+      annotationFields: props.annotationFields,
+      isoformOverrideSource: props.isoformOverrideSource,
+      filterMutationsBySelectedTranscript: props.filterMutationsBySelectedTranscript,
+      genomeNexusUrl: props.genomeNexusUrl,
+      oncoKbUrl: props.oncoKbUrl,
+      cachePostMethodsOnClients: props.cachePostMethodsOnClients,
+      apiCacheLimit: props.apiCacheLimit,
+      getMutationCount: props.getMutationCount,
+      getTumorType: props.getTumorType,
+      dataFilters: props.dataFilters,
+      selectionFilters: props.selectionFilters,
+      highlightFilters: props.highlightFilters,
+      groupFilters: props.groupFilters
+    },
+    () => (props.data || []) as Mutation[],
+    props.filterApplier,
+    props.filterAppliersOverride
+  );
+}
+
+export function getCustomFilterAppliers() {
+  return {
+    [ONCOGENICITY_FILTER_TYPE]: applyOncogenicityFilter,
+    [DataFilterType.CANCER_TYPE]: applyCancerTypeFilter
+  };
+}
+
 export class AnnotationStore {
   @observable hugoSymbolQuery: string;
   @observable alterationQuery: string;
   @observable tumorTypeQuery: string;
-  @observable oncogenicityFilters: string[] = [];
-  @observable selectedCancerTypes: string[] = [];
+
+  @computed get cancerTypeFilter() {
+    return this.mutationMapperStore.result ? findCancerTypeFilter(this.mutationMapperStore.result.dataStore.dataFilters) : undefined;
+  }
+
+  @computed get selectedCancerTypes() {
+    return this.cancerTypeFilter ? this.cancerTypeFilter.values : [];
+  }
+
+  @computed
+  public get oncogenicityFilter() {
+    return this.mutationMapperStore.result ? findOncogenicityFilter(this.mutationMapperStore.result.dataStore.dataFilters) : undefined;
+  }
+
+  @computed
+  public get oncogenicityFilters() {
+    return this.oncogenicityFilter ? this.oncogenicityFilter.values : [];
+  }
+
+  @computed get positionFilter() {
+    return this.mutationMapperStore.result ? findPositionFilter(this.mutationMapperStore.result.dataStore.selectionFilters) : undefined;
+  }
+
+  @computed get selectedPositions() {
+    return this.positionFilter ? this.positionFilter.values : [];
+  }
+
+  readonly mutationMapperProps = remoteData<Partial<MutationMapperProps>>({
+    await: () => [this.gene, this.mutationMapperData, this.biologicalAlterations],
+    invoke: () => {
+      return Promise.resolve({
+        ...MutationMapper.defaultProps,
+        hugoSymbol: this.gene.result.hugoSymbol,
+        entrezGeneId: this.gene.result.entrezGeneId,
+        tracks: [TrackName.OncoKB, TrackName.CancerHotspots, TrackName.PTM],
+        data: this.mutationMapperData.result,
+        oncogenicities: this.uniqOncogenicity,
+        filterAppliersOverride: getCustomFilterAppliers()
+      });
+    },
+    default: MutationMapper.defaultProps
+  });
+
+  readonly mutationMapperStore = remoteData<MutationMapperStore | undefined>({
+    await: () => [this.mutationMapperProps],
+    invoke: () => {
+      return Promise.resolve(initDefaultMutationMapperStore(this.mutationMapperProps.result));
+    },
+    default: undefined
+  });
 
   readonly reactions: IReactionDisposer[] = [];
 
@@ -168,7 +268,7 @@ export class AnnotationStore {
     default: []
   });
 
-  readonly mutationMapperDataExternal = remoteData<Mutation[]>({
+  readonly mutationMapperDataExternal = remoteData<OncokbMutation[]>({
     await: () => [this.biologicalAlterations],
     invoke: async () => {
       return Promise.resolve(
@@ -182,7 +282,8 @@ export class AnnotationStore {
             proteinPosStart: alteration.variant.proteinStart,
             referenceAllele: alteration.variant.refResidues,
             variantAllele: alteration.variant.variantResidues,
-            mutationType: alteration.variant.consequence.term
+            mutationType: alteration.variant.consequence.term,
+            oncogenic: shortenOncogenicity(alteration.oncogenic)
           };
         })
       );
@@ -280,7 +381,7 @@ export class AnnotationStore {
     default: []
   });
 
-  readonly mutationMapperData = remoteData<PortalAlteration[]>({
+  readonly mutationMapperDataPortal = remoteData<PortalAlteration[]>({
     invoke: async () => {
       return privateClient.utilMutationMapperDataGetUsingGET({
         hugoSymbol: this.hugoSymbol
@@ -289,14 +390,32 @@ export class AnnotationStore {
     default: []
   });
 
-  @action.bound
-  onToggleFilter(filterKey: string) {
-    this.oncogenicityFilters = _.xor(this.oncogenicityFilters, [filterKey]);
-  }
+  readonly mutationMapperData = remoteData<OncokbMutation[]>({
+    await: () => [this.mutationMapperDataExternal, this.mutationMapperDataPortal],
+    invoke: () => {
+      // simply mapping by protein change, assuming that protein change is unique for alterations
+      const indexedByProteinChange = _.keyBy(this.mutationMapperDataPortal.result, mutation => mutation.proteinChange);
+
+      const data = this.mutationMapperDataExternal.result
+        ? this.mutationMapperDataExternal.result.map(mutation => {
+            const portalMutation = indexedByProteinChange[mutation.proteinChange];
+            const cancerType = portalMutation ? portalMutation.cancerType : undefined;
+
+            return {
+              ...mutation,
+              cancerType
+            };
+          })
+        : [];
+
+      return Promise.resolve(data);
+    },
+    default: []
+  });
 
   @computed
   get barChartData() {
-    const groupedCanerTypeCounts = _.groupBy(this.mutationMapperData.result, 'cancerType');
+    const groupedCanerTypeCounts = _.groupBy(this.mutationMapperDataPortal.result, 'cancerType');
     const cancerGroups = _.keyBy(this.portalAlterationSampleCount.result.sort((a, b) => (a.count > b.count ? -1 : 1)), 'cancerType');
     return _.reduce(
       groupedCanerTypeCounts,
@@ -351,7 +470,7 @@ export class AnnotationStore {
 
   @computed
   get isFiltered() {
-    return this.oncogenicityFilters.length > 0 || this.selectedCancerTypes.length > 0;
+    return this.oncogenicityFilters.length > 0 || this.selectedCancerTypes.length > 0 || this.selectedPositions.length > 0;
   }
 
   @computed
@@ -367,6 +486,11 @@ export class AnnotationStore {
   }
 
   @computed
+  get filteredPositionsByBarChart() {
+    return _.uniq(_.flatten(this.filteredBarChartData.map(data => data.alterations.map(alteration => alteration.proteinStartPosition))));
+  }
+
+  @computed
   get filteredClinicalAlterations() {
     if (this.isFiltered) {
       return this.clinicalAlterations.result.filter(alteration => {
@@ -375,6 +499,9 @@ export class AnnotationStore {
           isMatch = false;
         }
         if (this.selectedCancerTypes.length > 0 && !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration)) {
+          isMatch = false;
+        }
+        if (this.selectedPositions.length > 0 && !this.selectedPositions.includes(alteration.variant.proteinStart)) {
           isMatch = false;
         }
         return isMatch;
@@ -393,6 +520,9 @@ export class AnnotationStore {
           isMatch = false;
         }
         if (this.selectedCancerTypes.length > 0 && !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration)) {
+          isMatch = false;
+        }
+        if (this.selectedPositions.length > 0 && !this.selectedPositions.includes(alteration.variant.proteinStart)) {
           isMatch = false;
         }
         return isMatch;
