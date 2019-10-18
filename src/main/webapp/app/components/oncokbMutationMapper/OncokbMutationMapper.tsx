@@ -1,12 +1,14 @@
-import { MutationMapperProps, MutationMapper } from 'react-mutation-mapper';
+import {MutationMapperProps, MutationMapper, onFilterOptionSelect} from 'react-mutation-mapper';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Form, Button, Badge } from 'react-bootstrap';
-import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
-import { observable, action } from 'mobx';
+import {action, computed} from 'mobx';
 import _ from 'lodash';
-import autobind from 'autobind-decorator';
-import styles from './oncokbMutationMapper.module.scss';
+import OncogenicityBadgeSelector from "app/components/oncokbMutationMapper/OncogenicityBadgeSelector";
+import {
+  findOncogenicityFilter,
+  ONCOGENICITY_FILTER_ID,
+  ONCOGENICITY_FILTER_TYPE
+} from "app/components/oncokbMutationMapper/FilterUtils";
 
 export type Filter = {
   name: string;
@@ -20,34 +22,36 @@ export type Oncogenicity = {
 
 export interface IOncokbMutationMapperProps extends MutationMapperProps {
   oncogenicities: Oncogenicity[];
-  onFilterChange?: (oncogenicity: string) => void;
 }
-
-type TOncogenicityFilterStatus = { [oncogenicity: string]: boolean };
 
 @observer
 export class OncokbMutationMapper extends MutationMapper<IOncokbMutationMapperProps> {
-  @observable oncogenicityFilterStatus: TOncogenicityFilterStatus = {};
-
-  @autobind
-  @action
-  onToggleFilter(filterKey: string) {
-    this.oncogenicityFilterStatus[filterKey] = !this.oncogenicityFilterStatus[filterKey];
-    if (this.props.onFilterChange) {
-      this.props.onFilterChange(filterKey);
-    }
+  @computed
+  public get oncogenicityFilter() {
+    return findOncogenicityFilter(this.store.dataStore.dataFilters);
   }
 
-  constructor(props: IOncokbMutationMapperProps, context: any) {
-    super(props, context);
-    this.oncogenicityFilterStatus = _.reduce(
-      props.oncogenicities,
+  @computed
+  public get oncogenictyCounts() {
+    return _.reduce(
+      this.props.oncogenicities,
       (acc, oncogenicity) => {
-        acc[oncogenicity.oncogenicity] = false;
+        acc[oncogenicity.oncogenicity] = oncogenicity.counts;
         return acc;
       },
-      {} as TOncogenicityFilterStatus
+      {}
     );
+  }
+
+  @action.bound
+  protected onToggleFilter(selectedOncogenicityIds: string[], allValuesSelected: boolean)
+  {
+    onFilterOptionSelect(
+      selectedOncogenicityIds,
+      allValuesSelected,
+      this.store.dataStore,
+      ONCOGENICITY_FILTER_TYPE,
+      ONCOGENICITY_FILTER_ID);
   }
 
   protected get geneSummary(): JSX.Element | null {
@@ -60,19 +64,12 @@ export class OncokbMutationMapper extends MutationMapper<IOncokbMutationMapperPr
 
   protected get mutationFilterPanel(): JSX.Element | null {
     return (
-      <div>
-        {this.props.oncogenicities.map(oncogenicity => (
-          <div className="mb-2" key={oncogenicity.oncogenicity}>
-            <span
-              className={this.oncogenicityFilterStatus[oncogenicity.oncogenicity] ? styles.activeBadge : styles.badge}
-              onClick={() => this.onToggleFilter(oncogenicity.oncogenicity)}
-            >
-              {oncogenicity.counts}
-            </span>
-            <span>{oncogenicity.oncogenicity}</span>
-          </div>
-        ))}
-      </div>
+      <OncogenicityBadgeSelector
+        filter={this.oncogenicityFilter}
+        oncogenicities={this.props.oncogenicities}
+        counts={this.oncogenictyCounts}
+        onSelect={this.onToggleFilter}
+      />
     );
   }
 }
