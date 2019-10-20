@@ -40,10 +40,15 @@ public class UUIDFilter extends GenericFilterBean {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private UUID resolveToken(HttpServletRequest request){
+    private UUID resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return UUID.fromString(bearerToken.substring(7));
+            try {
+                return UUID.fromString(bearerToken.substring(7));
+            } catch (Exception e) {
+                logger.info("Invalid token.");
+                return null;
+            }
         }
         return null;
     }

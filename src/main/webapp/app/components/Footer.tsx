@@ -8,7 +8,7 @@ import styles from './Footer.module.scss';
 import indexStyles from '../index.module.scss';
 import { CitationText } from 'app/components/CitationText';
 import classnames from 'classnames';
-import { ONCOKB_CONTACT_EMAIL } from 'app/config/constants';
+import { ONCOKB_CONTACT_EMAIL, PAGE_ROUTE } from 'app/config/constants';
 
 class Footer extends React.Component<{ lastUpdate: string }> {
   public get externalLinkIcon() {
@@ -60,7 +60,7 @@ class Footer extends React.Component<{ lastUpdate: string }> {
           <a href="https://twitter.com/OncoKB" target="_blank" rel="noopener noreferrer">
             Twitter
           </a>
-          <a href="api/v1/swagger-ui.html" target="_blank" rel="noopener noreferrer">
+          <a href={PAGE_ROUTE.SWAGGER_UI} target="_blank" rel="noopener noreferrer">
             API
           </a>
         </div>
