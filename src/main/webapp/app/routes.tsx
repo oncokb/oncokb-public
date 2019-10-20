@@ -26,11 +26,7 @@ import { AccountPage } from 'app/pages/AccountPage';
 import ActivateAccount from 'app/components/account/ActivateAccount';
 import { PasswordResetInit } from 'app/components/account/PasswordResetInit';
 import PasswordResetFinish from 'app/components/account/PasswordResetFinish';
-
-const Account = Loadable({
-  loader: () => import(/* webpackChunkName: "account" */ 'app/pages/menus/account.tsx'),
-  loading: () => <div>loading ...</div>
-});
+import PageNotFound from './shared/error/page-not-found';
 
 const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: RouterStore }) => {
   return (
@@ -45,7 +41,6 @@ const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: Ro
       <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration" component={AlterationPage} />
       <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage} />
       <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage} />
-      <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_SETTINGS} component={AccountPage} />
       <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
       <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
       <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
@@ -56,17 +51,19 @@ const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: Ro
       <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST} component={PasswordResetInit} />
       <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH} component={PasswordResetFinish} />
       <PrivateRoute
-        path={PAGE_ROUTE.ACCOUNT}
+        exact
+        path={PAGE_ROUTE.ACCOUNT_SETTINGS}
         authenticationStore={props.authenticationStore}
         // @ts-ignore
         routing={props.routing}
-        component={Account}
+        component={AccountPage}
         isAuthorized={
           props.authenticationStore.account.isComplete &&
           props.authenticationStore.account.result !== undefined &&
           isAuthorized(props.authenticationStore.account.result.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.USER])
         }
       />
+      <ErrorBoundaryRoute component={PageNotFound} />
     </Switch>
   );
 };
