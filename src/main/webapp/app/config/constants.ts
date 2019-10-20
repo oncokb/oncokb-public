@@ -233,6 +233,7 @@ export enum PAGE_ROUTE {
   TEAM = '/team',
   NEWS = '/news',
   LEVELS = '/levels',
+  SWAGGER_UI = '/swagger-ui/index.html',
   ACCOUNT = '/account',
   REGISTER = '/account/register',
   ACCOUNT_ACTIVATE = '/account/activate',

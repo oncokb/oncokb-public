@@ -129,6 +129,12 @@
 
                     var $urlDropdown = $('#select_baseUrl');
                     $urlDropdown.empty();
+                    data.unshift({
+                        location: "/api/v1/v2/api-docs",
+                        name: "API v1",
+                        swaggerVersion: "2.0",
+                        url: "/api/v1/v2/api-docs" ,
+                    });
                     $.each(data, function(i, resource) {
                         var option = $('<option></option>')
                         .attr("value", maybePrefix(resource.location, relativeLocation))
