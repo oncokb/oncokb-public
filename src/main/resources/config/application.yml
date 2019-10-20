@@ -151,7 +151,3 @@ jhipster:
 # More documentation is available at:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-
-application:
-  api-proxy-url: 'http://oncokb-core:8888'
-#  api-proxy-url: 'http://localhost:8080/oncokb-public'
