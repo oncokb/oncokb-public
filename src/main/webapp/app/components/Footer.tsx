@@ -35,9 +35,6 @@ class Footer extends React.Component<{ lastUpdate: string }> {
           <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology" target="_blank" rel="noopener noreferrer">
             CMO {this.externalLinkIcon}
           </a>
-          <a href="http://www.questdiagnostics.com/home.html" target="_blank" rel="noopener noreferrer">
-            Quest Diagnostics {this.externalLinkIcon}
-          </a>
           <a href="https://www.cbioportal.org" target="_blank" rel="noopener noreferrer">
             cBioPortal {this.externalLinkIcon}
           </a>

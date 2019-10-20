@@ -14,12 +14,6 @@ export const AboutPage: React.FunctionComponent<AboutPageProps> = inject('appSto
       <Row>
         <Col className="d-flex align-items-center">
           <h2>About OncoKB</h2>
-          <span className={'ml-auto d-flex align-items-center'}>
-            <span>Developed in partnership with</span>
-            <Button variant="link" href="https://questdiagnostics.com/home.html">
-              <img style={{ height: 50 }} src={questImg} />
-            </Button>
-          </span>
         </Col>
       </Row>
       <Row>
