@@ -1,5 +1,5 @@
 import API from './generated/API';
 
-const client = new API('http://localhost:9095');
+const client = new API('https://beta.oncokb.org');
 
 export default client;

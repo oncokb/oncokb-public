@@ -8,3 +8,11 @@ export const assignPublicToken = () => {
     Storage.session.set(AUTH_WEBSITE_TOKEN_KEY, pubWebToken);
   }
 };
+
+export function initializeAPIClients(){
+
+  // we need to set the domain of our api clients
+
+
+  // add POST caching
+}
