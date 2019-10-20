@@ -1,5 +1,5 @@
 import OncoKbAPI from './generated/OncoKbAPI';
 
-const client = new OncoKbAPI('http://localhost:9095/api/v1');
+const client = new OncoKbAPI('https://beta.oncokb.org/api/v1');
 
 export default client;
