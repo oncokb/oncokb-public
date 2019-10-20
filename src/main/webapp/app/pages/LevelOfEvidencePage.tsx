@@ -1,9 +1,9 @@
 import React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import classnames from 'classnames';
-import oncokbImg from 'content/images/level_v2.jpg';
-import oncokbImgPpt from 'content/files/levelOfEvidence/v2/LevelsOfEvidence.ppt';
-import oncokbImgPdf from 'content/files/levelOfEvidence/v2/LevelsOfEvidence.pdf';
+import oncokbImg from 'content/images/level_v1.jpg';
+import oncokbImgPpt from 'content/files/levelOfEvidence/v1/LevelsOfEvidence.ppt';
+import oncokbImgPdf from 'content/files/levelOfEvidence/v1/LevelsOfEvidence.pdf';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 
 export const LevelOfEvidencePage = () => {
