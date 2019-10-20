@@ -29,7 +29,6 @@ class AuthenticationStore {
   @observable showModalLogin = false;
   @observable errorMessage = ''; // Errors returned from server side
   @observable redirectMessage = '';
-  @observable sessionHasBeenFetched = false;
   @observable idToken = '';
   @observable logoutUrl = '';
 
