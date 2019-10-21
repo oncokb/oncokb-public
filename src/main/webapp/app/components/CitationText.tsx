@@ -6,7 +6,7 @@ export const CitationText = ({ highlightLinkout = false, boldLinkout = false }: 
     <span>
       When using OncoKB, please cite:{' '}
       <a
-        href="http://ascopubs.org/doi/full/10.1200/PO.17.00011"
+        href="https://ascopubs.org/doi/full/10.1200/PO.17.00011"
         className={highlightLinkout ? indexStyles.orange : ''}
         style={boldLinkout ? { fontWeight: 'bold' } : undefined}
         target="_blank"

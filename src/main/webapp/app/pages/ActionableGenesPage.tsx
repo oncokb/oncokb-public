@@ -22,15 +22,13 @@ import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
-import { LEVEL_BUTTON_DESCRIPTION, LEVELS, LG_TABLE_FIXED_HEIGHT, TABLE_COLUMN_KEY } from 'app/config/constants';
+import { LEVEL_BUTTON_DESCRIPTION, LEVELS, LG_TABLE_FIXED_HEIGHT, TABLE_COLUMN_KEY, COMPONENT_PADDING, QUERY_SEPARATOR_FOR_QUERY_STRING } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import * as QueryString from 'query-string';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 
-const COMPONENT_PADDING = ['pl-2', 'pr-2'];
-const QUERY_SEPARATOR_FOR_QUERY_STRING = 'comma';
 type Treatment = {
   level: string;
   hugoSymbol: string;
