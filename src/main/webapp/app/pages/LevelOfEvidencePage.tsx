@@ -5,6 +5,7 @@ import oncokbImg from 'content/images/level_v1.jpg';
 import oncokbImgPpt from 'content/files/levelOfEvidence/v1/LevelsOfEvidence.ppt';
 import oncokbImgPdf from 'content/files/levelOfEvidence/v1/LevelsOfEvidence.pdf';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
+import { IMG_MAX_WIDTH } from 'app/config/constants';
 
 export const LevelOfEvidencePage = () => {
   return (
@@ -23,7 +24,7 @@ export const LevelOfEvidencePage = () => {
       </Row>
       <Row>
         <Col className={'d-flex justify-content-center'}>
-          <img style={{ maxWidth: 600, width: '100%' }} src={oncokbImg} />
+          <img style={{ maxWidth: IMG_MAX_WIDTH, width: '100%' }} src={oncokbImg} />
         </Col>
       </Row>
     </div>

@@ -4,7 +4,7 @@
         {
             "fieldName": "licenseType",
             "fieldType": "LicenseType",
-            "fieldValues": "ACADEMIC,COMMERCIAL,COMMERCIAL_RESEARCH,HOSPITAL"
+            "fieldValues": "ACADEMIC,COMMERCIAL,RESEARCH_IN_COMMERCIAL,HOSPITAL"
         },
         {
             "fieldName": "jobTitle",

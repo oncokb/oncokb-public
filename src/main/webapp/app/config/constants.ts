@@ -121,6 +121,8 @@ export const TREATMENT_EVIDENCE_TYPES = [
   EVIDENCE_TYPES.INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE
 ];
 
+export const QUERY_SEPARATOR_FOR_QUERY_STRING = 'comma';
+
 // Defaults for margin spaces between sections
 export const DEFAULT_MARGIN_TOP_SM = 'mt-2';
 export const DEFAULT_MARGIN_TOP_LG = 'mt-3';
@@ -130,6 +132,8 @@ export const THRESHOLD_TABLE_FIXED_HEIGHT = 10;
 export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
 export const LG_TABLE_FIXED_HEIGHT = 500;
 export const SM_TABLE_FIXED_HEIGHT = 300;
+export const IMG_MAX_WIDTH = 800;
+export const COMPONENT_PADDING = ['pl-2', 'pr-2'];
 
 // Defaults for the models
 export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
@@ -257,7 +261,7 @@ export enum TABLE_COLUMN_KEY {
 
 export enum LicenseType {
   ACADEMIC = 'ACADEMIC',
-  COMMERCIAL_RESEARCH = 'COMMERCIAL_RESEARCH',
+  RESEARCH_IN_COMMERCIAL = 'RESEARCH_IN_COMMERCIAL',
   HOSPITAL = 'HOSPITAL',
   COMMERCIAL = 'COMMERCIAL'
 }
@@ -273,7 +277,7 @@ export const LICENSE_TYPES: License[] = [
     title: 'Research use in an academic setting'
   },
   {
-    key: LicenseType.COMMERCIAL_RESEARCH,
+    key: LicenseType.RESEARCH_IN_COMMERCIAL,
     title: 'Research use in a commercial setting'
   },
   {

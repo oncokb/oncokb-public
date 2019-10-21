@@ -83,16 +83,12 @@ export class AccountPage extends React.Component<IRegisterProps> {
             <Col>
               <h5>Account</h5>
               <InfoRow
-                title={getAccountInfoTitle(ACCOUNT_TITLES.USER_NAME, this.account.licenseType as LicenseType)}
-                content={this.account.login}
+                title={getAccountInfoTitle(ACCOUNT_TITLES.EMAIL, this.account.licenseType as LicenseType)}
+                content={this.account.email}
               />
               <InfoRow
                 title={getAccountInfoTitle(ACCOUNT_TITLES.NAME, this.account.licenseType as LicenseType)}
                 content={`${this.account.firstName} ${this.account.lastName}`}
-              />
-              <InfoRow
-                title={getAccountInfoTitle(ACCOUNT_TITLES.EMAIL, this.account.licenseType as LicenseType)}
-                content={this.account.email}
               />
               <InfoRow
                 title={getAccountInfoTitle(ACCOUNT_TITLES.LICENSE_TYPE, this.account.licenseType as LicenseType)}
@@ -102,7 +98,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
           </Row>
           <Row className={getSectionClassName()}>
             <Col>
-              <h5>Company</h5>
+              <h5>{getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.account.licenseType as LicenseType)}</h5>
               <InfoRow
                 title={getAccountInfoTitle(ACCOUNT_TITLES.POSITION, this.account.licenseType as LicenseType)}
                 content={this.account.jobTitle}

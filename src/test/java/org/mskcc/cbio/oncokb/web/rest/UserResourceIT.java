@@ -322,7 +322,7 @@ public class UserResourceIT {
         managedUserVM.setActivated(updatedUser.getActivated());
         managedUserVM.setImageUrl(UPDATED_IMAGEURL);
         managedUserVM.setLangKey(UPDATED_LANGKEY);
-        managedUserVM.setLicenseType(LicenseType.COMMERCIAL_RESEARCH);
+        managedUserVM.setLicenseType(LicenseType.RESEARCH_IN_COMMERCIAL);
         managedUserVM.setJobTitle("test title");
         managedUserVM.setCompany("test company");
         managedUserVM.setCity("test city");
