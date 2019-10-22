@@ -21,12 +21,12 @@ import { RouterStore } from 'mobx-react-router';
 import { LevelOfEvidencePage } from 'app/pages/LevelOfEvidencePage';
 import GenePage from 'app/pages/genePage/GenePage';
 import AlterationPage from 'app/pages/alterationPage/AlterationPage';
-import { DataAccessPage } from './pages/DataAccessPage';
 import { AccountPage } from 'app/pages/AccountPage';
 import ActivateAccount from 'app/components/account/ActivateAccount';
 import { PasswordResetInit } from 'app/components/account/PasswordResetInit';
 import PasswordResetFinish from 'app/components/account/PasswordResetFinish';
 import PageNotFound from './shared/error/page-not-found';
+import DataAccessPage from 'app/pages/DataAccessPage';
 
 const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: RouterStore }) => {
   return (

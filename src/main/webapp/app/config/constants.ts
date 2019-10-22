@@ -334,3 +334,36 @@ export const ACADEMIC_TERMS = [
     description: 'I have read and agree with the OncoKB Terms of Use.'
   }
 ];
+
+export type DataRelease = {
+  version: string;
+  date: string;
+};
+
+export const DATA_RELEASES: DataRelease[] = [
+  { date: '10302019', version: 'v1.24' },
+  { date: '08282019', version: 'v1.23' },
+  { date: '08042019', version: 'v1.22' },
+  { date: '06212019', version: 'v1.21' },
+  { date: '05092019', version: 'v1.20' },
+  { date: '03112019', version: 'v1.19_patch_1' },
+  { date: '01242019', version: 'v1.19' },
+  { date: '12142018', version: 'v1.18' },
+  { date: '11022018', version: 'v1.17_patch_1' },
+  { date: '10262018', version: 'v1.17' },
+  { date: '10012018', version: 'v1.16' },
+  { date: '08202018', version: 'v1.15' },
+  { date: '07122018', version: 'v1.14' },
+  { date: '04032018', version: 'v1.13_patch_2' },
+  { date: '02282018', version: 'v1.13_patch_1' },
+  { date: '02022018', version: 'v1.13' },
+  { date: '10262017', version: 'v1.12_patch_1' },
+  { date: '10192017', version: 'v1.12' },
+  { date: '08302017', version: 'v1.11_patch_1' },
+  { date: '08172017', version: 'v1.11' },
+  { date: '05152017', version: 'v1.10_patch_1' },
+  { date: '04192017', version: 'v1.9_patch_2' },
+  { date: '04172017', version: 'v1.9_patch_1' },
+  { date: '04052017', version: 'v1.9' },
+  { date: '03072017', version: 'v1.8' }
+];

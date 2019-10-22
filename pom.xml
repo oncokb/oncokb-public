@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
-    <artifactId>oncokb-public</artifactId>
-    <version>0.0.alpha.4</version>
+    <artifactId>public-website</artifactId>
+    <version>0.0.alpha.5</version>
     <packaging>jar</packaging>
-    <name>OncoKB</name>
+    <name>OncoKB Public Website</name>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
@@ -564,7 +564,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>cbioportal/oncokb-public:0.0.alpha.4</image>
+                            <image>cbioportal/oncokb-public:0.0.alpha.5</image>
                         </to>
                         <container>
                             <entrypoint>
