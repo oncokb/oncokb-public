@@ -83,6 +83,22 @@ export type Alteration = {
         'variantResidues': string
 
 };
+export type DownloadAvailability = {
+    'hasAllActionableVariants': boolean
+
+        'hasAllAnnotatedVariants': boolean
+
+        'hasAllCuratedGenes': boolean
+
+        'hasCancerGeneList': boolean
+
+        'hasReadme': boolean
+
+        'hasSqlDump': boolean
+
+        'version': string
+
+};
 export type MainNumber = {
     'alteration': number
 
@@ -956,6 +972,143 @@ export default class OncoKbPrivateAPI {
                 return response.body;
             });
         };
+    utilDataReleaseDownloadAvailabilityGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/dataRelease/downloadAvailability';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get information about what files are available by data version
+     * @method
+     * @name OncoKbPrivateAPI#utilDataReleaseDownloadAvailabilityGetUsingGET
+     */
+    utilDataReleaseDownloadAvailabilityGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/dataRelease/downloadAvailability';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get information about what files are available by data version
+     * @method
+     * @name OncoKbPrivateAPI#utilDataReleaseDownloadAvailabilityGetUsingGET
+     */
+    utilDataReleaseDownloadAvailabilityGetUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < DownloadAvailability >
+        > {
+            return this.utilDataReleaseDownloadAvailabilityGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilDataReleaseReadmeGetUsingGETURL(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/dataRelease/readme';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get readme info for specific data release version
+     * @method
+     * @name OncoKbPrivateAPI#utilDataReleaseReadmeGetUsingGET
+     * @param {string} version - version
+     */
+    utilDataReleaseReadmeGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/dataRelease/readme';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'text/plain';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get readme info for specific data release version
+     * @method
+     * @name OncoKbPrivateAPI#utilDataReleaseReadmeGetUsingGET
+     * @param {string} version - version
+     */
+    utilDataReleaseReadmeGetUsingGET(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < string > {
+        return this.utilDataReleaseReadmeGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     utilsEvidencesByLevelsGetUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
