@@ -364,6 +364,47 @@
         }
       }
     },
+    "/utils/dataRelease/sqlDump": {
+      "get": {
+        "tags": [
+          "Utils"
+        ],
+        "summary": "utilDataReleaseSqlDumpGet",
+        "operationId": "utilDataReleaseSqlDumpGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "query",
+            "description": "version",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/utils/evidences/levels": {
       "get": {
         "tags": [

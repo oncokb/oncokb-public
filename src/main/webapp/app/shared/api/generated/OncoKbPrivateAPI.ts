@@ -1109,6 +1109,80 @@ export default class OncoKbPrivateAPI {
             return response.body;
         });
     };
+    utilDataReleaseSqlDumpGetUsingGETURL(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/dataRelease/sqlDump';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * utilDataReleaseSqlDumpGet
+     * @method
+     * @name OncoKbPrivateAPI#utilDataReleaseSqlDumpGetUsingGET
+     * @param {string} version - version
+     */
+    utilDataReleaseSqlDumpGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/dataRelease/sqlDump';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'text/plain';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * utilDataReleaseSqlDumpGet
+     * @method
+     * @name OncoKbPrivateAPI#utilDataReleaseSqlDumpGetUsingGET
+     * @param {string} version - version
+     */
+    utilDataReleaseSqlDumpGetUsingGET(parameters: {
+        'version' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < string > {
+        return this.utilDataReleaseSqlDumpGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     utilsEvidencesByLevelsGetUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
