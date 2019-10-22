@@ -1428,7 +1428,7 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#annotateStructuralVariantsGetUsingGET
      * @param {string} hugoSymbolA - The gene symbol A used in Human Genome Organisation. Example: ABL1
      * @param {integer} entrezGeneIdA - The entrez gene ID A. (Higher priority than hugoSymbolA) Example: 25
-     * @param {string} hugoSymbolB - The gene symbol B used in Human Genome Organisation.Example: BCR
+     * @param {string} hugoSymbolB - The gene symbol B used in Human Genome Organisation.Example: BCR 
      * @param {integer} entrezGeneIdB - The entrez gene ID B. (Higher priority than hugoSymbolB) Example: 613
      * @param {string} structuralVariantType - Structural variant type
      * @param {boolean} isFunctionalFusion - Whether is functional fusion
@@ -1513,7 +1513,7 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#annotateStructuralVariantsGetUsingGET
      * @param {string} hugoSymbolA - The gene symbol A used in Human Genome Organisation. Example: ABL1
      * @param {integer} entrezGeneIdA - The entrez gene ID A. (Higher priority than hugoSymbolA) Example: 25
-     * @param {string} hugoSymbolB - The gene symbol B used in Human Genome Organisation.Example: BCR
+     * @param {string} hugoSymbolB - The gene symbol B used in Human Genome Organisation.Example: BCR 
      * @param {integer} entrezGeneIdB - The entrez gene ID B. (Higher priority than hugoSymbolB) Example: 613
      * @param {string} structuralVariantType - Structural variant type
      * @param {boolean} isFunctionalFusion - Whether is functional fusion
@@ -3556,10 +3556,14 @@ export default class OncoKbAPI {
             });
         };
     utilsAllActionableVariantsGetUsingGETURL(parameters: {
+        'version' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/allActionableVariants';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3575,8 +3579,10 @@ export default class OncoKbAPI {
      * Get All Actionable Variants.
      * @method
      * @name OncoKbAPI#utilsAllActionableVariantsGetUsingGET
+     * @param {string} version - version
      */
     utilsAllActionableVariantsGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -3591,6 +3597,10 @@ export default class OncoKbAPI {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = 'application/json';
             headers['Content-Type'] = 'application/json';
+
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3608,8 +3618,10 @@ export default class OncoKbAPI {
      * Get All Actionable Variants.
      * @method
      * @name OncoKbAPI#utilsAllActionableVariantsGetUsingGET
+     * @param {string} version - version
      */
     utilsAllActionableVariantsGetUsingGET(parameters: {
+            'version' ? : string,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < ActionableGene >
@@ -3619,10 +3631,14 @@ export default class OncoKbAPI {
             });
         };
     utilsAllActionableVariantsTxtGetUsingGETURL(parameters: {
+        'version' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/allActionableVariants.txt';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3638,8 +3654,10 @@ export default class OncoKbAPI {
      * Get All Actionable Variants in text file.
      * @method
      * @name OncoKbAPI#utilsAllActionableVariantsTxtGetUsingGET
+     * @param {string} version - version
      */
     utilsAllActionableVariantsTxtGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -3655,6 +3673,10 @@ export default class OncoKbAPI {
             headers['Accept'] = 'text/plain';
             headers['Content-Type'] = 'application/json';
 
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -3671,8 +3693,10 @@ export default class OncoKbAPI {
      * Get All Actionable Variants in text file.
      * @method
      * @name OncoKbAPI#utilsAllActionableVariantsTxtGetUsingGET
+     * @param {string} version - version
      */
     utilsAllActionableVariantsTxtGetUsingGET(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < string > {
@@ -3681,10 +3705,14 @@ export default class OncoKbAPI {
         });
     };
     utilsAllAnnotatedVariantsGetUsingGETURL(parameters: {
+        'version' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/allAnnotatedVariants';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3700,8 +3728,10 @@ export default class OncoKbAPI {
      * Get All Annotated Variants.
      * @method
      * @name OncoKbAPI#utilsAllAnnotatedVariantsGetUsingGET
+     * @param {string} version - version
      */
     utilsAllAnnotatedVariantsGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -3716,6 +3746,10 @@ export default class OncoKbAPI {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = 'application/json';
             headers['Content-Type'] = 'application/json';
+
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3733,8 +3767,10 @@ export default class OncoKbAPI {
      * Get All Annotated Variants.
      * @method
      * @name OncoKbAPI#utilsAllAnnotatedVariantsGetUsingGET
+     * @param {string} version - version
      */
     utilsAllAnnotatedVariantsGetUsingGET(parameters: {
+            'version' ? : string,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < AnnotatedVariant >
@@ -3744,10 +3780,14 @@ export default class OncoKbAPI {
             });
         };
     utilsAllAnnotatedVariantsTxtGetUsingGETURL(parameters: {
+        'version' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/allAnnotatedVariants.txt';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3763,8 +3803,10 @@ export default class OncoKbAPI {
      * Get All Annotated Variants in text file.
      * @method
      * @name OncoKbAPI#utilsAllAnnotatedVariantsTxtGetUsingGET
+     * @param {string} version - version
      */
     utilsAllAnnotatedVariantsTxtGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -3780,6 +3822,10 @@ export default class OncoKbAPI {
             headers['Accept'] = 'text/plain';
             headers['Content-Type'] = 'application/json';
 
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -3796,8 +3842,10 @@ export default class OncoKbAPI {
      * Get All Annotated Variants in text file.
      * @method
      * @name OncoKbAPI#utilsAllAnnotatedVariantsTxtGetUsingGET
+     * @param {string} version - version
      */
     utilsAllAnnotatedVariantsTxtGetUsingGET(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < string > {
@@ -3806,10 +3854,14 @@ export default class OncoKbAPI {
         });
     };
     utilsAllCuratedGenesGetUsingGETURL(parameters: {
+        'version' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/allCuratedGenes';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3825,8 +3877,10 @@ export default class OncoKbAPI {
      * Get list of genes OncoKB curated
      * @method
      * @name OncoKbAPI#utilsAllCuratedGenesGetUsingGET
+     * @param {string} version - version
      */
     utilsAllCuratedGenesGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -3841,6 +3895,10 @@ export default class OncoKbAPI {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = 'application/json';
             headers['Content-Type'] = 'application/json';
+
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3858,8 +3916,10 @@ export default class OncoKbAPI {
      * Get list of genes OncoKB curated
      * @method
      * @name OncoKbAPI#utilsAllCuratedGenesGetUsingGET
+     * @param {string} version - version
      */
     utilsAllCuratedGenesGetUsingGET(parameters: {
+            'version' ? : string,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < CuratedGene >
@@ -3869,10 +3929,14 @@ export default class OncoKbAPI {
             });
         };
     utilsAllCuratedGenesTxtGetUsingGETURL(parameters: {
+        'version' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/allCuratedGenes.txt';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3888,8 +3952,10 @@ export default class OncoKbAPI {
      * Get list of genes OncoKB curated in text file.
      * @method
      * @name OncoKbAPI#utilsAllCuratedGenesTxtGetUsingGET
+     * @param {string} version - version
      */
     utilsAllCuratedGenesTxtGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -3904,6 +3970,10 @@ export default class OncoKbAPI {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = 'text/plain';
             headers['Content-Type'] = 'application/json';
+
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3921,8 +3991,10 @@ export default class OncoKbAPI {
      * Get list of genes OncoKB curated in text file.
      * @method
      * @name OncoKbAPI#utilsAllCuratedGenesTxtGetUsingGET
+     * @param {string} version - version
      */
     utilsAllCuratedGenesTxtGetUsingGET(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < string > {
@@ -3931,10 +4003,14 @@ export default class OncoKbAPI {
         });
     };
     utilsCancerGeneListGetUsingGETURL(parameters: {
+        'version' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/cancerGeneList';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3950,8 +4026,10 @@ export default class OncoKbAPI {
      * Get cancer gene list
      * @method
      * @name OncoKbAPI#utilsCancerGeneListGetUsingGET
+     * @param {string} version - version
      */
     utilsCancerGeneListGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -3967,6 +4045,10 @@ export default class OncoKbAPI {
             headers['Accept'] = 'application/json';
             headers['Content-Type'] = 'application/json';
 
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -3983,8 +4065,10 @@ export default class OncoKbAPI {
      * Get cancer gene list
      * @method
      * @name OncoKbAPI#utilsCancerGeneListGetUsingGET
+     * @param {string} version - version
      */
     utilsCancerGeneListGetUsingGET(parameters: {
+            'version' ? : string,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < CancerGene >
@@ -3994,10 +4078,14 @@ export default class OncoKbAPI {
             });
         };
     utilsCancerGeneListTxtGetUsingGETURL(parameters: {
+        'version' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/cancerGeneList.txt';
+        if (parameters['version'] !== undefined) {
+            queryParameters['version'] = parameters['version'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -4013,8 +4101,10 @@ export default class OncoKbAPI {
      * Get cancer gene list in text file.
      * @method
      * @name OncoKbAPI#utilsCancerGeneListTxtGetUsingGET
+     * @param {string} version - version
      */
     utilsCancerGeneListTxtGetUsingGETWithHttpInfo(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -4029,6 +4119,10 @@ export default class OncoKbAPI {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = 'text/plain';
             headers['Content-Type'] = 'application/json';
+
+            if (parameters['version'] !== undefined) {
+                queryParameters['version'] = parameters['version'];
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -4046,8 +4140,10 @@ export default class OncoKbAPI {
      * Get cancer gene list in text file.
      * @method
      * @name OncoKbAPI#utilsCancerGeneListTxtGetUsingGET
+     * @param {string} version - version
      */
     utilsCancerGeneListTxtGetUsingGET(parameters: {
+        'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < string > {
