@@ -32,10 +32,16 @@ export default class DataAccessPage extends React.Component<{
         return acc;
       }, {} as { [key: string]: DownloadAvailability });
       return _.reduce(DATA_RELEASES.filter(release => _.has(availableVersions, release.version)), (acc, next) => {
-        acc.push({
-          ...availableVersions[next.version],
-          date: next.date
-        });
+        const currentVersionData: DownloadAvailability = availableVersions[next.version];
+        if (currentVersionData.hasAllActionableVariants
+          || currentVersionData.hasAllAnnotatedVariants
+          || currentVersionData.hasAllCuratedGenes
+          || currentVersionData.hasCancerGeneList) {
+          acc.push({
+            ...availableVersions[next.version],
+            date: next.date
+          });
+        }
         return acc;
       }, [] as DownloadAvailabilityWithDate[]);
     },
@@ -95,7 +101,7 @@ export default class DataAccessPage extends React.Component<{
           {this.dataAvailability.result.map(item => (
             <>
               <h5>
-                {getNewsTitle(item.date)}
+                {getNewsTitle(item.date)} ({item.version})
               </h5>
               <Row className={DEFAULT_MARGIN_BOTTOM_LG}>
                 <Col>
@@ -126,13 +132,13 @@ export default class DataAccessPage extends React.Component<{
                       buttonText="Actionable Alterations"
                     />
                   ) : null}
-                  {item.hasSqlDump ? (
+                  {item.hasCancerGeneList ? (
                     <AuthDownloadButton
-                      fileName={`oncokb_${item.version}.sql.zip`}
-                      getDownloadData={() => oncokbPrivateClient.utilDataReleaseSqlDumpGetUsingGET({
+                      fileName={`cancer_gene_list_${item.version}.tsv`}
+                      getDownloadData={() => oncokbClient.utilsCancerGeneListTxtGetUsingGET({
                         version: item.version
                       })}
-                      buttonText="SQL Dump for Docker"
+                      buttonText="Cancer Gene List"
                     />
                   ) : null}
                 </Col>

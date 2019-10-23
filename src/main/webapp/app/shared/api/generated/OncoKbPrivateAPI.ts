@@ -1149,7 +1149,7 @@ export default class OncoKbPrivateAPI {
         let headers: any = {};
         let form: any = {};
         return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'text/plain';
+            headers['Accept'] = 'application/zip';
             headers['Content-Type'] = 'application/json';
 
             if (parameters['version'] !== undefined) {
@@ -1175,14 +1175,15 @@ export default class OncoKbPrivateAPI {
      * @param {string} version - version
      */
     utilDataReleaseSqlDumpGetUsingGET(parameters: {
-        'version' ? : string,
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < string > {
-        return this.utilDataReleaseSqlDumpGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-            return response.body;
-        });
-    };
+            'version' ? : string,
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < string >
+        > {
+            return this.utilDataReleaseSqlDumpGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     utilsEvidencesByLevelsGetUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {

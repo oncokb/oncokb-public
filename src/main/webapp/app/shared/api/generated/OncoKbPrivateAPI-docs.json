@@ -375,7 +375,7 @@
           "application/json"
         ],
         "produces": [
-          "text/plain"
+          "application/zip"
         ],
         "parameters": [
           {
@@ -390,7 +390,11 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "string"
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "byte"
+              }
             }
           },
           "401": {
