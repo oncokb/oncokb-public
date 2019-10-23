@@ -2,7 +2,6 @@ import * as React from 'react';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
 import { CitationText } from 'app/components/CitationText';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
-import { Link } from 'react-router-dom';
 import { DATA_RELEASES, DataRelease, DEFAULT_MARGIN_BOTTOM_LG, PAGE_ROUTE } from 'app/config/constants';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { ButtonSelections } from 'app/components/LicenseSelection';
@@ -15,7 +14,6 @@ import { DownloadAvailability } from 'app/shared/api/generated/OncoKbPrivateAPI'
 import _ from 'lodash';
 import { Row, Col } from 'react-bootstrap';
 import { getNewsTitle } from 'app/pages/newsPage/NewsList';
-import InfoIcon from 'app/shared/icons/InfoIcon';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 @inject('routing')
@@ -77,6 +75,10 @@ export default class DataAccessPage extends React.Component<{
             You can programmatically access the OncoKB data via its{' '}
             <SwaggerApiLink content={'web API'}/>
             .
+            <div>
+              Please specify your API token in the request header with{' '}
+              <code>Authorization: Bearer [your token]</code>
+            </div>
           </div>
         </div>
         <div className={'mb-3'}>
