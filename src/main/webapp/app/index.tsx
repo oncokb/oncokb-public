@@ -5,6 +5,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import * as Sentry from '@sentry/browser';
 
 import 'font-awesome/css/font-awesome.css';
 import './index.scss';
@@ -54,5 +55,11 @@ superagent.Request.prototype.end = function(callback) {
   });
 };
 
-ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
+// the dsn is supposed to be different for different installation,
+// but since the serverConfigs hasn't been defined yet, it is ok for now.
+Sentry.init({
+  dsn: 'https://387bb103057b40659f3044069b7c0517@sentry.io/1793966',
+  blacklistUrls: [new RegExp('.*localhost.*')]
+});
+ReactDOM.render(<App/>, document.getElementById('root') as HTMLElement);
 registerServiceWorker();
