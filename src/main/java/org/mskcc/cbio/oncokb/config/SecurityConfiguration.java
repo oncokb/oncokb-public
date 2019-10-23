@@ -87,6 +87,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/utils").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
             // Permits the api swagger definitions through proxy
             .antMatchers("/api/v1/v2/api-docs").permitAll()
+            .antMatchers("/api/private/utils/dataRelease/downloadAvailability").permitAll()
             .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()
