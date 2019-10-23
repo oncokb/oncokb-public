@@ -121,7 +121,7 @@ info:
 
 jhipster:
   clientApp:
-    name: 'oncokbApp'
+    name: 'OncoKB Public Website'
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #     allowed-origins: "*"
@@ -131,18 +131,7 @@ jhipster:
   #     allow-credentials: true
   #     max-age: 1800
   mail:
-    from: oncokb@localhost
-  swagger:
-    default-include-pattern: /api/.*
-    title: OncoKB API
-    description: oncokb API documentation
-    version: 0.0.1
-    terms-of-service-url:
-    contact-name:
-    contact-url:
-    contact-email:
-    license:
-    license-url:
+    from: register@oncokb.org
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
