@@ -30,7 +30,7 @@ export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
 
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
 export const GRID_BREAKPOINTS = {
-  LG: 980,
+  LG: 1010,
   XL: 1450
 };
 

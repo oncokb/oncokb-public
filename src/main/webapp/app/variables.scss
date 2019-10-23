@@ -12,18 +12,19 @@ $light-grey: #d3d3d3; // light grey
 $primary: $blue;
 $secondary: $orange;
 
+$navbar-padding-x: 0;
 $grid-breakpoints: (
   xs: 0,
   sm: 576px,
   md: 768px,
-  lg: 980px,
+  lg: 1010px,
   xl: 1450px
 ) !default;
 
 $container-max-widths: (
   sm: 576px,
   md: 768px,
-  lg: 980px,
+  lg: 1000px,
   xl: 1450px
 ) !default;
 

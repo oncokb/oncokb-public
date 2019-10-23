@@ -34,6 +34,9 @@
   $footer-height: 18rem;
   @include sticky-footer($footer-height);
   @include home-page-logo(xs);
+  .navbar-brand {
+    margin-right: 1rem;
+  }
 
   .navbar-nav > .nav-item {
     padding: 0 0.25rem 0.25rem 0.25rem;
@@ -42,6 +45,15 @@
   #account-menu > a {
     padding: 0 0.25rem 0.25rem 0.25rem;
     margin: 0.25rem 0;
+  }
+  .navbar-expand-lg > .container,
+  .navbar-expand-lg > .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .header .navbar .navbar-nav .nav-link {
+    padding-left: 0 !important;
   }
 }
 
@@ -64,7 +76,7 @@
 }
 
 @include media-breakpoint-up(xl) {
-  .navbar-nav > a,
+  .navbar-nav > .nav-item,
   #account-menu > a {
     padding: 1rem 0.875rem !important;
     margin: 0;
