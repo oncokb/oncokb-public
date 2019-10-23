@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb;
 
+import io.sentry.Sentry;
 import org.mskcc.cbio.oncokb.config.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.DefaultProfileUtil;
 
@@ -62,6 +63,9 @@ public class OncokbApp implements InitializingBean {
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
+
+        // DSN will be set through system environment variable (SENTRY_DSN)
+        Sentry.init();
     }
 
     private static void logApplicationStartup(Environment env) {
