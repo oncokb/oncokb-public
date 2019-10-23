@@ -1,17 +1,13 @@
 import * as React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap';
-
 import oncokbImg from 'content/images/oncokb-lg.png';
-
 import { observer } from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';
-import { observable, action, reaction, IReactionDisposer } from 'mobx';
-import autobind from 'autobind-decorator';
 import { RouterStore } from 'mobx-react-router';
 import { withRouter } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import AccountMenu from 'app/pages/menus/account';
+import mskIcon from 'content/images/msk-icon-fff.png';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -63,9 +59,18 @@ class Header extends React.Component<IHeaderProps> {
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse>
-              <Nav>
+              <Nav className="mr-auto">
                 {this.subPages.map(page => this.getLink(page))}
+              </Nav>
+              <Nav>
                 <AccountMenu isAuthenticated={this.props.isUserAuthenticated} />
+                <Nav.Item>
+                  <img
+                    alt="mskcc-logo"
+                    src={mskIcon}
+                    height={'37px'}
+                  />
+                </Nav.Item>
               </Nav>
             </Navbar.Collapse>
           </Container>

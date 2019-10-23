@@ -35,7 +35,7 @@ export default class AccountMenu extends React.Component<{ isAuthenticated: bool
           <i className={'fa fa-user mr-1'} />
           Account
         </Dropdown.Toggle>
-        <Dropdown.Menu>
+        <Dropdown.Menu alignRight={true}>
           {this.props.isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}
         </Dropdown.Menu>
       </Dropdown>
