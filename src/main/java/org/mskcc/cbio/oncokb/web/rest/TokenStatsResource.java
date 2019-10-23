@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  * REST controller for managing {@link org.mskcc.cbio.oncokb.domain.TokenStats}.
  */
-@RestController
+//@RestController
 @RequestMapping("/api")
 public class TokenStatsResource {
 
