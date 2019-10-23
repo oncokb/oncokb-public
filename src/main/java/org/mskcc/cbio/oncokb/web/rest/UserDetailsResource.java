@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.UserDetailsService;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -85,6 +87,7 @@ public class UserDetailsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userDetails in body.
      */
     @GetMapping("/user-details")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<UserDetailsDTO> getAllUserDetails() {
         log.debug("REST request to get all UserDetails");
         return userDetailsService.findAll();
