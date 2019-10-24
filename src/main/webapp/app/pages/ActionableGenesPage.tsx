@@ -390,9 +390,10 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
       Cell(props: { original: Treatment }) {
-        return props.original.alterations
-          .map<React.ReactNode>(alteration => <AlterationPageLink hugoSymbol={props.original.hugoSymbol} alteration={alteration} />)
-          .reduce((prev, curr) => [prev, ', ', curr]);
+        return <div style={{ display: 'block' }}> {props.original.alterations
+          .map<React.ReactNode>((alteration, index: number) => <AlterationPageLink key={index} hugoSymbol={props.original.hugoSymbol} alteration={alteration} />)
+          .reduce((prev, curr) => [prev, ', ', curr])}
+          </div>;
       }
     },
     {
@@ -416,7 +417,6 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
     return (
       <If condition={this.allTumorTypes.isComplete && this.evidencesByLevel.isComplete}>
         <Then>
-          <>
             <Row style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }} className={'mb-2'}>
               {LEVELS.map(level => (
                 <Col className={classnames(...COMPONENT_PADDING)} lg={2} xs={4} key={level}>
@@ -514,11 +514,11 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                   }}
                   defaultSorted={[
                     {
-                      id: 'level',
+                      id: 'LEVEL',
                       desc: false
                     },
                     {
-                      id: 'hugoSymbol',
+                      id: 'HUGO_SYMBOL',
                       desc: false
                     }
                   ]}
@@ -526,7 +526,6 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                 />
               </Col>
             </Row>
-          </>
         </Then>
         <Else>
           <LoadingIndicator size={'big'} center={true} isLoading={this.allTumorTypes.isPending || this.evidencesByLevel.isPending} />

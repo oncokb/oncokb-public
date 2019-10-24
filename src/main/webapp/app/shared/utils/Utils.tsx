@@ -27,7 +27,7 @@ export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
 }
 
 export function getCenterAlignStyle() {
-  return { justifyContent: 'center', display: 'flex', alignItems: 'center', whiteSpace: 'normal' };
+  return { justifyContent: 'center', whiteSpace: 'normal' };
 }
 
 export function levelOfEvidence2Level(levelOfEvidence: string, trimSubversion = false) {
