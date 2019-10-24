@@ -122,7 +122,6 @@ module.exports = options => ({
       { from: './src/main/webapp/content/images/favicon/favicon.ico', to: 'favicon.ico' },
       { from: './src/main/webapp/manifest.webapp', to: 'manifest.webapp' },
       // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-      { from: './src/main/webapp/robots.txt', to: 'robots.txt' }
     ]),
     new HtmlWebpackPlugin({
       template: '!!html-loader!./src/main/webapp/index.html',

@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.config;
 
+import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
     private String apiProxyUrl;
+    private ProjectProfile profile;
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -18,5 +20,13 @@ public class ApplicationProperties {
 
     public void setApiProxyUrl(String apiProxyUrl) {
         this.apiProxyUrl = apiProxyUrl;
+    }
+
+    public ProjectProfile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(ProjectProfile profile) {
+        this.profile = profile;
     }
 }

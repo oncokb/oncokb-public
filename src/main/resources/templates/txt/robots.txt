@@ -1,3 +1,5 @@
+Sitemap: [(${baseUrl})]/sitemap_index.xml
+
 # robotstxt.org/
 
 User-agent: *
