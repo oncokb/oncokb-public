@@ -35,6 +35,7 @@ public class ThymeleafConfig {
     @PostConstruct
     public void extension() {
         // Adding resolves with resolvable patters
+        templateEngine.addTemplateResolver(indexTemplateResolver());
         templateEngine.addTemplateResolver(htmlTemplateResolver());
         templateEngine.addTemplateResolver(xmlTemplateResolver());
         templateEngine.addTemplateResolver(textTemplateResolver());
@@ -52,6 +53,20 @@ public class ThymeleafConfig {
         templateResolver.setTemplateMode(TemplateMode.HTML);
         templateResolver.setCharacterEncoding(STRING_ENCODING);
         templateResolver.setCacheable(getCacheable());
+        return templateResolver;
+    }
+
+    private ITemplateResolver indexTemplateResolver() {
+        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setOrder(Integer.valueOf(1));
+        templateResolver.setPrefix("/static/");
+        Set<String> patterns = new HashSet<>();
+        patterns.add("index");
+        templateResolver.setResolvablePatterns(patterns);
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCharacterEncoding(STRING_ENCODING);
+        templateResolver.setCacheable(false);
         return templateResolver;
     }
 

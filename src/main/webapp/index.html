@@ -60,12 +60,12 @@
     <script th:inline="javascript">
       /*<![CDATA[*/
 
-      window.applicationProperties = /*[[${applicationProperties}]]*/ {};
-      window.PUB_WEB_TOKEN = /*[[${publicToken}]]*/ '';
+      window.oncokbAppProps = /*[[${applicationProperties}]]*/ {};
+      window.oncokbAppPublicToken = /*[[${publicToken}]]*/ '';
 
       // settings for local test
-      if (!window.PUB_WEB_TOKEN && localStorage.pubWebToken) {
-        window.PUB_WEB_TOKEN = localStorage.pubWebToken;
+      if (!window.oncokbAppPublicToken && localStorage.pubWebToken) {
+        window.oncokbAppPublicToken = localStorage.pubWebToken;
       }
 
       /*]]>*/

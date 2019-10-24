@@ -17,6 +17,7 @@ import 'react-mutation-mapper/dist/styles.css';
 import { assignPublicToken } from 'app/indexUtils';
 import { AUTH_UER_TOKEN_KEY, AUTH_WEBSITE_TOKEN_KEY } from 'app/store/AuthenticationStore';
 import { Storage } from 'react-jhipster';
+import { ONCOKB_APP_PROPS, ONCOKB_APP_PUBLIC_TOKEN, OncokbAppProps } from 'app/config/constants';
 
 assignPublicToken();
 
@@ -51,6 +52,11 @@ superagent.Request.prototype.end = function(callback) {
       response.body = response.text;
     }
 
+    // If the code is 401, which means the token has expired, we need to refresh the page
+    // const oncokbAppProps: OncokbAppProps = window[ONCOKB_APP_PROPS];
+    // if (response && response.statusCode === 401 && window[ONCOKB_APP_PUBLIC_TOKEN] && oncokbAppProps.profile === 'PROD') {
+    //   window.location.reload();
+    // }
     callback(error, response);
   });
 };
