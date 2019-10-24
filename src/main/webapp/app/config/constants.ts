@@ -11,6 +11,13 @@ export default config;
 
 export const SERVER_API_URL = process.env.SERVER_API_URL;
 
+export interface OncokbAppProps {
+  profile: 'PROD' | 'DEV';
+}
+
+export const ONCOKB_APP_PROPS = 'oncokbAppProps';
+export const ONCOKB_APP_PUBLIC_TOKEN = 'oncokbAppPublicToken';
+
 export const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
   USER: 'ROLE_USER'
