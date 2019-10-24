@@ -13,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ApplicationProperties {
     private String apiProxyUrl;
     private ProjectProfile profile;
+    private Boolean sitemapEnabled;
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -28,5 +29,13 @@ public class ApplicationProperties {
 
     public void setProfile(ProjectProfile profile) {
         this.profile = profile;
+    }
+
+    public Boolean getSitemapEnabled() {
+        return sitemapEnabled;
+    }
+
+    public void setSitemapEnabled(Boolean sitemapEnabled) {
+        this.sitemapEnabled = sitemapEnabled;
     }
 }

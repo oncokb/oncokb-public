@@ -135,3 +135,4 @@ jhipster:
 application:
   profile: dev
   api-proxy-url: 'http://localhost:8080/oncokb-public'
+  sitemap-enabled: false
