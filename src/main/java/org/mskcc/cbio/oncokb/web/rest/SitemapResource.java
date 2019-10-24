@@ -32,6 +32,9 @@ public class SitemapResource {
 
     @GetMapping(path = "/sitemap_index.xml", produces = APPLICATION_XML_VALUE)
     public ResponseEntity<String> getSiteMapIndex(HttpServletRequest request) throws URISyntaxException {
+        if(!applicationProperties.getSitemapEnabled()) {
+            return ResponseEntity.notFound().build();
+        }
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_XML);
         ResponseEntity responseEntity = ResponseEntity.ok().headers(httpHeaders).body(sitemapService.getSitemapIndex(getBaseUrl(request)));
@@ -40,6 +43,9 @@ public class SitemapResource {
 
     @GetMapping(path = "/sitemap_general.xml", produces = APPLICATION_XML_VALUE)
     public ResponseEntity<String> getSiteMapGeneral(HttpServletRequest request) throws URISyntaxException {
+        if(!applicationProperties.getSitemapEnabled()) {
+            return ResponseEntity.notFound().build();
+        }
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_XML);
         ResponseEntity responseEntity = ResponseEntity.ok().headers(httpHeaders).body(sitemapService.getSitemapGeneral(getBaseUrl(request)));
@@ -52,6 +58,9 @@ public class SitemapResource {
         @ApiParam(value = "The entrez gene ID.", required = true) @RequestParam("entrezGeneId") Integer entrezGeneId,
         @ApiParam(value = "The hugo symbpol.", required = true) @RequestParam("hugoSymbol") String hugoSymbol
     ) throws URISyntaxException {
+        if(!applicationProperties.getSitemapEnabled()) {
+            return ResponseEntity.notFound().build();
+        }
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_XML);
         ResponseEntity responseEntity = ResponseEntity.ok().headers(httpHeaders).body(sitemapService.getSitemapGene(getBaseUrl(request), entrezGeneId, hugoSymbol));
@@ -60,6 +69,9 @@ public class SitemapResource {
 
     @GetMapping(path = "/robots.txt", produces = APPLICATION_XML_VALUE)
     public ResponseEntity<String> getRobotsTxt(HttpServletRequest request) {
+        if(!applicationProperties.getSitemapEnabled()) {
+            return ResponseEntity.notFound().build();
+        }
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
         ResponseEntity responseEntity = ResponseEntity.ok().headers(httpHeaders).body(sitemapService.getRobotsTxt(getBaseUrl(request)));

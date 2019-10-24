@@ -152,3 +152,4 @@ jhipster:
 application:
   profile: prod
   api-proxy-url: 'http://oncokb-core:8888'
+  sitemap-enabled: true
