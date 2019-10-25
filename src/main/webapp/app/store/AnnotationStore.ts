@@ -127,7 +127,12 @@ export class AnnotationStore {
   }
 
   @computed get selectedCancerTypes() {
-    return this.cancerTypeFilter ? this.cancerTypeFilter.values : [];
+    if (this.cancerTypeFilter) {
+      return this.cancerTypeFilter.values;
+    } else if (this.selectedPositions.length > 0) {
+      return this.barChartData.filter(data => data.alterations.filter(alteration => this.selectedPositions.includes(alteration.proteinStartPosition)).length > 0).map(data => data.x);
+    }
+    return [];
   }
 
   @computed
@@ -498,7 +503,7 @@ export class AnnotationStore {
         if (this.oncogenicityFilters.length > 0 && !this.oncogenicityFilters.includes(shortenOncogenicity(alteration.oncogenic))) {
           isMatch = false;
         }
-        if (this.selectedCancerTypes.length > 0 && !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration)) {
+        if (this.selectedCancerTypes.length > 0 && (!this.selectedCancerTypes.includes(alteration.cancerType.mainType.name) || !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration))) {
           isMatch = false;
         }
         if (this.selectedPositions.length > 0 && !this.selectedPositions.includes(alteration.variant.proteinStart)) {

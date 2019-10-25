@@ -28,7 +28,8 @@ export interface IBarChartProps {
 }
 
 // const VICTORY_THEME = generateTheme();
-const TILT_ANGLE = 90;
+const TILT_ANGLE = 40;
+const FONT_SIZE = 12;
 
 @observer
 export default class BarChart extends React.Component<IBarChartProps, {}> {
@@ -95,7 +96,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
         this.props.data.map(datum => {
           const content = datum.x;
           const fontFamily = 'Helvetica Neue';
-          const fontSize = `14px`;
+          const fontSize = `${FONT_SIZE}px`;
           const textHeight = getTextHeight(content, fontFamily, fontSize);
           const textWidth = getTextWidth(content, fontFamily, fontSize);
           if (TILT_ANGLE % 180 === 0) {
@@ -139,14 +140,15 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 height: this.props.height
               }
             }}
-            padding={{ left: 70, right: 10, top: 10, bottom: this.bottomPadding }}
+            padding={{ left: 30, right: 50, top: 10, bottom: this.bottomPadding }}
           >
             <VictoryAxis
               style={{
                 tickLabels: {
                   angle: TILT_ANGLE,
                   verticalAnchor: 'middle',
-                  textAnchor: 'start'
+                  textAnchor: 'start',
+                  fontSize: FONT_SIZE
                 },
                 axisLabel: {
                   padding: 10
