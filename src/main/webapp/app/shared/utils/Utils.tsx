@@ -303,8 +303,8 @@ export function filterByKeyword(value: string, keyword: string): boolean {
 }
 
 export function getRouteFromPath(pathName: string) {
-  const segments = pathName.split('/');
-  return segments.length < 2 ? PAGE_ROUTE.HOME : `/${segments[1]}`;
+  const firstSplashIndex = pathName.indexOf('/');
+  return firstSplashIndex === -1 ? PAGE_ROUTE.HOME : pathName.substr(pathName.indexOf('/') + 1);
 }
 
 export function getRedirectLoginState(pathName: string) {

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
-import questImg from 'content/images/quest.png';
 import processImg from 'content/images/process.jpg';
 import AppStore from 'app/store/AppStore';
 import { inject } from 'mobx-react';

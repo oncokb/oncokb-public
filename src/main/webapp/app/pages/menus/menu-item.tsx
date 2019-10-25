@@ -14,7 +14,7 @@ export default class MenuItem extends React.Component<IMenuItem> {
 
     return (
       <DropdownItem as={Link} to={to} id={id}>
-        <i className={`fa fa-${icon} mr-1`} /> {children}
+        <i className={`fa fa-${icon} fa-fw mr-1`} /> {children}
       </DropdownItem>
     );
   }

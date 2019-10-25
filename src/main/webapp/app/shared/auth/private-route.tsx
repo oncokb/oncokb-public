@@ -4,10 +4,9 @@ import { observer } from 'mobx-react';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { RouterStore } from 'mobx-react-router';
-import LoginPage from 'app/components/login/LoginPage';
-import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
+import { PAGE_ROUTE } from 'app/config/constants';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
-import has = Reflect.has;
+import { getRedirectLoginState } from 'app/shared/utils/Utils';
 
 export interface IPrivateRouteProps extends RouteProps {
   authenticationStore: AuthenticationStore;
@@ -33,6 +32,7 @@ export const PrivateRoute = observer(({ component, authenticationStore, hasAnyAu
     } else {
       return <Redirect
         to={{
+          state: getRedirectLoginState(routing.location.pathname),
           pathname: PAGE_ROUTE.LOGIN
         }}
       />;

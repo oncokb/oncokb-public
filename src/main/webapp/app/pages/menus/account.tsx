@@ -3,22 +3,30 @@ import MenuItem from 'app/pages/menus/menu-item';
 import { observer } from 'mobx-react';
 import { Dropdown, NavItem } from 'react-bootstrap';
 import NavLink from 'react-bootstrap/NavLink';
+import { PAGE_ROUTE } from 'app/config/constants';
 
-const accountMenuItemsAuthenticated = (
+const AccountMenuItemsAuthenticated: React.FunctionComponent<{
+  isAdmin: boolean
+}> = (props) => (
   <>
-    <MenuItem icon="wrench" to="/account/settings">
+    <MenuItem icon="wrench" to={PAGE_ROUTE.ACCOUNT_SETTINGS}>
       Account Settings
     </MenuItem>
-    <MenuItem icon="lock" to="/account/password">
+    <MenuItem icon="lock" to={PAGE_ROUTE.ACCOUNT_PASSWORD}>
       Change Password
     </MenuItem>
-    <MenuItem icon="sign-out" to="/logout">
+    {props.isAdmin ? (
+      <MenuItem icon="users" to={PAGE_ROUTE.ADMIN_USER_MANAGEMENT}>
+        Manage Users
+      </MenuItem>
+    ) : null}
+    <MenuItem icon="sign-out" to={PAGE_ROUTE.LOGOUT}>
       Sign out
     </MenuItem>
   </>
 );
 
-const accountMenuItems = (
+const AccountMenuItems: React.FunctionComponent<{}> = () => (
   <>
     <MenuItem id="login-item" icon="sign-in" to="/login">
       Sign in
@@ -30,16 +38,20 @@ const accountMenuItems = (
 );
 
 @observer
-export default class AccountMenu extends React.Component<{ isAuthenticated: boolean }> {
+export default class AccountMenu extends React.Component<{
+  isAuthenticated: boolean,
+  isAdmin: boolean
+}> {
   render() {
     return (
       <Dropdown as={NavItem}>
         <Dropdown.Toggle id={'account-menu'} as={NavLink}>
-          <i className={'fa fa-user mr-1'} />
+          <i className={'fa fa-user mr-1'}/>
           Account
         </Dropdown.Toggle>
         <Dropdown.Menu alignRight={true}>
-          {this.props.isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}
+          {this.props.isAuthenticated ? <AccountMenuItemsAuthenticated isAdmin={this.props.isAdmin}/> :
+            <AccountMenuItems/>}
         </Dropdown.Menu>
       </Dropdown>
     );

@@ -63,7 +63,10 @@ class Header extends React.Component<IHeaderProps> {
                 {this.subPages.map(page => this.getLink(page))}
               </Nav>
               <Nav>
-                <AccountMenu isAuthenticated={this.props.isUserAuthenticated} />
+                <AccountMenu
+                  isAuthenticated={this.props.isUserAuthenticated}
+                  isAdmin={this.props.isAdmin}
+                />
                 <Nav.Item>
                   <img
                     alt="mskcc-logo"
