@@ -25,9 +25,10 @@ import { AccountPage } from 'app/pages/AccountPage';
 import ActivateAccount from 'app/components/account/ActivateAccount';
 import { PasswordResetInit } from 'app/components/account/PasswordResetInit';
 import PasswordResetFinish from 'app/components/account/PasswordResetFinish';
-import PageNotFound from './shared/error/page-not-found';
+import PageNotFound from '../shared/error/page-not-found';
 import DataAccessPage from 'app/pages/DataAccessPage';
 import AccountPassword from 'app/components/account/AccountPassword';
+import AdminRouts from 'app/routes/AdminRoutes';
 
 const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: RouterStore }) => {
   return (
@@ -51,6 +52,13 @@ const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: Ro
       <ErrorBoundaryRoute exact path={PAGE_ROUTE.ACCOUNT_ACTIVATE} component={ActivateAccount}/>
       <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST} component={PasswordResetInit}/>
       <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH} component={PasswordResetFinish}/>
+      <PrivateRoute
+        authenticationStore={props.authenticationStore}
+        routing={props.routing}
+        path={PAGE_ROUTE.ADMIN}
+        component={AdminRouts}
+        hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+      />
       <PrivateRoute
         exact
         authenticationStore={props.authenticationStore}

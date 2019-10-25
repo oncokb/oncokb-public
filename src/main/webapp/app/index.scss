@@ -182,7 +182,7 @@ input[type='radio']:checked {
 }
 
 // Overwrite react-table styles
-.ReactTable {
+.oncokbReactTable.ReactTable {
   .-sort-desc {
     box-shadow: none !important;
 
@@ -210,5 +210,7 @@ input[type='radio']:checked {
   .rt-tbody .rt-td {
     display: flex;
     align-items: center;
+    white-space: normal;
+    word-break: break-word;
   }
 }

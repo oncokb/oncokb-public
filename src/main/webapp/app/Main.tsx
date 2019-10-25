@@ -2,7 +2,7 @@ import * as React from 'react';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import { observer } from 'mobx-react';
-import AppRouts from 'app/routes';
+import AppRouts from 'app/routes/routes';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { Container } from 'react-bootstrap';
 import { Stores } from 'app/App';

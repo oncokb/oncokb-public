@@ -245,6 +245,8 @@ export enum PAGE_ROUTE {
   NEWS = '/news',
   LEVELS = '/levels',
   SWAGGER_UI = '/swagger-ui/index.html',
+  ADMIN = '/admin',
+  ADMIN_USER_MANAGEMENT = '/admin/user-management',
   ACCOUNT = '/account',
   REGISTER = '/account/register',
   ACCOUNT_ACTIVATE = '/account/activate',
