@@ -58,17 +58,16 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: smtp.gmail.com
-    port: 587
-    protocol: smtp
-    username:
-    password:
-    tls: true
+    host: email-smtp.us-east-1.amazonaws.com
+    port: 465
+    protocol: smtps
+    debug: true
     properties.mail.smtp:
-      from: register@oncokb.org
-      auth: true
       starttls.enable: true
-      ssl.trust: smtp.gmail.com
+      starttls.required: true
+      ssl.enable: true
+    properties.mail.smtps:
+      auth: true
   thymeleaf:
     cache: true
 
