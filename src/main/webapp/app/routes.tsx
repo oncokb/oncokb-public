@@ -27,43 +27,46 @@ import { PasswordResetInit } from 'app/components/account/PasswordResetInit';
 import PasswordResetFinish from 'app/components/account/PasswordResetFinish';
 import PageNotFound from './shared/error/page-not-found';
 import DataAccessPage from 'app/pages/DataAccessPage';
+import AccountPassword from 'app/components/account/AccountPassword';
 
 const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: RouterStore }) => {
   return (
     <Switch>
-      <ErrorBoundaryRoute path={PAGE_ROUTE.LOGIN} component={Login} />
-      <ErrorBoundaryRoute path={PAGE_ROUTE.LOGOUT} component={Logout} />
-      <ErrorBoundaryRoute path={PAGE_ROUTE.REGISTER} component={RegisterPage} />
-      <ErrorBoundaryRoute path={PAGE_ROUTE.DATA_ACCESS} component={DataAccessPage} />
-      <ErrorBoundaryRoute path={PAGE_ROUTE.CANCER_GENES} component={CancerGenesPage} />
-      <ErrorBoundaryRoute path={PAGE_ROUTE.ACTIONABLE_GENE} component={ActionableGenesPage} />
-      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol" component={GenePage} />
-      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration" component={AlterationPage} />
-      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage} />
-      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage} />
-      <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
-      <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
-      <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
-      <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage} />
-      <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
-      <Route exact path={PAGE_ROUTE.LEVELS} component={LevelOfEvidencePage} />
-      <ErrorBoundaryRoute exact path={PAGE_ROUTE.ACCOUNT_ACTIVATE} component={ActivateAccount} />
-      <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST} component={PasswordResetInit} />
-      <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH} component={PasswordResetFinish} />
+      <ErrorBoundaryRoute path={PAGE_ROUTE.LOGIN} component={Login}/>
+      <ErrorBoundaryRoute path={PAGE_ROUTE.LOGOUT} component={Logout}/>
+      <ErrorBoundaryRoute path={PAGE_ROUTE.REGISTER} component={RegisterPage}/>
+      <ErrorBoundaryRoute path={PAGE_ROUTE.DATA_ACCESS} component={DataAccessPage}/>
+      <ErrorBoundaryRoute path={PAGE_ROUTE.CANCER_GENES} component={CancerGenesPage}/>
+      <ErrorBoundaryRoute path={PAGE_ROUTE.ACTIONABLE_GENE} component={ActionableGenesPage}/>
+      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol" component={GenePage}/>
+      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration" component={AlterationPage}/>
+      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage}/>
+      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage}/>
+      <Route exact path={PAGE_ROUTE.HOME} component={HomePage}/>
+      <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage}/>
+      <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage}/>
+      <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage}/>
+      <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage}/>
+      <Route exact path={PAGE_ROUTE.LEVELS} component={LevelOfEvidencePage}/>
+      <ErrorBoundaryRoute exact path={PAGE_ROUTE.ACCOUNT_ACTIVATE} component={ActivateAccount}/>
+      <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST} component={PasswordResetInit}/>
+      <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH} component={PasswordResetFinish}/>
+      <PrivateRoute
+        exact
+        authenticationStore={props.authenticationStore}
+        routing={props.routing}
+        path={PAGE_ROUTE.ACCOUNT_PASSWORD}
+        component={AccountPassword}
+        hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}/>
       <PrivateRoute
         exact
         path={PAGE_ROUTE.ACCOUNT_SETTINGS}
         authenticationStore={props.authenticationStore}
-        // @ts-ignore
         routing={props.routing}
         component={AccountPage}
-        isAuthorized={
-          props.authenticationStore.account.isComplete &&
-          props.authenticationStore.account.result !== undefined &&
-          isAuthorized(props.authenticationStore.account.result.authorities, [AUTHORITIES.ADMIN, AUTHORITIES.USER])
-        }
+        hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}
       />
-      <ErrorBoundaryRoute component={PageNotFound} />
+      <ErrorBoundaryRoute component={PageNotFound}/>
     </Switch>
   );
 };
