@@ -412,7 +412,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
           {this.pageShouldBeRendered ? (
             <>
               <Row>
-                <Col xl={8} lg={6} xs={12}>
+                <Col xl={7} lg={6} xs={12}>
                   <div className="">
                     <h2>{this.store.hugoSymbol}</h2>
                     <GeneInfo
@@ -434,7 +434,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
                     )}
                   </div>
                 </Col>
-                <Col xl={4} lg={6} xs={12} className={'d-flex flex-column align-items-center'}>
+                <Col xl={5} lg={6} xs={12} className={'d-flex flex-column align-items-center'}>
                   <div>
                     <b>Cancer Types with {this.store.hugoSymbol} Mutations</b>
                     <DefaultTooltip
