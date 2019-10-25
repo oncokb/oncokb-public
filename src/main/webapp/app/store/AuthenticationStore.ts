@@ -1,12 +1,12 @@
-import { observable, IReactionDisposer, reaction, action, computed } from 'mobx';
+import { observable, action, computed, IReactionDisposer, reaction } from 'mobx';
 import { Storage } from 'react-jhipster';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
 import { UserDTO } from 'app/shared/api/generated/API';
 import * as _ from 'lodash';
-import { assignPublicToken } from 'app/indexUtils';
 import { AUTHORITIES } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
+import { assignPublicToken, getPublicWebsiteToken, getStoredToken } from 'app/indexUtils';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -20,9 +20,7 @@ export const AUTH_UER_TOKEN_KEY = 'oncokb-user-token';
 export const AUTH_WEBSITE_TOKEN_KEY = 'oncokb-webiste-token';
 
 class AuthenticationStore {
-  @observable rememberMe = true;
   @observable loading = false;
-  @observable isAuthenticated = false;
   @observable loginSuccess = false;
   @observable loginError = false; // Errors returned from server side
   @observable loginErrorMessage = ''; // Errors returned from server side
@@ -31,35 +29,34 @@ class AuthenticationStore {
   @observable redirectMessage = '';
   @observable idToken = '';
   @observable logoutUrl = '';
+  @observable account: UserDTO | undefined;
 
   @observable userName = '';
   @observable password = '';
 
+  readonly reactions: IReactionDisposer[] = [];
+
   constructor() {
-    const existedToken = this.getStoredToken();
+    const existedToken = getStoredToken();
     if (existedToken) {
       this.idToken = existedToken;
+      if (this.idToken !== getPublicWebsiteToken()) {
+        this.getAccount();
+      }
     }
   }
 
-  readonly account = remoteData<UserDTO | undefined>({
-    invoke: () => {
-      if (this.idToken) {
-        return client.getAccountUsingGET({});
-      } else {
-        return Promise.resolve(undefined);
-      }
-    },
-    onResult: account => {
-      if (account) {
-        this.isAuthenticated = true;
-      }
-    },
-    onError: () => {
-      this.updateIdToken('');
-    },
-    default: undefined
-  });
+  @action
+  getAccount() {
+    client
+      .getAccountUsingGET({})
+      .then(account => {
+        this.account = account;
+      })
+      .catch(error => {
+        this.updateIdToken('');
+      });
+  }
 
   @autobind
   @action
@@ -78,26 +75,25 @@ class AuthenticationStore {
   }
 
   @computed
+  get isAuthenticated() {
+    return !!this.idToken;
+  }
+
+  @computed
   get isUserAuthenticated() {
-    return (
-      this.isAuthenticated &&
-      this.account.result !== undefined &&
-      _.intersection([AUTHORITIES.ADMIN, AUTHORITIES.USER], this.account.result.authorities).length > 0
-    );
+    return this.isAuthenticated && this.account !== undefined;
   }
 
   @autobind
   @action
-  public login(username: string, password: string, rememberMe = false) {
+  public login(username: string, password: string) {
     this.loading = true;
-    this.loginError = false;
-    this.rememberMe = rememberMe;
     client
       .authorizeUsingPOST({
         loginVm: {
           username,
           password,
-          rememberMe: this.rememberMe
+          rememberMe: false
         }
       })
       .then(this.loginSuccessCallback, this.loginErrorCallback);
@@ -108,16 +104,15 @@ class AuthenticationStore {
     const uuid = result;
     this.updateIdToken(uuid);
     this.loginSuccess = true;
+
+    // we should fetch the account info when the user is successfully logged in.
+    this.getAccount();
     this.loading = false;
   }
 
   @action
   updateIdToken(newToken: string) {
-    if (this.rememberMe) {
-      Storage.local.set(AUTH_UER_TOKEN_KEY, newToken);
-    } else {
-      Storage.session.set(AUTH_UER_TOKEN_KEY, newToken);
-    }
+    Storage.local.set(AUTH_UER_TOKEN_KEY, newToken);
     this.idToken = newToken;
   }
 
@@ -125,7 +120,6 @@ class AuthenticationStore {
   loginErrorCallback(error: Error) {
     this.loginError = true;
     this.loginErrorMessage = error.message;
-    this.logout();
   }
 
   public clearAuthToken() {
@@ -137,18 +131,28 @@ class AuthenticationStore {
     }
   }
 
-  public getStoredToken() {
-    return Storage.local.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_WEBSITE_TOKEN_KEY);
-  }
-
   @autobind
   @action
   public logout() {
+    // Remove user's token
     this.clearAuthToken();
-    this.idToken = '';
-    this.loginSuccess = false;
+    // Remove the account info as well
+    this.account = undefined;
     // Revert back to public website token
-    assignPublicToken();
+    this.idToken = getPublicWebsiteToken();
+  }
+
+  @action
+  initialLoginStatus() {
+    this.loginSuccess = false;
+    this.loginError = false;
+    this.loginErrorMessage = '';
+  }
+
+  destroy() {
+    for (const item of this.reactions) {
+      item();
+    }
   }
 }
 

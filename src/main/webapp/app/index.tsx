@@ -14,7 +14,7 @@ import 'oncokb-styles/dist/oncokb.css';
 import 'react-responsive-tabs/styles.css';
 import 'react-mutation-mapper/dist/styles.css';
 
-import { assignPublicToken } from 'app/indexUtils';
+import { assignPublicToken, getStoredToken } from 'app/indexUtils';
 import { AUTH_UER_TOKEN_KEY, AUTH_WEBSITE_TOKEN_KEY } from 'app/store/AuthenticationStore';
 import { Storage } from 'react-jhipster';
 import { ONCOKB_APP_PROPS, ONCOKB_APP_PUBLIC_TOKEN, OncokbAppProps } from 'app/config/constants';
@@ -29,8 +29,7 @@ const end = superagent.Request.prototype.end;
 
 // @ts-ignore
 superagent.Request.prototype.query = function(queryParameters: any) {
-  const token =
-    Storage.local.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_UER_TOKEN_KEY) || Storage.session.get(AUTH_WEBSITE_TOKEN_KEY);
+  const token = getStoredToken();
   if (token) {
     this.set('Authorization', `Bearer ${token}`);
   }

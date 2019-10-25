@@ -16,7 +16,7 @@ export interface IPrivateRouteProps extends RouteProps {
 }
 
 export const PrivateRoute = observer(({ component, authenticationStore, hasAnyAuthorities, routing, ...rest }: IPrivateRouteProps) => {
-  const userAuthorities = authenticationStore.account.result ? authenticationStore.account.result.authorities : [];
+  const userAuthorities = authenticationStore.account ? authenticationStore.account.authorities : [];
   const userIsAuthorized = hasAnyAuthorities ? isAuthorized(userAuthorities, hasAnyAuthorities) : true;
   const checkAuthorities = (props: RouteProps) =>
     userIsAuthorized ? (

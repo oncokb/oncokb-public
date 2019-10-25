@@ -29,6 +29,10 @@ class App extends React.Component {
     super(props);
   }
 
+  componentWillUnmount(): void {
+    this.stores.authenticationStore.destroy();
+  }
+
   public render() {
     const browserHistory = createBrowserHistory();
     const history = syncHistoryWithStore(browserHistory, this.stores.routing);
