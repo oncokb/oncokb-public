@@ -131,7 +131,7 @@ jhipster:
   #     allow-credentials: true
   #     max-age: 1800
   mail:
-    from: register@oncokb.org
+    from: registration@oncokb.org
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
