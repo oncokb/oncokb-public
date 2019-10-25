@@ -22,7 +22,8 @@ class Main extends React.Component<IMainPage> {
           isUserAuthenticated={this.props.authenticationStore.isUserAuthenticated}
           isAdmin={
             this.props.authenticationStore.isUserAuthenticated &&
-            isAuthorized(this.props.authenticationStore.account.result!.authorities, [AUTHORITIES.ADMIN])
+            isAuthorized(this.props.authenticationStore.account ?
+              this.props.authenticationStore.account.authorities : [], [AUTHORITIES.ADMIN])
           }
           ribbonEnv={''}
           isInProduction={false}

@@ -45,9 +45,6 @@ const LoginContent: React.FunctionComponent<{
               required
               errorMessage="Password cannot be empty"
             />
-            <AvCheckboxGroup name="rememberMe">
-              <AvCheckbox label="Remember Me" value="rememberMe" />
-            </AvCheckboxGroup>
           </Col>
         </Row>
         <div className="mt-1">&nbsp;</div>
@@ -72,9 +69,9 @@ export default class LoginPage extends React.Component<ILoginProps> {
   handleLogin = (
     event: any,
     errors: any,
-    { email, password, rememberMe = [] }: { email: string; password: string; rememberMe: string[] }
+    { email, password }: { email: string; password: string; }
   ) => {
-    this.props.authenticationStore.login(email, password, rememberMe.includes('rememberMe'));
+    this.props.authenticationStore.login(email, password);
   };
 
   render() {

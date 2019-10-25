@@ -40,7 +40,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
 
   @computed
   get account() {
-    return this.props.authenticationStore.account.result;
+    return this.props.authenticationStore.account;
   }
 
   @autobind
