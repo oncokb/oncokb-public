@@ -7,7 +7,8 @@ import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { Container } from 'react-bootstrap';
 import { Stores } from 'app/App';
 import { withRouter } from 'react-router';
-import { AUTHORITIES } from 'app/config/constants';
+import { AUTHORITIES, NOTIFICATION_TIMEOUT_MILLISECONDS } from 'app/config/constants';
+import {ToastContainer} from 'react-toastify';
 
 export type IMainPage = Stores;
 
@@ -18,6 +19,17 @@ class Main extends React.Component<IMainPage> {
   public render() {
     return (
       <div className="Main">
+        <ToastContainer
+          position="top-center"
+          autoClose={NOTIFICATION_TIMEOUT_MILLISECONDS}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <Header
           isUserAuthenticated={this.props.authenticationStore.isUserAuthenticated}
           isAdmin={
@@ -33,10 +45,10 @@ class Main extends React.Component<IMainPage> {
         />
         <div className={'view-wrapper'}>
           <Container fluid={!this.props.windowStore.isXLscreen}>
-            <AppRouts authenticationStore={this.props.authenticationStore} routing={this.props.routing} />
+            <AppRouts authenticationStore={this.props.authenticationStore} routing={this.props.routing}/>
           </Container>
         </div>
-        <Footer lastUpdate={this.props.appStore.appInfo.result.dataVersion.date} />
+        <Footer lastUpdate={this.props.appStore.appInfo.result.dataVersion.date}/>
       </div>
     );
   }

@@ -1,6 +1,16 @@
 import * as request from "superagent";
 
 type CallbackHandler = (err: any, res ? : request.Response) => void;
+export type AuditEvent = {
+    'data': {}
+
+    'principal': string
+
+        'timestamp': string
+
+        'type': string
+
+};
 export type KeyAndPasswordVM = {
     'key': string
 
@@ -139,7 +149,7 @@ export type UserDetailsDTO = {
 };
 
 /**
- * oncokb API documentation
+ * OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
  * @class API
  * @param {(string)} [domainOrOptions] - The project domain.
  */
@@ -1275,15 +1285,38 @@ export default class API {
         });
     };
     getAllUsersUsingGETURL(parameters: {
+        'offset' ? : number,
         'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
         'size' ? : number,
         'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
             $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/users';
+        if (parameters['offset'] !== undefined) {
+            queryParameters['offset'] = parameters['offset'];
+        }
+
         if (parameters['page'] !== undefined) {
             queryParameters['page'] = parameters['page'];
+        }
+
+        if (parameters['pageNumber'] !== undefined) {
+            queryParameters['pageNumber'] = parameters['pageNumber'];
+        }
+
+        if (parameters['pageSize'] !== undefined) {
+            queryParameters['pageSize'] = parameters['pageSize'];
+        }
+
+        if (parameters['paged'] !== undefined) {
+            queryParameters['paged'] = parameters['paged'];
         }
 
         if (parameters['size'] !== undefined) {
@@ -1292,6 +1325,18 @@ export default class API {
 
         if (parameters['sort'] !== undefined) {
             queryParameters['sort'] = parameters['sort'];
+        }
+
+        if (parameters['sortSorted'] !== undefined) {
+            queryParameters['sort.sorted'] = parameters['sortSorted'];
+        }
+
+        if (parameters['sortUnsorted'] !== undefined) {
+            queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+        }
+
+        if (parameters['unpaged'] !== undefined) {
+            queryParameters['unpaged'] = parameters['unpaged'];
         }
 
         if (parameters.$queryParameters) {
@@ -1308,14 +1353,28 @@ export default class API {
      * getAllUsers
      * @method
      * @name API#getAllUsersUsingGET
+     * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} pageSize - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} paged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {integer} size - Size of a page
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      */
     getAllUsersUsingGETWithHttpInfo(parameters: {
+        'offset' ? : number,
         'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
         'size' ? : number,
         'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
             $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -1330,8 +1389,24 @@ export default class API {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
 
+            if (parameters['offset'] !== undefined) {
+                queryParameters['offset'] = parameters['offset'];
+            }
+
             if (parameters['page'] !== undefined) {
                 queryParameters['page'] = parameters['page'];
+            }
+
+            if (parameters['pageNumber'] !== undefined) {
+                queryParameters['pageNumber'] = parameters['pageNumber'];
+            }
+
+            if (parameters['pageSize'] !== undefined) {
+                queryParameters['pageSize'] = parameters['pageSize'];
+            }
+
+            if (parameters['paged'] !== undefined) {
+                queryParameters['paged'] = parameters['paged'];
             }
 
             if (parameters['size'] !== undefined) {
@@ -1340,6 +1415,18 @@ export default class API {
 
             if (parameters['sort'] !== undefined) {
                 queryParameters['sort'] = parameters['sort'];
+            }
+
+            if (parameters['sortSorted'] !== undefined) {
+                queryParameters['sort.sorted'] = parameters['sortSorted'];
+            }
+
+            if (parameters['sortUnsorted'] !== undefined) {
+                queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+            }
+
+            if (parameters['unpaged'] !== undefined) {
+                queryParameters['unpaged'] = parameters['unpaged'];
             }
 
             if (parameters.$queryParameters) {
@@ -1358,14 +1445,28 @@ export default class API {
      * getAllUsers
      * @method
      * @name API#getAllUsersUsingGET
+     * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} pageSize - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} paged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {integer} size - Size of a page
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      */
     getAllUsersUsingGET(parameters: {
+            'offset' ? : number,
             'page' ? : number,
+            'pageNumber' ? : number,
+            'pageSize' ? : number,
+            'paged' ? : boolean,
             'size' ? : number,
             'sort' ? : Array < string > ,
+                'sortSorted' ? : boolean,
+                'sortUnsorted' ? : boolean,
+                'unpaged' ? : boolean,
                 $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < UserDTO >
@@ -1451,11 +1552,15 @@ export default class API {
         });
     };
     updateUserUsingPUTURL(parameters: {
+        'sendEmail': boolean,
         'userDto': UserDTO,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/users';
+        if (parameters['sendEmail'] !== undefined) {
+            queryParameters['sendEmail'] = parameters['sendEmail'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -1471,9 +1576,11 @@ export default class API {
      * updateUser
      * @method
      * @name API#updateUserUsingPUT
+     * @param {boolean} sendEmail - sendEmail
      * @param {} userDto - userDTO
      */
     updateUserUsingPUTWithHttpInfo(parameters: {
+        'sendEmail': boolean,
         'userDto': UserDTO,
         $queryParameters ? : any,
         $domain ? : string
@@ -1489,6 +1596,15 @@ export default class API {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
             headers['Content-Type'] = 'application/json';
+
+            if (parameters['sendEmail'] !== undefined) {
+                queryParameters['sendEmail'] = parameters['sendEmail'];
+            }
+
+            if (parameters['sendEmail'] === undefined) {
+                reject(new Error('Missing required  parameter: sendEmail'));
+                return;
+            }
 
             if (parameters['userDto'] !== undefined) {
                 body = parameters['userDto'];
@@ -1515,9 +1631,11 @@ export default class API {
      * updateUser
      * @method
      * @name API#updateUserUsingPUT
+     * @param {boolean} sendEmail - sendEmail
      * @param {} userDto - userDTO
      */
     updateUserUsingPUT(parameters: {
+        'sendEmail': boolean,
         'userDto': UserDTO,
         $queryParameters ? : any,
         $domain ? : string
@@ -1735,6 +1853,272 @@ export default class API {
         $domain ? : string
     }): Promise < any > {
         return this.deleteUserUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getAllUsingGETURL(parameters: {
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/management/audits';
+        if (parameters['offset'] !== undefined) {
+            queryParameters['offset'] = parameters['offset'];
+        }
+
+        if (parameters['page'] !== undefined) {
+            queryParameters['page'] = parameters['page'];
+        }
+
+        if (parameters['pageNumber'] !== undefined) {
+            queryParameters['pageNumber'] = parameters['pageNumber'];
+        }
+
+        if (parameters['pageSize'] !== undefined) {
+            queryParameters['pageSize'] = parameters['pageSize'];
+        }
+
+        if (parameters['paged'] !== undefined) {
+            queryParameters['paged'] = parameters['paged'];
+        }
+
+        if (parameters['size'] !== undefined) {
+            queryParameters['size'] = parameters['size'];
+        }
+
+        if (parameters['sort'] !== undefined) {
+            queryParameters['sort'] = parameters['sort'];
+        }
+
+        if (parameters['sortSorted'] !== undefined) {
+            queryParameters['sort.sorted'] = parameters['sortSorted'];
+        }
+
+        if (parameters['sortUnsorted'] !== undefined) {
+            queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+        }
+
+        if (parameters['unpaged'] !== undefined) {
+            queryParameters['unpaged'] = parameters['unpaged'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getAll
+     * @method
+     * @name API#getAllUsingGET
+     * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} pageSize - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} paged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     */
+    getAllUsingGETWithHttpInfo(parameters: {
+        'offset' ? : number,
+        'page' ? : number,
+        'pageNumber' ? : number,
+        'pageSize' ? : number,
+        'paged' ? : boolean,
+        'size' ? : number,
+        'sort' ? : Array < string > ,
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/management/audits';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters['offset'] !== undefined) {
+                queryParameters['offset'] = parameters['offset'];
+            }
+
+            if (parameters['page'] !== undefined) {
+                queryParameters['page'] = parameters['page'];
+            }
+
+            if (parameters['pageNumber'] !== undefined) {
+                queryParameters['pageNumber'] = parameters['pageNumber'];
+            }
+
+            if (parameters['pageSize'] !== undefined) {
+                queryParameters['pageSize'] = parameters['pageSize'];
+            }
+
+            if (parameters['paged'] !== undefined) {
+                queryParameters['paged'] = parameters['paged'];
+            }
+
+            if (parameters['size'] !== undefined) {
+                queryParameters['size'] = parameters['size'];
+            }
+
+            if (parameters['sort'] !== undefined) {
+                queryParameters['sort'] = parameters['sort'];
+            }
+
+            if (parameters['sortSorted'] !== undefined) {
+                queryParameters['sort.sorted'] = parameters['sortSorted'];
+            }
+
+            if (parameters['sortUnsorted'] !== undefined) {
+                queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
+            }
+
+            if (parameters['unpaged'] !== undefined) {
+                queryParameters['unpaged'] = parameters['unpaged'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getAll
+     * @method
+     * @name API#getAllUsingGET
+     * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} page - Page number of the requested page
+     * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} pageSize - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} paged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} size - Size of a page
+     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     */
+    getAllUsingGET(parameters: {
+            'offset' ? : number,
+            'page' ? : number,
+            'pageNumber' ? : number,
+            'pageSize' ? : number,
+            'paged' ? : boolean,
+            'size' ? : number,
+            'sort' ? : Array < string > ,
+                'sortSorted' ? : boolean,
+                'sortUnsorted' ? : boolean,
+                'unpaged' ? : boolean,
+                $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < AuditEvent >
+        > {
+            return this.getAllUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getUsingGETURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/management/audits/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * get
+     * @method
+     * @name API#getUsingGET
+     * @param {integer} id - id
+     */
+    getUsingGETWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/management/audits/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * get
+     * @method
+     * @name API#getUsingGET
+     * @param {integer} id - id
+     */
+    getUsingGET(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < AuditEvent > {
+        return this.getUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };

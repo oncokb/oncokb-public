@@ -42,6 +42,7 @@ export const GRID_BREAKPOINTS = {
 };
 
 export const REDIRECT_TIMEOUT_MILLISECONDS = 5000;
+export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;
 
 export enum ONCOGENICITY {
   ONCOGENIC = 'Oncogenic',
