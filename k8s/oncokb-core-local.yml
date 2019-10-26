@@ -47,7 +47,7 @@ spec:
             envFrom:
               - configMapRef:
                   name: oncokb-core-local
-            image: cbioportal/oncokb:core-1.5.alpha.2
+            image: cbioportal/oncokb:core-1.5.alpha.3
             command: ["java"]
             args: [
                 # from https://developers.redhat.com/blog/2017/04/04/openjdk-and-containers/
@@ -79,7 +79,7 @@ spec:
                 "-jar",
                 "/webapp-runner.jar",
                 "--proxy-base-url",
-                "https://oncokb.org",
+                "https://www.oncokb.org",
                 "--enable-compression",
                 "--expand-war",
                 "--port",
