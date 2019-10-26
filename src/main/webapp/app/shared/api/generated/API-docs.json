@@ -1,16 +1,27 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "oncokb API documentation",
-    "version": "0.0.1",
-    "title": "OncoKB API",
-    "contact": {},
-    "license": {}
+    "description": "OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.",
+    "version": "v1.0.0",
+    "title": "OncoKB APIs",
+    "contact": {
+      "name": "OncoKB",
+      "url": "https://www.oncokb.org",
+      "email": "contact@oncokb.org"
+    },
+    "license": {
+      "name": "Usage Terms",
+      "url": "https://www.oncokb.org/terms"
+    }
   },
   "tags": [
     {
       "name": "account-resource",
       "description": "Account Resource"
+    },
+    {
+      "name": "audit-resource",
+      "description": "Audit Resource"
     },
     {
       "name": "user-details-resource",
@@ -630,12 +641,39 @@
         ],
         "parameters": [
           {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
             "name": "page",
             "in": "query",
             "description": "Page number of the requested page",
             "required": false,
             "type": "integer",
             "format": "int32"
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "paged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           },
           {
             "name": "size",
@@ -655,6 +693,24 @@
               "type": "string"
             },
             "collectionFormat": "multi"
+          },
+          {
+            "name": "sort.sorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "sort.unsorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "unpaged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -737,6 +793,13 @@
           "*/*"
         ],
         "parameters": [
+          {
+            "name": "sendEmail",
+            "in": "query",
+            "description": "sendEmail",
+            "required": true,
+            "type": "boolean"
+          },
           {
             "in": "body",
             "name": "userDTO",
@@ -875,9 +938,175 @@
         },
         "deprecated": false
       }
+    },
+    "/management/audits": {
+      "get": {
+        "tags": [
+          "audit-resource"
+        ],
+        "summary": "getAll",
+        "operationId": "getAllUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number of the requested page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "paged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of a page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "sort.sorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "sort.unsorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "unpaged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AuditEvent"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/management/audits/{id}": {
+      "get": {
+        "tags": [
+          "audit-resource"
+        ],
+        "summary": "get",
+        "operationId": "getUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AuditEvent"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
     }
   },
   "definitions": {
+    "AuditEvent": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object"
+        },
+        "principal": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "title": "AuditEvent"
+    },
     "KeyAndPasswordVM": {
       "type": "object",
       "properties": {

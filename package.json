@@ -57,7 +57,7 @@
     "react-select": "^3.0.4",
     "react-spinkit": "latest",
     "react-table": "^6.10.3",
-    "react-toastify": "4.5.2",
+    "react-toastify": "5.4.0",
     "react-transition-group": "2.7.0",
     "reactstrap": "7.1.0",
     "tslib": "1.9.3",

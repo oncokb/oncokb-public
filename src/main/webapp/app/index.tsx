@@ -13,6 +13,7 @@ import 'react-table/react-table.css';
 import 'oncokb-styles/dist/oncokb.css';
 import 'react-responsive-tabs/styles.css';
 import 'react-mutation-mapper/dist/styles.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { assignPublicToken, getStoredToken } from 'app/indexUtils';
 import { AUTH_UER_TOKEN_KEY, AUTH_WEBSITE_TOKEN_KEY } from 'app/store/AuthenticationStore';

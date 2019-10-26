@@ -1,5 +1,8 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
@@ -11,11 +14,6 @@ import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.LoginAlreadyUsedException;
-
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +28,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing users.
@@ -92,7 +92,7 @@ public class UserResource {
      *
      * @param userDTO the user to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new user, or with status {@code 400 (Bad Request)} if the login or email is already in use.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @throws URISyntaxException       if the Location URI syntax is incorrect.
      * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
      */
     @PostMapping("/users")
@@ -111,7 +111,7 @@ public class UserResource {
             User newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert(applicationName,  "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
+                .headers(HeaderUtil.createAlert(applicationName, "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
                 .body(newUser);
         }
     }
@@ -126,7 +126,10 @@ public class UserResource {
      */
     @PutMapping("/users")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUser(
+        @Valid @RequestBody UserDTO userDTO,
+        @NotNull @RequestParam Boolean sendEmail
+    ) {
         log.debug("REST request to update User : {}", userDTO);
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
@@ -158,6 +161,7 @@ public class UserResource {
 
     /**
      * Gets a list of all roles.
+     *
      * @return a string list of all roles.
      */
     @GetMapping("/users/authorities")
@@ -192,6 +196,6 @@ public class UserResource {
         log.debug("REST request to delete User: {}", login);
         // TODO: token, token_stats, user_details need to be deleted in order to delete the user
         userService.deleteUser(login);
-        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName,  "A user is deleted with identifier " + login, login)).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, "A user is deleted with identifier " + login, login)).build();
     }
 }
