@@ -141,6 +141,9 @@ public class UserResource {
         }
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
+        if(existingUser.isPresent() && sendEmail) {
+            mailService.sendApprovalEmail(existingUser.get());
+        }
         return ResponseUtil.wrapOrNotFound(updatedUser,
             HeaderUtil.createAlert(applicationName, "A user is updated with identifier " + userDTO.getLogin(), userDTO.getLogin()));
     }

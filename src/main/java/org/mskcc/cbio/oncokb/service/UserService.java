@@ -64,8 +64,8 @@ public class UserService {
         log.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
             .map(user -> {
-                // activate given user for the registration key.
-                user.setActivated(true);
+                // we only set the activation key to null after verifying the email.
+                // the account needs to be manually verified by the admin
                 user.setActivationKey(null);
                 this.clearUserCaches(user);
                 log.debug("Activated user: {}", user);
