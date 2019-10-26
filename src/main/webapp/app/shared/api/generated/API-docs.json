@@ -944,12 +944,19 @@
         "tags": [
           "audit-resource"
         ],
-        "summary": "getAll",
-        "operationId": "getAllUsingGET",
+        "summary": "getByDates",
+        "operationId": "getByDatesUsingGET",
         "produces": [
           "*/*"
         ],
         "parameters": [
+          {
+            "name": "fromDate",
+            "in": "query",
+            "description": "fromDate",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "offset",
             "in": "query",
@@ -1015,6 +1022,13 @@
             "in": "query",
             "required": false,
             "type": "boolean"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "description": "toDate",
+            "required": true,
+            "type": "string"
           },
           {
             "name": "unpaged",
