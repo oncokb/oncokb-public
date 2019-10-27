@@ -82,14 +82,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
             // Permits the api swagger definitions through proxy
-            .antMatchers("/api/private/utils/dataRelease/downloadAvailability").permitAll()
             .antMatchers("/api/v1/v2/api-docs").permitAll()
+            .antMatchers("/api/private/utils/dataRelease/downloadAvailability").permitAll()
 
             .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/search/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/v1/utils/**.txt").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/v1/utils/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
@@ -98,7 +97,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/users/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/user-details/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/token-stats/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/private/utils/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()
