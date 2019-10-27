@@ -120,9 +120,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   @action.bound
   successToRegistered() {
     this.registerStatus = RegisterStatus.REGISTERED;
-    // TODO: figure out whether you need to have manual activation process.
-    // await this.props.authenticationStore.login(this.newAccount.login!, this.newAccount.password!);
-    setTimeout(this.redirectToAccountPage, REDIRECT_TIMEOUT_MILLISECONDS);
+    // setTimeout(this.redirectToAccountPage, REDIRECT_TIMEOUT_MILLISECONDS);
   }
 
   @action.bound
@@ -189,8 +187,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
       return (
         <div>
           <Alert variant="info">
-            New account has been created, the page will be redirected to your account page
-            in {REDIRECT_TIMEOUT_MILLISECONDS / 1000}s
+            We have sent you an email to verify your email address. Please follow the further instruction in the email.
           </Alert>
         </div>
       );

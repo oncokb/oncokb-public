@@ -8,7 +8,7 @@ import { remoteData } from 'cbioportal-frontend-commons';
 import { Link } from 'react-router-dom';
 import { PAGE_ROUTE } from 'app/config/constants';
 import { inject, observer } from 'mobx-react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Alert } from 'react-bootstrap';
 import SmallPageContainer from '../SmallComponentContainer';
 
 @inject('routing')
@@ -41,19 +41,20 @@ export default class ActivateAccount extends React.Component<{
 
   getSuccessfulMessage = () => {
     return (
-      <div style={{ color: 'success' }}>
-        <strong>Your OncoKB account has been created, we will review the account and let you know once it&apos;s approved.</strong>
+      <div>
+        <Alert variant={'info'}>Your OncoKB account has been created, we will review the account and let you know once
+          it&apos;s approved.</Alert>
       </div>
     );
   };
 
   getFailureMessage = () => {
     return (
-      <div style={{ color: 'danger' }}>
-        <strong>
-          Your user could not be activated{this.activateAccount.error ? ` due to ${this.activateAccount.error.message}` : ''}.
-        </strong>{' '}
-        Please use the registration form to sign up.
+      <div>
+        <Alert variant={'warning'}>
+          Your user account could not be
+          activated{this.activateAccount.error ? ` due to ${this.activateAccount.error.message}` : ''}.
+        </Alert>
       </div>
     );
   };
@@ -61,7 +62,7 @@ export default class ActivateAccount extends React.Component<{
   render() {
     return (
       <SmallPageContainer>
-        {this.activateAccount.isPending ? <LoadingIndicator isLoading={true} /> : null}
+        {this.activateAccount.isPending ? <LoadingIndicator isLoading={true}/> : null}
         {this.activateAccount.isComplete ? this.getSuccessfulMessage() : null}
         {this.activateAccount.isError ? this.getFailureMessage() : null}
       </SmallPageContainer>
