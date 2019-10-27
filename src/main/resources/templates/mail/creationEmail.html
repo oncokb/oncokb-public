@@ -10,7 +10,11 @@
             Dear
         </p>
         <p th:text="#{email.creation.text1}">
-            Your OncoKB account has been created, we will review the account and let you know once it's approved.
+          Your OncoKB account has been created, please click on the URL below to access it:
+        </p>
+        <p>
+          <a th:with="url=(@{|${baseUrl}/account/reset/finish?key=${user.resetKey}|})" th:href="${url}"
+             th:text="${url}">Login link</a>
         </p>
         <p>
             <span th:text="#{email.activation.text2}">Regards, </span>
