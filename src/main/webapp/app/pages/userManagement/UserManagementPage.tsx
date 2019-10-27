@@ -28,7 +28,7 @@ export default class UserManagementPage extends React.Component<{
   }
 
   @computed
-  currentSelectedUserIsActivated() {
+  get currentSelectedUserIsActivated() {
     return this.currentSelectedUser && this.currentSelectedUser.activated;
   }
 
