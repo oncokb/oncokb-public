@@ -15,7 +15,7 @@ import {
   LICENSE_TYPES,
   LicenseType,
   PAGE_ROUTE,
-  QUERY_SEPARATOR_FOR_QUERY_STRING
+  QUERY_SEPARATOR_FOR_QUERY_STRING, REDIRECT_TIMEOUT_MILLISECONDS
 } from 'app/config/constants';
 import { getAccountInfoTitle, getSectionClassName } from './account/AccountUtils';
 import SmallPageContainer from 'app/components/SmallComponentContainer';
@@ -57,7 +57,6 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   @observable registerError: any;
   @observable selectedLicense: LicenseType | undefined;
 
-  private redirectTimeoutInSecond = 5;
   private newAccount: Partial<ManagedUserVM>;
   readonly reactions: IReactionDisposer[] = [];
 
@@ -123,7 +122,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     this.registerStatus = RegisterStatus.REGISTERED;
     // TODO: figure out whether you need to have manual activation process.
     // await this.props.authenticationStore.login(this.newAccount.login!, this.newAccount.password!);
-    setTimeout(this.redirectToAccountPage, this.redirectTimeoutInSecond * 1000);
+    setTimeout(this.redirectToAccountPage, REDIRECT_TIMEOUT_MILLISECONDS);
   }
 
   @action.bound
@@ -191,7 +190,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         <div>
           <Alert variant="info">
             New account has been created, the page will be redirected to your account page
-            in {this.redirectTimeoutInSecond}s
+            in {REDIRECT_TIMEOUT_MILLISECONDS / 1000}s
           </Alert>
         </div>
       );

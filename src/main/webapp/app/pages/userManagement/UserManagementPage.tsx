@@ -1,5 +1,5 @@
 import React from 'react';
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
@@ -25,6 +25,11 @@ export default class UserManagementPage extends React.Component<{
   constructor(props: Readonly<{ routing: RouterStore; match: match }>) {
     super(props);
     this.getUsers();
+  }
+
+  @computed
+  currentSelectedUserIsActivated() {
+    return this.currentSelectedUser && this.currentSelectedUser.activated;
   }
 
   @action
@@ -175,7 +180,7 @@ export default class UserManagementPage extends React.Component<{
             <Modal.Title>Update User Status</Modal.Title>
           </Modal.Header>
           <Modal.Body>Are you sure
-            to {this.currentSelectedUser ? (this.currentSelectedUser.activated ? 'deactivate' : 'active') : '?'} the
+            to {this.currentSelectedUserIsActivated ? 'deactivate' : 'active'} the
             user?</Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => this.cancelUpdateActiveStatus()}>
@@ -184,14 +189,17 @@ export default class UserManagementPage extends React.Component<{
             <Button variant="primary" onClick={() => this.updateActiveStatus(true)}>
               Update
             </Button>
-            <DefaultTooltip
-              placement={'top'}
-              overlay={'Update user status without sending an email to the user'}
-            >
-              <Button variant="primary" onClick={() => this.updateActiveStatus(true)}>
-                Silent Update
-              </Button>
-            </DefaultTooltip>
+            {
+              !this.currentSelectedUserIsActivated ?
+                <DefaultTooltip
+                  placement={'top'}
+                  overlay={'Update user status without sending an email to the user'}
+                >
+                  <Button variant="primary" onClick={() => this.updateActiveStatus(false)}>
+                    Silent Update
+                  </Button>
+                </DefaultTooltip> : null
+            }
           </Modal.Footer>
         </Modal>
       </>
