@@ -42,7 +42,7 @@ export default class ActivateAccount extends React.Component<{
   getSuccessfulMessage = () => {
     return (
       <div style={{ color: 'success' }}>
-        <strong>Your OncoKB account has been created, we will review the account and let you know once it's approved.</strong>
+        <strong>Your OncoKB account has been created, we will review the account and let you know once it&apos;s approved.</strong>
       </div>
     );
   };
