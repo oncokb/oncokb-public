@@ -252,7 +252,7 @@ export enum PAGE_ROUTE {
   ADMIN_USER_MANAGEMENT = '/admin/user-management',
   ACCOUNT = '/account',
   REGISTER = '/account/register',
-  ACCOUNT_ACTIVATE = '/account/activate',
+  ACCOUNT_VERIFY = '/account/verify',
   ACCOUNT_SETTINGS = '/account/settings',
   ACCOUNT_PASSWORD = '/account/password',
   ACCOUNT_PASSWORD_RESET_REQUEST = '/account/reset/request',
