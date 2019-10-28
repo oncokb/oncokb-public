@@ -1,0 +1,9 @@
+Dear [(${user.login})],
+
+Your OncoKB account has been created. Please use the URL below to access it:
+
+[(${baseUrl})]/account/reset/finish?key=[(${user.resetKey})]
+
+Regards,
+The OncoKB Team
+

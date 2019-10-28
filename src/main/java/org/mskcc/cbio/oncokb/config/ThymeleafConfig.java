@@ -47,7 +47,6 @@ public class ThymeleafConfig {
         templateResolver.setPrefix("/templates/");
         Set<String> patterns = new HashSet<>();
         patterns.add("html/*");
-        patterns.add("mail/*");
         templateResolver.setResolvablePatterns(patterns);
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
@@ -89,6 +88,7 @@ public class ThymeleafConfig {
         final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         Set<String> patterns = new HashSet<>();
         patterns.add("txt/*");
+        patterns.add("mail/*");
         templateResolver.setResolvablePatterns(patterns);
         templateResolver.setOrder(Integer.valueOf(3));
         templateResolver.setPrefix("/templates/");
