@@ -1,8 +1,7 @@
 import { remoteData } from 'cbioportal-frontend-commons';
 import {
   DataFilterType,
-  DefaultMutationMapperStore,
-  Mutation,
+  initDefaultMutationMapperStore,
   MutationMapper,
   MutationMapperProps,
   MutationMapperStore,
@@ -82,34 +81,6 @@ export type TherapeuticImplication = {
   citations: Citations;
 };
 
-// TODO import this function from "react-mutation-mapper"
-export function initDefaultMutationMapperStore(props: MutationMapperProps) {
-  return new DefaultMutationMapperStore(
-    {
-      entrezGeneId: props.entrezGeneId, // entrezGeneId is required to display uniprot id
-      hugoGeneSymbol: props.hugoSymbol ? props.hugoSymbol : ''
-    },
-    {
-      annotationFields: props.annotationFields,
-      isoformOverrideSource: props.isoformOverrideSource,
-      filterMutationsBySelectedTranscript: props.filterMutationsBySelectedTranscript,
-      genomeNexusUrl: props.genomeNexusUrl,
-      oncoKbUrl: props.oncoKbUrl,
-      cachePostMethodsOnClients: props.cachePostMethodsOnClients,
-      apiCacheLimit: props.apiCacheLimit,
-      getMutationCount: props.getMutationCount,
-      getTumorType: props.getTumorType,
-      dataFilters: props.dataFilters,
-      selectionFilters: props.selectionFilters,
-      highlightFilters: props.highlightFilters,
-      groupFilters: props.groupFilters
-    },
-    () => (props.data || []) as Mutation[],
-    props.filterApplier,
-    props.filterAppliersOverride
-  );
-}
-
 export function getCustomFilterAppliers() {
   return {
     [ONCOGENICITY_FILTER_TYPE]: applyOncogenicityFilter,
@@ -130,7 +101,9 @@ export class AnnotationStore {
     if (this.cancerTypeFilter) {
       return this.cancerTypeFilter.values;
     } else if (this.selectedPositions.length > 0) {
-      return this.barChartData.filter(data => data.alterations.filter(alteration => this.selectedPositions.includes(alteration.proteinStartPosition)).length > 0).map(data => data.x);
+      return this.barChartData
+        .filter(data => data.alterations.filter(alteration => this.selectedPositions.includes(alteration.proteinStartPosition)).length > 0)
+        .map(data => data.x);
     }
     return [];
   }
@@ -503,7 +476,11 @@ export class AnnotationStore {
         if (this.oncogenicityFilters.length > 0 && !this.oncogenicityFilters.includes(shortenOncogenicity(alteration.oncogenic))) {
           isMatch = false;
         }
-        if (this.selectedCancerTypes.length > 0 && (!this.selectedCancerTypes.includes(alteration.cancerType.mainType.name) || !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration))) {
+        if (
+          this.selectedCancerTypes.length > 0 &&
+          (!this.selectedCancerTypes.includes(alteration.cancerType.mainType.name) ||
+            !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration))
+        ) {
           isMatch = false;
         }
         if (this.selectedPositions.length > 0 && !this.selectedPositions.includes(alteration.variant.proteinStart)) {
