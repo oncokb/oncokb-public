@@ -1,8 +1,7 @@
 package org.mskcc.cbio.oncokb.service.dto;
 
-import io.swagger.models.License;
+import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
-
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
@@ -10,8 +9,8 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,6 +47,8 @@ public class UserDTO {
     @Size(min = 5, max = 254)
     private String email;
 
+    private Boolean emailVerified;
+
     @Size(max = 256)
     private String imageUrl;
 
@@ -77,6 +78,7 @@ public class UserDTO {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.activated = user.getActivated();
+        this.emailVerified = StringUtils.isEmpty(user.getActivationKey());
         this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
         this.createdBy = user.getCreatedBy();
@@ -133,6 +135,14 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
     }
 
     public LicenseType getLicenseType() {

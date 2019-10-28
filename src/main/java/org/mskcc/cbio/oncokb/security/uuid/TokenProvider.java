@@ -51,12 +51,16 @@ public class TokenProvider implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
     }
 
+    public List<Token> getUserTokens(User userLogin) {
+        return tokenService.findValidByUser(userLogin);
+    }
+
     private Token getNewToken(Set<Authority> authorities) {
         Token token = new Token();
         Instant currentTime = Instant.now();
         Instant expirationTime = authorities.stream().filter(
             authority -> authority.getName().equalsIgnoreCase(AuthoritiesConstants.PUBLIC_WEBSITE)).count() > 0 ?
-            Instant.now().plusSeconds(60 * EXPIRATION_TIME_IN_MINUTES) : currentTime.plusSeconds(60 * 24 * EXPIRATION_TIME_IN_DAYS);
+            Instant.now().plusSeconds(60 * EXPIRATION_TIME_IN_MINUTES) : currentTime.plusSeconds(60 * 60 * 24 * EXPIRATION_TIME_IN_DAYS);
         token.setCreation(currentTime);
         token.setExpiration(expirationTime);
 
@@ -64,15 +68,15 @@ public class TokenProvider implements InitializingBean {
         return token;
     }
 
-    public UUID createToken() {
+    public Token createToken() {
         Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
         Token token = getNewToken(userOptional.get().getAuthorities());
         token.setUser(userOptional.get());
         tokenService.save(token);
-        return token.getToken();
+        return token;
     }
 
-    public UUID updateToken() {
+    public Token updateCurrentUserToken() {
         Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
         if (userOptional.isPresent()) {
             List<Token> tokenList = tokenService.findByUser(userOptional.get());
@@ -87,6 +91,11 @@ public class TokenProvider implements InitializingBean {
         } else {
             return null;
         }
+    }
+
+    public void expireToken(Token token) {
+        token.setExpiration(Instant.now());
+        tokenService.save(token);
     }
 
     // This method is used in the frontend thymeleaf parsing
@@ -140,6 +149,7 @@ public class TokenProvider implements InitializingBean {
         }
         return false;
     }
+
 
     public TokenStats addAccessRecord(UUID uuid, String accessIp) {
         Optional<Token> tokenOptional = tokenService.findByToken(uuid);

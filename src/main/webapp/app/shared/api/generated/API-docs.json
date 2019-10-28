@@ -153,43 +153,6 @@
         "deprecated": false
       }
     },
-    "/api/account/change-token": {
-      "post": {
-        "tags": [
-          "account-resource"
-        ],
-        "summary": "changeToken",
-        "operationId": "changeTokenUsingPOST",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "deprecated": false
-      }
-    },
     "/api/account/reset-password/finish": {
       "post": {
         "tags": [
@@ -273,6 +236,109 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/account/tokens": {
+      "get": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "getTokens",
+        "operationId": "getTokensUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Token"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "createToken",
+        "operationId": "createTokenUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "deleteToken",
+        "operationId": "deleteTokenUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "token",
+            "description": "token",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         },
         "deprecated": false
@@ -1189,6 +1255,9 @@
           "minLength": 5,
           "maxLength": 254
         },
+        "emailVerified": {
+          "type": "boolean"
+        },
         "firstName": {
           "type": "string",
           "minLength": 0,
@@ -1257,6 +1326,31 @@
         }
       },
       "title": "PasswordChangeDTO"
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "creation": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiration": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "token": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "title": "Token"
     },
     "User": {
       "type": "object",
@@ -1342,6 +1436,9 @@
           "type": "string",
           "minLength": 5,
           "maxLength": 254
+        },
+        "emailVerified": {
+          "type": "boolean"
         },
         "firstName": {
           "type": "string",

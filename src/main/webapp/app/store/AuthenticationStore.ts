@@ -2,11 +2,12 @@ import { observable, action, computed, IReactionDisposer, reaction } from 'mobx'
 import { Storage } from 'react-jhipster';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
-import { UserDTO } from 'app/shared/api/generated/API';
+import { Token, UserDTO } from 'app/shared/api/generated/API';
 import * as _ from 'lodash';
 import { AUTHORITIES } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
 import { assignPublicToken, getPublicWebsiteToken, getStoredToken } from 'app/indexUtils';
+import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -30,6 +31,7 @@ class AuthenticationStore {
   @observable idToken = '';
   @observable logoutUrl = '';
   @observable account: UserDTO | undefined;
+  @observable tokens: Token[] = [];
 
   @observable userName = '';
   @observable password = '';
@@ -52,6 +54,7 @@ class AuthenticationStore {
       .getAccountUsingGET({})
       .then(account => {
         this.account = account;
+        this.getAccountTokens();
       })
       .catch(error => {
         this.updateIdToken('');
@@ -60,15 +63,67 @@ class AuthenticationStore {
 
   @autobind
   @action
+  getAccountTokens() {
+    return new Promise((resolve, reject) => {
+      client
+        .getTokensUsingGET({})
+        .then(tokens => {
+          this.tokens = tokens;
+          resolve(tokens);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  @autobind
+  @action
   generateIdToken() {
     return new Promise((resolve, reject) => {
       client
-        .changeTokenUsingPOST({})
-        .then((newToken: string) => {
-          this.updateIdToken(newToken);
-          resolve(this.idToken);
+        .createTokenUsingPOST({})
+        .then((token: Token) => {
+          this.getAccountTokens()
+            .then(() => {
+              resolve(this.idToken);
+            })
+            .catch(error => {
+              reject(error);
+            });
         })
         .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  @action
+  deleteToken(token: Token) {
+    return new Promise((resolve, reject) => {
+      client
+        .deleteTokenUsingDELETE({
+          token
+        })
+        .then(() => {
+          if (token.token === this.idToken) {
+            if (this.tokens.length > 1) {
+              const match = _.find(this.tokens, (tokenItem: Token) => tokenItem.token !== this.idToken);
+              if (match !== undefined) {
+                this.updateIdToken(match.token);
+              }
+            }
+          }
+          this.getAccountTokens()
+            .then((tokens: Token[]) => {
+              this.tokens = tokens;
+              resolve();
+            })
+            .catch(error => {
+              reject(error);
+            });
+        })
+        .catch((error: Error) => {
           reject(error);
         });
     });

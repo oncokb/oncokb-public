@@ -42,6 +42,8 @@ export type ManagedUserVM = {
 
         'email': string
 
+        'emailVerified': boolean
+
         'firstName': string
 
         'id': number
@@ -69,6 +71,18 @@ export type PasswordChangeDTO = {
     'currentPassword': string
 
         'newPassword': string
+
+};
+export type Token = {
+    'creation': string
+
+        'expiration': string
+
+        'id': number
+
+        'token': string
+
+        'user': User
 
 };
 export type User = {
@@ -107,6 +121,8 @@ export type UserDTO = {
         'createdDate': string
 
         'email': string
+
+        'emailVerified': boolean
 
         'firstName': string
 
@@ -415,68 +431,6 @@ export default class API {
             return response.body;
         });
     };
-    changeTokenUsingPOSTURL(parameters: {
-        $queryParameters ? : any
-    }): string {
-        let queryParameters: any = {};
-        let path = '/api/account/change-token';
-
-        if (parameters.$queryParameters) {
-            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                var parameter = parameters.$queryParameters[parameterName];
-                queryParameters[parameterName] = parameter;
-            });
-        }
-        let keys = Object.keys(queryParameters);
-        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
-    };
-
-    /**
-     * changeToken
-     * @method
-     * @name API#changeTokenUsingPOST
-     */
-    changeTokenUsingPOSTWithHttpInfo(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/api/account/change-token';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
-            headers['Content-Type'] = 'application/json';
-
-            if (parameters.$queryParameters) {
-                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                    var parameter = parameters.$queryParameters[parameterName];
-                    queryParameters[parameterName] = parameter;
-                });
-            }
-
-            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-
-        });
-    };
-
-    /**
-     * changeToken
-     * @method
-     * @name API#changeTokenUsingPOST
-     */
-    changeTokenUsingPOST(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < string > {
-        return this.changeTokenUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
-            return response.body;
-        });
-    };
     finishPasswordResetUsingPOSTURL(parameters: {
         'keyAndPassword': KeyAndPasswordVM,
         $queryParameters ? : any
@@ -626,6 +580,205 @@ export default class API {
         $domain ? : string
     }): Promise < any > {
         return this.requestPasswordResetUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getTokensUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/tokens';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getTokens
+     * @method
+     * @name API#getTokensUsingGET
+     */
+    getTokensUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getTokens
+     * @method
+     * @name API#getTokensUsingGET
+     */
+    getTokensUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < Token >
+        > {
+            return this.getTokensUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    createTokenUsingPOSTURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/tokens';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * createToken
+     * @method
+     * @name API#createTokenUsingPOST
+     */
+    createTokenUsingPOSTWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * createToken
+     * @method
+     * @name API#createTokenUsingPOST
+     */
+    createTokenUsingPOST(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < Token > {
+        return this.createTokenUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    deleteTokenUsingDELETEURL(parameters: {
+        'token': Token,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/tokens';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * deleteToken
+     * @method
+     * @name API#deleteTokenUsingDELETE
+     * @param {} token - token
+     */
+    deleteTokenUsingDELETEWithHttpInfo(parameters: {
+        'token': Token,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters['token'] !== undefined) {
+                body = parameters['token'];
+            }
+
+            if (parameters['token'] === undefined) {
+                reject(new Error('Missing required  parameter: token'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('DELETE', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * deleteToken
+     * @method
+     * @name API#deleteTokenUsingDELETE
+     * @param {} token - token
+     */
+    deleteTokenUsingDELETE(parameters: {
+        'token': Token,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.deleteTokenUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
