@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 
+import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.*;
@@ -163,16 +165,62 @@ public class AccountResource {
     }
 
     /**
-     * {@code POST  /account/change-token} : changes the current user's token.
+     * {@code GET  /account/tokens} : get the list of current logged in user's tokens.
+     *
+     * @return list of tokens
+     */
+    @GetMapping(path = "/account/tokens")
+    public List<Token> getTokens() {
+        Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
+        if (userLogin.isPresent()) {
+            Optional<User> user = userService.getUserWithAuthoritiesByLogin(userLogin.get());
+            if (user.isPresent()) {
+                return tokenProvider.getUserTokens(user.get());
+            } else {
+                throw new AccountResourceException("Cannot find the user");
+            }
+        } else {
+            throw new AccountResourceException("User is not logged in");
+        }
+    }
+
+    /**
+     * {@code POST  /account/tokens} : create a new token for the current user's token.
+     *
      * @return the new token
      */
-    @PostMapping(path = "/account/change-token")
-    public UUID changeToken() {
-        Optional<UUID> token = SecurityUtils.getCurrentUserToken();
-        if (token.isPresent()) {
-            return tokenProvider.updateToken();
+    @PostMapping(path = "/account/tokens")
+    public Token createToken() {
+        Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
+        if (userLogin.isPresent()) {
+            Optional<User> user = userService.getUserWithAuthoritiesByLogin(userLogin.get());
+            List<Token> tokens = tokenProvider.getUserTokens(user.get());
+            if (tokens.size() >= 2) {
+                throw new AccountResourceException("No more thant two tokens can be created");
+            } else {
+                return tokenProvider.createToken();
+            }
         } else {
-            throw new AccountResourceException("No user was found with this token");
+            throw new AccountResourceException("User is not logged in");
+        }
+    }
+
+    /**
+     * {@code DELETE  /account/tokens} : create a new token for the current user's token.
+     *
+     * @return the new token
+     */
+    @DeleteMapping(path = "/account/tokens")
+    public void deleteToken(@RequestBody Token token) throws AuthenticationException {
+        Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
+        if (userLogin.isPresent() && token.getUser() != null) {
+            if (token.getUser().getLogin().equalsIgnoreCase(userLogin.get())) {
+                tokenProvider.expireToken(token);
+            } else {
+                throw new AuthenticationException("User does not have the permission to update the token requested");
+            }
+        } else {
+            throw new AccountResourceException("User is not logged in");
         }
     }
 

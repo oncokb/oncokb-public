@@ -6,13 +6,14 @@ import { NewlyAddedGenesListItem, NewlyAddedGenesListItemProps } from 'app/pages
 import { ChangedAnnotationListItem } from 'app/pages/newsPage/ChangedAnnotatonListItem';
 import { UpdatedTxImplOldFormatListItem } from 'app/pages/newsPage/UpdatedTxImplOldFormatListItem';
 import { ElementType, SimpleTableCell, SimpleTableRow, SimpleTableRows } from 'app/components/SimpleTable';
+import { NEWS_DATE_FORMAT, NEWS_TITLE_DATE_FORMAT } from 'app/config/constants';
 
 export type NewsListProps = {
   date: string;
 };
 
 export const getNewsTitle = (date: string) => {
-  return moment(date, 'MMDDYYYY').format('MMMM D, YYYY');
+  return moment(date, NEWS_DATE_FORMAT).format(NEWS_TITLE_DATE_FORMAT);
 };
 
 const getNewsList = (data: SimpleTableCell[]) => {

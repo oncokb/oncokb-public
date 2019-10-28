@@ -54,9 +54,9 @@ superagent.Request.prototype.end = function(callback) {
 
     // If the code is 401, which means the token has expired, we need to refresh the page
     // const oncokbAppProps: OncokbAppProps = window[ONCOKB_APP_PROPS];
-    // if (response && response.statusCode === 401 && window[ONCOKB_APP_PUBLIC_TOKEN] && oncokbAppProps.profile === 'PROD') {
-    //   window.location.reload();
-    // }
+    if (response && response.statusCode === 401 && window[ONCOKB_APP_PUBLIC_TOKEN] && window[ONCOKB_APP_PROPS].profile === 'PROD') {
+      window.location.reload();
+    }
     callback(error, response);
   });
 };

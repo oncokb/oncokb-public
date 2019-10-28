@@ -419,7 +419,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
         <Then>
             <Row style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }} className={'mb-2'}>
               {LEVELS.map(level => (
-                <Col className={classnames(...COMPONENT_PADDING)} lg={2} xs={4} key={level}>
+                <Col className={classnames(...COMPONENT_PADDING)} lg={2} xs={6} key={level}>
                   <LevelButton
                     level={level}
                     numOfGenes={this.levelNumbers[level]}
@@ -433,7 +433,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
               ))}
             </Row>
             <Row style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }} className={'mb-2'}>
-              <Col className={classnames(...COMPONENT_PADDING)} xs={4}>
+              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
                 <Select
                   value={this.geneSelectValue}
                   placeholder={`${this.filteredGenes.length} actionable ${pluralize('gene', this.filteredGenes.length)}`}
@@ -447,7 +447,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                   onChange={(selectedOption: any) => (this.geneSearchKeyword = selectedOption ? selectedOption.label : '')}
                 />
               </Col>
-              <Col className={classnames(...COMPONENT_PADDING)} xs={4}>
+              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
                 <Select
                   value={this.tumorTypeSelectValue}
                   placeholder="Search Tumor Type"
@@ -461,7 +461,7 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                   onChange={(selectedOption: any) => (this.relevantTumorTypeSearchKeyword = selectedOption ? selectedOption.label : '')}
                 />
               </Col>
-              <Col className={classnames(...COMPONENT_PADDING)} xs={4}>
+              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
                 <Select
                   value={this.drugSelectValue}
                   placeholder={`${this.filteredDrugs.length} ${pluralize('drug', this.filteredDrugs.length)}`}

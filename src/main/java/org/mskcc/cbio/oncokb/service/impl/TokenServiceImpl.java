@@ -1,17 +1,15 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
-import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.service.TokenService;
 import org.mskcc.cbio.oncokb.domain.Token;
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.TokenRepository;
+import org.mskcc.cbio.oncokb.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -77,7 +75,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public List<Token> findByUserIsCurrentUser() {
+    public List<Token> findValidByCurrentUser() {
         return tokenRepository.findByUserIsCurrentUser().stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
     }
 

@@ -38,9 +38,9 @@ public final class SecurityUtils {
     }
 
     /**
-     * Get the JWT of the current user.
+     * Get the uuid of the current user.
      *
-     * @return the JWT of the current user.
+     * @return the uuid of the current user.
      */
     public static Optional<UUID> getCurrentUserToken() {
         SecurityContext securityContext = SecurityContextHolder.getContext();

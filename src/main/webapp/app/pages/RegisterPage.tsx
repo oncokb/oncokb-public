@@ -185,11 +185,14 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
     if (this.registerStatus === RegisterStatus.REGISTERED) {
       return (
-        <div>
-          <Alert variant="info">
-            We have sent you an email to verify your email address. Please follow the further instruction in the email.
-          </Alert>
-        </div>
+        <SmallPageContainer className={'registerPage'}>
+          <div>
+            <Alert variant="info">
+              We have sent you an email to verify your email address. Please follow the further instruction in the
+              email.
+            </Alert>
+          </div>
+        </SmallPageContainer>
       );
     }
 

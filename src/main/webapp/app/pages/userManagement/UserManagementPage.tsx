@@ -11,6 +11,9 @@ import { RouterStore } from 'mobx-react-router';
 import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
+import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { filterByKeyword, toAppTimestampFormat } from 'app/shared/utils/Utils';
+import _ from 'lodash';
 
 @inject('routing')
 @observer
@@ -20,7 +23,7 @@ export default class UserManagementPage extends React.Component<{
 }> {
   @observable users: UserDTO[] = [];
   @observable showModal = false;
-  private currentSelectedUser: UserDTO | undefined;
+  @observable currentSelectedUser: UserDTO | undefined;
 
   constructor(props: Readonly<{ routing: RouterStore; match: match }>) {
     super(props);
@@ -74,6 +77,10 @@ export default class UserManagementPage extends React.Component<{
     }
   }
 
+  private getStatus(activated: boolean) {
+    return activated ? 'Activated' : 'Deactivated';
+  }
+
   private columns: SearchColumn<UserDTO>[] = [
     {
       id: 'email',
@@ -82,6 +89,7 @@ export default class UserManagementPage extends React.Component<{
       minWidth: 100,
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
+      onFilter: (data: UserDTO, keyword) => filterByKeyword(data.email, keyword),
       Cell(props: { original: UserDTO }) {
         return <Button variant={'link'}>{props.original.email}</Button>;
       }
@@ -93,15 +101,22 @@ export default class UserManagementPage extends React.Component<{
       minWidth: 100,
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
+      onFilter: (data: UserDTO, keyword) => filterByKeyword(this.getStatus(data.activated), keyword),
       Cell: (props: { original: UserDTO }) => {
-        return (
-          <Button
-            variant={props.original.activated ? 'success' : 'danger'}
-            onClick={() => this.confirmUpdatingUser(props.original)}
-          >
-            {props.original.activated ? 'Activated' : 'Deactivated'}
-          </Button>
-        );
+        if (props.original.emailVerified) {
+          return (
+            <Button
+              variant={props.original.activated ? 'success' : 'danger'}
+              onClick={() => this.confirmUpdatingUser(props.original)}
+            >
+              {this.getStatus(props.original.activated)}
+            </Button>
+          );
+        } else {
+          return (
+            <div>Email hasn&apos;t been verified yet</div>
+          );
+        }
       }
     },
     {
@@ -111,6 +126,7 @@ export default class UserManagementPage extends React.Component<{
       minWidth: 160,
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
+      onFilter: (data: UserDTO, keyword) => _.some(data.authorities, authority => filterByKeyword(authority, keyword)),
       Cell(props: { original: UserDTO }) {
         return (
           <div>
@@ -127,17 +143,30 @@ export default class UserManagementPage extends React.Component<{
     {
       id: 'createdDate',
       Header: <span>Created Date</span>,
-      accessor: 'createdDate'
+      onFilter: (data: UserDTO, keyword) => data.createdDate ? filterByKeyword(toAppTimestampFormat(data.createdDate), keyword) : false,
+      accessor: 'createdDate',
+      Cell(props: { original: UserDTO }): any {
+        return (
+          <div>{toAppTimestampFormat(props.original.createdDate)}</div>
+        );
+      }
     },
     {
       id: 'lastModifiedBy',
       Header: <span>Last Modified By</span>,
+      onFilter: (data: UserDTO, keyword) => data.lastModifiedBy ? filterByKeyword(data.lastModifiedBy, keyword) : false,
       accessor: 'lastModifiedBy'
     },
     {
       id: 'lastModifiedDate',
       Header: <span>Last Modified Date</span>,
-      accessor: 'lastModifiedDate'
+      onFilter: (data: UserDTO, keyword) => data.lastModifiedDate ? filterByKeyword(toAppTimestampFormat(data.lastModifiedDate), keyword) : false,
+      accessor: 'lastModifiedDate',
+      Cell(props: { original: UserDTO }): any {
+        return (
+          <div>{toAppTimestampFormat(props.original.lastModifiedDate)}</div>
+        );
+      }
     }
     // {
     //   id: 'operations',

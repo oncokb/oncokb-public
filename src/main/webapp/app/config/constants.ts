@@ -27,13 +27,15 @@ export const messages = {
   DATA_ERROR_ALERT: 'Internal Error'
 };
 
-export const APP_DATE_FORMAT = 'DD/MM/YY HH:mm';
-export const APP_TIMESTAMP_FORMAT = 'DD/MM/YY HH:mm:ss';
-export const APP_LOCAL_DATE_FORMAT = 'DD/MM/YYYY';
-export const APP_LOCAL_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
-export const APP_LOCAL_DATETIME_FORMAT_Z = 'YYYY-MM-DDTHH:mm Z';
+export const APP_DATE_FORMAT = 'MM/DD/YY HH:mm';
+export const APP_TIMESTAMP_FORMAT = 'MM/DD/YY HH:mm:ss';
+export const APP_LOCAL_DATE_FORMAT = 'MM/DD/YYYY';
+export const APP_LOCAL_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
+export const APP_LOCAL_DATETIME_FORMAT_Z = 'YYYY-MM-DDTHH:mm:ssZ';
 export const APP_WHOLE_NUMBER_FORMAT = '0,0';
 export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
+export const NEWS_DATE_FORMAT = 'MMDDYYYY';
+export const NEWS_TITLE_DATE_FORMAT = 'MMMM D, YYYY';
 
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
 export const GRID_BREAKPOINTS = {
@@ -141,7 +143,7 @@ export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
 export const LG_TABLE_FIXED_HEIGHT = 500;
 export const SM_TABLE_FIXED_HEIGHT = 300;
 export const IMG_MAX_WIDTH = 800;
-export const COMPONENT_PADDING = ['pl-2', 'pr-2'];
+export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
 
 // Defaults for the models
 export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {

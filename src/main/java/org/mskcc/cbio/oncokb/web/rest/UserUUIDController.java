@@ -51,13 +51,13 @@ public class UserUUIDController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        List<Token> tokenList = tokenService.findByUserIsCurrentUser();
+        List<Token> tokenList = tokenService.findValidByCurrentUser();
         UUID uuid;
         if (tokenList.size() > 0) {
             uuid = tokenList.iterator().next().getToken();
         } else {
-
-            uuid = tokenProvider.createToken();
+            Token token = tokenProvider.createToken();
+            uuid = token.getToken();
         }
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(UUIDFilter.AUTHORIZATION_HEADER, "Bearer " + uuid);
