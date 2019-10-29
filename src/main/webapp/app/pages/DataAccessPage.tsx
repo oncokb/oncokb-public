@@ -2,7 +2,7 @@ import * as React from 'react';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
 import { CitationText } from 'app/components/CitationText';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
-import { DATA_RELEASES, DataRelease, DEFAULT_MARGIN_BOTTOM_LG, PAGE_ROUTE } from 'app/config/constants';
+import { DATA_RELEASES, DataRelease, DEFAULT_MARGIN_BOTTOM_LG, LicenseType, PAGE_ROUTE } from 'app/config/constants';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { ButtonSelections } from 'app/components/LicenseSelection';
 import { RouterStore } from 'mobx-react-router';
@@ -14,12 +14,17 @@ import { DownloadAvailability } from 'app/shared/api/generated/OncoKbPrivateAPI'
 import _ from 'lodash';
 import { Row, Col } from 'react-bootstrap';
 import { getNewsTitle } from 'app/pages/newsPage/NewsList';
+import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
+import { action } from 'mobx';
+import WindowStore from 'app/store/WindowStore';
+import SmallPageContainer from 'app/components/SmallComponentContainer';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
-@inject('routing')
+@inject('routing', 'windowStore')
 @observer
 export default class DataAccessPage extends React.Component<{
-  routing: RouterStore
+  routing: RouterStore,
+  windowStore: WindowStore
 }> {
 
   readonly dataAvailability = remoteData<DownloadAvailabilityWithDate[]>({
@@ -46,6 +51,11 @@ export default class DataAccessPage extends React.Component<{
     default: []
   });
 
+  @action
+  onSelectLicense = (licenseKey: LicenseType) => {
+    this.props.routing.history.push(`${PAGE_ROUTE.REGISTER}#${LICENSE_HASH_KEY}=${licenseKey}`);
+  };
+
   render() {
     return (
       <>
@@ -56,7 +66,10 @@ export default class DataAccessPage extends React.Component<{
               {' '}For bulk downloads and API access, please register below for an account. See this page for more information about commercial use [need to draft].
             </span>
           </h6>
-          <ButtonSelections routing={this.props.routing}/>
+          <ButtonSelections
+            isLargeScreen={this.props.windowStore.isLargeScreen}
+            onSelectLicense={this.onSelectLicense}
+          />
           <h6>Once registered and logged in, you will have access to the following:</h6>
         </div>
         <div className={'mb-3'}>

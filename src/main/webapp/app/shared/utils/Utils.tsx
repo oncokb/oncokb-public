@@ -324,9 +324,9 @@ export function getRedirectLoginState(pathName: string) {
 export function toAppTimestampFormat(utcTime: string | undefined) {
   if (!utcTime)
     return '';
-  return moment.utc(utcTime, APP_LOCAL_DATETIME_FORMAT_Z).format(APP_TIMESTAMP_FORMAT);
+  return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z).format(APP_TIMESTAMP_FORMAT);
 }
 
 export function getMomentInstance(utcTime: string) {
-  return moment.utc(utcTime, APP_LOCAL_DATETIME_FORMAT_Z);
+  return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z);
 }

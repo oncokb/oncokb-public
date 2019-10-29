@@ -212,7 +212,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
 
   render() {
     return (
-      <SmallPageContainer>
+      <>
         <h2 className={'d-flex align-items-center'}>
           <GenePageLink hugoSymbol={this.store.hugoSymbol} highlightContent={false}/>
           <span className={'ml-2'}>{` ${this.store.alterationQuery}`}</span>
@@ -307,7 +307,7 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
             </Col>
           </Row>
         ) : null}
-      </SmallPageContainer>
+      </>
     );
   }
 }

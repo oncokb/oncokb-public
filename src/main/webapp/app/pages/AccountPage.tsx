@@ -28,8 +28,8 @@ const InfoRow: React.FunctionComponent<{
 }> = props => {
   return (
     <Row className={'mb-2'}>
-      <Col sm="3">{props.title}</Col>
-      <Col sm="9">
+      <Col sm="4">{props.title}</Col>
+      <Col sm="8">
         {props.content}
         {props.children}
       </Col>

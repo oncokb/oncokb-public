@@ -21,7 +21,7 @@ export const TermsPage = () => {
             the content, and by using this website you agree that MSK will not be liable for any loss or damages arising from your use of or
             reliance on information contained in this site or other sites that may be linked to from our site. This information is not
             intended as a substitute for medical professional help or advice. A physician should always be consulted for any health problem
-            or medical condition. Inquiries about the content should be directed to
+            or medical condition. Inquiries about the content should be directed to{' '}
             <a href={`mailto:${ONCOKB_CONTACT_EMAIL}`} target="_top">
               {ONCOKB_CONTACT_EMAIL}
             </a>

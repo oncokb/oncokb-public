@@ -33,6 +33,11 @@ class WindowStore {
   get isXLscreen() {
     return this.size.width > GRID_BREAKPOINTS.XL;
   }
+
+  @computed
+  get isLargeScreen() {
+    return this.size.width > GRID_BREAKPOINTS.LG;
+  }
 }
 
 export default WindowStore;
