@@ -22,10 +22,24 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: JAVA_OPTS
-              value: '-Xmx750m -Xms256m'
+              value: '-Xmx1024m -Xms512m'
           envFrom:
             - configMapRef:
                 name: oncokb-public
+          readinessProbe:
+            httpGet:
+              path: /api/v1/info
+              port: 9095
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/v1/info
+              port: 9095
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+            periodSeconds: 10
           resources:
             requests:
               memory: 1Gi
