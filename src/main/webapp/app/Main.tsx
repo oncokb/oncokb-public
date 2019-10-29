@@ -4,7 +4,7 @@ import Header from './components/Header';
 import { observer } from 'mobx-react';
 import AppRouts from 'app/routes/routes';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
-import { Container } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { Stores } from 'app/App';
 import { withRouter } from 'react-router';
 import { AUTHORITIES, NOTIFICATION_TIMEOUT_MILLISECONDS } from 'app/config/constants';
@@ -45,7 +45,11 @@ class Main extends React.Component<IMainPage> {
         />
         <div className={'view-wrapper'}>
           <Container fluid={!this.props.windowStore.isXLscreen}>
-            <AppRouts authenticationStore={this.props.authenticationStore} routing={this.props.routing}/>
+            <Row className={`justify-content-center`}>
+              <Col xl={8} lg={10}>
+                <AppRouts authenticationStore={this.props.authenticationStore} routing={this.props.routing}/>
+              </Col>
+            </Row>
           </Container>
         </div>
         <Footer lastUpdate={this.props.appStore.appInfo.result.dataVersion.date}/>

@@ -38,6 +38,7 @@ export const NEWS_DATE_FORMAT = 'MMDDYYYY';
 export const NEWS_TITLE_DATE_FORMAT = 'MMMM D, YYYY';
 
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
+export const ONCOKB_LICENSE_EMAIL = 'license@oncokb.org';
 export const GRID_BREAKPOINTS = {
   LG: 1010,
   XL: 1450
@@ -279,6 +280,13 @@ export enum LicenseType {
   COMMERCIAL = 'COMMERCIAL'
 }
 
+export const LICENSE_TITLES: { [key: string]: string } = {
+  [LicenseType.ACADEMIC]: 'Research use in an academic setting',
+  [LicenseType.RESEARCH_IN_COMMERCIAL]: 'Research use in a commercial setting',
+  [LicenseType.HOSPITAL]: 'Annotation of patient reports in a hospital',
+  [LicenseType.COMMERCIAL]: 'Use in a commercial product'
+};
+
 export type License = {
   key: LicenseType;
   title: string;
@@ -287,19 +295,19 @@ export type License = {
 export const LICENSE_TYPES: License[] = [
   {
     key: LicenseType.ACADEMIC,
-    title: 'Research use in an academic setting'
+    title: LICENSE_TITLES[LicenseType.ACADEMIC]
   },
   {
     key: LicenseType.RESEARCH_IN_COMMERCIAL,
-    title: 'Research use in a commercial setting'
+    title: LICENSE_TITLES[LicenseType.RESEARCH_IN_COMMERCIAL]
   },
   {
     key: LicenseType.HOSPITAL,
-    title: 'Annotation of patient reports in a hospital'
+    title: LICENSE_TITLES[LicenseType.HOSPITAL]
   },
   {
     key: LicenseType.COMMERCIAL,
-    title: 'Use in a commercial product'
+    title: LICENSE_TITLES[LicenseType.COMMERCIAL]
   }
 ];
 

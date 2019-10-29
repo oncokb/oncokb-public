@@ -13,7 +13,7 @@ import {
   ACCOUNT_TITLES,
   IMG_MAX_WIDTH,
   LICENSE_TYPES,
-  LicenseType,
+  LicenseType, ONCOKB_CONTACT_EMAIL, ONCOKB_LICENSE_EMAIL,
   PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING, REDIRECT_TIMEOUT_MILLISECONDS
 } from 'app/config/constants';
@@ -25,7 +25,9 @@ import licenseModel from 'content/images/license_model.png';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { RouterStore } from 'mobx-react-router';
 import * as QueryString from 'query-string';
-import { RadioSelections } from 'app/components/LicenseSelection';
+import { ButtonSelections, RadioSelections } from 'app/components/LicenseSelection';
+import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
+import WindowStore from 'app/store/WindowStore';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -44,12 +46,13 @@ enum RegisterStatus {
 export type IRegisterProps = {
   routing: RouterStore;
   authenticationStore: AuthenticationStore;
+  windowStore: WindowStore,
   handleRegister: (newUser: NewUserRequiredFields) => void;
 };
 
 export const LICENSE_HASH_KEY = 'license';
 
-@inject('authenticationStore', 'routing')
+@inject('authenticationStore', 'routing', 'windowStore')
 @observer
 export class RegisterPage extends React.Component<IRegisterProps> {
   @observable password = '';
@@ -160,7 +163,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
             company already has
             one, we will grant you access. Otherwise, we will contact you to discuss your needs and license terms.
             Please see the{' '}
-            <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>.
+            <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>. You can also reach out to {' '}
+            <LicenseInquireLink /> for more information.
           </div>
         </div>
       );
@@ -197,7 +201,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     }
 
     return (
-      <SmallPageContainer className={'registerPage'}>
+      <div className={'registerPage'}>
         {this.registerStatus === RegisterStatus.NOT_SUCCESS ? (
           <div>
             <Alert variant="danger">{this.errorRegisterMessage}</Alert>
@@ -210,16 +214,16 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 <LicenseExplanation/>
               </h6>
             </Col>
-            <Col xs={12} className={'d-flex justify-content-center'}>
-              <img style={{ maxWidth: IMG_MAX_WIDTH, width: '100%' }} src={licenseModel} alt={'OncoKB License Model'}/>
-            </Col>
           </Row>
           <Row className={getSectionClassName(false)}>
             <Col md="3">
               <h5>Choose License</h5>
             </Col>
             <Col md="9">
-              <RadioSelections selectedRadio={this.selectedLicense} onSelectLicense={this.onSelectLicense}/>
+              <ButtonSelections
+                isLargeScreen={this.props.windowStore.isLargeScreen}
+                selectedButton={this.selectedLicense}
+                onSelectLicense={this.onSelectLicense}/>
             </Col>
           </Row>
           {this.selectedLicense ? (
@@ -381,7 +385,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
             </>
           ) : null}
         </AvForm>
-      </SmallPageContainer>
+      </div>
     );
   }
 }
