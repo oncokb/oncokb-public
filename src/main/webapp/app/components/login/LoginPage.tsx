@@ -24,7 +24,7 @@ const LoginContent: React.FunctionComponent<{
           <Col md="12">
             {props.loginError ? (
               <Alert variant="danger">
-                <strong>Failed to sign in!</strong> Please check your credentials and try again.
+                <strong>Failed to log in!</strong> Please check your credentials and try again.
               </Alert>
             ) : null}
           </Col>
@@ -55,7 +55,7 @@ const LoginContent: React.FunctionComponent<{
           <span>You don&apos;t have an account yet?</span> <Link to="/account/register">Register a new account</Link>
         </Alert>
         <Button variant="primary" type="submit">
-          Sign in
+          Log in
         </Button>
       </AvForm>
     </SmallPageContainer>

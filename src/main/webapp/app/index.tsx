@@ -79,4 +79,4 @@ Sentry.init({
   blacklistUrls: [new RegExp('.*localhost.*')]
 });
 ReactDOM.render(<App/>, document.getElementById('root') as HTMLElement);
-registerServiceWorker();
+// registerServiceWorker();

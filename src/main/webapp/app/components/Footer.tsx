@@ -8,8 +8,8 @@ import styles from './Footer.module.scss';
 import indexStyles from '../index.module.scss';
 import { CitationText } from 'app/components/CitationText';
 import classnames from 'classnames';
-import { ONCOKB_CONTACT_EMAIL, PAGE_ROUTE } from 'app/config/constants';
 import { SwaggerApiLink } from 'app/shared/links/SwaggerApiLink';
+import { ContactLink } from 'app/shared/links/ContactLink';
 
 class Footer extends React.Component<{ lastUpdate: string }> {
   public get externalLinkIcon() {
@@ -52,13 +52,11 @@ class Footer extends React.Component<{ lastUpdate: string }> {
       <>
         <div className={classnames(styles.footerAList, 'mb-2')}>
           <Link to="/terms">Usage Terms</Link>
-          <a href={`mailto:${ONCOKB_CONTACT_EMAIL}`} target="_blank" rel="noopener noreferrer">
-            Contact us
-          </a>
+          <ContactLink emailSubject={'Contact us'}>Contact Us</ContactLink>
           <a href="https://twitter.com/OncoKB" target="_blank" rel="noopener noreferrer">
             Twitter
           </a>
-          <SwaggerApiLink content={'API'}/>
+          <SwaggerApiLink>API</SwaggerApiLink>
         </div>
         <div className={classnames(styles.footerAList, 'mb-2')}>
           <Link to="/news">Last update: {this.props.lastUpdate}</Link>

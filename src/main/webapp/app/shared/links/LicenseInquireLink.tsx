@@ -1,7 +1,7 @@
 import React from 'react';
 import { ONCOKB_LICENSE_EMAIL, PAGE_ROUTE } from 'app/config/constants';
 
-export const LicenseInquireLink: React.FunctionComponent<{ content?: string }> = (props) => {
+export const LicenseInquireLink: React.FunctionComponent<{}> = (props) => {
   const title = 'License Inquiry';
   return (
     <a
@@ -10,7 +10,7 @@ export const LicenseInquireLink: React.FunctionComponent<{ content?: string }> =
       rel="noopener noreferrer"
       title={title}
     >
-      {props.content ? props.content : ONCOKB_LICENSE_EMAIL}
+      {props.children ? props.children : ONCOKB_LICENSE_EMAIL}
     </a>
   );
 };
