@@ -2,9 +2,9 @@ import React from 'react';
 import { ONCOKB_CONTACT_EMAIL, ONCOKB_LICENSE_EMAIL, PAGE_ROUTE } from 'app/config/constants';
 
 export const ContactLink: React.FunctionComponent<{
-  emailSubject: string
-  title?: string
-}> = (props) => {
+  emailSubject: string;
+  title?: string;
+}> = props => {
   return (
     <a
       href={`mailto:${ONCOKB_CONTACT_EMAIL}?subject=${props.emailSubject}`}

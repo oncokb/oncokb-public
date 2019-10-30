@@ -11,16 +11,14 @@ export default class PageNotFound extends React.Component {
 
   constructor(props: {}) {
     super(props);
-    setTimeout(() => this.shouldBeRedirect = true, REDIRECT_TIMEOUT_MILLISECONDS);
+    setTimeout(() => (this.shouldBeRedirect = true), REDIRECT_TIMEOUT_MILLISECONDS);
   }
 
   render() {
     return (
       <div>
         {this.shouldBeRedirect ? (
-          <Redirect
-            to={PAGE_ROUTE.HOME}
-          />
+          <Redirect to={PAGE_ROUTE.HOME} />
         ) : (
           <Alert variant="danger">The page does not exist. You will be redirected to home page.</Alert>
         )}

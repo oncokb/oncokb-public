@@ -5,8 +5,7 @@ export const ReportIssue: React.FunctionComponent<{}> = () => {
   return (
     <div>
       <i>
-        If you notice any mistakes or missing alterations / citations, please <ContactLink
-        emailSubject={'OncoKB Feedback'}/>.
+        If you notice any mistakes or missing alterations / citations, please <ContactLink emailSubject={'OncoKB Feedback'} />.
       </i>
     </div>
   );

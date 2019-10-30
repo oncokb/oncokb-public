@@ -10,7 +10,7 @@ import { PAGE_ROUTE } from 'app/config/constants';
 import { inject, observer } from 'mobx-react';
 import { Col, Row, Alert } from 'react-bootstrap';
 import SmallPageContainer from '../SmallPageContainer';
-import MessageToContact from 'app/shared/links/MessageToContact';
+import MessageToContact from 'app/shared/texts/MessageToContact';
 
 @inject('routing')
 @observer
@@ -44,13 +44,9 @@ export default class ActivateAccount extends React.Component<{
     return (
       <div>
         <Alert variant={'info'}>
-          <div className={'mb-3'}>
-            Your OncoKB account has been created, but you can not log in at this moment yet.
-          </div>
-          <div className={'mb-3'}>
-            We will review the account and let you know once it&apos;s approved.
-          </div>
-          <MessageToContact emailTitle={'Account Activation Question'}/>
+          <div className={'mb-3'}>Your OncoKB account has been created, but you can not log in at this moment yet.</div>
+          <div className={'mb-3'}>We will review the account and let you know once it&apos;s approved.</div>
+          <MessageToContact emailTitle={'Account Activation Question'} />
         </Alert>
       </div>
     );
@@ -60,8 +56,7 @@ export default class ActivateAccount extends React.Component<{
     return (
       <div>
         <Alert variant={'warning'}>
-          Your user account could not be
-          activated{this.activateAccount.error ? ` due to ${this.activateAccount.error.message}` : ''}.
+          Your user account could not be activated{this.activateAccount.error ? ` due to ${this.activateAccount.error.message}` : ''}.
         </Alert>
       </div>
     );
@@ -70,7 +65,7 @@ export default class ActivateAccount extends React.Component<{
   render() {
     return (
       <SmallPageContainer>
-        {this.activateAccount.isPending ? <LoadingIndicator isLoading={true}/> : null}
+        {this.activateAccount.isPending ? <LoadingIndicator isLoading={true} /> : null}
         {this.activateAccount.isComplete ? this.getSuccessfulMessage() : null}
         {this.activateAccount.isError ? this.getFailureMessage() : null}
       </SmallPageContainer>

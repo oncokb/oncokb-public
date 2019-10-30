@@ -2,6 +2,7 @@ import './password-strength-bar.scss';
 
 import React from 'react';
 
+// The component comes from jHipster generator
 export interface IPasswordStrengthBarProps {
   password: string;
 }

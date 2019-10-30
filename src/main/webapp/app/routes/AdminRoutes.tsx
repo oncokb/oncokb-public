@@ -6,7 +6,7 @@ import UserManagementPage from 'app/pages/userManagement/UserManagementPage';
 const AdminRouts = () => {
   return (
     <>
-      <ErrorBoundaryRoute path={PAGE_ROUTE.ADMIN_USER_MANAGEMENT} component={UserManagementPage}/>
+      <ErrorBoundaryRoute path={PAGE_ROUTE.ADMIN_USER_MANAGEMENT} component={UserManagementPage} />
     </>
   );
 };

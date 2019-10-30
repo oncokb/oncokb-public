@@ -13,7 +13,7 @@ import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 interface IAuthDownloadButton extends ButtonProps {
   getDownloadData: () => Promise<string>;
   fileName: string;
-  mime?: string,
+  mime?: string;
   buttonText: string;
   routing?: RouterStore;
   className?: string;
@@ -46,7 +46,7 @@ export class AuthDownloadButton extends React.Component<IAuthDownloadButton> {
   render() {
     const { routing, authenticationStore, buttonText, getDownloadData, fileName, ...rest } = this.props;
     return (
-      <Button size={'sm'} style={{width: 160}} className={classnames('mr-1', 'mb-1', 'p-2')} onClick={this.onClick} {...rest}>
+      <Button size={'sm'} style={{ width: 160 }} className={classnames('mr-1', 'mb-1', 'p-2')} onClick={this.onClick} {...rest}>
         {this.downloading ? (
           <LoadingIndicator isLoading={true} size={'small'} color="white" />
         ) : (

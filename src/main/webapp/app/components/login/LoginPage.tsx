@@ -29,14 +29,7 @@ const LoginContent: React.FunctionComponent<{
             ) : null}
           </Col>
           <Col md="12">
-            <AvField
-              name="email"
-              label="Email"
-              placeholder="Your email address"
-              type="text"
-              required
-              autoFocus
-            />
+            <AvField name="email" label="Email" placeholder="Your email address" type="text" required autoFocus />
             <AvField
               name="password"
               type="password"
@@ -66,11 +59,7 @@ const LoginContent: React.FunctionComponent<{
 @observer
 export default class LoginPage extends React.Component<ILoginProps> {
   @action
-  handleLogin = (
-    event: any,
-    errors: any,
-    { email, password }: { email: string; password: string; }
-  ) => {
+  handleLogin = (event: any, errors: any, { email, password }: { email: string; password: string }) => {
     this.props.authenticationStore.login(email, password);
   };
 

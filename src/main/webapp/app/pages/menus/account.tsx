@@ -6,8 +6,8 @@ import NavLink from 'react-bootstrap/NavLink';
 import { PAGE_ROUTE } from 'app/config/constants';
 
 const AccountMenuItemsAuthenticated: React.FunctionComponent<{
-  isAdmin: boolean
-}> = (props) => (
+  isAdmin: boolean;
+}> = props => (
   <>
     <MenuItem icon="wrench" to={PAGE_ROUTE.ACCOUNT_SETTINGS}>
       Account Settings
@@ -39,19 +39,18 @@ const AccountMenuItems: React.FunctionComponent<{}> = () => (
 
 @observer
 export default class AccountMenu extends React.Component<{
-  isAuthenticated: boolean,
-  isAdmin: boolean
+  isAuthenticated: boolean;
+  isAdmin: boolean;
 }> {
   render() {
     return (
       <Dropdown as={NavItem}>
         <Dropdown.Toggle id={'account-menu'} as={NavLink}>
-          <i className={'fa fa-user mr-1'}/>
+          <i className={'fa fa-user mr-1'} />
           Account
         </Dropdown.Toggle>
         <Dropdown.Menu alignRight={true}>
-          {this.props.isAuthenticated ? <AccountMenuItemsAuthenticated isAdmin={this.props.isAdmin}/> :
-            <AccountMenuItems/>}
+          {this.props.isAuthenticated ? <AccountMenuItemsAuthenticated isAdmin={this.props.isAdmin} /> : <AccountMenuItems />}
         </Dropdown.Menu>
       </Dropdown>
     );

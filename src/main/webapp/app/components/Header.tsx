@@ -59,20 +59,11 @@ class Header extends React.Component<IHeaderProps> {
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse>
-              <Nav className="mr-auto">
-                {this.subPages.map(page => this.getLink(page))}
-              </Nav>
+              <Nav className="mr-auto">{this.subPages.map(page => this.getLink(page))}</Nav>
               <Nav>
-                <AccountMenu
-                  isAuthenticated={this.props.isUserAuthenticated}
-                  isAdmin={this.props.isAdmin}
-                />
+                <AccountMenu isAuthenticated={this.props.isUserAuthenticated} isAdmin={this.props.isAdmin} />
                 <Nav.Item>
-                  <img
-                    alt="mskcc-logo"
-                    src={mskIcon}
-                    height={'37px'}
-                  />
+                  <img alt="mskcc-logo" src={mskIcon} height={'37px'} />
                 </Nav.Item>
               </Nav>
             </Navbar.Collapse>
