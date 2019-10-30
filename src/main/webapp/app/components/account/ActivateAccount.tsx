@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { PAGE_ROUTE } from 'app/config/constants';
 import { inject, observer } from 'mobx-react';
 import { Col, Row, Alert } from 'react-bootstrap';
-import SmallPageContainer from '../SmallComponentContainer';
+import SmallPageContainer from '../SmallPageContainer';
 
 @inject('routing')
 @observer

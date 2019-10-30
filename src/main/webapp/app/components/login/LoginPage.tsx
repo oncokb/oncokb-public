@@ -4,7 +4,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import { RouterStore } from 'mobx-react-router';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
-import SmallPageContainer from 'app/components/SmallComponentContainer';
+import SmallPageContainer from 'app/components/SmallPageContainer';
 import { AvCheckbox, AvCheckboxGroup, AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 

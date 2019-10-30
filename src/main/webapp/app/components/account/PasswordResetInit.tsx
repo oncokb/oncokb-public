@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Button } from 'react-bootstrap';
-import SmallPageContainer from '../SmallComponentContainer';
+import SmallPageContainer from '../SmallPageContainer';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import { action, observable } from 'mobx';
 import client from 'app/shared/api/clientInstance';

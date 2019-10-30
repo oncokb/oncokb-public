@@ -10,7 +10,7 @@ import { getAccountInfoTitle, getLicenseTitle, getSectionClassName } from 'app/p
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import classnames from 'classnames';
 import { Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap';
-import SmallPageContainer from 'app/components/SmallComponentContainer';
+import SmallPageContainer from 'app/components/SmallPageContainer';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Token } from 'app/shared/api/generated/API';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';

@@ -102,7 +102,7 @@ export const ButtonSelections: React.FunctionComponent<{
               </Row>
             </Col>
             <Col lg={12} xs={6} style={{ textAlign: 'center' }}>
-              <i style={{color: COLOR_GREY}}>Requires payment of a license fee, with the fee depending on the use f
+              <i style={{color: COLOR_GREY}}>Requires payment of a license fee, with the fee depending on the use of
                 the product and the size of the
                 company
               </i>

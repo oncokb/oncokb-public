@@ -18,7 +18,6 @@ import {
   QUERY_SEPARATOR_FOR_QUERY_STRING, REDIRECT_TIMEOUT_MILLISECONDS
 } from 'app/config/constants';
 import { getAccountInfoTitle, getSectionClassName } from './account/AccountUtils';
-import SmallPageContainer from 'app/components/SmallComponentContainer';
 import Form from 'react-bootstrap/Form';
 import { Alert, Row, Col, Button } from 'react-bootstrap';
 import licenseModel from 'content/images/license_model.png';
@@ -28,6 +27,7 @@ import * as QueryString from 'query-string';
 import { ButtonSelections, RadioSelections } from 'app/components/LicenseSelection';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 import WindowStore from 'app/store/WindowStore';
+import SmallPageContainer from 'app/components/SmallPageContainer';
 
 export type NewUserRequiredFields = {
   username: string;
