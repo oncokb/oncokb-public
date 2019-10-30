@@ -55,9 +55,18 @@ const mutationEffectOrder = [
 ];
 
 export function oncogenicitySortMethod(a: ONCOGENICITY, b: ONCOGENICITY) {
-  return sortByArrayIndexAsc(oncogenicityOrder.indexOf(a), oncogenicityOrder.indexOf(b));
+  return sortByArrayIndexAsc(
+    oncogenicityOrder.indexOf(a),
+    oncogenicityOrder.indexOf(b)
+  );
 }
 
-export function mutationEffectSortMethod(a: MUTATION_EFFECT, b: MUTATION_EFFECT) {
-  return sortByArrayIndexAsc(mutationEffectOrder.indexOf(a), mutationEffectOrder.indexOf(b));
+export function mutationEffectSortMethod(
+  a: MUTATION_EFFECT,
+  b: MUTATION_EFFECT
+) {
+  return sortByArrayIndexAsc(
+    mutationEffectOrder.indexOf(a),
+    mutationEffectOrder.indexOf(b)
+  );
 }

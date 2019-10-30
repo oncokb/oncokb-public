@@ -8,7 +8,9 @@ import { UserDTO } from 'app/shared/api/generated/API';
 import { match } from 'react-router';
 import { Button, Row, Col, Badge, ButtonGroup, Modal } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
-import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
+import OncoKBTable, {
+  SearchColumn
+} from 'app/components/oncokbTable/OncoKBTable';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -90,7 +92,8 @@ export default class UserManagementPage extends React.Component<{
       minWidth: 100,
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
-      onFilter: (data: UserDTO, keyword) => filterByKeyword(data.email, keyword),
+      onFilter: (data: UserDTO, keyword) =>
+        filterByKeyword(data.email, keyword),
       Cell(props: { original: UserDTO }) {
         return <Button variant={'link'}>{props.original.email}</Button>;
       }
@@ -102,11 +105,15 @@ export default class UserManagementPage extends React.Component<{
       minWidth: 100,
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
-      onFilter: (data: UserDTO, keyword) => filterByKeyword(this.getStatus(data.activated), keyword),
+      onFilter: (data: UserDTO, keyword) =>
+        filterByKeyword(this.getStatus(data.activated), keyword),
       Cell: (props: { original: UserDTO }) => {
         if (props.original.emailVerified) {
           return (
-            <Button variant={props.original.activated ? 'success' : 'danger'} onClick={() => this.confirmUpdatingUser(props.original)}>
+            <Button
+              variant={props.original.activated ? 'success' : 'danger'}
+              onClick={() => this.confirmUpdatingUser(props.original)}
+            >
               {this.getStatus(props.original.activated)}
             </Button>
           );
@@ -122,7 +129,10 @@ export default class UserManagementPage extends React.Component<{
       minWidth: 160,
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
-      onFilter: (data: UserDTO, keyword) => _.some(data.authorities, authority => filterByKeyword(authority, keyword)),
+      onFilter: (data: UserDTO, keyword) =>
+        _.some(data.authorities, authority =>
+          filterByKeyword(authority, keyword)
+        ),
       Cell(props: { original: UserDTO }) {
         return (
           <div>
@@ -138,7 +148,10 @@ export default class UserManagementPage extends React.Component<{
     {
       id: 'createdDate',
       Header: <span>Created Date</span>,
-      onFilter: (data: UserDTO, keyword) => (data.createdDate ? filterByKeyword(toAppTimestampFormat(data.createdDate), keyword) : false),
+      onFilter: (data: UserDTO, keyword) =>
+        data.createdDate
+          ? filterByKeyword(toAppTimestampFormat(data.createdDate), keyword)
+          : false,
       accessor: 'createdDate',
       Cell(props: { original: UserDTO }): any {
         return <div>{toAppTimestampFormat(props.original.createdDate)}</div>;
@@ -147,17 +160,27 @@ export default class UserManagementPage extends React.Component<{
     {
       id: 'lastModifiedBy',
       Header: <span>Last Modified By</span>,
-      onFilter: (data: UserDTO, keyword) => (data.lastModifiedBy ? filterByKeyword(data.lastModifiedBy, keyword) : false),
+      onFilter: (data: UserDTO, keyword) =>
+        data.lastModifiedBy
+          ? filterByKeyword(data.lastModifiedBy, keyword)
+          : false,
       accessor: 'lastModifiedBy'
     },
     {
       id: 'lastModifiedDate',
       Header: <span>Last Modified Date</span>,
       onFilter: (data: UserDTO, keyword) =>
-        data.lastModifiedDate ? filterByKeyword(toAppTimestampFormat(data.lastModifiedDate), keyword) : false,
+        data.lastModifiedDate
+          ? filterByKeyword(
+              toAppTimestampFormat(data.lastModifiedDate),
+              keyword
+            )
+          : false,
       accessor: 'lastModifiedDate',
       Cell(props: { original: UserDTO }): any {
-        return <div>{toAppTimestampFormat(props.original.lastModifiedDate)}</div>;
+        return (
+          <div>{toAppTimestampFormat(props.original.lastModifiedDate)}</div>
+        );
       }
     }
     // {
@@ -188,24 +211,47 @@ export default class UserManagementPage extends React.Component<{
         </Row>
         <Row className={getSectionClassName()}>
           <Col>
-            <OncoKBTable data={this.users} columns={this.columns} showPagination={true} pageSize={10} />
+            <OncoKBTable
+              data={this.users}
+              columns={this.columns}
+              showPagination={true}
+              pageSize={10}
+            />
           </Col>
         </Row>
         <Modal show={this.showModal} onHide={() => null}>
           <Modal.Header closeButton>
             <Modal.Title>Update User Status</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Are you sure to {this.currentSelectedUserIsActivated ? 'deactivate' : 'active'} the user?</Modal.Body>
+          <Modal.Body>
+            Are you sure to{' '}
+            {this.currentSelectedUserIsActivated ? 'deactivate' : 'active'} the
+            user?
+          </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => this.cancelUpdateActiveStatus()}>
+            <Button
+              variant="secondary"
+              onClick={() => this.cancelUpdateActiveStatus()}
+            >
               Close
             </Button>
-            <Button variant="primary" onClick={() => this.updateActiveStatus(true)}>
+            <Button
+              variant="primary"
+              onClick={() => this.updateActiveStatus(true)}
+            >
               Update
             </Button>
             {!this.currentSelectedUserIsActivated ? (
-              <DefaultTooltip placement={'top'} overlay={'Update user status without sending an email to the user'}>
-                <Button variant="primary" onClick={() => this.updateActiveStatus(false)}>
+              <DefaultTooltip
+                placement={'top'}
+                overlay={
+                  'Update user status without sending an email to the user'
+                }
+              >
+                <Button
+                  variant="primary"
+                  onClick={() => this.updateActiveStatus(false)}
+                >
                   Silent Update
                 </Button>
               </DefaultTooltip>

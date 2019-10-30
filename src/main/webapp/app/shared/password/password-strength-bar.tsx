@@ -7,7 +7,9 @@ export interface IPasswordStrengthBarProps {
   password: string;
 }
 
-export const PasswordStrengthBar = ({ password }: IPasswordStrengthBarProps) => {
+export const PasswordStrengthBar = ({
+  password
+}: IPasswordStrengthBarProps) => {
   const colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0'];
 
   const measureStrength = (p: string): number => {
@@ -20,7 +22,9 @@ export const PasswordStrengthBar = ({ password }: IPasswordStrengthBarProps) => 
       symbols: regex.test(p)
     };
 
-    const passedMatches = Object.values(flags).filter((isMatchedFlag: boolean) => !!isMatchedFlag).length;
+    const passedMatches = Object.values(flags).filter(
+      (isMatchedFlag: boolean) => !!isMatchedFlag
+    ).length;
 
     force += 2 * p.length + (p.length >= 10 ? 1 : 0);
     force += passedMatches * 10;
@@ -55,7 +59,17 @@ export const PasswordStrengthBar = ({ password }: IPasswordStrengthBarProps) => 
   const getPoints = (force: any) => {
     const pts = [];
     for (let i = 0; i < 5; i++) {
-      pts.push(<li key={i} className="point" style={i < force.idx ? { backgroundColor: force.col } : { backgroundColor: '#DDD' }} />);
+      pts.push(
+        <li
+          key={i}
+          className="point"
+          style={
+            i < force.idx
+              ? { backgroundColor: force.col }
+              : { backgroundColor: '#DDD' }
+          }
+        />
+      );
     }
     return pts;
   };

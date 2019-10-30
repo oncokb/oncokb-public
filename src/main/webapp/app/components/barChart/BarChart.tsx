@@ -1,13 +1,22 @@
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import { VictoryChart, VictoryBar, VictoryAxis, VictorySelectionContainer } from 'victory';
+import {
+  VictoryChart,
+  VictoryBar,
+  VictoryAxis,
+  VictorySelectionContainer
+} from 'victory';
 import WindowStore from 'app/store/WindowStore';
 import { observable, computed } from 'mobx';
 import autobind from 'autobind-decorator';
 import ReactDOM from 'react-dom';
 import BarChartToolTip from 'app/components/barChart/BarChartToolTip';
 import { COLOR_BLUE, COLOR_GREY } from 'app/config/theme';
-import { getTextHeight, getTextWidth, getTextDiagonal } from 'cbioportal-frontend-commons';
+import {
+  getTextHeight,
+  getTextWidth,
+  getTextDiagonal
+} from 'cbioportal-frontend-commons';
 import _ from 'lodash';
 import { PortalAlteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
 
@@ -126,7 +135,13 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 selectionDimension="x"
                 onSelection={(points: any, bounds: any, props: any) => {
                   if (this.props.onUserSelection) {
-                    const filters = _.uniq(_.flatten(points.map((point: any) => point.data.map((dataPoint: any) => dataPoint.xName))));
+                    const filters = _.uniq(
+                      _.flatten(
+                        points.map((point: any) =>
+                          point.data.map((dataPoint: any) => dataPoint.xName)
+                        )
+                      )
+                    );
                     // @ts-ignore
                     this.props.onUserSelection(filters);
                   }
@@ -140,7 +155,12 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 height: this.props.height
               }
             }}
-            padding={{ left: 30, right: 50, top: 10, bottom: this.bottomPadding }}
+            padding={{
+              left: 30,
+              right: 50,
+              top: 10,
+              bottom: this.bottomPadding
+            }}
           >
             <VictoryAxis
               style={{
@@ -163,7 +183,9 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
             />
             <VictoryAxis
               dependentAxis={true}
-              tickFormat={(t: number) => (Number.isInteger(t) ? `${t.toFixed(1)} %` : '')}
+              tickFormat={(t: number) =>
+                Number.isInteger(t) ? `${t.toFixed(1)} %` : ''
+              }
               style={{
                 ticks: {
                   fill: 'transparent',
@@ -178,7 +200,10 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
               style={{
                 data: {
                   fill: (d: BarChartDatum) =>
-                    this.isDataBinSelected(d, this.props.filters) || this.props.filters.length === 0 ? COLOR_BLUE : COLOR_GREY
+                    this.isDataBinSelected(d, this.props.filters) ||
+                    this.props.filters.length === 0
+                      ? COLOR_BLUE
+                      : COLOR_GREY
                 }
               }}
               data={this.props.data}

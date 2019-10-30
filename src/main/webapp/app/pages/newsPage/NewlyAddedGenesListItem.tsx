@@ -7,11 +7,15 @@ export type NewlyAddedGenesListItemProps = {
   geneTypes?: NewlyAddedGeneType[];
   genes: string[];
 };
-export const NewlyAddedGenesListItem = (props: NewlyAddedGenesListItemProps) => {
+export const NewlyAddedGenesListItem = (
+  props: NewlyAddedGenesListItemProps
+) => {
   return (
     <li>
       Addition of {props.genes.length} new{' '}
-      {props.geneTypes ? `${props.geneTypes.map(type => `${type}-`).join(', ')}associated ` : undefined}
+      {props.geneTypes
+        ? `${props.geneTypes.map(type => `${type}-`).join(', ')}associated `
+        : undefined}
       {pluralize('gene', props.genes.length)}:
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {props.genes.map((hugo: string) => (

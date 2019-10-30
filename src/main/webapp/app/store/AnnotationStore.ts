@@ -11,7 +11,12 @@ import apiClient from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { observable, computed, IReactionDisposer, action } from 'mobx';
 import { Evidence, Gene, Citations } from 'app/shared/api/generated/OncoKbAPI';
-import { DEFAULT_GENE, EVIDENCE_TYPES, DEFAULT_ANNOTATION, TREATMENT_EVIDENCE_TYPES } from 'app/config/constants';
+import {
+  DEFAULT_GENE,
+  EVIDENCE_TYPES,
+  DEFAULT_ANNOTATION,
+  TREATMENT_EVIDENCE_TYPES
+} from 'app/config/constants';
 import {
   BiologicalVariant,
   CancerTypeCount,
@@ -61,7 +66,11 @@ export type RequestParams = {
   fields?: string;
 };
 
-const getRequestParams = (hugoSymbol: string, alteration?: string, tumorType?: string): RequestParams => {
+const getRequestParams = (
+  hugoSymbol: string,
+  alteration?: string,
+  tumorType?: string
+): RequestParams => {
   const params = {};
   params['hugoSymbol'] = hugoSymbol;
   if (alteration) {
@@ -94,7 +103,11 @@ export class AnnotationStore {
   @observable tumorTypeQuery: string;
 
   @computed get cancerTypeFilter() {
-    return this.mutationMapperStore.result ? findCancerTypeFilter(this.mutationMapperStore.result.dataStore.dataFilters) : undefined;
+    return this.mutationMapperStore.result
+      ? findCancerTypeFilter(
+          this.mutationMapperStore.result.dataStore.dataFilters
+        )
+      : undefined;
   }
 
   @computed get selectedCancerTypes() {
@@ -102,7 +115,12 @@ export class AnnotationStore {
       return this.cancerTypeFilter.values;
     } else if (this.selectedPositions.length > 0) {
       return this.barChartData
-        .filter(data => data.alterations.filter(alteration => this.selectedPositions.includes(alteration.proteinStartPosition)).length > 0)
+        .filter(
+          data =>
+            data.alterations.filter(alteration =>
+              this.selectedPositions.includes(alteration.proteinStartPosition)
+            ).length > 0
+        )
         .map(data => data.x);
     }
     return [];
@@ -110,7 +128,11 @@ export class AnnotationStore {
 
   @computed
   public get oncogenicityFilter() {
-    return this.mutationMapperStore.result ? findOncogenicityFilter(this.mutationMapperStore.result.dataStore.dataFilters) : undefined;
+    return this.mutationMapperStore.result
+      ? findOncogenicityFilter(
+          this.mutationMapperStore.result.dataStore.dataFilters
+        )
+      : undefined;
   }
 
   @computed
@@ -119,7 +141,11 @@ export class AnnotationStore {
   }
 
   @computed get positionFilter() {
-    return this.mutationMapperStore.result ? findPositionFilter(this.mutationMapperStore.result.dataStore.selectionFilters) : undefined;
+    return this.mutationMapperStore.result
+      ? findPositionFilter(
+          this.mutationMapperStore.result.dataStore.selectionFilters
+        )
+      : undefined;
   }
 
   @computed get selectedPositions() {
@@ -127,7 +153,11 @@ export class AnnotationStore {
   }
 
   readonly mutationMapperProps = remoteData<Partial<MutationMapperProps>>({
-    await: () => [this.gene, this.mutationMapperData, this.biologicalAlterations],
+    await: () => [
+      this.gene,
+      this.mutationMapperData,
+      this.biologicalAlterations
+    ],
     invoke: () => {
       return Promise.resolve({
         ...MutationMapper.defaultProps,
@@ -145,7 +175,9 @@ export class AnnotationStore {
   readonly mutationMapperStore = remoteData<MutationMapperStore | undefined>({
     await: () => [this.mutationMapperProps],
     invoke: () => {
-      return Promise.resolve(initDefaultMutationMapperStore(this.mutationMapperProps.result));
+      return Promise.resolve(
+        initDefaultMutationMapperStore(this.mutationMapperProps.result)
+      );
     },
     default: undefined
   });
@@ -294,7 +326,11 @@ export class AnnotationStore {
       return Promise.resolve([
         {
           label: 'Cancer Type',
-          options: _.uniq(this.allMainTypes.result.filter(mainType => !mainType.name.endsWith('NOS')).map(mainType => mainType.name))
+          options: _.uniq(
+            this.allMainTypes.result
+              .filter(mainType => !mainType.name.endsWith('NOS'))
+              .map(mainType => mainType.name)
+          )
             .sort()
             .map(tumorType => {
               return {
@@ -333,13 +369,21 @@ export class AnnotationStore {
     return _.reduce(
       this.annotationResult.result.tumorTypes,
       (acc, next) => {
-        const oncoTreeCancerType = getCancerTypeNameFromOncoTreeType(next.tumorType);
+        const oncoTreeCancerType = getCancerTypeNameFromOncoTreeType(
+          next.tumorType
+        );
         next.evidences.forEach(evidence => {
-          if (TREATMENT_EVIDENCE_TYPES.includes(evidence.evidenceType as EVIDENCE_TYPES)) {
+          if (
+            TREATMENT_EVIDENCE_TYPES.includes(
+              evidence.evidenceType as EVIDENCE_TYPES
+            )
+          ) {
             const level = levelOfEvidence2Level(evidence.levelOfEvidence);
             acc.push({
               level,
-              alterations: evidence.alterations.map(alteration => alteration.name).join(', '),
+              alterations: evidence.alterations
+                .map(alteration => alteration.name)
+                .join(', '),
               drugs: getTreatmentNameFromEvidence(evidence),
               cancerTypes: oncoTreeCancerType,
               citations: articles2Citations(evidence.articles)
@@ -369,15 +413,24 @@ export class AnnotationStore {
   });
 
   readonly mutationMapperData = remoteData<OncokbMutation[]>({
-    await: () => [this.mutationMapperDataExternal, this.mutationMapperDataPortal],
+    await: () => [
+      this.mutationMapperDataExternal,
+      this.mutationMapperDataPortal
+    ],
     invoke: () => {
       // simply mapping by protein change, assuming that protein change is unique for alterations
-      const indexedByProteinChange = _.keyBy(this.mutationMapperDataPortal.result, mutation => mutation.proteinChange);
+      const indexedByProteinChange = _.keyBy(
+        this.mutationMapperDataPortal.result,
+        mutation => mutation.proteinChange
+      );
 
       const data = this.mutationMapperDataExternal.result
         ? this.mutationMapperDataExternal.result.map(mutation => {
-            const portalMutation = indexedByProteinChange[mutation.proteinChange];
-            const cancerType = portalMutation ? portalMutation.cancerType : undefined;
+            const portalMutation =
+              indexedByProteinChange[mutation.proteinChange];
+            const cancerType = portalMutation
+              ? portalMutation.cancerType
+              : undefined;
 
             return {
               ...mutation,
@@ -393,16 +446,28 @@ export class AnnotationStore {
 
   @computed
   get barChartData() {
-    const groupedCanerTypeCounts = _.groupBy(this.mutationMapperDataPortal.result, 'cancerType');
-    const cancerGroups = _.keyBy(this.portalAlterationSampleCount.result.sort((a, b) => (a.count > b.count ? -1 : 1)), 'cancerType');
+    const groupedCanerTypeCounts = _.groupBy(
+      this.mutationMapperDataPortal.result,
+      'cancerType'
+    );
+    const cancerGroups = _.keyBy(
+      this.portalAlterationSampleCount.result.sort((a, b) =>
+        a.count > b.count ? -1 : 1
+      ),
+      'cancerType'
+    );
     return _.reduce(
       groupedCanerTypeCounts,
       (acc, next: PortalAlteration[], cancerType) => {
-        const numUniqSampleCountsInCancerType = _.uniq(next.map(item => item.sampleId)).length;
+        const numUniqSampleCountsInCancerType = _.uniq(
+          next.map(item => item.sampleId)
+        ).length;
         if (cancerGroups[cancerType] && cancerGroups[cancerType].count > 50) {
           acc.push({
             x: cancerType,
-            y: (100 * numUniqSampleCountsInCancerType) / cancerGroups[cancerType].count,
+            y:
+              (100 * numUniqSampleCountsInCancerType) /
+              cancerGroups[cancerType].count,
             alterations: next,
             overlay: ''
           } as BarChartDatum);
@@ -448,24 +513,42 @@ export class AnnotationStore {
 
   @computed
   get isFiltered() {
-    return this.oncogenicityFilters.length > 0 || this.selectedCancerTypes.length > 0 || this.selectedPositions.length > 0;
+    return (
+      this.oncogenicityFilters.length > 0 ||
+      this.selectedCancerTypes.length > 0 ||
+      this.selectedPositions.length > 0
+    );
   }
 
   @computed
   get filteredBarChartData() {
     return this.selectedCancerTypes.length === 0
       ? this.barChartData
-      : this.barChartData.filter(data => this.selectedCancerTypes.includes(data.x));
+      : this.barChartData.filter(data =>
+          this.selectedCancerTypes.includes(data.x)
+        );
   }
 
   @computed
   get filteredAlterationsByBarChart() {
-    return _.uniq(_.flatten(this.filteredBarChartData.map(data => data.alterations.map(alteration => alteration.proteinChange))));
+    return _.uniq(
+      _.flatten(
+        this.filteredBarChartData.map(data =>
+          data.alterations.map(alteration => alteration.proteinChange)
+        )
+      )
+    );
   }
 
   @computed
   get filteredPositionsByBarChart() {
-    return _.uniq(_.flatten(this.filteredBarChartData.map(data => data.alterations.map(alteration => alteration.proteinStartPosition))));
+    return _.uniq(
+      _.flatten(
+        this.filteredBarChartData.map(data =>
+          data.alterations.map(alteration => alteration.proteinStartPosition)
+        )
+      )
+    );
   }
 
   @computed
@@ -473,17 +556,29 @@ export class AnnotationStore {
     if (this.isFiltered) {
       return this.clinicalAlterations.result.filter(alteration => {
         let isMatch = true;
-        if (this.oncogenicityFilters.length > 0 && !this.oncogenicityFilters.includes(shortenOncogenicity(alteration.oncogenic))) {
+        if (
+          this.oncogenicityFilters.length > 0 &&
+          !this.oncogenicityFilters.includes(
+            shortenOncogenicity(alteration.oncogenic)
+          )
+        ) {
           isMatch = false;
         }
         if (
           this.selectedCancerTypes.length > 0 &&
-          (!this.selectedCancerTypes.includes(alteration.cancerType.mainType.name) ||
-            !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration))
+          (!this.selectedCancerTypes.includes(
+            alteration.cancerType.mainType.name
+          ) ||
+            !this.filteredAlterationsByBarChart.includes(
+              alteration.variant.alteration
+            ))
         ) {
           isMatch = false;
         }
-        if (this.selectedPositions.length > 0 && !this.selectedPositions.includes(alteration.variant.proteinStart)) {
+        if (
+          this.selectedPositions.length > 0 &&
+          !this.selectedPositions.includes(alteration.variant.proteinStart)
+        ) {
           isMatch = false;
         }
         return isMatch;
@@ -498,13 +593,26 @@ export class AnnotationStore {
     if (this.isFiltered) {
       return this.biologicalAlterations.result.filter(alteration => {
         let isMatch = true;
-        if (this.oncogenicityFilters.length > 0 && !this.oncogenicityFilters.includes(shortenOncogenicity(alteration.oncogenic))) {
+        if (
+          this.oncogenicityFilters.length > 0 &&
+          !this.oncogenicityFilters.includes(
+            shortenOncogenicity(alteration.oncogenic)
+          )
+        ) {
           isMatch = false;
         }
-        if (this.selectedCancerTypes.length > 0 && !this.filteredAlterationsByBarChart.includes(alteration.variant.alteration)) {
+        if (
+          this.selectedCancerTypes.length > 0 &&
+          !this.filteredAlterationsByBarChart.includes(
+            alteration.variant.alteration
+          )
+        ) {
           isMatch = false;
         }
-        if (this.selectedPositions.length > 0 && !this.selectedPositions.includes(alteration.variant.proteinStart)) {
+        if (
+          this.selectedPositions.length > 0 &&
+          !this.selectedPositions.includes(alteration.variant.proteinStart)
+        ) {
           isMatch = false;
         }
         return isMatch;

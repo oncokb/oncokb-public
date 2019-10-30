@@ -9,11 +9,15 @@ import PmidItem from 'app/components/PmidItem';
 import ArticleAbstractItem from 'app/components/ArticleAbstractItem';
 
 @observer
-export class CitationTooltip extends React.Component<{ pmids: string[]; abstracts: ArticleAbstract[] }, {}> {
+export class CitationTooltip extends React.Component<
+  { pmids: string[]; abstracts: ArticleAbstract[] },
+  {}
+> {
   readonly citationContent = remoteData<any>({
     invoke: async () => {
       const result = await request.get(
-        'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=' + this.props.pmids.join(',')
+        'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=' +
+          this.props.pmids.join(',')
       );
       return Promise.resolve(result.body);
     }
@@ -30,7 +34,11 @@ export class CitationTooltip extends React.Component<{ pmids: string[]; abstract
         <PmidItem
           key={pmid}
           title={data.title}
-          author={_.isArray(data.authors) && data.authors.length > 0 ? data.authors[0].name + ' et al.' : 'Unknown'}
+          author={
+            _.isArray(data.authors) && data.authors.length > 0
+              ? data.authors[0].name + ' et al.'
+              : 'Unknown'
+          }
           source={data.source}
           date={new Date(data.pubdate).getFullYear().toString()}
           pmid={data.uid}
@@ -48,7 +56,11 @@ export class CitationTooltip extends React.Component<{ pmids: string[]; abstract
           <div>
             {this.getPmidItems()}
             {this.props.abstracts.map(abstract => (
-              <ArticleAbstractItem key={abstract.abstract} abstract={abstract.abstract} link={abstract.link} />
+              <ArticleAbstractItem
+                key={abstract.abstract}
+                abstract={abstract.abstract}
+                link={abstract.link}
+              />
             ))}
           </div>
         )}

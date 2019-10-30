@@ -6,7 +6,11 @@ import { Redirect } from 'react-router-dom';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import client from 'app/shared/api/clientInstance';
 import { ACCOUNT_TITLES, LicenseType, PAGE_ROUTE } from 'app/config/constants';
-import { getAccountInfoTitle, getLicenseTitle, getSectionClassName } from 'app/pages/account/AccountUtils';
+import {
+  getAccountInfoTitle,
+  getLicenseTitle,
+  getSectionClassName
+} from 'app/pages/account/AccountUtils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import classnames from 'classnames';
 import { Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap';
@@ -110,7 +114,9 @@ export class AccountPage extends React.Component<IRegisterProps> {
   }
 
   getDuration(expireInDays: number, expireInHours: number) {
-    return expireInDays > 0 ? `${expireInDays} ${pluralize('day', expireInDays)}` : `${expireInHours} ${pluralize('hour', expireInHours)}`;
+    return expireInDays > 0
+      ? `${expireInDays} ${pluralize('day', expireInDays)}`
+      : `${expireInHours} ${pluralize('hour', expireInHours)}`;
   }
 
   getContent() {
@@ -123,36 +129,46 @@ export class AccountPage extends React.Component<IRegisterProps> {
           <Col>
             <h5>Account</h5>
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.EMAIL, this.account.licenseType as LicenseType)}
+              title={getAccountInfoTitle(ACCOUNT_TITLES.EMAIL, this.account
+                .licenseType as LicenseType)}
               content={this.account.email}
             />
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.NAME, this.account.licenseType as LicenseType)}
+              title={getAccountInfoTitle(ACCOUNT_TITLES.NAME, this.account
+                .licenseType as LicenseType)}
               content={`${this.account.firstName} ${this.account.lastName}`}
             />
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.LICENSE_TYPE, this.account.licenseType as LicenseType)}
+              title={getAccountInfoTitle(ACCOUNT_TITLES.LICENSE_TYPE, this
+                .account.licenseType as LicenseType)}
               content={this.licenseTitle}
             />
           </Col>
         </Row>
         <Row className={getSectionClassName()}>
           <Col>
-            <h5>{getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.account.licenseType as LicenseType)}</h5>
+            <h5>
+              {getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.account
+                .licenseType as LicenseType)}
+            </h5>
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.POSITION, this.account.licenseType as LicenseType)}
+              title={getAccountInfoTitle(ACCOUNT_TITLES.POSITION, this.account
+                .licenseType as LicenseType)}
               content={this.account.jobTitle}
             />
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.account.licenseType as LicenseType)}
+              title={getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.account
+                .licenseType as LicenseType)}
               content={this.account.company}
             />
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.CITY, this.account.licenseType as LicenseType)}
+              title={getAccountInfoTitle(ACCOUNT_TITLES.CITY, this.account
+                .licenseType as LicenseType)}
               content={this.account.city}
             />
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.COUNTRY, this.account.licenseType as LicenseType)}
+              title={getAccountInfoTitle(ACCOUNT_TITLES.COUNTRY, this.account
+                .licenseType as LicenseType)}
               content={this.account.country}
             />
           </Col>
@@ -163,18 +179,30 @@ export class AccountPage extends React.Component<IRegisterProps> {
             <InfoRow
               title={
                 <div className={'d-flex align-items-center'}>
-                  <span>{getAccountInfoTitle(ACCOUNT_TITLES.API_TOKEN, this.account.licenseType as LicenseType)}</span>
+                  <span>
+                    {getAccountInfoTitle(ACCOUNT_TITLES.API_TOKEN, this.account
+                      .licenseType as LicenseType)}
+                  </span>
                   {this.generateTokenEnabled ? (
                     <DefaultTooltip
                       placement={'top'}
                       overlay={
-                        this.enableRegenerateToken ? 'Get a new token' : 'You cannot add a token at the moment, please try again later.'
+                        this.enableRegenerateToken
+                          ? 'Get a new token'
+                          : 'You cannot add a token at the moment, please try again later.'
                       }
                     >
                       {this.enableRegenerateToken ? (
-                        <i className={classnames('ml-2 fa fa-plus')} onClick={this.addNewToken}></i>
+                        <i
+                          className={classnames('ml-2 fa fa-plus')}
+                          onClick={this.addNewToken}
+                        ></i>
                       ) : (
-                        <i className={classnames('ml-2 fa fa-exclamation-triangle text-warning')}></i>
+                        <i
+                          className={classnames(
+                            'ml-2 fa fa-exclamation-triangle text-warning'
+                          )}
+                        ></i>
                       )}
                     </DefaultTooltip>
                   ) : null}
@@ -184,26 +212,54 @@ export class AccountPage extends React.Component<IRegisterProps> {
               {this.tokens.map(token => {
                 const today = moment.utc();
                 const expiration = getMomentInstance(token.expiration);
-                const expirationDay = moment.duration(expiration.diff(today)).days();
-                const expirationHour = moment.duration(expiration.diff(today)).hours();
+                const expirationDay = moment
+                  .duration(expiration.diff(today))
+                  .days();
+                const expirationHour = moment
+                  .duration(expiration.diff(today))
+                  .hours();
                 return (
                   <div key={token.id} className={'mb-2'}>
                     <InputGroup size={'sm'}>
-                      <FormControl value={token.token} type={'text'} contentEditable={false} disabled={true} />
+                      <FormControl
+                        value={token.token}
+                        type={'text'}
+                        contentEditable={false}
+                        disabled={true}
+                      />
                       <InputGroup.Append>
-                        <InputGroup.Text id="btnGroupAddon">Expires in {this.getDuration(expirationDay, expirationHour)}</InputGroup.Text>
-                        <CopyToClipboard text={token.token} onCopy={() => this.onCopyIdToken()}>
+                        <InputGroup.Text id="btnGroupAddon">
+                          Expires in{' '}
+                          {this.getDuration(expirationDay, expirationHour)}
+                        </InputGroup.Text>
+                        <CopyToClipboard
+                          text={token.token}
+                          onCopy={() => this.onCopyIdToken()}
+                        >
                           <Button variant={'primary'}>
-                            <DefaultTooltip placement={'top'} overlay={this.copiedIdToken ? 'Copied' : 'Copy ID Token'}>
+                            <DefaultTooltip
+                              placement={'top'}
+                              overlay={
+                                this.copiedIdToken ? 'Copied' : 'Copy ID Token'
+                              }
+                            >
                               <i className={classnames('fa fa-copy')}></i>
                             </DefaultTooltip>
                           </Button>
                         </CopyToClipboard>
                         <DefaultTooltip
                           placement={'top'}
-                          overlay={this.tokens.length < 2 ? 'You need to have one valid token' : 'Delete the token'}
+                          overlay={
+                            this.tokens.length < 2
+                              ? 'You need to have one valid token'
+                              : 'Delete the token'
+                          }
                         >
-                          <Button variant={'primary'} disabled={this.tokens.length < 2} onClick={() => this.deleteToken(token)}>
+                          <Button
+                            variant={'primary'}
+                            disabled={this.tokens.length < 2}
+                            onClick={() => this.deleteToken(token)}
+                          >
                             <i className={classnames('fa fa-trash')}></i>
                           </Button>
                         </DefaultTooltip>

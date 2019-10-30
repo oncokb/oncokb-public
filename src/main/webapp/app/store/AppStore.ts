@@ -4,7 +4,10 @@ import apiClient from 'app/shared/api/oncokbClientInstance';
 import { OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
 import { MainNumber } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import oncokbPrivateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import { DEFAULT_MAIN_NUMBERS, DEFAULT_ONCOKB_INFO } from 'app/config/constants';
+import {
+  DEFAULT_MAIN_NUMBERS,
+  DEFAULT_ONCOKB_INFO
+} from 'app/config/constants';
 
 export interface IAppConfig {
   ribbonEnv: string;

@@ -1,4 +1,10 @@
-import { Citations, Evidence, TreatmentDrug, TumorType, Article } from 'app/shared/api/generated/OncoKbAPI';
+import {
+  Citations,
+  Evidence,
+  TreatmentDrug,
+  TumorType,
+  Article
+} from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
 import React from 'react';
 import {
@@ -10,14 +16,25 @@ import {
   TABLE_COLUMN_KEY
 } from 'app/config/constants';
 import classnames from 'classnames';
-import { Alteration, Treatment } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { defaultSortMethod, mutationEffectSortMethod, oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
+import {
+  Alteration,
+  Treatment
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  defaultSortMethod,
+  mutationEffectSortMethod,
+  oncogenicitySortMethod
+} from 'app/shared/utils/ReactTableUtils';
 import { TableCellRenderer } from 'react-table';
 import { LevelWithDescription } from 'app/components/LevelWithDescription';
 import pluralize from 'pluralize';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { CitationTooltip } from 'app/components/CitationTooltip';
-import { AlterationPageLink, GenePageLink, TumorTypePageLink } from 'app/shared/utils/UrlUtils';
+import {
+  AlterationPageLink,
+  GenePageLink,
+  TumorTypePageLink
+} from 'app/shared/utils/UrlUtils';
 import moment from 'moment';
 
 // Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
@@ -26,7 +43,9 @@ export function shortenOncogenicity(oncogenicity: string): string {
   return GENERAL_ONCOGENICITY[oncogenicity];
 }
 
-export function getCancerTypeNameFromOncoTreeType(oncoTreeType: TumorType): string {
+export function getCancerTypeNameFromOncoTreeType(
+  oncoTreeType: TumorType
+): string {
   return oncoTreeType.name || oncoTreeType.mainType.name || 'NA';
 }
 
@@ -38,7 +57,10 @@ export function getCenterAlignStyle() {
   return { justifyContent: 'center', whiteSpace: 'normal' };
 }
 
-export function levelOfEvidence2Level(levelOfEvidence: string, trimSubversion = false) {
+export function levelOfEvidence2Level(
+  levelOfEvidence: string,
+  trimSubversion = false
+) {
   let level = levelOfEvidence.replace('LEVEL_', '');
   if (trimSubversion) {
     level = trimLevelOfEvidenceSubversion(level);
@@ -51,7 +73,9 @@ export function level2LevelOfEvidence(level: string) {
 }
 
 export function getAllAlterationsName(alterations: Alteration[]) {
-  return alterations ? alterations.map(alteration => alteration.name).join(', ') : '';
+  return alterations
+    ? alterations.map(alteration => alteration.name).join(', ')
+    : '';
 }
 
 export function getAllTumorTypesName(tumorTypes: TumorType[]) {
@@ -70,7 +94,11 @@ export function getDrugNameFromTreatment(drug: TreatmentDrug) {
 }
 
 export function getTreatmentNameFromEvidence(evidence: Evidence) {
-  return evidence.treatments.map(treatment => treatment.drugs.map(drug => getDrugNameFromTreatment(drug)).join(' + ')).join(', ');
+  return evidence.treatments
+    .map(treatment =>
+      treatment.drugs.map(drug => getDrugNameFromTreatment(drug)).join(' + ')
+    )
+    .join(', ');
 }
 
 export function articles2Citations(articles: Article[]): Citations {
@@ -83,11 +111,16 @@ export function articles2Citations(articles: Article[]): Citations {
           link: article.link
         };
       }),
-    pmids: articles.filter(article => !!article.pmid).map(article => article.pmid)
+    pmids: articles
+      .filter(article => !!article.pmid)
+      .map(article => article.pmid)
   };
 }
 
-function getAnnotationLevelClassName(sensitiveLevel: string, resistanceLevel: string) {
+function getAnnotationLevelClassName(
+  sensitiveLevel: string,
+  resistanceLevel: string
+) {
   const sensitiveLevelClassName = sensitiveLevel ? `-${sensitiveLevel}` : '';
   const resistanceLevelClassName = resistanceLevel ? `-${resistanceLevel}` : '';
 
@@ -97,7 +130,10 @@ function getAnnotationLevelClassName(sensitiveLevel: string, resistanceLevel: st
   return `level${sensitiveLevelClassName}${resistanceLevelClassName}`;
 }
 
-function getAnnotationOncogenicityClassName(oncogenicity: string, vus: boolean) {
+function getAnnotationOncogenicityClassName(
+  oncogenicity: string,
+  vus: boolean
+) {
   const map = ONCOGENICITY_CLASS_NAMES[oncogenicity];
   if (map) {
     return map;
@@ -120,7 +156,10 @@ export const OncoKBAnnotationIcon: React.FunctionComponent<{
   return (
     <i
       className={classnames(
-        `oncokb annotation-icon ${getAnnotationOncogenicityClassName(props.oncogenicity, props.vus)} ${getAnnotationLevelClassName(
+        `oncokb annotation-icon ${getAnnotationOncogenicityClassName(
+          props.oncogenicity,
+          props.vus
+        )} ${getAnnotationLevelClassName(
           props.sensitiveLevel,
           props.resistanceLevel
         )}`,
@@ -138,7 +177,10 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
     <span style={{ width: 16, marginTop: -3, marginLeft: 3 }}>
       <i
         className={classnames(
-          `oncokb annotation-icon ${getAnnotationOncogenicityClassName(props.oncogenicity, props.isVus)} no-level`,
+          `oncokb annotation-icon ${getAnnotationOncogenicityClassName(
+            props.oncogenicity,
+            props.isVus
+          )} no-level`,
           props.className
         )}
       />
@@ -146,7 +188,10 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
   );
 };
 
-export const reduceJoin = (data: React.ReactNode[], separator: string | JSX.Element) => {
+export const reduceJoin = (
+  data: React.ReactNode[],
+  separator: string | JSX.Element
+) => {
   return data.reduce((prev, curr) => [prev, separator, curr]);
 };
 
@@ -155,7 +200,11 @@ export const OncoKBLevelIcon: React.FunctionComponent<{
   withDescription?: boolean;
 }> = ({ level, withDescription = true }) => {
   const oncokbIcon = <i className={`oncokb level-icon level-${level}`} />;
-  return withDescription ? <LevelWithDescription level={level}>{oncokbIcon}</LevelWithDescription> : oncokbIcon;
+  return withDescription ? (
+    <LevelWithDescription level={level}>{oncokbIcon}</LevelWithDescription>
+  ) : (
+    oncokbIcon
+  );
 };
 
 export function getDefaultColumnDefinition<T>(
@@ -194,7 +243,12 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell(props: { original: any }) {
-          return <AlterationPageLink hugoSymbol={props.original.hugoSymbol} alteration={props.original.alteration} />;
+          return (
+            <AlterationPageLink
+              hugoSymbol={props.original.hugoSymbol}
+              alteration={props.original.alteration}
+            />
+          );
         }
       };
     case TABLE_COLUMN_KEY.ALTERATIONS:
@@ -256,7 +310,12 @@ export function getDefaultColumnDefinition<T>(
         style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
         Cell(props: any) {
-          return <OncoKBLevelIcon level={props.original.level} withDescription={true} />;
+          return (
+            <OncoKBLevelIcon
+              level={props.original.level}
+              withDescription={true}
+            />
+          );
         }
       };
     case TABLE_COLUMN_KEY.CITATIONS:
@@ -269,13 +328,20 @@ export function getDefaultColumnDefinition<T>(
         style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
         Cell(props: any) {
-          const numOfReferences = props.original.drugAbstracts.length + props.original.drugPmids.length;
+          const numOfReferences =
+            props.original.drugAbstracts.length +
+            props.original.drugPmids.length;
           return (
             <div>
               <DefaultTooltip
                 placement="left"
                 trigger={['hover', 'focus']}
-                overlay={() => <CitationTooltip pmids={props.original.drugPmids} abstracts={props.original.drugAbstracts} />}
+                overlay={() => (
+                  <CitationTooltip
+                    pmids={props.original.drugPmids}
+                    abstracts={props.original.drugAbstracts}
+                  />
+                )}
               >
                 <span>{numOfReferences}</span>
               </DefaultTooltip>
@@ -312,7 +378,9 @@ export function filterByKeyword(value: string, keyword: string): boolean {
 
 export function getRouteFromPath(pathName: string) {
   const firstSplashIndex = pathName.indexOf('/');
-  return firstSplashIndex === -1 ? PAGE_ROUTE.HOME : pathName.substr(pathName.indexOf('/') + 1);
+  return firstSplashIndex === -1
+    ? PAGE_ROUTE.HOME
+    : pathName.substr(pathName.indexOf('/') + 1);
 }
 
 export function getRedirectLoginState(pathName: string) {
@@ -323,7 +391,9 @@ export function getRedirectLoginState(pathName: string) {
 
 export function toAppTimestampFormat(utcTime: string | undefined) {
   if (!utcTime) return '';
-  return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z).format(APP_TIMESTAMP_FORMAT);
+  return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z).format(
+    APP_TIMESTAMP_FORMAT
+  );
 }
 
 export function getMomentInstance(utcTime: string) {

@@ -5,7 +5,13 @@ import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { remoteData } from 'cbioportal-frontend-commons';
-import { action, computed, IReactionDisposer, observable, reaction } from 'mobx';
+import {
+  action,
+  computed,
+  IReactionDisposer,
+  observable,
+  reaction
+} from 'mobx';
 import { Evidence, MainType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
@@ -61,7 +67,9 @@ type HashQueries = {
 type EvidencesByLevel = { [level: string]: Evidence[] };
 @inject('routing', 'authenticationStore')
 @observer
-export default class ActionableGenesPage extends React.Component<ActionableGenesPageProps> {
+export default class ActionableGenesPage extends React.Component<
+  ActionableGenesPageProps
+> {
   @observable relevantTumorTypeSearchKeyword = '';
   @observable drugSearchKeyword = '';
   @observable geneSearchKeyword = '';
@@ -80,10 +88,14 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
     await: () => [this.allMainTypes, this.evidencesByLevel],
     invoke: async () => {
       let allTumorTypes: string[] = _.uniq(
-        this.allMainTypes.result.filter(mainType => !mainType.name.endsWith('NOS')).map(mainType => mainType.name)
+        this.allMainTypes.result
+          .filter(mainType => !mainType.name.endsWith('NOS'))
+          .map(mainType => mainType.name)
       );
 
-      allTumorTypes = allTumorTypes.concat(this.allTreatments.map(treatment => treatment.tumorType));
+      allTumorTypes = allTumorTypes.concat(
+        this.allTreatments.map(treatment => treatment.tumorType)
+      );
 
       return Promise.resolve(_.uniq(allTumorTypes));
     },
@@ -103,9 +115,11 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
     invoke: async () => {
       let result = [];
       if (this.relevantTumorTypeSearchKeyword) {
-        const allRelevantTumorTypes = await privateClient.utilRelevantTumorTypesGetUsingGET({
-          tumorType: this.relevantTumorTypeSearchKeyword
-        });
+        const allRelevantTumorTypes = await privateClient.utilRelevantTumorTypesGetUsingGET(
+          {
+            tumorType: this.relevantTumorTypeSearchKeyword
+          }
+        );
         result = allRelevantTumorTypes.map(tumorType => {
           return tumorType.code ? tumorType.name : tumorType.mainType.name;
         });
@@ -125,12 +139,15 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
       reaction(
         () => [props.routing.location.hash],
         ([hash]) => {
-          const queryStrings = QueryString.parse(hash, { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING }) as HashQueries;
+          const queryStrings = QueryString.parse(hash, {
+            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING
+          }) as HashQueries;
           if (queryStrings.levels) {
             this.levelSelected = this.initLevelSelected();
-            (_.isArray(queryStrings.levels) ? queryStrings.levels : [queryStrings.levels]).forEach(
-              level => (this.levelSelected[level] = true)
-            );
+            (_.isArray(queryStrings.levels)
+              ? queryStrings.levels
+              : [queryStrings.levels]
+            ).forEach(level => (this.levelSelected[level] = true));
           }
           if (queryStrings.hugoSymbol) {
             this.geneSearchKeyword = queryStrings.hugoSymbol;
@@ -147,7 +164,9 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
       reaction(
         () => this.hashQueries,
         newHash => {
-          const parsedHashQueryString = QueryString.stringify(newHash, { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING });
+          const parsedHashQueryString = QueryString.stringify(newHash, {
+            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING
+          });
           window.location.hash = parsedHashQueryString;
         }
       )
@@ -175,7 +194,9 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
           _.reduce(
             item.treatments,
             (acc, treatment) => {
-              const result: string[] = treatment.drugs.map(drug => getDrugNameFromTreatment(drug));
+              const result: string[] = treatment.drugs.map(drug =>
+                getDrugNameFromTreatment(drug)
+              );
               return acc.concat(result);
             },
             [] as string[]
@@ -229,19 +250,30 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
   get filteredTreatments(): Treatment[] {
     return this.allTreatments.filter(treatment => {
       let match = true;
-      if (this.geneSearchKeyword && treatment.hugoSymbol !== this.geneSearchKeyword) {
+      if (
+        this.geneSearchKeyword &&
+        treatment.hugoSymbol !== this.geneSearchKeyword
+      ) {
         match = false;
       }
       if (
         this.relevantTumorTypeSearchKeyword &&
-        this.relevantTumorTypes.result.filter(tumorType => tumorType === treatment.tumorType).length === 0
+        this.relevantTumorTypes.result.filter(
+          tumorType => tumorType === treatment.tumorType
+        ).length === 0
       ) {
         match = false;
       }
-      if (this.drugSearchKeyword && !treatment.uniqueDrugs.includes(this.drugSearchKeyword)) {
+      if (
+        this.drugSearchKeyword &&
+        !treatment.uniqueDrugs.includes(this.drugSearchKeyword)
+      ) {
         match = false;
       }
-      if (this.selectedLevels.length > 0 && !this.selectedLevels.includes(treatment.level)) {
+      if (
+        this.selectedLevels.length > 0 &&
+        !this.selectedLevels.includes(treatment.level)
+      ) {
         match = false;
       }
       return match;
@@ -250,7 +282,11 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   @computed
   get secondLayerFilterEnabled() {
-    return !!this.geneSearchKeyword || !!this.relevantTumorTypeSearchKeyword || !!this.drugSearchKeyword;
+    return (
+      !!this.geneSearchKeyword ||
+      !!this.relevantTumorTypeSearchKeyword ||
+      !!this.drugSearchKeyword
+    );
   }
 
   @computed
@@ -260,17 +296,23 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   @computed
   get filteredGenes() {
-    return _.uniq(this.filteredTreatments.map(treatment => treatment.hugoSymbol)).sort();
+    return _.uniq(
+      this.filteredTreatments.map(treatment => treatment.hugoSymbol)
+    ).sort();
   }
 
   @computed
   get filteredDrugs() {
-    return _.uniq(_.flatten(this.filteredTreatments.map(treatment => treatment.uniqueDrugs))).sort();
+    return _.uniq(
+      _.flatten(this.filteredTreatments.map(treatment => treatment.uniqueDrugs))
+    ).sort();
   }
 
   @computed
   get filteredTumorTypes() {
-    return _.uniq(this.filteredTreatments.map(treatment => treatment.tumorType));
+    return _.uniq(
+      this.filteredTreatments.map(treatment => treatment.tumorType)
+    );
   }
 
   @computed
@@ -285,7 +327,9 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
     );
 
     // when there is no second layer filtering enabled, we allow to choose multiple levels
-    const treatmentSource = this.secondLayerFilterEnabled ? this.filteredTreatments : this.allTreatments;
+    const treatmentSource = this.secondLayerFilterEnabled
+      ? this.filteredTreatments
+      : this.allTreatments;
     treatmentSource.map(treatment => {
       levelNumbers[treatment.level].push(treatment.hugoSymbol);
     });
@@ -370,9 +414,19 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   @autobind
   downloadAssociation() {
-    const content = [['Level', 'Gene', 'Alterations', 'Tumor Type', 'Drugs'].join('\t')];
+    const content = [
+      ['Level', 'Gene', 'Alterations', 'Tumor Type', 'Drugs'].join('\t')
+    ];
     _.each(this.filteredTreatments, item => {
-      content.push([item.level, item.hugoSymbol, item.alterations.join(', '), item.tumorType, item.drugs].join('\t'));
+      content.push(
+        [
+          item.level,
+          item.hugoSymbol,
+          item.alterations.join(', '),
+          item.tumorType,
+          item.drugs
+        ].join('\t')
+      );
     });
     return Promise.resolve(content.join('\n'));
   }
@@ -402,7 +456,11 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
             {' '}
             {props.original.alterations
               .map<React.ReactNode>((alteration, index: number) => (
-                <AlterationPageLink key={index} hugoSymbol={props.original.hugoSymbol} alteration={alteration} />
+                <AlterationPageLink
+                  key={index}
+                  hugoSymbol={props.original.hugoSymbol}
+                  alteration={alteration}
+                />
               ))
               .reduce((prev, curr) => [prev, ', ', curr])}
           </div>
@@ -428,11 +486,23 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
 
   render() {
     return (
-      <If condition={this.allTumorTypes.isComplete && this.evidencesByLevel.isComplete}>
+      <If
+        condition={
+          this.allTumorTypes.isComplete && this.evidencesByLevel.isComplete
+        }
+      >
         <Then>
-          <Row style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }} className={'mb-2'}>
+          <Row
+            style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
+            className={'mb-2'}
+          >
             {LEVELS.map(level => (
-              <Col className={classnames(...COMPONENT_PADDING)} lg={2} xs={6} key={level}>
+              <Col
+                className={classnames(...COMPONENT_PADDING)}
+                lg={2}
+                xs={6}
+                key={level}
+              >
                 <LevelButton
                   level={level}
                   numOfGenes={this.levelNumbers[level]}
@@ -445,11 +515,16 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
               </Col>
             ))}
           </Row>
-          <Row style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }} className={'mb-2'}>
+          <Row
+            style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
+            className={'mb-2'}
+          >
             <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
               <Select
                 value={this.geneSelectValue}
-                placeholder={`${this.filteredGenes.length} actionable ${pluralize('gene', this.filteredGenes.length)}`}
+                placeholder={`${
+                  this.filteredGenes.length
+                } actionable ${pluralize('gene', this.filteredGenes.length)}`}
                 options={this.filteredGenes.map(hugoSymbol => {
                   return {
                     value: hugoSymbol,
@@ -457,7 +532,11 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                   };
                 })}
                 isClearable={true}
-                onChange={(selectedOption: any) => (this.geneSearchKeyword = selectedOption ? selectedOption.label : '')}
+                onChange={(selectedOption: any) =>
+                  (this.geneSearchKeyword = selectedOption
+                    ? selectedOption.label
+                    : '')
+                }
               />
             </Col>
             <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
@@ -471,13 +550,20 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                   };
                 })}
                 isClearable={true}
-                onChange={(selectedOption: any) => (this.relevantTumorTypeSearchKeyword = selectedOption ? selectedOption.label : '')}
+                onChange={(selectedOption: any) =>
+                  (this.relevantTumorTypeSearchKeyword = selectedOption
+                    ? selectedOption.label
+                    : '')
+                }
               />
             </Col>
             <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
               <Select
                 value={this.drugSelectValue}
-                placeholder={`${this.filteredDrugs.length} ${pluralize('drug', this.filteredDrugs.length)}`}
+                placeholder={`${this.filteredDrugs.length} ${pluralize(
+                  'drug',
+                  this.filteredDrugs.length
+                )}`}
                 options={this.filteredDrugs.map(drug => {
                   return {
                     value: drug,
@@ -485,20 +571,35 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                   };
                 })}
                 isClearable={true}
-                onChange={(selectedOption: any) => (this.drugSearchKeyword = selectedOption ? selectedOption.label : '')}
+                onChange={(selectedOption: any) =>
+                  (this.drugSearchKeyword = selectedOption
+                    ? selectedOption.label
+                    : '')
+                }
               />
             </Col>
           </Row>
           <Row className={'mb-2'}>
             <Col className="d-flex">
               <span>
-                <b>{`Showing ${this.filteredTreatments.length} biomarker-drug  ${pluralize(
+                <b>{`Showing ${
+                  this.filteredTreatments.length
+                } biomarker-drug  ${pluralize(
                   'association',
                   this.filteredTreatments.length
                 )}`}</b>
-                {` (${this.filteredGenes.length} ${pluralize('gene', this.filteredGenes.length)},
-                ${this.filteredTumorTypes.length} ${pluralize('tumor type', this.filteredTumorTypes.length)},
-                ${this.filteredLevels.length} ${pluralize('level of evidence', this.filteredLevels.length)})`}
+                {` (${this.filteredGenes.length} ${pluralize(
+                  'gene',
+                  this.filteredGenes.length
+                )},
+                ${this.filteredTumorTypes.length} ${pluralize(
+                  'tumor type',
+                  this.filteredTumorTypes.length
+                )},
+                ${this.filteredLevels.length} ${pluralize(
+                  'level of evidence',
+                  this.filteredLevels.length
+                )})`}
               </span>
               <AuthDownloadButton
                 className={classnames('ml-2', 'pt-1')}
@@ -507,7 +608,12 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
                 buttonText={'Associations'}
               />
               {this.treatmentsAreFiltered ? (
-                <Button variant="link" style={{ whiteSpace: 'nowrap' }} className={'ml-auto pr-0'} onClick={this.clearFilters}>
+                <Button
+                  variant="link"
+                  style={{ whiteSpace: 'nowrap' }}
+                  className={'ml-auto pr-0'}
+                  onClick={this.clearFilters}
+                >
                   Reset filters
                 </Button>
               ) : (
@@ -541,7 +647,13 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
           </Row>
         </Then>
         <Else>
-          <LoadingIndicator size={'big'} center={true} isLoading={this.allTumorTypes.isPending || this.evidencesByLevel.isPending} />
+          <LoadingIndicator
+            size={'big'}
+            center={true}
+            isLoading={
+              this.allTumorTypes.isPending || this.evidencesByLevel.isPending
+            }
+          />
         </Else>
       </If>
     );

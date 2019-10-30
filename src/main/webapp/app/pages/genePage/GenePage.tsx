@@ -23,11 +23,20 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import pluralize from 'pluralize';
 import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
-import { SM_TABLE_FIXED_HEIGHT, TABLE_COLUMN_KEY, THRESHOLD_TABLE_FIXED_HEIGHT } from 'app/config/constants';
-import { BiologicalVariant, ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  SM_TABLE_FIXED_HEIGHT,
+  TABLE_COLUMN_KEY,
+  THRESHOLD_TABLE_FIXED_HEIGHT
+} from 'app/config/constants';
+import {
+  BiologicalVariant,
+  ClinicalVariant
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
-import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
+import OncoKBTable, {
+  SearchColumn
+} from 'app/components/oncokbTable/OncoKBTable';
 import _ from 'lodash';
 import { MskimpactLink } from 'app/components/MskimpactLink';
 import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
@@ -109,7 +118,13 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
       key: 'loe',
       element: (
         <div>
-          <h5>Highest level of evidence: {getHighestLevelStrings(props.highestSensitiveLevel, props.highestResistanceLevel)}</h5>
+          <h5>
+            Highest level of evidence:{' '}
+            {getHighestLevelStrings(
+              props.highestSensitiveLevel,
+              props.highestResistanceLevel
+            )}
+          </h5>
         </div>
       )
     });
@@ -125,7 +140,11 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   const additionalInfo: React.ReactNode[] = [
     <span key="geneId">
       Gene ID:{' '}
-      <Button className={styles.geneAdditionalInfoButton} variant="link" href={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}>
+      <Button
+        className={styles.geneAdditionalInfoButton}
+        variant="link"
+        href={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}
+      >
         {gene.entrezGeneId}
       </Button>
     </span>
@@ -134,7 +153,11 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
     additionalInfo.push(
       <span key="isoform">
         Isoform:{' '}
-        <Button className={styles.geneAdditionalInfoButton} variant="link" href={`https://www.ensembl.org/id/${gene.curatedIsoform}`}>
+        <Button
+          className={styles.geneAdditionalInfoButton}
+          variant="link"
+          href={`https://www.ensembl.org/id/${gene.curatedIsoform}`}
+        >
           {gene.curatedIsoform}
         </Button>
       </span>
@@ -186,8 +209,14 @@ const GeneBackground: React.FunctionComponent<{
   return (
     <div className={props.className}>
       <div onClick={() => props.onClick()}>
-        <i>{`${props.show ? 'Hide' : 'Show'} ${props.hugoSymbol} background`}</i>
-        <i className={`fa ${props.show ? 'fa-arrow-circle-o-up' : 'fa-arrow-circle-o-down'} ml-2`} />
+        <i>{`${props.show ? 'Hide' : 'Show'} ${
+          props.hugoSymbol
+        } background`}</i>
+        <i
+          className={`fa ${
+            props.show ? 'fa-arrow-circle-o-up' : 'fa-arrow-circle-o-down'
+          } ml-2`}
+        />
       </div>
       {props.show ? <div>{props.geneBackground}</div> : undefined}
     </div>
@@ -196,7 +225,10 @@ const GeneBackground: React.FunctionComponent<{
 
 @inject('appStore', 'windowStore')
 @observer
-export default class GenePage extends React.Component<{ appStore: AppStore; windowStore: WindowStore }, {}> {
+export default class GenePage extends React.Component<
+  { appStore: AppStore; windowStore: WindowStore },
+  {}
+> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground = false;
 
@@ -207,21 +239,38 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
     return [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
-        onFilter: (data: ClinicalVariant, keyword) => filterByKeyword(data.variant.name, keyword),
+        onFilter: (data: ClinicalVariant, keyword) =>
+          filterByKeyword(data.variant.name, keyword),
         Cell: (props: { original: ClinicalVariant }) => {
-          return <AlterationPageLink hugoSymbol={this.store.hugoSymbol} alteration={props.original.variant.name} />;
+          return (
+            <AlterationPageLink
+              hugoSymbol={this.store.hugoSymbol}
+              alteration={props.original.variant.name}
+            />
+          );
         }
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
-        onFilter: (data: ClinicalVariant, keyword) => filterByKeyword(getCancerTypeNameFromOncoTreeType(data.cancerType), keyword),
+        onFilter: (data: ClinicalVariant, keyword) =>
+          filterByKeyword(
+            getCancerTypeNameFromOncoTreeType(data.cancerType),
+            keyword
+          ),
         Cell(props: { original: ClinicalVariant }) {
-          return <span>{getCancerTypeNameFromOncoTreeType(props.original.cancerType)}</span>;
+          return (
+            <span>
+              {getCancerTypeNameFromOncoTreeType(props.original.cancerType)}
+            </span>
+          );
         }
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
-        onFilter: (data: ClinicalVariant, keyword) => _.some(data.drug, (drug: string) => drug.toLowerCase().includes(keyword)),
+        onFilter: (data: ClinicalVariant, keyword) =>
+          _.some(data.drug, (drug: string) =>
+            drug.toLowerCase().includes(keyword)
+          ),
         Cell(props: { original: ClinicalVariant }) {
           return <span>{reduceJoin(props.original.drug, <br />)}</span>;
         }
@@ -241,30 +290,43 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
     return [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
-        onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.variant.name, keyword),
+        onFilter: (data: BiologicalVariant, keyword) =>
+          filterByKeyword(data.variant.name, keyword),
         Cell: (props: { original: BiologicalVariant }) => {
-          return <AlterationPageLink hugoSymbol={this.store.hugoSymbol} alteration={props.original.variant.name} />;
+          return (
+            <AlterationPageLink
+              hugoSymbol={this.store.hugoSymbol}
+              alteration={props.original.variant.name}
+            />
+          );
         }
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ONCOGENICITY),
-        onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.oncogenic, keyword),
+        onFilter: (data: BiologicalVariant, keyword) =>
+          filterByKeyword(data.oncogenic, keyword),
         style: getCenterAlignStyle()
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
-        onFilter: (data: BiologicalVariant, keyword) => filterByKeyword(data.mutationEffect, keyword),
+        onFilter: (data: BiologicalVariant, keyword) =>
+          filterByKeyword(data.mutationEffect, keyword),
         style: getCenterAlignStyle()
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
         style: getCenterAlignStyle(),
         Cell(props: { original: BiologicalVariant }) {
-          const numOfReferences = props.original.mutationEffectAbstracts.length + props.original.mutationEffectPmids.length;
+          const numOfReferences =
+            props.original.mutationEffectAbstracts.length +
+            props.original.mutationEffectPmids.length;
           return (
             <DefaultTooltip
               overlay={() => (
-                <CitationTooltip pmids={props.original.mutationEffectPmids} abstracts={props.original.mutationEffectAbstracts} />
+                <CitationTooltip
+                  pmids={props.original.mutationEffectPmids}
+                  abstracts={props.original.mutationEffectAbstracts}
+                />
               )}
             >
               <span>{numOfReferences}</span>
@@ -277,7 +339,9 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
 
   constructor(props: any) {
     super(props);
-    this.hugoSymbolQuery = props.match.params ? props.match.params.hugoSymbol : undefined;
+    this.hugoSymbolQuery = props.match.params
+      ? props.match.params.hugoSymbol
+      : undefined;
     this.store = new AnnotationStore({
       hugoSymbolQuery: this.hugoSymbolQuery
     });
@@ -296,7 +360,8 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
           data={this.store.filteredClinicalAlterations}
           columns={this.clinicalTableColumns}
           style={
-            this.store.filteredBiologicalAlterations.length > THRESHOLD_TABLE_FIXED_HEIGHT
+            this.store.filteredBiologicalAlterations.length >
+            THRESHOLD_TABLE_FIXED_HEIGHT
               ? {
                   height: SM_TABLE_FIXED_HEIGHT
                 }
@@ -321,7 +386,8 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
           data={this.store.filteredBiologicalAlterations}
           columns={this.biologicalTableColumns}
           style={
-            this.store.filteredBiologicalAlterations.length > THRESHOLD_TABLE_FIXED_HEIGHT
+            this.store.filteredBiologicalAlterations.length >
+            THRESHOLD_TABLE_FIXED_HEIGHT
               ? {
                   height: SM_TABLE_FIXED_HEIGHT
                 }
@@ -359,17 +425,19 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
     if (this.store.clinicalAlterations.result.length > 0) {
       tabs.push({
         key: TAB_KEYS.CLINICAL,
-        title: `Clinically Relevant ${pluralize('Alteration', this.store.clinicalAlterations.result.length)} (${
-          this.store.filteredClinicalAlterations.length
-        })`
+        title: `Clinically Relevant ${pluralize(
+          'Alteration',
+          this.store.clinicalAlterations.result.length
+        )} (${this.store.filteredClinicalAlterations.length})`
       });
     }
     if (this.store.biologicalAlterations.result.length > 0) {
       tabs.push({
         key: TAB_KEYS.BIOLOGICAL,
-        title: `All Annotated ${pluralize('Alteration', this.store.biologicalAlterations.result.length)} (${
-          this.store.filteredBiologicalAlterations.length
-        })`
+        title: `All Annotated ${pluralize(
+          'Alteration',
+          this.store.biologicalAlterations.result.length
+        )} (${this.store.filteredBiologicalAlterations.length})`
       });
     }
     return tabs.map(tab => {
@@ -396,7 +464,9 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
 
   @computed
   get tabDefaultActiveKey() {
-    return this.store.clinicalAlterations.result.length > 0 ? TAB_KEYS.CLINICAL : TAB_KEYS.BIOLOGICAL;
+    return this.store.clinicalAlterations.result.length > 0
+      ? TAB_KEYS.CLINICAL
+      : TAB_KEYS.BIOLOGICAL;
   }
 
   componentWillUnmount(): void {
@@ -415,10 +485,20 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
                     <h2>{this.store.hugoSymbol}</h2>
                     <GeneInfo
                       gene={this.store.gene.result}
-                      highestSensitiveLevel={this.store.geneNumber.result.highestSensitiveLevel}
-                      highestResistanceLevel={this.store.geneNumber.result.highestResistanceLevel}
+                      highestSensitiveLevel={
+                        this.store.geneNumber.result.highestSensitiveLevel
+                      }
+                      highestResistanceLevel={
+                        this.store.geneNumber.result.highestResistanceLevel
+                      }
                     />
-                    {this.store.geneSummary.result ? <div className="mt-2">{this.store.geneSummary.result}</div> : undefined}
+                    {this.store.geneSummary.result ? (
+                      <div className="mt-2">
+                        {this.store.geneSummary.result}
+                      </div>
+                    ) : (
+                      undefined
+                    )}
                     {this.store.geneBackground.result ? (
                       <GeneBackground
                         className="mt-2"
@@ -432,14 +512,21 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
                     )}
                   </div>
                 </Col>
-                <Col xl={5} lg={6} xs={12} className={'d-flex flex-column align-items-center'}>
+                <Col
+                  xl={5}
+                  lg={6}
+                  xs={12}
+                  className={'d-flex flex-column align-items-center'}
+                >
                   <div>
                     <b>Cancer Types with {this.store.hugoSymbol} Mutations</b>
                     <DefaultTooltip
                       overlay={() => (
                         <div style={{ maxWidth: 300 }}>
-                          Currently, the mutation frequency does not take into account copy number changes, chromosomal translocations or
-                          cancer types with fewer than 50 samples in <MskimpactLink />
+                          Currently, the mutation frequency does not take into
+                          account copy number changes, chromosomal
+                          translocations or cancer types with fewer than 50
+                          samples in <MskimpactLink />
                         </div>
                       )}
                     >
@@ -452,7 +539,8 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
                     filters={this.store.selectedCancerTypes}
                     windowStore={this.props.windowStore}
                     onUserSelection={selectedCancerTypes =>
-                      this.store.mutationMapperStore && this.store.mutationMapperStore.result
+                      this.store.mutationMapperStore &&
+                      this.store.mutationMapperStore.result
                         ? onFilterOptionSelect(
                             selectedCancerTypes,
                             false,
@@ -486,7 +574,13 @@ export default class GenePage extends React.Component<{ appStore: AppStore; wind
               </Row>
             </>
           ) : (
-            <LoadingIndicator size={'big'} center={true} isLoading={this.store.gene.isPending || this.store.geneNumber.isPending} />
+            <LoadingIndicator
+              size={'big'}
+              center={true}
+              isLoading={
+                this.store.gene.isPending || this.store.geneNumber.isPending
+              }
+            />
           )}
         </Then>
         <Else>

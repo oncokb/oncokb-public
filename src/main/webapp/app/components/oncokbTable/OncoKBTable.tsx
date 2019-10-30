@@ -14,7 +14,10 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
 }
 
 @observer
-export default class OncoKBTable<T> extends React.Component<ITableWithSearchBox<T>, {}> {
+export default class OncoKBTable<T> extends React.Component<
+  ITableWithSearchBox<T>,
+  {}
+> {
   @observable searchKeyword = '';
 
   public static defaultProps = {
@@ -25,9 +28,13 @@ export default class OncoKBTable<T> extends React.Component<ITableWithSearchBox<
   @computed
   get filteredData() {
     return this.props.data.filter((item: T) => {
-      const filterableColumns = this.props.columns.filter(column => !!column.onFilter);
+      const filterableColumns = this.props.columns.filter(
+        column => !!column.onFilter
+      );
       if (filterableColumns.length > 0) {
-        return filterableColumns.map(column => column.onFilter!(item, this.searchKeyword)).includes(true);
+        return filterableColumns
+          .map(column => column.onFilter!(item, this.searchKeyword))
+          .includes(true);
       } else {
         return true;
       }
@@ -56,7 +63,9 @@ export default class OncoKBTable<T> extends React.Component<ITableWithSearchBox<
         <div className="mt-2">
           <ReactTable
             showPagination={false}
-            pageSize={this.filteredData.length === 0 ? 1 : this.filteredData.length}
+            pageSize={
+              this.filteredData.length === 0 ? 1 : this.filteredData.length
+            }
             className={'-striped -highlight oncokbReactTable'}
             {...this.props}
             data={this.filteredData}

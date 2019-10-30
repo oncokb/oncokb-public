@@ -1,6 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { AnnotationStore, TherapeuticImplication } from 'app/store/AnnotationStore';
+import {
+  AnnotationStore,
+  TherapeuticImplication
+} from 'app/store/AnnotationStore';
 import { computed, action, IReactionDisposer, reaction } from 'mobx';
 import { Col, Row } from 'react-bootstrap';
 import AppStore from 'app/store/AppStore';
@@ -8,9 +11,19 @@ import _ from 'lodash';
 import Select from 'react-select';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
-import { DEFAULT_MARGIN_BOTTOM_SM, TABLE_COLUMN_KEY, THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT } from 'app/config/constants';
-import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
-import { getDefaultColumnDefinition, OncoKBOncogenicityIcon, reduceJoin } from 'app/shared/utils/Utils';
+import {
+  DEFAULT_MARGIN_BOTTOM_SM,
+  TABLE_COLUMN_KEY,
+  THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT
+} from 'app/config/constants';
+import OncoKBTable, {
+  SearchColumn
+} from 'app/components/oncokbTable/OncoKBTable';
+import {
+  getDefaultColumnDefinition,
+  OncoKBOncogenicityIcon,
+  reduceJoin
+} from 'app/shared/utils/Utils';
 import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
@@ -50,7 +63,10 @@ const AlterationInfo: React.FunctionComponent<{
     content.push(
       <>
         <span key="oncogenicity">{props.oncogenicity}</span>
-        <OncoKBOncogenicityIcon oncogenicity={props.oncogenicity} isVus={props.isVus} />
+        <OncoKBOncogenicityIcon
+          oncogenicity={props.oncogenicity}
+          isVus={props.isVus}
+        />
       </>
     );
   }
@@ -58,18 +74,29 @@ const AlterationInfo: React.FunctionComponent<{
     content.push(<span key="mutationEffect">{props.mutationEffect}</span>);
   }
   if (props.highestSensitiveLevel || props.highestResistanceLevel) {
-    content.push(getHighestLevelStrings(props.highestSensitiveLevel, props.highestResistanceLevel, separator));
+    content.push(
+      getHighestLevelStrings(
+        props.highestSensitiveLevel,
+        props.highestResistanceLevel,
+        separator
+      )
+    );
   }
   return (
     <div className="mt-2">
-      <h5 className={'d-flex align-items-center'}>{reduceJoin(content, separator)}</h5>
+      <h5 className={'d-flex align-items-center'}>
+        {reduceJoin(content, separator)}
+      </h5>
     </div>
   );
 };
 
 @inject('appStore', 'routing')
 @observer
-export default class GenePage extends React.Component<{ appStore: AppStore; routing: RouterStore }, {}> {
+export default class GenePage extends React.Component<
+  { appStore: AppStore; routing: RouterStore },
+  {}
+> {
   private store: AnnotationStore;
 
   readonly reactions: IReactionDisposer[] = [];
@@ -90,7 +117,9 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
         newTumorType => {
           let tumorTypeSection = this.store.tumorTypeQuery.replace('/', '%2F');
           tumorTypeSection = tumorTypeSection ? `/${tumorTypeSection}` : '';
-          this.props.routing.history.replace(`/gene/${this.store.hugoSymbol}/${this.store.alterationQuery}${tumorTypeSection}`);
+          this.props.routing.history.replace(
+            `/gene/${this.store.hugoSymbol}/${this.store.alterationQuery}${tumorTypeSection}`
+          );
         }
       )
     );
@@ -109,7 +138,10 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
   @computed
   get tumorTypeSelectValue() {
     if (this.store.tumorTypeQuery) {
-      const matchedSubtype = _.find(this.store.allSubtype.result, tumorType => tumorType.code === this.store.tumorTypeQuery);
+      const matchedSubtype = _.find(
+        this.store.allSubtype.result,
+        tumorType => tumorType.code === this.store.tumorTypeQuery
+      );
       if (matchedSubtype) {
         return {
           label: matchedSubtype.name,
@@ -134,14 +166,21 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
 
   @computed
   get alterationSummaries() {
-    const orderedSummaries = [SummaryKey.GENE_SUMMARY, SummaryKey.ALTERATION_SUMMARY];
+    const orderedSummaries = [
+      SummaryKey.GENE_SUMMARY,
+      SummaryKey.ALTERATION_SUMMARY
+    ];
     return this.getSummaries(orderedSummaries);
   }
 
   @computed
   get tumorTypeSummaries() {
     const orderedSummaries = this.store.tumorTypeQuery
-      ? [SummaryKey.TUMOR_TYPE_SUMMARY, SummaryKey.DIAGNOSTIC_SUMMARY, SummaryKey.PROGNOSTIC_SUMMARY]
+      ? [
+          SummaryKey.TUMOR_TYPE_SUMMARY,
+          SummaryKey.DIAGNOSTIC_SUMMARY,
+          SummaryKey.PROGNOSTIC_SUMMARY
+        ]
       : [];
     return this.getSummaries(orderedSummaries);
   }
@@ -181,10 +220,17 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
         Cell(props: { original: TherapeuticImplication }) {
-          const numOfReferences = props.original.citations.abstracts.length + props.original.citations.pmids.length;
+          const numOfReferences =
+            props.original.citations.abstracts.length +
+            props.original.citations.pmids.length;
           return (
             <DefaultTooltip
-              overlay={() => <CitationTooltip pmids={props.original.citations.pmids} abstracts={props.original.citations.abstracts} />}
+              overlay={() => (
+                <CitationTooltip
+                  pmids={props.original.citations.pmids}
+                  abstracts={props.original.citations.abstracts}
+                />
+              )}
             >
               <span>{numOfReferences}</span>
             </DefaultTooltip>
@@ -209,27 +255,42 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
     return (
       <>
         <h2 className={'d-flex align-items-center'}>
-          <GenePageLink hugoSymbol={this.store.hugoSymbol} highlightContent={false} />
+          <GenePageLink
+            hugoSymbol={this.store.hugoSymbol}
+            highlightContent={false}
+          />
           <span className={'ml-2'}>{` ${this.store.alterationQuery}`}</span>
         </h2>
         <AlterationInfo
           oncogenicity={this.store.annotationResult.result.oncogenic}
-          mutationEffect={this.store.annotationResult.result.mutationEffect.knownEffect}
+          mutationEffect={
+            this.store.annotationResult.result.mutationEffect.knownEffect
+          }
           isVus={this.store.annotationResult.result.vus}
-          highestSensitiveLevel={this.store.annotationResult.result.highestSensitiveLevel}
-          highestResistanceLevel={this.store.annotationResult.result.highestResistanceLevel}
+          highestSensitiveLevel={
+            this.store.annotationResult.result.highestSensitiveLevel
+          }
+          highestResistanceLevel={
+            this.store.annotationResult.result.highestResistanceLevel
+          }
         />
         <Row>
           <Col>
             {this.alterationSummaries.map(summary => {
-              return <div className={DEFAULT_MARGIN_BOTTOM_SM}>{summary.content}</div>;
+              return (
+                <div className={DEFAULT_MARGIN_BOTTOM_SM}>
+                  {summary.content}
+                </div>
+              );
             })}
           </Col>
         </Row>
         <Row>
           <Col>
             <div className="d-flex align-items-center">
-              <span className={classnames(styles.headerTumorTypeSelection, 'mr-2')}>
+              <span
+                className={classnames(styles.headerTumorTypeSelection, 'mr-2')}
+              >
                 <Select
                   styles={{
                     control: (base, state) => ({
@@ -260,7 +321,9 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
                   options={this.store.allTumorTypesOptions.result}
                   formatGroupLabel={this.formatGroupLabel}
                   isClearable={true}
-                  onChange={(selectedOption: any) => this.updateTumorTypeQuery(selectedOption)}
+                  onChange={(selectedOption: any) =>
+                    this.updateTumorTypeQuery(selectedOption)
+                  }
                 />
               </span>
               <InfoIcon
@@ -275,7 +338,11 @@ export default class GenePage extends React.Component<{ appStore: AppStore; rout
           <Row>
             <Col>
               {this.tumorTypeSummaries.map(summary => {
-                return <div className={DEFAULT_MARGIN_BOTTOM_SM}>{summary.content}</div>;
+                return (
+                  <div className={DEFAULT_MARGIN_BOTTOM_SM}>
+                    {summary.content}
+                  </div>
+                );
               })}
             </Col>
           </Row>

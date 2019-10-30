@@ -30,16 +30,32 @@ class Footer extends React.Component<{ lastUpdate: string }> {
           <CitationText highlightLinkout={true} />
         </div>
         <div className={classnames(styles.footerAList, 'mb-2')}>
-          <a href="https://www.mskcc.org" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://www.mskcc.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             MSK {this.externalLinkIcon}
           </a>
-          <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             CMO {this.externalLinkIcon}
           </a>
-          <a href="https://www.cbioportal.org" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://www.cbioportal.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             cBioPortal {this.externalLinkIcon}
           </a>
-          <a href="http://oncotree.mskcc.org" target="_blank" rel="noopener noreferrer">
+          <a
+            href="http://oncotree.mskcc.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             OncoTree {this.externalLinkIcon}
           </a>
         </div>
@@ -53,7 +69,11 @@ class Footer extends React.Component<{ lastUpdate: string }> {
         <div className={classnames(styles.footerAList, 'mb-2')}>
           <Link to="/terms">Usage Terms</Link>
           <ContactLink emailSubject={'Contact us'}>Contact Us</ContactLink>
-          <a href="https://twitter.com/OncoKB" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://twitter.com/OncoKB"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Twitter
           </a>
           <SwaggerApiLink>API</SwaggerApiLink>

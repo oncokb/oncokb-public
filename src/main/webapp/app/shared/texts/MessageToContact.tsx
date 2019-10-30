@@ -6,8 +6,11 @@ const MessageToContact: React.FunctionComponent<{
 }> = props => {
   return (
     <div>
-      Please don&apos;t hesitate to <ContactLink emailSubject={props.emailTitle ? props.emailTitle : ''}>contact us</ContactLink> for any
-      issues you encountered.
+      Please don&apos;t hesitate to{' '}
+      <ContactLink emailSubject={props.emailTitle ? props.emailTitle : ''}>
+        contact us
+      </ContactLink>{' '}
+      for any issues you encountered.
     </div>
   );
 };

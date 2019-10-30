@@ -1,4 +1,10 @@
-import { observable, action, computed, IReactionDisposer, reaction } from 'mobx';
+import {
+  observable,
+  action,
+  computed,
+  IReactionDisposer,
+  reaction
+} from 'mobx';
 import { Storage } from 'react-jhipster';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
@@ -6,7 +12,11 @@ import { Token, UserDTO } from 'app/shared/api/generated/API';
 import * as _ from 'lodash';
 import { AUTHORITIES } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
-import { assignPublicToken, getPublicWebsiteToken, getStoredToken } from 'app/indexUtils';
+import {
+  assignPublicToken,
+  getPublicWebsiteToken,
+  getStoredToken
+} from 'app/indexUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 
 export const ACTION_TYPES = {
@@ -108,7 +118,10 @@ class AuthenticationStore {
         .then(() => {
           if (token.token === this.idToken) {
             if (this.tokens.length > 1) {
-              const match = _.find(this.tokens, (tokenItem: Token) => tokenItem.token !== this.idToken);
+              const match = _.find(
+                this.tokens,
+                (tokenItem: Token) => tokenItem.token !== this.idToken
+              );
               if (match !== undefined) {
                 this.updateIdToken(match.token);
               }

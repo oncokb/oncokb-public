@@ -1,4 +1,7 @@
-export function isAuthorized(userAuthorities: string[], hasAnyAuthorities: string[]) {
+export function isAuthorized(
+  userAuthorities: string[],
+  hasAnyAuthorities: string[]
+) {
   if (userAuthorities && userAuthorities.length !== 0) {
     if (hasAnyAuthorities.length === 0) {
       return true;

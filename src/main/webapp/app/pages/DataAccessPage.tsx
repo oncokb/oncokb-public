@@ -2,7 +2,13 @@ import * as React from 'react';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
 import { CitationText } from 'app/components/CitationText';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
-import { DATA_RELEASES, DataRelease, DEFAULT_MARGIN_BOTTOM_LG, LicenseType, PAGE_ROUTE } from 'app/config/constants';
+import {
+  DATA_RELEASES,
+  DataRelease,
+  DEFAULT_MARGIN_BOTTOM_LG,
+  LicenseType,
+  PAGE_ROUTE
+} from 'app/config/constants';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { ButtonSelections } from 'app/components/LicenseSelection';
 import { RouterStore } from 'mobx-react-router';
@@ -28,7 +34,9 @@ export default class DataAccessPage extends React.Component<{
 }> {
   readonly dataAvailability = remoteData<DownloadAvailabilityWithDate[]>({
     async invoke() {
-      const result = await oncokbPrivateClient.utilDataReleaseDownloadAvailabilityGetUsingGET({});
+      const result = await oncokbPrivateClient.utilDataReleaseDownloadAvailabilityGetUsingGET(
+        {}
+      );
       const availableVersions = _.reduce(
         result,
         (acc, next) => {
@@ -38,9 +46,12 @@ export default class DataAccessPage extends React.Component<{
         {} as { [key: string]: DownloadAvailability }
       );
       return _.reduce(
-        DATA_RELEASES.filter(release => _.has(availableVersions, release.version)),
+        DATA_RELEASES.filter(release =>
+          _.has(availableVersions, release.version)
+        ),
         (acc, next) => {
-          const currentVersionData: DownloadAvailability = availableVersions[next.version];
+          const currentVersionData: DownloadAvailability =
+            availableVersions[next.version];
           if (
             currentVersionData.hasAllActionableVariants ||
             currentVersionData.hasAllAnnotatedVariants ||
@@ -62,7 +73,9 @@ export default class DataAccessPage extends React.Component<{
 
   @action
   onSelectLicense = (licenseKey: LicenseType) => {
-    this.props.routing.history.push(`${PAGE_ROUTE.REGISTER}#${LICENSE_HASH_KEY}=${licenseKey}`);
+    this.props.routing.history.push(
+      `${PAGE_ROUTE.REGISTER}#${LICENSE_HASH_KEY}=${licenseKey}`
+    );
   };
 
   render() {
@@ -73,18 +86,30 @@ export default class DataAccessPage extends React.Component<{
             <LicenseExplanation />
             <span>
               {' '}
-              For bulk downloads and API access, please register below for an account. See this page for more information about commercial
-              use [need to draft].
+              For bulk downloads and API access, please register below for an
+              account. See this page for more information about commercial use
+              [need to draft].
             </span>
           </h6>
-          <ButtonSelections isLargeScreen={this.props.windowStore.isLargeScreen} onSelectLicense={this.onSelectLicense} />
-          <h6>Once registered and logged in, you will have access to the following:</h6>
+          <ButtonSelections
+            isLargeScreen={this.props.windowStore.isLargeScreen}
+            onSelectLicense={this.onSelectLicense}
+          />
+          <h6>
+            Once registered and logged in, you will have access to the
+            following:
+          </h6>
         </div>
         <div className={'mb-3'}>
           <h5 className="title">Annotating Your Files</h5>
           <div>
-            You can annotate your data files (mutations, copy number alterations, fusions, and clinical data) with{' '}
-            <a href="https://github.com/oncokb/oncokb-annotator" target="_blank" rel="noopener noreferrer">
+            You can annotate your data files (mutations, copy number
+            alterations, fusions, and clinical data) with{' '}
+            <a
+              href="https://github.com/oncokb/oncokb-annotator"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               OncoKB Annotator
             </a>
             .
@@ -93,19 +118,26 @@ export default class DataAccessPage extends React.Component<{
         <div className={'mb-3'}>
           <h5 className="title">Web API</h5>
           <div>
-            You can programmatically access the OncoKB data via its <SwaggerApiLink>web API</SwaggerApiLink>.
+            You can programmatically access the OncoKB data via its{' '}
+            <SwaggerApiLink>web API</SwaggerApiLink>.
             <div>
-              Please specify your API token in the request header with <code>Authorization: Bearer [your token]</code>
+              Please specify your API token in the request header with{' '}
+              <code>Authorization: Bearer [your token]</code>
             </div>
             <div>
-              Example: <code>curl -H &quot;Authorization: Bearer [your token]&quot; https://www.oncokb.org/api/v1/genes</code>
+              Example:{' '}
+              <code>
+                curl -H &quot;Authorization: Bearer [your token]&quot;
+                https://www.oncokb.org/api/v1/genes
+              </code>
             </div>
           </div>
         </div>
         <div className={'mb-3'}>
           <h5 className="title">Data Download</h5>
           <div>
-            OncoKB annotations are fully available for download. Please review the{' '}
+            OncoKB annotations are fully available for download. Please review
+            the{' '}
             <a href="terms">
               <u>usage terms</u>
             </a>{' '}
@@ -171,7 +203,10 @@ export default class DataAccessPage extends React.Component<{
           {this.dataAvailability.error ? (
             <Alert variant={'warning'}>
               We are not able to provide data download at the moment, please{' '}
-              <ContactLink emailSubject={'Unable to Download the Data'}>contact us</ContactLink>.
+              <ContactLink emailSubject={'Unable to Download the Data'}>
+                contact us
+              </ContactLink>
+              .
             </Alert>
           ) : null}
         </div>

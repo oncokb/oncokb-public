@@ -39,14 +39,30 @@ export class AuthDownloadButton extends React.Component<IAuthDownloadButton> {
           this.downloading = false;
         });
     } else {
-      this.props.routing!.history.push(PAGE_ROUTE.LOGIN, getRedirectLoginState(this.props.routing!.location.pathname));
+      this.props.routing!.history.push(
+        PAGE_ROUTE.LOGIN,
+        getRedirectLoginState(this.props.routing!.location.pathname)
+      );
     }
   };
 
   render() {
-    const { routing, authenticationStore, buttonText, getDownloadData, fileName, ...rest } = this.props;
+    const {
+      routing,
+      authenticationStore,
+      buttonText,
+      getDownloadData,
+      fileName,
+      ...rest
+    } = this.props;
     return (
-      <Button size={'sm'} style={{ width: 160 }} className={classnames('mr-1', 'mb-1', 'p-2')} onClick={this.onClick} {...rest}>
+      <Button
+        size={'sm'}
+        style={{ width: 160 }}
+        className={classnames('mr-1', 'mb-1', 'p-2')}
+        onClick={this.onClick}
+        {...rest}
+      >
         {this.downloading ? (
           <LoadingIndicator isLoading={true} size={'small'} color="white" />
         ) : (

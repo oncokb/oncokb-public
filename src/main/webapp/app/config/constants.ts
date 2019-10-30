@@ -1,5 +1,8 @@
 import { OncoKBInfo, Gene } from 'app/shared/api/generated/OncoKbAPI';
-import { MainNumber, VariantAnnotation } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  MainNumber,
+  VariantAnnotation
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 
 /* eslint no-shadow: 0 */
 
@@ -96,7 +99,14 @@ export const LEVEL_BUTTON_DESCRIPTION = {
   R2: EVIDENCE_TYPE.CLINICAL_EVIDENCE
 };
 export const LEVELS = ['1', '2', '3', '4', 'R1', 'R2'];
-export const LEVEL_OF_EVIDENCE = ['LEVEL_1', 'LEVEL_2', 'LEVEL_3', 'LEVEL_4', 'LEVEL_R1', 'LEVEL_R2'];
+export const LEVEL_OF_EVIDENCE = [
+  'LEVEL_1',
+  'LEVEL_2',
+  'LEVEL_3',
+  'LEVEL_4',
+  'LEVEL_R1',
+  'LEVEL_R2'
+];
 export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
   [ONCOGENICITY.NEUTRAL]: 'neutral',
   [ONCOGENICITY.LIKELY_NEUTRAL]: 'neutral',
@@ -340,15 +350,18 @@ export enum TERM_DEFINITION {
 export const ACADEMIC_TERMS = [
   {
     key: TERM_DEFINITION.IS_ACADEMIC_GROUP,
-    description: 'I confirm that I am a student or employee at the academic institution specified above.'
+    description:
+      'I confirm that I am a student or employee at the academic institution specified above.'
   },
   {
     key: TERM_DEFINITION.ONLY_ACADEMIC_USAGE,
-    description: 'I agree that my use of OncoKB is solely for research or educational purposes.'
+    description:
+      'I agree that my use of OncoKB is solely for research or educational purposes.'
   },
   {
     key: TERM_DEFINITION.NO_COMPANY_USAGE,
-    description: 'I confirm that I will NOT use OncoKB data for use in medical reports or in an electronic health care system.'
+    description:
+      'I confirm that I will NOT use OncoKB data for use in medical reports or in an electronic health care system.'
   },
   {
     key: TERM_DEFINITION.OK_WITH_TERMS_OF_USE,

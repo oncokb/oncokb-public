@@ -1,7 +1,13 @@
 import React from 'react';
 import indexStyles from 'app/index.module.scss';
 
-export const CitationText = ({ highlightLinkout = false, boldLinkout = false }: { highlightLinkout?: boolean; boldLinkout?: boolean }) => {
+export const CitationText = ({
+  highlightLinkout = false,
+  boldLinkout = false
+}: {
+  highlightLinkout?: boolean;
+  boldLinkout?: boolean;
+}) => {
   return (
     <span>
       When using OncoKB, please cite:{' '}

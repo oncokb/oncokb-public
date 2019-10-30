@@ -5,7 +5,14 @@ import { RouterStore } from 'mobx-react-router';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
 import SmallPageContainer from 'app/components/SmallPageContainer';
-import { AvCheckbox, AvCheckboxGroup, AvField, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import {
+  AvCheckbox,
+  AvCheckboxGroup,
+  AvField,
+  AvForm,
+  AvGroup,
+  AvInput
+} from 'availity-reactstrap-validation';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 
 export interface ILoginProps {
@@ -24,12 +31,20 @@ const LoginContent: React.FunctionComponent<{
           <Col md="12">
             {props.loginError ? (
               <Alert variant="danger">
-                <strong>Failed to log in!</strong> Please check your credentials and try again.
+                <strong>Failed to log in!</strong> Please check your credentials
+                and try again.
               </Alert>
             ) : null}
           </Col>
           <Col md="12">
-            <AvField name="email" label="Email" placeholder="Your email address" type="text" required autoFocus />
+            <AvField
+              name="email"
+              label="Email"
+              placeholder="Your email address"
+              type="text"
+              required
+              autoFocus
+            />
             <AvField
               name="password"
               type="password"
@@ -45,7 +60,8 @@ const LoginContent: React.FunctionComponent<{
           <Link to="/account/reset/request">Did you forget your password?</Link>
         </Alert>
         <Alert variant="warning">
-          <span>You don&apos;t have an account yet?</span> <Link to="/account/register">Register a new account</Link>
+          <span>You don&apos;t have an account yet?</span>{' '}
+          <Link to="/account/register">Register a new account</Link>
         </Alert>
         <Button variant="primary" type="submit">
           Log in
@@ -59,15 +75,26 @@ const LoginContent: React.FunctionComponent<{
 @observer
 export default class LoginPage extends React.Component<ILoginProps> {
   @action
-  handleLogin = (event: any, errors: any, { email, password }: { email: string; password: string }) => {
+  handleLogin = (
+    event: any,
+    errors: any,
+    { email, password }: { email: string; password: string }
+  ) => {
     this.props.authenticationStore.login(email, password);
   };
 
   render() {
-    const { from } = this.props.routing.location.state || { from: { pathname: '/', search: location.search } };
+    const { from } = this.props.routing.location.state || {
+      from: { pathname: '/', search: location.search }
+    };
     if (this.props.authenticationStore.isUserAuthenticated) {
       return <Redirect to={from} />;
     }
-    return <LoginContent loginError={this.props.authenticationStore.loginError} handleLogin={this.handleLogin} />;
+    return (
+      <LoginContent
+        loginError={this.props.authenticationStore.loginError}
+        handleLogin={this.handleLogin}
+      />
+    );
   }
 }
