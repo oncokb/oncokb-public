@@ -12,7 +12,10 @@ export type OncogenicityBadgeSelectorProps = BadgeSelectorProps & {
 };
 
 @observer
-export class OncogenicityBadgeSelector extends React.Component<OncogenicityBadgeSelectorProps, {}> {
+export class OncogenicityBadgeSelector extends React.Component<
+  OncogenicityBadgeSelectorProps,
+  {}
+> {
   public static defaultProps: Partial<OncogenicityBadgeSelectorProps> = {
     numberOfColumnsPerRow: 1
   };
@@ -23,16 +26,27 @@ export class OncogenicityBadgeSelector extends React.Component<OncogenicityBadge
   }
 
   public render() {
-    return <BadgeSelector options={this.options} getOptionLabel={this.getOncogenicityOptionLabel} {...this.props} />;
+    return (
+      <BadgeSelector
+        options={this.options}
+        getOptionLabel={this.getOncogenicityOptionLabel}
+        {...this.props}
+      />
+    );
   }
 
   @autobind
-  protected getOncogenicityOptionLabel(option: Option, selectedValues: { [optionValue: string]: any }): JSX.Element {
+  protected getOncogenicityOptionLabel(
+    option: Option,
+    selectedValues: { [optionValue: string]: any }
+  ): JSX.Element {
     const isSelected = option.value in selectedValues;
 
     return (
       <div className="mb-2" key={option.value}>
-        <span className={isSelected ? styles.activeBadge : styles.badge}>{this.props.counts[option.value]}</span>
+        <span className={isSelected ? styles.activeBadge : styles.badge}>
+          {this.props.counts[option.value]}
+        </span>
         <span>{option.value}</span>
       </div>
     );

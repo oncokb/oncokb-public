@@ -16,9 +16,17 @@ import 'react-mutation-mapper/dist/styles.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { assignPublicToken, getStoredToken } from 'app/indexUtils';
-import { AUTH_UER_TOKEN_KEY, AUTH_WEBSITE_TOKEN_KEY } from 'app/store/AuthenticationStore';
+import {
+  AUTH_UER_TOKEN_KEY,
+  AUTH_WEBSITE_TOKEN_KEY
+} from 'app/store/AuthenticationStore';
 import { Storage } from 'react-jhipster';
-import { ONCOKB_APP_PROPS, ONCOKB_APP_PUBLIC_TOKEN, OncokbAppProps, UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
+import {
+  ONCOKB_APP_PROPS,
+  ONCOKB_APP_PUBLIC_TOKEN,
+  OncokbAppProps,
+  UNAUTHORIZED_ALLOWED_PATH
+} from 'app/config/constants';
 import _ from 'lodash';
 
 assignPublicToken();
@@ -48,7 +56,9 @@ superagent.Request.prototype.end = function(callback) {
       response.statusCode === 200 &&
       response.headers &&
       response.headers['content-type'] &&
-      ['application/zip', 'text/plain;'].some(item => response.headers['content-type'].includes(item))
+      ['application/zip', 'text/plain;'].some(item =>
+        response.headers['content-type'].includes(item)
+      )
     ) {
       response.body = response.text;
     }
@@ -61,7 +71,9 @@ superagent.Request.prototype.end = function(callback) {
       window[ONCOKB_APP_PUBLIC_TOKEN] &&
       window[ONCOKB_APP_PROPS].profile === 'PROD' &&
       response.req &&
-      !_.some(UNAUTHORIZED_ALLOWED_PATH, path => window.location.pathname.endsWith(path))
+      !_.some(UNAUTHORIZED_ALLOWED_PATH, path =>
+        window.location.pathname.endsWith(path)
+      )
     ) {
       window.location.reload();
     }

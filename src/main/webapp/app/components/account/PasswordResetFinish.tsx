@@ -50,7 +50,8 @@ export default class PasswordResetFinish extends React.Component<{
   getSuccessfulMessage = () => {
     return (
       <Alert variant="success">
-        <strong>Your password has been reset.</strong> Please <Link to={PAGE_ROUTE.LOGIN}>log in</Link>.
+        <strong>Your password has been reset.</strong> Please{' '}
+        <Link to={PAGE_ROUTE.LOGIN}>log in</Link>.
       </Alert>
     );
   };
@@ -72,9 +73,19 @@ export default class PasswordResetFinish extends React.Component<{
           placeholder={'New password'}
           type="password"
           validate={{
-            required: { value: true, errorMessage: 'Your password is required.' },
-            minLength: { value: 4, errorMessage: 'Your password is required to be at least 4 characters.' },
-            maxLength: { value: 50, errorMessage: 'Your password cannot be longer than 50 characters.' }
+            required: {
+              value: true,
+              errorMessage: 'Your password is required.'
+            },
+            minLength: {
+              value: 4,
+              errorMessage:
+                'Your password is required to be at least 4 characters.'
+            },
+            maxLength: {
+              value: 50,
+              errorMessage: 'Your password cannot be longer than 50 characters.'
+            }
           }}
           onChange={(event: any) => (this.password = event.target.value)}
         />
@@ -85,13 +96,24 @@ export default class PasswordResetFinish extends React.Component<{
           placeholder="Confirm the new password"
           type="password"
           validate={{
-            required: { value: true, errorMessage: 'Your confirmation password is required.' },
+            required: {
+              value: true,
+              errorMessage: 'Your confirmation password is required.'
+            },
             minLength: {
               value: 4,
-              errorMessage: 'Your confirmation password is required to be at least 4 characters.'
+              errorMessage:
+                'Your confirmation password is required to be at least 4 characters.'
             },
-            maxLength: { value: 50, errorMessage: 'Your confirmation password cannot be longer than 50 characters.' },
-            match: { value: 'newPassword', errorMessage: 'The password and its confirmation do not match!' }
+            maxLength: {
+              value: 50,
+              errorMessage:
+                'Your confirmation password cannot be longer than 50 characters.'
+            },
+            match: {
+              value: 'newPassword',
+              errorMessage: 'The password and its confirmation do not match!'
+            }
           }}
         />
         <Button color="success" type="submit">
@@ -104,8 +126,12 @@ export default class PasswordResetFinish extends React.Component<{
   render() {
     return (
       <SmallPageContainer>
-        {this.resetStatus === API_CALL_STATUS.SUCCESSFUL ? this.getSuccessfulMessage() : null}
-        {this.resetStatus === API_CALL_STATUS.FAILURE ? this.getFailureMessage() : null}
+        {this.resetStatus === API_CALL_STATUS.SUCCESSFUL
+          ? this.getSuccessfulMessage()
+          : null}
+        {this.resetStatus === API_CALL_STATUS.FAILURE
+          ? this.getFailureMessage()
+          : null}
         <h1>Reset password</h1>
         <div>{this.activateKey ? this.getResetForm() : null}</div>
       </SmallPageContainer>

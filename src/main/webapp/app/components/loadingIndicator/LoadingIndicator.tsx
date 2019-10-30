@@ -22,7 +22,11 @@ export default class LoadingIndicator extends React.Component<ILoader, {}> {
   };
 
   public render() {
-    const color = this.props.color ? this.props.color : this.props.size === 'small' ? COLOR_BLUE : 'white';
+    const color = this.props.color
+      ? this.props.color
+      : this.props.size === 'small'
+      ? COLOR_BLUE
+      : 'white';
     const spinnerStyles = {
       [styles.small]: this.props.size === 'small',
       [styles.big]: this.props.size === 'big',
@@ -32,15 +36,20 @@ export default class LoadingIndicator extends React.Component<ILoader, {}> {
 
     const parentStyles = {
       [styles.centered]: this.props.center,
-      [styles['centered-relative-to-container']]: this.props.centerRelativeToContainer,
+      [styles['centered-relative-to-container']]: this.props
+        .centerRelativeToContainer,
       [styles['centered-with-children']]:
-        (this.props.center || this.props.centerRelativeToContainer) && React.Children.count(this.props.children) > 0
+        (this.props.center || this.props.centerRelativeToContainer) &&
+        React.Children.count(this.props.children) > 0
     };
 
     return (
       <If condition={this.props.isLoading}>
         <Then>
-          <div className={classnames(parentStyles, this.props.className)} style={this.props.style || {}}>
+          <div
+            className={classnames(parentStyles, this.props.className)}
+            style={this.props.style || {}}
+          >
             <Spinner
               color={color}
               fadeIn="none"

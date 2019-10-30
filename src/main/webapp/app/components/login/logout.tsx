@@ -8,7 +8,9 @@ import { Row } from 'react-bootstrap';
 
 @inject('authenticationStore')
 @observer
-export class Logout extends React.Component<{ authenticationStore: AuthenticationStore }> {
+export class Logout extends React.Component<{
+  authenticationStore: AuthenticationStore;
+}> {
   @observable redirect = false;
 
   @action toggleRedirect = () => (this.redirect = !this.redirect);
@@ -24,7 +26,11 @@ export class Logout extends React.Component<{ authenticationStore: Authenticatio
       // if Keycloak, logoutUrl has protocol/openid-connect in it
       window.location.href = logoutUrl.includes('/protocol')
         ? logoutUrl + '?redirect_uri=' + window.location.origin
-        : logoutUrl + '?id_token_hint=' + this.props.authenticationStore.idToken + '&post_logout_redirect_uri=' + window.location.origin;
+        : logoutUrl +
+          '?id_token_hint=' +
+          this.props.authenticationStore.idToken +
+          '&post_logout_redirect_uri=' +
+          window.location.origin;
     }
 
     if (this.redirect) {

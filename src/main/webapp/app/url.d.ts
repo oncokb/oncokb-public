@@ -1,5 +1,7 @@
 declare module 'url' {
-  export type QueryParams = { [key: string]: undefined | null | string | string[] };
+  export type QueryParams = {
+    [key: string]: undefined | null | string | string[];
+  };
 
   export interface URLParts {
     auth: string | null;
@@ -29,7 +31,11 @@ declare module 'url' {
     parseQueryString: true,
     slashesDenoteHost?: boolean
   ): URLParts & { query: QueryParams; search: string };
-  export function parse(urlStr: string, parseQueryString?: false, slashesDenoteHost?: boolean): URLParts & { query: string | null };
+  export function parse(
+    urlStr: string,
+    parseQueryString?: false,
+    slashesDenoteHost?: boolean
+  ): URLParts & { query: string | null };
 
   export function format(urlObj: URLFormatParams): string;
 

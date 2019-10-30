@@ -47,7 +47,9 @@ export default class PasswordResetFinish extends React.Component<{}> {
     return (
       <Alert variant="danger">
         <div>
-          <strong>An error has occurred. The password could not be changed.</strong>
+          <strong>
+            An error has occurred. The password could not be changed.
+          </strong>
         </div>
         <div>
           <strong>{this.errorMessage}.</strong>
@@ -65,9 +67,19 @@ export default class PasswordResetFinish extends React.Component<{}> {
           placeholder={'Password'}
           type="password"
           validate={{
-            required: { value: true, errorMessage: 'Your password is required.' },
-            minLength: { value: 4, errorMessage: 'Your password is required to be at least 4 characters.' },
-            maxLength: { value: 50, errorMessage: 'Your password cannot be longer than 50 characters.' }
+            required: {
+              value: true,
+              errorMessage: 'Your password is required.'
+            },
+            minLength: {
+              value: 4,
+              errorMessage:
+                'Your password is required to be at least 4 characters.'
+            },
+            maxLength: {
+              value: 50,
+              errorMessage: 'Your password cannot be longer than 50 characters.'
+            }
           }}
           onChange={(event: any) => (this.currentPassword = event.target.value)}
         />
@@ -77,9 +89,19 @@ export default class PasswordResetFinish extends React.Component<{}> {
           placeholder={'New password'}
           type="password"
           validate={{
-            required: { value: true, errorMessage: 'Your password is required.' },
-            minLength: { value: 4, errorMessage: 'Your password is required to be at least 4 characters.' },
-            maxLength: { value: 50, errorMessage: 'Your password cannot be longer than 50 characters.' }
+            required: {
+              value: true,
+              errorMessage: 'Your password is required.'
+            },
+            minLength: {
+              value: 4,
+              errorMessage:
+                'Your password is required to be at least 4 characters.'
+            },
+            maxLength: {
+              value: 50,
+              errorMessage: 'Your password cannot be longer than 50 characters.'
+            }
           }}
           onChange={(event: any) => (this.newPassword = event.target.value)}
         />
@@ -90,13 +112,24 @@ export default class PasswordResetFinish extends React.Component<{}> {
           placeholder="Confirm the new password"
           type="password"
           validate={{
-            required: { value: true, errorMessage: 'Your confirmation password is required.' },
+            required: {
+              value: true,
+              errorMessage: 'Your confirmation password is required.'
+            },
             minLength: {
               value: 4,
-              errorMessage: 'Your confirmation password is required to be at least 4 characters.'
+              errorMessage:
+                'Your confirmation password is required to be at least 4 characters.'
             },
-            maxLength: { value: 50, errorMessage: 'Your confirmation password cannot be longer than 50 characters.' },
-            match: { value: 'newPassword', errorMessage: 'The password and its confirmation do not match!' }
+            maxLength: {
+              value: 50,
+              errorMessage:
+                'Your confirmation password cannot be longer than 50 characters.'
+            },
+            match: {
+              value: 'newPassword',
+              errorMessage: 'The password and its confirmation do not match!'
+            }
           }}
         />
         <Button color="success" type="submit">
@@ -109,8 +142,12 @@ export default class PasswordResetFinish extends React.Component<{}> {
   render() {
     return (
       <SmallPageContainer>
-        {this.resetStatus === API_CALL_STATUS.SUCCESSFUL ? this.getSuccessfulMessage() : null}
-        {this.resetStatus === API_CALL_STATUS.FAILURE ? this.getFailureMessage() : null}
+        {this.resetStatus === API_CALL_STATUS.SUCCESSFUL
+          ? this.getSuccessfulMessage()
+          : null}
+        {this.resetStatus === API_CALL_STATUS.FAILURE
+          ? this.getFailureMessage()
+          : null}
         <h1>Change password</h1>
         <div>{this.getResetForm()}</div>
       </SmallPageContainer>

@@ -18,7 +18,13 @@ export const LevelWithDescription: React.FunctionComponent<{
       props.appStore.appInfo.result.levels,
       (level: InfoLevel) => level.levelOfEvidence === levelOfEvidence
     );
-    return match ? <div style={{ maxWidth: 300 }}>{ReactHtmlParser(match.htmlDescription)}</div> : '';
+    return match ? (
+      <div style={{ maxWidth: 300 }}>
+        {ReactHtmlParser(match.htmlDescription)}
+      </div>
+    ) : (
+      ''
+    );
   }
 
   return (

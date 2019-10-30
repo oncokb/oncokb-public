@@ -50,7 +50,11 @@ export default class AccountMenu extends React.Component<{
           Account
         </Dropdown.Toggle>
         <Dropdown.Menu alignRight={true}>
-          {this.props.isAuthenticated ? <AccountMenuItemsAuthenticated isAdmin={this.props.isAdmin} /> : <AccountMenuItems />}
+          {this.props.isAuthenticated ? (
+            <AccountMenuItemsAuthenticated isAdmin={this.props.isAdmin} />
+          ) : (
+            <AccountMenuItems />
+          )}
         </Dropdown.Menu>
       </Dropdown>
     );

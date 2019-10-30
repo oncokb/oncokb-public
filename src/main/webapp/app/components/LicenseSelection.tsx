@@ -1,5 +1,9 @@
 import React from 'react';
-import { LICENSE_TITLES, LICENSE_TYPES, LicenseType } from 'app/config/constants';
+import {
+  LICENSE_TITLES,
+  LICENSE_TYPES,
+  LicenseType
+} from 'app/config/constants';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { COLOR_GREY, COLOR_LIGHT_GREY } from 'app/config/theme';
 
@@ -10,8 +14,18 @@ export const RadioSelections: React.FunctionComponent<{
   return (
     <>
       {LICENSE_TYPES.map(license => (
-        <div className="primary" key={license.key} onClick={() => props.onSelectLicense(license.key)}>
-          <Form.Check className={'px-0'} type="radio" label={license.title} readOnly checked={props.selectedRadio === license.key} />
+        <div
+          className="primary"
+          key={license.key}
+          onClick={() => props.onSelectLicense(license.key)}
+        >
+          <Form.Check
+            className={'px-0'}
+            type="radio"
+            label={license.title}
+            readOnly
+            checked={props.selectedRadio === license.key}
+          />
         </div>
       ))}
     </>
@@ -101,7 +115,8 @@ export const ButtonSelections: React.FunctionComponent<{
             </Col>
             <Col lg={12} xs={6} style={{ textAlign: 'center' }}>
               <i style={{ color: COLOR_GREY }}>
-                Requires payment of a license fee, with the fee depending on the use of the product and the size of the company
+                Requires payment of a license fee, with the fee depending on the
+                use of the product and the size of the company
               </i>
             </Col>
           </Row>

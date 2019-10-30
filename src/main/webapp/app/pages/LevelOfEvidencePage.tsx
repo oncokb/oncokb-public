@@ -12,11 +12,19 @@ export const LevelOfEvidencePage = () => {
     <div>
       <Row>
         <Col className={'d-flex justify-content-end'}>
-          <Button size={'sm'} className={classnames('ml-1')} href={oncokbImgPpt}>
+          <Button
+            size={'sm'}
+            className={classnames('ml-1')}
+            href={oncokbImgPpt}
+          >
             <i className={'fa fa-cloud-download mr-1'} />
             Download Slide
           </Button>
-          <DownloadButton size={'sm'} className={classnames('ml-1')} href={oncokbImgPdf}>
+          <DownloadButton
+            size={'sm'}
+            className={classnames('ml-1')}
+            href={oncokbImgPdf}
+          >
             <i className={'fa fa-cloud-download mr-1'} />
             Download PDF
           </DownloadButton>
@@ -24,7 +32,10 @@ export const LevelOfEvidencePage = () => {
       </Row>
       <Row>
         <Col className={'d-flex justify-content-center'}>
-          <img style={{ maxWidth: IMG_MAX_WIDTH, width: '100%' }} src={oncokbImg} />
+          <img
+            style={{ maxWidth: IMG_MAX_WIDTH, width: '100%' }}
+            src={oncokbImg}
+          />
         </Col>
       </Row>
     </div>

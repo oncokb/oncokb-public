@@ -1,5 +1,8 @@
 import { Storage } from 'react-jhipster';
-import { AUTH_UER_TOKEN_KEY, AUTH_WEBSITE_TOKEN_KEY } from 'app/store/AuthenticationStore';
+import {
+  AUTH_UER_TOKEN_KEY,
+  AUTH_WEBSITE_TOKEN_KEY
+} from 'app/store/AuthenticationStore';
 import { ONCOKB_APP_PUBLIC_TOKEN } from 'app/config/constants';
 
 export const getPublicWebsiteToken = () => {

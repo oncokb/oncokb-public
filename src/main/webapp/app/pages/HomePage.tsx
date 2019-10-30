@@ -3,19 +3,34 @@ import { observable, action } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { remoteData } from 'cbioportal-frontend-commons';
 import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
-import { Gene, LevelNumber, TypeaheadSearchResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  Gene,
+  LevelNumber,
+  TypeaheadSearchResp
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import autobind from 'autobind-decorator';
 import { Row, Col } from 'react-bootstrap';
 import oncokbImg from 'content/images/oncokb.png';
 import { HomePageNumber } from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
-import { LEVEL_BUTTON_DESCRIPTION, LEVELS, PAGE_ROUTE } from 'app/config/constants';
+import {
+  LEVEL_BUTTON_DESCRIPTION,
+  LEVELS,
+  PAGE_ROUTE
+} from 'app/config/constants';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
-import { getAllAlterationsName, getAllTumorTypesName, levelOfEvidence2Level } from 'app/shared/utils/Utils';
+import {
+  getAllAlterationsName,
+  getAllTumorTypesName,
+  levelOfEvidence2Level
+} from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import { CitationText } from 'app/components/CitationText';
 import _ from 'lodash';
-import { SearchOption, SearchOptionType } from 'app/components/searchOption/SearchOption';
+import {
+  SearchOption,
+  SearchOptionType
+} from 'app/components/searchOption/SearchOption';
 import AsyncSelect from 'react-select/async';
 import { components } from 'react-select';
 import { SuggestCuration } from 'app/components/SuggestCuration';
@@ -80,7 +95,9 @@ class HomePage extends React.Component<IHomeProps> {
   readonly levelNumbers = remoteData<{ [level: string]: LevelNumber }>({
     await: () => [],
     async invoke() {
-      const levelNumber = await oncokbPrivateClient.utilsNumbersLevelsGetUsingGET({});
+      const levelNumber = await oncokbPrivateClient.utilsNumbersLevelsGetUsingGET(
+        {}
+      );
       return Promise.resolve(
         _.reduce(
           levelNumber,
@@ -100,7 +117,11 @@ class HomePage extends React.Component<IHomeProps> {
       _.reduce(
         levels,
         (acc, level) => {
-          acc.push(...(this.levelNumbers.result[level] ? this.levelNumbers.result[level].genes : []));
+          acc.push(
+            ...(this.levelNumbers.result[level]
+              ? this.levelNumbers.result[level].genes
+              : [])
+          );
           return acc;
         },
         [] as Gene[]
@@ -142,7 +163,11 @@ class HomePage extends React.Component<IHomeProps> {
       return (
         <>
           <components.Option {...props}>
-            <SearchOption search={this.keyword} type={props.data.queryType as SearchOptionType} data={props.data}>
+            <SearchOption
+              search={this.keyword}
+              type={props.data.queryType as SearchOptionType}
+              data={props.data}
+            >
               <components.Option {...props} />
             </SearchOption>
           </components.Option>
@@ -153,7 +178,10 @@ class HomePage extends React.Component<IHomeProps> {
       if (this.keyword) {
         return (
           <components.Option {...props}>
-            <span className="mr-2">No result found, please send us an email if you would like {this.keyword} to be curated.</span>
+            <span className="mr-2">
+              No result found, please send us an email if you would like{' '}
+              {this.keyword} to be curated.
+            </span>
             <SuggestCuration suggestion={this.keyword} />
           </components.Option>
         );
@@ -165,9 +193,14 @@ class HomePage extends React.Component<IHomeProps> {
     return (
       <div className="home">
         <Row className="mb-5">
-          <Col md={6} className={'mx-auto d-flex flex-column align-items-center '}>
+          <Col
+            md={6}
+            className={'mx-auto d-flex flex-column align-items-center '}
+          >
             <img src={oncokbImg} className="home-page-logo" />
-            <span className="home-page-logo-title">Precision Oncology Knowledge Base</span>
+            <span className="home-page-logo-title">
+              Precision Oncology Knowledge Base
+            </span>
           </Col>
         </Row>
         <Row className="mb-5">
@@ -177,27 +210,39 @@ class HomePage extends React.Component<IHomeProps> {
                 <HomePageNumber
                   href={'/cancerGenes'}
                   number={this.props.appStore.mainNumbers.result.gene}
-                  title={`${pluralize('Gene', this.props.appStore.mainNumbers.result.gene)}`}
+                  title={`${pluralize(
+                    'Gene',
+                    this.props.appStore.mainNumbers.result.gene
+                  )}`}
                 />
               </Col>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
                   number={this.props.appStore.mainNumbers.result.alteration}
-                  title={`${pluralize('Alteration', this.props.appStore.mainNumbers.result.alteration)}`}
+                  title={`${pluralize(
+                    'Alteration',
+                    this.props.appStore.mainNumbers.result.alteration
+                  )}`}
                 />
               </Col>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
                   href={PAGE_ROUTE.ACTIONABLE_GENE}
                   number={this.props.appStore.mainNumbers.result.tumorType}
-                  title={`${pluralize('Tumor Type', this.props.appStore.mainNumbers.result.tumorType)}`}
+                  title={`${pluralize(
+                    'Tumor Type',
+                    this.props.appStore.mainNumbers.result.tumorType
+                  )}`}
                 />
               </Col>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
                   href={PAGE_ROUTE.ACTIONABLE_GENE}
                   number={this.props.appStore.mainNumbers.result.drug}
-                  title={`${pluralize('Drug', this.props.appStore.mainNumbers.result.drug)}`}
+                  title={`${pluralize(
+                    'Drug',
+                    this.props.appStore.mainNumbers.result.drug
+                  )}`}
                 />
               </Col>
             </Row>

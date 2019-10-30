@@ -9,15 +9,23 @@ export const NewsPage = () => {
     <div className="news">
       <div>
         <p>
-          While we aim to keep the information up to date and correct, there will inevitably be gaps or mistakes. Please help us to identify
-          any issues by <b>sending an email to</b>{' '}
-          <a href={`mailto:${ONCOKB_CONTACT_EMAIL}?subject=OncoKB Feedback`}>{ONCOKB_CONTACT_EMAIL}</a>, or use the feedback button that
-          appears next to alterations in cBioPortal.
+          While we aim to keep the information up to date and correct, there
+          will inevitably be gaps or mistakes. Please help us to identify any
+          issues by <b>sending an email to</b>{' '}
+          <a href={`mailto:${ONCOKB_CONTACT_EMAIL}?subject=OncoKB Feedback`}>
+            {ONCOKB_CONTACT_EMAIL}
+          </a>
+          , or use the feedback button that appears next to alterations in
+          cBioPortal.
         </p>
         <p>
-          <b>Stay tuned</b> for future data updates (improved annotations, new alterations), as well as new features. You can follow us on
-          Twitter (
-          <a href="https://twitter.com/OncoKB" target="_blank" rel="noopener noreferrer">
+          <b>Stay tuned</b> for future data updates (improved annotations, new
+          alterations), as well as new features. You can follow us on Twitter (
+          <a
+            href="https://twitter.com/OncoKB"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             @OncoKB
           </a>
           ) or subscribe to our{' '}
@@ -47,7 +55,10 @@ export const NewsPage = () => {
 
         <h3>{getNewsTitle('08172017')}</h3>
         <div>
-          <b>The following FDA-approvals have been incorporated into the Actionable Genes table:</b>
+          <b>
+            The following FDA-approvals have been incorporated into the
+            Actionable Genes table:
+          </b>
           <ul>
             {getNews({
               key: 'news-08172017',
@@ -81,17 +92,32 @@ export const NewsPage = () => {
       <h3>Jun 6, 2016</h3>
       <div>
         <p>
-          We are happy to announce the <b>first release of OncoKB</b>, a knowledge base for precision medicine. Our goal is to
-          comprehensively annotate the oncogenic effect of mutations observed in cancer, as well as their therapeutic implications. This
-          release contains information about almost 3,000 alterations in 418 cancer genes. For each alteration, we categorize the biological
-          and clinical effect, along with citations of the source of the information, and, when available, the therapeutic implications of a
-          alteration. We have focussed on FDA-approved (Level 1) or guideline-listed (Level 2) biomarkers, as well as biomarkers that with
-          clinical evidence for sensitivity and for which therapies are currently explored in clinical trials (Level 3). See the Levels of
-          Evidence and Actionable Genes pages for more information.
+          We are happy to announce the <b>first release of OncoKB</b>, a
+          knowledge base for precision medicine. Our goal is to comprehensively
+          annotate the oncogenic effect of mutations observed in cancer, as well
+          as their therapeutic implications. This release contains information
+          about almost 3,000 alterations in 418 cancer genes. For each
+          alteration, we categorize the biological and clinical effect, along
+          with citations of the source of the information, and, when available,
+          the therapeutic implications of a alteration. We have focussed on
+          FDA-approved (Level 1) or guideline-listed (Level 2) biomarkers, as
+          well as biomarkers that with clinical evidence for sensitivity and for
+          which therapies are currently explored in clinical trials (Level 3).
+          See the Levels of Evidence and Actionable Genes pages for more
+          information.
         </p>
         <p>
-          We have also <b>integrated information from OncoKB into the cBioPortal for Cancer Genomics</b>. When exploring alterations in{' '}
-          <a href="http://www.cbioportal.org/" target="_blank" rel="noopener noreferrer">
+          We have also{' '}
+          <b>
+            integrated information from OncoKB into the cBioPortal for Cancer
+            Genomics
+          </b>
+          . When exploring alterations in{' '}
+          <a
+            href="http://www.cbioportal.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             cbioportal.org
           </a>
           , you will see annotations from OncoKB when available.{' '}

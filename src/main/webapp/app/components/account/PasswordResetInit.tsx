@@ -39,11 +39,14 @@ export class PasswordResetInit extends React.Component<{}> {
           <span>Enter the email address you used to register</span>
         </Alert>
         {this.resetStatus === API_CALL_STATUS.SUCCESSFUL ? (
-          <Alert variant="success">Check your emails for details on how to reset your password.</Alert>
+          <Alert variant="success">
+            Check your emails for details on how to reset your password.
+          </Alert>
         ) : null}
         {this.resetStatus === API_CALL_STATUS.FAILURE ? (
           <Alert variant="danger">
-            <strong>Email address isn&apos;t registered!</strong> Please check and try again
+            <strong>Email address isn&apos;t registered!</strong> Please check
+            and try again
           </Alert>
         ) : null}
         <AvForm onValidSubmit={this.resetPassword}>
@@ -53,9 +56,19 @@ export class PasswordResetInit extends React.Component<{}> {
             placeholder={'Your email'}
             type="email"
             validate={{
-              required: { value: true, errorMessage: 'Your email is required.' },
-              minLength: { value: 5, errorMessage: 'Your email is required to be at least 5 characters.' },
-              maxLength: { value: 254, errorMessage: 'Your email cannot be longer than 50 characters.' }
+              required: {
+                value: true,
+                errorMessage: 'Your email is required.'
+              },
+              minLength: {
+                value: 5,
+                errorMessage:
+                  'Your email is required to be at least 5 characters.'
+              },
+              maxLength: {
+                value: 254,
+                errorMessage: 'Your email cannot be longer than 50 characters.'
+              }
             }}
           />
           <Button color="primary" type="submit">

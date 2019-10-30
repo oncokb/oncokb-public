@@ -37,16 +37,20 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
       active={props.active}
       href={props.href}
       disabled={props.disabled}
-      className={classnames(props.href ? styles.levelButtonLink : styles.levelButton, props.className)}
+      className={classnames(
+        props.href ? styles.levelButtonLink : styles.levelButton,
+        props.className
+      )}
     >
-      <div className={classnames(`oncokb level-${props.level}`, styles.levelName)}>
+      <div
+        className={classnames(`oncokb level-${props.level}`, styles.levelName)}
+      >
         {props.title ? props.title : `Level ${props.level}`}
       </div>
       <div className={styles.levelDescription}>{props.description}</div>
-      <div className={classnames(`oncokb level-${props.level}`, styles.geneNumber)}>{`${props.numOfGenes} ${pluralize(
-        'Gene',
-        props.numOfGenes
-      )}`}</div>
+      <div
+        className={classnames(`oncokb level-${props.level}`, styles.geneNumber)}
+      >{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
     </Button>
   );
 });

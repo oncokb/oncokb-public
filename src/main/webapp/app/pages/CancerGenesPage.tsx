@@ -7,8 +7,13 @@ import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import { SuggestCuration } from 'app/components/SuggestCuration';
 import { Col, Row } from 'react-bootstrap';
 import * as _ from 'lodash';
-import OncoKBTable, { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
-import { filterByKeyword, getDefaultColumnDefinition } from 'app/shared/utils/Utils';
+import OncoKBTable, {
+  SearchColumn
+} from 'app/components/oncokbTable/OncoKBTable';
+import {
+  filterByKeyword,
+  getDefaultColumnDefinition
+} from 'app/shared/utils/Utils';
 import { LG_TABLE_FIXED_HEIGHT, TABLE_COLUMN_KEY } from 'app/config/constants';
 import AppStore from 'app/store/AppStore';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
@@ -35,7 +40,10 @@ const getGeneType = (isOncogene: boolean, isTsg: boolean) => {
   return '';
 };
 
-const getPanelGeneCount = (data: ExtendCancerGene[], key: keyof ExtendCancerGene) => {
+const getPanelGeneCount = (
+  data: ExtendCancerGene[],
+  key: keyof ExtendCancerGene
+) => {
   return data.filter(cancerGene => cancerGene[key]).length;
 };
 
@@ -47,15 +55,22 @@ type ExtendCancerGene = CancerGene & {
 
 @inject('appStore')
 @observer
-export default class CancerGenesPage extends React.Component<{ appStore: AppStore }> {
+export default class CancerGenesPage extends React.Component<{
+  appStore: AppStore;
+}> {
   private fetchedDate = '05/07/2019';
 
   private columns: SearchColumn<ExtendCancerGene>[] = [
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
-      onFilter: (data: ExtendCancerGene, keyword) => filterByKeyword(data.hugoSymbol, keyword),
+      onFilter: (data: ExtendCancerGene, keyword) =>
+        filterByKeyword(data.hugoSymbol, keyword),
       Cell(props: { original: ExtendCancerGene }) {
-        return props.original.annotated ? <GenePageLink hugoSymbol={props.original.hugoSymbol} /> : `${props.original.hugoSymbol}`;
+        return props.original.annotated ? (
+          <GenePageLink hugoSymbol={props.original.hugoSymbol} />
+        ) : (
+          `${props.original.hugoSymbol}`
+        );
       }
     },
     {
@@ -72,7 +87,11 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
       minWidth: 100,
       sortMethod: defaultSortMethod,
       Cell(props: { original: ExtendCancerGene }) {
-        return props.original.oncokbAnnotated ? <i className="fa fa-check" /> : <SuggestCuration suggestion={props.original.hugoSymbol} />;
+        return props.original.oncokbAnnotated ? (
+          <i className="fa fa-check" />
+        ) : (
+          <SuggestCuration suggestion={props.original.hugoSymbol} />
+        );
       }
     },
     {
@@ -85,22 +104,31 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
       ),
       minWidth: 120,
       accessor: 'geneType',
-      onFilter: (data: ExtendCancerGene, keyword) => filterByKeyword(data.geneType, keyword),
+      onFilter: (data: ExtendCancerGene, keyword) =>
+        filterByKeyword(data.geneType, keyword),
       sortMethod: (a: string, b: string) => a.localeCompare(b)
     },
     {
       id: 'mSKImpact',
-      Header: (props: { original: ExtendCancerGene; data: ExtendCancerGene[] }) => (
+      Header: (props: {
+        original: ExtendCancerGene;
+        data: ExtendCancerGene[];
+      }) => (
         <>
           <span>MSK-IMPACT</span>
           <InfoIcon
             overlay={
               <span>
                 Gene is part of the{' '}
-                <a href="https://www.mskcc.org/msk-impact" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://www.mskcc.org/msk-impact"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   MSK-IMPACT panel
                 </a>{' '}
-                ({getPanelGeneCount(props.data, 'mSKImpact')} genes, {this.fetchedDate})
+                ({getPanelGeneCount(props.data, 'mSKImpact')} genes,{' '}
+                {this.fetchedDate})
               </span>
             }
           />
@@ -116,7 +144,10 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
     },
     {
       id: 'mSKHeme',
-      Header: (props: { original: ExtendCancerGene; data: ExtendCancerGene[] }) => (
+      Header: (props: {
+        original: ExtendCancerGene;
+        data: ExtendCancerGene[];
+      }) => (
         <>
           <span>
             MSK-IMPACT
@@ -127,10 +158,15 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             overlay={
               <span>
                 Gene is part of the{' '}
-                <a href="https://www.mskcc.org/msk-impact" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://www.mskcc.org/msk-impact"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   MSK-IMPACT Heme and HemePACT panels
                 </a>{' '}
-                ({getPanelGeneCount(props.data, 'mSKHeme')} genes, {this.fetchedDate})
+                ({getPanelGeneCount(props.data, 'mSKHeme')} genes,{' '}
+                {this.fetchedDate})
               </span>
             }
           />
@@ -145,7 +181,10 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
     },
     {
       id: 'foundation',
-      Header: (props: { original: ExtendCancerGene; data: ExtendCancerGene[] }) => (
+      Header: (props: {
+        original: ExtendCancerGene;
+        data: ExtendCancerGene[];
+      }) => (
         <>
           <span>
             Foundation One
@@ -156,10 +195,15 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             overlay={
               <span>
                 Gene is part of the{' '}
-                <a href="https://www.accessdata.fda.gov/cdrh_docs/pdf17/P170019C.pdf" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://www.accessdata.fda.gov/cdrh_docs/pdf17/P170019C.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   FoundationOne CDx panel
                 </a>{' '}
-                ({getPanelGeneCount(props.data, 'foundation')} genes, {this.fetchedDate})
+                ({getPanelGeneCount(props.data, 'foundation')} genes,{' '}
+                {this.fetchedDate})
               </span>
             }
           />
@@ -175,7 +219,10 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
     },
     {
       id: 'foundationHeme',
-      Header: (props: { original: ExtendCancerGene; data: ExtendCancerGene[] }) => (
+      Header: (props: {
+        original: ExtendCancerGene;
+        data: ExtendCancerGene[];
+      }) => (
         <>
           <span>
             Foundation One
@@ -193,7 +240,8 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
                 >
                   FoundationOne Heme panel
                 </a>{' '}
-                ({getPanelGeneCount(props.data, 'foundationHeme')} genes, {this.fetchedDate})
+                ({getPanelGeneCount(props.data, 'foundationHeme')} genes,{' '}
+                {this.fetchedDate})
               </span>
             }
           />
@@ -204,22 +252,34 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
       accessor: 'foundationHeme',
       sortable: true,
       Cell(props: { original: ExtendCancerGene }) {
-        return props.original.foundationHeme ? <i className="fa fa-check" /> : '';
+        return props.original.foundationHeme ? (
+          <i className="fa fa-check" />
+        ) : (
+          ''
+        );
       }
     },
     {
       id: 'vogelstein',
-      Header: (props: { original: ExtendCancerGene; data: ExtendCancerGene[] }) => (
+      Header: (props: {
+        original: ExtendCancerGene;
+        data: ExtendCancerGene[];
+      }) => (
         <>
           <span>Vogelstein et al. 2013</span>
           <InfoIcon
             overlay={
               <span>
                 Gene is part of the published{' '}
-                <a href="https://science.sciencemag.org/content/339/6127/1546.full" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://science.sciencemag.org/content/339/6127/1546.full"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Vogelstein et al. Science, 2013
                 </a>{' '}
-                cancer gene list ({getPanelGeneCount(props.data, 'vogelstein')} genes, 03/29/2013)
+                cancer gene list ({getPanelGeneCount(props.data, 'vogelstein')}{' '}
+                genes, 03/29/2013)
               </span>
             }
           />
@@ -235,7 +295,10 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
     },
     {
       id: 'sangerCGC',
-      Header: (props: { original: ExtendCancerGene; data: ExtendCancerGene[] }) => (
+      Header: (props: {
+        original: ExtendCancerGene;
+        data: ExtendCancerGene[];
+      }) => (
         <>
           <span>
             Cancer Gene Census
@@ -246,10 +309,15 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
             overlay={
               <span>
                 Gene is part of the{' '}
-                <a href="https://cancer.sanger.ac.uk/cosmic/census?tier=1" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://cancer.sanger.ac.uk/cosmic/census?tier=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Cancer Gene Census Tier 1
                 </a>{' '}
-                ({getPanelGeneCount(props.data, 'sangerCGC')} genes, v89 - 15th May 2019)
+                ({getPanelGeneCount(props.data, 'sangerCGC')} genes, v89 - 15th
+                May 2019)
               </span>
             }
           />
@@ -268,7 +336,8 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
       Header: () => '# of Sources',
       style: { textAlign: 'center' },
       sortable: true,
-      onFilter: (data: ExtendCancerGene, keyword) => filterByKeyword(data.numOfSources.toString(), keyword),
+      onFilter: (data: ExtendCancerGene, keyword) =>
+        filterByKeyword(data.numOfSources.toString(), keyword),
       accessor: 'numOfSources'
     }
   ];
@@ -347,7 +416,9 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
           <Col className="col-auto">
             <AuthDownloadButton
               fileName="cancerGeneList.tsv"
-              getDownloadData={() => oncokbClient.utilsCancerGeneListTxtGetUsingGET({})}
+              getDownloadData={() =>
+                oncokbClient.utilsCancerGeneListTxtGetUsingGET({})
+              }
               buttonText="Cancer Gene List"
             />
           </Col>
@@ -355,12 +426,17 @@ export default class CancerGenesPage extends React.Component<{ appStore: AppStor
         <Row>
           <Col>
             <div>
-              {this.cancerGenes.result.length} genes, last update {this.props.appStore.appInfo.result.dataVersion.date}
+              {this.cancerGenes.result.length} genes, last update{' '}
+              {this.props.appStore.appInfo.result.dataVersion.date}
             </div>
             <div>
-              The following genes are considered to be cancer genes by OncoKB, based on their inclusion in various different sequencing
-              panels, the Sanger Cancer Gene Census, or{' '}
-              <a href="http://science.sciencemag.org/content/339/6127/1546.full">Vogelstein et al. (2013)</a>.
+              The following genes are considered to be cancer genes by OncoKB,
+              based on their inclusion in various different sequencing panels,
+              the Sanger Cancer Gene Census, or{' '}
+              <a href="http://science.sciencemag.org/content/339/6127/1546.full">
+                Vogelstein et al. (2013)
+              </a>
+              .
             </div>
           </Col>
         </Row>

@@ -1,15 +1,35 @@
 import React from 'react';
-import { AvField, AvForm, AvCheckboxGroup, AvCheckbox } from 'availity-reactstrap-validation';
+import {
+  AvField,
+  AvForm,
+  AvCheckboxGroup,
+  AvCheckbox
+} from 'availity-reactstrap-validation';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 import { inject, observer } from 'mobx-react';
-import { action, computed, observable, reaction, IReactionDisposer } from 'mobx';
+import {
+  action,
+  computed,
+  observable,
+  reaction,
+  IReactionDisposer
+} from 'mobx';
 import autobind from 'autobind-decorator';
 import { Link, Redirect } from 'react-router-dom';
 import client from 'app/shared/api/clientInstance';
 import { ManagedUserVM } from 'app/shared/api/generated/API';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import { ACADEMIC_TERMS, ACCOUNT_TITLES, LicenseType, PAGE_ROUTE, QUERY_SEPARATOR_FOR_QUERY_STRING } from 'app/config/constants';
-import { getAccountInfoTitle, getSectionClassName } from './account/AccountUtils';
+import {
+  ACADEMIC_TERMS,
+  ACCOUNT_TITLES,
+  LicenseType,
+  PAGE_ROUTE,
+  QUERY_SEPARATOR_FOR_QUERY_STRING
+} from 'app/config/constants';
+import {
+  getAccountInfoTitle,
+  getSectionClassName
+} from './account/AccountUtils';
 import { Alert, Row, Col, Button } from 'react-bootstrap';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { RouterStore } from 'mobx-react-router';
@@ -60,9 +80,13 @@ export class RegisterPage extends React.Component<IRegisterProps> {
       reaction(
         () => [props.routing.location.hash],
         ([hash]) => {
-          const queryStrings = QueryString.parse(hash, { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING });
+          const queryStrings = QueryString.parse(hash, {
+            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING
+          });
           if (queryStrings[LICENSE_HASH_KEY]) {
-            this.selectedLicense = queryStrings[LICENSE_HASH_KEY] as LicenseType;
+            this.selectedLicense = queryStrings[
+              LICENSE_HASH_KEY
+            ] as LicenseType;
           }
         },
         { fireImmediately: true }
@@ -128,12 +152,20 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   }
 
   getErrorMessage(additionalInfo = '') {
-    return (additionalInfo ? `${additionalInfo}, w` : 'W') + 'e were not able to create an account for you.';
+    return (
+      (additionalInfo ? `${additionalInfo}, w` : 'W') +
+      'e were not able to create an account for you.'
+    );
   }
 
   @computed
   get errorRegisterMessage() {
-    if (this.registerError && this.registerError.response && this.registerError.response.body && this.registerError.response.body.title) {
+    if (
+      this.registerError &&
+      this.registerError.response &&
+      this.registerError.response.body &&
+      this.registerError.response.body.title
+    ) {
       return this.getErrorMessage(this.registerError.response.body.title);
     } else {
       return this.getErrorMessage();
@@ -142,18 +174,27 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   getLicenseAdditionalInfo(licenseType: LicenseType) {
     if (licenseType === LicenseType.ACADEMIC) {
-      return <div>OncoKB data is freely accessible for research use in the academic setting. Please register below for access.</div>;
+      return (
+        <div>
+          OncoKB data is freely accessible for research use in the academic
+          setting. Please register below for access.
+        </div>
+      );
     } else {
       return (
         <div>
           <div>
-            To support the future development and maintenance of OncoKB, we have introduced license fees for clinical and commercial use.
-            The fee will depend on the type of use and size of company.
+            To support the future development and maintenance of OncoKB, we have
+            introduced license fees for clinical and commercial use. The fee
+            will depend on the type of use and size of company.
           </div>
           <div className="mt-2">
-            In order to be granted access to downloadable content and our API, your company will need a license. If your company already has
-            one, we will grant you access. Otherwise, we will contact you to discuss your needs and license terms. Please see the{' '}
-            <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>. You can also reach out to <LicenseInquireLink /> for more information.
+            In order to be granted access to downloadable content and our API,
+            your company will need a license. If your company already has one,
+            we will grant you access. Otherwise, we will contact you to discuss
+            your needs and license terms. Please see the{' '}
+            <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>. You can also
+            reach out to <LicenseInquireLink /> for more information.
           </div>
         </div>
       );
@@ -182,10 +223,12 @@ export class RegisterPage extends React.Component<IRegisterProps> {
           <div>
             <Alert variant="info">
               <div className={'mb-3'}>
-                We have sent you an email to verify your email address. Please follow the further instruction in the email.
+                We have sent you an email to verify your email address. Please
+                follow the further instruction in the email.
               </div>
               <div className={'mb-3'}>
-                If you do not receive the email within 24 hours, the email maybe blocked by your institution/company or spammed.
+                If you do not receive the email within 24 hours, the email maybe
+                blocked by your institution/company or spammed.
               </div>
               <MessageToContact emailTitle={'Registration Question'} />
             </Alert>
@@ -235,30 +278,62 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 <Col md="9">
                   <AvField
                     name="email"
-                    label={getAccountInfoTitle(ACCOUNT_TITLES.EMAIL, this.selectedLicense)}
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.EMAIL,
+                      this.selectedLicense
+                    )}
                     type="email"
                     validate={{
-                      required: { value: true, errorMessage: 'Your email is required.' },
-                      minLength: { value: 5, errorMessage: 'Your email is required to be at least 5 characters.' },
-                      maxLength: { value: 254, errorMessage: 'Your email cannot be longer than 50 characters.' }
+                      required: {
+                        value: true,
+                        errorMessage: 'Your email is required.'
+                      },
+                      minLength: {
+                        value: 5,
+                        errorMessage:
+                          'Your email is required to be at least 5 characters.'
+                      },
+                      maxLength: {
+                        value: 254,
+                        errorMessage:
+                          'Your email cannot be longer than 50 characters.'
+                      }
                     }}
                   />
                   <AvField
                     name="firstName"
                     autoComplete="given-name"
-                    label={getAccountInfoTitle(ACCOUNT_TITLES.FIRST_NAME, this.selectedLicense)}
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.FIRST_NAME,
+                      this.selectedLicense
+                    )}
                     validate={{
-                      required: { value: true, errorMessage: 'Your first name is required.' },
-                      minLength: { value: 1, errorMessage: 'Your first can not be empty' }
+                      required: {
+                        value: true,
+                        errorMessage: 'Your first name is required.'
+                      },
+                      minLength: {
+                        value: 1,
+                        errorMessage: 'Your first can not be empty'
+                      }
                     }}
                   />
                   <AvField
                     name="lastName"
                     autoComplete="family-name"
-                    label={getAccountInfoTitle(ACCOUNT_TITLES.LAST_NAME, this.selectedLicense)}
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.LAST_NAME,
+                      this.selectedLicense
+                    )}
                     validate={{
-                      required: { value: true, errorMessage: 'Your last name is required.' },
-                      minLength: { value: 1, errorMessage: 'Your last name can not be empty' }
+                      required: {
+                        value: true,
+                        errorMessage: 'Your last name is required.'
+                      },
+                      minLength: {
+                        value: 1,
+                        errorMessage: 'Your last name can not be empty'
+                      }
                     }}
                   />
                   <AvField
@@ -269,9 +344,20 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     type="password"
                     onChange={this.updatePassword}
                     validate={{
-                      required: { value: true, errorMessage: 'Your password is required.' },
-                      minLength: { value: 4, errorMessage: 'Your password is required to be at least 4 characters.' },
-                      maxLength: { value: 50, errorMessage: 'Your password cannot be longer than 50 characters.' }
+                      required: {
+                        value: true,
+                        errorMessage: 'Your password is required.'
+                      },
+                      minLength: {
+                        value: 4,
+                        errorMessage:
+                          'Your password is required to be at least 4 characters.'
+                      },
+                      maxLength: {
+                        value: 50,
+                        errorMessage:
+                          'Your password cannot be longer than 50 characters.'
+                      }
                     }}
                   />
                   <PasswordStrengthBar password={this.password} />
@@ -282,18 +368,24 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     placeholder="Confirm the new password"
                     type="password"
                     validate={{
-                      required: { value: true, errorMessage: 'Your confirmation password is required.' },
+                      required: {
+                        value: true,
+                        errorMessage: 'Your confirmation password is required.'
+                      },
                       minLength: {
                         value: 4,
-                        errorMessage: 'Your confirmation password is required to be at least 4 characters.'
+                        errorMessage:
+                          'Your confirmation password is required to be at least 4 characters.'
                       },
                       maxLength: {
                         value: 50,
-                        errorMessage: 'Your confirmation password cannot be longer than 50 characters.'
+                        errorMessage:
+                          'Your confirmation password cannot be longer than 50 characters.'
                       },
                       match: {
                         value: 'firstPassword',
-                        errorMessage: 'The password and its confirmation do not match!'
+                        errorMessage:
+                          'The password and its confirmation do not match!'
                       }
                     }}
                   />
@@ -301,47 +393,88 @@ export class RegisterPage extends React.Component<IRegisterProps> {
               </Row>
               <Row className={getSectionClassName()}>
                 <Col md="3">
-                  <h5>{getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.selectedLicense)}</h5>
+                  <h5>
+                    {getAccountInfoTitle(
+                      ACCOUNT_TITLES.COMPANY,
+                      this.selectedLicense
+                    )}
+                  </h5>
                 </Col>
                 <Col md="9">
                   {/* Job Title */}
                   <AvField
                     name="jobTitle"
-                    label={getAccountInfoTitle(ACCOUNT_TITLES.POSITION, this.selectedLicense)}
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.POSITION,
+                      this.selectedLicense
+                    )}
                     validate={{
                       required: { value: true, errorMessage: 'Required.' },
-                      minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
-                      maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
+                      minLength: {
+                        value: 1,
+                        errorMessage: 'Required to be at least 1 character'
+                      },
+                      maxLength: {
+                        value: 50,
+                        errorMessage: 'Cannot be longer than 50 characters'
+                      }
                     }}
                   />
                   {/* Company */}
                   <AvField
                     name="company"
-                    label={getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.selectedLicense)}
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.COMPANY,
+                      this.selectedLicense
+                    )}
                     validate={{
                       required: { value: true, errorMessage: 'Required.' },
-                      minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
-                      maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
+                      minLength: {
+                        value: 1,
+                        errorMessage: 'Required to be at least 1 character'
+                      },
+                      maxLength: {
+                        value: 50,
+                        errorMessage: 'Cannot be longer than 50 characters'
+                      }
                     }}
                   />
                   {/* City */}
                   <AvField
                     name="city"
-                    label={getAccountInfoTitle(ACCOUNT_TITLES.CITY, this.selectedLicense)}
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.CITY,
+                      this.selectedLicense
+                    )}
                     validate={{
                       required: { value: true, errorMessage: 'Required.' },
-                      minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
-                      maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
+                      minLength: {
+                        value: 1,
+                        errorMessage: 'Required to be at least 1 character'
+                      },
+                      maxLength: {
+                        value: 50,
+                        errorMessage: 'Cannot be longer than 50 characters'
+                      }
                     }}
                   />
                   {/* Country */}
                   <AvField
                     name="country"
-                    label={getAccountInfoTitle(ACCOUNT_TITLES.COUNTRY, this.selectedLicense)}
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.COUNTRY,
+                      this.selectedLicense
+                    )}
                     validate={{
                       required: { value: true, errorMessage: 'Required.' },
-                      minLength: { value: 1, errorMessage: 'Required to be at least 1 character' },
-                      maxLength: { value: 50, errorMessage: 'Cannot be longer than 50 characters' }
+                      minLength: {
+                        value: 1,
+                        errorMessage: 'Required to be at least 1 character'
+                      },
+                      maxLength: {
+                        value: 50,
+                        errorMessage: 'Cannot be longer than 50 characters'
+                      }
                     }}
                   />
                 </Col>
@@ -350,7 +483,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 <>
                   <Row className={getSectionClassName()}>
                     <Col md="9" className={'ml-auto'}>
-                      In order to be granted access to downloadable content and our API, please agree to the following terms:
+                      In order to be granted access to downloadable content and
+                      our API, please agree to the following terms:
                     </Col>
                   </Row>
                   <Row className={getSectionClassName()}>
@@ -359,8 +493,16 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     </Col>
                     <Col md="9">
                       {ACADEMIC_TERMS.map(term => (
-                        <AvCheckboxGroup name={term.key} required key={term.key} errorMessage={'You have to accept the term'}>
-                          <AvCheckbox label={term.description} value={term.key} />
+                        <AvCheckboxGroup
+                          name={term.key}
+                          required
+                          key={term.key}
+                          errorMessage={'You have to accept the term'}
+                        >
+                          <AvCheckbox
+                            label={term.description}
+                            value={term.key}
+                          />
                         </AvCheckboxGroup>
                       ))}
                     </Col>

@@ -5,7 +5,11 @@ const getFormattedMessage = (message: string) => {
   return _.upperFirst(message);
 };
 const getErrorMessage = (error: Error, additionalInfo?: string) => {
-  return getFormattedMessage(`${additionalInfo ? `${_.upperFirst(additionalInfo)}: ` : ''}${error.message}`);
+  return getFormattedMessage(
+    `${additionalInfo ? `${_.upperFirst(additionalInfo)}: ` : ''}${
+      error.message
+    }`
+  );
 };
 
 export const notifyInfo = (message: string) => {

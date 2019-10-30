@@ -8,11 +8,13 @@ export const TeamPage = () => {
         <Col>
           <h2>OncoKB Team</h2>
           <p>
-            OncoKB is developed and maintained by the Knowledge Systems group in the{' '}
+            OncoKB is developed and maintained by the Knowledge Systems group in
+            the{' '}
             <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology">
               Marie Josée and Henry R. Kravis Center for Molecular Oncology
             </a>{' '}
-            at Memorial Sloan Kettering Cancer Center. Disclosure of conflicts of interest of all OncoKB contributors is available{' '}
+            at Memorial Sloan Kettering Cancer Center. Disclosure of conflicts
+            of interest of all OncoKB contributors is available{' '}
             <a
               href="https://docs.google.com/spreadsheets/d/1FaOIvQmLXA7Z9rM_WkgP9QPbfkDHoTLKEUGlr0G2UT0/edit?usp=sharing"
               target="_blank"

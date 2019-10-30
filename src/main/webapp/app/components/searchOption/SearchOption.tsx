@@ -1,5 +1,8 @@
 import React from 'react';
-import { levelOfEvidence2Level, OncoKBAnnotationIcon } from 'app/shared/utils/Utils';
+import {
+  levelOfEvidence2Level,
+  OncoKBAnnotationIcon
+} from 'app/shared/utils/Utils';
 import { If, Then, Else } from 'react-if';
 import Highlighter from 'react-highlight-words';
 import styles from './SearchOption.module.scss';
@@ -21,14 +24,24 @@ const LevelString: React.FunctionComponent<{
     <>
       {' '}
       {props.highestSensitiveLevel ? (
-        <span className={`oncokb level-${levelOfEvidence2Level(props.highestSensitiveLevel, true)}`}>
+        <span
+          className={`oncokb level-${levelOfEvidence2Level(
+            props.highestSensitiveLevel,
+            true
+          )}`}
+        >
           Level {props.highestSensitiveLevel}{' '}
         </span>
       ) : (
         undefined
       )}
       {props.highestResistanceLevel ? (
-        <span className={`oncokb level-${levelOfEvidence2Level(props.highestResistanceLevel, true)}`}>
+        <span
+          className={`oncokb level-${levelOfEvidence2Level(
+            props.highestResistanceLevel,
+            true
+          )}`}
+        >
           Level {props.highestResistanceLevel}
         </span>
       ) : (
@@ -48,7 +61,8 @@ const GeneSearchOption: React.FunctionComponent<{
           searchWords={[props.search]}
           textToHighlight={`${props.data.gene.hugoSymbol} (Entrez Gene: ${props.data.gene.entrezGeneId})`}
         />
-        {props.data.highestSensitiveLevel || props.data.highestResistanceLevel ? (
+        {props.data.highestSensitiveLevel ||
+        props.data.highestResistanceLevel ? (
           <span className={styles.subTitle}>
             {' '}
             Highest level of evidence:
@@ -65,7 +79,10 @@ const GeneSearchOption: React.FunctionComponent<{
         <i>
           <div className={styles.subTitle}>
             <span>Also known as </span>
-            <Highlighter searchWords={[props.search]} textToHighlight={`${props.data.gene.geneAliases.join(', ')}`} />
+            <Highlighter
+              searchWords={[props.search]}
+              textToHighlight={`${props.data.gene.geneAliases.join(', ')}`}
+            />
           </div>
         </i>
       ) : (
@@ -82,8 +99,15 @@ const AlterationSearchOption: React.FunctionComponent<{
   return (
     <>
       <div className={'d-flex align-items-center'}>
-        <Highlighter textToHighlight={props.data.gene.hugoSymbol} searchWords={[props.search]} /> /
-        <Highlighter textToHighlight={props.data.alterationsName} searchWords={[props.search]} />
+        <Highlighter
+          textToHighlight={props.data.gene.hugoSymbol}
+          searchWords={[props.search]}
+        />{' '}
+        /
+        <Highlighter
+          textToHighlight={props.data.alterationsName}
+          searchWords={[props.search]}
+        />
         <OncoKBAnnotationIcon
           className={'mb-1 ml-1'}
           oncogenicity={props.data.oncogenicity}
@@ -116,13 +140,21 @@ const DrugSearchOption: React.FunctionComponent<{
   return (
     <>
       <div>
-        <Highlighter searchWords={[props.search]} textToHighlight={props.data.drug.drugName} />
+        <Highlighter
+          searchWords={[props.search]}
+          textToHighlight={props.data.drug.drugName}
+        />
       </div>
       <div className={styles.subTitle}>
         The drug is
-        <LevelString highestSensitiveLevel={props.data.highestSensitiveLevel} highestResistanceLevel={props.data.highestResistanceLevel} />
+        <LevelString
+          highestSensitiveLevel={props.data.highestSensitiveLevel}
+          highestResistanceLevel={props.data.highestResistanceLevel}
+        />
         {` ${props.data.gene.hugoSymbol} `}
-        {props.data.variants.length > 1 ? `(${props.data.alterationsName})` : ''}
+        {props.data.variants.length > 1
+          ? `(${props.data.alterationsName})`
+          : ''}
         {props.data.variants.length === 1 ? props.data.alterationsName : ''}
         {` ${props.data.tumorTypesName}`}
       </div>
@@ -130,7 +162,9 @@ const DrugSearchOption: React.FunctionComponent<{
   );
 };
 
-export const SearchOption: React.FunctionComponent<SearchOptionProps> = props => {
+export const SearchOption: React.FunctionComponent<
+  SearchOptionProps
+> = props => {
   const searchKeyword = props.search ? props.search : '';
   return (
     <div className={classnames(styles.match)}>
@@ -141,7 +175,10 @@ export const SearchOption: React.FunctionComponent<SearchOptionProps> = props =>
         <Else>
           <If condition={props.type === 'variant'}>
             <Then>
-              <AlterationSearchOption search={searchKeyword} data={props.data} />
+              <AlterationSearchOption
+                search={searchKeyword}
+                data={props.data}
+              />
             </Then>
             <Else>
               <If condition={props.type === 'drug'}>

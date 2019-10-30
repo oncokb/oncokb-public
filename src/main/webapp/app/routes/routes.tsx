@@ -31,28 +31,65 @@ import AccountPassword from 'app/components/account/AccountPassword';
 import AdminRouts from 'app/routes/AdminRoutes';
 import PageContainer from 'app/components/PageContainer';
 
-const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: RouterStore }) => {
+const AppRouts = (props: {
+  authenticationStore: AuthenticationStore;
+  routing: RouterStore;
+}) => {
   return (
     <Switch>
       <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
       <PageContainer>
         <ErrorBoundaryRoute path={PAGE_ROUTE.LOGIN} component={Login} />
         <ErrorBoundaryRoute path={PAGE_ROUTE.LOGOUT} component={Logout} />
-        <ErrorBoundaryRoute path={PAGE_ROUTE.REGISTER} component={RegisterPage} />
-        <ErrorBoundaryRoute path={PAGE_ROUTE.DATA_ACCESS} component={DataAccessPage} />
-        <ErrorBoundaryRoute path={PAGE_ROUTE.CANCER_GENES} component={CancerGenesPage} />
-        <ErrorBoundaryRoute path={PAGE_ROUTE.ACTIONABLE_GENE} component={ActionableGenesPage} />
-        <ErrorBoundaryRoute exact path="/gene/:hugoSymbol" component={GenePage} />
-        <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration" component={AlterationPage} />
-        <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage} />
+        <ErrorBoundaryRoute
+          path={PAGE_ROUTE.REGISTER}
+          component={RegisterPage}
+        />
+        <ErrorBoundaryRoute
+          path={PAGE_ROUTE.DATA_ACCESS}
+          component={DataAccessPage}
+        />
+        <ErrorBoundaryRoute
+          path={PAGE_ROUTE.CANCER_GENES}
+          component={CancerGenesPage}
+        />
+        <ErrorBoundaryRoute
+          path={PAGE_ROUTE.ACTIONABLE_GENE}
+          component={ActionableGenesPage}
+        />
+        <ErrorBoundaryRoute
+          exact
+          path="/gene/:hugoSymbol"
+          component={GenePage}
+        />
+        <ErrorBoundaryRoute
+          exact
+          path="/gene/:hugoSymbol/:alteration"
+          component={AlterationPage}
+        />
+        <ErrorBoundaryRoute
+          exact
+          path="/gene/:hugoSymbol/:alteration/:tumorType"
+          component={AlterationPage}
+        />
         <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
         <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
         <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage} />
         <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
         <Route exact path={PAGE_ROUTE.LEVELS} component={LevelOfEvidencePage} />
-        <ErrorBoundaryRoute exact path={PAGE_ROUTE.ACCOUNT_VERIFY} component={ActivateAccount} />
-        <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST} component={PasswordResetInit} />
-        <ErrorBoundaryRoute path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH} component={PasswordResetFinish} />
+        <ErrorBoundaryRoute
+          exact
+          path={PAGE_ROUTE.ACCOUNT_VERIFY}
+          component={ActivateAccount}
+        />
+        <ErrorBoundaryRoute
+          path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
+          component={PasswordResetInit}
+        />
+        <ErrorBoundaryRoute
+          path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}
+          component={PasswordResetFinish}
+        />
         <PrivateRoute
           authenticationStore={props.authenticationStore}
           routing={props.routing}
