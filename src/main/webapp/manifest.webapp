@@ -1,6 +1,6 @@
 {
   "name": "OncoKB",
-  "short_name": "oncokb",
+  "short_name": "OncoKB",
   "icons": [
       {
           "src": "./content/images/oncokb.png",
@@ -9,8 +9,8 @@
       }
   ],
   "theme_color": "#1c75cd",
-  "background_color": "#808080",
-  "start_url": ".",
+  "background_color": "#ffffff",
+  "start_url": "https://www.oncokb.org",
   "display": "standalone",
   "orientation": "portrait"
 }
