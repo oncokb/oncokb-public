@@ -50,7 +50,7 @@ export default class PasswordResetFinish extends React.Component<{
   getSuccessfulMessage = () => {
     return (
       <Alert variant="success">
-        <strong>Your password has been reset.</strong> Please <Link to={PAGE_ROUTE.LOGIN}>sign in</Link>.
+        <strong>Your password has been reset.</strong> Please <Link to={PAGE_ROUTE.LOGIN}>log in</Link>.
       </Alert>
     );
   };

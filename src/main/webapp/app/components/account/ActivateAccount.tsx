@@ -10,6 +10,7 @@ import { PAGE_ROUTE } from 'app/config/constants';
 import { inject, observer } from 'mobx-react';
 import { Col, Row, Alert } from 'react-bootstrap';
 import SmallPageContainer from '../SmallPageContainer';
+import MessageToContact from 'app/shared/links/MessageToContact';
 
 @inject('routing')
 @observer
@@ -42,8 +43,15 @@ export default class ActivateAccount extends React.Component<{
   getSuccessfulMessage = () => {
     return (
       <div>
-        <Alert variant={'info'}>Your OncoKB account has been created, we will review the account and let you know once
-          it&apos;s approved.</Alert>
+        <Alert variant={'info'}>
+          <div className={'mb-3'}>
+            Your OncoKB account has been created, but you can not log in at this moment yet.
+          </div>
+          <div className={'mb-3'}>
+            We will review the account and let you know once it&apos;s approved.
+          </div>
+          <MessageToContact emailTitle={'Account Activation Question'}/>
+        </Alert>
       </div>
     );
   };

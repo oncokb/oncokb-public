@@ -21,7 +21,7 @@ const AccountMenuItemsAuthenticated: React.FunctionComponent<{
       </MenuItem>
     ) : null}
     <MenuItem icon="sign-out" to={PAGE_ROUTE.LOGOUT}>
-      Sign out
+      Log out
     </MenuItem>
   </>
 );
@@ -29,7 +29,7 @@ const AccountMenuItemsAuthenticated: React.FunctionComponent<{
 const AccountMenuItems: React.FunctionComponent<{}> = () => (
   <>
     <MenuItem id="login-item" icon="sign-in" to="/login">
-      Sign in
+      Log in
     </MenuItem>
     <MenuItem icon="sign-in" to="/account/register">
       Register

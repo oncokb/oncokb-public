@@ -12,11 +12,12 @@ import { remoteData } from 'cbioportal-frontend-commons';
 import oncokbPrivateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { DownloadAvailability } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Alert } from 'react-bootstrap';
 import { getNewsTitle } from 'app/pages/newsPage/NewsList';
 import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
 import { action } from 'mobx';
 import WindowStore from 'app/store/WindowStore';
+import { ContactLink } from 'app/shared/links/ContactLink';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 @inject('routing', 'windowStore')
@@ -85,12 +86,13 @@ export default class DataAccessPage extends React.Component<{
           <h5 className="title">Web API</h5>
           <div>
             You can programmatically access the OncoKB data via its{' '}
-            <SwaggerApiLink content={'web API'}/>
+            <SwaggerApiLink>web API</SwaggerApiLink>
             .
             <div>
               Please specify your API token in the request header with{' '}
               <code>Authorization: Bearer [your token]</code>
             </div>
+            <div>Example: <code>curl -H &quot;Authorization: Bearer [your token]&quot; https://www.oncokb.org/api/v1/genes</code></div>
           </div>
         </div>
         <div className={'mb-3'}>
@@ -100,16 +102,8 @@ export default class DataAccessPage extends React.Component<{
             <a href="terms">
               <u>usage terms</u>
             </a>{' '}
-            before downloading. Previous versions are available{' '}
-            <a href="https://github.com/oncokb/oncokb-public/tree/master/data" target="_blank"
-               rel="noopener noreferrer">
-              here
-            </a>
-            .
+            before downloading. <CitationText/>.
           </div>
-        </div>
-        <div className={'mb-3'}>
-          <CitationText/>
         </div>
         <div>
           {this.dataAvailability.result.map(item => (
@@ -159,6 +153,11 @@ export default class DataAccessPage extends React.Component<{
               </Row>
             </>
           ))}
+          {this.dataAvailability.error ? (
+            <Alert variant={'warning'}>
+              We are not able to provide data download at the moment, please <ContactLink emailSubject={"Unable to Download the Data"}>contact us</ContactLink>.
+            </Alert>
+          ) : null}
         </div>
       </>
     );

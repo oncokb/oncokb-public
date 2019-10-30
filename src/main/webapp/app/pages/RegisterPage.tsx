@@ -11,23 +11,20 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import {
   ACADEMIC_TERMS,
   ACCOUNT_TITLES,
-  IMG_MAX_WIDTH,
-  LICENSE_TYPES,
-  LicenseType, ONCOKB_CONTACT_EMAIL, ONCOKB_LICENSE_EMAIL,
+  LicenseType,
   PAGE_ROUTE,
-  QUERY_SEPARATOR_FOR_QUERY_STRING, REDIRECT_TIMEOUT_MILLISECONDS
+  QUERY_SEPARATOR_FOR_QUERY_STRING
 } from 'app/config/constants';
 import { getAccountInfoTitle, getSectionClassName } from './account/AccountUtils';
-import Form from 'react-bootstrap/Form';
 import { Alert, Row, Col, Button } from 'react-bootstrap';
-import licenseModel from 'content/images/license_model.png';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { RouterStore } from 'mobx-react-router';
 import * as QueryString from 'query-string';
-import { ButtonSelections, RadioSelections } from 'app/components/LicenseSelection';
+import { ButtonSelections } from 'app/components/LicenseSelection';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 import WindowStore from 'app/store/WindowStore';
 import SmallPageContainer from 'app/components/SmallPageContainer';
+import MessageToContact from 'app/shared/links/MessageToContact';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -164,7 +161,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
             one, we will grant you access. Otherwise, we will contact you to discuss your needs and license terms.
             Please see the{' '}
             <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>. You can also reach out to {' '}
-            <LicenseInquireLink /> for more information.
+            <LicenseInquireLink/> for more information.
           </div>
         </div>
       );
@@ -192,8 +189,15 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         <SmallPageContainer className={'registerPage'}>
           <div>
             <Alert variant="info">
-              We have sent you an email to verify your email address. Please follow the further instruction in the
-              email.
+              <div className={'mb-3'}>
+                We have sent you an email to verify your email address. Please follow the further instruction in the
+                email.
+              </div>
+              <div className={'mb-3'}>
+                If you do not receive the email within 24 hours, the email maybe blocked by your institution/company or
+                spammed.
+              </div>
+              <MessageToContact emailTitle={'Registration Question'} />
             </Alert>
           </div>
         </SmallPageContainer>
