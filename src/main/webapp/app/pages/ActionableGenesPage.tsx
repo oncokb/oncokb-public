@@ -22,7 +22,14 @@ import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
-import { LEVEL_BUTTON_DESCRIPTION, LEVELS, LG_TABLE_FIXED_HEIGHT, TABLE_COLUMN_KEY, COMPONENT_PADDING, QUERY_SEPARATOR_FOR_QUERY_STRING } from 'app/config/constants';
+import {
+  LEVEL_BUTTON_DESCRIPTION,
+  LEVELS,
+  LG_TABLE_FIXED_HEIGHT,
+  TABLE_COLUMN_KEY,
+  COMPONENT_PADDING,
+  QUERY_SEPARATOR_FOR_QUERY_STRING
+} from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import * as QueryString from 'query-string';
@@ -390,10 +397,16 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
       Cell(props: { original: Treatment }) {
-        return <div style={{ display: 'block' }}> {props.original.alterations
-          .map<React.ReactNode>((alteration, index: number) => <AlterationPageLink key={index} hugoSymbol={props.original.hugoSymbol} alteration={alteration} />)
-          .reduce((prev, curr) => [prev, ', ', curr])}
-          </div>;
+        return (
+          <div style={{ display: 'block' }}>
+            {' '}
+            {props.original.alterations
+              .map<React.ReactNode>((alteration, index: number) => (
+                <AlterationPageLink key={index} hugoSymbol={props.original.hugoSymbol} alteration={alteration} />
+              ))
+              .reduce((prev, curr) => [prev, ', ', curr])}
+          </div>
+        );
       }
     },
     {
@@ -417,115 +430,115 @@ export default class ActionableGenesPage extends React.Component<ActionableGenes
     return (
       <If condition={this.allTumorTypes.isComplete && this.evidencesByLevel.isComplete}>
         <Then>
-            <Row style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }} className={'mb-2'}>
-              {LEVELS.map(level => (
-                <Col className={classnames(...COMPONENT_PADDING)} lg={2} xs={6} key={level}>
-                  <LevelButton
-                    level={level}
-                    numOfGenes={this.levelNumbers[level]}
-                    description={LEVEL_BUTTON_DESCRIPTION[level]}
-                    active={this.levelSelected[level]}
-                    className="mb-2"
-                    disabled={this.levelNumbers[level] === 0}
-                    onClick={() => this.updateLevelSelection(level)}
-                  />
-                </Col>
-              ))}
-            </Row>
-            <Row style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }} className={'mb-2'}>
-              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
-                <Select
-                  value={this.geneSelectValue}
-                  placeholder={`${this.filteredGenes.length} actionable ${pluralize('gene', this.filteredGenes.length)}`}
-                  options={this.filteredGenes.map(hugoSymbol => {
-                    return {
-                      value: hugoSymbol,
-                      label: hugoSymbol
-                    };
-                  })}
-                  isClearable={true}
-                  onChange={(selectedOption: any) => (this.geneSearchKeyword = selectedOption ? selectedOption.label : '')}
+          <Row style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }} className={'mb-2'}>
+            {LEVELS.map(level => (
+              <Col className={classnames(...COMPONENT_PADDING)} lg={2} xs={6} key={level}>
+                <LevelButton
+                  level={level}
+                  numOfGenes={this.levelNumbers[level]}
+                  description={LEVEL_BUTTON_DESCRIPTION[level]}
+                  active={this.levelSelected[level]}
+                  className="mb-2"
+                  disabled={this.levelNumbers[level] === 0}
+                  onClick={() => this.updateLevelSelection(level)}
                 />
               </Col>
-              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
-                <Select
-                  value={this.tumorTypeSelectValue}
-                  placeholder="Search Tumor Type"
-                  options={this.relevantTumorTypes.result.map(tumorType => {
-                    return {
-                      value: tumorType,
-                      label: tumorType
-                    };
-                  })}
-                  isClearable={true}
-                  onChange={(selectedOption: any) => (this.relevantTumorTypeSearchKeyword = selectedOption ? selectedOption.label : '')}
-                />
-              </Col>
-              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
-                <Select
-                  value={this.drugSelectValue}
-                  placeholder={`${this.filteredDrugs.length} ${pluralize('drug', this.filteredDrugs.length)}`}
-                  options={this.filteredDrugs.map(drug => {
-                    return {
-                      value: drug,
-                      label: drug
-                    };
-                  })}
-                  isClearable={true}
-                  onChange={(selectedOption: any) => (this.drugSearchKeyword = selectedOption ? selectedOption.label : '')}
-                />
-              </Col>
-            </Row>
-            <Row className={'mb-2'}>
-              <Col className="d-flex">
-                <span>
-                  <b>{`Showing ${this.filteredTreatments.length} biomarker-drug  ${pluralize(
-                    'association',
-                    this.filteredTreatments.length
-                  )}`}</b>
-                  {` (${this.filteredGenes.length} ${pluralize('gene', this.filteredGenes.length)},
+            ))}
+          </Row>
+          <Row style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }} className={'mb-2'}>
+            <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
+              <Select
+                value={this.geneSelectValue}
+                placeholder={`${this.filteredGenes.length} actionable ${pluralize('gene', this.filteredGenes.length)}`}
+                options={this.filteredGenes.map(hugoSymbol => {
+                  return {
+                    value: hugoSymbol,
+                    label: hugoSymbol
+                  };
+                })}
+                isClearable={true}
+                onChange={(selectedOption: any) => (this.geneSearchKeyword = selectedOption ? selectedOption.label : '')}
+              />
+            </Col>
+            <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
+              <Select
+                value={this.tumorTypeSelectValue}
+                placeholder="Search Tumor Type"
+                options={this.relevantTumorTypes.result.map(tumorType => {
+                  return {
+                    value: tumorType,
+                    label: tumorType
+                  };
+                })}
+                isClearable={true}
+                onChange={(selectedOption: any) => (this.relevantTumorTypeSearchKeyword = selectedOption ? selectedOption.label : '')}
+              />
+            </Col>
+            <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
+              <Select
+                value={this.drugSelectValue}
+                placeholder={`${this.filteredDrugs.length} ${pluralize('drug', this.filteredDrugs.length)}`}
+                options={this.filteredDrugs.map(drug => {
+                  return {
+                    value: drug,
+                    label: drug
+                  };
+                })}
+                isClearable={true}
+                onChange={(selectedOption: any) => (this.drugSearchKeyword = selectedOption ? selectedOption.label : '')}
+              />
+            </Col>
+          </Row>
+          <Row className={'mb-2'}>
+            <Col className="d-flex">
+              <span>
+                <b>{`Showing ${this.filteredTreatments.length} biomarker-drug  ${pluralize(
+                  'association',
+                  this.filteredTreatments.length
+                )}`}</b>
+                {` (${this.filteredGenes.length} ${pluralize('gene', this.filteredGenes.length)},
                 ${this.filteredTumorTypes.length} ${pluralize('tumor type', this.filteredTumorTypes.length)},
                 ${this.filteredLevels.length} ${pluralize('level of evidence', this.filteredLevels.length)})`}
-                </span>
-                <AuthDownloadButton
-                  className={classnames('ml-2', 'pt-1')}
-                  getDownloadData={this.downloadAssociation}
-                  fileName={'oncokb_biomarker_drug_associations.tsv'}
-                  buttonText={'Associations'}
-                />
-                {this.treatmentsAreFiltered ? (
-                  <Button variant="link" style={{ whiteSpace: 'nowrap' }} className={'ml-auto pr-0'} onClick={this.clearFilters}>
-                    Reset filters
-                  </Button>
-                ) : (
-                  undefined
-                )}
-              </Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <OncoKBTable
-                  disableSearch={true}
-                  data={this.filteredTreatments}
-                  loading={this.relevantTumorTypes.isPending}
-                  columns={this.columns}
-                  style={{
-                    height: LG_TABLE_FIXED_HEIGHT
-                  }}
-                  defaultSorted={[
-                    {
-                      id: 'LEVEL',
-                      desc: false
-                    },
-                    {
-                      id: 'HUGO_SYMBOL',
-                      desc: false
-                    }
-                  ]}
-                  className="-striped -highlight"
-                />
-              </Col>
-            </Row>
+              </span>
+              <AuthDownloadButton
+                className={classnames('ml-2', 'pt-1')}
+                getDownloadData={this.downloadAssociation}
+                fileName={'oncokb_biomarker_drug_associations.tsv'}
+                buttonText={'Associations'}
+              />
+              {this.treatmentsAreFiltered ? (
+                <Button variant="link" style={{ whiteSpace: 'nowrap' }} className={'ml-auto pr-0'} onClick={this.clearFilters}>
+                  Reset filters
+                </Button>
+              ) : (
+                undefined
+              )}
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col>
+              <OncoKBTable
+                disableSearch={true}
+                data={this.filteredTreatments}
+                loading={this.relevantTumorTypes.isPending}
+                columns={this.columns}
+                style={{
+                  height: LG_TABLE_FIXED_HEIGHT
+                }}
+                defaultSorted={[
+                  {
+                    id: 'LEVEL',
+                    desc: false
+                  },
+                  {
+                    id: 'HUGO_SYMBOL',
+                    desc: false
+                  }
+                ]}
+                className="-striped -highlight"
+              />
+            </Col>
+          </Row>
         </Then>
         <Else>
           <LoadingIndicator size={'big'} center={true} isLoading={this.allTumorTypes.isPending || this.evidencesByLevel.isPending} />

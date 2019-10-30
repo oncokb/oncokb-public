@@ -31,11 +31,12 @@ public class SecurityUtilsUnitTest {
     @Test
     public void testgetCurrentUserToken() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "token"));
+        UUID uuid = UUID.randomUUID();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", uuid));
         SecurityContextHolder.setContext(securityContext);
         Optional<UUID> token = SecurityUtils.getCurrentUserToken();
         assertThat(token).isNotEmpty();
-        assertThat(token.get().toString()).contains("token");
+        assertThat(token.get().toString()).isEqualTo(uuid.toString());
     }
 
     @Test

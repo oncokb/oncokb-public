@@ -23,9 +23,6 @@ export const assignPublicToken = () => {
 };
 
 export function initializeAPIClients() {
-
   // we need to set the domain of our api clients
-
-
   // add POST caching
 }

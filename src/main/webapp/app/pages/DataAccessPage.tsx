@@ -23,30 +23,39 @@ type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 @inject('routing', 'windowStore')
 @observer
 export default class DataAccessPage extends React.Component<{
-  routing: RouterStore,
-  windowStore: WindowStore
+  routing: RouterStore;
+  windowStore: WindowStore;
 }> {
-
   readonly dataAvailability = remoteData<DownloadAvailabilityWithDate[]>({
     async invoke() {
       const result = await oncokbPrivateClient.utilDataReleaseDownloadAvailabilityGetUsingGET({});
-      const availableVersions = _.reduce(result, (acc, next) => {
-        acc[next.version] = next;
-        return acc;
-      }, {} as { [key: string]: DownloadAvailability });
-      return _.reduce(DATA_RELEASES.filter(release => _.has(availableVersions, release.version)), (acc, next) => {
-        const currentVersionData: DownloadAvailability = availableVersions[next.version];
-        if (currentVersionData.hasAllActionableVariants
-          || currentVersionData.hasAllAnnotatedVariants
-          || currentVersionData.hasAllCuratedGenes
-          || currentVersionData.hasCancerGeneList) {
-          acc.push({
-            ...availableVersions[next.version],
-            date: next.date
-          });
-        }
-        return acc;
-      }, [] as DownloadAvailabilityWithDate[]);
+      const availableVersions = _.reduce(
+        result,
+        (acc, next) => {
+          acc[next.version] = next;
+          return acc;
+        },
+        {} as { [key: string]: DownloadAvailability }
+      );
+      return _.reduce(
+        DATA_RELEASES.filter(release => _.has(availableVersions, release.version)),
+        (acc, next) => {
+          const currentVersionData: DownloadAvailability = availableVersions[next.version];
+          if (
+            currentVersionData.hasAllActionableVariants ||
+            currentVersionData.hasAllAnnotatedVariants ||
+            currentVersionData.hasAllCuratedGenes ||
+            currentVersionData.hasCancerGeneList
+          ) {
+            acc.push({
+              ...availableVersions[next.version],
+              date: next.date
+            });
+          }
+          return acc;
+        },
+        [] as DownloadAvailabilityWithDate[]
+      );
     },
     default: []
   });
@@ -61,15 +70,14 @@ export default class DataAccessPage extends React.Component<{
       <>
         <div className={'mb-4'}>
           <h6>
-            <LicenseExplanation/>
+            <LicenseExplanation />
             <span>
-              {' '}For bulk downloads and API access, please register below for an account. See this page for more information about commercial use [need to draft].
+              {' '}
+              For bulk downloads and API access, please register below for an account. See this page for more information about commercial
+              use [need to draft].
             </span>
           </h6>
-          <ButtonSelections
-            isLargeScreen={this.props.windowStore.isLargeScreen}
-            onSelectLicense={this.onSelectLicense}
-          />
+          <ButtonSelections isLargeScreen={this.props.windowStore.isLargeScreen} onSelectLicense={this.onSelectLicense} />
           <h6>Once registered and logged in, you will have access to the following:</h6>
         </div>
         <div className={'mb-3'}>
@@ -85,14 +93,13 @@ export default class DataAccessPage extends React.Component<{
         <div className={'mb-3'}>
           <h5 className="title">Web API</h5>
           <div>
-            You can programmatically access the OncoKB data via its{' '}
-            <SwaggerApiLink>web API</SwaggerApiLink>
-            .
+            You can programmatically access the OncoKB data via its <SwaggerApiLink>web API</SwaggerApiLink>.
             <div>
-              Please specify your API token in the request header with{' '}
-              <code>Authorization: Bearer [your token]</code>
+              Please specify your API token in the request header with <code>Authorization: Bearer [your token]</code>
             </div>
-            <div>Example: <code>curl -H &quot;Authorization: Bearer [your token]&quot; https://www.oncokb.org/api/v1/genes</code></div>
+            <div>
+              Example: <code>curl -H &quot;Authorization: Bearer [your token]&quot; https://www.oncokb.org/api/v1/genes</code>
+            </div>
           </div>
         </div>
         <div className={'mb-3'}>
@@ -102,7 +109,7 @@ export default class DataAccessPage extends React.Component<{
             <a href="terms">
               <u>usage terms</u>
             </a>{' '}
-            before downloading. <CitationText/>.
+            before downloading. <CitationText />.
           </div>
         </div>
         <div>
@@ -116,36 +123,44 @@ export default class DataAccessPage extends React.Component<{
                   {item.hasAllCuratedGenes ? (
                     <AuthDownloadButton
                       fileName={`all_curated_genes_${item.version}.tsv`}
-                      getDownloadData={() => oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
-                        version: item.version
-                      })}
+                      getDownloadData={() =>
+                        oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
+                          version: item.version
+                        })
+                      }
                       buttonText="All Curated Genes"
                     />
                   ) : null}
                   {item.hasAllAnnotatedVariants ? (
                     <AuthDownloadButton
                       fileName={`all_annotated_variants_${item.version}.tsv`}
-                      getDownloadData={() => oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET({
-                        version: item.version
-                      })}
+                      getDownloadData={() =>
+                        oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET({
+                          version: item.version
+                        })
+                      }
                       buttonText="All Curated Alterations"
                     />
                   ) : null}
                   {item.hasAllActionableVariants ? (
                     <AuthDownloadButton
                       fileName={`all_actionable_variants_${item.version}.tsv`}
-                      getDownloadData={() => oncokbClient.utilsAllActionableVariantsTxtGetUsingGET({
-                        version: item.version
-                      })}
+                      getDownloadData={() =>
+                        oncokbClient.utilsAllActionableVariantsTxtGetUsingGET({
+                          version: item.version
+                        })
+                      }
                       buttonText="Actionable Alterations"
                     />
                   ) : null}
                   {item.hasCancerGeneList ? (
                     <AuthDownloadButton
                       fileName={`cancer_gene_list_${item.version}.tsv`}
-                      getDownloadData={() => oncokbClient.utilsCancerGeneListTxtGetUsingGET({
-                        version: item.version
-                      })}
+                      getDownloadData={() =>
+                        oncokbClient.utilsCancerGeneListTxtGetUsingGET({
+                          version: item.version
+                        })
+                      }
                       buttonText="Cancer Gene List"
                     />
                   ) : null}
@@ -155,11 +170,12 @@ export default class DataAccessPage extends React.Component<{
           ))}
           {this.dataAvailability.error ? (
             <Alert variant={'warning'}>
-              We are not able to provide data download at the moment, please <ContactLink emailSubject={"Unable to Download the Data"}>contact us</ContactLink>.
+              We are not able to provide data download at the moment, please{' '}
+              <ContactLink emailSubject={'Unable to Download the Data'}>contact us</ContactLink>.
             </Alert>
           ) : null}
         </div>
       </>
     );
   }
-};
+}

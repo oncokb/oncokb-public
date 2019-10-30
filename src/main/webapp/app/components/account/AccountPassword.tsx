@@ -46,8 +46,12 @@ export default class PasswordResetFinish extends React.Component<{}> {
   getFailureMessage = () => {
     return (
       <Alert variant="danger">
-        <div><strong>An error has occurred. The password could not be changed.</strong></div>
-        <div><strong>{this.errorMessage}.</strong></div>
+        <div>
+          <strong>An error has occurred. The password could not be changed.</strong>
+        </div>
+        <div>
+          <strong>{this.errorMessage}.</strong>
+        </div>
       </Alert>
     );
   };
@@ -79,7 +83,7 @@ export default class PasswordResetFinish extends React.Component<{}> {
           }}
           onChange={(event: any) => (this.newPassword = event.target.value)}
         />
-        <PasswordStrengthBar password={this.newPassword}/>
+        <PasswordStrengthBar password={this.newPassword} />
         <AvField
           name="confirmPassword"
           label="New password confirmation"

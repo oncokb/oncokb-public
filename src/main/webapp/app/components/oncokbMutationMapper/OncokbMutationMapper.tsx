@@ -1,14 +1,10 @@
-import {MutationMapperProps, MutationMapper, onFilterOptionSelect} from 'react-mutation-mapper';
+import { MutationMapperProps, MutationMapper, onFilterOptionSelect } from 'react-mutation-mapper';
 import { observer } from 'mobx-react';
 import React from 'react';
-import {action, computed} from 'mobx';
+import { action, computed } from 'mobx';
 import _ from 'lodash';
-import OncogenicityBadgeSelector from "app/components/oncokbMutationMapper/OncogenicityBadgeSelector";
-import {
-  findOncogenicityFilter,
-  ONCOGENICITY_FILTER_ID,
-  ONCOGENICITY_FILTER_TYPE
-} from "app/components/oncokbMutationMapper/FilterUtils";
+import OncogenicityBadgeSelector from 'app/components/oncokbMutationMapper/OncogenicityBadgeSelector';
+import { findOncogenicityFilter, ONCOGENICITY_FILTER_ID, ONCOGENICITY_FILTER_TYPE } from 'app/components/oncokbMutationMapper/FilterUtils';
 
 export type Filter = {
   name: string;
@@ -44,14 +40,14 @@ export class OncokbMutationMapper extends MutationMapper<IOncokbMutationMapperPr
   }
 
   @action.bound
-  protected onToggleFilter(selectedOncogenicityIds: string[], allValuesSelected: boolean)
-  {
+  protected onToggleFilter(selectedOncogenicityIds: string[], allValuesSelected: boolean) {
     onFilterOptionSelect(
       selectedOncogenicityIds,
       allValuesSelected,
       this.store.dataStore,
       ONCOGENICITY_FILTER_TYPE,
-      ONCOGENICITY_FILTER_ID);
+      ONCOGENICITY_FILTER_ID
+    );
   }
 
   protected get geneSummary(): JSX.Element | null {

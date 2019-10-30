@@ -18,8 +18,8 @@ import _ from 'lodash';
 @inject('routing')
 @observer
 export default class UserManagementPage extends React.Component<{
-  routing: RouterStore
-  match: match
+  routing: RouterStore;
+  match: match;
 }> {
   @observable users: UserDTO[] = [];
   @observable showModal = false;
@@ -55,10 +55,11 @@ export default class UserManagementPage extends React.Component<{
       return;
     }
     this.currentSelectedUser.activated = !this.currentSelectedUser.activated;
-    client.updateUserUsingPUT({
-      userDto: this.currentSelectedUser,
-      sendEmail
-    })
+    client
+      .updateUserUsingPUT({
+        userDto: this.currentSelectedUser,
+        sendEmail
+      })
       .then(() => {
         notifySuccess('Updated');
         this.getUsers();
@@ -105,17 +106,12 @@ export default class UserManagementPage extends React.Component<{
       Cell: (props: { original: UserDTO }) => {
         if (props.original.emailVerified) {
           return (
-            <Button
-              variant={props.original.activated ? 'success' : 'danger'}
-              onClick={() => this.confirmUpdatingUser(props.original)}
-            >
+            <Button variant={props.original.activated ? 'success' : 'danger'} onClick={() => this.confirmUpdatingUser(props.original)}>
               {this.getStatus(props.original.activated)}
             </Button>
           );
         } else {
-          return (
-            <div>Email hasn&apos;t been verified yet</div>
-          );
+          return <div>Email hasn&apos;t been verified yet</div>;
         }
       }
     },
@@ -131,10 +127,9 @@ export default class UserManagementPage extends React.Component<{
         return (
           <div>
             {props.original.authorities.map(authority => (
-              <Badge
-                className={'m-1 p-2'}
-                variant={'primary'}
-                key={authority}>{authority}</Badge>
+              <Badge className={'m-1 p-2'} variant={'primary'} key={authority}>
+                {authority}
+              </Badge>
             ))}
           </div>
         );
@@ -143,29 +138,26 @@ export default class UserManagementPage extends React.Component<{
     {
       id: 'createdDate',
       Header: <span>Created Date</span>,
-      onFilter: (data: UserDTO, keyword) => data.createdDate ? filterByKeyword(toAppTimestampFormat(data.createdDate), keyword) : false,
+      onFilter: (data: UserDTO, keyword) => (data.createdDate ? filterByKeyword(toAppTimestampFormat(data.createdDate), keyword) : false),
       accessor: 'createdDate',
       Cell(props: { original: UserDTO }): any {
-        return (
-          <div>{toAppTimestampFormat(props.original.createdDate)}</div>
-        );
+        return <div>{toAppTimestampFormat(props.original.createdDate)}</div>;
       }
     },
     {
       id: 'lastModifiedBy',
       Header: <span>Last Modified By</span>,
-      onFilter: (data: UserDTO, keyword) => data.lastModifiedBy ? filterByKeyword(data.lastModifiedBy, keyword) : false,
+      onFilter: (data: UserDTO, keyword) => (data.lastModifiedBy ? filterByKeyword(data.lastModifiedBy, keyword) : false),
       accessor: 'lastModifiedBy'
     },
     {
       id: 'lastModifiedDate',
       Header: <span>Last Modified Date</span>,
-      onFilter: (data: UserDTO, keyword) => data.lastModifiedDate ? filterByKeyword(toAppTimestampFormat(data.lastModifiedDate), keyword) : false,
+      onFilter: (data: UserDTO, keyword) =>
+        data.lastModifiedDate ? filterByKeyword(toAppTimestampFormat(data.lastModifiedDate), keyword) : false,
       accessor: 'lastModifiedDate',
       Cell(props: { original: UserDTO }): any {
-        return (
-          <div>{toAppTimestampFormat(props.original.lastModifiedDate)}</div>
-        );
+        return <div>{toAppTimestampFormat(props.original.lastModifiedDate)}</div>;
       }
     }
     // {
@@ -196,21 +188,14 @@ export default class UserManagementPage extends React.Component<{
         </Row>
         <Row className={getSectionClassName()}>
           <Col>
-            <OncoKBTable
-              data={this.users}
-              columns={this.columns}
-              showPagination={true}
-              pageSize={10}
-            />
+            <OncoKBTable data={this.users} columns={this.columns} showPagination={true} pageSize={10} />
           </Col>
         </Row>
         <Modal show={this.showModal} onHide={() => null}>
           <Modal.Header closeButton>
             <Modal.Title>Update User Status</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Are you sure
-            to {this.currentSelectedUserIsActivated ? 'deactivate' : 'active'} the
-            user?</Modal.Body>
+          <Modal.Body>Are you sure to {this.currentSelectedUserIsActivated ? 'deactivate' : 'active'} the user?</Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => this.cancelUpdateActiveStatus()}>
               Close
@@ -218,17 +203,13 @@ export default class UserManagementPage extends React.Component<{
             <Button variant="primary" onClick={() => this.updateActiveStatus(true)}>
               Update
             </Button>
-            {
-              !this.currentSelectedUserIsActivated ?
-                <DefaultTooltip
-                  placement={'top'}
-                  overlay={'Update user status without sending an email to the user'}
-                >
-                  <Button variant="primary" onClick={() => this.updateActiveStatus(false)}>
-                    Silent Update
-                  </Button>
-                </DefaultTooltip> : null
-            }
+            {!this.currentSelectedUserIsActivated ? (
+              <DefaultTooltip placement={'top'} overlay={'Update user status without sending an email to the user'}>
+                <Button variant="primary" onClick={() => this.updateActiveStatus(false)}>
+                  Silent Update
+                </Button>
+              </DefaultTooltip>
+            ) : null}
           </Modal.Footer>
         </Modal>
       </>

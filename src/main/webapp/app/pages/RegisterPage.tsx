@@ -8,13 +8,7 @@ import { Link, Redirect } from 'react-router-dom';
 import client from 'app/shared/api/clientInstance';
 import { ManagedUserVM } from 'app/shared/api/generated/API';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import {
-  ACADEMIC_TERMS,
-  ACCOUNT_TITLES,
-  LicenseType,
-  PAGE_ROUTE,
-  QUERY_SEPARATOR_FOR_QUERY_STRING
-} from 'app/config/constants';
+import { ACADEMIC_TERMS, ACCOUNT_TITLES, LicenseType, PAGE_ROUTE, QUERY_SEPARATOR_FOR_QUERY_STRING } from 'app/config/constants';
 import { getAccountInfoTitle, getSectionClassName } from './account/AccountUtils';
 import { Alert, Row, Col, Button } from 'react-bootstrap';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
@@ -24,7 +18,7 @@ import { ButtonSelections } from 'app/components/LicenseSelection';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 import WindowStore from 'app/store/WindowStore';
 import SmallPageContainer from 'app/components/SmallPageContainer';
-import MessageToContact from 'app/shared/links/MessageToContact';
+import MessageToContact from 'app/shared/texts/MessageToContact';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -43,7 +37,7 @@ enum RegisterStatus {
 export type IRegisterProps = {
   routing: RouterStore;
   authenticationStore: AuthenticationStore;
-  windowStore: WindowStore,
+  windowStore: WindowStore;
   handleRegister: (newUser: NewUserRequiredFields) => void;
 };
 
@@ -76,9 +70,12 @@ export class RegisterPage extends React.Component<IRegisterProps> {
       reaction(
         () => this.selectedLicense,
         newSelection => {
-          const parsedHashQueryString = QueryString.stringify({
-            [LICENSE_HASH_KEY]: newSelection
-          }, { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING });
+          const parsedHashQueryString = QueryString.stringify(
+            {
+              [LICENSE_HASH_KEY]: newSelection
+            },
+            { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING }
+          );
           window.location.hash = parsedHashQueryString;
         }
       )
@@ -145,23 +142,18 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   getLicenseAdditionalInfo(licenseType: LicenseType) {
     if (licenseType === LicenseType.ACADEMIC) {
-      return <div>OncoKB data is freely accessible for research use in the academic setting. Please register below for
-        access.</div>;
+      return <div>OncoKB data is freely accessible for research use in the academic setting. Please register below for access.</div>;
     } else {
       return (
         <div>
           <div>
-            To support the future development and maintenance of OncoKB, we have introduced license fees for clinical
-            and commercial use.
+            To support the future development and maintenance of OncoKB, we have introduced license fees for clinical and commercial use.
             The fee will depend on the type of use and size of company.
           </div>
           <div className="mt-2">
-            In order to be granted access to downloadable content and our API, your company will need a license. If your
-            company already has
-            one, we will grant you access. Otherwise, we will contact you to discuss your needs and license terms.
-            Please see the{' '}
-            <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>. You can also reach out to {' '}
-            <LicenseInquireLink/> for more information.
+            In order to be granted access to downloadable content and our API, your company will need a license. If your company already has
+            one, we will grant you access. Otherwise, we will contact you to discuss your needs and license terms. Please see the{' '}
+            <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>. You can also reach out to <LicenseInquireLink /> for more information.
           </div>
         </div>
       );
@@ -181,7 +173,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   render() {
     if (this.registerStatus === RegisterStatus.READY_REDIRECT) {
-      return <Redirect to={'/'}/>;
+      return <Redirect to={'/'} />;
     }
 
     if (this.registerStatus === RegisterStatus.REGISTERED) {
@@ -190,12 +182,10 @@ export class RegisterPage extends React.Component<IRegisterProps> {
           <div>
             <Alert variant="info">
               <div className={'mb-3'}>
-                We have sent you an email to verify your email address. Please follow the further instruction in the
-                email.
+                We have sent you an email to verify your email address. Please follow the further instruction in the email.
               </div>
               <div className={'mb-3'}>
-                If you do not receive the email within 24 hours, the email maybe blocked by your institution/company or
-                spammed.
+                If you do not receive the email within 24 hours, the email maybe blocked by your institution/company or spammed.
               </div>
               <MessageToContact emailTitle={'Registration Question'} />
             </Alert>
@@ -215,7 +205,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
           <Row className={getSectionClassName(true)}>
             <Col xs={12}>
               <h6>
-                <LicenseExplanation/>
+                <LicenseExplanation />
               </h6>
             </Col>
           </Row>
@@ -227,7 +217,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
               <ButtonSelections
                 isLargeScreen={this.props.windowStore.isLargeScreen}
                 selectedButton={this.selectedLicense}
-                onSelectLicense={this.onSelectLicense}/>
+                onSelectLicense={this.onSelectLicense}
+              />
             </Col>
           </Row>
           {this.selectedLicense ? (
@@ -283,7 +274,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       maxLength: { value: 50, errorMessage: 'Your password cannot be longer than 50 characters.' }
                     }}
                   />
-                  <PasswordStrengthBar password={this.password}/>
+                  <PasswordStrengthBar password={this.password} />
                   <AvField
                     name="secondPassword"
                     label="New password confirmation"
@@ -359,8 +350,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 <>
                   <Row className={getSectionClassName()}>
                     <Col md="9" className={'ml-auto'}>
-                      In order to be granted access to downloadable content and our API, please agree to the following
-                      terms:
+                      In order to be granted access to downloadable content and our API, please agree to the following terms:
                     </Col>
                   </Row>
                   <Row className={getSectionClassName()}>
@@ -369,9 +359,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     </Col>
                     <Col md="9">
                       {ACADEMIC_TERMS.map(term => (
-                        <AvCheckboxGroup name={term.key} required key={term.key}
-                                         errorMessage={'You have to accept the term'}>
-                          <AvCheckbox label={term.description} value={term.key}/>
+                        <AvCheckboxGroup name={term.key} required key={term.key} errorMessage={'You have to accept the term'}>
+                          <AvCheckbox label={term.description} value={term.key} />
                         </AvCheckboxGroup>
                       ))}
                     </Col>

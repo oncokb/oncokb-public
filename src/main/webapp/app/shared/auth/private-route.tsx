@@ -30,12 +30,14 @@ export const PrivateRoute = observer(({ component, authenticationStore, hasAnyAu
     if (authenticationStore.isUserAuthenticated) {
       return checkAuthorities(props);
     } else {
-      return <Redirect
-        to={{
-          state: getRedirectLoginState(routing.location.pathname),
-          pathname: PAGE_ROUTE.LOGIN
-        }}
-      />;
+      return (
+        <Redirect
+          to={{
+            state: getRedirectLoginState(routing.location.pathname),
+            pathname: PAGE_ROUTE.LOGIN
+          }}
+        />
+      );
     }
   };
 

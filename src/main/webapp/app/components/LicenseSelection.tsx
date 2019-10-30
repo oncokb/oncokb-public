@@ -4,20 +4,14 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import { COLOR_GREY, COLOR_LIGHT_GREY } from 'app/config/theme';
 
 export const RadioSelections: React.FunctionComponent<{
-  selectedRadio?: LicenseType,
-  onSelectLicense: (licenseKey: LicenseType | undefined) => void
-}> = (props) => {
+  selectedRadio?: LicenseType;
+  onSelectLicense: (licenseKey: LicenseType | undefined) => void;
+}> = props => {
   return (
     <>
-      {LICENSE_TYPES.map((license) => (
+      {LICENSE_TYPES.map(license => (
         <div className="primary" key={license.key} onClick={() => props.onSelectLicense(license.key)}>
-          <Form.Check
-            className={'px-0'}
-            type="radio"
-            label={license.title}
-            readOnly
-            checked={props.selectedRadio === license.key}
-          />
+          <Form.Check className={'px-0'} type="radio" label={license.title} readOnly checked={props.selectedRadio === license.key} />
         </div>
       ))}
     </>
@@ -25,10 +19,10 @@ export const RadioSelections: React.FunctionComponent<{
 };
 
 const SelectionButton: React.FunctionComponent<{
-  selectedButton?: LicenseType
-  onSelectLicense: (licenseKey: LicenseType | undefined) => void
-  license: LicenseType
-}> = (props) => {
+  selectedButton?: LicenseType;
+  onSelectLicense: (licenseKey: LicenseType | undefined) => void;
+  license: LicenseType;
+}> = props => {
   return (
     <Button
       size={'sm'}
@@ -44,22 +38,26 @@ const SelectionButton: React.FunctionComponent<{
 };
 
 export const ButtonSelections: React.FunctionComponent<{
-  isLargeScreen: boolean,
-  selectedButton?: LicenseType,
-  onSelectLicense: (licenseKey: LicenseType | undefined) => void
-}> = (props) => {
+  isLargeScreen: boolean;
+  selectedButton?: LicenseType;
+  onSelectLicense: (licenseKey: LicenseType | undefined) => void;
+}> = props => {
   return (
     <>
       <Row className={'my-2'}>
         <Col
           lg={3}
           xs={12}
-          style={props.isLargeScreen ? {
-            borderRight: `1px dashed ${COLOR_LIGHT_GREY}`
-          } : {
-            borderBottom: `1px dashed ${COLOR_LIGHT_GREY}`,
-            marginBottom: '7px'
-          }}
+          style={
+            props.isLargeScreen
+              ? {
+                  borderRight: `1px dashed ${COLOR_LIGHT_GREY}`
+                }
+              : {
+                  borderBottom: `1px dashed ${COLOR_LIGHT_GREY}`,
+                  marginBottom: '7px'
+                }
+          }
         >
           <Row className={'align-items-center'}>
             <Col lg={12} xs={6}>
@@ -70,7 +68,7 @@ export const ButtonSelections: React.FunctionComponent<{
               />
             </Col>
             <Col lg={12} xs={6} style={{ textAlign: 'center' }}>
-              <i style={{color: COLOR_GREY}}>No fee</i>
+              <i style={{ color: COLOR_GREY }}>No fee</i>
             </Col>
           </Row>
         </Col>
@@ -102,9 +100,8 @@ export const ButtonSelections: React.FunctionComponent<{
               </Row>
             </Col>
             <Col lg={12} xs={6} style={{ textAlign: 'center' }}>
-              <i style={{color: COLOR_GREY}}>Requires payment of a license fee, with the fee depending on the use of
-                the product and the size of the
-                company
+              <i style={{ color: COLOR_GREY }}>
+                Requires payment of a license fee, with the fee depending on the use of the product and the size of the company
               </i>
             </Col>
           </Row>

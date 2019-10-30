@@ -29,4 +29,3 @@ export const notifyError = (error: Error, additionalInfo?: string) => {
     className: 'bg-danger'
   });
 };
-

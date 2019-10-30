@@ -1,10 +1,10 @@
 import React from 'react';
 import { ErrorBoundaryRoute } from 'app/shared/error/error-boundary-route';
 import { Switch } from 'react-router-dom';
-import { match as IMatch } from "react-router";
+import { match as IMatch } from 'react-router';
 import UserManagementPage from 'app/pages/userManagement/UserManagementPage';
 
-const UserManagementRoutes = ({ match } : {match:IMatch}) => {
+const UserManagementRoutes = ({ match }: { match: IMatch }) => {
   return (
     <>
       <Switch>

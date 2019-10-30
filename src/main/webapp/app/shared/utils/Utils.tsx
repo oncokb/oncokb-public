@@ -2,7 +2,8 @@ import { Citations, Evidence, TreatmentDrug, TumorType, Article } from 'app/shar
 import _ from 'lodash';
 import React from 'react';
 import {
-  APP_LOCAL_DATETIME_FORMAT_Z, APP_TIMESTAMP_FORMAT,
+  APP_LOCAL_DATETIME_FORMAT_Z,
+  APP_TIMESTAMP_FORMAT,
   GENERAL_ONCOGENICITY,
   ONCOGENICITY_CLASS_NAMES,
   PAGE_ROUTE,
@@ -56,9 +57,9 @@ export function getAllAlterationsName(alterations: Alteration[]) {
 export function getAllTumorTypesName(tumorTypes: TumorType[]) {
   return tumorTypes
     ? tumorTypes
-      .map(getCancerTypeNameFromOncoTreeType)
-      .sort()
-      .join(', ')
+        .map(getCancerTypeNameFromOncoTreeType)
+        .sort()
+        .join(', ')
     : '';
 }
 
@@ -153,7 +154,7 @@ export const OncoKBLevelIcon: React.FunctionComponent<{
   level: string;
   withDescription?: boolean;
 }> = ({ level, withDescription = true }) => {
-  const oncokbIcon = <i className={`oncokb level-icon level-${level}`}/>;
+  const oncokbIcon = <i className={`oncokb level-icon level-${level}`} />;
   return withDescription ? <LevelWithDescription level={level}>{oncokbIcon}</LevelWithDescription> : oncokbIcon;
 };
 
@@ -161,15 +162,15 @@ export function getDefaultColumnDefinition<T>(
   columnKey: TABLE_COLUMN_KEY
 ):
   | {
-  id: string;
-  Header: TableCellRenderer;
-  accessor: string;
-  minWidth: number;
-  style?: object;
-  defaultSortDesc: boolean;
-  Cell?: TableCellRenderer;
-  sortMethod: typeof defaultSortMethod;
-}
+      id: string;
+      Header: TableCellRenderer;
+      accessor: string;
+      minWidth: number;
+      style?: object;
+      defaultSortDesc: boolean;
+      Cell?: TableCellRenderer;
+      sortMethod: typeof defaultSortMethod;
+    }
   | undefined {
   switch (columnKey) {
     case TABLE_COLUMN_KEY.HUGO_SYMBOL:
@@ -181,7 +182,7 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell(props: { original: any }) {
-          return <GenePageLink hugoSymbol={props.original.hugoSymbol}/>;
+          return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
         }
       };
     case TABLE_COLUMN_KEY.ALTERATION:
@@ -193,7 +194,7 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell(props: { original: any }) {
-          return <AlterationPageLink hugoSymbol={props.original.hugoSymbol} alteration={props.original.alteration}/>;
+          return <AlterationPageLink hugoSymbol={props.original.hugoSymbol} alteration={props.original.alteration} />;
         }
       };
     case TABLE_COLUMN_KEY.ALTERATIONS:
@@ -255,7 +256,7 @@ export function getDefaultColumnDefinition<T>(
         style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
         Cell(props: any) {
-          return <OncoKBLevelIcon level={props.original.level} withDescription={true}/>;
+          return <OncoKBLevelIcon level={props.original.level} withDescription={true} />;
         }
       };
     case TABLE_COLUMN_KEY.CITATIONS:
@@ -274,8 +275,7 @@ export function getDefaultColumnDefinition<T>(
               <DefaultTooltip
                 placement="left"
                 trigger={['hover', 'focus']}
-                overlay={() => <CitationTooltip pmids={props.original.drugPmids}
-                                                abstracts={props.original.drugAbstracts}/>}
+                overlay={() => <CitationTooltip pmids={props.original.drugPmids} abstracts={props.original.drugAbstracts} />}
               >
                 <span>{numOfReferences}</span>
               </DefaultTooltip>
@@ -322,8 +322,7 @@ export function getRedirectLoginState(pathName: string) {
 }
 
 export function toAppTimestampFormat(utcTime: string | undefined) {
-  if (!utcTime)
-    return '';
+  if (!utcTime) return '';
   return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z).format(APP_TIMESTAMP_FORMAT);
 }
 

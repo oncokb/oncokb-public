@@ -1,5 +1,0 @@
-export const enum AccountType {
-  ACADEMIC = 'ACADEMIC',
-  COMMERCIAL = 'COMMERCIAL',
-  NONAFFILIATED = 'NONAFFILIATED'
-}
