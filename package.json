@@ -1,9 +1,9 @@
 {
-  "name": "oncokb",
+  "name": "oncokb-public",
   "version": "0.0.1-SNAPSHOT",
-  "description": "Description for oncokb",
+  "description": "OncoKB Public Website",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "https://www.oncokb.org/terms",
   "cacheDirectories": [
     "node_modules"
   ],
