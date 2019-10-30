@@ -99,7 +99,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ['2A', 'BRAF', 'V600E', 'Hairy Cell Leukemia', 'Vemurafenib', 'Listing in 3.2019 Hairy Cell Leukemia NCCN (PMID: 26352686)'],
       [
         '3A',
-        'ARAF, RAF, RAF1, NRAS, KRAS, MAP2K2',
+        'ARAF, BRAF, RAF1, NRAS, KRAS, MAP2K2',
         'Oncogenic mutations',
         'Histiocytic and Dendritic Cell Neoplasms',
         'Cobimetinib',
@@ -110,7 +110,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         'BRAF',
         'D287H, D594, F595L, G466, G596, N581, S467L, V459L',
-        'All Tumors',
+        'All Solid Tumors',
         'PLX8394',
         '4',
         'No level',
