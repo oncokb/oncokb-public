@@ -35,10 +35,10 @@
     "clientFramework": "react",
     "clientTheme": "none",
     "appsFolders": [
-      "public-gateway"
+      "public-website"
     ],
     "directoryPath": "../",
-    "dockerRepositoryName": "oncokb-public-gateway",
+    "dockerRepositoryName": "oncokb-public",
     "dockerPushCommand": "docker push",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "Ingress",
