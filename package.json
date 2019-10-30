@@ -169,23 +169,13 @@
     "updateOncoKbAPI": "yarn run fetchOncoKbAPI && yarn run buildOncoKbAPI",
     "fetchOncoKbAPI": "curl http://localhost:8080/oncokb-public/api/v1/v2/api-docs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/OncoKbAPI-docs.json && curl http://localhost:8080/oncokb-public/api/private/v2/api-docs | json | grep -v basePath | grep -v termsOfService | grep -v host > src/main/webapp/app/shared/api/generated/OncoKbPrivateAPI-docs.json",
     "buildOncoKbAPI": "node scripts/generate-api.js src/main/webapp/app/shared/api/generated OncoKbAPI OncoKbPrivateAPI",
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config src/test/javascript/jest.conf.js",
-    "jest:update": "yarn run jest -- --updateSnapshot",
-    "test": "yarn run lint && yarn run jest",
-    "test-ci": "yarn run lint && yarn run jest:update",
-    "test:watch": "yarn test -- --watch",
     "webpack:dev": "yarn run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
     "webpack:dev-verbose": "yarn run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
     "webpack:build:main": "yarn run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
     "webpack:build": "yarn run cleanup && yarn run webpack:build:main",
     "webpack:prod:main": "yarn run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:prod": "yarn run cleanup && yarn run webpack:prod:main",
-    "webpack:test": "yarn run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
-  },
-  "jestSonar": {
-    "reportPath": "target/test-results/jest",
-    "reportFile": "TESTS-results-sonar.xml"
   }
 }
