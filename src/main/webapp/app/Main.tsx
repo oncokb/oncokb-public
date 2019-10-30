@@ -45,11 +45,7 @@ class Main extends React.Component<IMainPage> {
         />
         <div className={'view-wrapper'}>
           <Container fluid={!this.props.windowStore.isXLscreen}>
-            <Row className={`justify-content-center`}>
-              <Col xl={8} lg={10}>
-                <AppRouts authenticationStore={this.props.authenticationStore} routing={this.props.routing}/>
-              </Col>
-            </Row>
+            <AppRouts authenticationStore={this.props.authenticationStore} routing={this.props.routing}/>
           </Container>
         </div>
         <Footer lastUpdate={this.props.appStore.appInfo.result.dataVersion.date}/>

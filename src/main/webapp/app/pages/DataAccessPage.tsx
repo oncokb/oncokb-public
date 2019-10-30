@@ -17,7 +17,6 @@ import { getNewsTitle } from 'app/pages/newsPage/NewsList';
 import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
 import { action } from 'mobx';
 import WindowStore from 'app/store/WindowStore';
-import SmallPageContainer from 'app/components/SmallComponentContainer';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 @inject('routing', 'windowStore')

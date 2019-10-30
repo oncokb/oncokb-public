@@ -29,10 +29,13 @@ import PageNotFound from '../shared/error/page-not-found';
 import DataAccessPage from 'app/pages/DataAccessPage';
 import AccountPassword from 'app/components/account/AccountPassword';
 import AdminRouts from 'app/routes/AdminRoutes';
+import PageContainer from 'app/components/PageContainer';
 
 const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: RouterStore }) => {
   return (
     <Switch>
+      <Route exact path={PAGE_ROUTE.HOME} component={HomePage}/>
+      <PageContainer>
       <ErrorBoundaryRoute path={PAGE_ROUTE.LOGIN} component={Login}/>
       <ErrorBoundaryRoute path={PAGE_ROUTE.LOGOUT} component={Logout}/>
       <ErrorBoundaryRoute path={PAGE_ROUTE.REGISTER} component={RegisterPage}/>
@@ -42,8 +45,6 @@ const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: Ro
       <ErrorBoundaryRoute exact path="/gene/:hugoSymbol" component={GenePage}/>
       <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration" component={AlterationPage}/>
       <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage}/>
-      <ErrorBoundaryRoute exact path="/gene/:hugoSymbol/:alteration/:tumorType" component={AlterationPage}/>
-      <Route exact path={PAGE_ROUTE.HOME} component={HomePage}/>
       <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage}/>
       <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage}/>
       <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage}/>
@@ -74,6 +75,7 @@ const AppRouts = (props: { authenticationStore: AuthenticationStore; routing: Ro
         component={AccountPage}
         hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}
       />
+      </PageContainer>
       <ErrorBoundaryRoute component={PageNotFound}/>
     </Switch>
   );

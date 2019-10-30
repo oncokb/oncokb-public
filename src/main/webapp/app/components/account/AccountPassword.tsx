@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { API_CALL_STATUS, PAGE_ROUTE } from 'app/config/constants';
 import { inject, observer } from 'mobx-react';
 import { Alert, Button } from 'react-bootstrap';
-import SmallPageContainer from '../SmallComponentContainer';
+import SmallPageContainer from '../SmallPageContainer';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 

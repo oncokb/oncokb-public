@@ -22,7 +22,7 @@ import { RouterStore } from 'mobx-react-router';
 import { getHighestLevelStrings } from '../genePage/GenePage';
 import styles from './AlterationPage.module.scss';
 import classnames from 'classnames';
-import SmallPageContainer from 'app/components/SmallComponentContainer';
+import SmallPageContainer from 'app/components/SmallPageContainer';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 
 enum SummaryKey {
