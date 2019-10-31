@@ -68,6 +68,11 @@ class AuthenticationStore {
       })
       .catch(error => {
         this.updateIdToken('');
+        notifyError(
+          new Error(
+            'There an issue fetching your account information, please send an email to contact@oncokb.org.'
+          )
+        );
       });
   }
 
