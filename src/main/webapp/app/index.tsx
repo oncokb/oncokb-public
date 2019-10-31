@@ -1,3 +1,5 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import 'typeface-open-sans';
 import * as superagent from 'superagent';
 

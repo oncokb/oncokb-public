@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "target": "es6",
+    "target": "es5",
     "module": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
