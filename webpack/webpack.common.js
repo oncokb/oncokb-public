@@ -81,6 +81,27 @@ module.exports = options => ({
           emitError: false,
         },
         exclude: [utils.root('node_modules')]
+      },{
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            "presets": [
+              [
+                "@babel/preset-env",
+                {
+                  "targets": {
+                    "firefox": "60",
+                    "ie": "11"
+                  },
+                  "useBuiltIns": "entry",
+                  "corejs": 3
+                }
+              ]
+            ]
+          }
+        },
+        exclude: /@babel(?:\/|\\{1,2})runtime|core-js/,
       }
     ]
   },
