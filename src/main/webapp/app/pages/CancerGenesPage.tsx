@@ -457,7 +457,7 @@ export default class CancerGenesPage extends React.Component<{
                   desc: true
                 },
                 {
-                  id: 'hugoSymbol',
+                  id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
                   desc: false
                 },
                 {

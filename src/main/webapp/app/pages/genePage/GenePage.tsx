@@ -469,6 +469,20 @@ export default class GenePage extends React.Component<
       : TAB_KEYS.BIOLOGICAL;
   }
 
+  @computed
+  get genePanelClass() {
+    if (this.store.barChartData.length > 0) {
+      return {
+        xl: 7,
+        lg: 6,
+        xs: 12
+      };
+    } else {
+      return {
+        xs: 12
+      };
+    }
+  }
   componentWillUnmount(): void {
     this.store.destroy();
   }
@@ -480,7 +494,7 @@ export default class GenePage extends React.Component<
           {this.pageShouldBeRendered ? (
             <>
               <Row>
-                <Col xl={7} lg={6} xs={12}>
+                <Col {...this.genePanelClass}>
                   <div className="">
                     <h2>{this.store.hugoSymbol}</h2>
                     <GeneInfo
@@ -512,46 +526,48 @@ export default class GenePage extends React.Component<
                     )}
                   </div>
                 </Col>
-                <Col
-                  xl={5}
-                  lg={6}
-                  xs={12}
-                  className={'d-flex flex-column align-items-center'}
-                >
-                  <div>
-                    <b>Cancer Types with {this.store.hugoSymbol} Mutations</b>
-                    <DefaultTooltip
-                      overlay={() => (
-                        <div style={{ maxWidth: 300 }}>
-                          Currently, the mutation frequency does not take into
-                          account copy number changes, chromosomal
-                          translocations or cancer types with fewer than 50
-                          samples in <MskimpactLink />
-                        </div>
-                      )}
-                    >
-                      <i className="fa fa-question-circle-o ml-2" />
-                    </DefaultTooltip>
-                  </div>
-                  <BarChart
-                    data={this.store.barChartData}
-                    height={300}
-                    filters={this.store.selectedCancerTypes}
-                    windowStore={this.props.windowStore}
-                    onUserSelection={selectedCancerTypes =>
-                      this.store.mutationMapperStore &&
-                      this.store.mutationMapperStore.result
-                        ? onFilterOptionSelect(
-                            selectedCancerTypes,
-                            false,
-                            this.store.mutationMapperStore.result.dataStore,
-                            DataFilterType.CANCER_TYPE,
-                            CANCER_TYPE_FILTER_ID
-                          )
-                        : undefined
-                    }
-                  />
-                </Col>
+                {this.store.barChartData.length > 0 ? (
+                  <Col
+                    xl={5}
+                    lg={6}
+                    xs={12}
+                    className={'d-flex flex-column align-items-center'}
+                  >
+                    <div>
+                      <b>Cancer Types with {this.store.hugoSymbol} Mutations</b>
+                      <DefaultTooltip
+                        overlay={() => (
+                          <div style={{ maxWidth: 300 }}>
+                            Currently, the mutation frequency does not take into
+                            account copy number changes, chromosomal
+                            translocations or cancer types with fewer than 50
+                            samples in <MskimpactLink />
+                          </div>
+                        )}
+                      >
+                        <i className="fa fa-question-circle-o ml-2" />
+                      </DefaultTooltip>
+                    </div>
+                    <BarChart
+                      data={this.store.barChartData}
+                      height={300}
+                      filters={this.store.selectedCancerTypes}
+                      windowStore={this.props.windowStore}
+                      onUserSelection={selectedCancerTypes =>
+                        this.store.mutationMapperStore &&
+                        this.store.mutationMapperStore.result
+                          ? onFilterOptionSelect(
+                              selectedCancerTypes,
+                              false,
+                              this.store.mutationMapperStore.result.dataStore,
+                              DataFilterType.CANCER_TYPE,
+                              CANCER_TYPE_FILTER_ID
+                            )
+                          : undefined
+                      }
+                    />
+                  </Col>
+                ) : null}
               </Row>
               <Row className={'mt-5'}>
                 <Col xs={12}>

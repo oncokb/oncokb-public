@@ -205,7 +205,7 @@ input[type='radio']:checked {
 
   .rt-thead .rt-resizable-header-content {
     white-space: normal;
-    word-break: break-all;
+    word-break: break-word;
   }
   .rt-tbody .rt-td {
     display: flex;
