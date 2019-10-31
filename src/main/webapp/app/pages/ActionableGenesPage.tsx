@@ -641,7 +641,6 @@ export default class ActionableGenesPage extends React.Component<
                     desc: false
                   }
                 ]}
-                className="-striped -highlight"
               />
             </Col>
           </Row>

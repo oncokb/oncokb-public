@@ -13,7 +13,7 @@ import { ContactLink } from 'app/shared/links/ContactLink';
 
 class Footer extends React.Component<{ lastUpdate: string }> {
   public get externalLinkIcon() {
-    return <i className={'fa external-link-alt'} />;
+    return <i className={'fa fa-external-link'} />;
   }
 
   public get externalLinks() {
@@ -89,11 +89,11 @@ class Footer extends React.Component<{ lastUpdate: string }> {
     return (
       <footer className={classnames('footer', styles.footer)}>
         <Container>
-          <Row className="text-center">
+          <Row className="text-center mb-4">
             <Col>{this.externalLinks}</Col>
           </Row>
           <Row className="text-center">
-            <Col lg md={12}>
+            <Col lg md={12} className={'mb-4'}>
               {this.internalLinks}
             </Col>
             <Col lg md={12}>

@@ -144,7 +144,8 @@ class HomePage extends React.Component<IHomeProps> {
     this.keyword = keyword;
     return _.reduce(
       await oncokbPrivateClient.searchTypeAheadGetUsingGET({
-        query: keyword
+        query: keyword,
+        limit: 20
       }),
       (acc, result) => {
         acc.push({

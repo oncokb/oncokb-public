@@ -32,7 +32,7 @@
 }
 
 @include media-breakpoint-up(xs) {
-  $footer-height: 18rem;
+  $footer-height: 20rem;
   @include sticky-footer($footer-height);
   @include home-page-logo(xs);
   .navbar-brand {
@@ -59,13 +59,13 @@
 }
 
 @include media-breakpoint-up(md) {
-  $footer-height: 16rem;
+  $footer-height: 20rem;
   @include sticky-footer($footer-height);
   @include home-page-logo(md);
 }
 
 @include media-breakpoint-up(lg) {
-  $footer-height: 12rem;
+  $footer-height: 13rem;
   @include sticky-footer($footer-height);
   @include home-page-logo(lg);
 
