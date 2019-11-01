@@ -121,6 +121,31 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
     return padding;
   }
 
+  @computed
+  get rightPadding(): number {
+    const MIN_PADDING = 10; // used when tickFormat is empty
+    const MAX_PADDING = 90;
+    const lastThreeElements = _.takeRight(this.props.data, 3);
+    const padding =
+      _.max(
+        lastThreeElements.map(datum => {
+          const content = datum.x;
+          const fontFamily = 'Helvetica Neue';
+          const fontSize = `${FONT_SIZE}px`;
+          const textWidth = getTextWidth(content, fontFamily, fontSize);
+          return textWidth/3*2;
+        })
+      ) || MIN_PADDING;
+    return padding < MAX_PADDING ? padding : MAX_PADDING;
+  }
+
+  @computed
+  get domainPadding(): number {
+    const MIN_PADDING = 20;
+    const MAX_PADDING = 40;
+    return this.props.data.length < 6 ? MAX_PADDING : MIN_PADDING;
+  }
+
   private isDataBinSelected(dataBin: BarChartDatum, filters: string[]) {
     return filters.find(filter => dataBin.x === filter);
   }
@@ -148,7 +173,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 }}
               />
             }
-            domainPadding={20}
+            domainPadding={{ x: [this.domainPadding, this.domainPadding], y: [20, 20] }}
             style={{
               parent: {
                 width: '100%',
@@ -156,8 +181,8 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
               }
             }}
             padding={{
-              left: 30,
-              right: 50,
+              left: 50,
+              right: this.rightPadding,
               top: 10,
               bottom: this.bottomPadding
             }}
@@ -184,7 +209,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
             <VictoryAxis
               dependentAxis={true}
               tickFormat={(t: number) =>
-                Number.isInteger(t) ? `${t.toFixed(1)} %` : ''
+                Number.isInteger(t) ? `${t.toFixed(1)} %` : (t > 2 ? '' : `${t.toFixed(2)} %`)
               }
               style={{
                 ticks: {
