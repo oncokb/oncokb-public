@@ -41,7 +41,7 @@ import _ from 'lodash';
 import { MskimpactLink } from 'app/components/MskimpactLink';
 import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import { CitationTooltip } from 'app/components/CitationTooltip';
-import WindowStore from 'app/store/WindowStore';
+import { IWindowSize } from 'app/store/WindowStore';
 import { DataFilterType, onFilterOptionSelect } from 'react-mutation-mapper';
 import { CANCER_TYPE_FILTER_ID } from 'app/components/oncokbMutationMapper/FilterUtils';
 
@@ -487,6 +487,19 @@ export default class GenePage extends React.Component<
     this.store.destroy();
   }
 
+  @computed
+  get windowWrapper() {
+    const MAX_WIDTH = 1442;
+    if (this.props.windowStore.size.width > MAX_WIDTH) {
+      const windowSize: IWindowSize = {
+        width: MAX_WIDTH,
+        height: this.props.windowStore.size.height
+      };
+      return {size: windowSize};
+    }
+    return this.props.windowStore;
+  }
+
   render() {
     return (
       <If condition={!!this.hugoSymbolQuery}>
@@ -580,6 +593,7 @@ export default class GenePage extends React.Component<
                     {...this.store.mutationMapperProps.result}
                     store={this.store.mutationMapperStore.result}
                     oncogenicities={this.store.uniqOncogenicity}
+                    windowWrapper={this.windowWrapper}
                   />
                 </Col>
               </Row>
