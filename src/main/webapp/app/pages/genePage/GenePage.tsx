@@ -41,7 +41,7 @@ import _ from 'lodash';
 import { MskimpactLink } from 'app/components/MskimpactLink';
 import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import { CitationTooltip } from 'app/components/CitationTooltip';
-import { IWindowSize } from 'app/store/WindowStore';
+import WindowStore, { IWindowSize } from 'app/store/WindowStore';
 import { DataFilterType, onFilterOptionSelect } from 'react-mutation-mapper';
 import { CANCER_TYPE_FILTER_ID } from 'app/components/oncokbMutationMapper/FilterUtils';
 
