@@ -8,6 +8,7 @@ import { withRouter } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import AccountMenu from 'app/pages/menus/account';
 import mskIcon from 'content/images/msk-icon-fff.png';
+import { observable } from "mobx";
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -39,12 +40,23 @@ class Header extends React.Component<IHeaderProps> {
     { title: 'Terms', link: 'terms' }
   ];
 
+  @observable isNavExpanded = false;
+
+  toggleNav() {
+    this.isNavExpanded = !this.isNavExpanded;
+  }
+
+  closeNav() {
+    this.isNavExpanded = false;
+  }
+
   getLink(page: SubpageLink) {
     return (
       <NavLink
         to={`/${page.link}`}
         key={page.title}
         className={'mr-auto nav-item'}
+        onClick={() => this.closeNav()}
       >
         {page.title}
       </NavLink>
@@ -54,14 +66,14 @@ class Header extends React.Component<IHeaderProps> {
   public render() {
     return (
       <header className="sticky-top header">
-        <Navbar bg="primary" expand="lg" className="navbar-dark main-navbar">
+        <Navbar bg="primary" expand="lg" className="navbar-dark main-navbar" expanded={this.isNavExpanded}>
           <Container fluid={!this.props.windowStore.isXLscreen}>
             <Navbar.Brand>
               <NavLink to="/">
                 <img height={38} src={oncokbImg} alt={'OncoKB'} />
               </NavLink>
             </Navbar.Brand>
-            <Navbar.Toggle />
+            <Navbar.Toggle onClick={() => this.toggleNav()}/>
             <Navbar.Collapse>
               <Nav className="mr-auto">
                 {this.subPages.map(page => this.getLink(page))}
