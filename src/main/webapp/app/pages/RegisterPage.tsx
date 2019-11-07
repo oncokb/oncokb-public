@@ -220,10 +220,6 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 We have sent you an email to verify your email address. Please
                 follow the further instruction in the email.
               </div>
-              <div className={'mb-3'}>
-                If you do not receive the email within 24 hours, the email maybe
-                blocked by your institution/company or spammed.
-              </div>
               <MessageToContact emailTitle={'Registration Question'} />
             </Alert>
           </div>
