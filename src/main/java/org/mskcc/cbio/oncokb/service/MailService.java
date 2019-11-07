@@ -2,9 +2,13 @@ package org.mskcc.cbio.oncokb.service;
 
 import io.github.jhipster.config.JHipsterProperties;
 import org.mskcc.cbio.oncokb.domain.User;
+
+import javax.mail.MessagingException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -62,12 +66,8 @@ public class MailService {
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
             log.debug("Sent email to User '{}'", to);
-        } catch (Exception e) {
-            if (log.isDebugEnabled()) {
-                log.warn("Email could not be sent to user '{}'", to, e);
-            } else {
-                log.warn("Email could not be sent to user '{}': {}", to, e.getMessage());
-            }
+        }  catch (MailException | MessagingException e) {
+            log.warn("Email could not be sent to user '{}'", to, e);
         }
     }
 

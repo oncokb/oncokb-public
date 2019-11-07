@@ -3936,10 +3936,10 @@ cheerio@^1.0.0-rc.2:
     lodash "^4.15.0"
     parse5 "^3.0.1"
 
-chevrotain@4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-4.4.0.tgz#552366430143c8b28cad654f92aa83711edbd1c9"
-  integrity sha512-CS0auzIhlLxo9RCVarVZJIsKj339jJrLIdCbX3rwk/kTu7+VkYdiXiAD8aJOXJEcRc1GGcbOQ587e/85+xLxaA==
+chevrotain@6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-6.2.0.tgz#80134d43bbc8dab8039465bb1e24827f725a5347"
+  integrity sha512-wA/7Py7CrNWe4vgAkvA2S+mQcW7jIERkB/FWAexqsdIRPVvEXdu4T8f3XWI8EMMQtkb3sJo3DHmafy+gbCPzTQ==
   dependencies:
     regexp-to-ast "0.4.0"
 
@@ -7022,10 +7022,10 @@ gaze@^1.0.0:
   dependencies:
     globule "^1.0.0"
 
-generator-jhipster@6.3.1:
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/generator-jhipster/-/generator-jhipster-6.3.1.tgz#c48c7bf4921e7fdf2b622a7eb17776088aaf5b36"
-  integrity sha512-1v3vbk5/C+vrBvEGw2pl4TfgPe2YHhr1T3ROfEjCItgbo9hBWdhcwbAZOLCvaNAc8eYN4DYz+fOoTBnuNnjipw==
+generator-jhipster@6.4.1:
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/generator-jhipster/-/generator-jhipster-6.4.1.tgz#7ca79b2c983c90dab3d19ae39cd860a990d7297a"
+  integrity sha512-TO/OLaH/cGz/Agag3WXCe774LEwJ//cxBd72AhZTmvCd1Y0TduSzx+KNIYJqWznGXV2qUyPSyobg6OzQ/43eMA==
   dependencies:
     axios "0.19.0"
     chalk "2.4.2"
@@ -7037,7 +7037,7 @@ generator-jhipster@6.3.1:
     glob "7.1.3"
     gulp-filter "5.1.0"
     insight "0.10.1"
-    jhipster-core "4.3.0"
+    jhipster-core "5.0.0"
     js-object-pretty-print "0.3.0"
     js-yaml "3.13.1"
     lodash "4.17.13"
@@ -8889,10 +8889,10 @@ jest-jasmine2@^24.9.0:
     pretty-format "^24.9.0"
     throat "^4.0.0"
 
-jest-junit@6.3.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/jest-junit/-/jest-junit-6.3.0.tgz#99e64ebc54eddcb21238f0cc49f5820c89a8c785"
-  integrity sha512-3PH9UkpaomX6CUzqjlnk0m4yBCW/eroxV6v61OM6LkCQFO848P3YUhfIzu8ypZSBKB3vvCbB4WaLTKT0BrIf8A==
+jest-junit@8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/jest-junit/-/jest-junit-8.0.0.tgz#d4f7ff67e292a5426dc60bc38694c9f77cb94178"
+  integrity sha512-cuD2XM2youMjrOxOu/7H2pLfsO8LfAG4D3WsBxd9fFyI9U0uPpmr/CORH64kbIyZ47X5x1Rbzb9ovUkAEvhEEA==
   dependencies:
     jest-validate "^24.0.0"
     mkdirp "^0.5.1"
@@ -9112,12 +9112,12 @@ jest@24.5.0:
     import-local "^2.0.0"
     jest-cli "^24.5.0"
 
-jhipster-core@4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-4.3.0.tgz#de945e24a5029efef658a01d0e628cdee277e0c5"
-  integrity sha512-6EY28JQ84FswajMon3n6D9SwbDFYEiU4Yw4Unj2C14XUkB33FMBBs5tXO0uDky8GCCGuFp/fMrDWhYeAMf6vAg==
+jhipster-core@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-5.0.0.tgz#6a85599e40d1980ce282185bcbbaada9f0be7113"
+  integrity sha512-pAkFqICz0IU5jpWDUGN3KHiXWE/HFpp7vVz53M5w5XmjeBOCEln2kMigYBH9j6PLkr7txAzcfSIf57Tzx2QUWw==
   dependencies:
-    chevrotain "4.4.0"
+    chevrotain "6.2.0"
     fs-extra "8.1.0"
     lodash "4.17.15"
     winston "3.2.1"

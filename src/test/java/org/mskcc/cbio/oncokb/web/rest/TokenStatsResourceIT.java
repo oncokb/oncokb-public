@@ -166,11 +166,11 @@ public class TokenStatsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(tokenStats.getId().intValue())))
-            .andExpect(jsonPath("$.[*].accessIp").value(hasItem(DEFAULT_ACCESS_IP.toString())))
-            .andExpect(jsonPath("$.[*].resource").value(hasItem(DEFAULT_RESOURCE.toString())))
-            .andExpect(jsonPath("$.[*].accessTime").value(hasItem(DEFAULT_ACCESS_TIME.toString())));
+            .andExpect(jsonPath("$.[*].accessIp").value(hasItem(DEFAULT_ACCESS_IP)))
+            .andExpect(jsonPath("$.[*].resource").value(hasItem(DEFAULT_RESOURCE)))
+            .andExpect(jsonPath("$.[*].accessTime").value(hasItem(DEFAULT_ACCESS_TIME)));
     }
-    
+
     @Test
     @Transactional
     public void getTokenStats() throws Exception {
@@ -182,9 +182,9 @@ public class TokenStatsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(tokenStats.getId().intValue()))
-            .andExpect(jsonPath("$.accessIp").value(DEFAULT_ACCESS_IP.toString()))
-            .andExpect(jsonPath("$.resource").value(DEFAULT_RESOURCE.toString()))
-            .andExpect(jsonPath("$.accessTime").value(DEFAULT_ACCESS_TIME.toString()));
+            .andExpect(jsonPath("$.accessIp").value(DEFAULT_ACCESS_IP))
+            .andExpect(jsonPath("$.resource").value(DEFAULT_RESOURCE))
+            .andExpect(jsonPath("$.accessTime").value(DEFAULT_ACCESS_TIME));
     }
 
     @Test

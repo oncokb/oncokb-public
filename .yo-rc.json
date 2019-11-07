@@ -3,7 +3,7 @@
     "promptValues": {
       "packageName": "org.mskcc.cbio.oncokb"
     },
-    "jhipsterVersion": "6.3.1",
+    "jhipsterVersion": "6.4.1",
     "applicationType": "monolith",
     "baseName": "oncokb",
     "packageName": "org.mskcc.cbio.oncokb",
