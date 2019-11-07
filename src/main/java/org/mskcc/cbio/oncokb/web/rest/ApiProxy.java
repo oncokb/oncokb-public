@@ -22,9 +22,6 @@ import java.nio.charset.StandardCharsets;
 @RestController
 @RequestMapping("/api")
 public class ApiProxy {
-
-    private final Logger log = LoggerFactory.getLogger(ApiProxy.class);
-
     @Autowired
     private ApiProxyService apiProxyService;
 
@@ -32,7 +29,6 @@ public class ApiProxy {
     public String proxy(@RequestBody(required = false) String body, HttpMethod method, HttpServletRequest request)
         throws URISyntaxException {
         URI uri = apiProxyService.prepareURI(request);
-        log.info(uri.getPath());
 
         HttpHeaders httpHeaders = apiProxyService.prepareHttpHeaders(request.getContentType());
         RestTemplate restTemplate = new RestTemplate();
@@ -46,7 +42,6 @@ public class ApiProxy {
     public ResponseEntity<byte[]> downloadSqlDump(HttpMethod method, HttpServletRequest request)
         throws URISyntaxException {
         URI uri = apiProxyService.prepareURI(request);
-        log.info(uri.getPath());
 
         HttpHeaders httpHeaders = apiProxyService.prepareHttpHeaders(request.getContentType());
 //        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
