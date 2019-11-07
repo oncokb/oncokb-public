@@ -82,14 +82,8 @@ export default class DataAccessPage extends React.Component<{
     return (
       <>
         <div className={'mb-4'}>
-          <h6>
+          <h6 className={'mb-3'}>
             <LicenseExplanation />
-            <span>
-              {' '}
-              For bulk downloads and API access, please register below for an
-              account. See this page for more information about commercial use
-              [need to draft].
-            </span>
           </h6>
           <ButtonSelections
             isLargeScreen={this.props.windowStore.isLargeScreen}

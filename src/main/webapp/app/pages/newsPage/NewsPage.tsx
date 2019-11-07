@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { CitationText } from 'app/components/CitationText';
-import { getNews, getNewsTitle, NewsList } from 'app/pages/newsPage/NewsList';
+import NewsList, { getNews, getNewsTitle } from 'app/pages/newsPage/NewsList';
 import { NEWS_BY_DATE } from 'app/pages/newsPage/NewsPageContent';
-import { ONCOKB_CONTACT_EMAIL } from 'app/config/constants';
+import { ONCOKB_CONTACT_EMAIL, PAGE_ROUTE } from 'app/config/constants';
+import { Link } from 'react-router-dom';
 
 export const NewsPage = () => {
   return (
@@ -39,6 +40,18 @@ export const NewsPage = () => {
         <CitationText />
       </div>
       <div className="mt-2">
+        <NewsList date={'10302019'}>
+          <span>
+            Established login procedures for access to downloadable data files
+            and API. Please review the{' '}
+            <Link to={PAGE_ROUTE.TERMS}>usage terms</Link> before using. OncoKB
+            will continue to be accessible for no fee for research use in
+            academic setting. A license is required to use OncoKB for commercial
+            and/or clinical purposes. Fees will be used to support future
+            development and maintenance of OncoKB. Please visit the{' '}
+            <Link to={PAGE_ROUTE.REGISTER}>registration page</Link>.
+          </span>
+        </NewsList>
         <NewsList date={'08282019'} />
         <NewsList date={'08042019'} />
         <NewsList date={'06212019'} />

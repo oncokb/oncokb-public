@@ -176,25 +176,19 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     if (licenseType === LicenseType.ACADEMIC) {
       return (
         <div>
-          OncoKB data is freely accessible for research use in the academic
-          setting. Please register below for access.
+          OncoKB is accessible for no fee for research use in academic setting.
+          Please register below for access.
         </div>
       );
     } else {
       return (
         <div>
-          <div>
-            To support the future development and maintenance of OncoKB, we have
-            introduced license fees for clinical and commercial use. The fee
-            will depend on the type of use and size of company.
-          </div>
           <div className="mt-2">
             In order to be granted access to downloadable content and our API,
             your company will need a license. If your company already has one,
             we will grant you access. Otherwise, we will contact you to discuss
-            your needs and license terms. Please see the{' '}
-            <Link to={PAGE_ROUTE.TERMS}>OncoKB Terms of Use</Link>. You can also
-            reach out to <LicenseInquireLink /> for more information.
+            your needs and license terms. You can also reach out to{' '}
+            <LicenseInquireLink /> for more information.
           </div>
         </div>
       );
