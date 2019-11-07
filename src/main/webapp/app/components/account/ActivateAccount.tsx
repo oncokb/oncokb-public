@@ -44,12 +44,11 @@ export default class ActivateAccount extends React.Component<{
     return (
       <div>
         <Alert variant={'info'}>
+          <div className={'mb-3'}>Thanks for confirming your email.</div>
           <div className={'mb-3'}>
-            Your OncoKB account has been created, but you can not log in at this
-            moment yet.
-          </div>
-          <div className={'mb-3'}>
-            We will review the account and let you know once it&apos;s approved.
+            We are reviewing your registration information and will contact you
+            about your account&apos;s approval status within two business days.
+            Thank you.
           </div>
           <MessageToContact emailTitle={'Account Activation Question'} />
         </Alert>
