@@ -30,7 +30,10 @@ public class TokenProvider implements InitializingBean {
 
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
-    private static final int EXPIRATION_TIME_IN_DAYS = 30;
+    // This is for general users
+    private static final int EXPIRATION_TIME_IN_DAYS = 30 * 6;
+
+    // This is for the public website
     private static final int EXPIRATION_TIME_IN_MINUTES = 10;
 
     private Key key;
