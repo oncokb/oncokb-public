@@ -69,6 +69,12 @@ export const TermsPage = () => {
                   </li>
                 </ul>
               </li>
+              <li>
+                you seek to use OncoKB for clinical or commercial purposes,
+                please visit the{' '}
+                <Link to={PAGE_ROUTE.REGISTER}>registration page</Link> and
+                select your anticipated use
+              </li>
             </ul>
           </div>
         </Col>

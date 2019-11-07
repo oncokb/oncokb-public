@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 const LicenseExplanation: React.FunctionComponent = () => {
   return (
     <span>
-      OncoKB data is freely accessible for research use in the academic setting.
-      To support the future development and maintenance of OncoKB, we have
-      introduced license fees for clinical and commercial use. See our{' '}
-      <Link to={PAGE_ROUTE.TERMS}>usage terms</Link> for further information.
+      A license is required to use OncoKB for commercial and/or clinical
+      purposes. Fees will be used to support future development and maintenance
+      of OncoKB. OncoKB is accessible for no fee for research use in academic
+      setting.
     </span>
   );
 };

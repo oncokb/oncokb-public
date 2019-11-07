@@ -46,11 +46,8 @@ export const getNews = (news: {
   return getNewsList(data);
 };
 
-export const NewsList = (props: NewsListProps) => {
-  const date = props.date;
-  const newsData: NewsData = NEWS_BY_DATE[date];
-
-  const getNewlyAddGeneSection = () => {
+export default class NewsList extends React.Component<NewsListProps> {
+  getNewlyAddGeneSection = (newsData: NewsData) => {
     if (newsData.newlyAddedGenes) {
       const componentProps: NewlyAddedGenesListItemProps = {
         genes: newsData.newlyAddedGenes
@@ -64,68 +61,74 @@ export const NewsList = (props: NewsListProps) => {
     }
   };
 
-  return (
-    <>
-      <h3>{getNewsTitle(date)}</h3>
-      <div>
-        {newsData ? (
-          <ul>
-            {getNews({
-              key: `priority-news-${date}`,
-              content: newsData.priorityNews
-            })}
-            {newsData.updatedImplication ? (
-              <UpdatedTxImplListItem
-                data={newsData.updatedImplication.map((item, index) => {
-                  return {
-                    key: `updatedImplication-${date}-${index}`,
-                    content: item.map((subItem, subIndex) => {
-                      return {
-                        key: `updatedImplication-${date}-${index}-${subIndex}`,
-                        content: subItem
-                      };
-                    })
-                  };
-                })}
-              />
-            ) : (
-              undefined
-            )}
-            {newsData.updatedImplicationInOldFormat ? (
-              <UpdatedTxImplOldFormatListItem
-                data={newsData.updatedImplicationInOldFormat}
-                key={`UpdatedTxImplOldFormatListItem-${date}`}
-              />
-            ) : (
-              undefined
-            )}
-            {newsData.changedAnnotation ? (
-              <ChangedAnnotationListItem
-                data={newsData.changedAnnotation.map((item, index) => {
-                  return {
-                    key: `changedAnnotation-${date}-${index}`,
-                    content: item.map((subItem, subIndex) => {
-                      return {
-                        key: `changedAnnotation-${date}-${index}-${subIndex}`,
-                        content: subItem
-                      };
-                    })
-                  };
-                })}
-              />
-            ) : (
-              undefined
-            )}
-            {getNewlyAddGeneSection()}
-            {getNews({
-              key: `news-${date}`,
-              content: newsData.news ? newsData.news : []
-            })}
-          </ul>
-        ) : (
-          undefined
-        )}
-      </div>
-    </>
-  );
-};
+  render() {
+    const date = this.props.date;
+    const newsData: NewsData = NEWS_BY_DATE[date];
+    return (
+      <>
+        <h3>{getNewsTitle(date)}</h3>
+        <div className={'mb-3'}>
+          {this.props.children ? (
+            this.props.children
+          ) : newsData ? (
+            <ul>
+              {getNews({
+                key: `priority-news-${date}`,
+                content: newsData.priorityNews
+              })}
+              {newsData.updatedImplication ? (
+                <UpdatedTxImplListItem
+                  data={newsData.updatedImplication.map((item, index) => {
+                    return {
+                      key: `updatedImplication-${date}-${index}`,
+                      content: item.map((subItem, subIndex) => {
+                        return {
+                          key: `updatedImplication-${date}-${index}-${subIndex}`,
+                          content: subItem
+                        };
+                      })
+                    };
+                  })}
+                />
+              ) : (
+                undefined
+              )}
+              {newsData.updatedImplicationInOldFormat ? (
+                <UpdatedTxImplOldFormatListItem
+                  data={newsData.updatedImplicationInOldFormat}
+                  key={`UpdatedTxImplOldFormatListItem-${date}`}
+                />
+              ) : (
+                undefined
+              )}
+              {newsData.changedAnnotation ? (
+                <ChangedAnnotationListItem
+                  data={newsData.changedAnnotation.map((item, index) => {
+                    return {
+                      key: `changedAnnotation-${date}-${index}`,
+                      content: item.map((subItem, subIndex) => {
+                        return {
+                          key: `changedAnnotation-${date}-${index}-${subIndex}`,
+                          content: subItem
+                        };
+                      })
+                    };
+                  })}
+                />
+              ) : (
+                undefined
+              )}
+              {this.getNewlyAddGeneSection(newsData)}
+              {getNews({
+                key: `news-${date}`,
+                content: newsData.news ? newsData.news : []
+              })}
+            </ul>
+          ) : (
+            undefined
+          )}
+        </div>
+      </>
+    );
+  }
+}

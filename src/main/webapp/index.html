@@ -15,16 +15,24 @@
 </head>
 <body>
     <!--[if lt IE 9]>
-        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/?locale=en">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div id="root">
         <div class="app-loading">
-            <div class="lds-css ng-scope">
-                <div class="lds-pacman">
-                    <div><div></div><div></div><div></div></div>
-                    <div><div></div><div></div><div></div></div>
-                </div>
-            </div>
+          <div class="sk-circle">
+            <div class="sk-circle1 sk-child"></div>
+            <div class="sk-circle2 sk-child"></div>
+            <div class="sk-circle3 sk-child"></div>
+            <div class="sk-circle4 sk-child"></div>
+            <div class="sk-circle5 sk-child"></div>
+            <div class="sk-circle6 sk-child"></div>
+            <div class="sk-circle7 sk-child"></div>
+            <div class="sk-circle8 sk-child"></div>
+            <div class="sk-circle9 sk-child"></div>
+            <div class="sk-circle10 sk-child"></div>
+            <div class="sk-circle11 sk-child"></div>
+            <div class="sk-circle12 sk-child"></div>
+          </div>
         </div>
         <div class="app-loading">
             <div id="oncokb-error" style="display:none">
@@ -32,23 +40,30 @@
                 <h1>An error has occurred :-(</h1>
                 <h2>Usual error causes</h2>
                 <ol>
-                    <li>You started the application from an IDE and you didn't run <code style="color:red">npm start</code> or <code style="color:red">npm run webpack:build</code>.</li>
-                    <li>You had a network error while running <code style="color:red">npm install</code>. If you are behind a corporate proxy, it is likely that this error was caused by your proxy. Have a look at the OncoKB error logs, you will probably have the cause of the error.</li>
+                    <li>You started the application from an IDE and you didn't run <code style="color:red">yarn start</code> or <code style="color:red">yarn run webpack:build</code>.</li>
+                    <li>You had a network error while running <code style="color:red">yarn install</code>. If you are behind a corporate proxy, it is likely that this error was caused by your proxy. Have a look at the OncoKB error logs, you will probably have the cause of the error.</li>
                     <li>You installed a Node.js version that doesn't work with OncoKB: please use an LTS (long-term support) version, as it's the only version we support.</li>
                 </ol>
                 <h2>Building the client side code again</h2>
                 <p>If you want to go fast, run <code style="color:red">./mvnw</code> to build and run everything.</p>
                 <p>If you want to have more control, so you can debug your issue more easily, you should follow the following steps:</p>
                 <ol>
-                    <li>Install npm dependencies with the command <code style="color:red">npm install</code></li>
-                    <li>Build the client with the command <code style="color:red">npm run webpack:build</code> or <code style="color:red">npm start</code></li>
+                    <li>Install yarn dependencies with the command <code style="color:red">yarn install</code></li>
+                    <li>Build the client with the command <code style="color:red">yarn run webpack:build</code> or <code style="color:red">yarn start</code></li>
                     <li>Start the server with <code style="color:red">./mvnw</code> or using your IDE</li>
                 </ol>
 
                 <h2>Getting more help</h2>
 
                 <p>
-                    Please send us an email at team@oncokb.org
+                    Please send us an email at <a
+                  href='mailto:contact@oncokb.org?subject=Cannot load the page'
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title='Cannot load the page'
+                >
+                  contact@oncokb.org
+                </a>
                 </p>
                 <!-- end of troubleshooting content -->
             </div>
