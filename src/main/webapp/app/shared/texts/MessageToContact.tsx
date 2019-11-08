@@ -3,14 +3,15 @@ import React from 'react';
 
 const MessageToContact: React.FunctionComponent<{
   emailTitle?: string;
+  className?: string;
 }> = props => {
   return (
-    <div>
-      Please don&apos;t hesitate to{' '}
+    <div className={props.className}>
+      Please do not hesitate to{' '}
       <ContactLink emailSubject={props.emailTitle ? props.emailTitle : ''}>
         contact us
       </ContactLink>{' '}
-      for any issues you encountered.
+      with any questions.
     </div>
   );
 };
