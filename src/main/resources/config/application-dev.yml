@@ -60,7 +60,6 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
-  # use gmail service is easier for debugging purpose
   mail:
     host: smtp.gmail.com
     username:
