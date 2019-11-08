@@ -58,16 +58,16 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: email-smtp.us-east-1.amazonaws.com
-    port: 465
-    protocol: smtps
-    debug: true
+    host: smtp.gmail.com
+    username:
+    password:
+    port: 587
+    protocol: smtp
+    tls: true
     properties.mail.smtp:
-      starttls.enable: true
-      starttls.required: true
-      ssl.enable: true
-    properties.mail.smtps:
       auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
   thymeleaf:
     cache: true
 
