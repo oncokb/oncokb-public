@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <sitemap>
+    <loc th:text="${baseUrl} + '/sitemap_general.xml'"></loc>
+  </sitemap>
+  <sitemap th:each="gene : ${genes}">
+    <loc
+      th:text="${baseUrl} + '/sitemap_gene.xml?hugoSymbol=' + ${gene.hugoSymbol} + '&amp;entrezGeneId='+${gene.entrezGeneId}"></loc>
+  </sitemap>
+</sitemapindex>
+

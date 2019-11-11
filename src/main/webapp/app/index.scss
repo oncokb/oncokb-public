@@ -1,0 +1,216 @@
+html {
+  font-size: $oncokb-font-font-size;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.Main {
+  min-height: 100%;
+  position: relative;
+}
+
+@import '~bootstrap/scss/bootstrap';
+@import 'layout';
+
+.home {
+  .home-page-logo-title {
+    font-weight: 500;
+    color: $orange;
+  }
+}
+
+.orange {
+  color: $oncokb-orange;
+}
+
+.header {
+  .navbar-brand {
+  }
+
+  .navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+
+    .nav-link {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .navbar-nav {
+      & > .nav-item {
+        color: white;
+        line-height: 2.75rem;
+        border-bottom: 0.25rem solid $primary;
+
+        &.active {
+          border-bottom-color: $oncokb-orange;
+        }
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+
+      & .nav-link {
+        padding-left: $navbar-nav-link-padding-x;
+        padding-right: $navbar-nav-link-padding-x;
+      }
+    }
+  }
+
+  .nav-link {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .navbar-dark .navbar-nav .nav-link {
+    color: white;
+  }
+}
+
+#account-menu {
+  line-height: 2.75rem;
+  border-bottom: 0.25rem $primary;
+}
+
+.team {
+  ul {
+    padding-left: 0;
+    list-style-type: none;
+  }
+}
+
+.news {
+  ul {
+    padding-left: 2rem;
+    list-style: none;
+  }
+
+  li {
+    margin-bottom: 0.75rem;
+  }
+
+  li:before {
+    font-family: 'FontAwesome';
+    content: '\f0a4';
+    margin: 0 0.5rem 0 -1rem;
+  }
+
+  ul.bullet li:before {
+    content: '\f111';
+    font-size: 0.5rem;
+    vertical-align: 20%;
+  }
+
+  .table {
+    margin-bottom: 0;
+
+    ul {
+      padding-left: 1rem;
+      list-style: none;
+    }
+
+    li {
+      margin-bottom: 0;
+    }
+
+    li:before {
+      font-size: 0.875rem;
+    }
+
+    th {
+      border-top: none;
+    }
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
+.form-check {
+  padding-left: 0;
+}
+
+fieldset.form-group {
+  margin-bottom: 0;
+}
+
+// Change the default checkbox/radio icon to fontawesome to have a more clear message
+input[type='checkbox'],
+input[type='radio'] {
+  display: none;
+}
+input[type='checkbox'],
+input[type='checkbox']:checked,
+input[type='radio'],
+input[type='radio']:checked {
+  + label:before {
+    width: 21px;
+    letter-spacing: 10px;
+    font-family: FontAwesome;
+    display: inline-block;
+  }
+}
+
+input[type='checkbox'] {
+  + label:before {
+    content: '\f096';
+  }
+}
+
+input[type='radio'] {
+  + label:before {
+    content: '\f1db';
+  }
+}
+
+input[type='checkbox']:checked {
+  + label:before {
+    content: '\f046';
+  }
+}
+
+input[type='radio']:checked {
+  + label:before {
+    content: '\f05d';
+  }
+}
+
+// Overwrite react-table styles
+.oncokbReactTable.ReactTable {
+  .-sort-desc {
+    box-shadow: none !important;
+
+    &:before {
+      font-family: FontAwesome;
+      content: '\f0dd';
+      float: right;
+    }
+  }
+
+  .-sort-asc {
+    box-shadow: none !important;
+
+    &:before {
+      font-family: FontAwesome;
+      content: '\f0de';
+      float: right;
+    }
+  }
+
+  .rt-thead .rt-resizable-header-content {
+    white-space: normal;
+    word-break: break-word;
+  }
+  .rt-tbody .rt-td {
+    display: flex;
+    align-items: center;
+    white-space: normal;
+    word-break: break-word;
+  }
+}

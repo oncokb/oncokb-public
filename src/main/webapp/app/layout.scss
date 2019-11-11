@@ -1,0 +1,85 @@
+@mixin sticky-footer($footer-height) {
+  .view-wrapper {
+    margin: 0 auto (-$footer-height);
+    padding: $view-wrapper-default-p-y 0
+      ($footer-height + $view-wrapper-default-p-y);
+  }
+  .footer {
+    height: $footer-height;
+  }
+}
+
+@mixin home-page-logo($size) {
+  @if $size == xs {
+    .home-page-logo {
+      width: 200px;
+    }
+    .home-page-logo-title {
+      font-size: 18px;
+    }
+  } @else if $size == md {
+    .home-page-logo {
+      width: 320px;
+    }
+  } @else if $size == lg {
+    .home-page-logo {
+      width: 400px;
+    }
+    .home-page-logo-title {
+      font-size: 20px;
+    }
+  }
+}
+
+@include media-breakpoint-up(xs) {
+  $footer-height: 20rem;
+  @include sticky-footer($footer-height);
+  @include home-page-logo(xs);
+  .navbar-brand {
+    margin-right: 1rem;
+  }
+
+  .navbar-nav > .nav-item {
+    padding: 0 0.25rem 0.25rem 0.25rem;
+    margin: 0.25rem 0;
+  }
+  #account-menu > a {
+    padding: 0 0.25rem 0.25rem 0.25rem;
+    margin: 0.25rem 0;
+  }
+  .navbar-expand-lg > .container,
+  .navbar-expand-lg > .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .header .navbar .navbar-nav .nav-link {
+    padding-left: 0 !important;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  $footer-height: 20rem;
+  @include sticky-footer($footer-height);
+  @include home-page-logo(md);
+}
+
+@include media-breakpoint-up(lg) {
+  $footer-height: 13rem;
+  @include sticky-footer($footer-height);
+  @include home-page-logo(lg);
+
+  .navbar-nav > .nav-item,
+  #account-menu > a {
+    padding: 1rem 0.5rem !important;
+    margin: 0;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .navbar-nav > .nav-item,
+  #account-menu > a {
+    padding: 1rem 0.875rem !important;
+    margin: 0;
+  }
+}

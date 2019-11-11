@@ -1,0 +1,18 @@
+package org.mskcc.cbio.oncokb.security;
+
+/**
+ * Constants for Spring Security authorities.
+ */
+public final class AuthoritiesConstants {
+
+    public static final String ADMIN = "ROLE_ADMIN";
+
+    public static final String USER = "ROLE_USER";
+
+    public static final String PUBLIC_WEBSITE = "ROLE_PUBLIC_WEBSITE";
+
+    public static final String ANONYMOUS = "ROLE_ANONYMOUS";
+
+    private AuthoritiesConstants() {
+    }
+}
