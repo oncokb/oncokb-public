@@ -1,0 +1,49 @@
+{
+    "name": "UserDetails",
+    "fields": [
+        {
+            "fieldName": "licenseType",
+            "fieldType": "LicenseType",
+            "fieldValues": "ACADEMIC,COMMERCIAL,RESEARCH_IN_COMMERCIAL,HOSPITAL"
+        },
+        {
+            "fieldName": "jobTitle",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "company",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "city",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "country",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "address",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "userDetails",
+            "relationshipName": "user",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190826161330",
+    "entityTableName": "user_details",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,119 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "4"
+  creationTimestamp: null
+  generation: 1
+  labels:
+    run: oncokb-core
+  name: oncokb-core
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/oncokb-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: oncokb-core
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: oncokb-core
+    spec:
+      containers:
+      - env:
+        envFrom:
+          - configMapRef:
+              name: oncokb-core
+        image: cbioportal/oncokb:core-1.5.alpha.4
+        command: ["java"]
+        args: [
+            # from https://developers.redhat.com/blog/2017/04/04/openjdk-and-containers/
+            "-Xms250m",
+            "-XX:+UseSerialGC",
+            # aggressive garbage collection
+            "-XX:MinHeapFreeRatio=20",
+            "-XX:MaxHeapFreeRatio=40",
+            "-XX:GCTimeRatio=4",
+            "-XX:AdaptiveSizePolicyWeight=90",
+            "-XX:+UnlockExperimentalVMOptions",
+            "-XX:+UseCGroupMemoryLimitForHeap",
+            # use maxRAMFraction > 1 https://github.com/akka/akka/issues/23499
+            "-XX:MaxRAMFraction=2",
+            "-XX:+PrintFlagsFinal",
+            "-XshowSettings:vm",
+            # need to set MaxRAM, somehow the MaxRAMFraction is not picked up
+            # from the limits
+            "-XX:MaxRAM=1024m",
+            "-Djdbc.driverClassName=com.mysql.jdbc.Driver",
+            "-Djdbc.url=jdbc:mysql://$(DB_HOST):3306/$(MYSQL_DATABASE)?useUnicode=yes&characterEncoding=UTF-8&useSSL=false",
+            "-Djdbc.username=$(MYSQL_USER)",
+            "-Djdbc.password=$(MYSQL_PASSWORD)",
+            "-Ddata.version=v1.24",
+            "-Ddata.version_date=10/30/2019",
+            "-Dgenomenexus.api=https://www.genomenexus.org/",
+            "-Doncokb_data.access_token=$(ONCOKB_DATA_ACCESS_TOKEN)",
+            "-Dshow_sitemaps=false",
+            "-jar",
+            "/webapp-runner.jar",
+            "--proxy-base-url",
+            "https://beta.oncokb.org",
+            "--enable-compression",
+            "--expand-war",
+            "--port",
+            "8888",
+            "/app.war"
+        ]
+        imagePullPolicy: Always
+          # use actionable variants endpoint to cache everything
+        readinessProbe:
+          httpGet:
+            path: /api/v1/utils/allActionableVariants
+            port: 8888
+          initialDelaySeconds: 300
+          timeoutSeconds: 10
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /api/v1/utils/allActionableVariants
+            port: 8888
+          initialDelaySeconds: 30
+          timeoutSeconds: 300
+          periodSeconds: 200
+        name: oncokb-core
+        ports:
+          - containerPort: 8888
+            protocol: TCP
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            memory: 2Gi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: oncokb-core
+  name: oncokb-core
+  selfLink: /api/v1/namespaces/default/services/oncokb-core
+spec:
+  ports:
+    - port: 8888
+  selector:
+    run: oncokb-core
+  type: ClusterIP

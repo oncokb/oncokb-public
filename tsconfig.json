@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "removeComments": false,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "outDir": "target/classes/static/app",
+    "lib": ["es2015", "es2017", "dom"],
+    "types": ["webpack-env", "jest"],
+    "allowJs": true,
+    "checkJs": false,
+    "baseUrl": "./",
+    "paths": {
+      "app/*": ["src/main/webapp/app/*"],
+      "content/*": ["src/main/webapp/content/*"]
+    },
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/main/webapp/app", "src/main/webapp/content"],
+  "exclude": ["node_modules"]
+}
