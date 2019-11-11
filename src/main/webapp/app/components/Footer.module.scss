@@ -1,0 +1,25 @@
+@import '../variables';
+
+.footer {
+  width: 100%;
+  padding: 10px 0;
+  color: #fff;
+  background-color: #737373;
+  position: absolute;
+  bottom: 0;
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+
+.footerAList > a {
+  color: white;
+  border-right: 0.5px solid #fff;
+  padding: 0 5px;
+
+  &:last-child {
+    border: 0;
+  }
+  &:hover {
+    color: white;
+  }
+}

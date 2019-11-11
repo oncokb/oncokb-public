@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="#{email.activation.title}">OncoKB activation</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p th:text="#{email.approval.greeting(${user.login})}">
+            Dear
+        </p>
+        <p th:text="#{email.approval.text1}">
+            Your OncoKB account has been approved. Please click on the URL below to log in:
+        </p>
+        <p>
+          <a th:with="url=(@{|${baseUrl}/login|})" th:href="${url}"
+               th:text="${url}">Login link</a>
+        </p>
+        <p>
+            <span th:text="#{email.approval.text2}">Regards, </span>
+            <br/>
+            <div th:text="#{email.signature}">The OncoKB Team</div>
+        </p>
+    </body>
+</html>
