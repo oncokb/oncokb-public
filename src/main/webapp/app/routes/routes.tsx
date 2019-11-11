@@ -1,5 +1,5 @@
 import * as React from 'React';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import Login from 'app/components/login/LoginPage';
 import { Logout } from 'app/components/login/logout';
@@ -35,9 +35,21 @@ const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
 }) => {
+  // Redirect needs to be defined first
   return (
     <Switch>
       <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
+      <Redirect exact from={'/updates'} to={PAGE_ROUTE.NEWS} />
+      <Redirect
+        exact
+        from={'/gene/:hugoSymbol/alteration/:alteration'}
+        to={PAGE_ROUTE.ALTERATION}
+      />
+      <Redirect
+        exact
+        from={'/gene/:hugoSymbol/variant/:alteration'}
+        to={PAGE_ROUTE.ALTERATION}
+      />
       <PageContainer>
         <ErrorBoundaryRoute path={PAGE_ROUTE.LOGIN} component={Login} />
         <ErrorBoundaryRoute path={PAGE_ROUTE.LOGOUT} component={Logout} />
@@ -57,19 +69,15 @@ const AppRouts = (props: {
           path={PAGE_ROUTE.ACTIONABLE_GENE}
           component={ActionableGenesPage}
         />
+        <ErrorBoundaryRoute exact path={PAGE_ROUTE.GENE} component={GenePage} />
         <ErrorBoundaryRoute
           exact
-          path="/gene/:hugoSymbol"
-          component={GenePage}
-        />
-        <ErrorBoundaryRoute
-          exact
-          path="/gene/:hugoSymbol/:alteration"
+          path={PAGE_ROUTE.ALTERATION}
           component={AlterationPage}
         />
         <ErrorBoundaryRoute
           exact
-          path="/gene/:hugoSymbol/:alteration/:tumorType"
+          path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
           component={AlterationPage}
         />
         <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
