@@ -12,7 +12,7 @@ export const GenePageLink: React.FunctionComponent<{
   return (
     <Link
       style={{ color: highlightContent ? undefined : 'black' }}
-      to={`${PAGE_ROUTE.GENE}/${props.hugoSymbol}`}
+      to={`${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}`}
     >
       {props.content ? props.content : props.hugoSymbol}
     </Link>
@@ -26,7 +26,9 @@ export const AlterationPageLink: React.FunctionComponent<{
   content?: string;
 }> = props => {
   return (
-    <Link to={`${PAGE_ROUTE.GENE}/${props.hugoSymbol}/${props.alteration}`}>
+    <Link
+      to={`${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`}
+    >
       {props.content
         ? props.content
         : props.showGene
@@ -44,7 +46,7 @@ export const TumorTypePageLink: React.FunctionComponent<{
 }> = props => {
   return (
     <Link
-      to={`${PAGE_ROUTE.GENE}/${props.hugoSymbol}/${props.alteration}/${props.tumorType}`}
+      to={`${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}/${props.tumorType}`}
     >
       {props.content ? props.content : props.tumorType}
     </Link>

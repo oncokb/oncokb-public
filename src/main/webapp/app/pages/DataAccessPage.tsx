@@ -24,6 +24,7 @@ import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
 import { action } from 'mobx';
 import WindowStore from 'app/store/WindowStore';
 import { ContactLink } from 'app/shared/links/ContactLink';
+import { Link } from 'react-router-dom';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 @inject('routing', 'windowStore')
@@ -116,7 +117,11 @@ export default class DataAccessPage extends React.Component<{
             <SwaggerApiLink>web API</SwaggerApiLink>.
             <div>
               Please specify your API token in the request header with{' '}
-              <code>Authorization: Bearer [your token]</code>
+              <code>Authorization: Bearer [your token]</code>.
+            </div>
+            <div>
+              Your token is available in your{' '}
+              <Link to={PAGE_ROUTE.ACCOUNT_SETTINGS}>Account Settings</Link>.
             </div>
             <div>
               Example:{' '}
