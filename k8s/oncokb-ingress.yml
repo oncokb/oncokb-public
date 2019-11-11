@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: oncokb
+  namespace: default
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /.*
+            backend:
+              serviceName: oncokb-public
+              servicePort: 9090

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <url>
+    <loc th:text="${baseUrl} + '/gene/' + ${hugoSymbol}"></loc>
+  </url>
+  <url th:each="alteration : ${alterations}">
+    <loc th:text="${baseUrl} + '/gene/' + ${hugoSymbol} + '/'+ ${alteration.name}"></loc>
+  </url>
+</urlset>
+

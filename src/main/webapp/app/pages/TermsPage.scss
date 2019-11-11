@@ -1,0 +1,24 @@
+.terms {
+  .highlight {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+
+  ul {
+    padding-left: 3rem;
+
+    li {
+      line-height: 2rem;
+    }
+  }
+
+  ul > li {
+    list-style-type: lower-roman;
+    padding-left: 0.75rem;
+  }
+
+  ul > li > ul > li {
+    list-style-type: lower-latin;
+    padding-left: 0.75rem;
+  }
+}
