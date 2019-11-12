@@ -155,6 +155,7 @@ export const LG_TABLE_FIXED_HEIGHT = 500;
 export const SM_TABLE_FIXED_HEIGHT = 300;
 export const IMG_MAX_WIDTH = 800;
 export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
+export const H5_FONT_SIZE = '1.25rem';
 
 // Defaults for the models
 export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {

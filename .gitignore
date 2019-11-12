@@ -145,3 +145,9 @@ Desktop.ini
 # ESLint
 ######################
 .eslintcache
+
+######################
+# .gitignore for v1
+######################
+bower_components
+/app

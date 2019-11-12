@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -56,7 +57,7 @@ public class UserUUIDController {
         if (tokenList.size() > 0) {
             uuid = tokenList.iterator().next().getToken();
         } else {
-            Token token = tokenProvider.createToken();
+            Token token = tokenProvider.createToken(Optional.empty());
             uuid = token.getToken();
         }
         HttpHeaders httpHeaders = new HttpHeaders();
