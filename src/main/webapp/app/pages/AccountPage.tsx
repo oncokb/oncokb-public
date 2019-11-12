@@ -5,7 +5,12 @@ import autobind from 'autobind-decorator';
 import { Redirect } from 'react-router-dom';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import client from 'app/shared/api/clientInstance';
-import { ACCOUNT_TITLES, LicenseType, PAGE_ROUTE } from 'app/config/constants';
+import {
+  ACCOUNT_TITLES,
+  H5_FONT_SIZE,
+  LicenseType,
+  PAGE_ROUTE
+} from 'app/config/constants';
 import {
   getAccountInfoTitle,
   getLicenseTitle,
@@ -21,6 +26,7 @@ import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { getMomentInstance } from 'app/shared/utils/Utils';
 import moment from 'moment';
 import pluralize from 'pluralize';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 
 export type IRegisterProps = {
   authenticationStore: AuthenticationStore;
@@ -124,7 +130,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
       return <Redirect to={PAGE_ROUTE.LOGIN} />;
     }
     return (
-      <SmallPageContainer>
+      <SmallPageContainer size={'lg'}>
         <Row className={getSectionClassName(true)}>
           <Col>
             <h5>Account</h5>
@@ -175,7 +181,16 @@ export class AccountPage extends React.Component<IRegisterProps> {
         </Row>
         <Row className={getSectionClassName()}>
           <Col>
-            <h5>API</h5>
+            <div className={'d-flex align-items-center'}>
+              <span style={{ fontSize: H5_FONT_SIZE }}>API</span>
+              <InfoIcon
+                placement={'top'}
+                overlay={
+                  'You can have up to two tokens to be used. Your token will be automatically renewed after reviewing the license and account information.'
+                }
+                className={'ml-2'}
+              />
+            </div>
             <InfoRow
               title={
                 <div className={'d-flex align-items-center'}>
@@ -212,12 +227,8 @@ export class AccountPage extends React.Component<IRegisterProps> {
               {this.tokens.map(token => {
                 const today = moment.utc();
                 const expiration = getMomentInstance(token.expiration);
-                const expirationDay = moment
-                  .duration(expiration.diff(today))
-                  .days();
-                const expirationHour = moment
-                  .duration(expiration.diff(today))
-                  .hours();
+                const expirationDay = expiration.diff(today, 'days');
+                const expirationHour = expiration.diff(today, 'hours');
                 return (
                   <div key={token.id} className={'mb-2'}>
                     <InputGroup size={'sm'}>
