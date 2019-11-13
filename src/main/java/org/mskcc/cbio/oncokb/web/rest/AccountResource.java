@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -198,7 +199,13 @@ public class AccountResource {
             if (tokens.size() >= 2) {
                 throw new AccountResourceException("No more thant two tokens can be created");
             } else {
-                return tokenProvider.createToken();
+                // if there is a token already available, we should use the same expiration date
+                // we only renew the token after validating the account is valid on half year basis
+                if (tokens.size() > 0) {
+                    return tokenProvider.createToken(Optional.of(tokens.iterator().next().getExpiration()));
+                } else {
+                    return tokenProvider.createToken(Optional.empty());
+                }
             }
         } else {
             throw new AccountResourceException("User is not logged in");
