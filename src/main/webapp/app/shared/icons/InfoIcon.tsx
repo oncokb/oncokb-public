@@ -10,7 +10,13 @@ const InfoIcon: React.FunctionComponent<{
 }> = props => {
   return (
     <DefaultTooltip overlay={props.overlay} placement={props.placement}>
-      <span className={`fa-stack ${props.className}`} style={props.style}>
+      <span
+        className={`fa-stack ${props.className}`}
+        style={{
+          fontSize: '0.6rem',
+          ...props.style
+        }}
+      >
         <i className="fa fa-circle-thin fa-stack-2x"></i>
         <i className="fa fa-info fa-stack-1x"></i>
       </span>
