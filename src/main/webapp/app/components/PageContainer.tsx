@@ -6,7 +6,9 @@ const PageContainer: React.FunctionComponent<{
 }> = props => {
   return (
     <Row className={`justify-content-center ${props.className}`}>
-      <Col lg={10}>{props.children}</Col>
+      <Col xl={10} lg={11}>
+        {props.children}
+      </Col>
     </Row>
   );
 };
