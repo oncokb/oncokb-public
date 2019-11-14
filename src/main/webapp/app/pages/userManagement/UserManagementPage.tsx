@@ -82,7 +82,7 @@ export default class UserManagementPage extends React.Component<{
       return;
     }
     this.currentSelectedUser.activated = !this.currentSelectedUser.activated;
-    this.updateUser(this.currentSelectedUser);
+    this.updateUser(this.currentSelectedUser, sendEmail);
   }
 
   @action
@@ -105,11 +105,11 @@ export default class UserManagementPage extends React.Component<{
   }
 
   @action
-  updateUser(updatedUser: UserDTO) {
+  updateUser(updatedUser: UserDTO, sendEmail = false) {
     client
       .updateUserUsingPUT({
         userDto: updatedUser,
-        sendEmail: false
+        sendEmail
       })
       .then(() => {
         notifySuccess('Updated');
