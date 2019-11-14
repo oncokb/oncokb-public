@@ -196,9 +196,12 @@ export default class UserManagementPage extends React.Component<{
                 {NOT_CHANGEABLE_AUTHORITIES.includes(authority) ? null : (
                   <InputGroup.Append>
                     <Button
-                      variant={'secondary'}
-                      onClick={() =>
-                        this.removeAuthority(props.original, authority)
+                      variant={"secondary"}
+                      onClick={
+                        (event: any) => {
+                          event.preventDefault();
+                          this.removeAuthority(props.original, authority);
+                        }
                       }
                     >
                       <i className={'fa fa-trash'}></i>
@@ -322,7 +325,10 @@ export default class UserManagementPage extends React.Component<{
             </Button>
             <Button
               variant="primary"
-              onClick={() => this.updateActiveStatus(true)}
+              onClick={(event:any) => {
+                event.preventDefault();
+                this.updateActiveStatus(true)
+              }}
             >
               Update
             </Button>
@@ -355,7 +361,10 @@ export default class UserManagementPage extends React.Component<{
             <Button variant="secondary" onClick={() => this.cancelAddAdmin()}>
               Close
             </Button>
-            <Button variant="primary" onClick={() => this.addUserAsAdmin()}>
+            <Button variant="primary" onClick={(event:any) => {
+              event.preventDefault();
+              this.addUserAsAdmin()
+            }}>
               Update
             </Button>
           </Modal.Footer>

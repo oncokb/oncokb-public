@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 const SmallPageContainer: React.FunctionComponent<{
-  size?: 'sm' | 'big';
+  size?: 'sm' | 'lg';
   className?: string;
 }> = props => {
   return (
