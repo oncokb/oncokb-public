@@ -6,7 +6,15 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import client from 'app/shared/api/clientInstance';
 import { UserDTO } from 'app/shared/api/generated/API';
 import { match } from 'react-router';
-import { Button, Row, Col, Badge, ButtonGroup, Modal } from 'react-bootstrap';
+import {
+  Button,
+  Row,
+  Col,
+  Badge,
+  ButtonGroup,
+  Modal,
+  InputGroup
+} from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
 import OncoKBTable, {
   SearchColumn
@@ -16,6 +24,10 @@ import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { filterByKeyword, toAppTimestampFormat } from 'app/shared/utils/Utils';
 import _ from 'lodash';
+import {
+  NOT_CHANGEABLE_AUTHORITIES,
+  USER_AUTHORITIES
+} from 'app/config/constants';
 
 @inject('routing')
 @observer
@@ -24,7 +36,8 @@ export default class UserManagementPage extends React.Component<{
   match: match;
 }> {
   @observable users: UserDTO[] = [];
-  @observable showModal = false;
+  @observable showUpdateStatusModal = false;
+  @observable showAddAdminModal = false;
   @observable currentSelectedUser: UserDTO | undefined;
 
   constructor(props: Readonly<{ routing: RouterStore; match: match }>) {
@@ -39,28 +52,64 @@ export default class UserManagementPage extends React.Component<{
 
   @action
   confirmUpdatingUser(user: UserDTO) {
-    this.showModal = true;
+    this.showUpdateStatusModal = true;
     this.currentSelectedUser = user;
   }
 
   @action
   cancelUpdateActiveStatus() {
-    this.showModal = false;
+    this.showUpdateStatusModal = false;
+    this.currentSelectedUser = undefined;
+  }
+
+  @action
+  confirmAddAdmin(user: UserDTO) {
+    this.showAddAdminModal = true;
+    this.currentSelectedUser = user;
+  }
+
+  @action
+  cancelAddAdmin() {
+    this.showAddAdminModal = false;
     this.currentSelectedUser = undefined;
   }
 
   @action
   updateActiveStatus(sendEmail = true) {
-    this.showModal = false;
+    this.showUpdateStatusModal = false;
     if (this.currentSelectedUser === undefined) {
       notifyError(new Error('No user specified'));
       return;
     }
     this.currentSelectedUser.activated = !this.currentSelectedUser.activated;
+    this.updateUser(this.currentSelectedUser);
+  }
+
+  @action
+  addUserAsAdmin() {
+    this.showAddAdminModal = false;
+    if (this.currentSelectedUser === undefined) {
+      notifyError(new Error('No user specified'));
+      return;
+    }
+    this.currentSelectedUser.authorities.push(USER_AUTHORITIES.ROLE_ADMIN);
+    this.updateUser(this.currentSelectedUser);
+  }
+
+  @action
+  removeAuthority(user: UserDTO, authorityToBeRemoved: string) {
+    user.authorities = user.authorities.filter(
+      authority => authority !== authorityToBeRemoved
+    );
+    this.updateUser(user);
+  }
+
+  @action
+  updateUser(updatedUser: UserDTO) {
     client
       .updateUserUsingPUT({
-        userDto: this.currentSelectedUser,
-        sendEmail
+        userDto: updatedUser,
+        sendEmail: false
       })
       .then(() => {
         notifySuccess('Updated');
@@ -95,7 +144,7 @@ export default class UserManagementPage extends React.Component<{
       onFilter: (data: UserDTO, keyword) =>
         filterByKeyword(data.email, keyword),
       Cell(props: { original: UserDTO }) {
-        return <Button variant={'link'}>{props.original.email}</Button>;
+        return <span>{props.original.email}</span>;
       }
     },
     {
@@ -104,6 +153,7 @@ export default class UserManagementPage extends React.Component<{
       accessor: 'activated',
       minWidth: 100,
       defaultSortDesc: false,
+      className: 'justify-content-center',
       sortMethod: defaultSortMethod,
       onFilter: (data: UserDTO, keyword) =>
         filterByKeyword(this.getStatus(data.activated), keyword),
@@ -133,14 +183,46 @@ export default class UserManagementPage extends React.Component<{
         _.some(data.authorities, authority =>
           filterByKeyword(authority, keyword)
         ),
-      Cell(props: { original: UserDTO }) {
+      Cell: (props: { original: UserDTO }) => {
         return (
           <div>
-            {props.original.authorities.map(authority => (
-              <Badge className={'m-1 p-2'} variant={'primary'} key={authority}>
-                {authority}
-              </Badge>
+            {props.original.authorities.map((authority: USER_AUTHORITIES) => (
+              <InputGroup size={'sm'} className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text className={'bg-transparent'}>
+                    {authority}
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                {NOT_CHANGEABLE_AUTHORITIES.includes(authority) ? null : (
+                  <InputGroup.Append>
+                    <Button
+                      variant={'secondary'}
+                      onClick={() =>
+                        this.removeAuthority(props.original, authority)
+                      }
+                    >
+                      <i className={'fa fa-trash'}></i>
+                    </Button>
+                  </InputGroup.Append>
+                )}
+              </InputGroup>
             ))}
+            {!props.original.authorities.some(
+              authority => authority === USER_AUTHORITIES.ROLE_ADMIN
+            ) &&
+            !props.original.authorities.some(
+              authority => authority === USER_AUTHORITIES.ROLE_PUBLIC_WEBSITE
+            ) ? (
+              <DefaultTooltip
+                overlay={'Add user as administrator'}
+                placement={'top'}
+              >
+                <i
+                  className={'fa fa-plus-circle ml-2'}
+                  onClick={() => this.confirmAddAdmin(props.original)}
+                />
+              </DefaultTooltip>
+            ) : null}
           </div>
         );
       }
@@ -219,7 +301,10 @@ export default class UserManagementPage extends React.Component<{
             />
           </Col>
         </Row>
-        <Modal show={this.showModal} onHide={() => null}>
+        <Modal
+          show={this.showUpdateStatusModal}
+          onHide={() => this.cancelUpdateActiveStatus()}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Update User Status</Modal.Title>
           </Modal.Header>
@@ -256,6 +341,23 @@ export default class UserManagementPage extends React.Component<{
                 </Button>
               </DefaultTooltip>
             ) : null}
+          </Modal.Footer>
+        </Modal>
+        <Modal
+          show={this.showAddAdminModal}
+          onHide={() => this.cancelAddAdmin()}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Add User as Administrator</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure to add user as administrator?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => this.cancelAddAdmin()}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={() => this.addUserAsAdmin()}>
+              Update
+            </Button>
           </Modal.Footer>
         </Modal>
       </>
