@@ -61,14 +61,14 @@ public class SlackService {
     }
 
     @Async
-    public void sendApprovedConfirmation(String responseUrl) {
+    public void sendApprovedConfirmation(UserDTO userDTO, BlockActionPayload blockActionPayload) {
         Payload payload = Payload.builder()
-            .text("User has been approved and notified")
+            .text(userDTO.getEmail() + " has been approved and notified by " + blockActionPayload.getUser().getName())
             .build();
 
         Slack slack = Slack.getInstance();
         try {
-            WebhookResponse response = slack.send(responseUrl, payload);
+            WebhookResponse response = slack.send(blockActionPayload.getResponseUrl(), payload);
         } catch (IOException e) {
             log.warn("Failed to send message to slack");
         }
@@ -88,10 +88,10 @@ public class SlackService {
     private List<LayoutBlock> buildUserApprovalBlocks(UserDTO user) {
 
         List<LayoutBlock> blocks = new ArrayList<>();
+        blocks.add(SectionBlock.builder().text(PlainTextObject.builder().text("@channel ").build()).build());
 
         // Title
         List<TextObject> title = new ArrayList<>();
-        title.add(MarkdownTextObject.builder().text("@channel \n").build());
         title.add(getTextObject("The following user registered an " + user.getLicenseType() + " account", ""));
         blocks.add(SectionBlock.builder().fields(title).build());
 
