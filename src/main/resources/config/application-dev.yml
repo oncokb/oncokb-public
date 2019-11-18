@@ -136,3 +136,4 @@ application:
   profile: dev
   api-proxy-url: 'http://localhost:8888'
   sitemap-enabled: false
+  user-registration-webhook:

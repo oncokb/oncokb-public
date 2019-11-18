@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
     private String apiProxyUrl;
+    private String userRegistrationWebhook;
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
 
@@ -21,6 +22,14 @@ public class ApplicationProperties {
 
     public void setApiProxyUrl(String apiProxyUrl) {
         this.apiProxyUrl = apiProxyUrl;
+    }
+
+    public String getUserRegistrationWebhook() {
+        return userRegistrationWebhook;
+    }
+
+    public void setUserRegistrationWebhook(String userRegistrationWebhook) {
+        this.userRegistrationWebhook = userRegistrationWebhook;
     }
 
     public ProjectProfile getProfile() {
