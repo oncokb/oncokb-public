@@ -91,7 +91,8 @@ public class SlackService {
 
         // Title
         List<TextObject> title = new ArrayList<>();
-        title.add(getTextObject("@channel The following user registered an " + user.getLicenseType() + " account", ""));
+        title.add(MarkdownTextObject.builder().text("@channel \n").build());
+        title.add(getTextObject("The following user registered an " + user.getLicenseType() + " account", ""));
         blocks.add(SectionBlock.builder().fields(title).build());
 
 
