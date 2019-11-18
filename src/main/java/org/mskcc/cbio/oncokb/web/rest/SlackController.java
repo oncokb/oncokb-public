@@ -63,10 +63,10 @@ public class SlackController {
                     Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
                     if (updatedUser.isPresent() && updatedUser.get().isActivated()) {
                         mailService.sendApprovalEmail(existingUser.get());
-                        slackService.sendApprovedConfirmation(pl.getResponseUrl());
+                        slackService.sendApprovedConfirmation(updatedUser.get(), pl);
                     }
                 } else {
-                    slackService.sendApprovedConfirmation(pl.getResponseUrl());
+                    slackService.sendApprovedConfirmation(userDTO, pl);
                 }
             }
         }
