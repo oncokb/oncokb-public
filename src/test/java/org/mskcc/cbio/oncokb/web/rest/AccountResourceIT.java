@@ -9,6 +9,7 @@ import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.MailService;
+import org.mskcc.cbio.oncokb.service.SlackService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -68,6 +69,9 @@ public class AccountResourceIT {
     @Autowired
     private TokenProvider tokenProvider;
 
+    @Autowired
+    private SlackService slackService;
+
     @Mock
     private UserService mockUserService;
 
@@ -83,10 +87,10 @@ public class AccountResourceIT {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(any());
         AccountResource accountResource =
-            new AccountResource(userRepository, userService, mockMailService, tokenProvider);
+            new AccountResource(userRepository, userService, mockMailService, tokenProvider, slackService);
 
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, mockUserService, mockMailService, tokenProvider);
+            new AccountResource(userRepository, mockUserService, mockMailService, tokenProvider, slackService);
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
             .setControllerAdvice(exceptionTranslator)

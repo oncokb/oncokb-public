@@ -1,12 +1,14 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 
+import com.github.seratch.jslack.Slack;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.MailService;
+import org.mskcc.cbio.oncokb.service.SlackService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -47,6 +49,8 @@ public class AccountResource {
 
     private final UserService userService;
 
+    private final SlackService slackService;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -54,12 +58,15 @@ public class AccountResource {
 
     private final TokenProvider tokenProvider;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, TokenProvider tokenProvider) {
+    public AccountResource(UserRepository userRepository, UserService userService,
+                           MailService mailService, TokenProvider tokenProvider,
+                           SlackService slackService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
         this.tokenProvider = tokenProvider;
+        this.slackService = slackService;
     }
 
     /**
@@ -91,6 +98,8 @@ public class AccountResource {
         Optional<User> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
+        } else {
+            slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(user.get()));
         }
     }
 
