@@ -216,11 +216,13 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         <SmallPageContainer className={'registerPage'}>
           <div>
             <Alert variant="info">
-              <div className={'mb-3'}>
-                We have sent you an email to verify your email address. Please
-                follow the further instruction in the email.
-              </div>
-              <MessageToContact emailTitle={'Registration Question'} />
+              <p className={'mb-3'}>
+                Thank you for creating an OncoKB account. We have sent you an email to verify your email address. Please
+                follow the instructions in the email to complete registration.
+              </p>
+              <MessageToContact emailTitle={"Registration Question"}/>
+              <p>Regards,</p>
+              <p>The OncoKB Team</p>
             </Alert>
           </div>
         </SmallPageContainer>

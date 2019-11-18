@@ -44,7 +44,7 @@ export default class ActivateAccount extends React.Component<{
     return (
       <div>
         <Alert variant={'info'}>
-          <p>Thank you for confirming your email.</p>
+          <p>Thank you for verifying your email.</p>
           <p>
             We are reviewing your registration information and will contact you
             about your account&apos;s approval status within two business days.

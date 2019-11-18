@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>public-website</artifactId>
-    <version>0.0.alpha.19</version>
+    <version>0.0.alpha.20</version>
     <packaging>jar</packaging>
     <name>OncoKB Public Website</name>
 
@@ -91,6 +91,7 @@
         <jacoco.itReportFile>${jacoco.itReportFolder}/integrationTest.exec</jacoco.itReportFile>
         <junit.utReportFolder>${project.testresult.directory}/test</junit.utReportFolder>
         <junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
+        <jslack.version>3.1.0</jslack.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -343,6 +344,11 @@
             <artifactId>sentry</artifactId>
             <version>1.7.27</version>
         </dependency>
+        <dependency>
+          <groupId>com.github.seratch</groupId>
+          <artifactId>jslack</artifactId>
+          <version>3.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -561,7 +567,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>cbioportal/oncokb-public:0.0.alpha.19</image>
+                            <image>cbioportal/oncokb-public:0.0.alpha.20</image>
                         </to>
                         <container>
                             <entrypoint>
