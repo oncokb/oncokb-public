@@ -58,68 +58,34 @@ export const ButtonSelections: React.FunctionComponent<{
 }> = props => {
   return (
     <>
-      <Row className={'my-2'}>
-        <Col
-          lg={3}
-          xs={12}
-          style={
-            props.isLargeScreen
-              ? {
-                  borderRight: `1px dashed ${COLOR_LIGHT_GREY}`
-                }
-              : {
-                  borderBottom: `1px dashed ${COLOR_LIGHT_GREY}`,
-                  marginBottom: '7px'
-                }
-          }
-        >
-          <Row className={'align-items-center'}>
-            <Col lg={12} xs={6}>
-              <SelectionButton
-                selectedButton={props.selectedButton}
-                onSelectLicense={props.onSelectLicense}
-                license={LicenseType.ACADEMIC}
-              />
-            </Col>
-            <Col lg={12} xs={6} style={{ textAlign: 'center' }}>
-              <i style={{ color: COLOR_GREY }}>No fee</i>
-            </Col>
-          </Row>
+      <Row className={"my-2"}>
+        <Col xl={3} sm={6} xs={12}>
+          <SelectionButton
+            selectedButton={props.selectedButton}
+            onSelectLicense={props.onSelectLicense}
+            license={LicenseType.COMMERCIAL}
+          />
         </Col>
-        <Col lg={9} xs={12}>
-          <Row className={'align-items-center'}>
-            <Col lg={12} xs={6}>
-              <Row>
-                <Col lg={4} xs={12}>
-                  <SelectionButton
-                    selectedButton={props.selectedButton}
-                    onSelectLicense={props.onSelectLicense}
-                    license={LicenseType.RESEARCH_IN_COMMERCIAL}
-                  />
-                </Col>
-                <Col lg={4} xs={12}>
-                  <SelectionButton
-                    selectedButton={props.selectedButton}
-                    onSelectLicense={props.onSelectLicense}
-                    license={LicenseType.HOSPITAL}
-                  />
-                </Col>
-                <Col lg={4} xs={12}>
-                  <SelectionButton
-                    selectedButton={props.selectedButton}
-                    onSelectLicense={props.onSelectLicense}
-                    license={LicenseType.COMMERCIAL}
-                  />
-                </Col>
-              </Row>
-            </Col>
-            <Col lg={12} xs={6} style={{ textAlign: 'center' }}>
-              <i style={{ color: COLOR_GREY }}>
-                Requires payment of a license fee, with the fee depending on the
-                use of the product and the size of the company
-              </i>
-            </Col>
-          </Row>
+        <Col xl={3} sm={6} xs={12}>
+          <SelectionButton
+            selectedButton={props.selectedButton}
+            onSelectLicense={props.onSelectLicense}
+            license={LicenseType.HOSPITAL}
+          />
+        </Col>
+        <Col xl={3} sm={6} xs={12}>
+          <SelectionButton
+            selectedButton={props.selectedButton}
+            onSelectLicense={props.onSelectLicense}
+            license={LicenseType.RESEARCH_IN_COMMERCIAL}
+          />
+        </Col>
+        <Col xl={3} sm={6} xs={12}>
+          <SelectionButton
+            selectedButton={props.selectedButton}
+            onSelectLicense={props.onSelectLicense}
+            license={LicenseType.ACADEMIC}
+          />
         </Col>
       </Row>
     </>
