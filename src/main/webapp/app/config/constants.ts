@@ -41,7 +41,7 @@ export const NEWS_DATE_FORMAT = 'MMDDYYYY';
 export const NEWS_TITLE_DATE_FORMAT = 'MMMM D, YYYY';
 
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
-export const ONCOKB_LICENSE_EMAIL = 'license@oncokb.org';
+export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
   LG: 1010,
   XL: 1450
