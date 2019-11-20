@@ -61,14 +61,19 @@ export default class ActivateAccount extends React.Component<{
   };
 
   getFailureMessage = () => {
+    // the server attaches more information into the error which the type does not allow
+    const error = this.activateAccount.error as any;
+    const defaultInfo = 'Your user account could not be activated.';
     return (
       <div>
         <Alert variant={'warning'}>
-          Your user account could not be activated
           {this.activateAccount.error
-            ? ` due to ${this.activateAccount.error.message}`
-            : ''}
-          .
+            ? error.response &&
+              error.response.body &&
+              error.response.body.detail
+              ? error.response.body.detail
+              : `${defaultInfo} due to ${error.message}`
+            : defaultInfo}
         </Alert>
       </div>
     );
