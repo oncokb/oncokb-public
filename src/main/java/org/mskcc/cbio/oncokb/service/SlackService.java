@@ -88,7 +88,7 @@ public class SlackService {
     private List<LayoutBlock> buildUserApprovalBlocks(UserDTO user) {
 
         List<LayoutBlock> blocks = new ArrayList<>();
-        blocks.add(SectionBlock.builder().text(PlainTextObject.builder().text("@channel ").build()).build());
+        blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text("<@U1BDQTM1V> <!here>").build()).build());
 
         // Title
         List<TextObject> title = new ArrayList<>();
