@@ -6,7 +6,7 @@ Please cite [Chakravarty et al., JCO PO 2017.](https://ascopubs.org/doi/full/10.
 This application was generated using JHipster 6.4.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.4.1](https://www.jhipster.tech/documentation-archive/v6.4.1).
 
 ## Status
-![](https://github.com/oncokb/oncokb-public/workflows/Node%20CI/badge.svg)
+![](https://github.com/oncokb/oncokb-public/workflows/Node%20CI/badge.svg) <a href="https://codeclimate.com/github/oncokb/oncokb-public/maintainability"><img src="https://api.codeclimate.com/v1/badges/d625e20939f824b0290d/maintainability" /></a>
 
 ## Info
 ![Gitter](https://img.shields.io/gitter/room/OncoKB/public-chat)
