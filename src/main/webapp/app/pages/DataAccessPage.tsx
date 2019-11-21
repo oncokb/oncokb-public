@@ -94,7 +94,7 @@ export default class DataAccessPage extends React.Component<{
         <div className={'mb-4'}>
           <h6>
             Once registered and logged in, you will have access to the following. Please review the <Link
-            to={PAGE_ROUTE.TERMS}>usage terms</Link> before proceeding. <CitationText/>:
+            to={PAGE_ROUTE.TERMS}>usage terms</Link> before proceeding. <CitationText/>
           </h6>
         </div>
         <div className={"mb-3"}>
