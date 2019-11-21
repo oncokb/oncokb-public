@@ -9,7 +9,7 @@ This application was generated using JHipster 6.4.1, you can find documentation 
 ![](https://github.com/oncokb/oncokb-public/workflows/Node%20CI/badge.svg) <a href="https://codeclimate.com/github/oncokb/oncokb-public/maintainability"><img src="https://api.codeclimate.com/v1/badges/d625e20939f824b0290d/maintainability" /></a>
 
 ## Info
-![Gitter](https://img.shields.io/gitter/room/OncoKB/public-chat) ![OncoKB Publication](https://img.shields.io/badge/DOI-10.1200%2FPO.17.00011-1c75cd)
+![Gitter](https://img.shields.io/gitter/room/OncoKB/public-chat) <a href="https://ascopubs.org/doi/full/10.1200/PO.17.00011"><img src="https://img.shields.io/badge/DOI-10.1200%2FPO.17.00011-1c75cd" /></a>
 
 ## Development
 
