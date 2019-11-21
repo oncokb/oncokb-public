@@ -1,6 +1,15 @@
 # OncoKB Public Website
 
+OncoKB is a precision oncology knowledge base and contains information about the effects and treatment implications of specific cancer gene alterations.
+Please cite [Chakravarty et al., JCO PO 2017.](https://ascopubs.org/doi/full/10.1200/PO.17.00011)
+
 This application was generated using JHipster 6.4.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.4.1](https://www.jhipster.tech/documentation-archive/v6.4.1).
+
+## Status
+![](https://github.com/oncokb/oncokb-public/workflows/Node%20CI/badge.svg)
+
+## Info
+![Gitter](https://img.shields.io/gitter/room/OncoKB/public-chat)
 
 ## Development
 
