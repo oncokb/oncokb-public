@@ -90,12 +90,14 @@ export default class DataAccessPage extends React.Component<{
             isLargeScreen={this.props.windowStore.isLargeScreen}
             onSelectLicense={this.onSelectLicense}
           />
+        </div>
+        <div className={'mb-4'}>
           <h6>
-            Once registered and logged in, you will have access to the
-            following:
+            Once registered and logged in, you will have access to the following. Please review the <Link
+            to={PAGE_ROUTE.TERMS}>usage terms</Link> before proceeding. <CitationText/>:
           </h6>
         </div>
-        <div className={'mb-3'}>
+        <div className={"mb-3"}>
           <h5 className="title">Annotating Your Files</h5>
           <div>
             You can annotate your data files (mutations, copy number
@@ -134,14 +136,6 @@ export default class DataAccessPage extends React.Component<{
         </div>
         <div className={'mb-3'}>
           <h5 className="title">Data Download</h5>
-          <div>
-            OncoKB annotations are fully available for download. Please review
-            the{' '}
-            <a href="terms">
-              <u>usage terms</u>
-            </a>{' '}
-            before downloading. <CitationText />.
-          </div>
         </div>
         <div>
           {this.dataAvailability.result.map(item => (
