@@ -1,4 +1,3 @@
-import * as React from 'React';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import Login from 'app/components/login/LoginPage';
@@ -30,6 +29,7 @@ import DataAccessPage from 'app/pages/DataAccessPage';
 import AccountPassword from 'app/components/account/AccountPassword';
 import AdminRouts from 'app/routes/AdminRoutes';
 import PageContainer from 'app/components/PageContainer';
+import React from 'react';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
