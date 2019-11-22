@@ -5,7 +5,7 @@
     },
     "jhipsterVersion": "6.5.1",
     "applicationType": "monolith",
-    "baseName": "oncokb",
+    "baseName": "oncokb-public",
     "packageName": "org.mskcc.cbio.oncokb",
     "packageFolder": "org/mskcc/cbio/oncokb",
     "serverPort": "9090",
