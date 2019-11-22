@@ -10,7 +10,7 @@
     "packageFolder": "org/mskcc/cbio/oncokb",
     "serverPort": "9090",
     "authenticationType": "jwt",
-    "cacheProvider": "ehcache",
+    "cacheProvider": "redis",
     "enableHibernateCache": true,
     "websocket": false,
     "databaseType": "sql",

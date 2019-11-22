@@ -1,10 +1,12 @@
 package org.mskcc.cbio.oncokb.config.timezone;
 
 import org.mskcc.cbio.oncokb.OncokbApp;
+import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.repository.timezone.DateTimeWrapper;
 import org.mskcc.cbio.oncokb.repository.timezone.DateTimeWrapperRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for the UTC Hibernate configuration.
  */
 @SpringBootTest(classes = OncokbApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 public class HibernateTimeZoneIT {
 
     @Autowired
