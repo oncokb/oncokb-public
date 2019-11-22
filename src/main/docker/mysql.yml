@@ -1,7 +1,7 @@
 version: '2'
 services:
   oncokb-public-mysql:
-    image: mysql:8.0.17
+    image: mysql:8.0.18
     # volumes:
     #     - ~/volumes/jhipster/oncokb/mysql/:/var/lib/mysql/
     environment:

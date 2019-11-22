@@ -101,13 +101,13 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         return create(ex, problem, request);
     }
     @ExceptionHandler
-    public ResponseEntity<Problem> handleEmailAreadyUsedException(org.mskcc.cbio.oncokb.service.EmailAlreadyUsedException ex, NativeWebRequest request) {
+    public ResponseEntity<Problem> handleEmailAlreadyUsedException(org.mskcc.cbio.oncokb.service.EmailAlreadyUsedException ex, NativeWebRequest request) {
         EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
         return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  false, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handleUsernameAreadyUsedException(org.mskcc.cbio.oncokb.service.UsernameAlreadyUsedException ex, NativeWebRequest request) {
+    public ResponseEntity<Problem> handleUsernameAlreadyUsedException(org.mskcc.cbio.oncokb.service.UsernameAlreadyUsedException ex, NativeWebRequest request) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
         return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  false, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }

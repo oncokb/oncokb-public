@@ -360,7 +360,7 @@ export default class CancerGenesPage extends React.Component<{
 
   private readonly extendedCancerGene = remoteData<ExtendCancerGene[]>({
     await: () => [this.annotatedGenes, this.cancerGenes],
-    invoke: async () => {
+    invoke: () => {
       const annotatedGenes = _.reduce(
         this.annotatedGenes.result,
         (acc, next) => {
