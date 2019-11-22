@@ -298,42 +298,4 @@ public class UserDetailsResourceIT {
         List<UserDetails> userDetailsList = userDetailsRepository.findAll();
         assertThat(userDetailsList).hasSize(databaseSizeBeforeDelete - 1);
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(UserDetails.class);
-        UserDetails userDetails1 = new UserDetails();
-        userDetails1.setId(1L);
-        UserDetails userDetails2 = new UserDetails();
-        userDetails2.setId(userDetails1.getId());
-        assertThat(userDetails1).isEqualTo(userDetails2);
-        userDetails2.setId(2L);
-        assertThat(userDetails1).isNotEqualTo(userDetails2);
-        userDetails1.setId(null);
-        assertThat(userDetails1).isNotEqualTo(userDetails2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(UserDetailsDTO.class);
-        UserDetailsDTO userDetailsDTO1 = new UserDetailsDTO();
-        userDetailsDTO1.setId(1L);
-        UserDetailsDTO userDetailsDTO2 = new UserDetailsDTO();
-        assertThat(userDetailsDTO1).isNotEqualTo(userDetailsDTO2);
-        userDetailsDTO2.setId(userDetailsDTO1.getId());
-        assertThat(userDetailsDTO1).isEqualTo(userDetailsDTO2);
-        userDetailsDTO2.setId(2L);
-        assertThat(userDetailsDTO1).isNotEqualTo(userDetailsDTO2);
-        userDetailsDTO1.setId(null);
-        assertThat(userDetailsDTO1).isNotEqualTo(userDetailsDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(userDetailsMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(userDetailsMapper.fromId(null)).isNull();
-    }
 }
