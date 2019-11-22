@@ -280,7 +280,7 @@ export class AnnotationStore {
 
   readonly mutationMapperDataExternal = remoteData<OncokbMutation[]>({
     await: () => [this.biologicalAlterations],
-    invoke: async () => {
+    invoke: () => {
       return Promise.resolve(
         this.biologicalAlterations.result.map(alteration => {
           return {
@@ -322,7 +322,7 @@ export class AnnotationStore {
 
   readonly allTumorTypesOptions = remoteData<any>({
     await: () => [this.allMainTypes, this.allSubtype],
-    invoke: async () => {
+    invoke: () => {
       return Promise.resolve([
         {
           label: 'Cancer Type',
