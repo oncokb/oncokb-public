@@ -45,6 +45,9 @@ public class CacheConfiguration {
             createCache(cm, org.mskcc.cbio.oncokb.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
             createCache(cm, org.mskcc.cbio.oncokb.domain.User.class.getName(), jcacheConfiguration);
             createCache(cm, org.mskcc.cbio.oncokb.domain.Authority.class.getName(), jcacheConfiguration);
+            createCache(cm, org.mskcc.cbio.oncokb.domain.UserDetails.class.getName(), jcacheConfiguration);
+            createCache(cm, org.mskcc.cbio.oncokb.domain.Token.class.getName(), jcacheConfiguration);
+            createCache(cm, org.mskcc.cbio.oncokb.domain.TokenStats.class.getName(), jcacheConfiguration);
             createCache(cm, org.mskcc.cbio.oncokb.domain.User.class.getName() + ".authorities", jcacheConfiguration);
             // jhipster-needle-redis-add-entry
         };
