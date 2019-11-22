@@ -67,8 +67,8 @@ export const Home = (props: IHomeProp) => {
             </a>
           </li>
           <li>
-            <a href="https://twitter.com/java_hipster" target="_blank" rel="noopener noreferrer">
-              follow @java_hipster on Twitter
+            <a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer">
+              follow @jhipster on Twitter
             </a>
           </li>
         </ul>

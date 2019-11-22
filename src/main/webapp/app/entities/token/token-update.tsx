@@ -66,7 +66,7 @@ export class TokenUpdate extends React.Component<ITokenUpdateProps, ITokenUpdate
   };
 
   handleClose = () => {
-    this.props.history.push('/entity/token');
+    this.props.history.push('/token');
   };
 
   render() {
@@ -137,7 +137,7 @@ export class TokenUpdate extends React.Component<ITokenUpdateProps, ITokenUpdate
                       : null}
                   </AvInput>
                 </AvGroup>
-                <Button tag={Link} id="cancel-save" to="/entity/token" replace color="info">
+                <Button tag={Link} id="cancel-save" to="/token" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">Back</span>

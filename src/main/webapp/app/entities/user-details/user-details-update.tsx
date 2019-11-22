@@ -63,7 +63,7 @@ export class UserDetailsUpdate extends React.Component<IUserDetailsUpdateProps, 
   };
 
   handleClose = () => {
-    this.props.history.push('/entity/user-details');
+    this.props.history.push('/user-details');
   };
 
   render() {
@@ -149,7 +149,7 @@ export class UserDetailsUpdate extends React.Component<IUserDetailsUpdateProps, 
                       : null}
                   </AvInput>
                 </AvGroup>
-                <Button tag={Link} id="cancel-save" to="/entity/user-details" replace color="info">
+                <Button tag={Link} id="cancel-save" to="/user-details" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">Back</span>

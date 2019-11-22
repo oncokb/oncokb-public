@@ -13,9 +13,9 @@ const Routes = ({ match }) => (
   <div>
     <Switch>
       {/* prettier-ignore */}
-      <ErrorBoundaryRoute path={`${match.url}/token`} component={Token} />
-      <ErrorBoundaryRoute path={`${match.url}/token-stats`} component={TokenStats} />
-      <ErrorBoundaryRoute path={`${match.url}/user-details`} component={UserDetails} />
+      <ErrorBoundaryRoute path={`${match.url}token`} component={Token} />
+      <ErrorBoundaryRoute path={`${match.url}token-stats`} component={TokenStats} />
+      <ErrorBoundaryRoute path={`${match.url}user-details`} component={UserDetails} />
       {/* jhipster-needle-add-route-path - JHipster will add routes here */}
     </Switch>
   </div>
