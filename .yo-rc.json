@@ -1,0 +1,50 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "org.mskcc.cbio.oncokb"
+    },
+    "jhipsterVersion": "6.4.1",
+    "applicationType": "monolith",
+    "baseName": "oncokb",
+    "packageName": "org.mskcc.cbio.oncokb",
+    "packageFolder": "org/mskcc/cbio/oncokb",
+    "serverPort": "9090",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "ZmRlMDk2NDM3ZDQ1NzIzZmExODhlYTZkNmZkNTVkY2ViZjM0MjI5NjM2ZDUyYjMwZTFkMzY3YTUzZmRiZGRiOWNlNjZhMjIxNzY2OTVhMGU5NmZlMWZlMTQ4ODQwNGU1OTI3ODVjNGFkY2FlMWQ0ZmVhMzhkMjEzN2FkYWJkZmU=",
+    "useSass": true,
+    "clientPackageManager": "yarn",
+    "skipClient": false,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "blueprints": [],
+    "clientFramework": "react",
+    "clientTheme": "none",
+    "appsFolders": [
+      "public-website"
+    ],
+    "directoryPath": "../",
+    "dockerRepositoryName": "oncokb-public",
+    "dockerPushCommand": "docker push",
+    "kubernetesNamespace": "default",
+    "kubernetesServiceType": "Ingress",
+    "ingressDomain": "localhost",
+    "monitoring": "no",
+    "istio": false,
+    "embeddableLaunchScript": false
+  }
+}
