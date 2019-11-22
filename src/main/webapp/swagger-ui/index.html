@@ -129,6 +129,10 @@
 
                     var $urlDropdown = $('#select_baseUrl');
                     $urlDropdown.empty();
+                    data.sort(function (a, b) {
+                        var x = a.name.toLowerCase(), y = b.name.toLowerCase();
+                        return x < y ? -1 : x > y ? 1 : 0;
+                    });
                     data.unshift({
                         location: "/api/v1/v2/api-docs",
                         name: "API v1",
