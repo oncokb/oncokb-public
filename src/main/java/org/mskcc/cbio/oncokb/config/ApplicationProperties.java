@@ -15,7 +15,7 @@ public class ApplicationProperties {
     private String userRegistrationWebhook;
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
-    private String redisPassword;
+    private MasterSlaveRedisCache masterSlaveRedisCache;
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -49,11 +49,11 @@ public class ApplicationProperties {
         this.sitemapEnabled = sitemapEnabled;
     }
 
-    public String getRedisPassword() {
-        return redisPassword;
+    public MasterSlaveRedisCache getMasterSlaveRedisCache() {
+        return masterSlaveRedisCache;
     }
 
-    public void setRedisPassword(String redisPassword) {
-        this.redisPassword = redisPassword;
+    public void setMasterSlaveRedisCache(MasterSlaveRedisCache masterSlaveRedisCache) {
+        this.masterSlaveRedisCache = masterSlaveRedisCache;
     }
 }
