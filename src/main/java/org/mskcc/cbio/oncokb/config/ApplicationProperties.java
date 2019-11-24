@@ -15,6 +15,7 @@ public class ApplicationProperties {
     private String userRegistrationWebhook;
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
+    private String redisPassword;
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -46,5 +47,13 @@ public class ApplicationProperties {
 
     public void setSitemapEnabled(Boolean sitemapEnabled) {
         this.sitemapEnabled = sitemapEnabled;
+    }
+
+    public String getRedisPassword() {
+        return redisPassword;
+    }
+
+    public void setRedisPassword(String redisPassword) {
+        this.redisPassword = redisPassword;
     }
 }

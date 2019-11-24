@@ -24,10 +24,12 @@ import io.github.jhipster.config.JHipsterProperties;
 public class CacheConfiguration {
 
     @Bean
-    public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties) {
+    public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties, ApplicationProperties applicationProperties) {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
         Config config = new Config();
-        config.useSingleServer().setAddress(jHipsterProperties.getCache().getRedis().getServer());
+        config.useSingleServer()
+            .setAddress(jHipsterProperties.getCache().getRedis().getServer())
+            .setPassword(applicationProperties.getRedisPassword());
         jcacheConfig.setStatisticsEnabled(true);
         jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
         return RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);

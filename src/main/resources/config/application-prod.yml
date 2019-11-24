@@ -116,7 +116,7 @@ jhipster:
   cache: # Cache configuration
     redis: # Redis configuration
       expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
-      server: redis://localhost:6379
+      server: redis://oncokb-public-redis-master:6379
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://my-server-url-to-change # Modify according to your server's URL
   metrics:
@@ -146,3 +146,5 @@ application:
   profile: prod
   api-proxy-url: 'http://oncokb-core:8888'
   sitemap-enabled: true
+  user-registration-webhook:
+  redis-password: 'oncokb-public-redis-password'
