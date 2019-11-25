@@ -3,36 +3,36 @@ import MenuItem from 'app/pages/menus/menu-item';
 import { observer } from 'mobx-react';
 import { Dropdown, NavItem } from 'react-bootstrap';
 import NavLink from 'react-bootstrap/NavLink';
-import { PAGE_ROUTE } from 'app/config/constants';
+import { PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
 
 const AccountMenuItemsAuthenticated: React.FunctionComponent<{
   isAdmin: boolean;
 }> = props => (
   <>
     <MenuItem icon="wrench" to={PAGE_ROUTE.ACCOUNT_SETTINGS}>
-      Account Settings
+      {PAGE_TITLE.ACCOUNT_SETTINGS}
     </MenuItem>
     <MenuItem icon="lock" to={PAGE_ROUTE.ACCOUNT_PASSWORD}>
-      Change Password
+      {PAGE_TITLE.ACCOUNT_PASSWORD}
     </MenuItem>
     {props.isAdmin ? (
       <MenuItem icon="users" to={PAGE_ROUTE.ADMIN_USER_MANAGEMENT}>
-        Manage Users
+        {PAGE_TITLE.ADMIN_USER_MANAGEMENT}
       </MenuItem>
     ) : null}
     <MenuItem icon="sign-out" to={PAGE_ROUTE.LOGOUT}>
-      Log out
+      {PAGE_TITLE.LOGOUT}
     </MenuItem>
   </>
 );
 
 const AccountMenuItems: React.FunctionComponent<{}> = () => (
   <>
-    <MenuItem id="login-item" icon="sign-in" to="/login">
-      Log in
+    <MenuItem id="login-item" icon="sign-in" to={PAGE_ROUTE.LOGIN}>
+      {PAGE_TITLE.LOGIN}
     </MenuItem>
-    <MenuItem icon="sign-in" to="/account/register">
-      Register
+    <MenuItem icon="sign-in" to={PAGE_ROUTE.REGISTER}>
+      {PAGE_TITLE.REGISTER}
     </MenuItem>
   </>
 );
@@ -47,7 +47,7 @@ export default class AccountMenu extends React.Component<{
       <Dropdown as={NavItem}>
         <Dropdown.Toggle id={'account-menu'} as={NavLink}>
           <i className={'fa fa-user mr-1'} />
-          Account
+          {PAGE_TITLE.ACCOUNT}
         </Dropdown.Toggle>
         <Dropdown.Menu alignRight={true}>
           {this.props.isAuthenticated ? (

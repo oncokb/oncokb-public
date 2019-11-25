@@ -246,6 +246,16 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
   vus: false
 };
 
+export enum PAGE_TITLE {
+  ACCOUNT = 'Account',
+  ACCOUNT_SETTINGS = 'Account Settings',
+  ACCOUNT_PASSWORD = 'Change Password',
+  ADMIN_USER_MANAGEMENT = 'Manage Users',
+  LOGOUT = 'Log out',
+  LOGIN = 'Log in',
+  REGISTER = 'Register'
+}
+
 export enum PAGE_ROUTE {
   LOGIN = '/login',
   LOGOUT = '/logout',

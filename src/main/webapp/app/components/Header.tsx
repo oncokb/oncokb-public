@@ -9,6 +9,7 @@ import { NavLink } from 'react-router-dom';
 import AccountMenu from 'app/pages/menus/account';
 import mskIcon from 'content/images/msk-icon-fff.png';
 import { action, observable } from "mobx";
+import { PAGE_TITLE } from 'app/config/constants';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -49,7 +50,7 @@ class Header extends React.Component<IHeaderProps> {
 
   @action
   closeNav(event: any) {
-    if (event.target.text !== 'Account') {
+    if (event.target.text !== PAGE_TITLE.ACCOUNT) {
       this.isNavExpanded = false;
     }
   }
