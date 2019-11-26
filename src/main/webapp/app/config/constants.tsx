@@ -3,6 +3,8 @@ import {
   MainNumber,
   VariantAnnotation
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 /* eslint no-shadow: 0 */
 
@@ -307,7 +309,8 @@ export enum LicenseType {
 export const LICENSE_TITLES: { [key: string]: string } = {
   [LicenseType.ACADEMIC]: 'Research use in an academic setting',
   [LicenseType.RESEARCH_IN_COMMERCIAL]: 'Research use in a commercial setting',
-  [LicenseType.HOSPITAL]: 'Use for patient services or reports in hospital/care setting',
+  [LicenseType.HOSPITAL]:
+    'Use for patient services or reports in hospital/care setting',
   [LicenseType.COMMERCIAL]: 'Use in a commercial product'
 };
 
@@ -379,7 +382,12 @@ export const ACADEMIC_TERMS = [
   },
   {
     key: TERM_DEFINITION.OK_WITH_TERMS_OF_USE,
-    description: 'I have read and agree with the OncoKB Terms of Use.'
+    description: (
+      <span>
+        I have read and agree with the OncoKB{' '}
+        <Link to={PAGE_ROUTE.TERMS}>Terms of Use</Link>.
+      </span>
+    )
   }
 ];
 
@@ -389,7 +397,6 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
-  { date: '10302019', version: 'v1.24' },
   { date: '08282019', version: 'v1.23' },
   { date: '08042019', version: 'v1.22' },
   { date: '06212019', version: 'v1.21' },
