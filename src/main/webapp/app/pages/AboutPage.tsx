@@ -46,7 +46,7 @@ export const AboutPage: React.FunctionComponent<AboutPageProps> = inject(
               rel="noopener noreferrer"
             >
               ClinicalTrials.gov
-            </a>
+            </a>{' '}
             and the scientific literature.
           </p>
           <p>

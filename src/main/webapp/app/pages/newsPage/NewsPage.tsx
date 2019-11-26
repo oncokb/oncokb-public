@@ -40,7 +40,7 @@ export const NewsPage = () => {
         <CitationText />
       </div>
       <div className="mt-2">
-        <NewsList date={'10302019'}>
+        <NewsList date={'12022019'}>
           <span>
             Established login procedures for access to downloadable data files
             and API. Please review the{' '}
