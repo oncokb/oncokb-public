@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbApp;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.User;
@@ -10,6 +11,7 @@ import org.mskcc.cbio.oncokb.service.util.RandomUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +34,7 @@ import static org.mockito.Mockito.when;
  * Integration tests for {@link UserService}.
  */
 @SpringBootTest(classes = OncokbApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class UserServiceIT {
 

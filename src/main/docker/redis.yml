@@ -1,0 +1,6 @@
+version: '2'
+services:
+  oncokb-public-redis:
+    image: redis:5.0.6
+    ports:
+      - '6379:6379'

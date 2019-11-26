@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service.mapper;
 
+import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbApp;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
@@ -8,6 +9,7 @@ import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -22,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for {@link UserMapper}.
  */
 @SpringBootTest(classes = OncokbApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 public class UserMapperIT {
 
     private static final String DEFAULT_LOGIN = "johndoe";

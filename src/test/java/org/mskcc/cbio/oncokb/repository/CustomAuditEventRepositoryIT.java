@@ -1,11 +1,13 @@
 package org.mskcc.cbio.oncokb.repository;
 
 import org.mskcc.cbio.oncokb.OncokbApp;
+import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.audit.AuditEventConverter;
 import org.mskcc.cbio.oncokb.domain.PersistentAuditEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +30,7 @@ import static org.mskcc.cbio.oncokb.repository.CustomAuditEventRepository.EVENT_
  * Integration tests for {@link CustomAuditEventRepository}.
  */
 @SpringBootTest(classes = OncokbApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class CustomAuditEventRepositoryIT {
 
