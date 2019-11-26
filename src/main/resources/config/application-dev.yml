@@ -88,9 +88,9 @@ server:
 
 jhipster:
   cache: # Cache configuration
-    ehcache: # Ehcache configuration
-      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
-      max-entries: 100 # Number of objects in each cache entry
+    redis: # Redis configuration
+      expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+      server: redis://localhost:6379
   # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
   cors:
     allowed-origins: '*'
@@ -138,3 +138,4 @@ application:
   api-proxy-url: 'http://localhost:8888'
   sitemap-enabled: false
   user-registration-webhook:
+  redis-password: oncokb-public-redis-password

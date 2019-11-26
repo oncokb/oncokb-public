@@ -1,11 +1,13 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.domain.PersistentAuditEvent;
 import org.mskcc.cbio.oncokb.repository.PersistenceAuditEventRepository;
 import org.mskcc.cbio.oncokb.OncokbApp;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for {@link AuditEventService}.
  */
 @SpringBootTest(classes = OncokbApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class AuditEventServiceIT {
     @Autowired

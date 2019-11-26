@@ -102,7 +102,9 @@ jhipster:
     logs: # Reports metrics in the logs
       enabled: true
       report-frequency: 60 # in seconds
-
+  cache:
+    redis:
+      server: ${redis.test.server}
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

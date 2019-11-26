@@ -149,6 +149,19 @@
             <!-- parent POM declares this dependency in default (compile) scope -->
         </dependency>
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
         </dependency>
@@ -169,10 +182,6 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.cache</groupId>
-            <artifactId>cache-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
@@ -185,14 +194,6 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jcache</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -352,6 +353,7 @@
           <artifactId>jslack</artifactId>
           <version>3.1.0</version>
         </dependency>
+      <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
 
     <build>
@@ -993,17 +995,17 @@
                                     <arguments>install</arguments>
                                 </configuration>
                             </execution>
-<!--?                            <execution>-->
-<!--?                                <id>webpack build test</id>-->
-<!--?                                <goals>-->
-<!--?                                    <goal>yarn</goal>-->
-<!--?                                </goals>-->
-<!--?                                <phase>test</phase>-->
-<!--?                                <configuration>-->
-<!--?                                    <arguments>run webpack:test</arguments>-->
-<!--?                                    <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>-->
-<!--?                                </configuration>-->
-<!--?                            </execution>-->
+<!--                            <execution>-->
+<!--                                <id>webpack build test</id>-->
+<!--                                <goals>-->
+<!--                                    <goal>yarn</goal>-->
+<!--                                </goals>-->
+<!--                                <phase>test</phase>-->
+<!--                                <configuration>-->
+<!--                                    <arguments>run webpack:test</arguments>-->
+<!--                                    <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>-->
+<!--                                </configuration>-->
+<!--                            </execution>-->
                             <execution>
                                 <id>webpack build prod</id>
                                 <goals>

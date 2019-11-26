@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.OncokbApp;
+import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import io.github.jhipster.config.JHipsterProperties;
 import org.mskcc.cbio.oncokb.config.audit.AuditEventConverter;
 import org.mskcc.cbio.oncokb.domain.PersistentAuditEvent;
@@ -9,6 +10,7 @@ import org.mskcc.cbio.oncokb.repository.PersistenceAuditEventRepository;
 import org.mskcc.cbio.oncokb.service.AuditEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link AuditResource} REST controller.
  */
 @SpringBootTest(classes = OncokbApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class AuditResourceIT {
 

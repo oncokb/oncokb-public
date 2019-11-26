@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.security;
 
+import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbApp;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
@@ -7,6 +8,7 @@ import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
  * Integrations tests for {@link DomainUserDetailsService}.
  */
 @SpringBootTest(classes = OncokbApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class DomainUserDetailsServiceIT {
 
