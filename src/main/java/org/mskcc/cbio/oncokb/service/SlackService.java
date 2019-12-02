@@ -12,7 +12,7 @@ import com.github.seratch.jslack.api.webhook.Payload;
 import com.github.seratch.jslack.api.webhook.WebhookResponse;
 import com.github.seratch.jslack.app_backend.interactive_messages.payload.BlockActionPayload;
 import org.apache.commons.lang3.StringUtils;
-import org.mskcc.cbio.oncokb.config.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
