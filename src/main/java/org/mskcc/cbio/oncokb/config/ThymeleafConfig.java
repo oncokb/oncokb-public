@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.config;
 
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

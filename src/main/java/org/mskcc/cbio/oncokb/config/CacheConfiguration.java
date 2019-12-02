@@ -1,7 +1,8 @@
 package org.mskcc.cbio.oncokb.config;
 
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.RedisType;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.*;
 import org.redisson.Redisson;
 import org.redisson.config.Config;
 import org.redisson.jcache.configuration.RedissonConfiguration;
@@ -24,13 +25,21 @@ import io.github.jhipster.config.JHipsterProperties;
 public class CacheConfiguration {
 
     @Bean
-    public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties, ApplicationProperties applicationProperties) {
+    public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties, ApplicationProperties applicationProperties) throws Exception {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
         Config config = new Config();
-        config.useMasterSlaveServers()
-            .setMasterAddress(applicationProperties.getMasterSlaveRedisCache().getMasterAddress())
-            .addSlaveAddress(applicationProperties.getMasterSlaveRedisCache().getSlaveAddress())
-            .setPassword(applicationProperties.getMasterSlaveRedisCache().getPassword());
+        if (applicationProperties.getRedis().getType().equals(RedisType.SINGLE.getType())) {
+            config.useSingleServer()
+                .setAddress(applicationProperties.getRedis().getSingleCache().getAddress())
+                .setPassword(applicationProperties.getRedis().getPassword());
+        } else if (applicationProperties.getRedis().getType().equals(RedisType.MASTER_SLAVE.getType())) {
+            config.useMasterSlaveServers()
+                .setMasterAddress(applicationProperties.getRedis().getMasterSlaveCache().getMasterAddress())
+                .addSlaveAddress(applicationProperties.getRedis().getMasterSlaveCache().getSlaveAddress())
+                .setPassword(applicationProperties.getRedis().getPassword());
+        } else {
+            throw new Exception("The redis type " + applicationProperties.getRedis().getType() + " is not supported. Only single and master-slave are supported.");
+        }
         jcacheConfig.setStatisticsEnabled(true);
         jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
         return RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
