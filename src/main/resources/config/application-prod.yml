@@ -147,7 +147,9 @@ application:
   api-proxy-url: 'http://oncokb-core:8888'
   sitemap-enabled: true
   user-registration-webhook:
-  master-slave-redis-cache:
-    master-address: 'redis://oncokb-public-redis-master:6379'
-    slave-address: 'redis://oncokb-public-redis-slave:6379'
+  redis:
+    type: 'master-slave'
     password: 'oncokb-public-redis-password'
+    master-slave-cache:
+      master-address: 'redis://oncokb-public-redis-master:6379'
+      slave-address: 'redis://oncokb-public-redis-slave:6379'

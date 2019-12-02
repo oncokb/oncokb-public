@@ -1,4 +1,4 @@
-package org.mskcc.cbio.oncokb.config;
+package org.mskcc.cbio.oncokb.config.application;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,7 +15,7 @@ public class ApplicationProperties {
     private String userRegistrationWebhook;
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
-    private MasterSlaveRedisCache masterSlaveRedisCache;
+    private RedisProperties redis;
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -49,11 +49,11 @@ public class ApplicationProperties {
         this.sitemapEnabled = sitemapEnabled;
     }
 
-    public MasterSlaveRedisCache getMasterSlaveRedisCache() {
-        return masterSlaveRedisCache;
+    public RedisProperties getRedis() {
+        return redis;
     }
 
-    public void setMasterSlaveRedisCache(MasterSlaveRedisCache masterSlaveRedisCache) {
-        this.masterSlaveRedisCache = masterSlaveRedisCache;
+    public void setRedis(RedisProperties redis) {
+        this.redis = redis;
     }
 }

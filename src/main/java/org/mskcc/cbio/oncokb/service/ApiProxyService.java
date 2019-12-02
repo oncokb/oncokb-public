@@ -1,6 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
-import org.mskcc.cbio.oncokb.config.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
