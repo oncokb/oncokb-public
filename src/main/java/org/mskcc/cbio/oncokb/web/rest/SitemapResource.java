@@ -82,7 +82,11 @@ public class SitemapResource {
         StringBuffer basePath = new StringBuffer();
         String scheme = request.getScheme();
         String domain = request.getServerName();
-        basePath.append(scheme);
+//        basePath.append(scheme);
+        // The certificate is attached on the ingress level and not propagate to pods
+        // Within the cluster, all connections are to http which will cause issue in the sitemap generation.
+        // We only want to show the result in google with https anyway, so hard code to https for now
+        basePath.append("https");
         basePath.append("://");
         basePath.append(domain);
 
