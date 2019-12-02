@@ -8,6 +8,7 @@
     // Technically, this only produces warnings, but I supporse everyone knows the drill why they use non-null assertion
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/prefer-regexp-exec": "off",
     "@typescript-eslint/no-misused-promises": [
       "error",
       {
