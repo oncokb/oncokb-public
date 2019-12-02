@@ -32,7 +32,7 @@ import {
   BiologicalVariant,
   ClinicalVariant
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
+import { AlterationPageLink, CitationLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
 import OncoKBTable, {
   SearchColumn
@@ -218,7 +218,7 @@ const GeneBackground: React.FunctionComponent<{
           } ml-2`}
         />
       </div>
-      {props.show ? <div>{props.geneBackground}</div> : undefined}
+      {props.show ? <CitationLink content={props.geneBackground}/> : undefined}
     </div>
   );
 };
