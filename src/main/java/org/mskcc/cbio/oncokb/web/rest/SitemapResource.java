@@ -1,7 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import io.swagger.annotations.ApiParam;
-import org.mskcc.cbio.oncokb.config.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.mskcc.cbio.oncokb.service.SitemapService;
 import org.springframework.beans.factory.annotation.Autowired;
