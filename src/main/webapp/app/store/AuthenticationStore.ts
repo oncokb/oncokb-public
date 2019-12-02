@@ -60,20 +60,24 @@ class AuthenticationStore {
 
   @action
   getAccount() {
-    client
-      .getAccountUsingGET({})
-      .then(account => {
-        this.account = account;
-        this.getAccountTokens();
-      })
-      .catch(error => {
-        this.updateIdToken('');
-        notifyError(
-          new Error(
-            'There an issue fetching your account information, please send an email to contact@oncokb.org.'
-          )
-        );
-      });
+    return new Promise((resolve, reject) => {
+      client
+        .getAccountUsingGET({})
+        .then(account => {
+          this.account = account;
+          this.getAccountTokens();
+          resolve();
+        })
+        .catch(error => {
+          this.updateIdToken('');
+          notifyError(
+            new Error(
+              'There an issue fetching your account information, please send an email to contact@oncokb.org.'
+            )
+          );
+          reject(error);
+        });
+    });
   }
 
   @autobind
@@ -176,11 +180,14 @@ class AuthenticationStore {
   loginSuccessCallback(result: string) {
     const uuid = result;
     this.updateIdToken(uuid);
-    this.loginSuccess = true;
 
     // we should fetch the account info when the user is successfully logged in.
-    this.getAccount();
-    this.loading = false;
+    this.getAccount().finally(() => {
+      this.loginSuccess = true;
+      this.loginError = false;
+      this.loginErrorMessage = '';
+      this.loading = false;
+    });
   }
 
   @action
@@ -191,8 +198,10 @@ class AuthenticationStore {
 
   @action.bound
   loginErrorCallback(error: Error) {
+    this.loginSuccess = false;
     this.loginError = true;
     this.loginErrorMessage = error.message;
+    this.loading = false;
   }
 
   public clearAuthToken() {
