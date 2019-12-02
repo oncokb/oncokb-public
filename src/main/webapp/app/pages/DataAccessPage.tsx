@@ -21,18 +21,81 @@ import _ from 'lodash';
 import { Row, Col, Alert } from 'react-bootstrap';
 import { getNewsTitle } from 'app/pages/newsPage/NewsList';
 import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
-import { action } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import WindowStore from 'app/store/WindowStore';
 import { ContactLink } from 'app/shared/links/ContactLink';
 import { Link } from 'react-router-dom';
+import Select from 'react-select';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
+
+const getDataTitle = (date: string, version: string) => {
+  return `${getNewsTitle(date)} (${version})`;
+};
+
+const DownloadButtonGroups: React.FunctionComponent<{
+  data: DownloadAvailabilityWithDate;
+}> = props => {
+  return (
+    <>
+      {props.data.hasAllCuratedGenes ? (
+        <AuthDownloadButton
+          fileName={`all_curated_genes_${props.data.version}.tsv`}
+          getDownloadData={() =>
+            oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
+              version: props.data.version
+            })
+          }
+          buttonText="All Curated Genes"
+        />
+      ) : null}
+      {props.data.hasAllAnnotatedVariants ? (
+        <AuthDownloadButton
+          fileName={`all_annotated_variants_${props.data.version}.tsv`}
+          getDownloadData={() =>
+            oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET({
+              version: props.data.version
+            })
+          }
+          buttonText="All Curated Alterations"
+        />
+      ) : null}
+      {props.data.hasAllActionableVariants ? (
+        <AuthDownloadButton
+          fileName={`all_actionable_variants_${props.data.version}.tsv`}
+          getDownloadData={() =>
+            oncokbClient.utilsAllActionableVariantsTxtGetUsingGET({
+              version: props.data.version
+            })
+          }
+          buttonText="Actionable Alterations"
+        />
+      ) : null}
+      {props.data.hasCancerGeneList ? (
+        <AuthDownloadButton
+          fileName={`cancer_gene_list_${props.data.version}.tsv`}
+          getDownloadData={() =>
+            oncokbClient.utilsCancerGeneListTxtGetUsingGET({
+              version: props.data.version
+            })
+          }
+          buttonText="Cancer Gene List"
+        />
+      ) : null}
+    </>
+  );
+};
+
 @inject('routing', 'windowStore')
 @observer
 export default class DataAccessPage extends React.Component<{
   routing: RouterStore;
   windowStore: WindowStore;
 }> {
+  @observable selectedVersion: {
+    label: string;
+    value: string;
+  };
   readonly dataAvailability = remoteData<DownloadAvailabilityWithDate[]>({
     async invoke() {
       const result = await oncokbPrivateClient.utilDataReleaseDownloadAvailabilityGetUsingGET(
@@ -79,6 +142,18 @@ export default class DataAccessPage extends React.Component<{
     );
   };
 
+  @computed
+  get selectedData() {
+    if (this.selectedVersion) {
+      return _.chain(this.dataAvailability.result)
+        .filter(item => item.version === this.selectedVersion.value)
+        .first()
+        .value();
+    } else {
+      return undefined;
+    }
+  }
+
   render() {
     return (
       <>
@@ -93,11 +168,13 @@ export default class DataAccessPage extends React.Component<{
         </div>
         <div className={'mb-4'}>
           <h6>
-            Once registered and logged in, you will have access to the following. Please review the <Link
-            to={PAGE_ROUTE.TERMS}>usage terms</Link> before proceeding. <CitationText/>
+            Once registered and logged in, you will have access to the
+            following. Please review the{' '}
+            <Link to={PAGE_ROUTE.TERMS}>usage terms</Link> before proceeding.{' '}
+            <CitationText />
           </h6>
         </div>
-        <div className={"mb-3"}>
+        <div className={'mb-3'}>
           <h5 className="title">Annotating Your Files</h5>
           <div>
             You can annotate your data files (mutations, copy number
@@ -137,62 +214,56 @@ export default class DataAccessPage extends React.Component<{
         <div className={'mb-3'}>
           <h5 className="title">Data Download</h5>
         </div>
+        {this.dataAvailability.isComplete &&
+        this.dataAvailability.result.length > 0 ? (
+          <>
+            <h6 className="title">
+              {getDataTitle(
+                this.dataAvailability.result[0].date,
+                this.dataAvailability.result[0].version
+              )}
+              , the latest
+            </h6>
+            <DownloadButtonGroups data={this.dataAvailability.result[0]} />
+
+            {this.dataAvailability.result.length > 1 ? (
+              <>
+                <hr />
+                <Row className={'mb-3'}>
+                  <Col lg={4} xs={12}>
+                    <Select
+                      value={this.selectedVersion}
+                      placeholder={'Select previous version'}
+                      options={this.dataAvailability.result
+                        .slice(1)
+                        .map(data => {
+                          return {
+                            value: data.version,
+                            label: getDataTitle(data.date, data.version)
+                          };
+                        })}
+                      onChange={(selectedOption: any) =>
+                        (this.selectedVersion = selectedOption)
+                      }
+                      isClearable={true}
+                    />
+                  </Col>
+                </Row>
+
+                {this.selectedData !== undefined ? (
+                  <>
+                    <Row className={DEFAULT_MARGIN_BOTTOM_LG}>
+                      <Col>
+                        <DownloadButtonGroups data={this.selectedData} />
+                      </Col>
+                    </Row>
+                  </>
+                ) : null}
+              </>
+            ) : null}
+          </>
+        ) : null}
         <div>
-          {this.dataAvailability.result.map(item => (
-            <>
-              <h5>
-                {getNewsTitle(item.date)} ({item.version})
-              </h5>
-              <Row className={DEFAULT_MARGIN_BOTTOM_LG}>
-                <Col>
-                  {item.hasAllCuratedGenes ? (
-                    <AuthDownloadButton
-                      fileName={`all_curated_genes_${item.version}.tsv`}
-                      getDownloadData={() =>
-                        oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
-                          version: item.version
-                        })
-                      }
-                      buttonText="All Curated Genes"
-                    />
-                  ) : null}
-                  {item.hasAllAnnotatedVariants ? (
-                    <AuthDownloadButton
-                      fileName={`all_annotated_variants_${item.version}.tsv`}
-                      getDownloadData={() =>
-                        oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET({
-                          version: item.version
-                        })
-                      }
-                      buttonText="All Curated Alterations"
-                    />
-                  ) : null}
-                  {item.hasAllActionableVariants ? (
-                    <AuthDownloadButton
-                      fileName={`all_actionable_variants_${item.version}.tsv`}
-                      getDownloadData={() =>
-                        oncokbClient.utilsAllActionableVariantsTxtGetUsingGET({
-                          version: item.version
-                        })
-                      }
-                      buttonText="Actionable Alterations"
-                    />
-                  ) : null}
-                  {item.hasCancerGeneList ? (
-                    <AuthDownloadButton
-                      fileName={`cancer_gene_list_${item.version}.tsv`}
-                      getDownloadData={() =>
-                        oncokbClient.utilsCancerGeneListTxtGetUsingGET({
-                          version: item.version
-                        })
-                      }
-                      buttonText="Cancer Gene List"
-                    />
-                  ) : null}
-                </Col>
-              </Row>
-            </>
-          ))}
           {this.dataAvailability.error ? (
             <Alert variant={'warning'}>
               We are not able to provide data download at the moment, please{' '}
