@@ -255,7 +255,8 @@ export enum PAGE_TITLE {
   ADMIN_USER_MANAGEMENT = 'Manage Users',
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
-  REGISTER = 'Register'
+  REGISTER = 'Register',
+  TERMS = 'Usage Terms - Academic Research'
 }
 
 export enum PAGE_ROUTE {
@@ -362,6 +363,18 @@ export enum TERM_DEFINITION {
   ONLY_ACADEMIC_USAGE = 'ONLY_ACADEMIC_USAGE',
   NO_COMPANY_USAGE = 'NO_COMPANY_USAGE',
   OK_WITH_TERMS_OF_USE = 'OK_WITH_TERMS_OF_USE'
+}
+
+export enum DOCUMENT_TITLES {
+  HOME = 'OncoKB',
+  LEVELS = 'OncoKB Levels of Evidence',
+  TEAM = 'OncoKB Team',
+  ABOUT = 'About OncoKB',
+  ACTIONABLE_GENES = 'OncoKB Actionable Genes',
+  TERMS = 'OncoKB Usage Terms - Academic Research',
+  NEWS = 'OncoKB Latest News',
+  DATA_ACCESS = 'Ways to Access OncoKB Data',
+  CANCER_GENES = 'OncoKB Cancer Gene List'
 }
 
 export const ACADEMIC_TERMS = [

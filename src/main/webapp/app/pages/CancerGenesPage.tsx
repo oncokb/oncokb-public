@@ -14,10 +14,15 @@ import {
   filterByKeyword,
   getDefaultColumnDefinition
 } from 'app/shared/utils/Utils';
-import { LG_TABLE_FIXED_HEIGHT, TABLE_COLUMN_KEY } from 'app/config/constants';
+import {
+  DOCUMENT_TITLES,
+  LG_TABLE_FIXED_HEIGHT,
+  TABLE_COLUMN_KEY
+} from 'app/config/constants';
 import AppStore from 'app/store/AppStore';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
+import DocumentTitle from 'react-document-title';
 
 const InfoIcon = (props: { overlay: string | JSX.Element }) => {
   return (
@@ -408,67 +413,69 @@ export default class CancerGenesPage extends React.Component<{
 
   render() {
     return (
-      <div className="cancerGenes">
-        <Row>
-          <Col className="col-auto mr-auto">
-            <h2>OncoKB Cancer Gene List</h2>
-          </Col>
-          <Col className="col-auto">
-            <AuthDownloadButton
-              fileName="cancerGeneList.tsv"
-              getDownloadData={() =>
-                oncokbClient.utilsCancerGeneListTxtGetUsingGET({})
-              }
-              buttonText="Cancer Gene List"
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <div>
-              {this.cancerGenes.result.length} genes, last update{' '}
-              {this.props.appStore.appInfo.result.dataVersion.date}
-            </div>
-            <div>
-              The following genes are considered to be cancer genes by OncoKB,
-              based on their inclusion in various different sequencing panels,
-              the Sanger Cancer Gene Census, or{' '}
-              <a href="http://science.sciencemag.org/content/339/6127/1546.full">
-                Vogelstein et al. (2013)
-              </a>
-              .
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <OncoKBTable
-              data={this.extendedCancerGene.result}
-              columns={this.columns}
-              style={{
-                height: LG_TABLE_FIXED_HEIGHT
-              }}
-              pageSize={10}
-              showPagination={true}
-              loading={this.extendedCancerGene.isPending}
-              defaultSorted={[
-                {
-                  id: 'numOfSources',
-                  desc: true
-                },
-                {
-                  id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
-                  desc: false
-                },
-                {
-                  id: 'oncokbAnnotated',
-                  desc: true
+      <DocumentTitle title={DOCUMENT_TITLES.CANCER_GENES}>
+        <div className="cancerGenes">
+          <Row>
+            <Col className="col-auto mr-auto">
+              <h2>OncoKB Cancer Gene List</h2>
+            </Col>
+            <Col className="col-auto">
+              <AuthDownloadButton
+                fileName="cancerGeneList.tsv"
+                getDownloadData={() =>
+                  oncokbClient.utilsCancerGeneListTxtGetUsingGET({})
                 }
-              ]}
-            />
-          </Col>
-        </Row>
-      </div>
+                buttonText="Cancer Gene List"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <div>
+                {this.cancerGenes.result.length} genes, last update{' '}
+                {this.props.appStore.appInfo.result.dataVersion.date}
+              </div>
+              <div>
+                The following genes are considered to be cancer genes by OncoKB,
+                based on their inclusion in various different sequencing panels,
+                the Sanger Cancer Gene Census, or{' '}
+                <a href="http://science.sciencemag.org/content/339/6127/1546.full">
+                  Vogelstein et al. (2013)
+                </a>
+                .
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <OncoKBTable
+                data={this.extendedCancerGene.result}
+                columns={this.columns}
+                style={{
+                  height: LG_TABLE_FIXED_HEIGHT
+                }}
+                pageSize={10}
+                showPagination={true}
+                loading={this.extendedCancerGene.isPending}
+                defaultSorted={[
+                  {
+                    id: 'numOfSources',
+                    desc: true
+                  },
+                  {
+                    id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
+                    desc: false
+                  },
+                  {
+                    id: 'oncokbAnnotated',
+                    desc: true
+                  }
+                ]}
+              />
+            </Col>
+          </Row>
+        </div>
+      </DocumentTitle>
     );
   }
 }

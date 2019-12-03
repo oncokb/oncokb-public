@@ -20,7 +20,7 @@ class Footer extends React.Component<{ lastUpdate: string }> {
     return (
       <>
         <div className={'mb-2'}>
-          OncoKB is intended for research purposes only. Please review the{' '}
+          Please review the{' '}
           <Link to={'/terms'} className={indexStyles.orange}>
             usage terms
           </Link>{' '}

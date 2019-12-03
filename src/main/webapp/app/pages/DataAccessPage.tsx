@@ -6,6 +6,7 @@ import {
   DATA_RELEASES,
   DataRelease,
   DEFAULT_MARGIN_BOTTOM_LG,
+  DOCUMENT_TITLES,
   LicenseType,
   PAGE_ROUTE
 } from 'app/config/constants';
@@ -26,6 +27,7 @@ import WindowStore from 'app/store/WindowStore';
 import { ContactLink } from 'app/shared/links/ContactLink';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
+import DocumentTitle from 'react-document-title';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 
@@ -156,125 +158,127 @@ export default class DataAccessPage extends React.Component<{
 
   render() {
     return (
-      <>
-        <div className={'mb-4'}>
-          <h6 className={'mb-3'}>
-            <LicenseExplanation />
-          </h6>
-          <ButtonSelections
-            isLargeScreen={this.props.windowStore.isLargeScreen}
-            onSelectLicense={this.onSelectLicense}
-          />
-        </div>
-        <div className={'mb-4'}>
-          <h6>
-            Once registered and logged in, you will have access to the
-            following. Please review the{' '}
-            <Link to={PAGE_ROUTE.TERMS}>usage terms</Link> before proceeding.{' '}
-            <CitationText />
-          </h6>
-        </div>
-        <div className={'mb-3'}>
-          <h5 className="title">Annotating Your Files</h5>
-          <div>
-            You can annotate your data files (mutations, copy number
-            alterations, fusions, and clinical data) with{' '}
-            <a
-              href="https://github.com/oncokb/oncokb-annotator"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              OncoKB Annotator
-            </a>
-            .
-          </div>
-        </div>
-        <div className={'mb-3'}>
-          <h5 className="title">Web API</h5>
-          <div>
-            You can programmatically access the OncoKB data via its{' '}
-            <SwaggerApiLink>web API</SwaggerApiLink>.
-            <div>
-              Please specify your API token in the request header with{' '}
-              <code>Authorization: Bearer [your token]</code>.
-            </div>
-            <div>
-              Your token is available in your{' '}
-              <Link to={PAGE_ROUTE.ACCOUNT_SETTINGS}>Account Settings</Link>.
-            </div>
-            <div>
-              Example:{' '}
-              <code>
-                curl -H &quot;Authorization: Bearer [your token]&quot;
-                https://www.oncokb.org/api/v1/genes
-              </code>
-            </div>
-          </div>
-        </div>
-        <div className={'mb-3'}>
-          <h5 className="title">Data Download</h5>
-        </div>
-        {this.dataAvailability.isComplete &&
-        this.dataAvailability.result.length > 0 ? (
-          <>
-            <h6 className="title">
-              {getDataTitle(
-                this.dataAvailability.result[0].date,
-                this.dataAvailability.result[0].version
-              )}
-              , the latest
+      <DocumentTitle title={DOCUMENT_TITLES.DATA_ACCESS}>
+        <>
+          <div className={'mb-4'}>
+            <h6 className={'mb-3'}>
+              <LicenseExplanation />
             </h6>
-            <DownloadButtonGroups data={this.dataAvailability.result[0]} />
-
-            {this.dataAvailability.result.length > 1 ? (
-              <>
-                <hr />
-                <Row className={'mb-3'}>
-                  <Col lg={4} xs={12}>
-                    <Select
-                      value={this.selectedVersion}
-                      placeholder={'Select previous version'}
-                      options={this.dataAvailability.result
-                        .slice(1)
-                        .map(data => {
-                          return {
-                            value: data.version,
-                            label: getDataTitle(data.date, data.version)
-                          };
-                        })}
-                      onChange={(selectedOption: any) =>
-                        (this.selectedVersion = selectedOption)
-                      }
-                      isClearable={true}
-                    />
-                  </Col>
-                </Row>
-
-                {this.selectedData !== undefined ? (
-                  <>
-                    <Row className={DEFAULT_MARGIN_BOTTOM_LG}>
-                      <Col>
-                        <DownloadButtonGroups data={this.selectedData} />
-                      </Col>
-                    </Row>
-                  </>
-                ) : null}
-              </>
-            ) : null}
-          </>
-        ) : null}
-        <div>
-          {this.dataAvailability.error ? (
-            <Alert variant={'warning'}>
-              We are not able to provide data download at the moment, please{' '}
-              <ContactLink emailSubject={'Unable to Download the Data'}>
-                contact us
-              </ContactLink>
+            <ButtonSelections
+              isLargeScreen={this.props.windowStore.isLargeScreen}
+              onSelectLicense={this.onSelectLicense}
+            />
+          </div>
+          <div className={'mb-4'}>
+            <h6>
+              Once registered and logged in, you will have access to the
+              following. Please review the{' '}
+              <Link to={PAGE_ROUTE.TERMS}>usage terms</Link> before proceeding.{' '}
+              <CitationText />
+            </h6>
+          </div>
+          <div className={'mb-3'}>
+            <h5 className="title">Annotating Your Files</h5>
+            <div>
+              You can annotate your data files (mutations, copy number
+              alterations, fusions, and clinical data) with{' '}
+              <a
+                href="https://github.com/oncokb/oncokb-annotator"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                OncoKB Annotator
+              </a>
               .
-            </Alert>
+            </div>
+          </div>
+          <div className={'mb-3'}>
+            <h5 className="title">Web API</h5>
+            <div>
+              You can programmatically access the OncoKB data via its{' '}
+              <SwaggerApiLink>web API</SwaggerApiLink>.
+              <div>
+                Please specify your API token in the request header with{' '}
+                <code>Authorization: Bearer [your token]</code>.
+              </div>
+              <div>
+                Your token is available in your{' '}
+                <Link to={PAGE_ROUTE.ACCOUNT_SETTINGS}>Account Settings</Link>.
+              </div>
+              <div>
+                Example:{' '}
+                <code>
+                  curl -H &quot;Authorization: Bearer [your token]&quot;
+                  https://www.oncokb.org/api/v1/genes
+                </code>
+              </div>
+            </div>
+          </div>
+          <div className={'mb-3'}>
+            <h5 className="title">Data Download</h5>
+          </div>
+          {this.dataAvailability.isComplete &&
+          this.dataAvailability.result.length > 0 ? (
+            <>
+              <h6 className="title">
+                {getDataTitle(
+                  this.dataAvailability.result[0].date,
+                  this.dataAvailability.result[0].version
+                )}
+                , the latest
+              </h6>
+              <DownloadButtonGroups data={this.dataAvailability.result[0]} />
+
+              {this.dataAvailability.result.length > 1 ? (
+                <>
+                  <hr />
+                  <Row className={'mb-3'}>
+                    <Col lg={4} xs={12}>
+                      <Select
+                        value={this.selectedVersion}
+                        placeholder={'Select previous version'}
+                        options={this.dataAvailability.result
+                          .slice(1)
+                          .map(data => {
+                            return {
+                              value: data.version,
+                              label: getDataTitle(data.date, data.version)
+                            };
+                          })}
+                        onChange={(selectedOption: any) =>
+                          (this.selectedVersion = selectedOption)
+                        }
+                        isClearable={true}
+                      />
+                    </Col>
+                  </Row>
+
+                  {this.selectedData !== undefined ? (
+                    <>
+                      <Row className={DEFAULT_MARGIN_BOTTOM_LG}>
+                        <Col>
+                          <DownloadButtonGroups data={this.selectedData} />
+                        </Col>
+                      </Row>
+                    </>
+                  ) : null}
+                </>
+              ) : null}
+            </>
           ) : null}
-        </div>
-      </>
+          <div>
+            {this.dataAvailability.error ? (
+              <Alert variant={'warning'}>
+                We are not able to provide data download at the moment, please{' '}
+                <ContactLink emailSubject={'Unable to Download the Data'}>
+                  contact us
+                </ContactLink>
+                .
+              </Alert>
+            ) : null}
+          </div>
+        </>
+      </DocumentTitle>
     );
   }
 }
