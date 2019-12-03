@@ -8,6 +8,8 @@ import { RouterStore, SynchronizedHistory } from 'mobx-react-router';
 import { Router, withRouter } from 'react-router';
 import { syncHistoryWithStore } from 'mobx-react-router';
 import { createBrowserHistory } from 'history';
+import DocumentTitle from 'react-document-title';
+import { DOCUMENT_TITLES } from 'app/config/constants';
 
 export type Stores = {
   appStore: AppStore;
@@ -51,11 +53,13 @@ class App extends React.Component {
     this.checkHash(history);
 
     return (
-      <Provider {...this.stores}>
-        <Router history={history}>
-          <Main {...this.stores} />
-        </Router>
-      </Provider>
+      <DocumentTitle title={DOCUMENT_TITLES.HOME}>
+        <Provider {...this.stores}>
+          <Router history={history}>
+            <Main {...this.stores} />
+          </Router>
+        </Provider>
+      </DocumentTitle>
     );
   }
 }
