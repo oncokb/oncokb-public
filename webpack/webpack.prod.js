@@ -70,7 +70,7 @@ module.exports = webpackMerge(commonConfig({
   },
   optimization: {
     runtimeChunk: false,
-    minimize: false,
+    minimize: true,
     minimizer: [
       new TerserPlugin({
         cache: true,
