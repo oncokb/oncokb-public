@@ -40,6 +40,7 @@ const AppRouts = (props: {
     <Switch>
       <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
       <Redirect exact from={'/updates'} to={PAGE_ROUTE.NEWS} />
+      <Redirect exact from={'/genes'} to={PAGE_ROUTE.CANCER_GENES} />
       <Redirect
         exact
         from={'/gene/:hugoSymbol/alteration/:alteration'}
