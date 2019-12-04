@@ -6,4 +6,4 @@ COPY pom.xml .
 RUN mvn dependency:go-offline
 
 COPY . ${APP_DIR}
-RUN mvn package -Pprod verify jib:dockerBuild -DskipTests
+RUN mvn package -Pprod verify jib:dockerBuild -DskipTests -q
