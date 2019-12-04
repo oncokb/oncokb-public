@@ -1,8 +1,8 @@
 name: Publish Docker
-on: 
-  push:
-    tags: 
-      - 'v*'
+on: [push] 
+#  push:
+#    tags: 
+#      - 'v*'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,4 +14,5 @@ jobs:
         name: cbioportal/oncokb-public
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+        dockerfile: ./Dockerfile
         tag_names: true
