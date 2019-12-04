@@ -3,7 +3,7 @@ ENV APP_DIR /app
 WORKDIR ${APP_DIR}
 
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN mvn dependency:go-offline -q
 
 COPY . ${APP_DIR}
 RUN mvn package -Pprod verify jib:dockerBuild -DskipTests -q
