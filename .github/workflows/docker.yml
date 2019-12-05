@@ -1,18 +1,32 @@
-name: Publish Docker
+name: Publish Image to Docker Registry
 on: [push] 
 #  push:
 #    tags: 
 #      - 'v*'
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: cbioportal/oncokb-public
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        dockerfile: ./Dockerfile
-        tag_names: true
+    applications:
+        name: Publish Image to Docker Registry
+        runs-on: ubuntu-latest
+        timeout-minutes: 40
+        env:
+            NODE_VERSION: 12.13.0
+            SPRING_OUTPUT_ANSI_ENABLED: DETECT
+            SPRING_JPA_SHOW_SQL: false
+            JHI_DISABLE_WEBPACK_LOGS: true
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 12.13.0
+            - uses: actions/setup-java@v1
+              with:
+                  java-version: '11.x'
+            - uses: "WyriHaximus/github-action-get-previous-tag@master"
+              env:
+                GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+            - name: Stop MySQL server
+              run: sudo /etc/init.d/mysql stop
+            - name: Install node.js packages
+              run: yarn install
+            - name: Package application
+              run: ./mvnw -ntp package -Pprod -DskipTests verify jib:dockerBuild -Djib.to.image=cbioportal/oncokb-public:${{tag}}
