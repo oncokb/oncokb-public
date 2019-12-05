@@ -22,69 +22,60 @@ export const TermsPage = () => {
         </Row>
         <Row>
           <Col>
-            <div>
+            <p>
               OncoKB is a precision oncology knowledge base maintained by
-              Memorial Sloan Kettering Cancer Center (MSK). MSK reserves the
-              right to update <OncoKBLink /> at any time without notice. MSK
+              Memorial Sloan Kettering Cancer Center (MSK). MSK may, from time
+              to time, update the content on <OncoKBLink /> (“Content”). MSK
               makes no warranties or representations, express or implied, with
-              respect to any of the content, including as to the present
+              respect to any of the Content, including as to the present
               accuracy, completeness, timeliness, adequacy, or usefulness of any
-              of the content, and by using this website you agree that MSK will
-              not be liable for any loss or damages arising from your use of or
-              reliance on information contained in this site or other sites that
-              may be linked to from our site. This information is not intended
-              as a substitute for medical professional help or advice. A
-              physician should always be consulted for any health problem or
-              medical condition. Inquiries about the content should be directed
-              to{' '}
+              of the Content. By using this website, you agree that MSK will not
+              be liable for any losses or damages arising from your use of or
+              reliance on the Content, or other websites or information to which
+              this website may be linked. The Content is not intended as a
+              substitute for professional medical help, judgment or advice. A
+              physician or other qualified health provider should always be
+              consulted for any health problem or medical condition. Inquiries
+              about the Content should be directed to{' '}
               <a href={`mailto:${ONCOKB_CONTACT_EMAIL}`} target="_top">
                 {ONCOKB_CONTACT_EMAIL}
               </a>
               .
-            </div>
-
-            <div>
-              You may view the content contained on <OncoKBLink /> solely for
-              your own personal or research purposes. You may not use any part
-              of the <OncoKBLink /> content (“Content”) for any commercial
-              purpose, including the distribution, licensing or sale of the
-              Content to any other person or entity, whether alone or in
-              combination with other materials, or the incorporation of the
-              Content into any commercial product. You may copy, reproduce, or
-              create derivative works of the Content only if:
-              <ul>
+            </p>
+            <p>
+              You may view the Content solely for your own personal reference or
+              use for research in an academic setting, provided that all
+              academic research use of the Content must credit OncoKB as the
+              source of the Content and reference these Terms of Use; outside of
+              scientific publication, you may not otherwise redistribute or
+              share with any third party the Content, in part or in whole, for
+              any purpose, without the express permission of MSK.
+            </p>
+            <p>
+              Unless you have signed a license agreement with MSK, you may not
+              use any part of the Content for any other purpose, including:
+              <ol>
                 <li>
-                  you are a researcher or a non-profit entity;{' '}
-                  <span className="highlight">and</span>
+                  use or incorporation into a commercial product or towards
+                  performance of a commercial service;
                 </li>
+                <li>research use in a commercial setting;</li>
+                <li>use for patient services; or</li>
                 <li>
-                  your use of the Content complies with all of the following
-                  requirements:
-                  <ul>
-                    <li>
-                      you are using the Content for personal or research
-                      purposes only; <span className="highlight">and</span>
-                    </li>
-                    <li>
-                      you are using the Content only to replicate OncoKB
-                      locally, whether in whole or in part;
-                      <span className="highlight">or</span>
-                    </li>
-                    <li>
-                      you are aggregating the Content with other data of similar
-                      nature for the purposes of advancing cancer research. You
-                      must credit the source and reference these usage terms.
-                    </li>
-                  </ul>
+                  generation of reports in a hospital or other patient care
+                  setting.
                 </li>
-                <li>
-                  you seek to use OncoKB for clinical or commercial purposes,
-                  please visit the{' '}
-                  <Link to={PAGE_ROUTE.REGISTER}>registration page</Link> and
-                  select your anticipated use
-                </li>
-              </ul>
-            </div>
+              </ol>
+            </p>
+            <p>
+              You may not copy, transfer, reproduce, modify or create derivative
+              works of OncoKB for any commercial purpose without the express
+              permission of MSK. If you seek to use OncoKB for such purposes,
+              please visit the{' '}
+              <Link to={PAGE_ROUTE.REGISTER}>registration page</Link> and
+              request the license which best describes your anticipated use of
+              OncoKB.
+            </p>
           </Col>
         </Row>
       </div>
