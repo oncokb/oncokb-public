@@ -4,21 +4,21 @@
     font-weight: bold;
   }
 
-  ul {
+  ol {
+    counter-reset: list;
     padding-left: 3rem;
 
     li {
       line-height: 2rem;
+      list-style: none;
+      position: relative;
     }
-  }
 
-  ul > li {
-    list-style-type: lower-roman;
-    padding-left: 0.75rem;
-  }
-
-  ul > li > ul > li {
-    list-style-type: lower-latin;
-    padding-left: 0.75rem;
+    li:before {
+      counter-increment: list;
+      content: '(' counter(list, lower-roman) ') ';
+      position: absolute;
+      left: -1.5em;
+    }
   }
 }
