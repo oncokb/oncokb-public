@@ -147,6 +147,7 @@ application:
   api-proxy-url: 'http://oncokb-core:8888'
   sitemap-enabled: true
   user-registration-webhook:
+  google-webmaster-verification:
   redis:
     type: 'master-slave'
     password: 'oncokb-public-redis-password'

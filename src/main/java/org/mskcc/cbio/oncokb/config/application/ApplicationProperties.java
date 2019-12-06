@@ -16,6 +16,7 @@ public class ApplicationProperties {
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
     private RedisProperties redis;
+    private String googleWebmasterVerification;
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -55,5 +56,13 @@ public class ApplicationProperties {
 
     public void setRedis(RedisProperties redis) {
         this.redis = redis;
+    }
+
+    public String getGoogleWebmasterVerification() {
+        return googleWebmasterVerification;
+    }
+
+    public void setGoogleWebmasterVerification(String googleWebmasterVerification) {
+        this.googleWebmasterVerification = googleWebmasterVerification;
     }
 }
