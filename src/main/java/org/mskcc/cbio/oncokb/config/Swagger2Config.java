@@ -34,7 +34,7 @@ public class Swagger2Config {
         return new ApiInfoBuilder().title("OncoKB APIs")
             .description("OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.")
             .contact(new Contact("OncoKB", "https://www.oncokb.org", "contact@oncokb.org"))
-            .license("Usage Terms")
+            .license("Terms of Use")
             .licenseUrl("https://www.oncokb.org/terms")
             .termsOfServiceUrl("https://www.oncokb.org/terms")
             .version("v1.0.0")

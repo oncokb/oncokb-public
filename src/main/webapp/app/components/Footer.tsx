@@ -22,7 +22,7 @@ class Footer extends React.Component<{ lastUpdate: string }> {
         <div className={'mb-2'}>
           Please review the{' '}
           <Link to={'/terms'} className={indexStyles.orange}>
-            usage terms
+            terms of use
           </Link>{' '}
           before continuing.
         </div>
@@ -67,7 +67,7 @@ class Footer extends React.Component<{ lastUpdate: string }> {
     return (
       <>
         <div className={classnames(styles.footerAList, 'mb-2')}>
-          <Link to="/terms">Usage Terms</Link>
+          <Link to="/terms">Terms of Use</Link>
           <ContactLink emailSubject={'Contact us'}>Contact Us</ContactLink>
           <a
             href="https://twitter.com/OncoKB"

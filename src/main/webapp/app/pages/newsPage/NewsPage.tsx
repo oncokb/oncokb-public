@@ -51,7 +51,7 @@ export const NewsPage = () => {
             <span>
               Established login procedures for access to downloadable data files
               and API. Please review the{' '}
-              <Link to={PAGE_ROUTE.TERMS}>usage terms</Link> before using.
+              <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before using.
               OncoKB will continue to be accessible for no fee for research use
               in academic setting. A license is required to use OncoKB for
               commercial and/or clinical purposes. Fees will be used to support
