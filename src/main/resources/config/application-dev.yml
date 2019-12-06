@@ -138,6 +138,7 @@ application:
   api-proxy-url: 'http://localhost:8888'
   sitemap-enabled: false
   user-registration-webhook:
+  google-webmaster-verification:
   redis:
     type: 'single'
     password: 'oncokb-public-redis-password'

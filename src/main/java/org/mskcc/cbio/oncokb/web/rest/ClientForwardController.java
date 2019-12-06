@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import springfox.documentation.annotations.ApiIgnore;
@@ -37,6 +38,16 @@ public class ClientForwardController {
         httpHeaders.setContentType(MediaType.TEXT_HTML);
 
         ResponseEntity responseEntity = ResponseEntity.ok().headers(httpHeaders).body(templateEngine.process("index", context));
+        return responseEntity;
+    }
+
+    @RequestMapping(value = "/${application.google-webmaster-verification}.html")
+    public ResponseEntity<String> googleDomain() {
+        Context context = new Context();
+        context.setVariable("verification", applicationProperties.getGoogleWebmasterVerification());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.TEXT_PLAIN);
+        ResponseEntity responseEntity = ResponseEntity.ok().headers(httpHeaders).body(templateEngine.process("txt/googleWebmaster", context));
         return responseEntity;
     }
 
