@@ -48,7 +48,7 @@ export const TermsPage = () => {
               academic research use of the Content must credit OncoKB as the
               source of the Content and reference these Terms of Use; outside of
               scientific publication, you may not otherwise redistribute or
-              share with any third party the Content, in part or in whole, for
+              share the Content with any third party, in part or in whole, for
               any purpose, without the express permission of MSK.
             </p>
             <p>
