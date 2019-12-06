@@ -173,7 +173,7 @@ export default class DataAccessPage extends React.Component<{
             <h6>
               Once registered and logged in, you will have access to the
               following. Please review the{' '}
-              <Link to={PAGE_ROUTE.TERMS}>usage terms</Link> before proceeding.{' '}
+              <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before proceeding.{' '}
               <CitationText />
             </h6>
           </div>
