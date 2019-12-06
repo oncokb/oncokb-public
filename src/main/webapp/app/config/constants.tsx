@@ -256,7 +256,7 @@ export enum PAGE_TITLE {
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
   REGISTER = 'Register',
-  TERMS = 'Usage Terms - Academic Research'
+  TERMS = 'Terms of Use - Academic Research'
 }
 
 export enum PAGE_ROUTE {
@@ -371,7 +371,7 @@ export enum DOCUMENT_TITLES {
   TEAM = 'OncoKB Team',
   ABOUT = 'About OncoKB',
   ACTIONABLE_GENES = 'OncoKB Actionable Genes',
-  TERMS = 'OncoKB Usage Terms - Academic Research',
+  TERMS = 'OncoKB Terms of Use - Academic Research',
   NEWS = 'OncoKB Latest News',
   DATA_ACCESS = 'Ways to Access OncoKB Data',
   CANCER_GENES = 'OncoKB Cancer Gene List'
