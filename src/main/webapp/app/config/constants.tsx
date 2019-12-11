@@ -345,7 +345,7 @@ export enum ACCOUNT_TITLES {
   LAST_NAME = 'Last Name',
   NAME = 'Name',
   EMAIL = 'Email',
-  POSITION = 'Position',
+  POSITION = 'Job Title',
   COMPANY = 'Company',
   CITY = 'City',
   COUNTRY = 'Country',
