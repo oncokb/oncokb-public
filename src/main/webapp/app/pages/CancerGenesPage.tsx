@@ -454,7 +454,6 @@ export default class CancerGenesPage extends React.Component<{
                 style={{
                   height: LG_TABLE_FIXED_HEIGHT
                 }}
-                pageSize={10}
                 showPagination={true}
                 loading={this.extendedCancerGene.isPending}
                 defaultSorted={[
