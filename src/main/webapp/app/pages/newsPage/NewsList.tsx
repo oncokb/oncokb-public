@@ -118,11 +118,11 @@ export default class NewsList extends React.Component<NewsListProps> {
               ) : (
                 undefined
               )}
-              {this.getNewlyAddGeneSection(newsData)}
               {getNews({
                 key: `news-${date}`,
                 content: newsData.news ? newsData.news : []
               })}
+              {this.getNewlyAddGeneSection(newsData)}
             </ul>
           ) : (
             undefined
