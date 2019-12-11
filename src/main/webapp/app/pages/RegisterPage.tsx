@@ -221,8 +221,10 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 follow the instructions in the email to complete registration.
               </p>
               <MessageToContact emailTitle={"Registration Question"}/>
-              <p>Regards,</p>
-              <p>The OncoKB Team</p>
+              <p>
+                <div>Regards,</div>
+                <div>The OncoKB Team</div>
+              </p>
             </Alert>
           </div>
         </SmallPageContainer>
