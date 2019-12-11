@@ -47,15 +47,15 @@ export const NewsPage = () => {
           <CitationText />
         </div>
         <div className="mt-2">
+          <NewsList date={'12122019'} />
           <NewsList date={'12092019'}>
             <span>
-              Established login procedures for access to downloadable data files
-              and API. Please review the{' '}
-              <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before using.
-              OncoKB will continue to be accessible for no fee for research use
-              in academic setting. A license is required to use OncoKB for
-              commercial and/or clinical purposes. Fees will be used to support
-              future development and maintenance of OncoKB. Please visit the{' '}
+              We now require user logins for access to downloadable data files
+              and API. OncoKB will continue to be accessible for no fee for
+              research use in an academic setting, but a license will be
+              required to use OncoKB for commercial and/or clinical purposes.
+              Fees will be used to support future development and maintenance of
+              OncoKB. Please visit the{' '}
               <Link to={PAGE_ROUTE.REGISTER}>registration page</Link>.
             </span>
           </NewsList>
