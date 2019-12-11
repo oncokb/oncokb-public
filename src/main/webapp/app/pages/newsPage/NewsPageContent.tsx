@@ -105,6 +105,207 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '12122019': {
+    priorityNews: [
+      <span>User accounts and commercial licenses now available</span>,
+      <span>OncoKB now contains annotation of over 5,000 variants</span>
+    ],
+    updatedImplication: [
+      [
+        '1',
+        'FLT3',
+        'D835, I836',
+        'AML',
+        'Gilteritinib',
+        <span>
+          <a
+            href="https://www.ncbi.nlm.nih.gov/pubmed/28183697,28645776"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            PMID: 28516360, 28645776
+          </a>{' '}
+          ;{' '}
+          <a
+            href="https://www.fda.gov/drugs/fda-approves-gilteritinib-relapsed-or-refractory-acute-myeloid-leukemia-aml-flt3-mutatation"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            FDA-approval of Gilteritinib
+          </a>
+        </span>
+      ],
+      [
+        '1',
+        'MSI-H',
+        '',
+        'Colorectal Cancer',
+        'Nivolumab + Ipilimumab',
+        <span>
+          <a
+            href="https://www.ncbi.nlm.nih.gov/pubmed/29355075"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            PMID: 29355075
+          </a>
+          ;{' '}
+          <a
+            href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-ipilimumab-msi-h-or-dmmr-metastatic-colorectal-cancer"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            FDA-approval of Nivolumab + Ipilimumab
+          </a>
+        </span>
+      ],
+      [
+        '1',
+        'ROS1',
+        'Fusions',
+        'NSCLC',
+        'Entrectinib',
+        <span>
+          <a
+            href="https://www.ncbi.nlm.nih.gov/pubmed/28183697"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            PMID: 28183697
+          </a>
+          , Abstract:{' '}
+          <a
+            href="https://cancerres.aacrjournals.org/content/77/13_Supplement/CT060"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Drilon et al. Abstract# CT060, AACR 2017
+          </a>{' '}
+          ;{' '}
+          <a
+            href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-entrectinib-ntrk-solid-tumors-and-ros-1-nsclc"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            FDA-approval of entrectinib
+          </a>
+        </span>
+      ],
+      [
+        '3A',
+        'KRAS',
+        'G12C',
+        'NSCLC',
+        'AMG-510',
+        <span>
+          Abstract:{' '}
+          <a
+            href="https://oncologypro.esmo.org/Meeting-Resources/ESMO-2019-Congress/Phase-1-Study-of-AMG-510-a-Novel-Molecule-Targeting-KRAS-G12C-Mutant-Solid-Tumors"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Govindan et al. ESMO 2019
+          </a>
+        </span>
+      ]
+    ],
+    changedAnnotation: [
+      [
+        'NTRK1/2/3',
+        'Fusions',
+        'All Solid Tumors',
+        'Entrectinib',
+        '3A',
+        '1',
+        <a
+          href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-entrectinib-ntrk-solid-tumors-and-ros-1-nsclc"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          FDA-approval of Entrectinib
+        </a>
+      ],
+      [
+        'ERBB2',
+        'Oncogenic Mutations',
+        'NSCLC',
+        'Ado-trastuzumab Emtansine',
+        '3A',
+        '2A',
+        <div>Listing in 1.2020 Non-Small Cell Lung Cancer NCCN</div>
+      ],
+      [
+        'IDH1',
+        'Oncogenic Mutations',
+        'Cholangiocarcinoma',
+        'Ivosidenib',
+        '2B',
+        '3A',
+        <span>
+          Abstract:{' '}
+          <a
+            href="https://oncologypro.esmo.org/Meeting-Resources/ESMO-2019-Congress/ClarIDHy-A-global-phase-3-randomized-double-blind-study-of-ivosidenib-IVO-vs-placebo-in-patients-with-advanced-cholangiocarcinoma-CC-with-an-isocitrate-dehydrogenase-1-IDH1-mutation"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Abou-Alfa et al. Abstract# LBA10_PR, ESMO 2019
+          </a>
+        </span>
+      ],
+      [
+        'PIK3CA',
+        'Oncogenic Mutations',
+        'Breast Cancer',
+        'Alpelisib',
+        '3A',
+        'None',
+        <div>
+          Alpelisib in combination with fulvestrant is{' '}
+          <a
+            href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-alpelisib-metastatic-breast-cancer"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            FDA-approved to treat patients with PIK3CA mutant breast cancer
+          </a>
+        </div>
+      ]
+    ],
+    news: [
+      <span>
+        Refined KIT and EGFR annotation to more strictly follow NCCN and FDA
+        guidelines
+      </span>
+    ],
+    newlyAddedGenes: [
+      'AGO1',
+      'ALB',
+      'APLNR',
+      'CYP19A1',
+      'DKK2',
+      'DKK3',
+      'DKK4',
+      'GAB2',
+      'HLA-C',
+      'LRP5',
+      'LRP6',
+      'MLLT1',
+      'DKK1',
+      'NADK',
+      'REST',
+      'SCG5',
+      'SFRP1',
+      'SFRP2',
+      'SOCS3',
+      'STAT1',
+      'STAT2',
+      'TLE1',
+      'TLE2',
+      'TLE3',
+      'TLE4',
+      'WIF1'
+    ]
+  },
   '08282019': {
     newlyAddedGenes: [
       'ARHGAP35',
