@@ -60,6 +60,7 @@
     "react-router-dom": "^4.3.1",
     "react-select": "^3.0.4",
     "react-spinkit": "latest",
+    "react-string-replace": "^0.4.4",
     "react-table": "^6.10.3",
     "react-toastify": "5.4.0",
     "react-transition-group": "2.7.0",
