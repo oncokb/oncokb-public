@@ -137,7 +137,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
-        'MSI-H',
+        <span style={{ whiteSpace: 'nowrap' }}>MSI-H</span>,
         '',
         'Colorectal Cancer',
         'Nivolumab + Ipilimumab',
@@ -187,7 +187,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             target="_blank"
             rel="noopener noreferrer"
           >
-            FDA-approval of entrectinib
+            FDA-approval of Entrectinib
           </a>
         </span>
       ],

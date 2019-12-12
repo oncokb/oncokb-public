@@ -101,7 +101,7 @@ public class SlackService {
         userInfo.add(getTextObject("Email", user.getEmail()));
         userInfo.add(getTextObject("Name", user.getLastName() + ", " + user.getFirstName()));
         userInfo.add(getTextObject("Company", user.getCompany()));
-        userInfo.add(getTextObject("Position", user.getJobTitle()));
+        userInfo.add(getTextObject("Job Title", user.getJobTitle()));
         userInfo.add(getTextObject("City", user.getCity()));
         userInfo.add(getTextObject("Country", user.getCountry()));
 
