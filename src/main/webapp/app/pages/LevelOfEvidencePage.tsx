@@ -33,7 +33,7 @@ export const LevelOfEvidencePage = () => {
           </Col>
         </Row>
         <Row>
-          <Col className={'d-flex justify-content-center'}>
+          <Col className={'d-sm-block d-md-flex justify-content-center'}>
             <img
               style={{ maxWidth: IMG_MAX_WIDTH, width: '100%' }}
               src={oncokbImg}

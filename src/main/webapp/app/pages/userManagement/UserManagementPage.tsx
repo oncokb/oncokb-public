@@ -123,7 +123,8 @@ export default class UserManagementPage extends React.Component<{
   @action
   async getUsers() {
     try {
-      this.users = await client.getAllUsersUsingGET({});
+      // Hard code the max returned user size. Need to fix pagination issue.
+      this.users = await client.getAllUsersUsingGET({'size': 2000});
     } catch (e) {
       notifyError(e, 'Error fetching users');
     }
@@ -300,7 +301,6 @@ export default class UserManagementPage extends React.Component<{
               data={this.users}
               columns={this.columns}
               showPagination={true}
-              pageSize={10}
             />
           </Col>
         </Row>
