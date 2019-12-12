@@ -18,6 +18,7 @@ import {
   GenePageLink,
   MSILink
 } from 'app/shared/utils/UrlUtils';
+import { PMIDLink } from 'app/shared/links/PMIDLink';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -118,14 +119,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'AML',
         'Gilteritinib',
         <span>
-          <a
-            href="https://www.ncbi.nlm.nih.gov/pubmed/28183697,28645776"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            PMID: 28516360, 28645776
-          </a>{' '}
-          ;{' '}
+          <PMIDLink pmids={'28516360, 28645776'} /> ;{' '}
           <a
             href="https://www.fda.gov/drugs/fda-approves-gilteritinib-relapsed-or-refractory-acute-myeloid-leukemia-aml-flt3-mutatation"
             target="_blank"
@@ -142,14 +136,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Colorectal Cancer',
         'Nivolumab + Ipilimumab',
         <span>
-          <a
-            href="https://www.ncbi.nlm.nih.gov/pubmed/29355075"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            PMID: 29355075
-          </a>
-          ;{' '}
+          <PMIDLink pmids={'29355075'} />;{' '}
           <a
             href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-ipilimumab-msi-h-or-dmmr-metastatic-colorectal-cancer"
             target="_blank"
@@ -166,14 +153,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'NSCLC',
         'Entrectinib',
         <span>
-          <a
-            href="https://www.ncbi.nlm.nih.gov/pubmed/28183697"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            PMID: 28183697
-          </a>
-          , Abstract:{' '}
+          <PMIDLink pmids={'28183697'} />, Abstract:{' '}
           <a
             href="https://cancerres.aacrjournals.org/content/77/13_Supplement/CT060"
             target="_blank"
@@ -273,8 +253,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     news: [
       <span>
-        Refined KIT and EGFR annotation to more strictly follow NCCN and FDA
-        guidelines
+        Refined KIT and EGFR biomarker-drug associations to strictly adhere to
+        the FDA drug labels and NCCN guidelines
       </span>
     ],
     newlyAddedGenes: [
@@ -341,7 +321,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'V600E',
         'Hairy Cell Leukemia',
         'Vemurafenib',
-        'Listing in 3.2019 Hairy Cell Leukemia NCCN (PMID: 26352686)'
+        <span>
+          Listing in 3.2019 Hairy Cell Leukemia NCCN (
+          <PMIDLink pmids={'26352686'} />)
+        </span>
       ],
       [
         '3A',
@@ -349,7 +332,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Oncogenic mutations',
         'Histiocytic and Dendritic Cell Neoplasms',
         'Cobimetinib',
-        'PMID: 30867592'
+        <PMIDLink pmids={'30867592'} />
       ]
     ],
     changedAnnotation: [
@@ -362,7 +345,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'No level',
         <>
           <div>Re-review of PMID</div>
-          <div>PMID: 28783719</div>
+          <div>
+            <PMIDLink pmids={'28783719'} />
+          </div>
           <br />
           <div>
             BRAF class III mutants are not necessarily sensitive to dimer

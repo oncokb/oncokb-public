@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 import { PAGE_ROUTE, REGEXP, REGEXP_LINK } from 'app/config/constants';
 import _ from 'lodash';
-import ReactHtmlParser from 'react-html-parser';
+import { PMIDLink } from 'app/shared/links/PMIDLink';
+import reactStringReplace from 'react-string-replace';
+import { ReactNodeArray } from 'prop-types';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -68,31 +70,35 @@ export const MSILink: React.FunctionComponent<{}> = () => {
 export const CitationLink: React.FunctionComponent<{
   content: string;
 }> = props => {
-    const regexps = [REGEXP.PMID, REGEXP.NCTID];
-    let contentWithLink = props.content;
-    _.forEach(regexps, (regexp) => {
-      const results = _.uniq(props.content.match(new RegExp(regexp, 'ig')));
-      if (results) {
-        _.forEach(results, (matchedItem) => {
-          const datum = matchedItem;
-          switch ( regexp ) {
-            case REGEXP.PMID:
-              contentWithLink = contentWithLink.replace( new RegExp( `${datum}(?!s*,)`, 'g' ),
-                `<a href="${REGEXP_LINK[regexp]}${datum.split( ':' )[ 1 ].trim()}" target="_blank">${datum}</a>` );
-              break;
-            case REGEXP.NCTID:
-              contentWithLink = contentWithLink.replace( datum,
-                `<a href="${REGEXP_LINK[regexp]}${datum}" target="_blank">${datum}</a>` );
-              break;
-            default:
-              break;
+  const regexps = [REGEXP.PMID, REGEXP.NCTID];
+  let contentWithLink: ReactNodeArray = [props.content];
+  _.forEach(regexps, regexp => {
+    contentWithLink = reactStringReplace(
+      contentWithLink,
+      new RegExp(regexp, 'ig'),
+      (match, i) => {
+        switch (regexp) {
+          case REGEXP.PMID: {
+            return <PMIDLink pmids={match} />;
+            break;
           }
-        });
+          case REGEXP.NCTID:
+            return (
+              <a
+                href={`${REGEXP_LINK[regexp]}${match}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ${match}
+              </a>
+            );
+            break;
+          default:
+            return match;
+            break;
+        }
       }
-    });
-  return (
-    <div>
-      {ReactHtmlParser(contentWithLink)}
-    </div>
-  );
+    );
+  });
+  return <div>{contentWithLink}</div>;
 };
