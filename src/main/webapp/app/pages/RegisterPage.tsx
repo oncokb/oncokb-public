@@ -177,7 +177,9 @@ export class RegisterPage extends React.Component<IRegisterProps> {
       return (
         <div>
           OncoKB is accessible for no fee for research use in academic setting.
-          Please register below for access.
+          This license type requires that you register your account using your
+          institution/university email address. Please register below for
+          access.
         </div>
       );
     } else {
@@ -217,10 +219,11 @@ export class RegisterPage extends React.Component<IRegisterProps> {
           <div>
             <Alert variant="info">
               <p className={'mb-3'}>
-                Thank you for creating an OncoKB account. We have sent you an email to verify your email address. Please
-                follow the instructions in the email to complete registration.
+                Thank you for creating an OncoKB account. We have sent you an
+                email to verify your email address. Please follow the
+                instructions in the email to complete registration.
               </p>
-              <MessageToContact emailTitle={"Registration Question"}/>
+              <MessageToContact emailTitle={'Registration Question'} />
               <p>
                 <div>Regards,</div>
                 <div>The OncoKB Team</div>
