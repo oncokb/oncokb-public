@@ -373,6 +373,9 @@ export default class GenePage extends React.Component<
                 <OncoKBTable
                   data={this.store.therapeuticImplications}
                   columns={this.therapeuticTableColumns}
+                  pageSize={
+                    this.store.therapeuticImplications.length === 0 ? 1 : this.store.therapeuticImplications.length
+                  }
                   loading={this.store.annotationResult.isPending}
                   disableSearch={true}
                   defaultSorted={[
