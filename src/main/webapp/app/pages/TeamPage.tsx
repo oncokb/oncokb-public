@@ -48,7 +48,7 @@ export const TeamPage = () => {
             <h6>Current Curators</h6>
             <ul>
               <li>Kinisha Gala, PhD</li>
-              <li>Hannah Johnsen</li>
+              <li>Hannah Wise, PhD</li>
               <li>Phillip Jonsson, PhD</li>
               <li>Lindsay M. LaFave, PhD</li>
               <li>David Knorr, MD, PhD</li>
