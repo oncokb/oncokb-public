@@ -28,7 +28,7 @@ export default class ActivateAccount extends React.Component<{
     }
   }
 
-  readonly activateAccount = remoteData<any>({
+  readonly activateAccount = remoteData<boolean>({
     invoke: () => {
       if (this.activateKey) {
         return client.activateAccountUsingGET({
@@ -45,10 +45,19 @@ export default class ActivateAccount extends React.Component<{
       <div>
         <Alert variant={'info'}>
           <p>Thank you for verifying your email.</p>
-          <p>
-            We are reviewing your registration information and will contact you
-            about your account&apos;s approval status within two business days.
-          </p>
+          {this.activateAccount.result && (
+            <p>
+              You can <Link to={PAGE_ROUTE.LOGIN}>login</Link> to your account
+              now.
+            </p>
+          )}
+          {!this.activateAccount.result && (
+            <p>
+              We are reviewing your registration information and will contact
+              you about your account&apos;s approval status within two business
+              days.
+            </p>
+          )}
           <MessageToContact
             className={'mb-3'}
             emailTitle={'Account Activation Question'}
