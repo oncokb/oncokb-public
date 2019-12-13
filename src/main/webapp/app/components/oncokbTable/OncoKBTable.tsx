@@ -63,7 +63,9 @@ export default class OncoKBTable<T> extends React.Component<
         <div className="mt-2">
           <ReactTable
             showPagination={false}
-            minRows={1}
+            pageSize={
+              this.filteredData.length === 0 ? 1 : this.filteredData.length
+            }
             className={'-striped -highlight oncokbReactTable'}
             {...this.props}
             data={this.filteredData}
