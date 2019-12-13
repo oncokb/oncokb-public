@@ -301,6 +301,7 @@ export default class UserManagementPage extends React.Component<{
               data={this.users}
               columns={this.columns}
               showPagination={true}
+              minRows={1}
             />
           </Col>
         </Row>
