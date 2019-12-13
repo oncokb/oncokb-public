@@ -10,6 +10,8 @@ export type SearchColumn<T> = Column<T> & {
 interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   data: T[];
   disableSearch?: boolean;
+  pageSize?: number;
+  minRows?: number;
   columns: SearchColumn<T>[];
 }
 
@@ -63,7 +65,6 @@ export default class OncoKBTable<T> extends React.Component<
         <div className="mt-2">
           <ReactTable
             showPagination={false}
-            minRows={1}
             className={'-striped -highlight oncokbReactTable'}
             {...this.props}
             data={this.filteredData}
