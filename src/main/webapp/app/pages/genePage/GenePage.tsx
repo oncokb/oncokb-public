@@ -13,7 +13,6 @@ import {
   getCenterAlignStyle,
   getDefaultColumnDefinition,
   levelOfEvidence2Level,
-  OncoKBLevelIcon,
   reduceJoin
 } from 'app/shared/utils/Utils';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
@@ -244,6 +243,7 @@ export default class GenePage extends React.Component<
     return [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+        accessor: 'variant',
         onFilter: (data: ClinicalVariant, keyword) =>
           filterByKeyword(data.variant.name, keyword),
         Cell: (props: { original: ClinicalVariant }) => {
@@ -295,6 +295,7 @@ export default class GenePage extends React.Component<
     return [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+        accessor: 'variant',
         onFilter: (data: BiologicalVariant, keyword) =>
           filterByKeyword(data.variant.name, keyword),
         Cell: (props: { original: BiologicalVariant }) => {
