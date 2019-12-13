@@ -1,4 +1,6 @@
 import { MUTATION_EFFECT, ONCOGENICITY } from 'app/config/constants';
+import _ from 'lodash';
+import { Alteration } from '../api/generated/OncoKbAPI';
 
 export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {
   if (aIndex === bIndex) {
@@ -31,6 +33,30 @@ export function defaultSortMethod(a: any, b: any): number {
 
   // returning 0 or undefined will use any subsequent column sorting methods or the row index as a tiebreaker
   return 0;
+}
+
+export function sortNumber(a: number, b: number): number {
+  if (!_.isNumber(a)) {
+    if (!_.isNumber(b)) {
+      return 0;
+    } else {
+      return 1;
+    }
+  }
+  if (!_.isNumber(b)) {
+    return -1;
+  }
+  return a - b;
+}
+
+export function sortByAlteration(a: Alteration, b: Alteration): number {
+  // force null and undefined to the bottom
+  let result = sortNumber(a.proteinStart, b.proteinStart);
+
+  if (result === 0) {
+    result = sortNumber(a.proteinEnd, b.proteinEnd);
+  }
+  return result;
 }
 
 const oncogenicityOrder = [

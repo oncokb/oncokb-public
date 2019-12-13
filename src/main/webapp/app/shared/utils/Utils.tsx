@@ -23,7 +23,8 @@ import {
 import {
   defaultSortMethod,
   mutationEffectSortMethod,
-  oncogenicitySortMethod
+  oncogenicitySortMethod,
+  sortByAlteration
 } from 'app/shared/utils/ReactTableUtils';
 import { TableCellRenderer } from 'react-table';
 import { LevelWithDescription } from 'app/components/LevelWithDescription';
@@ -240,8 +241,8 @@ export function getDefaultColumnDefinition<T>(
         Header: <span>Alteration</span>,
         accessor: 'alteration',
         minWidth: 100,
-        defaultSortDesc: false,
-        sortMethod: defaultSortMethod,
+        defaultSortDesc: true,
+        sortMethod: sortByAlteration,
         Cell(props: { original: any }) {
           return (
             <AlterationPageLink
