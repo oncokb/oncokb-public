@@ -24,9 +24,9 @@ import java.util.*;
 
 
 /**
- * Service for sending emails.
+ * Service for sending account approval info to slack.
  * <p>
- * We use the {@link Async} annotation to send emails asynchronously.
+ * We use the {@link Async} annotation to send slack messages asynchronously.
  */
 @Service
 public class SlackService {
@@ -88,7 +88,7 @@ public class SlackService {
     private List<LayoutBlock> buildUserApprovalBlocks(UserDTO user) {
 
         List<LayoutBlock> blocks = new ArrayList<>();
-        blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text("<@U1BDQTM1V> <!here>").build()).build());
+        blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text("<!here>").build()).build());
 
         // Title
         List<TextObject> title = new ArrayList<>();

@@ -2,11 +2,13 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 
 import com.github.seratch.jslack.Slack;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.service.EmailService;
 import org.mskcc.cbio.oncokb.service.MailService;
 import org.mskcc.cbio.oncokb.service.SlackService;
 import org.mskcc.cbio.oncokb.service.UserService;
@@ -51,6 +53,8 @@ public class AccountResource {
 
     private final SlackService slackService;
 
+    private final EmailService emailService;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -60,13 +64,14 @@ public class AccountResource {
 
     public AccountResource(UserRepository userRepository, UserService userService,
                            MailService mailService, TokenProvider tokenProvider,
-                           SlackService slackService) {
+                           SlackService slackService, EmailService emailService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
         this.tokenProvider = tokenProvider;
         this.slackService = slackService;
+        this.emailService = emailService;
     }
 
     /**
@@ -94,12 +99,27 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
      */
     @GetMapping("/activate")
-    public void activateAccount(@RequestParam(value = "key") String key) {
-        Optional<User> user = userService.activateRegistration(key);
-        if (!user.isPresent()) {
+    public boolean activateAccount(@RequestParam(value = "key") String key) {
+        Optional<User> userOptional = userService.activateRegistration(key);
+        if (!userOptional.isPresent()) {
             throw new AccountResourceException("Your user account could not be activated as no user was found associated with this activation key.");
         } else {
-            slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(user.get()));
+            User user = userOptional.get();
+            if (emailService.getAccountApprovalWhitelistEmailsDomains().contains(emailService.getEmailDomain(user.getEmail()))) {
+                Optional<User> existingUser = userRepository.findOneByLogin(user.getLogin());
+                if (existingUser.isPresent()) {
+                    UserDTO userDTO = userMapper.userToUserDTO(existingUser.get());
+                    if (!userDTO.isActivated()) {
+                        userDTO.setActivated(true);
+                    }
+                    return true;
+                } else {
+                    throw new AccountResourceException("User could not be found");
+                }
+            } else {
+                slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
+                return false;
+            }
         }
     }
 
