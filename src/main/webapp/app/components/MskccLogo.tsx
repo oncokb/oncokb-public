@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import mskLogo from 'content/images/msk-logo-fff.png';
+import mskLogo from 'content/images/msk-logo-fff-sm.png';
 
 class MskccLogo extends React.Component<{
   imageHeight?: number;
