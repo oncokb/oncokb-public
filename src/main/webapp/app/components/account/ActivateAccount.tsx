@@ -44,13 +44,16 @@ export default class ActivateAccount extends React.Component<{
     return (
       <div>
         <Alert variant={'info'}>
-          <p>Thank you for verifying your email.</p>
-          {this.activateAccount.result && (
-            <p>
-              You can <Link to={PAGE_ROUTE.LOGIN}>login</Link> to your account
-              now.
-            </p>
-          )}
+          <p>
+            Thank you for verifying your email address.{' '}
+            {this.activateAccount.result && (
+              <span>
+                You can now <Link to={PAGE_ROUTE.LOGIN}>login</Link> to your
+                OncoKB account.
+              </span>
+            )}
+          </p>
+
           {!this.activateAccount.result && (
             <p>
               We are reviewing your registration information and will contact
