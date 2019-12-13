@@ -148,6 +148,7 @@ application:
   sitemap-enabled: true
   user-registration-webhook:
   google-webmaster-verification:
+  account-approval-whitelist:
   redis:
     type: 'master-slave'
     password: 'oncokb-public-redis-password'

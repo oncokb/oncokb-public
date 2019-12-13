@@ -16,6 +16,7 @@ public class ApplicationProperties {
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
     private RedisProperties redis;
+    private String accountApprovalWhitelist;
     private String googleWebmasterVerification;
 
     public String getApiProxyUrl() {
@@ -32,6 +33,14 @@ public class ApplicationProperties {
 
     public void setUserRegistrationWebhook(String userRegistrationWebhook) {
         this.userRegistrationWebhook = userRegistrationWebhook;
+    }
+
+    public String getAccountApprovalWhitelist() {
+        return accountApprovalWhitelist;
+    }
+
+    public void setAccountApprovalWhitelist(String accountApprovalWhitelist) {
+        this.accountApprovalWhitelist = accountApprovalWhitelist;
     }
 
     public ProjectProfile getProfile() {

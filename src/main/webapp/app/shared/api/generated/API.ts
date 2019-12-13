@@ -855,7 +855,7 @@ export default class API {
         'key': string,
         $queryParameters ? : any,
         $domain ? : string
-    }): Promise < any > {
+    }): Promise < boolean > {
         return this.activateAccountUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });

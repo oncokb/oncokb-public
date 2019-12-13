@@ -10,7 +10,7 @@
       "email": "contact@oncokb.org"
     },
     "license": {
-      "name": "Usage Terms",
+      "name": "Terms of Use",
       "url": "https://www.oncokb.org/terms"
     }
   },
@@ -365,7 +365,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
           },
           "401": {
             "description": "Unauthorized"
