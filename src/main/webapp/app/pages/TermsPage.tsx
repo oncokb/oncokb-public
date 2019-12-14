@@ -51,22 +51,22 @@ export const TermsPage = () => {
               share the Content with any third party, in part or in whole, for
               any purpose, without the express permission of MSK.
             </p>
-            <p>
+            <div>
               Unless you have signed a license agreement with MSK, you may not
               use any part of the Content for any other purpose, including:
-              <ol>
-                <li>
-                  use or incorporation into a commercial product or towards
-                  performance of a commercial service;
-                </li>
-                <li>research use in a commercial setting;</li>
-                <li>use for patient services; or</li>
-                <li>
-                  generation of reports in a hospital or other patient care
-                  setting.
-                </li>
-              </ol>
-            </p>
+            </div>
+            <ol>
+              <li>
+                use or incorporation into a commercial product or towards
+                performance of a commercial service;
+              </li>
+              <li>research use in a commercial setting;</li>
+              <li>use for patient services; or</li>
+              <li>
+                generation of reports in a hospital or other patient care
+                setting.
+              </li>
+            </ol>
             <p>
               You may not copy, transfer, reproduce, modify or create derivative
               works of OncoKB for any commercial purpose without the express
