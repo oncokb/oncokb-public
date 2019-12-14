@@ -78,14 +78,14 @@ module.exports = webpackMerge(commonConfig({
         // exclude: './src/main/webapp/index.html',
         // sourceMap: true, // Enable source maps. Please note that this will slow down the build
         terserOptions: {
-          ecma: 6,
+          ecma: 5,
           toplevel: true,
           module: true,
           beautify: false,
           comments: false,
           compress: {
             warnings: false,
-            ecma: 6,
+            ecma: 5,
             module: true,
             toplevel: true
           },
@@ -93,7 +93,7 @@ module.exports = webpackMerge(commonConfig({
               comments: false,
               beautify: false,
               indent_level: 2,
-              ecma: 6
+              ecma: 5
           },
           mangle: {
             keep_fnames: true,
