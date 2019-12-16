@@ -53,25 +53,37 @@ const AppRouts = (props: {
       />
       <PageContainer>
         <Switch>
-          <ErrorBoundaryRoute path={PAGE_ROUTE.LOGIN} component={Login} />
-          <ErrorBoundaryRoute path={PAGE_ROUTE.LOGOUT} component={Logout} />
+          <ErrorBoundaryRoute exact path={PAGE_ROUTE.LOGIN} component={Login} />
           <ErrorBoundaryRoute
+            exact
+            path={PAGE_ROUTE.LOGOUT}
+            component={Logout}
+          />
+          <ErrorBoundaryRoute
+            exact
             path={PAGE_ROUTE.REGISTER}
             component={RegisterPage}
           />
           <ErrorBoundaryRoute
+            exact
             path={PAGE_ROUTE.DATA_ACCESS}
             component={DataAccessPage}
           />
           <ErrorBoundaryRoute
+            exact
             path={PAGE_ROUTE.CANCER_GENES}
             component={CancerGenesPage}
           />
           <ErrorBoundaryRoute
+            exact
             path={PAGE_ROUTE.ACTIONABLE_GENE}
             component={ActionableGenesPage}
           />
-          <ErrorBoundaryRoute exact path={PAGE_ROUTE.GENE} component={GenePage} />
+          <ErrorBoundaryRoute
+            exact
+            path={PAGE_ROUTE.GENE}
+            component={GenePage}
+          />
           <ErrorBoundaryRoute
             exact
             path={PAGE_ROUTE.ALTERATION}
@@ -86,17 +98,23 @@ const AppRouts = (props: {
           <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
           <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage} />
           <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
-          <Route exact path={PAGE_ROUTE.LEVELS} component={LevelOfEvidencePage} />
+          <Route
+            exact
+            path={PAGE_ROUTE.LEVELS}
+            component={LevelOfEvidencePage}
+          />
           <ErrorBoundaryRoute
             exact
             path={PAGE_ROUTE.ACCOUNT_VERIFY}
             component={ActivateAccount}
           />
           <ErrorBoundaryRoute
+            exact
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
             component={PasswordResetInit}
           />
           <ErrorBoundaryRoute
+            exact
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}
             component={PasswordResetFinish}
           />
