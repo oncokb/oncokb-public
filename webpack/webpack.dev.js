@@ -78,7 +78,9 @@ module.exports = (options) => webpackMerge(commonConfig({
       ignored: /node_modules/
     },
     https: options.tls,
-    historyApiFallback: true
+    historyApiFallback: {
+      disableDotRule: true
+    }
   },
   stats: process.env.JHI_DISABLE_WEBPACK_LOGS ? 'none' : options.stats,
   plugins: [
