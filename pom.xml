@@ -94,7 +94,7 @@
         <jacoco.itReportFile>${jacoco.itReportFolder}/integrationTest.exec</jacoco.itReportFile>
         <junit.utReportFolder>${project.testresult.directory}/test</junit.utReportFolder>
         <junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
-        <jslack.version>3.1.0</jslack.version>
+        <jslack.version>3.2.5</jslack.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -351,7 +351,7 @@
         <dependency>
           <groupId>com.github.seratch</groupId>
           <artifactId>jslack</artifactId>
-          <version>3.1.0</version>
+          <version>${jslack.version}</version>
         </dependency>
       <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>

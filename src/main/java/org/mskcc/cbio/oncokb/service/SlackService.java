@@ -4,6 +4,7 @@ import com.github.seratch.jslack.Slack;
 import com.github.seratch.jslack.api.model.block.ActionsBlock;
 import com.github.seratch.jslack.api.model.block.LayoutBlock;
 import com.github.seratch.jslack.api.model.block.SectionBlock;
+import com.github.seratch.jslack.api.model.block.composition.ConfirmationDialogObject;
 import com.github.seratch.jslack.api.model.block.composition.MarkdownTextObject;
 import com.github.seratch.jslack.api.model.block.composition.PlainTextObject;
 import com.github.seratch.jslack.api.model.block.composition.TextObject;
@@ -13,6 +14,7 @@ import com.github.seratch.jslack.api.webhook.WebhookResponse;
 import com.github.seratch.jslack.app_backend.interactive_messages.payload.BlockActionPayload;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +76,21 @@ public class SlackService {
         }
     }
 
+    @Async
+    public void sendApprovedConfirmation(UserDTO userDTO) {
+        Payload payload = Payload.builder()
+            .text(userDTO.getEmail() + " has been approved and notified automatically")
+            .build();
+
+        Slack slack = Slack.getInstance();
+        try {
+            // This is an automatic message when user from whitelist is registered.
+            WebhookResponse response = slack.send(this.applicationProperties.getUserRegistrationWebhook(), payload);
+        } catch (IOException e) {
+            log.warn("Failed to send message to slack");
+        }
+    }
+
     public Optional<BlockActionPayload.Action> getApproveUserAction(BlockActionPayload blockActionPayload) {
         return blockActionPayload.getActions().stream().filter(action -> action.getActionId().equalsIgnoreCase(APPROVE_USER)).findFirst();
     }
@@ -114,6 +131,16 @@ public class SlackService {
             .actionId(APPROVE_USER)
             .value(user.getLogin())
             .build();
+
+        if (user.getLicenseType() != LicenseType.ACADEMIC) {
+            ConfirmationDialogObject confirmationDialogObject = ConfirmationDialogObject.builder()
+                .title(PlainTextObject.builder().text("Are you sure?").build())
+                .text(PlainTextObject.builder().text("You are going to approve a commercial account.").build())
+                .confirm(PlainTextObject.builder().text("Yes").build())
+                .deny(PlainTextObject.builder().text("No").build())
+                .build();
+            button.setConfirm(confirmationDialogObject);
+        }
 
         blocks.add(ActionsBlock.builder().elements(Arrays.asList(button)).build());
 

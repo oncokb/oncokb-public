@@ -5,6 +5,7 @@ import com.github.seratch.jslack.Slack;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
@@ -109,10 +110,17 @@ public class AccountResource {
                 Optional<User> existingUser = userRepository.findOneByLogin(user.getLogin());
                 if (existingUser.isPresent()) {
                     UserDTO userDTO = userMapper.userToUserDTO(existingUser.get());
-                    if (!userDTO.isActivated()) {
-                        userDTO.setActivated(true);
+                    if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
+                        if (!userDTO.isActivated()) {
+                            userDTO.setActivated(true);
+                        }
+                        userService.updateUser(userDTO);
+                        slackService.sendApprovedConfirmation(userMapper.userToUserDTO(userOptional.get()));
+                        return true;
+                    } else {
+                        slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
+                        return false;
                     }
-                    return true;
                 } else {
                     throw new AccountResourceException("User could not be found");
                 }
