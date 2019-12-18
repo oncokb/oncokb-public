@@ -34,7 +34,7 @@ public class TokenProvider implements InitializingBean {
     private static final int EXPIRATION_TIME_IN_DAYS = 30 * 6;
 
     // This is for the public website
-    private static final int EXPIRATION_TIME_IN_MINUTES = 10;
+    private static final int EXPIRATION_TIME_IN_MINUTES = 60;
 
     private Key key;
 
