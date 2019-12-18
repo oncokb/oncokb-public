@@ -13,7 +13,6 @@ import { inject } from 'mobx-react';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { TermsPage } from 'app/pages/TermsPage';
 import { TeamPage } from 'app/pages/TeamPage';
-import { NewsPage } from 'app/pages/newsPage/NewsPage';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
 import ActionableGenesPage from 'app/pages/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
@@ -30,6 +29,7 @@ import AdminRouts from 'app/routes/AdminRoutes';
 import PageContainer from 'app/components/PageContainer';
 import React from 'react';
 import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
+import NewsPage from 'app/pages/newsPage/NewsPage';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;

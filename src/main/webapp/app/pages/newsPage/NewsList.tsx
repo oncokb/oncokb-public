@@ -8,16 +8,21 @@ import {
 } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { ChangedAnnotationListItem } from 'app/pages/newsPage/ChangedAnnotatonListItem';
 import { UpdatedTxImplOldFormatListItem } from 'app/pages/newsPage/UpdatedTxImplOldFormatListItem';
+import { ElementType, SimpleTableCell } from 'app/components/SimpleTable';
 import {
-  ElementType,
-  SimpleTableCell,
-  SimpleTableRow,
-  SimpleTableRows
-} from 'app/components/SimpleTable';
-import { NEWS_DATE_FORMAT, NEWS_TITLE_DATE_FORMAT } from 'app/config/constants';
+  NEWS_DATE_FORMAT,
+  NEWS_TITLE_DATE_FORMAT,
+  PAGE_ROUTE
+} from 'app/config/constants';
+import HashLink from 'app/shared/links/HashLink';
+import { RouterStore } from 'mobx-react-router';
+import { observable } from 'mobx';
+import autobind from 'autobind-decorator';
+import { observer } from 'mobx-react';
 
 export type NewsListProps = {
   date: string;
+  routing?: RouterStore;
 };
 
 export const getNewsTitle = (date: string) => {
@@ -46,7 +51,9 @@ export const getNews = (news: {
   return getNewsList(data);
 };
 
+@observer
 export default class NewsList extends React.Component<NewsListProps> {
+  @observable showAnchor = false;
   getNewlyAddGeneSection = (newsData: NewsData) => {
     if (newsData.newlyAddedGenes) {
       const componentProps: NewlyAddedGenesListItemProps = {
@@ -66,7 +73,14 @@ export default class NewsList extends React.Component<NewsListProps> {
     const newsData: NewsData = NEWS_BY_DATE[date];
     return (
       <>
-        <h3>{getNewsTitle(date)}</h3>
+        <h3
+          id={date}
+          onMouseEnter={() => (this.showAnchor = true)}
+          onMouseLeave={() => (this.showAnchor = false)}
+        >
+          {getNewsTitle(date)}
+          <HashLink path={PAGE_ROUTE.NEWS} hash={date} show={this.showAnchor} />
+        </h3>
         <div className={'mb-3'}>
           {this.props.children ? (
             this.props.children
