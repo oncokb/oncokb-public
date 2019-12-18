@@ -207,9 +207,10 @@ export class AnnotationStore {
   }
 
   readonly geneSummary = remoteData<string | undefined>({
+    await: () => [this.gene],
     invoke: async () => {
       const evidences = await apiClient.evidencesLookupGetUsingGET({
-        hugoSymbol: this.hugoSymbolQuery,
+        hugoSymbol: this.gene.result.hugoSymbol,
         evidenceTypes: EVIDENCE_TYPES.GENE_SUMMARY
       });
       if (evidences.length > 0) {
@@ -221,9 +222,10 @@ export class AnnotationStore {
   });
 
   readonly geneBackground = remoteData<string | undefined>({
+    await: () => [this.gene],
     invoke: async () => {
       const evidences = await apiClient.evidencesLookupGetUsingGET({
-        hugoSymbol: this.hugoSymbolQuery,
+        hugoSymbol: this.gene.result.hugoSymbol,
         evidenceTypes: EVIDENCE_TYPES.GENE_BACKGROUND
       });
       if (evidences.length > 0) {
@@ -235,9 +237,10 @@ export class AnnotationStore {
   });
 
   readonly geneNumber = remoteData<GeneNumber>({
+    await: () => [this.gene],
     invoke: async () => {
       return privateClient.utilsNumbersGeneGetUsingGET({
-        hugoSymbol: this.hugoSymbolQuery
+        hugoSymbol: this.gene.result.hugoSymbol
       });
     },
     default: {
@@ -250,9 +253,10 @@ export class AnnotationStore {
   });
 
   readonly mutationEffect = remoteData<Evidence[]>({
+    await: () => [this.gene],
     invoke: async () => {
       return apiClient.evidencesLookupGetUsingGET({
-        hugoSymbol: this.hugoSymbolQuery,
+        hugoSymbol: this.gene.result.hugoSymbol,
         variant: this.alterationQuery,
         evidenceTypes: EVIDENCE_TYPES.MUTATION_EFFECT
       });
@@ -261,31 +265,33 @@ export class AnnotationStore {
   });
 
   readonly clinicalAlterations = remoteData<ClinicalVariant[]>({
+    await: () => [this.gene],
     invoke: async () => {
       return privateClient.searchVariantsClinicalGetUsingGET({
-        hugoSymbol: this.hugoSymbolQuery
+        hugoSymbol: this.gene.result.hugoSymbol
       });
     },
     default: []
   });
 
   readonly biologicalAlterations = remoteData<BiologicalVariant[]>({
+    await: () => [this.gene],
     invoke: async () => {
       return privateClient.searchVariantsBiologicalGetUsingGET({
-        hugoSymbol: this.hugoSymbolQuery
+        hugoSymbol: this.gene.result.hugoSymbol
       });
     },
     default: []
   });
 
   readonly mutationMapperDataExternal = remoteData<OncokbMutation[]>({
-    await: () => [this.biologicalAlterations],
+    await: () => [this.gene, this.biologicalAlterations],
     invoke: () => {
       return Promise.resolve(
         this.biologicalAlterations.result.map(alteration => {
           return {
             gene: {
-              hugoGeneSymbol: this.hugoSymbolQuery
+              hugoGeneSymbol: this.gene.result.hugoSymbol
             },
             proteinChange: alteration.variant.alteration,
             proteinPosEnd: alteration.variant.proteinEnd,
@@ -354,9 +360,10 @@ export class AnnotationStore {
   });
 
   readonly annotationResult = remoteData<VariantAnnotation>({
+    await: () => [this.gene],
     invoke: async () => {
       return privateClient.utilVariantAnnotationGetUsingGET({
-        hugoSymbol: this.hugoSymbolQuery,
+        hugoSymbol: this.gene.result.hugoSymbol,
         alteration: this.alterationQuery,
         tumorType: this.tumorTypeQuery
       });
