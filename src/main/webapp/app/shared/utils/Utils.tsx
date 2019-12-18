@@ -400,3 +400,10 @@ export function toAppTimestampFormat(utcTime: string | undefined) {
 export function getMomentInstance(utcTime: string) {
   return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z);
 }
+
+export const scrollWidthOffsetInNews = (el?: any) => {
+  const yCoordinate =
+    el === undefined ? 0 : el.getBoundingClientRect().top + window.pageYOffset;
+  const yOffset = -80;
+  window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
+};
