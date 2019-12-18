@@ -9,6 +9,8 @@ import {
 } from 'app/config/constants';
 import { Link } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
+import LevelChange from 'content/images/loe-change.png';
+import { Linkout } from 'app/shared/links/Linkout';
 
 export const NewsPage = () => {
   return (
@@ -47,6 +49,49 @@ export const NewsPage = () => {
           <CitationText />
         </div>
         <div className="mt-2">
+          <NewsList date={'12192019'}>
+            <div>Introducing Simplified OncoKB Levels of Evidence:</div>
+            <ul>
+              <li>
+                <b>New Level 2</b>, defined as “Standard care biomarker
+                recommended by the NCCN or other expert panels predictive of
+                response to an FDA-approved drug in this indication” (formerly
+                Level 2A).
+              </li>
+              <li>
+                <b>Unified Level 3B</b>, defined as “Standard care or
+                investigational biomarker predictive of response to an
+                FDA-approved or investigational drug in another indication”
+                (combination of previous Levels 2B and 3B).
+              </li>
+            </ul>
+            <img className="md-auto" src={LevelChange} />
+            <div>
+              We have implemented these changes for 2 reasons:
+              <ol>
+                <li>
+                  To be consistent with the{' '}
+                  <Linkout link="https://www.sciencedirect.com/science/article/pii/S1525157816302239?via%3Dihub">
+                    Joint Consensus Recommendation by AMP, ASCO and CAP
+                  </Linkout>{' '}
+                  and the{' '}
+                  <Linkout link="https://academic.oup.com/annonc/article/29/9/1895/5076792?searchresult=1">
+                    ESMO Scale for Clinical Actionability of molecular Targets
+                    (ESCAT)
+                  </Linkout>
+                </li>
+                <li>
+                  To reflect the clinical data that demonstrates patients with
+                  investigational predictive biomarkers for a specific tumor
+                  type based on compelling clinical evidence (currently Level
+                  3A) are more likely to experience clinical benefit compared to
+                  patients with predictive biomarkers that are considered
+                  standard care in a different tumor type (previously Level 2B,
+                  now combined into Level 3B).
+                </li>
+              </ol>
+            </div>
+          </NewsList>
           <NewsList date={'12122019'} />
           <NewsList date={'12092019'}>
             <span>
