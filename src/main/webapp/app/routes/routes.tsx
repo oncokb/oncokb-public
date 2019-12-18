@@ -17,7 +17,6 @@ import { NewsPage } from 'app/pages/newsPage/NewsPage';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
 import ActionableGenesPage from 'app/pages/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
-import { LevelOfEvidencePage } from 'app/pages/LevelOfEvidencePage';
 import GenePage from 'app/pages/genePage/GenePage';
 import AlterationPage from 'app/pages/alterationPage/AlterationPage';
 import { AccountPage } from 'app/pages/AccountPage';
@@ -30,6 +29,7 @@ import AccountPassword from 'app/components/account/AccountPassword';
 import AdminRouts from 'app/routes/AdminRoutes';
 import PageContainer from 'app/components/PageContainer';
 import React from 'react';
+import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -71,7 +71,11 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.ACTIONABLE_GENE}
             component={ActionableGenesPage}
           />
-          <ErrorBoundaryRoute exact path={PAGE_ROUTE.GENE} component={GenePage} />
+          <ErrorBoundaryRoute
+            exact
+            path={PAGE_ROUTE.GENE}
+            component={GenePage}
+          />
           <ErrorBoundaryRoute
             exact
             path={PAGE_ROUTE.ALTERATION}
@@ -86,7 +90,11 @@ const AppRouts = (props: {
           <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
           <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage} />
           <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
-          <Route exact path={PAGE_ROUTE.LEVELS} component={LevelOfEvidencePage} />
+          <Route
+            exact
+            path={PAGE_ROUTE.LEVELS}
+            component={LevelOfEvidencePage}
+          />
           <ErrorBoundaryRoute
             exact
             path={PAGE_ROUTE.ACCOUNT_VERIFY}

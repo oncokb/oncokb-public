@@ -88,22 +88,34 @@ body,
   ul {
     padding-left: 2rem;
     list-style: none;
+
+    li {
+      margin-bottom: 0.75rem;
+    }
+
+    li:before {
+      font-family: 'FontAwesome';
+      content: '\f0a4';
+      margin: 0 0.5rem 0 -1.5rem;
+    }
+
+    ul.bullet li:before {
+      content: '\f111';
+      font-size: 0.5rem;
+      vertical-align: 20%;
+    }
   }
 
-  li {
-    margin-bottom: 0.75rem;
-  }
+  ol {
+    counter-reset: list;
+    padding-left: 2rem;
+    list-style: none;
 
-  li:before {
-    font-family: 'FontAwesome';
-    content: '\f0a4';
-    margin: 0 0.5rem 0 -1rem;
-  }
-
-  ul.bullet li:before {
-    content: '\f111';
-    font-size: 0.5rem;
-    vertical-align: 20%;
+    li:before {
+      counter-increment: list;
+      content: counter(list, decimal) ') ';
+      margin: 0 0.5rem 0 -1.7rem;
+    }
   }
 
   .table {
@@ -134,6 +146,14 @@ body,
 
 .form-check {
   padding-left: 0;
+}
+
+.levels-of-evidence {
+  .RRT__panel {
+    border-width: 1px 0 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 fieldset.form-group {
