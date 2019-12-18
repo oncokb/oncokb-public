@@ -1,7 +1,7 @@
 version: '2'
 services:
   oncokb-app:
-    image: cbioportal/oncokb-public:0.0.beta.6
+    image: cbioportal/oncokb-public:0.0.beta.7
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,swagger
