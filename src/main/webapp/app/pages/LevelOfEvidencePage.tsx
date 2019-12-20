@@ -5,15 +5,23 @@ import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import {
   DOCUMENT_TITLES,
   IMG_MAX_WIDTH,
+  PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
 import { inject, observer } from 'mobx-react';
-import { computed, IReactionDisposer, observable, reaction } from 'mobx';
+import {
+  action,
+  computed,
+  IReactionDisposer,
+  observable,
+  reaction
+} from 'mobx';
 import * as QueryString from 'query-string';
 import { RouterStore } from 'mobx-react-router';
-import styles from 'app/components/downloadButton/DownloadButton.module.scss';
-import Tabs from 'react-responsive-tabs';
+import autobind from 'autobind-decorator';
+import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 type LevelOfEvidencePageProps = {
   routing: RouterStore;
@@ -54,21 +62,14 @@ export default class LevelOfEvidencePage extends React.Component<
               this.version = queryStrings.version;
             } else {
               this.version = this.getVersionDefault();
-              this.updateLocationHash(this.version);
             }
           } else {
             this.version = this.getVersionDefault();
-            this.updateLocationHash(this.version);
           }
         },
         { fireImmediately: true }
       ),
-      reaction(
-        () => this.version,
-        newVersion => {
-          this.updateLocationHash(this.version);
-        }
-      )
+      reaction(() => this.version, newVersion => {})
     );
   }
 
@@ -76,66 +77,65 @@ export default class LevelOfEvidencePage extends React.Component<
     this.reactions.forEach(componentReaction => componentReaction());
   }
 
-  getTabContent(currentVersion: version) {
-    return (
-      <>
-        <Row>
-          <Col></Col>
-          <Col className={'d-flex justify-content-end'}>
-            <Button
-              size={'sm'}
-              className={classnames('ml-1')}
-              href={`content/files/levelOfEvidence/${currentVersion}/LevelsOfEvidence.ppt`}
-            >
-              <i className={'fa fa-cloud-download mr-1'} />
-              Download Slide
-            </Button>
-            <DownloadButton
-              size={'sm'}
-              className={classnames('ml-1')}
-              href={`content/files/levelOfEvidence/${currentVersion}/LevelsOfEvidence.pdf`}
-            >
-              <i className={'fa fa-cloud-download mr-1'} />
-              Download PDF
-            </DownloadButton>
-          </Col>
-        </Row>
-        <Row>
-          <Col className={'d-sm-block d-md-flex justify-content-center'}>
-            <img
-              style={{ maxWidth: IMG_MAX_WIDTH, width: '100%' }}
-              src={`content/images/level_${currentVersion}.jpg`}
-            />
-          </Col>
-        </Row>
-      </>
-    );
-  }
-
-  @computed
-  get tabs() {
-    return ALLOWED_VERSIONS.map(allowedVersion => {
-      return {
-        title: `Version ${allowedVersion.slice(1)}`,
-        getContent: () => this.getTabContent(allowedVersion),
-        /* Optional parameters */
-        key: allowedVersion,
-        tabClassName: styles.tab,
-        panelClassName: styles.panel
-      };
-    });
+  @autobind
+  @action
+  toggleVersion() {
+    this.version = this.version === version.v2 ? version.v1 : version.v2;
   }
 
   render() {
     return (
       <DocumentTitle title={DOCUMENT_TITLES.LEVELS}>
         <div className="levels-of-evidence">
-          <Tabs
-            items={this.tabs}
-            transform={false}
-            selectedTabKey={this.version}
-            onChange={(nextTabKey: version) => (this.version = nextTabKey)}
-          />
+          <>
+            <Row>
+              <Col className="col-auto mr-auto d-flex align-content-center">
+                <span className={'mr-1'}>
+                  Introducing Simplified OncoKB Levels of Evidence V2, refer to
+                  the
+                </span>
+                <HashLink to={`${PAGE_ROUTE.NEWS}#12202019`}>
+                  News 12/20/2019
+                </HashLink>
+              </Col>
+              <Col className={'col-auto'}>
+                <Button
+                  size={'sm'}
+                  className={classnames('ml-1')}
+                  href={`content/files/levelOfEvidence/${this.version}/LevelsOfEvidence.ppt`}
+                >
+                  <i className={'fa fa-cloud-download mr-1'} />
+                  Download Slide
+                </Button>
+                <DownloadButton
+                  size={'sm'}
+                  className={classnames('ml-1')}
+                  href={`content/files/levelOfEvidence/${this.version}/LevelsOfEvidence.pdf`}
+                >
+                  <i className={'fa fa-cloud-download mr-1'} />
+                  Download PDF
+                </DownloadButton>
+              </Col>
+            </Row>
+            <Row>
+              <Col className={'d-sm-block d-md-flex justify-content-center'}>
+                <img
+                  style={{ maxWidth: IMG_MAX_WIDTH, width: '100%' }}
+                  src={`content/images/level_${this.version}.jpg`}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col></Col>
+              <Col className={'d-flex justify-content-end'}>
+                <Button variant={'link'} onClick={this.toggleVersion}>
+                  Click here to see{' '}
+                  {this.version === version.v2 ? 'old' : 'new'} Levels of
+                  Evidence
+                </Button>
+              </Col>
+            </Row>
+          </>
         </div>
       </DocumentTitle>
     );
