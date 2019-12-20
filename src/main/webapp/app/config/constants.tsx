@@ -155,7 +155,7 @@ export const THRESHOLD_TABLE_FIXED_HEIGHT = 10;
 export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
 export const LG_TABLE_FIXED_HEIGHT = 650;
 export const SM_TABLE_FIXED_HEIGHT = 400;
-export const IMG_MAX_WIDTH = 600;
+export const IMG_MAX_WIDTH = 700;
 export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
 export const H5_FONT_SIZE = '1.25rem';
 
@@ -410,6 +410,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '12202019', version: 'v2.0' },
   { date: '12162019', version: 'v1.24_patch_1' },
   { date: '12122019', version: 'v1.24' },
   { date: '08282019', version: 'v1.23' },
