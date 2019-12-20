@@ -28,8 +28,8 @@ type LevelOfEvidencePageProps = {
 };
 
 enum version {
-  v1 = 'v1',
-  v2 = 'v2'
+  v1 = 'V1',
+  v2 = 'V2'
 }
 const ALLOWED_VERSIONS = [version.v2, version.v1];
 
@@ -90,13 +90,27 @@ export default class LevelOfEvidencePage extends React.Component<
           <>
             <Row>
               <Col className="col-auto mr-auto d-flex align-content-center">
-                <span className={'mr-1'}>
-                  Introducing Simplified OncoKB Levels of Evidence V2, refer to
-                  the
-                </span>
-                <HashLink to={`${PAGE_ROUTE.NEWS}#12202019`}>
-                  News 12/20/2019
-                </HashLink>
+                {this.version === version.v2 && (
+                  <span className={'d-flex align-items-center'}>
+                    <span className={'mr-1'}>
+                      Introducing Simplified OncoKB Levels of Evidence V2, refer to
+                      the
+                    </span>
+                    <HashLink to={`${PAGE_ROUTE.NEWS}#12202019`}>
+                      News 12/20/2019
+                    </HashLink>
+                  </span>
+                )}
+                {this.version === version.v1 && (
+                  <span className={'d-flex align-items-center'}>
+                    <span>This is the previous Levels of Evidence. </span>
+                    <Button variant={'link'} onClick={this.toggleVersion}>
+                      Click here to see{' '}
+                      <b>{version.v2}</b> Levels of
+                      Evidence
+                    </Button>
+                  </span>
+                )}
               </Col>
               <Col className={'col-auto'}>
                 <Button
@@ -125,15 +139,17 @@ export default class LevelOfEvidencePage extends React.Component<
                 />
               </Col>
             </Row>
-            <Row>
-              <Col>
-                <Button variant={'link'} onClick={this.toggleVersion}>
-                  Click here to see{' '}
-                  {this.version === version.v2 ? 'old' : 'new'} Levels of
-                  Evidence
-                </Button>
-              </Col>
-            </Row>
+            {this.version === version.v2 && (
+              <Row>
+                <Col>
+                  <Button variant={'link'} onClick={this.toggleVersion}>
+                    Click here to see{' '}
+                    {this.version === version.v2 ? version.v1 : version.v2} Levels of
+                    Evidence
+                  </Button>
+                </Col>
+              </Row>
+            )}
           </>
         </div>
       </DocumentTitle>
