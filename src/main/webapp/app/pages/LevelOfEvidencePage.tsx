@@ -126,8 +126,7 @@ export default class LevelOfEvidencePage extends React.Component<
               </Col>
             </Row>
             <Row>
-              <Col></Col>
-              <Col className={'d-flex justify-content-end'}>
+              <Col>
                 <Button variant={'link'} onClick={this.toggleVersion}>
                   Click here to see{' '}
                   {this.version === version.v2 ? 'old' : 'new'} Levels of
