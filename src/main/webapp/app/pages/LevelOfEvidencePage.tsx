@@ -132,11 +132,13 @@ export default class LevelOfEvidencePage extends React.Component<
               </Col>
             </Row>
             <Row>
-              <Col className={'d-sm-block d-md-flex justify-content-center'}>
-                <img
-                  style={{ maxWidth: IMG_MAX_WIDTH, width: '100%' }}
-                  src={`content/images/level_${this.version}.jpg`}
-                />
+              <Col className={'d-md-flex justify-content-center'}>
+                <div style={{ maxWidth: IMG_MAX_WIDTH }}>
+                  <img
+                    style={{ width: '100%' }}
+                    src={`content/images/level_${this.version}.png`}
+                  />
+                </div>
               </Col>
             </Row>
             {this.version === version.v2 && (
