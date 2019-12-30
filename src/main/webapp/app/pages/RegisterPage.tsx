@@ -39,6 +39,7 @@ import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 import WindowStore from 'app/store/WindowStore';
 import SmallPageContainer from 'app/components/SmallPageContainer';
 import MessageToContact from 'app/shared/texts/MessageToContact';
+import * as XRegExp from "xregexp";
 
 export type NewUserRequiredFields = {
   username: string;
@@ -310,8 +311,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                         errorMessage: 'Your first name is required.'
                       },
                       pattern: {
-                        value: '^[A-Za-z ]+$',
-                        errorMessage: 'Your name must be composed only with letters'
+                        value: XRegExp('^[\\p{Latin}\\s]+$'),
+                        errorMessage: 'Sorry, we only support Latin letters for now.'
                       },
                       minLength: {
                         value: 1,
@@ -332,8 +333,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                         errorMessage: 'Your last name is required.'
                       },
                       pattern: {
-                        value: '^[A-Za-z ]+$',
-                        errorMessage: 'Your name must be composed only with letters'
+                        value: XRegExp('^[\\p{Latin}\\s]+$'),
+                        errorMessage: 'Sorry, we only support Latin letters for now.'
                       },
                       minLength: {
                         value: 1,
@@ -420,8 +421,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                         errorMessage: 'Required to be at least 1 character'
                       },
                       pattern: {
-                        value: '^[A-Za-z/ ]+$',
-                        errorMessage: 'Must be composed with letters and special character \'/\''
+                        value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                        errorMessage: 'Sorry, we only support Latin letters for now.'
                       },
                       maxLength: {
                         value: 50,
@@ -443,8 +444,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                         errorMessage: 'Required to be at least 1 character'
                       },
                       pattern: {
-                        value: '^[A-Za-z ]+$',
-                        errorMessage: 'Must be composed only with letters'
+                        value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                        errorMessage: 'Sorry, we only support Latin letters for now.'
                       },
                       maxLength: {
                         value: 50,
@@ -466,8 +467,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                         errorMessage: 'Required to be at least 1 character'
                       },
                       pattern: {
-                        value: '^[A-Za-z ]+$',
-                        errorMessage: 'Must be composed only with letters'
+                        value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                        errorMessage: 'Sorry, we only support Latin letters for now.'
                       },
                       maxLength: {
                         value: 50,
@@ -485,8 +486,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     validate={{
                       required: { value: true, errorMessage: 'Required.' },
                       pattern: {
-                        value: '^[A-Za-z ]+$',
-                        errorMessage: 'Must be composed only with letters'
+                        value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                        errorMessage: 'Sorry, we only support Latin letters for now.'
                       },
                       minLength: {
                         value: 1,
