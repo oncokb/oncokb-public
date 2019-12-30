@@ -309,6 +309,10 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                         value: true,
                         errorMessage: 'Your first name is required.'
                       },
+                      pattern: {
+                        value: '^[A-Za-z ]+$',
+                        errorMessage: 'Your name must be composed only with letters'
+                      },
                       minLength: {
                         value: 1,
                         errorMessage: 'Your first can not be empty'
@@ -326,6 +330,10 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       required: {
                         value: true,
                         errorMessage: 'Your last name is required.'
+                      },
+                      pattern: {
+                        value: '^[A-Za-z ]+$',
+                        errorMessage: 'Your name must be composed only with letters'
                       },
                       minLength: {
                         value: 1,
@@ -411,6 +419,10 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                         value: 1,
                         errorMessage: 'Required to be at least 1 character'
                       },
+                      pattern: {
+                        value: '^[A-Za-z/ ]+$',
+                        errorMessage: 'Must be composed with letters and special character \'/\''
+                      },
                       maxLength: {
                         value: 50,
                         errorMessage: 'Cannot be longer than 50 characters'
@@ -429,6 +441,10 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       minLength: {
                         value: 1,
                         errorMessage: 'Required to be at least 1 character'
+                      },
+                      pattern: {
+                        value: '^[A-Za-z ]+$',
+                        errorMessage: 'Must be composed only with letters'
                       },
                       maxLength: {
                         value: 50,
@@ -449,6 +465,10 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                         value: 1,
                         errorMessage: 'Required to be at least 1 character'
                       },
+                      pattern: {
+                        value: '^[A-Za-z ]+$',
+                        errorMessage: 'Must be composed only with letters'
+                      },
                       maxLength: {
                         value: 50,
                         errorMessage: 'Cannot be longer than 50 characters'
@@ -464,6 +484,10 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                     )}
                     validate={{
                       required: { value: true, errorMessage: 'Required.' },
+                      pattern: {
+                        value: '^[A-Za-z ]+$',
+                        errorMessage: 'Must be composed only with letters'
+                      },
                       minLength: {
                         value: 1,
                         errorMessage: 'Required to be at least 1 character'
