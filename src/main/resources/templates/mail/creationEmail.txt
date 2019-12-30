@@ -4,6 +4,6 @@ Your OncoKB account has been created. Please click the URL below to access it:
 
 [(${baseUrl})]/account/reset/finish?key=[(${user.resetKey})]
 
-Regards,
+Sincerely,
 The OncoKB Team
 

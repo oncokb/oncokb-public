@@ -66,7 +66,7 @@ export default class ActivateAccount extends React.Component<{
             emailTitle={'Account Activation Question'}
           />
           <p>
-            <div>Regards,</div>
+            <div>Sincerely,</div>
             <div>The OncoKB Team</div>
           </p>
         </Alert>

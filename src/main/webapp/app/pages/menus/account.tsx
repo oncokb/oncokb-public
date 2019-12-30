@@ -16,9 +16,14 @@ const AccountMenuItemsAuthenticated: React.FunctionComponent<{
       {PAGE_TITLE.ACCOUNT_PASSWORD}
     </MenuItem>
     {props.isAdmin ? (
-      <MenuItem icon="users" to={PAGE_ROUTE.ADMIN_USER_MANAGEMENT}>
-        {PAGE_TITLE.ADMIN_USER_MANAGEMENT}
-      </MenuItem>
+      <>
+        <MenuItem icon="users" to={PAGE_ROUTE.ADMIN_USER_MANAGEMENT}>
+          {PAGE_TITLE.ADMIN_USER_MANAGEMENT}
+        </MenuItem>
+        <MenuItem icon="envelope" to={PAGE_ROUTE.ADMIN_SEND_EMAILS}>
+          {PAGE_TITLE.ADMIN_SEND_EMAILS}
+        </MenuItem>
+      </>
     ) : null}
     <MenuItem icon="sign-out" to={PAGE_ROUTE.LOGOUT}>
       {PAGE_TITLE.LOGOUT}

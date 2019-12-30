@@ -24,8 +24,16 @@
       "description": "Audit Resource"
     },
     {
+      "name": "mails-controller",
+      "description": "Mails Controller"
+    },
+    {
       "name": "user-details-resource",
       "description": "User Details Resource"
+    },
+    {
+      "name": "user-mails-resource",
+      "description": "User Mails Resource"
     },
     {
       "name": "user-resource",
@@ -459,6 +467,165 @@
         "deprecated": false
       }
     },
+    "/api/mails/from": {
+      "get": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "getMailsFrom",
+        "operationId": "getMailsFromUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/mails/types": {
+      "get": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "getMailsTypes",
+        "operationId": "getMailsTypesUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "licenseType",
+            "in": "query",
+            "description": "licenseType",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "ACADEMIC",
+              "COMMERCIAL",
+              "RESEARCH_IN_COMMERCIAL",
+              "HOSPITAL"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MailTypeInfo"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/mails/users": {
+      "post": {
+        "tags": [
+          "mails-controller"
+        ],
+        "summary": "sendUserMails",
+        "operationId": "sendUserMailsUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "by",
+            "in": "query",
+            "description": "by",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "mailType",
+            "in": "query",
+            "description": "mailType",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "ACTIVATION",
+              "APPROVAL",
+              "CREATION",
+              "PASSWORD_RESET",
+              "LICENSE_REVIEW_COMMERCIAL",
+              "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
+              "LICENSE_REVIEW_HOSPITAL",
+              "CLARIFY_ACADEMIC_FOR_PROFIT",
+              "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
+              "TEST"
+            ]
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "to",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/register": {
       "post": {
         "tags": [
@@ -668,6 +835,118 @@
         ],
         "summary": "deleteUserDetails",
         "operationId": "deleteUserDetailsUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/user-mails": {
+      "get": {
+        "tags": [
+          "user-mails-resource"
+        ],
+        "summary": "getAllUserMails",
+        "operationId": "getAllUserMailsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserMailsDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/user-mails/users/{login}": {
+      "get": {
+        "tags": [
+          "user-mails-resource"
+        ],
+        "summary": "getUsersUserMails",
+        "operationId": "getUsersUserMailsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "login",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserMailsDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/user-mails/{id}": {
+      "delete": {
+        "tags": [
+          "user-mails-resource"
+        ],
+        "summary": "deleteUserMails",
+        "operationId": "deleteUserMailsUsingDELETE",
         "produces": [
           "*/*"
         ],
@@ -1225,6 +1504,30 @@
       },
       "title": "LoginVM"
     },
+    "MailTypeInfo": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "mailType": {
+          "type": "string",
+          "enum": [
+            "ACTIVATION",
+            "APPROVAL",
+            "CREATION",
+            "PASSWORD_RESET",
+            "LICENSE_REVIEW_COMMERCIAL",
+            "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
+            "LICENSE_REVIEW_HOSPITAL",
+            "CLARIFY_ACADEMIC_FOR_PROFIT",
+            "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
+            "TEST"
+          ]
+        }
+      },
+      "title": "MailTypeInfo"
+    },
     "ManagedUserVM": {
       "type": "object",
       "properties": {
@@ -1532,6 +1835,53 @@
         }
       },
       "title": "UserDetailsDTO"
+    },
+    "UserMailsDTO": {
+      "type": "object",
+      "required": [
+        "sentBy",
+        "sentDate",
+        "sentFrom"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "mailType": {
+          "type": "string",
+          "enum": [
+            "ACTIVATION",
+            "APPROVAL",
+            "CREATION",
+            "PASSWORD_RESET",
+            "LICENSE_REVIEW_COMMERCIAL",
+            "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
+            "LICENSE_REVIEW_HOSPITAL",
+            "CLARIFY_ACADEMIC_FOR_PROFIT",
+            "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
+            "TEST"
+          ]
+        },
+        "sentBy": {
+          "type": "string"
+        },
+        "sentDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sentFrom": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userLogin": {
+          "type": "string"
+        }
+      },
+      "title": "UserMailsDTO"
     }
   }
 }
