@@ -146,7 +146,7 @@
     "stripcomment-loader": "0.1.0",
     "style-loader": "0.23.1",
     "swagger-js-codegen": "git+https://github.com/cBioPortal/swagger-js-codegen.git#0362f4a1e2d116ad6dffc36e4b57cdfbc93956cf",
-    "swagger-ui": "2.2.10",
+    "swagger-ui": "3.23.11",
     "terser-webpack-plugin": "1.2.3",
     "thread-loader": "2.1.2",
     "to-string-loader": "1.1.5",
