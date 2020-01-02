@@ -15,7 +15,7 @@ export const LevelWithDescription: React.FunctionComponent<{
 
   function getLevelDescription() {
     const match: InfoLevel | undefined = _.find(
-      props.appStore.appInfo.result.levels,
+      props.appStore!.appInfo.result.levels,
       (level: InfoLevel) => level.levelOfEvidence === levelOfEvidence
     );
     return match ? (

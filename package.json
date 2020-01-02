@@ -15,10 +15,10 @@
     "@types/lodash": "^4.14.123",
     "@types/node": "^11.11.1",
     "@types/rc-tooltip": "^3.7.1",
-    "@types/react": "^16.8.10",
+    "@types/react": "16.9.16",
     "@types/react-copy-to-clipboard": "^4.3.0",
     "@types/react-document-title": "^2.0.3",
-    "@types/react-dom": "^16.8.2",
+    "@types/react-dom": "16.9.4",
     "@types/react-router-bootstrap": "^0.24.5",
     "@types/react-router-hash-link": "^1.2.1",
     "@types/react-table": "^6.8.1",
@@ -58,7 +58,7 @@
     "react-responsive-tabs": "^3.3.0",
     "react-router": "^4.3.1",
     "react-router-bootstrap": "^0.24.4",
-    "react-router-dom": "5.1.2",
+    "react-router-dom": "4.3.1",
     "react-router-hash-link": "^1.2.2",
     "react-select": "^3.0.4",
     "react-spinkit": "latest",
@@ -89,7 +89,7 @@
     "@types/react-html-parser": "^2.0.1",
     "@types/react-loadable": "^5.5.1",
     "@types/react-portal": "^4.0.2",
-    "@types/react-router-dom": "5.1.3",
+    "@types/react-router-dom": "4.3.1",
     "@types/react-select": "^3.0.4",
     "@types/react-spinkit": "^3.0.5",
     "@types/reactstrap": "^8.0.4",
@@ -137,7 +137,6 @@
     "prettier": "1.19.1",
     "react-infinite-scroller": "1.2.4",
     "rimraf": "3.0.0",
-    "sass": "1.23.7",
     "sass-loader": "8.0.0",
     "sass-resources-loader": "^2.0.1",
     "simple-progress-webpack-plugin": "1.1.2",
@@ -168,7 +167,7 @@
   },
   "engines": {
     "node": ">=12.13.0",
-    "yarn": "1.19.1"
+    "yarn": "1.21.1"
   },
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml}\"",
