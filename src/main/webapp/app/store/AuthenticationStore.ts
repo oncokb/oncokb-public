@@ -28,7 +28,7 @@ export const ACTION_TYPES = {
 };
 
 export const AUTH_UER_TOKEN_KEY = 'oncokb-user-token';
-export const AUTH_WEBSITE_TOKEN_KEY = 'oncokb-webiste-token';
+export const AUTH_WEBSITE_TOKEN_KEY = 'oncokb-website-token';
 
 class AuthenticationStore {
   @observable loading = false;
