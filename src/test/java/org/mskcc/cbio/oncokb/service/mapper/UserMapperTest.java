@@ -21,24 +21,22 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Integration tests for {@link UserMapper}.
+ * Unit tests for {@link UserMapper}.
  */
-@SpringBootTest(classes = OncokbApp.class)
 @ExtendWith(RedisTestContainerExtension.class)
-public class UserMapperIT {
+public class UserMapperTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final Long DEFAULT_ID = 1L;
 
-    @Autowired
     private UserMapper userMapper;
-
     private User user;
     private UserDetails userDetails;
     private UserDTO userDto;
 
     @BeforeEach
     public void init() {
+        userMapper = new UserMapper();
         user = new User();
         user.setLogin(DEFAULT_LOGIN);
         user.setPassword(RandomStringUtils.random(60));

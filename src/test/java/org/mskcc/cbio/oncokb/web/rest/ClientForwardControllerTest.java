@@ -1,11 +1,9 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
-import org.mskcc.cbio.oncokb.OncokbApp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -19,11 +17,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Integration tests for the {@link ClientForwardController} REST controller.
+ * Unit tests for the {@link ClientForwardController} REST controller.
  */
-@SpringBootTest(classes = OncokbApp.class)
 @ExtendWith(RedisTestContainerExtension.class)
-public class ClientForwardControllerIT {
+public class ClientForwardControllerTest {
 
     private MockMvc restMockMvc;
 
@@ -57,6 +54,7 @@ public class ClientForwardControllerIT {
             .andExpect(status().isOk())
             .andExpect(forwardedUrl("/"));
     }
+
 
     @RestController
     public static class TestController {
