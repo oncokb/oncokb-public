@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
@@ -11,44 +11,47 @@ import { getEntity, deleteEntity } from './token.reducer';
 
 export interface ITokenDeleteDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TokenDeleteDialog extends React.Component<ITokenDeleteDialogProps> {
-  componentDidMount() {
-    this.props.getEntity(this.props.match.params.id);
-  }
+export const TokenDeleteDialog = (props: ITokenDeleteDialogProps) => {
+  useEffect(() => {
+    props.getEntity(props.match.params.id);
+  }, []);
 
-  confirmDelete = event => {
-    this.props.deleteEntity(this.props.tokenEntity.id);
-    this.handleClose(event);
+  const handleClose = () => {
+    props.history.push('/token');
   };
 
-  handleClose = event => {
-    event.stopPropagation();
-    this.props.history.goBack();
+  useEffect(() => {
+    if (props.updateSuccess) {
+      handleClose();
+    }
+  }, [props.updateSuccess]);
+
+  const confirmDelete = () => {
+    props.deleteEntity(props.tokenEntity.id);
   };
 
-  render() {
-    const { tokenEntity } = this.props;
-    return (
-      <Modal isOpen toggle={this.handleClose}>
-        <ModalHeader toggle={this.handleClose}>Confirm delete operation</ModalHeader>
-        <ModalBody id="oncokbApp.token.delete.question">Are you sure you want to delete this Token?</ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={this.handleClose}>
-            <FontAwesomeIcon icon="ban" />
-            &nbsp; Cancel
-          </Button>
-          <Button id="jhi-confirm-delete-token" color="danger" onClick={this.confirmDelete}>
-            <FontAwesomeIcon icon="trash" />
-            &nbsp; Delete
-          </Button>
-        </ModalFooter>
-      </Modal>
-    );
-  }
-}
+  const { tokenEntity } = props;
+  return (
+    <Modal isOpen toggle={handleClose}>
+      <ModalHeader toggle={handleClose}>Confirm delete operation</ModalHeader>
+      <ModalBody id="oncokbApp.token.delete.question">Are you sure you want to delete this Token?</ModalBody>
+      <ModalFooter>
+        <Button color="secondary" onClick={handleClose}>
+          <FontAwesomeIcon icon="ban" />
+          &nbsp; Cancel
+        </Button>
+        <Button id="jhi-confirm-delete-token" color="danger" onClick={confirmDelete}>
+          <FontAwesomeIcon icon="trash" />
+          &nbsp; Delete
+        </Button>
+      </ModalFooter>
+    </Modal>
+  );
+};
 
 const mapStateToProps = ({ token }: IRootState) => ({
-  tokenEntity: token.entity
+  tokenEntity: token.entity,
+  updateSuccess: token.updateSuccess
 });
 
 const mapDispatchToProps = { getEntity, deleteEntity };
@@ -56,7 +59,4 @@ const mapDispatchToProps = { getEntity, deleteEntity };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TokenDeleteDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(TokenDeleteDialog);

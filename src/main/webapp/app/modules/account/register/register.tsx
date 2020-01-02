@@ -102,7 +102,4 @@ export const RegisterPage = (props: IRegisterProps) => {
 const mapDispatchToProps = { handleRegister, reset };
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(RegisterPage);
+export default connect(null, mapDispatchToProps)(RegisterPage);

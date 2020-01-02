@@ -1,8 +1,8 @@
 package org.mskcc.cbio.oncokb;
 
 import org.mskcc.cbio.oncokb.config.ApplicationProperties;
-import org.mskcc.cbio.oncokb.config.DefaultProfileUtil;
 
+import io.github.jhipster.config.DefaultProfileUtil;
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.apache.commons.lang3.StringUtils;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
@@ -16,122 +16,108 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ITokenStatsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ITokenStatsUpdateState {
-  isNew: boolean;
-  tokenId: string;
-}
+export const TokenStatsUpdate = (props: ITokenStatsUpdateProps) => {
+  const [tokenId, setTokenId] = useState('0');
+  const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-export class TokenStatsUpdate extends React.Component<ITokenStatsUpdateProps, ITokenStatsUpdateState> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tokenId: '0',
-      isNew: !this.props.match.params || !this.props.match.params.id
-    };
-  }
+  const { tokenStatsEntity, tokens, loading, updating } = props;
 
-  componentWillUpdate(nextProps, nextState) {
-    if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
-      this.handleClose();
-    }
-  }
+  const handleClose = () => {
+    props.history.push('/token-stats');
+  };
 
-  componentDidMount() {
-    if (this.state.isNew) {
-      this.props.reset();
+  useEffect(() => {
+    if (isNew) {
+      props.reset();
     } else {
-      this.props.getEntity(this.props.match.params.id);
+      props.getEntity(props.match.params.id);
     }
 
-    this.props.getTokens();
-  }
+    props.getTokens();
+  }, []);
 
-  saveEntity = (event, errors, values) => {
+  useEffect(() => {
+    if (props.updateSuccess) {
+      handleClose();
+    }
+  }, [props.updateSuccess]);
+
+  const saveEntity = (event, errors, values) => {
     if (errors.length === 0) {
-      const { tokenStatsEntity } = this.props;
       const entity = {
         ...tokenStatsEntity,
         ...values
       };
 
-      if (this.state.isNew) {
-        this.props.createEntity(entity);
+      if (isNew) {
+        props.createEntity(entity);
       } else {
-        this.props.updateEntity(entity);
+        props.updateEntity(entity);
       }
     }
   };
 
-  handleClose = () => {
-    this.props.history.push('/token-stats');
-  };
-
-  render() {
-    const { tokenStatsEntity, tokens, loading, updating } = this.props;
-    const { isNew } = this.state;
-
-    return (
-      <div>
-        <Row className="justify-content-center">
-          <Col md="8">
-            <h2 id="oncokbApp.tokenStats.home.createOrEditLabel">Create or edit a TokenStats</h2>
-          </Col>
-        </Row>
-        <Row className="justify-content-center">
-          <Col md="8">
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
-              <AvForm model={isNew ? {} : tokenStatsEntity} onSubmit={this.saveEntity}>
-                {!isNew ? (
-                  <AvGroup>
-                    <Label for="token-stats-id">ID</Label>
-                    <AvInput id="token-stats-id" type="text" className="form-control" name="id" required readOnly />
-                  </AvGroup>
-                ) : null}
+  return (
+    <div>
+      <Row className="justify-content-center">
+        <Col md="8">
+          <h2 id="oncokbApp.tokenStats.home.createOrEditLabel">Create or edit a TokenStats</h2>
+        </Col>
+      </Row>
+      <Row className="justify-content-center">
+        <Col md="8">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <AvForm model={isNew ? {} : tokenStatsEntity} onSubmit={saveEntity}>
+              {!isNew ? (
                 <AvGroup>
-                  <Label id="accessIpLabel" for="token-stats-accessIp">
-                    Access Ip
-                  </Label>
-                  <AvField id="token-stats-accessIp" type="text" name="accessIp" />
+                  <Label for="token-stats-id">ID</Label>
+                  <AvInput id="token-stats-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
-                <AvGroup>
-                  <Label id="resourceLabel" for="token-stats-resource">
-                    Resource
-                  </Label>
-                  <AvField id="token-stats-resource" type="text" name="resource" />
-                </AvGroup>
-                <AvGroup>
-                  <Label for="token-stats-token">Token</Label>
-                  <AvInput id="token-stats-token" type="select" className="form-control" name="token.id">
-                    <option value="" key="0" />
-                    {tokens
-                      ? tokens.map(otherEntity => (
-                          <option value={otherEntity.id} key={otherEntity.id}>
-                            {otherEntity.id}
-                          </option>
-                        ))
-                      : null}
-                  </AvInput>
-                </AvGroup>
-                <Button tag={Link} id="cancel-save" to="/token-stats" replace color="info">
-                  <FontAwesomeIcon icon="arrow-left" />
-                  &nbsp;
-                  <span className="d-none d-md-inline">Back</span>
-                </Button>
+              ) : null}
+              <AvGroup>
+                <Label id="accessIpLabel" for="token-stats-accessIp">
+                  Access Ip
+                </Label>
+                <AvField id="token-stats-accessIp" type="text" name="accessIp" />
+              </AvGroup>
+              <AvGroup>
+                <Label id="resourceLabel" for="token-stats-resource">
+                  Resource
+                </Label>
+                <AvField id="token-stats-resource" type="text" name="resource" />
+              </AvGroup>
+              <AvGroup>
+                <Label for="token-stats-token">Token</Label>
+                <AvInput id="token-stats-token" type="select" className="form-control" name="token.id">
+                  <option value="" key="0" />
+                  {tokens
+                    ? tokens.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
+              </AvGroup>
+              <Button tag={Link} id="cancel-save" to="/token-stats" replace color="info">
+                <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
-                <Button color="primary" id="save-entity" type="submit" disabled={updating}>
-                  <FontAwesomeIcon icon="save" />
-                  &nbsp; Save
-                </Button>
-              </AvForm>
-            )}
-          </Col>
-        </Row>
-      </div>
-    );
-  }
-}
+                <span className="d-none d-md-inline">Back</span>
+              </Button>
+              &nbsp;
+              <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+                <FontAwesomeIcon icon="save" />
+                &nbsp; Save
+              </Button>
+            </AvForm>
+          )}
+        </Col>
+      </Row>
+    </div>
+  );
+};
 
 const mapStateToProps = (storeState: IRootState) => ({
   tokens: storeState.token.entities,
@@ -152,7 +138,4 @@ const mapDispatchToProps = {
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TokenStatsUpdate);
+export default connect(mapStateToProps, mapDispatchToProps)(TokenStatsUpdate);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
@@ -11,44 +11,47 @@ import { getEntity, deleteEntity } from './user-details.reducer';
 
 export interface IUserDetailsDeleteDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class UserDetailsDeleteDialog extends React.Component<IUserDetailsDeleteDialogProps> {
-  componentDidMount() {
-    this.props.getEntity(this.props.match.params.id);
-  }
+export const UserDetailsDeleteDialog = (props: IUserDetailsDeleteDialogProps) => {
+  useEffect(() => {
+    props.getEntity(props.match.params.id);
+  }, []);
 
-  confirmDelete = event => {
-    this.props.deleteEntity(this.props.userDetailsEntity.id);
-    this.handleClose(event);
+  const handleClose = () => {
+    props.history.push('/user-details');
   };
 
-  handleClose = event => {
-    event.stopPropagation();
-    this.props.history.goBack();
+  useEffect(() => {
+    if (props.updateSuccess) {
+      handleClose();
+    }
+  }, [props.updateSuccess]);
+
+  const confirmDelete = () => {
+    props.deleteEntity(props.userDetailsEntity.id);
   };
 
-  render() {
-    const { userDetailsEntity } = this.props;
-    return (
-      <Modal isOpen toggle={this.handleClose}>
-        <ModalHeader toggle={this.handleClose}>Confirm delete operation</ModalHeader>
-        <ModalBody id="oncokbApp.userDetails.delete.question">Are you sure you want to delete this UserDetails?</ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={this.handleClose}>
-            <FontAwesomeIcon icon="ban" />
-            &nbsp; Cancel
-          </Button>
-          <Button id="jhi-confirm-delete-userDetails" color="danger" onClick={this.confirmDelete}>
-            <FontAwesomeIcon icon="trash" />
-            &nbsp; Delete
-          </Button>
-        </ModalFooter>
-      </Modal>
-    );
-  }
-}
+  const { userDetailsEntity } = props;
+  return (
+    <Modal isOpen toggle={handleClose}>
+      <ModalHeader toggle={handleClose}>Confirm delete operation</ModalHeader>
+      <ModalBody id="oncokbApp.userDetails.delete.question">Are you sure you want to delete this UserDetails?</ModalBody>
+      <ModalFooter>
+        <Button color="secondary" onClick={handleClose}>
+          <FontAwesomeIcon icon="ban" />
+          &nbsp; Cancel
+        </Button>
+        <Button id="jhi-confirm-delete-userDetails" color="danger" onClick={confirmDelete}>
+          <FontAwesomeIcon icon="trash" />
+          &nbsp; Delete
+        </Button>
+      </ModalFooter>
+    </Modal>
+  );
+};
 
 const mapStateToProps = ({ userDetails }: IRootState) => ({
-  userDetailsEntity: userDetails.entity
+  userDetailsEntity: userDetails.entity,
+  updateSuccess: userDetails.updateSuccess
 });
 
 const mapDispatchToProps = { getEntity, deleteEntity };
@@ -56,7 +59,4 @@ const mapDispatchToProps = { getEntity, deleteEntity };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserDetailsDeleteDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(UserDetailsDeleteDialog);
