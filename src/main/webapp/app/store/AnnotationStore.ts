@@ -431,35 +431,31 @@ export class AnnotationStore {
         mutation => mutation.proteinChange
       );
 
-      const data = this.mutationMapperDataPortal.result
-        ? this.mutationMapperDataPortal.result.map(mutation => {
-            const externalMutation =
-              indexedByProteinChange[mutation.proteinChange];
-            const oncogenic = externalMutation
-              ? externalMutation.oncogenic
-              : 'Unknown';
-            const referenceAllele = externalMutation
-              ? externalMutation.referenceAllele
-              : undefined;
-            const variantAllele = externalMutation
-              ? externalMutation.variantAllele
-              : undefined;
+      const data = this.mutationMapperDataPortal.result.map(mutation => {
+        const oncogenic = indexedByProteinChange[mutation.proteinChange]
+          ? indexedByProteinChange[mutation.proteinChange].oncogenic
+          : 'Unknown';
+        const referenceAllele = indexedByProteinChange[mutation.proteinChange]
+          ? indexedByProteinChange[mutation.proteinChange].referenceAllele
+          : undefined;
+        const variantAllele = indexedByProteinChange[mutation.proteinChange]
+          ? indexedByProteinChange[mutation.proteinChange].variantAllele
+          : undefined;
 
-            return {
-              gene: {
-                hugoGeneSymbol: this.gene.result.hugoSymbol
-              },
-              proteinChange: mutation.proteinChange,
-              proteinPosEnd: mutation.proteinEndPosition,
-              proteinPosStart: mutation.proteinStartPosition,
-              referenceAllele,
-              variantAllele,
-              mutationType: mutation.alterationType,
-              oncogenic: shortenOncogenicity( oncogenic ),
-              cancerType: mutation.cancerType
-            };
-          })
-        : [];
+        return {
+          gene: {
+            hugoGeneSymbol: mutation.gene.hugoSymbol
+          },
+          proteinChange: mutation.proteinChange,
+          proteinPosEnd: mutation.proteinEndPosition,
+          proteinPosStart: mutation.proteinStartPosition,
+          referenceAllele,
+          variantAllele,
+          mutationType: mutation.alterationType,
+          oncogenic: shortenOncogenicity( oncogenic ),
+          cancerType: mutation.cancerType
+        };
+      });
 
       return Promise.resolve(data);
     },
