@@ -8,7 +8,8 @@ import {
   DEFAULT_MARGIN_BOTTOM_LG,
   DOCUMENT_TITLES,
   LicenseType,
-  PAGE_ROUTE
+  PAGE_ROUTE,
+  USER_AUTHORITY
 } from 'app/config/constants';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { ButtonSelections } from 'app/components/LicenseSelection';
@@ -28,6 +29,7 @@ import { ContactLink } from 'app/shared/links/ContactLink';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import DocumentTitle from 'react-document-title';
+import AuthenticationStore from 'app/store/AuthenticationStore';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 
@@ -88,11 +90,12 @@ const DownloadButtonGroups: React.FunctionComponent<{
   );
 };
 
-@inject('routing', 'windowStore')
+@inject('routing', 'windowStore', 'authenticationStore')
 @observer
 export default class DataAccessPage extends React.Component<{
   routing: RouterStore;
   windowStore: WindowStore;
+  authenticationStore: AuthenticationStore;
 }> {
   @observable selectedVersion: {
     label: string;
@@ -214,69 +217,79 @@ export default class DataAccessPage extends React.Component<{
               </div>
             </div>
           </div>
-          <div className={'mb-3'}>
-            <h5 className="title">Data Download</h5>
-          </div>
-          {this.dataAvailability.isComplete &&
-          this.dataAvailability.result.length > 0 ? (
+          {this.props.authenticationStore.account &&
+          this.props.authenticationStore.account.authorities.includes(
+            USER_AUTHORITY.ROLE_PREMIUM_USER
+          ) ? (
             <>
-              <h6 className="title">
-                {getDataTitle(
-                  this.dataAvailability.result[0].date,
-                  this.dataAvailability.result[0].version
-                )}
-                , the latest
-              </h6>
-              <DownloadButtonGroups data={this.dataAvailability.result[0]} />
-
-              {this.dataAvailability.result.length > 1 ? (
+              <div className={'mb-3'}>
+                <h5 className="title">Data Download</h5>
+              </div>
+              {this.dataAvailability.isComplete &&
+              this.dataAvailability.result.length > 0 ? (
                 <>
-                  <hr />
-                  <Row className={'mb-3'}>
-                    <Col lg={4} xs={12}>
-                      <Select
-                        value={this.selectedVersion}
-                        placeholder={'Select previous version'}
-                        options={this.dataAvailability.result
-                          .slice(1)
-                          .map(data => {
-                            return {
-                              value: data.version,
-                              label: getDataTitle(data.date, data.version)
-                            };
-                          })}
-                        onChange={(selectedOption: any) =>
-                          (this.selectedVersion = selectedOption)
-                        }
-                        isClearable={true}
-                      />
-                    </Col>
-                  </Row>
+                  <h6 className="title">
+                    {getDataTitle(
+                      this.dataAvailability.result[0].date,
+                      this.dataAvailability.result[0].version
+                    )}
+                    , the latest
+                  </h6>
+                  <DownloadButtonGroups
+                    data={this.dataAvailability.result[0]}
+                  />
 
-                  {this.selectedData !== undefined ? (
+                  {this.dataAvailability.result.length > 1 ? (
                     <>
-                      <Row className={DEFAULT_MARGIN_BOTTOM_LG}>
-                        <Col>
-                          <DownloadButtonGroups data={this.selectedData} />
+                      <hr />
+                      <Row className={'mb-3'}>
+                        <Col lg={4} xs={12}>
+                          <Select
+                            value={this.selectedVersion}
+                            placeholder={'Select previous version'}
+                            options={this.dataAvailability.result
+                              .slice(1)
+                              .map(data => {
+                                return {
+                                  value: data.version,
+                                  label: getDataTitle(data.date, data.version)
+                                };
+                              })}
+                            onChange={(selectedOption: any) =>
+                              (this.selectedVersion = selectedOption)
+                            }
+                            isClearable={true}
+                          />
                         </Col>
                       </Row>
+
+                      {this.selectedData !== undefined ? (
+                        <>
+                          <Row className={DEFAULT_MARGIN_BOTTOM_LG}>
+                            <Col>
+                              <DownloadButtonGroups data={this.selectedData} />
+                            </Col>
+                          </Row>
+                        </>
+                      ) : null}
                     </>
                   ) : null}
                 </>
               ) : null}
+              <div>
+                {this.dataAvailability.error ? (
+                  <Alert variant={'warning'}>
+                    We are not able to provide data download at the moment,
+                    please{' '}
+                    <ContactLink emailSubject={'Unable to Download the Data'}>
+                      contact us
+                    </ContactLink>
+                    .
+                  </Alert>
+                ) : null}
+              </div>
             </>
           ) : null}
-          <div>
-            {this.dataAvailability.error ? (
-              <Alert variant={'warning'}>
-                We are not able to provide data download at the moment, please{' '}
-                <ContactLink emailSubject={'Unable to Download the Data'}>
-                  contact us
-                </ContactLink>
-                .
-              </Alert>
-            ) : null}
-          </div>
         </>
       </DocumentTitle>
     );
