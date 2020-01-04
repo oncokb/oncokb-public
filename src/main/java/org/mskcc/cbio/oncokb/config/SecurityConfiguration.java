@@ -78,6 +78,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .authorizeRequests()
             .antMatchers("/api/v1/info").permitAll()
+            .antMatchers("/api/v1/levels").permitAll()
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
@@ -86,22 +87,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/v2/api-docs").permitAll()
             .antMatchers("/api/private/utils/dataRelease/downloadAvailability").permitAll()
 
-            .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/v1/search/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
+            // For endpoints only allowed for premium users
+            .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.USER)
 
-            .antMatchers("/api/v1/utils/**.txt").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/search/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/genes/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/variants/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/drugs/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+
+            .antMatchers("/api/v1/utils/cancerGeneList.txt").hasAnyAuthority(AuthoritiesConstants.USER)
+            .antMatchers("/api/v1/utils/cancerGeneList.json").hasAnyAuthority(AuthoritiesConstants.USER)
+            .antMatchers("/api/v1/utils/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
-            .antMatchers("/api/account/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/account/**").hasAnyAuthority(AuthoritiesConstants.USER)
 
-            .antMatchers("/api/users/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/user-details/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/token-stats/**").hasAnyAuthority(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/management/health").permitAll()
-            .antMatchers("/management/info").permitAll()
-            .antMatchers("/management/prometheus").permitAll()
+            .antMatchers("/api/users/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/user-details/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/token-stats/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
+
+            .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
+
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
         .and()
             .httpBasic()
