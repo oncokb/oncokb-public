@@ -427,24 +427,35 @@ export class AnnotationStore {
     invoke: () => {
       // simply mapping by protein change, assuming that protein change is unique for alterations
       const indexedByProteinChange = _.keyBy(
-        this.mutationMapperDataPortal.result,
+        this.mutationMapperDataExternal.result,
         mutation => mutation.proteinChange
       );
 
-      const data = this.mutationMapperDataExternal.result
-        ? this.mutationMapperDataExternal.result.map(mutation => {
-            const portalMutation =
-              indexedByProteinChange[mutation.proteinChange];
-            const cancerType = portalMutation
-              ? portalMutation.cancerType
-              : undefined;
+      const data = this.mutationMapperDataPortal.result.map(mutation => {
+        const oncogenic = indexedByProteinChange[mutation.proteinChange]
+          ? indexedByProteinChange[mutation.proteinChange].oncogenic
+          : 'Unknown';
+        const referenceAllele = indexedByProteinChange[mutation.proteinChange]
+          ? indexedByProteinChange[mutation.proteinChange].referenceAllele
+          : undefined;
+        const variantAllele = indexedByProteinChange[mutation.proteinChange]
+          ? indexedByProteinChange[mutation.proteinChange].variantAllele
+          : undefined;
 
-            return {
-              ...mutation,
-              cancerType
-            };
-          })
-        : [];
+        return {
+          gene: {
+            hugoGeneSymbol: mutation.gene.hugoSymbol
+          },
+          proteinChange: mutation.proteinChange,
+          proteinPosEnd: mutation.proteinEndPosition,
+          proteinPosStart: mutation.proteinStartPosition,
+          referenceAllele,
+          variantAllele,
+          mutationType: mutation.alterationType,
+          oncogenic: shortenOncogenicity( oncogenic ),
+          cancerType: mutation.cancerType
+        };
+      });
 
       return Promise.resolve(data);
     },
