@@ -1,33 +1,27 @@
 import React from 'react';
-import { action, observable, computed } from 'mobx';
-import { observer, inject } from 'mobx-react';
+import { action, computed, observable } from 'mobx';
+import { inject, observer } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import client from 'app/shared/api/clientInstance';
 import { UserDTO } from 'app/shared/api/generated/API';
 import { match } from 'react-router';
-import {
-  Button,
-  Row,
-  Col,
-  Badge,
-  ButtonGroup,
-  Modal,
-  InputGroup
-} from 'react-bootstrap';
+import { Button, Col, InputGroup, Modal, Row } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
 import OncoKBTable, {
   SearchColumn
 } from 'app/components/oncokbTable/OncoKBTable';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
-import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { filterByKeyword, toAppTimestampFormat } from 'app/shared/utils/Utils';
 import _ from 'lodash';
 import {
   NOT_CHANGEABLE_AUTHORITIES,
-  USER_AUTHORITIES
+  USER_AUTHORITIES,
+  USER_AUTHORITY
 } from 'app/config/constants';
+import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
+import autobind from 'autobind-decorator';
 
 @inject('routing')
 @observer
@@ -37,8 +31,16 @@ export default class UserManagementPage extends React.Component<{
 }> {
   @observable users: UserDTO[] = [];
   @observable showUpdateStatusModal = false;
-  @observable showAddAdminModal = false;
-  @observable currentSelectedUser: UserDTO | undefined;
+  @observable showAddAuthorityModal = false;
+  @observable currentSelected: {
+    user: UserDTO | undefined;
+    authority: USER_AUTHORITY | undefined;
+  } = {
+    user: undefined,
+    authority: undefined
+  };
+  @observable currentSelectedAuthority: UserDTO | undefined;
+  @observable modalTitle: string;
 
   constructor(props: Readonly<{ routing: RouterStore; match: match }>) {
     super(props);
@@ -47,55 +49,77 @@ export default class UserManagementPage extends React.Component<{
 
   @computed
   get currentSelectedUserIsActivated() {
-    return this.currentSelectedUser && this.currentSelectedUser.activated;
+    return (
+      this.currentSelected &&
+      this.currentSelected.user &&
+      this.currentSelected.user.activated
+    );
   }
 
   @action
   confirmUpdatingUser(user: UserDTO) {
     this.showUpdateStatusModal = true;
-    this.currentSelectedUser = user;
+    this.currentSelected.user = user;
   }
 
   @action
   cancelUpdateActiveStatus() {
     this.showUpdateStatusModal = false;
-    this.currentSelectedUser = undefined;
+    this.currentSelected.user = undefined;
   }
 
+  @autobind
   @action
-  confirmAddAdmin(user: UserDTO) {
-    this.showAddAdminModal = true;
-    this.currentSelectedUser = user;
+  confirmAddAuthority(user: UserDTO, authority: USER_AUTHORITY) {
+    this.showAddAuthorityModal = true;
+    this.currentSelected.user = user;
+    this.currentSelected.authority = authority;
   }
 
+  @autobind
   @action
-  cancelAddAdmin() {
-    this.showAddAdminModal = false;
-    this.currentSelectedUser = undefined;
+  cancelAddAuthority() {
+    this.showAddAuthorityModal = false;
+    this.currentSelected.user = undefined;
+    this.currentSelected.authority = undefined;
   }
 
   @action
   updateActiveStatus(sendEmail = true) {
     this.showUpdateStatusModal = false;
-    if (this.currentSelectedUser === undefined) {
+    if (this.currentSelected.user === undefined) {
       notifyError(new Error('No user specified'));
       return;
     }
-    this.currentSelectedUser.activated = !this.currentSelectedUser.activated;
-    this.updateUser(this.currentSelectedUser, sendEmail);
+    this.currentSelected.user.activated = !this.currentSelected.user.activated;
+    this.updateUser(this.currentSelected.user, sendEmail);
   }
 
+  @autobind
   @action
-  addUserAsAdmin() {
-    this.showAddAdminModal = false;
-    if (this.currentSelectedUser === undefined) {
+  addAuthorityToUser() {
+    this.showAddAuthorityModal = false;
+    if (this.currentSelected.user === undefined) {
       notifyError(new Error('No user specified'));
       return;
     }
-    this.currentSelectedUser.authorities.push(USER_AUTHORITIES.ROLE_ADMIN);
-    this.updateUser(this.currentSelectedUser);
+    if (this.currentSelected.authority === undefined) {
+      notifyError(new Error('No authority specified'));
+      return;
+    }
+    if (this.currentSelected.authority === USER_AUTHORITY.ROLE_ADMIN) {
+      this.currentSelected.user.authorities.push(
+        ...[this.currentSelected.authority, USER_AUTHORITY.ROLE_PREMIUM_USER]
+      );
+    } else {
+      this.currentSelected.user.authorities.push(
+        this.currentSelected.authority
+      );
+    }
+    this.updateUser(this.currentSelected.user);
   }
 
+  @autobind
   @action
   removeAuthority(user: UserDTO, authorityToBeRemoved: string) {
     user.authorities = user.authorities.filter(
@@ -124,7 +148,7 @@ export default class UserManagementPage extends React.Component<{
   async getUsers() {
     try {
       // Hard code the max returned user size. Need to fix pagination issue.
-      this.users = await client.getAllUsersUsingGET({'size': 2000});
+      this.users = await client.getAllUsersUsingGET({ size: 2000 });
     } catch (e) {
       notifyError(e, 'Error fetching users');
     }
@@ -185,48 +209,47 @@ export default class UserManagementPage extends React.Component<{
           filterByKeyword(authority, keyword)
         ),
       Cell: (props: { original: UserDTO }) => {
+        const authorities = props.original.authorities.includes(
+          USER_AUTHORITY.ROLE_PUBLIC_WEBSITE
+        )
+          ? [USER_AUTHORITY.ROLE_PUBLIC_WEBSITE]
+          : USER_AUTHORITIES;
         return (
           <div>
-            {props.original.authorities.map((authority: USER_AUTHORITIES) => (
-              <InputGroup size={'sm'} className="mb-3">
-                <InputGroup.Prepend>
-                  <InputGroup.Text className={'bg-transparent'}>
-                    {authority}
-                  </InputGroup.Text>
-                </InputGroup.Prepend>
-                {NOT_CHANGEABLE_AUTHORITIES.includes(authority) ? null : (
-                  <InputGroup.Append>
-                    <Button
-                      variant={"secondary"}
-                      onClick={
-                        (event: any) => {
-                          event.preventDefault();
-                          this.removeAuthority(props.original, authority);
-                        }
-                      }
-                    >
-                      <i className={'fa fa-trash'}></i>
-                    </Button>
-                  </InputGroup.Append>
-                )}
-              </InputGroup>
-            ))}
-            {!props.original.authorities.some(
-              authority => authority === USER_AUTHORITIES.ROLE_ADMIN
-            ) &&
-            !props.original.authorities.some(
-              authority => authority === USER_AUTHORITIES.ROLE_PUBLIC_WEBSITE
-            ) ? (
-              <DefaultTooltip
-                overlay={'Add user as administrator'}
-                placement={'top'}
-              >
-                <i
-                  className={'fa fa-plus-circle ml-2'}
-                  onClick={() => this.confirmAddAdmin(props.original)}
+            {authorities.map((authority: USER_AUTHORITY) => {
+              return authority !== USER_AUTHORITY.ROLE_PUBLIC_WEBSITE ||
+                props.original.authorities.includes(
+                  USER_AUTHORITY.ROLE_PUBLIC_WEBSITE
+                ) ? (
+                <ActionInputGroup
+                  icon={
+                    props.original.authorities.includes(authority)
+                      ? 'trash'
+                      : 'plus-circle'
+                  }
+                  type={
+                    props.original.authorities.includes(authority)
+                      ? 'danger'
+                      : 'success'
+                  }
+                  text={authority}
+                  onClick={
+                    props.original.authorities.includes(authority)
+                      ? !NOT_CHANGEABLE_AUTHORITIES.includes(authority)
+                        ? (event: any) => {
+                            this.removeAuthority(props.original, authority);
+                          }
+                        : undefined
+                      : !NOT_CHANGEABLE_AUTHORITIES.includes(authority)
+                      ? () =>
+                          this.confirmAddAuthority(props.original, authority)
+                      : undefined
+                  }
                 />
-              </DefaultTooltip>
-            ) : null}
+              ) : (
+                undefined
+              );
+            })}
           </div>
         );
       }
@@ -326,9 +349,9 @@ export default class UserManagementPage extends React.Component<{
             </Button>
             <Button
               variant="primary"
-              onClick={(event:any) => {
+              onClick={(event: any) => {
                 event.preventDefault();
-                this.updateActiveStatus(true)
+                this.updateActiveStatus(true);
               }}
             >
               Update
@@ -350,27 +373,37 @@ export default class UserManagementPage extends React.Component<{
             ) : null}
           </Modal.Footer>
         </Modal>
-        <Modal
-          show={this.showAddAdminModal}
-          onHide={() => this.cancelAddAdmin()}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Add User as Administrator</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Are you sure to add user as administrator?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => this.cancelAddAdmin()}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={(event:any) => {
-              event.preventDefault();
-              this.addUserAsAdmin()
-            }}>
-              Update
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <SimpleConfirmModal
+          show={this.showAddAuthorityModal}
+          title={`Add authority ${this.currentSelected.authority}?`}
+          onConfirm={this.addAuthorityToUser}
+          onCancel={this.cancelAddAuthority}
+        ></SimpleConfirmModal>
       </>
     );
   }
 }
+
+const ActionInputGroup: React.FunctionComponent<{
+  type: 'success' | 'danger';
+  icon: string;
+  text: string;
+  onClick?: (event: any) => void;
+}> = props => {
+  return (
+    <InputGroup size={'sm'} className="mb-3">
+      <InputGroup.Prepend>
+        <InputGroup.Text className={'bg-transparent'}>
+          {props.text}
+        </InputGroup.Text>
+      </InputGroup.Prepend>
+      {props.onClick ? (
+        <InputGroup.Append>
+          <Button variant={props.type} onClick={props.onClick}>
+            <i className={`fa fa-${props.icon}`}></i>
+          </Button>
+        </InputGroup.Append>
+      ) : null}
+    </InputGroup>
+  );
+};
