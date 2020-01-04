@@ -120,7 +120,7 @@ public class UserDetailsDTO implements Serializable {
             ", city='" + getCity() + "'" +
             ", country='" + getCountry() + "'" +
             ", address='" + getAddress() + "'" +
-            ", user=" + getUserId() +
+            ", userId=" + getUserId() +
             "}";
     }
 }
