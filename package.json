@@ -53,7 +53,7 @@
     "react-if": "^3.4.3",
     "react-jhipster": "0.9.0",
     "react-loadable": "5.5.0",
-    "react-mutation-mapper": "^0.3.0-beta.11",
+    "react-mutation-mapper": "^0.3.6",
     "react-portal": "latest",
     "react-responsive-tabs": "^3.3.0",
     "react-router": "^4.3.1",
