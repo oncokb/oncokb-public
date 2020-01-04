@@ -149,6 +149,7 @@ application:
   user-registration-webhook:
   google-webmaster-verification:
   account-approval-whitelist:
+  mail-from:
   redis:
     type: 'master-slave'
     password: 'oncokb-public-redis-password'

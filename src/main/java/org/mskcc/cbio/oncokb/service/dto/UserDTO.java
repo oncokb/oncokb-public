@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
@@ -7,6 +8,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 
+import javax.persistence.Column;
 import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;
@@ -54,6 +56,12 @@ public class UserDTO {
     @Size(min = 2, max = 10)
     private String langKey;
 
+    private String activationKey;
+
+    private String resetKey;
+
+    private Instant resetDate = null;
+
     private String createdBy;
 
     private Instant createdDate;
@@ -78,6 +86,9 @@ public class UserDTO {
         this.emailVerified = StringUtils.isEmpty(user.getActivationKey());
         this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
+        this.activationKey = user.getActivationKey();
+        this.resetKey = user.getResetKey();
+        this.resetDate = user.getResetDate();
         this.createdBy = user.getCreatedBy();
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
@@ -198,6 +209,18 @@ public class UserDTO {
         this.activated = activated;
     }
 
+    public String getActivationKey() {
+        return activationKey;
+    }
+
+    public String getResetKey() {
+        return resetKey;
+    }
+
+    public Instant getResetDate() {
+        return resetDate;
+    }
+
     public String getLangKey() {
         return langKey;
     }
@@ -260,6 +283,9 @@ public class UserDTO {
             ", country=" + country +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
+            ", activationKey=" + activationKey +
+            ", resetKey=" + resetKey +
+            ", resetDate=" + resetDate +
             ", langKey='" + langKey + '\'' +
             ", createdBy=" + createdBy +
             ", createdDate=" + createdDate +

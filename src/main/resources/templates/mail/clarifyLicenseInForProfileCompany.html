@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{email.license.clarify.title(${license})}"></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body>
+<p th:text="'Dear ' + ${user.lastName} + ', ' + ${user.firstName}"></p>
+
+<p th:text="'Thank you for your interest in the ' + ${license} + ' license for OncoKB.'"></p>
+
+<p>
+  We noticed that you are affiliated with a for-profit company. Under our current licensing model, any commercial company employee is required to apply for either a "Research Use in a Commercial Setting"  or "Use in a Commercial Product"  license type as appropriate.
+</p>
+
+<p>Therefore, could you please clarify your actual use case? Thank you.</p>
+
+<div>Sincerely, </div>
+<div>The OncoKB Team</div>
+</body>
+</html>

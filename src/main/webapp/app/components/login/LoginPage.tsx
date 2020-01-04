@@ -15,6 +15,7 @@ import {
 } from 'availity-reactstrap-validation';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
+import {LoadingButton} from "app/shared/button/LoadingButton";
 
 export interface ILoginProps {
   authenticationStore: AuthenticationStore;
@@ -65,13 +66,12 @@ const LoginContent: React.FunctionComponent<{
           <span>You don&apos;t have an account yet?</span>{' '}
           <Link to="/account/register">Register a new account</Link>
         </Alert>
-        <Button variant="primary" type="submit" disabled={props.loading}>
-          {props.loading ? (
-            <LoadingIndicator isLoading={true} size={'small'} color="white" />
-          ) : (
-            <span>Log in</span>
-          )}
-        </Button>
+        <LoadingButton
+          variant="primary"
+          type="submit"
+          loading={props.loading}>
+          <span>Log in</span>
+        </LoadingButton>
       </AvForm>
     </SmallPageContainer>
   );

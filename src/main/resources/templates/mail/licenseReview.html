@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{email.license.review.title(${license})}"></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body>
+<p th:text="'Dear ' + ${user.lastName} + ', ' + ${user.firstName}"></p>
+
+<p th:text="'Thank you for your interest in the ' + ${license} + ' license for OncoKB.'"></p>
+
+<p>
+  MSK's Office of Technology Development is reviewing your request and will reach out to you promptly.
+</p>
+
+<p>
+  If you do not receive an email response from MSK within ten business days, please let us know by responding to this email.
+</p>
+
+<p>
+  Additionally, please review your registration credentials below and respond to this email if any changes are needed.
+</p>
+
+<p>
+<div>Job Title: <span th:text="${user.jobTitle}"></span></div>
+<div>Company: <span th:text="${user.company}"></span></div>
+<div>City: <span th:text="${user.city}"></span></div>
+<div>Country: <span th:text="${user.country}"></span></div>
+</p>
+
+<p>Thank you in advance for your patience.</p>
+
+<div>Sincerely, </div>
+<div>The OncoKB Team</div>
+</body>
+</html>

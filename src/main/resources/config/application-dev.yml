@@ -15,9 +15,9 @@
 
 logging:
   level:
-    ROOT: DEBUG
-    io.github.jhipster: DEBUG
-    org.mskcc.cbio.oncokb: DEBUG
+    ROOT: INFO
+    io.github.jhipster: INFO
+    org.mskcc.cbio.oncokb: INFO
 
 spring:
   profiles:
@@ -140,6 +140,7 @@ application:
   user-registration-webhook:
   google-webmaster-verification:
   account-approval-whitelist:
+  mail-from:
   redis:
     type: 'single'
     password: 'oncokb-public-redis-password'
