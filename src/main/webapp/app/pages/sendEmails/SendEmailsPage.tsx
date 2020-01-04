@@ -51,8 +51,7 @@ export default class UserManagementPage extends React.Component<{
   @observable showConfirmModal = false;
   @observable userMails: UserMailsDTO[] = [];
   @observable showUpdateStatusModal = false;
-  @observable showAddAdminModal = false;
-  @observable currentSelectedUser: UserMailsDTO | undefined;
+  @observable showAddAuthorityModal = false;
   readonly reactions: IReactionDisposer[] = [];
 
   constructor(
