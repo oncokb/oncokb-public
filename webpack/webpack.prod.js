@@ -39,9 +39,10 @@ module.exports = webpackMerge(commonConfig({
           {
             loader: 'css-loader',
             options: {
-              modules: true,
+              modules: {
+                localIdentName: '[name]__[local]__[hash:base64:5]'
+              },
               importLoaders: 2,
-              localIdentName: '[name]__[local]__[hash:base64:5]'
             }
           },
           'sass-loader',
@@ -125,6 +126,7 @@ module.exports = webpackMerge(commonConfig({
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
+      exclude: [/swagger-ui/]
     })
   ]
 });
