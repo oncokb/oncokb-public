@@ -100,7 +100,10 @@ class Footer extends React.Component<{ lastUpdate: string }> {
               <MskccLogo imageHeight={50} className="mb-2" />
             </Col>
             <Col lg md={12}>
-              <div>&copy; 2019 Memorial Sloan Kettering Cancer Center</div>
+              <div>
+                &copy; {new Date().getFullYear()} Memorial Sloan Kettering
+                Cancer Center
+              </div>
             </Col>
           </Row>
         </Container>

@@ -36,9 +36,9 @@ public class ApiProxy {
         return restTemplate.exchange(uri, method, new HttpEntity<>(body, httpHeaders), String.class).getBody();
     }
 
-    @RequestMapping(value = "/private/utils/dataRelease/sqlDump",
-        produces = {"application/zip"},
-        method = RequestMethod.GET)
+//    @RequestMapping(value = "/private/utils/dataRelease/sqlDump",
+//        produces = {"application/zip"},
+//        method = RequestMethod.GET)
     public ResponseEntity<byte[]> downloadSqlDump(HttpMethod method, HttpServletRequest request)
         throws URISyntaxException {
         URI uri = apiProxyService.prepareURI(request);
