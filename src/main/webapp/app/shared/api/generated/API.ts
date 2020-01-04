@@ -25,8 +25,16 @@ export type LoginVM = {
         'username': string
 
 };
+export type MailTypeInfo = {
+    'description': string
+
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST"
+
+};
 export type ManagedUserVM = {
     'activated': boolean
+
+        'activationKey': string
 
         'authorities': Array < string >
 
@@ -65,6 +73,10 @@ export type ManagedUserVM = {
         'login': string
 
         'password': string
+
+        'resetDate': string
+
+        'resetKey': string
 
 };
 export type PasswordChangeDTO = {
@@ -108,6 +120,8 @@ export type User = {
 export type UserDTO = {
     'activated': boolean
 
+        'activationKey': string
+
         'authorities': Array < string >
 
         'city': string
@@ -144,6 +158,10 @@ export type UserDTO = {
 
         'login': string
 
+        'resetDate': string
+
+        'resetKey': string
+
 };
 export type UserDetailsDTO = {
     'address': string
@@ -161,6 +179,22 @@ export type UserDetailsDTO = {
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
 
         'userId': number
+
+};
+export type UserMailsDTO = {
+    'id': number
+
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST"
+
+        'sentBy': string
+
+        'sentDate': string
+
+        'sentFrom': string
+
+        'userId': number
+
+        'userLogin': string
 
 };
 
@@ -997,6 +1031,293 @@ export default class API {
             return response.body;
         });
     };
+    getMailsFromUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/mails/from';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getMailsFrom
+     * @method
+     * @name API#getMailsFromUsingGET
+     */
+    getMailsFromUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/mails/from';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getMailsFrom
+     * @method
+     * @name API#getMailsFromUsingGET
+     */
+    getMailsFromUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < string >
+        > {
+            return this.getMailsFromUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getMailsTypesUsingGETURL(parameters: {
+        'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL",
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/mails/types';
+        if (parameters['licenseType'] !== undefined) {
+            queryParameters['licenseType'] = parameters['licenseType'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getMailsTypes
+     * @method
+     * @name API#getMailsTypesUsingGET
+     * @param {string} licenseType - licenseType
+     */
+    getMailsTypesUsingGETWithHttpInfo(parameters: {
+        'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL",
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/mails/types';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters['licenseType'] !== undefined) {
+                queryParameters['licenseType'] = parameters['licenseType'];
+            }
+
+            if (parameters['licenseType'] === undefined) {
+                reject(new Error('Missing required  parameter: licenseType'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getMailsTypes
+     * @method
+     * @name API#getMailsTypesUsingGET
+     * @param {string} licenseType - licenseType
+     */
+    getMailsTypesUsingGET(parameters: {
+            'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL",
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < MailTypeInfo >
+        > {
+            return this.getMailsTypesUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    sendUserMailsUsingPOSTURL(parameters: {
+        'by': string,
+        'cc' ? : string,
+        'from': string,
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST",
+        'to': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/mails/users';
+        if (parameters['by'] !== undefined) {
+            queryParameters['by'] = parameters['by'];
+        }
+
+        if (parameters['cc'] !== undefined) {
+            queryParameters['cc'] = parameters['cc'];
+        }
+
+        if (parameters['from'] !== undefined) {
+            queryParameters['from'] = parameters['from'];
+        }
+
+        if (parameters['mailType'] !== undefined) {
+            queryParameters['mailType'] = parameters['mailType'];
+        }
+
+        if (parameters['to'] !== undefined) {
+            queryParameters['to'] = parameters['to'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * sendUserMails
+     * @method
+     * @name API#sendUserMailsUsingPOST
+     * @param {string} by - by
+     * @param {string} cc - cc
+     * @param {string} from - from
+     * @param {string} mailType - mailType
+     * @param {string} to - to
+     */
+    sendUserMailsUsingPOSTWithHttpInfo(parameters: {
+        'by': string,
+        'cc' ? : string,
+        'from': string,
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST",
+        'to': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/mails/users';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['by'] !== undefined) {
+                queryParameters['by'] = parameters['by'];
+            }
+
+            if (parameters['by'] === undefined) {
+                reject(new Error('Missing required  parameter: by'));
+                return;
+            }
+
+            if (parameters['cc'] !== undefined) {
+                queryParameters['cc'] = parameters['cc'];
+            }
+
+            if (parameters['from'] !== undefined) {
+                queryParameters['from'] = parameters['from'];
+            }
+
+            if (parameters['from'] === undefined) {
+                reject(new Error('Missing required  parameter: from'));
+                return;
+            }
+
+            if (parameters['mailType'] !== undefined) {
+                queryParameters['mailType'] = parameters['mailType'];
+            }
+
+            if (parameters['mailType'] === undefined) {
+                reject(new Error('Missing required  parameter: mailType'));
+                return;
+            }
+
+            if (parameters['to'] !== undefined) {
+                queryParameters['to'] = parameters['to'];
+            }
+
+            if (parameters['to'] === undefined) {
+                reject(new Error('Missing required  parameter: to'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * sendUserMails
+     * @method
+     * @name API#sendUserMailsUsingPOST
+     * @param {string} by - by
+     * @param {string} cc - cc
+     * @param {string} from - from
+     * @param {string} mailType - mailType
+     * @param {string} to - to
+     */
+    sendUserMailsUsingPOST(parameters: {
+        'by': string,
+        'cc' ? : string,
+        'from': string,
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST",
+        'to': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < string > {
+        return this.sendUserMailsUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     registerAccountUsingPOSTURL(parameters: {
         'managedUserVm': ManagedUserVM,
         $queryParameters ? : any
@@ -1434,6 +1755,219 @@ export default class API {
         $domain ? : string
     }): Promise < any > {
         return this.deleteUserDetailsUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getAllUserMailsUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/user-mails';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getAllUserMails
+     * @method
+     * @name API#getAllUserMailsUsingGET
+     */
+    getAllUserMailsUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/user-mails';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getAllUserMails
+     * @method
+     * @name API#getAllUserMailsUsingGET
+     */
+    getAllUserMailsUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < UserMailsDTO >
+        > {
+            return this.getAllUserMailsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getUsersUserMailsUsingGETURL(parameters: {
+        'login': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/user-mails/users/{login}';
+
+        path = path.replace('{login}', parameters['login'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getUsersUserMails
+     * @method
+     * @name API#getUsersUserMailsUsingGET
+     * @param {string} login - login
+     */
+    getUsersUserMailsUsingGETWithHttpInfo(parameters: {
+        'login': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/user-mails/users/{login}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{login}', parameters['login'] + '');
+
+            if (parameters['login'] === undefined) {
+                reject(new Error('Missing required  parameter: login'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getUsersUserMails
+     * @method
+     * @name API#getUsersUserMailsUsingGET
+     * @param {string} login - login
+     */
+    getUsersUserMailsUsingGET(parameters: {
+            'login': string,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < UserMailsDTO >
+        > {
+            return this.getUsersUserMailsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    deleteUserMailsUsingDELETEURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/user-mails/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * deleteUserMails
+     * @method
+     * @name API#deleteUserMailsUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteUserMailsUsingDELETEWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/user-mails/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('DELETE', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * deleteUserMails
+     * @method
+     * @name API#deleteUserMailsUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteUserMailsUsingDELETE(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.deleteUserMailsUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };

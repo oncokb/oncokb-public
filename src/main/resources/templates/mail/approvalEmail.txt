@@ -4,6 +4,6 @@ Your OncoKB account has been approved. Please click on the URL below to log in:
 
 [(${baseUrl})]/login
 
-Regards,
+Sincerely,
 The OncoKB Team
 

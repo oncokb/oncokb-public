@@ -18,6 +18,7 @@ public class ApplicationProperties {
     private RedisProperties redis;
     private String accountApprovalWhitelist;
     private String googleWebmasterVerification;
+    private String mailFrom;
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -73,5 +74,13 @@ public class ApplicationProperties {
 
     public void setGoogleWebmasterVerification(String googleWebmasterVerification) {
         this.googleWebmasterVerification = googleWebmasterVerification;
+    }
+
+    public String getMailFrom() {
+        return mailFrom;
+    }
+
+    public void setMailFrom(String mailFrom) {
+        this.mailFrom = mailFrom;
     }
 }

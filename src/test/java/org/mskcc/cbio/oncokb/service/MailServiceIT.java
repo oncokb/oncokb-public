@@ -4,6 +4,7 @@ import org.mskcc.cbio.oncokb.config.Constants;
 
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbApp;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
@@ -56,10 +59,16 @@ public class MailServiceIT {
     private JHipsterProperties jHipsterProperties;
 
     @Autowired
+    private ApplicationProperties applicationProperties;
+
+    @Autowired
     private MessageSource messageSource;
 
     @Autowired
     private SpringTemplateEngine templateEngine;
+
+    @Autowired
+    private UserMailsService userMailsService;
 
     @Spy
     private JavaMailSenderImpl javaMailSender;
@@ -73,12 +82,12 @@ public class MailServiceIT {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         doNothing().when(javaMailSender).send(any(MimeMessage.class));
-        mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine);
+        mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine, userMailsService, applicationProperties);
     }
 
     @Test
     public void testSendEmail() throws Exception {
-        mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
+        mailService.sendEmail("john.doe@example.com", jHipsterProperties.getMail().getFrom(), null, "testSubject", "testContent", false, false);
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
         assertThat(message.getSubject()).isEqualTo("testSubject");
@@ -91,7 +100,7 @@ public class MailServiceIT {
 
     @Test
     public void testSendHtmlEmail() throws Exception {
-        mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, true);
+        mailService.sendEmail("john.doe@example.com", jHipsterProperties.getMail().getFrom(), null, "testSubject", "testContent", false, true);
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
         assertThat(message.getSubject()).isEqualTo("testSubject");
@@ -104,7 +113,7 @@ public class MailServiceIT {
 
     @Test
     public void testSendMultipartEmail() throws Exception {
-        mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", true, false);
+        mailService.sendEmail("john.doe@example.com", jHipsterProperties.getMail().getFrom(), null, "testSubject", "testContent", true, false);
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
         MimeMultipart mp = (MimeMultipart) message.getContent();
@@ -121,7 +130,7 @@ public class MailServiceIT {
 
     @Test
     public void testSendMultipartHtmlEmail() throws Exception {
-        mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", true, true);
+        mailService.sendEmail("john.doe@example.com", jHipsterProperties.getMail().getFrom(), null, "testSubject", "testContent", true, true);
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
         MimeMultipart mp = (MimeMultipart) message.getContent();
@@ -138,11 +147,11 @@ public class MailServiceIT {
 
     @Test
     public void testSendEmailFromTemplate() throws Exception {
-        User user = new User();
+        UserDTO user = new UserDTO();
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         user.setLangKey("en");
-        mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
+        mailService.sendEmailFromTemplate(user, MailType.TEST);
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
         assertThat(message.getSubject()).isEqualTo("test title");
@@ -154,7 +163,7 @@ public class MailServiceIT {
 
     @Test
     public void testSendActivationEmail() throws Exception {
-        User user = new User();
+        UserDTO user = new UserDTO();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -169,7 +178,7 @@ public class MailServiceIT {
 
     @Test
     public void testCreationEmail() throws Exception {
-        User user = new User();
+        UserDTO user = new UserDTO();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -184,7 +193,7 @@ public class MailServiceIT {
 
     @Test
     public void testSendPasswordResetMail() throws Exception {
-        User user = new User();
+        UserDTO user = new UserDTO();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -201,7 +210,7 @@ public class MailServiceIT {
     public void testSendEmailWithException() throws Exception {
         doThrow(MailSendException.class).when(javaMailSender).send(any(MimeMessage.class));
         try {
-            mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
+            mailService.sendEmail("john.doe@example.com", jHipsterProperties.getMail().getFrom(), null, "testSubject", "testContent", false, false);
         } catch (Exception e) {
             fail("Exception shouldn't have been thrown");
         }
@@ -209,12 +218,12 @@ public class MailServiceIT {
 
     @Test
     public void testSendLocalizedEmailForAllSupportedLanguages() throws Exception {
-        User user = new User();
+        UserDTO user = new UserDTO();
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         for (String langKey : languages) {
             user.setLangKey(langKey);
-            mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
+            mailService.sendEmailFromTemplate(user, MailType.TEST);
             verify(javaMailSender, atLeastOnce()).send(messageCaptor.capture());
             MimeMessage message = messageCaptor.getValue();
 

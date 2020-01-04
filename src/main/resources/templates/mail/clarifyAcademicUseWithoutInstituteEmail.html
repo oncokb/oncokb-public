@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{email.license.clarify.title(${license})}"></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body>
+<p th:text="'Dear ' + ${user.lastName} + ', ' + ${user.firstName}"></p>
+
+<p th:text="'Thank you for your interest in the ' + ${license} + ' license for OncoKB.'"></p>
+
+<p>This license type requires that you register your account using your institution/university email address. Therefore, the email address you provided is not valid.</p>
+
+<p>Please re-register your account with your university/institute's email address. If you are not able to do so, please provide your reasons as to why not so we may approve your OncoKB account accordingly. Thank you.</p>
+
+<div>Sincerely, </div>
+<div>The OncoKB Team</div>
+</body>
+</html>
