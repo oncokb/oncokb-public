@@ -34,6 +34,8 @@ export type MailTypeInfo = {
 export type ManagedUserVM = {
     'activated': boolean
 
+        'activationKey': string
+
         'authorities': Array < string >
 
         'city': string
@@ -71,6 +73,10 @@ export type ManagedUserVM = {
         'login': string
 
         'password': string
+
+        'resetDate': string
+
+        'resetKey': string
 
 };
 export type PasswordChangeDTO = {
@@ -114,6 +120,8 @@ export type User = {
 export type UserDTO = {
     'activated': boolean
 
+        'activationKey': string
+
         'authorities': Array < string >
 
         'city': string
@@ -149,6 +157,10 @@ export type UserDTO = {
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
 
         'login': string
+
+        'resetDate': string
+
+        'resetKey': string
 
 };
 export type UserDetailsDTO = {
@@ -1162,6 +1174,7 @@ export default class API {
         };
     sendUserMailsUsingPOSTURL(parameters: {
         'by': string,
+        'cc' ? : string,
         'from': string,
         'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST",
         'to': string,
@@ -1171,6 +1184,10 @@ export default class API {
         let path = '/api/mails/users';
         if (parameters['by'] !== undefined) {
             queryParameters['by'] = parameters['by'];
+        }
+
+        if (parameters['cc'] !== undefined) {
+            queryParameters['cc'] = parameters['cc'];
         }
 
         if (parameters['from'] !== undefined) {
@@ -1200,12 +1217,14 @@ export default class API {
      * @method
      * @name API#sendUserMailsUsingPOST
      * @param {string} by - by
+     * @param {string} cc - cc
      * @param {string} from - from
      * @param {string} mailType - mailType
      * @param {string} to - to
      */
     sendUserMailsUsingPOSTWithHttpInfo(parameters: {
         'by': string,
+        'cc' ? : string,
         'from': string,
         'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST",
         'to': string,
@@ -1231,6 +1250,10 @@ export default class API {
             if (parameters['by'] === undefined) {
                 reject(new Error('Missing required  parameter: by'));
                 return;
+            }
+
+            if (parameters['cc'] !== undefined) {
+                queryParameters['cc'] = parameters['cc'];
             }
 
             if (parameters['from'] !== undefined) {
@@ -1277,12 +1300,14 @@ export default class API {
      * @method
      * @name API#sendUserMailsUsingPOST
      * @param {string} by - by
+     * @param {string} cc - cc
      * @param {string} from - from
      * @param {string} mailType - mailType
      * @param {string} to - to
      */
     sendUserMailsUsingPOST(parameters: {
         'by': string,
+        'cc' ? : string,
         'from': string,
         'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST",
         'to': string,

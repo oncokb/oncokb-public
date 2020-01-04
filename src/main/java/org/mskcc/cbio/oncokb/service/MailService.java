@@ -77,7 +77,7 @@ public class MailService {
     }
 
     @Async
-    public void sendEmail(String from, String to, String subject, String content, boolean isMultipart, boolean isHtml) throws MessagingException {
+    public void sendEmail(String to, String from, String cc, String subject, String content, boolean isMultipart, boolean isHtml) throws MessagingException {
         log.debug("Send email[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
             isMultipart, isHtml, to, subject, content);
 
@@ -85,6 +85,9 @@ public class MailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());
         message.setTo(to);
+        if (cc != null) {
+            message.setCc(cc);
+        }
         message.setFrom(from);
         message.setSubject(subject);
         message.setText(content, isHtml);
@@ -103,11 +106,11 @@ public class MailService {
 
     @Async
     public void sendEmailFromTemplate(UserDTO user, MailType mailType) {
-        sendEmailFromTemplate(user, mailType, jHipsterProperties.getMail().getFrom(), jHipsterProperties.getMail().getFrom());
+        sendEmailFromTemplate(user, mailType, jHipsterProperties.getMail().getFrom(), null, jHipsterProperties.getMail().getFrom());
     }
 
     @Async
-    public void sendEmailFromTemplate(UserDTO user, MailType mailType, String from, String by) {
+    public void sendEmailFromTemplate(UserDTO user, MailType mailType, String from, String cc, String by) {
         if (user.getEmail() == null) {
             log.debug("Email doesn't exist for user '{}'", user.getLogin());
             return;
@@ -118,7 +121,7 @@ public class MailService {
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         context.setVariable(LICENSE, user.getLicenseType().getName());
         String content = templateEngine.process("mail/" + mailType.getTemplateName(), context);
-        String subject = messageSource.getMessage(getTitleKeyByMailType(mailType).orElseThrow(() -> new UnknownMailTypeException()), new Object[] {user.getLicenseType().getName()}, locale);
+        String subject = messageSource.getMessage(getTitleKeyByMailType(mailType).orElseThrow(() -> new UnknownMailTypeException()), new Object[]{user.getLicenseType().getName()}, locale);
         try {
             if (from == null) {
                 from = jHipsterProperties.getMail().getFrom();
@@ -126,7 +129,7 @@ public class MailService {
             if (by == null) {
                 by = from;
             }
-            sendEmail(from, user.getEmail(), subject, content, false, true);
+            sendEmail(user.getEmail(), from, cc, subject, content, false, true);
             addUserMailsRecord(user, mailType, from, by);
             log.info("Sent email to User '{}'", user.getEmail());
         } catch (MailException | MessagingException e) {
@@ -165,7 +168,7 @@ public class MailService {
     }
 
     public List<String> getMailFrom() {
-        return Arrays.stream(applicationProperties.getMailFrom().split(",")).map(from->from.trim()).collect(Collectors.toList());
+        return Arrays.stream(applicationProperties.getMailFrom().split(",")).map(from -> from.trim()).collect(Collectors.toList());
     }
 
     private Optional<String> getTitleKeyByMailType(MailType mailType) {

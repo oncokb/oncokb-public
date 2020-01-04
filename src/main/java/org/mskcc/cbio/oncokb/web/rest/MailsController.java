@@ -59,12 +59,13 @@ public class MailsController {
     public ResponseEntity<String> sendUserMails(
         @Valid @RequestParam String from,
         @Valid @RequestParam String to,
+        @RequestParam(required = false) String cc,
         @RequestParam String by,
         @Valid @RequestParam MailType mailType
     ) {
         Optional<User> user = this.userService.getUserWithAuthoritiesByEmailIgnoreCase(to);
         if (user.isPresent()) {
-            mailService.sendEmailFromTemplate(userMapper.userToUserDTO(user.get()), mailType, from, by);
+            mailService.sendEmailFromTemplate(userMapper.userToUserDTO(user.get()), mailType, from, cc, by);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

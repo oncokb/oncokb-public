@@ -570,6 +570,13 @@
             "type": "string"
           },
           {
+            "name": "cc",
+            "in": "query",
+            "description": "cc",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "from",
             "in": "query",
             "description": "from",
@@ -1534,6 +1541,9 @@
         "activated": {
           "type": "boolean"
         },
+        "activationKey": {
+          "type": "string"
+        },
         "authorities": {
           "type": "array",
           "items": {
@@ -1617,6 +1627,13 @@
           "type": "string",
           "minLength": 4,
           "maxLength": 100
+        },
+        "resetDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "resetKey": {
+          "type": "string"
         }
       },
       "title": "ManagedUserVM"
@@ -1716,6 +1733,9 @@
         "activated": {
           "type": "boolean"
         },
+        "activationKey": {
+          "type": "string"
+        },
         "authorities": {
           "type": "array",
           "items": {
@@ -1794,6 +1814,13 @@
           "minLength": 1,
           "maxLength": 50,
           "pattern": "^[_.@A-Za-z0-9-]*$"
+        },
+        "resetDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "resetKey": {
+          "type": "string"
         }
       },
       "title": "UserDTO"
