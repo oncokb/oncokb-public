@@ -98,7 +98,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
 
   @computed
   get generateTokenEnabled() {
-    return this.enableRegenerateToken && this.tokens.length < 2;
+    return this.enableRegenerateToken && this.tokens.length < 1;
   }
 
   @computed
@@ -135,18 +135,24 @@ export class AccountPage extends React.Component<IRegisterProps> {
           <Col>
             <h5>Account</h5>
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.EMAIL, this.account
-                .licenseType as LicenseType)}
+              title={getAccountInfoTitle(
+                ACCOUNT_TITLES.EMAIL,
+                this.account.licenseType as LicenseType
+              )}
               content={this.account.email}
             />
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.NAME, this.account
-                .licenseType as LicenseType)}
+              title={getAccountInfoTitle(
+                ACCOUNT_TITLES.NAME,
+                this.account.licenseType as LicenseType
+              )}
               content={`${this.account.firstName} ${this.account.lastName}`}
             />
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.LICENSE_TYPE, this
-                .account.licenseType as LicenseType)}
+              title={getAccountInfoTitle(
+                ACCOUNT_TITLES.LICENSE_TYPE,
+                this.account.licenseType as LicenseType
+              )}
               content={this.licenseTitle}
             />
           </Col>
@@ -154,27 +160,37 @@ export class AccountPage extends React.Component<IRegisterProps> {
         <Row className={getSectionClassName()}>
           <Col>
             <h5>
-              {getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.account
-                .licenseType as LicenseType)}
+              {getAccountInfoTitle(
+                ACCOUNT_TITLES.COMPANY,
+                this.account.licenseType as LicenseType
+              )}
             </h5>
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.POSITION, this.account
-                .licenseType as LicenseType)}
+              title={getAccountInfoTitle(
+                ACCOUNT_TITLES.POSITION,
+                this.account.licenseType as LicenseType
+              )}
               content={this.account.jobTitle}
             />
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.COMPANY, this.account
-                .licenseType as LicenseType)}
+              title={getAccountInfoTitle(
+                ACCOUNT_TITLES.COMPANY,
+                this.account.licenseType as LicenseType
+              )}
               content={this.account.company}
             />
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.CITY, this.account
-                .licenseType as LicenseType)}
+              title={getAccountInfoTitle(
+                ACCOUNT_TITLES.CITY,
+                this.account.licenseType as LicenseType
+              )}
               content={this.account.city}
             />
             <InfoRow
-              title={getAccountInfoTitle(ACCOUNT_TITLES.COUNTRY, this.account
-                .licenseType as LicenseType)}
+              title={getAccountInfoTitle(
+                ACCOUNT_TITLES.COUNTRY,
+                this.account.licenseType as LicenseType
+              )}
               content={this.account.country}
             />
           </Col>
@@ -186,7 +202,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
               <InfoIcon
                 placement={'top'}
                 overlay={
-                  'You can have up to two tokens to be used. Your token will be automatically renewed after reviewing the license and account information.'
+                  'You can have one token to be used. Your token will be automatically renewed after reviewing the license and account information.'
                 }
                 className={'ml-2'}
               />
@@ -195,8 +211,10 @@ export class AccountPage extends React.Component<IRegisterProps> {
               title={
                 <div className={'d-flex align-items-center'}>
                   <span>
-                    {getAccountInfoTitle(ACCOUNT_TITLES.API_TOKEN, this.account
-                      .licenseType as LicenseType)}
+                    {getAccountInfoTitle(
+                      ACCOUNT_TITLES.API_TOKEN,
+                      this.account.licenseType as LicenseType
+                    )}
                   </span>
                   {this.generateTokenEnabled ? (
                     <DefaultTooltip
