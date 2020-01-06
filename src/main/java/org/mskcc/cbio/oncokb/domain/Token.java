@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -33,6 +34,13 @@ public class Token implements Serializable {
 
     @Column(name = "expiration")
     private Instant expiration;
+
+    @Column(name = "usage_limit")
+    private Integer usageLimit;
+
+    @NotNull
+    @Column(name = "current_usage", nullable = false)
+    private Integer currentUsage;
 
     @ManyToOne
     @JsonIgnoreProperties("tokens")
@@ -86,6 +94,32 @@ public class Token implements Serializable {
         this.expiration = expiration;
     }
 
+    public Integer getUsageLimit() {
+        return usageLimit;
+    }
+
+    public Token usageLimit(Integer usageLimit) {
+        this.usageLimit = usageLimit;
+        return this;
+    }
+
+    public void setUsageLimit(Integer usageLimit) {
+        this.usageLimit = usageLimit;
+    }
+
+    public Integer getCurrentUsage() {
+        return currentUsage;
+    }
+
+    public Token currentUsage(Integer currentUsage) {
+        this.currentUsage = currentUsage;
+        return this;
+    }
+
+    public void setCurrentUsage(Integer currentUsage) {
+        this.currentUsage = currentUsage;
+    }
+
     public User getUser() {
         return user;
     }
@@ -123,6 +157,8 @@ public class Token implements Serializable {
             ", token='" + getToken() + "'" +
             ", creation='" + getCreation() + "'" +
             ", expiration='" + getExpiration() + "'" +
+            ", usageLimit=" + getUsageLimit() +
+            ", currentUsage=" + getCurrentUsage() +
             "}";
     }
 }

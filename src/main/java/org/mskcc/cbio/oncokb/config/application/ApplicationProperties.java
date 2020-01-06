@@ -19,6 +19,7 @@ public class ApplicationProperties {
     private String accountApprovalWhitelist;
     private String googleWebmasterVerification;
     private String mailFrom;
+    private String tokenUsageCheck;
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -82,5 +83,13 @@ public class ApplicationProperties {
 
     public void setMailFrom(String mailFrom) {
         this.mailFrom = mailFrom;
+    }
+
+    public String getTokenUsageCheck() {
+        return tokenUsageCheck;
+    }
+
+    public void setTokenUsageCheck(String tokenUsageCheck) {
+        this.tokenUsageCheck = tokenUsageCheck;
     }
 }

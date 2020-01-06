@@ -130,7 +130,11 @@ public class TokenProvider implements InitializingBean {
         try {
             Optional<Token> token = tokenService.findByToken(tokenValue);
             if (token.isPresent() && token.get().getExpiration().isAfter(Instant.now())) {
-                return true;
+                if(token.get().getUsageLimit() == null || token.get().getCurrentUsage() < token.get().getUsageLimit()) {
+                    return true;
+                }else{
+                    return false;
+                }
             }
             return false;
         } catch (Exception e) {
@@ -138,25 +142,5 @@ public class TokenProvider implements InitializingBean {
             log.trace("JWT token compact of handler are invalid trace: {}", e);
         }
         return false;
-    }
-
-
-    public TokenStats addAccessRecord(UUID uuid, String accessIp) {
-        Optional<Token> tokenOptional = tokenService.findByToken(uuid);
-
-        if (tokenOptional.isPresent()) {
-            Token token = tokenOptional.get();
-            // When the token is used for each thread, we should record the usage
-            TokenStats tokenStats = new TokenStats();
-            tokenStats.setToken(token);
-
-            tokenStats.setAccessIp(accessIp);
-            tokenStats.setAccessTime(LocalDate.now());
-
-            tokenStatsRepository.save(tokenStats);
-
-            return tokenStats;
-        }
-        return null;
     }
 }
