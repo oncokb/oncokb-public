@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -46,7 +47,7 @@ public class TokenStatsResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/token-stats")
-    public ResponseEntity<TokenStats> createTokenStats(@RequestBody TokenStats tokenStats) throws URISyntaxException {
+    public ResponseEntity<TokenStats> createTokenStats(@Valid @RequestBody TokenStats tokenStats) throws URISyntaxException {
         log.debug("REST request to save TokenStats : {}", tokenStats);
         if (tokenStats.getId() != null) {
             throw new BadRequestAlertException("A new tokenStats cannot already have an ID", ENTITY_NAME, "idexists");
@@ -67,7 +68,7 @@ public class TokenStatsResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/token-stats")
-    public ResponseEntity<TokenStats> updateTokenStats(@RequestBody TokenStats tokenStats) throws URISyntaxException {
+    public ResponseEntity<TokenStats> updateTokenStats(@Valid @RequestBody TokenStats tokenStats) throws URISyntaxException {
         log.debug("REST request to update TokenStats : {}", tokenStats);
         if (tokenStats.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
