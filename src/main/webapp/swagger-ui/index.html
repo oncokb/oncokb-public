@@ -20,23 +20,21 @@
 
 
     window.onload = function () {
-        var urls = [];
+        var urls = [{
+          location: "/api/v1/v2/api-docs?group=Public%20APIs",
+          name: "Public APIs",
+          swaggerVersion: "2.0",
+          url: "/api/v1/v2/api-docs?group=Public%20APIs" ,
+        }, {
+          location: "/api/v1/v2/api-docs?group=Public%20APIs%20for%20Premium%20Users",
+          name: "Public APIs for Premium Useres",
+          swaggerVersion: "2.0",
+          url: "/api/v1/v2/api-docs?group=Public%20APIs%20for%20Premium%20Users" ,
+        }];
         axios.get("/swagger-resources").then(function (response) {
-            response.data.forEach(function (resource) {
-                urls.push({"name": resource.name, "url": resource.location});
-            });
-
-            urls.sort(function (a, b) {
-                var x = a.name.toLowerCase(), y = b.name.toLowerCase();
-                return x < y ? -1 : x > y ? 1 : 0;
-            });
-            urls.unshift({
-              location: "/api/v1/v2/api-docs",
-              name: "API v1",
-              swaggerVersion: "2.0",
-              url: "/api/v1/v2/api-docs" ,
-            });
-
+            // response.data.forEach(function (resource) {
+            //     urls.push({"name": resource.name, "url": resource.location});
+            // });
             // Build a system
             var ui = SwaggerUIBundle({
                 urls: urls,
