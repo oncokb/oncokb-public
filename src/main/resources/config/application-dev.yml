@@ -141,6 +141,7 @@ application:
   google-webmaster-verification:
   account-approval-whitelist:
   mail-from:
+  token-usage-check:
   redis:
     type: 'single'
     password: 'oncokb-public-redis-password'
