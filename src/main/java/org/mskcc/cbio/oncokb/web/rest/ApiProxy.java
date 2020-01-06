@@ -2,9 +2,11 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 import com.sun.xml.bind.v2.TODO;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.ApiProxyService;
@@ -64,14 +66,18 @@ public class ApiProxy {
         throws URISyntaxException {
         URI uri = apiProxyService.prepareURI(request);
 
-        List<String> tokenUsageCheckList = Arrays.stream(applicationProperties.getTokenUsageCheck().split(",")).map(api -> api.trim()).collect(Collectors.toList());
+        List<String> tokenUsageCheckList = Arrays.stream(applicationProperties.getTokenUsageCheck().split(",")).map(api -> api.trim()).filter(api -> !api.isEmpty()).collect(Collectors.toList());
         Optional<String> needsToBeRecorded = tokenUsageCheckList.stream().filter(api -> request.getRequestURI().startsWith(api)).findFirst();
         if (needsToBeRecorded.isPresent()) {
             Optional<String> userOptional = SecurityUtils.getCurrentUserLogin();
             if (userOptional.isPresent()) {
+                List<String> tokenUsageCheckWhitelist = Arrays.stream(applicationProperties.getTokenUsageCheckWhitelist().split(",")).map(api -> api.trim()).filter(api -> !api.isEmpty()).collect(Collectors.toList());
+
                 Optional<User> user = userService.getUserWithAuthoritiesByLogin(userOptional.get());
                 Optional<UUID> uuidOptional = SecurityUtils.getCurrentUserToken();
-                if (user.isPresent()) {
+                if (user.isPresent() &&
+                    user.get().getAuthorities().stream().filter(authority -> authority.getName().equalsIgnoreCase(AuthoritiesConstants.ADMIN)).count() == 0 &&
+                    !tokenUsageCheckWhitelist.contains(user.get().getLogin())) {
                     List<Token> tokenList = tokenProvider.getUserTokens(user.get());
                     tokenList.forEach(token -> {
                         token.setCurrentUsage(token.getCurrentUsage() + 1);

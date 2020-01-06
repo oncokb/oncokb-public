@@ -14,7 +14,7 @@ import java.time.Instant;
  */
 @Entity
 @Table(name = "token_stats")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class TokenStats implements Serializable {
 
     private static final long serialVersionUID = 1L;

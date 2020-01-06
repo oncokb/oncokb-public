@@ -20,6 +20,7 @@ public class ApplicationProperties {
     private String googleWebmasterVerification;
     private String mailFrom;
     private String tokenUsageCheck;
+    private String tokenUsageCheckWhitelist;
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -91,5 +92,13 @@ public class ApplicationProperties {
 
     public void setTokenUsageCheck(String tokenUsageCheck) {
         this.tokenUsageCheck = tokenUsageCheck;
+    }
+
+    public String getTokenUsageCheckWhitelist() {
+        return tokenUsageCheckWhitelist;
+    }
+
+    public void setTokenUsageCheckWhitelist(String tokenUsageCheckWhitelist) {
+        this.tokenUsageCheckWhitelist = tokenUsageCheckWhitelist;
     }
 }
