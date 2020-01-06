@@ -40,7 +40,7 @@ public class Token implements Serializable {
 
     @NotNull
     @Column(name = "current_usage", nullable = false)
-    private Integer currentUsage;
+    private Integer currentUsage = 0;
 
     @ManyToOne
     @JsonIgnoreProperties("tokens")
