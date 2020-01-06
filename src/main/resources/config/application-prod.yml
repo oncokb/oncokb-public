@@ -151,6 +151,7 @@ application:
   account-approval-whitelist:
   mail-from:
   token-usage-check:
+  token-usage-check-whitelist:
   redis:
     type: 'master-slave'
     password: 'oncokb-public-redis-password'

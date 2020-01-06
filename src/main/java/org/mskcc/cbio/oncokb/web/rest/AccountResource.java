@@ -234,8 +234,8 @@ public class AccountResource {
         if (userLogin.isPresent()) {
             Optional<User> user = userService.getUserWithAuthoritiesByLogin(userLogin.get());
             List<Token> tokens = tokenProvider.getUserTokens(user.get());
-            if (tokens.size() >= 2) {
-                throw new AccountResourceException("No more thant two tokens can be created");
+            if (tokens.size() >= 1) {
+                throw new AccountResourceException("No more than one token can be created");
             } else {
                 // if there is a token already available, we should use the same expiration date
                 // we only renew the token after validating the account is valid on half year basis
