@@ -22,16 +22,15 @@
             <column name="resource" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-
-            <column name="access_time" type="date">
-                <constraints nullable="true" />
+            <column name="access_time" type="datetime">
+                <constraints nullable="false" />
             </column>
-
             <column name="token_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
+        <dropDefaultValue tableName="token_stats" columnName="access_time" columnDataType="datetime"/>
     </changeSet>
 
     <changeSet id="20190826144658-1-relations" author="jhipster">
@@ -55,8 +54,7 @@
             <column name="id" type="numeric"/>
             <column name="access_ip" type="string"/>
             <column name="resource" type="string"/>
-            <column name="user_id" type="string"/>
-            <column name="access_time" type="date"/>
+            <column name="access_time" type="datetime"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

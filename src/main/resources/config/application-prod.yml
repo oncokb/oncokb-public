@@ -150,6 +150,7 @@ application:
   google-webmaster-verification:
   account-approval-whitelist:
   mail-from:
+  token-usage-check:
   redis:
     type: 'master-slave'
     password: 'oncokb-public-redis-password'

@@ -1,6 +1,16 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import com.sun.xml.bind.v2.TODO;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.domain.Token;
+import org.mskcc.cbio.oncokb.domain.TokenStats;
+import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.security.SecurityUtils;
+import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.ApiProxyService;
+import org.mskcc.cbio.oncokb.service.TokenService;
+import org.mskcc.cbio.oncokb.service.TokenStatsService;
+import org.mskcc.cbio.oncokb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +27,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.security.Security;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @ApiIgnore("The proxy has its swagger json definition")
 @RestController
@@ -25,18 +42,63 @@ public class ApiProxy {
     @Autowired
     private ApiProxyService apiProxyService;
 
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private TokenProvider tokenProvider;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private TokenStatsService tokenStatsService;
+
+    @Autowired
+    private ApplicationProperties applicationProperties;
+
+    private String IP_HEADER = "X-FORWARDED-FOR";
+
     @RequestMapping("/**")
     public String proxy(@RequestBody(required = false) String body, HttpMethod method, HttpServletRequest request)
         throws URISyntaxException {
         URI uri = apiProxyService.prepareURI(request);
 
+        List<String> tokenUsageCheckList = Arrays.stream(applicationProperties.getTokenUsageCheck().split(",")).map(api -> api.trim()).collect(Collectors.toList());
+        Optional<String> needsToBeRecorded = tokenUsageCheckList.stream().filter(api -> request.getRequestURI().startsWith(api)).findFirst();
+        if (needsToBeRecorded.isPresent()) {
+            Optional<String> userOptional = SecurityUtils.getCurrentUserLogin();
+            if (userOptional.isPresent()) {
+                Optional<User> user = userService.getUserWithAuthoritiesByLogin(userOptional.get());
+                Optional<UUID> uuidOptional = SecurityUtils.getCurrentUserToken();
+                if (user.isPresent()) {
+                    List<Token> tokenList = tokenProvider.getUserTokens(user.get());
+                    tokenList.forEach(token -> {
+                        token.setCurrentUsage(token.getCurrentUsage() + 1);
+                        tokenService.save(token);
+                        if (uuidOptional.isPresent() && uuidOptional.get().equals(token.getToken())) {
+                            TokenStats tokenStats = new TokenStats();
+                            tokenStats.setToken(token);
+
+                            String ipAddress = request.getHeader(IP_HEADER);
+                            if (ipAddress == null) {
+                                tokenStats.setAccessIp(request.getRemoteAddr());
+                            }
+                            tokenStats.setAccessTime(Instant.now());
+                            tokenStats.setResource(request.getMethod() + " " + request.getRequestURI());
+                            tokenStatsService.save(tokenStats);
+                        }
+                    });
+                }
+            }
+        }
         HttpHeaders httpHeaders = apiProxyService.prepareHttpHeaders(request.getContentType());
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate.exchange(uri, method, new HttpEntity<>(body, httpHeaders), String.class).getBody();
     }
 
-//    @RequestMapping(value = "/private/utils/dataRelease/sqlDump",
+    //    @RequestMapping(value = "/private/utils/dataRelease/sqlDump",
 //        produces = {"application/zip"},
 //        method = RequestMethod.GET)
     public ResponseEntity<byte[]> downloadSqlDump(HttpMethod method, HttpServletRequest request)

@@ -18,6 +18,13 @@
         {
             "fieldName": "resource",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "accessTime",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20190826144658",
@@ -29,5 +36,6 @@
     "jpaMetamodelFiltering": false,
     "pagination": "no",
     "name": "TokenStats",
-    "applications": "*"
+    "applications": "*",
+    "readOnly": false
 }

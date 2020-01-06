@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.OncokbApp;
+import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
 import org.mskcc.cbio.oncokb.service.TokenStatsService;
@@ -8,6 +9,7 @@ import org.mskcc.cbio.oncokb.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.mskcc.cbio.oncokb.web.rest.TestUtil.createFormattingConversionService;
@@ -34,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link TokenStatsResource} REST controller.
  */
 @SpringBootTest(classes = OncokbApp.class)
+@ExtendWith(RedisTestContainerExtension.class)
 public class TokenStatsResourceIT {
 
     private static final String DEFAULT_ACCESS_IP = "AAAAAAAAAA";
@@ -42,9 +45,8 @@ public class TokenStatsResourceIT {
     private static final String DEFAULT_RESOURCE = "AAAAAAAAAA";
     private static final String UPDATED_RESOURCE = "BBBBBBBBBB";
 
-    private static final LocalDate DEFAULT_ACCESS_TIME = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_ACCESS_TIME = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_ACCESS_TIME = LocalDate.ofEpochDay(-1L);
+    private static final Instant DEFAULT_ACCESS_TIME = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_ACCESS_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     @Autowired
     private TokenStatsRepository tokenStatsRepository;
@@ -157,6 +159,24 @@ public class TokenStatsResourceIT {
 
     @Test
     @Transactional
+    public void checkAccessTimeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = tokenStatsRepository.findAll().size();
+        // set the field null
+        tokenStats.setAccessTime(null);
+
+        // Create the TokenStats, which fails.
+
+        restTokenStatsMockMvc.perform(post("/api/token-stats")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(tokenStats)))
+            .andExpect(status().isBadRequest());
+
+        List<TokenStats> tokenStatsList = tokenStatsRepository.findAll();
+        assertThat(tokenStatsList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllTokenStats() throws Exception {
         // Initialize the database
         tokenStatsRepository.saveAndFlush(tokenStats);
@@ -168,7 +188,7 @@ public class TokenStatsResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(tokenStats.getId().intValue())))
             .andExpect(jsonPath("$.[*].accessIp").value(hasItem(DEFAULT_ACCESS_IP)))
             .andExpect(jsonPath("$.[*].resource").value(hasItem(DEFAULT_RESOURCE)))
-            .andExpect(jsonPath("$.[*].accessTime").value(hasItem(DEFAULT_ACCESS_TIME)));
+            .andExpect(jsonPath("$.[*].accessTime").value(hasItem(DEFAULT_ACCESS_TIME.toString())));
     }
 
     @Test
@@ -184,7 +204,7 @@ public class TokenStatsResourceIT {
             .andExpect(jsonPath("$.id").value(tokenStats.getId().intValue()))
             .andExpect(jsonPath("$.accessIp").value(DEFAULT_ACCESS_IP))
             .andExpect(jsonPath("$.resource").value(DEFAULT_RESOURCE))
-            .andExpect(jsonPath("$.accessTime").value(DEFAULT_ACCESS_TIME));
+            .andExpect(jsonPath("$.accessTime").value(DEFAULT_ACCESS_TIME.toString()));
     }
 
     @Test
