@@ -51,12 +51,12 @@
                     SwaggerUIBundle.plugins.DownloadUrl
                 ],
                 requestInterceptor: function(req) {
+                    var proxyUrl = req.url.match(/^(?=(http|https:\/\/)).*(?=(\/api))/gi);
+                    if (proxyUrl) {
+                      req.url = req.url.replace(proxyUrl[0], window.location.origin);
+                    }
                     var authToken = JSON.parse(localStorage.getItem("oncokb-user-token"));
                     if (authToken) {
-                        var proxyUrl = req.url.match(/^(?=(http|https:\/\/)).*(?=(\/api))/gi);
-                        if (proxyUrl) {
-                          req.url = req.url.replace(proxyUrl[0], window.location.origin);
-                        }
                         req.headers['Authorization'] = "Bearer " + authToken;
                     }
                     return req;
