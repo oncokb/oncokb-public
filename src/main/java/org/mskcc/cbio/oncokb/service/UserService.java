@@ -338,6 +338,11 @@ public class UserService {
         return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email);
     }
 
+    @Transactional(readOnly = true)
+    public Page<UserDTO> getAllRegisteredUsers(Pageable pageable) {
+        return userRepository.findAllByActivationKeyIsNullOrderByCreatedDate(pageable).map(user -> userMapper.userToUserDTO(user));
+    }
+
     /**
      * Not activated users should be automatically deleted after 3 days.
      * <p>

@@ -17,6 +17,9 @@ const AccountMenuItemsAuthenticated: React.FunctionComponent<{
     </MenuItem>
     {props.isAdmin ? (
       <>
+        <MenuItem icon="id-card-o" to={PAGE_ROUTE.ADMIN_USER_DETAILS}>
+          {PAGE_TITLE.ADMIN_USER_DETAILS}
+        </MenuItem>
         <MenuItem icon="users" to={PAGE_ROUTE.ADMIN_USER_MANAGEMENT}>
           {PAGE_TITLE.ADMIN_USER_MANAGEMENT}
         </MenuItem>

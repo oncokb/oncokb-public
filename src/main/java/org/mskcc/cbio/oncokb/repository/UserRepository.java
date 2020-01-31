@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.repository;
 
 import org.mskcc.cbio.oncokb.domain.User;
 
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 
@@ -27,6 +28,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findOneByActivationKey(String activationKey);
 
     List<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
+
+    // Get all registered users
+    Page<User> findAllByActivationKeyIsNullOrderByCreatedDate(Pageable pageable);
 
     Optional<User> findOneByResetKey(String resetKey);
 
