@@ -8,6 +8,7 @@ import {
 import _ from 'lodash';
 import React from 'react';
 import {
+  APP_LOCAL_DATE_FORMAT,
   APP_LOCAL_DATETIME_FORMAT_Z,
   APP_TIMESTAMP_FORMAT,
   GENERAL_ONCOGENICITY,
@@ -394,6 +395,13 @@ export function toAppTimestampFormat(utcTime: string | undefined) {
   if (!utcTime) return '';
   return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z).format(
     APP_TIMESTAMP_FORMAT
+  );
+}
+
+export function toAppLocalDateFormat(utcTime: string | undefined) {
+  if (!utcTime) return '';
+  return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z).format(
+    APP_LOCAL_DATE_FORMAT
   );
 }
 

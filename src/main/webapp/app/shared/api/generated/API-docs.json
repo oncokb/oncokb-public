@@ -1221,6 +1221,113 @@
         "deprecated": false
       }
     },
+    "/api/users/registered": {
+      "get": {
+        "tags": [
+          "user-resource"
+        ],
+        "summary": "getAllRegisteredUsers",
+        "operationId": "getAllRegisteredUsersUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number of the requested page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "paged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Size of a page",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "sort.sorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "sort.unsorted",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "unpaged",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/users/{login}": {
       "get": {
         "tags": [
@@ -1652,10 +1759,17 @@
     },
     "Token": {
       "type": "object",
+      "required": [
+        "currentUsage"
+      ],
       "properties": {
         "creation": {
           "type": "string",
           "format": "date-time"
+        },
+        "currentUsage": {
+          "type": "integer",
+          "format": "int32"
         },
         "expiration": {
           "type": "string",
@@ -1668,6 +1782,10 @@
         "token": {
           "type": "string",
           "format": "uuid"
+        },
+        "usageLimit": {
+          "type": "integer",
+          "format": "int32"
         },
         "user": {
           "$ref": "#/definitions/User"
