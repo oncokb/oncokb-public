@@ -21,7 +21,7 @@ class AppStore {
   @observable isSwaggerEnabled = false;
 
   readonly appInfo = remoteData<OncoKBInfo>({
-    invoke: () => apiClient.infoGetUsingGET({}),
+    invoke: () => apiClient.infoGetUsingGET_1({}),
     default: DEFAULT_ONCOKB_INFO
   });
 
