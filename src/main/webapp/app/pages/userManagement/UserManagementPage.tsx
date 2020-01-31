@@ -22,6 +22,7 @@ import {
 } from 'app/config/constants';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 import autobind from 'autobind-decorator';
+import LoadingIndicator from '../../components/loadingIndicator/LoadingIndicator';
 
 @inject('routing')
 @observer
@@ -30,6 +31,7 @@ export default class UserManagementPage extends React.Component<{
   match: match;
 }> {
   @observable users: UserDTO[] = [];
+  @observable loadedUsers = false;
   @observable showUpdateStatusModal = false;
   @observable showAddAuthorityModal = false;
   @observable currentSelected: {
@@ -149,6 +151,7 @@ export default class UserManagementPage extends React.Component<{
     try {
       // Hard code the max returned user size. Need to fix pagination issue.
       this.users = await client.getAllUsersUsingGET({ size: 2000 });
+      this.loadedUsers = true;
     } catch (e) {
       notifyError(e, 'Error fetching users');
     }
@@ -313,72 +316,82 @@ export default class UserManagementPage extends React.Component<{
   render() {
     return (
       <>
-        <Row className={getSectionClassName(true)}>
-          <Col className={'d-flex justify-content-between'}>
-            <h2>Users</h2>
-          </Col>
-        </Row>
-        <Row className={getSectionClassName()}>
-          <Col>
-            <OncoKBTable
-              data={this.users}
-              columns={this.columns}
-              showPagination={true}
-              minRows={1}
-            />
-          </Col>
-        </Row>
-        <Modal
-          show={this.showUpdateStatusModal}
-          onHide={() => this.cancelUpdateActiveStatus()}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Update User Status</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            Are you sure to{' '}
-            {this.currentSelectedUserIsActivated ? 'deactivate' : 'active'} the
-            user?
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => this.cancelUpdateActiveStatus()}
+        {this.loadedUsers ? (
+          <>
+            <Row className={getSectionClassName(true)}>
+              <Col className={'d-flex justify-content-between'}>
+                <h2>Users</h2>
+              </Col>
+            </Row>
+            <Row className={getSectionClassName()}>
+              <Col>
+                <OncoKBTable
+                  data={this.users}
+                  columns={this.columns}
+                  showPagination={true}
+                  minRows={1}
+                />
+              </Col>
+            </Row>
+            <Modal
+              show={this.showUpdateStatusModal}
+              onHide={() => this.cancelUpdateActiveStatus()}
             >
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              onClick={(event: any) => {
-                event.preventDefault();
-                this.updateActiveStatus(true);
-              }}
-            >
-              Update
-            </Button>
-            {!this.currentSelectedUserIsActivated ? (
-              <DefaultTooltip
-                placement={'top'}
-                overlay={
-                  'Update user status without sending an email to the user'
-                }
-              >
+              <Modal.Header closeButton>
+                <Modal.Title>Update User Status</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                Are you sure to{' '}
+                {this.currentSelectedUserIsActivated ? 'deactivate' : 'active'}{' '}
+                the user?
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant="secondary"
+                  onClick={() => this.cancelUpdateActiveStatus()}
+                >
+                  Close
+                </Button>
                 <Button
                   variant="primary"
-                  onClick={() => this.updateActiveStatus(false)}
+                  onClick={(event: any) => {
+                    event.preventDefault();
+                    this.updateActiveStatus(true);
+                  }}
                 >
-                  Silent Update
+                  Update
                 </Button>
-              </DefaultTooltip>
-            ) : null}
-          </Modal.Footer>
-        </Modal>
-        <SimpleConfirmModal
-          show={this.showAddAuthorityModal}
-          title={`Add authority ${this.currentSelected.authority}?`}
-          onConfirm={this.addAuthorityToUser}
-          onCancel={this.cancelAddAuthority}
-        ></SimpleConfirmModal>
+                {!this.currentSelectedUserIsActivated ? (
+                  <DefaultTooltip
+                    placement={'top'}
+                    overlay={
+                      'Update user status without sending an email to the user'
+                    }
+                  >
+                    <Button
+                      variant="primary"
+                      onClick={() => this.updateActiveStatus(false)}
+                    >
+                      Silent Update
+                    </Button>
+                  </DefaultTooltip>
+                ) : null}
+              </Modal.Footer>
+            </Modal>
+            <SimpleConfirmModal
+              show={this.showAddAuthorityModal}
+              title={`Add authority ${this.currentSelected.authority}?`}
+              onConfirm={this.addAuthorityToUser}
+              onCancel={this.cancelAddAuthority}
+            ></SimpleConfirmModal>
+          </>
+        ) : (
+          <LoadingIndicator
+            size={'big'}
+            center={true}
+            isLoading={!this.loadedUsers}
+          />
+        )}
       </>
     );
   }
