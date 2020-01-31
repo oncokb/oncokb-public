@@ -79,7 +79,7 @@ const DownloadButtonGroups: React.FunctionComponent<{
         <AuthDownloadButton
           fileName={`cancer_gene_list_${props.data.version}.tsv`}
           getDownloadData={() =>
-            oncokbClient.utilsCancerGeneListTxtGetUsingGET({
+            oncokbClient.utilsCancerGeneListTxtGetUsingGET_1({
               version: props.data.version
             })
           }

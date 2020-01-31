@@ -350,7 +350,7 @@ export default class CancerGenesPage extends React.Component<{
   private readonly cancerGenes = remoteData<CancerGene[]>({
     await: () => [],
     async invoke() {
-      return oncokbClient.utilsCancerGeneListGetUsingGET({});
+      return oncokbClient.utilsCancerGeneListGetUsingGET_1({});
     },
     default: []
   });
@@ -423,7 +423,7 @@ export default class CancerGenesPage extends React.Component<{
               <AuthDownloadButton
                 fileName="cancerGeneList.tsv"
                 getDownloadData={() =>
-                  oncokbClient.utilsCancerGeneListTxtGetUsingGET({})
+                  oncokbClient.utilsCancerGeneListTxtGetUsingGET_1({})
                 }
                 buttonText="Cancer Gene List"
               />
