@@ -123,7 +123,7 @@ export default class UserDetailsPage extends React.Component<{
   }
 
   private getStatus(activated: boolean) {
-    return activated ? 'Activated' : 'Deactivated';
+    return activated ? 'Activated' : 'Inactivated';
   }
 
   private columns: SearchColumn<UserDTO>[] = [
@@ -139,6 +139,49 @@ export default class UserDetailsPage extends React.Component<{
       Cell(props: { original: UserDTO }): any {
         return <div>{toAppLocalDateFormat(props.original.createdDate)}</div>;
       }
+    },
+    {
+      id: 'userName',
+      Header: <span className={styles.tableHeader}>User Name</span>,
+      onFilter: (data: UserDTO, keyword) =>
+        data.firstName + data.lastName
+          ? filterByKeyword(data.firstName + data.lastName, keyword)
+          : false,
+      Cell(props: { original: UserDTO }) {
+        return (
+          <span>{`${props.original.firstName} ${props.original.lastName}`}</span>
+        );
+      }
+    },
+    {
+      id: 'jobTitle',
+      Header: <span className={styles.tableHeader}>Job Title</span>,
+      onFilter: (data: UserDTO, keyword) =>
+        data.jobTitle ? filterByKeyword(data.jobTitle, keyword) : false,
+      accessor: 'jobTitle'
+    },
+    {
+      id: 'company',
+      Header: <span className={styles.tableHeader}>Company</span>,
+      onFilter: (data: UserDTO, keyword) =>
+        data.company ? filterByKeyword(data.company, keyword) : false,
+      accessor: 'company'
+    },
+    {
+      id: 'city',
+      Header: <span className={styles.tableHeader}>City</span>,
+      maxWidth: 100,
+      onFilter: (data: UserDTO, keyword) =>
+        data.city ? filterByKeyword(data.city, keyword) : false,
+      accessor: 'city'
+    },
+    {
+      id: 'country',
+      Header: <span className={styles.tableHeader}>Country</span>,
+      maxWidth: 100,
+      onFilter: (data: UserDTO, keyword) =>
+        data.country ? filterByKeyword(data.country, keyword) : false,
+      accessor: 'country'
     },
     {
       id: 'email',
@@ -184,19 +227,6 @@ export default class UserDetailsPage extends React.Component<{
       }
     },
     {
-      id: 'userName',
-      Header: <span className={styles.tableHeader}>User Name</span>,
-      onFilter: (data: UserDTO, keyword) =>
-        data.firstName + data.lastName
-          ? filterByKeyword(data.firstName + data.lastName, keyword)
-          : false,
-      Cell(props: { original: UserDTO }) {
-        return (
-          <span>{`${props.original.firstName} ${props.original.lastName}`}</span>
-        );
-      }
-    },
-    {
       id: 'licenseType',
       Header: <span className={styles.tableHeader}>License Type</span>,
       onFilter: (data: UserDTO, keyword) =>
@@ -222,36 +252,6 @@ export default class UserDetailsPage extends React.Component<{
           </span>
         );
       }
-    },
-    {
-      id: 'jobTitle',
-      Header: <span className={styles.tableHeader}>Job Title</span>,
-      onFilter: (data: UserDTO, keyword) =>
-        data.jobTitle ? filterByKeyword(data.jobTitle, keyword) : false,
-      accessor: 'jobTitle'
-    },
-    {
-      id: 'company',
-      Header: <span className={styles.tableHeader}>Company</span>,
-      onFilter: (data: UserDTO, keyword) =>
-        data.company ? filterByKeyword(data.company, keyword) : false,
-      accessor: 'company'
-    },
-    {
-      id: 'city',
-      Header: <span className={styles.tableHeader}>City</span>,
-      maxWidth: 100,
-      onFilter: (data: UserDTO, keyword) =>
-        data.city ? filterByKeyword(data.city, keyword) : false,
-      accessor: 'city'
-    },
-    {
-      id: 'country',
-      Header: <span className={styles.tableHeader}>Country</span>,
-      maxWidth: 100,
-      onFilter: (data: UserDTO, keyword) =>
-        data.country ? filterByKeyword(data.country, keyword) : false,
-      accessor: 'country'
     }
   ];
 
