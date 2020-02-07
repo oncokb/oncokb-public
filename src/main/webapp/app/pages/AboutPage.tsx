@@ -34,8 +34,7 @@ export const AboutPage: React.FunctionComponent<AboutPageProps> = inject(
               >
                 Marie Josée and Henry R. Kravis Center for Molecular Oncology
               </a>{' '}
-              at Memorial Sloan Kettering Cancer Center (MSK), in partnership
-              with Quest Diagnostics and Watson for Genomics, IBM.
+              at Memorial Sloan Kettering Cancer Center (MSK).
             </p>
             <p>
               Curated by a network of clinical fellows, research fellows, and
