@@ -158,7 +158,7 @@ export default class UserManagementPage extends React.Component<{
   }
 
   private getStatus(activated: boolean) {
-    return activated ? 'Activated' : 'Deactivated';
+    return activated ? 'Activated' : 'Inactivated';
   }
 
   private columns: SearchColumn<UserDTO>[] = [
