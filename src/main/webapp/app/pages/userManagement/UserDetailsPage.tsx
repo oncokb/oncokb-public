@@ -18,6 +18,12 @@ import { LicenseType } from 'app/config/constants';
 import styles from './UserDetailsPage.module.scss';
 import LoadingIndicator from '../../components/loadingIndicator/LoadingIndicator';
 
+enum USER_BUTTON_TYPE {
+  COMMERCIAL = 'Commercial Users',
+  VERIFIED = 'Verified Users',
+  ALL = 'All Users'
+}
+
 @inject('routing')
 @observer
 export default class UserDetailsPage extends React.Component<{
@@ -26,15 +32,19 @@ export default class UserDetailsPage extends React.Component<{
 }> {
   @observable users: UserDTO[] = [];
   @observable loadedUsers = false;
+  @observable currentSelectedButton = '';
   @observable currentSelectedFilter: {
-    activationKey: string | undefined;
-    activated: boolean | undefined;
+    activationKey: string | null | undefined;
     licenseType: string[] | undefined;
   } = {
     activationKey: undefined,
-    activated: undefined,
     licenseType: undefined
   };
+  userButtons = [
+    USER_BUTTON_TYPE.COMMERCIAL,
+    USER_BUTTON_TYPE.VERIFIED,
+    USER_BUTTON_TYPE.ALL
+  ];
 
   constructor(props: Readonly<{ routing: RouterStore; match: match }>) {
     super(props);
@@ -46,6 +56,8 @@ export default class UserDetailsPage extends React.Component<{
     try {
       // Hard code the max returned user size. Need to fix pagination issue.
       this.users = await client.getAllUsersUsingGET({ size: 2000 });
+      // Display all commerical users by default
+      this.toggleFilter(USER_BUTTON_TYPE.COMMERCIAL);
       this.loadedUsers = true;
     } catch (e) {
       notifyError(e, 'Error fetching users');
@@ -53,8 +65,28 @@ export default class UserDetailsPage extends React.Component<{
   }
 
   @action
-  toggleFilter(query: any) {
-    this.currentSelectedFilter = query;
+  toggleFilter(button: string) {
+    this.currentSelectedButton = button;
+    if (this.currentSelectedButton === USER_BUTTON_TYPE.COMMERCIAL) {
+      this.currentSelectedFilter = {
+        activationKey: null,
+        licenseType: [
+          LicenseType.HOSPITAL,
+          LicenseType.RESEARCH_IN_COMMERCIAL,
+          LicenseType.COMMERCIAL
+        ]
+      };
+    } else if (this.currentSelectedButton === USER_BUTTON_TYPE.VERIFIED) {
+      this.currentSelectedFilter = {
+        activationKey: null,
+        licenseType: undefined
+      };
+    } else {
+      this.currentSelectedFilter = {
+        activationKey: undefined,
+        licenseType: undefined
+      };
+    }
   }
 
   @computed
@@ -67,9 +99,6 @@ export default class UserDetailsPage extends React.Component<{
     } else {
       return this.users.filter((user: UserDTO) => {
         const result =
-          (_.isUndefined(this.currentSelectedFilter.activated)
-            ? true
-            : user.activated === this.currentSelectedFilter.activated) &&
           (_.isUndefined(this.currentSelectedFilter.activationKey)
             ? true
             : user.activationKey ===
@@ -85,7 +114,7 @@ export default class UserDetailsPage extends React.Component<{
   }
 
   private getStatus(activated: boolean) {
-    return activated ? 'Activated' : 'Deactivated';
+    return activated ? 'Activated' : 'Inactivated';
   }
 
   private columns: SearchColumn<UserDTO>[] = [
@@ -101,6 +130,49 @@ export default class UserDetailsPage extends React.Component<{
       Cell(props: { original: UserDTO }): any {
         return <div>{toAppLocalDateFormat(props.original.createdDate)}</div>;
       }
+    },
+    {
+      id: 'userName',
+      Header: <span className={styles.tableHeader}>User Name</span>,
+      onFilter: (data: UserDTO, keyword) =>
+        data.firstName + data.lastName
+          ? filterByKeyword(data.firstName + data.lastName, keyword)
+          : false,
+      Cell(props: { original: UserDTO }) {
+        return (
+          <span>{`${props.original.firstName} ${props.original.lastName}`}</span>
+        );
+      }
+    },
+    {
+      id: 'jobTitle',
+      Header: <span className={styles.tableHeader}>Job Title</span>,
+      onFilter: (data: UserDTO, keyword) =>
+        data.jobTitle ? filterByKeyword(data.jobTitle, keyword) : false,
+      accessor: 'jobTitle'
+    },
+    {
+      id: 'company',
+      Header: <span className={styles.tableHeader}>Company</span>,
+      onFilter: (data: UserDTO, keyword) =>
+        data.company ? filterByKeyword(data.company, keyword) : false,
+      accessor: 'company'
+    },
+    {
+      id: 'city',
+      Header: <span className={styles.tableHeader}>City</span>,
+      maxWidth: 100,
+      onFilter: (data: UserDTO, keyword) =>
+        data.city ? filterByKeyword(data.city, keyword) : false,
+      accessor: 'city'
+    },
+    {
+      id: 'country',
+      Header: <span className={styles.tableHeader}>Country</span>,
+      maxWidth: 100,
+      onFilter: (data: UserDTO, keyword) =>
+        data.country ? filterByKeyword(data.country, keyword) : false,
+      accessor: 'country'
     },
     {
       id: 'email',
@@ -146,19 +218,6 @@ export default class UserDetailsPage extends React.Component<{
       }
     },
     {
-      id: 'userName',
-      Header: <span className={styles.tableHeader}>User Name</span>,
-      onFilter: (data: UserDTO, keyword) =>
-        data.firstName + data.lastName
-          ? filterByKeyword(data.firstName + data.lastName, keyword)
-          : false,
-      Cell(props: { original: UserDTO }) {
-        return (
-          <span>{`${props.original.firstName} ${props.original.lastName}`}</span>
-        );
-      }
-    },
-    {
       id: 'licenseType',
       Header: <span className={styles.tableHeader}>License Type</span>,
       onFilter: (data: UserDTO, keyword) =>
@@ -184,36 +243,6 @@ export default class UserDetailsPage extends React.Component<{
           </span>
         );
       }
-    },
-    {
-      id: 'jobTitle',
-      Header: <span className={styles.tableHeader}>Job Title</span>,
-      onFilter: (data: UserDTO, keyword) =>
-        data.jobTitle ? filterByKeyword(data.jobTitle, keyword) : false,
-      accessor: 'jobTitle'
-    },
-    {
-      id: 'company',
-      Header: <span className={styles.tableHeader}>Company</span>,
-      onFilter: (data: UserDTO, keyword) =>
-        data.company ? filterByKeyword(data.company, keyword) : false,
-      accessor: 'company'
-    },
-    {
-      id: 'city',
-      Header: <span className={styles.tableHeader}>City</span>,
-      maxWidth: 100,
-      onFilter: (data: UserDTO, keyword) =>
-        data.city ? filterByKeyword(data.city, keyword) : false,
-      accessor: 'city'
-    },
-    {
-      id: 'country',
-      Header: <span className={styles.tableHeader}>Country</span>,
-      maxWidth: 100,
-      onFilter: (data: UserDTO, keyword) =>
-        data.country ? filterByKeyword(data.country, keyword) : false,
-      accessor: 'country'
     }
   ];
 
@@ -223,39 +252,17 @@ export default class UserDetailsPage extends React.Component<{
         {this.loadedUsers ? (
           <>
             <Row className={getSectionClassName(true)}>
-              <Col xs={4} className={styles.center}>
-                <Button
-                  className={styles.filterButton}
-                  onClick={() => this.toggleFilter({})}
-                >
-                  All Users
-                </Button>
-              </Col>
-              <Col xs={4} className={styles.center}>
-                <Button
-                  className={styles.filterButton}
-                  onClick={() => this.toggleFilter({ activationKey: null })}
-                >
-                  Verified Users
-                </Button>
-              </Col>
-              <Col xs={4} className={styles.center}>
-                <Button
-                  className={styles.filterButton}
-                  onClick={() =>
-                    this.toggleFilter({
-                      activationKey: null,
-                      licenseType: [
-                        LicenseType.HOSPITAL,
-                        LicenseType.RESEARCH_IN_COMMERCIAL,
-                        LicenseType.COMMERCIAL
-                      ]
-                    })
-                  }
-                >
-                  Commercial Users
-                </Button>
-              </Col>
+              {this.userButtons.map(button => (
+                <Col xs={4} className={styles.center}>
+                  <Button
+                    active={this.currentSelectedButton === button}
+                    className={styles.filterButton}
+                    onClick={() => this.toggleFilter(button)}
+                  >
+                    {button}
+                  </Button>
+                </Col>
+              ))}
             </Row>
             <Row className={getSectionClassName()}>
               <Col>
@@ -264,6 +271,12 @@ export default class UserDetailsPage extends React.Component<{
                   columns={this.columns}
                   showPagination={true}
                   minRows={1}
+                  defaultSorted={[
+                    {
+                      id: 'createdDate',
+                      desc: true
+                    }
+                  ]}
                 />
               </Col>
             </Row>
