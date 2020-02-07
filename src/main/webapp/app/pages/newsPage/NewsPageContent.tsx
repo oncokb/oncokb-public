@@ -106,6 +106,86 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '02072020': {
+    updatedImplication: [
+      [
+        '1',
+        'PDGFRA',
+        'D842V, D842Y, D842_H845del, D842_H845insV',
+        'Gastrointestinal Stromal Tumor',
+        'Avapritinib',
+        <span>
+          Abstract:{' '}
+          <a
+            href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-avapritinib-gastrointestinal-stromal-tumor-rare-mutation"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Heinrich et al. Abstract# 11022, ASCO 2019 ; FDA-approval of
+            Avapritinib
+          </a>
+        </span>
+      ],
+      [
+        '3A',
+        'BRCA2',
+        'Oncogenic Mutations',
+        'Pancreatic Adenocarcinoma',
+        'Rucaparib',
+        <span>
+          <PMIDLink pmids={'30051098'} />; Abstract:{' '}
+          <a
+            href="https://cancerres.aacrjournals.org/content/79/13_Supplement/CT234"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Reiss Binder et al. Abstract# CT234, AACR 2019
+          </a>
+        </span>
+      ],
+      [
+        '4',
+        'EGFR',
+        'L718V',
+        'Non-Small Cell Lung Cancer',
+        'Afatinib',
+        <span>
+          <PMIDLink pmids={'29571986, 31757379'} />
+        </span>
+      ],
+      [
+        'R2',
+        'EGFR',
+        'L718V',
+        'Non-Small Cell Lung Cancer',
+        'Osimertinib',
+        <span>
+          <PMIDLink pmids={'29568384, 29571986, 31301016, 31757379'} />
+        </span>
+      ],
+      [
+        'R2',
+        'KIT',
+        'A829P',
+        'Gastrointestinal Stromal Tumor',
+        'Imatinib',
+        <span>
+          <PMIDLink pmids={'18955458, 25239608, 31085175'} />
+        </span>
+      ],
+      [
+        'R2',
+        'KIT',
+        'A829P',
+        'Gastrointestinal Stromal Tumor',
+        'Sunitinib',
+        <span>
+          <PMIDLink pmids={'31085175'} />
+        </span>
+      ]
+    ],
+    newlyAddedGenes: ['AJUBA', 'ZBTB20', 'ZFP36L1']
+  },
   '12122019': {
     priorityNews: [
       <span>User accounts and commercial licenses now available</span>,
