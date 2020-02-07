@@ -67,34 +67,25 @@ export default class UserDetailsPage extends React.Component<{
   @action
   toggleFilter(button: string) {
     this.currentSelectedButton = button;
-    switch (this.currentSelectedButton) {
-      case USER_BUTTON_TYPE.COMMERCIAL:
-        this.currentSelectedFilter = {
-          activationKey: null,
-          licenseType: [
-            LicenseType.HOSPITAL,
-            LicenseType.RESEARCH_IN_COMMERCIAL,
-            LicenseType.COMMERCIAL
-          ]
-        };
-        break;
-      case USER_BUTTON_TYPE.VERIFIED:
-        this.currentSelectedFilter = {
-          activationKey: null,
-          licenseType: undefined
-        };
-        break;
-      case USER_BUTTON_TYPE.ALL:
-        this.currentSelectedFilter = {
-          activationKey: undefined,
-          licenseType: undefined
-        };
-        break;
-      default:
-        this.currentSelectedFilter = {
-          activationKey: undefined,
-          licenseType: undefined
-        };
+    if (this.currentSelectedButton === USER_BUTTON_TYPE.COMMERCIAL) {
+      this.currentSelectedFilter = {
+        activationKey: null,
+        licenseType: [
+          LicenseType.HOSPITAL,
+          LicenseType.RESEARCH_IN_COMMERCIAL,
+          LicenseType.COMMERCIAL
+        ]
+      };
+    } else if (this.currentSelectedButton === USER_BUTTON_TYPE.VERIFIED) {
+      this.currentSelectedFilter = {
+        activationKey: null,
+        licenseType: undefined
+      };
+    } else {
+      this.currentSelectedFilter = {
+        activationKey: undefined,
+        licenseType: undefined
+      };
     }
   }
 
