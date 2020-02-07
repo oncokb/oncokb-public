@@ -34,14 +34,12 @@ export const AboutPage: React.FunctionComponent<AboutPageProps> = inject(
               >
                 Marie Josée and Henry R. Kravis Center for Molecular Oncology
               </a>{' '}
-              at Memorial Sloan Kettering Cancer Center (MSK).
-            </p>
-            <p>
-              Curated by a network of clinical fellows, research fellows, and
-              faculty members at MSK, OncoKB contains detailed information about
-              specific alterations in {props.appStore.mainNumbers.result.gene}{' '}
-              cancer genes. The information is curated from various sources,
-              such as guidelines from the FDA, NCCN, or ASCO,{' '}
+              at Memorial Sloan Kettering Cancer Center (MSK). Curated by a
+              network of clinical fellows, research fellows, and faculty members
+              at MSK, OncoKB contains detailed information about specific
+              alterations in {props.appStore.mainNumbers.result.gene} cancer
+              genes. The information is curated from various sources, such as
+              guidelines from the FDA, NCCN, or ASCO,{' '}
               <a
                 href="https://clinicaltrials.gov/"
                 target="_blank"
