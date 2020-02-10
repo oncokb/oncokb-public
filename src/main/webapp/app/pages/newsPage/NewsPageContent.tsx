@@ -106,7 +106,7 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '02072020': {
+  '02102020': {
     updatedImplication: [
       [
         '1',
@@ -121,8 +121,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Heinrich et al. Abstract# 11022, ASCO 2019 ; FDA-approval of
-            Avapritinib
+            FDA-approval of Avapritinib; Heinrich et al. Abstract# 11022, ASCO
+            2019
           </a>
         </span>
       ],
