@@ -49,10 +49,10 @@ export const TeamPage = () => {
             <ul>
               <li>Kinisha Gala, PhD</li>
               <li>Hannah Wise, PhD</li>
-              <li>Phillip Jonsson, PhD</li>
               <li>Lindsay M. LaFave, PhD</li>
-              <li>David Knorr, MD, PhD</li>
               <li>Linde Miles, PhD</li>
+              <li>Emiliano Cocco, PhD</li>
+              <li>Renzo DiNatale, MD</li>
             </ul>
             <h6>Past Contributors</h6>
             <ul>
@@ -65,6 +65,8 @@ export const TeamPage = () => {
               <li>Neel Shah, PhD</li>
               <li>Eneda Toska, PhD</li>
               <li>Jiaojiao Wang, MSc</li>
+              <li>Phillip Jonsson, PhD</li>
+              <li>David Knorr, MD, PhD</li>
             </ul>
           </Col>
           <Col xs={6} md>
