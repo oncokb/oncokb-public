@@ -106,7 +106,16 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '02102020': {
+  '02112020': {
+    priorityNews: [
+      <span>
+        The{' '}
+        <a href="content/files/OncoKB_Curation_Protocol_v1.0.pdf">
+          OncoKB Curation Protocol
+        </a>{' '}
+        has been released.
+      </span>
+    ],
     updatedImplication: [
       [
         '1',
