@@ -65,11 +65,12 @@ export const AboutPage: React.FunctionComponent<AboutPageProps> = inject(
               targeted agents being tested in clinical trials) and Level 4
               (those alterations which are considered predictive of response
               based on compelling biological evidence to targeted agents being
-              tested in clinical trials). Please review the{' '}
+              tested in clinical trials). For additional details about the
+              OncoKB curation process, please refer to the version controlled{' '}
               <a href="content/files/OncoKB_Curation_Protocol_v1.0.pdf">
-                OncoKB Curation Protocol
-              </a>{' '}
-              for more detailed rules about OncoKB data curation.
+                OncoKB Curation Standard Operating Procedure v1.0
+              </a>
+              .
             </p>
             <CitationText />
             <p>
