@@ -377,7 +377,7 @@ export enum DOCUMENT_TITLES {
   ACTIONABLE_GENES = 'OncoKB Actionable Genes',
   TERMS = 'OncoKB Terms of Use - Academic Research',
   NEWS = 'OncoKB Latest News',
-  DATA_ACCESS = 'Ways to Access OncoKB Data',
+  DATA_ACCESS = 'OncoKB Data Access',
   CANCER_GENES = 'OncoKB Cancer Gene List'
 }
 
