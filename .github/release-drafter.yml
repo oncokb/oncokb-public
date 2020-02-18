@@ -1,5 +1,5 @@
-name-template: '$NEXT_PATH_VERSION'
-tag-template: '$NEXT_PATH_VERSION'
+name-template: '$NEXT_PATCH_VERSION'
+tag-template: '$NEXT_PATCH_VERSION'
 categories:
   - title: '🧬 Features'
     labels:
@@ -37,4 +37,4 @@ template: |
 
   ## 🕵️‍♀️ Full commit logs
 
-  - https://github.com/oncokb/oncokb-public/compare/$PREVIOUS_TAG...$NEXT_PATH_VERSION
+  - https://github.com/oncokb/oncokb-public/compare/$PREVIOUS_TAG...$NEXT_PATCH_VERSION
