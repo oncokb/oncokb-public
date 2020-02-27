@@ -94,13 +94,13 @@ public class MailsController {
         List<MailTypeInfo> mailTypeInfos = new ArrayList<>();
         if (licenseType != null) {
             if (licenseType.equals(LicenseType.COMMERCIAL)) {
-                mailTypeInfos.add(new MailTypeInfo(MailType.LICENSE_REVIEW_COMMERCIAL));
+                mailTypeInfos.add(new MailTypeInfo(MailType.SEND_INTAKE_FORM_COMMERCIAL));
             }
             if (licenseType.equals(LicenseType.HOSPITAL)) {
-                mailTypeInfos.add(new MailTypeInfo(MailType.LICENSE_REVIEW_HOSPITAL));
+                mailTypeInfos.add(new MailTypeInfo(MailType.SEND_INTAKE_FORM_HOSPITAL));
             }
             if (licenseType.equals(LicenseType.RESEARCH_IN_COMMERCIAL)) {
-                mailTypeInfos.add(new MailTypeInfo(MailType.LICENSE_REVIEW_RESEARCH_COMMERCIAL));
+                mailTypeInfos.add(new MailTypeInfo(MailType.SEND_INTAKE_FORM_RESEARCH_COMMERCIAL));
             }
             if(licenseType.equals(LicenseType.ACADEMIC)) {
                 mailTypeInfos.add(new MailTypeInfo(MailType.CLARIFY_ACADEMIC_FOR_PROFIT));

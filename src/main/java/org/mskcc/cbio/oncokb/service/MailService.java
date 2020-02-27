@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.service;
 
 import io.github.jhipster.config.JHipsterProperties;
+import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.User;
 
@@ -12,6 +13,7 @@ import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -21,6 +23,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Arrays;
@@ -77,7 +80,7 @@ public class MailService {
     }
 
     @Async
-    public void sendEmail(String to, String from, String cc, String subject, String content, boolean isMultipart, boolean isHtml) throws MessagingException {
+    public void sendEmail(String to, String from, String cc, String subject, String content, List<String> attachmentFilesNames, boolean isMultipart, boolean isHtml) throws MessagingException {
         log.debug("Send email[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
             isMultipart, isHtml, to, subject, content);
 
@@ -91,6 +94,17 @@ public class MailService {
         message.setFrom(from);
         message.setSubject(subject);
         message.setText(content, isHtml);
+
+        if (attachmentFilesNames != null) {
+            attachmentFilesNames.forEach(filename -> {
+                try {
+                    message.addAttachment(filename, new File(getClass().getClassLoader().getResource("files/" + filename).getFile()));
+                } catch (MessagingException e) {
+                    // having issue attach the file
+                    e.printStackTrace();
+                }
+            });
+        }
         javaMailSender.send(mimeMessage);
     }
 
@@ -129,7 +143,8 @@ public class MailService {
             if (by == null) {
                 by = from;
             }
-            sendEmail(user.getEmail(), from, cc, subject, content, false, true);
+            List<String> attachmentFileNames = (mailType == null || mailType.getAttachmentFileNames() == null) ? null : Arrays.asList(StringUtils.split(mailType.getAttachmentFileNames(), ",")).stream().map(item -> item.trim()).collect(Collectors.toList());
+            sendEmail(user.getEmail(), from, cc, subject, content, attachmentFileNames, (attachmentFileNames == null || attachmentFileNames.size() == 0) ? false : true, true);
             addUserMailsRecord(user, mailType, from, by);
             log.info("Sent email to User '{}'", user.getEmail());
         } catch (MailException | MessagingException e) {
@@ -189,6 +204,12 @@ public class MailService {
             case LICENSE_REVIEW_HOSPITAL:
                 return Optional.of("email.license.review.title");
             case LICENSE_REVIEW_RESEARCH_COMMERCIAL:
+                return Optional.of("email.license.review.title");
+            case SEND_INTAKE_FORM_COMMERCIAL:
+                return Optional.of("email.license.review.title");
+            case SEND_INTAKE_FORM_HOSPITAL:
+                return Optional.of("email.license.review.title");
+            case SEND_INTAKE_FORM_RESEARCH_COMMERCIAL:
                 return Optional.of("email.license.review.title");
             case CLARIFY_ACADEMIC_FOR_PROFIT:
                 return Optional.of("email.license.clarify.title");
