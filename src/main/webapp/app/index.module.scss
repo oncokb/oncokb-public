@@ -13,6 +13,11 @@
   }
 }
 
+.linkOutText {
+  textdecoration: 'underscore';
+  color: $oncokb-dark-blue;
+}
+
 .biggerText {
   font-size: $bigger-default-font-size;
 }

@@ -29,8 +29,11 @@ import {
   THRESHOLD_TABLE_FIXED_HEIGHT
 } from 'app/config/constants';
 import {
+  Alteration,
+  ArticleAbstract,
   BiologicalVariant,
-  ClinicalVariant
+  ClinicalVariant,
+  TumorType
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   AlterationPageLink,
@@ -50,6 +53,13 @@ import { DataFilterType, onFilterOptionSelect } from 'react-mutation-mapper';
 import { CANCER_TYPE_FILTER_ID } from 'app/components/oncokbMutationMapper/FilterUtils';
 import DocumentTitle from 'react-document-title';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
+import { Linkout } from 'app/shared/links/Linkout';
+import * as QueryString from 'query-string';
+import {
+  FdaVariant,
+  getFdaData,
+  getReferenceCell
+} from 'app/pages/genePage/FdaUtils';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -202,8 +212,9 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
 };
 
 enum TAB_KEYS {
-  'CLINICAL',
-  'BIOLOGICAL'
+  'CLINICAL' = 'CLINICAL',
+  'BIOLOGICAL' = 'BIOLOGICAL',
+  'FDA' = 'FDA'
 }
 
 const GeneBackground: React.FunctionComponent<{
@@ -243,8 +254,10 @@ interface GenePageProps extends RouteComponentProps<MatchParams> {
 @observer
 export default class GenePage extends React.Component<GenePageProps> {
   @observable hugoSymbolQuery: string;
+  @observable selectedTab: string;
   @observable showGeneBackground = false;
 
+  private fdaVariants: FdaVariant[] = [];
   private store: AnnotationStore;
 
   @computed
@@ -300,6 +313,63 @@ export default class GenePage extends React.Component<GenePageProps> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS)
+      }
+    ];
+  }
+
+  @computed
+  get fdaTableColumns(): SearchColumn<FdaVariant>[] {
+    return [
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+        accessor: 'variant',
+        onFilter: (data: FdaVariant, keyword) =>
+          filterByKeyword(data.alteration, keyword),
+        Cell: (props: { original: FdaVariant }) => {
+          return (
+            <AlterationPageLink
+              hugoSymbol={this.store.hugoSymbol}
+              alteration={props.original.alteration}
+            />
+          );
+        }
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
+        minWidth: 200,
+        Header: <span>Cancer Type</span>,
+        onFilter: (data: FdaVariant, keyword) =>
+          filterByKeyword(data.cancerType, keyword),
+        Cell(props: { original: FdaVariant }) {
+          return <span>{props.original.cancerType}</span>;
+        }
+      },
+      {
+        Header: <span>Specimen type</span>,
+        accessor: 'specimenType',
+        onFilter: (data: FdaVariant, keyword) =>
+          filterByKeyword(data.specimenType, keyword)
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+        minWidth: 200,
+        Header: <span>FDA Level of Evidence</span>,
+        accessor: 'level',
+        onFilter: (data: FdaVariant, keyword) =>
+          filterByKeyword(data.level, keyword),
+        Cell(props: { original: FdaVariant }) {
+          return <span>{props.original.level}</span>;
+        }
+      },
+      {
+        Header: <span>References</span>,
+        minWidth: 400,
+        accessor: 'referenceStr',
+        onFilter: (data: FdaVariant, keyword) =>
+          filterByKeyword(data.referenceStr, keyword),
+        Cell(props: { original: FdaVariant }) {
+          return getReferenceCell(props.original.references);
+        }
       }
     ];
   }
@@ -366,6 +436,13 @@ export default class GenePage extends React.Component<GenePageProps> {
     this.store = new AnnotationStore({
       hugoSymbolQuery: this.hugoSymbolQuery
     });
+    const queryStrings = QueryString.parse(window.location.hash) as {
+      selectedTab: string;
+    };
+    if (queryStrings.selectedTab) {
+      this.selectedTab = queryStrings.selectedTab;
+    }
+    this.fdaVariants = getFdaData(this.store.hugoSymbolQuery);
   }
 
   componentDidUpdate(prevProps: any) {
@@ -446,6 +523,21 @@ export default class GenePage extends React.Component<GenePageProps> {
           ]}
         />
       );
+    } else if (key === TAB_KEYS.FDA) {
+      return (
+        <OncoKBTable
+          data={getFdaData(this.store.hugoSymbolQuery)}
+          columns={this.fdaTableColumns}
+          pageSize={this.fdaVariants.length === 0 ? 1 : this.fdaVariants.length}
+          style={
+            this.fdaVariants.length > THRESHOLD_TABLE_FIXED_HEIGHT
+              ? {
+                  height: SM_TABLE_FIXED_HEIGHT
+                }
+              : undefined
+          }
+        />
+      );
     }
     return <span />;
   }
@@ -480,6 +572,15 @@ export default class GenePage extends React.Component<GenePageProps> {
         )} (${this.store.filteredBiologicalAlterations.length})`
       });
     }
+    if (this.fdaVariants.length > 0) {
+      tabs.push({
+        key: TAB_KEYS.FDA,
+        title: `FDA Recognized ${pluralize(
+          'Alteration',
+          this.fdaVariants.length
+        )} (${this.fdaVariants.length})`
+      });
+    }
     return tabs.map(tab => {
       return {
         title: tab.title,
@@ -503,7 +604,9 @@ export default class GenePage extends React.Component<GenePageProps> {
 
   @computed
   get tabDefaultActiveKey() {
-    return this.store.clinicalAlterations.result.length > 0
+    return this.fdaVariants.length > 0
+      ? TAB_KEYS.FDA
+      : this.store.clinicalAlterations.result.length > 0
       ? TAB_KEYS.CLINICAL
       : TAB_KEYS.BIOLOGICAL;
   }
@@ -657,7 +760,18 @@ export default class GenePage extends React.Component<GenePageProps> {
                     </Row>
                     <Row className={'mt-2'}>
                       <Col>
-                        <Tabs items={this.tabs} transform={false} />
+                        <Tabs
+                          selectedTabKey={
+                            this.selectedTab
+                              ? this.selectedTab
+                              : this.tabDefaultActiveKey
+                          }
+                          onChange={(selectedTabKey: string) => {
+                            this.selectedTab = selectedTabKey;
+                          }}
+                          items={this.tabs}
+                          transform={false}
+                        />
                       </Col>
                     </Row>
                   </>

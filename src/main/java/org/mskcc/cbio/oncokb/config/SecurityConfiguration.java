@@ -120,6 +120,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
 
+
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
         .and()
             .httpBasic()

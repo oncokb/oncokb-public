@@ -1,17 +1,13 @@
 import React from 'react';
+import {
+  getShortenPmidsFromList,
+  getShortenTextFromList
+} from 'app/shared/utils/Utils';
 
 export const PMIDLink: React.FunctionComponent<{ pmids: string }> = props => {
-  return (
-    <span>
-      PMID:{' '}
-      <a
-        href={`https://www.ncbi.nlm.nih.gov/pubmed/${props.pmids}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ whiteSpace: 'nowrap' }}
-      >
-        {props.pmids}
-      </a>
-    </span>
-  );
+  const pmidList = props.pmids
+    .split(/,|\s/)
+    .filter(pmid => pmid)
+    .map(pmid => pmid.trim());
+  return <span>PMID(s): {getShortenPmidsFromList(pmidList)}</span>;
 };
