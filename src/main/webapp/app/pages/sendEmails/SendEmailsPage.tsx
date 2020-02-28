@@ -201,7 +201,7 @@ export default class UserManagementPage extends React.Component<{
             </Col>
           </Row>
           <Row className={getSectionClassName()}>
-            <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
+            <Col className={classnames(...COMPONENT_PADDING)} lg={6} xs={12}>
               <div>
                 <div className={'pb-2'}>To</div>
                 <Select
@@ -228,7 +228,7 @@ export default class UserManagementPage extends React.Component<{
                 />
               </div>
             </Col>
-            <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
+            <Col className={classnames(...COMPONENT_PADDING)} lg={6} xs={12}>
               <div>
                 <div className={'pb-2'}>From</div>
                 <Select
@@ -255,36 +255,9 @@ export default class UserManagementPage extends React.Component<{
                 />
               </div>
             </Col>
-            <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
-              <div>
-                <div className={'pb-2'}>cc</div>
-                <Select
-                  value={
-                    this.selectedMailCc
-                      ? {
-                          value: this.selectedMailCc,
-                          label: this.selectedMailCc
-                        }
-                      : null
-                  }
-                  options={this.mailsFrom.result.map(from => {
-                    return {
-                      value: from,
-                      label: from
-                    };
-                  })}
-                  isClearable={true}
-                  onChange={(selectedOption: any) =>
-                    (this.selectedMailCc = selectedOption
-                      ? selectedOption.value
-                      : '')
-                  }
-                />
-              </div>
-            </Col>
           </Row>
           <Row>
-            <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
+            <Col className={classnames(...COMPONENT_PADDING)} lg={6} xs={12}>
               <Select
                 placeholder={`Select the type of mail`}
                 value={
@@ -312,7 +285,7 @@ export default class UserManagementPage extends React.Component<{
                 }
               />
             </Col>
-            <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
+            <Col className={classnames(...COMPONENT_PADDING)} lg={6} xs={12}>
               <LoadingButton
                 variant="primary"
                 type="submit"
