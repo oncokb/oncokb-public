@@ -15,7 +15,8 @@ import {
 } from 'availity-reactstrap-validation';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
-import {LoadingButton} from "app/shared/button/LoadingButton";
+import { LoadingButton } from 'app/shared/button/LoadingButton';
+import { ErrorAlert, OncoKBError } from 'app/shared/alert/ErrorAlert';
 
 export interface ILoginProps {
   authenticationStore: AuthenticationStore;
@@ -23,7 +24,7 @@ export interface ILoginProps {
 }
 
 const LoginContent: React.FunctionComponent<{
-  loginError: boolean;
+  loginError: OncoKBError;
   loading: boolean;
   handleLogin: Function;
 }> = props => {
@@ -32,12 +33,7 @@ const LoginContent: React.FunctionComponent<{
       <AvForm onSubmit={props.handleLogin}>
         <Row>
           <Col md="12">
-            {props.loginError ? (
-              <Alert variant="danger">
-                <strong>Failed to log in!</strong> Please check your credentials
-                and try again.
-              </Alert>
-            ) : null}
+            {props.loginError ? <ErrorAlert error={props.loginError} /> : null}
           </Col>
           <Col md="12">
             <AvField
@@ -66,10 +62,7 @@ const LoginContent: React.FunctionComponent<{
           <span>You don&apos;t have an account yet?</span>{' '}
           <Link to="/account/register">Register a new account</Link>
         </Alert>
-        <LoadingButton
-          variant="primary"
-          type="submit"
-          loading={props.loading}>
+        <LoadingButton variant="primary" type="submit" loading={props.loading}>
           <span>Log in</span>
         </LoadingButton>
       </AvForm>
