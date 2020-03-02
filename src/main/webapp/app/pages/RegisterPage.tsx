@@ -39,7 +39,8 @@ import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 import WindowStore from 'app/store/WindowStore';
 import SmallPageContainer from 'app/components/SmallPageContainer';
 import MessageToContact from 'app/shared/texts/MessageToContact';
-import * as XRegExp from "xregexp";
+import * as XRegExp from 'xregexp';
+import { ErrorAlert, OncoKBError } from 'app/shared/alert/ErrorAlert';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -69,7 +70,7 @@ export const LICENSE_HASH_KEY = 'license';
 export class RegisterPage extends React.Component<IRegisterProps> {
   @observable password = '';
   @observable registerStatus: RegisterStatus = RegisterStatus.NA;
-  @observable registerError: any;
+  @observable registerError: OncoKBError;
   @observable selectedLicense: LicenseType | undefined;
 
   private newAccount: Partial<ManagedUserVM>;
@@ -146,7 +147,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   }
 
   @action.bound
-  failedToRegistered(error: any) {
+  failedToRegistered(error: OncoKBError) {
     this.registerStatus = RegisterStatus.NOT_SUCCESS;
     this.registerError = error;
     window.scrollTo(0, 0);
@@ -237,11 +238,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
     return (
       <div className={'registerPage'}>
-        {this.registerStatus === RegisterStatus.NOT_SUCCESS ? (
-          <div>
-            <Alert variant="danger">{this.errorRegisterMessage}</Alert>
-          </div>
-        ) : null}
+        {this.registerError ? <ErrorAlert error={this.registerError} /> : null}
         <AvForm id="register-form" onValidSubmit={this.handleValidSubmit}>
           <Row className={getSectionClassName(true)}>
             <Col xs={12}>
@@ -312,7 +309,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       },
                       pattern: {
                         value: XRegExp('^[\\p{Latin}\\s]+$'),
-                        errorMessage: 'Sorry, we only support Latin letters for now.'
+                        errorMessage:
+                          'Sorry, we only support Latin letters for now.'
                       },
                       minLength: {
                         value: 1,
@@ -334,7 +332,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       },
                       pattern: {
                         value: XRegExp('^[\\p{Latin}\\s]+$'),
-                        errorMessage: 'Sorry, we only support Latin letters for now.'
+                        errorMessage:
+                          'Sorry, we only support Latin letters for now.'
                       },
                       minLength: {
                         value: 1,
@@ -422,7 +421,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       },
                       pattern: {
                         value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
-                        errorMessage: 'Sorry, we only support Latin letters for now.'
+                        errorMessage:
+                          'Sorry, we only support Latin letters for now.'
                       },
                       maxLength: {
                         value: 50,
@@ -445,7 +445,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       },
                       pattern: {
                         value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
-                        errorMessage: 'Sorry, we only support Latin letters for now.'
+                        errorMessage:
+                          'Sorry, we only support Latin letters for now.'
                       },
                       maxLength: {
                         value: 50,
@@ -468,7 +469,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       },
                       pattern: {
                         value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
-                        errorMessage: 'Sorry, we only support Latin letters for now.'
+                        errorMessage:
+                          'Sorry, we only support Latin letters for now.'
                       },
                       maxLength: {
                         value: 50,
@@ -487,7 +489,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                       required: { value: true, errorMessage: 'Required.' },
                       pattern: {
                         value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
-                        errorMessage: 'Sorry, we only support Latin letters for now.'
+                        errorMessage:
+                          'Sorry, we only support Latin letters for now.'
                       },
                       minLength: {
                         value: 1,
