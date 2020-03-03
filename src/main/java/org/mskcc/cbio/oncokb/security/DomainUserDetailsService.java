@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.security;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
@@ -50,7 +51,11 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
         if (!user.getActivated()) {
-            throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
+            if (StringUtils.isNotEmpty(user.getActivationKey())) {
+                throw new UserNotActivatedException(lowercaseLogin);
+            } else {
+                throw new UserNotApprovedException(lowercaseLogin);
+            }
         }
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
             .map(authority -> new SimpleGrantedAuthority(authority.getName()))
