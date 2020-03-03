@@ -24,7 +24,7 @@ export interface ILoginProps {
 }
 
 const LoginContent: React.FunctionComponent<{
-  loginError: OncoKBError;
+  loginError?: OncoKBError;
   loading: boolean;
   handleLogin: Function;
 }> = props => {
