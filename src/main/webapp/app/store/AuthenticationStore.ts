@@ -18,6 +18,7 @@ import {
   getStoredToken
 } from 'app/indexUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
+import { OncoKBError } from 'app/shared/alert/ErrorAlert';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -33,8 +34,7 @@ export const AUTH_WEBSITE_TOKEN_KEY = 'oncokb-website-token';
 class AuthenticationStore {
   @observable loading = false;
   @observable loginSuccess = false;
-  @observable loginError = false; // Errors returned from server side
-  @observable loginErrorMessage = ''; // Errors returned from server side
+  @observable loginError: OncoKBError | undefined; // Errors returned from server side
   @observable showModalLogin = false;
   @observable errorMessage = ''; // Errors returned from server side
   @observable redirectMessage = '';
@@ -184,9 +184,8 @@ class AuthenticationStore {
     // we should fetch the account info when the user is successfully logged in.
     this.getAccount().finally(() => {
       this.loginSuccess = true;
-      this.loginError = false;
-      this.loginErrorMessage = '';
       this.loading = false;
+      this.loginError = undefined;
     });
   }
 
@@ -197,10 +196,9 @@ class AuthenticationStore {
   }
 
   @action.bound
-  loginErrorCallback(error: Error) {
+  loginErrorCallback(error: OncoKBError) {
     this.loginSuccess = false;
-    this.loginError = true;
-    this.loginErrorMessage = error.message;
+    this.loginError = error;
     this.loading = false;
   }
 
@@ -222,13 +220,6 @@ class AuthenticationStore {
     this.account = undefined;
     // Revert back to public website token
     this.idToken = getPublicWebsiteToken();
-  }
-
-  @action
-  initialLoginStatus() {
-    this.loginSuccess = false;
-    this.loginError = false;
-    this.loginErrorMessage = '';
   }
 
   destroy() {
