@@ -34,7 +34,7 @@ export const AUTH_WEBSITE_TOKEN_KEY = 'oncokb-website-token';
 class AuthenticationStore {
   @observable loading = false;
   @observable loginSuccess = false;
-  @observable loginError: OncoKBError; // Errors returned from server side
+  @observable loginError: OncoKBError | undefined; // Errors returned from server side
   @observable showModalLogin = false;
   @observable errorMessage = ''; // Errors returned from server side
   @observable redirectMessage = '';
@@ -185,6 +185,7 @@ class AuthenticationStore {
     this.getAccount().finally(() => {
       this.loginSuccess = true;
       this.loading = false;
+      this.loginError = undefined;
     });
   }
 
@@ -219,11 +220,6 @@ class AuthenticationStore {
     this.account = undefined;
     // Revert back to public website token
     this.idToken = getPublicWebsiteToken();
-  }
-
-  @action
-  initialLoginStatus() {
-    this.loginSuccess = false;
   }
 
   destroy() {

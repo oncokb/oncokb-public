@@ -20,13 +20,17 @@ export const ErrorAlert: React.FunctionComponent<{
   error: OncoKBError;
 }> = props => {
   const error = props.error;
+  let errorMessage = error.message;
+  if (error.response && error.response.body) {
+    if (error.response.body.detail) {
+      errorMessage = error.response.body.detail;
+    } else if (error.response.body.title) {
+      errorMessage = error.response.body.title;
+    }
+  }
   return (
     <Alert variant="danger">
-      {error.response && error.response.body && error.response.body.detail ? (
-        <strong>{error.response.body.detail}</strong>
-      ) : (
-        <strong>{error.message}</strong>
-      )}
+      <strong>{errorMessage}</strong>
     </Alert>
   );
 };
