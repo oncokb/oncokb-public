@@ -12,7 +12,7 @@ import Select from 'react-select';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import {
-  DEFAULT_MARGIN_BOTTOM_SM,
+  DEFAULT_MARGIN_BOTTOM_LG,
   TABLE_COLUMN_KEY,
   THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT
 } from 'app/config/constants';
@@ -295,7 +295,7 @@ export default class GenePage extends React.Component<
             <Col>
               {this.alterationSummaries.map(summary => {
                 return (
-                  <div className={DEFAULT_MARGIN_BOTTOM_SM}>
+                  <div className={DEFAULT_MARGIN_BOTTOM_LG}>
                     {summary.content}
                   </div>
                 );
@@ -307,6 +307,7 @@ export default class GenePage extends React.Component<
               <div className="d-flex align-items-center">
                 <span
                   className={classnames(
+                    DEFAULT_MARGIN_BOTTOM_LG,
                     styles.headerTumorTypeSelection,
                     'mr-2'
                   )}
@@ -359,7 +360,7 @@ export default class GenePage extends React.Component<
               <Col>
                 {this.tumorTypeSummaries.map(summary => {
                   return (
-                    <div className={DEFAULT_MARGIN_BOTTOM_SM}>
+                    <div className={DEFAULT_MARGIN_BOTTOM_LG}>
                       {summary.content}
                     </div>
                   );
@@ -374,7 +375,9 @@ export default class GenePage extends React.Component<
                   data={this.store.therapeuticImplications}
                   columns={this.therapeuticTableColumns}
                   pageSize={
-                    this.store.therapeuticImplications.length === 0 ? 1 : this.store.therapeuticImplications.length
+                    this.store.therapeuticImplications.length === 0
+                      ? 1
+                      : this.store.therapeuticImplications.length
                   }
                   loading={this.store.annotationResult.isPending}
                   disableSearch={true}
