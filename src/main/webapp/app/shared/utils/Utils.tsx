@@ -374,8 +374,11 @@ export function getDefaultColumnDefinition<T>(
   }
 }
 
-export function filterByKeyword(value: string, keyword: string): boolean {
-  return value.toLowerCase().includes(keyword);
+export function filterByKeyword(
+  value: string | undefined | null,
+  keyword: string
+): boolean {
+  return value ? value.toLowerCase().includes(keyword) : false;
 }
 
 export function getRouteFromPath(pathName: string) {
