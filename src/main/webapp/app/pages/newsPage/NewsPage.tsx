@@ -5,6 +5,7 @@ import { NEWS_BY_DATE } from 'app/pages/newsPage/NewsPageContent';
 import {
   DOCUMENT_TITLES,
   ONCOKB_CONTACT_EMAIL,
+  ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK,
   PAGE_ROUTE
 } from 'app/config/constants';
 import { Link } from 'react-router-dom';
@@ -14,7 +15,6 @@ import { Linkout } from 'app/shared/links/Linkout';
 import { RouterStore } from 'mobx-react-router';
 import { scrollWidthOffsetInNews } from 'app/shared/utils/Utils';
 import { inject, observer } from 'mobx-react';
-
 @inject('routing')
 @observer
 export default class NewsPage extends React.Component<{
@@ -62,9 +62,9 @@ export default class NewsPage extends React.Component<{
               </a>
               ) or subscribe to our{' '}
               <b>
-                <a data-toggle="modal" data-target="#myModal" href="">
+                <Linkout link={ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK}>
                   low-volume email list
-                </a>
+                </Linkout>
               </b>{' '}
               for updates.
             </p>
