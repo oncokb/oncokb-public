@@ -42,6 +42,9 @@ export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
 export const NEWS_DATE_FORMAT = 'MMDDYYYY';
 export const NEWS_TITLE_DATE_FORMAT = 'MMMM D, YYYY';
 
+export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
+  'http://groups.google.com/group/oncokb-news/boxsubscribe';
+
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
 export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
