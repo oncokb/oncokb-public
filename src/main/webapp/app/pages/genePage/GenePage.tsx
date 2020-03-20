@@ -58,7 +58,8 @@ const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
   const geneTypes = [];
   if (oncogene) {
     geneTypes.push(GENE_TYPE_DESC.ONCOGENE);
-  } else if (tsg) {
+  }
+  if (tsg) {
     geneTypes.push(GENE_TYPE_DESC.TUMOR_SUPPRESSOR);
   }
   return geneTypes.join(', ');
@@ -365,7 +366,9 @@ export default class GenePage extends React.Component<
         <OncoKBTable
           data={this.store.filteredClinicalAlterations}
           pageSize={
-            this.store.filteredClinicalAlterations.length === 0 ? 1 : this.store.filteredClinicalAlterations.length
+            this.store.filteredClinicalAlterations.length === 0
+              ? 1
+              : this.store.filteredClinicalAlterations.length
           }
           columns={this.clinicalTableColumns}
           style={
@@ -395,7 +398,9 @@ export default class GenePage extends React.Component<
           data={this.store.filteredBiologicalAlterations}
           columns={this.biologicalTableColumns}
           pageSize={
-            this.store.filteredBiologicalAlterations.length === 0 ? 1 : this.store.filteredBiologicalAlterations.length
+            this.store.filteredBiologicalAlterations.length === 0
+              ? 1
+              : this.store.filteredBiologicalAlterations.length
           }
           style={
             this.store.filteredBiologicalAlterations.length >
