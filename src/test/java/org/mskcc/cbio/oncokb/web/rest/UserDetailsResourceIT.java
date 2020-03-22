@@ -6,25 +6,23 @@ import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.service.UserDetailsService;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
-import org.mskcc.cbio.oncokb.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
-
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static org.mskcc.cbio.oncokb.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -34,7 +32,10 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 /**
  * Integration tests for the {@link UserDetailsResource} REST controller.
  */
-@SpringBootTest(classes = OncokbApp.class)
+@SpringBootTest(classes = OncokbPublicApp.class)
+@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
+@AutoConfigureMockMvc
+@WithMockUser
 public class UserDetailsResourceIT {
 
     private static final LicenseType DEFAULT_LICENSE_TYPE = LicenseType.ACADEMIC;
@@ -65,35 +66,12 @@ public class UserDetailsResourceIT {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
-    private Validator validator;
-
     private MockMvc restUserDetailsMockMvc;
 
     private UserDetails userDetails;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final UserDetailsResource userDetailsResource = new UserDetailsResource(userDetailsService);
-        this.restUserDetailsMockMvc = MockMvcBuilders.standaloneSetup(userDetailsResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
 
     /**
      * Create an entity for this test.
@@ -141,7 +119,7 @@ public class UserDetailsResourceIT {
         // Create the UserDetails
         UserDetailsDTO userDetailsDTO = userDetailsMapper.toDto(userDetails);
         restUserDetailsMockMvc.perform(post("/api/user-details")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userDetailsDTO)))
             .andExpect(status().isCreated());
 
@@ -168,7 +146,7 @@ public class UserDetailsResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restUserDetailsMockMvc.perform(post("/api/user-details")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userDetailsDTO)))
             .andExpect(status().isBadRequest());
 
@@ -187,7 +165,7 @@ public class UserDetailsResourceIT {
         // Get all the userDetailsList
         restUserDetailsMockMvc.perform(get("/api/user-details?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userDetails.getId().intValue())))
             .andExpect(jsonPath("$.[*].licenseType").value(hasItem(DEFAULT_LICENSE_TYPE.toString())))
             .andExpect(jsonPath("$.[*].jobTitle").value(hasItem(DEFAULT_JOB_TITLE)))
@@ -196,7 +174,7 @@ public class UserDetailsResourceIT {
             .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)));
     }
-    
+
     @Test
     @Transactional
     public void getUserDetails() throws Exception {
@@ -206,7 +184,7 @@ public class UserDetailsResourceIT {
         // Get the userDetails
         restUserDetailsMockMvc.perform(get("/api/user-details/{id}", userDetails.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(userDetails.getId().intValue()))
             .andExpect(jsonPath("$.licenseType").value(DEFAULT_LICENSE_TYPE.toString()))
             .andExpect(jsonPath("$.jobTitle").value(DEFAULT_JOB_TITLE))
@@ -246,7 +224,7 @@ public class UserDetailsResourceIT {
         UserDetailsDTO userDetailsDTO = userDetailsMapper.toDto(updatedUserDetails);
 
         restUserDetailsMockMvc.perform(put("/api/user-details")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userDetailsDTO)))
             .andExpect(status().isOk());
 
@@ -272,7 +250,7 @@ public class UserDetailsResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restUserDetailsMockMvc.perform(put("/api/user-details")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userDetailsDTO)))
             .andExpect(status().isBadRequest());
 
@@ -291,7 +269,7 @@ public class UserDetailsResourceIT {
 
         // Delete the userDetails
         restUserDetailsMockMvc.perform(delete("/api/user-details/{id}", userDetails.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

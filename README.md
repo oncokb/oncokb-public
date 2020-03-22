@@ -3,7 +3,7 @@
 OncoKB is a precision oncology knowledge base and contains information about the effects and treatment implications of specific cancer gene alterations.
 Please cite [Chakravarty et al., JCO PO 2017.](https://ascopubs.org/doi/full/10.1200/PO.17.00011)
 
-This application was generated using JHipster 6.6.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.6.0](https://www.jhipster.tech/documentation-archive/v6.6.0).
+This application was generated using JHipster 6.8.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.8.0](https://www.jhipster.tech/documentation-archive/v6.8.0).
 
 ## Status
 
@@ -81,8 +81,9 @@ To package your application as a war in order to deploy it to an application ser
     ./mvnw -Pprod,war clean verify
 
 ### Packaging with a docker image ready
+
     ./mvnw package -Pprod verify jib:dockerBuild -DskipTests
-    
+
 ## Testing
 
 To launch your application's tests, run:
@@ -97,19 +98,18 @@ Unit tests are run by [Jest][] and written with [Jasmine][]. They're located in 
 
 For more information, refer to the [Running tests page][].
 
-
 ## Continuous Integration (optional)
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 6.6.0 archive]: https://www.jhipster.tech/documentation-archive/v6.6.0
-[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v6.6.0/development/
-[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v6.6.0/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v6.6.0/production/
-[running tests page]: https://www.jhipster.tech/documentation-archive/v6.6.0/running-tests/
-[code quality page]: https://www.jhipster.tech/documentation-archive/v6.6.0/code-quality/
-[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v6.6.0/setting-up-ci/
+[jhipster 6.8.0 archive]: https://www.jhipster.tech/documentation-archive/v6.8.0
+[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v6.8.0/development/
+[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v6.8.0/docker-compose
+[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v6.8.0/production/
+[running tests page]: https://www.jhipster.tech/documentation-archive/v6.8.0/running-tests/
+[code quality page]: https://www.jhipster.tech/documentation-archive/v6.8.0/code-quality/
+[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v6.8.0/setting-up-ci/
 [node.js]: https://nodejs.org/
 [yarn]: https://yarnpkg.org/
 [webpack]: https://webpack.github.io/

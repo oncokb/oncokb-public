@@ -1,7 +1,7 @@
 version: '2'
 services:
-  oncokb-prometheus:
-    image: prom/prometheus:v2.14.0
+  oncokb-public-prometheus:
+    image: prom/prometheus:v2.16.0
     volumes:
       - ./prometheus/:/etc/prometheus/
     command:
@@ -11,8 +11,8 @@ services:
     # On MacOS, remove next line and replace localhost by host.docker.internal in prometheus/prometheus.yml and
     # grafana/provisioning/datasources/datasource.yml
     network_mode: 'host' # to test locally running service
-  oncokb-grafana:
-    image: grafana/grafana:6.5.1
+  oncokb-public-grafana:
+    image: grafana/grafana:6.6.2
     volumes:
       - ./grafana/provisioning/:/etc/grafana/provisioning/
     environment:

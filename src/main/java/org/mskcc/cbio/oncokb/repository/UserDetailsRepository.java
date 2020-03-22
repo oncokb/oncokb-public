@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.repository;
 
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 

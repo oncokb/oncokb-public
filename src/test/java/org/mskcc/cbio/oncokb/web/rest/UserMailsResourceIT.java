@@ -14,24 +14,21 @@ import org.mskcc.cbio.oncokb.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
-
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static org.mskcc.cbio.oncokb.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -41,8 +38,10 @@ import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 /**
  * Integration tests for the {@link UserMailsResource} REST controller.
  */
-@SpringBootTest(classes = OncokbApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
+@SpringBootTest(classes = OncokbPublicApp.class)
+@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
+@AutoConfigureMockMvc
+@WithMockUser
 public class UserMailsResourceIT {
 
     private static final Instant DEFAULT_SENT_DATE = Instant.ofEpochMilli(0L);
@@ -70,35 +69,12 @@ public class UserMailsResourceIT {
     private UserService userService;
 
     @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
-    private Validator validator;
-
     private MockMvc restUserMailsMockMvc;
 
     private UserMails userMails;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final UserMailsResource userMailsResource = new UserMailsResource(userMailsService, userService);
-        this.restUserMailsMockMvc = MockMvcBuilders.standaloneSetup(userMailsResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
 
     /**
      * Create an entity for this test.
@@ -142,7 +118,7 @@ public class UserMailsResourceIT {
         // Create the UserMails
         UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
         restUserMailsMockMvc.perform(post("/api/user-mails")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
             .andExpect(status().isCreated());
 
@@ -167,7 +143,7 @@ public class UserMailsResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restUserMailsMockMvc.perform(post("/api/user-mails")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
             .andExpect(status().isBadRequest());
 
@@ -188,7 +164,7 @@ public class UserMailsResourceIT {
         UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
 
         restUserMailsMockMvc.perform(post("/api/user-mails")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
             .andExpect(status().isBadRequest());
 
@@ -207,7 +183,7 @@ public class UserMailsResourceIT {
         UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
 
         restUserMailsMockMvc.perform(post("/api/user-mails")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
             .andExpect(status().isBadRequest());
 
@@ -226,7 +202,7 @@ public class UserMailsResourceIT {
         UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
 
         restUserMailsMockMvc.perform(post("/api/user-mails")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
             .andExpect(status().isBadRequest());
 
@@ -243,7 +219,7 @@ public class UserMailsResourceIT {
         // Get all the userMailsList
         restUserMailsMockMvc.perform(get("/api/user-mails?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userMails.getId().intValue())))
             .andExpect(jsonPath("$.[*].sentDate").value(hasItem(DEFAULT_SENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].sentBy").value(hasItem(DEFAULT_SENT_BY)))
@@ -260,7 +236,7 @@ public class UserMailsResourceIT {
         // Get the userMails
         restUserMailsMockMvc.perform(get("/api/user-mails/{id}", userMails.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(userMails.getId().intValue()))
             .andExpect(jsonPath("$.sentDate").value(DEFAULT_SENT_DATE.toString()))
             .andExpect(jsonPath("$.sentBy").value(DEFAULT_SENT_BY))
@@ -296,7 +272,7 @@ public class UserMailsResourceIT {
         UserMailsDTO userMailsDTO = userMailsMapper.toDto(updatedUserMails);
 
         restUserMailsMockMvc.perform(put("/api/user-mails")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
             .andExpect(status().isOk());
 
@@ -320,7 +296,7 @@ public class UserMailsResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restUserMailsMockMvc.perform(put("/api/user-mails")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
             .andExpect(status().isBadRequest());
 
@@ -339,7 +315,7 @@ public class UserMailsResourceIT {
 
         // Delete the userMails
         restUserMailsMockMvc.perform(delete("/api/user-mails/{id}", userMails.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
