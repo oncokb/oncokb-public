@@ -3,7 +3,7 @@
     "promptValues": {
       "packageName": "org.mskcc.cbio.oncokb"
     },
-    "jhipsterVersion": "6.8.0",
+    "jhipsterVersion": "6.6.0",
     "applicationType": "monolith",
     "baseName": "oncokb-public",
     "packageName": "org.mskcc.cbio.oncokb",
@@ -34,7 +34,9 @@
     "blueprints": [],
     "clientFramework": "react",
     "clientTheme": "none",
-    "appsFolders": ["public-website"],
+    "appsFolders": [
+      "public-website"
+    ],
     "directoryPath": "../",
     "dockerRepositoryName": "oncokb-public",
     "dockerPushCommand": "docker push",
