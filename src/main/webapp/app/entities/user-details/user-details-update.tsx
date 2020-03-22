@@ -11,7 +11,7 @@ import { IUser } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './user-details.reducer';
 import { IUserDetails } from 'app/shared/model/user-details.model';
-import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IUserDetailsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
@@ -48,6 +48,7 @@ export const UserDetailsUpdate = (props: IUserDetailsUpdateProps) => {
         ...userDetailsEntity,
         ...values
       };
+      entity.user = users[values.user];
 
       if (isNew) {
         props.createEntity(entity);

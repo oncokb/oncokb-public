@@ -11,7 +11,7 @@ import { IUser } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './token.reducer';
 import { IToken } from 'app/shared/model/token.model';
-import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ITokenUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
@@ -51,6 +51,7 @@ export const TokenUpdate = (props: ITokenUpdateProps) => {
         ...tokenEntity,
         ...values
       };
+      entity.user = users[values.user];
 
       if (isNew) {
         props.createEntity(entity);
@@ -95,7 +96,7 @@ export const TokenUpdate = (props: ITokenUpdateProps) => {
                   className="form-control"
                   name="creation"
                   placeholder={'YYYY-MM-DD HH:mm'}
-                  value={isNew ? null : convertDateTimeFromServer(props.tokenEntity.creation)}
+                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.tokenEntity.creation)}
                 />
               </AvGroup>
               <AvGroup>
@@ -108,7 +109,7 @@ export const TokenUpdate = (props: ITokenUpdateProps) => {
                   className="form-control"
                   name="expiration"
                   placeholder={'YYYY-MM-DD HH:mm'}
-                  value={isNew ? null : convertDateTimeFromServer(props.tokenEntity.expiration)}
+                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.tokenEntity.expiration)}
                 />
               </AvGroup>
               <AvGroup>
@@ -134,11 +135,11 @@ export const TokenUpdate = (props: ITokenUpdateProps) => {
               </AvGroup>
               <AvGroup>
                 <Label for="token-user">User</Label>
-                <AvInput id="token-user" type="select" className="form-control" name="user.id">
+                <AvInput id="token-user" type="select" className="form-control" name="user">
                   <option value="" key="0" />
                   {users
-                    ? users.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
+                    ? users.map((otherEntity, index) => (
+                        <option value={index} key={otherEntity.id}>
                           {otherEntity.id}
                         </option>
                       ))

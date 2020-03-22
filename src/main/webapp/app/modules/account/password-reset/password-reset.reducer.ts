@@ -56,8 +56,7 @@ export const handlePasswordResetInit = mail => ({
   // If the content-type isn't set that way, axios will try to encode the body and thus modify the data sent to the server.
   payload: axios.post(`${apiUrl}/init`, mail, { headers: { ['Content-Type']: 'text/plain' } }),
   meta: {
-    successMessage: 'Check your emails for details on how to reset your password.',
-    errorMessage: "<strong>Email address isn't registered!</strong> Please check and try again"
+    successMessage: 'Check your emails for details on how to reset your password.'
   }
 });
 

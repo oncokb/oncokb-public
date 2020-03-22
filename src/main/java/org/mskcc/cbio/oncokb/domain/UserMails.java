@@ -1,4 +1,5 @@
 package org.mskcc.cbio.oncokb.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.time.Instant;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;

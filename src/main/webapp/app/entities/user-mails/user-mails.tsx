@@ -17,7 +17,7 @@ export const UserMails = (props: IUserMailsProps) => {
     props.getEntities();
   }, []);
 
-  const { userMailsList, match } = props;
+  const { userMailsList, match, loading } = props;
   return (
     <div>
       <h2 id="user-mails-heading">
@@ -74,7 +74,7 @@ export const UserMails = (props: IUserMailsProps) => {
             </tbody>
           </Table>
         ) : (
-          <div className="alert alert-warning">No User Mails found</div>
+          !loading && <div className="alert alert-warning">No User Mails found</div>
         )}
       </div>
     </div>
@@ -82,7 +82,8 @@ export const UserMails = (props: IUserMailsProps) => {
 };
 
 const mapStateToProps = ({ userMails }: IRootState) => ({
-  userMailsList: userMails.entities
+  userMailsList: userMails.entities,
+  loading: userMails.loading
 });
 
 const mapDispatchToProps = {

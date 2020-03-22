@@ -5,29 +5,25 @@ import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.repository.TokenRepository;
 import org.mskcc.cbio.oncokb.service.TokenService;
-import org.mskcc.cbio.oncokb.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
-
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
-import static org.mskcc.cbio.oncokb.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,7 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link TokenResource} REST controller.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
+@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
+@AutoConfigureMockMvc
+@WithMockUser
 public class TokenResourceIT {
 
     private static final UUID DEFAULT_TOKEN = UUID.randomUUID();
@@ -62,35 +60,12 @@ public class TokenResourceIT {
     private TokenService tokenService;
 
     @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
-    private Validator validator;
-
     private MockMvc restTokenMockMvc;
 
     private Token token;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final TokenResource tokenResource = new TokenResource(tokenService);
-        this.restTokenMockMvc = MockMvcBuilders.standaloneSetup(tokenResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
 
     /**
      * Create an entity for this test.
@@ -135,7 +110,7 @@ public class TokenResourceIT {
 
         // Create the Token
         restTokenMockMvc.perform(post("/api/tokens")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(token)))
             .andExpect(status().isCreated());
 
@@ -160,7 +135,7 @@ public class TokenResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restTokenMockMvc.perform(post("/api/tokens")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(token)))
             .andExpect(status().isBadRequest());
 
@@ -180,7 +155,7 @@ public class TokenResourceIT {
         // Create the Token, which fails.
 
         restTokenMockMvc.perform(post("/api/tokens")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(token)))
             .andExpect(status().isBadRequest());
 
@@ -197,7 +172,7 @@ public class TokenResourceIT {
         // Get all the tokenList
         restTokenMockMvc.perform(get("/api/tokens?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(token.getId().intValue())))
             .andExpect(jsonPath("$.[*].token").value(hasItem(DEFAULT_TOKEN.toString())))
             .andExpect(jsonPath("$.[*].creation").value(hasItem(DEFAULT_CREATION.toString())))
@@ -215,7 +190,7 @@ public class TokenResourceIT {
         // Get the token
         restTokenMockMvc.perform(get("/api/tokens/{id}", token.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(token.getId().intValue()))
             .andExpect(jsonPath("$.token").value(DEFAULT_TOKEN.toString()))
             .andExpect(jsonPath("$.creation").value(DEFAULT_CREATION.toString()))
@@ -252,7 +227,7 @@ public class TokenResourceIT {
             .currentUsage(UPDATED_CURRENT_USAGE);
 
         restTokenMockMvc.perform(put("/api/tokens")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(updatedToken)))
             .andExpect(status().isOk());
 
@@ -276,7 +251,7 @@ public class TokenResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTokenMockMvc.perform(put("/api/tokens")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(token)))
             .andExpect(status().isBadRequest());
 
@@ -295,7 +270,7 @@ public class TokenResourceIT {
 
         // Delete the token
         restTokenMockMvc.perform(delete("/api/tokens/{id}", token.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

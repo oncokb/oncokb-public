@@ -11,7 +11,7 @@ import { IToken } from 'app/shared/model/token.model';
 import { getEntities as getTokens } from 'app/entities/token/token.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './token-stats.reducer';
 import { ITokenStats } from 'app/shared/model/token-stats.model';
-import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ITokenStatsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
@@ -100,7 +100,7 @@ export const TokenStatsUpdate = (props: ITokenStatsUpdateProps) => {
                   className="form-control"
                   name="accessTime"
                   placeholder={'YYYY-MM-DD HH:mm'}
-                  value={isNew ? null : convertDateTimeFromServer(props.tokenStatsEntity.accessTime)}
+                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.tokenStatsEntity.accessTime)}
                   validate={{
                     required: { value: true, errorMessage: 'This field is required.' }
                   }}

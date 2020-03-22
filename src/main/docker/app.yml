@@ -8,6 +8,9 @@ services:
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://oncokb-public-mysql:3306/oncokb-public?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_CACHE_REDIS_SERVER=redis://oncokb-public-redis:6379
+      - JHIPSTER_CACHE_REDIS_CLUSTER=false
+      # - JHIPSTER_CACHE_REDIS_SERVER=redis://oncokb-public-redis:6379
+      # - JHIPSTER_CACHE_REDIS_CLUSTER=true
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     ports:
       - 9090:9090
