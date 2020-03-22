@@ -1,0 +1,51 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [],
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "userMails"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "sentDate",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "sentBy",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "mailType",
+            "fieldType": "MailType",
+            "fieldValues": "ACTIVATION,APPROVAL,CREATION,PASSWORD_RESET,LICENSE_REVIEW_COMMERCIAL,LICENSE_REVIEW_RESEARCH_COMMERCIAL,LICENSE_REVIEW_HOSPITAL,CLARIFY_ACADEMIC_FOR_PROFIT,CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL,TEST"
+        },
+        {
+            "fieldName": "sentFrom",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20191230201137",
+    "dto": "mapstruct",
+    "searchEngine": false,
+    "service": "serviceClass",
+    "entityTableName": "user_mails",
+    "databaseType": "sql",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}
