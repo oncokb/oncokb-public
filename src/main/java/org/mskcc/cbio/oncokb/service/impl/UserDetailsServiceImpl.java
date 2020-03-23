@@ -62,7 +62,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-
     /**
      * Get one userDetails by id.
      *

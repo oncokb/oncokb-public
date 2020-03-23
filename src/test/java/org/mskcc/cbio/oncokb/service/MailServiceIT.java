@@ -3,7 +3,7 @@ package org.mskcc.cbio.oncokb.service;
 import org.mskcc.cbio.oncokb.config.Constants;
 
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
-import org.mskcc.cbio.oncokb.OncokbApp;
+import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
@@ -45,11 +45,11 @@ import static org.mockito.Mockito.*;
 /**
  * Integration tests for {@link MailService}.
  */
-@SpringBootTest(classes = OncokbApp.class)
+@SpringBootTest(classes = OncokbPublicApp.class)
 @ExtendWith(RedisTestContainerExtension.class)
 public class MailServiceIT {
 
-    private static String[] languages = {
+    private static final String[] languages = {
         // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array
     };
     private static final Pattern PATTERN_LOCALE_3 = Pattern.compile("([a-z]{2})-([a-zA-Z]{4})-([a-z]{2})");
@@ -207,7 +207,7 @@ public class MailServiceIT {
     }
 
     @Test
-    public void testSendEmailWithException() throws Exception {
+    public void testSendEmailWithException() {
         doThrow(MailSendException.class).when(javaMailSender).send(any(MimeMessage.class));
         try {
             mailService.sendEmail("john.doe@example.com", jHipsterProperties.getMail().getFrom(), null, "testSubject", "testContent", null, false, false);

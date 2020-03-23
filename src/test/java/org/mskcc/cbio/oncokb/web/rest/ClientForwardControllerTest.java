@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @ExtendWith(RedisTestContainerExtension.class)
 public class ClientForwardControllerTest {
-
+    private final String GOOGLE_WEBMASTER_VERIFICATION="google";
     private MockMvc restMockMvc;
 
     @BeforeEach
@@ -29,6 +30,7 @@ public class ClientForwardControllerTest {
         ClientForwardController clientForwardController = new ClientForwardController();
         this.restMockMvc = MockMvcBuilders
             .standaloneSetup(clientForwardController, new TestController())
+            .addPlaceholderValue("application.google-webmaster-verification", GOOGLE_WEBMASTER_VERIFICATION)
             .build();
     }
 
