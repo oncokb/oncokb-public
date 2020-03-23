@@ -1,6 +1,6 @@
 package org.mskcc.cbio.oncokb.config.timezone;
 
-import org.mskcc.cbio.oncokb.OncokbApp;
+import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.repository.timezone.DateTimeWrapper;
 import org.mskcc.cbio.oncokb.repository.timezone.DateTimeWrapperRepository;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Integration tests for the UTC Hibernate configuration.
  */
-@SpringBootTest(classes = OncokbApp.class)
+@SpringBootTest(classes = OncokbPublicApp.class)
 @ExtendWith(RedisTestContainerExtension.class)
 public class HibernateTimeZoneIT {
 

@@ -1,7 +1,7 @@
 package org.mskcc.cbio.oncokb.service;
 
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
-import org.mskcc.cbio.oncokb.OncokbApp;
+import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 /**
  * Integration tests for {@link UserService}.
  */
-@SpringBootTest(classes = OncokbApp.class)
+@SpringBootTest(classes = OncokbPublicApp.class)
 @ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class UserServiceIT {

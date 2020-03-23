@@ -25,11 +25,11 @@ import java.util.Collection;
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
 public class OncokbPublicApp {
 
-    private static final Logger log = LoggerFactory.getLogger(OncokbApp.class);
+    private static final Logger log = LoggerFactory.getLogger(OncokbPublicApp.class);
 
     private final Environment env;
 
-    public OncokbApp(Environment env) {
+    public OncokbPublicApp(Environment env) {
         this.env = env;
     }
 
@@ -59,7 +59,7 @@ public class OncokbPublicApp {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(OncokbApp.class);
+        SpringApplication app = new SpringApplication(OncokbPublicApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);

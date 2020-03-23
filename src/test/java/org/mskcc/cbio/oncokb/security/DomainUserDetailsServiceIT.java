@@ -1,7 +1,7 @@
 package org.mskcc.cbio.oncokb.security;
 
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
-import org.mskcc.cbio.oncokb.OncokbApp;
+import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 /**
  * Integrations tests for {@link DomainUserDetailsService}.
  */
-@SpringBootTest(classes = OncokbApp.class)
+@SpringBootTest(classes = OncokbPublicApp.class)
 @ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class DomainUserDetailsServiceIT {
