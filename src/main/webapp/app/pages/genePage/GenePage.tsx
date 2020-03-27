@@ -329,6 +329,7 @@ export default class GenePage extends React.Component<
             props.original.mutationEffectPmids.length;
           return (
             <DefaultTooltip
+              placement={'left'}
               overlay={() => (
                 <CitationTooltip
                   pmids={props.original.mutationEffectPmids}
