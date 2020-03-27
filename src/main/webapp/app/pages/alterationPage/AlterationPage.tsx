@@ -34,6 +34,7 @@ import classnames from 'classnames';
 import SmallPageContainer from 'app/components/SmallPageContainer';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import DocumentTitle from 'react-document-title';
+import { MutationEffectResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -53,7 +54,7 @@ const SUMMARY_TITLE = {
 
 const AlterationInfo: React.FunctionComponent<{
   oncogenicity: string;
-  mutationEffect: string;
+  mutationEffect: MutationEffectResp;
   isVus: boolean;
   highestSensitiveLevel: string | undefined;
   highestResistanceLevel: string | undefined;
@@ -72,7 +73,21 @@ const AlterationInfo: React.FunctionComponent<{
     );
   }
   if (props.mutationEffect) {
-    content.push(<span key="mutationEffect">{props.mutationEffect}</span>);
+    content.push(
+      <span>
+        <span key="mutationEffect">{props.mutationEffect.knownEffect}</span>
+        <DefaultTooltip
+          overlay={() => (
+            <CitationTooltip
+              pmids={props.mutationEffect.citations.pmids}
+              abstracts={props.mutationEffect.citations.abstracts}
+            />
+          )}
+        >
+          <i className="fa fa-book mx-1" style={{ fontSize: '0.8em' }}></i>
+        </DefaultTooltip>
+      </span>
+    );
   }
   if (props.highestSensitiveLevel || props.highestResistanceLevel) {
     content.push(
@@ -226,6 +241,7 @@ export default class GenePage extends React.Component<
             props.original.citations.pmids.length;
           return (
             <DefaultTooltip
+              placement={'left'}
               overlay={() => (
                 <CitationTooltip
                   pmids={props.original.citations.pmids}
@@ -280,9 +296,7 @@ export default class GenePage extends React.Component<
           </h2>
           <AlterationInfo
             oncogenicity={this.store.annotationResult.result.oncogenic}
-            mutationEffect={
-              this.store.annotationResult.result.mutationEffect.knownEffect
-            }
+            mutationEffect={this.store.annotationResult.result.mutationEffect}
             isVus={this.store.annotationResult.result.vus}
             highestSensitiveLevel={
               this.store.annotationResult.result.highestSensitiveLevel
