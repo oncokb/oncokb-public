@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import ch.qos.logback.core.Layout;
 import com.github.seratch.jslack.Slack;
 import com.github.seratch.jslack.api.model.block.ActionsBlock;
 import com.github.seratch.jslack.api.model.block.LayoutBlock;
@@ -15,6 +16,7 @@ import com.github.seratch.jslack.app_backend.interactive_messages.payload.BlockA
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -37,10 +40,15 @@ public class SlackService {
 
     private static final String APPROVE_USER = "approve-user";
 
-    private final ApplicationProperties applicationProperties;
+    private static final String ACADEMIC_CLARIFICATION_NOTE = "We have sent the clarification email to the user asking why they could not use an institution email to register.";
+    private static final String COMMERCIAL_APPROVE_NOTE = "We have sent the intake form automatically.";
 
-    public SlackService(ApplicationProperties applicationProperties) {
+    private final ApplicationProperties applicationProperties;
+    private final MailService mailService;
+
+    public SlackService(ApplicationProperties applicationProperties, MailService mailService) {
         this.applicationProperties = applicationProperties;
+        this.mailService = mailService;
     }
 
     @Async
@@ -49,8 +57,22 @@ public class SlackService {
         if (StringUtils.isEmpty(this.applicationProperties.getUserRegistrationWebhook())) {
             log.debug("\tSkipped, the webhook is not configured");
         } else {
+            List<LayoutBlock> layoutBlocks = new ArrayList<>();
+            if (getAcademicEmailClarifyDomains().size() > 0 &&
+                getAcademicEmailClarifyDomains().stream().filter(domain -> user.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0 &&
+                user.getLicenseType().equals(LicenseType.ACADEMIC)) {
+                mailService.sendEmailFromTemplate(user, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
+                layoutBlocks = buildAcademicClarifyBlocks(user);
+            } else {
+                layoutBlocks = buildCommercialApprovalBlocks(user);
+                // Send intake form email
+                MailType intakeEmailMailType = mailService.getIntakeFormMailType(user.getLicenseType());
+                if (intakeEmailMailType != null) {
+                    mailService.sendEmailFromTemplate(user, intakeEmailMailType, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
+                }
+            }
             Payload payload = Payload.builder()
-                .blocks(buildUserApprovalBlocks(user))
+                .blocks(layoutBlocks)
                 .build();
 
             Slack slack = Slack.getInstance();
@@ -95,6 +117,10 @@ public class SlackService {
         return blockActionPayload.getActions().stream().filter(action -> action.getActionId().equalsIgnoreCase(APPROVE_USER)).findFirst();
     }
 
+    private List<String> getAcademicEmailClarifyDomains() {
+        return Arrays.stream(applicationProperties.getAcademicEmailClarifyDomain().split(",")).map(domain -> domain.trim()).collect(Collectors.toList());
+    }
+
     private TextObject getTextObject(String title, String content) {
         StringBuilder sb = new StringBuilder();
         sb.append("*" + title + ":*\n");
@@ -102,18 +128,56 @@ public class SlackService {
         return MarkdownTextObject.builder().text(sb.toString()).build();
     }
 
-    private List<LayoutBlock> buildUserApprovalBlocks(UserDTO user) {
-
+    private List<LayoutBlock> buildCommercialApprovalBlocks(UserDTO user) {
         List<LayoutBlock> blocks = new ArrayList<>();
-        blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text("<!here>").build()).build());
 
-        // Title
+        // Add mention
+        blocks.add(buildHereMentionBlock());
+
+        // Add Title
+        blocks.add(buildTitleBlock(user));
+
+        // Add user info section
+        blocks.add(buildUserInfoBlock(user));
+
+        // Add Approve button
+        blocks.add(buildApproveButton(user));
+
+        // Add Approve button
+        blocks.add(buildPlainTextBlock(COMMERCIAL_APPROVE_NOTE));
+
+        return blocks;
+    }
+
+    private List<LayoutBlock> buildAcademicClarifyBlocks(UserDTO user) {
+        List<LayoutBlock> blocks = new ArrayList<>();
+
+        // Add mention
+        blocks.add(buildHereMentionBlock());
+
+        // Add Title
+        blocks.add(buildTitleBlock(user));
+
+        // Add user info section
+        blocks.add(buildUserInfoBlock(user));
+
+        // Add Approve button
+        blocks.add(buildPlainTextBlock(ACADEMIC_CLARIFICATION_NOTE));
+
+        return blocks;
+    }
+
+    private LayoutBlock buildHereMentionBlock() {
+        return SectionBlock.builder().text(MarkdownTextObject.builder().text("<!here>").build()).build();
+    }
+
+    private LayoutBlock buildTitleBlock(UserDTO user) {
         List<TextObject> title = new ArrayList<>();
         title.add(getTextObject("The following user registered an " + user.getLicenseType() + " account", ""));
-        blocks.add(SectionBlock.builder().fields(title).build());
+        return SectionBlock.builder().fields(title).build();
+    }
 
-
-        // User info section
+    private LayoutBlock buildUserInfoBlock(UserDTO user) {
         List<TextObject> userInfo = new ArrayList<>();
         userInfo.add(getTextObject("Email", user.getEmail()));
         userInfo.add(getTextObject("Name", user.getFirstName() + " " + user.getLastName()));
@@ -122,16 +186,16 @@ public class SlackService {
         userInfo.add(getTextObject("City", user.getCity()));
         userInfo.add(getTextObject("Country", user.getCountry()));
 
-        blocks.add(SectionBlock.builder().fields(userInfo).build());
+        return SectionBlock.builder().fields(userInfo).build();
+    }
 
-        // Approve button
+    private LayoutBlock buildApproveButton(UserDTO user) {
         ButtonElement button = ButtonElement.builder()
             .text(PlainTextObject.builder().emoji(true).text("Approve").build())
             .style("primary")
             .actionId(APPROVE_USER)
             .value(user.getLogin())
             .build();
-
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
             ConfirmationDialogObject confirmationDialogObject = ConfirmationDialogObject.builder()
                 .title(PlainTextObject.builder().text("Are you sure?").build())
@@ -141,10 +205,10 @@ public class SlackService {
                 .build();
             button.setConfirm(confirmationDialogObject);
         }
-
-        blocks.add(ActionsBlock.builder().elements(Arrays.asList(button)).build());
-
-        return blocks;
+        return ActionsBlock.builder().elements(Arrays.asList(button)).build();
     }
 
+    private LayoutBlock buildPlainTextBlock(String text) {
+        return SectionBlock.builder().text(PlainTextObject.builder().text(text).build()).build();
+    }
 }

@@ -149,7 +149,6 @@ application:
   user-registration-webhook:
   google-webmaster-verification:
   account-approval-whitelist:
-  mail-from:
   token-usage-check:
   token-usage-check-whitelist:
   redis:
@@ -158,3 +157,6 @@ application:
     master-slave-cache:
       master-address: 'redis://oncokb-public-redis-master:6379'
       slave-address: 'redis://oncokb-public-redis-slave:6379'
+  email-addresses:
+    license-address:
+    registration-address:
