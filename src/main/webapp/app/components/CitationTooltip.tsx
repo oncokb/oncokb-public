@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { observer } from 'mobx-react';
 import { remoteData } from 'cbioportal-frontend-commons';
 import request from 'superagent';
@@ -7,10 +7,11 @@ import { ArticleAbstract } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
 import PmidItem from 'app/components/PmidItem';
 import ArticleAbstractItem from 'app/components/ArticleAbstractItem';
+import { TOOLTIP_MAX_HEIGHT } from 'app/config/constants';
 
 @observer
 export class CitationTooltip extends React.Component<
-  { pmids: string[]; abstracts: ArticleAbstract[] },
+  { pmids: string[]; abstracts: ArticleAbstract[]; style?: CSSProperties },
   {}
 > {
   readonly citationContent = remoteData<any>({
@@ -48,12 +49,17 @@ export class CitationTooltip extends React.Component<
   }
 
   render() {
+    const style = {
+      maxHeight: TOOLTIP_MAX_HEIGHT,
+      overflowY: 'scroll',
+      ...this.props.style
+    } as CSSProperties;
     return (
-      <>
+      <div>
         {this.citationContent.isPending ? (
           <LoadingIndicator isLoading={true} size={'small'} />
         ) : (
-          <div>
+          <div style={style}>
             {this.getPmidItems()}
             {this.props.abstracts.map(abstract => (
               <ArticleAbstractItem
@@ -64,7 +70,7 @@ export class CitationTooltip extends React.Component<
             ))}
           </div>
         )}
-      </>
+      </div>
     );
   }
 }
