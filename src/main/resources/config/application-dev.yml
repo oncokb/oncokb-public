@@ -140,7 +140,6 @@ application:
   user-registration-webhook:
   google-webmaster-verification:
   account-approval-whitelist:
-  mail-from:
   token-usage-check:
   token-usage-check-whitelist:
   redis:
@@ -148,3 +147,7 @@ application:
     password: 'oncokb-public-redis-password'
     single-cache:
       address: 'redis://localhost:6379'
+  email-addresses:
+    license-address:
+    registration-address:
+  academic-email-clarify-domain:

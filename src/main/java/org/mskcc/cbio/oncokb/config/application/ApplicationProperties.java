@@ -17,8 +17,9 @@ public class ApplicationProperties {
     private Boolean sitemapEnabled;
     private RedisProperties redis;
     private String accountApprovalWhitelist;
+    private String academicEmailClarifyDomain;
     private String googleWebmasterVerification;
-    private String mailFrom;
+    private EmailAddresses emailAddresses;
     private String tokenUsageCheck;
     private String tokenUsageCheckWhitelist;
 
@@ -44,6 +45,14 @@ public class ApplicationProperties {
 
     public void setAccountApprovalWhitelist(String accountApprovalWhitelist) {
         this.accountApprovalWhitelist = accountApprovalWhitelist;
+    }
+
+    public String getAcademicEmailClarifyDomain() {
+        return academicEmailClarifyDomain;
+    }
+
+    public void setAcademicEmailClarifyDomain(String academicEmailClarifyDomain) {
+        this.academicEmailClarifyDomain = academicEmailClarifyDomain;
     }
 
     public ProjectProfile getProfile() {
@@ -78,12 +87,12 @@ public class ApplicationProperties {
         this.googleWebmasterVerification = googleWebmasterVerification;
     }
 
-    public String getMailFrom() {
-        return mailFrom;
+    public EmailAddresses getEmailAddresses() {
+        return emailAddresses;
     }
 
-    public void setMailFrom(String mailFrom) {
-        this.mailFrom = mailFrom;
+    public void setEmailAddresses(EmailAddresses emailAddresses) {
+        this.emailAddresses = emailAddresses;
     }
 
     public String getTokenUsageCheck() {
