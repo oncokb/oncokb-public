@@ -162,6 +162,9 @@ export const IMG_MAX_WIDTH = 700;
 export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
 export const H5_FONT_SIZE = '1.25rem';
 
+// Defaults for tooltip size
+export const TOOLTIP_MAX_HEIGHT = 300;
+
 // Defaults for the models
 export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
   dataVersion: {
