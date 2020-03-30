@@ -146,7 +146,7 @@ public class SlackService {
         // Add Approve button
         blocks.add(buildApproveButton(user));
 
-        // Add Approve button
+        // Add intake form note
         blocks.add(buildPlainTextBlock(COMMERCIAL_APPROVE_NOTE));
 
         return blocks;
@@ -169,7 +169,7 @@ public class SlackService {
             blocks.add(buildPlainTextBlock(ACADEMIC_CLARIFICATION_NOTE));
         } else {
             // Add Approve button
-            blocks.add(buildPlainTextBlock(COMMERCIAL_APPROVE_NOTE));
+            blocks.add(buildApproveButton(user));
         }
 
         return blocks;
