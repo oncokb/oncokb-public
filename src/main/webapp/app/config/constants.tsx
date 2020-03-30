@@ -162,6 +162,9 @@ export const IMG_MAX_WIDTH = 700;
 export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
 export const H5_FONT_SIZE = '1.25rem';
 
+// Defaults for tooltip size
+export const TOOLTIP_MAX_HEIGHT = 300;
+
 // Defaults for the models
 export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
   dataVersion: {
@@ -417,6 +420,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '03262020', version: 'v2.1_patch_1' },
   { date: '02122020', version: 'v2.1' },
   { date: '12202019', version: 'v2.0' },
   { date: '12162019', version: 'v1.24_patch_1' },

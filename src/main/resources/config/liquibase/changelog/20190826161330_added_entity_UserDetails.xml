@@ -66,6 +66,7 @@
             <column name="city" type="string"/>
             <column name="country" type="string"/>
             <column name="address" type="string"/>
+            <column name="user_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

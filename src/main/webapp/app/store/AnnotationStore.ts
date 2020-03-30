@@ -166,6 +166,7 @@ export class AnnotationStore {
         tracks: [TrackName.OncoKB, TrackName.CancerHotspots, TrackName.PTM],
         data: this.mutationMapperData.result,
         oncogenicities: this.uniqOncogenicity,
+        isoformOverrideSource: 'mskcc',
         filterAppliersOverride: getCustomFilterAppliers()
       });
     },
@@ -452,7 +453,7 @@ export class AnnotationStore {
           referenceAllele,
           variantAllele,
           mutationType: mutation.alterationType,
-          oncogenic: shortenOncogenicity( oncogenic ),
+          oncogenic: shortenOncogenicity(oncogenic),
           cancerType: mutation.cancerType
         };
       });
