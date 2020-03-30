@@ -58,11 +58,14 @@ public class SlackService {
             log.debug("\tSkipped, the webhook is not configured");
         } else {
             List<LayoutBlock> layoutBlocks = new ArrayList<>();
-            if (getAcademicEmailClarifyDomains().size() > 0 &&
-                getAcademicEmailClarifyDomains().stream().filter(domain -> user.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0 &&
-                user.getLicenseType().equals(LicenseType.ACADEMIC)) {
-                mailService.sendEmailFromTemplate(user, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
-                layoutBlocks = buildAcademicClarifyBlocks(user);
+            if (user.getLicenseType().equals(LicenseType.ACADEMIC)) {
+                boolean withClarificationNote = false;
+                if (getAcademicEmailClarifyDomains().size() > 0 &&
+                    getAcademicEmailClarifyDomains().stream().filter(domain -> user.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
+                    withClarificationNote = true;
+                    mailService.sendEmailFromTemplate(user, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
+                }
+                layoutBlocks = buildAcademicBlocks(user, withClarificationNote);
             } else {
                 layoutBlocks = buildCommercialApprovalBlocks(user);
                 // Send intake form email
@@ -149,7 +152,7 @@ public class SlackService {
         return blocks;
     }
 
-    private List<LayoutBlock> buildAcademicClarifyBlocks(UserDTO user) {
+    private List<LayoutBlock> buildAcademicBlocks(UserDTO user, boolean withClarificationNote) {
         List<LayoutBlock> blocks = new ArrayList<>();
 
         // Add mention
@@ -161,8 +164,13 @@ public class SlackService {
         // Add user info section
         blocks.add(buildUserInfoBlock(user));
 
-        // Add Approve button
-        blocks.add(buildPlainTextBlock(ACADEMIC_CLARIFICATION_NOTE));
+        if(withClarificationNote) {
+            // Add clarification note
+            blocks.add(buildPlainTextBlock(ACADEMIC_CLARIFICATION_NOTE));
+        } else {
+            // Add Approve button
+            blocks.add(buildPlainTextBlock(COMMERCIAL_APPROVE_NOTE));
+        }
 
         return blocks;
     }
