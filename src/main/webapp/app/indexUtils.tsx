@@ -3,7 +3,7 @@ import {
   AUTH_UER_TOKEN_KEY,
   AUTH_WEBSITE_TOKEN_KEY
 } from 'app/store/AuthenticationStore';
-import { ONCOKB_APP_PUBLIC_TOKEN } from 'app/config/constants';
+import { ONCOKB_PUBLIC_APP_PUBLIC_TOKEN } from 'app/config/constants';
 
 export const getPublicWebsiteToken = () => {
   return Storage.session.get(AUTH_WEBSITE_TOKEN_KEY);
@@ -19,7 +19,7 @@ export const getStoredToken = () => {
 
 export const assignPublicToken = () => {
   // Inject the public website token to storage
-  const pubWebToken = (window as any)[ONCOKB_APP_PUBLIC_TOKEN];
+  const pubWebToken = (window as any)[ONCOKB_PUBLIC_APP_PUBLIC_TOKEN];
   if (pubWebToken) {
     setPublicWebsiteToken(pubWebToken);
   }

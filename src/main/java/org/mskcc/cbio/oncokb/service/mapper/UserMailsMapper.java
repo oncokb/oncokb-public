@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service.mapper;
 
+
 import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 

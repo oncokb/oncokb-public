@@ -1,5 +1,8 @@
 package org.mskcc.cbio.oncokb.config;
 
+import org.mskcc.cbio.oncokb.security.*;
+import org.mskcc.cbio.oncokb.security.jwt.*;
+
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.security.uuid.UUIDConfigurer;
