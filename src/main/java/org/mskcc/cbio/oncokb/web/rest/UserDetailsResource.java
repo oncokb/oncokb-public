@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -83,11 +82,10 @@ public class UserDetailsResource {
     /**
      * {@code GET  /user-details} : get all the userDetails.
      *
-
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userDetails in body.
      */
     @GetMapping("/user-details")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<UserDetailsDTO> getAllUserDetails() {
         log.debug("REST request to get all UserDetails");
         return userDetailsService.findAll();

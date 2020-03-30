@@ -25,7 +25,6 @@ public interface TokenStatsService {
      */
     List<TokenStats> findAll();
 
-
     /**
      * Get the "id" tokenStats.
      *

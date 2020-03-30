@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.repository;
 import org.mskcc.cbio.oncokb.domain.UserMails;
+
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
