@@ -7,6 +7,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 
 import javax.mail.MessagingException;
 
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
@@ -26,10 +27,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -182,8 +180,23 @@ public class MailService {
         sendEmailFromTemplate(user, MailType.LICENSE_REVIEW_COMMERCIAL);
     }
 
+    public MailType getIntakeFormMailType(LicenseType licenseType) {
+        switch (licenseType) {
+            case COMMERCIAL:
+                return MailType.SEND_INTAKE_FORM_COMMERCIAL;
+            case HOSPITAL:
+                return MailType.SEND_INTAKE_FORM_HOSPITAL;
+            case RESEARCH_IN_COMMERCIAL:
+                return MailType.SEND_INTAKE_FORM_RESEARCH_COMMERCIAL;
+            default:
+                return null;
+        }
+    }
     public List<String> getMailFrom() {
-        return Arrays.stream(applicationProperties.getMailFrom().split(",")).map(from -> from.trim()).collect(Collectors.toList());
+        List<String> mailFrom = new ArrayList<>();
+        mailFrom.add(applicationProperties.getEmailAddresses().getRegistrationAddress());
+        mailFrom.add(applicationProperties.getEmailAddresses().getLicenseAddress());
+        return mailFrom;
     }
 
     private Optional<String> getTitleKeyByMailType(MailType mailType) {
