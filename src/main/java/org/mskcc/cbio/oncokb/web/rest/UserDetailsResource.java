@@ -85,7 +85,7 @@ public class UserDetailsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userDetails in body.
      */
     @GetMapping("/user-details")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<UserDetailsDTO> getAllUserDetails() {
         log.debug("REST request to get all UserDetails");
         return userDetailsService.findAll();

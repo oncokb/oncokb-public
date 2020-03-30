@@ -24,9 +24,8 @@ import {
 } from 'app/store/AuthenticationStore';
 import { Storage } from 'react-jhipster';
 import {
-  ONCOKB_APP_PROPS,
-  ONCOKB_APP_PUBLIC_TOKEN,
-  OncokbAppProps,
+  ONCOKB_PUBLIC_APP_PROPS,
+  ONCOKB_PUBLIC_APP_PUBLIC_TOKEN,
   UNAUTHORIZED_ALLOWED_PATH
 } from 'app/config/constants';
 import _ from 'lodash';
@@ -70,8 +69,8 @@ superagent.Request.prototype.end = function(callback) {
     if (
       response &&
       response.statusCode === 401 &&
-      window[ONCOKB_APP_PUBLIC_TOKEN] &&
-      window[ONCOKB_APP_PROPS].profile === 'PROD' &&
+      window[ONCOKB_PUBLIC_APP_PUBLIC_TOKEN] &&
+      window[ONCOKB_PUBLIC_APP_PROPS].profile === 'PROD' &&
       response.req &&
       !_.some(UNAUTHORIZED_ALLOWED_PATH, path =>
         window.location.pathname.endsWith(path)

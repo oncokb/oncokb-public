@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 public class UserMailsResource {
 
     private final Logger log = LoggerFactory.getLogger(UserMailsResource.class);
