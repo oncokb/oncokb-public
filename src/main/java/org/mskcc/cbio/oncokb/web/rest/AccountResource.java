@@ -1,8 +1,6 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 
-import com.github.seratch.jslack.Slack;
-import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
