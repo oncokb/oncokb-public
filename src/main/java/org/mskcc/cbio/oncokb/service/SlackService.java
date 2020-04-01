@@ -71,7 +71,7 @@ public class SlackService {
                 // Send intake form email
                 MailType intakeEmailMailType = mailService.getIntakeFormMailType(user.getLicenseType());
                 if (intakeEmailMailType != null) {
-                    mailService.sendEmailFromTemplate(user, intakeEmailMailType, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
+                    mailService.sendEmailFromTemplate(user, intakeEmailMailType, applicationProperties.getEmailAddresses().getLicenseAddress(), applicationProperties.getEmailAddresses().getLicenseAddress(), null);
                 }
             }
             Payload payload = Payload.builder()
