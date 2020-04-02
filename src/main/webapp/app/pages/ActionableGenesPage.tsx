@@ -333,7 +333,9 @@ export default class ActionableGenesPage extends React.Component<
       ? this.filteredTreatments
       : this.allTreatments;
     treatmentSource.map(treatment => {
-      levelNumbers[treatment.level].push(treatment.hugoSymbol);
+      if (levelNumbers[treatment.level]) {
+        levelNumbers[treatment.level].push(treatment.hugoSymbol);
+      }
     });
     return _.reduce(
       levelNumbers,
@@ -632,7 +634,9 @@ export default class ActionableGenesPage extends React.Component<
                   loading={this.relevantTumorTypes.isPending}
                   columns={this.columns}
                   pageSize={
-                    this.filteredTreatments.length === 0 ? 1 : this.filteredTreatments.length
+                    this.filteredTreatments.length === 0
+                      ? 1
+                      : this.filteredTreatments.length
                   }
                   style={{
                     height: LG_TABLE_FIXED_HEIGHT
