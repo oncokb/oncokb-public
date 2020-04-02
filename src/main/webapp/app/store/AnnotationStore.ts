@@ -196,7 +196,7 @@ export class AnnotationStore {
       const genes = await apiClient.genesLookupGetUsingGET({
         query: this.hugoSymbolQuery
       });
-      return genes[0];
+      return genes && genes.length > 0 ? genes[0] : DEFAULT_GENE;
     },
     default: DEFAULT_GENE
   });
