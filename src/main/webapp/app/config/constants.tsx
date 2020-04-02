@@ -121,7 +121,8 @@ export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
   [ONCOGENICITY.LIKELY_ONCOGENIC]: 'oncogenic',
   [ONCOGENICITY.ONCOGENIC]: 'oncogenic'
 };
-
+export const DEFAULT_MESSAGE_UNKNOWN_GENE =
+  'We do not have any information for this gene';
 export enum EVIDENCE_TYPES {
   GENE_SUMMARY = 'GENE_SUMMARY',
   GENE_BACKGROUND = 'GENE_BACKGROUND',
