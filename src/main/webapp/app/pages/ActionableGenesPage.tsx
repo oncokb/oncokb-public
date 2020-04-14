@@ -607,7 +607,8 @@ export default class ActionableGenesPage extends React.Component<
                   )})`}
                 </span>
                 <AuthDownloadButton
-                  className={classnames('ml-2', 'pt-1')}
+                  size={'sm'}
+                  className={classnames('ml-2')}
                   getDownloadData={this.downloadAssociation}
                   fileName={'oncokb_biomarker_drug_associations.tsv'}
                   buttonText={'Associations'}
@@ -615,6 +616,7 @@ export default class ActionableGenesPage extends React.Component<
                 {this.treatmentsAreFiltered ? (
                   <Button
                     variant="link"
+                    size={'sm'}
                     style={{ whiteSpace: 'nowrap' }}
                     className={'ml-auto pr-0'}
                     onClick={this.clearFilters}
