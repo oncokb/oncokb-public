@@ -4,6 +4,7 @@ import NewsList, { getNews, getNewsTitle } from 'app/pages/newsPage/NewsList';
 import { NEWS_BY_DATE } from 'app/pages/newsPage/NewsPageContent';
 import {
   DOCUMENT_TITLES,
+  IMG_MAX_WIDTH,
   ONCOKB_CONTACT_EMAIL,
   ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK,
   PAGE_ROUTE
@@ -11,10 +12,12 @@ import {
 import { Link } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import LevelChange from 'content/images/loe-change.png';
+import JCS_IMAGE from 'content/images/level_JCS.png';
 import { Linkout } from 'app/shared/links/Linkout';
 import { RouterStore } from 'mobx-react-router';
 import { scrollWidthOffsetInNews } from 'app/shared/utils/Utils';
 import { inject, observer } from 'mobx-react';
+import indexStyles from 'app/index.module.scss';
 @inject('routing')
 @observer
 export default class NewsPage extends React.Component<{
@@ -71,6 +74,25 @@ export default class NewsPage extends React.Component<{
             <CitationText />
           </div>
           <div className="mt-2">
+            <NewsList date={'04152020'}>
+              <ul>
+                <li>
+                  An updated version of the OncoKB Curation Standard Operating
+                  Procedure, v1.1, has been released in the OncoKB{' '}
+                  <Link to={PAGE_ROUTE.ABOUT}>About</Link> page.
+                </li>
+                <li>
+                  Mapping of the OncoKB and AMP/ASCO/CAP Levels of Evidence is
+                  available on the{' '}
+                  <Link to={PAGE_ROUTE.LEVELS}>Levels of Evidence</Link> page.
+                </li>
+                <img
+                  className="md-auto"
+                  style={{ maxWidth: IMG_MAX_WIDTH }}
+                  src={JCS_IMAGE}
+                />
+              </ul>
+            </NewsList>
             <NewsList date={'02122020'} />
             <NewsList date={'12202019'}>
               <div>Introducing Simplified OncoKB Levels of Evidence:</div>
