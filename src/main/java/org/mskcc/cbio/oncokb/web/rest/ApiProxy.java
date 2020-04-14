@@ -114,6 +114,8 @@ public class ApiProxy {
                         String ipAddress = request.getHeader(IP_HEADER);
                         if (ipAddress == null) {
                             tokenStats.setAccessIp(request.getRemoteAddr());
+                        }else{
+                            tokenStats.setAccessIp(ipAddress);
                         }
                         tokenStats.setAccessTime(Instant.now());
                         tokenStats.setResource(request.getMethod() + " " + request.getRequestURI());
