@@ -27,26 +27,26 @@ type LevelOfEvidencePageProps = {
   routing: RouterStore;
 };
 
-enum version {
+enum Version {
   v1 = 'V1',
   v2 = 'V2'
 }
-const ALLOWED_VERSIONS = [version.v2, version.v1];
+const ALLOWED_VERSIONS = [Version.v2, Version.v1];
 
 @inject('routing')
 @observer
 export default class LevelOfEvidencePage extends React.Component<
   LevelOfEvidencePageProps
 > {
-  @observable version: version;
+  @observable version: Version;
 
   readonly reactions: IReactionDisposer[] = [];
 
   getVersionDefault = () => {
-    return version.v2;
+    return Version.v2;
   };
 
-  updateLocationHash = (newVersion: version) => {
+  updateLocationHash = (newVersion: Version) => {
     window.location.hash = QueryString.stringify({ version: newVersion });
   };
 
@@ -56,7 +56,7 @@ export default class LevelOfEvidencePage extends React.Component<
       reaction(
         () => [props.routing.location.hash],
         ([hash]) => {
-          const queryStrings = QueryString.parse(hash) as { version: version };
+          const queryStrings = QueryString.parse(hash) as { version: Version };
           if (queryStrings.version) {
             if (ALLOWED_VERSIONS.includes(queryStrings.version)) {
               this.version = queryStrings.version;
@@ -69,7 +69,10 @@ export default class LevelOfEvidencePage extends React.Component<
         },
         { fireImmediately: true }
       ),
-      reaction(() => this.version, newVersion => {})
+      reaction(
+        () => this.version,
+        newVersion => {}
+      )
     );
   }
 
@@ -80,7 +83,7 @@ export default class LevelOfEvidencePage extends React.Component<
   @autobind
   @action
   toggleVersion() {
-    this.version = this.version === version.v2 ? version.v1 : version.v2;
+    this.version = this.version === Version.v2 ? Version.v1 : Version.v2;
   }
 
   render() {
@@ -90,24 +93,22 @@ export default class LevelOfEvidencePage extends React.Component<
           <>
             <Row>
               <Col className="col-auto mr-auto d-flex align-content-center">
-                {this.version === version.v2 && (
+                {this.version === Version.v2 && (
                   <span className={'d-flex align-items-center'}>
                     <span className={'mr-1'}>
-                      Introducing Simplified OncoKB Levels of Evidence V2, refer to
-                      the
+                      Introducing Simplified OncoKB Levels of Evidence V2, refer
+                      to the
                     </span>
                     <HashLink to={`${PAGE_ROUTE.NEWS}#12202019`}>
                       News 12/20/2019
                     </HashLink>
                   </span>
                 )}
-                {this.version === version.v1 && (
+                {this.version === Version.v1 && (
                   <span className={'d-flex align-items-center'}>
                     <span>This is the previous Levels of Evidence. </span>
                     <Button variant={'link'} onClick={this.toggleVersion}>
-                      Click here to see{' '}
-                      <b>{version.v2}</b> Levels of
-                      Evidence
+                      Click here to see <b>{Version.v2}</b> Levels of Evidence
                     </Button>
                   </span>
                 )}
@@ -141,13 +142,13 @@ export default class LevelOfEvidencePage extends React.Component<
                 </div>
               </Col>
             </Row>
-            {this.version === version.v2 && (
+            {this.version === Version.v2 && (
               <Row>
                 <Col>
                   <Button variant={'link'} onClick={this.toggleVersion}>
                     Click here to see{' '}
-                    {this.version === version.v2 ? version.v1 : version.v2} Levels of
-                    Evidence
+                    {this.version === Version.v2 ? Version.v1 : Version.v2}{' '}
+                    Levels of Evidence
                   </Button>
                 </Col>
               </Row>
