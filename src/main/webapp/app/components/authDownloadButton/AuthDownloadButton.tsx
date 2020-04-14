@@ -1,6 +1,4 @@
-import { Button, ButtonProps } from 'react-bootstrap';
 import React from 'react';
-import classnames from 'classnames';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import fileDownload from 'js-file-download';
@@ -8,15 +6,11 @@ import { PAGE_ROUTE } from 'app/config/constants';
 import { getRedirectLoginState } from 'app/shared/utils/Utils';
 import { observer, inject } from 'mobx-react';
 import { observable, action } from 'mobx';
-import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
+import { LoadingButton } from 'app/shared/button/LoadingButton';
+import { IDownloadButtonWithPromise } from 'app/components/downloadButtonWithPromise/DownloadButtonWithPromise';
 
-interface IAuthDownloadButton extends ButtonProps {
-  getDownloadData: () => Promise<string>;
-  fileName: string;
-  mime?: string;
-  buttonText: string;
+interface IAuthDownloadButton extends IDownloadButtonWithPromise {
   routing?: RouterStore;
-  className?: string;
   authenticationStore?: AuthenticationStore;
 }
 
@@ -56,22 +50,16 @@ export class AuthDownloadButton extends React.Component<IAuthDownloadButton> {
       ...rest
     } = this.props;
     return (
-      <Button
-        size={'sm'}
-        style={{ width: 160 }}
-        className={classnames('mr-1', 'mb-1', 'p-2')}
+      <LoadingButton
         onClick={this.onClick}
+        loading={this.downloading}
         {...rest}
       >
-        {this.downloading ? (
-          <LoadingIndicator isLoading={true} size={'small'} color="white" />
-        ) : (
-          <>
-            <i className={'fa fa-cloud-download mr-1'} />
-            {buttonText}
-          </>
-        )}
-      </Button>
+        <>
+          <i className={'fa fa-cloud-download mr-1'} />
+          {buttonText}
+        </>
+      </LoadingButton>
     );
   }
 }

@@ -98,10 +98,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/variants/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/drugs/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
 
-            .antMatchers("/api/v1/utils/allCuratedGenes").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
-            .antMatchers("/api/v1/utils/cancerGeneList").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
-            .antMatchers("/api/v1/utils/cancerGeneList.txt").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
-            .antMatchers("/api/v1/utils/cancerGeneList.json").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
+            .antMatchers("/api/v1/utils/allCuratedGenes").permitAll()
+            .antMatchers("/api/v1/utils/cancerGeneList").permitAll()
+            .antMatchers("/api/v1/utils/cancerGeneList.txt").permitAll()
+            .antMatchers("/api/v1/utils/cancerGeneList.json").permitAll()
             .antMatchers("/api/v1/utils/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/account/reset-password/init").permitAll()
