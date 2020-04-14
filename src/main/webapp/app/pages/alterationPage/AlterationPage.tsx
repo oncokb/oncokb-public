@@ -20,6 +20,7 @@ import OncoKBTable, {
   SearchColumn
 } from 'app/components/oncokbTable/OncoKBTable';
 import {
+  citationsHasInfo,
   getDefaultColumnDefinition,
   OncoKBOncogenicityIcon,
   reduceJoin
@@ -36,6 +37,10 @@ import DocumentTitle from 'react-document-title';
 import { MutationEffectResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { Else, If, Then } from 'react-if';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
+import {
+  COLOR_ICON_WITH_INFO,
+  COLOR_ICON_WITHOUT_INFO
+} from 'app/config/theme';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -74,18 +79,28 @@ const AlterationInfo: React.FunctionComponent<{
     );
   }
   if (props.mutationEffect) {
+    const hasCitations = citationsHasInfo(props.mutationEffect.citations);
+    const tooltipOverlay = hasCitations
+      ? () => (
+          <CitationTooltip
+            pmids={props.mutationEffect.citations.pmids}
+            abstracts={props.mutationEffect.citations.abstracts}
+          />
+        )
+      : 'No info';
     content.push(
       <span>
         <span key="mutationEffect">{props.mutationEffect.knownEffect}</span>
-        <DefaultTooltip
-          overlay={() => (
-            <CitationTooltip
-              pmids={props.mutationEffect.citations.pmids}
-              abstracts={props.mutationEffect.citations.abstracts}
-            />
-          )}
-        >
-          <i className="fa fa-book mx-1" style={{ fontSize: '0.8em' }}></i>
+        <DefaultTooltip overlay={tooltipOverlay}>
+          <i
+            className="fa fa-book mx-1"
+            style={{
+              fontSize: '0.8em',
+              color: hasCitations
+                ? COLOR_ICON_WITH_INFO
+                : COLOR_ICON_WITHOUT_INFO
+            }}
+          ></i>
         </DefaultTooltip>
       </span>
     );
