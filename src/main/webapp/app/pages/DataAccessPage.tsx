@@ -37,24 +37,15 @@ const getDataTitle = (date: string, version: string) => {
   return `${getNewsTitle(date)} (${version})`;
 };
 
+const BUTTON_CLASS_NAME = 'mr-2 my-1';
 const DownloadButtonGroups: React.FunctionComponent<{
   data: DownloadAvailabilityWithDate;
 }> = props => {
   return (
     <>
-      {props.data.hasAllCuratedGenes ? (
-        <AuthDownloadButton
-          fileName={`all_curated_genes_${props.data.version}.tsv`}
-          getDownloadData={() =>
-            oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
-              version: props.data.version
-            })
-          }
-          buttonText="All Curated Genes"
-        />
-      ) : null}
       {props.data.hasAllAnnotatedVariants ? (
         <AuthDownloadButton
+          className={BUTTON_CLASS_NAME}
           fileName={`all_annotated_variants_${props.data.version}.tsv`}
           getDownloadData={() =>
             oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET({
@@ -66,6 +57,7 @@ const DownloadButtonGroups: React.FunctionComponent<{
       ) : null}
       {props.data.hasAllActionableVariants ? (
         <AuthDownloadButton
+          className={BUTTON_CLASS_NAME}
           fileName={`all_actionable_variants_${props.data.version}.tsv`}
           getDownloadData={() =>
             oncokbClient.utilsAllActionableVariantsTxtGetUsingGET({
@@ -77,6 +69,7 @@ const DownloadButtonGroups: React.FunctionComponent<{
       ) : null}
       {props.data.hasCancerGeneList ? (
         <AuthDownloadButton
+          className={BUTTON_CLASS_NAME}
           fileName={`cancer_gene_list_${props.data.version}.tsv`}
           getDownloadData={() =>
             oncokbClient.utilsCancerGeneListTxtGetUsingGET_1({

@@ -23,6 +23,7 @@ import AppStore from 'app/store/AppStore';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
 import DocumentTitle from 'react-document-title';
+import { DownloadButtonWithPromise } from 'app/components/downloadButtonWithPromise/DownloadButtonWithPromise';
 
 const InfoIcon = (props: { overlay: string | JSX.Element }) => {
   return (
@@ -420,7 +421,7 @@ export default class CancerGenesPage extends React.Component<{
               <h2>OncoKB Cancer Gene List</h2>
             </Col>
             <Col className="col-auto">
-              <AuthDownloadButton
+              <DownloadButtonWithPromise
                 fileName="cancerGeneList.tsv"
                 getDownloadData={() =>
                   oncokbClient.utilsCancerGeneListTxtGetUsingGET_1({})
