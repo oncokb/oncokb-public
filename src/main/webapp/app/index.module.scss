@@ -3,3 +3,11 @@
 .orange {
   color: $oncokb-orange;
 }
+
+.btnLinkText {
+  @extend .btn-link;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
