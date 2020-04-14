@@ -119,6 +119,16 @@ export function articles2Citations(articles: Article[]): Citations {
   };
 }
 
+export function citationsHasInfo(citations: Citations | null) {
+  if (!citations) {
+    return false;
+  }
+
+  const pmidsSize = citations.pmids ? citations.pmids.length : 0;
+  const abstractsSize = citations.abstracts ? citations.abstracts.length : 0;
+  return pmidsSize + abstractsSize > 0;
+}
+
 function getAnnotationLevelClassName(
   sensitiveLevel: string,
   resistanceLevel: string
