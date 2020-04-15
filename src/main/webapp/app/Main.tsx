@@ -61,7 +61,7 @@ class Main extends React.Component<IMainPage> {
           </Container>
         </div>
         <Footer
-          lastUpdate={this.props.appStore.appInfo.result.dataVersion.date}
+          lastDataUpdate={this.props.appStore.appInfo.result.dataVersion.date}
         />
       </div>
     );

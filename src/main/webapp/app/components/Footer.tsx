@@ -10,8 +10,9 @@ import { CitationText } from 'app/components/CitationText';
 import classnames from 'classnames';
 import { SwaggerApiLink } from 'app/shared/links/SwaggerApiLink';
 import { ContactLink } from 'app/shared/links/ContactLink';
+import { PAGE_ROUTE } from 'app/config/constants';
 
-class Footer extends React.Component<{ lastUpdate: string }> {
+class Footer extends React.Component<{ lastDataUpdate: string }> {
   public get externalLinkIcon() {
     return <i className={'fa fa-external-link'} />;
   }
@@ -79,7 +80,9 @@ class Footer extends React.Component<{ lastUpdate: string }> {
           <SwaggerApiLink>API</SwaggerApiLink>
         </div>
         <div className={classnames(styles.footerAList, 'mb-2')}>
-          <Link to="/news">Last update: {this.props.lastUpdate}</Link>
+          <Link to={PAGE_ROUTE.NEWS}>
+            Last data update: {this.props.lastDataUpdate}
+          </Link>
         </div>
       </>
     );
