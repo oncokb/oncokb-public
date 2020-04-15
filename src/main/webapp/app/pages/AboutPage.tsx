@@ -7,6 +7,7 @@ import { CitationText } from 'app/components/CitationText';
 import { Link } from 'react-router-dom';
 import { DOCUMENT_TITLES } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
+import { Linkout } from 'app/shared/links/Linkout';
 
 type AboutPageProps = { appStore: AppStore };
 export const AboutPage: React.FunctionComponent<AboutPageProps> = inject(
@@ -67,9 +68,9 @@ export const AboutPage: React.FunctionComponent<AboutPageProps> = inject(
               based on compelling biological evidence to targeted agents being
               tested in clinical trials). For additional details about the
               OncoKB curation process, please refer to the version controlled{' '}
-              <a href="content/files/OncoKB_Curation_Protocol_v1.0.pdf">
-                OncoKB Curation Standard Operating Procedure v1.0
-              </a>
+              <Linkout link={'https://sop.oncokb.org'}>
+                OncoKB Curation Standard Operating Procedure
+              </Linkout>
               .
             </p>
             <CitationText />
