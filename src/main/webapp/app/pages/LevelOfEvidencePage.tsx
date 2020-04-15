@@ -41,7 +41,7 @@ const LEVEL_TITLE: { [key in Version]: ElementType } = {
       <HashLink to={`${PAGE_ROUTE.NEWS}#12202019`}>News 12/20/2019</HashLink> )
     </>
   ),
-  [Version.JCS]: <>Mapping of OncoKB and AMP/ASCO/CAP Levels of Evidence</>
+  [Version.JCS]: <>Mapping between OncoKB and AMP/ASCO/CAP Levels of Evidence</>
 };
 const LEVEL_SUBTITLE: { [key in Version]: ElementType } = {
   [Version.v1]: <>Click here to see {Version.v2} Levels of Evidence</>,
@@ -52,7 +52,7 @@ const LEVEL_SUBTITLE: { [key in Version]: ElementType } = {
 const LEVEL_FILE_NAME: { [key in Version]: string } = {
   [Version.v1]: DEFAULT_LEVEL_FILE_NAME,
   [Version.v2]: DEFAULT_LEVEL_FILE_NAME,
-  [Version.JCS]: `LevelsOfEvidence_and_AMP_ASCO_CAP_JointConsensus`
+  [Version.JCS]: `Mapping_OncoKB_and_AMP_ASCO_CAP_LOfE`
 };
 
 @inject('routing')
