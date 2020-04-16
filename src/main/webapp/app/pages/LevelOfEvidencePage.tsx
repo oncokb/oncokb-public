@@ -32,7 +32,7 @@ const DEFAULT_LEVEL_FILE_NAME = 'LevelsOfEvidence';
 const JCS_CHECKBOX_ID = 'loe-jcs-checkbox';
 const ALLOWED_VERSIONS: string[] = [Version.v2, Version.v1, Version.JCS];
 const V2_RELATED_LEVELS = [Version.v2, Version.JCS];
-const JCS_NAME = 'AMP/ASCO/CAP Joint Consensus Recommendation';
+const JCS_NAME = 'AMP/ASCO/CAP Levels of Evidence';
 const LEVEL_TITLE: { [key in Version]: ElementType } = {
   [Version.v1]: <>OncoKB Levels of Evidence {Version.v1}</>,
   [Version.v2]: (
