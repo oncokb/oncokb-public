@@ -134,7 +134,7 @@ export default class LevelOfEvidencePage extends React.Component<
                       className={'form-check-label'}
                       htmlFor={JCS_CHECKBOX_ID}
                     >
-                      Showing mapping to {JCS_NAME}
+                      Show mapping to {JCS_NAME}
                     </label>
                   </span>
                 )}
