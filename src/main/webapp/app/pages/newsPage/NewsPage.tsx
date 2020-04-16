@@ -18,6 +18,7 @@ import { RouterStore } from 'mobx-react-router';
 import { scrollWidthOffsetInNews } from 'app/shared/utils/Utils';
 import { inject, observer } from 'mobx-react';
 import indexStyles from 'app/index.module.scss';
+import { Version } from 'app/pages/LevelOfEvidencePage';
 @inject('routing')
 @observer
 export default class NewsPage extends React.Component<{
@@ -84,7 +85,10 @@ export default class NewsPage extends React.Component<{
                 <li>
                   Mapping of the OncoKB and AMP/ASCO/CAP Levels of Evidence is
                   available on the{' '}
-                  <Link to={PAGE_ROUTE.LEVELS}>Levels of Evidence</Link> page.
+                  <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.JCS}`}>
+                    Levels of Evidence
+                  </Link>{' '}
+                  page.
                 </li>
                 <img
                   className="md-auto"
