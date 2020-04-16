@@ -22,7 +22,7 @@ type LevelOfEvidencePageProps = {
 };
 
 // the level content should be all uppercase
-enum Version {
+export enum Version {
   v1 = 'V1',
   v2 = 'V2',
   JCS = 'JCS'
@@ -44,8 +44,8 @@ const LEVEL_TITLE: { [key in Version]: ElementType } = {
   [Version.JCS]: <>Mapping between OncoKB and AMP/ASCO/CAP Levels of Evidence</>
 };
 const LEVEL_SUBTITLE: { [key in Version]: ElementType } = {
-  [Version.v1]: <>Click here to see {Version.v2} Levels of Evidence</>,
-  [Version.v2]: <>Click here to see {Version.v1} Levels of Evidence</>,
+  [Version.v1]: <>Click here to see Levels of Evidence {Version.v2}</>,
+  [Version.v2]: <>Click here to see Levels of Evidence {Version.v1}</>,
   [Version.JCS]: <></>
 };
 
