@@ -51,6 +51,7 @@ export const GRID_BREAKPOINTS = {
   LG: 1010,
   XL: 1450
 };
+export const SOP_LINK = 'https://sop.oncokb.org';
 
 export const REDIRECT_TIMEOUT_MILLISECONDS = 10000;
 export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;
