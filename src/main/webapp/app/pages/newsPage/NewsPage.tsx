@@ -7,7 +7,8 @@ import {
   IMG_MAX_WIDTH,
   ONCOKB_CONTACT_EMAIL,
   ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK,
-  PAGE_ROUTE
+  PAGE_ROUTE,
+  SOP_LINK
 } from 'app/config/constants';
 import { Link } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
@@ -75,16 +76,17 @@ export default class NewsPage extends React.Component<{
             <CitationText />
           </div>
           <div className="mt-2">
-            <NewsList date={'04152020'}>
+            <NewsList date={'04162020'}>
               <ul>
                 <li>
                   An updated version of the OncoKB Curation Standard Operating
-                  Procedure, v1.1, has been released in the OncoKB{' '}
-                  <Link to={PAGE_ROUTE.ABOUT}>About</Link> page.
+                  Procedure, v1.1, has been released. See the OncoKB{' '}
+                  <Link to={PAGE_ROUTE.ABOUT}>About</Link> page or{' '}
+                  <Linkout link={SOP_LINK}>{SOP_LINK}</Linkout>.
                 </li>
                 <li>
-                  Mapping of the OncoKB and AMP/ASCO/CAP Levels of Evidence is
-                  available on the{' '}
+                  We now show a comparison between the OncoKB and AMP/ASCO/CAP
+                  Levels of Evidence on the{' '}
                   <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.JCS}`}>
                     Levels of Evidence
                   </Link>{' '}
