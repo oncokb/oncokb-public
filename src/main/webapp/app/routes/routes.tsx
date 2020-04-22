@@ -23,7 +23,7 @@ import ActivateAccount from 'app/components/account/ActivateAccount';
 import { PasswordResetInit } from 'app/components/account/PasswordResetInit';
 import PasswordResetFinish from 'app/components/account/PasswordResetFinish';
 import PageNotFound from 'app/shared/error/page-not-found';
-import DataAccessPage from 'app/pages/DataAccessPage';
+import APIAccessPage from 'app/pages/APIAccessPage';
 import AccountPassword from 'app/components/account/AccountPassword';
 import AdminRouts from 'app/routes/AdminRoutes';
 import PageContainer from 'app/components/PageContainer';
@@ -41,6 +41,11 @@ const AppRouts = (props: {
       <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
       <Redirect exact from={'/updates'} to={PAGE_ROUTE.NEWS} />
       <Redirect exact from={'/genes'} to={PAGE_ROUTE.CANCER_GENES} />
+      <Redirect
+        exact
+        from={PAGE_ROUTE.DATA_ACCESS}
+        to={PAGE_ROUTE.API_ACCESS}
+      />
       <Redirect
         exact
         from={'/gene/:hugoSymbol/alteration/:alteration'}
@@ -66,8 +71,8 @@ const AppRouts = (props: {
           />
           <ErrorBoundaryRoute
             exact
-            path={PAGE_ROUTE.DATA_ACCESS}
-            component={DataAccessPage}
+            path={PAGE_ROUTE.API_ACCESS}
+            component={APIAccessPage}
           />
           <ErrorBoundaryRoute
             exact
