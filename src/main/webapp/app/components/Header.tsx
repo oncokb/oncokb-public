@@ -34,7 +34,7 @@ class Header extends React.Component<IHeaderProps> {
     { title: 'Levels of Evidence', link: 'levels' },
     { title: 'Actionable Genes', link: 'actionableGenes' },
     { title: 'Cancer Genes', link: 'cancerGenes' },
-    { title: 'Data Access', link: 'dataAccess' },
+    { title: 'API Access', link: 'apiAccess' },
     { title: 'About', link: 'about' },
     { title: 'Team', link: 'team' },
     { title: 'News', link: 'news' },
