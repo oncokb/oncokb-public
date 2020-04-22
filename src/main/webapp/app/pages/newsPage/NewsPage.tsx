@@ -4,6 +4,7 @@ import NewsList, { getNews, getNewsTitle } from 'app/pages/newsPage/NewsList';
 import { NEWS_BY_DATE } from 'app/pages/newsPage/NewsPageContent';
 import {
   DOCUMENT_TITLES,
+  FAQ_LINK,
   IMG_MAX_WIDTH,
   ONCOKB_CONTACT_EMAIL,
   ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK,
@@ -76,6 +77,15 @@ export default class NewsPage extends React.Component<{
             <CitationText />
           </div>
           <div className="mt-2">
+            <NewsList date={'04242020'}>
+              <ul>
+                <li>
+                  We have introduced a{' '}
+                  <Linkout link={FAQ_LINK}>FAQ page</Linkout> where you can find
+                  answers to several frequently asked questions.
+                </li>
+              </ul>
+            </NewsList>
             <NewsList date={'04232020'} />
             <NewsList date={'04162020'}>
               <ul>
