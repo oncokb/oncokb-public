@@ -85,7 +85,7 @@ const DownloadButtonGroups: React.FunctionComponent<{
 
 @inject('routing', 'windowStore', 'authenticationStore')
 @observer
-export default class DataAccessPage extends React.Component<{
+export default class APIAccessPage extends React.Component<{
   routing: RouterStore;
   windowStore: WindowStore;
   authenticationStore: AuthenticationStore;
@@ -154,7 +154,7 @@ export default class DataAccessPage extends React.Component<{
 
   render() {
     return (
-      <DocumentTitle title={DOCUMENT_TITLES.DATA_ACCESS}>
+      <DocumentTitle title={DOCUMENT_TITLES.API_ACCESS}>
         <>
           <div className={'mb-4'}>
             <h6 className={'mb-3'}>

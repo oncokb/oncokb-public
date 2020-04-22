@@ -273,6 +273,7 @@ export enum PAGE_ROUTE {
   LOGIN = '/login',
   LOGOUT = '/logout',
   DATA_ACCESS = '/dataAccess',
+  API_ACCESS = '/apiAccess',
   CANCER_GENES = '/cancerGenes',
   ACTIONABLE_GENE = '/actionableGenes',
   GENE_HEADER = '/gene',
@@ -385,7 +386,7 @@ export enum DOCUMENT_TITLES {
   ACTIONABLE_GENES = 'OncoKB Actionable Genes',
   TERMS = 'OncoKB Terms of Use - Academic Research',
   NEWS = 'OncoKB Latest News',
-  DATA_ACCESS = 'OncoKB Data Access',
+  API_ACCESS = 'OncoKB Data Access',
   CANCER_GENES = 'OncoKB Cancer Gene List'
 }
 
