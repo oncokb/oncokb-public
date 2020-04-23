@@ -106,6 +106,99 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '04232020': {
+    updatedImplication: [
+      [
+        '1',
+        'BRAF',
+        'V600E',
+        'Colorectal Cancer',
+        'Encorafenib + Cetuximab',
+        <span>
+          <PMIDLink pmids={'31566309'} />,{' '}
+          <a
+            href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-encorafenib-combination-cetuximab-metastatic-colorectal-cancer-braf-v600e-mutation"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            FDA-approval of Encorafenib + Cetuximab
+          </a>
+        </span>
+      ],
+      [
+        '1',
+        'NF1',
+        'Oncogenic Mutations',
+        'Neurofibroma',
+        'Selumetinib',
+        <span>
+          <PMIDLink pmids={'28029918, 32187457'} />,{' '}
+          <a
+            href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-selumetinib-neurofibromatosis-type-1-symptomatic-inoperable-plexiform-neurofibromas"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            FDA-approval of Selumetinib
+          </a>
+        </span>
+      ],
+      [
+        '2',
+        'BRAF',
+        'V600E',
+        'Colorectal Cancer',
+        'Encorafenib + Panitumumab',
+        <span>
+          <span>Listing in 2.2020 Colon Cancer NCCN;</span>{' '}
+          <PMIDLink pmids={'29431699, 31566309'} />
+        </span>
+      ],
+      [
+        '2',
+        'ERBB2',
+        'Amplification',
+        'Colorectal Cancer',
+        'Trastuzumab + Lapatinib',
+        <span>
+          <span>Listing in 2.2020 Colon Cancer NCCN;</span>{' '}
+          <PMIDLink pmids={'27108243'} />
+        </span>
+      ],
+      [
+        '2',
+        'ERBB2',
+        'Amplification',
+        'Colorectal Cancer',
+        'Trastuzumab + Pertuzumab',
+        <span>
+          <span>Listing in 2.2020 Colon Cancer NCCN;</span>{' '}
+          <PMIDLink pmids={'30857956'} />
+        </span>
+      ]
+    ],
+    changedAnnotation: [
+      [
+        'BRAF',
+        'V600E',
+        'Colorectal Cancer',
+        <div>
+          <div>Encorafenib + Cetuximab + Binimetinib,</div>
+          <div>Dabrafenib + Panitumumab + Trametinib</div>
+        </div>,
+        '2',
+        'None',
+        'Listing removed from 2.2020 Colon Cancer NCCN'
+      ]
+    ],
+    news: [
+      <span>
+        Updated EGFR biomarker-drug associations for investigational Levels 3A
+        and 4
+      </span>,
+      <span>Updated and reorganized KIT biomarker-drug associations</span>
+    ],
+    newlyAddedGenes: ['DDX4', 'DDX41', 'ELMSAN1', 'MBD6']
+  },
   '02122020': {
     priorityNews: [
       <span>
