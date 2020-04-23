@@ -9,8 +9,6 @@ import Loadable from 'react-loadable';
 import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import { inject } from 'mobx-react';
-import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { TermsPage } from 'app/pages/TermsPage';
 import { TeamPage } from 'app/pages/TeamPage';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
@@ -30,6 +28,7 @@ import PageContainer from 'app/components/PageContainer';
 import React from 'react';
 import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
+import { FAQPage } from 'app/pages/FAQPage';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -73,6 +72,11 @@ const AppRouts = (props: {
             exact
             path={PAGE_ROUTE.API_ACCESS}
             component={APIAccessPage}
+          />
+          <ErrorBoundaryRoute
+            exact
+            path={PAGE_ROUTE.FAQ_ACCESS}
+            component={FAQPage}
           />
           <ErrorBoundaryRoute
             exact

@@ -52,6 +52,7 @@ export const GRID_BREAKPOINTS = {
   XL: 1450
 };
 export const SOP_LINK = 'https://sop.oncokb.org';
+export const FAQ_LINK = 'https://faq.oncokb.org';
 
 export const REDIRECT_TIMEOUT_MILLISECONDS = 10000;
 export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;
@@ -274,6 +275,7 @@ export enum PAGE_ROUTE {
   LOGOUT = '/logout',
   DATA_ACCESS = '/dataAccess',
   API_ACCESS = '/apiAccess',
+  FAQ_ACCESS = '/faq',
   CANCER_GENES = '/cancerGenes',
   ACTIONABLE_GENE = '/actionableGenes',
   GENE_HEADER = '/gene',
