@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { inject, observer } from 'mobx-react';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
 import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import { remoteData } from 'cbioportal-frontend-commons';
+import { remoteData, DefaultTooltip } from 'cbioportal-frontend-commons';
 import {
   action,
   computed,
@@ -43,6 +43,7 @@ import * as QueryString from 'query-string';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import DocumentTitle from 'react-document-title';
+import { COLOR_BLUE } from 'app/config/theme';
 
 type Treatment = {
   level: string;
@@ -435,6 +436,52 @@ export default class ActionableGenesPage extends React.Component<
     return Promise.resolve(content.join('\n'));
   }
 
+  concatElementsByComma(list: ReactNode[]) {
+    return list.reduce((prev, curr) => [prev, ', ', curr]);
+  }
+
+  getAlterationCell(hugoSymbol: string, alterations: string[]) {
+    const linkedAlts = alterations.map<React.ReactNode>(
+      (alteration, index: number) => (
+        <AlterationPageLink
+          key={index}
+          hugoSymbol={hugoSymbol}
+          alteration={alteration}
+        />
+      )
+    );
+    if (linkedAlts.length > 5) {
+      return (
+        <span>
+          {linkedAlts[0]} and{' '}
+          <DefaultTooltip
+            overlay={
+              <div style={{ maxWidth: '400px' }}>
+                {this.concatElementsByComma(linkedAlts)}
+              </div>
+            }
+            overlayStyle={{
+              opacity: 1
+            }}
+            placement="right"
+            destroyTooltipOnHide={true}
+          >
+            <span
+              style={{
+                textDecoration: 'underscore',
+                color: COLOR_BLUE
+              }}
+            >
+              {linkedAlts.length - 1} other alterations
+            </span>
+          </DefaultTooltip>
+        </span>
+      );
+    } else {
+      return this.concatElementsByComma(linkedAlts);
+    }
+  }
+
   private columns = [
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL)
@@ -454,19 +501,14 @@ export default class ActionableGenesPage extends React.Component<
       style: { whiteSpace: 'normal' },
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
-      Cell(props: { original: Treatment }) {
+      Cell: (props: { original: Treatment }) => {
         return (
           <div style={{ display: 'block' }}>
             {' '}
-            {props.original.alterations
-              .map<React.ReactNode>((alteration, index: number) => (
-                <AlterationPageLink
-                  key={index}
-                  hugoSymbol={props.original.hugoSymbol}
-                  alteration={alteration}
-                />
-              ))
-              .reduce((prev, curr) => [prev, ', ', curr])}
+            {this.getAlterationCell(
+              props.original.hugoSymbol,
+              props.original.alterations
+            )}
           </div>
         );
       }
