@@ -80,7 +80,7 @@ export default class NewsPage extends React.Component<{
             <NewsList date={'04242020'}>
               <ul>
                 <li>
-                  We have introduced a{' '}
+                  We have introduced an{' '}
                   <Linkout link={FAQ_LINK}>FAQ page</Linkout> where you can find
                   answers to several frequently asked questions.
                 </li>
