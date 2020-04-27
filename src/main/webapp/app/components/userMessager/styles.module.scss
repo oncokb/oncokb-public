@@ -1,0 +1,17 @@
+.messager {
+  padding: 10px 0;
+  background: green;
+  color: #fff;
+  font-size: 14px;
+  position: relative;
+
+  .messagerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  i.close {
+    cursor: pointer;
+  }
+}
