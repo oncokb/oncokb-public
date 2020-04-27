@@ -37,7 +37,7 @@ if (
     // BASED ON USERS LOCALSTORAGE
     {
       dateEnd: 100000000000000,
-      content: `Join our webinar to learn how to use OncoKB effectively. First webinar <strong>May 7th 3pm-4pm EDT</strong>. <a class="btn btn-secondary btn-sm ml-2" target="_blank" href="https://meetmsk.zoom.us/meeting/register/vJcvf-CvrzsshBK8VEiD5J9DSRDf7C--qg">Click here to register!</a>`,
+      content: `Join our webinar to learn how to use OncoKB effectively, <strong>May 7th 3pm-4pm EDT</strong>. <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://meetmsk.zoom.us/meeting/register/vJcvf-CvrzsshBK8VEiD5J9DSRDf7C--qg">Click here to register!</a>`,
       id: '2020_spring_webinar'
     }
   ];
