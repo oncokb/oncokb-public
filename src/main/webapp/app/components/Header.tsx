@@ -10,6 +10,7 @@ import AccountMenu from 'app/pages/menus/account';
 import mskIcon from 'content/images/msk-icon-fff-sm.png';
 import { action, observable } from 'mobx';
 import { PAGE_TITLE } from 'app/config/constants';
+import UserMessager from 'app/components/userMessager/UserMessage';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -70,37 +71,40 @@ class Header extends React.Component<IHeaderProps> {
 
   public render() {
     return (
-      <header className="sticky-top header">
-        <Navbar
-          bg="primary"
-          expand="lg"
-          className="navbar-dark main-navbar"
-          expanded={this.isNavExpanded}
-        >
-          <Container fluid={!this.props.windowStore.isXLscreen}>
-            <Navbar.Brand>
-              <NavLink to="/">
-                <img height={38} src={oncokbImg} alt={'OncoKB'} />
-              </NavLink>
-            </Navbar.Brand>
-            <Navbar.Toggle onClick={this.toggleNav} />
-            <Navbar.Collapse onClick={(event: any) => this.closeNav(event)}>
-              <Nav className="mr-auto">
-                {this.subPages.map(page => this.getLink(page))}
-              </Nav>
-              <Nav>
-                <AccountMenu
-                  isAuthenticated={this.props.isUserAuthenticated}
-                  isAdmin={this.props.isAdmin}
-                />
-                <Nav.Item>
-                  <img alt="mskcc-logo" src={mskIcon} height={'37px'} />
-                </Nav.Item>
-              </Nav>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
-      </header>
+      <>
+        <UserMessager windowStore={this.props.windowStore} />
+        <header className="sticky-top header">
+          <Navbar
+            bg="primary"
+            expand="lg"
+            className="navbar-dark main-navbar"
+            expanded={this.isNavExpanded}
+          >
+            <Container fluid={!this.props.windowStore.isXLscreen}>
+              <Navbar.Brand>
+                <NavLink to="/">
+                  <img height={38} src={oncokbImg} alt={'OncoKB'} />
+                </NavLink>
+              </Navbar.Brand>
+              <Navbar.Toggle onClick={this.toggleNav} />
+              <Navbar.Collapse onClick={(event: any) => this.closeNav(event)}>
+                <Nav className="mr-auto">
+                  {this.subPages.map(page => this.getLink(page))}
+                </Nav>
+                <Nav>
+                  <AccountMenu
+                    isAuthenticated={this.props.isUserAuthenticated}
+                    isAdmin={this.props.isAdmin}
+                  />
+                  <Nav.Item style={{ paddingRight: 0 }}>
+                    <img alt="mskcc-logo" src={mskIcon} height={'37px'} />
+                  </Nav.Item>
+                </Nav>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
+        </header>
+      </>
     );
   }
 }
