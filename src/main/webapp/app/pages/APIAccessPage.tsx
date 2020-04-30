@@ -6,6 +6,7 @@ import {
   DATA_RELEASES,
   DataRelease,
   DEFAULT_MARGIN_BOTTOM_LG,
+  DEMO_WEBSITE_LINK,
   DOCUMENT_TITLES,
   LicenseType,
   PAGE_ROUTE,
@@ -30,6 +31,7 @@ import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import DocumentTitle from 'react-document-title';
 import AuthenticationStore from 'app/store/AuthenticationStore';
+import { Linkout } from 'app/shared/links/Linkout';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 
@@ -207,6 +209,12 @@ export default class APIAccessPage extends React.Component<{
                   curl -H &quot;Authorization: Bearer [your token]&quot;
                   https://www.oncokb.org/api/v1/genes
                 </code>
+              </div>
+              <div className={'mt-2'}>
+                You can also use our{' '}
+                <Linkout link={DEMO_WEBSITE_LINK}>demo website</Linkout> which
+                includes the full data of BRAF, TP53 and ROS1 before committing
+                to our license.
               </div>
             </div>
           </div>
