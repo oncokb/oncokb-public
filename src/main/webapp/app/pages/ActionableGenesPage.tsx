@@ -516,6 +516,7 @@ export default class ActionableGenesPage extends React.Component<
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
       minWidth: 300,
+      accessor: 'tumorType',
       Cell(props: { original: Treatment }) {
         return <span>{props.original.tumorType}</span>;
       }
