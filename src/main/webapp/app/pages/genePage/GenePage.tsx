@@ -32,7 +32,11 @@ import {
   BiologicalVariant,
   ClinicalVariant
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { AlterationPageLink, CitationLink } from 'app/shared/utils/UrlUtils';
+import {
+  AlterationPageLink,
+  CitationLink,
+  TumorTypePageLink
+} from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
 import OncoKBTable, {
   SearchColumn
@@ -261,11 +265,16 @@ export default class GenePage extends React.Component<
             getCancerTypeNameFromOncoTreeType(data.cancerType),
             keyword
           ),
-        Cell(props: { original: ClinicalVariant }) {
+        Cell: (props: { original: ClinicalVariant }) => {
+          const tumorType = getCancerTypeNameFromOncoTreeType(
+            props.original.cancerType
+          );
           return (
-            <span>
-              {getCancerTypeNameFromOncoTreeType(props.original.cancerType)}
-            </span>
+            <TumorTypePageLink
+              hugoSymbol={this.store.hugoSymbol}
+              alteration={props.original.variant.name}
+              tumorType={tumorType}
+            />
           );
         }
       },
@@ -626,6 +635,7 @@ export default class GenePage extends React.Component<
                           {...this.store.mutationMapperProps.result}
                           store={this.store.mutationMapperStore.result}
                           oncogenicities={this.store.uniqOncogenicity}
+                          showTrackSelector={false}
                           windowWrapper={this.windowWrapper}
                         />
                       </Col>
