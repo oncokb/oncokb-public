@@ -635,6 +635,7 @@ export default class GenePage extends React.Component<
                           {...this.store.mutationMapperProps.result}
                           store={this.store.mutationMapperStore.result}
                           oncogenicities={this.store.uniqOncogenicity}
+                          showTrackSelector={false}
                           windowWrapper={this.windowWrapper}
                         />
                       </Col>
