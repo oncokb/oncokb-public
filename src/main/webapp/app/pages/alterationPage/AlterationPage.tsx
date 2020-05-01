@@ -22,6 +22,8 @@ import OncoKBTable, {
 import {
   citationsHasInfo,
   concatElementsByComma,
+  decodeSlash,
+  encodeSlash,
   getDefaultColumnDefinition,
   OncoKBOncogenicityIcon,
   reduceJoin
@@ -143,8 +145,8 @@ export default class GenePage extends React.Component<
     if (props.match.params) {
       this.store = new AnnotationStore({
         hugoSymbolQuery: props.match.params.hugoSymbol,
-        alterationQuery: props.match.params.alteration,
-        tumorTypeQuery: props.match.params.tumorType
+        alterationQuery: decodeSlash(props.match.params.alteration),
+        tumorTypeQuery: decodeSlash(props.match.params.tumorType)
       });
     }
 
@@ -152,7 +154,7 @@ export default class GenePage extends React.Component<
       reaction(
         () => this.store.tumorTypeQuery,
         newTumorType => {
-          let tumorTypeSection = this.store.tumorTypeQuery.replace('/', '%2F');
+          let tumorTypeSection = encodeSlash(this.store.tumorTypeQuery);
           tumorTypeSection = tumorTypeSection ? `/${tumorTypeSection}` : '';
           this.props.routing.history.replace(
             `/gene/${this.store.hugoSymbol}/${this.store.alterationQuery}${tumorTypeSection}`
