@@ -89,19 +89,18 @@ export const TeamPage = () => {
               <li>James J. Harding, MD</li>
               <li>Matthew D. Hellmann, MD</li>
               <li>Alan L. Ho, MD, PhD</li>
-              <li>David Hyman, MD</li>
               <li>Gopa Iyer, MD</li>
               <li>Edgar A. Jaimes, MD</li>
               <li>Yelena Y. Janjigian, MD</li>
               <li>Philip Kantoff, MD</li>
               <li>David S. Klimstra, MD</li>
               <li>Andrew Kung, MD, PhD</li>
+              <li>Marc Ladanyi, MD</li>
             </ul>
           </Col>
           <Col xs={6} md>
             <h6>Clinical Genomics Annotation Committee (continued)</h6>
             <ul>
-              <li>Marc Ladanyi, MD</li>
               <li>C. Ola Landgren, MD, PhD</li>
               <li>Ingo K. Mellinghoff, MD</li>
               <li>Kenneth Offit, MD</li>
