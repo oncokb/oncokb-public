@@ -38,7 +38,6 @@ export const TeamPage = () => {
               <li>Hongxin Zhang, MSc</li>
               <li>Ritika Kundra, MSc</li>
               <li>Moriah Nissan, PhD</li>
-              <li>Jing Su, MSc</li>
               <li>Ederlinda Paraiso, MPA</li>
               <li>Julia Rudolph, MPA</li>
               <li>David Solit, MD</li>
@@ -67,6 +66,8 @@ export const TeamPage = () => {
               <li>Jiaojiao Wang, MSc</li>
               <li>Phillip Jonsson, PhD</li>
               <li>David Knorr, MD, PhD</li>
+              <li>David Hyman, MD</li>
+              <li>Jing Su, MSc</li>
             </ul>
           </Col>
           <Col xs={6} md>
