@@ -6,7 +6,7 @@ import {
   Article
 } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   APP_LOCAL_DATE_FORMAT,
   APP_LOCAL_DATETIME_FORMAT_Z,
@@ -427,4 +427,8 @@ export const scrollWidthOffsetInNews = (el?: any) => {
     el === undefined ? 0 : el.getBoundingClientRect().top + window.pageYOffset;
   const yOffset = -80;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
+};
+
+export const concatElementsByComma = (list: ReactNode[]) => {
+  return list.reduce((prev, curr) => [prev, ', ', curr]);
 };
