@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import reactStringReplace from 'react-string-replace';
 import { ReactNodeArray } from 'prop-types';
+import { encodeSlash } from 'app/shared/utils/Utils';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -50,7 +51,9 @@ export const TumorTypePageLink: React.FunctionComponent<{
 }> = props => {
   return (
     <Link
-      to={`${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}/${props.tumorType}`}
+      to={`${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${encodeSlash(
+        props.alteration
+      )}/${encodeSlash(props.tumorType)}`}
     >
       {props.content ? props.content : props.tumorType}
     </Link>
