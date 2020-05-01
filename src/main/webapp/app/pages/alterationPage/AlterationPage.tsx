@@ -5,7 +5,7 @@ import {
   TherapeuticImplication
 } from 'app/store/AnnotationStore';
 import { computed, action, IReactionDisposer, reaction } from 'mobx';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Button } from 'react-bootstrap';
 import AppStore from 'app/store/AppStore';
 import _ from 'lodash';
 import Select from 'react-select';
@@ -21,11 +21,16 @@ import OncoKBTable, {
 } from 'app/components/oncokbTable/OncoKBTable';
 import {
   citationsHasInfo,
+  concatElementsByComma,
   getDefaultColumnDefinition,
   OncoKBOncogenicityIcon,
   reduceJoin
 } from 'app/shared/utils/Utils';
-import { GenePageLink } from 'app/shared/utils/UrlUtils';
+import {
+  AlterationPageLink,
+  GenePageLink,
+  TumorTypePageLink
+} from 'app/shared/utils/UrlUtils';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { RouterStore } from 'mobx-react-router';
@@ -247,7 +252,19 @@ export default class GenePage extends React.Component<
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS)
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE)
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
+        Cell: (props: { original: any }) => {
+          return (
+            <Button
+              variant={'link'}
+              onClick={() =>
+                (this.store.tumorTypeQuery = props.original.cancerTypes)
+              }
+            >
+              {props.original.cancerTypes}
+            </Button>
+          );
+        }
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),

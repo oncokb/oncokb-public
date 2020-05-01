@@ -16,6 +16,7 @@ import { Evidence, MainType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
 import {
+  concatElementsByComma,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
@@ -436,10 +437,6 @@ export default class ActionableGenesPage extends React.Component<
     return Promise.resolve(content.join('\n'));
   }
 
-  concatElementsByComma(list: ReactNode[]) {
-    return list.reduce((prev, curr) => [prev, ', ', curr]);
-  }
-
   getAlterationCell(hugoSymbol: string, alterations: string[]) {
     const linkedAlts = alterations.map<React.ReactNode>(
       (alteration, index: number) => (
@@ -457,7 +454,7 @@ export default class ActionableGenesPage extends React.Component<
           <DefaultTooltip
             overlay={
               <div style={{ maxWidth: '400px' }}>
-                {this.concatElementsByComma(linkedAlts)}
+                {concatElementsByComma(linkedAlts)}
               </div>
             }
             overlayStyle={{
@@ -478,7 +475,7 @@ export default class ActionableGenesPage extends React.Component<
         </span>
       );
     } else {
-      return this.concatElementsByComma(linkedAlts);
+      return concatElementsByComma(linkedAlts);
     }
   }
 
