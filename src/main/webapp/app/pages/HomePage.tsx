@@ -309,8 +309,13 @@ class HomePage extends React.Component<IHomeProps> {
           <Col xs={0} lg={1}></Col>
         </Row>
         <Row className="mb-3">
-          <Col className={'d-flex justify-content-center'}>
-            <CitationText boldLinkout={true} />
+          <Col className={'text-center'}>
+            <div className={'font-weight-bold'}>
+              Powered by MSK clinical expertise
+            </div>
+            <div>
+              <CitationText boldLinkout={true} />
+            </div>
           </Col>
         </Row>
       </div>
