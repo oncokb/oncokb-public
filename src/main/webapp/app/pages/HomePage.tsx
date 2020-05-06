@@ -311,8 +311,8 @@ class HomePage extends React.Component<IHomeProps> {
         <Row className="mb-3">
           <Col className={'text-center'}>
             <div className={'font-weight-bold'}>
-              Powered by clinical expertise at Memorial Sloan Kettering Cancer
-              Center
+              Powered by the clinical expertise of Memorial Sloan Kettering
+              Cancer Center
             </div>
             <div>
               <CitationText boldLinkout={true} />
