@@ -422,6 +422,15 @@ export function getMomentInstance(utcTime: string) {
   return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z);
 }
 
+const SLASH_HTML_ENTITY_CODE = '%2F';
+
+export function encodeSlash(content: string) {
+  return content.replace('/', SLASH_HTML_ENTITY_CODE);
+}
+export function decodeSlash(content: string) {
+  return content.replace(SLASH_HTML_ENTITY_CODE, '/');
+}
+
 export const scrollWidthOffsetInNews = (el?: any) => {
   const yCoordinate =
     el === undefined ? 0 : el.getBoundingClientRect().top + window.pageYOffset;
