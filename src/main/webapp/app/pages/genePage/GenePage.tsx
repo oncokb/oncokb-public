@@ -1,9 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { AnnotationStore } from 'app/store/AnnotationStore';
-import { action, computed, observable } from 'mobx';
+import { action, computed, observable, IReactionDisposer } from 'mobx';
 import { Else, If, Then } from 'react-if';
-import { Redirect } from 'react-router';
+import { Redirect, RouteComponentProps } from 'react-router';
 import { Button, Col, Row } from 'react-bootstrap';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import styles from './GenePage.module.scss';
@@ -230,12 +230,18 @@ const GeneBackground: React.FunctionComponent<{
   );
 };
 
+interface MatchParams {
+  hugoSymbol: string;
+}
+
+interface GenePageProps extends RouteComponentProps<MatchParams> {
+  appStore: AppStore;
+  windowStore: WindowStore;
+}
+
 @inject('appStore', 'windowStore')
 @observer
-export default class GenePage extends React.Component<
-  { appStore: AppStore; windowStore: WindowStore },
-  {}
-> {
+export default class GenePage extends React.Component<GenePageProps> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground = false;
 
@@ -360,6 +366,15 @@ export default class GenePage extends React.Component<
     this.store = new AnnotationStore({
       hugoSymbolQuery: this.hugoSymbolQuery
     });
+  }
+
+  componentDidUpdate(prevProps: any) {
+    if (
+      this.props.match.params.hugoSymbol !== prevProps.match.params.hugoSymbol
+    ) {
+      this.hugoSymbolQuery = this.props.match.params.hugoSymbol;
+      this.store.hugoSymbolQuery = this.hugoSymbolQuery;
+    }
   }
 
   @autobind

@@ -48,6 +48,8 @@ import {
   COLOR_ICON_WITH_INFO,
   COLOR_ICON_WITHOUT_INFO
 } from 'app/config/theme';
+import WindowStore from 'app/store/WindowStore';
+import { RouteComponentProps } from 'react-router';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -130,11 +132,21 @@ const AlterationInfo: React.FunctionComponent<{
   );
 };
 
+interface MatchParams {
+  hugoSymbol: string;
+  alteration: string;
+  tumorType?: string;
+}
+
+interface AlterationPageProps extends RouteComponentProps<MatchParams> {
+  appStore: AppStore;
+  routing: RouterStore;
+}
+
 @inject('appStore', 'routing')
 @observer
-export default class GenePage extends React.Component<
-  { appStore: AppStore; routing: RouterStore },
-  {}
+export default class AlterationPage extends React.Component<
+  AlterationPageProps
 > {
   private store: AnnotationStore;
 
@@ -146,7 +158,9 @@ export default class GenePage extends React.Component<
       this.store = new AnnotationStore({
         hugoSymbolQuery: props.match.params.hugoSymbol,
         alterationQuery: decodeSlash(props.match.params.alteration),
-        tumorTypeQuery: decodeSlash(props.match.params.tumorType)
+        tumorTypeQuery: props.match.params.tumorType
+          ? decodeSlash(props.match.params.tumorType)
+          : props.match.params.tumorType
       });
     }
 
@@ -157,11 +171,38 @@ export default class GenePage extends React.Component<
           let tumorTypeSection = encodeSlash(this.store.tumorTypeQuery);
           tumorTypeSection = tumorTypeSection ? `/${tumorTypeSection}` : '';
           this.props.routing.history.replace(
-            `/gene/${this.store.hugoSymbol}/${this.store.alterationQuery}${tumorTypeSection}`
+            `/gene/${this.store.hugoSymbolQuery}/${this.store.alterationQuery}${tumorTypeSection}`
           );
         }
       )
     );
+  }
+
+  @action
+  updateQuery(prevProps: AlterationPageProps) {
+    if (
+      this.props.match.params.hugoSymbol !== prevProps.match.params.hugoSymbol
+    ) {
+      this.store.hugoSymbolQuery = this.props.match.params.hugoSymbol;
+    }
+    if (
+      this.props.match.params.alteration !== prevProps.match.params.alteration
+    ) {
+      this.store.alterationQuery = this.props.match.params.alteration;
+    }
+    // When a tumor type changed from the URL, we need to propagate that to the store
+    // but if the tumor type is unset, we need to clear the query in the store
+    if (
+      this.props.match.params.tumorType !== prevProps.match.params.tumorType
+    ) {
+      this.store.tumorTypeQuery = this.props.match.params.tumorType
+        ? this.props.match.params.tumorType
+        : '';
+    }
+  }
+
+  componentDidUpdate(prevProps: AlterationPageProps) {
+    this.updateQuery(prevProps);
   }
 
   @computed
