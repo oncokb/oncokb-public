@@ -3,6 +3,7 @@ import oncokbClient from 'app/shared/api/oncokbClientInstance';
 import { CitationText } from 'app/components/CitationText';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import {
+  API_DOCUMENT_LINK,
   DATA_RELEASES,
   DataRelease,
   DEFAULT_MARGIN_BOTTOM_LG,
@@ -209,6 +210,11 @@ export default class APIAccessPage extends React.Component<{
                   curl -H &quot;Authorization: Bearer [your token]&quot;
                   https://www.oncokb.org/api/v1/genes
                 </code>
+              </div>
+              <div className={'mt-2'}>
+                Please see our detailed{' '}
+                <Linkout link={API_DOCUMENT_LINK}>API documentation</Linkout>{' '}
+                for more information.
               </div>
               <div className={'mt-2'}>
                 You can also use our{' '}
