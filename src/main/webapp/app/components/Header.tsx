@@ -101,7 +101,7 @@ class Header extends React.Component<IHeaderProps> {
   public render() {
     return (
       <>
-        <UserMessager windowStore={this.props.windowStore} />
+        {/*<UserMessager windowStore={this.props.windowStore} />*/}
         <header className="sticky-top header">
           <Navbar
             bg="primary"
