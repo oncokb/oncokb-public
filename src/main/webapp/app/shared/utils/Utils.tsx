@@ -424,11 +424,12 @@ export function getMomentInstance(utcTime: string) {
 
 const SLASH_HTML_ENTITY_CODE = '%2F';
 
-export function encodeSlash(content: string) {
-  return content.replace('/', SLASH_HTML_ENTITY_CODE);
+export function encodeSlash(content: string | undefined) {
+  return content ? content.replace('/', SLASH_HTML_ENTITY_CODE) : content;
 }
-export function decodeSlash(content: string) {
-  return content.replace(SLASH_HTML_ENTITY_CODE, '/');
+
+export function decodeSlash(content: string | undefined) {
+  return content ? content.replace(SLASH_HTML_ENTITY_CODE, '/') : content;
 }
 
 export const scrollWidthOffsetInNews = (el?: any) => {
