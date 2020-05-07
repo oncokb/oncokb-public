@@ -53,6 +53,7 @@ export const GRID_BREAKPOINTS = {
 };
 export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
+export const API_DOCUMENT_LINK = 'https://api.oncokb.org/oncokb-website/api';
 export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
 
 export const REDIRECT_TIMEOUT_MILLISECONDS = 10000;
