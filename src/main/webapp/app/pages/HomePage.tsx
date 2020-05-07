@@ -8,33 +8,18 @@ import {
   LevelNumber,
   TypeaheadSearchResp
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import autobind from 'autobind-decorator';
 import { Row, Col } from 'react-bootstrap';
 import oncokbImg from 'content/images/oncokb.png';
 import { HomePageNumber } from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
-import {
-  LEVEL_BUTTON_DESCRIPTION,
-  LEVELS,
-  PAGE_ROUTE
-} from 'app/config/constants';
+import { LEVEL_BUTTON_DESCRIPTION, PAGE_ROUTE } from 'app/config/constants';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
-import {
-  getAllAlterationsName,
-  getAllTumorTypesName,
-  levelOfEvidence2Level
-} from 'app/shared/utils/Utils';
+import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import { CitationText } from 'app/components/CitationText';
 import _ from 'lodash';
-import {
-  SearchOption,
-  SearchOptionType
-} from 'app/components/searchOption/SearchOption';
-import AsyncSelect from 'react-select/async';
-import { components } from 'react-select';
-import { SuggestCuration } from 'app/components/SuggestCuration';
 import AppStore from 'app/store/AppStore';
+import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 
 interface IHomeProps {
   content: string;
@@ -129,68 +114,7 @@ class HomePage extends React.Component<IHomeProps> {
     ).length;
   }
 
-  // https://github.com/JedWatson/react-select/issues/614#issuecomment-244006496
-  private debouncedFetch = _.debounce((searchTerm, callback) => {
-    this.getOptions(searchTerm)
-      .then(result => {
-        return callback(result);
-      })
-      .catch((error: any) => callback(error, null));
-  }, 500);
-
-  @autobind
-  @action
-  async getOptions(keyword: string) {
-    this.keyword = keyword;
-    return _.reduce(
-      await oncokbPrivateClient.searchTypeAheadGetUsingGET({
-        query: keyword,
-        limit: 20
-      }),
-      (acc, result) => {
-        acc.push({
-          tumorTypesName: getAllTumorTypesName(result.tumorTypes),
-          alterationsName: getAllAlterationsName(result.variants),
-          ...result
-        });
-        return acc;
-      },
-      [] as ExtendedTypeaheadSearchResp[]
-    );
-  }
-
   public render() {
-    const Option = (props: any) => {
-      return (
-        <>
-          <components.Option {...props}>
-            <SearchOption
-              search={this.keyword}
-              type={props.data.queryType as SearchOptionType}
-              data={props.data}
-            >
-              <components.Option {...props} />
-            </SearchOption>
-          </components.Option>
-        </>
-      );
-    };
-    const NoOptionsMessage = (props: any) => {
-      if (this.keyword) {
-        return (
-          <components.Option {...props}>
-            <span className="mr-2">
-              No result found, please send us an email if you would like{' '}
-              {this.keyword} to be curated.
-            </span>
-            <SuggestCuration suggestion={this.keyword} />
-          </components.Option>
-        );
-      } else {
-        return null;
-      }
-    };
-
     return (
       <div className="home">
         <Row className="mb-5">
@@ -251,45 +175,7 @@ class HomePage extends React.Component<IHomeProps> {
         </Row>
         <Row className="mb-5">
           <Col md={8} className={'mx-auto'}>
-            <AsyncSelect
-              placeholder="Search Gene / Alteration / Drug"
-              components={{
-                Option,
-                DropdownIndicator: () => null,
-                IndicatorSeparator: () => null,
-                NoOptionsMessage
-              }}
-              styles={{
-                input(styles) {
-                  return {
-                    ...styles,
-                    lineHeight: '30px'
-                  };
-                },
-                placeholder(styles) {
-                  return {
-                    ...styles,
-                    width: '100%',
-                    lineHeight: '30px',
-                    textAlign: 'center'
-                  };
-                }
-              }}
-              isFocused={true}
-              defaultOptions={[] as ExtendedTypeaheadSearchResp[]}
-              menuIsOpen={!!this.keyword}
-              isClearable={true}
-              onChange={(value: ExtendedTypeaheadSearchResp, props) => {
-                if (value) {
-                  this.props.routing.history.push(value.link);
-                }
-              }}
-              closeMenuOnSelect={false}
-              loadOptions={this.debouncedFetch}
-              onInputChange={(keyword: string) => {
-                this.keyword = keyword;
-              }}
-            />
+            <OncoKBSearch />
           </Col>
         </Row>
         <Row className="mb-5">

@@ -11,6 +11,9 @@ import mskIcon from 'content/images/msk-icon-fff-sm.png';
 import { action, observable } from 'mobx';
 import { PAGE_TITLE } from 'app/config/constants';
 import UserMessager from 'app/components/userMessager/UserMessage';
+import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
+import classnames from 'classnames';
+import autobind from 'autobind-decorator';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -44,6 +47,8 @@ class Header extends React.Component<IHeaderProps> {
   ];
 
   @observable isNavExpanded = false;
+  @observable searchBarIsHovered = false;
+  private searchBarIsHoveredTimeout: number;
 
   @action.bound
   toggleNav() {
@@ -69,6 +74,30 @@ class Header extends React.Component<IHeaderProps> {
     );
   }
 
+  @autobind
+  @action
+  updateSearchBarHover(status: boolean, timeout: number) {
+    if (this.searchBarIsHoveredTimeout) {
+      window.clearTimeout(this.searchBarIsHoveredTimeout);
+    }
+    this.searchBarIsHoveredTimeout = window.setTimeout(
+      () => (this.searchBarIsHovered = status),
+      timeout
+    );
+  }
+
+  @autobind
+  @action
+  enterSearchBar() {
+    this.updateSearchBarHover(true, 100);
+  }
+
+  @autobind
+  @action
+  leaveSearchBar() {
+    this.updateSearchBarHover(false, 500);
+  }
+
   public render() {
     return (
       <>
@@ -92,13 +121,48 @@ class Header extends React.Component<IHeaderProps> {
                   {this.subPages.map(page => this.getLink(page))}
                 </Nav>
                 <Nav>
+                  {!this.isNavExpanded && (
+                    <>
+                      {this.searchBarIsHovered && (
+                        <span
+                          className={classnames(
+                            'position-relative',
+                            'nav-item'
+                          )}
+                          onMouseEnter={this.enterSearchBar}
+                          onMouseLeave={this.leaveSearchBar}
+                          onBlur={this.leaveSearchBar}
+                        >
+                          <span
+                            className={'position-absolute'}
+                            style={{ width: 500, right: 0, color: 'black' }}
+                          >
+                            <OncoKBSearch />
+                          </span>
+                        </span>
+                      )}
+                      {!this.searchBarIsHovered && (
+                        <Nav.Item
+                          style={{ paddingRight: 0 }}
+                          onMouseEnter={this.enterSearchBar}
+                          onMouseLeave={this.leaveSearchBar}
+                          onBlur={this.leaveSearchBar}
+                        >
+                          <i className={'fa fa-search'}></i>
+                        </Nav.Item>
+                      )}
+                    </>
+                  )}
                   <AccountMenu
                     isAuthenticated={this.props.isUserAuthenticated}
                     isAdmin={this.props.isAdmin}
                   />
-                  <Nav.Item style={{ paddingRight: 0 }}>
-                    <img alt="mskcc-logo" src={mskIcon} height={'37px'} />
-                  </Nav.Item>
+                  {(this.props.windowStore.isXLscreen ||
+                    this.isNavExpanded) && (
+                    <Nav.Item style={{ paddingRight: 0 }}>
+                      <img alt="mskcc-logo" src={mskIcon} height={'37px'} />
+                    </Nav.Item>
+                  )}
                 </Nav>
               </Navbar.Collapse>
             </Container>
