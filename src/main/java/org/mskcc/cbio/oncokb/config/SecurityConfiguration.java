@@ -67,7 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(problemSupport)
         .and()
             .headers()
-            .contentSecurityPolicy("default-src 'self'; frame-src 'self' https://*.oncokb.org; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com; font-src 'self' data:; connect-src 'self' https://*")
+            .contentSecurityPolicy("default-src 'self'; frame-src 'self' https://*.oncokb.org https://*.youtube.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com; font-src 'self' data:; connect-src 'self' https://*")
         .and()
             .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE)
         .and()
