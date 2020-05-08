@@ -15,13 +15,27 @@ import { Linkout } from 'app/shared/links/Linkout';
 import { observable } from 'mobx';
 import Tabs from 'react-responsive-tabs';
 import Iframe from 'react-iframe';
+import * as QueryString from 'query-string';
+import _ from 'lodash';
 
 type AboutPageProps = { appStore: AppStore };
 const ONCOKB_TUTORIAL = 'OncoKB Tutorial';
+export const SHOW_MODAL_KEY = 'showModal';
+
 @inject('appStore')
 @observer
 export class AboutPage extends React.Component<AboutPageProps> {
   @observable showModal = false;
+
+  constructor(props: AboutPageProps) {
+    super(props);
+    const queryStrings = QueryString.parse(window.location.hash) as {
+      showModal: string;
+    };
+    if (_.has(queryStrings, SHOW_MODAL_KEY)) {
+      this.showModal = queryStrings.showModal === 'true';
+    }
+  }
 
   private tabs = [
     {
