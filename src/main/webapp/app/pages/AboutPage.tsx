@@ -5,7 +5,11 @@ import AppStore from 'app/store/AppStore';
 import { inject } from 'mobx-react';
 import { CitationText } from 'app/components/CitationText';
 import { Link } from 'react-router-dom';
-import { DOCUMENT_TITLES, SOP_LINK } from 'app/config/constants';
+import {
+  DOCUMENT_TITLES,
+  SOP_LINK,
+  WEBINAR_LINKS_05082020
+} from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
 import { Linkout } from 'app/shared/links/Linkout';
 
@@ -72,6 +76,10 @@ export const AboutPage: React.FunctionComponent<AboutPageProps> = inject(
                 OncoKB Curation Standard Operating Procedure v1.1
               </Linkout>
               .
+            </p>
+            <p>
+              To learn more about how to utilize OncoKB, watch our first OncoKB
+              Webinar from May 7th, 2020 on {WEBINAR_LINKS_05082020}
             </p>
             <CitationText />
             <p>
