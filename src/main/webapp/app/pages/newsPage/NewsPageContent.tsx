@@ -298,15 +298,17 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Gastrointestinal Stromal Tumor',
         'Avapritinib',
         <span>
-          Abstract:{' '}
-          <a
-            href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-avapritinib-gastrointestinal-stromal-tumor-rare-mutation"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Linkout
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2019.37.15_suppl.11022'
+            }
           >
-            FDA-approval of Avapritinib; Heinrich et al. Abstract# 11022, ASCO
-            2019
-          </a>
+            Abstract: Heinrich et al. Abstract # 11022, ASCO 2019
+          </Linkout>
+          ;{' '}
+          <Linkout link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-avapritinib-gastrointestinal-stromal-tumor-rare-mutation">
+            FDA-approval of Avapritinib; 2019
+          </Linkout>
         </span>
       ],
       [
