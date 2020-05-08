@@ -5,6 +5,7 @@ import {
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Linkout } from 'app/shared/links/Linkout';
 
 /* eslint no-shadow: 0 */
 
@@ -55,6 +56,19 @@ export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
 export const API_DOCUMENT_LINK = 'https://api.oncokb.org/oncokb-website/api';
 export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
+export const WEBINAR_LINKS_05082020 = (
+  <span>
+    <Linkout
+      link={'https://www.youtube.com/watch?v=XqoKrrm2Boc&feature=youtu.be'}
+    >
+      YouTube.com
+    </Linkout>{' '}
+    or{' '}
+    <Linkout link={'https://www.bilibili.com/video/BV1pZ4y1s7ou'}>
+      bilibili.com
+    </Linkout>
+  </span>
+);
 
 export const REDIRECT_TIMEOUT_MILLISECONDS = 10000;
 export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;

@@ -12,13 +12,15 @@ import {
 } from 'app/components/SimpleTable';
 import { NewlyAddedGeneType } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { Link } from 'react-router-dom';
-import { PAGE_ROUTE } from 'app/config/constants';
+import { PAGE_ROUTE, WEBINAR_LINKS_05082020 } from 'app/config/constants';
 import {
   AlterationPageLink,
   GenePageLink,
   MSILink
 } from 'app/shared/utils/UrlUtils';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
+import { Linkout } from 'app/shared/links/Linkout';
+import Iframe from 'react-iframe';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -106,6 +108,88 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '05082020': {
+    priorityNews: [
+      <span>
+        We are excited to announce that our first OncoKB webinar was a success!
+        You can find a video recording on {WEBINAR_LINKS_05082020}.
+        <Iframe
+          width="560"
+          height="315"
+          url="https://www.youtube.com/embed/XqoKrrm2Boc"
+          frameBorder={0}
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></Iframe>
+      </span>
+    ],
+    updatedImplication: [
+      [
+        '1',
+        'FGFR2',
+        'Fusions',
+        'Cholangiocarcinoma',
+        'Pemigatinib',
+        <span>
+          <PMIDLink pmids={'32203698'} />,{' '}
+          <a
+            href="https://www.fda.gov/news-events/press-announcements/fda-approves-first-targeted-treatment-patients-cholangiocarcinoma-cancer-bile-ducts"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            FDA-approval of Pemigatinib
+          </a>
+        </span>
+      ],
+      [
+        '1',
+        'ERBB2',
+        'Amplification',
+        'Breast Cancer',
+        'Tucatinib + Trastuzumab + Capecitabine',
+        <span>
+          <PMIDLink pmids={'31825569'} />,{' '}
+          <a
+            href="https://www.fda.gov/news-events/press-announcements/fda-approves-first-new-drug-under-international-collaboration-treatment-option-patients-her2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            FDA-approval of Tucatinib
+          </a>
+        </span>
+      ],
+      [
+        '1',
+        'ERBB2',
+        'Amplification',
+        'Breast Cancer',
+        'Trastuzumab Deruxtecan',
+        <span>
+          <PMIDLink pmids={'31825192'} />,{' '}
+          <a
+            href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-fam-trastuzumab-deruxtecan-nxki-unresectable-or-metastatic-her2-positive-breast-cancer"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            FDA-approval of Trastuzumab Deruxtecan
+          </a>
+        </span>
+      ],
+      [
+        '2',
+        'BRAF',
+        'V600E',
+        'Pilocytic Astrocytoma, Pleomorphic Xanthoastrocytoma and Ganglioglioma',
+        'Dabrafenib + Trametinib, Vemurafenib + Cobimetinib',
+        <span>
+          <span>Listing in 1.2020 CNS NCCN;</span>{' '}
+          <PMIDLink
+            pmids={'28984141, 29380516, 26287849, 30351999, 30120137'}
+          />
+        </span>
+      ]
+    ]
+  },
   '04232020': {
     updatedImplication: [
       [
