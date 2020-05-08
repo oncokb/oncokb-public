@@ -21,6 +21,7 @@ import {
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
 import Iframe from 'react-iframe';
+import { SHOW_MODAL_KEY } from '../AboutPage';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -112,15 +113,16 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     priorityNews: [
       <span>
         We are excited to announce that our first OncoKB webinar was a success!
-        You can find a video recording on {WEBINAR_LINKS_05082020}.
-        <Iframe
-          width="560"
-          height="315"
-          url="https://www.youtube.com/embed/XqoKrrm2Boc"
-          frameBorder={0}
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></Iframe>
+        You can find a video recording{' '}
+        <Link
+          to={{
+            pathname: PAGE_ROUTE.ABOUT,
+            hash: `#${SHOW_MODAL_KEY}=true`
+          }}
+        >
+          here
+        </Link>
+        .
       </span>
     ],
     updatedImplication: [
