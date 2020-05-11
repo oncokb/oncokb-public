@@ -240,7 +240,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-grants-accelerated-approval-capmatinib-metastatic-non-small-cell-lung-cancer'
               }
             >
-              FDA-approval of capmatinib{' '}
+              FDA-approval of Capmatinib{' '}
             </Linkout>
           </div>
         </div>
