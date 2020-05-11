@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import {
   DOCUMENT_TITLES,
   SOP_LINK,
-  WEBINAR_LINKS_05082020
+  WEBINAR_LINKS_05072020
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -140,7 +140,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
               </p>
               <p>
                 To learn more about how to utilize OncoKB, watch our first
-                OncoKB Webinar from May 7th, 2020 on {WEBINAR_LINKS_05082020}
+                OncoKB Webinar from May 7th, 2020 on {WEBINAR_LINKS_05072020}
               </p>
               <CitationText />
               <p>
