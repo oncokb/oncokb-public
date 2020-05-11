@@ -12,7 +12,7 @@ import {
 } from 'app/components/SimpleTable';
 import { NewlyAddedGeneType } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { Link } from 'react-router-dom';
-import { PAGE_ROUTE, WEBINAR_LINKS_05082020 } from 'app/config/constants';
+import { PAGE_ROUTE, WEBINAR_LINKS_05072020 } from 'app/config/constants';
 import {
   AlterationPageLink,
   GenePageLink,
@@ -109,7 +109,7 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '05082020': {
+  '05112020': {
     priorityNews: [
       <span>
         We are excited to announce that our first OncoKB webinar was a success!
@@ -145,19 +145,47 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
+        'RET',
+        'Fusions',
+        'Thyroid Cancer',
+        'Selpercatinib',
+        <div>
+          <div>
+            Abstract:{' '}
+            <Linkout
+              link={
+                'https://www.sciencedirect.com/science/article/pii/S0923753419604539'
+              }
+            >
+              Wirth et al. Abstract# LBA93, ESMO 2019;
+            </Linkout>
+          </div>
+          <div>
+            <Linkout
+              link={
+                'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-selpercatinib-lung-and-thyroid-cancers-ret-gene-mutations-or-fusions'
+              }
+            >
+              FDA-approval of Selpercatinib{' '}
+            </Linkout>
+          </div>
+        </div>
+      ],
+      [
+        '1',
         'ERBB2',
         'Amplification',
         'Breast Cancer',
         'Tucatinib + Trastuzumab + Capecitabine',
         <span>
           <PMIDLink pmids={'31825569'} />,{' '}
-          <a
-            href="https://www.fda.gov/news-events/press-announcements/fda-approves-first-new-drug-under-international-collaboration-treatment-option-patients-her2"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Linkout
+            link={
+              'https://www.fda.gov/news-events/press-announcements/fda-approves-first-new-drug-under-international-collaboration-treatment-option-patients-her2'
+            }
           >
             FDA-approval of Tucatinib
-          </a>
+          </Linkout>
         </span>
       ],
       [
@@ -168,13 +196,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Trastuzumab Deruxtecan',
         <span>
           <PMIDLink pmids={'31825192'} />,{' '}
-          <a
-            href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-fam-trastuzumab-deruxtecan-nxki-unresectable-or-metastatic-her2-positive-breast-cancer"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <Linkout link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-fam-trastuzumab-deruxtecan-nxki-unresectable-or-metastatic-her2-positive-breast-cancer">
             FDA-approval of Trastuzumab Deruxtecan
-          </a>
+          </Linkout>
         </span>
       ],
       [
@@ -189,6 +213,95 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             pmids={'28984141, 29380516, 26287849, 30351999, 30120137'}
           />
         </span>
+      ]
+    ],
+    changedAnnotation: [
+      [
+        'MET',
+        'Exon 14 Skipping Mutations',
+        'Non-Small Cell Lung Cancer',
+        <div>Capmatinib</div>,
+        '3A',
+        '1',
+        <div>
+          <div>
+            Abstract:{' '}
+            <Linkout
+              link={
+                'https://ascopubs.org/doi/abs/10.1200/JCO.2019.37.15_suppl.9004'
+              }
+            >
+              Wolf, J. et al. Abstract# 9004, ASCO 2019;
+            </Linkout>
+          </div>
+          <div>
+            <Linkout
+              link={
+                'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-grants-accelerated-approval-capmatinib-metastatic-non-small-cell-lung-cancer'
+              }
+            >
+              FDA-approval of Capmatinib{' '}
+            </Linkout>
+          </div>
+        </div>
+      ],
+      [
+        'RET',
+        'Fusions',
+        'Non-Small Cell Lung Cancer',
+        'Selpercatinib',
+        '3A',
+        '1',
+        <div>
+          <div>
+            Abstract:{' '}
+            <Linkout
+              link={
+                'https://www.jto.org/article/S1556-0864(19)30742-7/fulltext'
+              }
+            >
+              Drilon et al. Abstract# PL02.08, IASLC WCLC 2019;
+            </Linkout>
+          </div>
+          <div>
+            <Linkout
+              link={
+                'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-selpercatinib-lung-and-thyroid-cancers-ret-gene-mutations-or-fusions'
+              }
+            >
+              FDA-approval of Selpercatinib{' '}
+            </Linkout>
+          </div>
+        </div>
+      ],
+      [
+        'RET',
+        'Oncogenic Mutations',
+        'Medullary Thyroid Cancer',
+        'Selpercatinib',
+        '3A',
+        '1',
+        <div>
+          <div>
+            Abstract:{' '}
+            <Linkout
+              link={
+                'https://www.sciencedirect.com/science/article/pii/S0923753419604539'
+              }
+            >
+              Wirth et al. Abstract# LBA93, ESMO 2019;
+            </Linkout>
+          </div>
+          <div>
+            <Linkout
+              link={
+                'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-selpercatinib-lung-and-thyroid-cancers-ret-gene-mutations-or-fusions'
+              }
+            >
+              FDA-approval of Selpercatinib{' '}
+            </Linkout>
+          </div>
+        </div>
       ]
     ]
   },
@@ -300,12 +413,13 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Gastrointestinal Stromal Tumor',
         'Avapritinib',
         <span>
+          Abstract:{' '}
           <Linkout
             link={
               'https://ascopubs.org/doi/abs/10.1200/JCO.2019.37.15_suppl.11022'
             }
           >
-            Abstract: Heinrich et al. Abstract # 11022, ASCO 2019
+            Heinrich et al. Abstract # 11022, ASCO 2019
           </Linkout>
           ;{' '}
           <Linkout link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-avapritinib-gastrointestinal-stromal-tumor-rare-mutation">
