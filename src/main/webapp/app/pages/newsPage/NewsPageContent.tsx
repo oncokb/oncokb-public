@@ -145,19 +145,47 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
+        'RET',
+        'Fusions',
+        'Thyroid Cancer',
+        'Selpercatinib',
+        <div>
+          <div>
+            Abstract:{' '}
+            <Linkout
+              link={
+                'https://www.sciencedirect.com/science/article/pii/S0923753419604539'
+              }
+            >
+              Wirth et al. Abstract# LBA93, ESMO 2019;
+            </Linkout>
+          </div>
+          <div>
+            <Linkout
+              link={
+                'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-selpercatinib-lung-and-thyroid-cancers-ret-gene-mutations-or-fusions'
+              }
+            >
+              FDA-approval of Selpercatinib{' '}
+            </Linkout>
+          </div>
+        </div>
+      ],
+      [
+        '1',
         'ERBB2',
         'Amplification',
         'Breast Cancer',
         'Tucatinib + Trastuzumab + Capecitabine',
         <span>
           <PMIDLink pmids={'31825569'} />,{' '}
-          <a
-            href="https://www.fda.gov/news-events/press-announcements/fda-approves-first-new-drug-under-international-collaboration-treatment-option-patients-her2"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Linkout
+            link={
+              'https://www.fda.gov/news-events/press-announcements/fda-approves-first-new-drug-under-international-collaboration-treatment-option-patients-her2'
+            }
           >
             FDA-approval of Tucatinib
-          </a>
+          </Linkout>
         </span>
       ],
       [
@@ -168,13 +196,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Trastuzumab Deruxtecan',
         <span>
           <PMIDLink pmids={'31825192'} />,{' '}
-          <a
-            href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-fam-trastuzumab-deruxtecan-nxki-unresectable-or-metastatic-her2-positive-breast-cancer"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <Linkout link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-fam-trastuzumab-deruxtecan-nxki-unresectable-or-metastatic-her2-positive-breast-cancer">
             FDA-approval of Trastuzumab Deruxtecan
-          </a>
+          </Linkout>
         </span>
       ],
       [
@@ -217,6 +241,64 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               }
             >
               FDA-approval of capmatinib{' '}
+            </Linkout>
+          </div>
+        </div>
+      ],
+      [
+        'RET',
+        'Fusions',
+        'Non-Small Cell Lung Cancer',
+        'Selpercatinib',
+        '3A',
+        '1',
+        <div>
+          <div>
+            Abstract:{' '}
+            <Linkout
+              link={
+                'https://www.jto.org/article/S1556-0864(19)30742-7/fulltext'
+              }
+            >
+              Drilon et al. Abstract# PL02.08, IASLC WCLC 2019;
+            </Linkout>
+          </div>
+          <div>
+            <Linkout
+              link={
+                'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-selpercatinib-lung-and-thyroid-cancers-ret-gene-mutations-or-fusions'
+              }
+            >
+              FDA-approval of Selpercatinib{' '}
+            </Linkout>
+          </div>
+        </div>
+      ],
+      [
+        'RET',
+        'Oncogenic Mutations',
+        'Medullary Thyroid Cancer',
+        'Selpercatinib',
+        '3A',
+        '1',
+        <div>
+          <div>
+            Abstract:{' '}
+            <Linkout
+              link={
+                'https://www.sciencedirect.com/science/article/pii/S0923753419604539'
+              }
+            >
+              Wirth et al. Abstract# LBA93, ESMO 2019;
+            </Linkout>
+          </div>
+          <div>
+            <Linkout
+              link={
+                'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-selpercatinib-lung-and-thyroid-cancers-ret-gene-mutations-or-fusions'
+              }
+            >
+              FDA-approval of Selpercatinib{' '}
             </Linkout>
           </div>
         </div>
