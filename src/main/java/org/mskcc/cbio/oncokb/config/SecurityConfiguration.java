@@ -99,6 +99,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/drugs/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/v1/utils/allCuratedGenes").permitAll()
+            .antMatchers("/api/v1/utils/allCuratedGenes.txt").permitAll()
+            .antMatchers("/api/v1/utils/allCuratedGenes.json").permitAll()
             .antMatchers("/api/v1/utils/cancerGeneList").permitAll()
             .antMatchers("/api/v1/utils/cancerGeneList.txt").permitAll()
             .antMatchers("/api/v1/utils/cancerGeneList.json").permitAll()
