@@ -23,12 +23,14 @@
     "@types/react-router-hash-link": "^1.2.1",
     "@types/react-table": "^6.8.1",
     "@types/seamless-immutable": "^7.1.10",
+    "@types/string-strip-html": "^4.3.0",
     "@types/superagent": "^4.1.1",
     "autobind-decorator": "^2.1.0",
     "availity-reactstrap-validation": "2.5.1",
     "axios": "0.19.0",
     "bootstrap": "4.4.1",
-    "cbioportal-frontend-commons": "0.2.8",
+    "cbioportal-frontend-commons": "0.2.11",
+    "cbioportal-utils": "^0.1.1",
     "classnames": "^2.2.6",
     "font-awesome": "^4.7.0",
     "history": "^4.10.1",
@@ -54,7 +56,7 @@
     "react-iframe": "^1.8.0",
     "react-jhipster": "0.10.0",
     "react-loadable": "5.5.0",
-    "react-mutation-mapper": "^0.3.6",
+    "react-mutation-mapper": "^0.5.12",
     "react-portal": "latest",
     "react-responsive-tabs": "^3.3.0",
     "react-router": "^4.3.1",
@@ -68,6 +70,7 @@
     "react-toastify": "5.4.0",
     "react-transition-group": "2.7.0",
     "reactstrap": "7.1.0",
+    "string-strip-html": "^4.4.5",
     "tslib": "1.10.0",
     "typeface-open-sans": "^0.0.54",
     "uuid": "3.3.3",
@@ -167,7 +170,7 @@
   },
   "engines": {
     "node": ">=12.13.0",
-    "yarn": "1.21.1"
+    "yarn": "1.22.4"
   },
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml}\"",

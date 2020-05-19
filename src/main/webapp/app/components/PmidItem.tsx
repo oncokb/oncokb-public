@@ -1,6 +1,7 @@
 import { getNCBIlink } from 'cbioportal-frontend-commons';
 import * as React from 'react';
 import styles from './citationListGroupItem.module.scss';
+import stripHtml from 'string-strip-html';
 
 type PmidItemProps = {
   title: string;
@@ -20,7 +21,7 @@ export default class PmidItem extends React.Component<PmidItemProps> {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <b>{this.props.title}</b>
+          <b>{stripHtml(this.props.title)}</b>
         </a>
         <div className={styles.listGroupItemContent}>
           <span>

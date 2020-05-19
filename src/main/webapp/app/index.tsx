@@ -13,6 +13,7 @@ import 'font-awesome/css/font-awesome.css';
 import './index.scss';
 import 'react-table/react-table.css';
 import 'oncokb-styles/dist/oncokb.css';
+import 'cbioportal-frontend-commons/dist/styles.css';
 import 'react-responsive-tabs/styles.css';
 import 'react-mutation-mapper/dist/styles.css';
 import 'react-toastify/dist/ReactToastify.css';
