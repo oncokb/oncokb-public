@@ -20,6 +20,10 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     @Query("select token from Token token where token.user.login = ?#{principal.username}")
     List<Token> findByUserIsCurrentUser();
 
+    @Modifying
+    @Query("update Token token set token.currentUsage=token.currentUsage + ?2 where token.id = ?1")
+    void increaseTokenUsage(Long id, int increment);
+
     Optional<Token> findByToken(UUID token);
 
     List<Token> findByUser(User user);

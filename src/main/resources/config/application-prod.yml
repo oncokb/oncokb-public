@@ -161,3 +161,6 @@ application:
   email-addresses:
     license-address:
     registration-address:
+    contact-address:
+    tech-dev-address:
+  public-website-api-threshold: 2000
