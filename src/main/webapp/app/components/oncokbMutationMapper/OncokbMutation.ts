@@ -1,4 +1,4 @@
-import { Mutation } from 'react-mutation-mapper';
+import { Mutation } from 'cbioportal-utils';
 
 export type OncokbMutation = Mutation & {
   oncogenic: string;
