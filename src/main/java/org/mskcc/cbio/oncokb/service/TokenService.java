@@ -42,6 +42,8 @@ public interface TokenService {
     List<Token> findByUser(User user);
 
     List<Token> findValidByUser(User user);
+
+    void increaseTokenUsage(Long id, int increment);
     /**
      * Delete the "id" token.
      *

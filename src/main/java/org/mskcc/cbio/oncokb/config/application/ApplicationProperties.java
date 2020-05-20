@@ -22,6 +22,7 @@ public class ApplicationProperties {
     private EmailAddresses emailAddresses;
     private String tokenUsageCheck;
     private String tokenUsageCheckWhitelist;
+    private int publicWebsiteApiThreshold;
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -109,5 +110,13 @@ public class ApplicationProperties {
 
     public void setTokenUsageCheckWhitelist(String tokenUsageCheckWhitelist) {
         this.tokenUsageCheckWhitelist = tokenUsageCheckWhitelist;
+    }
+
+    public int getPublicWebsiteApiThreshold() {
+        return publicWebsiteApiThreshold;
+    }
+
+    public void setPublicWebsiteApiThreshold(int publicWebsiteApiThreshold) {
+        this.publicWebsiteApiThreshold = publicWebsiteApiThreshold;
     }
 }

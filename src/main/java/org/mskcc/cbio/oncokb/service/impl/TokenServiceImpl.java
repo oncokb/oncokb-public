@@ -88,6 +88,11 @@ public class TokenServiceImpl implements TokenService {
         return tokenRepository.findByUser(user).stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
     }
 
+    @Override
+    public void increaseTokenUsage(Long id, int increment) {
+        tokenRepository.increaseTokenUsage(id, increment);
+    }
+
     /**
      * Delete the token by id.
      *
