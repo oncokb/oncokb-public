@@ -104,8 +104,8 @@ public class ApiProxy {
                     if(token.getCurrentUsage() > applicationProperties.getPublicWebsiteApiThreshold() && (token.getCurrentUsage() - applicationProperties.getPublicWebsiteApiThreshold()) % (applicationProperties.getPublicWebsiteApiThreshold() / 4) == 0) {
                         try {
                             mailService.sendEmail(
-                                applicationProperties.getEmailAddresses().getContactAddress(),
                                 applicationProperties.getEmailAddresses().getTechDevAddress(),
+                                applicationProperties.getEmailAddresses().getContactAddress(),
                                 null,
                                 "Public Website Token exceeds the threshold.",
                                 "The Current usage: " + token.getCurrentUsage() + "\n" + "The threshold:" + applicationProperties.getPublicWebsiteApiThreshold(),
