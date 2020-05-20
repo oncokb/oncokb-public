@@ -11,10 +11,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
-import org.mskcc.cbio.oncokb.service.ApiProxyService;
-import org.mskcc.cbio.oncokb.service.TokenService;
-import org.mskcc.cbio.oncokb.service.TokenStatsService;
-import org.mskcc.cbio.oncokb.service.UserService;
+import org.mskcc.cbio.oncokb.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -60,6 +58,9 @@ public class ApiProxy {
     private TokenStatsService tokenStatsService;
 
     @Autowired
+    private MailService mailService;
+
+    @Autowired
     private ApplicationProperties applicationProperties;
 
     private String IP_HEADER = "X-FORWARDED-FOR";
@@ -71,18 +72,72 @@ public class ApiProxy {
 
         List<String> tokenUsageCheckList = Arrays.stream(applicationProperties.getTokenUsageCheck().split(",")).map(api -> api.trim()).filter(api -> !api.isEmpty()).collect(Collectors.toList());
         Optional<String> needsToBeRecorded = tokenUsageCheckList.stream().filter(api -> request.getRequestURI().startsWith(api)).findFirst();
+
         if (needsToBeRecorded.isPresent()) {
-            updateTokenStats(body, method, request);
+            updateTokenStats(request, getUsageCount(body, method));
         }
+
+        // We want to record all traffics to /api using public_website token
+        updatePublicWebsiteUsage(body, method);
+
         HttpHeaders httpHeaders = apiProxyService.prepareHttpHeaders(request.getContentType());
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate.exchange(uri, method, new HttpEntity<>(body, httpHeaders), String.class).getBody();
     }
 
+    @Async
+    public void updatePublicWebsiteUsage(String body, HttpMethod method) {
+        Optional<String> userOptional = SecurityUtils.getCurrentUserLogin();
+        if (userOptional.isPresent()) {
+            Optional<User> user = userService.getUserWithAuthoritiesByLogin(userOptional.get());
+            if (user.isPresent() &&
+                user.get().getAuthorities().stream().filter(authority -> authority.getName().equalsIgnoreCase(AuthoritiesConstants.PUBLIC_WEBSITE)).count() > 0) {
+                List<Token> tokenList = tokenProvider.getUserTokens(user.get());
+                int usageCount = getUsageCount(body, method);
+                tokenList.forEach(token -> {
+                    tokenService.increaseTokenUsage(token.getId(), usageCount);
+                    // Check the current public website token usage
+                    // Send email if the token usage beyonds the threshold
+                    // This is not guaranteed to be triggered if the request is a post and total passes the cutoff
+                    // But I think the impact would be minimum
+                    if(token.getCurrentUsage() > applicationProperties.getPublicWebsiteApiThreshold() && (token.getCurrentUsage() - applicationProperties.getPublicWebsiteApiThreshold()) % (applicationProperties.getPublicWebsiteApiThreshold() / 4) == 0) {
+                        try {
+                            mailService.sendEmail(
+                                applicationProperties.getEmailAddresses().getContactAddress(),
+                                applicationProperties.getEmailAddresses().getTechDevAddress(),
+                                null,
+                                "Public Website Token exceeds the threshold.",
+                                "The Current usage: " + token.getCurrentUsage() + "\n" + "The threshold:" + applicationProperties.getPublicWebsiteApiThreshold(),
+                                null,
+                                false,
+                                false
+                            );
+                        } catch (MessagingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    private int getUsageCount(String body, HttpMethod method) {
+        int usageCount = 1;
+        if (method != null && method.equals(HttpMethod.POST)) {
+            try {
+                Gson gson = new GsonBuilder().create();
+                Object[] postRequest = gson.fromJson(body, Object[].class);
+                usageCount = postRequest.length;
+            }catch (Exception e) {
+                // For any reason the request cannot be parsed to a list, we should ignore it and count it as 1
+            }
+        }
+        return usageCount;
+    }
 
     @Async
-    public void updateTokenStats(String body, HttpMethod method, HttpServletRequest request) {
+    public void updateTokenStats(HttpServletRequest request, int usageCount) {
         Optional<String> userOptional = SecurityUtils.getCurrentUserLogin();
         if (userOptional.isPresent()) {
             List<String> tokenUsageCheckWhitelist = Arrays.stream(applicationProperties.getTokenUsageCheckWhitelist().split(",")).map(api -> api.trim()).filter(api -> !api.isEmpty()).collect(Collectors.toList());
@@ -93,20 +148,8 @@ public class ApiProxy {
                 user.get().getAuthorities().stream().filter(authority -> authority.getName().equalsIgnoreCase(AuthoritiesConstants.ADMIN)).count() == 0 &&
                 !tokenUsageCheckWhitelist.contains(user.get().getLogin())) {
                 List<Token> tokenList = tokenProvider.getUserTokens(user.get());
-                int usageCount = 1;
-                if (method != null && method.equals(HttpMethod.POST)) {
-                    try {
-                        Gson gson = new GsonBuilder().create();
-                        Object[] postRequest = gson.fromJson(body, Object[].class);
-                        usageCount = postRequest.length;
-                    }catch (Exception e) {
-                        // For any reason the request cannot be parsed to a list, we should ignore it and count it as 1
-                    }
-                }
-                int finalUsageCount = usageCount;
                 tokenList.forEach(token -> {
-                    token.setCurrentUsage(token.getCurrentUsage() + finalUsageCount);
-                    tokenService.save(token);
+                    tokenService.increaseTokenUsage(token.getId(), usageCount);
                     if (uuidOptional.isPresent() && uuidOptional.get().equals(token.getToken())) {
                         TokenStats tokenStats = new TokenStats();
                         tokenStats.setToken(token);
