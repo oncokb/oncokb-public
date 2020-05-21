@@ -31,10 +31,10 @@ public class TokenProvider implements InitializingBean {
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
     // This is for general users
-    private static final int EXPIRATION_TIME_IN_DAYS = 30 * 6;
+    public static final int EXPIRATION_TIME_IN_SECONDS = 60 * 60 * 24 * 30 * 6;
 
     // This is for the public website
-    private static final int EXPIRATION_TIME_IN_MINUTES = 60;
+    private static final int EXPIRATION_TIME_PUBLIC_WEBSITE_IN_SECONDS = 60 * 60;
 
     private Key key;
 
@@ -68,7 +68,7 @@ public class TokenProvider implements InitializingBean {
         } else {
             Instant expirationTime = authorities.stream().filter(
                 authority -> authority.getName().equalsIgnoreCase(AuthoritiesConstants.PUBLIC_WEBSITE)).count() > 0 ?
-                Instant.now().plusSeconds(60 * EXPIRATION_TIME_IN_MINUTES) : currentTime.plusSeconds(60 * 60 * 24 * EXPIRATION_TIME_IN_DAYS);
+                Instant.now().plusSeconds(EXPIRATION_TIME_PUBLIC_WEBSITE_IN_SECONDS) : currentTime.plusSeconds(EXPIRATION_TIME_IN_SECONDS);
             token.setExpiration(expirationTime);
         }
         token.setToken(UUID.randomUUID());

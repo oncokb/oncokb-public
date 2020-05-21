@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.service;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,7 +44,14 @@ public interface TokenService {
 
     List<Token> findValidByUser(User user);
 
+    /**
+     *
+     * @param id the id of the entity
+     * @param increment the increment the token usage will add
+     */
     void increaseTokenUsage(Long id, int increment);
+
+    List<Token> findAllExpiresBeforeDate(Instant date);
     /**
      * Delete the "id" token.
      *

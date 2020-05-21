@@ -6,6 +6,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,6 +24,9 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     @Modifying
     @Query("update Token token set token.currentUsage=token.currentUsage + ?2 where token.id = ?1")
     void increaseTokenUsage(Long id, int increment);
+
+    @Query("select token from Token token where token.expiration < ?1")
+    List<Token> findAllExpiresBeforeDate(Instant date);
 
     Optional<Token> findByToken(UUID token);
 

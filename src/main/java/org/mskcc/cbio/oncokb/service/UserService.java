@@ -63,7 +63,7 @@ public class UserService {
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
-        return userRepository.findOneByActivationKey(key)
+        return getUserByActivationKey(key)
             .map(user -> {
                 // we only set the activation key to null after verifying the email.
                 // the account needs to be manually verified by the admin
@@ -72,6 +72,10 @@ public class UserService {
                 log.debug("Activated user: {}", user);
                 return user;
             });
+    }
+
+    public Optional<User> getUserByActivationKey(String key) {
+        return userRepository.findOneByActivationKey(key);
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
@@ -339,15 +343,19 @@ public class UserService {
      * <p>
      * This is scheduled to get fired everyday, at 01:00 (am).
      */
-    @Scheduled(cron = "0 0 1 * * ?")
-    public void removeNotActivatedUsers() {
-        userRepository
-            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
-            .forEach(user -> {
-                log.debug("Deleting not activated user {}", user.getLogin());
-                userRepository.delete(user);
-                this.clearUserCaches(user);
-            });
+//    @Scheduled(cron = "0 0 1 * * ?")
+//    public void removeNotActivatedUsers() {
+//        userRepository
+//            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
+//            .forEach(user -> {
+//                log.debug("Deleting not activated user {}", user.getLogin());
+//                userRepository.delete(user);
+//                this.clearUserCaches(user);
+//            });
+//    }
+
+    public boolean userHasAuthority(User user, String authority) {
+        return user.getAuthorities().stream().filter(userAuth -> userAuth.getName().equalsIgnoreCase(authority)).count() > 0;
     }
 
     /**

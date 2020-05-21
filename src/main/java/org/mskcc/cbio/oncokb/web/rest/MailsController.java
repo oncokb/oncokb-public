@@ -65,7 +65,7 @@ public class MailsController {
     ) {
         Optional<User> user = this.userService.getUserWithAuthoritiesByEmailIgnoreCase(to);
         if (user.isPresent()) {
-            mailService.sendEmailFromTemplate(userMapper.userToUserDTO(user.get()), mailType, from, cc, by);
+            mailService.sendEmailWithLicenseContext(userMapper.userToUserDTO(user.get()), mailType, from, cc, by);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
