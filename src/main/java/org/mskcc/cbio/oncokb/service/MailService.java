@@ -46,6 +46,9 @@ public class MailService {
 
     private static final String LICENSE = "license";
 
+    private static final String EXPIRE_IN_DAYS = "expiresInDays";
+    private static final String EMAIL_TITLE = "emailTitle";
+
     private final JHipsterProperties jHipsterProperties;
 
     private final ApplicationProperties applicationProperties;
@@ -118,11 +121,43 @@ public class MailService {
 
     @Async
     public void sendEmailFromTemplate(UserDTO user, MailType mailType) {
-        sendEmailFromTemplate(user, mailType, jHipsterProperties.getMail().getFrom(), null, jHipsterProperties.getMail().getFrom());
+        sendEmailFromTemplate(user, mailType, null);
     }
 
     @Async
-    public void sendEmailFromTemplate(UserDTO user, MailType mailType, String from, String cc, String by) {
+    public void sendEmailFromTemplate(UserDTO user, MailType mailType, Context additionalContext) {
+        sendEmailFromTemplate(
+            user, mailType,
+            messageSource.getMessage(getTitleKeyByMailType(mailType).orElse(""), new Object[]{}, Locale.forLanguageTag(user.getLangKey())),
+            jHipsterProperties.getMail().getFrom(), null, jHipsterProperties.getMail().getFrom(), additionalContext);
+    }
+
+    @Async
+    public void sendEmailWithLicenseContext(UserDTO user, MailType mailType, String from, String cc, String by) {
+        Context context = new Context();
+        context.setVariable(LICENSE, user.getLicenseType().getName());
+        sendEmailFromTemplate(user, mailType,
+            messageSource.getMessage(getTitleKeyByMailType(mailType).orElse(""), new Object[]{user.getLicenseType().getName()}, Locale.forLanguageTag(user.getLangKey())),
+            from, cc, by, context);
+    }
+
+    /**
+     *
+     * @param user UserDTO
+     * @param mailType MailType
+     * @param days Days to expire, must more than one day.
+     */
+    @Async
+    public void sendEmailDeclareEmailOwnership(UserDTO user, MailType mailType, int days) {
+        Context context = new Context();
+        context.setVariable(EXPIRE_IN_DAYS, days);
+        sendEmailFromTemplate(user, mailType,
+            messageSource.getMessage(getTitleKeyByMailType(mailType).orElse(""), new Object[]{days}, Locale.forLanguageTag(user.getLangKey())),
+            applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null, context);
+    }
+
+    @Async
+    public void sendEmailFromTemplate(UserDTO user, MailType mailType, String subject, String from, String cc, String by, Context additionalContext) {
         if (user.getEmail() == null) {
             log.debug("Email doesn't exist for user '{}'", user.getLogin());
             return;
@@ -131,9 +166,11 @@ public class MailService {
         Context context = new Context(locale);
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-        context.setVariable(LICENSE, user.getLicenseType().getName());
+
+        // Merge the additional context
+        additionalContext.getVariableNames().forEach(name -> context.setVariable(name, additionalContext.getVariable(name)));
+
         String content = templateEngine.process("mail/" + mailType.getTemplateName(), context);
-        String subject = messageSource.getMessage(getTitleKeyByMailType(mailType).orElseThrow(() -> new UnknownMailTypeException()), new Object[]{user.getLicenseType().getName()}, locale);
         try {
             if (from == null) {
                 from = jHipsterProperties.getMail().getFrom();
@@ -172,12 +209,6 @@ public class MailService {
     public void sendPasswordResetMail(UserDTO user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, MailType.PASSWORD_RESET);
-    }
-
-    @Async
-    public void sendCommercialLicenseReview(UserDTO user) {
-        log.debug("Sending commercial license review email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, MailType.LICENSE_REVIEW_COMMERCIAL);
     }
 
     public MailType getIntakeFormMailType(LicenseType licenseType) {
@@ -228,6 +259,8 @@ public class MailService {
                 return Optional.of("email.license.clarify.title");
             case CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL:
                 return Optional.of("email.license.clarify.title");
+            case DECLARE_EMAIL_OWNERSHIP:
+                return Optional.of("email.renew.account.title");
             default:
                 return Optional.empty();
 
