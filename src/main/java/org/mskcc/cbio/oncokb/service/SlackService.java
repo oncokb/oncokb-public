@@ -121,7 +121,7 @@ public class SlackService {
     }
 
     private List<String> getAcademicEmailClarifyDomains() {
-        return Arrays.stream(applicationProperties.getAcademicEmailClarifyDomain().split(",")).map(domain -> domain.trim()).collect(Collectors.toList());
+        return Arrays.stream(applicationProperties.getAcademicEmailClarifyDomain().split(",")).map(domain -> domain.trim()).filter(domain -> !StringUtils.isEmpty(domain)).collect(Collectors.toList());
     }
 
     private TextObject getTextObject(String title, String content) {
