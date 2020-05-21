@@ -93,6 +93,11 @@ public class TokenServiceImpl implements TokenService {
         tokenRepository.increaseTokenUsage(id, increment);
     }
 
+    @Override
+    public List<Token> findAllExpiresBeforeDate(Instant date) {
+        return tokenRepository.findAllExpiresBeforeDate(date);
+    }
+
     /**
      * Delete the token by id.
      *
