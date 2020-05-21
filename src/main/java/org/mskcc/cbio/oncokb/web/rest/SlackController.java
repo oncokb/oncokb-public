@@ -47,6 +47,10 @@ public class SlackController {
         this.slackService = slackService;
     }
 
+    // We do not put any auth protection for the slack call
+    // Slack Interactivity Request URL does not provide an Auth option with bearer token.
+    // It's overall not recommend to include sensitive data in the payload.
+    // Considering faking a actionJSON with correct user email is difficult. Ignore the auth for now.
     @RequestMapping(method = RequestMethod.POST, value = "/slack", headers = {"content-type=application/x-www-form-urlencoded"})
     public ResponseEntity<String> approveUser(@RequestParam("payload") String actionJSON) {
         Gson snakeCase = GsonFactory.createSnakeCase();
