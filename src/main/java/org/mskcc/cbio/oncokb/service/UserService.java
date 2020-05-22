@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import io.github.jhipster.config.JHipsterProperties;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
@@ -50,14 +51,24 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final JHipsterProperties jHipsterProperties;
+
     @Autowired
     private UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, UserDetailsRepository userDetailsRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    public UserService(
+        UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository,
+        PasswordEncoder passwordEncoder,
+        AuthorityRepository authorityRepository,
+        JHipsterProperties jHipsterProperties,
+        CacheManager cacheManager
+    ) {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.jHipsterProperties = jHipsterProperties;
         this.cacheManager = cacheManager;
     }
 
@@ -338,21 +349,15 @@ public class UserService {
         return userRepository.findAllByActivationKeyIsNullOrderByCreatedDate(pageable).map(user -> userMapper.userToUserDTO(user));
     }
 
-    /**
-     * Not activated users should be automatically deleted after 3 days.
-     * <p>
-     * This is scheduled to get fired everyday, at 01:00 (am).
-     */
-//    @Scheduled(cron = "0 0 1 * * ?")
-//    public void removeNotActivatedUsers() {
-//        userRepository
-//            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
-//            .forEach(user -> {
-//                log.debug("Deleting not activated user {}", user.getLogin());
-//                userRepository.delete(user);
-//                this.clearUserCaches(user);
-//            });
-//    }
+    public void removeNotActivatedUsers() {
+        userRepository
+            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(jHipsterProperties.getAuditEvents().getRetentionPeriod(), ChronoUnit.DAYS))
+            .forEach(user -> {
+                log.debug("Deleting not activated user {}", user.getLogin());
+                userRepository.delete(user);
+                this.clearUserCaches(user);
+            });
+    }
 
     public boolean userHasAuthority(User user, String authority) {
         return user.getAuthorities().stream().filter(userAuth -> userAuth.getName().equalsIgnoreCase(authority)).count() > 0;

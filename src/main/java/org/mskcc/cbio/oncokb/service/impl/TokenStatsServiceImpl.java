@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
+import io.github.jhipster.config.JHipsterProperties;
 import org.mskcc.cbio.oncokb.service.TokenStatsService;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
@@ -9,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +26,11 @@ public class TokenStatsServiceImpl implements TokenStatsService {
 
     private final TokenStatsRepository tokenStatsRepository;
 
-    public TokenStatsServiceImpl(TokenStatsRepository tokenStatsRepository) {
+    private final JHipsterProperties jHipsterProperties;
+
+    public TokenStatsServiceImpl(TokenStatsRepository tokenStatsRepository, JHipsterProperties jHipsterProperties) {
         this.tokenStatsRepository = tokenStatsRepository;
+        this.jHipsterProperties = jHipsterProperties;
     }
 
     /**
@@ -73,5 +79,18 @@ public class TokenStatsServiceImpl implements TokenStatsService {
     public void delete(Long id) {
         log.debug("Request to delete TokenStats : {}", id);
         tokenStatsRepository.deleteById(id);
+    }
+
+    /**
+     * Old audit events should be automatically deleted after 30 days.
+     *
+     */
+    public void removeOldTokenStats() {
+        tokenStatsRepository
+            .findByAccessTimeBefore(Instant.now().minus(jHipsterProperties.getAuditEvents().getRetentionPeriod(), ChronoUnit.DAYS))
+            .forEach(tokenStat -> {
+                log.debug("Deleting token stats", tokenStat);
+                tokenStatsRepository.delete(tokenStat);
+            });
     }
 }
