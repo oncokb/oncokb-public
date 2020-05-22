@@ -47,7 +47,7 @@ public class CronJobController {
     public CronJobController(UserRepository userRepository, UserService userService,
                              MailService mailService, TokenProvider tokenProvider,
                              TokenService tokenService
-                           ) {
+    ) {
 
         this.userRepository = userRepository;
         this.userService = userService;
@@ -58,20 +58,24 @@ public class CronJobController {
 
     /**
      * {@code GET  /renew-tokens} : Checking token expiration.
-     *
      */
     @GetMapping(path = "/renew-tokens")
     public void tokensRenewCheck() {
         log.info("Started the cronjob to renew tokens");
 
-        int EXPIRATION_CHECK = 60 * 60 * 24 * 14; // two weeks
-        List<Token> tokensToBeExpired = tokenService.findAllExpiresBeforeDate(Instant.now().plusSeconds(EXPIRATION_CHECK));
+        tokenCheckByTime(14, false);
+
+        tokenCheckByTime(3, true);
+    }
+
+    private void tokenCheckByTime(int daysToExpire, boolean activationKeyShouldNotBeNull) {
+        List<Token> tokensToBeExpired = tokenService.findAllExpiresBeforeDate(Instant.now().plusSeconds(60 * 60 * 24 * daysToExpire));
         // Only return the users that token is about to expire and activation key is empty/null
         // Once the activation key is not null, means the email has been sent.
         List<User> selectedUsers = tokensToBeExpired.stream()
             .map(token -> token.getUser())
             .distinct()
-            .filter(user -> StringUtils.isEmpty(user.getActivationKey()) && user.getActivated() && !this.userService.userHasAuthority(user, AuthoritiesConstants.PUBLIC_WEBSITE))
+            .filter(user -> (activationKeyShouldNotBeNull || StringUtils.isEmpty(user.getActivationKey())) && user.getActivated() && !this.userService.userHasAuthority(user, AuthoritiesConstants.PUBLIC_WEBSITE))
             .collect(Collectors.toList());
 
         selectedUsers.forEach(user -> {
@@ -84,7 +88,7 @@ public class CronJobController {
                 userRepository.save(user);
 
                 // Send email to ask user to verify the account ownership
-                mailService.sendEmailDeclareEmailOwnership(userMapper.userToUserDTO(user), MailType.DECLARE_EMAIL_OWNERSHIP, 14);
+                mailService.sendEmailDeclareEmailOwnership(userMapper.userToUserDTO(user), MailType.DECLARE_EMAIL_OWNERSHIP, daysToExpire);
             }
         });
     }
