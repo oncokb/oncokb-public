@@ -37,6 +37,8 @@ public class CronJobController {
 
     private final TokenService tokenService;
 
+    private final TokenStatsService tokenStatsService;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -44,9 +46,12 @@ public class CronJobController {
 
     private final TokenProvider tokenProvider;
 
+    private final AuditEventService auditEventService;
+
     public CronJobController(UserRepository userRepository, UserService userService,
                              MailService mailService, TokenProvider tokenProvider,
-                             TokenService tokenService
+                             TokenService tokenService, AuditEventService auditEventService,
+                             TokenStatsService tokenStatsService
     ) {
 
         this.userRepository = userRepository;
@@ -54,6 +59,37 @@ public class CronJobController {
         this.mailService = mailService;
         this.tokenProvider = tokenProvider;
         this.tokenService = tokenService;
+        this.auditEventService = auditEventService;
+        this.tokenStatsService = tokenStatsService;
+    }
+
+    /**
+     * Old audit events should be automatically deleted after * days.
+     * Days depends on JHipster property audit audit-events: retention-period
+     *
+     */
+    @GetMapping(path = "/remove-old-audit-events")
+    public void removeOldAuditEvents() {
+        auditEventService.removeOldAuditEvents();
+    }
+
+    /**
+     * Old token stats should be automatically deleted after * days.
+     * Days depends on JHipster property audit audit-events: retention-period
+     */
+    @GetMapping(path = "/remove-old-token-stats")
+    public void removeOldTokenStats() {
+        tokenStatsService.removeOldTokenStats();
+    }
+
+    /**
+     * Not activated users should be automatically deleted after * days.
+     * Days depends on JHipster property audit audit-events: retention-period
+     */
+    @GetMapping(path = "/remove-not-activate-users")
+    public void removeNotActivatedUsers() {
+        // this is not really working due to the foreign key constraints
+//        userService.removeNotActivatedUsers();
     }
 
     /**
