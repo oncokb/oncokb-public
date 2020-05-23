@@ -126,6 +126,16 @@ jhipster:
     retention-period: 30 # Number of days before audit events are deleted.
 
 # ===================================================================
+# Sentry specific properties
+# How to configure Sentry Spring Boot: https://docs.sentry.io/clients/java/config/
+# Full reference is available at: https://github.com/getsentry/sentry-java/blob/master/sentry-spring-boot-starter/src/main/java/io/sentry/spring/autoconfigure/SentryProperties.java
+# ===================================================================
+sentry:
+  stacktrace:
+    app:
+      packages: org.mskcc.cbio.oncokb
+
+# ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
 # to have type-safe configuration, like in the JHipsterProperties above
