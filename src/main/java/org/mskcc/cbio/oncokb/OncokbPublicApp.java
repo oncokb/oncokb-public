@@ -1,6 +1,5 @@
 package org.mskcc.cbio.oncokb;
 
-import io.sentry.Sentry;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 
 import io.github.jhipster.config.DefaultProfileUtil;
@@ -63,9 +62,6 @@ public class OncokbPublicApp {
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
-
-        // DSN will be set through system environment variable (SENTRY_DSN)
-        Sentry.init();
     }
 
     private static void logApplicationStartup(Environment env) {
