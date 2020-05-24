@@ -74,8 +74,8 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public List<Token> findValidByCurrentUser() {
-        return tokenRepository.findByUserIsCurrentUser().stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
+    public List<Token> findByUserIsCurrentUser() {
+        return tokenRepository.findByUserIsCurrentUser();
     }
 
     @Override
