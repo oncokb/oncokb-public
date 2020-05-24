@@ -5,6 +5,7 @@ import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.security.uuid.UUIDFilter;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.TokenService;
+import org.mskcc.cbio.oncokb.web.rest.errors.TokenExpiredException;
 import org.mskcc.cbio.oncokb.web.rest.vm.LoginVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Controller to authenticate users.
@@ -52,10 +55,15 @@ public class UserUUIDController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        List<Token> tokenList = tokenService.findValidByCurrentUser();
+        List<Token> tokenList = tokenService.findByUserIsCurrentUser();
         UUID uuid;
         if (tokenList.size() > 0) {
-            uuid = tokenList.iterator().next().getToken();
+            List<Token> validTokens = tokenList.stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
+            if (validTokens.size() > 0) {
+                uuid = validTokens.iterator().next().getToken();
+            } else {
+                throw new TokenExpiredException();
+            }
         } else {
             Token token = tokenProvider.createToken(Optional.empty());
             uuid = token.getToken();
