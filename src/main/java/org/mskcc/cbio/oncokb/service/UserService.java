@@ -85,6 +85,12 @@ public class UserService {
             });
     }
 
+    public void generateNewActivationKey(User user) {
+        user.setActivationKey(RandomUtil.generateActivationKey());
+        userRepository.save(user);
+        this.clearUserCaches(user);
+    }
+
     public Optional<User> getUserByActivationKey(String key) {
         return userRepository.findOneByActivationKey(key);
     }
