@@ -1,6 +1,8 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserMails;
+import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.repository.UserMailsRepository;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMailsMapper;
@@ -10,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -68,6 +71,14 @@ public class UserMailsService {
     public List<UserMailsDTO> findUserAll(String login) {
         log.debug("Request to get all UserMails for a particular user");
         return userMailsRepository.findByUser(login).stream()
+            .map(userMailsMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserMailsDTO> findUserMailsByUserAndMailTypeAndSentDateAfter(User user, MailType mailType, Instant sentAfter) {
+        log.debug("Request to get all UserMails for a particular user");
+        return userMailsRepository.findUserMailsByUserAndMailTypeAndSentDateAfter(user, mailType, sentAfter).stream()
             .map(userMailsMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
