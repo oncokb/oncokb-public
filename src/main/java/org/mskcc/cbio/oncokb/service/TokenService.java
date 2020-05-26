@@ -38,7 +38,7 @@ public interface TokenService {
 
     Optional<Token> findByToken(UUID token);
 
-    List<Token> findValidByCurrentUser();
+    List<Token> findByUserIsCurrentUser();
 
     List<Token> findByUser(User user);
 
