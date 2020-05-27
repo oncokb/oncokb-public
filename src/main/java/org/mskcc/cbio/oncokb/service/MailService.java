@@ -168,7 +168,8 @@ public class MailService {
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
 
         // Merge the additional context
-        additionalContext.getVariableNames().forEach(name -> context.setVariable(name, additionalContext.getVariable(name)));
+        if (additionalContext != null)
+            additionalContext.getVariableNames().forEach(name -> context.setVariable(name, additionalContext.getVariable(name)));
 
         String content = templateEngine.process("mail/" + mailType.getTemplateName(), context);
         try {
