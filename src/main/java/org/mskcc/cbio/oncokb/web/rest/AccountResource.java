@@ -1,10 +1,12 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
@@ -31,6 +33,8 @@ import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.*;
 
+import static org.mskcc.cbio.oncokb.config.Constants.MSK_EMAIL_DOMAIN;
+
 /**
  * REST controller for managing the current user's account.
  */
@@ -56,6 +60,8 @@ public class AccountResource {
 
     private final TokenService tokenService;
 
+    private final ApplicationProperties applicationProperties;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -66,7 +72,7 @@ public class AccountResource {
     public AccountResource(UserRepository userRepository, UserService userService,
                            MailService mailService, TokenProvider tokenProvider,
                            SlackService slackService, EmailService emailService,
-                           TokenService tokenService
+                           TokenService tokenService, ApplicationProperties applicationProperties
                            ) {
 
         this.userRepository = userRepository;
@@ -76,6 +82,7 @@ public class AccountResource {
         this.slackService = slackService;
         this.emailService = emailService;
         this.tokenService = tokenService;
+        this.applicationProperties = applicationProperties;
     }
 
     /**
@@ -131,7 +138,18 @@ public class AccountResource {
                         throw new AccountResourceException("User could not be found");
                     }
                 } else {
-                    slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
+                    UserDTO userDTO = userMapper.userToUserDTO(user);
+                    if (isMSKCommercialUser(userDTO)) {
+                        LicenseType registeredLicenseType = userDTO.getLicenseType();
+                        userDTO.setLicenseType(LicenseType.ACADEMIC);
+                        if (!userDTO.isActivated()) {
+                            userDTO.setActivated(true);
+                        }
+                        userService.updateUser(userDTO);
+                        slackService.sendApprovedConfirmationForMSKCommercialRequest(userMapper.userToUserDTO(userOptional.get()), registeredLicenseType);
+                    } else {
+                        slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
+                    }
                     return false;
                 }
             } else {
@@ -143,6 +161,10 @@ public class AccountResource {
             }
             return true;
         }
+    }
+
+    private boolean isMSKCommercialUser(UserDTO userDTO) {
+        return emailService.getEmailDomain(userDTO.getEmail()).toLowerCase().endsWith(MSK_EMAIL_DOMAIN.toLowerCase()) && !userDTO.getLicenseType().equals(LicenseType.ACADEMIC);
     }
 
     /**

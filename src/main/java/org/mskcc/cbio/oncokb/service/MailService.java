@@ -30,6 +30,8 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
+
 /**
  * Service for sending emails.
  * <p>
@@ -43,8 +45,6 @@ public class MailService {
     private static final String USER = "user";
 
     private static final String BASE_URL = "baseUrl";
-
-    private static final String LICENSE = "license";
 
     private static final String EXPIRE_IN_DAYS = "expiresInDays";
     private static final String EMAIL_TITLE = "emailTitle";
@@ -135,7 +135,7 @@ public class MailService {
     @Async
     public void sendEmailWithLicenseContext(UserDTO user, MailType mailType, String from, String cc, String by) {
         Context context = new Context();
-        context.setVariable(LICENSE, user.getLicenseType().getName());
+        context.setVariable(MAIL_LICENSE, user.getLicenseType().getName());
         sendEmailFromTemplate(user, mailType,
             messageSource.getMessage(getTitleKeyByMailType(mailType).orElse(""), new Object[]{user.getLicenseType().getName()}, Locale.forLanguageTag(user.getLangKey())),
             from, cc, by, context);
@@ -262,6 +262,8 @@ public class MailService {
                 return Optional.of("email.license.clarify.title");
             case VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES:
                 return Optional.of("email.account.expires.by.days.title");
+            case APPROVAL_MSK_IN_COMMERCIAL:
+                return Optional.of("email.approval.title");
             default:
                 return Optional.empty();
 

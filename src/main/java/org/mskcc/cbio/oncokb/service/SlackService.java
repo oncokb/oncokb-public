@@ -1,6 +1,5 @@
 package org.mskcc.cbio.oncokb.service;
 
-import ch.qos.logback.core.Layout;
 import com.github.seratch.jslack.Slack;
 import com.github.seratch.jslack.api.model.block.ActionsBlock;
 import com.github.seratch.jslack.api.model.block.LayoutBlock;
@@ -22,10 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
 
 
 /**
@@ -60,8 +62,8 @@ public class SlackService {
             List<LayoutBlock> layoutBlocks = new ArrayList<>();
             if (user.getLicenseType().equals(LicenseType.ACADEMIC)) {
                 boolean withClarificationNote = false;
-                if (getAcademicEmailClarifyDomains().size() > 0 &&
-                    getAcademicEmailClarifyDomains().stream().filter(domain -> user.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
+                if (this.applicationProperties.getAcademicEmailClarifyDomains().size() > 0 &&
+                    this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> user.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
                     withClarificationNote = true;
                     mailService.sendEmailWithLicenseContext(user, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
                 }
@@ -116,12 +118,27 @@ public class SlackService {
         }
     }
 
-    public Optional<BlockActionPayload.Action> getApproveUserAction(BlockActionPayload blockActionPayload) {
-        return blockActionPayload.getActions().stream().filter(action -> action.getActionId().equalsIgnoreCase(APPROVE_USER)).findFirst();
+    @Async
+    public void sendApprovedConfirmationForMSKCommercialRequest(UserDTO userDTO, LicenseType registeredLicenseType) {
+        Payload payload = Payload.builder()
+            .text(userDTO.getEmail() + " has been approved and notified automatically. We also changed their license to Academic and clarified with the user.")
+            .build();
+
+        Slack slack = Slack.getInstance();
+        try {
+            // This is an automatic message when user from whitelist is registered.
+            WebhookResponse response = slack.send(this.applicationProperties.getUserRegistrationWebhook(), payload);
+            // In this case, we also want to send an email to user to explain
+            Context context = new Context();
+            context.setVariable(MAIL_LICENSE, registeredLicenseType.getName());
+            mailService.sendEmailFromTemplate(userDTO, MailType.APPROVAL_MSK_IN_COMMERCIAL, context);
+        } catch (IOException e) {
+            log.warn("Failed to send message to slack");
+        }
     }
 
-    private List<String> getAcademicEmailClarifyDomains() {
-        return Arrays.stream(applicationProperties.getAcademicEmailClarifyDomain().split(",")).map(domain -> domain.trim()).filter(domain -> !StringUtils.isEmpty(domain)).collect(Collectors.toList());
+    public Optional<BlockActionPayload.Action> getApproveUserAction(BlockActionPayload blockActionPayload) {
+        return blockActionPayload.getActions().stream().filter(action -> action.getActionId().equalsIgnoreCase(APPROVE_USER)).findFirst();
     }
 
     private TextObject getTextObject(String title, String content) {
