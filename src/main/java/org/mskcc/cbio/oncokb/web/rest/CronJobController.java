@@ -31,7 +31,6 @@ import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.VERIFY_EMAIL_BEF
  */
 @RestController
 @RequestMapping("/api/cronjob")
-@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.BOT + "\")")
 public class CronJobController {
 
     private final Logger log = LoggerFactory.getLogger(CronJobController.class);
