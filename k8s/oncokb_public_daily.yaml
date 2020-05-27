@@ -1,0 +1,32 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: oncokb-public-daily-cronjob
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - envFrom:
+            - configMapRef:
+                name: oncokb-public-bot
+            name: oncokb-public-daily-cronjob
+            image: "ubuntu:latest"
+            command: ["/bin/sh", "-c"]
+            args: [
+              "echo 'Install curl';
+              apt update; apt -y install curl;
+              echo 'Done installing curl\n\n';
+
+              echo 'API call to send emails to all users whose account will be expired soon';
+              echo 'http://oncokb-public:9095/api/cronjob/renew-tokens'  -H 'Authorization: Bearer $(TOKEN)';
+              curl 'http://oncokb-public:9095/api/cronjob/renew-tokens'  -H 'Authorization: Bearer $(TOKEN)';
+              echo 'Done calling cronjob/renew-tokens\n\n';
+
+
+              "
+            ]
+
+          restartPolicy: Never
