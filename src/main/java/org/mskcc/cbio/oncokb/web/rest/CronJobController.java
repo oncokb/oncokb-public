@@ -117,6 +117,7 @@ public class CronJobController {
 
         tokensToBeExpired.forEach(token -> {
             if (token.getUser().getActivated() &&
+                // Skip PUBLIC_WEBSITE token since it's short live
                 !this.userService.userHasAuthority(token.getUser(), AuthoritiesConstants.PUBLIC_WEBSITE) &&
                 !notifiedUserIds.contains(token.getUser().getLogin()) &&
                 // Do not include users that have been notified during the validate Token period
@@ -145,7 +146,13 @@ public class CronJobController {
 
     private boolean canBeAutoRenew(User user) {
         return userService.userHasAuthority(user, AuthoritiesConstants.ADMIN) ||
-            userService.userHasAuthority(user, AuthoritiesConstants.BOT);
+            userService.userHasAuthority(user, AuthoritiesConstants.BOT) ||
+            (
+                !StringUtils.isEmpty(user.getEmail()) && (
+                    user.getEmail().endsWith("localhost") ||
+                        user.getEmail().endsWith("oncokb.org")
+                )
+            );
     }
 
     private void renewToken(Token token) {
