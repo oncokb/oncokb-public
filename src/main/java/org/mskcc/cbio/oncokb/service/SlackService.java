@@ -63,7 +63,7 @@ public class SlackService {
                 if (getAcademicEmailClarifyDomains().size() > 0 &&
                     getAcademicEmailClarifyDomains().stream().filter(domain -> user.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
                     withClarificationNote = true;
-                    mailService.sendEmailFromTemplate(user, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
+                    mailService.sendEmailWithLicenseContext(user, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
                 }
                 layoutBlocks = buildAcademicBlocks(user, withClarificationNote);
             } else {
@@ -71,7 +71,7 @@ public class SlackService {
                 // Send intake form email
                 MailType intakeEmailMailType = mailService.getIntakeFormMailType(user.getLicenseType());
                 if (intakeEmailMailType != null) {
-                    mailService.sendEmailFromTemplate(user, intakeEmailMailType, applicationProperties.getEmailAddresses().getLicenseAddress(), applicationProperties.getEmailAddresses().getLicenseAddress(), null);
+                    mailService.sendEmailWithLicenseContext(user, intakeEmailMailType, applicationProperties.getEmailAddresses().getLicenseAddress(), applicationProperties.getEmailAddresses().getLicenseAddress(), null);
                 }
             }
             Payload payload = Payload.builder()

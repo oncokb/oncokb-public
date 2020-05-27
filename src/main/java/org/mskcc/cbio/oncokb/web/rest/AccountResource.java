@@ -7,14 +7,13 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
-import org.mskcc.cbio.oncokb.service.EmailService;
-import org.mskcc.cbio.oncokb.service.MailService;
-import org.mskcc.cbio.oncokb.service.SlackService;
-import org.mskcc.cbio.oncokb.service.UserService;
+import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.*;
+import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
+import org.mskcc.cbio.oncokb.web.rest.errors.InvalidPasswordException;
 import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndPasswordVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
 
@@ -55,6 +54,8 @@ public class AccountResource {
 
     private final EmailService emailService;
 
+    private final TokenService tokenService;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -64,7 +65,9 @@ public class AccountResource {
 
     public AccountResource(UserRepository userRepository, UserService userService,
                            MailService mailService, TokenProvider tokenProvider,
-                           SlackService slackService, EmailService emailService) {
+                           SlackService slackService, EmailService emailService,
+                           TokenService tokenService
+                           ) {
 
         this.userRepository = userRepository;
         this.userService = userService;
@@ -72,6 +75,7 @@ public class AccountResource {
         this.tokenProvider = tokenProvider;
         this.slackService = slackService;
         this.emailService = emailService;
+        this.tokenService = tokenService;
     }
 
     /**
@@ -100,33 +104,44 @@ public class AccountResource {
      */
     @GetMapping("/activate")
     public boolean activateAccount(@RequestParam(value = "key") String key) {
-        Optional<User> userOptional = userService.activateRegistration(key);
+        Optional<User> userOptional = userService.getUserByActivationKey(key);
         if (!userOptional.isPresent()) {
             throw new AccountResourceException("Your user account could not be activated as no user was found associated with this activation key.");
         } else {
+            boolean newUserActivation = !userOptional.get().getActivated();
+            userOptional = userService.activateRegistration(key);
             User user = userOptional.get();
-            if (emailService.getAccountApprovalWhitelistEmailsDomains().contains(emailService.getEmailDomain(user.getEmail()))) {
-                Optional<User> existingUser = userRepository.findOneByLogin(user.getLogin());
-                if (existingUser.isPresent()) {
-                    UserDTO userDTO = userMapper.userToUserDTO(existingUser.get());
-                    if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
-                        if (!userDTO.isActivated()) {
-                            userDTO.setActivated(true);
+            if (newUserActivation) {
+                if (emailService.getAccountApprovalWhitelistEmailsDomains().contains(emailService.getEmailDomain(user.getEmail()))) {
+                    Optional<User> existingUser = userRepository.findOneByLogin(user.getLogin());
+                    if (existingUser.isPresent()) {
+                        UserDTO userDTO = userMapper.userToUserDTO(existingUser.get());
+                        if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
+                            if (!userDTO.isActivated()) {
+                                userDTO.setActivated(true);
+                            }
+                            userService.updateUser(userDTO);
+                            slackService.sendApprovedConfirmation(userMapper.userToUserDTO(userOptional.get()));
+                            return true;
+                        } else {
+                            slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
+                            return false;
                         }
-                        userService.updateUser(userDTO);
-                        slackService.sendApprovedConfirmation(userMapper.userToUserDTO(userOptional.get()));
-                        return true;
                     } else {
-                        slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
-                        return false;
+                        throw new AccountResourceException("User could not be found");
                     }
                 } else {
-                    throw new AccountResourceException("User could not be found");
+                    slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
+                    return false;
                 }
             } else {
-                slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
-                return false;
+                // This user exists before, we are looking for to extend the expiration date of all tokens associated
+                tokenService.findByUser(user).forEach(token -> {
+                    token.setExpiration(token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS));
+                    tokenService.save(token);
+                });
             }
+            return true;
         }
     }
 
