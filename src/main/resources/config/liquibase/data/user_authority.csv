@@ -5,3 +5,4 @@ user_id;authority_name
 3;ROLE_USER
 4;ROLE_USER
 5;ROLE_PUBLIC_WEBSITE
+6;ROLE_BOT
