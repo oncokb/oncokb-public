@@ -65,8 +65,6 @@ public class AuditEventServiceIT  {
         persistenceAuditEventRepository.save(auditEventNew);
 
         persistenceAuditEventRepository.flush();
-        auditEventService.removeOldAuditEvents();
-        persistenceAuditEventRepository.flush();
 
         assertThat(persistenceAuditEventRepository.findAll().size()).isEqualTo(2);
         assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-old")).isEmpty();

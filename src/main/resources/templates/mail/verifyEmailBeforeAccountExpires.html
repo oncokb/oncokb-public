@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+    <head>
+        <title th:text="#{email.account.expires.by.days.title(${expiresInDays})}">OncoKB Account Expires</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p th:text="#{email.activation.greeting(${user.login})}">
+            Dear
+        </p>
+        <p>
+            Your OncoKB account will expire in <span th:text="${expiresInDays}"></span> days. Please click the URL below to verify you still own the email address so we can renew your account:
+        </p>
+        <p>
+            <a th:with="url=(@{|${baseUrl}/account/verify?key=${user.activationKey}|})" th:href="${url}"
+            th:text="${url}">Verification link</a>
+        </p>
+        <p>
+            <div th:text="#{email.activation.text2}">Sincerely, </div>
+            <div th:text="#{email.signature}">The OncoKB Team</div>
+        </p>
+    </body>
+</html>

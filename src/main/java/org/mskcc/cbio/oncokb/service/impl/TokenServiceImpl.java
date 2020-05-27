@@ -74,8 +74,8 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public List<Token> findValidByCurrentUser() {
-        return tokenRepository.findByUserIsCurrentUser().stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
+    public List<Token> findByUserIsCurrentUser() {
+        return tokenRepository.findByUserIsCurrentUser();
     }
 
     @Override
@@ -91,6 +91,11 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public void increaseTokenUsage(Long id, int increment) {
         tokenRepository.increaseTokenUsage(id, increment);
+    }
+
+    @Override
+    public List<Token> findAllExpiresBeforeDate(Instant date) {
+        return tokenRepository.findAllExpiresBeforeDate(date);
     }
 
     /**

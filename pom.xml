@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>public-website</artifactId>
-    <version>2.3.11</version>
+    <version>2.4.0</version>
     <packaging>jar</packaging>
     <name>OncoKB Public Website</name>
 
@@ -621,7 +621,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>cbioportal/oncokb-public:2.3.11</image>
+                            <image>cbioportal/oncokb-public:2.4.0</image>
                         </to>
                         <container>
                             <entrypoint>
@@ -657,7 +657,7 @@
                         <changeLogFile>${project.basedir}/src/main/resources/config/liquibase/master.xml</changeLogFile>
                         <diffChangeLogFile>${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                         <driver>com.mysql.cj.jdbc.Driver</driver>
-                        <url>jdbc:mysql://localhost:3306/oncokb-public</url>
+                        <url>jdbc:mysql://localhost:3306/oncokb-public?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC&amp;createDatabaseIfNotExist=true</url>
                         <username>root</username>
                         <password></password>
                         <referenceUrl>hibernate:spring:org.mskcc.cbio.oncokb.domain?dialect=org.hibernate.dialect.MySQL8Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
