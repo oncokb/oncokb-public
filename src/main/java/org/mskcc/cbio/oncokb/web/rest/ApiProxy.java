@@ -78,7 +78,7 @@ public class ApiProxy {
         }
 
         // We want to record all traffics to /api using public_website token
-        updatePublicWebsiteUsage(body, method);
+//        updatePublicWebsiteUsage(body, method);
 
         HttpHeaders httpHeaders = apiProxyService.prepareHttpHeaders(request.getContentType());
         RestTemplate restTemplate = new RestTemplate();
