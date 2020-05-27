@@ -12,6 +12,10 @@ public final class Constants {
     public static final String DEFAULT_LANGUAGE = "en";
     public static final String ANONYMOUS_USER = "anonymoususer";
 
+    public static final String MSK_EMAIL_DOMAIN = "mskcc.org";
+
+    public static final String MAIL_LICENSE = "license";
+
     private Constants() {
     }
 }
