@@ -17,6 +17,7 @@ public enum MailType {
     , CLARIFY_ACADEMIC_FOR_PROFIT("clarifyLicenseInForProfileCompany", "Clarify - Requested academic license from a for-profit company", null)
     , CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL("clarifyAcademicUseWithoutInstituteEmail", "Clarify - Requested academic license from a non-institute email", null)
     , VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES("verifyEmailBeforeAccountExpires", "Verify user still owns the email address", null)
+    , APPROVAL_MSK_IN_COMMERCIAL("approvalMSKInCommercial", "Autocorrect MSK user license to academic", null)
     , TEST("testEmail", "Test", null)
     ;
 
