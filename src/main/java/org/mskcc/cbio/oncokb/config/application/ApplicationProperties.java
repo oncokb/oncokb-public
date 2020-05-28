@@ -1,7 +1,12 @@
 package org.mskcc.cbio.oncokb.config.application;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Properties specific to Oncokb.
@@ -118,5 +123,13 @@ public class ApplicationProperties {
 
     public void setPublicWebsiteApiThreshold(int publicWebsiteApiThreshold) {
         this.publicWebsiteApiThreshold = publicWebsiteApiThreshold;
+    }
+
+    public List<String> getAcademicEmailClarifyDomains() {
+        return getDomains(this.getAcademicEmailClarifyDomain());
+    }
+
+    private List<String> getDomains(String domainStr) {
+        return Arrays.stream(domainStr.split(",")).map(domain -> domain.trim()).filter(domain -> !StringUtils.isEmpty(domain)).collect(Collectors.toList());
     }
 }

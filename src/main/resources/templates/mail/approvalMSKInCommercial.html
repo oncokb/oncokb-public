@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{email.license.review.title(${license})}"></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}"/>
+</head>
+<body>
+<p th:text="'Dear ' + ${user.firstName} + ' ' + ${user.lastName}"></p>
+
+<p th:text="'Thank you for your interest in the ' + ${license} + ' license for OncoKB.'"></p>
+
+<p>
+  As a member of the Memorial Sloan Kettering community, we are approving you for an OncoKB academic license which is
+  available for no fee. Please review the <a href="https://www.oncokb.org">terms of use</a> and do not hesitate to
+  contact us with any questions.
+</p>
+
+<div>Sincerely,</div>
+<div>The OncoKB Team</div>
+</body>
+</html>
