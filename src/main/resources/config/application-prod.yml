@@ -50,7 +50,7 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: smtp.gmail.com
+    host: smtp-relay.gmail.com
     username:
     password:
     port: 587
@@ -59,7 +59,7 @@ spring:
     properties.mail.smtp:
       auth: true
       starttls.enable: true
-      ssl.trust: smtp.gmail.com
+      ssl.trust: smtp-relay.gmail.com
   thymeleaf:
     cache: true
 
