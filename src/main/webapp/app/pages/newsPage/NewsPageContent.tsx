@@ -29,6 +29,7 @@ export type NewsData = {
   newlyAddedGenes?: string[];
   newlyAddedGenesTypes?: NewlyAddedGeneType[];
   updatedImplication?: ElementType[][];
+  numOfAssociationsInUpdatedImplication?: number;
   updatedImplicationInOldFormat?: { [level: string]: ElementType[] };
   changedAnnotation?: ElementType[][];
 };
@@ -109,6 +110,74 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '06092020': {
+    numOfAssociationsInUpdatedImplication: 15,
+    updatedImplication: [
+      [
+        '1',
+        'BRCA1, BRCA2, BARD1, BRIP1, CDK12, CHEK1, CHEK2, FANCL, PALB2, RAD51B, RAD51C, RAD51D, RAD54L',
+        <span style={{ whiteSpace: 'nowrap' }}>Oncogenic Mutations</span>,
+        'Prostate Cancer',
+        'Olaparib',
+        <span>
+          <PMIDLink pmids={'32343890'} />,{' '}
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-olaparib-hrr-gene-mutated-metastatic-castration-resistant-prostate-cancer'
+            }
+          >
+            FDA-approval of Olaparib
+          </Linkout>
+        </span>
+      ],
+      [
+        '1',
+        'BRCA1, BRCA2',
+        'Oncogenic Mutations',
+        <span style={{ whiteSpace: 'nowrap' }}>Prostate Cancer</span>,
+        'Rucaparib',
+        <span>
+          Abstract:{' '}
+          <Linkout
+            link={
+              'https://www.sciencedirect.com/science/article/pii/S0923753419590627'
+            }
+          >
+            Abida et al. Abstract# 846PD, ESMO 2019
+          </Linkout>
+          ,{' '}
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/fda-grants-accelerated-approval-rucaparib-brca-mutated-metastatic-castration-resistant-prostate'
+            }
+          >
+            FDA-approval of Rucaparib
+          </Linkout>
+        </span>
+      ]
+    ],
+    changedAnnotation: [
+      [
+        'ATM',
+        'Oncogenic Mutations',
+        'Prostate Cancer',
+        <div>Olaparib</div>,
+        '4',
+        '1',
+        <div>
+          <PMIDLink pmids={'32343890'} />,{' '}
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-olaparib-hrr-gene-mutated-metastatic-castration-resistant-prostate-cancer'
+            }
+          >
+            FDA-approval of Olaparib
+          </Linkout>
+        </div>
+      ]
+    ],
+    newlyAddedGenes: ['FANCL']
+  },
   '05112020': {
     priorityNews: [
       <span>
