@@ -10,6 +10,7 @@ import { ChangedAnnotationListItem } from 'app/pages/newsPage/ChangedAnnotatonLi
 import { UpdatedTxImplOldFormatListItem } from 'app/pages/newsPage/UpdatedTxImplOldFormatListItem';
 import { ElementType, SimpleTableCell } from 'app/components/SimpleTable';
 import {
+  DATA_RELEASES,
   NEWS_DATE_FORMAT,
   NEWS_TITLE_DATE_FORMAT,
   PAGE_ROUTE
@@ -79,6 +80,17 @@ export default class NewsList extends React.Component<NewsListProps> {
           onMouseLeave={() => (this.showAnchor = false)}
         >
           {getNewsTitle(date)}
+          {DATA_RELEASES.filter(item => item.date === date).length > 0 && (
+            <span
+              className={'ml-2'}
+              style={{
+                fontSize: '0.6em'
+              }}
+            >
+              Data version:{' '}
+              {DATA_RELEASES.filter(item => item.date === date)[0].version}
+            </span>
+          )}
           <HashLink path={PAGE_ROUTE.NEWS} hash={date} show={this.showAnchor} />
         </h3>
         <div className={'mb-3'}>
@@ -103,6 +115,9 @@ export default class NewsList extends React.Component<NewsListProps> {
                       })
                     };
                   })}
+                  numOfAssociationsInUpdatedImplication={
+                    newsData.numOfAssociationsInUpdatedImplication
+                  }
                 />
               ) : (
                 undefined
