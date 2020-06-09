@@ -442,3 +442,9 @@ export const scrollWidthOffsetInNews = (el?: any) => {
 export const concatElementsByComma = (list: ReactNode[]) => {
   return list.reduce((prev, curr) => [prev, ', ', curr]);
 };
+
+export function getGenePageLinks(genes: string): ReactNode {
+  return concatElementsByComma(
+    genes.split(',').map(gene => <GenePageLink hugoSymbol={gene.trim()} />)
+  );
+}
