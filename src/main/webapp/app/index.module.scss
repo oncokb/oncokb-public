@@ -1,4 +1,5 @@
 @import '~bootstrap/scss/bootstrap';
+@import 'variables';
 
 .orange {
   color: $oncokb-orange;
@@ -10,4 +11,8 @@
   &:hover {
     cursor: pointer;
   }
+}
+
+.biggerText {
+  font-size: $bigger-default-font-size;
 }
