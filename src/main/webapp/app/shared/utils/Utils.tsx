@@ -204,7 +204,9 @@ export const reduceJoin = (
   data: React.ReactNode[],
   separator: string | JSX.Element
 ) => {
-  return data.reduce((prev, curr) => [prev, separator, curr]);
+  return data.length === 0
+    ? null
+    : data.reduce((prev, curr) => [prev, separator, curr]);
 };
 
 export const OncoKBLevelIcon: React.FunctionComponent<{

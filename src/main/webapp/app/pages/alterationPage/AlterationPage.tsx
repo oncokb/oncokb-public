@@ -67,9 +67,12 @@ const SUMMARY_TITLE = {
   [SummaryKey.PROGNOSTIC_SUMMARY]: 'Prognostic Summary'
 };
 
+const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';
+const LOWERCASE_ONCOGENIC_MUTATIONS = ONCOGENIC_MUTATIONS.toLowerCase();
+
 const AlterationInfo: React.FunctionComponent<{
-  oncogenicity: string;
-  mutationEffect: MutationEffectResp;
+  oncogenicity: string | undefined;
+  mutationEffect: MutationEffectResp | undefined;
   isVus: boolean;
   highestSensitiveLevel: string | undefined;
   highestResistanceLevel: string | undefined;
@@ -92,8 +95,8 @@ const AlterationInfo: React.FunctionComponent<{
     const tooltipOverlay = hasCitations
       ? () => (
           <CitationTooltip
-            pmids={props.mutationEffect.citations.pmids}
-            abstracts={props.mutationEffect.citations.abstracts}
+            pmids={props.mutationEffect!.citations.pmids}
+            abstracts={props.mutationEffect!.citations.abstracts}
           />
         )
       : 'No info';
@@ -359,6 +362,13 @@ export default class AlterationPage extends React.Component<
     this.store.destroy();
   }
 
+  @computed get isOncogenicMutations() {
+    return (
+      this.store.alterationQuery &&
+      this.store.alterationQuery.toLowerCase() === LOWERCASE_ONCOGENIC_MUTATIONS
+    );
+  }
+
   render() {
     return (
       <DocumentTitle title={this.documentTitle}>
@@ -379,9 +389,15 @@ export default class AlterationPage extends React.Component<
                   >{` ${this.store.alterationQuery}`}</span>
                 </h2>
                 <AlterationInfo
-                  oncogenicity={this.store.annotationResult.result.oncogenic}
+                  oncogenicity={
+                    this.isOncogenicMutations
+                      ? ''
+                      : this.store.annotationResult.result.oncogenic
+                  }
                   mutationEffect={
-                    this.store.annotationResult.result.mutationEffect
+                    this.isOncogenicMutations
+                      ? undefined
+                      : this.store.annotationResult.result.mutationEffect
                   }
                   isVus={this.store.annotationResult.result.vus}
                   highestSensitiveLevel={
