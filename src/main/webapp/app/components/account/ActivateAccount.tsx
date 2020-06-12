@@ -11,6 +11,7 @@ import { inject, observer } from 'mobx-react';
 import { Col, Row, Alert } from 'react-bootstrap';
 import SmallPageContainer from '../SmallPageContainer';
 import MessageToContact from 'app/shared/texts/MessageToContact';
+import * as styles from '../../index.module.scss';
 
 @inject('routing')
 @observer
@@ -43,7 +44,7 @@ export default class ActivateAccount extends React.Component<{
   getSuccessfulMessage = () => {
     return (
       <div>
-        <Alert variant={'info'}>
+        <Alert variant={'info'} className={styles.biggerText}>
           <p>
             Thank you for verifying your email address.{' '}
             {this.activateAccount.result && (
@@ -80,7 +81,7 @@ export default class ActivateAccount extends React.Component<{
     const defaultInfo = 'Your user account could not be activated.';
     return (
       <div>
-        <Alert variant={'warning'}>
+        <Alert variant={'warning'} className={styles.biggerText}>
           {this.activateAccount.error
             ? error.response &&
               error.response.body &&
