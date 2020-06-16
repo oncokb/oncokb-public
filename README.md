@@ -7,7 +7,7 @@ This application was generated using JHipster 6.8.0, you can find documentation 
 
 ## Status
 
-![](https://github.com/oncokb/oncokb-public/workflows/Node%20CI/badge.svg) <a href="https://codeclimate.com/github/oncokb/oncokb-public/maintainability"><img src="https://api.codeclimate.com/v1/badges/d625e20939f824b0290d/maintainability" /></a>
+[![Application CI Status](https://github.com/oncokb/oncokb-public/workflows/Application%20CI/badge.svg)](https://github.com/oncokb/oncokb-public/actions) [![Release Management Status](https://github.com/oncokb/oncokb-public/workflows/Release%20Management/badge.svg)](https://github.com/oncokb/oncokb-public/actions) [![Sentrey Release Status](https://github.com/oncokb/oncokb-public/workflows/Sentrey%20Release/badge.svg)](https://github.com/oncokb/oncokb-public/actions) <a href="https://codeclimate.com/github/oncokb/oncokb-public/maintainability"><img src="https://api.codeclimate.com/v1/badges/d625e20939f824b0290d/maintainability" /></a>
 
 ## Info
 
