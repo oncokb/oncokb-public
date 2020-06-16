@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>public-website</artifactId>
-    <version>2.4.1</version>
+    <version>2.4.2</version>
     <packaging>jar</packaging>
     <name>OncoKB Public Website</name>
 
@@ -621,7 +621,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>cbioportal/oncokb-public:2.4.1</image>
+                            <image>cbioportal/oncokb-public:2.4.2</image>
                         </to>
                         <container>
                             <entrypoint>
