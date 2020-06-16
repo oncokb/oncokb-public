@@ -10,7 +10,7 @@
             Dear
         </p>
         <p th:text="#{email.creation.text1}">
-          Your OncoKB account has been created. Please click on the URL below to access it:
+          Your OncoKB account has been created. Please click on the URL below to update your password:
         </p>
         <p>
           <a th:with="url=(@{|${baseUrl}/account/reset/finish?key=${user.resetKey}|})" th:href="${url}"
