@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { action, observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
-import { ManagedUserVM } from 'app/shared/api/generated/API';
+import { ManagedUserVM, UserDTO } from 'app/shared/api/generated/API';
 import { LicenseType } from 'app/config/constants';
 import { Alert } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
@@ -22,15 +22,15 @@ export class CreateAccountPage extends React.Component<{
   windowStore: WindowStore;
 }> {
   @observable registerStatus: RegisterStatus = RegisterStatus.NA;
-  @observable registerError: OncoKBError;
+  @observable registerError: OncoKBError | undefined;
   @observable selectedLicense: LicenseType | undefined;
 
   @autobind
   @action
   handleValidSubmit(newAccount: Partial<ManagedUserVM>) {
     client
-      .registerAccountUsingPOST({
-        managedUserVm: newAccount as ManagedUserVM
+      .createUserUsingPOST({
+        userDto: newAccount as UserDTO
       })
       .then(this.successToRegistered, this.failedToRegistered);
   }
@@ -38,6 +38,7 @@ export class CreateAccountPage extends React.Component<{
   @action.bound
   successToRegistered() {
     this.registerStatus = RegisterStatus.REGISTERED;
+    this.registerError = undefined;
     window.scrollTo(0, 0);
   }
 
@@ -59,7 +60,7 @@ export class CreateAccountPage extends React.Component<{
           isLargeScreen={this.props.windowStore.isLargeScreen}
           defaultLicense={this.selectedLicense}
           onSubmit={this.handleValidSubmit}
-          generatePassword={true}
+          includePassword={false}
         />
       </div>
     );

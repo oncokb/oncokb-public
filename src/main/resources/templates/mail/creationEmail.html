@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
     <head>
-        <title th:text="#{email.activation.title}">OncoKB creation</title>
+        <title th:text="#{email.creation.title}">OncoKB creation</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
     </head>
     <body>
-        <p th:text="#{email.activation.greeting(${user.login})}">
+        <p th:text="#{email.creation.greeting(${user.login})}">
             Dear
         </p>
         <p th:text="#{email.creation.text1}">
@@ -17,7 +17,7 @@
              th:text="${url}">Login link</a>
         </p>
         <p>
-            <div th:text="#{email.activation.text2}">Sincerely, </div>
+            <div th:text="#{email.creation.text2}">Sincerely, </div>
             <div th:text="#{email.signature}">The OncoKB Team</div>
         </p>
     </body>

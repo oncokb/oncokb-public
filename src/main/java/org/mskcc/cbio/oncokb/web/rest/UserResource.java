@@ -32,6 +32,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,8 +109,13 @@ public class UserResource {
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
+            // Assign ROLE_USER to all new accounts
+            // All other authorities can be updated in the user management page
+            if (userDTO.getAuthorities() == null || userDTO.getAuthorities().isEmpty()) {
+                userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+            }
             User newUser = userService.createUser(userDTO);
-            mailService.sendCreationEmail(userDTO);
+            mailService.sendCreationEmail(userMapper.userToUserDTO(newUser));
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
                 .body(newUser);

@@ -28,8 +28,8 @@ import { If, Then, Else } from 'react-if';
 
 export type INewAccountForm = {
   isLargeScreen: boolean;
+  includePassword: boolean;
   defaultLicense?: LicenseType;
-  generatePassword: boolean;
   onSelectLicense?: (newLicenseType: LicenseType | undefined) => void;
   onSubmit: (newUser: Partial<ManagedUserVM>) => void;
 };
@@ -97,19 +97,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     }
   }
 
-  // The code is from https://github.com/bryanbraun/alt-react-demo/blob/master/components/password.js
-  @action
-  generatePassword() {
-    const charset = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
-    let newPassword = '';
-
-    for (let i = 0; i < 5; i++) {
-      newPassword += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
-
-    this.password = newPassword;
-  }
-
   @autobind
   updatePassword(event: any) {
     this.password = event.target.value;
@@ -156,11 +143,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     this.selectedLicense
                   )}
                   type="email"
-                  onChange={() => {
-                    if (this.props.generatePassword) {
-                      this.generatePassword();
-                    }
-                  }}
                   validate={{
                     required: {
                       value: true,
@@ -224,14 +206,8 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     }
                   }}
                 />
-                <If condition={this.props.generatePassword}>
+                <If condition={this.props.includePassword}>
                   <Then>
-                    <Form.Group>
-                      <Form.Label>Password</Form.Label>
-                      <Form.Text as={'b'}>{this.password}</Form.Text>
-                    </Form.Group>
-                  </Then>
-                  <Else>
                     <AvField
                       name="firstPassword"
                       label="New password"
@@ -286,7 +262,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         }
                       }}
                     />
-                  </Else>
+                  </Then>
                 </If>
               </Col>
             </Row>
