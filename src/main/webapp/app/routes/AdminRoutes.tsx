@@ -7,6 +7,7 @@ import { PrivateRoute } from 'app/shared/auth/private-route';
 import PageNotFound from 'app/shared/error/page-not-found';
 import SendEmailsPage from 'app/pages/sendEmails/SendEmailsPage';
 import UserDetailsPage from '../pages/userManagement/UserDetailsPage';
+import { CreateAccountPage } from 'app/pages/CreateAccountPage';
 
 const AdminRouts = () => {
   return (
@@ -25,6 +26,11 @@ const AdminRouts = () => {
         exact
         path={PAGE_ROUTE.ADMIN_SEND_EMAILS}
         component={SendEmailsPage}
+      />
+      <ErrorBoundaryRoute
+        exact
+        path={PAGE_ROUTE.ADMIN_CREATE_ACCOUNT}
+        component={CreateAccountPage}
       />
       <ErrorBoundaryRoute component={PageNotFound} />
     </Switch>

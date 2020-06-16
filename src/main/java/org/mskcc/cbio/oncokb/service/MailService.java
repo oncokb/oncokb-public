@@ -239,7 +239,7 @@ public class MailService {
             case ACTIVATION:
                 return Optional.of("email.activation.title");
             case CREATION:
-                return Optional.of("email.activation.title");
+                return Optional.of("email.creation.title");
             case APPROVAL:
                 return Optional.of("email.approval.title");
             case PASSWORD_RESET:
