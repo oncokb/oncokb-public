@@ -26,6 +26,9 @@ const AccountMenuItemsAuthenticated: React.FunctionComponent<{
         <MenuItem icon="envelope" to={PAGE_ROUTE.ADMIN_SEND_EMAILS}>
           {PAGE_TITLE.ADMIN_SEND_EMAILS}
         </MenuItem>
+        <MenuItem icon="user-plus" to={PAGE_ROUTE.ADMIN_CREATE_ACCOUNT}>
+          {PAGE_TITLE.ADMIN_CREATE_ACCOUNT}
+        </MenuItem>
       </>
     ) : null}
     <MenuItem icon="sign-out" to={PAGE_ROUTE.LOGOUT}>

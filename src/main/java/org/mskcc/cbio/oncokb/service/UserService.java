@@ -200,6 +200,16 @@ public class UserService {
             user.setAuthorities(authorities);
         }
         userRepository.save(user);
+
+        UserDetails userDetails = new UserDetails();
+        userDetails.setUser(user);
+        userDetails.setLicenseType(userDTO.getLicenseType());
+        userDetails.setJobTitle(userDTO.getJobTitle());
+        userDetails.setCompany(userDTO.getCompany());
+        userDetails.setCity(userDTO.getCity());
+        userDetails.setCountry(userDTO.getCountry());
+        userDetailsRepository.save(userDetails);
+
         this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
         return user;
