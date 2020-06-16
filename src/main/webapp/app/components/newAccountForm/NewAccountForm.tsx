@@ -28,7 +28,7 @@ import { If, Then, Else } from 'react-if';
 
 export type INewAccountForm = {
   isLargeScreen: boolean;
-  defaultLicense: LicenseType | undefined;
+  defaultLicense?: LicenseType;
   generatePassword: boolean;
   onSelectLicense?: (newLicenseType: LicenseType | undefined) => void;
   onSubmit: (newUser: Partial<ManagedUserVM>) => void;
@@ -41,7 +41,9 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   constructor(props: INewAccountForm) {
     super(props);
-    this.selectedLicense = props.defaultLicense;
+    if (props.defaultLicense) {
+      this.selectedLicense = props.defaultLicense;
+    }
   }
 
   @autobind
@@ -49,7 +51,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   handleValidSubmit(event: any, values: any) {
     this.props.onSubmit({
       login: values.email,
-      password: values.firstPassword,
+      password: this.password,
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
