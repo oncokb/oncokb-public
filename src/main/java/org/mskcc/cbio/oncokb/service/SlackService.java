@@ -44,6 +44,7 @@ public class SlackService {
 
     private static final String ACADEMIC_CLARIFICATION_NOTE = "We have sent the clarification email to the user asking why they could not use an institution email to register.";
     private static final String COMMERCIAL_APPROVE_NOTE = "We have sent the intake form automatically.";
+    private static final String LICENSED_DOMAIN_APPROVE_NOTE = ":bangbang: *This email domain belongs to a licensed company. Please review and approve accordingly.*";
 
     private final ApplicationProperties applicationProperties;
     private final MailService mailService;
@@ -69,11 +70,19 @@ public class SlackService {
                 }
                 layoutBlocks = buildAcademicBlocks(user, withClarificationNote);
             } else {
-                layoutBlocks = buildCommercialApprovalBlocks(user);
-                // Send intake form email
-                MailType intakeEmailMailType = mailService.getIntakeFormMailType(user.getLicenseType());
-                if (intakeEmailMailType != null) {
-                    mailService.sendEmailWithLicenseContext(user, intakeEmailMailType, applicationProperties.getEmailAddresses().getLicenseAddress(), applicationProperties.getEmailAddresses().getLicenseAddress(), null);
+                boolean domainIsLicensed = false;
+                List<String> licensedDomains = applicationProperties.getLicensedDomainsList();
+                if (!licensedDomains.isEmpty() && licensedDomains.stream().anyMatch(domain -> user.getEmail().toLowerCase().endsWith(domain.toLowerCase()))) {
+                    domainIsLicensed = true;
+                }
+                layoutBlocks = buildCommercialApprovalBlocks(user, domainIsLicensed);
+
+                if (!domainIsLicensed) {
+                    // Send intake form email
+                    MailType intakeEmailMailType = mailService.getIntakeFormMailType(user.getLicenseType());
+                    if (intakeEmailMailType != null) {
+                        mailService.sendEmailWithLicenseContext(user, intakeEmailMailType, applicationProperties.getEmailAddresses().getLicenseAddress(), applicationProperties.getEmailAddresses().getLicenseAddress(), null);
+                    }
                 }
             }
             Payload payload = Payload.builder()
@@ -148,11 +157,17 @@ public class SlackService {
         return MarkdownTextObject.builder().text(sb.toString()).build();
     }
 
-    private List<LayoutBlock> buildCommercialApprovalBlocks(UserDTO user) {
+    private List<LayoutBlock> buildCommercialApprovalBlocks(UserDTO user, boolean domainApproved) {
         List<LayoutBlock> blocks = new ArrayList<>();
 
         // Add mention
-        blocks.add(buildHereMentionBlock());
+        if (domainApproved) {
+            blocks.add(buildChannelMentionBlock());
+            blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(LICENSED_DOMAIN_APPROVE_NOTE).build()).build());
+        } else {
+            // Add intake form note
+            blocks.add(buildHereMentionBlock());
+        }
 
         // Add Title
         blocks.add(buildTitleBlock(user));
@@ -163,8 +178,10 @@ public class SlackService {
         // Add Approve button
         blocks.add(buildApproveButton(user));
 
-        // Add intake form note
-        blocks.add(buildPlainTextBlock(COMMERCIAL_APPROVE_NOTE));
+        if (!domainApproved) {
+            // Add intake form note
+            blocks.add(buildPlainTextBlock(COMMERCIAL_APPROVE_NOTE));
+        }
 
         return blocks;
     }
@@ -194,6 +211,10 @@ public class SlackService {
 
     private LayoutBlock buildHereMentionBlock() {
         return SectionBlock.builder().text(MarkdownTextObject.builder().text("<!here>").build()).build();
+    }
+
+    private LayoutBlock buildChannelMentionBlock() {
+        return SectionBlock.builder().text(MarkdownTextObject.builder().text("<!channel>").build()).build();
     }
 
     private LayoutBlock buildTitleBlock(UserDTO user) {
