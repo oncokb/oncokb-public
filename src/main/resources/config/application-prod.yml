@@ -159,6 +159,7 @@ application:
   sitemap-enabled: true
   user-registration-webhook:
   google-webmaster-verification:
+  licensed-domains:
   account-approval-whitelist:
   token-usage-check:
   token-usage-check-whitelist:
