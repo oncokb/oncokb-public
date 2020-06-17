@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,8 +30,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
 
+    @Query("select user from User user where user not in (select token.user from Token token)")
+    List<User> findAllWithoutTokens();
+
     // Get all registered users
-    Page<User> findAllByActivationKeyIsNullOrderByCreatedDate(Pageable pageable);
+    Page<User> findAllByActivatedIsTrueOrderByCreatedBy(Pageable pageable);
 
     Optional<User> findOneByResetKey(String resetKey);
 
