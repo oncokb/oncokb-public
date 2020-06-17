@@ -63,8 +63,7 @@ public class SlackController {
             if (existingUser.isPresent()) {
                 UserDTO userDTO = userMapper.userToUserDTO(existingUser.get());
                 if (!userDTO.isActivated()) {
-                    userDTO.setActivated(true);
-                    Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
+                    Optional<UserDTO> updatedUser = userService.approveUser(userDTO);
                     if (updatedUser.isPresent() && updatedUser.get().isActivated()) {
                         mailService.sendApprovalEmail(userDTO);
                         slackService.sendApprovedConfirmation(updatedUser.get(), pl);
