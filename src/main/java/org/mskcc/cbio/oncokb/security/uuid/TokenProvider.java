@@ -25,13 +25,15 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
+
 @Component("tokenProvider")
 public class TokenProvider implements InitializingBean {
 
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
     // This is for general users
-    public static final int EXPIRATION_TIME_IN_SECONDS = 60 * 60 * 24 * 30 * 6;
+    public static final int EXPIRATION_TIME_IN_SECONDS = HALF_YEAR_IN_SECONDS;
 
     // This is for the public website
     private static final int EXPIRATION_TIME_PUBLIC_WEBSITE_IN_SECONDS = 60 * 60;
@@ -75,10 +77,17 @@ public class TokenProvider implements InitializingBean {
         return token;
     }
 
-    public Token createToken(Optional<Instant> definedExpirationTime) {
+    public Token createTokenForCurrentUserLogin(Optional<Instant> definedExpirationTime) {
         Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
-        Token token = getNewToken(userOptional.get().getAuthorities(), definedExpirationTime);
-        token.setUser(userOptional.get());
+        if(userOptional.isPresent()) {
+            return createToken(userOptional.get(), definedExpirationTime);
+        }
+        return null;
+    }
+
+    public Token createToken(User user, Optional<Instant> definedExpirationTime) {
+        Token token = getNewToken(user.getAuthorities(), definedExpirationTime);
+        token.setUser(user);
         tokenService.save(token);
         return token;
     }
