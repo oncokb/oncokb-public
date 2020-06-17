@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class ApplicationProperties {
     private RedisProperties redis;
     private String accountApprovalWhitelist;
     private String academicEmailClarifyDomain;
+    private String licensedDomains;
     private String googleWebmasterVerification;
     private EmailAddresses emailAddresses;
     private String tokenUsageCheck;
@@ -59,6 +61,14 @@ public class ApplicationProperties {
 
     public void setAcademicEmailClarifyDomain(String academicEmailClarifyDomain) {
         this.academicEmailClarifyDomain = academicEmailClarifyDomain;
+    }
+
+    public String getLicensedDomains() {
+        return licensedDomains;
+    }
+
+    public void setLicensedDomains(String licensedDomains) {
+        this.licensedDomains = licensedDomains;
     }
 
     public ProjectProfile getProfile() {
@@ -129,7 +139,14 @@ public class ApplicationProperties {
         return getDomains(this.getAcademicEmailClarifyDomain());
     }
 
+    public List<String> getLicensedDomainsList() {
+        return getDomains(this.getLicensedDomains());
+    }
+
     private List<String> getDomains(String domainStr) {
+        if (StringUtils.isEmpty(domainStr)) {
+            return new ArrayList<>();
+        }
         return Arrays.stream(domainStr.split(",")).map(domain -> domain.trim()).filter(domain -> !StringUtils.isEmpty(domain)).collect(Collectors.toList());
     }
 }
