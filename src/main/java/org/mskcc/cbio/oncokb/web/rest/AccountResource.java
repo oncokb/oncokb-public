@@ -124,10 +124,7 @@ public class AccountResource {
                     if (existingUser.isPresent()) {
                         UserDTO userDTO = userMapper.userToUserDTO(existingUser.get());
                         if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
-                            if (!userDTO.isActivated()) {
-                                userDTO.setActivated(true);
-                            }
-                            userService.updateUser(userDTO);
+                            userService.approveUser(userDTO);
                             slackService.sendApprovedConfirmation(userMapper.userToUserDTO(userOptional.get()));
                             return true;
                         } else {
@@ -142,10 +139,7 @@ public class AccountResource {
                     if (isMSKCommercialUser(userDTO)) {
                         LicenseType registeredLicenseType = userDTO.getLicenseType();
                         userDTO.setLicenseType(LicenseType.ACADEMIC);
-                        if (!userDTO.isActivated()) {
-                            userDTO.setActivated(true);
-                        }
-                        userService.updateUser(userDTO);
+                        userService.approveUser(userDTO);
                         slackService.sendApprovedConfirmationForMSKCommercialRequest(userMapper.userToUserDTO(userOptional.get()), registeredLicenseType);
                     } else {
                         slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));

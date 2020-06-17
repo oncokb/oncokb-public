@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.service;
 import io.github.jhipster.config.JHipsterProperties;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
+import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
@@ -11,6 +12,7 @@ import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
+import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
@@ -31,6 +33,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
 
 /**
  * Service class for managing users.
@@ -53,6 +57,10 @@ public class UserService {
 
     private final JHipsterProperties jHipsterProperties;
 
+    private final TokenService tokenService;
+
+    private final TokenProvider tokenProvider;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -62,6 +70,8 @@ public class UserService {
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
         JHipsterProperties jHipsterProperties,
+        TokenService tokenService,
+        TokenProvider tokenProvider,
         CacheManager cacheManager
     ) {
         this.userRepository = userRepository;
@@ -69,6 +79,8 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.jHipsterProperties = jHipsterProperties;
+        this.tokenService = tokenService;
+        this.tokenProvider = tokenProvider;
         this.cacheManager = cacheManager;
     }
 
@@ -363,6 +375,18 @@ public class UserService {
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllRegisteredUsers(Pageable pageable) {
         return userRepository.findAllByActivatedIsTrueOrderByCreatedBy(pageable).map(user -> userMapper.userToUserDTO(user));
+    }
+
+    public Optional<UserDTO> approveUser(UserDTO userDTO) {
+        if (!userDTO.isActivated()) {
+            userDTO.setActivated(true);
+        }
+        // automatically generate a token for user if not exists
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        if (tokens.isEmpty()) {
+            tokenProvider.createToken(userMapper.userDTOToUser(userDTO), Optional.of(Instant.now().plusSeconds(HALF_YEAR_IN_SECONDS)));
+        }
+        return updateUser(userDTO);
     }
 
     public List<UserDTO> getAllWithoutTokens() {
