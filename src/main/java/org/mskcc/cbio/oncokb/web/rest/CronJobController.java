@@ -10,6 +10,7 @@ import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +19,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.mskcc.cbio.oncokb.config.Constants.DAY_IN_SECONDS;
+import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES;
 
 /**
@@ -108,6 +108,22 @@ public class CronJobController {
         for (int daysToExpired : timePointsToCheck) {
             tokenCheckByTime(daysToExpired, notifiedUserIds);
         }
+    }
+
+    /**
+     * {@code GET  /generate-tokens} : Generate tokens for all users without tokens.
+     */
+    @GetMapping(path = "/generate-tokens")
+    public void generateTokens() {
+        log.info("Started the cronjob to generate tokens");
+        List<UserDTO> userDTOs = userService.getAllWithoutTokens();
+
+        // Make sure the token has enough time before sending out the emails to users to verify the email address
+        Instant newTokenDefaultExpirationDate = Instant.now().plusSeconds(DAY_IN_SECONDS * 15);
+        userDTOs.stream().forEach(userDTO -> {
+            Instant expirationDate = userDTO.getCreatedDate() == null ? newTokenDefaultExpirationDate : userDTO.getCreatedDate().plusSeconds(HALF_YEAR_IN_SECONDS);
+            tokenProvider.createToken(userMapper.userDTOToUser(userDTO), Optional.of(expirationDate.isBefore(newTokenDefaultExpirationDate) ? newTokenDefaultExpirationDate : expirationDate));
+        });
     }
 
     private void tokenCheckByTime(int daysToExpire, Set<String> notifiedUserIds) {
