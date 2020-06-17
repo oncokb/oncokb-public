@@ -362,7 +362,11 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllRegisteredUsers(Pageable pageable) {
-        return userRepository.findAllByActivationKeyIsNullOrderByCreatedDate(pageable).map(user -> userMapper.userToUserDTO(user));
+        return userRepository.findAllByActivatedIsTrueOrderByCreatedBy(pageable).map(user -> userMapper.userToUserDTO(user));
+    }
+
+    public List<UserDTO> getAllWithoutTokens() {
+        return userRepository.findAllWithoutTokens().stream().map(user->userMapper.userToUserDTO(user)).collect(Collectors.toList());
     }
 
     public void removeNotActivatedUsers() {
