@@ -28,7 +28,7 @@ import { If, Then, Else } from 'react-if';
 
 export type INewAccountForm = {
   isLargeScreen: boolean;
-  includePassword: boolean;
+  byAdmin: boolean;
   defaultLicense?: LicenseType;
   onSelectLicense?: (newLicenseType: LicenseType | undefined) => void;
   onSubmit: (newUser: Partial<ManagedUserVM>) => void;
@@ -206,7 +206,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     }
                   }}
                 />
-                <If condition={this.props.includePassword}>
+                <If condition={!this.props.byAdmin}>
                   <Then>
                     <AvField
                       name="firstPassword"
@@ -284,7 +284,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     this.selectedLicense
                   )}
                   validate={{
-                    required: { value: true, errorMessage: 'Required.' },
+                    required: {
+                      value: !this.props.byAdmin,
+                      errorMessage: 'Required.'
+                    },
                     minLength: {
                       value: 1,
                       errorMessage: 'Required to be at least 1 character'
@@ -308,7 +311,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     this.selectedLicense
                   )}
                   validate={{
-                    required: { value: true, errorMessage: 'Required.' },
+                    required: {
+                      value: !this.props.byAdmin,
+                      errorMessage: 'Required.'
+                    },
                     minLength: {
                       value: 1,
                       errorMessage: 'Required to be at least 1 character'
@@ -332,7 +338,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     this.selectedLicense
                   )}
                   validate={{
-                    required: { value: true, errorMessage: 'Required.' },
+                    required: {
+                      value: !this.props.byAdmin,
+                      errorMessage: 'Required.'
+                    },
                     minLength: {
                       value: 1,
                       errorMessage: 'Required to be at least 1 character'
@@ -356,7 +365,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     this.selectedLicense
                   )}
                   validate={{
-                    required: { value: true, errorMessage: 'Required.' },
+                    required: {
+                      value: !this.props.byAdmin,
+                      errorMessage: 'Required.'
+                    },
                     pattern: {
                       value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
                       errorMessage:
@@ -374,7 +386,8 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 />
               </Col>
             </Row>
-            {this.selectedLicense === LicenseType.ACADEMIC ? (
+            {this.selectedLicense === LicenseType.ACADEMIC &&
+            !this.props.byAdmin ? (
               <>
                 <Row className={getSectionClassName()}>
                   <Col md="9" className={'ml-auto'}>
