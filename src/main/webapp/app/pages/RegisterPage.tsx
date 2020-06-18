@@ -179,7 +179,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
           isLargeScreen={this.props.windowStore.isLargeScreen}
           defaultLicense={this.selectedLicense}
           onSubmit={this.handleValidSubmit}
-          includePassword={true}
+          byAdmin={false}
           onSelectLicense={this.onSelectLicense}
         />
       </div>
