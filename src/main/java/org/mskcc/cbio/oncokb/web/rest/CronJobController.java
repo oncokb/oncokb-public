@@ -116,7 +116,7 @@ public class CronJobController {
     @GetMapping(path = "/generate-tokens")
     public void generateTokens() {
         log.info("Started the cronjob to generate tokens");
-        List<UserDTO> userDTOs = userService.getAllWithoutTokens();
+        List<UserDTO> userDTOs = userService.getAllActivatedUsersWithoutTokens();
 
         // Make sure the token has enough time before sending out the emails to users to verify the email address
         Instant newTokenDefaultExpirationDate = Instant.now().plusSeconds(DAY_IN_SECONDS * 15);
