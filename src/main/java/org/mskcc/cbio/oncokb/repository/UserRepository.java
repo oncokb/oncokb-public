@@ -30,8 +30,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
 
-    @Query("select user from User user where user not in (select token.user from Token token)")
-    List<User> findAllWithoutTokens();
+    @Query("select user from User user where user.activated=true and user not in (select token.user from Token token)")
+    List<User> findAllActivatedWithoutTokens();
 
     // Get all registered users
     Page<User> findAllByActivatedIsTrueOrderByCreatedBy(Pageable pageable);
