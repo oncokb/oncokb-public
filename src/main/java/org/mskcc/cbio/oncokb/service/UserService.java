@@ -389,8 +389,8 @@ public class UserService {
         return updateUser(userDTO);
     }
 
-    public List<UserDTO> getAllWithoutTokens() {
-        return userRepository.findAllWithoutTokens().stream().map(user->userMapper.userToUserDTO(user)).collect(Collectors.toList());
+    public List<UserDTO> getAllActivatedUsersWithoutTokens() {
+        return userRepository.findAllActivatedWithoutTokens().stream().map(user->userMapper.userToUserDTO(user)).collect(Collectors.toList());
     }
 
     public void removeNotActivatedUsers() {
