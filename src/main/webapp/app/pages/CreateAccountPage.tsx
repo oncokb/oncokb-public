@@ -60,7 +60,7 @@ export class CreateAccountPage extends React.Component<{
           isLargeScreen={this.props.windowStore.isLargeScreen}
           defaultLicense={this.selectedLicense}
           onSubmit={this.handleValidSubmit}
-          includePassword={false}
+          byAdmin={true}
         />
       </div>
     );
