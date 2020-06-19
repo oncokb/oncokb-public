@@ -436,13 +436,17 @@ export type GeneNumber = {
 export type IndicatorQueryTreatment = {
     'abstracts': Array < ArticleAbstract >
 
+        'alterations': Array < string >
+
         'approvedIndications': Array < string >
+
+        'description': string
 
         'drugs': Array < Drug >
 
-        'fdaApproved': boolean
-
         'level': "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO"
+
+        'levelAssociatedCancerType': TumorType
 
         'pmids': Array < string >
 
@@ -758,7 +762,7 @@ export default class OncoKbPrivateAPI {
      * Find matches based on blur query.
      * @method
      * @name OncoKbPrivateAPI#searchTypeAheadGetUsingGET
-     * @param {string} query - The search query, it could be hugoSymbol, entrezGeneId or variant.
+     * @param {string} query - The search query, it could be hugoSymbol, entrezGeneId or variant. At least two characters. Maximum two keywords are supported, separated by space
      * @param {integer} limit - The limit of returned result.
      */
     searchTypeAheadGetUsingGETWithHttpInfo(parameters: {
@@ -808,7 +812,7 @@ export default class OncoKbPrivateAPI {
      * Find matches based on blur query.
      * @method
      * @name OncoKbPrivateAPI#searchTypeAheadGetUsingGET
-     * @param {string} query - The search query, it could be hugoSymbol, entrezGeneId or variant.
+     * @param {string} query - The search query, it could be hugoSymbol, entrezGeneId or variant. At least two characters. Maximum two keywords are supported, separated by space
      * @param {integer} limit - The limit of returned result.
      */
     searchTypeAheadGetUsingGET(parameters: {
