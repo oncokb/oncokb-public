@@ -28,7 +28,7 @@ export type LoginVM = {
 export type MailTypeInfo = {
     'description': string
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST"
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TEST"
 
 };
 export type ManagedUserVM = {
@@ -188,7 +188,7 @@ export type UserDetailsDTO = {
 export type UserMailsDTO = {
     'id': number
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST"
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TEST"
 
         'sentBy': string
 
@@ -466,6 +466,82 @@ export default class API {
         $domain ? : string
     }): Promise < any > {
         return this.changePasswordUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    resendVerificationUsingPOSTURL(parameters: {
+        'loginVm': LoginVM,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/resend-verification';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * resendVerification
+     * @method
+     * @name API#resendVerificationUsingPOST
+     * @param {} loginVm - loginVM
+     */
+    resendVerificationUsingPOSTWithHttpInfo(parameters: {
+        'loginVm': LoginVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/resend-verification';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['loginVm'] !== undefined) {
+                body = parameters['loginVm'];
+            }
+
+            if (parameters['loginVm'] === undefined) {
+                reject(new Error('Missing required  parameter: loginVm'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * resendVerification
+     * @method
+     * @name API#resendVerificationUsingPOST
+     * @param {} loginVm - loginVM
+     */
+    resendVerificationUsingPOST(parameters: {
+        'loginVm': LoginVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.resendVerificationUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -1035,6 +1111,311 @@ export default class API {
             return response.body;
         });
     };
+    generateTokensUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/cronjob/generate-tokens';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * generateTokens
+     * @method
+     * @name API#generateTokensUsingGET
+     */
+    generateTokensUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/cronjob/generate-tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * generateTokens
+     * @method
+     * @name API#generateTokensUsingGET
+     */
+    generateTokensUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < any > {
+        return this.generateTokensUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    removeNotActivatedUsersUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/cronjob/remove-not-activate-users';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * removeNotActivatedUsers
+     * @method
+     * @name API#removeNotActivatedUsersUsingGET
+     */
+    removeNotActivatedUsersUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/cronjob/remove-not-activate-users';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * removeNotActivatedUsers
+     * @method
+     * @name API#removeNotActivatedUsersUsingGET
+     */
+    removeNotActivatedUsersUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < any > {
+        return this.removeNotActivatedUsersUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    removeOldAuditEventsUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/cronjob/remove-old-audit-events';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * removeOldAuditEvents
+     * @method
+     * @name API#removeOldAuditEventsUsingGET
+     */
+    removeOldAuditEventsUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/cronjob/remove-old-audit-events';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * removeOldAuditEvents
+     * @method
+     * @name API#removeOldAuditEventsUsingGET
+     */
+    removeOldAuditEventsUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < any > {
+        return this.removeOldAuditEventsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    removeOldTokenStatsUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/cronjob/remove-old-token-stats';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * removeOldTokenStats
+     * @method
+     * @name API#removeOldTokenStatsUsingGET
+     */
+    removeOldTokenStatsUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/cronjob/remove-old-token-stats';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * removeOldTokenStats
+     * @method
+     * @name API#removeOldTokenStatsUsingGET
+     */
+    removeOldTokenStatsUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < any > {
+        return this.removeOldTokenStatsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    tokensRenewCheckUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/cronjob/renew-tokens';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * tokensRenewCheck
+     * @method
+     * @name API#tokensRenewCheckUsingGET
+     */
+    tokensRenewCheckUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/cronjob/renew-tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * tokensRenewCheck
+     * @method
+     * @name API#tokensRenewCheckUsingGET
+     */
+    tokensRenewCheckUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < any > {
+        return this.tokensRenewCheckUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     getMailsFromUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
@@ -1180,7 +1561,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TEST",
         'to': string,
         $queryParameters ? : any
     }): string {
@@ -1230,7 +1611,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -1313,7 +1694,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -2738,8 +3119,7 @@ export default class API {
             return response.body;
         });
     };
-    getByDatesUsingGETURL(parameters: {
-        'fromDate': string,
+    getAllUsingGETURL(parameters: {
         'offset' ? : number,
         'page' ? : number,
         'pageNumber' ? : number,
@@ -2747,18 +3127,13 @@ export default class API {
         'paged' ? : boolean,
         'size' ? : number,
         'sort' ? : Array < string > ,
-        'sortSorted' ? : boolean,
-        'sortUnsorted' ? : boolean,
-        'toDate': string,
-        'unpaged' ? : boolean,
-        $queryParameters ? : any
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/management/audits';
-        if (parameters['fromDate'] !== undefined) {
-            queryParameters['fromDate'] = parameters['fromDate'];
-        }
-
         if (parameters['offset'] !== undefined) {
             queryParameters['offset'] = parameters['offset'];
         }
@@ -2795,10 +3170,6 @@ export default class API {
             queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
         }
 
-        if (parameters['toDate'] !== undefined) {
-            queryParameters['toDate'] = parameters['toDate'];
-        }
-
         if (parameters['unpaged'] !== undefined) {
             queryParameters['unpaged'] = parameters['unpaged'];
         }
@@ -2814,10 +3185,9 @@ export default class API {
     };
 
     /**
-     * getByDates
+     * getAll
      * @method
-     * @name API#getByDatesUsingGET
-     * @param {string} fromDate - fromDate
+     * @name API#getAllUsingGET
      * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {integer} page - Page number of the requested page
      * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
@@ -2827,11 +3197,9 @@ export default class API {
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {string} toDate - toDate
      * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      */
-    getByDatesUsingGETWithHttpInfo(parameters: {
-        'fromDate': string,
+    getAllUsingGETWithHttpInfo(parameters: {
         'offset' ? : number,
         'page' ? : number,
         'pageNumber' ? : number,
@@ -2839,12 +3207,11 @@ export default class API {
         'paged' ? : boolean,
         'size' ? : number,
         'sort' ? : Array < string > ,
-        'sortSorted' ? : boolean,
-        'sortUnsorted' ? : boolean,
-        'toDate': string,
-        'unpaged' ? : boolean,
-        $queryParameters ? : any,
-        $domain ? : string
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any,
+            $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
@@ -2856,15 +3223,6 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
-
-            if (parameters['fromDate'] !== undefined) {
-                queryParameters['fromDate'] = parameters['fromDate'];
-            }
-
-            if (parameters['fromDate'] === undefined) {
-                reject(new Error('Missing required  parameter: fromDate'));
-                return;
-            }
 
             if (parameters['offset'] !== undefined) {
                 queryParameters['offset'] = parameters['offset'];
@@ -2902,15 +3260,6 @@ export default class API {
                 queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
             }
 
-            if (parameters['toDate'] !== undefined) {
-                queryParameters['toDate'] = parameters['toDate'];
-            }
-
-            if (parameters['toDate'] === undefined) {
-                reject(new Error('Missing required  parameter: toDate'));
-                return;
-            }
-
             if (parameters['unpaged'] !== undefined) {
                 queryParameters['unpaged'] = parameters['unpaged'];
             }
@@ -2928,10 +3277,9 @@ export default class API {
     };
 
     /**
-     * getByDates
+     * getAll
      * @method
-     * @name API#getByDatesUsingGET
-     * @param {string} fromDate - fromDate
+     * @name API#getAllUsingGET
      * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {integer} page - Page number of the requested page
      * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
@@ -2941,11 +3289,9 @@ export default class API {
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {string} toDate - toDate
      * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      */
-    getByDatesUsingGET(parameters: {
-            'fromDate': string,
+    getAllUsingGET(parameters: {
             'offset' ? : number,
             'page' ? : number,
             'pageNumber' ? : number,
@@ -2953,15 +3299,14 @@ export default class API {
             'paged' ? : boolean,
             'size' ? : number,
             'sort' ? : Array < string > ,
-            'sortSorted' ? : boolean,
-            'sortUnsorted' ? : boolean,
-            'toDate': string,
-            'unpaged' ? : boolean,
-            $queryParameters ? : any,
-            $domain ? : string
+                'sortSorted' ? : boolean,
+                'sortUnsorted' ? : boolean,
+                'unpaged' ? : boolean,
+                $queryParameters ? : any,
+                $domain ? : string
         }): Promise < Array < AuditEvent >
         > {
-            return this.getByDatesUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return this.getAllUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
