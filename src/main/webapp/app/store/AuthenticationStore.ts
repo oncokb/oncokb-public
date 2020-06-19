@@ -18,7 +18,7 @@ import {
   getStoredToken
 } from 'app/indexUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
-import { OncoKBError } from 'app/shared/alert/ErrorAlert';
+import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
