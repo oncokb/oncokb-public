@@ -21,8 +21,9 @@ import * as QueryString from 'query-string';
 import WindowStore from 'app/store/WindowStore';
 import SmallPageContainer from 'app/components/SmallPageContainer';
 import MessageToContact from 'app/shared/texts/MessageToContact';
-import { ErrorAlert, OncoKBError } from 'app/shared/alert/ErrorAlert';
+import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import { NewAccountForm } from 'app/components/newAccountForm/NewAccountForm';
+import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 
 export type NewUserRequiredFields = {
   username: string;

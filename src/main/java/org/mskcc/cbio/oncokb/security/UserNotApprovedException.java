@@ -10,7 +10,7 @@ public class UserNotApprovedException extends AuthenticationException {
     private static final long serialVersionUID = 1L;
 
     public UserNotApprovedException(String userEmail) {
-        super("User " + userEmail + " is not approved.");
+        super("User " + userEmail + " is not approved");
     }
 
     public UserNotApprovedException(String message, Throwable t) {
