@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.repository;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,10 @@ import java.util.UUID;
 @Repository
 public interface TokenRepository extends JpaRepository<Token, Long> {
 
+    String TOKEN_BY_UUID_CACHE = "tokenByUuid";
+
+    String TOKENS_BY_USER_CACHE = "tokensByUser";
+
     @Query("select token from Token token where token.user.login = ?#{principal.username}")
     List<Token> findByUserIsCurrentUser();
 
@@ -28,7 +33,9 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     @Query("select token from Token token where token.expiration < ?1")
     List<Token> findAllExpiresBeforeDate(Instant date);
 
+    @Cacheable(cacheNames = TOKEN_BY_UUID_CACHE)
     Optional<Token> findByToken(UUID token);
 
+    @Cacheable(cacheNames = TOKENS_BY_USER_CACHE)
     List<Token> findByUser(User user);
 }
