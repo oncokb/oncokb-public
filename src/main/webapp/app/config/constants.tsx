@@ -192,6 +192,8 @@ export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
   },
   levels: [],
   ncitVersion: '',
+  apiVersion: 'v1.0.0',
+  publicInstance: false,
   oncoTreeVersion: ''
 };
 
