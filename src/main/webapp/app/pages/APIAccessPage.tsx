@@ -75,7 +75,7 @@ const DownloadButtonGroups: React.FunctionComponent<{
           className={BUTTON_CLASS_NAME}
           fileName={`cancer_gene_list_${props.data.version}.tsv`}
           getDownloadData={() =>
-            oncokbClient.utilsCancerGeneListTxtGetUsingGET_1({
+            oncokbClient.utilsCancerGeneListTxtGetUsingGET({
               version: props.data.version
             })
           }
