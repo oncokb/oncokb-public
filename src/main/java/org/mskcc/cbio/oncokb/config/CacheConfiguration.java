@@ -59,6 +59,8 @@ public class CacheConfiguration {
             createCache(cm, org.mskcc.cbio.oncokb.domain.Authority.class.getName(), jcacheConfiguration);
             createCache(cm, org.mskcc.cbio.oncokb.domain.UserDetails.class.getName(), jcacheConfiguration);
             createCache(cm, org.mskcc.cbio.oncokb.domain.Token.class.getName(), jcacheConfiguration);
+            createCache(cm, org.mskcc.cbio.oncokb.repository.TokenRepository.TOKEN_BY_UUID_CACHE, jcacheConfiguration);
+            createCache(cm, org.mskcc.cbio.oncokb.repository.TokenRepository.TOKENS_BY_USER_CACHE, jcacheConfiguration);
 //            createCache(cm, org.mskcc.cbio.oncokb.domain.TokenStats.class.getName(), jcacheConfiguration);
             createCache(cm, org.mskcc.cbio.oncokb.domain.User.class.getName() + ".authorities", jcacheConfiguration);
             createCache(cm, org.mskcc.cbio.oncokb.domain.UserMails.class.getName(), jcacheConfiguration);
