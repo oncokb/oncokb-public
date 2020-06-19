@@ -7,8 +7,9 @@ import { ManagedUserVM, UserDTO } from 'app/shared/api/generated/API';
 import { LicenseType } from 'app/config/constants';
 import { Alert } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
-import { ErrorAlert, OncoKBError } from 'app/shared/alert/ErrorAlert';
+import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import { NewAccountForm } from 'app/components/newAccountForm/NewAccountForm';
+import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 
 enum RegisterStatus {
   REGISTERED,

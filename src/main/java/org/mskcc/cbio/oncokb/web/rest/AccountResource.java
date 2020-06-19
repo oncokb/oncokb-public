@@ -17,6 +17,7 @@ import org.mskcc.cbio.oncokb.web.rest.errors.*;
 import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.InvalidPasswordException;
 import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndPasswordVM;
+import org.mskcc.cbio.oncokb.web.rest.vm.LoginVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -60,6 +63,8 @@ public class AccountResource {
 
     private final TokenService tokenService;
 
+    private final PasswordEncoder passwordEncoder;
+
     private final ApplicationProperties applicationProperties;
 
     @Autowired
@@ -72,6 +77,8 @@ public class AccountResource {
     public AccountResource(UserRepository userRepository, UserService userService,
                            MailService mailService, TokenProvider tokenProvider,
                            SlackService slackService, EmailService emailService,
+                           AuthenticationManagerBuilder authenticationManagerBuilder,
+                           PasswordEncoder passwordEncoder,
                            TokenService tokenService, ApplicationProperties applicationProperties
                            ) {
 
@@ -81,6 +88,7 @@ public class AccountResource {
         this.tokenProvider = tokenProvider;
         this.slackService = slackService;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
         this.applicationProperties = applicationProperties;
     }
@@ -332,6 +340,16 @@ public class AccountResource {
 
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this reset key");
+        }
+    }
+
+
+    @PostMapping(path = "/account/resend-verification")
+    public void resendVerification(@RequestBody LoginVM loginVM) {
+        Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
+
+        if (userOptional.isPresent() && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
+            mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
         }
     }
 
