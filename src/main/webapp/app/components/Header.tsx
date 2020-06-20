@@ -10,7 +10,7 @@ import AccountMenu from 'app/pages/menus/account';
 import mskIcon from 'content/images/msk-icon-fff-sm.png';
 import { action, observable } from 'mobx';
 import { PAGE_TITLE } from 'app/config/constants';
-import UserMessager from 'app/components/userMessager/UserMessage';
+import UserMessage from 'app/components/userMessager/UserMessage';
 import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 import classnames from 'classnames';
 import autobind from 'autobind-decorator';
@@ -101,7 +101,7 @@ class Header extends React.Component<IHeaderProps> {
   public render() {
     return (
       <>
-        {/*<UserMessager windowStore={this.props.windowStore} />*/}
+        <UserMessage windowStore={this.props.windowStore} />
         <header className="sticky-top header">
           <Navbar
             bg="primary"

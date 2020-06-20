@@ -27,7 +27,7 @@ function makeMessageKey(id: string) {
 let MESSAGE_DATA: IUserMessage[];
 
 if (
-  ['beta.oncokb.org', 'www.oncokb.org'].includes(
+  ['beta.oncokb.org', 'www.oncokb.org', 'localhost'].includes(
     getBrowserWindow().location.hostname
   )
 ) {
@@ -37,14 +37,22 @@ if (
     // BASED ON USERS LOCALSTORAGE
     {
       dateEnd: 100000000000000,
-      content: `Join our webinar to learn how to use OncoKB effectively, <strong>May 7th 3pm-4pm EDT</strong>. <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://meetmsk.zoom.us/meeting/register/vJcvf-CvrzsshBK8VEiD5J9DSRDf7C--qg">Click here to register!</a>`,
-      id: '2020_spring_webinar'
+      content: `
+        <div>
+          <div>We are excited to announce two upcoming OncoKB webinars.</div>
+          <ol style="margin-bottom: 0;">
+              <li><strong>June 30th, 12PM JST, for the Asia/Pacific region</strong>: Utilizing OncoKB, MSK’s Precision Oncology Knowledgebase. <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://meetmsk.zoom.us/webinar/register/WN_y8keM-CnTpmJ8vn0G0rhBA">Click here to register!</a></li>
+              <li><strong>June 30th, 1 PM EST</strong>: Utilizing APIs for annotation of variants in cancer. <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://meetmsk.zoom.us/webinar/register/WN_sduHSX3yTcaD2NKvDqTwAw">Click here to register!</a></li>
+          </ol>
+        </div>
+        `,
+      id: '2020_spring_webinars'
     }
   ];
 }
 
 @observer
-export default class UserMessager extends React.Component<
+export default class UserMessage extends React.Component<
   {
     dataUrl?: string;
     windowStore: WindowStore;
@@ -81,13 +89,12 @@ export default class UserMessager extends React.Component<
   render() {
     if (!this.dismissed && this.messageData.isComplete && this.shownMessage) {
       return (
-        <div className={styles.messager}>
+        <div className={styles.message}>
           <Container
             fluid={!this.props.windowStore.isXLscreen}
-            className={styles.messagerContainer}
+            className={styles.messageContainer}
           >
             <div
-              className={styles.message}
               dangerouslySetInnerHTML={{
                 __html: this.shownMessage.content
               }}
