@@ -33,7 +33,7 @@ type HashQueries = {
 @inject('appStore', 'routing')
 @observer
 export class AboutPage extends React.Component<AboutPageProps> {
-  @observable showTutorials = false;
+  @observable [SHOW_TUTORIALS_KEY] = false;
 
   readonly reactions: IReactionDisposer[] = [];
 
@@ -48,10 +48,11 @@ export class AboutPage extends React.Component<AboutPageProps> {
             window.location.hash
           ) as HashQueries;
           if (_.has(queryStrings, SHOW_MODAL_KEY)) {
-            this.showTutorials = queryStrings.showModal === 'true';
+            this[SHOW_TUTORIALS_KEY] = queryStrings[SHOW_MODAL_KEY] === 'true';
           }
           if (_.has(queryStrings, SHOW_TUTORIALS_KEY)) {
-            this.showTutorials = queryStrings.showTutorials === 'true';
+            this[SHOW_TUTORIALS_KEY] =
+              queryStrings[SHOW_TUTORIALS_KEY] === 'true';
           }
         },
         { fireImmediately: true }
@@ -69,14 +70,16 @@ export class AboutPage extends React.Component<AboutPageProps> {
   }
 
   componentWillUnmount() {
-    this.reactions.forEach(reaction => reaction());
+    this.reactions.forEach(componentReaction => componentReaction());
   }
 
   @computed
   get hashQueries() {
-    return {
-      [SHOW_TUTORIALS_KEY]: `${this.showTutorials}`
-    } as Partial<HashQueries>;
+    const queryString: Partial<HashQueries> = {};
+    if (this[SHOW_TUTORIALS_KEY]) {
+      queryString[SHOW_TUTORIALS_KEY] = `${this[SHOW_TUTORIALS_KEY]}`;
+    }
+    return queryString;
   }
 
   private getTabIframe = (link: string) => (
@@ -112,7 +115,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
               <h2>About OncoKB</h2>
               <Button
                 className={'mb-2'}
-                onClick={() => (this.showTutorials = true)}
+                onClick={() => (this[SHOW_TUTORIALS_KEY] = true)}
               >
                 <span>{ONCOKB_TUTORIAL}</span>
                 <i className={'fa fa-play-circle-o fa-lg ml-2'} />
@@ -184,8 +187,8 @@ export class AboutPage extends React.Component<AboutPageProps> {
             </Col>
           </Row>
           <Modal
-            show={this.showTutorials}
-            onHide={() => (this.showTutorials = false)}
+            show={this[SHOW_TUTORIALS_KEY]}
+            onHide={() => (this[SHOW_TUTORIALS_KEY] = false)}
             size={'xl'}
           >
             <Modal.Header closeButton>
