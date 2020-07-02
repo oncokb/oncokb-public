@@ -7,63 +7,98 @@ import { CitationText } from 'app/components/CitationText';
 import { Link } from 'react-router-dom';
 import {
   DOCUMENT_TITLES,
+  QUERY_SEPARATOR_FOR_QUERY_STRING,
   SOP_LINK,
   WEBINAR_LINKS_05072020
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
 import { Linkout } from 'app/shared/links/Linkout';
-import { observable } from 'mobx';
+import { observable, IReactionDisposer, reaction, computed } from 'mobx';
 import Tabs from 'react-responsive-tabs';
 import Iframe from 'react-iframe';
 import * as QueryString from 'query-string';
 import _ from 'lodash';
+import { RouterStore } from 'mobx-react-router';
 
-type AboutPageProps = { appStore: AppStore };
-const ONCOKB_TUTORIAL = 'OncoKB Tutorial';
+type AboutPageProps = { appStore: AppStore; routing: RouterStore };
+const ONCOKB_TUTORIAL = 'OncoKB Tutorials';
 export const SHOW_MODAL_KEY = 'showModal';
+export const SHOW_TUTORIALS_KEY = 'showTutorials';
 
-@inject('appStore')
+type HashQueries = {
+  [SHOW_MODAL_KEY]?: string;
+  [SHOW_TUTORIALS_KEY]?: string;
+};
+
+@inject('appStore', 'routing')
 @observer
 export class AboutPage extends React.Component<AboutPageProps> {
-  @observable showModal = false;
+  @observable showTutorials = false;
+
+  readonly reactions: IReactionDisposer[] = [];
 
   constructor(props: AboutPageProps) {
     super(props);
-    const queryStrings = QueryString.parse(window.location.hash) as {
-      showModal: string;
-    };
-    if (_.has(queryStrings, SHOW_MODAL_KEY)) {
-      this.showModal = queryStrings.showModal === 'true';
-    }
+
+    this.reactions.push(
+      reaction(
+        () => [props.routing.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(
+            window.location.hash
+          ) as HashQueries;
+          if (_.has(queryStrings, SHOW_MODAL_KEY)) {
+            this.showTutorials = queryStrings.showModal === 'true';
+          }
+          if (_.has(queryStrings, SHOW_TUTORIALS_KEY)) {
+            this.showTutorials = queryStrings.showTutorials === 'true';
+          }
+        },
+        { fireImmediately: true }
+      ),
+      reaction(
+        () => this.hashQueries,
+        newHash => {
+          const parsedHashQueryString = QueryString.stringify(newHash, {
+            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING
+          });
+          window.location.hash = parsedHashQueryString;
+        }
+      )
+    );
   }
 
-  private tabs = [
+  componentWillUnmount() {
+    this.reactions.forEach(reaction => reaction());
+  }
+
+  @computed
+  get hashQueries() {
+    return {
+      [SHOW_TUTORIALS_KEY]: `${this.showTutorials}`
+    } as Partial<HashQueries>;
+  }
+
+  private getTabIframe = (link: string) => (
+    <Iframe
+      width="100%"
+      height="400"
+      url={link}
+      frameBorder={0}
+      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    ></Iframe>
+  );
+
+  private getTabs = (links: { youTube: string; bilibili: string }) => [
     {
       title: 'YouTube.com',
-      getContent: () => (
-        <Iframe
-          width="100%"
-          height="600"
-          url="https://www.youtube.com/embed/XqoKrrm2Boc"
-          frameBorder={0}
-          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></Iframe>
-      ),
+      getContent: () => this.getTabIframe(links.youTube),
       key: 'youtube'
     },
     {
       title: 'bilibili.com',
-      getContent: () => (
-        <Iframe
-          width="100%"
-          height="600"
-          url="//player.bilibili.com/player.html?aid=370552044&bvid=BV1pZ4y1s7ou&cid=188401136&page=1"
-          frameBorder={0}
-          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></Iframe>
-      ),
+      getContent: () => this.getTabIframe(links.bilibili),
       key: 'bilibili'
     }
   ];
@@ -77,7 +112,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
               <h2>About OncoKB</h2>
               <Button
                 className={'mb-2'}
-                onClick={() => (this.showModal = true)}
+                onClick={() => (this.showTutorials = true)}
               >
                 <span>{ONCOKB_TUTORIAL}</span>
                 <i className={'fa fa-play-circle-o fa-lg ml-2'} />
@@ -149,15 +184,37 @@ export class AboutPage extends React.Component<AboutPageProps> {
             </Col>
           </Row>
           <Modal
-            show={this.showModal}
-            onHide={() => (this.showModal = false)}
+            show={this.showTutorials}
+            onHide={() => (this.showTutorials = false)}
             size={'xl'}
           >
             <Modal.Header closeButton>
               <Modal.Title>{ONCOKB_TUTORIAL}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Tabs items={this.tabs} transform={false} />
+              <div>
+                <h5>Webinar #1: Introduction to OncoKB</h5>
+                <Tabs
+                  items={this.getTabs({
+                    youTube: 'https://www.youtube.com/embed/XqoKrrm2Boc',
+                    bilibili:
+                      '//player.bilibili.com/player.html?aid=370552044&bvid=BV1pZ4y1s7ou&cid=188401136&page=1'
+                  })}
+                  transform={false}
+                />
+
+                <h5 className={'mt-3'}>
+                  Webinar #2: Introduction to OncoKB Web API
+                </h5>
+                <Tabs
+                  items={this.getTabs({
+                    youTube: 'https://www.youtube.com/embed/mTTe7CTdw-g',
+                    bilibili:
+                      '//player.bilibili.com/player.html?aid=328647655&bvid=BV1sA411i7F9&cid=207918006&page=1'
+                  })}
+                  transform={false}
+                />
+              </div>
             </Modal.Body>
           </Modal>
         </>
