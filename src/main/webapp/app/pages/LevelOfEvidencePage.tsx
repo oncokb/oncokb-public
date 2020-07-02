@@ -23,36 +23,36 @@ type LevelOfEvidencePageProps = {
 
 // the level content should be all uppercase
 export enum Version {
-  v1 = 'V1',
-  v2 = 'V2',
-  JCS = 'JCS'
+  V1 = 'V1',
+  V2 = 'V2',
+  AAC = 'AAC'
 }
 
 const DEFAULT_LEVEL_FILE_NAME = 'LevelsOfEvidence';
-const JCS_CHECKBOX_ID = 'loe-jcs-checkbox';
-const ALLOWED_VERSIONS: string[] = [Version.v2, Version.v1, Version.JCS];
-const V2_RELATED_LEVELS = [Version.v2, Version.JCS];
-const JCS_NAME = 'AMP/ASCO/CAP Levels of Evidence';
+const AAC_CHECKBOX_ID = 'loe-aac-checkbox';
+const ALLOWED_VERSIONS: string[] = [Version.V2, Version.V1, Version.AAC];
+const V2_RELATED_LEVELS = [Version.V2, Version.AAC];
+const AAC_NAME = 'AMP/ASCO/CAP Levels of Evidence';
 const LEVEL_TITLE: { [key in Version]: ElementType } = {
-  [Version.v1]: <>OncoKB Levels of Evidence {Version.v1}</>,
-  [Version.v2]: (
+  [Version.V1]: <>OncoKB Levels of Evidence {Version.V1}</>,
+  [Version.V2]: (
     <>
-      OncoKB Levels of Evidence {Version.v2} ({' '}
+      OncoKB Levels of Evidence {Version.V2} ({' '}
       <HashLink to={`${PAGE_ROUTE.NEWS}#12202019`}>News 12/20/2019</HashLink> )
     </>
   ),
-  [Version.JCS]: <>Mapping between OncoKB and AMP/ASCO/CAP Levels of Evidence</>
+  [Version.AAC]: <>Mapping between OncoKB and AMP/ASCO/CAP Levels of Evidence</>
 };
 const LEVEL_SUBTITLE: { [key in Version]: ElementType } = {
-  [Version.v1]: <>Click here to see Levels of Evidence {Version.v2}</>,
-  [Version.v2]: <>Click here to see Levels of Evidence {Version.v1}</>,
-  [Version.JCS]: <></>
+  [Version.V1]: <>Click here to see Levels of Evidence {Version.V2}</>,
+  [Version.V2]: <>Click here to see Levels of Evidence {Version.V1}</>,
+  [Version.AAC]: <></>
 };
 
 const LEVEL_FILE_NAME: { [key in Version]: string } = {
-  [Version.v1]: DEFAULT_LEVEL_FILE_NAME,
-  [Version.v2]: DEFAULT_LEVEL_FILE_NAME,
-  [Version.JCS]: `Mapping_OncoKB_and_AMP_ASCO_CAP_LOfE`
+  [Version.V1]: DEFAULT_LEVEL_FILE_NAME,
+  [Version.V2]: DEFAULT_LEVEL_FILE_NAME,
+  [Version.AAC]: `Mapping_OncoKB_and_AMP_ASCO_CAP_LOfE`
 };
 
 @inject('routing')
@@ -65,7 +65,7 @@ export default class LevelOfEvidencePage extends React.Component<
   readonly reactions: IReactionDisposer[] = [];
 
   getVersionDefault = () => {
-    return Version.v2;
+    return Version.V2;
   };
 
   updateLocationHash = (newVersion: Version) => {
@@ -93,7 +93,7 @@ export default class LevelOfEvidencePage extends React.Component<
       ),
       reaction(
         () => this.version,
-        newVersion => {}
+        newVersion => this.updateLocationHash(newVersion)
       )
     );
   }
@@ -120,21 +120,21 @@ export default class LevelOfEvidencePage extends React.Component<
                     <input
                       type={'checkbox'}
                       className={'form-check-input'}
-                      id={JCS_CHECKBOX_ID}
+                      id={AAC_CHECKBOX_ID}
                       onClick={() =>
                         this.toggleVersion(
-                          this.version === Version.JCS
-                            ? Version.v2
-                            : Version.JCS
+                          this.version === Version.AAC
+                            ? Version.V2
+                            : Version.AAC
                         )
                       }
-                      checked={this.version === Version.JCS}
+                      checked={this.version === Version.AAC}
                     />
                     <label
                       className={'form-check-label'}
-                      htmlFor={JCS_CHECKBOX_ID}
+                      htmlFor={AAC_CHECKBOX_ID}
                     >
-                      Show mapping to {JCS_NAME}
+                      Show mapping to {AAC_NAME}
                     </label>
                   </span>
                 )}
@@ -166,7 +166,7 @@ export default class LevelOfEvidencePage extends React.Component<
               <Col className={'d-md-flex justify-content-center mt-2'}>
                 <div
                   style={{
-                    maxWidth: this.version === Version.JCS ? 900 : IMG_MAX_WIDTH
+                    maxWidth: this.version === Version.AAC ? 900 : IMG_MAX_WIDTH
                   }}
                 >
                   <img
@@ -188,8 +188,8 @@ export default class LevelOfEvidencePage extends React.Component<
                     onClick={() =>
                       this.toggleVersion(
                         V2_RELATED_LEVELS.includes(this.version)
-                          ? Version.v1
-                          : Version.v2
+                          ? Version.V1
+                          : Version.V2
                       )
                     }
                     className={mainStyles.btnLinkText}

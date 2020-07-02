@@ -14,7 +14,7 @@ import {
 import { Link } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import LevelChange from 'content/images/loe-change.png';
-import JCS_IMAGE from 'content/images/level_JCS.png';
+import AAC_IMAGE from 'content/images/level_AAC.png';
 import { Linkout } from 'app/shared/links/Linkout';
 import { RouterStore } from 'mobx-react-router';
 import { scrollWidthOffsetInNews } from 'app/shared/utils/Utils';
@@ -100,7 +100,7 @@ export default class NewsPage extends React.Component<{
                 <li>
                   We now show a comparison between the OncoKB and AMP/ASCO/CAP
                   Levels of Evidence on the{' '}
-                  <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.JCS}`}>
+                  <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.AAC}`}>
                     Levels of Evidence
                   </Link>{' '}
                   page.
@@ -108,7 +108,7 @@ export default class NewsPage extends React.Component<{
                 <img
                   className="md-auto"
                   style={{ maxWidth: IMG_MAX_WIDTH }}
-                  src={JCS_IMAGE}
+                  src={AAC_IMAGE}
                 />
               </ul>
             </NewsList>
