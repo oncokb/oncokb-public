@@ -35,6 +35,10 @@ public class TokenStats implements Serializable {
     @Column(name = "access_time", nullable = false)
     private Instant accessTime;
 
+    @NotNull
+    @Column(name = "usage_count", nullable = false)
+    private Integer usageCount;
+
     @ManyToOne
     @JsonIgnoreProperties("tokenStats")
     private Token token;
@@ -87,6 +91,19 @@ public class TokenStats implements Serializable {
         this.accessTime = accessTime;
     }
 
+    public Integer getUsageCount() {
+        return usageCount;
+    }
+
+    public TokenStats usageCount(Integer usageCount) {
+        this.usageCount = usageCount;
+        return this;
+    }
+
+    public void setUsageCount(Integer usageCount) {
+        this.usageCount = usageCount;
+    }
+
     public Token getToken() {
         return token;
     }
@@ -124,6 +141,7 @@ public class TokenStats implements Serializable {
             ", accessIp='" + getAccessIp() + "'" +
             ", resource='" + getResource() + "'" +
             ", accessTime='" + getAccessTime() + "'" +
+            ", usageCount=" + getUsageCount() +
             "}";
     }
 }

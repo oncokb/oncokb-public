@@ -1,7 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
+import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
 import org.mskcc.cbio.oncokb.service.TokenStatsService;
@@ -46,6 +46,9 @@ public class TokenStatsResourceIT {
     private static final Instant DEFAULT_ACCESS_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_ACCESS_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
+    private static final Integer DEFAULT_USAGE_COUNT = 1;
+    private static final Integer UPDATED_USAGE_COUNT = 2;
+
     @Autowired
     private TokenStatsRepository tokenStatsRepository;
 
@@ -70,7 +73,8 @@ public class TokenStatsResourceIT {
         TokenStats tokenStats = new TokenStats()
             .accessIp(DEFAULT_ACCESS_IP)
             .resource(DEFAULT_RESOURCE)
-            .accessTime(DEFAULT_ACCESS_TIME);
+            .accessTime(DEFAULT_ACCESS_TIME)
+            .usageCount(DEFAULT_USAGE_COUNT);
         return tokenStats;
     }
     /**
@@ -83,7 +87,8 @@ public class TokenStatsResourceIT {
         TokenStats tokenStats = new TokenStats()
             .accessIp(UPDATED_ACCESS_IP)
             .resource(UPDATED_RESOURCE)
-            .accessTime(UPDATED_ACCESS_TIME);
+            .accessTime(UPDATED_ACCESS_TIME)
+            .usageCount(UPDATED_USAGE_COUNT);
         return tokenStats;
     }
 
@@ -110,6 +115,7 @@ public class TokenStatsResourceIT {
         assertThat(testTokenStats.getAccessIp()).isEqualTo(DEFAULT_ACCESS_IP);
         assertThat(testTokenStats.getResource()).isEqualTo(DEFAULT_RESOURCE);
         assertThat(testTokenStats.getAccessTime()).isEqualTo(DEFAULT_ACCESS_TIME);
+        assertThat(testTokenStats.getUsageCount()).isEqualTo(DEFAULT_USAGE_COUNT);
     }
 
     @Test
@@ -152,6 +158,24 @@ public class TokenStatsResourceIT {
 
     @Test
     @Transactional
+    public void checkUsageCountIsRequired() throws Exception {
+        int databaseSizeBeforeTest = tokenStatsRepository.findAll().size();
+        // set the field null
+        tokenStats.setUsageCount(null);
+
+        // Create the TokenStats, which fails.
+
+        restTokenStatsMockMvc.perform(post("/api/token-stats")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(tokenStats)))
+            .andExpect(status().isBadRequest());
+
+        List<TokenStats> tokenStatsList = tokenStatsRepository.findAll();
+        assertThat(tokenStatsList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllTokenStats() throws Exception {
         // Initialize the database
         tokenStatsRepository.saveAndFlush(tokenStats);
@@ -163,9 +187,10 @@ public class TokenStatsResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(tokenStats.getId().intValue())))
             .andExpect(jsonPath("$.[*].accessIp").value(hasItem(DEFAULT_ACCESS_IP)))
             .andExpect(jsonPath("$.[*].resource").value(hasItem(DEFAULT_RESOURCE)))
-            .andExpect(jsonPath("$.[*].accessTime").value(hasItem(DEFAULT_ACCESS_TIME.toString())));
+            .andExpect(jsonPath("$.[*].accessTime").value(hasItem(DEFAULT_ACCESS_TIME.toString())))
+            .andExpect(jsonPath("$.[*].usageCount").value(hasItem(DEFAULT_USAGE_COUNT)));
     }
-
+    
     @Test
     @Transactional
     public void getTokenStats() throws Exception {
@@ -179,7 +204,8 @@ public class TokenStatsResourceIT {
             .andExpect(jsonPath("$.id").value(tokenStats.getId().intValue()))
             .andExpect(jsonPath("$.accessIp").value(DEFAULT_ACCESS_IP))
             .andExpect(jsonPath("$.resource").value(DEFAULT_RESOURCE))
-            .andExpect(jsonPath("$.accessTime").value(DEFAULT_ACCESS_TIME.toString()));
+            .andExpect(jsonPath("$.accessTime").value(DEFAULT_ACCESS_TIME.toString()))
+            .andExpect(jsonPath("$.usageCount").value(DEFAULT_USAGE_COUNT));
     }
 
     @Test
@@ -205,7 +231,8 @@ public class TokenStatsResourceIT {
         updatedTokenStats
             .accessIp(UPDATED_ACCESS_IP)
             .resource(UPDATED_RESOURCE)
-            .accessTime(UPDATED_ACCESS_TIME);
+            .accessTime(UPDATED_ACCESS_TIME)
+            .usageCount(UPDATED_USAGE_COUNT);
 
         restTokenStatsMockMvc.perform(put("/api/token-stats")
             .contentType(MediaType.APPLICATION_JSON)
@@ -219,6 +246,7 @@ public class TokenStatsResourceIT {
         assertThat(testTokenStats.getAccessIp()).isEqualTo(UPDATED_ACCESS_IP);
         assertThat(testTokenStats.getResource()).isEqualTo(UPDATED_RESOURCE);
         assertThat(testTokenStats.getAccessTime()).isEqualTo(UPDATED_ACCESS_TIME);
+        assertThat(testTokenStats.getUsageCount()).isEqualTo(UPDATED_USAGE_COUNT);
     }
 
     @Test
