@@ -32,7 +32,7 @@ const DEFAULT_LEVEL_FILE_NAME = 'LevelsOfEvidence';
 const AAC_CHECKBOX_ID = 'loe-aac-checkbox';
 const ALLOWED_VERSIONS: string[] = [Version.V2, Version.V1, Version.AAC];
 const V2_RELATED_LEVELS = [Version.V2, Version.AAC];
-const JCS_NAME = 'AMP/ASCO/CAP Levels of Evidence';
+const AAC_NAME = 'AMP/ASCO/CAP Levels of Evidence';
 const LEVEL_TITLE: { [key in Version]: ElementType } = {
   [Version.V1]: <>OncoKB Levels of Evidence {Version.V1}</>,
   [Version.V2]: (
@@ -134,7 +134,7 @@ export default class LevelOfEvidencePage extends React.Component<
                       className={'form-check-label'}
                       htmlFor={AAC_CHECKBOX_ID}
                     >
-                      Show mapping to {JCS_NAME}
+                      Show mapping to {AAC_NAME}
                     </label>
                   </span>
                 )}
