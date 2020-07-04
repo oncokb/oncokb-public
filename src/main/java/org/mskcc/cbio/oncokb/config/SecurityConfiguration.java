@@ -113,6 +113,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             .antMatchers("/api/users/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/user-details/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/tokens/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/token-stats/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/cronjob/**").hasAnyAuthority(AuthoritiesConstants.BOT)

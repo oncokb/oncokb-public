@@ -153,6 +153,7 @@ public class CronJobController {
                 // Skip PUBLIC_WEBSITE token since it's short live
                 !this.userService.userHasAuthority(token.getUser(), AuthoritiesConstants.PUBLIC_WEBSITE) &&
                 !notifiedUserIds.contains(token.getUser().getLogin()) &&
+                token.isRenewable() &&
                 // Do not include users that have been notified during the validate Token period
                 this.userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(token.getUser(), VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES, token.getExpiration().minusSeconds(secondsToExpire)).isEmpty()
             ) {

@@ -156,10 +156,16 @@ public class AccountResource {
                 }
             } else {
                 // This user exists before, we are looking for to extend the expiration date of all tokens associated
-                tokenService.findByUser(user).forEach(token -> {
-                    token.setExpiration(token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS));
-                    tokenService.save(token);
-                });
+                List<Token> userTokens = tokenService.findByUser(user);
+                boolean userAccountCanNOTBeExtended = userTokens.stream().filter(token -> !token.isRenewable()).findAny().isPresent();
+                if (userAccountCanNOTBeExtended) {
+                    throw new AccountResourceException("Your account token is expired and cannot be extended.");
+                } else {
+                    tokenService.findByUser(user).forEach(token -> {
+                        token.setExpiration(token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS));
+                        tokenService.save(token);
+                    });
+                }
             }
             return true;
         }
