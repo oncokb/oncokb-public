@@ -211,7 +211,7 @@ public class UserService {
                 .collect(Collectors.toSet());
             user.setAuthorities(authorities);
         }
-        userRepository.save(user);
+        User updatedUser = userRepository.save(user);
 
         UserDetails userDetails = new UserDetails();
         userDetails.setUser(user);
@@ -223,6 +223,8 @@ public class UserService {
         userDetailsRepository.save(userDetails);
 
         this.clearUserCaches(user);
+
+        generateTokenForUser(userMapper.userToUserDTO(updatedUser));
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -381,12 +383,19 @@ public class UserService {
         if (!userDTO.isActivated()) {
             userDTO.setActivated(true);
         }
+        Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+        if (updatedUserDTO.isPresent()) {
+            generateTokenForUser(updatedUserDTO.get());
+        }
+        return updatedUserDTO;
+    }
+
+    private void generateTokenForUser(UserDTO userDTO) {
         // automatically generate a token for user if not exists
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
         if (tokens.isEmpty()) {
             tokenProvider.createToken(userMapper.userDTOToUser(userDTO), Optional.of(Instant.now().plusSeconds(HALF_YEAR_IN_SECONDS)));
         }
-        return updateUser(userDTO);
     }
 
     public List<UserDTO> getAllActivatedUsersWithoutTokens() {
