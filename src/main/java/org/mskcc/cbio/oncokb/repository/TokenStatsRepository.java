@@ -17,6 +17,6 @@ import java.util.List;
 public interface TokenStatsRepository extends JpaRepository<TokenStats, Long> {
     List<TokenStats> findByAccessTimeBefore(Instant before);
 
-    @Query("select sum(tokenStats.usageCount) as count, tokenStats.token as token from TokenStats tokenStats group by tokenStats.token")
-    List<UserTokenUsage> countTokenUsageByToken();
+    @Query("select sum(tokenStats.usageCount) as count, tokenStats.token as token from TokenStats tokenStats where tokenStats.accessTime < ?1 group by tokenStats.token")
+    List<UserTokenUsage> countTokenUsageByToken(Instant before);
 }

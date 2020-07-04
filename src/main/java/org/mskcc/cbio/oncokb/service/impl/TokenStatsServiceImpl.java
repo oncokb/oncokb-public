@@ -95,7 +95,7 @@ public class TokenStatsServiceImpl implements TokenStatsService {
             });
     }
 
-    public List<UserTokenUsage> getUserTokenUsage() {
-        return tokenStatsRepository.countTokenUsageByToken();
+    public List<UserTokenUsage> getUserTokenUsage(Instant before) {
+        return tokenStatsRepository.countTokenUsageByToken(before);
     }
 }

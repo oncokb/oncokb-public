@@ -133,7 +133,7 @@ public class CronJobController {
     @GetMapping(path = "/update-token-stats")
     public void updateTokenStats() {
         log.info("Started the cronjob to update token stats");
-        List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage();
+        List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(Instant.now());
         tokenUsages.stream().forEach(tokenUsage -> {
             if (!tokenUsage.getToken().getCurrentUsage().equals(tokenUsage.getCount())) {
                 tokenUsage.getToken().setCurrentUsage(tokenUsage.getCount());
