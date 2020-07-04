@@ -34,9 +34,7 @@
     "blueprints": [],
     "clientFramework": "react",
     "clientTheme": "none",
-    "appsFolders": [
-      "public-website"
-    ],
+    "appsFolders": ["public-website"],
     "directoryPath": "../",
     "dockerRepositoryName": "oncokb-public",
     "dockerPushCommand": "docker push",

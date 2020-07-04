@@ -96,7 +96,6 @@ public class ApiProxy {
                 List<Token> tokenList = tokenProvider.getUserTokens(user.get());
                 int usageCount = getUsageCount(body, method);
                 tokenList.forEach(token -> {
-                    tokenService.increaseTokenUsage(token.getId(), usageCount);
                     // Check the current public website token usage
                     // Send email if the token usage beyonds the threshold
                     // This is not guaranteed to be triggered if the request is a post and total passes the cutoff
@@ -149,7 +148,6 @@ public class ApiProxy {
                 !tokenUsageCheckWhitelist.contains(user.get().getLogin())) {
                 List<Token> tokenList = tokenProvider.getUserTokens(user.get());
                 tokenList.forEach(token -> {
-                    tokenService.increaseTokenUsage(token.getId(), usageCount);
                     if (uuidOptional.isPresent() && uuidOptional.get().equals(token.getToken())) {
                         TokenStats tokenStats = new TokenStats();
                         tokenStats.setToken(token);
@@ -161,6 +159,7 @@ public class ApiProxy {
                             tokenStats.setAccessIp(ipAddress);
                         }
                         tokenStats.setAccessTime(Instant.now());
+                        tokenStats.setUsageCount(usageCount);
                         tokenStats.setResource(request.getMethod() + " " + request.getRequestURI());
                         tokenStatsService.save(tokenStats);
                     }
