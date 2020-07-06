@@ -34,6 +34,7 @@ import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.html.Option;
 import javax.validation.Valid;
+import java.time.Instant;
 import java.util.*;
 
 import static org.mskcc.cbio.oncokb.config.Constants.MSK_EMAIL_DOMAIN;
@@ -156,10 +157,19 @@ public class AccountResource {
                 }
             } else {
                 // This user exists before, we are looking for to extend the expiration date of all tokens associated
-                tokenService.findByUser(user).forEach(token -> {
-                    token.setExpiration(token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS));
-                    tokenService.save(token);
-                });
+                List<Token> userTokens = tokenService.findByUser(user);
+                boolean userAccountCanNOTBeExtended = userTokens.stream().filter(token -> !token.isRenewable()).findAny().isPresent();
+                if (userAccountCanNOTBeExtended) {
+                    throw new AccountResourceException("Your account token is expired and cannot be extended.");
+                } else {
+                    Instant defaultExpiration = Instant.now().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
+                    tokenService.findByUser(user).forEach(token -> {
+                        // if the extended date based on the current token expiration is before the date in 6month, we should use the bigger one
+                        Instant expirationBased = token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
+                        token.setExpiration(expirationBased.isBefore(defaultExpiration) ? defaultExpiration : expirationBased);
+                        tokenService.save(token);
+                    });
+                }
             }
             return true;
         }

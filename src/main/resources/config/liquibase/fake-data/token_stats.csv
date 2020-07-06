@@ -1,11 +1,11 @@
-id;access_ip;resource;access_time;usage_count
-1;green Tasty Cotton Tuna;Agent digital;2019-08-25T22:33:05;24113
-2;yellow Cambridgeshire Pennsylvania;Kentucky;2019-08-25T15:03:02;25631
-3;transform bandwidth solid state;Central Pants Games;2019-08-26T08:30:15;80125
-4;Ergonomic;Manager;2019-08-26T00:14:24;29157
-5;backing up Refined Rubber Sausages Factors;deposit optical out-of-the-box;2019-08-25T16:18:12;6078
-6;white;magenta;2019-08-26T08:40:00;12805
-7;multi-byte;Trail Associate;2019-08-25T17:14:48;94909
-8;programming Fully-configurable;Home Loan Account distributed;2019-08-25T18:04:36;60964
-9;exuding;Indiana Practical Granite Chair;2019-08-25T16:27:08;98773
-10;Iowa PCI Tennessee;RAM Madagascar overriding;2019-08-25T23:59:58;98856
+id;access_ip;resource;access_time;usage_count;token_id
+1;green Tasty Cotton Tuna;Agent digital;2019-08-25T22:33:05;24113;1
+2;yellow Cambridgeshire Pennsylvania;Kentucky;2019-08-25T15:03:02;25631;1
+3;transform bandwidth solid state;Central Pants Games;2019-08-26T08:30:15;80125;1
+4;Ergonomic;Manager;2019-08-26T00:14:24;29157;1
+5;backing up Refined Rubber Sausages Factors;deposit optical out-of-the-box;2019-08-25T16:18:12;6078;2
+6;white;magenta;2019-08-26T08:40:00;12805;2
+7;multi-byte;Trail Associate;2019-08-25T17:14:48;94909;3
+8;programming Fully-configurable;Home Loan Account distributed;2019-08-25T18:04:36;60964;4
+9;exuding;Indiana Practical Granite Chair;2019-08-25T16:27:08;98773;4
+10;Iowa PCI Tennessee;RAM Madagascar overriding;2019-08-25T23:59:58;98856;4
