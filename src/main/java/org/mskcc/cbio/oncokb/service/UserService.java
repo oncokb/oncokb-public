@@ -34,6 +34,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.mskcc.cbio.oncokb.config.Constants.DAY_IN_SECONDS;
 import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
 
 /**
@@ -184,7 +185,7 @@ public class UserService {
         return true;
     }
 
-    public User createUser(UserDTO userDTO) {
+    public User createUser(UserDTO userDTO, Integer tokenValidDays) {
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
@@ -224,7 +225,7 @@ public class UserService {
 
         this.clearUserCaches(user);
 
-        generateTokenForUser(userMapper.userToUserDTO(updatedUser));
+        generateTokenForUser(userMapper.userToUserDTO(updatedUser), tokenValidDays);
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -385,16 +386,16 @@ public class UserService {
         }
         Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
         if (updatedUserDTO.isPresent()) {
-            generateTokenForUser(updatedUserDTO.get());
+            generateTokenForUser(updatedUserDTO.get(), null);
         }
         return updatedUserDTO;
     }
 
-    private void generateTokenForUser(UserDTO userDTO) {
+    private void generateTokenForUser(UserDTO userDTO, Integer tokenValidDays) {
         // automatically generate a token for user if not exists
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
         if (tokens.isEmpty()) {
-            tokenProvider.createToken(userMapper.userDTOToUser(userDTO), Optional.of(Instant.now().plusSeconds(HALF_YEAR_IN_SECONDS)));
+            tokenProvider.createToken(userMapper.userDTOToUser(userDTO), Optional.of(Instant.now().plusSeconds(tokenValidDays == null ? HALF_YEAR_IN_SECONDS : DAY_IN_SECONDS * tokenValidDays)));
         }
     }
 

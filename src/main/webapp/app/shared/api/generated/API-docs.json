@@ -1293,11 +1293,11 @@
         "parameters": [
           {
             "in": "body",
-            "name": "userDTO",
-            "description": "userDTO",
+            "name": "managedUserVM",
+            "description": "managedUserVM",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/UserDTO"
+              "$ref": "#/definitions/ManagedUserVM"
             }
           }
         ],
@@ -1920,6 +1920,10 @@
         },
         "resetKey": {
           "type": "string"
+        },
+        "tokenValidDays": {
+          "type": "integer",
+          "format": "int32"
         }
       },
       "title": "ManagedUserVM"
