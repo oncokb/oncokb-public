@@ -3121,8 +3121,7 @@ export default class API {
             return response.body;
         });
     };
-    getByDatesUsingGETURL(parameters: {
-        'fromDate': string,
+    getAllUsingGETURL(parameters: {
         'offset' ? : number,
         'page' ? : number,
         'pageNumber' ? : number,
@@ -3130,18 +3129,13 @@ export default class API {
         'paged' ? : boolean,
         'size' ? : number,
         'sort' ? : Array < string > ,
-        'sortSorted' ? : boolean,
-        'sortUnsorted' ? : boolean,
-        'toDate': string,
-        'unpaged' ? : boolean,
-        $queryParameters ? : any
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/management/audits';
-        if (parameters['fromDate'] !== undefined) {
-            queryParameters['fromDate'] = parameters['fromDate'];
-        }
-
         if (parameters['offset'] !== undefined) {
             queryParameters['offset'] = parameters['offset'];
         }
@@ -3178,10 +3172,6 @@ export default class API {
             queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
         }
 
-        if (parameters['toDate'] !== undefined) {
-            queryParameters['toDate'] = parameters['toDate'];
-        }
-
         if (parameters['unpaged'] !== undefined) {
             queryParameters['unpaged'] = parameters['unpaged'];
         }
@@ -3197,10 +3187,9 @@ export default class API {
     };
 
     /**
-     * getByDates
+     * getAll
      * @method
-     * @name API#getByDatesUsingGET
-     * @param {string} fromDate - fromDate
+     * @name API#getAllUsingGET
      * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {integer} page - Page number of the requested page
      * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
@@ -3210,11 +3199,9 @@ export default class API {
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {string} toDate - toDate
      * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      */
-    getByDatesUsingGETWithHttpInfo(parameters: {
-        'fromDate': string,
+    getAllUsingGETWithHttpInfo(parameters: {
         'offset' ? : number,
         'page' ? : number,
         'pageNumber' ? : number,
@@ -3222,12 +3209,11 @@ export default class API {
         'paged' ? : boolean,
         'size' ? : number,
         'sort' ? : Array < string > ,
-        'sortSorted' ? : boolean,
-        'sortUnsorted' ? : boolean,
-        'toDate': string,
-        'unpaged' ? : boolean,
-        $queryParameters ? : any,
-        $domain ? : string
+            'sortSorted' ? : boolean,
+            'sortUnsorted' ? : boolean,
+            'unpaged' ? : boolean,
+            $queryParameters ? : any,
+            $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
@@ -3239,15 +3225,6 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
-
-            if (parameters['fromDate'] !== undefined) {
-                queryParameters['fromDate'] = parameters['fromDate'];
-            }
-
-            if (parameters['fromDate'] === undefined) {
-                reject(new Error('Missing required  parameter: fromDate'));
-                return;
-            }
 
             if (parameters['offset'] !== undefined) {
                 queryParameters['offset'] = parameters['offset'];
@@ -3285,15 +3262,6 @@ export default class API {
                 queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
             }
 
-            if (parameters['toDate'] !== undefined) {
-                queryParameters['toDate'] = parameters['toDate'];
-            }
-
-            if (parameters['toDate'] === undefined) {
-                reject(new Error('Missing required  parameter: toDate'));
-                return;
-            }
-
             if (parameters['unpaged'] !== undefined) {
                 queryParameters['unpaged'] = parameters['unpaged'];
             }
@@ -3311,10 +3279,9 @@ export default class API {
     };
 
     /**
-     * getByDates
+     * getAll
      * @method
-     * @name API#getByDatesUsingGET
-     * @param {string} fromDate - fromDate
+     * @name API#getAllUsingGET
      * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {integer} page - Page number of the requested page
      * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
@@ -3324,11 +3291,9 @@ export default class API {
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {string} toDate - toDate
      * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
      */
-    getByDatesUsingGET(parameters: {
-            'fromDate': string,
+    getAllUsingGET(parameters: {
             'offset' ? : number,
             'page' ? : number,
             'pageNumber' ? : number,
@@ -3336,15 +3301,14 @@ export default class API {
             'paged' ? : boolean,
             'size' ? : number,
             'sort' ? : Array < string > ,
-            'sortSorted' ? : boolean,
-            'sortUnsorted' ? : boolean,
-            'toDate': string,
-            'unpaged' ? : boolean,
-            $queryParameters ? : any,
-            $domain ? : string
+                'sortSorted' ? : boolean,
+                'sortUnsorted' ? : boolean,
+                'unpaged' ? : boolean,
+                $queryParameters ? : any,
+                $domain ? : string
         }): Promise < Array < AuditEvent >
         > {
-            return this.getByDatesUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return this.getAllUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
