@@ -136,23 +136,13 @@ public class AccountResource {
                             slackService.sendApprovedConfirmation(userMapper.userToUserDTO(userOptional.get()));
                             return true;
                         } else {
-                            slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
-                            return false;
+                            return activateUser(userOptional, userDTO);
                         }
                     } else {
                         throw new AccountResourceException("User could not be found");
                     }
                 } else {
-                    UserDTO userDTO = userMapper.userToUserDTO(user);
-                    if (isMSKCommercialUser(userDTO)) {
-                        LicenseType registeredLicenseType = userDTO.getLicenseType();
-                        userDTO.setLicenseType(LicenseType.ACADEMIC);
-                        userService.approveUser(userDTO);
-                        slackService.sendApprovedConfirmationForMSKCommercialRequest(userMapper.userToUserDTO(userOptional.get()), registeredLicenseType);
-                    } else {
-                        slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
-                    }
-                    return false;
+                    return activateUser(userOptional, userMapper.userToUserDTO(user));
                 }
             } else {
                 // This user exists before, we are looking for to extend the expiration date of all tokens associated
@@ -163,6 +153,18 @@ public class AccountResource {
             }
             return true;
         }
+    }
+
+    private boolean activateUser(Optional<User> userOptional, UserDTO userDTO) {
+        if (isMSKCommercialUser(userDTO)) {
+            LicenseType registeredLicenseType = userDTO.getLicenseType();
+            userDTO.setLicenseType(LicenseType.ACADEMIC);
+            userService.approveUser(userDTO);
+            slackService.sendApprovedConfirmationForMSKCommercialRequest(userMapper.userToUserDTO(userOptional.get()), registeredLicenseType);
+        } else {
+            slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
+        }
+        return false;
     }
 
     private boolean isMSKCommercialUser(UserDTO userDTO) {
