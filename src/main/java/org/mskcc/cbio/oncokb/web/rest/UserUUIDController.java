@@ -65,7 +65,7 @@ public class UserUUIDController {
                 throw new TokenExpiredException();
             }
         } else {
-            Token token = tokenProvider.createTokenForCurrentUserLogin(Optional.empty());
+            Token token = tokenProvider.createTokenForCurrentUserLogin(Optional.empty(), Optional.empty());
             uuid = token.getToken();
         }
         HttpHeaders httpHeaders = new HttpHeaders();
