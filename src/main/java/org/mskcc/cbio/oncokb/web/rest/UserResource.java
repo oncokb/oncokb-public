@@ -14,6 +14,7 @@ import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.LoginAlreadyUsedException;
+import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,30 +92,30 @@ public class UserResource {
      * mail with an activation link.
      * The user needs to be activated on creation.
      *
-     * @param userDTO the user to create.
+     * @param managedUserVM the user to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new user, or with status {@code 400 (Bad Request)} if the login or email is already in use.
      * @throws URISyntaxException       if the Location URI syntax is incorrect.
      * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
-        log.debug("REST request to save User : {}", userDTO);
+    public ResponseEntity<User> createUser(@Valid @RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
+        log.debug("REST request to save User : {}", managedUserVM);
 
-        if (userDTO.getId() != null) {
+        if (managedUserVM.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
-        } else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
+        } else if (userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();
-        } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
+        } else if (userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
             // Assign ROLE_USER to all new accounts
             // All other authorities can be updated in the user management page
-            if (userDTO.getAuthorities() == null || userDTO.getAuthorities().isEmpty()) {
-                userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+            if (managedUserVM.getAuthorities() == null || managedUserVM.getAuthorities().isEmpty()) {
+                managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
             }
-            User newUser = userService.createUser(userDTO);
+            User newUser = userService.createUser(managedUserVM, managedUserVM.getTokenValidDays());
             mailService.sendCreationEmail(userMapper.userToUserDTO(newUser));
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))

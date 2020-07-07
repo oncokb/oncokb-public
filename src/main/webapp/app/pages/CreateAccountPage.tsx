@@ -29,9 +29,14 @@ export class CreateAccountPage extends React.Component<{
   @autobind
   @action
   handleValidSubmit(newAccount: Partial<ManagedUserVM>) {
+    // Insert an temp password since the model requires the password.
+    // The password is ignored at the serverside
     client
       .createUserUsingPOST({
-        userDto: newAccount as UserDTO
+        managedUserVm: {
+          ...newAccount,
+          password: 'test'
+        } as ManagedUserVM
       })
       .then(this.successToRegistered, this.failedToRegistered);
   }
