@@ -21,8 +21,8 @@ import java.util.Optional;
 /**
  * REST controller for managing {@link org.mskcc.cbio.oncokb.domain.Token}.
  */
-@RestController
-@RequestMapping("/api")
+//@RestController
+//@RequestMapping("/api")
 public class TokenResource {
 
     private final Logger log = LoggerFactory.getLogger(TokenResource.class);

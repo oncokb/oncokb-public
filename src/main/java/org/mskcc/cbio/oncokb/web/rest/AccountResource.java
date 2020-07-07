@@ -287,9 +287,9 @@ public class AccountResource {
                 // if there is a token already available, we should use the same expiration date
                 // we only renew the token after validating the account is valid on half year basis
                 if (tokens.size() > 0) {
-                    return tokenProvider.createTokenForCurrentUserLogin(Optional.of(tokens.iterator().next().getExpiration()));
+                    return tokenProvider.createTokenForCurrentUserLogin(Optional.of(tokens.iterator().next().getExpiration()), Optional.empty());
                 } else {
-                    return tokenProvider.createTokenForCurrentUserLogin(Optional.empty());
+                    return tokenProvider.createTokenForCurrentUserLogin(Optional.empty(), Optional.empty());
                 }
             }
         } else {

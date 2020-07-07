@@ -115,7 +115,7 @@ public class UserResource {
             if (managedUserVM.getAuthorities() == null || managedUserVM.getAuthorities().isEmpty()) {
                 managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
             }
-            User newUser = userService.createUser(managedUserVM, managedUserVM.getTokenValidDays());
+            User newUser = userService.createUser(managedUserVM, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
             mailService.sendCreationEmail(userMapper.userToUserDTO(newUser));
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))

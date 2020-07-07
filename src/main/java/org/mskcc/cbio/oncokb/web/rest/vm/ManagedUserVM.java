@@ -15,6 +15,8 @@ public class ManagedUserVM extends UserDTO {
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
+    private Boolean tokenIsRenewable;
+
     private Integer tokenValidDays;
 
     public ManagedUserVM() {
@@ -27,6 +29,14 @@ public class ManagedUserVM extends UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getTokenIsRenewable() {
+        return tokenIsRenewable;
+    }
+
+    public void setTokenIsRenewable(Boolean tokenIsRenewable) {
+        this.tokenIsRenewable = tokenIsRenewable;
     }
 
     public Integer getTokenValidDays() {
