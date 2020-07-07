@@ -2,6 +2,8 @@ import React from 'react';
 import {
   AvField,
   AvForm,
+  AvRadioGroup,
+  AvRadio,
   AvCheckboxGroup,
   AvCheckbox
 } from 'availity-reactstrap-validation';
@@ -34,10 +36,23 @@ export type INewAccountForm = {
   onSubmit: (newUser: Partial<ManagedUserVM>) => void;
 };
 
+export enum AccountType {
+  REGULAR = 'regular',
+  TRIAL = 'trial'
+}
+
+export const ACCOUNT_TYPE_DEFAULT = AccountType.REGULAR;
+export const TRIAL_TOKEN_VALID_DEFAULT = 30;
 @observer
 export class NewAccountForm extends React.Component<INewAccountForm> {
   @observable password = '';
   @observable selectedLicense: LicenseType | undefined;
+  @observable selectedAccountType = ACCOUNT_TYPE_DEFAULT;
+
+  private defaultFormValue = {
+    accountType: ACCOUNT_TYPE_DEFAULT,
+    tokenValidDays: TRIAL_TOKEN_VALID_DEFAULT
+  };
 
   constructor(props: INewAccountForm) {
     super(props);
@@ -49,7 +64,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   @autobind
   @action
   handleValidSubmit(event: any, values: any) {
-    this.props.onSubmit({
+    const newUser: Partial<ManagedUserVM> = {
       login: values.email,
       password: this.password,
       firstName: values.firstName,
@@ -60,7 +75,11 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       company: values.company,
       city: values.city,
       country: values.country
-    });
+    };
+    if (values.tokenValidDays) {
+      newUser.tokenValidDays = Number(values.tokenValidDays);
+    }
+    this.props.onSubmit(newUser);
   }
 
   getLicenseAdditionalInfo(licenseType: LicenseType) {
@@ -104,7 +123,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   render() {
     return (
-      <AvForm onValidSubmit={this.handleValidSubmit}>
+      <AvForm
+        onValidSubmit={this.handleValidSubmit}
+        model={this.defaultFormValue}
+      >
         <Row className={getSectionClassName(true)}>
           <Col xs={12}>
             <h6>
@@ -414,7 +436,47 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 </Row>
               </>
             ) : null}
-            <Row></Row>
+            {this.props.byAdmin ? (
+              <Row className={getSectionClassName()}>
+                <Col md="3">
+                  <h5>Account Type</h5>
+                </Col>
+                <Col md="9">
+                  <AvRadioGroup
+                    inline
+                    name="accountType"
+                    label=""
+                    required
+                    onChange={(event: any, values: any) => {
+                      if (values) {
+                        this.selectedAccountType = values;
+                      } else {
+                        this.selectedAccountType = ACCOUNT_TYPE_DEFAULT;
+                      }
+                    }}
+                  >
+                    <AvRadio
+                      label={AccountType.REGULAR}
+                      value={AccountType.REGULAR}
+                    />
+                    <AvRadio
+                      label={AccountType.TRIAL}
+                      value={AccountType.TRIAL}
+                    />
+                  </AvRadioGroup>
+                  {this.selectedAccountType === AccountType.TRIAL ? (
+                    <div className={'mt-2'}>
+                      <AvField
+                        name="tokenValidDays"
+                        label="Account Expires in Days"
+                        required
+                        validate={{ number: true }}
+                      />
+                    </div>
+                  ) : null}
+                </Col>
+              </Row>
+            ) : null}
             <Row>
               <Col md={9} className={'ml-auto'}>
                 <Button id="register-submit" variant="primary" type="submit">

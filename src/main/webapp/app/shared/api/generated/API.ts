@@ -78,6 +78,8 @@ export type ManagedUserVM = {
 
         'resetKey': string
 
+        'tokenValidDays': number
+
 };
 export type PasswordChangeDTO = {
     'currentPassword': string
@@ -2548,7 +2550,7 @@ export default class API {
             });
         };
     createUserUsingPOSTURL(parameters: {
-        'userDto': UserDTO,
+        'managedUserVm': ManagedUserVM,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -2568,10 +2570,10 @@ export default class API {
      * createUser
      * @method
      * @name API#createUserUsingPOST
-     * @param {} userDto - userDTO
+     * @param {} managedUserVm - managedUserVM
      */
     createUserUsingPOSTWithHttpInfo(parameters: {
-        'userDto': UserDTO,
+        'managedUserVm': ManagedUserVM,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -2587,12 +2589,12 @@ export default class API {
             headers['Accept'] = '*/*';
             headers['Content-Type'] = 'application/json';
 
-            if (parameters['userDto'] !== undefined) {
-                body = parameters['userDto'];
+            if (parameters['managedUserVm'] !== undefined) {
+                body = parameters['managedUserVm'];
             }
 
-            if (parameters['userDto'] === undefined) {
-                reject(new Error('Missing required  parameter: userDto'));
+            if (parameters['managedUserVm'] === undefined) {
+                reject(new Error('Missing required  parameter: managedUserVm'));
                 return;
             }
 
@@ -2612,10 +2614,10 @@ export default class API {
      * createUser
      * @method
      * @name API#createUserUsingPOST
-     * @param {} userDto - userDTO
+     * @param {} managedUserVm - managedUserVM
      */
     createUserUsingPOST(parameters: {
-        'userDto': UserDTO,
+        'managedUserVm': ManagedUserVM,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < User > {
