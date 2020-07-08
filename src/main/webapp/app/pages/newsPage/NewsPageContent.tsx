@@ -110,6 +110,64 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '07092020': {
+    updatedImplication: [
+      [
+        '1',
+        'SMARCB1',
+        'Deletion',
+        'Epithelioid Sarcoma',
+        'Tazemetostat',
+        <span>
+          Abstract:{' '}
+          <Linkout
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2019.37.15_suppl.11003'
+            }
+          >
+            Stacchiotti et al. Abstract# 11003, JCO 2019
+          </Linkout>
+          ,{' '}
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-tazemetostat-advanced-epithelioid-sarcoma'
+            }
+          >
+            FDA-approval of Tazemetostat
+          </Linkout>
+        </span>
+      ]
+    ],
+    changedAnnotation: [
+      [
+        'EZH2',
+        'A682G, A692V, Y646C, Y646F, Y646H, Y646N, Y646S',
+        'Follicular Lymphoma',
+        <div>Tazemetostat</div>,
+        '3A',
+        '1',
+        <div>
+          Abstract:{' '}
+          <Linkout
+            link={
+              'https://ashpublications.org/blood/article/134/Supplement_1/123/426294/Phase-2-Multicenter-Study-of-Tazemetostat-an-EZH2'
+            }
+          >
+            Morschhauser et al. Abstract# 123, ASH 2019
+          </Linkout>
+          ,{' '}
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/fda-granted-accelerated-approval-tazemetostat-follicular-lymphoma'
+            }
+          >
+            FDA-approval of Tazemetostat
+          </Linkout>
+        </div>
+      ]
+    ],
+    newlyAddedGenes: ['PPP2R2A']
+  },
   '06092020': {
     numOfAssociationsInUpdatedImplication: 15,
     updatedImplication: [
