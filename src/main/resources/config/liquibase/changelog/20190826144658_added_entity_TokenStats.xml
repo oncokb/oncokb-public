@@ -25,9 +25,6 @@
             <column name="access_time" type="datetime">
                 <constraints nullable="false" />
             </column>
-            <column name="usage_count" type="integer">
-                <constraints nullable="false" />
-            </column>
             <column name="token_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -36,8 +33,12 @@
         <dropDefaultValue tableName="token_stats" columnName="access_time" columnDataType="datetime"/>
     </changeSet>
 
-    <changeSet id="20190826144658-1-relations" author="jhipster">
-
+    <changeSet author="zhangh2 (generated)" id="1594171858545-2">
+      <addColumn tableName="token_stats">
+        <column name="usage_count" type="integer">
+          <constraints nullable="false"/>
+        </column>
+      </addColumn>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

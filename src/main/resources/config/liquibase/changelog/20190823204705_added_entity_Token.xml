@@ -31,9 +31,6 @@
             <column name="current_usage" type="integer">
                 <constraints nullable="false" />
             </column>
-            <column name="renewable" type="boolean">
-                <constraints nullable="false" />
-            </column>
             <column name="user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -43,8 +40,12 @@
         <dropDefaultValue tableName="token" columnName="expiration" columnDataType="datetime"/>
     </changeSet>
 
-    <changeSet id="20190823204705-1-relations" author="jhipster">
-
+    <changeSet author="zhangh2 (generated)" id="1594171858545-1">
+      <addColumn tableName="token">
+        <column name="renewable" type="bit">
+          <constraints nullable="false"/>
+        </column>
+      </addColumn>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
