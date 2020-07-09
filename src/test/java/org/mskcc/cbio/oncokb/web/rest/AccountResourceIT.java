@@ -23,6 +23,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.time.Instant;
 import java.util.*;
 
@@ -89,7 +90,7 @@ public class AccountResourceIT {
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
         user.setAuthorities(authorities);
-        userService.createUser(user, null);
+        userService.createUser(user, Optional.empty(), Optional.empty());
 
         restAccountMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))

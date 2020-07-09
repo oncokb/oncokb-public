@@ -44,6 +44,10 @@ public class Token implements Serializable {
     @Column(name = "current_usage", nullable = false)
     private Integer currentUsage = 0;
 
+    @NotNull
+    @Column(name = "renewable", nullable = false)
+    private Boolean renewable = true;
+
     @ManyToOne
     @JsonIgnoreProperties("tokens")
     private User user;
@@ -122,6 +126,19 @@ public class Token implements Serializable {
         this.currentUsage = currentUsage;
     }
 
+    public Boolean isRenewable() {
+        return renewable;
+    }
+
+    public Token renewable(Boolean renewable) {
+        this.renewable = renewable;
+        return this;
+    }
+
+    public void setRenewable(Boolean renewable) {
+        this.renewable = renewable;
+    }
+
     public User getUser() {
         return user;
     }
@@ -161,6 +178,7 @@ public class Token implements Serializable {
             ", expiration='" + getExpiration() + "'" +
             ", usageLimit=" + getUsageLimit() +
             ", currentUsage=" + getCurrentUsage() +
+            ", renewable='" + isRenewable() + "'" +
             "}";
     }
 }

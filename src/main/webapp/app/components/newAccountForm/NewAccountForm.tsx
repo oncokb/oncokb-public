@@ -71,6 +71,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       lastName: values.lastName,
       email: values.email,
       licenseType: this.selectedLicense,
+      tokenIsRenewable: this.selectedAccountType !== AccountType.TRIAL,
       jobTitle: values.jobTitle,
       company: values.company,
       city: values.city,

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
+import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
@@ -122,8 +123,24 @@ public class CronJobController {
         Instant newTokenDefaultExpirationDate = Instant.now().plusSeconds(DAY_IN_SECONDS * 15);
         userDTOs.stream().forEach(userDTO -> {
             Instant expirationDate = userDTO.getCreatedDate() == null ? newTokenDefaultExpirationDate : userDTO.getCreatedDate().plusSeconds(HALF_YEAR_IN_SECONDS);
-            tokenProvider.createToken(userMapper.userDTOToUser(userDTO), Optional.of(expirationDate.isBefore(newTokenDefaultExpirationDate) ? newTokenDefaultExpirationDate : expirationDate));
+            tokenProvider.createToken(userMapper.userDTOToUser(userDTO), Optional.of(expirationDate.isBefore(newTokenDefaultExpirationDate) ? newTokenDefaultExpirationDate : expirationDate), Optional.empty());
         });
+    }
+
+    /**
+     * {@code GET  /update-token-stats} : Update token stats.
+     */
+    @GetMapping(path = "/update-token-stats")
+    public void updateTokenStats() {
+        log.info("Started the cronjob to update token stats");
+        List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(Instant.now());
+        tokenUsages.stream().forEach(tokenUsage -> {
+            if (!tokenUsage.getToken().getCurrentUsage().equals(tokenUsage.getCount())) {
+                tokenUsage.getToken().setCurrentUsage(tokenUsage.getCount());
+                tokenService.save(tokenUsage.getToken());
+            }
+        });
+
     }
 
     private void tokenCheckByTime(int daysToExpire, Set<String> notifiedUserIds) {
@@ -136,6 +153,7 @@ public class CronJobController {
                 // Skip PUBLIC_WEBSITE token since it's short live
                 !this.userService.userHasAuthority(token.getUser(), AuthoritiesConstants.PUBLIC_WEBSITE) &&
                 !notifiedUserIds.contains(token.getUser().getLogin()) &&
+                token.isRenewable() &&
                 // Do not include users that have been notified during the validate Token period
                 this.userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(token.getUser(), VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES, token.getExpiration().minusSeconds(secondsToExpire)).isEmpty()
             ) {

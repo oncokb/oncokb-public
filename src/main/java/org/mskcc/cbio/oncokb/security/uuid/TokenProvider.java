@@ -2,7 +2,6 @@ package org.mskcc.cbio.oncokb.security.uuid;
 
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.Token;
-import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,9 +59,19 @@ public class TokenProvider implements InitializingBean {
     }
 
     private Token getNewToken(Set<Authority> authorities, Optional<Instant> definedExpirationTime) {
+        return getNewToken(authorities, definedExpirationTime, Optional.of(true));
+    }
+
+    private Token getNewToken(Set<Authority> authorities, Optional<Instant> definedExpirationTime, Optional<Boolean> isRenewable) {
         Token token = new Token();
         Instant currentTime = Instant.now();
         token.setCreation(currentTime);
+
+        if (isRenewable.isPresent()) {
+            token.setRenewable(isRenewable.get());
+        } else {
+            token.setRenewable(true);
+        }
 
         if (definedExpirationTime.isPresent()) {
             token.setExpiration(definedExpirationTime.get());
@@ -77,16 +85,16 @@ public class TokenProvider implements InitializingBean {
         return token;
     }
 
-    public Token createTokenForCurrentUserLogin(Optional<Instant> definedExpirationTime) {
+    public Token createTokenForCurrentUserLogin(Optional<Instant> definedExpirationTime, Optional<Boolean> isRenewable) {
         Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin().get());
         if(userOptional.isPresent()) {
-            return createToken(userOptional.get(), definedExpirationTime);
+            return createToken(userOptional.get(), definedExpirationTime, isRenewable);
         }
         return null;
     }
 
-    public Token createToken(User user, Optional<Instant> definedExpirationTime) {
-        Token token = getNewToken(user.getAuthorities(), definedExpirationTime);
+    public Token createToken(User user, Optional<Instant> definedExpirationTime, Optional<Boolean> isRenewable) {
+        Token token = getNewToken(user.getAuthorities(), definedExpirationTime, isRenewable);
         token.setUser(user);
         tokenService.save(token);
         return token;
@@ -111,7 +119,7 @@ public class TokenProvider implements InitializingBean {
                 userToken = tokenList.iterator().next();
                 if (userToken.getExpiration().isBefore(Instant.now())) {
                     // I want to update the token associated with public website once it's expired
-                    Token newToken = getNewToken(user.get().getAuthorities(), Optional.empty());
+                    Token newToken = getNewToken(user.get().getAuthorities(), Optional.empty(), Optional.empty());
                     userToken.setToken(newToken.getToken());
                     userToken.setCreation(newToken.getCreation());
                     userToken.setExpiration(newToken.getExpiration());
