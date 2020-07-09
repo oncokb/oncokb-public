@@ -17,7 +17,7 @@ This application was generated using JHipster 6.8.0, you can find documentation 
 
 ### Running environment
 
-Make sure your running environment:
+Make sure your running environment is the following:
 
 - **Java version: 8**
 - **MySQL version: 5.7.28**
