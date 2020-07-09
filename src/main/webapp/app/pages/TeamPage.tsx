@@ -38,6 +38,7 @@ export const TeamPage = () => {
               <li>Hongxin Zhang, MSc</li>
               <li>Ritika Kundra, MSc</li>
               <li>Moriah Nissan, PhD</li>
+              <li>Yifu Yao, MSc</li>
               <li>Ederlinda Paraiso, MPA</li>
               <li>Julia Rudolph, MPA</li>
               <li>David Solit, MD</li>
@@ -47,83 +48,89 @@ export const TeamPage = () => {
             <h6>Current Curators</h6>
             <ul>
               <li>Kinisha Gala, PhD</li>
-              <li>Hannah Wise, PhD</li>
               <li>Lindsay M. LaFave, PhD</li>
               <li>Linde Miles, PhD</li>
               <li>Emiliano Cocco, PhD</li>
-              <li>Renzo DiNatale, MD</li>
-            </ul>
-            <h6>Past Contributors</h6>
-            <ul>
-              <li>Tara Soumerai, MD</li>
-              <li>Aphrothiti Hanrahan, PhD</li>
-              <li>Anton Henssen, MD</li>
-              <li>Tripti Shrestha Bhattarai, PhD</li>
-              <li>Fiona Brown, PhD</li>
-              <li>Iñigo Landa-Lopez, PhD</li>
-              <li>Neel Shah, PhD</li>
-              <li>Eneda Toska, PhD</li>
-              <li>Jiaojiao Wang, MSc</li>
-              <li>Phillip Jonsson, PhD</li>
-              <li>David Knorr, MD, PhD</li>
-              <li>David Hyman, MD</li>
-              <li>Jing Su, MSc</li>
             </ul>
           </Col>
           <Col xs={6} md>
             <h6>Clinical Genomics Annotation Committee</h6>
             <ul>
-              <li>Carol Aghajanian, MD</li>
+              <li>Lisa DeAngelis, MD</li>
+              <li>Phil Kantoff, MD</li>
+              <li>David Klimstra, MD</li>
+              <li>Marc Ladanyi, MD</li>
+              <li>Ross Levine, MD</li>
+              <li>Mike Berger, PhD</li>
               <li>Maria Arcila, MD</li>
-              <li>Michael Berger, PhD</li>
-              <li>Margaret Callahan, MD, PhD</li>
-              <li>Timothy A. Chan, MD, PhD</li>
+              <li>Ahmet Dogan, MD, PhD</li>
               <li>Sarat Chandarlapaty, MD, PhD</li>
               <li>Ping Chi, MD, PhD</li>
-              <li>Daniel Danila, MD</li>
-              <li>Lisa DeAngelis, MD</li>
-              <li>Luis Alberto Diaz, Jr., MD</li>
-              <li>Ahmet Dogan, MD, PhD</li>
-              <li>Alexander Drilon, MD</li>
-              <li>James A. Fagin, MD</li>
-              <li>Mrinal M. Gounder, MD</li>
-              <li>James J. Harding, MD</li>
-              <li>Matthew D. Hellmann, MD</li>
-              <li>Alan L. Ho, MD, PhD</li>
+              <li>Rona Yaeger, MD</li>
+              <li>Wassim Abida, MD</li>
+              <li>Alex Drilon, MD</li>
+              <li>Diana Mandelkar, MD</li>
+              <li>Kamal Menghrajani, MD</li>
+              <li>Alison Schram, MD</li>
+              <li>Santosh Verdhana, MD</li>
+              <li>Carol Aghajanian, MD</li>
+              <li>Daniel Danilla, MD</li>
+              <li>Eli Diamond, MD</li>
+              <li>Jim Fagin, MD</li>
+              <li>Alan Ho, MD, PhD</li>
               <li>Gopa Iyer, MD</li>
-              <li>Edgar A. Jaimes, MD</li>
-              <li>Yelena Y. Janjigian, MD</li>
-              <li>Philip Kantoff, MD</li>
-              <li>David S. Klimstra, MD</li>
+              <li>Komal Jhaveri, MD</li>
               <li>Andrew Kung, MD, PhD</li>
-              <li>Marc Ladanyi, MD</li>
+              <li>Ingo Mellinghoff, MD</li>
+              <li>Ken Offit, MD</li>
+              <li>Paul Paik, MD</li>
+              <li>David Pfister, MD</li>
+              <li>Jonathan Rosenberg, MD</li>
+              <li>Greg Riely, MD, PhD</li>
+              <li>Mark Robson, MD</li>
+              <li>Neal Rosen, MD, PhD</li>
+              <li>Len Saltz, MD</li>
+              <li>Sohrab Shah, PhD</li>
+              <li>Maurizio Scaltriti, PhD</li>
+              <li>Alex Shoushtari, MD</li>
+              <li>Neal Shukla, MD</li>
+              <li>Zsofia Stadler, MD</li>
+              <li>Bill Tap, MD</li>
+              <li>Martin Voss, MD</li>
+              <li>Jedd Wolchok, MD</li>
             </ul>
           </Col>
           <Col xs={6} md>
-            <h6>Clinical Genomics Annotation Committee (continued)</h6>
+            <h6>Past Contributors</h6>
             <ul>
+              <li>Tripti Shrestha Bhattarai, PhD</li>
+              <li>Fiona Brown, PhD</li>
+              <li>Margaret Callahan, MD, PhD</li>
+              <li>Timothy A. Chan, MD, PhD</li>
+              <li>Luis Alberto Diaz, Jr., MD</li>
+              <li>Renzo DiNatale, MD</li>
+              <li>Mrinal M. Gounder, MD</li>
+              <li>Aphrothiti Hanrahan, PhD</li>
+              <li>James J. Harding, MD</li>
+              <li>Matthew D. Hellmann, MD</li>
+              <li>Anton Henssen, MD</li>
+              <li>David Hyman, MD</li>
+              <li>Edgar A. Jaimes, MD</li>
+              <li>Phillip Jonsson, PhD</li>
+              <li>David Knorr, MD, PhD</li>
+              <li>Iñigo Landa-Lopez, PhD</li>
               <li>C. Ola Landgren, MD, PhD</li>
-              <li>Ingo K. Mellinghoff, MD</li>
-              <li>Kenneth Offit, MD</li>
-              <li>Paul K. Paik, MD</li>
-              <li>David G. Pfister, MD</li>
               <li>Dana E. Rathkopf, MD</li>
-              <li>Gregory J. Riely, MD, PhD</li>
-              <li>Mark E. Robson, MD</li>
-              <li>Neal Rosen, MD, PhD</li>
-              <li>Leonard Saltz, MD</li>
-              <li>Maurizio Scaltriti, PhD</li>
               <li>Howard I. Scher, MD</li>
-              <li>Sohrab Shah, PhD</li>
-              <li>Alexander N. Shoushtari, MD</li>
-              <li>Neerav N. Shukla, MD</li>
-              <li>Martin S. Tallman, MD</li>
+              <li>Neel Shah, PhD</li>
+              <li>Tara Soumerai, MD</li>
+              <li>Jing Su, MSc</li>
               <li>William D. Tap, MD</li>
               <li>Barry S. Taylor, PhD</li>
+              <li>Eneda Toska, PhD</li>
               <li>Tiffany A. Traina, MD</li>
-              <li>Martin H. Voss, MD</li>
-              <li>Jedd D. Wolchok, MD, PhD</li>
-              <li>Rona D. Yaeger, MD</li>
+              <li>Jiaojiao Wang, MSc</li>
+              <li>Hannah Wise, PhD</li>
               <li>Anas Younes, MD</li>
             </ul>
           </Col>
