@@ -15,6 +15,50 @@ This application was generated using JHipster 6.8.0, you can find documentation 
 
 ## Development
 
+### Running environment
+
+Make sure your running environment is the following:
+
+- **Java version: 8**
+- **MySQL version: 5.7.28**
+- **Redis**
+
+### Modify config
+
+`/pom.xml`
+
+You should confirm the database name, username and password under `liquibase-maven-plugin`
+
+`/src/main/resources/config/application-dev.yml`
+
+1. Confirm database name, username, password under `datasource` config.
+2. Change `api-proxy-url` to the URL where oncokb running. For example, `http://localhost:8888/oncokb`
+3. Make sure the password for your Redis as same as the password for Redis defined in this file
+
+**Modify the three client instances**
+
+**clientInstance.ts, oncokbClientInstance.ts and oncokbPrivateClientInstance.ts**
+
+Change the url to initiate the API. It needs to point to the oncokb instance. For example, if the URL of oncokb instance is `http://localhost:8888/oncokb`, then these three need to be modified as
+
+```javascript
+// clientInstance.ts
+// const client = new API();
+const client = new API('http://localhost:8888/oncokb');
+
+// oncokbClientInstance.ts
+// const client = new OncoKbAPI('api/v1');
+const client = new OncoKbAPI('http://localhost:8888/oncokb/api/v1');
+
+// oncokbPrivateClientInstance.ts
+// const privateClient = new OncoKbPrivateAPI('api/private');
+const privateClient = new OncoKbPrivateAPI(
+  'http://localhost:8888/oncokb/api/private'
+);
+```
+
+### Building
+
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
 1. [Node.js][]: We use Node to run a development web server and build the project.
