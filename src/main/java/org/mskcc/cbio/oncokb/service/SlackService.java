@@ -48,10 +48,12 @@ public class SlackService {
 
     private final ApplicationProperties applicationProperties;
     private final MailService mailService;
+    private final EmailService emailService;
 
-    public SlackService(ApplicationProperties applicationProperties, MailService mailService) {
+    public SlackService(ApplicationProperties applicationProperties, MailService mailService, EmailService emailService) {
         this.applicationProperties = applicationProperties;
         this.mailService = mailService;
+        this.emailService = emailService;
     }
 
     @Async
@@ -72,7 +74,7 @@ public class SlackService {
             } else {
                 boolean domainIsLicensed = false;
                 List<String> licensedDomains = applicationProperties.getLicensedDomainsList();
-                if (!licensedDomains.isEmpty() && licensedDomains.stream().anyMatch(domain -> user.getEmail().toLowerCase().endsWith(domain.toLowerCase()))) {
+                if (!licensedDomains.isEmpty() && licensedDomains.stream().anyMatch(domain -> emailService.getEmailDomain(user.getEmail().toLowerCase()).equals(domain.toLowerCase()))) {
                     domainIsLicensed = true;
                 }
                 layoutBlocks = buildCommercialApprovalBlocks(user, domainIsLicensed);
