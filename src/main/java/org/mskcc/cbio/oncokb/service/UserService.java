@@ -29,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -185,7 +186,7 @@ public class UserService {
         return true;
     }
 
-    public User createUser(UserDTO userDTO, Integer tokenValidDays) {
+    public User createUser(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
@@ -225,7 +226,7 @@ public class UserService {
 
         this.clearUserCaches(user);
 
-        generateTokenForUser(userMapper.userToUserDTO(updatedUser), tokenValidDays);
+        generateTokenForUser(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable);
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -386,16 +387,20 @@ public class UserService {
         }
         Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
         if (updatedUserDTO.isPresent()) {
-            generateTokenForUser(updatedUserDTO.get(), null);
+            generateTokenForUser(updatedUserDTO.get(), Optional.empty(), Optional.empty());
         }
         return updatedUserDTO;
     }
 
-    private void generateTokenForUser(UserDTO userDTO, Integer tokenValidDays) {
+    private void generateTokenForUser(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
         // automatically generate a token for user if not exists
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
         if (tokens.isEmpty()) {
-            tokenProvider.createToken(userMapper.userDTOToUser(userDTO), Optional.of(Instant.now().plusSeconds(tokenValidDays == null ? HALF_YEAR_IN_SECONDS : DAY_IN_SECONDS * tokenValidDays)));
+            tokenProvider.createToken(
+                userMapper.userDTOToUser(userDTO),
+                tokenValidDays.isPresent() ? Optional.of(Instant.now().plusSeconds(DAY_IN_SECONDS * tokenValidDays.get())) : Optional.empty(),
+                tokenIsRenewable
+            );
         }
     }
 

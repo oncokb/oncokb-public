@@ -22,7 +22,7 @@ import java.util.Optional;
  * REST controller for managing {@link org.mskcc.cbio.oncokb.domain.TokenStats}.
  */
 //@RestController
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class TokenStatsResource {
 
     private final Logger log = LoggerFactory.getLogger(TokenStatsResource.class);
