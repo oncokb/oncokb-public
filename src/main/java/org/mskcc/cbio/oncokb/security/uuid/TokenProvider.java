@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
+import static org.mskcc.cbio.oncokb.config.Constants.PUBLIC_WEBSITE_LOGIN;
 
 @Component("tokenProvider")
 public class TokenProvider implements InitializingBean {
@@ -107,16 +108,16 @@ public class TokenProvider implements InitializingBean {
 
     // This method is used in the frontend thymeleaf parsing
     public UUID getPubWebToken() {
-        Optional<User> user = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("public_website@localhost");
+        Optional<User> user = userRepository.findOneByLogin(PUBLIC_WEBSITE_LOGIN);
         if (user.isPresent()) {
             Token userToken = new Token();
-            List<Token> tokenList = tokenService.findByUser(user.get());
-            if (tokenList.isEmpty()) {
+            Optional<Token> tokenOptional  = tokenService.findPublicWebsiteToken();
+            if (!tokenOptional.isPresent()) {
                 Token newToken = getNewToken(user.get().getAuthorities(), Optional.empty());
                 newToken.setUser(user.get());
                 userToken = tokenService.save(newToken);
             } else {
-                userToken = tokenList.iterator().next();
+                userToken = tokenOptional.get();
                 if (userToken.getExpiration().isBefore(Instant.now())) {
                     // I want to update the token associated with public website once it's expired
                     Token newToken = getNewToken(user.get().getAuthorities(), Optional.empty(), Optional.empty());
