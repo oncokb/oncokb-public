@@ -33,6 +33,9 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     @Query("select token from Token token where token.expiration < ?1")
     List<Token> findAllExpiresBeforeDate(Instant date);
 
+    @Query("select token from Token token where token.user.login = org.mskcc.cbio.oncokb.config.Constants.PUBLIC_WEBSITE_LOGIN")
+    Optional<Token> findPublicWebsiteToken();
+
     @Cacheable(cacheNames = TOKEN_BY_UUID_CACHE)
     Optional<Token> findByToken(UUID token);
 

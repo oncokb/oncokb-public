@@ -76,6 +76,10 @@ public class TokenServiceImpl implements TokenService {
         return tokenRepository.findById(id);
     }
 
+    @Override
+    public Optional<Token> findPublicWebsiteToken() {
+        return tokenRepository.findPublicWebsiteToken();
+    }
 
     @Override
     public Optional<Token> findByToken(UUID token) {
