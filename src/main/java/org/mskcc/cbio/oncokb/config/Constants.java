@@ -16,6 +16,8 @@ public final class Constants {
 
     public static final String MAIL_LICENSE = "license";
 
+    public static final String PUBLIC_WEBSITE_LOGIN = "publicwebsite";
+
     public static final int DAY_IN_SECONDS = 60 * 60 * 24;
     public static final int HALF_YEAR_IN_SECONDS = DAY_IN_SECONDS * 180;
     private Constants() {
