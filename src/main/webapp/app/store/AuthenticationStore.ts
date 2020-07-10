@@ -15,7 +15,8 @@ import { remoteData } from 'cbioportal-frontend-commons';
 import {
   assignPublicToken,
   getPublicWebsiteToken,
-  getStoredToken
+  getStoredToken,
+  AUTH_UER_TOKEN_KEY
 } from 'app/indexUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
@@ -27,9 +28,6 @@ export const ACTION_TYPES = {
   CLEAR_AUTH: 'authentication/CLEAR_AUTH',
   ERROR_MESSAGE: 'authentication/ERROR_MESSAGE'
 };
-
-export const AUTH_UER_TOKEN_KEY = 'oncokb-user-token';
-export const AUTH_WEBSITE_TOKEN_KEY = 'oncokb-website-token';
 
 class AuthenticationStore {
   @observable loading = false;

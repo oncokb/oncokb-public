@@ -18,7 +18,7 @@ export interface IUserMessage {
 }
 
 function makeMessageKey(id: string) {
-  return `portalMessageKey-${id}`;
+  return `oncokbMessageKey-${id}`;
 }
 
 // ADD MESSAGE IN FOLLOWING FORMAT

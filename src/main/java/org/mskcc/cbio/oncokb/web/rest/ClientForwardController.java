@@ -31,7 +31,7 @@ public class ClientForwardController {
     @GetMapping(value = "/index.html")
     public ResponseEntity<String> index() {
         Context context = new Context();
-        context.setVariable("applicationProperties", applicationProperties);
+        context.setVariable("appProfile", applicationProperties.getProfile());
         context.setVariable("publicToken", tokenProvider.getPubWebToken());
 
         HttpHeaders httpHeaders = new HttpHeaders();

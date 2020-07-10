@@ -18,14 +18,13 @@ import 'react-responsive-tabs/styles.css';
 import 'react-mutation-mapper/dist/styles.css';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { assignPublicToken, getStoredToken } from 'app/indexUtils';
 import {
-  AUTH_UER_TOKEN_KEY,
+  assignPublicToken,
+  getStoredToken,
   AUTH_WEBSITE_TOKEN_KEY
-} from 'app/store/AuthenticationStore';
-import { Storage } from 'react-jhipster';
+} from 'app/indexUtils';
 import {
-  ONCOKB_PUBLIC_APP_PROPS,
+  ONCOKB_PUBLIC_APP_PROFILE,
   ONCOKB_PUBLIC_APP_PUBLIC_TOKEN,
   UNAUTHORIZED_ALLOWED_PATH
 } from 'app/config/constants';
@@ -38,6 +37,9 @@ assignPublicToken();
 const query = superagent.Request.prototype.query;
 // @ts-ignore
 const end = superagent.Request.prototype.end;
+
+const WEBSITE_RELOAD_TIMES_KEY = 'oncokb-website-reload-times';
+const WEBSITE_RELOAD_TIMES_THRESHOLD = 10;
 
 // @ts-ignore
 superagent.Request.prototype.query = function(queryParameters: any) {
@@ -71,13 +73,35 @@ superagent.Request.prototype.end = function(callback) {
       response &&
       response.statusCode === 401 &&
       window[ONCOKB_PUBLIC_APP_PUBLIC_TOKEN] &&
-      window[ONCOKB_PUBLIC_APP_PROPS].profile === 'PROD' &&
+      window[ONCOKB_PUBLIC_APP_PROFILE] === 'PROD' &&
       response.req &&
       !_.some(UNAUTHORIZED_ALLOWED_PATH, path =>
         window.location.pathname.endsWith(path)
       )
     ) {
-      window.location.reload();
+      const currentDate = new Date();
+
+      const STORAGE_KEY = `${WEBSITE_RELOAD_TIMES_KEY}-${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDay()}-${currentDate.getHours()}`;
+      if (localStorage.getItem(STORAGE_KEY) == null) {
+        localStorage.setItem(STORAGE_KEY, '0');
+      }
+      if (
+        Number(localStorage.getItem(STORAGE_KEY)) <=
+        WEBSITE_RELOAD_TIMES_THRESHOLD
+      ) {
+        const newIncrement = Number(localStorage.getItem(STORAGE_KEY)) + 1;
+        localStorage.setItem(STORAGE_KEY, `${newIncrement}`);
+        window.location.reload();
+      } else {
+        // Send an error to sentry
+        Sentry.captureException(
+          new Error(
+            `The user cannot reload the page with the newest public website token. The website has retried ${WEBSITE_RELOAD_TIMES_THRESHOLD} time(s). The token currently used is ${localStorage.getItem(
+              AUTH_WEBSITE_TOKEN_KEY
+            )}`
+          )
+        );
+      }
     }
     callback(error, response);
   });
@@ -86,7 +110,8 @@ superagent.Request.prototype.end = function(callback) {
 // the dsn is supposed to be different for different installation,
 // but since the serverConfigs hasn't been defined yet, it is ok for now.
 Sentry.init({
-  dsn: 'https://387bb103057b40659f3044069b7c0517@sentry.io/1793966',
+  dsn:
+    'https://387bb103057b40659f3044069b7c0517@o76124.ingest.sentry.io/1793966',
   blacklistUrls: [new RegExp('.*localhost.*')]
 });
 ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
