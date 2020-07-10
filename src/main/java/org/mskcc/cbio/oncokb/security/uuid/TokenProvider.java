@@ -125,7 +125,7 @@ public class TokenProvider implements InitializingBean {
                     userToken.setExpiration(newToken.getExpiration());
                     // Reset the usage after recreating the token
                     userToken.setCurrentUsage(0);
-                    tokenService.save(userToken);
+                    userToken = tokenService.save(userToken);
                 }
             }
             return userToken.getToken();
