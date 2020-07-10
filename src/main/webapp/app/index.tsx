@@ -21,7 +21,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
   assignPublicToken,
   getStoredToken,
-  AUTH_WEBSITE_TOKEN_KEY
+  AUTH_WEBSITE_TOKEN_KEY,
+  getPublicWebsiteToken
 } from 'app/indexUtils';
 import {
   ONCOKB_PUBLIC_APP_PROFILE,
@@ -96,9 +97,7 @@ superagent.Request.prototype.end = function(callback) {
         // Send an error to sentry
         Sentry.captureException(
           new Error(
-            `The user cannot reload the page with the newest public website token. The website has retried ${WEBSITE_RELOAD_TIMES_THRESHOLD} time(s). The token currently used is ${localStorage.getItem(
-              AUTH_WEBSITE_TOKEN_KEY
-            )}`
+            `The user cannot reload the page with the newest public website token. The website has retried ${WEBSITE_RELOAD_TIMES_THRESHOLD} time(s). The token currently used is ${getPublicWebsiteToken()}`
           )
         );
       }
