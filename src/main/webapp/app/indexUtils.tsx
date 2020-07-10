@@ -1,9 +1,8 @@
 import { Storage } from 'react-jhipster';
-import {
-  AUTH_UER_TOKEN_KEY,
-  AUTH_WEBSITE_TOKEN_KEY
-} from 'app/store/AuthenticationStore';
 import { ONCOKB_PUBLIC_APP_PUBLIC_TOKEN } from 'app/config/constants';
+
+export const AUTH_UER_TOKEN_KEY = 'oncokb-user-token';
+export const AUTH_WEBSITE_TOKEN_KEY = 'oncokb-website-token';
 
 export const getPublicWebsiteToken = () => {
   return Storage.session.get(AUTH_WEBSITE_TOKEN_KEY);
