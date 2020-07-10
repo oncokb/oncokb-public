@@ -101,7 +101,7 @@ jhipster:
       timeToLiveInDays: 1461
   cache: # Cache configuration
     redis: # Redis configuration
-      expiration: 1800 # By default objects stay 30 minutes (in seconds) in the cache
+      expiration: 600 # By default objects stay 10 minutes (in seconds) in the cache
       server: redis://oncokb-public-redis-master:6379
       cluster: false
       # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
