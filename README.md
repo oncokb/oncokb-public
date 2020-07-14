@@ -25,37 +25,11 @@ Make sure your running environment is the following:
 
 ### Modify config
 
-`/pom.xml`
-
-You should confirm the database name, username and password under `liquibase-maven-plugin`
-
 `/src/main/resources/config/application-dev.yml`
 
 1. Confirm database name, username, password under `datasource` config.
 2. Change `api-proxy-url` to the URL where oncokb running. For example, `http://localhost:8888/oncokb`
 3. Make sure the password for your Redis as same as the password for Redis defined in this file
-
-**Modify the three client instances**
-
-**clientInstance.ts, oncokbClientInstance.ts and oncokbPrivateClientInstance.ts**
-
-Change the url to initiate the API. It needs to point to the oncokb instance. For example, if the URL of oncokb instance is `http://localhost:8888/oncokb`, then these three need to be modified as
-
-```javascript
-// clientInstance.ts
-// const client = new API();
-const client = new API('http://localhost:8888/oncokb');
-
-// oncokbClientInstance.ts
-// const client = new OncoKbAPI('api/v1');
-const client = new OncoKbAPI('http://localhost:8888/oncokb/api/v1');
-
-// oncokbPrivateClientInstance.ts
-// const privateClient = new OncoKbPrivateAPI('api/private');
-const privateClient = new OncoKbPrivateAPI(
-  'http://localhost:8888/oncokb/api/private'
-);
-```
 
 ### Building
 
@@ -82,6 +56,22 @@ specifying a newer version in [package.json](package.json). You can also run `ya
 Add the `help` flag on any command to see how you can use it. For example, `yarn help update`.
 
 The `yarn run` command will list all of the scripts available to run for this project.
+
+### Connect with server side locally
+
+After starting project up locally, you should type the following command in your browser console
+
+```
+localStorage.setItem("localdev","PUBLIC_SERVER_API")
+```
+
+Replace `PUBLIC_SERVER_API` with the url of this public server. The default setting is `http://localhost:9095`.
+
+To unset do:
+
+```
+localStorage.removeItem("localdev")
+```
 
 ### PWA Support
 
