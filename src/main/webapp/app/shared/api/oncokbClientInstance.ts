@@ -1,5 +1,9 @@
 import OncoKbAPI from './generated/OncoKbAPI';
 
-const client = new OncoKbAPI('api/v1');
+let devUrl = localStorage.getItem('localdev');
+if (devUrl !== null) devUrl += '/';
+else devUrl = '';
+
+const client = new OncoKbAPI(devUrl + 'api/v1');
 
 export default client;
