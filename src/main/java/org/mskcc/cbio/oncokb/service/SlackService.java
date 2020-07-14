@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
+import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -212,11 +213,19 @@ public class SlackService {
     }
 
     private LayoutBlock buildHereMentionBlock() {
-        return SectionBlock.builder().text(MarkdownTextObject.builder().text("<!here>").build()).build();
+        if (applicationProperties.getProfile() != null && applicationProperties.getProfile().equals(ProjectProfile.PROD)) {
+            return SectionBlock.builder().text(MarkdownTextObject.builder().text("<!here>").build()).build();
+        } else {
+            return SectionBlock.builder().text(PlainTextObject.builder().text("[placeholder for @here handle]").build()).build();
+        }
     }
 
     private LayoutBlock buildChannelMentionBlock() {
-        return SectionBlock.builder().text(MarkdownTextObject.builder().text("<!channel>").build()).build();
+        if (applicationProperties.getProfile() != null && applicationProperties.getProfile().equals(ProjectProfile.PROD)) {
+            return SectionBlock.builder().text(MarkdownTextObject.builder().text("<!channel>").build()).build();
+        } else {
+            return SectionBlock.builder().text(PlainTextObject.builder().text("[placeholder for @channel handle]").build()).build();
+        }
     }
 
     private LayoutBlock buildTitleBlock(UserDTO user) {
