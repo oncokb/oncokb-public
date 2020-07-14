@@ -513,5 +513,3 @@ export const REGEXP_LINK: { [key: string]: string } = {
   [REGEXP.PMID]: 'https://www.ncbi.nlm.nih.gov/pubmed/',
   [REGEXP.NCTID]: 'http://clinicaltrials.gov/show/'
 };
-
-export const dev = '';
