@@ -134,13 +134,27 @@ public class CronJobController {
     public void updateTokenStats() {
         log.info("Started the cronjob to update token stats");
         List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(Instant.now());
+
+        // Update tokens with token usage
         tokenUsages.stream().forEach(tokenUsage -> {
             if (!tokenUsage.getToken().getCurrentUsage().equals(tokenUsage.getCount())) {
-                tokenUsage.getToken().setCurrentUsage(tokenUsage.getCount());
-                tokenService.save(tokenUsage.getToken());
+                Optional<Token> tokenOptional = tokenService.findByToken(tokenUsage.getToken().getToken());
+                if (tokenOptional.isPresent()) {
+                    tokenOptional.get().setCurrentUsage(tokenUsage.getCount());
+                    tokenService.save(tokenOptional.get());
+                }
             }
         });
 
+        // Update tokens without token usage
+        List<Long> tokenWithStats = tokenUsages.stream().map(tokenUsage -> tokenUsage.getToken().getId()).collect(Collectors.toList());
+        List<Token> tokens = tokenService.findAll().stream().filter(token -> !tokenWithStats.contains(token.getId())).collect(Collectors.toList());
+        tokens.stream().forEach(token -> {
+            if (!token.getCurrentUsage().equals(0)) {
+                token.setCurrentUsage(0);
+                tokenService.save(token);
+            }
+        });
     }
 
     private void tokenCheckByTime(int daysToExpire, Set<String> notifiedUserIds) {
