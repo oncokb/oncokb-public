@@ -1,5 +1,8 @@
 import API from './generated/API';
 
-const client = new API();
+let devUrl = localStorage.getItem('localdev');
+if (devUrl === null) devUrl = '';
+
+const client = new API(devUrl);
 
 export default client;

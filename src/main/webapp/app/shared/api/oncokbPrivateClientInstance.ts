@@ -1,5 +1,9 @@
 import OncoKbPrivateAPI from './generated/OncoKbPrivateAPI';
 
-const privateClient = new OncoKbPrivateAPI('api/private');
+let devUrl = localStorage.getItem('localdev');
+if (devUrl !== null) devUrl += '/';
+else devUrl = '';
+
+const privateClient = new OncoKbPrivateAPI(devUrl + 'api/private');
 
 export default privateClient;
