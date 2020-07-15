@@ -20,6 +20,9 @@ export const SERVER_API_URL = process.env.SERVER_API_URL;
 export const ONCOKB_PUBLIC_APP_PROFILE = 'oncokbAppProfile';
 export const ONCOKB_PUBLIC_APP_PUBLIC_TOKEN = 'oncokbAppPublicToken';
 
+export const LOCAL_DEV_OPT = 'localdev';
+export const DEV_URL = 'http://localhost:9095';
+
 export const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
   USER: 'ROLE_USER'
