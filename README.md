@@ -62,15 +62,19 @@ The `yarn run` command will list all of the scripts available to run for this pr
 After starting project up locally, you should type the following command in your browser console
 
 ```
-localStorage.setItem("localdev","PUBLIC_SERVER_API")
+localStorage.setItem("localdev", true)
 ```
-
-Replace `PUBLIC_SERVER_API` with the url of this public server. The default setting is `http://localhost:9095`.
 
 To unset do:
 
 ```
 localStorage.removeItem("localdev")
+```
+
+or
+
+```
+localStorage.setItem("localdev", false)
 ```
 
 ### PWA Support
