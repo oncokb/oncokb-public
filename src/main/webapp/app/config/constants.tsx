@@ -106,7 +106,7 @@ export enum MUTATION_EFFECT {
 }
 
 const EVIDENCE_TYPE = {
-  FDA_APPROVED: 'FDA-approved',
+  FDA_APPROVED: 'FDA-approved drugs',
   STANDARD_CARE: 'Standard care',
   CLINICAL_EVIDENCE: 'Clinical evidence',
   BIOLOGICAL_EVIDENCE: 'Biological evidence'
