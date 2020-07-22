@@ -110,6 +110,36 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '07232020': {
+    updatedImplication: [
+      [
+        '1',
+        'Other Biomarkers',
+        'Tumor Mutational Burden - High',
+        'All Solid Tumors',
+        'Pembrolizumab',
+        <span>
+          Abstract:{' '}
+          <Linkout
+            link={
+              'https://www.sciencedirect.com/science/article/pii/S0923753419594042'
+            }
+          >
+            Marabelle et al. Abstract# 1192O, ESMO 2019
+          </Linkout>
+          ,{' '}
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-pembrolizumab-adults-and-children-tmb-h-solid-tumors'
+            }
+          >
+            FDA-approval of Pembrolizumab
+          </Linkout>
+        </span>
+      ]
+    ],
+    newlyAddedGenes: ['LARP4B', 'DAZAP1', 'KLF3', 'ZNF750', 'MEF2D']
+  },
   '07092020': {
     updatedImplication: [
       [
