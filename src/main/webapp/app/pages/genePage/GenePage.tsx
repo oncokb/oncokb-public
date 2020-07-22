@@ -1,13 +1,20 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { AnnotationStore } from 'app/store/AnnotationStore';
-import { action, computed, observable, IReactionDisposer } from 'mobx';
+import {
+  action,
+  computed,
+  observable,
+  IReactionDisposer,
+  reaction
+} from 'mobx';
 import { Else, If, Then } from 'react-if';
 import { Redirect, RouteComponentProps } from 'react-router';
 import { Button, Col, Row } from 'react-bootstrap';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import styles from './GenePage.module.scss';
 import {
+  encodeSlash,
   filterByKeyword,
   getCancerTypeNameFromOncoTreeType,
   getCenterAlignStyle,
@@ -18,7 +25,7 @@ import {
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import BarChart from 'app/components/barChart/BarChart';
-import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
 import pluralize from 'pluralize';
 import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
@@ -50,6 +57,7 @@ import { DataFilterType, onFilterOptionSelect } from 'react-mutation-mapper';
 import { CANCER_TYPE_FILTER_ID } from 'app/components/oncokbMutationMapper/FilterUtils';
 import DocumentTitle from 'react-document-title';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
+import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -147,13 +155,17 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   const additionalInfo: React.ReactNode[] = [
     <span key="geneId">
       Gene ID:{' '}
-      <Button
-        className={styles.geneAdditionalInfoButton}
-        variant="link"
-        href={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}
-      >
-        {gene.entrezGeneId}
-      </Button>
+      {gene.entrezGeneId > 0 ? (
+        <Button
+          className={styles.geneAdditionalInfoButton}
+          variant="link"
+          href={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}
+        >
+          {gene.entrezGeneId}
+        </Button>
+      ) : (
+        <span className={'ml-1'}>{gene.entrezGeneId}</span>
+      )}
     </span>
   ];
   if (gene.curatedIsoform) {
@@ -243,9 +255,10 @@ interface GenePageProps extends RouteComponentProps<MatchParams> {
 @observer
 export default class GenePage extends React.Component<GenePageProps> {
   @observable hugoSymbolQuery: string;
-  @observable showGeneBackground = false;
+  @observable showGeneBackground: boolean;
 
   private store: AnnotationStore;
+  readonly reactions: IReactionDisposer[] = [];
 
   @computed
   get clinicalTableColumns(): SearchColumn<ClinicalVariant>[] {
@@ -366,6 +379,20 @@ export default class GenePage extends React.Component<GenePageProps> {
     this.store = new AnnotationStore({
       hugoSymbolQuery: this.hugoSymbolQuery
     });
+
+    this.reactions.push(
+      reaction(
+        () => this.defaultShowGeneBackground,
+        defaultShowGeneBackground => {
+          if (
+            this.showGeneBackground === undefined &&
+            defaultShowGeneBackground !== undefined
+          ) {
+            this.showGeneBackground = defaultShowGeneBackground;
+          }
+        }
+      )
+    );
   }
 
   componentDidUpdate(prevProps: any) {
@@ -496,6 +523,7 @@ export default class GenePage extends React.Component<GenePageProps> {
   get pageShouldBeRendered() {
     return (
       this.store.geneNumber.isComplete &&
+      this.store.gene.isComplete &&
       this.store.clinicalAlterations.isComplete &&
       this.store.biologicalAlterations.isComplete
     );
@@ -528,7 +556,19 @@ export default class GenePage extends React.Component<GenePageProps> {
     return `Gene: ${this.store.hugoSymbol}`;
   }
 
+  @computed
+  get defaultShowGeneBackground() {
+    if (this.store.biologicalAlterations.isComplete) {
+      return this.store.biologicalAlterations.result.length === 0;
+    } else {
+      return undefined;
+    }
+  }
+
   componentWillUnmount(): void {
+    for (const reactionItem of this.reactions) {
+      reactionItem();
+    }
     this.store.destroy();
   }
 
@@ -556,111 +596,126 @@ export default class GenePage extends React.Component<GenePageProps> {
                 this.store.gene.result === DEFAULT_GENE ? (
                   <UnknownGeneAlert />
                 ) : (
-                  <>
-                    <Row>
-                      <Col {...this.genePanelClass}>
-                        <div className="">
-                          <h2>{this.store.hugoSymbol}</h2>
-                          <GeneInfo
-                            gene={this.store.gene.result}
-                            highestSensitiveLevel={
-                              this.store.geneNumber.result.highestSensitiveLevel
-                            }
-                            highestResistanceLevel={
-                              this.store.geneNumber.result
-                                .highestResistanceLevel
-                            }
-                          />
-                          {this.store.geneSummary.result ? (
-                            <div className="mt-2">
-                              {this.store.geneSummary.result}
-                            </div>
-                          ) : (
-                            undefined
-                          )}
-                          {this.store.geneBackground.result ? (
-                            <GeneBackground
-                              className="mt-2"
-                              show={this.showGeneBackground}
-                              hugoSymbol={this.store.hugoSymbol}
-                              geneBackground={this.store.geneBackground.result}
-                              onClick={this.toggleGeneBackground}
+                  <If condition={this.pageShouldBeRendered}>
+                    <Then>
+                      <Row>
+                        <Col {...this.genePanelClass}>
+                          <div className="">
+                            <h2>{this.store.hugoSymbol}</h2>
+                            <GeneInfo
+                              gene={this.store.gene.result}
+                              highestSensitiveLevel={
+                                this.store.geneNumber.result
+                                  .highestSensitiveLevel
+                              }
+                              highestResistanceLevel={
+                                this.store.geneNumber.result
+                                  .highestResistanceLevel
+                              }
                             />
-                          ) : (
-                            undefined
-                          )}
-                        </div>
-                      </Col>
-                      {this.store.barChartData.length > 0 ? (
-                        <Col
-                          xl={5}
-                          lg={6}
-                          xs={12}
-                          className={'d-flex flex-column align-items-center'}
-                        >
-                          <div>
-                            <b>
-                              Cancer Types with {this.store.hugoSymbol}{' '}
-                              Mutations
-                            </b>
-                            <DefaultTooltip
-                              overlay={() => (
-                                <div style={{ maxWidth: 300 }}>
-                                  Currently, the mutation frequency does not
-                                  take into account copy number changes,
-                                  chromosomal translocations or cancer types
-                                  with fewer than 50 samples in{' '}
-                                  <MskimpactLink />
-                                </div>
-                              )}
-                            >
-                              <i className="fa fa-question-circle-o ml-2" />
-                            </DefaultTooltip>
+                            {this.store.geneSummary.result ? (
+                              <div className="mt-2">
+                                {this.store.geneSummary.result}
+                              </div>
+                            ) : (
+                              undefined
+                            )}
+                            {this.store.geneBackground.result ? (
+                              <GeneBackground
+                                className="mt-2"
+                                show={this.showGeneBackground}
+                                hugoSymbol={this.store.hugoSymbol}
+                                geneBackground={
+                                  this.store.geneBackground.result
+                                }
+                                onClick={this.toggleGeneBackground}
+                              />
+                            ) : (
+                              undefined
+                            )}
                           </div>
-                          <BarChart
-                            data={this.store.barChartData}
-                            height={300}
-                            filters={this.store.selectedCancerTypes}
-                            windowStore={this.props.windowStore}
-                            onUserSelection={selectedCancerTypes =>
-                              this.store.mutationMapperStore &&
-                              this.store.mutationMapperStore.result
-                                ? onFilterOptionSelect(
-                                    selectedCancerTypes,
-                                    false,
-                                    this.store.mutationMapperStore.result
-                                      .dataStore,
-                                    DataFilterType.CANCER_TYPE,
-                                    CANCER_TYPE_FILTER_ID
-                                  )
-                                : undefined
-                            }
-                          />
                         </Col>
-                      ) : null}
-                    </Row>
-                    <Row className={'mt-5'}>
-                      <Col xs={12}>
-                        <h6>
-                          Annotated Mutation Distribution in <MskimpactLink />
-                        </h6>
-                      </Col>
-                      <Col xs={12}>
-                        <OncokbMutationMapper
-                          {...this.store.mutationMapperProps.result}
-                          store={this.store.mutationMapperStore.result}
-                          oncogenicities={this.store.uniqOncogenicity}
-                          showTrackSelector={false}
-                          windowWrapper={this.windowWrapper}
-                        />
-                      </Col>
-                    </Row>
-                    <Row className={'mt-2'}>
-                      <Col>
-                        <Tabs items={this.tabs} transform={false} />
-                      </Col>
-                    </Row>
-                  </>
+                        {this.store.barChartData.length > 0 ? (
+                          <Col
+                            xl={5}
+                            lg={6}
+                            xs={12}
+                            className={'d-flex flex-column align-items-center'}
+                          >
+                            <div>
+                              <b>
+                                Cancer Types with {this.store.hugoSymbol}{' '}
+                                Mutations
+                              </b>
+                              <DefaultTooltip
+                                overlay={() => (
+                                  <div style={{ maxWidth: 300 }}>
+                                    Currently, the mutation frequency does not
+                                    take into account copy number changes,
+                                    chromosomal translocations or cancer types
+                                    with fewer than 50 samples in{' '}
+                                    <MskimpactLink />
+                                  </div>
+                                )}
+                              >
+                                <i className="fa fa-question-circle-o ml-2" />
+                              </DefaultTooltip>
+                            </div>
+                            <BarChart
+                              data={this.store.barChartData}
+                              height={300}
+                              filters={this.store.selectedCancerTypes}
+                              windowStore={this.props.windowStore}
+                              onUserSelection={selectedCancerTypes =>
+                                this.store.mutationMapperStore &&
+                                this.store.mutationMapperStore.result
+                                  ? onFilterOptionSelect(
+                                      selectedCancerTypes,
+                                      false,
+                                      this.store.mutationMapperStore.result
+                                        .dataStore,
+                                      DataFilterType.CANCER_TYPE,
+                                      CANCER_TYPE_FILTER_ID
+                                    )
+                                  : undefined
+                              }
+                            />
+                          </Col>
+                        ) : null}
+                      </Row>
+                      <If condition={this.store.gene.result.entrezGeneId > 0}>
+                        <Row className={'mt-5'}>
+                          <Col xs={12}>
+                            <h6>
+                              Annotated Mutation Distribution in{' '}
+                              <MskimpactLink />
+                            </h6>
+                          </Col>
+                          <Col xs={12}>
+                            <OncokbMutationMapper
+                              {...this.store.mutationMapperProps.result}
+                              store={this.store.mutationMapperStore.result}
+                              oncogenicities={this.store.uniqOncogenicity}
+                              showTrackSelector={false}
+                              windowWrapper={this.windowWrapper}
+                            />
+                          </Col>
+                        </Row>
+                      </If>
+                      <Row className={'mt-2'}>
+                        <Col>
+                          <Tabs items={this.tabs} transform={false} />
+                        </Col>
+                      </Row>
+                    </Then>
+                    <Else>
+                      <LoadingIndicator
+                        size={'big'}
+                        center={true}
+                        isLoading={this.store.gene.isPending}
+                      />
+                    </Else>
+                  </If>
                 )}
               </Then>
               <Else>
