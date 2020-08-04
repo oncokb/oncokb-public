@@ -4,15 +4,15 @@ metadata:
   name: oncokb-public
   namespace: default
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: oncokb-public
       version: 'v1'
   strategy:
     rollingUpdate:
-      maxSurge: 4
-      maxUnavailable: 2
+      maxSurge: 2
+      maxUnavailable: 1
     type: RollingUpdate
   template:
     metadata:
@@ -33,19 +33,20 @@ spec:
                 name: oncokb-public
           readinessProbe:
             httpGet:
-              path: /api/v1/info
+              path: /v2/api-docs
               port: 9095
-            initialDelaySeconds: 60
-            timeoutSeconds: 10
-            periodSeconds: 10
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 5
+            failureThreshold: 6
           livenessProbe:
             httpGet:
               path: /
               port: 9095
             initialDelaySeconds: 90
-            timeoutSeconds: 1
-            periodSeconds: 10
-            failureThreshold: 5
+            timeoutSeconds: 15
+            periodSeconds: 15
+            failureThreshold: 10
           resources:
             requests:
               memory: 1Gi
