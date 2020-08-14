@@ -8,6 +8,8 @@ export type AnnotateMutationByGenomicChangeQuery = {
 
         'id': string
 
+        'referenceGenome': "GRCH37" | "GRCH38"
+
         'tumorType': string
 
 };
@@ -35,6 +37,8 @@ export type Query = {
         'proteinEnd': number
 
         'proteinStart': number
+
+        'referenceGenome': "GRCH37" | "GRCH38"
 
         'svType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN"
 
@@ -84,6 +88,8 @@ export type Alteration = {
 
         'refResidues': string
 
+        'referenceGenomes': Array < "GRCH37" | "GRCH38" >
+
         'variantResidues': string
 
 };
@@ -92,7 +98,13 @@ export type AnnotatedVariant = {
 
         'gene': string
 
-        'isoform': string
+        'grch37Isoform': string
+
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
 
         'mutationEffect': string
 
@@ -103,8 +115,6 @@ export type AnnotatedVariant = {
         'oncogenicity': string
 
         'proteinChange': string
-
-        'refSeq': string
 
         'variant': string
 
@@ -142,19 +152,21 @@ export type TumorType = {
 
 };
 export type Gene = {
-    'curatedIsoform': string
-
-        'curatedRefSeq': string
-
-        'entrezGeneId': number
+    'entrezGeneId': number
 
         'geneAliases': Array < string >
 
         'genesets': Array < Geneset >
 
-        'hugoSymbol': string
+        'grch37Isoform': string
 
-        'name': string
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
+
+        'hugoSymbol': string
 
         'oncogene': boolean
 
@@ -240,6 +252,8 @@ export type AnnotateStructuralVariantQuery = {
 
         'id': string
 
+        'referenceGenome': "GRCH37" | "GRCH38"
+
         'structuralVariantType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN"
 
         'tumorType': string
@@ -306,15 +320,19 @@ export type ActionableGene = {
 
         'gene': string
 
-        'isoform': string
+        'grch37Isoform': string
+
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
 
         'level': string
 
         'pmids': string
 
         'proteinChange': string
-
-        'refSeq': string
 
         'variant': string
 
@@ -348,17 +366,23 @@ export type Drug = {
 export type CuratedGene = {
     'entrezGeneId': number
 
+        'grch37Isoform': string
+
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
+
         'highestResistancLevel': string
+
+        'highestResistanceLevel': string
 
         'highestSensitiveLevel': string
 
         'hugoSymbol': string
 
-        'isoform': string
-
         'oncogene': boolean
-
-        'refSeq': string
 
         'summary': string
 
@@ -398,9 +422,15 @@ export type CancerGene = {
 
         'foundationHeme': boolean
 
-        'hugoSymbol': string
+        'grch37Isoform': string
 
-        'isoform': string
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
+
+        'hugoSymbol': string
 
         'mSKHeme': boolean
 
@@ -411,8 +441,6 @@ export type CancerGene = {
         'oncogene': boolean
 
         'oncokbAnnotated': boolean
-
-        'refSeq': string
 
         'sangerCGC': boolean
 
@@ -465,6 +493,8 @@ export type AnnotateMutationByProteinChangeQuery = {
         'proteinEnd': number
 
         'proteinStart': number
+
+        'referenceGenome': "GRCH37" | "GRCH38"
 
         'tumorType': string
 
@@ -524,6 +554,8 @@ export type VariantSearchQuery = {
 
         'proteinStart': number
 
+        'referenceGenome': "GRCH37" | "GRCH38"
+
         'variant': string
 
         'variantType': string
@@ -546,6 +578,8 @@ export type AnnotateCopyNumberAlterationQuery = {
 
         'id': string
 
+        'referenceGenome': "GRCH37" | "GRCH38"
+
         'tumorType': string
 
 };
@@ -555,6 +589,8 @@ export type AnnotateMutationByHGVSgQuery = {
         'hgvsg': string
 
         'id': string
+
+        'referenceGenome': "GRCH37" | "GRCH38"
 
         'tumorType': string
 
@@ -840,6 +876,7 @@ export default class OncoKbAPI {
         };
     annotateMutationsByGenomicChangeGetUsingGETURL(parameters: {
         'genomicLocation': string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any
@@ -848,6 +885,10 @@ export default class OncoKbAPI {
         let path = '/annotate/mutations/byGenomicChange';
         if (parameters['genomicLocation'] !== undefined) {
             queryParameters['genomicLocation'] = parameters['genomicLocation'];
+        }
+
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
         }
 
         if (parameters['tumorType'] !== undefined) {
@@ -873,11 +914,13 @@ export default class OncoKbAPI {
      * @method
      * @name OncoKbAPI#annotateMutationsByGenomicChangeGetUsingGET
      * @param {string} genomicLocation - Genomic location. Example: 7,140453136,140453136,A,T
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByGenomicChangeGetUsingGETWithHttpInfo(parameters: {
         'genomicLocation': string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
@@ -902,6 +945,10 @@ export default class OncoKbAPI {
             if (parameters['genomicLocation'] === undefined) {
                 reject(new Error('Missing required  parameter: genomicLocation'));
                 return;
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
             }
 
             if (parameters['tumorType'] !== undefined) {
@@ -929,11 +976,13 @@ export default class OncoKbAPI {
      * @method
      * @name OncoKbAPI#annotateMutationsByGenomicChangeGetUsingGET
      * @param {string} genomicLocation - Genomic location. Example: 7,140453136,140453136,A,T
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByGenomicChangeGetUsingGET(parameters: {
         'genomicLocation': string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
@@ -1022,6 +1071,7 @@ export default class OncoKbAPI {
         };
     annotateMutationsByHGVSgGetUsingGETURL(parameters: {
         'hgvsg': string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any
@@ -1030,6 +1080,10 @@ export default class OncoKbAPI {
         let path = '/annotate/mutations/byHGVSg';
         if (parameters['hgvsg'] !== undefined) {
             queryParameters['hgvsg'] = parameters['hgvsg'];
+        }
+
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
         }
 
         if (parameters['tumorType'] !== undefined) {
@@ -1055,11 +1109,13 @@ export default class OncoKbAPI {
      * @method
      * @name OncoKbAPI#annotateMutationsByHGVSgGetUsingGET
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByHGVSgGetUsingGETWithHttpInfo(parameters: {
         'hgvsg': string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
@@ -1084,6 +1140,10 @@ export default class OncoKbAPI {
             if (parameters['hgvsg'] === undefined) {
                 reject(new Error('Missing required  parameter: hgvsg'));
                 return;
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
             }
 
             if (parameters['tumorType'] !== undefined) {
@@ -1111,11 +1171,13 @@ export default class OncoKbAPI {
      * @method
      * @name OncoKbAPI#annotateMutationsByHGVSgGetUsingGET
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByHGVSgGetUsingGET(parameters: {
         'hgvsg': string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'tumorType' ? : string,
         'evidenceType' ? : string,
         $queryParameters ? : any,
@@ -1206,6 +1268,7 @@ export default class OncoKbAPI {
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
         'alteration' ? : string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
@@ -1225,6 +1288,10 @@ export default class OncoKbAPI {
 
         if (parameters['alteration'] !== undefined) {
             queryParameters['alteration'] = parameters['alteration'];
+        }
+
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
         }
 
         if (parameters['consequence'] !== undefined) {
@@ -1264,6 +1331,7 @@ export default class OncoKbAPI {
      * @param {string} hugoSymbol - The gene symbol used in Human Genome Organisation. Example: BRAF
      * @param {integer} entrezGeneId - The entrez gene ID. (Higher priority than hugoSymbol). Example: 673
      * @param {string} alteration - Protein Change. Example: V600E
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {string} consequence - Consequence. Exacmple: missense_variant
      * @param {integer} proteinStart - Protein Start. Example: 600
      * @param {integer} proteinEnd - Protein End. Example: 600
@@ -1274,6 +1342,7 @@ export default class OncoKbAPI {
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
         'alteration' ? : string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
@@ -1304,6 +1373,10 @@ export default class OncoKbAPI {
 
             if (parameters['alteration'] !== undefined) {
                 queryParameters['alteration'] = parameters['alteration'];
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
             }
 
             if (parameters['consequence'] !== undefined) {
@@ -1345,6 +1418,7 @@ export default class OncoKbAPI {
      * @param {string} hugoSymbol - The gene symbol used in Human Genome Organisation. Example: BRAF
      * @param {integer} entrezGeneId - The entrez gene ID. (Higher priority than hugoSymbol). Example: 673
      * @param {string} alteration - Protein Change. Example: V600E
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {string} consequence - Consequence. Exacmple: missense_variant
      * @param {integer} proteinStart - Protein Start. Example: 600
      * @param {integer} proteinEnd - Protein End. Example: 600
@@ -1355,6 +1429,7 @@ export default class OncoKbAPI {
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
         'alteration' ? : string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
@@ -3257,6 +3332,7 @@ export default class OncoKbAPI {
     };
     searchGetUsingGETURL(parameters: {
         'id' ? : string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
         'variant' ? : string,
@@ -3278,6 +3354,10 @@ export default class OncoKbAPI {
         let path = '/search';
         if (parameters['id'] !== undefined) {
             queryParameters['id'] = parameters['id'];
+        }
+
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
         }
 
         if (parameters['hugoSymbol'] !== undefined) {
@@ -3355,6 +3435,7 @@ export default class OncoKbAPI {
      * @method
      * @name OncoKbAPI#searchGetUsingGET
      * @param {string} id - The query ID
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {string} hugoSymbol - The gene symbol used in Human Genome Organisation.
      * @param {integer} entrezGeneId - The entrez gene ID.
      * @param {string} variant - Variant name.
@@ -3373,6 +3454,7 @@ export default class OncoKbAPI {
      */
     searchGetUsingGETWithHttpInfo(parameters: {
         'id' ? : string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
         'variant' ? : string,
@@ -3405,6 +3487,10 @@ export default class OncoKbAPI {
 
             if (parameters['id'] !== undefined) {
                 queryParameters['id'] = parameters['id'];
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
             }
 
             if (parameters['hugoSymbol'] !== undefined) {
@@ -3484,6 +3570,7 @@ export default class OncoKbAPI {
      * @method
      * @name OncoKbAPI#searchGetUsingGET
      * @param {string} id - The query ID
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {string} hugoSymbol - The gene symbol used in Human Genome Organisation.
      * @param {integer} entrezGeneId - The entrez gene ID.
      * @param {string} variant - Variant name.
@@ -3502,6 +3589,7 @@ export default class OncoKbAPI {
      */
     searchGetUsingGET(parameters: {
         'id' ? : string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
         'variant' ? : string,
@@ -4294,6 +4382,7 @@ export default class OncoKbAPI {
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
         'hgvs' ? : string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'fields' ? : string,
         $queryParameters ? : any
     }): string {
@@ -4331,6 +4420,10 @@ export default class OncoKbAPI {
             queryParameters['hgvs'] = parameters['hgvs'];
         }
 
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
+        }
+
         if (parameters['fields'] !== undefined) {
             queryParameters['fields'] = parameters['fields'];
         }
@@ -4357,6 +4450,7 @@ export default class OncoKbAPI {
      * @param {integer} proteinStart - proteinStart
      * @param {integer} proteinEnd - proteinEnd
      * @param {string} hgvs - HGVS varaint. Its priority is higher than entrezGeneId/hugoSymbol + variant combination
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {string} fields - The fields to be returned.
      */
     variantsLookupGetUsingGETWithHttpInfo(parameters: {
@@ -4368,6 +4462,7 @@ export default class OncoKbAPI {
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
         'hgvs' ? : string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'fields' ? : string,
         $queryParameters ? : any,
             $domain ? : string
@@ -4416,6 +4511,10 @@ export default class OncoKbAPI {
                 queryParameters['hgvs'] = parameters['hgvs'];
             }
 
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
+            }
+
             if (parameters['fields'] !== undefined) {
                 queryParameters['fields'] = parameters['fields'];
             }
@@ -4444,6 +4543,7 @@ export default class OncoKbAPI {
      * @param {integer} proteinStart - proteinStart
      * @param {integer} proteinEnd - proteinEnd
      * @param {string} hgvs - HGVS varaint. Its priority is higher than entrezGeneId/hugoSymbol + variant combination
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {string} fields - The fields to be returned.
      */
     variantsLookupGetUsingGET(parameters: {
@@ -4455,6 +4555,7 @@ export default class OncoKbAPI {
             'proteinStart' ? : number,
             'proteinEnd' ? : number,
             'hgvs' ? : string,
+            'referenceGenome' ? : "GRCH37" | "GRCH38",
             'fields' ? : string,
             $queryParameters ? : any,
                 $domain ? : string

@@ -57,7 +57,8 @@ import { DataFilterType, onFilterOptionSelect } from 'react-mutation-mapper';
 import { CANCER_TYPE_FILTER_ID } from 'app/components/oncokbMutationMapper/FilterUtils';
 import DocumentTitle from 'react-document-title';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
-import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
+import { Linkout } from 'app/shared/links/Linkout';
+import { ReferenceGenomeInfo, ReferenceGenome } from './ReferenceGenomeInfo';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -153,47 +154,36 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   }
 
   const additionalInfo: React.ReactNode[] = [
-    <span key="geneId">
+    <div key="geneId">
       Gene ID:{' '}
       {gene.entrezGeneId > 0 ? (
-        <Button
-          className={styles.geneAdditionalInfoButton}
-          variant="link"
-          href={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}
+        <Linkout
+          className={styles.lowKeyLinkout}
+          link={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}
         >
           {gene.entrezGeneId}
-        </Button>
+        </Linkout>
       ) : (
         <span className={'ml-1'}>{gene.entrezGeneId}</span>
       )}
-    </span>
+    </div>
   ];
-  if (gene.curatedIsoform) {
+  if (gene.grch37Isoform || gene.grch37RefSeq) {
     additionalInfo.push(
-      <span key="isoform">
-        Isoform:{' '}
-        <Button
-          className={styles.geneAdditionalInfoButton}
-          variant="link"
-          href={`https://www.ensembl.org/id/${gene.curatedIsoform}`}
-        >
-          {gene.curatedIsoform}
-        </Button>
-      </span>
+      <ReferenceGenomeInfo
+        referenceGenome={ReferenceGenome.GRCH37}
+        isoform={gene.grch37Isoform}
+        refseq={gene.grch37RefSeq}
+      />
     );
   }
-  if (gene.curatedRefSeq) {
+  if (gene.grch38Isoform || gene.grch38RefSeq) {
     additionalInfo.push(
-      <span key="refSeq">
-        RefSeq:{' '}
-        <Button
-          className={styles.geneAdditionalInfoButton}
-          variant="link"
-          href={`https://www.ncbi.nlm.nih.gov/nuccore/${gene.curatedRefSeq}`}
-        >
-          {gene.curatedRefSeq}
-        </Button>
-      </span>
+      <ReferenceGenomeInfo
+        referenceGenome={ReferenceGenome.GRCH38}
+        isoform={gene.grch38Isoform}
+        refseq={gene.grch38RefSeq}
+      />
     );
   }
 

@@ -1,6 +1,16 @@
 import * as request from "superagent";
 
 type CallbackHandler = (err: any, res ? : request.Response) => void;
+export type UntranslatedRegion = {
+    'end': number
+
+        'start': number
+
+        'strand': number
+
+        'type': string
+
+};
 export type TreatmentDrug = {
     'priority': number
 
@@ -25,6 +35,8 @@ export type Query = {
         'proteinEnd': number
 
         'proteinStart': number
+
+        'referenceGenome': "GRCH37" | "GRCH38"
 
         'svType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN"
 
@@ -79,6 +91,8 @@ export type Alteration = {
         'proteinStart': number
 
         'refResidues': string
+
+        'referenceGenomes': Array < "GRCH37" | "GRCH38" >
 
         'variantResidues': string
 
@@ -176,7 +190,13 @@ export type AnnotatedVariant = {
 
         'gene': string
 
-        'isoform': string
+        'grch37Isoform': string
+
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
 
         'mutationEffect': string
 
@@ -187,8 +207,6 @@ export type AnnotatedVariant = {
         'oncogenicity': string
 
         'proteinChange': string
-
-        'refSeq': string
 
         'variant': string
 
@@ -225,20 +243,36 @@ export type LevelNumber = {
         'level': "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO"
 
 };
+export type Exon = {
+    'exonEnd': number
+
+        'exonId': string
+
+        'exonStart': number
+
+        'rank': number
+
+        'strand': number
+
+        'version': number
+
+};
 export type Gene = {
-    'curatedIsoform': string
-
-        'curatedRefSeq': string
-
-        'entrezGeneId': number
+    'entrezGeneId': number
 
         'geneAliases': Array < string >
 
         'genesets': Array < Geneset >
 
-        'hugoSymbol': string
+        'grch37Isoform': string
 
-        'name': string
+        'grch37RefSeq': string
+
+        'grch38Isoform': string
+
+        'grch38RefSeq': string
+
+        'hugoSymbol': string
 
         'oncogene': boolean
 
@@ -299,6 +333,28 @@ export type PortalAlteration = {
         'proteinStartPosition': number
 
         'sampleId': string
+
+};
+export type EnsemblTranscript = {
+    'ccdsId': string
+
+        'exons': Array < Exon >
+
+        'geneId': string
+
+        'hugoSymbols': Array < string >
+
+        'pfamDomains': Array < PfamDomainRange >
+
+        'proteinId': string
+
+        'proteinLength': number
+
+        'refseqMrnaId': string
+
+        'transcriptId': string
+
+        'utrs': Array < UntranslatedRegion >
 
 };
 export type TreatmentDrugId = {
@@ -399,6 +455,14 @@ export type Drug = {
         'uuid': string
 
 };
+export type TranscriptResult = {
+    'grch37Transcript': EnsemblTranscript
+
+        'grch38Transcript': EnsemblTranscript
+
+        'note': string
+
+};
 export type MatchVariantRequest = {
     'oncokbVariants': Array < MatchVariant >
 
@@ -431,6 +495,14 @@ export type GeneNumber = {
         'highestSensitiveLevel': string
 
         'tumorType': number
+
+};
+export type PfamDomainRange = {
+    'pfamDomainEnd': number
+
+        'pfamDomainId': string
+
+        'pfamDomainStart': number
 
 };
 export type IndicatorQueryTreatment = {
@@ -976,6 +1048,82 @@ export default class OncoKbPrivateAPI {
                 return response.body;
             });
         };
+    getTranscriptUsingGETURL(parameters: {
+        'hugoSymbol': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/transcripts/{hugoSymbol}';
+
+        path = path.replace('{hugoSymbol}', parameters['hugoSymbol'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get transcript info in both GRCh37 and 38.
+     * @method
+     * @name OncoKbPrivateAPI#getTranscriptUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     */
+    getTranscriptUsingGETWithHttpInfo(parameters: {
+        'hugoSymbol': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/transcripts/{hugoSymbol}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            path = path.replace('{hugoSymbol}', parameters['hugoSymbol'] + '');
+
+            if (parameters['hugoSymbol'] === undefined) {
+                reject(new Error('Missing required  parameter: hugoSymbol'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get transcript info in both GRCh37 and 38.
+     * @method
+     * @name OncoKbPrivateAPI#getTranscriptUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     */
+    getTranscriptUsingGET(parameters: {
+        'hugoSymbol': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < TranscriptResult > {
+        return this.getTranscriptUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     utilDataReleaseDownloadAvailabilityGetUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
@@ -1339,6 +1487,7 @@ export default class OncoKbPrivateAPI {
     };
     validateVariantExampleGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'variant' ? : string,
         'examples' ? : string,
         $queryParameters ? : any
@@ -1361,11 +1510,13 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#validateVariantExampleGetUsingGET
      * @param {} hugoSymbol - Gene Hugo Symbol
+     * @param {} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {} variant - The OncoKB variant
      * @param {} examples - The genomic examples.
      */
     validateVariantExampleGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol' ? : string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'variant' ? : string,
         'examples' ? : string,
         $queryParameters ? : any,
@@ -1385,6 +1536,10 @@ export default class OncoKbPrivateAPI {
 
             if (parameters['hugoSymbol'] !== undefined) {
                 body = parameters['hugoSymbol'];
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                body = parameters['referenceGenome'];
             }
 
             if (parameters['variant'] !== undefined) {
@@ -1412,11 +1567,13 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#validateVariantExampleGetUsingGET
      * @param {} hugoSymbol - Gene Hugo Symbol
+     * @param {} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
      * @param {} variant - The OncoKB variant
      * @param {} examples - The genomic examples.
      */
     validateVariantExampleGetUsingGET(parameters: {
         'hugoSymbol' ? : string,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'variant' ? : string,
         'examples' ? : string,
         $queryParameters ? : any,
@@ -2270,27 +2427,13 @@ export default class OncoKbPrivateAPI {
     utilVariantAnnotationGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'alteration' ? : string,
         'tumorType' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/variantAnnotation';
-        if (parameters['hugoSymbol'] !== undefined) {
-            queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
-        }
-
-        if (parameters['entrezGeneId'] !== undefined) {
-            queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
-        }
-
-        if (parameters['alteration'] !== undefined) {
-            queryParameters['alteration'] = parameters['alteration'];
-        }
-
-        if (parameters['tumorType'] !== undefined) {
-            queryParameters['tumorType'] = parameters['tumorType'];
-        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -2306,14 +2449,16 @@ export default class OncoKbPrivateAPI {
      * Get all the info for the query
      * @method
      * @name OncoKbPrivateAPI#utilVariantAnnotationGetUsingGET
-     * @param {string} hugoSymbol - hugoSymbol
-     * @param {integer} entrezGeneId - entrezGeneId
-     * @param {string} alteration - Alteration
-     * @param {string} tumorType - OncoTree tumor type name/main type/code
+     * @param {} hugoSymbol - hugoSymbol
+     * @param {} entrezGeneId - entrezGeneId
+     * @param {} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
+     * @param {} alteration - Alteration
+     * @param {} tumorType - OncoTree tumor type name/main type/code
      */
     utilVariantAnnotationGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'alteration' ? : string,
         'tumorType' ? : string,
         $queryParameters ? : any,
@@ -2332,19 +2477,23 @@ export default class OncoKbPrivateAPI {
             headers['Content-Type'] = 'application/json';
 
             if (parameters['hugoSymbol'] !== undefined) {
-                queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+                body = parameters['hugoSymbol'];
             }
 
             if (parameters['entrezGeneId'] !== undefined) {
-                queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+                body = parameters['entrezGeneId'];
+            }
+
+            if (parameters['referenceGenome'] !== undefined) {
+                body = parameters['referenceGenome'];
             }
 
             if (parameters['alteration'] !== undefined) {
-                queryParameters['alteration'] = parameters['alteration'];
+                body = parameters['alteration'];
             }
 
             if (parameters['tumorType'] !== undefined) {
-                queryParameters['tumorType'] = parameters['tumorType'];
+                body = parameters['tumorType'];
             }
 
             if (parameters.$queryParameters) {
@@ -2363,14 +2512,16 @@ export default class OncoKbPrivateAPI {
      * Get all the info for the query
      * @method
      * @name OncoKbPrivateAPI#utilVariantAnnotationGetUsingGET
-     * @param {string} hugoSymbol - hugoSymbol
-     * @param {integer} entrezGeneId - entrezGeneId
-     * @param {string} alteration - Alteration
-     * @param {string} tumorType - OncoTree tumor type name/main type/code
+     * @param {} hugoSymbol - hugoSymbol
+     * @param {} entrezGeneId - entrezGeneId
+     * @param {} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
+     * @param {} alteration - Alteration
+     * @param {} tumorType - OncoTree tumor type name/main type/code
      */
     utilVariantAnnotationGetUsingGET(parameters: {
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
+        'referenceGenome' ? : "GRCH37" | "GRCH38",
         'alteration' ? : string,
         'tumorType' ? : string,
         $queryParameters ? : any,
