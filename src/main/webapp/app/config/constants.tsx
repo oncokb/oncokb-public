@@ -205,13 +205,14 @@ export const DEFAULT_MAIN_NUMBERS: MainNumber = {
 };
 
 export const DEFAULT_GENE: Gene = {
-  curatedIsoform: '',
-  curatedRefSeq: '',
+  grch37Isoform: '',
+  grch37RefSeq: '',
+  grch38Isoform: '',
+  grch38RefSeq: '',
   entrezGeneId: -1,
   geneAliases: [],
   genesets: [],
   hugoSymbol: '',
-  name: '',
   oncogene: false,
   tsg: false
 };
@@ -237,6 +238,7 @@ export const DEFAULT_QUERY = {
   id: '',
   proteinEnd: -1,
   proteinStart: -1,
+  referenceGenome: 'GRCH37' as any,
   svType: 'UNKNOWN' as 'UNKNOWN',
   tumorType: '',
   type: ''
