@@ -69,6 +69,7 @@
     "react-table": "^6.10.3",
     "react-toastify": "5.4.0",
     "react-transition-group": "2.7.0",
+    "react-with-separator": "^1.2.0",
     "reactstrap": "7.1.0",
     "string-strip-html": "^4.4.5",
     "tslib": "1.10.0",

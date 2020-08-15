@@ -362,7 +362,7 @@ export class AnnotationStore {
 
   readonly annotationResult = remoteData<VariantAnnotation>({
     await: () => [this.gene],
-    invoke: async () => {
+    invoke: () => {
       return privateClient.utilVariantAnnotationGetUsingGET({
         hugoSymbol: this.gene.result.hugoSymbol,
         alteration: this.alterationQuery,
@@ -371,38 +371,6 @@ export class AnnotationStore {
     },
     default: DEFAULT_ANNOTATION
   });
-
-  @computed
-  get therapeuticImplications(): TherapeuticImplication[] {
-    return _.reduce(
-      this.annotationResult.result.tumorTypes,
-      (acc, next) => {
-        const oncoTreeCancerType = getCancerTypeNameFromOncoTreeType(
-          next.tumorType
-        );
-        next.evidences.forEach(evidence => {
-          if (
-            TREATMENT_EVIDENCE_TYPES.includes(
-              evidence.evidenceType as EVIDENCE_TYPES
-            )
-          ) {
-            const level = levelOfEvidence2Level(evidence.levelOfEvidence);
-            acc.push({
-              level,
-              alterations: evidence.alterations
-                .map(alteration => alteration.name)
-                .join(', '),
-              drugs: getTreatmentNameFromEvidence(evidence),
-              cancerTypes: oncoTreeCancerType,
-              citations: articles2Citations(evidence.articles)
-            });
-          }
-        });
-        return acc;
-      },
-      [] as TherapeuticImplication[]
-    );
-  }
 
   readonly portalAlterationSampleCount = remoteData<CancerTypeCount[]>({
     async invoke() {

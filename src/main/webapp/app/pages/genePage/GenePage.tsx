@@ -19,8 +19,7 @@ import {
   getCancerTypeNameFromOncoTreeType,
   getCenterAlignStyle,
   getDefaultColumnDefinition,
-  levelOfEvidence2Level,
-  reduceJoin
+  levelOfEvidence2Level
 } from 'app/shared/utils/Utils';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
@@ -59,6 +58,7 @@ import DocumentTitle from 'react-document-title';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { Linkout } from 'app/shared/links/Linkout';
 import { ReferenceGenomeInfo, ReferenceGenome } from './ReferenceGenomeInfo';
+import WithSeparator from 'react-with-separator';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -98,7 +98,11 @@ export const getHighestLevelStrings = (
       </span>
     );
   }
-  return <>{reduceJoin(levels, separator)}</>;
+  return (
+    <WithSeparator separator={separator} key={'highest-levels'}>
+      {levels}
+    </WithSeparator>
+  );
 };
 
 type GeneInfoProps = {
@@ -294,7 +298,11 @@ export default class GenePage extends React.Component<GenePageProps> {
             drug.toLowerCase().includes(keyword)
           ),
         Cell(props: { original: ClinicalVariant }) {
-          return <span>{reduceJoin(props.original.drug, <br />)}</span>;
+          return (
+            <WithSeparator separator={<br />}>
+              {props.original.drug}
+            </WithSeparator>
+          );
         }
       },
       {
