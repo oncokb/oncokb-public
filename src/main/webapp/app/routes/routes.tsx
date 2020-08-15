@@ -29,6 +29,7 @@ import React from 'react';
 import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
 import { FAQPage } from 'app/pages/FAQPage';
+import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -97,6 +98,11 @@ const AppRouts = (props: {
             exact
             path={PAGE_ROUTE.ALTERATION}
             component={AlterationPage}
+          />
+          <ErrorBoundaryRoute
+            exact
+            path={PAGE_ROUTE.HGVSG}
+            component={HgvsgPage}
           />
           <ErrorBoundaryRoute
             exact

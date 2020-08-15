@@ -301,6 +301,7 @@ export enum PAGE_ROUTE {
   GENE_HEADER = '/gene',
   GENE = '/gene/:hugoSymbol',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
+  HGVSG = '/hgvsg/:hgvsg',
   ALTERATION_TUMOR_TYPE = '/gene/:hugoSymbol/:alteration/:tumorType',
   HOME = '/',
   ABOUT = '/about',
@@ -519,3 +520,12 @@ export const REGEXP_LINK: { [key: string]: string } = {
   [REGEXP.PMID]: 'https://www.ncbi.nlm.nih.gov/pubmed/',
   [REGEXP.NCTID]: 'http://clinicaltrials.gov/show/'
 };
+
+export enum REFERENCE_GENOME {
+  GRCH37 = 'GRCH37',
+  GRCH38 = 'GRCH38'
+}
+export enum REFERENCE_GENOME_NAME {
+  GRCH37 = 'GRCh37',
+  GRCH38 = 'GRCh38'
+}

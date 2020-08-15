@@ -30,6 +30,7 @@ import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
   DEFAULT_GENE,
+  REFERENCE_GENOME_NAME,
   SM_TABLE_FIXED_HEIGHT,
   TABLE_COLUMN_KEY,
   THRESHOLD_TABLE_FIXED_HEIGHT
@@ -57,7 +58,7 @@ import { CANCER_TYPE_FILTER_ID } from 'app/components/oncokbMutationMapper/Filte
 import DocumentTitle from 'react-document-title';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { Linkout } from 'app/shared/links/Linkout';
-import { ReferenceGenomeInfo, ReferenceGenome } from './ReferenceGenomeInfo';
+import { ReferenceGenomeInfo } from './ReferenceGenomeInfo';
 import WithSeparator from 'react-with-separator';
 
 enum GENE_TYPE_DESC {
@@ -175,7 +176,7 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   if (gene.grch37Isoform || gene.grch37RefSeq) {
     additionalInfo.push(
       <ReferenceGenomeInfo
-        referenceGenome={ReferenceGenome.GRCH37}
+        referenceGenomeName={REFERENCE_GENOME_NAME.GRCH37}
         isoform={gene.grch37Isoform}
         refseq={gene.grch37RefSeq}
       />
@@ -184,7 +185,7 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   if (gene.grch38Isoform || gene.grch38RefSeq) {
     additionalInfo.push(
       <ReferenceGenomeInfo
-        referenceGenome={ReferenceGenome.GRCH38}
+        referenceGenomeName={REFERENCE_GENOME_NAME.GRCH38}
         isoform={gene.grch38Isoform}
         refseq={gene.grch38RefSeq}
       />
