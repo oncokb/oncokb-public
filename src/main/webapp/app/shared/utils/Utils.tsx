@@ -186,7 +186,10 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
   className?: string;
 }> = props => {
   return (
-    <span style={{ width: 16, marginTop: -3, marginLeft: 3 }}>
+    <span
+      style={{ width: 16, marginTop: -3, marginLeft: 3 }}
+      key={'oncokb-oncogenicity-icone'}
+    >
       <i
         className={classnames(
           `oncokb annotation-icon ${getAnnotationOncogenicityClassName(
@@ -198,15 +201,6 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
       />
     </span>
   );
-};
-
-export const reduceJoin = (
-  data: React.ReactNode[],
-  separator: string | JSX.Element
-) => {
-  return data.length === 0
-    ? null
-    : data.reduce((prev, curr) => [prev, separator, curr]);
 };
 
 export const OncoKBLevelIcon: React.FunctionComponent<{
@@ -440,13 +434,3 @@ export const scrollWidthOffsetInNews = (el?: any) => {
   const yOffset = -80;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
 };
-
-export const concatElementsByComma = (list: ReactNode[]) => {
-  return list.reduce((prev, curr) => [prev, ', ', curr]);
-};
-
-export function getGenePageLinks(genes: string): ReactNode {
-  return concatElementsByComma(
-    genes.split(',').map(gene => <GenePageLink hugoSymbol={gene.trim()} />)
-  );
-}

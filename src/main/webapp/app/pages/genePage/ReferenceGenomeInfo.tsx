@@ -2,20 +2,16 @@ import React from 'react';
 
 import styles from './GenePage.module.scss';
 import { Linkout } from 'app/shared/links/Linkout';
-
-export enum ReferenceGenome {
-  GRCH37 = 'GRCh37',
-  GRCH38 = 'GRCh38'
-}
+import { REFERENCE_GENOME_NAME } from 'app/config/constants';
 
 export const ReferenceGenomeInfo: React.FunctionComponent<{
-  referenceGenome: ReferenceGenome;
+  referenceGenomeName: REFERENCE_GENOME_NAME;
   isoform?: string;
   refseq?: string;
 }> = props => {
   return props.isoform || props.refseq ? (
     <div className={styles.sameLineSpans}>
-      <span>{props.referenceGenome}</span>
+      <span>{props.referenceGenomeName}</span>
       {props.isoform && (
         <span>
           Isoform:{' '}

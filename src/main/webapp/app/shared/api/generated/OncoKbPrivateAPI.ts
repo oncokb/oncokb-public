@@ -2429,11 +2429,35 @@ export default class OncoKbPrivateAPI {
         'entrezGeneId' ? : number,
         'referenceGenome' ? : "GRCH37" | "GRCH38",
         'alteration' ? : string,
+        'hgvsg' ? : string,
         'tumorType' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/variantAnnotation';
+        if (parameters['hugoSymbol'] !== undefined) {
+            queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+        }
+
+        if (parameters['entrezGeneId'] !== undefined) {
+            queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+        }
+
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
+        }
+
+        if (parameters['alteration'] !== undefined) {
+            queryParameters['alteration'] = parameters['alteration'];
+        }
+
+        if (parameters['hgvsg'] !== undefined) {
+            queryParameters['hgvsg'] = parameters['hgvsg'];
+        }
+
+        if (parameters['tumorType'] !== undefined) {
+            queryParameters['tumorType'] = parameters['tumorType'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -2449,17 +2473,19 @@ export default class OncoKbPrivateAPI {
      * Get all the info for the query
      * @method
      * @name OncoKbPrivateAPI#utilVariantAnnotationGetUsingGET
-     * @param {} hugoSymbol - hugoSymbol
-     * @param {} entrezGeneId - entrezGeneId
-     * @param {} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
-     * @param {} alteration - Alteration
-     * @param {} tumorType - OncoTree tumor type name/main type/code
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
+     * @param {string} alteration - Alteration
+     * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
+     * @param {string} tumorType - OncoTree tumor type name/main type/code
      */
     utilVariantAnnotationGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
         'referenceGenome' ? : "GRCH37" | "GRCH38",
         'alteration' ? : string,
+        'hgvsg' ? : string,
         'tumorType' ? : string,
         $queryParameters ? : any,
             $domain ? : string
@@ -2477,23 +2503,27 @@ export default class OncoKbPrivateAPI {
             headers['Content-Type'] = 'application/json';
 
             if (parameters['hugoSymbol'] !== undefined) {
-                body = parameters['hugoSymbol'];
+                queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
             }
 
             if (parameters['entrezGeneId'] !== undefined) {
-                body = parameters['entrezGeneId'];
+                queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
             }
 
             if (parameters['referenceGenome'] !== undefined) {
-                body = parameters['referenceGenome'];
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
             }
 
             if (parameters['alteration'] !== undefined) {
-                body = parameters['alteration'];
+                queryParameters['alteration'] = parameters['alteration'];
+            }
+
+            if (parameters['hgvsg'] !== undefined) {
+                queryParameters['hgvsg'] = parameters['hgvsg'];
             }
 
             if (parameters['tumorType'] !== undefined) {
-                body = parameters['tumorType'];
+                queryParameters['tumorType'] = parameters['tumorType'];
             }
 
             if (parameters.$queryParameters) {
@@ -2512,17 +2542,19 @@ export default class OncoKbPrivateAPI {
      * Get all the info for the query
      * @method
      * @name OncoKbPrivateAPI#utilVariantAnnotationGetUsingGET
-     * @param {} hugoSymbol - hugoSymbol
-     * @param {} entrezGeneId - entrezGeneId
-     * @param {} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
-     * @param {} alteration - Alteration
-     * @param {} tumorType - OncoTree tumor type name/main type/code
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
+     * @param {string} alteration - Alteration
+     * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
+     * @param {string} tumorType - OncoTree tumor type name/main type/code
      */
     utilVariantAnnotationGetUsingGET(parameters: {
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
         'referenceGenome' ? : "GRCH37" | "GRCH38",
         'alteration' ? : string,
+        'hgvsg' ? : string,
         'tumorType' ? : string,
         $queryParameters ? : any,
             $domain ? : string

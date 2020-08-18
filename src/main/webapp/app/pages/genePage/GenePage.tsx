@@ -19,8 +19,7 @@ import {
   getCancerTypeNameFromOncoTreeType,
   getCenterAlignStyle,
   getDefaultColumnDefinition,
-  levelOfEvidence2Level,
-  reduceJoin
+  levelOfEvidence2Level
 } from 'app/shared/utils/Utils';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
@@ -31,6 +30,7 @@ import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
   DEFAULT_GENE,
+  REFERENCE_GENOME_NAME,
   SM_TABLE_FIXED_HEIGHT,
   TABLE_COLUMN_KEY,
   THRESHOLD_TABLE_FIXED_HEIGHT
@@ -58,7 +58,8 @@ import { CANCER_TYPE_FILTER_ID } from 'app/components/oncokbMutationMapper/Filte
 import DocumentTitle from 'react-document-title';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { Linkout } from 'app/shared/links/Linkout';
-import { ReferenceGenomeInfo, ReferenceGenome } from './ReferenceGenomeInfo';
+import { ReferenceGenomeInfo } from './ReferenceGenomeInfo';
+import WithSeparator from 'react-with-separator';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -98,7 +99,11 @@ export const getHighestLevelStrings = (
       </span>
     );
   }
-  return <>{reduceJoin(levels, separator)}</>;
+  return (
+    <WithSeparator separator={separator} key={'highest-levels'}>
+      {levels}
+    </WithSeparator>
+  );
 };
 
 type GeneInfoProps = {
@@ -171,7 +176,7 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   if (gene.grch37Isoform || gene.grch37RefSeq) {
     additionalInfo.push(
       <ReferenceGenomeInfo
-        referenceGenome={ReferenceGenome.GRCH37}
+        referenceGenomeName={REFERENCE_GENOME_NAME.GRCH37}
         isoform={gene.grch37Isoform}
         refseq={gene.grch37RefSeq}
       />
@@ -180,7 +185,7 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   if (gene.grch38Isoform || gene.grch38RefSeq) {
     additionalInfo.push(
       <ReferenceGenomeInfo
-        referenceGenome={ReferenceGenome.GRCH38}
+        referenceGenomeName={REFERENCE_GENOME_NAME.GRCH38}
         isoform={gene.grch38Isoform}
         refseq={gene.grch38RefSeq}
       />
@@ -294,7 +299,11 @@ export default class GenePage extends React.Component<GenePageProps> {
             drug.toLowerCase().includes(keyword)
           ),
         Cell(props: { original: ClinicalVariant }) {
-          return <span>{reduceJoin(props.original.drug, <br />)}</span>;
+          return (
+            <WithSeparator separator={<br />}>
+              {props.original.drug}
+            </WithSeparator>
+          );
         }
       },
       {

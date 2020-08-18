@@ -16,7 +16,6 @@ import { Evidence, MainType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
 import {
-  concatElementsByComma,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
@@ -45,6 +44,7 @@ import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import DocumentTitle from 'react-document-title';
 import { COLOR_BLUE } from 'app/config/theme';
+import WithSeparator from 'react-with-separator';
 
 type Treatment = {
   level: string;
@@ -454,7 +454,7 @@ export default class ActionableGenesPage extends React.Component<
           <DefaultTooltip
             overlay={
               <div style={{ maxWidth: '400px' }}>
-                {concatElementsByComma(linkedAlts)}
+                <WithSeparator separator={','}>{linkedAlts}</WithSeparator>
               </div>
             }
             overlayStyle={{
@@ -475,7 +475,7 @@ export default class ActionableGenesPage extends React.Component<
         </span>
       );
     } else {
-      return concatElementsByComma(linkedAlts);
+      return <WithSeparator separator={','}>{linkedAlts}</WithSeparator>;
     }
   }
 

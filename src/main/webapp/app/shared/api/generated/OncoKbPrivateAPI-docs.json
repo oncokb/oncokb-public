@@ -1119,54 +1119,52 @@
         ],
         "parameters": [
           {
-            "in": "body",
             "name": "hugoSymbol",
+            "in": "query",
             "description": "hugoSymbol",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
-            "in": "body",
             "name": "entrezGeneId",
+            "in": "query",
             "description": "entrezGeneId",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+            "type": "integer",
+            "format": "int32"
           },
           {
-            "in": "body",
             "name": "referenceGenome",
+            "in": "query",
             "description": "Reference genome, either GRCH37 or GRCH38. The default is GRCH37",
             "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "GRCH37",
-                "GRCH38"
-              ]
-            }
+            "type": "string",
+            "default": "GRCH37",
+            "enum": [
+              "GRCH37",
+              "GRCH38"
+            ]
           },
           {
-            "in": "body",
             "name": "alteration",
+            "in": "query",
             "description": "Alteration",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
-            "in": "body",
+            "name": "hgvsg",
+            "in": "query",
+            "description": "HGVS genomic format. Example: 7:g.140453136A>T",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "tumorType",
+            "in": "query",
             "description": "OncoTree tumor type name/main type/code",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
