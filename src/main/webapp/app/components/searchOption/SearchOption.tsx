@@ -10,7 +10,12 @@ import { SuggestCuration } from 'app/components/SuggestCuration';
 import { ExtendedTypeaheadSearchResp } from 'app/pages/HomePage';
 import classnames from 'classnames';
 
-export type SearchOptionType = 'gene' | 'variant' | 'drug';
+export enum SearchOptionType {
+  GENE = 'GENE',
+  VARIANT = 'VARIANT',
+  DRUG = 'DRUG',
+  TEXT = 'TEXT'
+}
 type SearchOptionProps = {
   search: string | undefined;
   type: SearchOptionType;
@@ -162,18 +167,16 @@ const DrugSearchOption: React.FunctionComponent<{
   );
 };
 
-export const SearchOption: React.FunctionComponent<
-  SearchOptionProps
-> = props => {
+export const SearchOption: React.FunctionComponent<SearchOptionProps> = props => {
   const searchKeyword = props.search ? props.search : '';
   return (
     <div className={classnames(styles.match)}>
-      <If condition={props.type === 'gene'}>
+      <If condition={props.type === SearchOptionType.GENE}>
         <Then>
           <GeneSearchOption search={searchKeyword} data={props.data} />
         </Then>
         <Else>
-          <If condition={props.type === 'variant'}>
+          <If condition={props.type === SearchOptionType.VARIANT}>
             <Then>
               <AlterationSearchOption
                 search={searchKeyword}
@@ -181,10 +184,17 @@ export const SearchOption: React.FunctionComponent<
               />
             </Then>
             <Else>
-              <If condition={props.type === 'drug'}>
+              <If condition={props.type === SearchOptionType.DRUG}>
                 <Then>
                   <DrugSearchOption search={searchKeyword} data={props.data} />
                 </Then>
+                <Else>
+                  <If condition={props.type === SearchOptionType.TEXT}>
+                    <Then>
+                      <span>{props.data.annotation}</span>
+                    </Then>
+                  </If>
+                </Else>
               </If>
             </Else>
           </If>
