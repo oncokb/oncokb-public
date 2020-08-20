@@ -2032,7 +2032,13 @@
           "type": "string"
         },
         "queryType": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "GENE",
+            "VARIANT",
+            "DRUG",
+            "TEXT"
+          ]
         },
         "tumorTypes": {
           "type": "array",
