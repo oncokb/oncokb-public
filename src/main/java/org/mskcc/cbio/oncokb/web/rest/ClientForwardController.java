@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.FrontendProperties;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +33,7 @@ public class ClientForwardController {
     public ResponseEntity<String> index() {
         Context context = new Context();
         context.setVariable("appProfile", applicationProperties.getProfile());
+        context.setVariable("frontConfig", applicationProperties.getFrontend());
         context.setVariable("publicToken", tokenProvider.getPubWebToken());
 
         HttpHeaders httpHeaders = new HttpHeaders();
