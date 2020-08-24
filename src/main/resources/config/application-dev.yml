@@ -166,3 +166,6 @@ application:
     tech-dev-address:
   public-website-api-threshold: 10
   academic-email-clarify-domain:
+  frontend:
+    sentry-project-id:
+    google-analytics-project-id:

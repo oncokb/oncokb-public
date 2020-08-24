@@ -175,3 +175,6 @@ application:
     contact-address:
     tech-dev-address:
   public-website-api-threshold: 2000
+  frontend:
+    sentry-project-id:
+    google-analytics-project-id:

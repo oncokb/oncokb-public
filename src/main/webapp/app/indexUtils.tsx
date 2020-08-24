@@ -1,5 +1,5 @@
 import { Storage } from 'react-jhipster';
-import { ONCOKB_PUBLIC_APP_PUBLIC_TOKEN } from 'app/config/constants';
+import { AppConfig } from 'app/appConfig';
 
 export const AUTH_UER_TOKEN_KEY = 'oncokb-user-token';
 export const AUTH_WEBSITE_TOKEN_KEY = 'oncokb-website-token';
@@ -18,9 +18,8 @@ export const getStoredToken = () => {
 
 export const assignPublicToken = () => {
   // Inject the public website token to storage
-  const pubWebToken = (window as any)[ONCOKB_PUBLIC_APP_PUBLIC_TOKEN];
-  if (pubWebToken) {
-    setPublicWebsiteToken(pubWebToken);
+  if (AppConfig.serverConfig.token) {
+    setPublicWebsiteToken(AppConfig.serverConfig.token);
   }
 };
 
