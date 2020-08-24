@@ -30,6 +30,7 @@ public class ApplicationProperties {
     private String tokenUsageCheck;
     private String tokenUsageCheckWhitelist;
     private int publicWebsiteApiThreshold;
+    private FrontendProperties frontend;
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -133,6 +134,14 @@ public class ApplicationProperties {
 
     public void setPublicWebsiteApiThreshold(int publicWebsiteApiThreshold) {
         this.publicWebsiteApiThreshold = publicWebsiteApiThreshold;
+    }
+
+    public FrontendProperties getFrontend() {
+        return frontend;
+    }
+
+    public void setFrontend(FrontendProperties frontend) {
+        this.frontend = frontend;
     }
 
     public List<String> getAcademicEmailClarifyDomains() {

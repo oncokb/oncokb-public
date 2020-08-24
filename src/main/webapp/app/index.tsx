@@ -21,15 +21,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
   assignPublicToken,
   getStoredToken,
-  AUTH_WEBSITE_TOKEN_KEY,
   getPublicWebsiteToken
 } from 'app/indexUtils';
-import {
-  ONCOKB_PUBLIC_APP_PROFILE,
-  ONCOKB_PUBLIC_APP_PUBLIC_TOKEN,
-  UNAUTHORIZED_ALLOWED_PATH
-} from 'app/config/constants';
+import { UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
 import _ from 'lodash';
+import { AppConfig, AppProfile } from 'app/appConfig';
 
 assignPublicToken();
 
@@ -73,8 +69,8 @@ superagent.Request.prototype.end = function(callback) {
     if (
       response &&
       response.statusCode === 401 &&
-      window[ONCOKB_PUBLIC_APP_PUBLIC_TOKEN] &&
-      window[ONCOKB_PUBLIC_APP_PROFILE] === 'PROD' &&
+      AppConfig.serverConfig.token &&
+      AppConfig.serverConfig.appProfile === AppProfile.PROD &&
       response.req &&
       !_.some(UNAUTHORIZED_ALLOWED_PATH, path =>
         window.location.pathname.endsWith(path)
@@ -94,24 +90,26 @@ superagent.Request.prototype.end = function(callback) {
         localStorage.setItem(STORAGE_KEY, `${newIncrement}`);
         window.location.reload();
       } else {
-        // Send an error to sentry
-        Sentry.captureException(
-          new Error(
-            `The user cannot reload the page with the newest public website token. The website has retried ${WEBSITE_RELOAD_TIMES_THRESHOLD} time(s). The token currently used is ${getPublicWebsiteToken()}`
-          )
-        );
+        if (AppConfig.serverConfig?.sentryProjectId) {
+          // Send an error to sentry
+          Sentry.captureException(
+            new Error(
+              `The user cannot reload the page with the newest public website token. The website has retried ${WEBSITE_RELOAD_TIMES_THRESHOLD} time(s). The token currently used is ${getPublicWebsiteToken()}`
+            )
+          );
+        }
       }
     }
     callback(error, response);
   });
 };
 
-// the dsn is supposed to be different for different installation,
-// but since the serverConfigs hasn't been defined yet, it is ok for now.
-Sentry.init({
-  dsn:
-    'https://387bb103057b40659f3044069b7c0517@o76124.ingest.sentry.io/1793966',
-  blacklistUrls: [new RegExp('.*localhost.*')]
-});
+if (AppConfig.serverConfig?.sentryProjectId) {
+  Sentry.init({
+    dsn: AppConfig.serverConfig.sentryProjectId,
+    blacklistUrls: [new RegExp('.*localhost.*')]
+  });
+}
+
 ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
 // registerServiceWorker();
