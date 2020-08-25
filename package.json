@@ -9,7 +9,7 @@
   ],
   "dependencies": {
     "@hot-loader/react-dom": "^16.8.6",
-    "@sentry/browser": "^5.7.1",
+    "@sentry/react": "^5.21.4",
     "@types/jest": "^24.0.11",
     "@types/jquery": "^3.3.29",
     "@types/lodash": "^4.14.123",
