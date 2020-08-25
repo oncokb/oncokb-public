@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.Constants.DAY_IN_SECONDS;
 import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
+import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES;
 
 /**
@@ -157,8 +158,32 @@ public class CronJobController {
         });
     }
 
+    /**
+     * {@code GET  /check-trial-accounts} : Check the status of trial accounts
+     */
+    @GetMapping(path = "/check-trial-accounts")
+    public void checkTrialAccounts() {
+        log.info("Started the cronjob to check the status of trial accounts");
+        final int DAYS_TO_CHECK = 3;
+        List<Token> tokens = tokenService
+            .findAllExpiresBeforeDate(Instant.now().plusSeconds(DAY_IN_SECONDS * DAYS_TO_CHECK))
+            .stream()
+            .filter(token -> !token.isRenewable() && token.getExpiration().isAfter(Instant.now()))
+            .filter(token -> {
+                // Do not include users that have been notified in the
+                return this.userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(token.getUser(), TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE, token.getExpiration().minusSeconds(DAY_IN_SECONDS * DAYS_TO_CHECK)).isEmpty();
+            })
+            .collect(Collectors.toList());
+        List<UserDTO> userDTOS = tokens
+            .stream()
+            .map(token -> userMapper.userToUserDTO(token.getUser()))
+            .collect(Collectors.toList());
+
+        mailService.sendTrialAccountExpiresMail(DAYS_TO_CHECK, userDTOS);
+    }
+
     private void tokenCheckByTime(int daysToExpire, Set<String> notifiedUserIds) {
-        int secondsToExpire = 60 * 60 * 24 * daysToExpire;
+        int secondsToExpire = DAY_IN_SECONDS * daysToExpire;
         List<Token> tokensToBeExpired = tokenService.findAllExpiresBeforeDate(Instant.now().plusSeconds(secondsToExpire));// Only return the users that token is about to expire and no email has been sent before.
         List<User> selectedUsers = new ArrayList<>();
 
