@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
+import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE;
 
 /**
  * Service for sending emails.
@@ -142,10 +143,9 @@ public class MailService {
     }
 
     /**
-     *
-     * @param user UserDTO
+     * @param user     UserDTO
      * @param mailType MailType
-     * @param days Days to expire, must more than one day.
+     * @param days     Days to expire, must more than one day.
      */
     @Async
     public void sendEmailDeclareEmailOwnership(UserDTO user, MailType mailType, int days) {
@@ -210,6 +210,30 @@ public class MailService {
     public void sendPasswordResetMail(UserDTO user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, MailType.PASSWORD_RESET);
+    }
+
+    @Async
+    public void sendTrialAccountExpiresMail(int expiresInDays, List<UserDTO> users) {
+        if (users == null || users.isEmpty()) {
+            return;
+        }
+        Context context = new Context(Locale.US);
+        context.setVariable("users", users);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        context.setVariable(EXPIRE_IN_DAYS, expiresInDays);
+
+        for (UserDTO user : users) {
+            addUserMailsRecord(user, TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE, applicationProperties.getEmailAddresses().getLicenseAddress(), "bot");
+        }
+
+        String content = templateEngine.process("mail/" + TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE.getTemplateName(), context);
+
+        try {
+            sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getLicenseAddress(), null, "The list of expiring trial accounts", content, null, false, true);
+            log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getTechDevAddress());
+        } catch (MailException | MessagingException e) {
+            log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
+        }
     }
 
     public MailType getIntakeFormMailType(LicenseType licenseType) {
