@@ -7,7 +7,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/react';
 
 import 'font-awesome/css/font-awesome.css';
 import './index.scss';
