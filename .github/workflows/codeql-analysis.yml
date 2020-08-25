@@ -3,9 +3,17 @@ name: "CodeQL"
 on:
   push:
     branches: [master, fda-mock, oncokb-demo, redirect-to-public]
+    paths-ignore:
+      - node
+      - node_modules
+      - target
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [master, fda-mock, oncokb-demo, redirect-to-public]
+    paths-ignore:
+      - node
+      - node_modules
+      - target
   schedule:
     - cron: '0 1 * * 0'
 
@@ -52,3 +60,4 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
+
