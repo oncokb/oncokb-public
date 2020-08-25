@@ -8,6 +8,8 @@ import * as ReactDOM from 'react-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import * as Sentry from '@sentry/react';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { Storage } from 'react-jhipster';
 
 import 'font-awesome/css/font-awesome.css';
 import './index.scss';
@@ -21,7 +23,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
   assignPublicToken,
   getStoredToken,
-  getPublicWebsiteToken
+  getPublicWebsiteToken,
+  AUTH_UER_TOKEN_KEY,
+  RECAPTCHA_KEY
 } from 'app/indexUtils';
 import { UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
 import _ from 'lodash';
@@ -110,6 +114,16 @@ if (AppConfig.serverConfig?.sentryProjectId) {
     blacklistUrls: [new RegExp('.*localhost.*')]
   });
 }
+
+ReactDOM.render(
+  <ReCAPTCHA
+    sitekey="6LcxRsMZAAAAAFYpXX6KAc9ASGSf8IptsIKehJby"
+    onChange={value => {
+      Storage.local.set(RECAPTCHA_KEY, value);
+    }}
+  />,
+  document.body
+);
 
 ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
 // registerServiceWorker();

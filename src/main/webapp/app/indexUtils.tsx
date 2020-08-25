@@ -3,6 +3,7 @@ import { AppConfig } from 'app/appConfig';
 
 export const AUTH_UER_TOKEN_KEY = 'oncokb-user-token';
 export const AUTH_WEBSITE_TOKEN_KEY = 'oncokb-website-token';
+export const RECAPTCHA_KEY = 'oncokb-website-recaptcha-token';
 
 export const getPublicWebsiteToken = () => {
   return Storage.session.get(AUTH_WEBSITE_TOKEN_KEY);

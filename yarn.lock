@@ -1329,6 +1329,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-google-recaptcha@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/react-google-recaptcha/-/react-google-recaptcha-2.1.0.tgz#49f544cdbaea1f27227297a8466b6f2d96a165fd"
+  integrity sha512-gOwTA3YYTr4gOvnbJf3ikYvVpvn/5oalxTGXk2ASo9wCspeoe86i2+cifBnxFsKw0QbBt0djj/C69vctmQUIIg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-highlight-words@^0.16.0":
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/@types/react-highlight-words/-/react-highlight-words-0.16.0.tgz#bcd67e9724fb5f070c955732f604068de5cbe30b"
@@ -12517,6 +12524,14 @@ rc-util@^4.0.4, rc-util@^4.15.3, rc-util@^4.4.0:
     react-lifecycles-compat "^3.0.4"
     shallowequal "^1.1.0"
 
+react-async-script@^1.1.1:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-async-script/-/react-async-script-1.2.0.tgz#ab9412a26f0b83f5e2e00de1d2befc9400834b21"
+  integrity sha512-bCpkbm9JiAuMGhkqoAiC0lLkb40DJ0HOEJIku+9JDjxX3Rcs+ztEOG13wbrOskt3n2DTrjshhaQ/iay+SnGg5Q==
+  dependencies:
+    hoist-non-react-statics "^3.3.0"
+    prop-types "^15.5.0"
+
 react-bootstrap@^1.0.0-beta.6:
   version "1.0.0-beta.16"
   resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-1.0.0-beta.16.tgz#42da0314aee6754494e478687b8e6953de1aaf62"
@@ -12580,6 +12595,14 @@ react-file-download@^0.3.2:
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/react-file-download/-/react-file-download-0.3.5.tgz#7a4e75874528806bfa53ddddd98b4da427d3a897"
   integrity sha1-ek51h0UogGv6U93d2YtNpCfTqJc=
+
+react-google-recaptcha@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-google-recaptcha/-/react-google-recaptcha-2.1.0.tgz#9f6f4954ce49c1dedabc2c532347321d892d0a16"
+  integrity sha512-K9jr7e0CWFigi8KxC3WPvNqZZ47df2RrMAta6KmRoE4RUi7Ys6NmNjytpXpg4HI/svmQJLKR+PncEPaNJ98DqQ==
+  dependencies:
+    prop-types "^15.5.0"
+    react-async-script "^1.1.1"
 
 react-highlight-words@^0.16.0:
   version "0.16.0"
