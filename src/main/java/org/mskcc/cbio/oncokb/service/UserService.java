@@ -398,7 +398,7 @@ public class UserService {
         if (tokens.isEmpty()) {
             tokenProvider.createToken(
                 userMapper.userDTOToUser(userDTO),
-                tokenValidDays.isPresent() ? Optional.of(Instant.now().plusSeconds(DAY_IN_SECONDS * tokenValidDays.get())) : Optional.empty(),
+                tokenValidDays.isPresent() ? Optional.of(Instant.now().plusSeconds(DAY_IN_SECONDS * (long) tokenValidDays.get())) : Optional.empty(),
                 tokenIsRenewable
             );
         }
