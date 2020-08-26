@@ -12,7 +12,7 @@ export const MskimpactLink: React.FunctionComponent<{}> = () => {
       </a>{' '}
       (
       <a
-        href="https://www.ncbi.nlm.nih.gov/pubmed/28481359"
+        href="https://pubmed.ncbi.nlm.nih.gov/28481359"
         target="_blank"
         rel="noopener noreferrer"
       >
