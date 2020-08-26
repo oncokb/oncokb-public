@@ -10,6 +10,10 @@ import { syncHistoryWithStore } from 'mobx-react-router';
 import { createBrowserHistory } from 'history';
 import DocumentTitle from 'react-document-title';
 import { DOCUMENT_TITLES } from 'app/config/constants';
+import { setRecaptchaToken } from 'app/indexUtils';
+import { observable, action } from 'mobx';
+import autobind from 'autobind-decorator';
+import Reaptcha from 'reaptcha';
 
 export type Stores = {
   appStore: AppStore;
@@ -27,8 +31,18 @@ class App extends React.Component {
     routing: new RouterStore()
   };
 
+  @observable getRecaptchaToken = false;
+
   constructor(props: IAppConfig) {
     super(props);
+    this.stores.windowStore.recaptchaRef = React.createRef();
+  }
+
+  @autobind
+  @action
+  onExecuteChange(value: string) {
+    this.getRecaptchaToken = true;
+    setRecaptchaToken(value);
   }
 
   componentWillUnmount(): void {
@@ -54,11 +68,24 @@ class App extends React.Component {
 
     return (
       <DocumentTitle title={DOCUMENT_TITLES.HOME}>
-        <Provider {...this.stores}>
-          <Router history={history}>
-            <Main {...this.stores} />
-          </Router>
-        </Provider>
+        <>
+          <Reaptcha
+            ref={this.stores.windowStore.recaptchaRef}
+            sitekey="6LcxRsMZAAAAAFYpXX6KAc9ASGSf8IptsIKehJby"
+            onVerify={this.onExecuteChange}
+            onRender={() =>
+              this.stores.windowStore.recaptchaRef.current.execute()
+            }
+            size="invisible"
+          />
+          {this.getRecaptchaToken && (
+            <Provider {...this.stores}>
+              <Router history={history}>
+                <Main {...this.stores} />
+              </Router>
+            </Provider>
+          )}
+        </>
       </DocumentTitle>
     );
   }

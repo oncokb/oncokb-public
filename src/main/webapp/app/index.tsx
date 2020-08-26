@@ -8,8 +8,6 @@ import * as ReactDOM from 'react-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import * as Sentry from '@sentry/react';
-import ReCAPTCHA from 'react-google-recaptcha';
-import { Storage } from 'react-jhipster';
 
 import 'font-awesome/css/font-awesome.css';
 import './index.scss';
@@ -25,7 +23,8 @@ import {
   getStoredToken,
   getPublicWebsiteToken,
   AUTH_UER_TOKEN_KEY,
-  RECAPTCHA_KEY
+  RECAPTCHA_KEY,
+  getRecaptchaToken
 } from 'app/indexUtils';
 import { UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
 import _ from 'lodash';
@@ -45,8 +44,13 @@ const WEBSITE_RELOAD_TIMES_THRESHOLD = 10;
 // @ts-ignore
 superagent.Request.prototype.query = function(queryParameters: any) {
   const token = getStoredToken();
+  const recaptchaToken = getRecaptchaToken();
   if (token) {
     this.set('Authorization', `Bearer ${token}`);
+  }
+
+  if (recaptchaToken) {
+    this.set('reCAPTCHA', `Bearer ${recaptchaToken}`);
   }
   return query.call(this, queryParameters);
 };
@@ -114,16 +118,6 @@ if (AppConfig.serverConfig?.sentryProjectId) {
     blacklistUrls: [new RegExp('.*localhost.*')]
   });
 }
-
-ReactDOM.render(
-  <ReCAPTCHA
-    sitekey="6LcxRsMZAAAAAFYpXX6KAc9ASGSf8IptsIKehJby"
-    onChange={value => {
-      Storage.local.set(RECAPTCHA_KEY, value);
-    }}
-  />,
-  document.body
-);
 
 ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
 // registerServiceWorker();

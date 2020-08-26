@@ -17,6 +17,14 @@ export const getStoredToken = () => {
   return Storage.local.get(AUTH_UER_TOKEN_KEY) || getPublicWebsiteToken();
 };
 
+export const setRecaptchaToken = (token: string) => {
+  return Storage.local.set(RECAPTCHA_KEY, token);
+};
+
+export const getRecaptchaToken = () => {
+  return Storage.local.get(RECAPTCHA_KEY);
+};
+
 export const assignPublicToken = () => {
   // Inject the public website token to storage
   if (AppConfig.serverConfig.token) {
