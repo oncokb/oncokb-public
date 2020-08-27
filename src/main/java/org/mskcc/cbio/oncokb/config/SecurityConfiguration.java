@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.config;
 
+import com.github.mkopylec.recaptcha.validation.RecaptchaValidator;
 import org.mskcc.cbio.oncokb.security.*;
 import org.mskcc.cbio.oncokb.security.jwt.*;
 
@@ -28,11 +29,13 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
+    private final RecaptchaValidator recaptchaValidator;
 
     private final CorsFilter corsFilter;
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(TokenProvider tokenProvider, CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(RecaptchaValidator recaptchaValidator, TokenProvider tokenProvider, CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
+        this.recaptchaValidator = recaptchaValidator;
         this.tokenProvider = tokenProvider;
         this.corsFilter = corsFilter;
         this.problemSupport = problemSupport;
@@ -67,7 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(problemSupport)
         .and()
             .headers()
-            .contentSecurityPolicy("default-src 'self'; frame-src 'self' https://*.oncokb.org https://*.youtube.com https://*.bilibili.com https://*.gitbook.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com; font-src 'self' data:; connect-src 'self' https://*")
+            .contentSecurityPolicy("default-src 'self'; frame-src 'self' https://*.google.com https://recaptcha.net https://*.oncokb.org https://*.youtube.com https://*.bilibili.com https://*.gitbook.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com www.google-analytics.com https://recaptcha.net https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com; font-src 'self' data:; connect-src 'self' https://*")
         .and()
             .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE)
         .and()
@@ -133,6 +136,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //    }
 
     private UUIDConfigurer securityConfigurerAdapter() {
-        return new UUIDConfigurer(tokenProvider);
+        return new UUIDConfigurer(tokenProvider, recaptchaValidator);
     }
 }
