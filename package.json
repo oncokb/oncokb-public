@@ -43,7 +43,7 @@
     "moment": "2.24.0",
     "oncokb-styles": "^0.1.1",
     "pluralize": "^8.0.0",
-    "query-string": "^6.8.3",
+    "query-string": "^6.13.1",
     "react": "16.12.0",
     "react-bootstrap": "^1.0.0-beta.6",
     "react-copy-to-clipboard": "^5.0.1",
