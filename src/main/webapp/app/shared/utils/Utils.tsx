@@ -98,7 +98,9 @@ export function getDrugNameFromTreatment(drug: TreatmentDrug) {
 export function getTreatmentNameFromEvidence(evidence: Evidence) {
   return evidence.treatments
     .map(treatment =>
-      treatment.drugs.map(drug => getDrugNameFromTreatment(drug)).join(' + ')
+      _.sortBy(treatment.drugs, 'priority')
+        .map(drug => getDrugNameFromTreatment(drug))
+        .join(' + ')
     )
     .join(', ');
 }
