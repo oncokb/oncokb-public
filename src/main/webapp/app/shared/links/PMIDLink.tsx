@@ -5,7 +5,7 @@ export const PMIDLink: React.FunctionComponent<{ pmids: string }> = props => {
     <span>
       PMID:{' '}
       <a
-        href={`https://www.ncbi.nlm.nih.gov/pubmed/${props.pmids}`}
+        href={`https://pubmed.ncbi.nlm.nih.gov/?term=${props.pmids}`}
         target="_blank"
         rel="noopener noreferrer"
         style={{ whiteSpace: 'nowrap' }}
