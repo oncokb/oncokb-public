@@ -30,12 +30,17 @@ public class CacheConfiguration {
         Config config = new Config();
         if (applicationProperties.getRedis().getType().equals(RedisType.SINGLE.getType())) {
             config.useSingleServer()
-                .setAddress(applicationProperties.getRedis().getSingleCache().getAddress())
+                .setAddress(applicationProperties.getRedis().getAddress())
                 .setPassword(applicationProperties.getRedis().getPassword());
-        } else if (applicationProperties.getRedis().getType().equals(RedisType.MASTER_SLAVE.getType())) {
-            config.useMasterSlaveServers()
-                .setMasterAddress(applicationProperties.getRedis().getMasterSlaveCache().getMasterAddress())
-                .addSlaveAddress(applicationProperties.getRedis().getMasterSlaveCache().getSlaveAddress())
+        } else if (applicationProperties.getRedis().getType().equals(RedisType.SENTINEL.getType())) {
+            config.useSentinelServers()
+                .setMasterName(applicationProperties.getRedis().getSentinelMasterName())
+                .setCheckSentinelsList(false)
+                .addSentinelAddress(
+                    applicationProperties
+                        .getRedis()
+                        .getAddress()
+                )
                 .setPassword(applicationProperties.getRedis().getPassword());
         } else {
             throw new Exception("The redis type " + applicationProperties.getRedis().getType() + " is not supported. Only single and master-slave are supported.");
