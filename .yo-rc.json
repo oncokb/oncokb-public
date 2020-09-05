@@ -11,7 +11,7 @@
     "serverPort": "9090",
     "authenticationType": "jwt",
     "cacheProvider": "redis",
-    "enableHibernateCache": true,
+    "enableHibernateCache": false,
     "websocket": false,
     "databaseType": "sql",
     "devDatabaseType": "mysql",

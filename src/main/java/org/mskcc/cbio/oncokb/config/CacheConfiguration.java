@@ -2,11 +2,17 @@ package org.mskcc.cbio.oncokb.config;
 
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.RedisType;
+import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
+import org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver;
+import org.mskcc.cbio.oncokb.config.cache.UserCacheResolver;
+import org.redisson.api.RedissonClient;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.redisson.Redisson;
 import org.redisson.config.Config;
 import org.redisson.jcache.configuration.RedissonConfiguration;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+import org.springframework.cache.interceptor.CacheResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
@@ -23,10 +29,8 @@ import io.github.jhipster.config.JHipsterProperties;
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
-
     @Bean
-    public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties, ApplicationProperties applicationProperties) throws Exception {
-        MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
+    public RedissonClient redissonClient(ApplicationProperties applicationProperties) throws Exception {
         Config config = new Config();
         if (applicationProperties.getRedis().getType().equals(RedisType.SINGLE.getType())) {
             config.useSingleServer()
@@ -45,9 +49,15 @@ public class CacheConfiguration {
         } else {
             throw new Exception("The redis type " + applicationProperties.getRedis().getType() + " is not supported. Only single and master-slave are supported.");
         }
+        return Redisson.create(config);
+    }
+
+    @Bean
+    public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties, RedissonClient redissonClient) {
+        MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
         jcacheConfig.setStatisticsEnabled(true);
         jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
-        return RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
+        return RedissonConfiguration.fromInstance(redissonClient, jcacheConfig);
     }
 
     @Bean
@@ -56,27 +66,32 @@ public class CacheConfiguration {
     }
 
     @Bean
-    public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
+    public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration, CacheNameResolver cacheNameResolver, ApplicationProperties applicationProperties) {
         return cm -> {
-            createCache(cm, org.mskcc.cbio.oncokb.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
-            createCache(cm, org.mskcc.cbio.oncokb.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
-            createCache(cm, org.mskcc.cbio.oncokb.domain.User.class.getName(), jcacheConfiguration);
-            createCache(cm, org.mskcc.cbio.oncokb.domain.Authority.class.getName(), jcacheConfiguration);
-            createCache(cm, org.mskcc.cbio.oncokb.domain.UserDetails.class.getName(), jcacheConfiguration);
-            createCache(cm, org.mskcc.cbio.oncokb.domain.Token.class.getName(), jcacheConfiguration);
-            createCache(cm, org.mskcc.cbio.oncokb.repository.TokenRepository.TOKEN_BY_UUID_CACHE, jcacheConfiguration);
-            createCache(cm, org.mskcc.cbio.oncokb.repository.TokenRepository.TOKENS_BY_USER_CACHE, jcacheConfiguration);
-//            createCache(cm, org.mskcc.cbio.oncokb.domain.TokenStats.class.getName(), jcacheConfiguration);
-            createCache(cm, org.mskcc.cbio.oncokb.domain.User.class.getName() + ".authorities", jcacheConfiguration);
-            createCache(cm, org.mskcc.cbio.oncokb.domain.UserMails.class.getName(), jcacheConfiguration);
+            createCache(cm, org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE, jcacheConfiguration, cacheNameResolver);
+            createCache(cm, org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE, jcacheConfiguration, cacheNameResolver);
+
+            createCache(cm, org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKEN_BY_UUID_CACHE, jcacheConfiguration, cacheNameResolver);
+            createCache(cm, org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKENS_BY_USER_CACHE, jcacheConfiguration, cacheNameResolver);
             // jhipster-needle-redis-add-entry
         };
     }
 
-    private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
+    @Bean
+    public CacheResolver tokenCacheResolver(CacheManager cm, ApplicationProperties applicationProperties, CacheNameResolver cacheNameResolver) {
+        return new TokenCacheResolver(cm, applicationProperties, cacheNameResolver);
+    }
+
+
+    @Bean
+    public CacheResolver userCacheResolver(CacheManager cm, ApplicationProperties applicationProperties, CacheNameResolver cacheNameResolver) {
+        return new UserCacheResolver(cm, applicationProperties, cacheNameResolver);
+    }
+
+    private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration, CacheNameResolver cacheNameResolver) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
         if (cache == null) {
-            cm.createCache(cacheName, jcacheConfiguration);
+            cm.createCache(cacheNameResolver.getCacheName(cacheName), jcacheConfiguration);
         }
     }
 
