@@ -34,7 +34,7 @@ interface HgvsgPageProps extends RouteComponentProps<MatchParams> {
 @observer
 export default class HgvsgPage extends React.Component<HgvsgPageProps> {
   @observable tumorType = '';
-  @observable refGenome = REFERENCE_GENOME.GRCH37;
+  @observable refGenome = REFERENCE_GENOME.GRCh37;
 
   private store: AnnotationStore;
   readonly reactions: IReactionDisposer[] = [];

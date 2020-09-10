@@ -36,7 +36,7 @@ export type Query = {
 
         'proteinStart': number
 
-        'referenceGenome': "GRCH37" | "GRCH38"
+        'referenceGenome': "GRCh37" | "GRCh38"
 
         'svType': "DELETION" | "TRANSLOCATION" | "DUPLICATION" | "INSERTION" | "INVERSION" | "FUSION" | "UNKNOWN"
 
@@ -92,7 +92,7 @@ export type Alteration = {
 
         'refResidues': string
 
-        'referenceGenomes': Array < "GRCH37" | "GRCH38" >
+        'referenceGenomes': Array < "GRCh37" | "GRCh38" >
 
         'variantResidues': string
 
@@ -1487,7 +1487,7 @@ export default class OncoKbPrivateAPI {
     };
     validateVariantExampleGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
-        'referenceGenome' ? : "GRCH37" | "GRCH38",
+        'referenceGenome' ? : string,
         'variant' ? : string,
         'examples' ? : string,
         $queryParameters ? : any
@@ -1510,13 +1510,13 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#validateVariantExampleGetUsingGET
      * @param {} hugoSymbol - Gene Hugo Symbol
-     * @param {} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
+     * @param {} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {} variant - The OncoKB variant
      * @param {} examples - The genomic examples.
      */
     validateVariantExampleGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol' ? : string,
-        'referenceGenome' ? : "GRCH37" | "GRCH38",
+        'referenceGenome' ? : string,
         'variant' ? : string,
         'examples' ? : string,
         $queryParameters ? : any,
@@ -1567,13 +1567,13 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#validateVariantExampleGetUsingGET
      * @param {} hugoSymbol - Gene Hugo Symbol
-     * @param {} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
+     * @param {} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {} variant - The OncoKB variant
      * @param {} examples - The genomic examples.
      */
     validateVariantExampleGetUsingGET(parameters: {
         'hugoSymbol' ? : string,
-        'referenceGenome' ? : "GRCH37" | "GRCH38",
+        'referenceGenome' ? : string,
         'variant' ? : string,
         'examples' ? : string,
         $queryParameters ? : any,
@@ -2427,7 +2427,7 @@ export default class OncoKbPrivateAPI {
     utilVariantAnnotationGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
-        'referenceGenome' ? : "GRCH37" | "GRCH38",
+        'referenceGenome' ? : string,
         'alteration' ? : string,
         'hgvsg' ? : string,
         'tumorType' ? : string,
@@ -2475,7 +2475,7 @@ export default class OncoKbPrivateAPI {
      * @name OncoKbPrivateAPI#utilVariantAnnotationGetUsingGET
      * @param {string} hugoSymbol - hugoSymbol
      * @param {integer} entrezGeneId - entrezGeneId
-     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} alteration - Alteration
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
      * @param {string} tumorType - OncoTree tumor type name/main type/code
@@ -2483,7 +2483,7 @@ export default class OncoKbPrivateAPI {
     utilVariantAnnotationGetUsingGETWithHttpInfo(parameters: {
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
-        'referenceGenome' ? : "GRCH37" | "GRCH38",
+        'referenceGenome' ? : string,
         'alteration' ? : string,
         'hgvsg' ? : string,
         'tumorType' ? : string,
@@ -2544,7 +2544,7 @@ export default class OncoKbPrivateAPI {
      * @name OncoKbPrivateAPI#utilVariantAnnotationGetUsingGET
      * @param {string} hugoSymbol - hugoSymbol
      * @param {integer} entrezGeneId - entrezGeneId
-     * @param {string} referenceGenome - Reference genome, either GRCH37 or GRCH38. The default is GRCH37
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} alteration - Alteration
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
      * @param {string} tumorType - OncoTree tumor type name/main type/code
@@ -2552,7 +2552,7 @@ export default class OncoKbPrivateAPI {
     utilVariantAnnotationGetUsingGET(parameters: {
         'hugoSymbol' ? : string,
         'entrezGeneId' ? : number,
-        'referenceGenome' ? : "GRCH37" | "GRCH38",
+        'referenceGenome' ? : string,
         'alteration' ? : string,
         'hgvsg' ? : string,
         'tumorType' ? : string,

@@ -30,7 +30,7 @@ import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
   DEFAULT_GENE,
-  REFERENCE_GENOME_NAME,
+  REFERENCE_GENOME,
   SM_TABLE_FIXED_HEIGHT,
   TABLE_COLUMN_KEY,
   THRESHOLD_TABLE_FIXED_HEIGHT
@@ -60,6 +60,7 @@ import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { Linkout } from 'app/shared/links/Linkout';
 import { ReferenceGenomeInfo } from './ReferenceGenomeInfo';
 import WithSeparator from 'react-with-separator';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -176,7 +177,7 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   if (gene.grch37Isoform || gene.grch37RefSeq) {
     additionalInfo.push(
       <ReferenceGenomeInfo
-        referenceGenomeName={REFERENCE_GENOME_NAME.GRCH37}
+        referenceGenomeName={REFERENCE_GENOME.GRCh37}
         isoform={gene.grch37Isoform}
         refseq={gene.grch37RefSeq}
       />
@@ -185,7 +186,7 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   if (gene.grch38Isoform || gene.grch38RefSeq) {
     additionalInfo.push(
       <ReferenceGenomeInfo
-        referenceGenomeName={REFERENCE_GENOME_NAME.GRCH38}
+        referenceGenomeName={REFERENCE_GENOME.GRCh38}
         isoform={gene.grch38Isoform}
         refseq={gene.grch38RefSeq}
       />
@@ -265,10 +266,20 @@ export default class GenePage extends React.Component<GenePageProps> {
           filterByKeyword(data.variant.name, keyword),
         Cell: (props: { original: ClinicalVariant }) => {
           return (
-            <AlterationPageLink
-              hugoSymbol={this.store.hugoSymbol}
-              alteration={props.original.variant.name}
-            />
+            <>
+              <AlterationPageLink
+                hugoSymbol={this.store.hugoSymbol}
+                alteration={props.original.variant.name}
+              />
+              {props.original.variant.referenceGenomes.length === 1 ? (
+                <InfoIcon
+                  overlay={`Only in ${props.original.variant.referenceGenomes[0]}`}
+                  placement="top"
+                  className="ml-1"
+                  style={{ fontSize: '0.7rem' }}
+                />
+              ) : null}
+            </>
           );
         }
       },
@@ -326,10 +337,20 @@ export default class GenePage extends React.Component<GenePageProps> {
           filterByKeyword(data.variant.name, keyword),
         Cell: (props: { original: BiologicalVariant }) => {
           return (
-            <AlterationPageLink
-              hugoSymbol={this.store.hugoSymbol}
-              alteration={props.original.variant.name}
-            />
+            <>
+              <AlterationPageLink
+                hugoSymbol={this.store.hugoSymbol}
+                alteration={props.original.variant.name}
+              />
+              {props.original.variant.referenceGenomes.length === 1 ? (
+                <InfoIcon
+                  overlay={`Only in ${props.original.variant.referenceGenomes[0]}`}
+                  placement="top"
+                  className="ml-1"
+                  style={{ fontSize: '0.7rem' }}
+                />
+              ) : null}
+            </>
           );
         }
       },
