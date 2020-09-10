@@ -105,6 +105,14 @@
             ]
           },
           {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
+          },
+          {
             "name": "tumorType",
             "in": "query",
             "description": "OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
@@ -205,14 +213,10 @@
           {
             "name": "referenceGenome",
             "in": "query",
-            "description": "Reference genome, either GRCH37 or GRCH38. The default is GRCH37",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
             "required": false,
             "type": "string",
-            "default": "GRCH37",
-            "enum": [
-              "GRCH37",
-              "GRCH38"
-            ]
+            "default": "GRCh37"
           },
           {
             "name": "tumorType",
@@ -315,14 +319,10 @@
           {
             "name": "referenceGenome",
             "in": "query",
-            "description": "Reference genome, either GRCH37 or GRCH38. The default is GRCH37",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
             "required": false,
             "type": "string",
-            "default": "GRCH37",
-            "enum": [
-              "GRCH37",
-              "GRCH38"
-            ]
+            "default": "GRCh37"
           },
           {
             "name": "tumorType",
@@ -440,14 +440,10 @@
           {
             "name": "referenceGenome",
             "in": "query",
-            "description": "Reference genome, either GRCH37 or GRCH38. The default is GRCH37",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
             "required": false,
             "type": "string",
-            "default": "GRCH37",
-            "enum": [
-              "GRCH37",
-              "GRCH38"
-            ]
+            "default": "GRCh37"
           },
           {
             "name": "consequence",
@@ -627,6 +623,14 @@
             "required": true,
             "type": "boolean",
             "default": false
+          },
+          {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
           },
           {
             "name": "tumorType",
@@ -1465,14 +1469,10 @@
           {
             "name": "referenceGenome",
             "in": "query",
-            "description": "Reference genome, either GRCH37 or GRCH38. The default is GRCH37",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
             "required": false,
             "type": "string",
-            "default": "GRCH37",
-            "enum": [
-              "GRCH37",
-              "GRCH38"
-            ]
+            "default": "GRCh37"
           },
           {
             "name": "hugoSymbol",
@@ -2100,14 +2100,10 @@
           {
             "name": "referenceGenome",
             "in": "query",
-            "description": "Reference genome, either GRCH37 or GRCH38. The default is GRCH37",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
             "required": false,
             "type": "string",
-            "default": "GRCH37",
-            "enum": [
-              "GRCH37",
-              "GRCH38"
-            ]
+            "default": "GRCh37"
           },
           {
             "name": "fields",
@@ -2217,8 +2213,8 @@
         "referenceGenome": {
           "type": "string",
           "enum": [
-            "GRCH37",
-            "GRCH38"
+            "GRCh37",
+            "GRCh38"
           ]
         },
         "tumorType": {
@@ -2274,8 +2270,8 @@
         "referenceGenome": {
           "type": "string",
           "enum": [
-            "GRCH37",
-            "GRCH38"
+            "GRCh37",
+            "GRCh38"
           ]
         },
         "svType": {
@@ -2370,8 +2366,8 @@
           "items": {
             "type": "string",
             "enum": [
-              "GRCH37",
-              "GRCH38"
+              "GRCh37",
+              "GRCh38"
             ]
           }
         },
@@ -2818,8 +2814,8 @@
         "referenceGenome": {
           "type": "string",
           "enum": [
-            "GRCH37",
-            "GRCH38"
+            "GRCh37",
+            "GRCh38"
           ]
         },
         "structuralVariantType": {
@@ -3450,8 +3446,8 @@
         "referenceGenome": {
           "type": "string",
           "enum": [
-            "GRCH37",
-            "GRCH38"
+            "GRCh37",
+            "GRCh38"
           ]
         },
         "tumorType": {
@@ -3693,8 +3689,8 @@
         "referenceGenome": {
           "type": "string",
           "enum": [
-            "GRCH37",
-            "GRCH38"
+            "GRCh37",
+            "GRCh38"
           ]
         },
         "variant": {
@@ -3764,8 +3760,8 @@
         "referenceGenome": {
           "type": "string",
           "enum": [
-            "GRCH37",
-            "GRCH38"
+            "GRCh37",
+            "GRCh38"
           ]
         },
         "tumorType": {
@@ -3809,8 +3805,8 @@
         "referenceGenome": {
           "type": "string",
           "enum": [
-            "GRCH37",
-            "GRCH38"
+            "GRCh37",
+            "GRCh38"
           ]
         },
         "tumorType": {

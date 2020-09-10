@@ -522,10 +522,6 @@ export const REGEXP_LINK: { [key: string]: string } = {
 };
 
 export enum REFERENCE_GENOME {
-  GRCH37 = 'GRCH37',
-  GRCH38 = 'GRCH38'
-}
-export enum REFERENCE_GENOME_NAME {
-  GRCH37 = 'GRCh37',
-  GRCH38 = 'GRCh38'
+  GRCh37 = 'GRCh37',
+  GRCh38 = 'GRCh38'
 }

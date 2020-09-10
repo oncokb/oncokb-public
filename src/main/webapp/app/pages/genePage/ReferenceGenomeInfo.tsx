@@ -2,10 +2,10 @@ import React from 'react';
 
 import styles from './GenePage.module.scss';
 import { Linkout } from 'app/shared/links/Linkout';
-import { REFERENCE_GENOME_NAME } from 'app/config/constants';
+import { REFERENCE_GENOME } from 'app/config/constants';
 
 export const ReferenceGenomeInfo: React.FunctionComponent<{
-  referenceGenomeName: REFERENCE_GENOME_NAME;
+  referenceGenomeName: REFERENCE_GENOME;
   isoform?: string;
   refseq?: string;
 }> = props => {

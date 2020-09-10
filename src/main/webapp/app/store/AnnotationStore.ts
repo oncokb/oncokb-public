@@ -70,7 +70,7 @@ export class AnnotationStore {
   @observable alterationQuery: string;
   @observable tumorTypeQuery: string;
   @observable hgvsgQuery: string;
-  @observable referenceGenomeQuery: REFERENCE_GENOME = REFERENCE_GENOME.GRCH37;
+  @observable referenceGenomeQuery: REFERENCE_GENOME = REFERENCE_GENOME.GRCh37;
 
   @computed get cancerTypeFilter() {
     return this.mutationMapperStore.result

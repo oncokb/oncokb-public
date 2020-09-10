@@ -564,14 +564,10 @@
           {
             "in": "body",
             "name": "referenceGenome",
-            "description": "Reference genome, either GRCH37 or GRCH38. The default is GRCH37",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
             "required": false,
             "schema": {
-              "type": "string",
-              "enum": [
-                "GRCH37",
-                "GRCH38"
-              ]
+              "type": "string"
             }
           },
           {
@@ -1136,14 +1132,10 @@
           {
             "name": "referenceGenome",
             "in": "query",
-            "description": "Reference genome, either GRCH37 or GRCH38. The default is GRCH37",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
             "required": false,
             "type": "string",
-            "default": "GRCH37",
-            "enum": [
-              "GRCH37",
-              "GRCH38"
-            ]
+            "default": "GRCh37"
           },
           {
             "name": "alteration",
@@ -1266,8 +1258,8 @@
         "referenceGenome": {
           "type": "string",
           "enum": [
-            "GRCH37",
-            "GRCH38"
+            "GRCh37",
+            "GRCh38"
           ]
         },
         "svType": {
@@ -1373,8 +1365,8 @@
           "items": {
             "type": "string",
             "enum": [
-              "GRCH37",
-              "GRCH38"
+              "GRCh37",
+              "GRCh38"
             ]
           }
         },

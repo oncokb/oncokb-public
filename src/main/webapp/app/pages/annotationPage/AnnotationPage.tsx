@@ -298,7 +298,6 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
               <InfoIcon
                 overlay="For tumor type specific information, please select a tumor type from the dropdown"
                 placement="top"
-                style={{ fontSize: '0.6rem' }}
               />
             </div>
           </Col>
