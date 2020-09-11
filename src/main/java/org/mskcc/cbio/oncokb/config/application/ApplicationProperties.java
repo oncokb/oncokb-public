@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
+    private String name;
     private String apiProxyUrl;
     private String userRegistrationWebhook;
     private ProjectProfile profile;
@@ -31,6 +32,14 @@ public class ApplicationProperties {
     private String tokenUsageCheckWhitelist;
     private int publicWebsiteApiThreshold;
     private FrontendProperties frontend;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getApiProxyUrl() {
         return apiProxyUrl;

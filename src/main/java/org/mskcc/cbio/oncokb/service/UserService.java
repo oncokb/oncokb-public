@@ -37,6 +37,8 @@ import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.Constants.DAY_IN_SECONDS;
 import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE;
 
 /**
  * Service class for managing users.
@@ -432,9 +434,9 @@ public class UserService {
 
 
     private void clearUserCaches(User user) {
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
+        Objects.requireNonNull(cacheManager.getCache(USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         if (user.getEmail() != null) {
-            Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+            Objects.requireNonNull(cacheManager.getCache(USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
         }
     }
 }

@@ -53,7 +53,7 @@ spring:
     properties:
       hibernate.id.new_generator_mappings: true
       hibernate.connection.provider_disables_autocommit: true
-      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
   liquibase:
@@ -145,6 +145,7 @@ sentry:
 # ===================================================================
 
 application:
+  name: local
   profile: dev
   api-proxy-url: 'http://localhost:8888'
   sitemap-enabled: false

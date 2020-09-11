@@ -17,6 +17,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKENS_BY_USER_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKEN_BY_UUID_CACHE;
+
 /**
  * Service Implementation for managing {@link Token}.
  */
@@ -127,7 +130,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     private void clearTokenCaches(Token token) {
-        Objects.requireNonNull(cacheManager.getCache(TokenRepository.TOKEN_BY_UUID_CACHE)).evict(token.getToken());
-        Objects.requireNonNull(cacheManager.getCache(TokenRepository.TOKENS_BY_USER_CACHE)).evict(token.getUser());
+        Objects.requireNonNull(cacheManager.getCache(TOKEN_BY_UUID_CACHE)).evict(token.getToken());
+        Objects.requireNonNull(cacheManager.getCache(TOKENS_BY_USER_CACHE)).evict(token.getUser());
     }
 }
