@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
+import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.TokenRepository;
@@ -33,10 +34,13 @@ public class TokenServiceImpl implements TokenService {
 
     private final CacheManager cacheManager;
 
+    private final CacheNameResolver cacheNameResolver;
 
-    public TokenServiceImpl(TokenRepository tokenRepository, CacheManager cacheManager) {
+
+    public TokenServiceImpl(TokenRepository tokenRepository, CacheManager cacheManager,  CacheNameResolver cacheNameResolver) {
         this.tokenRepository = tokenRepository;
         this.cacheManager = cacheManager;
+        this.cacheNameResolver = cacheNameResolver;
     }
 
     /**
@@ -130,7 +134,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     private void clearTokenCaches(Token token) {
-        Objects.requireNonNull(cacheManager.getCache(TOKEN_BY_UUID_CACHE)).evict(token.getToken());
-        Objects.requireNonNull(cacheManager.getCache(TOKENS_BY_USER_CACHE)).evict(token.getUser());
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(TOKEN_BY_UUID_CACHE))).evict(token.getToken());
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(TOKENS_BY_USER_CACHE))).evict(token.getUser());
     }
 }
