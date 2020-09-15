@@ -52,6 +52,9 @@ export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
 export const API_DOCUMENT_LINK = 'https://api.oncokb.org/oncokb-website/api';
 export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
+export const FACULTY_COI_WEBSITE_LINK = 'https://www.mskcc.org/disclosures';
+export const NONE_FACULTY_COI_WEBSITE_LINK =
+  'https://www.mskcc.org/disclosures';
 export const WEBINAR_LINKS_05072020 = (
   <span>
     <Linkout
