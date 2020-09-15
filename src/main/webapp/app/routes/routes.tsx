@@ -10,7 +10,7 @@ import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { TermsPage } from 'app/pages/TermsPage';
-import { TeamPage } from 'app/pages/TeamPage';
+import { TeamPage } from 'app/pages/teamPage/TeamPage';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
 import ActionableGenesPage from 'app/pages/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
