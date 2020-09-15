@@ -110,6 +110,135 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '08282020': {
+    priorityNews: [
+      <span>
+        Updated therapeutic implications - 4 new associations
+        <Row>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Tumor Type</th>
+                <th>Drug</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>KIT</td>
+                <td>Select Oncogenic Mutations</td>
+                <td>Gastrointestinal Stromal Tumors</td>
+                <td>Ripretinib</td>
+                <td>
+                  <Linkout
+                    link={
+                      'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-ripretinib-advanced-gastrointestinal-stromal-tumor'
+                    }
+                  >
+                    FDA-approval of Ripretinib
+                  </Linkout>
+                  ; <PMIDLink pmids={'32511981'} />
+                </td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>BRAF</td>
+                <td>V600</td>
+                <td>Melanoma</td>
+                <td>Vemurafenib + Cobimetinib + Atezulizumab</td>
+                <td>
+                  <Linkout
+                    link={
+                      'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-atezolizumab-braf-v600-unresectable-or-metastatic-melanoma?utm_campaign=Oncology%207-31-2020%20atezolizumab&utm_medium=email&utm_source=Eloqua&elqTrackId=38552F7B5C55F017B66C6336EE62E571&elq=83c8ebb4efca420989e612b8413456fe&elqaid=13603&elqat=1&elqCampaignId=11643'
+                    }
+                  >
+                    FDA-approval of Atezulizumab
+                  </Linkout>
+                  ; <PMIDLink pmids={'32534646'} />
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={3}>2</td>
+                <td rowSpan={3}>PDGFRA</td>
+                <td rowSpan={3}>Oncogenic Mutations</td>
+                <td rowSpan={3}>Gastrointestinal Stromal Tumors</td>
+                <td>Ripretinib</td>
+                <td>
+                  Listing in 2.2020 Soft Tissue Sarcoma NCCN;{' '}
+                  <PMIDLink pmids={'32511981'} />
+                </td>
+              </tr>
+              <tr>
+                <td>Regorafenib</td>
+                <td>
+                  Listing in 2.2020 Soft Tissue Sarcoma NCCN;{' '}
+                  <PMIDLink pmids={'23177515, 27371698'} />
+                </td>
+              </tr>
+              <tr>
+                <td>Sunitinib</td>
+                <td>
+                  Listing in 2.2020 Soft Tissue Sarcoma NCCN;{' '}
+                  <PMIDLink pmids={'17046465, 19282169, 25641662'} />
+                </td>
+              </tr>
+              <tr>
+                <td>3A</td>
+                <td>BRCA1, BRCA2</td>
+                <td>Oncogenic Mutations</td>
+                <td>Pancreatic Adenocarcinoma</td>
+                <td>Olaparib</td>
+                <td>
+                  <Linkout
+                    link={
+                      'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olaparib-gbrcam-metastatic-pancreatic-adenocarcinoma'
+                    }
+                  >
+                    FDA-approval of Olaparib in the germline setting
+                  </Linkout>
+                  ; <PMIDLink pmids={'31157963, 32444418'} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>
+    ]
+  },
+  '07232020': {
+    updatedImplication: [
+      [
+        '1',
+        'Other Biomarkers',
+        'Tumor Mutational Burden - High',
+        'All Solid Tumors',
+        'Pembrolizumab',
+        <span>
+          Abstract:{' '}
+          <Linkout
+            link={
+              'https://www.sciencedirect.com/science/article/pii/S0923753419594042'
+            }
+          >
+            Marabelle et al. Abstract# 1192O, ESMO 2019
+          </Linkout>
+          ,{' '}
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-pembrolizumab-adults-and-children-tmb-h-solid-tumors'
+            }
+          >
+            FDA-approval of Pembrolizumab
+          </Linkout>
+        </span>
+      ]
+    ],
+    newlyAddedGenes: ['LARP4B', 'DAZAP1', 'KLF3', 'ZNF750', 'MEF2D']
+  },
   '07092020': {
     updatedImplication: [
       [

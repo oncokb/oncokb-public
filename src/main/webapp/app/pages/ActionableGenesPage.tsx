@@ -675,6 +675,7 @@ export default class ActionableGenesPage extends React.Component<
                   data={this.filteredTreatments}
                   loading={this.relevantTumorTypes.isPending}
                   columns={this.columns}
+                  minRows={Math.round(LG_TABLE_FIXED_HEIGHT / 36) - 1}
                   pageSize={
                     this.filteredTreatments.length === 0
                       ? 1

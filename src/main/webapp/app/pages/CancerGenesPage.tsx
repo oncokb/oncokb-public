@@ -90,7 +90,7 @@ export default class CancerGenesPage extends React.Component<{
       ),
       accessor: 'oncokbAnnotated',
       style: { textAlign: 'center' },
-      minWidth: 100,
+      minWidth: 80,
       sortMethod: defaultSortMethod,
       Cell(props: { original: ExtendCancerGene }) {
         return props.original.oncokbAnnotated ? (
@@ -180,6 +180,7 @@ export default class CancerGenesPage extends React.Component<{
       ),
       style: { textAlign: 'center' },
       accessor: 'mSKHeme',
+      minWidth: 120,
       sortable: true,
       Cell(props: { original: ExtendCancerGene }) {
         return props.original.mSKHeme ? <i className="fa fa-check" /> : '';
@@ -217,7 +218,7 @@ export default class CancerGenesPage extends React.Component<{
       ),
       style: { textAlign: 'center' },
       accessor: 'foundation',
-      minWidth: 150,
+      minWidth: 120,
       sortable: true,
       Cell(props: { original: ExtendCancerGene }) {
         return props.original.foundation ? <i className="fa fa-check" /> : '';
@@ -253,7 +254,7 @@ export default class CancerGenesPage extends React.Component<{
           />
         </>
       ),
-      minWidth: 150,
+      minWidth: 120,
       style: { textAlign: 'center' },
       accessor: 'foundationHeme',
       sortable: true,
@@ -292,7 +293,7 @@ export default class CancerGenesPage extends React.Component<{
         </>
       ),
       style: { textAlign: 'center' },
-      minWidth: 200,
+      minWidth: 110,
       accessor: 'vogelstein',
       sortable: true,
       Cell(props: { original: ExtendCancerGene }) {

@@ -17,8 +17,8 @@ export default config;
 
 export const SERVER_API_URL = process.env.SERVER_API_URL;
 
-export const ONCOKB_PUBLIC_APP_PROFILE = 'oncokbAppProfile';
-export const ONCOKB_PUBLIC_APP_PUBLIC_TOKEN = 'oncokbAppPublicToken';
+export const LOCAL_DEV_OPT = 'localdev';
+export const DEV_URL = 'http://localhost:9095';
 
 export const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
@@ -104,7 +104,7 @@ export enum MUTATION_EFFECT {
 }
 
 const EVIDENCE_TYPE = {
-  FDA_APPROVED: 'FDA-approved',
+  FDA_APPROVED: 'FDA-approved drugs',
   STANDARD_CARE: 'Standard care',
   CLINICAL_EVIDENCE: 'Clinical evidence',
   BIOLOGICAL_EVIDENCE: 'Biological evidence'
@@ -172,7 +172,7 @@ export const DEFAULT_MARGIN_BOTTOM_SM = 'mb-2';
 export const DEFAULT_MARGIN_BOTTOM_LG = 'mb-3';
 export const THRESHOLD_TABLE_FIXED_HEIGHT = 10;
 export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
-export const LG_TABLE_FIXED_HEIGHT = 650;
+export const LG_TABLE_FIXED_HEIGHT = 640;
 export const SM_TABLE_FIXED_HEIGHT = 400;
 export const IMG_MAX_WIDTH = 700;
 export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
@@ -442,6 +442,9 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '08282020', version: 'v2.7' },
+  { date: '08052020', version: 'v2.6_patch_1' },
+  { date: '07232020', version: 'v2.6' },
   { date: '07092020', version: 'v2.5' },
   { date: '06092020', version: 'v2.4' },
   { date: '05112020', version: 'v2.3' },

@@ -1,5 +1,7 @@
 import API from './generated/API';
 
-const client = new API();
+import { getClientInstanceURL } from '../utils/DevUtils';
+
+const client = new API(getClientInstanceURL(''));
 
 export default client;

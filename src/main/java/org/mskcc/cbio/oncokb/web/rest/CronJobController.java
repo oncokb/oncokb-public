@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.Constants.DAY_IN_SECONDS;
 import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
+import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES;
 
 /**
@@ -134,17 +135,55 @@ public class CronJobController {
     public void updateTokenStats() {
         log.info("Started the cronjob to update token stats");
         List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(Instant.now());
+
+        // Update tokens with token usage
         tokenUsages.stream().forEach(tokenUsage -> {
             if (!tokenUsage.getToken().getCurrentUsage().equals(tokenUsage.getCount())) {
-                tokenUsage.getToken().setCurrentUsage(tokenUsage.getCount());
-                tokenService.save(tokenUsage.getToken());
+                Optional<Token> tokenOptional = tokenService.findByToken(tokenUsage.getToken().getToken());
+                if (tokenOptional.isPresent()) {
+                    tokenOptional.get().setCurrentUsage(tokenUsage.getCount());
+                    tokenService.save(tokenOptional.get());
+                }
             }
         });
 
+        // Update tokens without token usage
+        List<Long> tokenWithStats = tokenUsages.stream().map(tokenUsage -> tokenUsage.getToken().getId()).collect(Collectors.toList());
+        List<Token> tokens = tokenService.findAll().stream().filter(token -> !tokenWithStats.contains(token.getId())).collect(Collectors.toList());
+        tokens.stream().forEach(token -> {
+            if (!token.getCurrentUsage().equals(0)) {
+                token.setCurrentUsage(0);
+                tokenService.save(token);
+            }
+        });
+    }
+
+    /**
+     * {@code GET  /check-trial-accounts} : Check the status of trial accounts
+     */
+    @GetMapping(path = "/check-trial-accounts")
+    public void checkTrialAccounts() {
+        log.info("Started the cronjob to check the status of trial accounts");
+        final int DAYS_TO_CHECK = 3;
+        List<Token> tokens = tokenService
+            .findAllExpiresBeforeDate(Instant.now().plusSeconds(DAY_IN_SECONDS * DAYS_TO_CHECK))
+            .stream()
+            .filter(token -> !token.isRenewable() && token.getExpiration().isAfter(Instant.now()))
+            .filter(token -> {
+                // Do not include users that have been notified in the
+                return this.userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(token.getUser(), TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE, token.getExpiration().minusSeconds(DAY_IN_SECONDS * DAYS_TO_CHECK)).isEmpty();
+            })
+            .collect(Collectors.toList());
+        List<UserDTO> userDTOS = tokens
+            .stream()
+            .map(token -> userMapper.userToUserDTO(token.getUser()))
+            .collect(Collectors.toList());
+
+        mailService.sendTrialAccountExpiresMail(DAYS_TO_CHECK, userDTOS);
     }
 
     private void tokenCheckByTime(int daysToExpire, Set<String> notifiedUserIds) {
-        int secondsToExpire = 60 * 60 * 24 * daysToExpire;
+        int secondsToExpire = DAY_IN_SECONDS * daysToExpire;
         List<Token> tokensToBeExpired = tokenService.findAllExpiresBeforeDate(Instant.now().plusSeconds(secondsToExpire));// Only return the users that token is about to expire and no email has been sent before.
         List<User> selectedUsers = new ArrayList<>();
 
