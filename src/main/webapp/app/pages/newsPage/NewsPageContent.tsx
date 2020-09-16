@@ -149,7 +149,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             Subbiah et al. Abstract# 109, ASCO 2020
           </Linkout>
-          ,{' '}
+          ;{' '}
           <Linkout
             link={
               'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-pralsetinib-lung-cancer-ret-gene-fusions'
