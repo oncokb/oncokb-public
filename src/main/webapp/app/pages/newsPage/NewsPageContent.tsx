@@ -110,6 +110,57 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '09172020': {
+    priorityNews: [
+      <span>
+        We now support links to the variant page with the{' '}
+        <Linkout link={'https://varnomen.hgvs.org/recommendations/DNA/'}>
+          HGVS Variant Nomenclature
+        </Linkout>
+        , see HERE for more details.
+      </span>
+    ],
+    updatedImplication: [
+      [
+        'R1',
+        'BTK',
+        'C481S',
+        'Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma',
+        'Ibrutinib',
+        <span>
+          Listing in NCCN v4.2020 CLL; <PMIDLink pmids={'24869598, 28418267'} />
+        </span>
+      ]
+    ],
+    changedAnnotation: [
+      [
+        'RET',
+        'Fusions',
+        'Non-Small Cell Lung Cancer',
+        <div>Pralsetinib</div>,
+        '3A',
+        '1',
+        <div>
+          Abstract:{' '}
+          <Linkout
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2020.38.15_suppl.109'
+            }
+          >
+            Subbiah et al. Abstract# 109, ASCO 2020
+          </Linkout>
+          ,{' '}
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-pralsetinib-lung-cancer-ret-gene-fusions'
+            }
+          >
+            FDA-approval of Pralsetinib
+          </Linkout>
+        </div>
+      ]
+    ]
+  },
   '08282020': {
     priorityNews: [
       <span>
