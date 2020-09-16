@@ -205,13 +205,14 @@ export const DEFAULT_MAIN_NUMBERS: MainNumber = {
 };
 
 export const DEFAULT_GENE: Gene = {
-  curatedIsoform: '',
-  curatedRefSeq: '',
+  grch37Isoform: '',
+  grch37RefSeq: '',
+  grch38Isoform: '',
+  grch38RefSeq: '',
   entrezGeneId: -1,
   geneAliases: [],
   genesets: [],
   hugoSymbol: '',
-  name: '',
   oncogene: false,
   tsg: false
 };
@@ -237,6 +238,7 @@ export const DEFAULT_QUERY = {
   id: '',
   proteinEnd: -1,
   proteinStart: -1,
+  referenceGenome: 'GRCH37' as any,
   svType: 'UNKNOWN' as 'UNKNOWN',
   tumorType: '',
   type: ''
@@ -299,6 +301,7 @@ export enum PAGE_ROUTE {
   GENE_HEADER = '/gene',
   GENE = '/gene/:hugoSymbol',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
+  HGVSG = '/hgvsg/:hgvsg',
   ALTERATION_TUMOR_TYPE = '/gene/:hugoSymbol/:alteration/:tumorType',
   HOME = '/',
   ABOUT = '/about',
@@ -519,3 +522,8 @@ export const REGEXP_LINK: { [key: string]: string } = {
   [REGEXP.PMID]: 'https://www.ncbi.nlm.nih.gov/pubmed/',
   [REGEXP.NCTID]: 'http://clinicaltrials.gov/show/'
 };
+
+export enum REFERENCE_GENOME {
+  GRCh37 = 'GRCh37',
+  GRCh38 = 'GRCh38'
+}

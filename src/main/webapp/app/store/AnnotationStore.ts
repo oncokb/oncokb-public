@@ -9,13 +9,13 @@ import {
 } from 'react-mutation-mapper';
 import apiClient from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import { observable, computed, IReactionDisposer, action } from 'mobx';
-import { Evidence, Gene, Citations } from 'app/shared/api/generated/OncoKbAPI';
+import { computed, IReactionDisposer, observable } from 'mobx';
+import { Citations, Evidence, Gene } from 'app/shared/api/generated/OncoKbAPI';
 import {
+  DEFAULT_ANNOTATION,
   DEFAULT_GENE,
   EVIDENCE_TYPES,
-  DEFAULT_ANNOTATION,
-  TREATMENT_EVIDENCE_TYPES
+  REFERENCE_GENOME
 } from 'app/config/constants';
 import {
   BiologicalVariant,
@@ -29,13 +29,7 @@ import {
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
-import {
-  articles2Citations,
-  getCancerTypeNameFromOncoTreeType,
-  getTreatmentNameFromEvidence,
-  levelOfEvidence2Level,
-  shortenOncogenicity
-} from 'app/shared/utils/Utils';
+import { shortenOncogenicity } from 'app/shared/utils/Utils';
 import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 import { Oncogenicity } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import { OncokbMutation } from 'app/components/oncokbMutationMapper/OncokbMutation';
@@ -49,38 +43,12 @@ import {
 } from 'app/components/oncokbMutationMapper/FilterUtils';
 
 interface IAnnotationStore {
-  hugoSymbolQuery: string;
+  hugoSymbolQuery?: string;
   alterationQuery?: string;
   tumorTypeQuery?: string;
+  hgsvgQuery?: string;
+  referenceGenomeQuery?: REFERENCE_GENOME;
 }
-
-export type RequestParams = {
-  entrezGeneId?: number;
-  hugoSymbol?: string;
-  variant?: string;
-  variantType?: string;
-  consequence?: string;
-  proteinStart?: number;
-  proteinEnd?: number;
-  hgvs?: string;
-  fields?: string;
-};
-
-const getRequestParams = (
-  hugoSymbol: string,
-  alteration?: string,
-  tumorType?: string
-): RequestParams => {
-  const params = {};
-  params['hugoSymbol'] = hugoSymbol;
-  if (alteration) {
-    params['variant'] = alteration;
-  }
-  if (tumorType) {
-    params['tumorType'] = tumorType;
-  }
-  return params;
-};
 
 export type TherapeuticImplication = {
   level: string;
@@ -101,6 +69,8 @@ export class AnnotationStore {
   @observable hugoSymbolQuery: string;
   @observable alterationQuery: string;
   @observable tumorTypeQuery: string;
+  @observable hgvsgQuery: string;
+  @observable referenceGenomeQuery: REFERENCE_GENOME = REFERENCE_GENOME.GRCh37;
 
   @computed get cancerTypeFilter() {
     return this.mutationMapperStore.result
@@ -186,9 +156,12 @@ export class AnnotationStore {
   readonly reactions: IReactionDisposer[] = [];
 
   constructor(props: IAnnotationStore) {
-    this.hugoSymbolQuery = props.hugoSymbolQuery;
+    if (props.hugoSymbolQuery) this.hugoSymbolQuery = props.hugoSymbolQuery;
     if (props.alterationQuery) this.alterationQuery = props.alterationQuery;
     if (props.tumorTypeQuery) this.tumorTypeQuery = props.tumorTypeQuery;
+    if (props.hgsvgQuery) this.hgvsgQuery = props.hgsvgQuery;
+    if (props.referenceGenomeQuery)
+      this.referenceGenomeQuery = props.referenceGenomeQuery;
   }
 
   readonly gene = remoteData<Gene>({
@@ -362,47 +335,28 @@ export class AnnotationStore {
 
   readonly annotationResult = remoteData<VariantAnnotation>({
     await: () => [this.gene],
-    invoke: async () => {
+    invoke: () => {
       return privateClient.utilVariantAnnotationGetUsingGET({
         hugoSymbol: this.gene.result.hugoSymbol,
         alteration: this.alterationQuery,
-        tumorType: this.tumorTypeQuery
+        tumorType: this.tumorTypeQuery,
+        referenceGenome: this.referenceGenomeQuery
       });
     },
     default: DEFAULT_ANNOTATION
   });
 
-  @computed
-  get therapeuticImplications(): TherapeuticImplication[] {
-    return _.reduce(
-      this.annotationResult.result.tumorTypes,
-      (acc, next) => {
-        const oncoTreeCancerType = getCancerTypeNameFromOncoTreeType(
-          next.tumorType
-        );
-        next.evidences.forEach(evidence => {
-          if (
-            TREATMENT_EVIDENCE_TYPES.includes(
-              evidence.evidenceType as EVIDENCE_TYPES
-            )
-          ) {
-            const level = levelOfEvidence2Level(evidence.levelOfEvidence);
-            acc.push({
-              level,
-              alterations: evidence.alterations
-                .map(alteration => alteration.name)
-                .join(', '),
-              drugs: getTreatmentNameFromEvidence(evidence),
-              cancerTypes: oncoTreeCancerType,
-              citations: articles2Citations(evidence.articles)
-            });
-          }
-        });
-        return acc;
-      },
-      [] as TherapeuticImplication[]
-    );
-  }
+  readonly annotationResultByHgvsg = remoteData<VariantAnnotation>({
+    await: () => [],
+    invoke: () => {
+      return privateClient.utilVariantAnnotationGetUsingGET({
+        hgvsg: this.hgvsgQuery,
+        tumorType: this.tumorTypeQuery,
+        referenceGenome: this.referenceGenomeQuery
+      });
+    },
+    default: DEFAULT_ANNOTATION
+  });
 
   readonly portalAlterationSampleCount = remoteData<CancerTypeCount[]>({
     async invoke() {

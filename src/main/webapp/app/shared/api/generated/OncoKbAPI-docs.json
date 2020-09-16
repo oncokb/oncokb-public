@@ -105,6 +105,14 @@
             ]
           },
           {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
+          },
+          {
             "name": "tumorType",
             "in": "query",
             "description": "OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
@@ -203,6 +211,14 @@
             "type": "string"
           },
           {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
+          },
+          {
             "name": "tumorType",
             "in": "query",
             "description": "OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
@@ -299,6 +315,14 @@
             "description": "HGVS genomic format. Example: 7:g.140453136A>T",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
           },
           {
             "name": "tumorType",
@@ -412,6 +436,14 @@
             "description": "Protein Change. Example: V600E",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
           },
           {
             "name": "consequence",
@@ -591,6 +623,14 @@
             "required": true,
             "type": "boolean",
             "default": false
+          },
+          {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
           },
           {
             "name": "tumorType",
@@ -1427,6 +1467,14 @@
             "type": "string"
           },
           {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
+          },
+          {
             "name": "hugoSymbol",
             "in": "query",
             "description": "The gene symbol used in Human Genome Organisation.",
@@ -2050,6 +2098,14 @@
             "type": "string"
           },
           {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
+          },
+          {
             "name": "fields",
             "in": "query",
             "description": "The fields to be returned.",
@@ -2154,6 +2210,13 @@
         "id": {
           "type": "string"
         },
+        "referenceGenome": {
+          "type": "string",
+          "enum": [
+            "GRCh37",
+            "GRCh38"
+          ]
+        },
         "tumorType": {
           "type": "string"
         }
@@ -2203,6 +2266,13 @@
         "proteinStart": {
           "type": "integer",
           "format": "int32"
+        },
+        "referenceGenome": {
+          "type": "string",
+          "enum": [
+            "GRCh37",
+            "GRCh38"
+          ]
         },
         "svType": {
           "type": "string",
@@ -2291,6 +2361,16 @@
         "refResidues": {
           "type": "string"
         },
+        "referenceGenomes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "GRCh37",
+              "GRCh38"
+            ]
+          }
+        },
         "variantResidues": {
           "type": "string"
         }
@@ -2306,7 +2386,16 @@
         "gene": {
           "type": "string"
         },
-        "isoform": {
+        "grch37Isoform": {
+          "type": "string"
+        },
+        "grch37RefSeq": {
+          "type": "string"
+        },
+        "grch38Isoform": {
+          "type": "string"
+        },
+        "grch38RefSeq": {
           "type": "string"
         },
         "mutationEffect": {
@@ -2322,9 +2411,6 @@
           "type": "string"
         },
         "proteinChange": {
-          "type": "string"
-        },
-        "refSeq": {
           "type": "string"
         },
         "variant": {
@@ -2420,12 +2506,6 @@
     "Gene": {
       "type": "object",
       "properties": {
-        "curatedIsoform": {
-          "type": "string"
-        },
-        "curatedRefSeq": {
-          "type": "string"
-        },
         "entrezGeneId": {
           "type": "integer",
           "format": "int32"
@@ -2442,10 +2522,19 @@
             "$ref": "#/definitions/Geneset"
           }
         },
-        "hugoSymbol": {
+        "grch37Isoform": {
           "type": "string"
         },
-        "name": {
+        "grch37RefSeq": {
+          "type": "string"
+        },
+        "grch38Isoform": {
+          "type": "string"
+        },
+        "grch38RefSeq": {
+          "type": "string"
+        },
+        "hugoSymbol": {
           "type": "string"
         },
         "oncogene": {
@@ -2722,6 +2811,13 @@
         "id": {
           "type": "string"
         },
+        "referenceGenome": {
+          "type": "string",
+          "enum": [
+            "GRCh37",
+            "GRCh38"
+          ]
+        },
         "structuralVariantType": {
           "type": "string",
           "enum": [
@@ -2970,7 +3066,16 @@
         "gene": {
           "type": "string"
         },
-        "isoform": {
+        "grch37Isoform": {
+          "type": "string"
+        },
+        "grch37RefSeq": {
+          "type": "string"
+        },
+        "grch38Isoform": {
+          "type": "string"
+        },
+        "grch38RefSeq": {
           "type": "string"
         },
         "level": {
@@ -2980,9 +3085,6 @@
           "type": "string"
         },
         "proteinChange": {
-          "type": "string"
-        },
-        "refSeq": {
           "type": "string"
         },
         "variant": {
@@ -3065,7 +3167,22 @@
           "type": "integer",
           "format": "int32"
         },
+        "grch37Isoform": {
+          "type": "string"
+        },
+        "grch37RefSeq": {
+          "type": "string"
+        },
+        "grch38Isoform": {
+          "type": "string"
+        },
+        "grch38RefSeq": {
+          "type": "string"
+        },
         "highestResistancLevel": {
+          "type": "string"
+        },
+        "highestResistanceLevel": {
           "type": "string"
         },
         "highestSensitiveLevel": {
@@ -3074,14 +3191,8 @@
         "hugoSymbol": {
           "type": "string"
         },
-        "isoform": {
-          "type": "string"
-        },
         "oncogene": {
           "type": "boolean"
-        },
-        "refSeq": {
-          "type": "string"
         },
         "summary": {
           "type": "string"
@@ -3183,10 +3294,19 @@
         "foundationHeme": {
           "type": "boolean"
         },
-        "hugoSymbol": {
+        "grch37Isoform": {
           "type": "string"
         },
-        "isoform": {
+        "grch37RefSeq": {
+          "type": "string"
+        },
+        "grch38Isoform": {
+          "type": "string"
+        },
+        "grch38RefSeq": {
+          "type": "string"
+        },
+        "hugoSymbol": {
           "type": "string"
         },
         "mSKHeme": {
@@ -3204,9 +3324,6 @@
         },
         "oncokbAnnotated": {
           "type": "boolean"
-        },
-        "refSeq": {
-          "type": "string"
         },
         "sangerCGC": {
           "type": "boolean"
@@ -3325,6 +3442,13 @@
         "proteinStart": {
           "type": "integer",
           "format": "int32"
+        },
+        "referenceGenome": {
+          "type": "string",
+          "enum": [
+            "GRCh37",
+            "GRCh38"
+          ]
         },
         "tumorType": {
           "type": "string"
@@ -3562,6 +3686,13 @@
           "type": "integer",
           "format": "int32"
         },
+        "referenceGenome": {
+          "type": "string",
+          "enum": [
+            "GRCh37",
+            "GRCh38"
+          ]
+        },
         "variant": {
           "type": "string"
         },
@@ -3626,6 +3757,13 @@
         "id": {
           "type": "string"
         },
+        "referenceGenome": {
+          "type": "string",
+          "enum": [
+            "GRCh37",
+            "GRCh38"
+          ]
+        },
         "tumorType": {
           "type": "string"
         }
@@ -3663,6 +3801,13 @@
         },
         "id": {
           "type": "string"
+        },
+        "referenceGenome": {
+          "type": "string",
+          "enum": [
+            "GRCh37",
+            "GRCh38"
+          ]
         },
         "tumorType": {
           "type": "string"
