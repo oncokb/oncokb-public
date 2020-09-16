@@ -19,10 +19,6 @@ import java.util.UUID;
 @Repository
 public interface TokenRepository extends JpaRepository<Token, Long> {
 
-    String TOKEN_BY_UUID_CACHE = "tokenByUuid";
-
-    String TOKENS_BY_USER_CACHE = "tokensByUser";
-
     @Query("select token from Token token where token.user.login = ?#{principal.username}")
     List<Token> findByUserIsCurrentUser();
 
@@ -36,9 +32,9 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     @Query("select token from Token token where token.user.login = org.mskcc.cbio.oncokb.config.Constants.PUBLIC_WEBSITE_LOGIN")
     Optional<Token> findPublicWebsiteToken();
 
-    @Cacheable(cacheNames = TOKEN_BY_UUID_CACHE)
+    @Cacheable(cacheResolver = "tokenCacheResolver")
     Optional<Token> findByToken(UUID token);
 
-    @Cacheable(cacheNames = TOKENS_BY_USER_CACHE)
+    @Cacheable(cacheResolver = "tokenCacheResolver")
     List<Token> findByUser(User user);
 }

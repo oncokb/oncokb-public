@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.service;
 
 import io.github.jhipster.config.JHipsterProperties;
 import org.mskcc.cbio.oncokb.config.Constants;
+import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
@@ -37,6 +38,8 @@ import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.Constants.DAY_IN_SECONDS;
 import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE;
 
 /**
  * Service class for managing users.
@@ -57,6 +60,8 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final CacheNameResolver cacheNameResolver;
+
     private final JHipsterProperties jHipsterProperties;
 
     private final TokenService tokenService;
@@ -74,6 +79,7 @@ public class UserService {
         JHipsterProperties jHipsterProperties,
         TokenService tokenService,
         TokenProvider tokenProvider,
+        CacheNameResolver cacheNameResolver,
         CacheManager cacheManager
     ) {
         this.userRepository = userRepository;
@@ -83,6 +89,7 @@ public class UserService {
         this.jHipsterProperties = jHipsterProperties;
         this.tokenService = tokenService;
         this.tokenProvider = tokenProvider;
+        this.cacheNameResolver = cacheNameResolver;
         this.cacheManager = cacheManager;
     }
 
@@ -432,9 +439,9 @@ public class UserService {
 
 
     private void clearUserCaches(User user) {
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_LOGIN_CACHE))).evict(user.getLogin());
         if (user.getEmail() != null) {
-            Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+            Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE))).evict(user.getEmail());
         }
     }
 }

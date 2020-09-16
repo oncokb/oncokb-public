@@ -15,7 +15,6 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
  */
 @Entity
 @Table(name = "user_details")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class UserDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
