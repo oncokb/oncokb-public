@@ -154,6 +154,7 @@ sentry:
 # ===================================================================
 
 application:
+  name: oncokb
   profile: prod
   api-proxy-url: 'http://oncokb-core:8888'
   sitemap-enabled: true
@@ -164,11 +165,10 @@ application:
   token-usage-check:
   token-usage-check-whitelist:
   redis:
-    type: 'master-slave'
+    type: 'sentinel'
     password: 'oncokb-public-redis-password'
-    master-slave-cache:
-      master-address: 'redis://oncokb-public-redis-master:6379'
-      slave-address: 'redis://oncokb-public-redis-slave:6379'
+    sentinel-master-name: 'oncokb-master'
+    address: 'redis://oncokb-public-sentinel-redis:6379'
   email-addresses:
     license-address:
     registration-address:
