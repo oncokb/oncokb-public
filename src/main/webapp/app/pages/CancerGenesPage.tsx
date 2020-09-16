@@ -461,16 +461,16 @@ export default class CancerGenesPage extends React.Component<{
                 loading={this.extendedCancerGene.isPending}
                 defaultSorted={[
                   {
+                    id: 'oncokbAnnotated',
+                    desc: true
+                  },
+                  {
                     id: 'numOfSources',
                     desc: true
                   },
                   {
                     id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
                     desc: false
-                  },
-                  {
-                    id: 'oncokbAnnotated',
-                    desc: true
                   }
                 ]}
               />
