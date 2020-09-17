@@ -12,7 +12,7 @@ import {
 } from 'app/components/SimpleTable';
 import { NewlyAddedGeneType } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { Link } from 'react-router-dom';
-import { PAGE_ROUTE, WEBINAR_LINKS_05072020 } from 'app/config/constants';
+import { FAQ_URL_PATTERNS_LINK, PAGE_ROUTE } from 'app/config/constants';
 import {
   AlterationPageLink,
   GenePageLink,
@@ -20,7 +20,6 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
-import Iframe from 'react-iframe';
 import { SHOW_MODAL_KEY } from '../AboutPage';
 
 export type NewsData = {
@@ -117,7 +116,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <Linkout link={'https://varnomen.hgvs.org/recommendations/DNA/'}>
           HGVS Variant Nomenclature
         </Linkout>
-        , see HERE for more details.
+        , see <Linkout link={FAQ_URL_PATTERNS_LINK}>HERE</Linkout> for more
+        details.
       </span>
     ],
     updatedImplication: [
