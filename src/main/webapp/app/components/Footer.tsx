@@ -8,9 +8,9 @@ import styles from './Footer.module.scss';
 import indexStyles from '../index.module.scss';
 import { CitationText } from 'app/components/CitationText';
 import classnames from 'classnames';
-import { SwaggerApiLink } from 'app/shared/links/SwaggerApiLink';
 import { ContactLink } from 'app/shared/links/ContactLink';
-import { PAGE_ROUTE } from 'app/config/constants';
+import { API_DOCUMENT_LINK, PAGE_ROUTE } from 'app/config/constants';
+import { Linkout } from 'app/shared/links/Linkout';
 
 class Footer extends React.Component<{ lastDataUpdate: string }> {
   public get externalLinkIcon() {
@@ -77,7 +77,7 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
           >
             Twitter
           </a>
-          <SwaggerApiLink>API</SwaggerApiLink>
+          <Linkout link={API_DOCUMENT_LINK}>API</Linkout>
         </div>
         <div className={classnames(styles.footerAList, 'mb-2')}>
           <Link to={PAGE_ROUTE.NEWS}>
