@@ -50,6 +50,7 @@ export const GRID_BREAKPOINTS = {
 };
 export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
+export const FAQ_URL_PATTERNS_LINK = `${FAQ_LINK}/technical#what-are-the-url-patterns-of-oncokb-website`;
 export const API_DOCUMENT_LINK = 'https://api.oncokb.org/oncokb-website/api';
 export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
 export const FACULTY_COI_WEBSITE_LINK = 'https://www.mskcc.org/disclosures';
