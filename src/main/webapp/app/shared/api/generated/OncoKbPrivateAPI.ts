@@ -1124,11 +1124,11 @@ export default class OncoKbPrivateAPI {
             return response.body;
         });
     };
-    utilDataReleaseDownloadAvailabilityGetUsingGETURL(parameters: {
+    utilDataAvailabilityGetUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
-        let path = '/utils/dataRelease/downloadAvailability';
+        let path = '/utils/data/availability';
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -1143,16 +1143,16 @@ export default class OncoKbPrivateAPI {
     /**
      * Get information about what files are available by data version
      * @method
-     * @name OncoKbPrivateAPI#utilDataReleaseDownloadAvailabilityGetUsingGET
+     * @name OncoKbPrivateAPI#utilDataAvailabilityGetUsingGET
      */
-    utilDataReleaseDownloadAvailabilityGetUsingGETWithHttpInfo(parameters: {
+    utilDataAvailabilityGetUsingGETWithHttpInfo(parameters: {
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
         const request = this.request;
-        let path = '/utils/dataRelease/downloadAvailability';
+        let path = '/utils/data/availability';
         let body: any;
         let queryParameters: any = {};
         let headers: any = {};
@@ -1176,23 +1176,23 @@ export default class OncoKbPrivateAPI {
     /**
      * Get information about what files are available by data version
      * @method
-     * @name OncoKbPrivateAPI#utilDataReleaseDownloadAvailabilityGetUsingGET
+     * @name OncoKbPrivateAPI#utilDataAvailabilityGetUsingGET
      */
-    utilDataReleaseDownloadAvailabilityGetUsingGET(parameters: {
+    utilDataAvailabilityGetUsingGET(parameters: {
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < DownloadAvailability >
         > {
-            return this.utilDataReleaseDownloadAvailabilityGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return this.utilDataAvailabilityGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
-    utilDataReleaseReadmeGetUsingGETURL(parameters: {
+    utilDataReadmeGetUsingGETURL(parameters: {
         'version' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
-        let path = '/utils/dataRelease/readme';
+        let path = '/utils/data/readme';
         if (parameters['version'] !== undefined) {
             queryParameters['version'] = parameters['version'];
         }
@@ -1210,10 +1210,10 @@ export default class OncoKbPrivateAPI {
     /**
      * Get readme info for specific data release version
      * @method
-     * @name OncoKbPrivateAPI#utilDataReleaseReadmeGetUsingGET
+     * @name OncoKbPrivateAPI#utilDataReadmeGetUsingGET
      * @param {string} version - version
      */
-    utilDataReleaseReadmeGetUsingGETWithHttpInfo(parameters: {
+    utilDataReadmeGetUsingGETWithHttpInfo(parameters: {
         'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
@@ -1221,7 +1221,7 @@ export default class OncoKbPrivateAPI {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
         const request = this.request;
-        let path = '/utils/dataRelease/readme';
+        let path = '/utils/data/readme';
         let body: any;
         let queryParameters: any = {};
         let headers: any = {};
@@ -1249,24 +1249,24 @@ export default class OncoKbPrivateAPI {
     /**
      * Get readme info for specific data release version
      * @method
-     * @name OncoKbPrivateAPI#utilDataReleaseReadmeGetUsingGET
+     * @name OncoKbPrivateAPI#utilDataReadmeGetUsingGET
      * @param {string} version - version
      */
-    utilDataReleaseReadmeGetUsingGET(parameters: {
+    utilDataReadmeGetUsingGET(parameters: {
         'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < string > {
-        return this.utilDataReleaseReadmeGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+        return this.utilDataReadmeGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
-    utilDataReleaseSqlDumpGetUsingGETURL(parameters: {
+    utilDataSqlDumpGetUsingGETURL(parameters: {
         'version' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
-        let path = '/utils/dataRelease/sqlDump';
+        let path = '/utils/data/sqlDump';
         if (parameters['version'] !== undefined) {
             queryParameters['version'] = parameters['version'];
         }
@@ -1282,12 +1282,12 @@ export default class OncoKbPrivateAPI {
     };
 
     /**
-     * utilDataReleaseSqlDumpGet
+     * utilDataSqlDumpGet
      * @method
-     * @name OncoKbPrivateAPI#utilDataReleaseSqlDumpGetUsingGET
+     * @name OncoKbPrivateAPI#utilDataSqlDumpGetUsingGET
      * @param {string} version - version
      */
-    utilDataReleaseSqlDumpGetUsingGETWithHttpInfo(parameters: {
+    utilDataSqlDumpGetUsingGETWithHttpInfo(parameters: {
         'version' ? : string,
         $queryParameters ? : any,
             $domain ? : string
@@ -1295,13 +1295,13 @@ export default class OncoKbPrivateAPI {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
         const request = this.request;
-        let path = '/utils/dataRelease/sqlDump';
+        let path = '/utils/data/sqlDump';
         let body: any;
         let queryParameters: any = {};
         let headers: any = {};
         let form: any = {};
         return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'application/zip';
+            headers['Accept'] = 'application/gz';
             headers['Content-Type'] = 'application/json';
 
             if (parameters['version'] !== undefined) {
@@ -1321,18 +1321,18 @@ export default class OncoKbPrivateAPI {
     };
 
     /**
-     * utilDataReleaseSqlDumpGet
+     * utilDataSqlDumpGet
      * @method
-     * @name OncoKbPrivateAPI#utilDataReleaseSqlDumpGetUsingGET
+     * @name OncoKbPrivateAPI#utilDataSqlDumpGetUsingGET
      * @param {string} version - version
      */
-    utilDataReleaseSqlDumpGetUsingGET(parameters: {
+    utilDataSqlDumpGetUsingGET(parameters: {
             'version' ? : string,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < string >
         > {
-            return this.utilDataReleaseSqlDumpGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return this.utilDataSqlDumpGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
