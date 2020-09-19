@@ -326,14 +326,14 @@
         }
       }
     },
-    "/utils/dataRelease/downloadAvailability": {
+    "/utils/data/availability": {
       "get": {
         "tags": [
           "Utils"
         ],
-        "summary": "utilDataReleaseDownloadAvailabilityGet",
+        "summary": "utilDataAvailabilityGet",
         "description": "Get information about what files are available by data version",
-        "operationId": "utilDataReleaseDownloadAvailabilityGetUsingGET",
+        "operationId": "utilDataAvailabilityGetUsingGET",
         "consumes": [
           "application/json"
         ],
@@ -365,14 +365,14 @@
         }
       }
     },
-    "/utils/dataRelease/readme": {
+    "/utils/data/readme": {
       "get": {
         "tags": [
           "Utils"
         ],
-        "summary": "utilDataReleaseReadmeGet",
+        "summary": "utilDataReadmeGet",
         "description": "Get readme info for specific data release version",
-        "operationId": "utilDataReleaseReadmeGetUsingGET",
+        "operationId": "utilDataReadmeGetUsingGET",
         "consumes": [
           "application/json"
         ],
@@ -410,18 +410,18 @@
         }
       }
     },
-    "/utils/dataRelease/sqlDump": {
+    "/utils/data/sqlDump": {
       "get": {
         "tags": [
           "Utils"
         ],
-        "summary": "utilDataReleaseSqlDumpGet",
-        "operationId": "utilDataReleaseSqlDumpGetUsingGET",
+        "summary": "utilDataSqlDumpGet",
+        "operationId": "utilDataSqlDumpGetUsingGET",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "application/zip"
+          "application/gz"
         ],
         "parameters": [
           {
