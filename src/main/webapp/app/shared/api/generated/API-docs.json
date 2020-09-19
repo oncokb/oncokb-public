@@ -511,6 +511,33 @@
         "deprecated": false
       }
     },
+    "/api/cronjob/check-trial-accounts": {
+      "get": {
+        "tags": [
+          "cron-job-controller"
+        ],
+        "summary": "checkTrialAccounts",
+        "operationId": "checkTrialAccountsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/cronjob/generate-tokens": {
       "get": {
         "tags": [
@@ -810,6 +837,7 @@
               "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "APPROVAL_MSK_IN_COMMERCIAL",
+              "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
               "TEST"
             ]
           },
@@ -1672,6 +1700,7 @@
             "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
+            "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
             "TEST"
           ]
         }
@@ -2057,6 +2086,7 @@
             "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
+            "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
             "TEST"
           ]
         },
