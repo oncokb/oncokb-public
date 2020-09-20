@@ -233,7 +233,7 @@ public class UserService {
 
         this.clearUserCaches(user);
 
-        generateTokenForUser(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable);
+        generateTokenForUserIfNotExist(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable);
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -283,7 +283,7 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        return Optional.of(userRepository
+        Optional<UserDTO> updatedUserDTO = Optional.of(userRepository
             .findById(userDTO.getId()))
             .filter(Optional::isPresent)
             .map(Optional::get)
@@ -311,6 +311,11 @@ public class UserService {
                 return new UserDTO(user, getUpdatedUserDetails(
                     user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
             });
+
+        if (updatedUserDTO.isPresent()) {
+            generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+        }
+        return updatedUserDTO;
     }
 
     private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String company, String city, String country) {
@@ -394,12 +399,12 @@ public class UserService {
         }
         Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
         if (updatedUserDTO.isPresent()) {
-            generateTokenForUser(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+            generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
         }
         return updatedUserDTO;
     }
 
-    private void generateTokenForUser(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
+    private void generateTokenForUserIfNotExist(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
         // automatically generate a token for user if not exists
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
         if (tokens.isEmpty()) {
