@@ -420,6 +420,18 @@ export function getMomentInstance(utcTime: string) {
   return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z);
 }
 
+export function daysDiff(date: string) {
+  const today = moment.utc();
+  const expiration = getMomentInstance(date);
+  return expiration.diff(today, 'days');
+}
+
+export function secDiff(date: string) {
+  const today = moment.utc();
+  const expiration = getMomentInstance(date);
+  return expiration.diff(today, 'hours');
+}
+
 const SLASH_HTML_ENTITY_CODE = '%2F';
 
 export function encodeSlash(content: string | undefined) {

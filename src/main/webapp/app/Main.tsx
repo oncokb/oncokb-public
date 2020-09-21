@@ -50,6 +50,7 @@ class Main extends React.Component<IMainPage> {
           isInProduction={false}
           isSwaggerEnabled
           windowStore={this.props.windowStore}
+          authStore={this.props.authenticationStore}
           routing={this.props.routing}
         />
         <div className={'view-wrapper'}>

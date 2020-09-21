@@ -1,27 +1,21 @@
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
-import AuthenticationStore from 'app/store/AuthenticationStore';
+import { Link, Redirect } from 'react-router-dom';
+import AuthenticationStore, {
+  ACCOUNT_STATUS
+} from 'app/store/AuthenticationStore';
 import { RouterStore } from 'mobx-react-router';
 import { inject, observer } from 'mobx-react';
 import { action, computed, observable } from 'mobx';
 import SmallPageContainer from 'app/components/SmallPageContainer';
-import {
-  AvCheckbox,
-  AvCheckboxGroup,
-  AvField,
-  AvForm,
-  AvGroup,
-  AvInput
-} from 'availity-reactstrap-validation';
-import { Alert, Button, Col, Row } from 'react-bootstrap';
-import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
+import { AvField, AvForm } from 'availity-reactstrap-validation';
+import { Alert, Col, Row } from 'react-bootstrap';
 import { LoadingButton } from 'app/shared/button/LoadingButton';
 import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import {
-  UNAUTHORIZED_EXPIRED_ENDS_WITH,
+  UNAUTHORIZED_EXPIRED,
   UNAUTHORIZED_NOT_ACTIVATED_ENDS_WITH
 } from 'app/shared/api/errorMessages';
-import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
+import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import client from 'app/shared/api/clientInstance';
 import { LoginVM } from 'app/shared/api/generated/API';
 
@@ -64,7 +58,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
       );
       return [
         UNAUTHORIZED_NOT_ACTIVATED_ENDS_WITH,
-        UNAUTHORIZED_EXPIRED_ENDS_WITH
+        UNAUTHORIZED_EXPIRED
       ].some(str => errorMessage.endsWith(str));
     } else {
       return false;
