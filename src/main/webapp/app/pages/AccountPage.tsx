@@ -23,10 +23,9 @@ import SmallPageContainer from 'app/components/SmallPageContainer';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Token } from 'app/shared/api/generated/API';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
-import { getMomentInstance } from 'app/shared/utils/Utils';
-import moment from 'moment';
 import pluralize from 'pluralize';
 import InfoIcon from 'app/shared/icons/InfoIcon';
+import { daysDiff, secDiff } from 'app/shared/utils/Utils';
 
 export type IRegisterProps = {
   authenticationStore: AuthenticationStore;
@@ -243,10 +242,8 @@ export class AccountPage extends React.Component<IRegisterProps> {
               }
             >
               {this.tokens.map(token => {
-                const today = moment.utc();
-                const expiration = getMomentInstance(token.expiration);
-                const expirationDay = expiration.diff(today, 'days');
-                const expirationHour = expiration.diff(today, 'hours');
+                const expirationDay = daysDiff(token.expiration);
+                const expirationHour = secDiff(token.expiration);
                 return (
                   <div key={token.id} className={'mb-2'}>
                     <InputGroup size={'sm'}>

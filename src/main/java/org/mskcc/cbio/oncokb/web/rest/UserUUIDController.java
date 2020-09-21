@@ -6,6 +6,7 @@ import org.mskcc.cbio.oncokb.security.uuid.UUIDFilter;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.TokenService;
 import org.mskcc.cbio.oncokb.web.rest.errors.TokenExpiredException;
+import org.mskcc.cbio.oncokb.web.rest.errors.TrialAccountExpiredException;
 import org.mskcc.cbio.oncokb.web.rest.vm.LoginVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -62,7 +63,11 @@ public class UserUUIDController {
             if (validTokens.size() > 0) {
                 uuid = validTokens.iterator().next().getToken();
             } else {
-                throw new TokenExpiredException();
+                if (tokenList.stream().filter(token -> !token.isRenewable()).findAny().isPresent()) {
+                    throw new TrialAccountExpiredException();
+                } else {
+                    throw new TokenExpiredException();
+                }
             }
         } else {
             Token token = tokenProvider.createTokenForCurrentUserLogin(Optional.empty(), Optional.empty());
