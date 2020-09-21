@@ -31,8 +31,6 @@ class App extends React.Component {
     routing: new RouterStore()
   };
 
-  @observable getRecaptchaToken = false;
-
   constructor(props: IAppConfig) {
     super(props);
     this.stores.windowStore.recaptchaRef = React.createRef();
@@ -41,7 +39,6 @@ class App extends React.Component {
   @autobind
   @action
   onExecuteChange(value: string) {
-    this.getRecaptchaToken = true;
     setRecaptchaToken(value);
   }
 
@@ -78,13 +75,13 @@ class App extends React.Component {
             }
             size="invisible"
           />
-          {this.getRecaptchaToken && (
+          {
             <Provider {...this.stores}>
               <Router history={history}>
                 <Main {...this.stores} />
               </Router>
             </Provider>
-          )}
+          }
         </>
       </DocumentTitle>
     );

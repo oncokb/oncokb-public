@@ -29,6 +29,7 @@ import React from 'react';
 import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
 import { FAQPage } from 'app/pages/FAQPage';
+import { RecaptchaBoundaryRoute } from '../shared/auth/RecaptchaBoundaryRoute';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -78,27 +79,27 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.FAQ_ACCESS}
             component={FAQPage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
             path={PAGE_ROUTE.CANCER_GENES}
             component={CancerGenesPage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
             path={PAGE_ROUTE.ACTIONABLE_GENE}
             component={ActionableGenesPage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
             path={PAGE_ROUTE.GENE}
             component={GenePage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
             path={PAGE_ROUTE.ALTERATION}
             component={AlterationPage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
             component={AlterationPage}
