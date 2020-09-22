@@ -1897,6 +1897,370 @@ export default class API {
             return response.body;
         });
     };
+    getAllTokensUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/tokens';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getAllTokens
+     * @method
+     * @name API#getAllTokensUsingGET
+     */
+    getAllTokensUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getAllTokens
+     * @method
+     * @name API#getAllTokensUsingGET
+     */
+    getAllTokensUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < Token >
+        > {
+            return this.getAllTokensUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    createTokenUsingPOST_1URL(parameters: {
+        'token': Token,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/tokens';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * createToken
+     * @method
+     * @name API#createTokenUsingPOST_1
+     * @param {} token - token
+     */
+    createTokenUsingPOST_1WithHttpInfo(parameters: {
+        'token': Token,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['token'] !== undefined) {
+                body = parameters['token'];
+            }
+
+            if (parameters['token'] === undefined) {
+                reject(new Error('Missing required  parameter: token'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * createToken
+     * @method
+     * @name API#createTokenUsingPOST_1
+     * @param {} token - token
+     */
+    createTokenUsingPOST_1(parameters: {
+        'token': Token,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < Token > {
+        return this.createTokenUsingPOST_1WithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    updateTokenUsingPUTURL(parameters: {
+        'token': Token,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/tokens';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * updateToken
+     * @method
+     * @name API#updateTokenUsingPUT
+     * @param {} token - token
+     */
+    updateTokenUsingPUTWithHttpInfo(parameters: {
+        'token': Token,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['token'] !== undefined) {
+                body = parameters['token'];
+            }
+
+            if (parameters['token'] === undefined) {
+                reject(new Error('Missing required  parameter: token'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('PUT', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * updateToken
+     * @method
+     * @name API#updateTokenUsingPUT
+     * @param {} token - token
+     */
+    updateTokenUsingPUT(parameters: {
+        'token': Token,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < Token > {
+        return this.updateTokenUsingPUTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getTokenUsingGETURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/tokens/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getToken
+     * @method
+     * @name API#getTokenUsingGET
+     * @param {integer} id - id
+     */
+    getTokenUsingGETWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/tokens/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getToken
+     * @method
+     * @name API#getTokenUsingGET
+     * @param {integer} id - id
+     */
+    getTokenUsingGET(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < Token > {
+        return this.getTokenUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    deleteTokenUsingDELETE_1URL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/tokens/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * deleteToken
+     * @method
+     * @name API#deleteTokenUsingDELETE_1
+     * @param {integer} id - id
+     */
+    deleteTokenUsingDELETE_1WithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/tokens/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('DELETE', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * deleteToken
+     * @method
+     * @name API#deleteTokenUsingDELETE_1
+     * @param {integer} id - id
+     */
+    deleteTokenUsingDELETE_1(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.deleteTokenUsingDELETE_1WithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     getAllUserDetailsUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
@@ -3237,4 +3601,80 @@ export default class API {
             return response.body;
         });
     };
+    getUserTokensUsingGETURL(parameters: {
+        'login': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/users/{login}/tokens';
+
+        path = path.replace('{login}', parameters['login'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getUserTokens
+     * @method
+     * @name API#getUserTokensUsingGET
+     * @param {string} login - login
+     */
+    getUserTokensUsingGETWithHttpInfo(parameters: {
+        'login': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/users/{login}/tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{login}', parameters['login'] + '');
+
+            if (parameters['login'] === undefined) {
+                reject(new Error('Missing required  parameter: login'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getUserTokens
+     * @method
+     * @name API#getUserTokensUsingGET
+     * @param {string} login - login
+     */
+    getUserTokensUsingGET(parameters: {
+            'login': string,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < Token >
+        > {
+            return this.getUserTokensUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
 }
