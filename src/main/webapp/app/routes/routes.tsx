@@ -30,6 +30,7 @@ import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
 import { FAQPage } from 'app/pages/FAQPage';
 import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
+import UserPage from 'app/pages/userPage/UserPage';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -155,6 +156,14 @@ const AppRouts = (props: {
             routing={props.routing}
             component={AccountPage}
             hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}
+          />
+          <PrivateRoute
+            exact
+            path={PAGE_ROUTE.USER}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            component={UserPage}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <ErrorBoundaryRoute component={PageNotFound} />
         </Switch>
