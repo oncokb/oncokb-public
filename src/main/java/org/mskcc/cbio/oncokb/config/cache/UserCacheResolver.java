@@ -31,7 +31,7 @@ public class UserCacheResolver implements CacheResolver {
 
         if (context.getMethod().getName() == "findOneWithAuthoritiesByLogin") {
             caches.add(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_LOGIN_CACHE)));
-        } else if (context.getMethod().getName() == "findByUser") {
+        } else if (context.getMethod().getName() == "findOneWithAuthoritiesByEmailIgnoreCase") {
             caches.add(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE)));
         } else {
             caches.add(cacheManager.getCache(this.cacheNameResolver.getCacheName(context.getMethod().getName())));
