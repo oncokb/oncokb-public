@@ -14,9 +14,11 @@ import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 import { filterByKeyword, toAppLocalDateFormat } from 'app/shared/utils/Utils';
 import _ from 'lodash';
-import { LicenseType } from 'app/config/constants';
+import { AUTHORITIES, LicenseType, PAGE_ROUTE } from 'app/config/constants';
 import styles from './UserDetailsPage.module.scss';
 import LoadingIndicator from '../../components/loadingIndicator/LoadingIndicator';
+import { isAuthorized } from 'app/shared/auth/AuthUtils';
+import { Link } from 'react-router-dom';
 
 enum USER_BUTTON_TYPE {
   COMMERCIAL = 'Commercial Users',
@@ -32,7 +34,7 @@ export default class UserDetailsPage extends React.Component<{
 }> {
   @observable users: UserDTO[] = [];
   @observable loadedUsers = false;
-  @observable currentSelectedButton = '';
+  @observable currentSelectedButton = USER_BUTTON_TYPE.VERIFIED;
   @observable currentSelectedFilter: {
     activationKey: string | null | undefined;
     licenseType: string[] | undefined;
@@ -65,7 +67,7 @@ export default class UserDetailsPage extends React.Component<{
   }
 
   @action
-  toggleFilter(button: string) {
+  toggleFilter(button: USER_BUTTON_TYPE) {
     this.currentSelectedButton = button;
     if (this.currentSelectedButton === USER_BUTTON_TYPE.COMMERCIAL) {
       this.currentSelectedFilter = {
@@ -228,7 +230,7 @@ export default class UserDetailsPage extends React.Component<{
       id: 'approval',
       Header: <span className={styles.tableHeader}>Approval</span>,
       accessor: 'activated',
-      minWidth: 60,
+      minWidth: 70,
       defaultSortDesc: false,
       className: 'justify-content-center',
       sortMethod: defaultSortMethod,
@@ -240,6 +242,24 @@ export default class UserDetailsPage extends React.Component<{
             }
           >
             {props.original.activated ? 'Yes' : 'No'}
+          </span>
+        );
+      }
+    },
+    {
+      id: 'operations',
+      Header: <span className={styles.tableHeader}>Edit</span>,
+      minWidth: 60,
+      sortable: false,
+      className: 'justify-content-center',
+      Cell(props: { original: UserDTO }) {
+        return (
+          <span>
+            {isAuthorized(props.original.authorities, [AUTHORITIES.USER]) && (
+              <Link to={`/users/${props.original.login}`}>
+                <i className="fa fa-pencil-square-o"></i>
+              </Link>
+            )}
           </span>
         );
       }
