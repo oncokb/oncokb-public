@@ -176,6 +176,7 @@ export const DEFAULT_MARGIN_BOTTOM_SM = 'mb-2';
 export const DEFAULT_MARGIN_BOTTOM_LG = 'mb-3';
 export const THRESHOLD_TABLE_FIXED_HEIGHT = 10;
 export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
+export const THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT = 30;
 export const LG_TABLE_FIXED_HEIGHT = 640;
 export const SM_TABLE_FIXED_HEIGHT = 400;
 export const IMG_MAX_WIDTH = 700;
@@ -319,6 +320,7 @@ export enum PAGE_ROUTE {
   ADMIN_USER_DETAILS = '/admin/user-details',
   ADMIN_SEND_EMAILS = '/admin/send-emails',
   ADMIN_CREATE_ACCOUNT = '/admin/create-account',
+  USER = '/users/:login',
   ACCOUNT = '/account',
   REGISTER = '/account/register',
   ACCOUNT_VERIFY = '/account/verify',
