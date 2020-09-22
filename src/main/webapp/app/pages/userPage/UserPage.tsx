@@ -183,6 +183,7 @@ export default class UserPage extends React.Component<IUserPage> {
               })
               .then(
                 tokens => {
+                  notifySuccess('Updated User');
                   tokens.forEach(token => {
                     if (
                       token.renewable !== tokenIsRenewable ||
@@ -204,7 +205,7 @@ export default class UserPage extends React.Component<IUserPage> {
                         })
                         .then(
                           () => {
-                            notifySuccess('Updated User');
+                            notifySuccess('Updated Token');
                           },
                           (error: Error) => {
                             notifyError(error);
