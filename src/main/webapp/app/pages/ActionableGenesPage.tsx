@@ -429,7 +429,7 @@ export default class ActionableGenesPage extends React.Component<
         [
           item.level,
           item.hugoSymbol,
-          item.alterations.join(', '),
+          item.alterations.map(alteration => alteration.name).join(', '),
           item.tumorType,
           item.drugs
         ].join('\t')
