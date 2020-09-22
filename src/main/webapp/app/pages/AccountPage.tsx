@@ -26,6 +26,7 @@ import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import pluralize from 'pluralize';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { daysDiff, secDiff } from 'app/shared/utils/Utils';
+import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 
 export type IRegisterProps = {
   authenticationStore: AuthenticationStore;
@@ -59,12 +60,6 @@ export class AccountPage extends React.Component<IRegisterProps> {
   @autobind
   @action
   handleValidSubmit(event: any, values: any) {}
-
-  @action
-  onCopyIdToken() {
-    this.copiedIdToken = true;
-    setTimeout(() => (this.copiedIdToken = false), 5000);
-  }
 
   @computed
   get account() {
@@ -116,12 +111,6 @@ export class AccountPage extends React.Component<IRegisterProps> {
     } else {
       return '';
     }
-  }
-
-  getDuration(expireInDays: number, expireInHours: number) {
-    return expireInDays > 0
-      ? `${expireInDays} ${pluralize('day', expireInDays)}`
-      : `${expireInHours} ${pluralize('hour', expireInHours)}`;
   }
 
   getContent() {
@@ -241,59 +230,10 @@ export class AccountPage extends React.Component<IRegisterProps> {
                 </div>
               }
             >
-              {this.tokens.map(token => {
-                const expirationDay = daysDiff(token.expiration);
-                const expirationHour = secDiff(token.expiration);
-                return (
-                  <div key={token.id} className={'mb-2'}>
-                    <InputGroup size={'sm'}>
-                      <FormControl
-                        value={token.token}
-                        type={'text'}
-                        contentEditable={false}
-                        disabled={true}
-                      />
-                      <InputGroup.Append>
-                        <InputGroup.Text id="btnGroupAddon">
-                          Expires in{' '}
-                          {this.getDuration(expirationDay, expirationHour)}
-                        </InputGroup.Text>
-                        <CopyToClipboard
-                          text={token.token}
-                          onCopy={() => this.onCopyIdToken()}
-                        >
-                          <Button variant={'primary'}>
-                            <DefaultTooltip
-                              placement={'top'}
-                              overlay={
-                                this.copiedIdToken ? 'Copied' : 'Copy ID Token'
-                              }
-                            >
-                              <i className={classnames('fa fa-copy')}></i>
-                            </DefaultTooltip>
-                          </Button>
-                        </CopyToClipboard>
-                        <DefaultTooltip
-                          placement={'top'}
-                          overlay={
-                            this.tokens.length < 2
-                              ? 'You need to have one valid token'
-                              : 'Delete the token'
-                          }
-                        >
-                          <Button
-                            variant={'primary'}
-                            disabled={this.tokens.length < 2}
-                            onClick={() => this.deleteToken(token)}
-                          >
-                            <i className={classnames('fa fa-trash')}></i>
-                          </Button>
-                        </DefaultTooltip>
-                      </InputGroup.Append>
-                    </InputGroup>
-                  </div>
-                );
-              })}
+              <TokenInputGroups
+                tokens={this.tokens}
+                onDeleteToken={this.deleteToken}
+              />
             </InfoRow>
           </Col>
         </Row>
