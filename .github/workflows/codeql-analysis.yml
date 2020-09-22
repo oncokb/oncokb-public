@@ -2,14 +2,20 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [master, fda-mock, oncokb-demo, redirect-to-public]
+    branches: [master, fda-mock]
     paths:
     - 'src/**'
+    paths-ignore:
+    - '.yarn/releases/**'
+    - 'node_modules/**'
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [master, fda-mock, oncokb-demo, redirect-to-public]
+    branches: [master, fda-mock]
     paths:
     - 'src/**'
+    paths-ignore:
+    - '.yarn/releases/**'
+    - 'node_modules/**'
   schedule:
     - cron: '0 1 * * 0'
 
@@ -35,8 +41,8 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
       # Override language selection by uncommenting this and choosing your languages
-      # with:
-      #   languages: go, javascript, csharp, python, cpp, java
+      with:
+        languages: javascript, java
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
