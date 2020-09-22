@@ -60,7 +60,7 @@ public class ClientForwardController {
      * for hgvsg, we could annotate as /hgvsg/7:g.140753336A>T?refGenome=GRCH38
      * @return forward to client {@code index.html}.
      */
-    @GetMapping(value = {"/**/{path:[^\\.]*}", "/gene/**", "/hgvsg/**"})
+    @GetMapping(value = {"/**/{path:[^\\.]*}", "/gene/**", "/hgvsg/**", "/users/**"})
     public String forward() {
         return "forward:/";
     }
