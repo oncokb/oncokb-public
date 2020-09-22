@@ -3,25 +3,19 @@ name: "CodeQL"
 on:
   push:
     branches: [master, fda-mock]
-    paths-ignore:
-    - '.yarn/releases/**'
-    - 'node_modules/**'
-    - 'node/**'
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [master, fda-mock]
-    paths-ignore:
-    - '.yarn/releases/**'
-    - 'node_modules/**'
-    - 'node/**'
-  schedule:
-    - cron: '0 1 * * 0'
 
 jobs:
   analyse:
     name: Analyse
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['javascript', 'java']
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -40,7 +34,8 @@ jobs:
       uses: github/codeql-action/init@v1
       # Override language selection by uncommenting this and choosing your languages
       with:
-        languages: javascript, java
+        languages: ${{ matrix.language }}
+        config-file: ./.github/codeql-config.yml
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
