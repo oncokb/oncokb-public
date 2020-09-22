@@ -77,7 +77,7 @@ export default class AlterationPage extends React.Component<
       this.props.match.params.tumorType !== prevProps.match.params.tumorType
     ) {
       this.store.tumorTypeQuery = this.props.match.params.tumorType
-        ? this.props.match.params.tumorType
+        ? decodeSlash(this.props.match.params.tumorType)!
         : '';
     }
   }
