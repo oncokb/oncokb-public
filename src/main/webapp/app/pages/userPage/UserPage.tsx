@@ -20,7 +20,8 @@ import {
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   UNAUTHORIZED_ALLOWED_PATH,
   USER_AUTHORITIES,
-  USER_AUTHORITY
+  USER_AUTHORITY,
+  XREGEXP_VALID_LATIN_TEXT
 } from 'app/config/constants';
 import XRegExp from 'xregexp';
 import {
@@ -330,7 +331,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 'Required to be at least 1 character'
                             },
                             pattern: {
-                              value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                              value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
                                 'Sorry, we only support Latin letters for now.'
                             },
@@ -357,7 +358,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 'Required to be at least 1 character'
                             },
                             pattern: {
-                              value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                              value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
                                 'Sorry, we only support Latin letters for now.'
                             },
@@ -385,7 +386,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 'Required to be at least 1 character'
                             },
                             pattern: {
-                              value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                              value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
                                 'Sorry, we only support Latin letters for now.'
                             },
@@ -407,7 +408,7 @@ export default class UserPage extends React.Component<IUserPage> {
                           value={this.user.result.country}
                           validate={{
                             pattern: {
-                              value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                              value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
                                 'Sorry, we only support Latin letters for now.'
                             },
