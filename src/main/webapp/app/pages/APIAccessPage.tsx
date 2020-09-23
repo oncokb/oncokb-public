@@ -46,28 +46,16 @@ const DownloadButtonGroups: React.FunctionComponent<{
 }> = props => {
   return (
     <>
-      {props.data.hasAllAnnotatedVariants ? (
+      {props.data.hasAllCuratedGenes ? (
         <AuthDownloadButton
           className={BUTTON_CLASS_NAME}
-          fileName={`all_annotated_variants_${props.data.version}.tsv`}
+          fileName={`all_curated_genes_${props.data.version}.tsv`}
           getDownloadData={() =>
-            oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET({
+            oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
               version: props.data.version
             })
           }
-          buttonText="All Curated Alterations"
-        />
-      ) : null}
-      {props.data.hasAllActionableVariants ? (
-        <AuthDownloadButton
-          className={BUTTON_CLASS_NAME}
-          fileName={`all_actionable_variants_${props.data.version}.tsv`}
-          getDownloadData={() =>
-            oncokbClient.utilsAllActionableVariantsTxtGetUsingGET({
-              version: props.data.version
-            })
-          }
-          buttonText="Actionable Alterations"
+          buttonText="All Curated Genes"
         />
       ) : null}
       {props.data.hasCancerGeneList ? (
@@ -80,6 +68,19 @@ const DownloadButtonGroups: React.FunctionComponent<{
             })
           }
           buttonText="Cancer Gene List"
+        />
+      ) : null}
+      {props.data.hasAllActionableVariants ? (
+        <AuthDownloadButton
+          className={BUTTON_CLASS_NAME}
+          fileName={`oncokb_${props.data.version.replace('.', '_')}.sql.gz`}
+          getDownloadData={async () => {
+            const data = await oncokbPrivateClient.utilDataSqlDumpGetUsingGET({
+              version: props.data.version
+            });
+            return data;
+          }}
+          buttonText="Data Dump"
         />
       ) : null}
     </>
@@ -99,7 +100,7 @@ export default class APIAccessPage extends React.Component<{
   };
   readonly dataAvailability = remoteData<DownloadAvailabilityWithDate[]>({
     async invoke() {
-      const result = await oncokbPrivateClient.utilDataReleaseDownloadAvailabilityGetUsingGET(
+      const result = await oncokbPrivateClient.utilDataAvailabilityGetUsingGET(
         {}
       );
       const availableVersions = _.reduce(
@@ -110,9 +111,12 @@ export default class APIAccessPage extends React.Component<{
         },
         {} as { [key: string]: DownloadAvailability }
       );
+      // do not provide data on version 1
       return _.reduce(
-        DATA_RELEASES.filter(release =>
-          _.has(availableVersions, release.version)
+        DATA_RELEASES.filter(
+          release =>
+            _.has(availableVersions, release.version) &&
+            !release.version.startsWith('v1')
         ),
         (acc, next) => {
           const currentVersionData: DownloadAvailability =
@@ -226,7 +230,7 @@ export default class APIAccessPage extends React.Component<{
           </div>
           {this.props.authenticationStore.account &&
           this.props.authenticationStore.account.authorities.includes(
-            USER_AUTHORITY.ROLE_PREMIUM_USER
+            USER_AUTHORITY.ROLE_DATA_DOWNLOAD
           ) ? (
             <>
               <div className={'mb-3'}>
@@ -283,18 +287,6 @@ export default class APIAccessPage extends React.Component<{
                   ) : null}
                 </>
               ) : null}
-              <div>
-                {this.dataAvailability.error ? (
-                  <Alert variant={'warning'}>
-                    We are not able to provide data download at the moment,
-                    please{' '}
-                    <ContactLink emailSubject={'Unable to Download the Data'}>
-                      contact us
-                    </ContactLink>
-                    .
-                  </Alert>
-                ) : null}
-              </div>
             </>
           ) : null}
         </>

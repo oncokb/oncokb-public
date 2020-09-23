@@ -55,9 +55,12 @@ public class ClientForwardController {
 
     /**
      * Forwards any unmapped paths (except those containing a period) to the client {@code index.html}.
+     * Allow dots for any url under gene and hgvsg
+     * for gene, we could annotate /gene/BRAF/p.V600E
+     * for hgvsg, we could annotate as /hgvsg/7:g.140753336A>T?refGenome=GRCH38
      * @return forward to client {@code index.html}.
      */
-    @GetMapping(value = "/**/{path:[^\\.]*}")
+    @GetMapping(value = {"/**/{path:[^\\.]*}", "/gene/**", "/hgvsg/**", "/users/**"})
     public String forward() {
         return "forward:/";
     }

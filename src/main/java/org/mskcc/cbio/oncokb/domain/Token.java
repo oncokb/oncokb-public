@@ -18,7 +18,6 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "token")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Token implements Serializable {
 
     private static final long serialVersionUID = 1L;

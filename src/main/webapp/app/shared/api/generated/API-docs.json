@@ -28,6 +28,10 @@
       "description": "Mails Controller"
     },
     {
+      "name": "token-resource",
+      "description": "Token Resource"
+    },
+    {
       "name": "user-details-resource",
       "description": "User Details Resource"
     },
@@ -511,6 +515,33 @@
         "deprecated": false
       }
     },
+    "/api/cronjob/check-trial-accounts": {
+      "get": {
+        "tags": [
+          "cron-job-controller"
+        ],
+        "summary": "checkTrialAccounts",
+        "operationId": "checkTrialAccountsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/cronjob/generate-tokens": {
       "get": {
         "tags": [
@@ -810,6 +841,7 @@
               "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "APPROVAL_MSK_IN_COMMERCIAL",
+              "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
               "TEST"
             ]
           },
@@ -880,6 +912,204 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/tokens": {
+      "get": {
+        "tags": [
+          "token-resource"
+        ],
+        "summary": "getAllTokens",
+        "operationId": "getAllTokensUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Token"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "token-resource"
+        ],
+        "summary": "createToken",
+        "operationId": "createTokenUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "token",
+            "description": "token",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "put": {
+        "tags": [
+          "token-resource"
+        ],
+        "summary": "updateToken",
+        "operationId": "updateTokenUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "token",
+            "description": "token",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/tokens/{id}": {
+      "get": {
+        "tags": [
+          "token-resource"
+        ],
+        "summary": "getToken",
+        "operationId": "getTokenUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "tags": [
+          "token-resource"
+        ],
+        "summary": "deleteToken",
+        "operationId": "deleteTokenUsingDELETE_1",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         },
         "deprecated": false
@@ -1611,6 +1841,48 @@
         },
         "deprecated": false
       }
+    },
+    "/api/users/{login}/tokens": {
+      "get": {
+        "tags": [
+          "user-resource"
+        ],
+        "summary": "getUserTokens",
+        "operationId": "getUserTokensUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "login",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Token"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
     }
   },
   "definitions": {
@@ -1672,6 +1944,7 @@
             "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
+            "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
             "TEST"
           ]
         }
@@ -2057,6 +2330,7 @@
             "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
+            "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
             "TEST"
           ]
         },

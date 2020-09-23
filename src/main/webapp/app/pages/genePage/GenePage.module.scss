@@ -1,11 +1,12 @@
-.geneAdditionalInfo {
+.geneAdditionalInfo,
+.lowKeyLinkout {
   color: $grey;
-  display: flex;
+}
 
+.sameLineSpans {
+  display: flex;
   > span {
-    margin: 0 0.25rem;
-    display: flex;
-    align-items: center;
+    margin: 0 0.3rem;
   }
 
   > span:first-child {
@@ -15,11 +16,6 @@
   > span:last-child {
     margin-left: 0;
   }
-}
-
-:global(.btn).geneAdditionalInfoButton {
-  color: $grey;
-  padding: 0 0.25rem;
 }
 
 :global(.RRT__panel).panel {

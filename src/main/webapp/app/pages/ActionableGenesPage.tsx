@@ -12,11 +12,14 @@ import {
   observable,
   reaction
 } from 'mobx';
-import { Evidence, MainType } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  Alteration,
+  Evidence,
+  MainType
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
 import {
-  concatElementsByComma,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
@@ -45,11 +48,13 @@ import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import DocumentTitle from 'react-document-title';
 import { COLOR_BLUE } from 'app/config/theme';
+import WithSeparator from 'react-with-separator';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 
 type Treatment = {
   level: string;
   hugoSymbol: string;
-  alterations: string[];
+  alterations: Alteration[];
   tumorType: string;
   treatments: {}[];
   uniqueDrugs: string[];
@@ -187,11 +192,7 @@ export default class ActionableGenesPage extends React.Component<
       treatments.push({
         level: levelOfEvidence2Level(item.levelOfEvidence, true),
         hugoSymbol: item.gene.hugoSymbol || 'NA',
-        alterations: item.alterations
-          .map(function(alt) {
-            return alt.name ? alt.name : alt.alteration;
-          })
-          .sort(),
+        alterations: _.sortBy(item.alterations, 'name'),
         tumorType: getCancerTypeNameFromOncoTreeType(item.oncoTreeType),
         treatments: item.treatments,
         uniqueDrugs: _.uniq(
@@ -428,7 +429,7 @@ export default class ActionableGenesPage extends React.Component<
         [
           item.level,
           item.hugoSymbol,
-          item.alterations.join(', '),
+          item.alterations.map(alteration => alteration.name).join(', '),
           item.tumorType,
           item.drugs
         ].join('\t')
@@ -437,14 +438,24 @@ export default class ActionableGenesPage extends React.Component<
     return Promise.resolve(content.join('\n'));
   }
 
-  getAlterationCell(hugoSymbol: string, alterations: string[]) {
+  getAlterationCell(hugoSymbol: string, alterations: Alteration[]) {
     const linkedAlts = alterations.map<React.ReactNode>(
       (alteration, index: number) => (
-        <AlterationPageLink
-          key={index}
-          hugoSymbol={hugoSymbol}
-          alteration={alteration}
-        />
+        <>
+          <AlterationPageLink
+            key={index}
+            hugoSymbol={hugoSymbol}
+            alteration={alteration.name}
+          />
+          {alteration.referenceGenomes.length === 1 ? (
+            <InfoIcon
+              overlay={`Only in ${alteration.referenceGenomes[0]}`}
+              placement="top"
+              className="ml-1"
+              style={{ fontSize: '0.7rem' }}
+            />
+          ) : null}
+        </>
       )
     );
     if (linkedAlts.length > 5) {
@@ -454,7 +465,7 @@ export default class ActionableGenesPage extends React.Component<
           <DefaultTooltip
             overlay={
               <div style={{ maxWidth: '400px' }}>
-                {concatElementsByComma(linkedAlts)}
+                <WithSeparator separator={','}>{linkedAlts}</WithSeparator>
               </div>
             }
             overlayStyle={{
@@ -475,7 +486,7 @@ export default class ActionableGenesPage extends React.Component<
         </span>
       );
     } else {
-      return concatElementsByComma(linkedAlts);
+      return <WithSeparator separator={', '}>{linkedAlts}</WithSeparator>;
     }
   }
 

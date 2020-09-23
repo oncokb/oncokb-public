@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.mail.MessagingException;
+import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -84,6 +86,19 @@ public class ApiProxy {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate.exchange(uri, method, new HttpEntity<>(body, httpHeaders), String.class).getBody();
+    }
+
+    @RequestMapping("/private/utils/data/sqlDump")
+    public ResponseEntity<byte[]> proxyDataReleaseDownload(@RequestBody(required = false) String body, HttpMethod method, HttpServletRequest request)
+        throws URISyntaxException {
+        URI uri = apiProxyService.prepareURI(request);
+        updateTokenStats(request, 1);
+
+        HttpHeaders httpHeaders = apiProxyService.prepareHttpHeaders(request.getContentType());
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(
+            new ByteArrayHttpMessageConverter());
+        return restTemplate.exchange(uri, method, new HttpEntity<>(body, httpHeaders), byte[].class);
     }
 
     @Async

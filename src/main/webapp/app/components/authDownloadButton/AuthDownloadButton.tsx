@@ -8,6 +8,7 @@ import { observer, inject } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { LoadingButton } from 'app/shared/button/LoadingButton';
 import { IDownloadButtonWithPromise } from 'app/components/downloadButtonWithPromise/DownloadButtonWithPromise';
+import _ from 'lodash';
 
 interface IAuthDownloadButton extends IDownloadButtonWithPromise {
   routing?: RouterStore;
@@ -26,6 +27,9 @@ export class AuthDownloadButton extends React.Component<IAuthDownloadButton> {
       this.props
         .getDownloadData()
         .then(data => {
+          if (_.isArray(data)) {
+            data = data.join('');
+          }
           fileDownload(data, this.props.fileName, this.props.mime);
         })
         .catch(error => {})

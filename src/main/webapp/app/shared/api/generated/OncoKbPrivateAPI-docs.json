@@ -20,6 +20,10 @@
       "description": "The utils API"
     },
     {
+      "name": "Transcript",
+      "description": "The transcript API"
+    },
+    {
       "name": "Search",
       "description": "The utils API"
     }
@@ -280,14 +284,56 @@
         }
       }
     },
-    "/utils/dataRelease/downloadAvailability": {
+    "/transcripts/{hugoSymbol}": {
+      "get": {
+        "tags": [
+          "Transcript"
+        ],
+        "summary": "getTranscript",
+        "description": "Get transcript info in both GRCh37 and 38.",
+        "operationId": "getTranscriptUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hugoSymbol",
+            "in": "path",
+            "description": "hugoSymbol",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TranscriptResult"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/utils/data/availability": {
       "get": {
         "tags": [
           "Utils"
         ],
-        "summary": "utilDataReleaseDownloadAvailabilityGet",
+        "summary": "utilDataAvailabilityGet",
         "description": "Get information about what files are available by data version",
-        "operationId": "utilDataReleaseDownloadAvailabilityGetUsingGET",
+        "operationId": "utilDataAvailabilityGetUsingGET",
         "consumes": [
           "application/json"
         ],
@@ -319,14 +365,14 @@
         }
       }
     },
-    "/utils/dataRelease/readme": {
+    "/utils/data/readme": {
       "get": {
         "tags": [
           "Utils"
         ],
-        "summary": "utilDataReleaseReadmeGet",
+        "summary": "utilDataReadmeGet",
         "description": "Get readme info for specific data release version",
-        "operationId": "utilDataReleaseReadmeGetUsingGET",
+        "operationId": "utilDataReadmeGetUsingGET",
         "consumes": [
           "application/json"
         ],
@@ -364,18 +410,18 @@
         }
       }
     },
-    "/utils/dataRelease/sqlDump": {
+    "/utils/data/sqlDump": {
       "get": {
         "tags": [
           "Utils"
         ],
-        "summary": "utilDataReleaseSqlDumpGet",
-        "operationId": "utilDataReleaseSqlDumpGetUsingGET",
+        "summary": "utilDataSqlDumpGet",
+        "operationId": "utilDataSqlDumpGetUsingGET",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "application/zip"
+          "application/gz"
         ],
         "parameters": [
           {
@@ -510,6 +556,15 @@
             "in": "body",
             "name": "hugoSymbol",
             "description": "Gene Hugo Symbol",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "name": "referenceGenome",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
             "required": false,
             "schema": {
               "type": "string"
@@ -1075,9 +1130,24 @@
             "format": "int32"
           },
           {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
+          },
+          {
             "name": "alteration",
             "in": "query",
             "description": "Alteration",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "hgvsg",
+            "in": "query",
+            "description": "HGVS genomic format. Example: 7:g.140453136A>T",
             "required": false,
             "type": "string"
           },
@@ -1110,6 +1180,36 @@
     }
   },
   "definitions": {
+    "UntranslatedRegion": {
+      "type": "object",
+      "required": [
+        "end",
+        "start",
+        "strand",
+        "type"
+      ],
+      "properties": {
+        "end": {
+          "type": "integer",
+          "format": "int32",
+          "description": "End position of UTR"
+        },
+        "start": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Start position of UTR"
+        },
+        "strand": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Strand UTR is on, -1 for - and 1 for +"
+        },
+        "type": {
+          "type": "string",
+          "description": "UTR Type"
+        }
+      }
+    },
     "TreatmentDrug": {
       "type": "object",
       "properties": {
@@ -1154,6 +1254,13 @@
         "proteinStart": {
           "type": "integer",
           "format": "int32"
+        },
+        "referenceGenome": {
+          "type": "string",
+          "enum": [
+            "GRCh37",
+            "GRCh38"
+          ]
         },
         "svType": {
           "type": "string",
@@ -1252,6 +1359,16 @@
         },
         "refResidues": {
           "type": "string"
+        },
+        "referenceGenomes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "GRCh37",
+              "GRCh38"
+            ]
+          }
         },
         "variantResidues": {
           "type": "string"
@@ -1554,7 +1671,16 @@
         "gene": {
           "type": "string"
         },
-        "isoform": {
+        "grch37Isoform": {
+          "type": "string"
+        },
+        "grch37RefSeq": {
+          "type": "string"
+        },
+        "grch38Isoform": {
+          "type": "string"
+        },
+        "grch38RefSeq": {
           "type": "string"
         },
         "mutationEffect": {
@@ -1570,9 +1696,6 @@
           "type": "string"
         },
         "proteinChange": {
-          "type": "string"
-        },
-        "refSeq": {
           "type": "string"
         },
         "variant": {
@@ -1686,15 +1809,51 @@
         }
       }
     },
+    "Exon": {
+      "type": "object",
+      "required": [
+        "exonEnd",
+        "exonId",
+        "exonStart",
+        "rank",
+        "strand",
+        "version"
+      ],
+      "properties": {
+        "exonEnd": {
+          "type": "integer",
+          "format": "int32",
+          "description": "End position of exon"
+        },
+        "exonId": {
+          "type": "string",
+          "description": "Exon id"
+        },
+        "exonStart": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Start position of exon"
+        },
+        "rank": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of exon in transcript"
+        },
+        "strand": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Strand exon is on, -1 for - and 1 for +"
+        },
+        "version": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Exon version"
+        }
+      }
+    },
     "Gene": {
       "type": "object",
       "properties": {
-        "curatedIsoform": {
-          "type": "string"
-        },
-        "curatedRefSeq": {
-          "type": "string"
-        },
         "entrezGeneId": {
           "type": "integer",
           "format": "int32"
@@ -1711,10 +1870,19 @@
             "$ref": "#/definitions/Geneset"
           }
         },
-        "hugoSymbol": {
+        "grch37Isoform": {
           "type": "string"
         },
-        "name": {
+        "grch37RefSeq": {
+          "type": "string"
+        },
+        "grch38Isoform": {
+          "type": "string"
+        },
+        "grch38RefSeq": {
+          "type": "string"
+        },
+        "hugoSymbol": {
           "type": "string"
         },
         "oncogene": {
@@ -1833,6 +2001,69 @@
         },
         "sampleId": {
           "type": "string"
+        }
+      }
+    },
+    "EnsemblTranscript": {
+      "type": "object",
+      "required": [
+        "geneId",
+        "proteinId",
+        "transcriptId"
+      ],
+      "properties": {
+        "ccdsId": {
+          "type": "string",
+          "description": "Consensus CDS (CCDS) ID"
+        },
+        "exons": {
+          "type": "array",
+          "description": "Exon information",
+          "items": {
+            "$ref": "#/definitions/Exon"
+          }
+        },
+        "geneId": {
+          "type": "string",
+          "description": "Ensembl gene id"
+        },
+        "hugoSymbols": {
+          "type": "array",
+          "description": "Hugo symbols",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pfamDomains": {
+          "type": "array",
+          "description": "Pfam domains",
+          "items": {
+            "$ref": "#/definitions/PfamDomainRange"
+          }
+        },
+        "proteinId": {
+          "type": "string",
+          "description": "Ensembl protein id"
+        },
+        "proteinLength": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Length of protein"
+        },
+        "refseqMrnaId": {
+          "type": "string",
+          "description": "RefSeq mRNA ID"
+        },
+        "transcriptId": {
+          "type": "string",
+          "description": "Ensembl transcript id"
+        },
+        "utrs": {
+          "type": "array",
+          "description": "UTR information",
+          "items": {
+            "$ref": "#/definitions/UntranslatedRegion"
+          }
         }
       }
     },
@@ -2108,6 +2339,20 @@
         }
       }
     },
+    "TranscriptResult": {
+      "type": "object",
+      "properties": {
+        "grch37Transcript": {
+          "$ref": "#/definitions/EnsemblTranscript"
+        },
+        "grch38Transcript": {
+          "$ref": "#/definitions/EnsemblTranscript"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
     "MatchVariantRequest": {
       "type": "object",
       "properties": {
@@ -2178,6 +2423,30 @@
         "tumorType": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "PfamDomainRange": {
+      "type": "object",
+      "required": [
+        "pfamDomainEnd",
+        "pfamDomainId",
+        "pfamDomainStart"
+      ],
+      "properties": {
+        "pfamDomainEnd": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Pfam domain end amino acid"
+        },
+        "pfamDomainId": {
+          "type": "string",
+          "description": "Pfam domain id"
+        },
+        "pfamDomainStart": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Pfam domain start amino acid"
         }
       }
     },

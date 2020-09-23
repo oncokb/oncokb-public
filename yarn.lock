@@ -2302,10 +2302,10 @@ autoprefixer@^6.3.1:
     postcss "^5.2.16"
     postcss-value-parser "^3.2.3"
 
-availity-reactstrap-validation@2.5.1:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/availity-reactstrap-validation/-/availity-reactstrap-validation-2.5.1.tgz#84f29a964d3f0fe2023ee319a966e768b0fca522"
-  integrity sha512-mASNeIx8ZpwEYL5hvEOur3ntRy87g75jPYohl+5Ote6qdfZoFI/EgKJwqvxamflboRJ0qgfzLPxzGaKirQXrag==
+availity-reactstrap-validation@2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/availity-reactstrap-validation/-/availity-reactstrap-validation-2.6.1.tgz#7a682322da18db63aeca10b9494cf0338688cf4c"
+  integrity sha512-Se9X7q1wV0jyOjCnieayUXltPPELNsQ2AdiETdH5yf1yyfcqDUsJ52rLhQ56LUIyoc1C3OjFqoi2YbfgnBqSFA==
   dependencies:
     babel-runtime "^6.26.0"
     classnames "^2.2.6"
@@ -12889,6 +12889,11 @@ react-transition-group@^4.0.0:
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
+
+react-with-separator@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-with-separator/-/react-with-separator-1.2.0.tgz#56996acff0b8c01f40da117f39d79bd1ad17b7a1"
+  integrity sha512-tAkZa0QpaK3HA0SjICxcIovwzmWqhW4BsJ4yIA3D7urGrNnHrqQHXBpZ3zxUdJ6bkRhWnLVAydWuoCvIY4MaUg==
 
 react@16.12.0:
   version "16.12.0"

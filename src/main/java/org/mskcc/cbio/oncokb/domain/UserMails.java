@@ -18,7 +18,6 @@ import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
  */
 @Entity
 @Table(name = "user_mails")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class UserMails implements Serializable {
 
     private static final long serialVersionUID = 1L;

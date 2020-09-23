@@ -6,8 +6,8 @@ package org.mskcc.cbio.oncokb.config.application;
 public class RedisProperties {
     String type;
     String password;
-    MasterSlaveRedisCache masterSlaveCache;
-    SingleRedisCache singleCache;
+    String address;
+    String sentinelMasterName;
 
     public String getType() {
         return type;
@@ -25,19 +25,19 @@ public class RedisProperties {
         this.password = password;
     }
 
-    public MasterSlaveRedisCache getMasterSlaveCache() {
-        return masterSlaveCache;
+    public String getAddress() {
+        return address;
     }
 
-    public void setMasterSlaveCache(MasterSlaveRedisCache masterSlaveCache) {
-        this.masterSlaveCache = masterSlaveCache;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public SingleRedisCache getSingleCache() {
-        return singleCache;
+    public String getSentinelMasterName() {
+        return sentinelMasterName;
     }
 
-    public void setSingleCache(SingleRedisCache singleCache) {
-        this.singleCache = singleCache;
+    public void setSentinelMasterName(String sentinelMasterName) {
+        this.sentinelMasterName = sentinelMasterName;
     }
 }

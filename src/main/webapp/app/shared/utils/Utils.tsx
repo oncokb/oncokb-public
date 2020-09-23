@@ -192,7 +192,10 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
   className?: string;
 }> = props => {
   return (
-    <span style={{ width: 16, marginTop: -3, marginLeft: 3 }}>
+    <span
+      style={{ width: 16, marginTop: -3, marginLeft: 3 }}
+      key={'oncokb-oncogenicity-icone'}
+    >
       <i
         className={classnames(
           `oncokb annotation-icon ${getAnnotationOncogenicityClassName(
@@ -204,15 +207,6 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
       />
     </span>
   );
-};
-
-export const reduceJoin = (
-  data: React.ReactNode[],
-  separator: string | JSX.Element
-) => {
-  return data.length === 0
-    ? null
-    : data.reduce((prev, curr) => [prev, separator, curr]);
 };
 
 export const OncoKBLevelIcon: React.FunctionComponent<{
@@ -428,6 +422,18 @@ export function toAppLocalDateFormat(utcTime: string | undefined) {
 
 export function getMomentInstance(utcTime: string) {
   return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z);
+}
+
+export function daysDiff(date: string) {
+  const today = moment.utc();
+  const expiration = getMomentInstance(date);
+  return expiration.diff(today, 'days');
+}
+
+export function secDiff(date: string) {
+  const today = moment.utc();
+  const expiration = getMomentInstance(date);
+  return expiration.diff(today, 'hours');
 }
 
 const SLASH_HTML_ENTITY_CODE = '%2F';
