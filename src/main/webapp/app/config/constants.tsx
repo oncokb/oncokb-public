@@ -525,6 +525,8 @@ export enum REGEXP {
   NCTID = 'NCT[0-9]+'
 }
 
+export const XREGEXP_VALID_LATIN_TEXT = '^[\\p{Latin}\\p{Common}\\s]+$';
+
 export const REGEXP_LINK: { [key: string]: string } = {
   [REGEXP.PMID]: 'https://www.ncbi.nlm.nih.gov/pubmed/',
   [REGEXP.NCTID]: 'http://clinicaltrials.gov/show/'
