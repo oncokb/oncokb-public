@@ -16,7 +16,8 @@ import {
   ACADEMIC_TERMS,
   ACCOUNT_TITLES,
   LicenseType,
-  THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT
+  THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
+  XREGEXP_VALID_LATIN_TEXT
 } from 'app/config/constants';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
@@ -196,7 +197,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Your first name is required.'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },
@@ -219,7 +220,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Your last name is required.'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },
@@ -315,7 +316,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Required to be at least 1 character'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },
@@ -341,7 +342,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Required to be at least 1 character'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },
@@ -367,7 +368,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Required to be at least 1 character'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },
@@ -389,7 +390,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Required.'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },
