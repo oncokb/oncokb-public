@@ -9,8 +9,8 @@ import {
   reaction
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
-import { Redirect, RouteComponentProps } from 'react-router';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Redirect, RouteComponentProps, Prompt } from 'react-router';
+import { Button, Col, Row, Modal } from 'react-bootstrap';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import styles from './GenePage.module.scss';
 import {
@@ -71,6 +71,7 @@ import {
   getFdaData,
   getReferenceCell
 } from 'app/pages/genePage/FdaUtils';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -258,12 +259,16 @@ interface GenePageProps extends RouteComponentProps<MatchParams> {
   windowStore: WindowStore;
 }
 
+const LEAVING_PAGE_MESSAGE =
+  'You are now leaving the FDA-recognized portion of this page.';
+
 @inject('appStore', 'windowStore')
 @observer
 export default class GenePage extends React.Component<GenePageProps> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground: boolean;
   @observable selectedTab: string;
+  @observable showModal = false;
 
   private fdaVariants: FdaVariant[] = [];
   private store: AnnotationStore;
@@ -376,22 +381,31 @@ export default class GenePage extends React.Component<GenePageProps> {
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
         minWidth: 200,
-        Header: <span>FDA Level of Evidence</span>,
+        Header: (
+          <div>
+            <span>FDA Level of Evidence</span>
+            <InfoIcon
+              className={'ml-1'}
+              overlay={
+                <span>
+                  For more information about FDA Level of Evidence, please see{' '}
+                  <Linkout
+                    link={'https://www.fda.gov/media/109050/download'}
+                    className={'font-weight-bold'}
+                  >
+                    HERE
+                  </Linkout>
+                  .
+                </span>
+              }
+            />
+          </div>
+        ),
         accessor: 'level',
         onFilter: (data: FdaVariant, keyword) =>
           filterByKeyword(data.level, keyword),
         Cell(props: { original: FdaVariant }) {
           return <span>{props.original.level}</span>;
-        }
-      },
-      {
-        Header: <span>References</span>,
-        minWidth: 400,
-        accessor: 'referenceStr',
-        onFilter: (data: FdaVariant, keyword) =>
-          filterByKeyword(data.referenceStr, keyword),
-        Cell(props: { original: FdaVariant }) {
-          return getReferenceCell(props.original.references);
         }
       }
     ];
@@ -505,6 +519,15 @@ export default class GenePage extends React.Component<GenePageProps> {
   @action
   toggleGeneBackground() {
     this.showGeneBackground = !this.showGeneBackground;
+  }
+
+  @autobind
+  @action
+  onChangeTab(selectedTabKey: string) {
+    if (this.onFdaTab && selectedTabKey !== TAB_KEYS.FDA) {
+      this.showModal = true;
+    }
+    this.selectedTab = selectedTabKey;
   }
 
   getTable(key: TAB_KEYS) {
@@ -657,6 +680,13 @@ export default class GenePage extends React.Component<GenePageProps> {
       : this.store.clinicalAlterations.result.length > 0
       ? TAB_KEYS.CLINICAL
       : TAB_KEYS.BIOLOGICAL;
+  }
+
+  @computed
+  get onFdaTab() {
+    return this.selectedTab === undefined
+      ? this.tabDefaultActiveKey === TAB_KEYS.FDA
+      : this.selectedTab === TAB_KEYS.FDA;
   }
 
   @computed
@@ -833,14 +863,33 @@ export default class GenePage extends React.Component<GenePageProps> {
                                 ? this.selectedTab
                                 : this.tabDefaultActiveKey
                             }
-                            onChange={(selectedTabKey: string) => {
-                              this.selectedTab = selectedTabKey;
-                            }}
+                            onChange={this.onChangeTab}
                             items={this.tabs}
                             transform={false}
                           />
                         </Col>
                       </Row>
+                      <Modal
+                        show={this.showModal}
+                        onHide={() => (this.showModal = false)}
+                      >
+                        <Modal.Body>{LEAVING_PAGE_MESSAGE}</Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            variant="primary"
+                            onClick={(event: any) => {
+                              event.preventDefault();
+                              this.showModal = false;
+                            }}
+                          >
+                            OK
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                      <Prompt
+                        when={this.onFdaTab}
+                        message={LEAVING_PAGE_MESSAGE}
+                      />
                     </Then>
                     <Else>
                       <LoadingIndicator
