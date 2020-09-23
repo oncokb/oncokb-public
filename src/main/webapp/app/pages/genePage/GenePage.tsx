@@ -71,7 +71,6 @@ import {
   getFdaData,
   getReferenceCell
 } from 'app/pages/genePage/FdaUtils';
-import InfoIcon from 'app/shared/icons/InfoIcon';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
