@@ -269,7 +269,6 @@ export default class GenePage extends React.Component<GenePageProps> {
   @observable selectedTab: string;
   @observable showModal = false;
 
-  private fdaVariants: FdaVariant[] = [];
   private store: AnnotationStore;
   readonly reactions: IReactionDisposer[] = [];
 
@@ -488,7 +487,6 @@ export default class GenePage extends React.Component<GenePageProps> {
     if (queryStrings.selectedTab) {
       this.selectedTab = queryStrings.selectedTab;
     }
-    this.fdaVariants = getFdaData(this.store.hugoSymbolQuery);
 
     this.reactions.push(
       reaction(
@@ -503,6 +501,47 @@ export default class GenePage extends React.Component<GenePageProps> {
         }
       )
     );
+  }
+
+  isOncogenicMutations(alteration: string) {
+    return alteration.toLowerCase() === 'oncogenic mutations';
+  }
+
+  @computed
+  get fdaVariants() {
+    const predefinedFdaVariants = getFdaData(this.store.hugoSymbolQuery);
+    const hasOncogenicMutations =
+      predefinedFdaVariants.filter((alteration: FdaVariant) =>
+        this.isOncogenicMutations(alteration.alteration)
+      ).length > 0;
+    if (hasOncogenicMutations) {
+      const oncogenicAlts = this.store.filteredBiologicalAlterations.filter(
+        (alteration: BiologicalVariant) =>
+          ['oncogenic', 'likely oncogenic', 'predicted oncogenic'].includes(
+            alteration.oncogenic.toLowerCase()
+          )
+      );
+      return _.reduce(
+        predefinedFdaVariants,
+        (acc, next) => {
+          if (this.isOncogenicMutations(next.alteration)) {
+            acc.push(
+              ...oncogenicAlts.map(alt => {
+                return {
+                  ...next,
+                  alteration: alt.variant.name
+                };
+              })
+            );
+          } else {
+            acc.push(next);
+          }
+          return acc;
+        },
+        [] as FdaVariant[]
+      );
+    }
+    return predefinedFdaVariants;
   }
 
   componentDidUpdate(prevProps: any) {
@@ -595,7 +634,7 @@ export default class GenePage extends React.Component<GenePageProps> {
     } else if (key === TAB_KEYS.FDA) {
       return (
         <OncoKBTable
-          data={getFdaData(this.store.hugoSymbolQuery)}
+          data={this.fdaVariants}
           columns={this.fdaTableColumns}
           pageSize={this.fdaVariants.length === 0 ? 1 : this.fdaVariants.length}
           style={
