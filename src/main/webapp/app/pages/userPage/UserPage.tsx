@@ -149,6 +149,25 @@ export default class UserPage extends React.Component<IUserPage> {
       });
   }
 
+  @action
+  extendExpirationDate(token: Token, newDate: string) {
+    client
+      .updateTokenUsingPUT({
+        token: {
+          ...token,
+          expiration: newDate
+        }
+      })
+      .then(
+        () => {
+          notifySuccess('Updated Token');
+        },
+        (error: Error) => {
+          notifyError(error);
+        }
+      );
+  }
+
   @autobind
   @action
   updateUser(event: any, values: any) {
@@ -297,13 +316,27 @@ export default class UserPage extends React.Component<IUserPage> {
                           value={this.user.result.lastModifiedDate}
                           disabled
                         />
+                        <AvField
+                          name="activationKey"
+                          label={<b>Activation Key</b>}
+                          value={this.user.result.activationKey}
+                          disabled
+                        />
+                        <AvField
+                          name="resetKey"
+                          label={<b>Reset Key</b>}
+                          value={this.user.result.resetKey}
+                          disabled
+                        />
                       </Col>
                     </Row>
                     <Row className={getSectionClassName(false)}>
                       <Col>
                         <TokenInputGroups
+                          changeTokenExpirationDate={true}
                           tokens={this.tokens.result}
                           onDeleteToken={this.deleteToken}
+                          extendExpirationDate={this.extendExpirationDate}
                         />
                       </Col>
                     </Row>
