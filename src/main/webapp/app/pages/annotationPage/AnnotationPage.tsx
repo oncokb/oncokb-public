@@ -179,6 +179,9 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
         Cell: (props: { original: any }) => {
           return (
             <Button
+              style={{
+                padding: 0
+              }}
               variant={'link'}
               onClick={() =>
                 this.props.onChangeTumorType(props.original.cancerTypes)
