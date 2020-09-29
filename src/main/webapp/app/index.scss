@@ -237,14 +237,32 @@ input[type='radio']:checked {
     }
   }
 
-  .rt-thead .rt-resizable-header-content {
-    white-space: normal;
-    word-break: break-word;
+  .rt-table {
+    .rt-thead {
+      .rt-resizable-header-content {
+        text-align: left;
+        white-space: normal;
+        word-break: break-word;
+      }
+    }
+
+    .rt-tbody {
+      .rt-td {
+        white-space: normal;
+        word-break: break-word;
+      }
+    }
   }
-  .rt-tbody .rt-td {
-    display: flex;
-    align-items: center;
-    white-space: normal;
-    word-break: break-word;
+}
+
+.oncokbReactTable.ReactTable.fixedHeight {
+  .rt-table {
+    .rt-thead {
+      .rt-th:last-child {
+        // We fixed header so the scroll bar on the tbody occupies this width causing the header and body misalignment.
+        // Adding additional space to the last column of the table to align them.
+        margin-right: 15px;
+      }
+    }
   }
 }

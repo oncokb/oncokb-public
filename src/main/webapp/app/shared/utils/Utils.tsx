@@ -55,10 +55,6 @@ export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
   return _.replace(levelOfEvidence, new RegExp('[AB]'), '');
 }
 
-export function getCenterAlignStyle() {
-  return { justifyContent: 'center', whiteSpace: 'normal' };
-}
-
 export function levelOfEvidence2Level(
   levelOfEvidence: string,
   trimSubversion = false
@@ -225,6 +221,7 @@ export function getDefaultColumnDefinition<T>(
       Header: TableCellRenderer;
       accessor: string;
       minWidth: number;
+      width?: number;
       style?: object;
       defaultSortDesc: boolean;
       Cell?: TableCellRenderer;
@@ -316,15 +313,17 @@ export function getDefaultColumnDefinition<T>(
         Header: <span>Level</span>,
         accessor: 'level',
         minWidth: 70,
+        width: 70,
         defaultSortDesc: false,
-        style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
         Cell(props: any) {
           return (
-            <OncoKBLevelIcon
-              level={props.original.level}
-              withDescription={true}
-            />
+            <div className={'my-1'}>
+              <OncoKBLevelIcon
+                level={props.original.level}
+                withDescription={true}
+              />
+            </div>
           );
         }
       };
@@ -335,7 +334,6 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'citations',
         minWidth: 90,
         defaultSortDesc: false,
-        style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
         Cell(props: any) {
           const numOfReferences =
