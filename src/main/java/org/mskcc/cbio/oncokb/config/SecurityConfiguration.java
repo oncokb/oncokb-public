@@ -93,15 +93,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/slack").permitAll()
             // Permits the api swagger definitions through proxy
             .antMatchers("/api/v1/v2/api-docs").permitAll()
-            .antMatchers("/api/private/utils/dataRelease/**").hasAnyAuthority(AuthoritiesConstants.DATA_DOWNLOAD)
+            .antMatchers("/api/private/utils/data/**").hasAnyAuthority(AuthoritiesConstants.DATA_DOWNLOAD)
 
             .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.USER)
 
-            .antMatchers("/api/v1/search/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/v1/genes/lookup").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/v1/genes/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/v1/variants/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/v1/drugs/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/genes/lookup").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/evidences/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/v1/utils/allCuratedGenes").permitAll()
             .antMatchers("/api/v1/utils/allCuratedGenes.txt").permitAll()
@@ -109,7 +106,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/utils/cancerGeneList").permitAll()
             .antMatchers("/api/v1/utils/cancerGeneList.txt").permitAll()
             .antMatchers("/api/v1/utils/cancerGeneList.json").permitAll()
-            .antMatchers("/api/v1/utils/**").hasAnyAuthority(AuthoritiesConstants.PREMIUM_USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
