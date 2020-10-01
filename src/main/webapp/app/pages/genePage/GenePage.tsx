@@ -14,24 +14,21 @@ import { Button, Col, Row, Modal } from 'react-bootstrap';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import styles from './GenePage.module.scss';
 import {
-  encodeSlash,
   filterByKeyword,
   getCancerTypeNameFromOncoTreeType,
-  getCenterAlignStyle,
   getDefaultColumnDefinition,
   levelOfEvidence2Level
 } from 'app/shared/utils/Utils';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import BarChart from 'app/components/barChart/BarChart';
-import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
-import pluralize from 'pluralize';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
   DEFAULT_GENE,
+  LG_TABLE_FIXED_HEIGHT,
   REFERENCE_GENOME,
-  SM_TABLE_FIXED_HEIGHT,
   TABLE_COLUMN_KEY,
   THRESHOLD_TABLE_FIXED_HEIGHT
 } from 'app/config/constants';
@@ -439,18 +436,15 @@ export default class GenePage extends React.Component<GenePageProps> {
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ONCOGENICITY),
         onFilter: (data: BiologicalVariant, keyword) =>
-          filterByKeyword(data.oncogenic, keyword),
-        style: getCenterAlignStyle()
+          filterByKeyword(data.oncogenic, keyword)
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
         onFilter: (data: BiologicalVariant, keyword) =>
-          filterByKeyword(data.mutationEffect, keyword),
-        style: getCenterAlignStyle()
+          filterByKeyword(data.mutationEffect, keyword)
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
-        style: getCenterAlignStyle(),
         Cell(props: { original: BiologicalVariant }) {
           const numOfReferences =
             props.original.mutationEffectAbstracts.length +
@@ -583,9 +577,13 @@ export default class GenePage extends React.Component<GenePageProps> {
             this.store.filteredBiologicalAlterations.length >
             THRESHOLD_TABLE_FIXED_HEIGHT
               ? {
-                  height: SM_TABLE_FIXED_HEIGHT
+                  height: LG_TABLE_FIXED_HEIGHT
                 }
               : undefined
+          }
+          fixedHeight={
+            this.store.filteredBiologicalAlterations.length >
+            THRESHOLD_TABLE_FIXED_HEIGHT
           }
           loading={this.store.clinicalAlterations.isPending}
           defaultSorted={[
@@ -614,9 +612,13 @@ export default class GenePage extends React.Component<GenePageProps> {
             this.store.filteredBiologicalAlterations.length >
             THRESHOLD_TABLE_FIXED_HEIGHT
               ? {
-                  height: SM_TABLE_FIXED_HEIGHT
+                  height: LG_TABLE_FIXED_HEIGHT
                 }
               : undefined
+          }
+          fixedHeight={
+            this.store.filteredBiologicalAlterations.length >
+            THRESHOLD_TABLE_FIXED_HEIGHT
           }
           loading={this.store.biologicalAlterations.isPending}
           defaultSorted={[
@@ -662,22 +664,16 @@ export default class GenePage extends React.Component<GenePageProps> {
   @computed
   get tabs() {
     const tabs: { title: string; key: TAB_KEYS }[] = [];
-    if (this.store.clinicalAlterations.result.length > 0) {
-      tabs.push({
-        key: TAB_KEYS.CLINICAL,
-        title: `Clinically Relevant ${pluralize(
-          'Alteration',
-          this.store.clinicalAlterations.result.length
-        )} (${this.store.filteredClinicalAlterations.length})`
-      });
-    }
     if (this.store.biologicalAlterations.result.length > 0) {
       tabs.push({
         key: TAB_KEYS.BIOLOGICAL,
-        title: `All Annotated ${pluralize(
-          'Alteration',
-          this.store.biologicalAlterations.result.length
-        )} (${this.store.filteredBiologicalAlterations.length})`
+        title: 'Annotated Alterations'
+      });
+    }
+    if (this.store.clinicalAlterations.result.length > 0) {
+      tabs.push({
+        key: TAB_KEYS.CLINICAL,
+        title: 'Clinically Actionable Alterations'
       });
     }
     if (this.fdaVariants.length > 0) {
