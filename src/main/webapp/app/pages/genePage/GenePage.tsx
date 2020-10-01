@@ -389,7 +389,8 @@ export default class GenePage extends React.Component<GenePageProps> {
               className={'ml-1'}
               overlay={
                 <span>
-                  For more information about FDA Level of Evidence, please see{' '}
+                  For more information about the FDA Level of Evidence, please
+                  see{' '}
                   <Linkout
                     link={'https://www.fda.gov/media/109050/download'}
                     className={'font-weight-bold'}
