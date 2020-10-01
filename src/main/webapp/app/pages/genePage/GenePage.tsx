@@ -28,6 +28,7 @@ import Tabs from 'react-responsive-tabs';
 import {
   DEFAULT_GENE,
   LG_TABLE_FIXED_HEIGHT,
+  PAGE_ROUTE,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
   THRESHOLD_TABLE_FIXED_HEIGHT
@@ -68,6 +69,9 @@ import {
   getFdaData,
   getReferenceCell
 } from 'app/pages/genePage/FdaUtils';
+import { RouterStore } from 'mobx-react-router';
+import { Location } from 'history';
+import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -253,18 +257,20 @@ interface MatchParams {
 interface GenePageProps extends RouteComponentProps<MatchParams> {
   appStore: AppStore;
   windowStore: WindowStore;
+  routing: RouterStore;
 }
 
 const LEAVING_PAGE_MESSAGE =
   'You are now leaving the FDA-recognized portion of this page.';
 
-@inject('appStore', 'windowStore')
+@inject('appStore', 'windowStore', 'routing')
 @observer
 export default class GenePage extends React.Component<GenePageProps> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground: boolean;
   @observable selectedTab: string;
   @observable showModal = false;
+  @observable lastLocation: Location;
 
   private store: AnnotationStore;
   readonly reactions: IReactionDisposer[] = [];
@@ -375,7 +381,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-        minWidth: 200,
+        width: 200,
         Header: (
           <div>
             <span>FDA Level of Evidence</span>
@@ -639,10 +645,11 @@ export default class GenePage extends React.Component<GenePageProps> {
           data={this.fdaVariants}
           columns={this.fdaTableColumns}
           pageSize={this.fdaVariants.length === 0 ? 1 : this.fdaVariants.length}
+          fixedHeight={this.fdaVariants.length > THRESHOLD_TABLE_FIXED_HEIGHT}
           style={
             this.fdaVariants.length > THRESHOLD_TABLE_FIXED_HEIGHT
               ? {
-                  height: SM_TABLE_FIXED_HEIGHT
+                  height: LG_TABLE_FIXED_HEIGHT
                 }
               : undefined
           }
@@ -659,6 +666,17 @@ export default class GenePage extends React.Component<GenePageProps> {
         {this.getTable(key)}
       </div>
     );
+  }
+
+  @autobind
+  @action
+  handleBlockedNavigation(nextLocation: Location): boolean {
+    if (!this.showModal && this.onFdaTab) {
+      this.showModal = true;
+      this.lastLocation = nextLocation;
+      return false;
+    }
+    return true;
   }
 
   @computed
@@ -679,10 +697,7 @@ export default class GenePage extends React.Component<GenePageProps> {
     if (this.fdaVariants.length > 0) {
       tabs.push({
         key: TAB_KEYS.FDA,
-        title: `FDA Recognized ${pluralize(
-          'Alteration',
-          this.fdaVariants.length
-        )} (${this.fdaVariants.length})`
+        title: 'FDA-Recognized Alterations'
       });
     }
     return tabs.map(tab => {
@@ -770,6 +785,15 @@ export default class GenePage extends React.Component<GenePageProps> {
       return { size: windowSize };
     }
     return this.props.windowStore;
+  }
+
+  @autobind
+  @action
+  confirmLeavingFdaTab() {
+    if (this.lastLocation) {
+      this.props.routing.history.push(this.lastLocation.pathname);
+    }
+    this.showModal = false;
   }
 
   render() {
@@ -905,16 +929,13 @@ export default class GenePage extends React.Component<GenePageProps> {
                       </Row>
                       <Modal
                         show={this.showModal}
-                        onHide={() => (this.showModal = false)}
+                        onHide={this.confirmLeavingFdaTab}
                       >
                         <Modal.Body>{LEAVING_PAGE_MESSAGE}</Modal.Body>
                         <Modal.Footer>
                           <Button
                             variant="primary"
-                            onClick={(event: any) => {
-                              event.preventDefault();
-                              this.showModal = false;
-                            }}
+                            onClick={this.confirmLeavingFdaTab}
                           >
                             OK
                           </Button>
@@ -922,7 +943,7 @@ export default class GenePage extends React.Component<GenePageProps> {
                       </Modal>
                       <Prompt
                         when={this.onFdaTab}
-                        message={LEAVING_PAGE_MESSAGE}
+                        message={this.handleBlockedNavigation}
                       />
                     </Then>
                     <Else>
