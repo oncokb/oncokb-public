@@ -1,4 +1,5 @@
 package org.mskcc.cbio.oncokb.service.dto;
+
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
  * A DTO for the {@link org.mskcc.cbio.oncokb.domain.UserMails} entity.
  */
 public class UserMailsDTO implements Serializable {
-
+    
     private Long id;
 
     @NotNull
@@ -27,7 +28,7 @@ public class UserMailsDTO implements Serializable {
     private Long userId;
 
     private String userLogin;
-
+    
     public Long getId() {
         return id;
     }

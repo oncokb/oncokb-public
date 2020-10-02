@@ -1,10 +1,12 @@
 package org.mskcc.cbio.oncokb.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.time.Instant;
 
 /**

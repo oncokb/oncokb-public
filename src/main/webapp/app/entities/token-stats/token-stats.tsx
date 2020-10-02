@@ -17,7 +17,7 @@ export const TokenStats = (props: ITokenStatsProps) => {
     props.getEntities();
   }, []);
 
-  const { tokenStatsList, match } = props;
+  const { tokenStatsList, match, loading } = props;
   return (
     <div>
       <h2 id="token-stats-heading">
@@ -74,7 +74,7 @@ export const TokenStats = (props: ITokenStatsProps) => {
             </tbody>
           </Table>
         ) : (
-          <div className="alert alert-warning">No Token Stats found</div>
+          !loading && <div className="alert alert-warning">No Token Stats found</div>
         )}
       </div>
     </div>
@@ -82,7 +82,8 @@ export const TokenStats = (props: ITokenStatsProps) => {
 };
 
 const mapStateToProps = ({ tokenStats }: IRootState) => ({
-  tokenStatsList: tokenStats.entities
+  tokenStatsList: tokenStats.entities,
+  loading: tokenStats.loading
 });
 
 const mapDispatchToProps = {

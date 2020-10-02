@@ -25,7 +25,11 @@ public class CacheConfiguration {
     public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties) {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
         Config config = new Config();
-        config.useSingleServer().setAddress(jHipsterProperties.getCache().getRedis().getServer());
+        if (jHipsterProperties.getCache().getRedis().isCluster()) {
+            config.useClusterServers().addNodeAddress(jHipsterProperties.getCache().getRedis().getServer());
+        } else {
+            config.useSingleServer().setAddress(jHipsterProperties.getCache().getRedis().getServer()[0]);
+        }
         jcacheConfig.setStatisticsEnabled(true);
         jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
         return RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
@@ -43,10 +47,9 @@ public class CacheConfiguration {
 
     private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache != null) {
-            cm.destroyCache(cacheName);
+        if (cache == null) {
+            cm.createCache(cacheName, jcacheConfiguration);
         }
-        cm.createCache(cacheName, jcacheConfiguration);
     }
 
 }

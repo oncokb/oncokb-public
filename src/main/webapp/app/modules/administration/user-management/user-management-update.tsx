@@ -145,11 +145,11 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
               </AvGroup>
               <AvGroup check>
                 <Label>
-                  <AvInput type="checkbox" name="activated" value={user.activated} /> Activated
+                  <AvInput type="checkbox" name="activated" value={user.activated} checked={user.activated} disabled={!user.id} /> Activated
                 </Label>
               </AvGroup>
               <AvGroup>
-                <Label for="authorities">Language Key</Label>
+                <Label for="authorities">Profiles</Label>
                 <AvInput type="select" className="form-control" name="authorities" value={user.authorities} multiple>
                   {roles.map(role => (
                     <option value={role} key={role}>

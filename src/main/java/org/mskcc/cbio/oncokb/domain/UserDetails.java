@@ -1,8 +1,10 @@
 package org.mskcc.cbio.oncokb.domain;
 
+
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 

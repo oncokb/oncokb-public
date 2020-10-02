@@ -11,7 +11,7 @@ import { IUser } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './user-mails.reducer';
 import { IUserMails } from 'app/shared/model/user-mails.model';
-import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IUserMailsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
@@ -50,6 +50,7 @@ export const UserMailsUpdate = (props: IUserMailsUpdateProps) => {
         ...userMailsEntity,
         ...values
       };
+      entity.user = users[values.user];
 
       if (isNew) {
         props.createEntity(entity);
@@ -88,7 +89,7 @@ export const UserMailsUpdate = (props: IUserMailsUpdateProps) => {
                   className="form-control"
                   name="sentDate"
                   placeholder={'YYYY-MM-DD HH:mm'}
-                  value={isNew ? null : convertDateTimeFromServer(props.userMailsEntity.sentDate)}
+                  value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.userMailsEntity.sentDate)}
                   validate={{
                     required: { value: true, errorMessage: 'This field is required.' }
                   }}

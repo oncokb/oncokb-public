@@ -17,7 +17,7 @@ export const UserDetails = (props: IUserDetailsProps) => {
     props.getEntities();
   }, []);
 
-  const { userDetailsList, match } = props;
+  const { userDetailsList, match, loading } = props;
   return (
     <div>
       <h2 id="user-details-heading">
@@ -76,7 +76,7 @@ export const UserDetails = (props: IUserDetailsProps) => {
             </tbody>
           </Table>
         ) : (
-          <div className="alert alert-warning">No User Details found</div>
+          !loading && <div className="alert alert-warning">No User Details found</div>
         )}
       </div>
     </div>
@@ -84,7 +84,8 @@ export const UserDetails = (props: IUserDetailsProps) => {
 };
 
 const mapStateToProps = ({ userDetails }: IRootState) => ({
-  userDetailsList: userDetails.entities
+  userDetailsList: userDetails.entities,
+  loading: userDetails.loading
 });
 
 const mapDispatchToProps = {
