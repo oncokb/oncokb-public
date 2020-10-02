@@ -25,6 +25,7 @@ public interface UserDetailsService {
      */
     List<UserDetailsDTO> findAll();
 
+
     /**
      * Get the "id" userDetails.
      *

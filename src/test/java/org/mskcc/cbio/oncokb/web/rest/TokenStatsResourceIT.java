@@ -101,7 +101,6 @@ public class TokenStatsResourceIT {
     @Transactional
     public void createTokenStats() throws Exception {
         int databaseSizeBeforeCreate = tokenStatsRepository.findAll().size();
-
         // Create the TokenStats
         restTokenStatsMockMvc.perform(post("/api/token-stats")
             .contentType(MediaType.APPLICATION_JSON)
@@ -147,6 +146,7 @@ public class TokenStatsResourceIT {
 
         // Create the TokenStats, which fails.
 
+
         restTokenStatsMockMvc.perform(post("/api/token-stats")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(tokenStats)))
@@ -164,6 +164,7 @@ public class TokenStatsResourceIT {
         tokenStats.setUsageCount(null);
 
         // Create the TokenStats, which fails.
+
 
         restTokenStatsMockMvc.perform(post("/api/token-stats")
             .contentType(MediaType.APPLICATION_JSON)
@@ -207,7 +208,6 @@ public class TokenStatsResourceIT {
             .andExpect(jsonPath("$.accessTime").value(DEFAULT_ACCESS_TIME.toString()))
             .andExpect(jsonPath("$.usageCount").value(DEFAULT_USAGE_COUNT));
     }
-
     @Test
     @Transactional
     public void getNonExistingTokenStats() throws Exception {
@@ -253,8 +253,6 @@ public class TokenStatsResourceIT {
     @Transactional
     public void updateNonExistingTokenStats() throws Exception {
         int databaseSizeBeforeUpdate = tokenStatsRepository.findAll().size();
-
-        // Create the TokenStats
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTokenStatsMockMvc.perform(put("/api/token-stats")
