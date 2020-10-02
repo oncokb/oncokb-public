@@ -76,8 +76,7 @@
     "typeface-open-sans": "^0.0.54",
     "uuid": "7.0.3",
     "victory": "^31.0.22",
-    "xregexp": "^4.2.4",
-    "yarn-deduplicate": "^3.0.0"
+    "xregexp": "^4.2.4"
   },
   "devDependencies": {
     "@babel/core": "7.6.4",
