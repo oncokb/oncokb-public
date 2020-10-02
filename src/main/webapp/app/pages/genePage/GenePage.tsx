@@ -14,24 +14,22 @@ import { Button, Col, Row, Modal } from 'react-bootstrap';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import styles from './GenePage.module.scss';
 import {
-  encodeSlash,
   filterByKeyword,
   getCancerTypeNameFromOncoTreeType,
-  getCenterAlignStyle,
   getDefaultColumnDefinition,
   levelOfEvidence2Level
 } from 'app/shared/utils/Utils';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import BarChart from 'app/components/barChart/BarChart';
-import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
-import pluralize from 'pluralize';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
   DEFAULT_GENE,
+  LG_TABLE_FIXED_HEIGHT,
+  PAGE_ROUTE,
   REFERENCE_GENOME,
-  SM_TABLE_FIXED_HEIGHT,
   TABLE_COLUMN_KEY,
   THRESHOLD_TABLE_FIXED_HEIGHT
 } from 'app/config/constants';
@@ -71,6 +69,9 @@ import {
   getFdaData,
   getReferenceCell
 } from 'app/pages/genePage/FdaUtils';
+import { RouterStore } from 'mobx-react-router';
+import { Location } from 'history';
+import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -256,18 +257,20 @@ interface MatchParams {
 interface GenePageProps extends RouteComponentProps<MatchParams> {
   appStore: AppStore;
   windowStore: WindowStore;
+  routing: RouterStore;
 }
 
 const LEAVING_PAGE_MESSAGE =
   'You are now leaving the FDA-recognized portion of this page.';
 
-@inject('appStore', 'windowStore')
+@inject('appStore', 'windowStore', 'routing')
 @observer
 export default class GenePage extends React.Component<GenePageProps> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground: boolean;
   @observable selectedTab: string;
   @observable showModal = false;
+  @observable lastLocation: Location;
 
   private store: AnnotationStore;
   readonly reactions: IReactionDisposer[] = [];
@@ -378,7 +381,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-        minWidth: 200,
+        width: 200,
         Header: (
           <div>
             <span>FDA Level of Evidence</span>
@@ -386,7 +389,8 @@ export default class GenePage extends React.Component<GenePageProps> {
               className={'ml-1'}
               overlay={
                 <span>
-                  For more information about FDA Level of Evidence, please see{' '}
+                  For more information about the FDA Level of Evidence, please
+                  see{' '}
                   <Linkout
                     link={'https://www.fda.gov/media/109050/download'}
                     className={'font-weight-bold'}
@@ -439,18 +443,15 @@ export default class GenePage extends React.Component<GenePageProps> {
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ONCOGENICITY),
         onFilter: (data: BiologicalVariant, keyword) =>
-          filterByKeyword(data.oncogenic, keyword),
-        style: getCenterAlignStyle()
+          filterByKeyword(data.oncogenic, keyword)
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.MUTATION_EFFECT),
         onFilter: (data: BiologicalVariant, keyword) =>
-          filterByKeyword(data.mutationEffect, keyword),
-        style: getCenterAlignStyle()
+          filterByKeyword(data.mutationEffect, keyword)
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
-        style: getCenterAlignStyle(),
         Cell(props: { original: BiologicalVariant }) {
           const numOfReferences =
             props.original.mutationEffectAbstracts.length +
@@ -583,9 +584,13 @@ export default class GenePage extends React.Component<GenePageProps> {
             this.store.filteredBiologicalAlterations.length >
             THRESHOLD_TABLE_FIXED_HEIGHT
               ? {
-                  height: SM_TABLE_FIXED_HEIGHT
+                  height: LG_TABLE_FIXED_HEIGHT
                 }
               : undefined
+          }
+          fixedHeight={
+            this.store.filteredBiologicalAlterations.length >
+            THRESHOLD_TABLE_FIXED_HEIGHT
           }
           loading={this.store.clinicalAlterations.isPending}
           defaultSorted={[
@@ -614,9 +619,13 @@ export default class GenePage extends React.Component<GenePageProps> {
             this.store.filteredBiologicalAlterations.length >
             THRESHOLD_TABLE_FIXED_HEIGHT
               ? {
-                  height: SM_TABLE_FIXED_HEIGHT
+                  height: LG_TABLE_FIXED_HEIGHT
                 }
               : undefined
+          }
+          fixedHeight={
+            this.store.filteredBiologicalAlterations.length >
+            THRESHOLD_TABLE_FIXED_HEIGHT
           }
           loading={this.store.biologicalAlterations.isPending}
           defaultSorted={[
@@ -637,10 +646,11 @@ export default class GenePage extends React.Component<GenePageProps> {
           data={this.fdaVariants}
           columns={this.fdaTableColumns}
           pageSize={this.fdaVariants.length === 0 ? 1 : this.fdaVariants.length}
+          fixedHeight={this.fdaVariants.length > THRESHOLD_TABLE_FIXED_HEIGHT}
           style={
             this.fdaVariants.length > THRESHOLD_TABLE_FIXED_HEIGHT
               ? {
-                  height: SM_TABLE_FIXED_HEIGHT
+                  height: LG_TABLE_FIXED_HEIGHT
                 }
               : undefined
           }
@@ -659,34 +669,36 @@ export default class GenePage extends React.Component<GenePageProps> {
     );
   }
 
+  @autobind
+  @action
+  handleBlockedNavigation(nextLocation: Location): boolean {
+    if (!this.showModal && this.onFdaTab) {
+      this.showModal = true;
+      this.lastLocation = nextLocation;
+      return false;
+    }
+    return true;
+  }
+
   @computed
   get tabs() {
     const tabs: { title: string; key: TAB_KEYS }[] = [];
-    if (this.store.clinicalAlterations.result.length > 0) {
-      tabs.push({
-        key: TAB_KEYS.CLINICAL,
-        title: `Clinically Relevant ${pluralize(
-          'Alteration',
-          this.store.clinicalAlterations.result.length
-        )} (${this.store.filteredClinicalAlterations.length})`
-      });
-    }
     if (this.store.biologicalAlterations.result.length > 0) {
       tabs.push({
         key: TAB_KEYS.BIOLOGICAL,
-        title: `All Annotated ${pluralize(
-          'Alteration',
-          this.store.biologicalAlterations.result.length
-        )} (${this.store.filteredBiologicalAlterations.length})`
+        title: 'Annotated Alterations'
+      });
+    }
+    if (this.store.clinicalAlterations.result.length > 0) {
+      tabs.push({
+        key: TAB_KEYS.CLINICAL,
+        title: 'Clinically Actionable Alterations'
       });
     }
     if (this.fdaVariants.length > 0) {
       tabs.push({
         key: TAB_KEYS.FDA,
-        title: `FDA Recognized ${pluralize(
-          'Alteration',
-          this.fdaVariants.length
-        )} (${this.fdaVariants.length})`
+        title: 'FDA-Recognized Alterations'
       });
     }
     return tabs.map(tab => {
@@ -774,6 +786,15 @@ export default class GenePage extends React.Component<GenePageProps> {
       return { size: windowSize };
     }
     return this.props.windowStore;
+  }
+
+  @autobind
+  @action
+  confirmLeavingFdaTab() {
+    if (this.lastLocation) {
+      this.props.routing.history.push(this.lastLocation.pathname);
+    }
+    this.showModal = false;
   }
 
   render() {
@@ -909,16 +930,13 @@ export default class GenePage extends React.Component<GenePageProps> {
                       </Row>
                       <Modal
                         show={this.showModal}
-                        onHide={() => (this.showModal = false)}
+                        onHide={this.confirmLeavingFdaTab}
                       >
                         <Modal.Body>{LEAVING_PAGE_MESSAGE}</Modal.Body>
                         <Modal.Footer>
                           <Button
                             variant="primary"
-                            onClick={(event: any) => {
-                              event.preventDefault();
-                              this.showModal = false;
-                            }}
+                            onClick={this.confirmLeavingFdaTab}
                           >
                             OK
                           </Button>
@@ -926,7 +944,7 @@ export default class GenePage extends React.Component<GenePageProps> {
                       </Modal>
                       <Prompt
                         when={this.onFdaTab}
-                        message={LEAVING_PAGE_MESSAGE}
+                        message={this.handleBlockedNavigation}
                       />
                     </Then>
                     <Else>

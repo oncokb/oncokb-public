@@ -55,7 +55,7 @@ export const API_DOCUMENT_LINK = 'https://api.oncokb.org/oncokb-website/api';
 export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
 export const FACULTY_COI_WEBSITE_LINK = 'https://www.mskcc.org/disclosures';
 export const NONE_FACULTY_COI_WEBSITE_LINK =
-  'https://www.mskcc.org/disclosures';
+  'https://docs.google.com/spreadsheets/d/1PKHV8ArVm4AFu4Rj-URWHcCAqnbWlm7p2-LOxhe0aFU/edit?usp=sharing';
 export const WEBINAR_LINKS_05072020 = (
   <span>
     <Linkout
@@ -175,7 +175,7 @@ export const DEFAULT_MARGIN_TOP_SM = 'mt-2';
 export const DEFAULT_MARGIN_TOP_LG = 'mt-3';
 export const DEFAULT_MARGIN_BOTTOM_SM = 'mb-2';
 export const DEFAULT_MARGIN_BOTTOM_LG = 'mb-3';
-export const THRESHOLD_TABLE_FIXED_HEIGHT = 10;
+export const THRESHOLD_TABLE_FIXED_HEIGHT = 15;
 export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
 export const THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT = 30;
 export const LG_TABLE_FIXED_HEIGHT = 640;

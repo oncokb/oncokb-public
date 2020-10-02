@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
 import { Button, Col, Row } from 'react-bootstrap';
@@ -692,6 +692,7 @@ export default class ActionableGenesPage extends React.Component<
                       ? 1
                       : this.filteredTreatments.length
                   }
+                  fixedHeight={true}
                   style={{
                     height: LG_TABLE_FIXED_HEIGHT
                   }}

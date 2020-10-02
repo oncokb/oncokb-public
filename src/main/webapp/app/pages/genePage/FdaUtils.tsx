@@ -88,7 +88,7 @@ function getContent() {
 
     splitAbstracts(row, row.abstracts);
 
-    /// get pmids and nccn
+    // get pmids and nccn
     if (!row.pmids) {
       row.pmids = '';
     }
