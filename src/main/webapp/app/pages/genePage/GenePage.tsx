@@ -560,6 +560,27 @@ export default class GenePage extends React.Component<GenePageProps> {
     this.showGeneBackground = !this.showGeneBackground;
   }
 
+  getTabDescription(key: TAB_KEYS) {
+    if (key === TAB_KEYS.BIOLOGICAL) {
+      return (
+        <span>
+          A list of the oncogenic and mutation effects of{' '}
+          <b>all OncoKB curated</b> {this.store.hugoSymbol} alterations.
+        </span>
+      );
+    } else if (key === TAB_KEYS.CLINICAL) {
+      return (
+        <span>
+          A list of the tumor type-specific {this.store.hugoSymbol} alterations
+          that may predict response to a targeted drug and the corresponding
+          OncoKB level of evidence assigning their level of{' '}
+          <b>clinical actionability</b>.
+        </span>
+      );
+    }
+    return null;
+  }
+
   @autobind
   @action
   onChangeTab(selectedTabKey: string) {
@@ -663,7 +684,10 @@ export default class GenePage extends React.Component<GenePageProps> {
   getTabContent(key: TAB_KEYS) {
     return (
       <div>
-        <ReportIssue />
+        <div style={{ width: '80%', marginBottom: '-30px' }}>
+          <div>{this.getTabDescription(key)}</div>
+          <ReportIssue />
+        </div>
         {this.getTable(key)}
       </div>
     );
