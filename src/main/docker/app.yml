@@ -1,0 +1,21 @@
+version: '2'
+services:
+  oncokb-public-app:
+    image: oncokb-public
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://oncokb-public-mysql:3306/oncokb-public?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+      - JHIPSTER_CACHE_REDIS_SERVER=redis://oncokb-public-redis:6379
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+    ports:
+      - 9090:9090
+  oncokb-public-mysql:
+    extends:
+      file: mysql.yml
+      service: oncokb-public-mysql
+  oncokb-public-redis:
+    extends:
+      file: redis.yml
+      service: oncokb-public-redis
