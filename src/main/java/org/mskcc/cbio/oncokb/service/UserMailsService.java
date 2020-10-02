@@ -83,7 +83,6 @@ public class UserMailsService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-
     /**
      * Get one userMails by id.
      *
