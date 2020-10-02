@@ -581,8 +581,8 @@ export default class GenePage extends React.Component<GenePageProps> {
       return (
         <span>
           A list of the tumor type-specific {this.store.hugoSymbol} alterations
-          that may predict response to a targeted drug and the corresponding FDA
-          level of evidence assigning their <b>clinical significance</b>.
+          and the corresponding FDA level of evidence assigning their{' '}
+          <b>clinical significance</b>.
         </span>
       );
     }
