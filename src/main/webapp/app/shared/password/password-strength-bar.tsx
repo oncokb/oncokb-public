@@ -56,8 +56,8 @@ export const PasswordStrengthBar = ({
     return { idx: idx + 1, col: colors[idx] };
   };
 
-  const getPoints = force => {
-    const pts = [] as any[];
+  const getPoints = (force: any) => {
+    const pts = [];
     for (let i = 0; i < 5; i++) {
       pts.push(
         <li
