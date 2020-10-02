@@ -577,6 +577,14 @@ export default class GenePage extends React.Component<GenePageProps> {
           <b>clinical actionability</b>.
         </span>
       );
+    } else if (key === TAB_KEYS.FDA) {
+      return (
+        <span>
+          A list of the tumor type-specific {this.store.hugoSymbol} alterations
+          that may predict response to a targeted drug and the corresponding FDA
+          level of evidence assigning their <b>clinical significance</b>.
+        </span>
+      );
     }
     return null;
   }
