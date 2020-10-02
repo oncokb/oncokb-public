@@ -51,7 +51,7 @@ export const UserDetailsDeleteDialog = (props: IUserDetailsDeleteDialogProps) =>
 
 const mapStateToProps = ({ userDetails }: IRootState) => ({
   userDetailsEntity: userDetails.entity,
-  updateSuccess: userDetails.updateSuccess
+  updateSuccess: userDetails.updateSuccess,
 });
 
 const mapDispatchToProps = { getEntity, deleteEntity };

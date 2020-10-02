@@ -48,6 +48,7 @@ public class Authority implements Serializable {
         return Objects.hashCode(name);
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "Authority{" +

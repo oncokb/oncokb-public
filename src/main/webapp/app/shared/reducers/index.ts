@@ -62,7 +62,7 @@ const rootReducer = combineReducers<IRootState>({
   userDetails,
   userMails,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
-  loadingBar
+  loadingBar,
 });
 
 export default rootReducer;

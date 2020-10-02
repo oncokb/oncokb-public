@@ -65,7 +65,7 @@ export const UserDetailsDetail = (props: IUserDetailsDetailProps) => {
 };
 
 const mapStateToProps = ({ userDetails }: IRootState) => ({
-  userDetailsEntity: userDetails.entity
+  userDetailsEntity: userDetails.entity,
 });
 
 const mapDispatchToProps = { getEntity };

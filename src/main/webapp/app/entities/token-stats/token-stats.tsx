@@ -52,7 +52,7 @@ export const TokenStats = (props: ITokenStatsProps) => {
                   <td>{tokenStats.accessIp}</td>
                   <td>{tokenStats.resource}</td>
                   <td>
-                    <TextFormat type="date" value={tokenStats.accessTime} format={APP_DATE_FORMAT} />
+                    {tokenStats.accessTime ? <TextFormat type="date" value={tokenStats.accessTime} format={APP_DATE_FORMAT} /> : null}
                   </td>
                   <td>{tokenStats.usageCount}</td>
                   <td>{tokenStats.token ? <Link to={`token/${tokenStats.token.id}`}>{tokenStats.token.id}</Link> : ''}</td>
@@ -83,11 +83,11 @@ export const TokenStats = (props: ITokenStatsProps) => {
 
 const mapStateToProps = ({ tokenStats }: IRootState) => ({
   tokenStatsList: tokenStats.entities,
-  loading: tokenStats.loading
+  loading: tokenStats.loading,
 });
 
 const mapDispatchToProps = {
-  getEntities
+  getEntities,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

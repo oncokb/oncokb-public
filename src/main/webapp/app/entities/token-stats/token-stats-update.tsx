@@ -48,7 +48,7 @@ export const TokenStatsUpdate = (props: ITokenStatsUpdateProps) => {
     if (errors.length === 0) {
       const entity = {
         ...tokenStatsEntity,
-        ...values
+        ...values,
       };
 
       if (isNew) {
@@ -102,7 +102,7 @@ export const TokenStatsUpdate = (props: ITokenStatsUpdateProps) => {
                   placeholder={'YYYY-MM-DD HH:mm'}
                   value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.tokenStatsEntity.accessTime)}
                   validate={{
-                    required: { value: true, errorMessage: 'This field is required.' }
+                    required: { value: true, errorMessage: 'This field is required.' },
                   }}
                 />
               </AvGroup>
@@ -117,7 +117,7 @@ export const TokenStatsUpdate = (props: ITokenStatsUpdateProps) => {
                   name="usageCount"
                   validate={{
                     required: { value: true, errorMessage: 'This field is required.' },
-                    number: { value: true, errorMessage: 'This field should be a number.' }
+                    number: { value: true, errorMessage: 'This field should be a number.' },
                   }}
                 />
               </AvGroup>
@@ -157,7 +157,7 @@ const mapStateToProps = (storeState: IRootState) => ({
   tokenStatsEntity: storeState.tokenStats.entity,
   loading: storeState.tokenStats.loading,
   updating: storeState.tokenStats.updating,
-  updateSuccess: storeState.tokenStats.updateSuccess
+  updateSuccess: storeState.tokenStats.updateSuccess,
 });
 
 const mapDispatchToProps = {
@@ -165,7 +165,7 @@ const mapDispatchToProps = {
   getEntity,
   updateEntity,
   createEntity,
-  reset
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

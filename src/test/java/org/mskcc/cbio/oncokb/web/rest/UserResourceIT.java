@@ -482,7 +482,6 @@ public class UserResourceIT {
     }
 
     @Test
-    @Transactional
     public void testUserEquals() throws Exception {
         TestUtil.equalsVerifier(User.class);
         User user1 = new User();

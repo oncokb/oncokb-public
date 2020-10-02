@@ -4,8 +4,8 @@ import { IUser } from 'app/shared/model/user.model';
 export interface IToken {
   id?: number;
   token?: string;
-  creation?: Moment;
-  expiration?: Moment;
+  creation?: string;
+  expiration?: string;
   usageLimit?: number;
   currentUsage?: number;
   renewable?: boolean;
@@ -13,5 +13,5 @@ export interface IToken {
 }
 
 export const defaultValue: Readonly<IToken> = {
-  renewable: false
+  renewable: false,
 };

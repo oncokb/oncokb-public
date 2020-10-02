@@ -2,23 +2,17 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
-import io.github.jhipster.config.JHipsterProperties;
-import org.mskcc.cbio.oncokb.config.audit.AuditEventConverter;
 import org.mskcc.cbio.oncokb.domain.PersistentAuditEvent;
 import org.mskcc.cbio.oncokb.repository.PersistenceAuditEventRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 
-import org.mskcc.cbio.oncokb.service.AuditEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -129,7 +123,6 @@ public class AuditResourceIT {
     }
 
     @Test
-    @Transactional
     public void testPersistentAuditEventEquals() throws Exception {
         TestUtil.equalsVerifier(PersistentAuditEvent.class);
         PersistentAuditEvent auditEvent1 = new PersistentAuditEvent();

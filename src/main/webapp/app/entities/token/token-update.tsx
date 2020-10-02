@@ -49,9 +49,8 @@ export const TokenUpdate = (props: ITokenUpdateProps) => {
     if (errors.length === 0) {
       const entity = {
         ...tokenEntity,
-        ...values
+        ...values,
       };
-      entity.user = users[values.user];
 
       if (isNew) {
         props.createEntity(entity);
@@ -129,7 +128,7 @@ export const TokenUpdate = (props: ITokenUpdateProps) => {
                   name="currentUsage"
                   validate={{
                     required: { value: true, errorMessage: 'This field is required.' },
-                    number: { value: true, errorMessage: 'This field should be a number.' }
+                    number: { value: true, errorMessage: 'This field should be a number.' },
                   }}
                 />
               </AvGroup>
@@ -141,11 +140,11 @@ export const TokenUpdate = (props: ITokenUpdateProps) => {
               </AvGroup>
               <AvGroup>
                 <Label for="token-user">User</Label>
-                <AvInput id="token-user" type="select" className="form-control" name="user">
+                <AvInput id="token-user" type="select" className="form-control" name="user.id">
                   <option value="" key="0" />
                   {users
-                    ? users.map((otherEntity, index) => (
-                        <option value={index} key={otherEntity.id}>
+                    ? users.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
                           {otherEntity.id}
                         </option>
                       ))
@@ -175,7 +174,7 @@ const mapStateToProps = (storeState: IRootState) => ({
   tokenEntity: storeState.token.entity,
   loading: storeState.token.loading,
   updating: storeState.token.updating,
-  updateSuccess: storeState.token.updateSuccess
+  updateSuccess: storeState.token.updateSuccess,
 });
 
 const mapDispatchToProps = {
@@ -183,7 +182,7 @@ const mapDispatchToProps = {
   getEntity,
   updateEntity,
   createEntity,
-  reset
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = OncokbPublicApp.class)
 @ExtendWith(RedisTestContainerExtension.class)
 @Transactional
-public class AuditEventServiceIT  {
+public class AuditEventServiceIT {
     @Autowired
     private AuditEventService auditEventService;
 

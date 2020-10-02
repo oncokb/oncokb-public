@@ -107,7 +107,6 @@ public class UserMailsResourceIT {
     @Transactional
     public void createUserMails() throws Exception {
         int databaseSizeBeforeCreate = userMailsRepository.findAll().size();
-
         // Create the UserMails
         UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
         restUserMailsMockMvc.perform(post("/api/user-mails")
@@ -156,6 +155,7 @@ public class UserMailsResourceIT {
         // Create the UserMails, which fails.
         UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
 
+
         restUserMailsMockMvc.perform(post("/api/user-mails")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
@@ -175,6 +175,7 @@ public class UserMailsResourceIT {
         // Create the UserMails, which fails.
         UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
 
+
         restUserMailsMockMvc.perform(post("/api/user-mails")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
@@ -193,6 +194,7 @@ public class UserMailsResourceIT {
 
         // Create the UserMails, which fails.
         UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
+
 
         restUserMailsMockMvc.perform(post("/api/user-mails")
             .contentType(MediaType.APPLICATION_JSON)
@@ -236,7 +238,6 @@ public class UserMailsResourceIT {
             .andExpect(jsonPath("$.mailType").value(DEFAULT_MAIL_TYPE.toString()))
             .andExpect(jsonPath("$.sentFrom").value(DEFAULT_SENT_FROM));
     }
-
     @Test
     @Transactional
     public void getNonExistingUserMails() throws Exception {

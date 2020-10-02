@@ -37,7 +37,7 @@ export const TokenStatsDetail = (props: ITokenStatsDetailProps) => {
             <span id="accessTime">Access Time</span>
           </dt>
           <dd>
-            <TextFormat value={tokenStatsEntity.accessTime} type="date" format={APP_DATE_FORMAT} />
+            {tokenStatsEntity.accessTime ? <TextFormat value={tokenStatsEntity.accessTime} type="date" format={APP_DATE_FORMAT} /> : null}
           </dd>
           <dt>
             <span id="usageCount">Usage Count</span>
@@ -59,7 +59,7 @@ export const TokenStatsDetail = (props: ITokenStatsDetailProps) => {
 };
 
 const mapStateToProps = ({ tokenStats }: IRootState) => ({
-  tokenStatsEntity: tokenStats.entity
+  tokenStatsEntity: tokenStats.entity,
 });
 
 const mapDispatchToProps = { getEntity };

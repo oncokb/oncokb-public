@@ -85,11 +85,11 @@ export const UserDetails = (props: IUserDetailsProps) => {
 
 const mapStateToProps = ({ userDetails }: IRootState) => ({
   userDetailsList: userDetails.entities,
-  loading: userDetails.loading
+  loading: userDetails.loading,
 });
 
 const mapDispatchToProps = {
-  getEntities
+  getEntities,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

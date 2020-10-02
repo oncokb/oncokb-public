@@ -3,7 +3,7 @@ import { MailType } from 'app/shared/model/enumerations/mail-type.model';
 
 export interface IUserMails {
   id?: number;
-  sentDate?: Moment;
+  sentDate?: string;
   sentBy?: string;
   mailType?: MailType;
   sentFrom?: string;

@@ -48,9 +48,8 @@ export const UserMailsUpdate = (props: IUserMailsUpdateProps) => {
     if (errors.length === 0) {
       const entity = {
         ...userMailsEntity,
-        ...values
+        ...values,
       };
-      entity.user = users[values.user];
 
       if (isNew) {
         props.createEntity(entity);
@@ -91,7 +90,7 @@ export const UserMailsUpdate = (props: IUserMailsUpdateProps) => {
                   placeholder={'YYYY-MM-DD HH:mm'}
                   value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.userMailsEntity.sentDate)}
                   validate={{
-                    required: { value: true, errorMessage: 'This field is required.' }
+                    required: { value: true, errorMessage: 'This field is required.' },
                   }}
                 />
               </AvGroup>
@@ -104,7 +103,7 @@ export const UserMailsUpdate = (props: IUserMailsUpdateProps) => {
                   type="text"
                   name="sentBy"
                   validate={{
-                    required: { value: true, errorMessage: 'This field is required.' }
+                    required: { value: true, errorMessage: 'This field is required.' },
                   }}
                 />
               </AvGroup>
@@ -140,7 +139,7 @@ export const UserMailsUpdate = (props: IUserMailsUpdateProps) => {
                   type="text"
                   name="sentFrom"
                   validate={{
-                    required: { value: true, errorMessage: 'This field is required.' }
+                    required: { value: true, errorMessage: 'This field is required.' },
                   }}
                 />
               </AvGroup>
@@ -180,7 +179,7 @@ const mapStateToProps = (storeState: IRootState) => ({
   userMailsEntity: storeState.userMails.entity,
   loading: storeState.userMails.loading,
   updating: storeState.userMails.updating,
-  updateSuccess: storeState.userMails.updateSuccess
+  updateSuccess: storeState.userMails.updateSuccess,
 });
 
 const mapDispatchToProps = {
@@ -188,7 +187,7 @@ const mapDispatchToProps = {
   getEntity,
   updateEntity,
   createEntity,
-  reset
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

@@ -51,7 +51,7 @@ export const TokenStatsDeleteDialog = (props: ITokenStatsDeleteDialogProps) => {
 
 const mapStateToProps = ({ tokenStats }: IRootState) => ({
   tokenStatsEntity: tokenStats.entity,
-  updateSuccess: tokenStats.updateSuccess
+  updateSuccess: tokenStats.updateSuccess,
 });
 
 const mapDispatchToProps = { getEntity, deleteEntity };

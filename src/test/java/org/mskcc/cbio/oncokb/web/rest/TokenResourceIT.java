@@ -112,7 +112,6 @@ public class TokenResourceIT {
     @Transactional
     public void createToken() throws Exception {
         int databaseSizeBeforeCreate = tokenRepository.findAll().size();
-
         // Create the Token
         restTokenMockMvc.perform(post("/api/tokens")
             .contentType(MediaType.APPLICATION_JSON)
@@ -160,6 +159,7 @@ public class TokenResourceIT {
 
         // Create the Token, which fails.
 
+
         restTokenMockMvc.perform(post("/api/tokens")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(token)))
@@ -177,6 +177,7 @@ public class TokenResourceIT {
         token.setRenewable(null);
 
         // Create the Token, which fails.
+
 
         restTokenMockMvc.perform(post("/api/tokens")
             .contentType(MediaType.APPLICATION_JSON)
@@ -224,7 +225,6 @@ public class TokenResourceIT {
             .andExpect(jsonPath("$.currentUsage").value(DEFAULT_CURRENT_USAGE))
             .andExpect(jsonPath("$.renewable").value(DEFAULT_RENEWABLE.booleanValue()));
     }
-
     @Test
     @Transactional
     public void getNonExistingToken() throws Exception {
@@ -274,8 +274,6 @@ public class TokenResourceIT {
     @Transactional
     public void updateNonExistingToken() throws Exception {
         int databaseSizeBeforeUpdate = tokenRepository.findAll().size();
-
-        // Create the Token
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTokenMockMvc.perform(put("/api/tokens")

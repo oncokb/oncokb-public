@@ -49,9 +49,7 @@ export const UserMails = (props: IUserMailsProps) => {
                       {userMails.id}
                     </Button>
                   </td>
-                  <td>
-                    <TextFormat type="date" value={userMails.sentDate} format={APP_DATE_FORMAT} />
-                  </td>
+                  <td>{userMails.sentDate ? <TextFormat type="date" value={userMails.sentDate} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{userMails.sentBy}</td>
                   <td>{userMails.mailType}</td>
                   <td>{userMails.sentFrom}</td>
@@ -83,11 +81,11 @@ export const UserMails = (props: IUserMailsProps) => {
 
 const mapStateToProps = ({ userMails }: IRootState) => ({
   userMailsList: userMails.entities,
-  loading: userMails.loading
+  loading: userMails.loading,
 });
 
 const mapDispatchToProps = {
-  getEntities
+  getEntities,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

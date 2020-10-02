@@ -5,7 +5,7 @@ export interface ITokenStats {
   id?: number;
   accessIp?: string;
   resource?: string;
-  accessTime?: Moment;
+  accessTime?: string;
   usageCount?: number;
   token?: IToken;
 }

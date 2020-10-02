@@ -1,4 +1,4 @@
-FROM redis:5.0.7
+FROM redis:6.0.4
 RUN apt update && \
     apt install dnsutils -y
 ADD redis/connectRedisCluster.sh /usr/local/bin/connectRedisCluster

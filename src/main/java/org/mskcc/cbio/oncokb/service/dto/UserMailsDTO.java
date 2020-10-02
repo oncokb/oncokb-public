@@ -3,7 +3,6 @@ package org.mskcc.cbio.oncokb.service.dto;
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.Objects;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 
 /**
@@ -90,22 +89,19 @@ public class UserMailsDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof UserMailsDTO)) {
             return false;
         }
 
-        UserMailsDTO userMailsDTO = (UserMailsDTO) o;
-        if (userMailsDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), userMailsDTO.getId());
+        return id != null && id.equals(((UserMailsDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "UserMailsDTO{" +

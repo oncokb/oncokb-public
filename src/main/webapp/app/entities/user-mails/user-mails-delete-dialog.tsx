@@ -51,7 +51,7 @@ export const UserMailsDeleteDialog = (props: IUserMailsDeleteDialogProps) => {
 
 const mapStateToProps = ({ userMails }: IRootState) => ({
   userMailsEntity: userMails.entity,
-  updateSuccess: userMails.updateSuccess
+  updateSuccess: userMails.updateSuccess,
 });
 
 const mapDispatchToProps = { getEntity, deleteEntity };

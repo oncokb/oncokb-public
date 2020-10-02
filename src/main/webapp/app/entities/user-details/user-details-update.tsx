@@ -46,9 +46,8 @@ export const UserDetailsUpdate = (props: IUserDetailsUpdateProps) => {
     if (errors.length === 0) {
       const entity = {
         ...userDetailsEntity,
-        ...values
+        ...values,
       };
-      entity.user = users[values.user];
 
       if (isNew) {
         props.createEntity(entity);
@@ -160,7 +159,7 @@ const mapStateToProps = (storeState: IRootState) => ({
   userDetailsEntity: storeState.userDetails.entity,
   loading: storeState.userDetails.loading,
   updating: storeState.userDetails.updating,
-  updateSuccess: storeState.userDetails.updateSuccess
+  updateSuccess: storeState.userDetails.updateSuccess,
 });
 
 const mapDispatchToProps = {
@@ -168,7 +167,7 @@ const mapDispatchToProps = {
   getEntity,
   updateEntity,
   createEntity,
-  reset
+  reset,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

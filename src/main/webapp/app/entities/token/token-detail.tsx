@@ -32,15 +32,11 @@ export const TokenDetail = (props: ITokenDetailProps) => {
           <dt>
             <span id="creation">Creation</span>
           </dt>
-          <dd>
-            <TextFormat value={tokenEntity.creation} type="date" format={APP_DATE_FORMAT} />
-          </dd>
+          <dd>{tokenEntity.creation ? <TextFormat value={tokenEntity.creation} type="date" format={APP_DATE_FORMAT} /> : null}</dd>
           <dt>
             <span id="expiration">Expiration</span>
           </dt>
-          <dd>
-            <TextFormat value={tokenEntity.expiration} type="date" format={APP_DATE_FORMAT} />
-          </dd>
+          <dd>{tokenEntity.expiration ? <TextFormat value={tokenEntity.expiration} type="date" format={APP_DATE_FORMAT} /> : null}</dd>
           <dt>
             <span id="usageLimit">Usage Limit</span>
           </dt>
@@ -69,7 +65,7 @@ export const TokenDetail = (props: ITokenDetailProps) => {
 };
 
 const mapStateToProps = ({ token }: IRootState) => ({
-  tokenEntity: token.entity
+  tokenEntity: token.entity,
 });
 
 const mapDispatchToProps = { getEntity };

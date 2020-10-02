@@ -52,12 +52,8 @@ export const Token = (props: ITokenProps) => {
                     </Button>
                   </td>
                   <td>{token.token}</td>
-                  <td>
-                    <TextFormat type="date" value={token.creation} format={APP_DATE_FORMAT} />
-                  </td>
-                  <td>
-                    <TextFormat type="date" value={token.expiration} format={APP_DATE_FORMAT} />
-                  </td>
+                  <td>{token.creation ? <TextFormat type="date" value={token.creation} format={APP_DATE_FORMAT} /> : null}</td>
+                  <td>{token.expiration ? <TextFormat type="date" value={token.expiration} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{token.usageLimit}</td>
                   <td>{token.currentUsage}</td>
                   <td>{token.renewable ? 'true' : 'false'}</td>
@@ -89,11 +85,11 @@ export const Token = (props: ITokenProps) => {
 
 const mapStateToProps = ({ token }: IRootState) => ({
   tokenList: token.entities,
-  loading: token.loading
+  loading: token.loading,
 });
 
 const mapDispatchToProps = {
-  getEntities
+  getEntities,
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
