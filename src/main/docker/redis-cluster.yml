@@ -1,7 +1,7 @@
 version: '2'
 services:
   oncokb-public-redis:
-    image: redis:5.0.7
+    image: redis:6.0.4
     command:
       - 'redis-server'
       - '--port 6379'
@@ -12,7 +12,7 @@ services:
     ports:
       - '6379:6379'
   oncokb-public-redis-1:
-    image: redis:5.0.7
+    image: redis:6.0.4
     command:
       - 'redis-server'
       - '--port 6379'
@@ -23,7 +23,7 @@ services:
     ports:
       - '16379:6379'
   oncokb-public-redis-2:
-    image: redis:5.0.7
+    image: redis:6.0.4
     command:
       - 'redis-server'
       - '--port 6379'
@@ -34,7 +34,7 @@ services:
     ports:
       - '26379:6379'
   oncokb-public-redis-3:
-    image: redis:5.0.7
+    image: redis:6.0.4
     command:
       - 'redis-server'
       - '--port 6379'
@@ -45,7 +45,7 @@ services:
     ports:
       - '36379:6379'
   oncokb-public-redis-4:
-    image: redis:5.0.7
+    image: redis:6.0.4
     command:
       - 'redis-server'
       - '--port 6379'
@@ -56,7 +56,7 @@ services:
     ports:
       - '46379:6379'
   oncokb-public-redis-5:
-    image: redis:5.0.7
+    image: redis:6.0.4
     command:
       - 'redis-server'
       - '--port 6379'

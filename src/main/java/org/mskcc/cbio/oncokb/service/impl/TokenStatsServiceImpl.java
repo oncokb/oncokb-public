@@ -58,6 +58,7 @@ public class TokenStatsServiceImpl implements TokenStatsService {
         return tokenStatsRepository.findAll();
     }
 
+
     /**
      * Get one tokenStats by id.
      *

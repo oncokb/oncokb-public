@@ -62,6 +62,7 @@ public class UserMailsService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
     /**
      * Get all userMails for a particular user
      *

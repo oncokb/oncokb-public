@@ -1,7 +1,6 @@
 package org.mskcc.cbio.oncokb.service.dto;
 
 import java.io.Serializable;
-import java.util.Objects;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 
 /**
@@ -95,22 +94,19 @@ public class UserDetailsDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof UserDetailsDTO)) {
             return false;
         }
 
-        UserDetailsDTO userDetailsDTO = (UserDetailsDTO) o;
-        if (userDetailsDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), userDetailsDTO.getId());
+        return id != null && id.equals(((UserDetailsDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "UserDetailsDTO{" +
