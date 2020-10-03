@@ -144,7 +144,7 @@ module.exports = options => ({
     ]),
     new HtmlWebpackPlugin({
       template: '!!html-loader!./src/main/webapp/index.html',
-      chunksSortMode: 'dependency',
+      chunksSortMode: 'auto',
       minify: {
         removeComments: true,
         removeCommentsFromCDATA: true,
@@ -160,7 +160,8 @@ module.exports = options => ({
         removeScriptTypeAttributes: true,
         removeStyleTypeAttributes: true
       },
-      inject: 'body'
+      base: '/',
+      inject: 'body',
     }),
   ]
 });

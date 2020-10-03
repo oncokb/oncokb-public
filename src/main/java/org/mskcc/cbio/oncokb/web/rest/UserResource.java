@@ -12,7 +12,9 @@ import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
 import org.mskcc.cbio.oncokb.service.TokenService;
 import org.springframework.data.domain.Sort;
-import java.util.Collections;
+
+import java.util.*;
+
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
@@ -40,8 +42,6 @@ import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * REST controller for managing users.
