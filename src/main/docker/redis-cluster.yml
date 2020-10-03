@@ -1,0 +1,72 @@
+version: '2'
+services:
+  oncokb-public-redis:
+    image: redis:6.0.4
+    command:
+      - 'redis-server'
+      - '--port 6379'
+      - '--cluster-enabled yes'
+      - '--cluster-config-file nodes.conf'
+      - '--cluster-node-timeout 5000'
+      - '--appendonly yes'
+    ports:
+      - '6379:6379'
+  oncokb-public-redis-1:
+    image: redis:6.0.4
+    command:
+      - 'redis-server'
+      - '--port 6379'
+      - '--cluster-enabled yes'
+      - '--cluster-config-file nodes.conf'
+      - '--cluster-node-timeout 5000'
+      - '--appendonly yes'
+    ports:
+      - '16379:6379'
+  oncokb-public-redis-2:
+    image: redis:6.0.4
+    command:
+      - 'redis-server'
+      - '--port 6379'
+      - '--cluster-enabled yes'
+      - '--cluster-config-file nodes.conf'
+      - '--cluster-node-timeout 5000'
+      - '--appendonly yes'
+    ports:
+      - '26379:6379'
+  oncokb-public-redis-3:
+    image: redis:6.0.4
+    command:
+      - 'redis-server'
+      - '--port 6379'
+      - '--cluster-enabled yes'
+      - '--cluster-config-file nodes.conf'
+      - '--cluster-node-timeout 5000'
+      - '--appendonly yes'
+    ports:
+      - '36379:6379'
+  oncokb-public-redis-4:
+    image: redis:6.0.4
+    command:
+      - 'redis-server'
+      - '--port 6379'
+      - '--cluster-enabled yes'
+      - '--cluster-config-file nodes.conf'
+      - '--cluster-node-timeout 5000'
+      - '--appendonly yes'
+    ports:
+      - '46379:6379'
+  oncokb-public-redis-5:
+    image: redis:6.0.4
+    command:
+      - 'redis-server'
+      - '--port 6379'
+      - '--cluster-enabled yes'
+      - '--cluster-config-file nodes.conf'
+      - '--cluster-node-timeout 5000'
+      - '--appendonly yes'
+    ports:
+      - '56379:6379'
+  oncokb-public-redis-cluster-builder:
+    build:
+      context: .
+      dockerfile: redis/Redis-Cluster.Dockerfile
