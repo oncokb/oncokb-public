@@ -27,23 +27,12 @@ public class TokenServiceImpl implements TokenService {
         this.tokenRepository = tokenRepository;
     }
 
-    /**
-     * Save a token.
-     *
-     * @param token the entity to save.
-     * @return the persisted entity.
-     */
     @Override
     public Token save(Token token) {
         log.debug("Request to save Token : {}", token);
         return tokenRepository.save(token);
     }
 
-    /**
-     * Get all the tokens.
-     *
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
     public List<Token> findAll() {
@@ -52,12 +41,6 @@ public class TokenServiceImpl implements TokenService {
     }
 
 
-    /**
-     * Get one token by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<Token> findOne(Long id) {
@@ -65,11 +48,6 @@ public class TokenServiceImpl implements TokenService {
         return tokenRepository.findById(id);
     }
 
-    /**
-     * Delete the token by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Token : {}", id);

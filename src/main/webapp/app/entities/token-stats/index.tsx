@@ -11,12 +11,12 @@ import TokenStatsDeleteDialog from './token-stats-delete-dialog';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={TokenStatsDeleteDialog} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={TokenStatsUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={TokenStatsUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={TokenStatsDetail} />
       <ErrorBoundaryRoute path={match.url} component={TokenStats} />
     </Switch>
+    <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={TokenStatsDeleteDialog} />
   </>
 );
 

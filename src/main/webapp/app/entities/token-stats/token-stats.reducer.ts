@@ -135,6 +135,7 @@ export const deleteEntity: ICrudDeleteAction<ITokenStats> = id => async dispatch
     type: ACTION_TYPES.DELETE_TOKENSTATS,
     payload: axios.delete(requestUrl),
   });
+  dispatch(getEntities());
   return result;
 };
 

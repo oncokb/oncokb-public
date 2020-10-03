@@ -257,6 +257,13 @@ describe('Entities reducer tests', () => {
           type: SUCCESS(ACTION_TYPES.DELETE_USERMAILS),
           payload: resolvedObject,
         },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_USERMAILS_LIST),
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_USERMAILS_LIST),
+          payload: resolvedObject,
+        },
       ];
       await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
