@@ -43,12 +43,6 @@ public class TokenServiceImpl implements TokenService {
         this.cacheNameResolver = cacheNameResolver;
     }
 
-    /**
-     * Save a token.
-     *
-     * @param token the entity to save.
-     * @return the persisted entity.
-     */
     @Override
     public Token save(Token token) {
         log.debug("Request to save Token : {}", token);
@@ -58,11 +52,6 @@ public class TokenServiceImpl implements TokenService {
         return updatedToken;
     }
 
-    /**
-     * Get all the tokens.
-     *
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
     public List<Token> findAll() {
@@ -71,12 +60,6 @@ public class TokenServiceImpl implements TokenService {
     }
 
 
-    /**
-     * Get one token by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<Token> findOne(Long id) {
@@ -123,11 +106,6 @@ public class TokenServiceImpl implements TokenService {
         return tokenRepository.findAllExpiresBeforeDate(date);
     }
 
-    /**
-     * Delete the token by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Token : {}", id);

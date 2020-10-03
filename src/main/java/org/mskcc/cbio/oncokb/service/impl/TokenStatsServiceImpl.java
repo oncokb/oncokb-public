@@ -34,23 +34,12 @@ public class TokenStatsServiceImpl implements TokenStatsService {
         this.jHipsterProperties = jHipsterProperties;
     }
 
-    /**
-     * Save a tokenStats.
-     *
-     * @param tokenStats the entity to save.
-     * @return the persisted entity.
-     */
     @Override
     public TokenStats save(TokenStats tokenStats) {
         log.debug("Request to save TokenStats : {}", tokenStats);
         return tokenStatsRepository.save(tokenStats);
     }
 
-    /**
-     * Get all the tokenStats.
-     *
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
     public List<TokenStats> findAll() {
@@ -59,12 +48,6 @@ public class TokenStatsServiceImpl implements TokenStatsService {
     }
 
 
-    /**
-     * Get one tokenStats by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<TokenStats> findOne(Long id) {
@@ -72,11 +55,6 @@ public class TokenStatsServiceImpl implements TokenStatsService {
         return tokenStatsRepository.findById(id);
     }
 
-    /**
-     * Delete the tokenStats by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete TokenStats : {}", id);
