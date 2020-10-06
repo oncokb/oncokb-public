@@ -4,7 +4,6 @@ import { action, computed, observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import { Redirect } from 'react-router-dom';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import client from 'app/shared/api/clientInstance';
 import {
   ACCOUNT_TITLES,
   H5_FONT_SIZE,
@@ -27,6 +26,7 @@ import pluralize from 'pluralize';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { daysDiff, secDiff } from 'app/shared/utils/Utils';
 import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
+import client from 'app/shared/api/clientInstance';
 
 export type IRegisterProps = {
   authenticationStore: AuthenticationStore;
@@ -76,6 +76,25 @@ export class AccountPage extends React.Component<IRegisterProps> {
       .catch((error: Error) => {
         notifyError(error);
       });
+  }
+
+  @action
+  extendExpirationDate(token: Token, newDate: string) {
+    client
+      .updateTokenUsingPUT({
+        token: {
+          ...token,
+          expiration: newDate
+        }
+      })
+      .then(
+        () => {
+          notifySuccess('Updated Token');
+        },
+        (error: Error) => {
+          notifyError(error);
+        }
+      );
   }
 
   @autobind
@@ -231,6 +250,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
               }
             >
               <TokenInputGroups
+                changeTokenExpirationDate={false}
                 tokens={this.tokens}
                 onDeleteToken={this.deleteToken}
               />

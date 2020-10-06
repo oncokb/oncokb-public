@@ -9,10 +9,13 @@ import classnames from 'classnames';
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import autobind from 'autobind-decorator';
+import { CalendarButton } from 'app/components/calendarButton/CalendarButton';
 
 type TokenInputGroupsProps = {
+  changeTokenExpirationDate: boolean;
   tokens: Token[];
   onDeleteToken: (token: Token) => void;
+  extendExpirationDate?: (token: Token, newDate: string) => void;
 };
 
 @observer
@@ -57,6 +60,17 @@ export default class TokenInputGroups extends React.Component<
                   <InputGroup.Text id="btnGroupAddon">
                     Expires in {this.getDuration(expirationDay, expirationHour)}
                   </InputGroup.Text>
+                </InputGroup.Append>
+                {this.props.changeTokenExpirationDate && (
+                  <CalendarButton
+                    currentDate={token.expiration}
+                    afterChangeDate={(newDate: string) => {
+                      if (this.props.extendExpirationDate)
+                        this.props.extendExpirationDate(token, newDate);
+                    }}
+                  />
+                )}
+                <InputGroup.Append>
                   <CopyToClipboard text={token.token} onCopy={this.onCopyToken}>
                     <Button variant={'primary'}>
                       <DefaultTooltip
