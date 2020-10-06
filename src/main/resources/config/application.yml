@@ -153,6 +153,17 @@ jhipster:
   #     max-age: 1800
   mail:
     from: registration@oncokb.org
+  swagger:
+    default-include-pattern: /api/.*
+    title: oncokb-public API
+    description: oncokb-public API documentation
+    version: 0.0.1
+    terms-of-service-url:
+    contact-name:
+    contact-url:
+    contact-email:
+    license: unlicensed
+    license-url:
 
 # ===================================================================
 # Sentry specific properties
