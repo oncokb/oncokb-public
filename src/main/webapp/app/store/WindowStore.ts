@@ -25,7 +25,7 @@ class WindowStore {
   private setWindowSize() {
     this.size = {
       width: this.windowObj.innerWidth,
-      height: this.windowObj.innerHeight
+      height: this.windowObj.innerHeight,
     };
   }
 

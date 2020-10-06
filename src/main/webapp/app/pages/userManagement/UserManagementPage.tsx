@@ -9,7 +9,7 @@ import { match } from 'react-router';
 import { Button, Col, InputGroup, Modal, Row } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
 import OncoKBTable, {
-  SearchColumn
+  SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
@@ -18,7 +18,7 @@ import _ from 'lodash';
 import {
   NOT_CHANGEABLE_AUTHORITIES,
   USER_AUTHORITIES,
-  USER_AUTHORITY
+  USER_AUTHORITY,
 } from 'app/config/constants';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 import autobind from 'autobind-decorator';
@@ -39,7 +39,7 @@ export default class UserManagementPage extends React.Component<{
     authority: USER_AUTHORITY | undefined;
   } = {
     user: undefined,
-    authority: undefined
+    authority: undefined,
   };
   @observable currentSelectedAuthority: UserDTO | undefined;
   @observable modalTitle: string;
@@ -135,7 +135,7 @@ export default class UserManagementPage extends React.Component<{
     client
       .updateUserUsingPUT({
         userDto: updatedUser,
-        sendEmail
+        sendEmail,
       })
       .then(() => {
         notifySuccess('Updated');
@@ -173,7 +173,7 @@ export default class UserManagementPage extends React.Component<{
         filterByKeyword(data.email, keyword),
       Cell(props: { original: UserDTO }) {
         return <span>{props.original.email}</span>;
-      }
+      },
     },
     {
       id: 'activated',
@@ -198,7 +198,7 @@ export default class UserManagementPage extends React.Component<{
         } else {
           return <div>Email hasn&apos;t been verified yet</div>;
         }
-      }
+      },
     },
     {
       id: 'authorities',
@@ -249,13 +249,11 @@ export default class UserManagementPage extends React.Component<{
                       : undefined
                   }
                 />
-              ) : (
-                undefined
-              );
+              ) : undefined;
             })}
           </div>
         );
-      }
+      },
     },
     {
       id: 'createdDate',
@@ -267,7 +265,7 @@ export default class UserManagementPage extends React.Component<{
       accessor: 'createdDate',
       Cell(props: { original: UserDTO }): any {
         return <div>{toAppTimestampFormat(props.original.createdDate)}</div>;
-      }
+      },
     },
     {
       id: 'lastModifiedBy',
@@ -276,7 +274,7 @@ export default class UserManagementPage extends React.Component<{
         data.lastModifiedBy
           ? filterByKeyword(data.lastModifiedBy, keyword)
           : false,
-      accessor: 'lastModifiedBy'
+      accessor: 'lastModifiedBy',
     },
     {
       id: 'lastModifiedDate',
@@ -293,8 +291,8 @@ export default class UserManagementPage extends React.Component<{
         return (
           <div>{toAppTimestampFormat(props.original.lastModifiedDate)}</div>
         );
-      }
-    }
+      },
+    },
     // {
     //   id: 'operations',
     //   Header: <span></span>,

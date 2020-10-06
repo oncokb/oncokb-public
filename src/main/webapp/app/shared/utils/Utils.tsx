@@ -3,7 +3,7 @@ import {
   Evidence,
   TreatmentDrug,
   TumorType,
-  Article
+  Article,
 } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
 import React, { ReactNode } from 'react';
@@ -14,18 +14,18 @@ import {
   GENERAL_ONCOGENICITY,
   ONCOGENICITY_CLASS_NAMES,
   PAGE_ROUTE,
-  TABLE_COLUMN_KEY
+  TABLE_COLUMN_KEY,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
   Alteration,
-  Treatment
+  Treatment,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   defaultSortMethod,
   mutationEffectSortMethod,
   oncogenicitySortMethod,
-  sortByAlteration
+  sortByAlteration,
 } from 'app/shared/utils/ReactTableUtils';
 import { TableCellRenderer } from 'react-table';
 import { LevelWithDescription } from 'app/components/LevelWithDescription';
@@ -35,7 +35,7 @@ import { CitationTooltip } from 'app/components/CitationTooltip';
 import {
   AlterationPageLink,
   GenePageLink,
-  TumorTypePageLink
+  TumorTypePageLink,
 } from 'app/shared/utils/UrlUtils';
 import moment from 'moment';
 
@@ -78,10 +78,7 @@ export function getAllAlterationsName(alterations: Alteration[]) {
 
 export function getAllTumorTypesName(tumorTypes: TumorType[]) {
   return tumorTypes
-    ? tumorTypes
-        .map(getCancerTypeNameFromOncoTreeType)
-        .sort()
-        .join(', ')
+    ? tumorTypes.map(getCancerTypeNameFromOncoTreeType).sort().join(', ')
     : '';
 }
 
@@ -108,12 +105,12 @@ export function articles2Citations(articles: Article[]): Citations {
       .map(article => {
         return {
           abstract: article.abstract,
-          link: article.link
+          link: article.link,
         };
       }),
     pmids: articles
       .filter(article => !!article.pmid)
-      .map(article => article.pmid)
+      .map(article => article.pmid),
   };
 }
 
@@ -239,7 +236,7 @@ export function getDefaultColumnDefinition<T>(
         sortMethod: defaultSortMethod,
         Cell(props: { original: any }) {
           return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
-        }
+        },
       };
     case TABLE_COLUMN_KEY.ALTERATION:
       return {
@@ -256,7 +253,7 @@ export function getDefaultColumnDefinition<T>(
               alteration={props.original.alteration}
             />
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.ALTERATIONS:
       return {
@@ -266,7 +263,7 @@ export function getDefaultColumnDefinition<T>(
         style: { whiteSpace: 'normal' },
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
       };
     case TABLE_COLUMN_KEY.TUMOR_TYPE:
       return {
@@ -285,7 +282,7 @@ export function getDefaultColumnDefinition<T>(
               tumorType={props.original.tumorType}
             />
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE:
       return {
@@ -295,7 +292,7 @@ export function getDefaultColumnDefinition<T>(
         style: { whiteSpace: 'normal' },
         minWidth: 110,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
       };
     case TABLE_COLUMN_KEY.DRUGS:
       return {
@@ -305,7 +302,7 @@ export function getDefaultColumnDefinition<T>(
         style: { whiteSpace: 'normal' },
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
       };
     case TABLE_COLUMN_KEY.LEVEL:
       return {
@@ -325,7 +322,7 @@ export function getDefaultColumnDefinition<T>(
               />
             </div>
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.CITATIONS:
       return {
@@ -355,7 +352,7 @@ export function getDefaultColumnDefinition<T>(
               </DefaultTooltip>
             </div>
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.ONCOGENICITY:
       return {
@@ -364,7 +361,7 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'oncogenic',
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: oncogenicitySortMethod
+        sortMethod: oncogenicitySortMethod,
       };
     case TABLE_COLUMN_KEY.MUTATION_EFFECT:
       return {
@@ -373,7 +370,7 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'mutationEffect',
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: mutationEffectSortMethod
+        sortMethod: mutationEffectSortMethod,
       };
     default:
       return undefined;
@@ -396,7 +393,7 @@ export function getRouteFromPath(pathName: string) {
 
 export function getRedirectLoginState(pathName: string) {
   return {
-    from: getRouteFromPath(pathName)
+    from: getRouteFromPath(pathName),
   };
 }
 

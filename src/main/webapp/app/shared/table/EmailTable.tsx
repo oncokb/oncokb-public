@@ -1,5 +1,5 @@
 import OncoKBTable, {
-  SearchColumn
+  SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
 import React from 'react';
 import { UserMailsDTO } from 'app/shared/api/generated/API';
@@ -19,7 +19,7 @@ export const EmailTable: React.FunctionComponent<EmailTableProps> = tablProps =>
       defaultSortDesc: false,
       sortMethod: defaultSortMethod,
       onFilter: (data: UserMailsDTO, keyword) =>
-        filterByKeyword(data.mailType, keyword)
+        filterByKeyword(data.mailType, keyword),
     },
     {
       id: 'sentDate',
@@ -31,30 +31,30 @@ export const EmailTable: React.FunctionComponent<EmailTableProps> = tablProps =>
       accessor: 'createdDate',
       Cell(props: { original: UserMailsDTO }): any {
         return <div>{toAppTimestampFormat(props.original.sentDate)}</div>;
-      }
+      },
     },
     {
       id: 'sentFrom',
       Header: <span>Sent From</span>,
       onFilter: (data: UserMailsDTO, keyword) =>
         data.sentFrom ? filterByKeyword(data.sentFrom, keyword) : false,
-      accessor: 'sentFrom'
+      accessor: 'sentFrom',
     },
     {
       id: 'sentBy',
       Header: <span>Sent By</span>,
       onFilter: (data: UserMailsDTO, keyword) =>
         data.sentBy ? filterByKeyword(data.sentBy, keyword) : false,
-      accessor: 'sentBy'
-    }
+      accessor: 'sentBy',
+    },
   ];
   return (
     <OncoKBTable
       defaultSorted={[
         {
           id: 'sentDate',
-          desc: true
-        }
+          desc: true,
+        },
       ]}
       data={tablProps.data}
       columns={columns}

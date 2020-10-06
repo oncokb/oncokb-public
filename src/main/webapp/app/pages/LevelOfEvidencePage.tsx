@@ -5,7 +5,7 @@ import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import {
   DOCUMENT_TITLES,
   IMG_MAX_WIDTH,
-  PAGE_ROUTE
+  PAGE_ROUTE,
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
 import { inject, observer } from 'mobx-react';
@@ -25,7 +25,7 @@ type LevelOfEvidencePageProps = {
 export enum Version {
   V1 = 'V1',
   V2 = 'V2',
-  AAC = 'AAC'
+  AAC = 'AAC',
 }
 
 const DEFAULT_LEVEL_FILE_NAME = 'LevelsOfEvidence';
@@ -41,18 +41,20 @@ const LEVEL_TITLE: { [key in Version]: ElementType } = {
       <HashLink to={`${PAGE_ROUTE.NEWS}#12202019`}>News 12/20/2019</HashLink> )
     </>
   ),
-  [Version.AAC]: <>Mapping between OncoKB and AMP/ASCO/CAP Levels of Evidence</>
+  [Version.AAC]: (
+    <>Mapping between OncoKB and AMP/ASCO/CAP Levels of Evidence</>
+  ),
 };
 const LEVEL_SUBTITLE: { [key in Version]: ElementType } = {
   [Version.V1]: <>Click here to see Levels of Evidence {Version.V2}</>,
   [Version.V2]: <>Click here to see Levels of Evidence {Version.V1}</>,
-  [Version.AAC]: <></>
+  [Version.AAC]: <></>,
 };
 
 const LEVEL_FILE_NAME: { [key in Version]: string } = {
   [Version.V1]: DEFAULT_LEVEL_FILE_NAME,
   [Version.V2]: DEFAULT_LEVEL_FILE_NAME,
-  [Version.AAC]: `Mapping_OncoKB_and_AMP_ASCO_CAP_LOfE`
+  [Version.AAC]: `Mapping_OncoKB_and_AMP_ASCO_CAP_LOfE`,
 };
 
 @inject('routing')
@@ -166,7 +168,8 @@ export default class LevelOfEvidencePage extends React.Component<
               <Col className={'d-md-flex justify-content-center mt-2'}>
                 <div
                   style={{
-                    maxWidth: this.version === Version.AAC ? 900 : IMG_MAX_WIDTH
+                    maxWidth:
+                      this.version === Version.AAC ? 900 : IMG_MAX_WIDTH,
                   }}
                 >
                   <img

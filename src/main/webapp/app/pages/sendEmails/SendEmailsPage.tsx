@@ -4,7 +4,7 @@ import {
   observable,
   computed,
   IReactionDisposer,
-  reaction
+  reaction,
 } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
@@ -13,13 +13,13 @@ import client from 'app/shared/api/clientInstance';
 import {
   MailTypeInfo,
   UserDTO,
-  UserMailsDTO
+  UserMailsDTO,
 } from 'app/shared/api/generated/API';
 import { match } from 'react-router';
 import { Row, Col } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
 import OncoKBTable, {
-  SearchColumn
+  SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
@@ -86,7 +86,7 @@ export default class UserManagementPage extends React.Component<{
           from: this.selectedMailFrom!,
           cc: this.selectedMailCc,
           by: this.props.authenticationStore.account!.login,
-          mailType: this.selectedMailType!.mailType
+          mailType: this.selectedMailType!.mailType,
         })
         .then(() => {
           notifySuccess('Sent the email.');
@@ -103,7 +103,7 @@ export default class UserManagementPage extends React.Component<{
   @action
   async getUserMails() {
     this.userMails = await client.getUsersUserMailsUsingGET({
-      login: this.selectedUserLogin
+      login: this.selectedUserLogin,
     });
   }
 
@@ -126,7 +126,7 @@ export default class UserManagementPage extends React.Component<{
     invoke() {
       return client.getAllUsersUsingGET({ size: 2000 });
     },
-    default: []
+    default: [],
   });
 
   readonly mailTypes = remoteData<MailTypeInfo[]>({
@@ -135,18 +135,18 @@ export default class UserManagementPage extends React.Component<{
         return [];
       } else {
         return await client.getMailsTypesUsingGET({
-          licenseType: this.selectedUser.licenseType
+          licenseType: this.selectedUser.licenseType,
         });
       }
     },
-    default: []
+    default: [],
   });
 
   readonly mailsFrom = remoteData<string[]>({
     invoke() {
       return client.getMailsFromUsingGET({});
     },
-    default: []
+    default: [],
   });
 
   componentWillUnmount(): void {
@@ -171,14 +171,14 @@ export default class UserManagementPage extends React.Component<{
                     this.selectedUserLogin
                       ? {
                           value: this.selectedUserLogin,
-                          label: this.selectedUserLogin
+                          label: this.selectedUserLogin,
                         }
                       : null
                   }
                   options={this.users.result.map(user => {
                     return {
                       value: user.login,
-                      label: user.login
+                      label: user.login,
                     };
                   })}
                   isClearable={true}
@@ -198,14 +198,14 @@ export default class UserManagementPage extends React.Component<{
                     this.selectedMailFrom
                       ? {
                           value: this.selectedMailFrom,
-                          label: this.selectedMailFrom
+                          label: this.selectedMailFrom,
                         }
                       : null
                   }
                   options={this.mailsFrom.result.map(from => {
                     return {
                       value: from,
-                      label: from
+                      label: from,
                     };
                   })}
                   isClearable={true}
@@ -226,14 +226,14 @@ export default class UserManagementPage extends React.Component<{
                   this.selectedMailType
                     ? {
                         value: this.selectedMailType.mailType,
-                        label: this.selectedMailType.description
+                        label: this.selectedMailType.description,
                       }
                     : null
                 }
                 options={this.mailTypes.result.map(type => {
                   return {
                     value: type.mailType,
-                    label: type.description
+                    label: type.description,
                   };
                 })}
                 isClearable={true}
@@ -241,7 +241,7 @@ export default class UserManagementPage extends React.Component<{
                   (this.selectedMailType = selectedOption
                     ? {
                         mailType: selectedOption.value,
-                        description: selectedOption.label
+                        description: selectedOption.label,
                       }
                     : undefined)
                 }

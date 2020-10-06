@@ -46,7 +46,7 @@ class Header extends React.Component<IHeaderProps> {
     { title: 'Team', link: 'team' },
     { title: 'News', link: 'news' },
     { title: 'Terms', link: 'terms' },
-    { title: 'FAQ', link: 'faq' }
+    { title: 'FAQ', link: 'faq' },
   ];
 
   @observable isNavExpanded = false;

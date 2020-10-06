@@ -41,7 +41,7 @@ export default class AlterationPage extends React.Component<
         alterationQuery: decodeSlash(props.match.params.alteration),
         tumorTypeQuery: props.match.params.tumorType
           ? decodeSlash(props.match.params.tumorType)
-          : props.match.params.tumorType
+          : props.match.params.tumorType,
       });
     }
 

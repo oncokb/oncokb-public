@@ -1,6 +1,6 @@
 export enum AppProfile {
   PROD = 'PROD',
-  DEV = 'DEV'
+  DEV = 'DEV',
 }
 
 type ServerConfig = {
@@ -15,5 +15,5 @@ interface IAppConfig {
 }
 
 export const AppConfig: IAppConfig = {
-  serverConfig: (window as any).serverConfig || {}
+  serverConfig: (window as any).serverConfig || {},
 };

@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { Container } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
 import AuthenticationStore, {
-  ACCOUNT_STATUS
+  ACCOUNT_STATUS,
 } from 'app/store/AuthenticationStore';
 import { ContactLink } from 'app/shared/links/ContactLink';
 
