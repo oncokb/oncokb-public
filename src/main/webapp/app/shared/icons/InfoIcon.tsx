@@ -22,7 +22,7 @@ const InfoIcon: React.FunctionComponent<{
         style={{
           color: 'grey',
           fontSize: '0.8rem',
-          ...props.style
+          ...props.style,
         }}
       ></i>
     </DefaultTooltip>

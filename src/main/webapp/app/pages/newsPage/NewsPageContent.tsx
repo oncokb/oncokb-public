@@ -8,7 +8,7 @@ import ERBBImg from 'content/images/ERBB.png';
 import {
   ElementType,
   SimpleTable,
-  SimpleTableCell
+  SimpleTableCell,
 } from 'app/components/SimpleTable';
 import { NewlyAddedGeneType } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { Link } from 'react-router-dom';
@@ -16,7 +16,7 @@ import { FAQ_URL_PATTERNS_LINK, PAGE_ROUTE } from 'app/config/constants';
 import {
   AlterationPageLink,
   GenePageLink,
-  MSILink
+  MSILink,
 } from 'app/shared/utils/UrlUtils';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -37,7 +37,7 @@ export const NEWLY_ADDED_LEVEL_FOUR_COLUMNS = [
   { name: 'Gene', size: 2 },
   { name: 'Mutation', size: 6 },
   { name: 'Tumor Type', size: 2 },
-  { name: 'Drug', size: 2 }
+  { name: 'Drug', size: 2 },
 ];
 
 export const UPDATED_IMPLICATION_COLUMNS = [
@@ -46,12 +46,12 @@ export const UPDATED_IMPLICATION_COLUMNS = [
   { name: 'Mutation' },
   { name: 'Tumor Type' },
   { name: 'Drug' },
-  { name: 'Evidence' }
+  { name: 'Evidence' },
 ];
 
 export const UPDATED_IMPLICATION_OLD_FORMAT_COLUMNS = [
   { name: 'Level' },
-  { name: 'Update' }
+  { name: 'Update' },
 ];
 
 export const CHANGED_ANNOTATION_COLUMNS = [
@@ -61,7 +61,7 @@ export const CHANGED_ANNOTATION_COLUMNS = [
   { name: 'Drug' },
   { name: 'Previous Level' },
   { name: 'Current Level' },
-  { name: 'Reason' }
+  { name: 'Reason' },
 ];
 
 export const NEWLY_ADDED_LEVEL_FOUR = [
@@ -70,13 +70,13 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
     'BRAF',
     'D287H, D594A, D594G, D594H, D594N, F595L, G464E, G464V, G466A, G466E, G466V, G469A, G469E, G469R, G469V, G596D, G596R, K601N, K601T, L597Q, L597V, N581I, N581S, S467L, V459L',
     'All Tumors',
-    'PLX8394'
+    'PLX8394',
   ],
   [
     'CDKN2A',
     'Oncogenic Mutations',
     'All Tumors',
-    'Abemaciclib, Palbociclib, Ribociclib'
+    'Abemaciclib, Palbociclib, Ribociclib',
   ],
   ['EGFR', 'A289V, R108K, T263P', 'Glioma', 'Lapatinib'],
   ['EGFR', 'Amplification', 'Glioma', 'Lapatinib'],
@@ -85,24 +85,24 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
     'FGFR1',
     'Oncogenic Mutations',
     'All Tumors',
-    'AZD4547, BGJ398, Debio1347, Erdafitinib'
+    'AZD4547, BGJ398, Debio1347, Erdafitinib',
   ],
   [
     'FGFR2',
     'Oncogenic Mutations',
     'All Tumors',
-    'AZD4547, BGJ398, Debio1347, Erdafitinib'
+    'AZD4547, BGJ398, Debio1347, Erdafitinib',
   ],
   [
     'KRAS',
     'Oncogenic Mutations',
     'All Tumors',
-    'KO-947, LY3214996, Ravoxertinib, Ulixertinib'
+    'KO-947, LY3214996, Ravoxertinib, Ulixertinib',
   ],
   ['MTOR', 'Oncogenic Mutations', 'All Tumors', 'Everolimus, Temsirolimus'],
   ['NF1', 'Oncogenic Mutations', 'All Tumors', 'Cobimetinib, Trametinib'],
   ['PTEN', 'Oncogenic Mutations', 'All Tumors', 'AZD8186, GSK2636771'],
-  ['SMARCB1', 'Oncogenic Mutations', 'All Tumors', 'Tazemetostat']
+  ['SMARCB1', 'Oncogenic Mutations', 'All Tumors', 'Tazemetostat'],
 ];
 
 // NOTE: cannot associate a type to the object literal in order to have the CHANGED_ANNOTATION_DATE type works
@@ -118,7 +118,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </Linkout>
         , see <Linkout link={FAQ_URL_PATTERNS_LINK}>HERE</Linkout> for more
         details.
-      </span>
+      </span>,
     ],
     updatedImplication: [
       [
@@ -129,8 +129,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Ibrutinib',
         <span>
           Listing in NCCN v4.2020 CLL; <PMIDLink pmids={'24869598, 28418267'} />
-        </span>
-      ]
+        </span>,
+      ],
     ],
     changedAnnotation: [
       [
@@ -157,9 +157,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Pralsetinib
           </Linkout>
-        </div>
-      ]
-    ]
+        </div>,
+      ],
+    ],
   },
   '08282020': {
     priorityNews: [
@@ -257,8 +257,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </tbody>
           </table>
         </Row>
-      </span>
-    ]
+      </span>,
+    ],
   },
   '07232020': {
     updatedImplication: [
@@ -285,10 +285,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Pembrolizumab
           </Linkout>
-        </span>
-      ]
+        </span>,
+      ],
     ],
-    newlyAddedGenes: ['LARP4B', 'DAZAP1', 'KLF3', 'ZNF750', 'MEF2D']
+    newlyAddedGenes: ['LARP4B', 'DAZAP1', 'KLF3', 'ZNF750', 'MEF2D'],
   },
   '07092020': {
     updatedImplication: [
@@ -315,8 +315,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Tazemetostat
           </Linkout>
-        </span>
-      ]
+        </span>,
+      ],
     ],
     changedAnnotation: [
       [
@@ -343,10 +343,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Tazemetostat
           </Linkout>
-        </div>
-      ]
+        </div>,
+      ],
     ],
-    newlyAddedGenes: ['PPP2R2A']
+    newlyAddedGenes: ['PPP2R2A'],
   },
   '06092020': {
     numOfAssociationsInUpdatedImplication: 15,
@@ -366,7 +366,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Olaparib
           </Linkout>
-        </span>
+        </span>,
       ],
       [
         '1',
@@ -391,8 +391,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Rucaparib
           </Linkout>
-        </span>
-      ]
+        </span>,
+      ],
     ],
     changedAnnotation: [
       [
@@ -411,10 +411,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Olaparib
           </Linkout>
-        </div>
-      ]
+        </div>,
+      ],
     ],
-    newlyAddedGenes: ['FANCL']
+    newlyAddedGenes: ['FANCL'],
   },
   '05112020': {
     priorityNews: [
@@ -424,13 +424,13 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <Link
           to={{
             pathname: PAGE_ROUTE.ABOUT,
-            hash: `#${SHOW_MODAL_KEY}=true`
+            hash: `#${SHOW_MODAL_KEY}=true`,
           }}
         >
           here
         </Link>
         .
-      </span>
+      </span>,
     ],
     updatedImplication: [
       [
@@ -448,7 +448,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Pemigatinib
           </a>
-        </span>
+        </span>,
       ],
       [
         '1',
@@ -476,7 +476,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               FDA-approval of Selpercatinib{' '}
             </Linkout>
           </div>
-        </div>
+        </div>,
       ],
       [
         '1',
@@ -493,7 +493,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Tucatinib
           </Linkout>
-        </span>
+        </span>,
       ],
       [
         '1',
@@ -506,7 +506,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           <Linkout link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-fam-trastuzumab-deruxtecan-nxki-unresectable-or-metastatic-her2-positive-breast-cancer">
             FDA-approval of Trastuzumab Deruxtecan
           </Linkout>
-        </span>
+        </span>,
       ],
       [
         '2',
@@ -519,8 +519,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           <PMIDLink
             pmids={'28984141, 29380516, 26287849, 30351999, 30120137'}
           />
-        </span>
-      ]
+        </span>,
+      ],
     ],
     changedAnnotation: [
       [
@@ -550,7 +550,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               FDA-approval of Capmatinib{' '}
             </Linkout>
           </div>
-        </div>
+        </div>,
       ],
       [
         'RET',
@@ -579,7 +579,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               FDA-approval of Selpercatinib{' '}
             </Linkout>
           </div>
-        </div>
+        </div>,
       ],
       [
         'RET',
@@ -608,9 +608,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               FDA-approval of Selpercatinib{' '}
             </Linkout>
           </div>
-        </div>
-      ]
-    ]
+        </div>,
+      ],
+    ],
   },
   '04232020': {
     updatedImplication: [
@@ -629,7 +629,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Encorafenib + Cetuximab
           </a>
-        </span>
+        </span>,
       ],
       [
         '1',
@@ -646,7 +646,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Selumetinib
           </a>
-        </span>
+        </span>,
       ],
       [
         '2',
@@ -657,7 +657,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           <span>Listing in 2.2020 Colon Cancer NCCN;</span>{' '}
           <PMIDLink pmids={'29431699, 31566309'} />
-        </span>
+        </span>,
       ],
       [
         '2',
@@ -668,7 +668,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           <span>Listing in 2.2020 Colon Cancer NCCN;</span>{' '}
           <PMIDLink pmids={'27108243'} />
-        </span>
+        </span>,
       ],
       [
         '2',
@@ -679,8 +679,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           <span>Listing in 2.2020 Colon Cancer NCCN;</span>{' '}
           <PMIDLink pmids={'30857956'} />
-        </span>
-      ]
+        </span>,
+      ],
     ],
     changedAnnotation: [
       [
@@ -693,24 +693,24 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </div>,
         '2',
         'None',
-        'Listing removed from 2.2020 Colon Cancer NCCN'
-      ]
+        'Listing removed from 2.2020 Colon Cancer NCCN',
+      ],
     ],
     news: [
       <span>
         Updated EGFR biomarker-drug associations for investigational Levels 3A
         and 4
       </span>,
-      <span>Updated and reorganized KIT biomarker-drug associations</span>
+      <span>Updated and reorganized KIT biomarker-drug associations</span>,
     ],
-    newlyAddedGenes: ['DDX4', 'DDX41', 'ELMSAN1', 'MBD6']
+    newlyAddedGenes: ['DDX4', 'DDX41', 'ELMSAN1', 'MBD6'],
   },
   '02122020': {
     priorityNews: [
       <span>
         The version controlled OncoKB Curation Standard Operating Procedure v1.0
         has been released in the <Link to="/about">OncoKB About</Link> page.
-      </span>
+      </span>,
     ],
     updatedImplication: [
       [
@@ -732,7 +732,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           <Linkout link="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-avapritinib-gastrointestinal-stromal-tumor-rare-mutation">
             FDA-approval of Avapritinib; 2019
           </Linkout>
-        </span>
+        </span>,
       ],
       [
         '3A',
@@ -749,7 +749,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             Reiss Binder et al. Abstract# CT234, AACR 2019
           </a>
-        </span>
+        </span>,
       ],
       [
         '4',
@@ -759,7 +759,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Afatinib',
         <span>
           <PMIDLink pmids={'29571986, 31757379'} />
-        </span>
+        </span>,
       ],
       [
         'R2',
@@ -769,7 +769,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Osimertinib',
         <span>
           <PMIDLink pmids={'29568384, 29571986, 31301016, 31757379'} />
-        </span>
+        </span>,
       ],
       [
         'R2',
@@ -779,7 +779,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Imatinib',
         <span>
           <PMIDLink pmids={'18955458, 25239608, 31085175'} />
-        </span>
+        </span>,
       ],
       [
         'R2',
@@ -789,15 +789,15 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Sunitinib',
         <span>
           <PMIDLink pmids={'31085175'} />
-        </span>
-      ]
+        </span>,
+      ],
     ],
-    newlyAddedGenes: ['AJUBA', 'ZBTB20', 'ZFP36L1']
+    newlyAddedGenes: ['AJUBA', 'ZBTB20', 'ZFP36L1'],
   },
   '12122019': {
     priorityNews: [
       <span>User accounts and commercial licenses now available</span>,
-      <span>OncoKB now contains annotation of over 5,000 variants</span>
+      <span>OncoKB now contains annotation of over 5,000 variants</span>,
     ],
     updatedImplication: [
       [
@@ -815,7 +815,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Gilteritinib
           </a>
-        </span>
+        </span>,
       ],
       [
         '1',
@@ -832,7 +832,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Nivolumab + Ipilimumab
           </a>
-        </span>
+        </span>,
       ],
       [
         '1',
@@ -857,7 +857,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Entrectinib
           </a>
-        </span>
+        </span>,
       ],
       [
         '3A',
@@ -874,8 +874,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             Govindan et al. ESMO 2019
           </a>
-        </span>
-      ]
+        </span>,
+      ],
     ],
     changedAnnotation: [
       [
@@ -891,7 +891,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           rel="noopener noreferrer"
         >
           FDA-approval of Entrectinib
-        </a>
+        </a>,
       ],
       [
         'ERBB2',
@@ -900,7 +900,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Ado-trastuzumab Emtansine',
         '3A',
         '2A',
-        <div>Listing in 1.2020 Non-Small Cell Lung Cancer NCCN</div>
+        <div>Listing in 1.2020 Non-Small Cell Lung Cancer NCCN</div>,
       ],
       [
         'IDH1',
@@ -918,7 +918,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             Abou-Alfa et al. Abstract# LBA10_PR, ESMO 2019
           </a>
-        </span>
+        </span>,
       ],
       [
         'PIK3CA',
@@ -936,14 +936,14 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approved to treat patients with PIK3CA mutant breast cancer
           </a>
-        </div>
-      ]
+        </div>,
+      ],
     ],
     news: [
       <span>
         Refined KIT and EGFR biomarker-drug associations to strictly adhere to
         the FDA drug labels and NCCN guidelines
-      </span>
+      </span>,
     ],
     newlyAddedGenes: [
       'AGO1',
@@ -971,8 +971,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'TLE2',
       'TLE3',
       'TLE4',
-      'WIF1'
-    ]
+      'WIF1',
+    ],
   },
   '08282019': {
     newlyAddedGenes: [
@@ -981,7 +981,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'GAB1',
       'MAD2L2',
       'SMARCA2',
-      'SMARCE1'
+      'SMARCE1',
     ],
     updatedImplication: [
       [
@@ -996,9 +996,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           rel="noopener noreferrer"
         >
           Abstract: Morschhauser et al. Abstract# S100, EHA 2018.
-        </a>
-      ]
-    ]
+        </a>,
+      ],
+    ],
   },
   '08042019': {
     newlyAddedGenes: ['ATXN7', 'MTAP', 'SERPINB3', 'SERPINB4'],
@@ -1012,7 +1012,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           Listing in 3.2019 Hairy Cell Leukemia NCCN (
           <PMIDLink pmids={'26352686'} />)
-        </span>
+        </span>,
       ],
       [
         '3A',
@@ -1020,8 +1020,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Oncogenic mutations',
         'Histiocytic and Dendritic Cell Neoplasms',
         'Cobimetinib',
-        <PMIDLink pmids={'30867592'} />
-      ]
+        <PMIDLink pmids={'30867592'} />,
+      ],
     ],
     changedAnnotation: [
       [
@@ -1041,9 +1041,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             BRAF class III mutants are not necessarily sensitive to dimer
             disrupter RAF inhibitor PLX8394
           </div>
-        </>
-      ]
-    ]
+        </>,
+      ],
+    ],
   },
   '06212019': {
     priorityNews: [
@@ -1059,7 +1059,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           Cancer Gene Census Tier 2 genes
         </a>
         )
-      </span>
+      </span>,
     ],
     updatedImplicationInOldFormat: {
       '1': [
@@ -1076,7 +1076,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           </a>{' '}
           in combination with fulvestrant, to treat patients with HR+/ HER2-
           PIK3CA-mutant advanced or metastatic breast cancer.
-        </span>
+        </span>,
       ],
       '2': [
         <span>
@@ -1086,9 +1086,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           ERBB2 - Amplification - Uterine Serous Carcinoma - Trastuzumab +
           Carboplatin-Paclitaxel (<b>previously level 2B</b>)
-        </span>
-      ]
-    }
+        </span>,
+      ],
+    },
   },
   '05092019': {
     news: [
@@ -1101,7 +1101,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         >
           NCI thesaurus
         </a>
-      </span>
+      </span>,
     ],
     priorityNews: [
       <span>
@@ -1218,7 +1218,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </tbody>
           </table>
         </Row>
-      </span>
+      </span>,
     ],
     newlyAddedGenes: [
       'ATF1',
@@ -1257,7 +1257,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'TRIP13',
       'USP8',
       'YY1',
-      'ZNRF3'
+      'ZNRF3',
     ],
     newlyAddedGenesTypes: ['heme', 'fusion'],
     updatedImplicationInOldFormat: {
@@ -1275,7 +1275,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           with susceptible FGFR3 or FGFR2 genetic alterations (FGFR2 Fusions,
           FGFR3 Fusions or FGFR3 R248C, S249C, G370C, Y373C mutations), that has
           progressed during or following platinum-containing chemotherapy.
-        </span>
+        </span>,
       ],
       '4': [
         <span>
@@ -1284,9 +1284,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           CDK12 - Truncating Mutations - All Tumors - Pembrolizumab, Nivolumab,
           Cemiplimab (<b>new association</b>)
-        </span>
-      ]
-    }
+        </span>,
+      ],
+    },
   },
   '01242019': {
     newlyAddedGenesTypes: ['heme'],
@@ -1306,7 +1306,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'MECOM',
       'DEK',
       'RBM15',
-      'BCL9'
+      'BCL9',
     ],
     updatedImplicationInOldFormat: {
       '1': [
@@ -1323,9 +1323,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           non-small cell lung cancer (NSCLC) whose disease has progressed on
           crizotinib and at least one other ALK inhibitor or whose disease has
           progressed on alectinib or ceritinib for metastatic disease.
-        </span>
-      ]
-    }
+        </span>,
+      ],
+    },
   },
   '12142018': {
     priorityNews: [
@@ -1333,7 +1333,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         Inclusion of <GenePageLink hugoSymbol={'NTRK1'} /> and{' '}
         <GenePageLink hugoSymbol={'NTRK3'} /> Level R2 alterations to the
         Actionable Genes page
-      </span>
+      </span>,
     ],
     newlyAddedGenes: [
       'KSR2',
@@ -1360,7 +1360,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'UBR5',
       'VAV1',
       'VAV2',
-      'XBP1'
+      'XBP1',
     ],
     newlyAddedGenesTypes: ['heme'],
     updatedImplicationInOldFormat: {
@@ -1376,7 +1376,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           </a>{' '}
           for adult and pediatric patients with solid tumors that have an NTRK1,
           -2, or -3 gene fusion without a known acquired resistance mutation.
-        </span>
+        </span>,
       ],
       '2': [
         <span>
@@ -1386,7 +1386,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           RET - Fusions - Non-Small Cell Lung Cancer - BLU-667 (
           <b>new association</b>)
-        </span>
+        </span>,
       ],
       '3': [
         <span>
@@ -1400,15 +1400,15 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           RET - Oncogenic Mutations - Medullary Thyroid Cancer - BLU-667 (
           <b>new association</b>)
-        </span>
+        </span>,
       ],
       '4': [
         <span>
           KDM6A - Oncogenic Mutations - Bladder Cancer - EZH2 inhibitors (
           <b>new association</b>)
-        </span>
-      ]
-    }
+        </span>,
+      ],
+    },
   },
   '11022018': {
     updatedImplicationInOldFormat: {
@@ -1416,9 +1416,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           RET - Fusions - Non-Small Cell Lung Cancer - LOXO-292 (
           <b>added as new association</b>)
-        </span>
-      ]
-    }
+        </span>,
+      ],
+    },
   },
   '10262018': {
     news: [
@@ -1464,7 +1464,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </a>
           </li>
         </ul>
-      </span>
+      </span>,
     ],
     priorityNews: [
       <span>
@@ -1472,7 +1472,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <GenePageLink hugoSymbol={'ALK'} /> <GenePageLink hugoSymbol={'EGFR'} />{' '}
         <GenePageLink hugoSymbol={'MET'} /> are now included in the{' '}
         <Link to={PAGE_ROUTE.ACTIONABLE_GENE}>Actionable Genes</Link> page
-      </span>
+      </span>,
     ],
     newlyAddedGenes: [
       'NT5C2',
@@ -1483,7 +1483,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'PTPN2 ',
       'STAG1',
       'TRAF3',
-      'TRAF5'
+      'TRAF5',
     ],
     newlyAddedGenesTypes: ['heme'],
     updatedImplicationInOldFormat: {
@@ -1492,9 +1492,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ALK - C1156Y, G1269A, I1171N, L1196M - Non-Small Cell Lung Cancer -
           Lorlatinib
         </span>,
-        <span>EGFR - D761Y - Non-Small Cell Lung Cancer - Osimertinib</span>
-      ]
-    }
+        <span>EGFR - D761Y - Non-Small Cell Lung Cancer - Osimertinib</span>,
+      ],
+    },
   },
   '10012018': {
     news: [
@@ -1521,15 +1521,15 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </a>
           </li>
         </ul>
-      </span>
+      </span>,
     ],
     updatedImplicationInOldFormat: {
       '3': [
         <span>
           RET - Oncogenic Mutations - Medullary Thyroid Cancer - LOXO-292 (
           <b>added as new association</b>)
-        </span>
-      ]
+        </span>,
+      ],
     },
     newlyAddedGenes: [
       'HIST1H1E',
@@ -1558,9 +1558,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'HIST1H2AG',
       'HIST1H2AL',
       'HIST1H2AM',
-      'TYK2'
+      'TYK2',
     ],
-    newlyAddedGenesTypes: ['heme']
+    newlyAddedGenesTypes: ['heme'],
   },
   '08202018': {
     news: [
@@ -1612,12 +1612,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </a>
           </li>
         </ul>
-      </span>
+      </span>,
     ],
     priorityNews: [
       <span>
         OncoKB now contains over 4000 curated alterations in over 500 genes.
-      </span>
+      </span>,
     ],
     newlyAddedGenes: [
       'ACTG1',
@@ -1661,7 +1661,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'HDAC7',
       'HIF1A',
       'HIST1H1B',
-      'HIST1H1D'
+      'HIST1H1D',
     ],
     newlyAddedGenesTypes: ['heme'],
     updatedImplicationInOldFormat: {
@@ -1678,9 +1678,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           for adult patients with relapsed or refractory acute myeloid leukemia
           (AML) with a susceptible IDH1 mutation as detected by an FDA-approved
           test.
-        </span>
-      ]
-    }
+        </span>,
+      ],
+    },
   },
   '07122018': {
     news: [
@@ -1695,9 +1695,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 content: record.map((subItem, subIndex) => {
                   return {
                     key: `NEWLY_ADDED_LEVEL_FOUR-${index}-${subIndex}`,
-                    content: subItem
+                    content: subItem,
                   };
-                })
+                }),
               };
             })}
           />
@@ -1705,7 +1705,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       </span>,
       <span>
         Inclusion of Level R1 actionable alterations in Actionable Genes
-      </span>
+      </span>,
     ],
     updatedImplicationInOldFormat: {
       '1': [
@@ -1746,7 +1746,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           </a>{' '}
           for patients with BRAF V600E- or V600K-mutant metastatic and/or
           unresectable melanoma.
-        </span>
+        </span>,
       ],
       '3': [
         <span>
@@ -1772,9 +1772,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           MTOR - Q2223K - Renal cell carcinoma - Everolimus (
           <b>updated association</b>)
-        </span>
-      ]
-    }
+        </span>,
+      ],
+    },
   },
   '02022018': {
     news: [
@@ -1791,7 +1791,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       </span>,
       <span>
         Addition of new alterations and updates to existing alterations.
-      </span>
+      </span>,
     ],
     updatedImplicationInOldFormat: {
       '1': [
@@ -1806,15 +1806,15 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           </a>{' '}
           for treatment of patients with Erdheim-Chester disease (histiocytosis)
           who harbor BRAF V600 mutations.
-        </span>
+        </span>,
       ],
       '3': [
         <span>
           HRAS - Oncogenic mutations - Head and Neck Squamous Cell Carcinoma -
           Tipifarnib (<b>moved from 4 to 3A only for HNSCC</b>)
-        </span>
-      ]
-    }
+        </span>,
+      ],
+    },
   },
   '10262017': {
     news: [
@@ -1837,8 +1837,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           Zehir et al., Nature Medicine, 2017
         </a>
         ).
-      </span>
-    ]
+      </span>,
+    ],
   },
   '08172017': {
     news: [
@@ -1896,8 +1896,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </a>{' '}
         for treatment of patients with unresectable or metastatic, <MSILink />{' '}
         or mismatch repair deficient (MMR-D) solid tumors.
-      </span>
-    ]
+      </span>,
+    ],
   },
   '08022017': {
     news: [
@@ -1929,8 +1929,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             <img className="md-auto" src={SearchTwoImg} />
           </Col>
         </Row>
-      </>
-    ]
+      </>,
+    ],
   },
   '05152017': {
     news: [
@@ -1946,8 +1946,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       <span>
         Addition of new alterations and updates to existing alteration
         annotations.
-      </span>
-    ]
+      </span>,
+    ],
   },
   '04052017': {
     priorityNews: [
@@ -1963,7 +1963,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           </Col>
         </Row>
       </>,
-      <span>API updates.</span>
+      <span>API updates.</span>,
     ],
     updatedImplicationInOldFormat: {
       '1': [
@@ -1978,7 +1978,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           Updated alterations for KIT - Gastrointestinal Stromal Tumor -
           Imatinib, Sunitinib, Regorafenib
-        </span>
+        </span>,
       ],
       '2': [
         <span>
@@ -1987,7 +1987,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
         <span>
           Updated alterations for KIT - Thymic cancer - Sunitinib, Sorafenib
-        </span>
+        </span>,
       ],
       '3': [
         <span>
@@ -2009,7 +2009,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           PIK3CA - Oncogenic mutations - Breast cancer - Updated treatments and
           evidence
-        </span>
+        </span>,
       ],
       '4': [
         <span>
@@ -2028,9 +2028,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           PTEN - Oncogenic mutations - Breast cancer - Updated treatments and
           evidence
-        </span>
-      ]
-    }
+        </span>,
+      ],
+    },
   },
   '03072017': {
     priorityNews: [
@@ -2040,7 +2040,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       </span>,
       <span>
         Level 4 actionable genes are now accessible from the home page.
-      </span>
+      </span>,
     ],
     updatedImplicationInOldFormat: {
       '1': [
@@ -2050,7 +2050,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           Updated alterations for KIT - Gastrointestinal Stromal Tumor -
           Imatinib, Sunitinib, Regorafenib
-        </span>
+        </span>,
       ],
       '2': [
         <span>
@@ -2060,7 +2060,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
         <span>
           TSC1 - Renal Cell Carcinoma - Everolimus (<b>new association</b>)
-        </span>
+        </span>,
       ],
       '3': [
         <span>
@@ -2097,7 +2097,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           PIK3CA - Oncogenic Mutations - Breast Cancer - Alpelisib+Fulvestrant,
           Buparlisib+Fulvestrant, Copanlisib, GDC0077, Serabelisib,
           Fulvestrant+Taselisib (<b>new drugs added</b>)
-        </span>
+        </span>,
       ],
       '4': [
         <span>
@@ -2113,17 +2113,17 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>
           IDH1 - R132 alterations - Chondrosarcoma - AG-120 (
           <b>moved from 3A to 4</b>)
-        </span>
-      ]
-    }
+        </span>,
+      ],
+    },
   },
   '12292016': {
     news: [
       <span>
         Level 3 and 4 alterations supported by data from conference proceedings
         are now included in the Actionable Genes tab.
-      </span>
-    ]
+      </span>,
+    ],
   },
   '11222016': {
     news: [
@@ -2139,8 +2139,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       </span>,
       <span>
         Alterations with inconclusive supporting data have now been included.
-      </span>
-    ]
+      </span>,
+    ],
   },
   '10242016': {
     news: [
@@ -2153,11 +2153,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         completion of the SELECT-1 trial. Despite promising initial results,
         selumetinib did not have a significant effect on survival, and therefore
         activating KRAS mutations are now considered Level 4.
-      </span>
-    ]
+      </span>,
+    ],
   },
   '09162016': {
-    news: [<span>Updated Actionable Genes.</span>]
+    news: [<span>Updated Actionable Genes.</span>],
   },
   '08102016': {
     news: [
@@ -2179,8 +2179,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         Updated genes and alterations in the tables of Levels 1, 2 and 3
         Actionable Genes.
       </span>,
-      <span>Updated Levels of Evidence.</span>
-    ]
+      <span>Updated Levels of Evidence.</span>,
+    ],
   },
   '07062016': {
     news: [
@@ -2192,7 +2192,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         The Levels of Evidence system now includes Level R1, comprising of
         alterations that are NCCN-compendium listed as a biomarker of resistance
         to an FDA-approved drug.
-      </span>
-    ]
-  }
+      </span>,
+    ],
+  },
 };

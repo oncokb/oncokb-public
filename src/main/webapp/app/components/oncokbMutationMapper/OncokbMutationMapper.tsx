@@ -1,7 +1,7 @@
 import {
   MutationMapperProps,
   MutationMapper,
-  onFilterOptionSelect
+  onFilterOptionSelect,
 } from 'react-mutation-mapper';
 import { observer } from 'mobx-react';
 import React from 'react';
@@ -11,7 +11,7 @@ import OncogenicityBadgeSelector from 'app/components/oncokbMutationMapper/Oncog
 import {
   findOncogenicityFilter,
   ONCOGENICITY_FILTER_ID,
-  ONCOGENICITY_FILTER_TYPE
+  ONCOGENICITY_FILTER_TYPE,
 } from 'app/components/oncokbMutationMapper/FilterUtils';
 
 export type Filter = {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Linkout } from 'app/shared/links/Linkout';
 import {
   FACULTY_COI_WEBSITE_LINK,
-  NONE_FACULTY_COI_WEBSITE_LINK
+  NONE_FACULTY_COI_WEBSITE_LINK,
 } from 'app/config/constants';
 
 export const COILinkout: React.FunctionComponent<{

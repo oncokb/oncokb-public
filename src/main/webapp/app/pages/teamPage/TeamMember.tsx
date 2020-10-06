@@ -6,7 +6,7 @@ export enum TITLE {
   PHD = 'PhD',
   MSC = 'MSc',
   MPA = 'MPA',
-  FACP = 'FACP'
+  FACP = 'FACP',
 }
 
 export type ITeamMember = {
