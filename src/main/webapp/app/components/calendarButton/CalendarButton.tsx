@@ -110,8 +110,7 @@ export const CalendarButton: React.FunctionComponent<CalendarButtonProps> = prop
             style={{ margin: '0 auto', zIndex: 0 }}
             onClick={handleSelectedDay}
           >
-            {' '}
-            Set{' '}
+            Set
           </Button>
         </Row>
       </DropdownButton>
