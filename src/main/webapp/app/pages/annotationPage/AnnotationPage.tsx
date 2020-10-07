@@ -5,12 +5,12 @@ import {
   DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
   TABLE_COLUMN_KEY,
-  TREATMENT_EVIDENCE_TYPES
+  TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import OncoKBTable, {
-  SearchColumn
+  SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
 import { Row, Col, Button } from 'react-bootstrap';
@@ -19,7 +19,7 @@ import { computed, action } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
   TumorType,
-  VariantAnnotation
+  VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { TherapeuticImplication } from 'app/store/AnnotationStore';
 import {
@@ -27,7 +27,7 @@ import {
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getTreatmentNameFromEvidence,
-  levelOfEvidence2Level
+  levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { CitationTooltip } from 'app/components/CitationTooltip';
@@ -39,7 +39,7 @@ enum SummaryKey {
   ALTERATION_SUMMARY = 'variantSummary',
   TUMOR_TYPE_SUMMARY = 'tumorTypeSummary',
   DIAGNOSTIC_SUMMARY = 'diagnosticSummary',
-  PROGNOSTIC_SUMMARY = 'prognosticSummary'
+  PROGNOSTIC_SUMMARY = 'prognosticSummary',
 }
 
 const SUMMARY_TITLE = {
@@ -47,7 +47,7 @@ const SUMMARY_TITLE = {
   [SummaryKey.ALTERATION_SUMMARY]: 'Alteration Summary',
   [SummaryKey.TUMOR_TYPE_SUMMARY]: 'Tumor Type Summary',
   [SummaryKey.DIAGNOSTIC_SUMMARY]: 'Diagnostic Summary',
-  [SummaryKey.PROGNOSTIC_SUMMARY]: 'Prognostic Summary'
+  [SummaryKey.PROGNOSTIC_SUMMARY]: 'Prognostic Summary',
 };
 
 const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';
@@ -85,7 +85,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                 .join(', '),
               drugs: getTreatmentNameFromEvidence(evidence),
               cancerTypes: oncoTreeCancerType,
-              citations: articles2Citations(evidence.articles)
+              citations: articles2Citations(evidence.articles),
             });
           }
         });
@@ -105,12 +105,12 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
       if (matchedSubtype) {
         return {
           label: matchedSubtype.name,
-          value: matchedSubtype.code
+          value: matchedSubtype.code,
         };
       } else {
         return {
           label: this.props.tumorType,
-          value: this.props.tumorType
+          value: this.props.tumorType,
         };
       }
     } else {
@@ -128,7 +128,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
   get alterationSummaries() {
     const orderedSummaries = [
       SummaryKey.GENE_SUMMARY,
-      SummaryKey.ALTERATION_SUMMARY
+      SummaryKey.ALTERATION_SUMMARY,
     ];
     return this.getSummaries(orderedSummaries);
   }
@@ -139,7 +139,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
       ? [
           SummaryKey.TUMOR_TYPE_SUMMARY,
           SummaryKey.DIAGNOSTIC_SUMMARY,
-          SummaryKey.PROGNOSTIC_SUMMARY
+          SummaryKey.PROGNOSTIC_SUMMARY,
         ]
       : [];
     return this.getSummaries(orderedSummaries);
@@ -153,7 +153,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
           acc.push({
             key: next,
             title: SUMMARY_TITLE[next],
-            content: this.props.annotation[next]
+            content: this.props.annotation[next],
           });
         }
         return acc;
@@ -166,13 +166,13 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
   get therapeuticTableColumns(): SearchColumn<TherapeuticImplication>[] {
     return [
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL)
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS)
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS)
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
@@ -180,7 +180,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
           return (
             <Button
               style={{
-                padding: 0
+                padding: 0,
               }}
               variant={'link'}
               onClick={() =>
@@ -190,7 +190,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
               {props.original.cancerTypes}
             </Button>
           );
-        }
+        },
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
@@ -211,8 +211,8 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
               <span>{numOfReferences}</span>
             </DefaultTooltip>
           );
-        }
-      }
+        },
+      },
     ];
   }
 
@@ -268,25 +268,25 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                     control: (base, state) => ({
                       ...base,
                       height: '30px',
-                      minHeight: '30px'
+                      minHeight: '30px',
                     }),
                     dropdownIndicator: base => ({
                       ...base,
-                      padding: 4
+                      padding: 4,
                     }),
                     clearIndicator: base => ({
                       ...base,
-                      padding: 4
+                      padding: 4,
                     }),
                     valueContainer: base => ({
                       ...base,
-                      padding: '0px 6px'
+                      padding: '0px 6px',
                     }),
                     input: base => ({
                       ...base,
                       margin: 0,
-                      padding: 0
-                    })
+                      padding: 0,
+                    }),
                   }}
                   value={this.tumorTypeSelectValue}
                   placeholder="Select a tumor type"
@@ -337,12 +337,12 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                 defaultSorted={[
                   {
                     id: TABLE_COLUMN_KEY.LEVEL,
-                    desc: false
+                    desc: false,
                   },
                   {
                     id: TABLE_COLUMN_KEY.ALTERATION,
-                    desc: false
-                  }
+                    desc: false,
+                  },
                 ]}
               />
             </Col>

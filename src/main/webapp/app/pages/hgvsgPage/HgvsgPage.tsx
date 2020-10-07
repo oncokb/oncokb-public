@@ -12,7 +12,7 @@ import AnnotationPage from 'app/pages/annotationPage/AnnotationPage';
 import * as QueryString from 'query-string';
 import {
   QUERY_SEPARATOR_FOR_QUERY_STRING,
-  REFERENCE_GENOME
+  REFERENCE_GENOME,
 } from 'app/config/constants';
 import { Alert } from 'react-bootstrap';
 
@@ -46,7 +46,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
       this.store = new AnnotationStore({
         hgsvgQuery: props.match.params.hgvsg,
         tumorTypeQuery: this.tumorType,
-        referenceGenomeQuery: this.refGenome
+        referenceGenomeQuery: this.refGenome,
       });
     }
 
@@ -70,7 +70,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
         () => this.searchQueries,
         newHash => {
           const parsedSearchQueryString = QueryString.stringify(newHash, {
-            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING
+            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING,
           });
           window.location.search = `?${parsedSearchQueryString}`;
         }

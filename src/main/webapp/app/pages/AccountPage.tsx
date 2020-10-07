@@ -8,12 +8,12 @@ import {
   ACCOUNT_TITLES,
   H5_FONT_SIZE,
   LicenseType,
-  PAGE_ROUTE
+  PAGE_ROUTE,
 } from 'app/config/constants';
 import {
   getAccountInfoTitle,
   getLicenseTitle,
-  getSectionClassName
+  getSectionClassName,
 } from 'app/pages/account/AccountUtils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import classnames from 'classnames';
@@ -84,8 +84,8 @@ export class AccountPage extends React.Component<IRegisterProps> {
       .updateTokenUsingPUT({
         token: {
           ...token,
-          expiration: newDate
-        }
+          expiration: newDate,
+        },
       })
       .then(
         () => {

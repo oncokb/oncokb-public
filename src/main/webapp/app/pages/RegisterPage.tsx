@@ -5,7 +5,7 @@ import {
   computed,
   observable,
   reaction,
-  IReactionDisposer
+  IReactionDisposer,
 } from 'mobx';
 import autobind from 'autobind-decorator';
 import { Redirect } from 'react-router-dom';
@@ -13,7 +13,7 @@ import client from 'app/shared/api/clientInstance';
 import { ManagedUserVM } from 'app/shared/api/generated/API';
 import {
   LicenseType,
-  QUERY_SEPARATOR_FOR_QUERY_STRING
+  QUERY_SEPARATOR_FOR_QUERY_STRING,
 } from 'app/config/constants';
 import { Alert, Row, Col, Button } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
@@ -36,7 +36,7 @@ enum RegisterStatus {
   REGISTERED,
   NOT_SUCCESS,
   NA,
-  READY_REDIRECT
+  READY_REDIRECT,
 }
 
 export type IRegisterProps = {
@@ -63,7 +63,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         () => [props.routing.location.hash],
         ([hash]) => {
           const queryStrings = QueryString.parse(hash, {
-            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING
+            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING,
           });
           if (queryStrings[LICENSE_HASH_KEY]) {
             this.selectedLicense = queryStrings[
@@ -78,7 +78,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         newSelection => {
           const parsedHashQueryString = QueryString.stringify(
             {
-              [LICENSE_HASH_KEY]: newSelection
+              [LICENSE_HASH_KEY]: newSelection,
             },
             { arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING }
           );
@@ -97,7 +97,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   handleValidSubmit(newAccount: Partial<ManagedUserVM>) {
     client
       .registerAccountUsingPOST({
-        managedUserVm: newAccount as ManagedUserVM
+        managedUserVm: newAccount as ManagedUserVM,
       })
       .then(this.successToRegistered, this.failedToRegistered);
   }

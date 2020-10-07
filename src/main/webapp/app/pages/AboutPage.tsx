@@ -9,7 +9,7 @@ import {
   DOCUMENT_TITLES,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   SOP_LINK,
-  WEBINAR_LINKS_05072020
+  WEBINAR_LINKS_05072020,
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -61,7 +61,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
         () => this.hashQueries,
         newHash => {
           const parsedHashQueryString = QueryString.stringify(newHash, {
-            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING
+            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING,
           });
           window.location.hash = parsedHashQueryString;
         }
@@ -97,13 +97,13 @@ export class AboutPage extends React.Component<AboutPageProps> {
     {
       title: 'YouTube.com',
       getContent: () => this.getTabIframe(links.youTube),
-      key: 'youtube'
+      key: 'youtube',
     },
     {
       title: 'bilibili.com',
       getContent: () => this.getTabIframe(links.bilibili),
-      key: 'bilibili'
-    }
+      key: 'bilibili',
+    },
   ];
 
   render() {
@@ -201,7 +201,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
                   items={this.getTabs({
                     youTube: 'https://www.youtube.com/embed/XqoKrrm2Boc',
                     bilibili:
-                      '//player.bilibili.com/player.html?aid=370552044&bvid=BV1pZ4y1s7ou&cid=188401136&page=1'
+                      '//player.bilibili.com/player.html?aid=370552044&bvid=BV1pZ4y1s7ou&cid=188401136&page=1',
                   })}
                   transform={false}
                 />
@@ -213,7 +213,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
                   items={this.getTabs({
                     youTube: 'https://www.youtube.com/embed/mTTe7CTdw-g',
                     bilibili:
-                      '//player.bilibili.com/player.html?aid=328647655&bvid=BV1sA411i7F9&cid=207918006&page=1'
+                      '//player.bilibili.com/player.html?aid=328647655&bvid=BV1sA411i7F9&cid=207918006&page=1',
                   })}
                   transform={false}
                 />

@@ -2,7 +2,7 @@ import {
   ACCOUNT_TITLES,
   License,
   LICENSE_TYPES,
-  LicenseType
+  LicenseType,
 } from 'app/config/constants';
 
 export function getSectionClassName(theFirst = false) {
