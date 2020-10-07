@@ -46,8 +46,8 @@ if (
           </ol>
         </div>
         `,
-      id: '2020_spring_webinars'
-    }
+      id: '2020_spring_webinars',
+    },
   ];
 }
 
@@ -104,7 +104,7 @@ export default class UserMessage extends React.Component<UserMessageProps> {
           >
             <div
               dangerouslySetInnerHTML={{
-                __html: this.shownMessage.content
+                __html: this.shownMessage.content,
               }}
             ></div>
             <i

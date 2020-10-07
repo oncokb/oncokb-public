@@ -3,7 +3,7 @@ import indexStyles from 'app/index.module.scss';
 
 export const CitationText = ({
   highlightLinkout = false,
-  boldLinkout = false
+  boldLinkout = false,
 }: {
   highlightLinkout?: boolean;
   boldLinkout?: boolean;

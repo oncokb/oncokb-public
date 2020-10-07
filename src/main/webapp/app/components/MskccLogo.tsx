@@ -19,7 +19,7 @@ class MskccLogo extends React.Component<{
           alt="mskcc-logo"
           src={mskLogo}
           style={{
-            height: this.props.imageHeight || 50
+            height: this.props.imageHeight || 50,
           }}
         />
       </a>

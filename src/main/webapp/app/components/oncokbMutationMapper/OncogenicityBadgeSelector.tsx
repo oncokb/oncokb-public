@@ -17,7 +17,7 @@ export class OncogenicityBadgeSelector extends React.Component<
   {}
 > {
   public static defaultProps: Partial<OncogenicityBadgeSelectorProps> = {
-    numberOfColumnsPerRow: 1
+    numberOfColumnsPerRow: 1,
   };
 
   @computed

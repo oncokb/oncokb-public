@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import {
   getAccountInfoTitle,
-  getSectionClassName
+  getSectionClassName,
 } from 'app/pages/account/AccountUtils';
 import { ButtonSelections } from 'app/components/LicenseSelection';
 import {
@@ -11,7 +11,7 @@ import {
   AvRadio,
   AvRadioGroup,
   AvCheckboxGroup,
-  AvCheckbox
+  AvCheckbox,
 } from 'availity-reactstrap-validation';
 import {
   ACCOUNT_TITLES,
@@ -21,12 +21,12 @@ import {
   UNAUTHORIZED_ALLOWED_PATH,
   USER_AUTHORITIES,
   USER_AUTHORITY,
-  XREGEXP_VALID_LATIN_TEXT
+  XREGEXP_VALID_LATIN_TEXT,
 } from 'app/config/constants';
 import XRegExp from 'xregexp';
 import {
   ACCOUNT_TYPE_DEFAULT,
-  AccountType
+  AccountType,
 } from 'app/components/newAccountForm/NewAccountForm';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
@@ -34,7 +34,7 @@ import {
   ManagedUserVM,
   Token,
   UserDTO,
-  UserMailsDTO
+  UserMailsDTO,
 } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { remoteData } from 'cbioportal-frontend-commons';
@@ -43,7 +43,7 @@ import {
   computed,
   IReactionDisposer,
   observable,
-  reaction
+  reaction,
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
@@ -58,7 +58,7 @@ import { EmailTable } from 'app/shared/table/EmailTable';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
-  INACTIVATED = 'Inactivated'
+  INACTIVATED = 'Inactivated',
 }
 
 interface MatchParams {
@@ -92,20 +92,20 @@ export default class UserPage extends React.Component<IUserPage> {
   readonly user = remoteData<UserDTO>({
     invoke: () => {
       return client.getUserUsingGET({
-        login: this.props.match.params.login
+        login: this.props.match.params.login,
       });
     },
     onResult: user => {
       if (user) {
         this.selectedLicense = user.licenseType as LicenseType;
       }
-    }
+    },
   });
 
   readonly tokens = remoteData<Token[]>({
     invoke: () => {
       return client.getUserTokensUsingGET({
-        login: this.props.match.params.login
+        login: this.props.match.params.login,
       });
     },
     default: [],
@@ -117,16 +117,16 @@ export default class UserPage extends React.Component<IUserPage> {
           ? AccountType.TRIAL
           : AccountType.REGULAR;
       }
-    }
+    },
   });
 
   readonly usersUserMails = remoteData<UserMailsDTO[]>({
     invoke: () => {
       return client.getUsersUserMailsUsingGET({
-        login: this.props.match.params.login
+        login: this.props.match.params.login,
       });
     },
-    default: []
+    default: [],
   });
 
   @computed
@@ -155,8 +155,8 @@ export default class UserPage extends React.Component<IUserPage> {
       .updateTokenUsingPUT({
         token: {
           ...token,
-          expiration: newDate
-        }
+          expiration: newDate,
+        },
       })
       .then(
         () => {
@@ -182,12 +182,12 @@ export default class UserPage extends React.Component<IUserPage> {
         jobTitle: values.jobTitle,
         company: values.company,
         city: values.city,
-        country: values.country
+        country: values.country,
       };
       client
         .updateUserUsingPUT({
           userDto: updatedUser,
-          sendEmail: false
+          sendEmail: false,
         })
         .then(
           (updatedUserDTO: UserDTO) => {
@@ -199,7 +199,7 @@ export default class UserPage extends React.Component<IUserPage> {
             }
             client
               .getUserTokensUsingGET({
-                login: updatedUserDTO.login
+                login: updatedUserDTO.login,
               })
               .then(
                 tokens => {
@@ -220,8 +220,8 @@ export default class UserPage extends React.Component<IUserPage> {
                             renewable: tokenIsRenewable,
                             expiration: tokenValidDays
                               ? now.toISOString()
-                              : token.expiration
-                          }
+                              : token.expiration,
+                          },
                         })
                         .then(
                           () => {
@@ -361,18 +361,18 @@ export default class UserPage extends React.Component<IUserPage> {
                             minLength: {
                               value: 1,
                               errorMessage:
-                                'Required to be at least 1 character'
+                                'Required to be at least 1 character',
                             },
                             pattern: {
                               value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
-                                'Sorry, we only support Latin letters for now.'
+                                'Sorry, we only support Latin letters for now.',
                             },
                             maxLength: {
                               value: 50,
                               errorMessage:
-                                'Cannot be longer than 50 characters'
-                            }
+                                'Cannot be longer than 50 characters',
+                            },
                           }}
                           value={this.user.result.jobTitle}
                         />
@@ -388,18 +388,18 @@ export default class UserPage extends React.Component<IUserPage> {
                             minLength: {
                               value: 1,
                               errorMessage:
-                                'Required to be at least 1 character'
+                                'Required to be at least 1 character',
                             },
                             pattern: {
                               value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
-                                'Sorry, we only support Latin letters for now.'
+                                'Sorry, we only support Latin letters for now.',
                             },
                             maxLength: {
                               value: 50,
                               errorMessage:
-                                'Cannot be longer than 50 characters'
-                            }
+                                'Cannot be longer than 50 characters',
+                            },
                           }}
                           value={this.user.result.company}
                         />
@@ -416,18 +416,18 @@ export default class UserPage extends React.Component<IUserPage> {
                             minLength: {
                               value: 1,
                               errorMessage:
-                                'Required to be at least 1 character'
+                                'Required to be at least 1 character',
                             },
                             pattern: {
                               value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
-                                'Sorry, we only support Latin letters for now.'
+                                'Sorry, we only support Latin letters for now.',
                             },
                             maxLength: {
                               value: 50,
                               errorMessage:
-                                'Cannot be longer than 50 characters'
-                            }
+                                'Cannot be longer than 50 characters',
+                            },
                           }}
                         />
                         <AvField
@@ -443,18 +443,18 @@ export default class UserPage extends React.Component<IUserPage> {
                             pattern: {
                               value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
-                                'Sorry, we only support Latin letters for now.'
+                                'Sorry, we only support Latin letters for now.',
                             },
                             minLength: {
                               value: 1,
                               errorMessage:
-                                'Required to be at least 1 character'
+                                'Required to be at least 1 character',
                             },
                             maxLength: {
                               value: 50,
                               errorMessage:
-                                'Cannot be longer than 50 characters'
-                            }
+                                'Cannot be longer than 50 characters',
+                            },
                           }}
                         />
                         <div className={'mb-2 font-weight-bold'}>

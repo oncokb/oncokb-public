@@ -24,7 +24,7 @@ class App extends React.Component {
     appStore: new AppStore(),
     authenticationStore: new AuthenticationStore(),
     windowStore: new WindowStore(),
-    routing: new RouterStore()
+    routing: new RouterStore(),
   };
 
   constructor(props: IAppConfig) {

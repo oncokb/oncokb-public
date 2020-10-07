@@ -14,7 +14,7 @@ import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 enum RegisterStatus {
   REGISTERED,
   NOT_SUCCESS,
-  NA
+  NA,
 }
 
 @inject('windowStore')
@@ -35,8 +35,8 @@ export class CreateAccountPage extends React.Component<{
       .createUserUsingPOST({
         managedUserVm: {
           ...newAccount,
-          password: 'test'
-        } as ManagedUserVM
+          password: 'test',
+        } as ManagedUserVM,
       })
       .then(this.successToRegistered, this.failedToRegistered);
   }
