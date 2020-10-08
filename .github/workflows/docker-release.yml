@@ -1,0 +1,36 @@
+name: Build/Push docker image
+on:
+  release:
+    types: [published]
+jobs:
+  main:
+    if: github.repository == 'oncokb/oncokb-public'
+    name: Build and Push
+    runs-on: ubuntu-latest
+    env:
+      NODE_VERSION: 12.16.1
+      SPRING_OUTPUT_ANSI_ENABLED: DETECT
+      SPRING_JPA_SHOW_SQL: false
+      JHI_DISABLE_WEBPACK_LOGS: true
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.16.1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11.x'
+      - name: Install node.js packages
+        run: yarn install
+      - name: Package application with Jib
+        env:
+          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+          TAG_NAME: ${{ github.event.release.tag_name }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          ./mvnw -ntp package -Pprod verify jib:dockerBuild \
+          -DskipTests \
+          -Djib.to.image="${REPOSITORY}:${TAG_NAME}" \
+          -Djib.to.auth.username=$DOCKER_USERNAME \
+          -Djib.to.auth.password=$DOCKER_PASSWORD
