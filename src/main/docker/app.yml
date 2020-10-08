@@ -1,7 +1,7 @@
 version: '2'
 services:
   oncokb-app:
-    image: oncokb/oncokb-public:2.7.0
+    image: oncokb/oncokb-public:latest
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,swagger
