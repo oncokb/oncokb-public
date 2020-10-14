@@ -84,9 +84,27 @@ const BoldAccountTitle: React.FunctionComponent<{
 export default class UserPage extends React.Component<IUserPage> {
   @observable selectedLicense: LicenseType | undefined;
   @observable selectedAccountType: AccountType | undefined;
+  @observable userTokens: Token[] = [];
+  readonly reactions: IReactionDisposer[] = [];
 
   constructor(props: IUserPage) {
     super(props);
+    this.reactions.push(
+      reaction(
+        () => this.defaultSelectedAccountType,
+        newDefault => {
+          if (this.selectedAccountType === undefined) {
+            this.selectedAccountType = newDefault;
+          }
+        },
+        true
+      )
+    );
+    this.getUserTokens();
+  }
+
+  componentWillUnmount() {
+    this.reactions.forEach(disposer => disposer());
   }
 
   readonly user = remoteData<UserDTO>({
@@ -102,24 +120,6 @@ export default class UserPage extends React.Component<IUserPage> {
     },
   });
 
-  readonly tokens = remoteData<Token[]>({
-    invoke: () => {
-      return client.getUserTokensUsingGET({
-        login: this.props.match.params.login,
-      });
-    },
-    default: [],
-    onResult: tokens => {
-      if (this.selectedAccountType === undefined) {
-        const currentlyIsTrialAccount =
-          this.tokens.result.filter(token => !token.renewable).length > 0;
-        this.selectedAccountType = currentlyIsTrialAccount
-          ? AccountType.TRIAL
-          : AccountType.REGULAR;
-      }
-    },
-  });
-
   readonly usersUserMails = remoteData<UserMailsDTO[]>({
     invoke: () => {
       return client.getUsersUserMailsUsingGET({
@@ -129,9 +129,23 @@ export default class UserPage extends React.Component<IUserPage> {
     default: [],
   });
 
+  @action
+  async getUserTokens() {
+    this.userTokens = await client.getUserTokensUsingGET({
+      login: this.props.match.params.login,
+    });
+  }
+
+  @computed
+  get defaultSelectedAccountType() {
+    const currentlyIsTrialAccount =
+      this.userTokens.filter(token => !token.renewable).length > 0;
+    return currentlyIsTrialAccount ? AccountType.TRIAL : AccountType.REGULAR;
+  }
+
   @computed
   get shortestToken() {
-    const tokens = _.sortBy(this.tokens.result, token =>
+    const tokens = _.sortBy(this.userTokens, token =>
       daysDiff(token.expiration)
     );
     return tokens.length > 0 ? tokens[0] : undefined;
@@ -149,6 +163,7 @@ export default class UserPage extends React.Component<IUserPage> {
       });
   }
 
+  @autobind
   @action
   extendExpirationDate(token: Token, newDate: string) {
     client
@@ -161,6 +176,7 @@ export default class UserPage extends React.Component<IUserPage> {
       .then(
         () => {
           notifySuccess('Updated Token');
+          this.getUserTokens();
         },
         (error: Error) => {
           notifyError(error);
@@ -248,7 +264,7 @@ export default class UserPage extends React.Component<IUserPage> {
 
   render() {
     return (
-      <If condition={this.user.isPending || this.tokens.isPending}>
+      <If condition={this.user.isPending}>
         <Then>
           <LoadingIndicator isLoading={true}>
             Loading user information
@@ -334,7 +350,7 @@ export default class UserPage extends React.Component<IUserPage> {
                       <Col>
                         <TokenInputGroups
                           changeTokenExpirationDate={true}
-                          tokens={this.tokens.result}
+                          tokens={this.userTokens}
                           onDeleteToken={this.deleteToken}
                           extendExpirationDate={this.extendExpirationDate}
                         />
@@ -465,7 +481,7 @@ export default class UserPage extends React.Component<IUserPage> {
                           name="accountType"
                           label=""
                           required
-                          value={this.selectedAccountType}
+                          value={this.defaultSelectedAccountType}
                           onChange={(event: any, values: any) => {
                             if (values) {
                               this.selectedAccountType = values;
