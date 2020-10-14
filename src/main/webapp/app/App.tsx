@@ -40,6 +40,13 @@ class App extends React.Component {
   @action
   onExecuteChange(value: string) {
     setRecaptchaToken(value);
+    // this.stores.windowStore.recaptchaRef.current.getResponse().then((token: string) => {
+    //   console.log(token)
+    // })
+
+    // this.stores.windowStore.recaptchaRef.current.reset().then(()=>{
+    //   this.stores.windowStore.recaptchaRef.current.execute()
+    // })
   }
 
   componentWillUnmount(): void {
@@ -66,7 +73,7 @@ class App extends React.Component {
     return (
       <DocumentTitle title={DOCUMENT_TITLES.HOME}>
         <>
-          <Reaptcha
+          {/* <Reaptcha
             ref={this.stores.windowStore.recaptchaRef}
             sitekey="6LcxRsMZAAAAAFYpXX6KAc9ASGSf8IptsIKehJby"
             onVerify={this.onExecuteChange}
@@ -74,7 +81,7 @@ class App extends React.Component {
               this.stores.windowStore.recaptchaRef.current.execute()
             }
             size="invisible"
-          />
+          /> */}
           {
             <Provider {...this.stores}>
               <Router history={history}>

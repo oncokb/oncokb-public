@@ -22,7 +22,9 @@ export const setRecaptchaToken = (token: string) => {
 };
 
 export const getRecaptchaToken = () => {
-  return Storage.local.get(RECAPTCHA_KEY);
+  const key = Storage.local.get(RECAPTCHA_KEY);
+  // Storage.local.remove(RECAPTCHA_KEY);
+  return key;
 };
 
 export const assignPublicToken = () => {

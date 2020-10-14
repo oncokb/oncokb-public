@@ -169,3 +169,13 @@ application:
   frontend:
     sentry-project-id:
     google-analytics-project-id:
+
+recaptcha:
+  validation:
+    secret-key: # reCAPTCHA secret key.
+    response-parameter: g-recaptcha-response # HTTP request parameter name containing user reCAPTCHA response.
+    verification-url: https://www.google.com/recaptcha/api/siteverify # reCAPTCHA validation endpoint.
+    timeout:
+      connect: 500ms # reCAPTCHA validation request connect timeout.
+      read: 1000ms # reCAPTCHA validation request read timeout.
+      write: 1000ms # reCAPTCHA validation request write timeout.

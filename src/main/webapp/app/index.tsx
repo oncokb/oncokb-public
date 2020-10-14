@@ -24,11 +24,17 @@ import {
   getPublicWebsiteToken,
   AUTH_UER_TOKEN_KEY,
   RECAPTCHA_KEY,
-  getRecaptchaToken
+  getRecaptchaToken,
+  setRecaptchaToken
 } from 'app/indexUtils';
 import { UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
 import _ from 'lodash';
 import { AppConfig, AppProfile } from 'app/appConfig';
+import Reaptcha from 'reaptcha';
+import { Provider, observer } from 'mobx-react';
+import WindowStore from 'app/store/WindowStore';
+import autobind from 'autobind-decorator';
+import { observable, action } from 'mobx';
 
 assignPublicToken();
 
@@ -41,6 +47,9 @@ const end = superagent.Request.prototype.end;
 const WEBSITE_RELOAD_TIMES_KEY = 'oncokb-website-reload-times';
 const WEBSITE_RELOAD_TIMES_THRESHOLD = 10;
 
+const store = new WindowStore();
+let recapchaStatus = false;
+
 // @ts-ignore
 superagent.Request.prototype.query = function(queryParameters: any) {
   const token = getStoredToken();
@@ -48,10 +57,18 @@ superagent.Request.prototype.query = function(queryParameters: any) {
   if (token) {
     this.set('Authorization', `Bearer ${token}`);
   }
-
   if (recaptchaToken) {
     this.set('reCAPTCHA', `Bearer ${recaptchaToken}`);
   }
+
+  console.log(recapchaStatus);
+  console.log(this);
+  if (recapchaStatus) {
+    store.recaptchaRef.current.reset().then(() => {
+      store.recaptchaRef.current.execute();
+    });
+  }
+
   return query.call(this, queryParameters);
 };
 
@@ -119,5 +136,43 @@ if (AppConfig.serverConfig?.sentryProjectId) {
   });
 }
 
+@observer
+class Recaptcha extends React.Component {
+  constructor(props: any) {
+    super(props);
+    store.recaptchaRef = React.createRef();
+  }
+  @autobind
+  @action
+  onExecuteChange(value: string) {
+    setRecaptchaToken(value);
+    console.log(value);
+    // store.recaptchaRef.current.reset().then(()=>{
+    //   store.recaptchaRef.current.execute()
+    // })
+  }
+
+  render() {
+    return (
+      <div>
+        <Reaptcha
+          ref={store.recaptchaRef}
+          sitekey="6LcxRsMZAAAAAFYpXX6KAc9ASGSf8IptsIKehJby"
+          onRender={() => {
+            store.recaptchaRef.current.execute();
+            recapchaStatus = true;
+          }}
+          onVerify={this.onExecuteChange}
+          size="invisible"
+        />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Recaptcha />,
+  document.getElementById('recaptcha') as HTMLElement
+);
 ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);
 // registerServiceWorker();
