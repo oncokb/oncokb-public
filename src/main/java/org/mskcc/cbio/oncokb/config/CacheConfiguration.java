@@ -72,7 +72,7 @@ public class CacheConfiguration {
             createCache(cm, org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE, jcacheConfiguration, cacheNameResolver);
 
             createCache(cm, org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKEN_BY_UUID_CACHE, jcacheConfiguration, cacheNameResolver);
-            createCache(cm, org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKENS_BY_USER_CACHE, jcacheConfiguration, cacheNameResolver);
+            createCache(cm, org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKENS_BY_USER_LOGIN_CACHE, jcacheConfiguration, cacheNameResolver);
             // jhipster-needle-redis-add-entry
         };
     }

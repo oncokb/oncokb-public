@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKENS_BY_USER_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKENS_BY_USER_LOGIN_CACHE;
 import static org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKEN_BY_UUID_CACHE;
 
 /**
@@ -37,7 +37,7 @@ public class TokenServiceImpl implements TokenService {
     private final CacheNameResolver cacheNameResolver;
 
 
-    public TokenServiceImpl(TokenRepository tokenRepository, CacheManager cacheManager,  CacheNameResolver cacheNameResolver) {
+    public TokenServiceImpl(TokenRepository tokenRepository, CacheManager cacheManager, CacheNameResolver cacheNameResolver) {
         this.tokenRepository = tokenRepository;
         this.cacheManager = cacheManager;
         this.cacheNameResolver = cacheNameResolver;
@@ -47,7 +47,7 @@ public class TokenServiceImpl implements TokenService {
     public Token save(Token token) {
         log.debug("Request to save Token : {}", token);
 
-        Token updatedToken =  tokenRepository.save(token);
+        Token updatedToken = tokenRepository.save(token);
         this.clearTokenCaches(token);
         return updatedToken;
     }
@@ -84,12 +84,12 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public List<Token> findByUser(User user) {
-        return tokenRepository.findByUser(user);
+        return tokenRepository.findByUserLogin(user.getLogin());
     }
 
     @Override
     public List<Token> findValidByUser(User user) {
-        return tokenRepository.findByUser(user).stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
+        return tokenRepository.findByUserLogin(user.getLogin()).stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
     }
 
     @Override
@@ -114,6 +114,6 @@ public class TokenServiceImpl implements TokenService {
 
     private void clearTokenCaches(Token token) {
         Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(TOKEN_BY_UUID_CACHE))).evict(token.getToken());
-        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(TOKENS_BY_USER_CACHE))).evict(token.getUser());
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(TOKENS_BY_USER_LOGIN_CACHE))).evict(token.getUser().getLogin());
     }
 }
