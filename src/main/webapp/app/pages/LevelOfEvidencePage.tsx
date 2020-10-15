@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import {
   DOCUMENT_TITLES,
+  FDA_LEVELS_OF_EVIDENCE_LINK,
   IMG_MAX_WIDTH,
   PAGE_ROUTE
 } from 'app/config/constants';
@@ -16,6 +17,7 @@ import autobind from 'autobind-decorator';
 import { HashLink } from 'react-router-hash-link';
 import mainStyles from '../index.module.scss';
 import { ElementType } from 'app/components/SimpleTable';
+import { Linkout } from 'app/shared/links/Linkout';
 
 type LevelOfEvidencePageProps = {
   routing: RouterStore;
@@ -54,7 +56,14 @@ const LEVEL_TITLE: { [key in Version]: ElementType } = {
       <HashLink to={`${PAGE_ROUTE.NEWS}#12202019`}>News 12/20/2019</HashLink> )
     </>
   ),
-  [Version.FDA]: <>Mapping between OncoKB and {`${LEVEL_NAME[Version.FDA]}`}</>,
+  [Version.FDA]: (
+    <>
+      Mapping between OncoKB and{' '}
+      <Linkout link={FDA_LEVELS_OF_EVIDENCE_LINK}>
+        {`${LEVEL_NAME[Version.FDA]}`}
+      </Linkout>
+    </>
+  ),
   [Version.AAC]: <>Mapping between OncoKB and {`${LEVEL_NAME[Version.AAC]}`}</>
 };
 const LEVEL_SUBTITLE: { [key in Version]: ElementType } = {

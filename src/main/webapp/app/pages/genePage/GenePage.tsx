@@ -27,6 +27,7 @@ import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
   DEFAULT_GENE,
+  FDA_LEVELS_OF_EVIDENCE_LINK,
   LG_TABLE_FIXED_HEIGHT,
   PAGE_ROUTE,
   REFERENCE_GENOME,
@@ -394,7 +395,7 @@ export default class GenePage extends React.Component<GenePageProps> {
                   For more information about the FDA Level of Evidence, please
                   see{' '}
                   <Linkout
-                    link={'https://www.fda.gov/media/109050/download'}
+                    link={FDA_LEVELS_OF_EVIDENCE_LINK}
                     className={'font-weight-bold'}
                   >
                     HERE
