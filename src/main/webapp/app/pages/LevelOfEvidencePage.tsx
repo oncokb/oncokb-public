@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Form } from 'react-bootstrap';
 import classnames from 'classnames';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import {
@@ -25,33 +25,49 @@ type LevelOfEvidencePageProps = {
 export enum Version {
   V1 = 'V1',
   V2 = 'V2',
+  FDA = 'FDA',
   AAC = 'AAC'
 }
 
 const DEFAULT_LEVEL_FILE_NAME = 'LevelsOfEvidence';
 const AAC_CHECKBOX_ID = 'loe-aac-checkbox';
-const ALLOWED_VERSIONS: string[] = [Version.V2, Version.V1, Version.AAC];
-const V2_RELATED_LEVELS = [Version.V2, Version.AAC];
-const AAC_NAME = 'AMP/ASCO/CAP Levels of Evidence';
+const ALLOWED_VERSIONS: string[] = [
+  Version.V2,
+  Version.V1,
+  Version.FDA,
+  Version.AAC
+];
+const V2_RELATED_LEVELS = [Version.V2, Version.FDA, Version.AAC];
+
+const LEVEL_NAME: { [key in Version]: ElementType } = {
+  [Version.V1]: 'Level of Evidence V1',
+  [Version.V2]: 'Level of Evidence V2',
+  [Version.FDA]: 'FDA Levels of Evidence',
+  [Version.AAC]: 'AMP/ASCO/CAP Levels of Evidence'
+};
+
 const LEVEL_TITLE: { [key in Version]: ElementType } = {
-  [Version.V1]: <>OncoKB Levels of Evidence {Version.V1}</>,
+  [Version.V1]: <>{`${LEVEL_NAME[Version.V1]}`}</>,
   [Version.V2]: (
     <>
-      OncoKB Levels of Evidence {Version.V2} ({' '}
+      {`${LEVEL_NAME[Version.V2]}`} ({' '}
       <HashLink to={`${PAGE_ROUTE.NEWS}#12202019`}>News 12/20/2019</HashLink> )
     </>
   ),
-  [Version.AAC]: <>Mapping between OncoKB and AMP/ASCO/CAP Levels of Evidence</>
+  [Version.FDA]: <>Mapping between OncoKB and {`${LEVEL_NAME[Version.FDA]}`}</>,
+  [Version.AAC]: <>Mapping between OncoKB and {`${LEVEL_NAME[Version.AAC]}`}</>
 };
 const LEVEL_SUBTITLE: { [key in Version]: ElementType } = {
-  [Version.V1]: <>Click here to see Levels of Evidence {Version.V2}</>,
-  [Version.V2]: <>Click here to see Levels of Evidence {Version.V1}</>,
+  [Version.V1]: <>Click here to see {`${LEVEL_NAME[Version.V2]}`}</>,
+  [Version.V2]: <>Click here to see {`${LEVEL_NAME[Version.V1]}`}</>,
+  [Version.FDA]: <></>,
   [Version.AAC]: <></>
 };
 
 const LEVEL_FILE_NAME: { [key in Version]: string } = {
   [Version.V1]: DEFAULT_LEVEL_FILE_NAME,
   [Version.V2]: DEFAULT_LEVEL_FILE_NAME,
+  [Version.FDA]: `Mapping_OncoKB_and_FDA_LOfE`,
   [Version.AAC]: `Mapping_OncoKB_and_AMP_ASCO_CAP_LOfE`
 };
 
@@ -117,25 +133,22 @@ export default class LevelOfEvidencePage extends React.Component<
               <Col className="col-auto mr-auto d-flex align-content-center">
                 {V2_RELATED_LEVELS.includes(this.version) && (
                   <span className={'d-flex align-items-center form-check'}>
-                    <input
-                      type={'checkbox'}
-                      className={'form-check-input'}
-                      id={AAC_CHECKBOX_ID}
-                      onClick={() =>
-                        this.toggleVersion(
-                          this.version === Version.AAC
-                            ? Version.V2
-                            : Version.AAC
-                        )
-                      }
-                      checked={this.version === Version.AAC}
-                    />
-                    <label
-                      className={'form-check-label'}
-                      htmlFor={AAC_CHECKBOX_ID}
-                    >
-                      Show mapping to {AAC_NAME}
-                    </label>
+                    <Form.Group>
+                      {[Version.FDA, Version.AAC].map(version => (
+                        <Form.Check
+                          label={`Show mapping to ${LEVEL_NAME[version]}`}
+                          type="checkbox"
+                          onClick={() =>
+                            this.toggleVersion(
+                              this.version === version ? Version.V2 : version
+                            )
+                          }
+                          name="mapping-to-other-levels"
+                          id={`mapping-to-other-levels-${version}`}
+                          checked={this.version === version}
+                        />
+                      ))}
+                    </Form.Group>
                   </span>
                 )}
               </Col>
