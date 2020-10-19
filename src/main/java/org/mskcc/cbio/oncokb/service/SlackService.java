@@ -45,7 +45,8 @@ public class SlackService {
 
     private static final String ACADEMIC_CLARIFICATION_NOTE = "We have sent the clarification email to the user asking why they could not use an institution email to register.";
     private static final String COMMERCIAL_APPROVE_NOTE = "We have sent the intake form automatically.";
-    private static final String LICENSED_DOMAIN_APPROVE_NOTE = ":bangbang: *This email domain belongs to a licensed company. Please review and approve accordingly.*";
+    private static final String LICENSED_DOMAIN_APPROVE_NOTE = ":star: *This email domain belongs to a licensed company. Please review and approve accordingly.*";
+    private static final String TRIALED_DOMAIN_APPROVE_NOTE = ":bangbang: *This email domain belongs to a company that has trial license. The account will be approved by the IT team.*";
 
     private final ApplicationProperties applicationProperties;
     private final MailService mailService;
@@ -74,13 +75,20 @@ public class SlackService {
                 layoutBlocks = buildAcademicBlocks(user, withClarificationNote);
             } else {
                 boolean domainIsLicensed = false;
+                boolean domainIsTrialed = false;
                 List<String> licensedDomains = applicationProperties.getLicensedDomainsList();
                 if (!licensedDomains.isEmpty() && licensedDomains.stream().anyMatch(domain -> emailService.getEmailDomain(user.getEmail().toLowerCase()).equals(domain.toLowerCase()))) {
                     domainIsLicensed = true;
                 }
-                layoutBlocks = buildCommercialApprovalBlocks(user, domainIsLicensed);
+                List<String> trialedDomains = applicationProperties.getTrialedDomainsList();
+                if (!trialedDomains.isEmpty() && trialedDomains.stream().anyMatch(domain -> emailService.getEmailDomain(user.getEmail().toLowerCase()).equals(domain.toLowerCase()))) {
+                    domainIsTrialed = true;
+                }
 
-                if (!domainIsLicensed) {
+                boolean isApprovedDomain = isApprovedDomain(domainIsLicensed, domainIsTrialed);
+                layoutBlocks = buildCommercialApprovalBlocks(user, domainIsLicensed, domainIsTrialed);
+
+                if (!isApprovedDomain) {
                     // Send intake form email
                     MailType intakeEmailMailType = mailService.getIntakeFormMailType(user.getLicenseType());
                     if (intakeEmailMailType != null) {
@@ -160,13 +168,17 @@ public class SlackService {
         return MarkdownTextObject.builder().text(sb.toString()).build();
     }
 
-    private List<LayoutBlock> buildCommercialApprovalBlocks(UserDTO user, boolean domainApproved) {
+    private List<LayoutBlock> buildCommercialApprovalBlocks(UserDTO user, boolean licensedDomain, boolean trialDomain) {
         List<LayoutBlock> blocks = new ArrayList<>();
+        boolean isApprovedDomain = isApprovedDomain(licensedDomain, trialDomain);
 
         // Add mention
-        if (domainApproved) {
+        if (isApprovedDomain) {
             blocks.add(buildChannelMentionBlock());
-            blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(LICENSED_DOMAIN_APPROVE_NOTE).build()).build());
+            if (licensedDomain)
+                blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(LICENSED_DOMAIN_APPROVE_NOTE).build()).build());
+            if (trialDomain)
+                blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(TRIALED_DOMAIN_APPROVE_NOTE).build()).build());
         } else {
             // Add intake form note
             blocks.add(buildHereMentionBlock());
@@ -178,15 +190,21 @@ public class SlackService {
         // Add user info section
         blocks.add(buildUserInfoBlock(user));
 
-        // Add Approve button
-        blocks.add(buildApproveButton(user));
+        if(!trialDomain) {
+            // Add Approve button
+            blocks.add(buildApproveButton(user));
+        }
 
-        if (!domainApproved) {
+        if (!isApprovedDomain) {
             // Add intake form note
             blocks.add(buildPlainTextBlock(COMMERCIAL_APPROVE_NOTE));
         }
 
         return blocks;
+    }
+
+    private boolean isApprovedDomain(boolean licensedDomain, boolean trialDomain) {
+        return licensedDomain || trialDomain;
     }
 
     private List<LayoutBlock> buildAcademicBlocks(UserDTO user, boolean withClarificationNote) {

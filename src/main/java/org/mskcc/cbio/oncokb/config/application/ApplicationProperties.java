@@ -26,6 +26,7 @@ public class ApplicationProperties {
     private String accountApprovalWhitelist;
     private String academicEmailClarifyDomain;
     private String licensedDomains;
+    private String trialedDomains;
     private String googleWebmasterVerification;
     private EmailAddresses emailAddresses;
     private String tokenUsageCheck;
@@ -79,6 +80,14 @@ public class ApplicationProperties {
 
     public void setLicensedDomains(String licensedDomains) {
         this.licensedDomains = licensedDomains;
+    }
+
+    public String getTrialedDomains() {
+        return trialedDomains;
+    }
+
+    public void setTrialedDomains(String trialedDomains) {
+        this.trialedDomains = trialedDomains;
     }
 
     public ProjectProfile getProfile() {
@@ -159,6 +168,9 @@ public class ApplicationProperties {
 
     public List<String> getLicensedDomainsList() {
         return getDomains(this.getLicensedDomains());
+    }
+    public List<String> getTrialedDomainsList() {
+        return getDomains(this.getTrialedDomains());
     }
 
     private List<String> getDomains(String domainStr) {
