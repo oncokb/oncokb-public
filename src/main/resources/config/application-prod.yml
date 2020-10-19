@@ -161,6 +161,7 @@ application:
   user-registration-webhook:
   google-webmaster-verification:
   licensed-domains:
+  trialed-domains:
   account-approval-whitelist:
   token-usage-check:
   token-usage-check-whitelist:
