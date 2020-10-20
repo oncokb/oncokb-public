@@ -1,7 +1,5 @@
 package org.mskcc.cbio.oncokb.security.uuid;
 
-import com.github.mkopylec.recaptcha.validation.RecaptchaValidator;
-import com.github.mkopylec.recaptcha.validation.ValidationResult;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -15,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.UUID;
 
-import static org.mskcc.cbio.oncokb.security.AuthoritiesConstants.PUBLIC_WEBSITE;
-
 /**
  * Filters incoming requests and installs a Spring Security principal if a header corresponding to a valid user is
  * found.
@@ -28,11 +24,8 @@ public class UUIDFilter extends GenericFilterBean {
 
     private TokenProvider tokenProvider;
 
-    private RecaptchaValidator recaptchaValidator;
-
-    public UUIDFilter(TokenProvider tokenProvider, RecaptchaValidator recaptchaValidator) {
+    public UUIDFilter(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
-        this.recaptchaValidator = recaptchaValidator;
     }
 
     @Override
@@ -42,16 +35,7 @@ public class UUIDFilter extends GenericFilterBean {
         UUID uuid = resolveToken(httpServletRequest);
         if (uuid != null && this.tokenProvider.validateToken(uuid)) {
             Authentication authentication = this.tokenProvider.getAuthentication(uuid);
-            boolean isPublicWebsite = authentication.getAuthorities().stream().filter(grantedAuthority -> grantedAuthority.getAuthority().equals(PUBLIC_WEBSITE)).findAny().isPresent();
-            if (isPublicWebsite) {
-                String reCAPTCHA = resolveRecaptchaToken(httpServletRequest);
-                ValidationResult result = recaptchaValidator.validate(reCAPTCHA);
-                if (result.isSuccess()) {
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-            } else {
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 //            this.tokenProvider.addAccessRecord(uuid, servletRequest.getRemoteAddr());
         }
         filterChain.doFilter(servletRequest, servletResponse);
@@ -62,19 +46,6 @@ public class UUIDFilter extends GenericFilterBean {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             try {
                 return UUID.fromString(bearerToken.substring(7));
-            } catch (Exception e) {
-                logger.info("Invalid token.");
-                return null;
-            }
-        }
-        return null;
-    }
-
-    private String resolveRecaptchaToken(HttpServletRequest request) {
-        String recaptchaToken = request.getHeader(RECAPTCHA_HEADER);
-        if (StringUtils.hasText(recaptchaToken) && recaptchaToken.startsWith("Bearer ")) {
-            try {
-                return recaptchaToken.substring(7);
             } catch (Exception e) {
                 logger.info("Invalid token.");
                 return null;

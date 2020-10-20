@@ -1,6 +1,5 @@
 package org.mskcc.cbio.oncokb.security.uuid;
 
-import com.github.mkopylec.recaptcha.validation.RecaptchaValidator;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
@@ -10,16 +9,13 @@ public class UUIDConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFil
 
     private TokenProvider tokenProvider;
 
-    private RecaptchaValidator recaptchaValidator;
-
-    public UUIDConfigurer(TokenProvider tokenProvider, RecaptchaValidator recaptchaValidator) {
+    public UUIDConfigurer(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
-        this.recaptchaValidator = recaptchaValidator;
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        UUIDFilter customFilter = new UUIDFilter(tokenProvider, recaptchaValidator);
+        UUIDFilter customFilter = new UUIDFilter(tokenProvider);
         http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

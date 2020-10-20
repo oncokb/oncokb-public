@@ -9,7 +9,7 @@ import { Router, withRouter } from 'react-router';
 import { syncHistoryWithStore } from 'mobx-react-router';
 import { createBrowserHistory } from 'history';
 import DocumentTitle from 'react-document-title';
-import { DOCUMENT_TITLES } from 'app/config/constants';
+import { DOCUMENT_TITLES, RECAPTCHA_SITE_KEY } from 'app/config/constants';
 import { setRecaptchaToken } from 'app/indexUtils';
 import { observable, action } from 'mobx';
 import autobind from 'autobind-decorator';
@@ -68,7 +68,7 @@ class App extends React.Component {
         <>
           <Reaptcha
             ref={this.stores.windowStore.recaptchaRef}
-            sitekey="6LcxRsMZAAAAAFYpXX6KAc9ASGSf8IptsIKehJby"
+            sitekey={RECAPTCHA_SITE_KEY}
             onVerify={this.onExecuteChange}
             onRender={() =>
               this.stores.windowStore.recaptchaRef.current.execute()

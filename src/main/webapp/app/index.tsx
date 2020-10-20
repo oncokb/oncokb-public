@@ -44,14 +44,10 @@ const WEBSITE_RELOAD_TIMES_THRESHOLD = 10;
 // @ts-ignore
 superagent.Request.prototype.query = function(queryParameters: any) {
   const token = getStoredToken();
-  const recaptchaToken = getRecaptchaToken();
   if (token) {
     this.set('Authorization', `Bearer ${token}`);
   }
 
-  if (recaptchaToken) {
-    this.set('reCAPTCHA', `Bearer ${recaptchaToken}`);
-  }
   return query.call(this, queryParameters);
 };
 
