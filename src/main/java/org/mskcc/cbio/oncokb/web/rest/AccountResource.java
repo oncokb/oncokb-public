@@ -355,6 +355,16 @@ public class AccountResource {
         }
     }
 
+    @PostMapping(path = "/account/generate-reset-key")
+    public UserDTO generateResetKey(@RequestBody String mail) {
+        Optional<User> user = userService.requestPasswordReset(mail);
+        if (user.isPresent()) {
+            return userMapper.userToUserDTO(user.get());
+        } else {
+            throw new AccountResourceException("No user was found");
+        }
+    }
+
 
     @PostMapping(path = "/account/resend-verification")
     public void resendVerification(@RequestBody LoginVM loginVM) {
