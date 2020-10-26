@@ -6,21 +6,19 @@ import {
 } from 'app/pages/account/AccountUtils';
 import { ButtonSelections } from 'app/components/LicenseSelection';
 import {
+  AvCheckbox,
+  AvCheckboxGroup,
   AvField,
   AvForm,
   AvRadio,
   AvRadioGroup,
-  AvCheckboxGroup,
-  AvCheckbox,
 } from 'availity-reactstrap-validation';
 import {
   ACCOUNT_TITLES,
   LicenseType,
   NOT_CHANGEABLE_AUTHORITIES,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
-  UNAUTHORIZED_ALLOWED_PATH,
   USER_AUTHORITIES,
-  USER_AUTHORITY,
   XREGEXP_VALID_LATIN_TEXT,
 } from 'app/config/constants';
 import XRegExp from 'xregexp';
@@ -30,12 +28,7 @@ import {
 } from 'app/components/newAccountForm/NewAccountForm';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
-import {
-  ManagedUserVM,
-  Token,
-  UserDTO,
-  UserMailsDTO,
-} from 'app/shared/api/generated/API';
+import { Token, UserDTO, UserMailsDTO } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { remoteData } from 'cbioportal-frontend-commons';
 import {
@@ -55,6 +48,7 @@ import _ from 'lodash';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import { EmailTable } from 'app/shared/table/EmailTable';
+import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -85,6 +79,9 @@ export default class UserPage extends React.Component<IUserPage> {
   @observable selectedLicense: LicenseType | undefined;
   @observable selectedAccountType: AccountType | undefined;
   @observable userTokens: Token[] = [];
+  @observable user: UserDTO;
+  @observable getUserStatus: PromiseStatus;
+
   readonly reactions: IReactionDisposer[] = [];
 
   constructor(props: IUserPage) {
@@ -100,25 +97,13 @@ export default class UserPage extends React.Component<IUserPage> {
         true
       )
     );
+    this.getUser();
     this.getUserTokens();
   }
 
   componentWillUnmount() {
     this.reactions.forEach(disposer => disposer());
   }
-
-  readonly user = remoteData<UserDTO>({
-    invoke: () => {
-      return client.getUserUsingGET({
-        login: this.props.match.params.login,
-      });
-    },
-    onResult: user => {
-      if (user) {
-        this.selectedLicense = user.licenseType as LicenseType;
-      }
-    },
-  });
 
   readonly usersUserMails = remoteData<UserMailsDTO[]>({
     invoke: () => {
@@ -187,12 +172,12 @@ export default class UserPage extends React.Component<IUserPage> {
   @autobind
   @action
   updateUser(event: any, values: any) {
-    if (this.user.result) {
+    if (this.user) {
       const updatedUser: UserDTO = {
-        ...this.user.result,
+        ...this.user,
         licenseType: this.selectedLicense
           ? this.selectedLicense
-          : this.user.result.licenseType,
+          : this.user.licenseType,
         authorities: values.authorities,
         activated: values.accountStatus === AccountStatus.ACTIVATED,
         jobTitle: values.jobTitle,
@@ -213,13 +198,14 @@ export default class UserPage extends React.Component<IUserPage> {
             if (values.tokenValidDays) {
               tokenValidDays = Number(values.tokenValidDays);
             }
+            notifySuccess('Updated User');
+            this.user = updatedUserDTO;
             client
               .getUserTokensUsingGET({
                 login: updatedUserDTO.login,
               })
               .then(
                 tokens => {
-                  notifySuccess('Updated User');
                   tokens.forEach(token => {
                     if (
                       token.renewable !== tokenIsRenewable ||
@@ -262,28 +248,80 @@ export default class UserPage extends React.Component<IUserPage> {
     }
   }
 
+  @action
+  getUser() {
+    this.getUserStatus = PromiseStatus.pending;
+    client
+      .getUserUsingGET({
+        login: this.props.match.params.login,
+      })
+      .then(
+        user => {
+          this.user = user;
+          if (this.user) {
+            this.selectedLicense = this.user.licenseType as LicenseType;
+          }
+          this.getUserStatus = PromiseStatus.complete;
+        },
+        (error: Error) => {
+          this.getUserStatus = PromiseStatus.error;
+          notifyError(error);
+        }
+      );
+  }
+
+  @autobind
+  @action
+  generateResetKey() {
+    client
+      .generateResetKeyUsingPOST({
+        mail: this.props.match.params.login,
+      })
+      .then(
+        updatedUser => {
+          this.user = updatedUser;
+          notifySuccess('Updated User');
+        },
+        (error: Error) => notifyError(error)
+      );
+  }
+
   render() {
     return (
-      <If condition={this.user.isPending}>
+      <If condition={this.getUserStatus === PromiseStatus.pending}>
         <Then>
           <LoadingIndicator isLoading={true}>
             Loading user information
           </LoadingIndicator>
         </Then>
         <Else>
-          <If condition={this.user.isError}>
+          <If condition={this.getUserStatus === PromiseStatus.error}>
             <Then>
               <Alert variant={'danger'}>Error loading user information</Alert>
             </Then>
             <Else>
-              {this.user.result !== undefined && (
+              {this.user !== undefined && (
                 <AvForm onValidSubmit={this.updateUser}>
                   <div>
                     <Row className={getSectionClassName()}>
                       <Col>
+                        <div>Quick Tools</div>
+                        <div>
+                          <Button
+                            variant="outline-primary"
+                            onClick={this.generateResetKey}
+                            className={'mb-2'}
+                          >
+                            Generate Reset Key
+                          </Button>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className={getSectionClassName()}>
+                      <Col>
                         <AvField
                           name="email"
-                          value={this.user.result.email}
+                          value={this.user.email}
                           label={
                             <BoldAccountTitle
                               title={ACCOUNT_TITLES.EMAIL}
@@ -300,7 +338,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               licenseType={this.selectedLicense}
                             />
                           }
-                          value={this.user.result.firstName}
+                          value={this.user.firstName}
                           disabled
                         />
                         <AvField
@@ -311,37 +349,43 @@ export default class UserPage extends React.Component<IUserPage> {
                               licenseType={this.selectedLicense}
                             />
                           }
-                          value={this.user.result.lastName}
+                          value={this.user.lastName}
                           disabled
                         />
                         <AvField
                           name="createdDate"
                           label={<b>Created Date</b>}
-                          value={this.user.result.createdDate}
+                          value={this.user.createdDate}
                           disabled
                         />
                         <AvField
                           name="lastModifiedBy"
                           label={<b>Last Modified By</b>}
-                          value={this.user.result.lastModifiedBy}
+                          value={this.user.lastModifiedBy}
                           disabled
                         />
                         <AvField
                           name="lastModifiedDate"
                           label={<b>Last Modified Date</b>}
-                          value={this.user.result.lastModifiedDate}
+                          value={this.user.lastModifiedDate}
                           disabled
                         />
                         <AvField
                           name="activationKey"
                           label={<b>Activation Key</b>}
-                          value={this.user.result.activationKey}
+                          value={this.user.activationKey}
                           disabled
                         />
                         <AvField
                           name="resetKey"
                           label={<b>Reset Key</b>}
-                          value={this.user.result.resetKey}
+                          value={this.user.resetKey}
+                          disabled
+                        />
+                        <AvField
+                          name="resetDate"
+                          label={<b>Reset Date</b>}
+                          value={this.user.resetDate}
                           disabled
                         />
                       </Col>
@@ -390,7 +434,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 'Cannot be longer than 50 characters',
                             },
                           }}
-                          value={this.user.result.jobTitle}
+                          value={this.user.jobTitle}
                         />
                         <AvField
                           name="company"
@@ -417,7 +461,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 'Cannot be longer than 50 characters',
                             },
                           }}
-                          value={this.user.result.company}
+                          value={this.user.company}
                         />
                         <AvField
                           name="city"
@@ -427,7 +471,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               licenseType={this.selectedLicense}
                             />
                           }
-                          value={this.user.result.city}
+                          value={this.user.city}
                           validate={{
                             minLength: {
                               value: 1,
@@ -454,7 +498,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               licenseType={this.selectedLicense}
                             />
                           }
-                          value={this.user.result.country}
+                          value={this.user.country}
                           validate={{
                             pattern: {
                               value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
@@ -529,7 +573,7 @@ export default class UserPage extends React.Component<IUserPage> {
                           label=""
                           required
                           value={
-                            this.user.result.activated
+                            this.user.activated
                               ? AccountStatus.ACTIVATED
                               : AccountStatus.INACTIVATED
                           }
@@ -550,7 +594,7 @@ export default class UserPage extends React.Component<IUserPage> {
                           inline
                           name="authorities"
                           label=""
-                          value={this.user.result.authorities}
+                          value={this.user.authorities}
                           required
                         >
                           {USER_AUTHORITIES.map(authority => (
