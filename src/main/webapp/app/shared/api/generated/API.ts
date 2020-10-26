@@ -465,6 +465,82 @@ export default class API {
             return response.body;
         });
     };
+    generateResetKeyUsingPOSTURL(parameters: {
+        'mail': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/generate-reset-key';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * generateResetKey
+     * @method
+     * @name API#generateResetKeyUsingPOST
+     * @param {} mail - mail
+     */
+    generateResetKeyUsingPOSTWithHttpInfo(parameters: {
+        'mail': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/generate-reset-key';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['mail'] !== undefined) {
+                body = parameters['mail'];
+            }
+
+            if (parameters['mail'] === undefined) {
+                reject(new Error('Missing required  parameter: mail'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * generateResetKey
+     * @method
+     * @name API#generateResetKeyUsingPOST
+     * @param {} mail - mail
+     */
+    generateResetKeyUsingPOST(parameters: {
+        'mail': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < UserDTO > {
+        return this.generateResetKeyUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     resendVerificationUsingPOSTURL(parameters: {
         'loginVm': LoginVM,
         $queryParameters ? : any
