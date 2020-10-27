@@ -21,7 +21,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
   assignPublicToken,
   getStoredToken,
-  getPublicWebsiteToken
+  getPublicWebsiteToken,
+  AUTH_UER_TOKEN_KEY,
+  RECAPTCHA_KEY,
+  getRecaptchaToken
 } from 'app/indexUtils';
 import { UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
 import _ from 'lodash';
@@ -44,6 +47,7 @@ superagent.Request.prototype.query = function(queryParameters: any) {
   if (token) {
     this.set('Authorization', `Bearer ${token}`);
   }
+
   return query.call(this, queryParameters);
 };
 

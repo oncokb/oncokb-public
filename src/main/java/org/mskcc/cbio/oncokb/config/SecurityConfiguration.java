@@ -28,6 +28,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
+    // private final RecaptchaValidator recaptchaValidator;
 
     private final CorsFilter corsFilter;
     private final SecurityProblemSupport problemSupport;

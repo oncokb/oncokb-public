@@ -10,6 +10,7 @@ export interface IWindowSize {
 
 class WindowStore {
   @observable size: IWindowSize;
+  public recaptchaRef: any;
 
   private handleWindowResize = _.debounce(this.setWindowSize, 200);
   private windowObj: any;
@@ -18,6 +19,16 @@ class WindowStore {
     this.windowObj = window;
     this.setWindowSize();
     this.windowObj.addEventListener('resize', this.handleWindowResize);
+    this.windowObj.addEventListener('click', () => {
+      this.executeRecaptcha();
+    });
+  }
+
+  @action
+  private executeRecaptcha() {
+    if (this.recaptchaRef) {
+      this.recaptchaRef.current.execute();
+    }
   }
 
   @autobind

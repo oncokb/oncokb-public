@@ -20,6 +20,7 @@ import java.util.UUID;
 public class UUIDFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String RECAPTCHA_HEADER = "reCAPTCHA";
 
     private TokenProvider tokenProvider;
 
