@@ -32,7 +32,7 @@ export type IRegisterProps = {
   authenticationStore: AuthenticationStore;
 };
 
-const InfoRow: React.FunctionComponent<{
+export const InfoRow: React.FunctionComponent<{
   title: JSX.Element | string;
   content?: JSX.Element | string;
 }> = props => {
