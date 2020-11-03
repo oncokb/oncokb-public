@@ -74,6 +74,8 @@ export const WEBINAR_LINKS_05072020 = (
 export const REDIRECT_TIMEOUT_MILLISECONDS = 10000;
 export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;
 export const TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS = 14;
+export const USAGE_TOP_USERS_LIMIT = 10000;
+export const USGAE_ALL_TIME_KEY = 'All';
 
 export enum ONCOGENICITY {
   ONCOGENIC = 'Oncogenic',
@@ -289,6 +291,7 @@ export enum PAGE_TITLE {
   ADMIN_USER_DETAILS = 'Users Information',
   ADMIN_SEND_EMAILS = 'Send Emails to Users',
   ADMIN_CREATE_ACCOUNT = 'Create New Account',
+  ADMIN_USAGE_ANALYSIS = 'Usage Analysis',
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
   REGISTER = 'Register',
@@ -319,6 +322,9 @@ export enum PAGE_ROUTE {
   ADMIN_USER_DETAILS = '/admin/user-details',
   ADMIN_SEND_EMAILS = '/admin/send-emails',
   ADMIN_CREATE_ACCOUNT = '/admin/create-account',
+  ADMIN_USAGE_ANALYSIS = '/admin/usage-analysis',
+  ADMIN_USER_USAGE_DETAILS = '/admin/usage-analysis/users/:id',
+  ADMIN_USER_USAGE_DETAILS_LINK = '/admin/usage-analysis/users/',
   USER = '/users/:login',
   ACCOUNT = '/account',
   REGISTER = '/account/register',
