@@ -33,6 +33,7 @@ public class ApplicationProperties {
     private String tokenUsageCheckWhitelist;
     private int publicWebsiteApiThreshold;
     private FrontendProperties frontend;
+    private AWSProperties aws;
 
     public String getName() {
         return name;
@@ -178,5 +179,13 @@ public class ApplicationProperties {
             return new ArrayList<>();
         }
         return Arrays.stream(domainStr.split(",")).map(domain -> domain.trim()).filter(domain -> !StringUtils.isEmpty(domain)).collect(Collectors.toList());
+    }
+
+    public AWSProperties getAws() {
+        return aws;
+    }
+
+    public void setAws(AWSProperties aws) {
+        this.aws = aws;
     }
 }
