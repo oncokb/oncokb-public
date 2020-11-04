@@ -164,3 +164,7 @@ application:
   frontend:
     sentry-project-id:
     google-analytics-project-id:
+  aws:
+    s3-access-key:
+    s3-secret-key:
+    s3-region:

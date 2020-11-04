@@ -197,6 +197,33 @@ export type UserMailsDTO = {
         'userLogin': string
 
 };
+export type UserUsageOverview = {
+    'userId': string
+    'userEmail': string
+    'endpoint': string
+    'maxUsage': string
+    'totalUsage': string
+}
+
+export type UserUsage = {
+    'userFirstName': string
+    'userLastName': string
+    'userEmail': string
+    'licenseType': string
+    'jobTitle': string
+    'company': string
+    'summary': UsageSummary
+}
+
+export type UsageSummary = {
+    'month': Map<string, Map<string, number>>
+    'year': Map<string, number>
+}
+
+export type UsageRecord = {
+    'resource': string,
+    'usage': number,
+}
 
 /**
  * OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
@@ -3753,4 +3780,94 @@ export default class API {
                 return response.body;
             });
         };
+
+    getAllResourcesUsageUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/usage/resource';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+        });
+    };
+
+    getAllResourcesUsageUsingGET( parameters: {
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < UsageSummary > {
+                return this.getAllResourcesUsageUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                    return response.body;
+                });
+            };
+
+    getUserUsageOverviewUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/usage/overview';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+        });
+    };
+
+    getUserUsageOverviewUsingGET( parameters: {
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < UserUsageOverview > > {
+                return this.getUserUsageOverviewUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                    return response.body;
+                });
+            };
+
+    
+    getUserUsageUsingGETWithHttpInfo(parameters: {
+        id: string, 
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = `/api/usage/users/${parameters.id}`;
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+        });
+    };
+
+    getUserUsageUsingGET( parameters: {
+            id: string,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < UserUsage > {
+                return this.getUserUsageUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                    return response.body;
+                });
+            };
 }
