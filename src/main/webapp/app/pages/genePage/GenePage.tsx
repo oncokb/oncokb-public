@@ -377,12 +377,6 @@ export default class GenePage extends React.Component<GenePageProps> {
         }
       },
       {
-        Header: <span>Specimen type</span>,
-        accessor: 'specimenType',
-        onFilter: (data: FdaVariant, keyword) =>
-          filterByKeyword(data.specimenType, keyword)
-      },
-      {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
         width: 200,
         Header: (
@@ -586,9 +580,15 @@ export default class GenePage extends React.Component<GenePageProps> {
           A list of the tumor type-specific {this.store.hugoSymbol} alterations
           and the corresponding{' '}
           <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
+            FDA Level of Evidence
+          </Link>{' '}
+          assigning their clinical significance. The analytic significance of
+          the assigned{' '}
+          <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
             FDA level of evidence
           </Link>{' '}
-          assigning their <b>clinical significance</b>.
+          is based on these alterations being tested in Formalin Fixed Paraffin
+          Embedded (FFPE) specimen types if applicable.
         </span>
       );
     }

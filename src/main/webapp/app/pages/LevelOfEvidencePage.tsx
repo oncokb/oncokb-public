@@ -126,9 +126,9 @@ export default class LevelOfEvidencePage extends React.Component<
       case Version.FDA:
         return (
           <>
-            * Note that FDA Level 1 is reserved specifically for Companion
-            Diagnostics. For more information please see{' '}
-            <Linkout link={FDA_LEVELS_OF_EVIDENCE_LINK}>here</Linkout>.
+            OncoKB is not associated with a Companion Diagnostic test.
+            Therefore, by definition, no variant in OncoKB can be mapped to FDA
+            Level 1.
           </>
         );
       case Version.V1:
@@ -211,7 +211,9 @@ export default class LevelOfEvidencePage extends React.Component<
               <Col className={'d-md-flex justify-content-center mt-2'}>
                 <div
                   style={{
-                    maxWidth: this.version === Version.AAC ? 900 : IMG_MAX_WIDTH
+                    maxWidth: [Version.AAC, Version.FDA].includes(this.version)
+                      ? 900
+                      : IMG_MAX_WIDTH
                   }}
                 >
                   <img
