@@ -56,6 +56,8 @@ export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
 export const FACULTY_COI_WEBSITE_LINK = 'https://www.mskcc.org/disclosures';
 export const NONE_FACULTY_COI_WEBSITE_LINK =
   'https://docs.google.com/spreadsheets/d/1PKHV8ArVm4AFu4Rj-URWHcCAqnbWlm7p2-LOxhe0aFU/edit?usp=sharing';
+export const FDA_LEVELS_OF_EVIDENCE_LINK =
+  'https://www.fda.gov/media/109050/download';
 export const WEBINAR_LINKS_05072020 = (
   <span>
     <Linkout

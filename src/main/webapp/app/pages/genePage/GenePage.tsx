@@ -27,6 +27,7 @@ import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
   DEFAULT_GENE,
+  FDA_LEVELS_OF_EVIDENCE_LINK,
   LG_TABLE_FIXED_HEIGHT,
   PAGE_ROUTE,
   REFERENCE_GENOME,
@@ -72,6 +73,8 @@ import {
 import { RouterStore } from 'mobx-react-router';
 import { Location } from 'history';
 import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
+import { Link } from 'react-router-dom';
+import { Version } from 'app/pages/LevelOfEvidencePage';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -374,12 +377,6 @@ export default class GenePage extends React.Component<GenePageProps> {
         }
       },
       {
-        Header: <span>Specimen type</span>,
-        accessor: 'specimenType',
-        onFilter: (data: FdaVariant, keyword) =>
-          filterByKeyword(data.specimenType, keyword)
-      },
-      {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
         width: 200,
         Header: (
@@ -392,7 +389,7 @@ export default class GenePage extends React.Component<GenePageProps> {
                   For more information about the FDA Level of Evidence, please
                   see{' '}
                   <Linkout
-                    link={'https://www.fda.gov/media/109050/download'}
+                    link={FDA_LEVELS_OF_EVIDENCE_LINK}
                     className={'font-weight-bold'}
                   >
                     HERE
@@ -407,7 +404,7 @@ export default class GenePage extends React.Component<GenePageProps> {
         onFilter: (data: FdaVariant, keyword) =>
           filterByKeyword(data.level, keyword),
         Cell(props: { original: FdaVariant }) {
-          return <span>{props.original.level}</span>;
+          return <span>FDA {props.original.level}</span>;
         }
       }
     ];
@@ -565,7 +562,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       return (
         <span>
           A list of the oncogenic and mutation effects of{' '}
-          <b>all OncoKB curated</b> {this.store.hugoSymbol} alterations.
+          <b>all OncoKB annotated</b> {this.store.hugoSymbol} alterations.
         </span>
       );
     } else if (key === TAB_KEYS.CLINICAL) {
@@ -581,8 +578,17 @@ export default class GenePage extends React.Component<GenePageProps> {
       return (
         <span>
           A list of the tumor type-specific {this.store.hugoSymbol} alterations
-          and the corresponding FDA level of evidence assigning their{' '}
-          <b>clinical significance</b>.
+          and the corresponding{' '}
+          <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
+            FDA Level of Evidence
+          </Link>{' '}
+          assigning their clinical significance. The analytic significance of
+          the assigned{' '}
+          <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
+            FDA level of evidence
+          </Link>{' '}
+          is based on these alterations being tested in Formalin Fixed Paraffin
+          Embedded (FFPE) specimen types if applicable.
         </span>
       );
     }
@@ -824,7 +830,9 @@ export default class GenePage extends React.Component<GenePageProps> {
   @action
   confirmLeavingFdaTab() {
     if (this.lastLocation) {
-      this.props.routing.history.push(this.lastLocation.pathname);
+      this.props.routing.history.push(
+        this.lastLocation.pathname + this.lastLocation.hash
+      );
     }
     this.showModal = false;
   }
