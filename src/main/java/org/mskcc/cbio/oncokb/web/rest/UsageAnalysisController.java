@@ -95,6 +95,8 @@ public class UsageAnalysisController {
             
             String endpoint = "";
             int maxUsage = 0;
+            String noPrivateEndpoint = "";
+            int noPrivateMaxUsage = 0;
             int totalUsage = 0;
             Map<String,Integer> summary = userUsage.getSummary().getYear();
             for (String resource: summary.keySet()){
@@ -103,10 +105,18 @@ public class UsageAnalysisController {
                     endpoint = resource;
                     maxUsage = summary.get(resource);
                 }
+                if (resource.indexOf("/private/") == -1){
+                    if (summary.get(resource) > noPrivateMaxUsage){
+                        noPrivateEndpoint = resource;
+                        noPrivateMaxUsage = summary.get(resource);
+                    }
+                }
             }
             cur.setTotalUsage(totalUsage);
             cur.setEndpoint(endpoint);
             cur.setMaxUsage(maxUsage);
+            cur.setNoPrivateEndpoint(noPrivateEndpoint);
+            cur.setNoPrivateMaxUsage(noPrivateMaxUsage);
 
             result.add(cur);
         }
