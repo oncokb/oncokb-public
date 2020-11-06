@@ -52,7 +52,7 @@ public class ClientForwardControllerTest {
 
     @Test
     public void getNestedClientEndpoint() throws Exception {
-        restMockMvc.perform(get("/admin/user-management"))
+        restMockMvc.perform(get("/admin/user-details"))
             .andExpect(status().isOk())
             .andExpect(forwardedUrl("/"));
     }

@@ -1,0 +1,10 @@
+name: "codeql config"
+
+paths:
+  - src
+
+paths-ignore:
+  - node_modules
+  - yarn
+  - target
+  - .yarn

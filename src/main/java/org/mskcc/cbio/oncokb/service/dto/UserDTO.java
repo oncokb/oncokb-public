@@ -269,6 +269,7 @@ public class UserDTO {
         this.authorities = authorities;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "UserDTO{" +

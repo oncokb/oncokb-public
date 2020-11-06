@@ -3,11 +3,18 @@ package org.mskcc.cbio.oncokb.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import org.apache.http.protocol.HTTP;
 import org.mskcc.cbio.oncokb.config.Constants;
+import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
+import org.mskcc.cbio.oncokb.service.TokenService;
+import org.springframework.data.domain.Sort;
+
+import java.util.*;
+
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
@@ -26,6 +33,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.MessagingException;
@@ -34,8 +42,6 @@ import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * REST controller for managing users.
@@ -64,6 +70,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class UserResource {
+    private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey"));
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
@@ -79,10 +86,13 @@ public class UserResource {
 
     private final MailService mailService;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
+    private final TokenService tokenService;
+
+    public UserResource(UserService userService, UserRepository userRepository, MailService mailService, TokenService tokenService) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
+        this.tokenService = tokenService;
     }
 
     /**
@@ -164,6 +174,10 @@ public class UserResource {
     @GetMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
+        if (!onlyContainsAllowedProperties(pageable)) {
+            return ResponseEntity.badRequest().build();
+        }
+
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -183,6 +197,10 @@ public class UserResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+
+    private boolean onlyContainsAllowedProperties(Pageable pageable) {
+        return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(ALLOWED_ORDERED_PROPERTIES::contains);
+    }
 
     /**
      * Gets a list of all roles.
@@ -222,5 +240,22 @@ public class UserResource {
         // TODO: token, token_stats, user_details need to be deleted in order to delete the user
         userService.deleteUser(login);
         return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, "A user is deleted with identifier " + login, login)).build();
+    }
+
+    /**
+     * {@code GET /users/:login/tokens} : get all tokens for the "login" user.
+     *
+     * @param login the login of the user to find.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the list of tokens, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}/tokens")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<List<Token>> getUserTokens(@PathVariable String login) {
+        log.debug("REST request to get User : {}", login);
+        Optional<User> optionalUser = userService.getUserWithAuthoritiesByLogin(login);
+        if (!optionalUser.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(tokenService.findByUser(optionalUser.get()), HttpStatus.OK);
     }
 }

@@ -16,7 +16,6 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "jhi_authority")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Authority implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,6 +50,7 @@ public class Authority implements Serializable {
         return Objects.hashCode(name);
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "Authority{" +

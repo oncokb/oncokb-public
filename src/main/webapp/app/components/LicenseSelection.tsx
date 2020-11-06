@@ -58,7 +58,7 @@ export const ButtonSelections: React.FunctionComponent<{
 }> = props => {
   return (
     <>
-      <Row className={"my-2"}>
+      <Row className={'my-2'}>
         <Col xl={3} sm={6} xs={12}>
           <SelectionButton
             selectedButton={props.selectedButton}

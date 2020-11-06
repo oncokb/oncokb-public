@@ -46,6 +46,9 @@ superagent.Request.prototype.query = function(queryParameters: any) {
   const token = getStoredToken();
   if (token) {
     this.set('Authorization', `Bearer ${token}`);
+    if (this.url.endsWith('sqlDump')) {
+      this.responseType('blob');
+    }
   }
 
   return query.call(this, queryParameters);
@@ -61,7 +64,7 @@ superagent.Request.prototype.end = function(callback) {
       response.statusCode === 200 &&
       response.headers &&
       response.headers['content-type'] &&
-      ['application/zip', 'text/plain;'].some(item =>
+      ['text/plain;'].some(item =>
         response.headers['content-type'].includes(item)
       )
     ) {

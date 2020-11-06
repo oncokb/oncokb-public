@@ -10,7 +10,7 @@ import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { TermsPage } from 'app/pages/TermsPage';
-import { TeamPage } from 'app/pages/TeamPage';
+import { TeamPage } from 'app/pages/teamPage/TeamPage';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
 import ActionableGenesPage from 'app/pages/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
@@ -30,6 +30,8 @@ import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
 import { FAQPage } from 'app/pages/FAQPage';
 import { RecaptchaBoundaryRoute } from '../shared/auth/RecaptchaBoundaryRoute';
+import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
+import UserPage from 'app/pages/userPage/UserPage';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -101,6 +103,11 @@ const AppRouts = (props: {
           />
           <RecaptchaBoundaryRoute
             exact
+            path={PAGE_ROUTE.HGVSG}
+            component={HgvsgPage}
+          />
+          <RecaptchaBoundaryRoute
+            exact
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
             component={AlterationPage}
           />
@@ -150,6 +157,14 @@ const AppRouts = (props: {
             routing={props.routing}
             component={AccountPage}
             hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}
+          />
+          <PrivateRoute
+            exact
+            path={PAGE_ROUTE.USER}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            component={UserPage}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <ErrorBoundaryRoute component={PageNotFound} />
         </Switch>

@@ -331,7 +331,7 @@ public class AccountResource {
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made
-            log.warn("Password reset requested for non existing mail '{}'", mail);
+            log.warn("Password reset requested for non existing mail");
         }
     }
 
@@ -352,6 +352,16 @@ public class AccountResource {
 
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this reset key");
+        }
+    }
+
+    @PostMapping(path = "/account/generate-reset-key")
+    public UserDTO generateResetKey(@RequestBody String mail) {
+        Optional<User> user = userService.requestPasswordReset(mail);
+        if (user.isPresent()) {
+            return userMapper.userToUserDTO(user.get());
+        } else {
+            throw new AccountResourceException("No user was found");
         }
     }
 

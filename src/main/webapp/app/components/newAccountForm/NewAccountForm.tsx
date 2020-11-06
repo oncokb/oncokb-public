@@ -15,7 +15,9 @@ import { ManagedUserVM } from 'app/shared/api/generated/API';
 import {
   ACADEMIC_TERMS,
   ACCOUNT_TITLES,
-  LicenseType
+  LicenseType,
+  THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
+  XREGEXP_VALID_LATIN_TEXT
 } from 'app/config/constants';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
@@ -42,7 +44,6 @@ export enum AccountType {
 }
 
 export const ACCOUNT_TYPE_DEFAULT = AccountType.REGULAR;
-export const TRIAL_TOKEN_VALID_DEFAULT = 30;
 @observer
 export class NewAccountForm extends React.Component<INewAccountForm> {
   @observable password = '';
@@ -51,7 +52,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   private defaultFormValue = {
     accountType: ACCOUNT_TYPE_DEFAULT,
-    tokenValidDays: TRIAL_TOKEN_VALID_DEFAULT
+    tokenValidDays: THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT
   };
 
   constructor(props: INewAccountForm) {
@@ -196,7 +197,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Your first name is required.'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },
@@ -219,7 +220,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Your last name is required.'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },
@@ -299,7 +300,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 </h5>
               </Col>
               <Col md="9">
-                {/* Job Title */}
                 <AvField
                   name="jobTitle"
                   label={getAccountInfoTitle(
@@ -316,7 +316,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Required to be at least 1 character'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },
@@ -326,7 +326,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     }
                   }}
                 />
-                {/* Company */}
                 <AvField
                   name="company"
                   label={getAccountInfoTitle(
@@ -343,7 +342,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Required to be at least 1 character'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },
@@ -353,7 +352,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     }
                   }}
                 />
-                {/* City */}
                 <AvField
                   name="city"
                   label={getAccountInfoTitle(
@@ -370,7 +368,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Required to be at least 1 character'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },
@@ -380,7 +378,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     }
                   }}
                 />
-                {/* Country */}
                 <AvField
                   name="country"
                   label={getAccountInfoTitle(
@@ -393,7 +390,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Required.'
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
                         'Sorry, we only support Latin letters for now.'
                     },

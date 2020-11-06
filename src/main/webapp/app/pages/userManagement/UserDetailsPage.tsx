@@ -5,18 +5,28 @@ import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import client from 'app/shared/api/clientInstance';
 import { UserDTO } from 'app/shared/api/generated/API';
 import { match } from 'react-router';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Modal } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
 import OncoKBTable, {
   SearchColumn
 } from 'app/components/oncokbTable/OncoKBTable';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
-import { notifyError } from 'app/shared/utils/NotificationUtils';
+import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { filterByKeyword, toAppLocalDateFormat } from 'app/shared/utils/Utils';
 import _ from 'lodash';
-import { LicenseType } from 'app/config/constants';
+import {
+  AUTHORITIES,
+  LicenseType,
+  NOT_CHANGEABLE_AUTHORITIES,
+  PAGE_ROUTE,
+  USER_AUTHORITIES,
+  USER_AUTHORITY
+} from 'app/config/constants';
 import styles from './UserDetailsPage.module.scss';
 import LoadingIndicator from '../../components/loadingIndicator/LoadingIndicator';
+import { isAuthorized } from 'app/shared/auth/AuthUtils';
+import { Link } from 'react-router-dom';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
 
 enum USER_BUTTON_TYPE {
   COMMERCIAL = 'Commercial Users',
@@ -32,7 +42,15 @@ export default class UserDetailsPage extends React.Component<{
 }> {
   @observable users: UserDTO[] = [];
   @observable loadedUsers = false;
-  @observable currentSelectedButton = '';
+  @observable showUpdateStatusModal = false;
+  @observable currentSelected: {
+    user: UserDTO | undefined;
+    authority: USER_AUTHORITY | undefined;
+  } = {
+    user: undefined,
+    authority: undefined
+  };
+  @observable currentSelectedButton = USER_BUTTON_TYPE.VERIFIED;
   @observable currentSelectedFilter: {
     activationKey: string | null | undefined;
     licenseType: string[] | undefined;
@@ -57,7 +75,7 @@ export default class UserDetailsPage extends React.Component<{
       // Hard code the max returned user size. Need to fix pagination issue.
       this.users = await client.getAllUsersUsingGET({ size: 2000 });
       // Display all commerical users by default
-      this.toggleFilter(USER_BUTTON_TYPE.COMMERCIAL);
+      this.toggleFilter(USER_BUTTON_TYPE.VERIFIED);
       this.loadedUsers = true;
     } catch (e) {
       notifyError(e, 'Error fetching users');
@@ -65,7 +83,7 @@ export default class UserDetailsPage extends React.Component<{
   }
 
   @action
-  toggleFilter(button: string) {
+  toggleFilter(button: USER_BUTTON_TYPE) {
     this.currentSelectedButton = button;
     if (this.currentSelectedButton === USER_BUTTON_TYPE.COMMERCIAL) {
       this.currentSelectedFilter = {
@@ -87,6 +105,54 @@ export default class UserDetailsPage extends React.Component<{
         licenseType: undefined
       };
     }
+  }
+
+  @action
+  confirmUpdatingUser(user: UserDTO) {
+    this.showUpdateStatusModal = true;
+    this.currentSelected.user = user;
+  }
+
+  @action
+  cancelUpdateActiveStatus() {
+    this.showUpdateStatusModal = false;
+    this.currentSelected.user = undefined;
+  }
+
+  @action
+  updateActiveStatus(sendEmail = true) {
+    this.showUpdateStatusModal = false;
+    if (this.currentSelected.user === undefined) {
+      notifyError(new Error('No user specified'));
+      return;
+    }
+    this.currentSelected.user.activated = !this.currentSelected.user.activated;
+    this.updateUser(this.currentSelected.user, sendEmail);
+  }
+
+  @action
+  updateUser(updatedUser: UserDTO, sendEmail = false) {
+    client
+      .updateUserUsingPUT({
+        userDto: updatedUser,
+        sendEmail
+      })
+      .then(() => {
+        notifySuccess('Updated');
+        this.getUsers();
+      })
+      .catch((error: Error) => {
+        notifyError(error, 'Error updating user');
+      });
+  }
+
+  @computed
+  get currentSelectedUserIsActivated() {
+    return (
+      this.currentSelected &&
+      this.currentSelected.user &&
+      this.currentSelected.user.activated
+    );
   }
 
   @computed
@@ -191,7 +257,7 @@ export default class UserDetailsPage extends React.Component<{
       id: 'activated',
       Header: <span className={styles.tableHeader}>Status</span>,
       accessor: 'activated',
-      minWidth: 100,
+      minWidth: 120,
       defaultSortDesc: false,
       className: 'justify-content-center',
       sortMethod: defaultSortMethod,
@@ -200,21 +266,37 @@ export default class UserDetailsPage extends React.Component<{
       Cell: (props: { original: UserDTO }) => {
         if (props.original.emailVerified) {
           return (
-            <span
-              className={
-                props.original.activated ? 'text-success' : 'text-danger'
-              }
+            <Button
+              variant={props.original.activated ? 'success' : 'danger'}
+              onClick={() => this.confirmUpdatingUser(props.original)}
             >
               {this.getStatus(props.original.activated)}
-            </span>
+            </Button>
           );
         } else {
-          return (
-            <span className="text-warning">
-              Email hasn&apos;t been verified yet
-            </span>
-          );
+          return <div>Email hasn&apos;t been verified yet</div>;
         }
+      }
+    },
+    {
+      id: 'authorities',
+      Header: <span>Profiles</span>,
+      accessor: 'authorities',
+      minWidth: 160,
+      defaultSortDesc: false,
+      sortMethod: defaultSortMethod,
+      onFilter: (data: UserDTO, keyword) =>
+        _.some(data.authorities, authority =>
+          filterByKeyword(authority, keyword)
+        ),
+      Cell(props: { original: UserDTO }) {
+        return (
+          <div className={'d-flex flex-column'}>
+            {props.original.authorities.map(authority => (
+              <div>{authority}</div>
+            ))}
+          </div>
+        );
       }
     },
     {
@@ -225,21 +307,19 @@ export default class UserDetailsPage extends React.Component<{
       accessor: 'licenseType'
     },
     {
-      id: 'approval',
-      Header: <span className={styles.tableHeader}>Approval</span>,
-      accessor: 'activated',
+      id: 'operations',
+      Header: <span className={styles.tableHeader}>Edit</span>,
       minWidth: 60,
-      defaultSortDesc: false,
+      sortable: false,
       className: 'justify-content-center',
-      sortMethod: defaultSortMethod,
       Cell(props: { original: UserDTO }) {
         return (
-          <span
-            className={
-              props.original.activated ? 'text-success' : 'text-danger'
-            }
-          >
-            {props.original.activated ? 'Yes' : 'No'}
+          <span>
+            {isAuthorized(props.original.authorities, [AUTHORITIES.USER]) && (
+              <Link to={`/users/${props.original.login}`}>
+                <i className="fa fa-pencil-square-o"></i>
+              </Link>
+            )}
           </span>
         );
       }
@@ -288,6 +368,51 @@ export default class UserDetailsPage extends React.Component<{
             isLoading={!this.loadedUsers}
           />
         )}
+        <Modal
+          show={this.showUpdateStatusModal}
+          onHide={() => this.cancelUpdateActiveStatus()}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Update User Status</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure to{' '}
+            {this.currentSelectedUserIsActivated ? 'deactivate' : 'active'} the
+            user?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => this.cancelUpdateActiveStatus()}
+            >
+              Close
+            </Button>
+            <Button
+              variant="primary"
+              onClick={(event: any) => {
+                event.preventDefault();
+                this.updateActiveStatus(true);
+              }}
+            >
+              Update
+            </Button>
+            {!this.currentSelectedUserIsActivated ? (
+              <DefaultTooltip
+                placement={'top'}
+                overlay={
+                  'Update user status without sending an email to the user'
+                }
+              >
+                <Button
+                  variant="primary"
+                  onClick={() => this.updateActiveStatus(false)}
+                >
+                  Silent Update
+                </Button>
+              </DefaultTooltip>
+            ) : null}
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }

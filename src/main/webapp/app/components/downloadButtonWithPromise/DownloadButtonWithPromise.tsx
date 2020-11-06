@@ -5,9 +5,10 @@ import fileDownload from 'js-file-download';
 import { observer, inject } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { LoadingButton } from 'app/shared/button/LoadingButton';
+import _ from 'lodash';
 
 export interface IDownloadButtonWithPromise extends ButtonProps {
-  getDownloadData: () => Promise<string>;
+  getDownloadData: () => Promise<string | Blob | string[]>;
   fileName: string;
   mime?: string;
   buttonText: string;
@@ -26,6 +27,9 @@ export class DownloadButtonWithPromise extends React.Component<
     this.props
       .getDownloadData()
       .then(data => {
+        if (_.isArray(data)) {
+          data = data.join('');
+        }
         fileDownload(data, this.props.fileName, this.props.mime);
       })
       .catch(error => {})

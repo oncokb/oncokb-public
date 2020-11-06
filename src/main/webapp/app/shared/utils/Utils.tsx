@@ -55,10 +55,6 @@ export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
   return _.replace(levelOfEvidence, new RegExp('[AB]'), '');
 }
 
-export function getCenterAlignStyle() {
-  return { justifyContent: 'center', whiteSpace: 'normal' };
-}
-
 export function levelOfEvidence2Level(
   levelOfEvidence: string,
   trimSubversion = false
@@ -188,7 +184,10 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
   className?: string;
 }> = props => {
   return (
-    <span style={{ width: 16, marginTop: -3, marginLeft: 3 }}>
+    <span
+      style={{ width: 16, marginTop: -3, marginLeft: 3 }}
+      key={'oncokb-oncogenicity-icone'}
+    >
       <i
         className={classnames(
           `oncokb annotation-icon ${getAnnotationOncogenicityClassName(
@@ -200,15 +199,6 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
       />
     </span>
   );
-};
-
-export const reduceJoin = (
-  data: React.ReactNode[],
-  separator: string | JSX.Element
-) => {
-  return data.length === 0
-    ? null
-    : data.reduce((prev, curr) => [prev, separator, curr]);
 };
 
 export const OncoKBLevelIcon: React.FunctionComponent<{
@@ -231,6 +221,7 @@ export function getDefaultColumnDefinition<T>(
       Header: TableCellRenderer;
       accessor: string;
       minWidth: number;
+      width?: number;
       style?: object;
       defaultSortDesc: boolean;
       Cell?: TableCellRenderer;
@@ -322,15 +313,17 @@ export function getDefaultColumnDefinition<T>(
         Header: <span>Level</span>,
         accessor: 'level',
         minWidth: 70,
+        width: 70,
         defaultSortDesc: false,
-        style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
         Cell(props: any) {
           return (
-            <OncoKBLevelIcon
-              level={props.original.level}
-              withDescription={true}
-            />
+            <div className={'my-1'}>
+              <OncoKBLevelIcon
+                level={props.original.level}
+                withDescription={true}
+              />
+            </div>
           );
         }
       };
@@ -341,7 +334,6 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'citations',
         minWidth: 90,
         defaultSortDesc: false,
-        style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
         Cell(props: any) {
           const numOfReferences =
@@ -426,6 +418,18 @@ export function getMomentInstance(utcTime: string) {
   return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z);
 }
 
+export function daysDiff(date: string) {
+  const today = moment.utc();
+  const expiration = getMomentInstance(date);
+  return expiration.diff(today, 'days');
+}
+
+export function secDiff(date: string) {
+  const today = moment.utc();
+  const expiration = getMomentInstance(date);
+  return expiration.diff(today, 'hours');
+}
+
 const SLASH_HTML_ENTITY_CODE = '%2F';
 
 export function encodeSlash(content: string | undefined) {
@@ -442,13 +446,3 @@ export const scrollWidthOffsetInNews = (el?: any) => {
   const yOffset = -80;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
 };
-
-export const concatElementsByComma = (list: ReactNode[]) => {
-  return list.reduce((prev, curr) => [prev, ', ', curr]);
-};
-
-export function getGenePageLinks(genes: string): ReactNode {
-  return concatElementsByComma(
-    genes.split(',').map(gene => <GenePageLink hugoSymbol={gene.trim()} />)
-  );
-}

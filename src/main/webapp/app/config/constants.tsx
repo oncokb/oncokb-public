@@ -36,6 +36,7 @@ export const APP_TIMESTAMP_FORMAT = 'MM/DD/YY HH:mm:ss';
 export const APP_LOCAL_DATE_FORMAT = 'MM/DD/YYYY';
 export const APP_LOCAL_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 export const APP_LOCAL_DATETIME_FORMAT_Z = 'YYYY-MM-DDTHH:mm:ssZ';
+export const APP_LOCAL_DATETIME_FORMAT_Z_FORCE = 'YYYY-MM-DDTHH:MM:SS[Z]';
 export const APP_WHOLE_NUMBER_FORMAT = '0,0';
 export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
 export const NEWS_DATE_FORMAT = 'MMDDYYYY';
@@ -52,8 +53,12 @@ export const GRID_BREAKPOINTS = {
 };
 export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
+export const FAQ_URL_PATTERNS_LINK = `${FAQ_LINK}/technical#what-are-the-url-patterns-of-oncokb-website`;
 export const API_DOCUMENT_LINK = 'https://api.oncokb.org/oncokb-website/api';
 export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
+export const FACULTY_COI_WEBSITE_LINK = 'https://www.mskcc.org/disclosures';
+export const NONE_FACULTY_COI_WEBSITE_LINK =
+  'https://docs.google.com/spreadsheets/d/1PKHV8ArVm4AFu4Rj-URWHcCAqnbWlm7p2-LOxhe0aFU/edit?usp=sharing';
 export const WEBINAR_LINKS_05072020 = (
   <span>
     <Linkout
@@ -70,6 +75,9 @@ export const WEBINAR_LINKS_05072020 = (
 
 export const REDIRECT_TIMEOUT_MILLISECONDS = 10000;
 export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;
+export const TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS = 14;
+export const USAGE_TOP_USERS_LIMIT = 10000;
+export const USGAE_ALL_TIME_KEY = 'All';
 
 export enum ONCOGENICITY {
   ONCOGENIC = 'Oncogenic',
@@ -171,13 +179,16 @@ export const DEFAULT_MARGIN_TOP_SM = 'mt-2';
 export const DEFAULT_MARGIN_TOP_LG = 'mt-3';
 export const DEFAULT_MARGIN_BOTTOM_SM = 'mb-2';
 export const DEFAULT_MARGIN_BOTTOM_LG = 'mb-3';
-export const THRESHOLD_TABLE_FIXED_HEIGHT = 10;
+export const THRESHOLD_TABLE_FIXED_HEIGHT = 15;
 export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
+export const THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT = 30;
 export const LG_TABLE_FIXED_HEIGHT = 640;
 export const SM_TABLE_FIXED_HEIGHT = 400;
 export const IMG_MAX_WIDTH = 700;
 export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
 export const H5_FONT_SIZE = '1.25rem';
+export const FONT_FAMILY =
+  "'Helvetica Neue', Helvetica, Verdana, Arial, sans-serif";
 
 // Defaults for tooltip size
 export const TOOLTIP_MAX_HEIGHT = 300;
@@ -204,13 +215,14 @@ export const DEFAULT_MAIN_NUMBERS: MainNumber = {
 };
 
 export const DEFAULT_GENE: Gene = {
-  curatedIsoform: '',
-  curatedRefSeq: '',
+  grch37Isoform: '',
+  grch37RefSeq: '',
+  grch38Isoform: '',
+  grch38RefSeq: '',
   entrezGeneId: -1,
   geneAliases: [],
   genesets: [],
   hugoSymbol: '',
-  name: '',
   oncogene: false,
   tsg: false
 };
@@ -236,6 +248,7 @@ export const DEFAULT_QUERY = {
   id: '',
   proteinEnd: -1,
   proteinStart: -1,
+  referenceGenome: 'GRCH37' as any,
   svType: 'UNKNOWN' as 'UNKNOWN',
   tumorType: '',
   type: ''
@@ -277,10 +290,10 @@ export enum PAGE_TITLE {
   ACCOUNT = 'Account',
   ACCOUNT_SETTINGS = 'Account Settings',
   ACCOUNT_PASSWORD = 'Change Password',
-  ADMIN_USER_MANAGEMENT = 'Manage Users',
   ADMIN_USER_DETAILS = 'Users Information',
   ADMIN_SEND_EMAILS = 'Send Emails to Users',
   ADMIN_CREATE_ACCOUNT = 'Create New Account',
+  ADMIN_USAGE_ANALYSIS = 'Usage Analysis',
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
   REGISTER = 'Register',
@@ -298,6 +311,7 @@ export enum PAGE_ROUTE {
   GENE_HEADER = '/gene',
   GENE = '/gene/:hugoSymbol',
   ALTERATION = '/gene/:hugoSymbol/:alteration',
+  HGVSG = '/hgvsg/:hgvsg',
   ALTERATION_TUMOR_TYPE = '/gene/:hugoSymbol/:alteration/:tumorType',
   HOME = '/',
   ABOUT = '/about',
@@ -307,10 +321,13 @@ export enum PAGE_ROUTE {
   LEVELS = '/levels',
   SWAGGER_UI = '/swagger-ui/index.html',
   ADMIN = '/admin',
-  ADMIN_USER_MANAGEMENT = '/admin/user-management',
   ADMIN_USER_DETAILS = '/admin/user-details',
   ADMIN_SEND_EMAILS = '/admin/send-emails',
   ADMIN_CREATE_ACCOUNT = '/admin/create-account',
+  ADMIN_USAGE_ANALYSIS = '/admin/usage-analysis',
+  ADMIN_USER_USAGE_DETAILS = '/admin/usage-analysis/users/:id',
+  ADMIN_USER_USAGE_DETAILS_LINK = '/admin/usage-analysis/users/',
+  USER = '/users/:login',
   ACCOUNT = '/account',
   REGISTER = '/account/register',
   ACCOUNT_VERIFY = '/account/verify',
@@ -443,6 +460,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '09172020', version: 'v2.8' },
   { date: '08282020', version: 'v2.7' },
   { date: '08052020', version: 'v2.6_patch_1' },
   { date: '07232020', version: 'v2.6' },
@@ -494,12 +512,14 @@ export enum USER_AUTHORITY {
   ROLE_USER = 'ROLE_USER',
   ROLE_PREMIUM_USER = 'ROLE_PREMIUM_USER',
   ROLE_ADMIN = 'ROLE_ADMIN',
+  ROLE_DATA_DOWNLOAD = 'ROLE_DATA_DOWNLOAD',
   ROLE_PUBLIC_WEBSITE = 'ROLE_PUBLIC_WEBSITE'
 }
 
 export const USER_AUTHORITIES = [
   USER_AUTHORITY.ROLE_ADMIN,
   USER_AUTHORITY.ROLE_PREMIUM_USER,
+  USER_AUTHORITY.ROLE_DATA_DOWNLOAD,
   USER_AUTHORITY.ROLE_USER,
   USER_AUTHORITY.ROLE_PUBLIC_WEBSITE
 ];
@@ -514,7 +534,14 @@ export enum REGEXP {
   NCTID = 'NCT[0-9]+'
 }
 
+export const XREGEXP_VALID_LATIN_TEXT = '^[\\p{Latin}\\p{Common}\\s]+$';
+
 export const REGEXP_LINK: { [key: string]: string } = {
   [REGEXP.PMID]: 'https://www.ncbi.nlm.nih.gov/pubmed/',
   [REGEXP.NCTID]: 'http://clinicaltrials.gov/show/'
 };
+
+export enum REFERENCE_GENOME {
+  GRCh37 = 'GRCh37',
+  GRCh38 = 'GRCh38'
+}
