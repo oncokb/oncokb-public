@@ -201,8 +201,10 @@ export type UserUsageOverview = {
     'userId': string
     'userEmail': string
     'endpoint': string
-    'maxUsage': string
-    'totalUsage': string
+    'noPrivateEndpoint': string
+    'maxUsage': number
+    'noPrivateMaxUsage': number
+    'totalUsage': number
 }
 
 export type UserUsage = {
