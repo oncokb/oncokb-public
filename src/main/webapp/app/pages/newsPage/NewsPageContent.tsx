@@ -109,6 +109,114 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '11122020': {
+    priorityNews: [
+      <span>Updated few gene symbols to the latest HUGO symbol</span>,
+      <span>
+        Based on the updated NCCN Guidelines for CML and ALL, the ABL1 G250E,
+        Y253H, E255K/V, V299L T315I/A, F317V/I/C/L, F359C/I/V mutations are
+        included as Level R1 resistance mutations for the tyrosine kinase
+        inhibitors indicated in the table below.
+      </span>,
+      <span>
+        Updated therapeutic implications
+        <Row>
+          <table className="table">
+            <thead>
+              <tr style={{ whiteSpace: 'nowrap' }}>
+                <th>Level</th>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Tumor Type</th>
+                <th>Drug</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowSpan={8}>R1</td>
+                <td rowSpan={8}>ABL1</td>
+                <td rowSpan={2}>V299L, F317L, G250E</td>
+                <td>CML</td>
+                <td rowSpan={2}>Bosutinib</td>
+                <td>
+                  NCCN v2.2021 CML; <PMIDLink pmids={'21865346, 22371878'} />
+                </td>
+              </tr>
+              <tr>
+                <td>BLL</td>
+                <td>
+                  NCCN v2.2020 ALL; <PMIDLink pmids={'26040495'} />
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={2}>F317V/I/C/L, T315A, V299L</td>
+                <td>CML</td>
+                <td rowSpan={2}>Dasatinib</td>
+                <td>
+                  NCCN v2.2021 CML;{' '}
+                  <PMIDLink
+                    pmids={
+                      '17785585, 19589924, 19779040, 17710227, 17339191, 17114651'
+                    }
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>BLL</td>
+                <td>
+                  NCCN v2.2020 ALL;{' '}
+                  <PMIDLink pmids={'17496201, 20131302, 17339191'} />
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={2}>E255K/V, F359C/I/V, Y253H, G250E</td>
+                <td>CML</td>
+                <td rowSpan={2}>Nilotinib</td>
+                <td>
+                  NCCN v2.2021 CML;{' '}
+                  <PMIDLink
+                    pmids={'16775235, 17785585, 23502220, 19652056, 19589924'}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>BLL</td>
+                <td>
+                  NCCN v2.2020 ALL;{' '}
+                  <PMIDLink
+                    pmids={'16775235, 17785585, 23502220, 19652056, 19589924'}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={2}>
+                  V299L, G250E, F317V/I/C/L, T315A, E255K/V, F359C/I/V, Y253H
+                </td>
+                <td>CML</td>
+                <td rowSpan={2}>Imatinib</td>
+                <td>
+                  NCCN v2.2021 CML;{' '}
+                  <PMIDLink
+                    pmids={
+                      '17189410, 20010464, 19925053, 17189410, 17785585, 12623848'
+                    }
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>BLL</td>
+                <td>
+                  NCCN v2.2020 ALL;{' '}
+                  <PMIDLink pmids={'17189410, 17405907, 11861307'} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+  },
   '09172020': {
     priorityNews: [
       <span>

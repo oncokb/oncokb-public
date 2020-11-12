@@ -5,7 +5,9 @@ export const PMIDLink: React.FunctionComponent<{ pmids: string }> = props => {
     <span>
       PMID:{' '}
       <a
-        href={`https://pubmed.ncbi.nlm.nih.gov/?term=${props.pmids}`}
+        href={`https://pubmed.ncbi.nlm.nih.gov/?term=${props.pmids
+          .split(/[ |,]/g)
+          .join(' ')}`}
         target="_blank"
         rel="noopener noreferrer"
         style={{ whiteSpace: 'nowrap' }}
