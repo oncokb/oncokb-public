@@ -109,12 +109,11 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '11122020': {
+  '11132020': {
     priorityNews: [
-      <span>Updated few gene symbols to the latest HUGO symbol</span>,
       <span>
         Based on the updated NCCN Guidelines for CML and ALL, the ABL1 G250E,
-        Y253H, E255K/V, V299L T315I/A, F317V/I/C/L, F359C/I/V mutations are
+        Y253H, E255K/V, V299L T315I/A, F317V/I/C/L, and F359C/I/V mutations are
         included as Level R1 resistance mutations for the tyrosine kinase
         inhibitors indicated in the table below.
       </span>,
