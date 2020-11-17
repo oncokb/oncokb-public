@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head>
+        <title>OncoKB Token Exposed</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p>Dear <b th:text="${token.firstName} + ' ' + ${token.lastName}"></b></p>
+        <p>We have become aware that your OncoKB token <b th:text="${token.token}"></b> was publicly availble on: <b th:text="${token.source}"></b>.</p>
+        <p>
+            This exposure of your token poses a security risk to your OncoKB account and could lead to unauthorized activities. 
+            Therefore, we have disabled the exposed token and created a new one, which can be accessed in your account settings.
+        </p>
+        <p>
+            Please refrain from adding your OncoKB token in publicly accessible repositories in the future.
+            If you have any questions, feel free to <a href = "mailto: contact@oncokb.org">contact us</a>; 
+        </p>
+        <p>
+            Thank you for your immediate attention to this matter.
+        </p>
+        <p>
+            <div th:text="#{email.closing}">Sincerely, </div>
+            <div th:text="#{email.signature}">The OncoKB Team</div>
+        </p>
+    </body>
+</html>

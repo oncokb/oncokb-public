@@ -1,8 +1,8 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-
 import io.github.jhipster.security.RandomUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
@@ -13,6 +13,7 @@ import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.web.rest.vm.ExposedToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,28 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.amazonaws.services.dynamodbv2.xspec.NULL;
+
+import java.io.*;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import org.kohsuke.github.*;
+
 import static org.mskcc.cbio.oncokb.config.Constants.DAY_IN_SECONDS;
 import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES;
+
+import static java.lang.Thread.sleep;
 
 /**
  * REST controller for managing crobjobs.
@@ -54,10 +73,13 @@ public class CronJobController {
 
     private final AuditEventService auditEventService;
 
+    private final ApplicationProperties applicationProperties;
+
     public CronJobController(UserService userService,
                              MailService mailService, TokenProvider tokenProvider,
                              TokenService tokenService, AuditEventService auditEventService,
-                             TokenStatsService tokenStatsService, UserMailsService userMailsService
+                             TokenStatsService tokenStatsService, UserMailsService userMailsService,
+                             ApplicationProperties applicationProperties
     ) {
 
         this.userService = userService;
@@ -67,6 +89,7 @@ public class CronJobController {
         this.auditEventService = auditEventService;
         this.tokenStatsService = tokenStatsService;
         this.userMailsService = userMailsService;
+        this.applicationProperties = applicationProperties;
     }
 
     /**
@@ -180,6 +203,156 @@ public class CronJobController {
             .collect(Collectors.toList());
 
         mailService.sendTrialAccountExpiresMail(DAYS_TO_CHECK, userDTOS);
+    }
+
+    @GetMapping(path = "/check-exposed-tokens")
+    public void checkExposedTokens() throws IOException, InterruptedException {
+        List<Token> tokens = tokenService
+                                .findAll()
+                                .stream()
+                                .filter(token -> token.getExpiration().isAfter(Instant.now()))
+                                .collect(Collectors.toList());
+        log.info("Searching exposed tokens pipeline begins...");
+        List<ExposedToken> results = new ArrayList<>();
+        boolean googleSearching = true;
+        googleSearching = googleSearchingTest();
+        boolean baiduSearching = true;
+        baiduSearching = baiduSearchingTest();
+        for (Token token : tokens){
+            String q = token.getToken().toString();
+
+            int githubCount = 0;
+            try {
+                GitHub github = new GitHubBuilder().withOAuthToken(applicationProperties.getGithubToken()).build();
+                List<GHContent> gitRes = github.searchContent().q(q).list().toList();
+                githubCount = gitRes.size();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            int googleCount = 0;
+            if (googleSearching){
+                try{
+                    HttpEntity entity = getGoogleResponse(q).getEntity();
+                    Document googleDoc = Jsoup.parse(EntityUtils.toString(entity));
+                    Elements resultEle = googleDoc.select("h3");
+                    googleCount = resultEle.size();
+                    if (googleCount > 0) {
+                        String description = googleDoc.select(".kCrYT > div > div > div > div > div").text();
+                        if (description.indexOf(q) == -1)
+                            googleCount = 0;
+                    }
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            
+            int baiduCount = 0;
+            if (baiduSearching){
+                try{
+                    Document document = Jsoup.connect(String.format("https://www.baidu.com/s?wd=\"%s\"", q)).get();
+                    Elements elements = document.select("div.result.c-container");
+                    baiduCount = elements.size();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                } 
+            }         
+
+            if (githubCount > 0 || googleCount > 0 || baiduCount > 0){   
+                ExposedToken t = new ExposedToken();
+                UserDTO user = userMapper.userToUserDTO(token.getUser());
+                t.setToken(q);
+                t.setEmail(user.getEmail());
+                t.setFirstName(user.getFirstName());
+                t.setLastName(user.getLastName());
+                t.setLicenseType(user.getLicenseType() != null ? user.getLicenseType().name() : "");
+                List<String> source = new ArrayList<>();
+                if(githubCount > 0){
+                    source.add("GitHub");
+                }
+                if (googleCount > 0){
+                    source.add("Google");
+                }
+                if (baiduCount > 0){
+                    source.add("Baidu");
+                }
+                t.setSource(source.stream().collect(Collectors.joining(", ")));   
+                results.add(t);
+
+                updateExposedToken(token);
+                mailService.sendMailToUserWhenTokenExposed(user, t);
+            }
+            sleep(1000);
+        }
+        log.info("Searching exposed tokens pipeline finished!");
+        if (results.size() > 0){
+            mailService.sendExposedTokensInfoMail(results);
+        }
+    }
+
+    private HttpResponse getGoogleResponse(String query) {
+        String uri = String.format("https://www.google.com/search?q=%s", query);
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(uri);
+        HttpResponse result = null;
+        try {
+          result = client.execute(request);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+        return result;
+    }
+
+    private void updateExposedToken(Token token){
+        tokenProvider.createToken(token);
+        token.setExpiration(Instant.now());
+        tokenService.save(token);
+    }
+
+    private boolean googleSearchingTest(){
+        try{
+            HttpEntity entity = getGoogleResponse("test").getEntity();
+            Document googleDoc = Jsoup.parse(EntityUtils.toString(entity));
+            Elements resultEle = googleDoc.select("h3");
+            if (!resultEle.isEmpty()) {
+                Elements descriptionEle = googleDoc.select(".kCrYT > div > div > div > div > div");
+                if (descriptionEle.isEmpty()){
+                    mailService.sendMailWhenSearchingStructrueChange("Google");
+                    return false;
+                }
+                String description = descriptionEle.text();
+                if (description.indexOf("test") == -1){
+                    mailService.sendMailWhenSearchingStructrueChange("Google");
+                    return false;
+                }              
+            }
+            else{
+                mailService.sendMailWhenSearchingStructrueChange("Google");
+                return false;
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    private boolean baiduSearchingTest(){
+        try{
+            Document document = Jsoup.connect(String.format("https://www.baidu.com/s?wd=\"%s\"", "test")).get();
+            Elements elements = document.select("div.result.c-container");
+            if (elements.isEmpty()){
+                mailService.sendMailWhenSearchingStructrueChange("Baidu");
+                return false;
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return true;
     }
 
     private void tokenCheckByTime(int daysToExpire, Set<String> notifiedUserIds) {
