@@ -265,12 +265,12 @@ export function getFdaLevel(oncokbLevel: string) {
     case '1':
     case '2':
     case 'R1':
-      return '2';
+      return 'Level 2';
     case '3A':
     case '3B':
     case '4':
     case 'R2':
-      return '3';
+      return 'Level 3';
     default:
       return '';
   }

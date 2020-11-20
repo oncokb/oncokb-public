@@ -58,13 +58,18 @@ const LEVEL_TITLE: { [key in Version]: ElementType } = {
   ),
   [Version.FDA]: (
     <>
-      Mapping between OncoKB and{' '}
+      Mapping between the OncoKB Levels of Evidence and the{' '}
       <Linkout link={FDA_LEVELS_OF_EVIDENCE_LINK}>
         {`${LEVEL_NAME[Version.FDA]}`}
       </Linkout>
     </>
   ),
-  [Version.AAC]: <>Mapping between OncoKB and {`${LEVEL_NAME[Version.AAC]}`}</>,
+  [Version.AAC]: (
+    <>
+      Mapping between the OncoKB Levels of Evidence and the
+      {`${LEVEL_NAME[Version.AAC]}`}
+    </>
+  ),
 };
 
 const LEVEL_FILE_NAME: { [key in Version]: string } = {
@@ -123,14 +128,6 @@ export default class LevelOfEvidencePage extends React.Component<
 
   getSubTitle(version: Version) {
     switch (version) {
-      case Version.FDA:
-        return (
-          <>
-            OncoKB is not associated with a Companion Diagnostic test.
-            Therefore, by definition, no variant in OncoKB can be mapped to FDA
-            Level 1.
-          </>
-        );
       case Version.V1:
       case Version.V2:
         return (
@@ -207,12 +204,22 @@ export default class LevelOfEvidencePage extends React.Component<
                 </DownloadButton>
               </Col>
             </Row>
+            <Row className={'justify-content-md-center mt-5'}>
+              <Col className={'col-md-auto text-center'}>
+                <div>
+                  <h3 className={'mr-1 font-weight-bold'}>
+                    {LEVEL_TITLE[this.version]}
+                  </h3>
+                </div>
+                <h5>{this.getSubTitle(this.version)}</h5>
+              </Col>
+            </Row>
             <Row>
               <Col className={'d-md-flex justify-content-center mt-2'}>
                 <div
                   style={{
                     maxWidth: [Version.AAC, Version.FDA].includes(this.version)
-                      ? 900
+                      ? 1100
                       : IMG_MAX_WIDTH,
                   }}
                 >
@@ -221,16 +228,6 @@ export default class LevelOfEvidencePage extends React.Component<
                     src={`content/images/level_${this.version}.png`}
                   />
                 </div>
-              </Col>
-            </Row>
-            <Row className={'justify-content-md-center'}>
-              <Col className={'col-md-auto text-center'}>
-                <div>
-                  <span className={'mr-1 font-weight-bold'}>
-                    {LEVEL_TITLE[this.version]}
-                  </span>
-                </div>
-                <div>{this.getSubTitle(this.version)}</div>
               </Col>
             </Row>
           </>
