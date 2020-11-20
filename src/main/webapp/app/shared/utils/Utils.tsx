@@ -314,7 +314,7 @@ export function getDefaultColumnDefinition<T>(
         Header: <span>Level</span>,
         accessor: 'level',
         minWidth: 70,
-        width: 70,
+        // width: 70,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell(props: any) {

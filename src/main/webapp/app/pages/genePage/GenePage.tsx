@@ -68,6 +68,7 @@ import * as QueryString from 'query-string';
 import {
   FdaVariant,
   getFdaData,
+  getFdaLevel,
   getReferenceCell,
 } from 'app/pages/genePage/FdaUtils';
 import { RouterStore } from 'mobx-react-router';
@@ -355,6 +356,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
         accessor: 'variant',
+        width: 400,
         onFilter: (data: FdaVariant, keyword) =>
           filterByKeyword(data.alteration, keyword),
         Cell: (props: { original: FdaVariant }) => {
@@ -368,7 +370,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
-        minWidth: 200,
+        width: 400,
         Header: <span>Cancer Type</span>,
         onFilter: (data: FdaVariant, keyword) =>
           filterByKeyword(data.cancerType, keyword),
@@ -378,7 +380,6 @@ export default class GenePage extends React.Component<GenePageProps> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-        width: 200,
         Header: (
           <div>
             <span>FDA Level of Evidence</span>
@@ -507,7 +508,15 @@ export default class GenePage extends React.Component<GenePageProps> {
 
   @computed
   get fdaVariants() {
-    const predefinedFdaVariants = getFdaData(this.store.hugoSymbolQuery);
+    const predefinedFdaVariants: FdaVariant[] = this.store.filteredClinicalAlterations.map(
+      clinicalAlt => {
+        return {
+          cancerType: getCancerTypeNameFromOncoTreeType(clinicalAlt.cancerType),
+          level: getFdaLevel(clinicalAlt.level),
+          alteration: clinicalAlt.variant.name,
+        };
+      }
+    );
     const hasOncogenicMutations =
       predefinedFdaVariants.filter((alteration: FdaVariant) =>
         this.isOncogenicMutations(alteration.alteration)
@@ -582,13 +591,13 @@ export default class GenePage extends React.Component<GenePageProps> {
           <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
             FDA Level of Evidence
           </Link>{' '}
-          assigning their clinical significance. The analytic significance of
-          the assigned{' '}
+          assigning their clinical significance. The assigned{' '}
           <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
             FDA level of evidence
           </Link>{' '}
           is based on these alterations being tested in Formalin Fixed Paraffin
-          Embedded (FFPE) specimen types if applicable.
+          Embedded (FFPE) specimen types, except in cases where specimen type is
+          not specified.
         </span>
       );
     }

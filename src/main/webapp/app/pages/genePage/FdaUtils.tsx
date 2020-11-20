@@ -22,7 +22,7 @@ function splitTreatment(str: string, regex: RegExp, stringSplit: string) {
     if (result.length > 0) {
       treatments.push({
         drugs: result[0].split('+').map(item => item.trim()),
-        fdaApproval: result[1] === 'http:' ? '' : result[1]
+        fdaApproval: result[1] === 'http:' ? '' : result[1],
       });
     }
   });
@@ -58,7 +58,7 @@ function splitAbstracts(data: any, str: string) {
     } else {
       abstracts.push({
         abstract: result[0].trim(),
-        link: `http${result[1].trim()}`
+        link: `http${result[1].trim()}`,
       });
     }
   });
@@ -110,7 +110,7 @@ function getContent() {
       _.keys(row.drugs).join(SEPARATOR),
       row.pmids.length > 0 ? 'pmid' : '',
       row.pmids,
-      row.nccn
+      row.nccn,
     ].join(SEPARATOR);
 
     delete row.fdaApproval;
@@ -246,10 +246,7 @@ export function getReferenceCell(data: any) {
 export type FdaVariant = {
   cancerType: string;
   level: string;
-  specimenType?: string;
   alteration: string;
-  references: any;
-  referenceStr: string;
 };
 
 export function getFdaData(hugoSymbol: string): FdaVariant[] {
@@ -258,10 +255,23 @@ export function getFdaData(hugoSymbol: string): FdaVariant[] {
     return {
       cancerType: record.cancerType,
       level: record.fdaLevel,
-      specimenType: record.specimen ? record.specimen : 'NA',
       alteration: record.alteration,
-      references: record,
-      referenceStr: record.referenceStr
     };
   });
+}
+
+export function getFdaLevel(oncokbLevel: string) {
+  switch (oncokbLevel) {
+    case '1':
+    case '2':
+    case 'R1':
+      return '2';
+    case '3A':
+    case '3B':
+    case '4':
+    case 'R2':
+      return '3';
+    default:
+      return '';
+  }
 }
