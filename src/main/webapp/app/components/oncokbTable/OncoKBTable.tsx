@@ -25,7 +25,7 @@ export default class OncoKBTable<T> extends React.Component<
 
   public static defaultProps = {
     disableSearch: false,
-    searchIconClassName: 'fa fa-search'
+    searchIconClassName: 'fa fa-search',
   };
 
   @computed
@@ -47,9 +47,7 @@ export default class OncoKBTable<T> extends React.Component<
   render() {
     return (
       <div>
-        {this.props.disableSearch ? (
-          undefined
-        ) : (
+        {this.props.disableSearch ? undefined : (
           <div className="d-flex">
             <div className="ml-auto">
               <input

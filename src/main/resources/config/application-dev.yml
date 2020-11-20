@@ -50,12 +50,6 @@ spring:
         useServerPrepStmts: true
   jpa:
     show-sql: true
-    properties:
-      hibernate.id.new_generator_mappings: true
-      hibernate.connection.provider_disables_autocommit: true
-      hibernate.cache.use_second_level_cache: false
-      hibernate.cache.use_query_cache: false
-      hibernate.generate_statistics: false
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
@@ -152,6 +146,7 @@ application:
   user-registration-webhook:
   google-webmaster-verification:
   licensed-domains:
+  trialed-domains:
   account-approval-whitelist:
   token-usage-check:
   token-usage-check-whitelist:
@@ -169,3 +164,7 @@ application:
   frontend:
     sentry-project-id:
     google-analytics-project-id:
+  aws:
+    s3-access-key:
+    s3-secret-key:
+    s3-region:

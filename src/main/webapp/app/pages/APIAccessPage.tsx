@@ -11,7 +11,7 @@ import {
   DOCUMENT_TITLES,
   LicenseType,
   PAGE_ROUTE,
-  USER_AUTHORITY
+  USER_AUTHORITY,
 } from 'app/config/constants';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { ButtonSelections } from 'app/components/LicenseSelection';
@@ -52,7 +52,7 @@ const DownloadButtonGroups: React.FunctionComponent<{
           fileName={`all_curated_genes_${props.data.version}.tsv`}
           getDownloadData={() =>
             oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
-              version: props.data.version
+              version: props.data.version,
             })
           }
           buttonText="All Curated Genes"
@@ -64,7 +64,7 @@ const DownloadButtonGroups: React.FunctionComponent<{
           fileName={`cancer_gene_list_${props.data.version}.tsv`}
           getDownloadData={() =>
             oncokbClient.utilsCancerGeneListTxtGetUsingGET({
-              version: props.data.version
+              version: props.data.version,
             })
           }
           buttonText="Cancer Gene List"
@@ -76,7 +76,7 @@ const DownloadButtonGroups: React.FunctionComponent<{
           fileName={`oncokb_${props.data.version.replace('.', '_')}.sql.gz`}
           getDownloadData={async () => {
             const data = await oncokbPrivateClient.utilDataSqlDumpGetUsingGET({
-              version: props.data.version
+              version: props.data.version,
             });
             return data;
           }}
@@ -129,7 +129,7 @@ export default class APIAccessPage extends React.Component<{
           ) {
             acc.push({
               ...availableVersions[next.version],
-              date: next.date
+              date: next.date,
             });
           }
           return acc;
@@ -137,7 +137,7 @@ export default class APIAccessPage extends React.Component<{
         [] as DownloadAvailabilityWithDate[]
       );
     },
-    default: []
+    default: [],
   });
 
   @action
@@ -212,7 +212,7 @@ export default class APIAccessPage extends React.Component<{
                 Example:{' '}
                 <code>
                   curl -H &quot;Authorization: Bearer [your token]&quot;
-                  https://www.oncokb.org/api/v1/genes
+                  https://www.oncokb.org/api/v1/utils/allCuratedGenes
                 </code>
               </div>
               <div className={'mt-2'}>
@@ -263,7 +263,7 @@ export default class APIAccessPage extends React.Component<{
                               .map(data => {
                                 return {
                                   value: data.version,
-                                  label: getDataTitle(data.date, data.version)
+                                  label: getDataTitle(data.date, data.version),
                                 };
                               })}
                             onChange={(selectedOption: any) =>

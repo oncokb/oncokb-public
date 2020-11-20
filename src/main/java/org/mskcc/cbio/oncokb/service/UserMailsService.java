@@ -62,6 +62,7 @@ public class UserMailsService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
     /**
      * Get all userMails for a particular user
      *
@@ -82,7 +83,6 @@ public class UserMailsService {
             .map(userMailsMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
-
 
     /**
      * Get one userMails by id.

@@ -197,6 +197,35 @@ export type UserMailsDTO = {
         'userLogin': string
 
 };
+export type UserUsageOverview = {
+    'userId': string
+    'userEmail': string
+    'endpoint': string
+    'noPrivateEndpoint': string
+    'maxUsage': number
+    'noPrivateMaxUsage': number
+    'totalUsage': number
+}
+
+export type UserUsage = {
+    'userFirstName': string
+    'userLastName': string
+    'userEmail': string
+    'licenseType': string
+    'jobTitle': string
+    'company': string
+    'summary': UsageSummary
+}
+
+export type UsageSummary = {
+    'month': Map<string, Map<string, number>>
+    'year': Map<string, number>
+}
+
+export type UsageRecord = {
+    'resource': string,
+    'usage': number,
+}
 
 /**
  * OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
@@ -462,6 +491,82 @@ export default class API {
         $domain ? : string
     }): Promise < any > {
         return this.changePasswordUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    generateResetKeyUsingPOSTURL(parameters: {
+        'mail': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/generate-reset-key';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * generateResetKey
+     * @method
+     * @name API#generateResetKeyUsingPOST
+     * @param {} mail - mail
+     */
+    generateResetKeyUsingPOSTWithHttpInfo(parameters: {
+        'mail': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/generate-reset-key';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['mail'] !== undefined) {
+                body = parameters['mail'];
+            }
+
+            if (parameters['mail'] === undefined) {
+                reject(new Error('Missing required  parameter: mail'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * generateResetKey
+     * @method
+     * @name API#generateResetKeyUsingPOST
+     * @param {} mail - mail
+     */
+    generateResetKeyUsingPOST(parameters: {
+        'mail': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < UserDTO > {
+        return this.generateResetKeyUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -3677,4 +3782,94 @@ export default class API {
                 return response.body;
             });
         };
+
+    getAllResourcesUsageUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/usage/resource';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+        });
+    };
+
+    getAllResourcesUsageUsingGET( parameters: {
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < UsageSummary > {
+                return this.getAllResourcesUsageUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                    return response.body;
+                });
+            };
+
+    getUserUsageOverviewUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/usage/overview';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+        });
+    };
+
+    getUserUsageOverviewUsingGET( parameters: {
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < UserUsageOverview > > {
+                return this.getUserUsageOverviewUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                    return response.body;
+                });
+            };
+
+    
+    getUserUsageUsingGETWithHttpInfo(parameters: {
+        id: string, 
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = `/api/usage/users/${parameters.id}`;
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+        });
+    };
+
+    getUserUsageUsingGET( parameters: {
+            id: string,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < UserUsage > {
+                return this.getUserUsageUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                    return response.body;
+                });
+            };
 }

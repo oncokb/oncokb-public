@@ -4,7 +4,7 @@ import {
   VictoryChart,
   VictoryBar,
   VictoryAxis,
-  VictorySelectionContainer
+  VictorySelectionContainer,
 } from 'victory';
 import WindowStore from 'app/store/WindowStore';
 import { observable, computed } from 'mobx';
@@ -15,7 +15,7 @@ import { COLOR_BLUE, COLOR_GREY } from 'app/config/theme';
 import {
   getTextHeight,
   getTextWidth,
-  getTextDiagonal
+  getTextDiagonal,
 } from 'cbioportal-frontend-commons';
 import _ from 'lodash';
 import { PortalAlteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -54,7 +54,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
 
   public static defaultProps = {
     filters: [],
-    height: 300
+    height: 300,
   };
 
   /*
@@ -74,8 +74,8 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 mutation(event: any) {
                   this.currentBarIndex = event.datum.eventKey;
                   this.toolTipModel = this.props.data[this.currentBarIndex].x;
-                }
-              }
+                },
+              },
             ];
           },
           onMouseLeave() {
@@ -84,12 +84,12 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 target: 'data',
                 mutation() {
                   this.toolTipModel = null;
-                }
-              }
+                },
+              },
             ];
-          }
-        }
-      }
+          },
+        },
+      },
     ];
   }
 
@@ -176,19 +176,19 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
             }
             domainPadding={{
               x: [this.domainPadding, this.domainPadding],
-              y: [20, 20]
+              y: [20, 20],
             }}
             style={{
               parent: {
                 width: '100%',
-                height: this.props.height
-              }
+                height: this.props.height,
+              },
             }}
             padding={{
               left: 50,
               right: this.rightPadding,
               top: 10,
-              bottom: this.bottomPadding
+              bottom: this.bottomPadding,
             }}
           >
             <VictoryAxis
@@ -198,14 +198,14 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                   verticalAnchor: 'middle',
                   textAnchor: 'start',
                   fontFamily: FONT_FAMILY,
-                  fontSize: FONT_SIZE
+                  fontSize: FONT_SIZE,
                 },
                 ticks: {
                   fill: 'transparent',
                   size: 4,
                   stroke: 'black',
-                  strokeWidth: 1
-                }
+                  strokeWidth: 1,
+                },
               }}
             />
             <VictoryAxis
@@ -219,18 +219,18 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                   textAnchor: 'end',
                   fontFamily: FONT_FAMILY,
                   fontSize: FONT_SIZE,
-                  padding: 5
+                  padding: 5,
                 },
                 axisLabel: {
                   padding: 40,
-                  fontFamily: FONT_FAMILY
+                  fontFamily: FONT_FAMILY,
                 },
                 ticks: {
                   fill: 'transparent',
                   size: 4,
                   stroke: 'black',
-                  strokeWidth: 1
-                }
+                  strokeWidth: 1,
+                },
               }}
             />
             <VictoryBar
@@ -241,8 +241,8 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                     this.isDataBinSelected(d, this.props.filters) ||
                     this.props.filters.length === 0
                       ? COLOR_BLUE
-                      : COLOR_GREY
-                }
+                      : COLOR_GREY,
+                },
               }}
               data={this.props.data}
               // events={this.barPlotEvents}

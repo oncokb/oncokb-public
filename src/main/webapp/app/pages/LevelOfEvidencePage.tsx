@@ -6,7 +6,7 @@ import {
   DOCUMENT_TITLES,
   FDA_LEVELS_OF_EVIDENCE_LINK,
   IMG_MAX_WIDTH,
-  PAGE_ROUTE
+  PAGE_ROUTE,
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
 import { inject, observer } from 'mobx-react';
@@ -28,7 +28,7 @@ export enum Version {
   V1 = 'V1',
   V2 = 'V2',
   FDA = 'FDA',
-  AAC = 'AAC'
+  AAC = 'AAC',
 }
 
 const DEFAULT_LEVEL_FILE_NAME = 'LevelsOfEvidence';
@@ -37,7 +37,7 @@ const ALLOWED_VERSIONS: string[] = [
   Version.V2,
   Version.V1,
   Version.FDA,
-  Version.AAC
+  Version.AAC,
 ];
 const V2_RELATED_LEVELS = [Version.V2, Version.FDA, Version.AAC];
 
@@ -45,7 +45,7 @@ const LEVEL_NAME: { [key in Version]: ElementType } = {
   [Version.V1]: 'Level of Evidence V1',
   [Version.V2]: 'Level of Evidence V2',
   [Version.FDA]: 'FDA Levels of Evidence',
-  [Version.AAC]: 'AMP/ASCO/CAP Levels of Evidence'
+  [Version.AAC]: 'AMP/ASCO/CAP Levels of Evidence',
 };
 
 const LEVEL_TITLE: { [key in Version]: ElementType } = {
@@ -64,14 +64,14 @@ const LEVEL_TITLE: { [key in Version]: ElementType } = {
       </Linkout>
     </>
   ),
-  [Version.AAC]: <>Mapping between OncoKB and {`${LEVEL_NAME[Version.AAC]}`}</>
+  [Version.AAC]: <>Mapping between OncoKB and {`${LEVEL_NAME[Version.AAC]}`}</>,
 };
 
 const LEVEL_FILE_NAME: { [key in Version]: string } = {
   [Version.V1]: DEFAULT_LEVEL_FILE_NAME,
   [Version.V2]: DEFAULT_LEVEL_FILE_NAME,
   [Version.FDA]: `Mapping_OncoKB_and_FDA_LOfE`,
-  [Version.AAC]: `Mapping_OncoKB_and_AMP_ASCO_CAP_LOfE`
+  [Version.AAC]: `Mapping_OncoKB_and_AMP_ASCO_CAP_LOfE`,
 };
 
 @inject('routing')
@@ -213,7 +213,7 @@ export default class LevelOfEvidencePage extends React.Component<
                   style={{
                     maxWidth: [Version.AAC, Version.FDA].includes(this.version)
                       ? 900
-                      : IMG_MAX_WIDTH
+                      : IMG_MAX_WIDTH,
                   }}
                 >
                   <img

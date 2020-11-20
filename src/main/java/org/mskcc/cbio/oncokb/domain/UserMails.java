@@ -8,7 +8,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.time.Instant;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
@@ -43,10 +42,10 @@ public class UserMails implements Serializable {
     private String sentFrom;
 
     @ManyToOne
-    @JsonIgnoreProperties("userMails")
+    @JsonIgnoreProperties(value = "userMails", allowSetters = true)
     private User user;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }
@@ -119,7 +118,7 @@ public class UserMails implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -137,6 +136,7 @@ public class UserMails implements Serializable {
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "UserMails{" +

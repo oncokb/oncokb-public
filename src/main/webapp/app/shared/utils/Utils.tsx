@@ -3,7 +3,7 @@ import {
   Evidence,
   TreatmentDrug,
   TumorType,
-  Article
+  Article,
 } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
 import React, { ReactNode } from 'react';
@@ -15,18 +15,18 @@ import {
   ONCOGENICITY_CLASS_NAMES,
   PAGE_ROUTE,
   SHORTEN_TEXT_FROM_LIST_THRESHOLD,
-  TABLE_COLUMN_KEY
+  TABLE_COLUMN_KEY,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
   Alteration,
-  Treatment
+  Treatment,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   defaultSortMethod,
   mutationEffectSortMethod,
   oncogenicitySortMethod,
-  sortByAlteration
+  sortByAlteration,
 } from 'app/shared/utils/ReactTableUtils';
 import { TableCellRenderer } from 'react-table';
 import { LevelWithDescription } from 'app/components/LevelWithDescription';
@@ -36,7 +36,7 @@ import { CitationTooltip } from 'app/components/CitationTooltip';
 import {
   AlterationPageLink,
   GenePageLink,
-  TumorTypePageLink
+  TumorTypePageLink,
 } from 'app/shared/utils/UrlUtils';
 import moment from 'moment';
 import { COLOR_BLUE } from 'app/config/theme';
@@ -82,10 +82,7 @@ export function getAllAlterationsName(alterations: Alteration[]) {
 
 export function getAllTumorTypesName(tumorTypes: TumorType[]) {
   return tumorTypes
-    ? tumorTypes
-        .map(getCancerTypeNameFromOncoTreeType)
-        .sort()
-        .join(', ')
+    ? tumorTypes.map(getCancerTypeNameFromOncoTreeType).sort().join(', ')
     : '';
 }
 
@@ -112,12 +109,12 @@ export function articles2Citations(articles: Article[]): Citations {
       .map(article => {
         return {
           abstract: article.abstract,
-          link: article.link
+          link: article.link,
         };
       }),
     pmids: articles
       .filter(article => !!article.pmid)
-      .map(article => article.pmid)
+      .map(article => article.pmid),
   };
 }
 
@@ -243,7 +240,7 @@ export function getDefaultColumnDefinition<T>(
         sortMethod: defaultSortMethod,
         Cell(props: { original: any }) {
           return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
-        }
+        },
       };
     case TABLE_COLUMN_KEY.ALTERATION:
       return {
@@ -260,7 +257,7 @@ export function getDefaultColumnDefinition<T>(
               alteration={props.original.alteration}
             />
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.ALTERATIONS:
       return {
@@ -270,7 +267,7 @@ export function getDefaultColumnDefinition<T>(
         style: { whiteSpace: 'normal' },
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
       };
     case TABLE_COLUMN_KEY.TUMOR_TYPE:
       return {
@@ -289,7 +286,7 @@ export function getDefaultColumnDefinition<T>(
               tumorType={props.original.tumorType}
             />
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE:
       return {
@@ -299,7 +296,7 @@ export function getDefaultColumnDefinition<T>(
         style: { whiteSpace: 'normal' },
         minWidth: 110,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
       };
     case TABLE_COLUMN_KEY.DRUGS:
       return {
@@ -309,7 +306,7 @@ export function getDefaultColumnDefinition<T>(
         style: { whiteSpace: 'normal' },
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
       };
     case TABLE_COLUMN_KEY.LEVEL:
       return {
@@ -329,7 +326,7 @@ export function getDefaultColumnDefinition<T>(
               />
             </div>
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.CITATIONS:
       return {
@@ -359,7 +356,7 @@ export function getDefaultColumnDefinition<T>(
               </DefaultTooltip>
             </div>
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.ONCOGENICITY:
       return {
@@ -368,7 +365,7 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'oncogenic',
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: oncogenicitySortMethod
+        sortMethod: oncogenicitySortMethod,
       };
     case TABLE_COLUMN_KEY.MUTATION_EFFECT:
       return {
@@ -377,7 +374,7 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'mutationEffect',
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: mutationEffectSortMethod
+        sortMethod: mutationEffectSortMethod,
       };
     default:
       return undefined;
@@ -400,7 +397,7 @@ export function getRouteFromPath(pathName: string) {
 
 export function getRedirectLoginState(pathName: string) {
   return {
-    from: getRouteFromPath(pathName)
+    from: getRouteFromPath(pathName),
   };
 }
 
@@ -478,7 +475,7 @@ export function getShortenTextFromList(data: JSX.Element[] | string[]) {
             </div>
           }
           overlayStyle={{
-            opacity: 1
+            opacity: 1,
           }}
           placement="right"
           destroyTooltipOnHide={true}
@@ -486,7 +483,7 @@ export function getShortenTextFromList(data: JSX.Element[] | string[]) {
           <span
             style={{
               textDecoration: 'underscore',
-              color: COLOR_BLUE
+              color: COLOR_BLUE,
             }}
           >
             {data.length - 1} others
@@ -513,7 +510,7 @@ export function getShortenPmidsFromList(pmidList: string[]) {
         <DefaultTooltip
           overlay={<CitationTooltip pmids={pmidList.slice(1)} abstracts={[]} />}
           overlayStyle={{
-            opacity: 1
+            opacity: 1,
           }}
           placement="right"
           destroyTooltipOnHide={true}
@@ -521,7 +518,7 @@ export function getShortenPmidsFromList(pmidList: string[]) {
           <span
             style={{
               textDecoration: 'underscore',
-              color: COLOR_BLUE
+              color: COLOR_BLUE,
             }}
           >
             {pmidList.length - 1} others

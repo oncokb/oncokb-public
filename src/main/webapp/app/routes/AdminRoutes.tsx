@@ -6,6 +6,8 @@ import PageNotFound from 'app/shared/error/page-not-found';
 import SendEmailsPage from 'app/pages/sendEmails/SendEmailsPage';
 import UserDetailsPage from '../pages/userManagement/UserDetailsPage';
 import { CreateAccountPage } from 'app/pages/CreateAccountPage';
+import UsageAnalysisPage from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
+import UserUsagePage from 'app/pages/usageAnalysisPage/UserUsagePage';
 
 const AdminRouts = () => {
   return (
@@ -14,6 +16,16 @@ const AdminRouts = () => {
         exact
         path={PAGE_ROUTE.ADMIN_USER_DETAILS}
         component={UserDetailsPage}
+      />
+      <ErrorBoundaryRoute
+        exact
+        path={PAGE_ROUTE.ADMIN_USAGE_ANALYSIS}
+        component={UsageAnalysisPage}
+      />
+      <ErrorBoundaryRoute
+        exact
+        path={PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS}
+        component={UserUsagePage}
       />
       <ErrorBoundaryRoute
         exact

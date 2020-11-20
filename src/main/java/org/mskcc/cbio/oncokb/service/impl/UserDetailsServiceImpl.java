@@ -34,12 +34,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userDetailsMapper = userDetailsMapper;
     }
 
-    /**
-     * Save a userDetails.
-     *
-     * @param userDetailsDTO the entity to save.
-     * @return the persisted entity.
-     */
     @Override
     public UserDetailsDTO save(UserDetailsDTO userDetailsDTO) {
         log.debug("Request to save UserDetails : {}", userDetailsDTO);
@@ -48,11 +42,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userDetailsMapper.toDto(userDetails);
     }
 
-    /**
-     * Get all the userDetails.
-     *
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
     public List<UserDetailsDTO> findAll() {
@@ -62,12 +51,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    /**
-     * Get one userDetails by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
+
     @Override
     @Transactional(readOnly = true)
     public Optional<UserDetailsDTO> findOne(Long id) {
@@ -76,11 +60,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             .map(userDetailsMapper::toDto);
     }
 
-    /**
-     * Delete the userDetails by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete UserDetails : {}", id);

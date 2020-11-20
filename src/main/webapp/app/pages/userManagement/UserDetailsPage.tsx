@@ -8,7 +8,7 @@ import { match } from 'react-router';
 import { Button, Col, Row, Modal } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
 import OncoKBTable, {
-  SearchColumn
+  SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
@@ -20,7 +20,7 @@ import {
   NOT_CHANGEABLE_AUTHORITIES,
   PAGE_ROUTE,
   USER_AUTHORITIES,
-  USER_AUTHORITY
+  USER_AUTHORITY,
 } from 'app/config/constants';
 import styles from './UserDetailsPage.module.scss';
 import LoadingIndicator from '../../components/loadingIndicator/LoadingIndicator';
@@ -31,7 +31,7 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 enum USER_BUTTON_TYPE {
   COMMERCIAL = 'Commercial Users',
   VERIFIED = 'Verified Users',
-  ALL = 'All Users'
+  ALL = 'All Users',
 }
 
 @inject('routing')
@@ -48,7 +48,7 @@ export default class UserDetailsPage extends React.Component<{
     authority: USER_AUTHORITY | undefined;
   } = {
     user: undefined,
-    authority: undefined
+    authority: undefined,
   };
   @observable currentSelectedButton = USER_BUTTON_TYPE.VERIFIED;
   @observable currentSelectedFilter: {
@@ -56,12 +56,12 @@ export default class UserDetailsPage extends React.Component<{
     licenseType: string[] | undefined;
   } = {
     activationKey: undefined,
-    licenseType: undefined
+    licenseType: undefined,
   };
   userButtons = [
     USER_BUTTON_TYPE.COMMERCIAL,
     USER_BUTTON_TYPE.VERIFIED,
-    USER_BUTTON_TYPE.ALL
+    USER_BUTTON_TYPE.ALL,
   ];
 
   constructor(props: Readonly<{ routing: RouterStore; match: match }>) {
@@ -91,18 +91,18 @@ export default class UserDetailsPage extends React.Component<{
         licenseType: [
           LicenseType.HOSPITAL,
           LicenseType.RESEARCH_IN_COMMERCIAL,
-          LicenseType.COMMERCIAL
-        ]
+          LicenseType.COMMERCIAL,
+        ],
       };
     } else if (this.currentSelectedButton === USER_BUTTON_TYPE.VERIFIED) {
       this.currentSelectedFilter = {
         activationKey: null,
-        licenseType: undefined
+        licenseType: undefined,
       };
     } else {
       this.currentSelectedFilter = {
         activationKey: undefined,
-        licenseType: undefined
+        licenseType: undefined,
       };
     }
   }
@@ -135,7 +135,7 @@ export default class UserDetailsPage extends React.Component<{
     client
       .updateUserUsingPUT({
         userDto: updatedUser,
-        sendEmail
+        sendEmail,
       })
       .then(() => {
         notifySuccess('Updated');
@@ -195,7 +195,7 @@ export default class UserDetailsPage extends React.Component<{
       accessor: 'createdDate',
       Cell(props: { original: UserDTO }): any {
         return <div>{toAppLocalDateFormat(props.original.createdDate)}</div>;
-      }
+      },
     },
     {
       id: 'userName',
@@ -208,21 +208,21 @@ export default class UserDetailsPage extends React.Component<{
         return (
           <span>{`${props.original.firstName} ${props.original.lastName}`}</span>
         );
-      }
+      },
     },
     {
       id: 'jobTitle',
       Header: <span className={styles.tableHeader}>Job Title</span>,
       onFilter: (data: UserDTO, keyword) =>
         data.jobTitle ? filterByKeyword(data.jobTitle, keyword) : false,
-      accessor: 'jobTitle'
+      accessor: 'jobTitle',
     },
     {
       id: 'company',
       Header: <span className={styles.tableHeader}>Company</span>,
       onFilter: (data: UserDTO, keyword) =>
         data.company ? filterByKeyword(data.company, keyword) : false,
-      accessor: 'company'
+      accessor: 'company',
     },
     {
       id: 'city',
@@ -230,7 +230,7 @@ export default class UserDetailsPage extends React.Component<{
       maxWidth: 100,
       onFilter: (data: UserDTO, keyword) =>
         data.city ? filterByKeyword(data.city, keyword) : false,
-      accessor: 'city'
+      accessor: 'city',
     },
     {
       id: 'country',
@@ -238,7 +238,7 @@ export default class UserDetailsPage extends React.Component<{
       maxWidth: 100,
       onFilter: (data: UserDTO, keyword) =>
         data.country ? filterByKeyword(data.country, keyword) : false,
-      accessor: 'country'
+      accessor: 'country',
     },
     {
       id: 'email',
@@ -251,7 +251,7 @@ export default class UserDetailsPage extends React.Component<{
         filterByKeyword(data.email, keyword),
       Cell(props: { original: UserDTO }) {
         return <span>{props.original.email}</span>;
-      }
+      },
     },
     {
       id: 'activated',
@@ -276,7 +276,7 @@ export default class UserDetailsPage extends React.Component<{
         } else {
           return <div>Email hasn&apos;t been verified yet</div>;
         }
-      }
+      },
     },
     {
       id: 'authorities',
@@ -297,14 +297,14 @@ export default class UserDetailsPage extends React.Component<{
             ))}
           </div>
         );
-      }
+      },
     },
     {
       id: 'licenseType',
       Header: <span className={styles.tableHeader}>License Type</span>,
       onFilter: (data: UserDTO, keyword) =>
         data.licenseType ? filterByKeyword(data.licenseType, keyword) : false,
-      accessor: 'licenseType'
+      accessor: 'licenseType',
     },
     {
       id: 'operations',
@@ -322,8 +322,8 @@ export default class UserDetailsPage extends React.Component<{
             )}
           </span>
         );
-      }
-    }
+      },
+    },
   ];
 
   render() {
@@ -354,8 +354,8 @@ export default class UserDetailsPage extends React.Component<{
                   defaultSorted={[
                     {
                       id: 'createdDate',
-                      desc: true
-                    }
+                      desc: true,
+                    },
                   ]}
                 />
               </Col>

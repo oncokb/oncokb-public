@@ -47,6 +47,7 @@ public class ManagedUserVM extends UserDTO {
         this.tokenValidDays = tokenValidDays;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "ManagedUserVM{" + super.toString() + "} ";

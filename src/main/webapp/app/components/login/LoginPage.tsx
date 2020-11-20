@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import AuthenticationStore, {
-  ACCOUNT_STATUS
+  ACCOUNT_STATUS,
 } from 'app/store/AuthenticationStore';
 import { RouterStore } from 'mobx-react-router';
 import { inject, observer } from 'mobx-react';
@@ -13,7 +13,7 @@ import { LoadingButton } from 'app/shared/button/LoadingButton';
 import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import {
   UNAUTHORIZED_EXPIRED,
-  UNAUTHORIZED_NOT_ACTIVATED_ENDS_WITH
+  UNAUTHORIZED_NOT_ACTIVATED_ENDS_WITH,
 } from 'app/shared/api/errorMessages';
 import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import client from 'app/shared/api/clientInstance';
@@ -36,7 +36,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
     this.resendingVerification = true;
     client
       .resendVerificationUsingPOST({
-        loginVm: this.savedCredential
+        loginVm: this.savedCredential,
       })
       .then(
         () => {
@@ -58,7 +58,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
       );
       return [
         UNAUTHORIZED_NOT_ACTIVATED_ENDS_WITH,
-        UNAUTHORIZED_EXPIRED
+        UNAUTHORIZED_EXPIRED,
       ].some(str => errorMessage.endsWith(str));
     } else {
       return false;
@@ -74,14 +74,14 @@ export default class LoginPage extends React.Component<ILoginProps> {
     this.savedCredential = {
       username: email,
       password,
-      rememberMe: false
+      rememberMe: false,
     };
     this.props.authenticationStore.login(email, password);
   };
 
   render() {
     const { from } = this.props.routing.location.state || {
-      from: { pathname: '/', search: location.search }
+      from: { pathname: '/', search: location.search },
     };
     if (this.props.authenticationStore.isUserAuthenticated) {
       return <Redirect to={from} />;

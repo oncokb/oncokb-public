@@ -18,7 +18,7 @@ export class PasswordResetInit extends React.Component<{}> {
     if (values.email) {
       client
         .requestPasswordResetUsingPOST({
-          mail: values.email
+          mail: values.email,
         })
         .then(() => {
           this.resetStatus = API_CALL_STATUS.SUCCESSFUL;
@@ -58,17 +58,17 @@ export class PasswordResetInit extends React.Component<{}> {
             validate={{
               required: {
                 value: true,
-                errorMessage: 'Your email is required.'
+                errorMessage: 'Your email is required.',
               },
               minLength: {
                 value: 5,
                 errorMessage:
-                  'Your email is required to be at least 5 characters.'
+                  'Your email is required to be at least 5 characters.',
               },
               maxLength: {
                 value: 254,
-                errorMessage: 'Your email cannot be longer than 50 characters.'
-              }
+                errorMessage: 'Your email cannot be longer than 50 characters.',
+              },
             }}
           />
           <Button color="primary" type="submit">

@@ -165,6 +165,53 @@
         "deprecated": false
       }
     },
+    "/api/account/generate-reset-key": {
+      "post": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "generateResetKey",
+        "operationId": "generateResetKeyUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "mail",
+            "description": "mail",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/account/resend-verification": {
       "post": {
         "tags": [

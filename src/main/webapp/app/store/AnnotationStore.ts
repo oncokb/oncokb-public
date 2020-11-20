@@ -5,7 +5,7 @@ import {
   MutationMapper,
   MutationMapperProps,
   MutationMapperStore,
-  TrackName
+  TrackName,
 } from 'react-mutation-mapper';
 import apiClient from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
@@ -15,7 +15,7 @@ import {
   DEFAULT_ANNOTATION,
   DEFAULT_GENE,
   EVIDENCE_TYPES,
-  REFERENCE_GENOME
+  REFERENCE_GENOME,
 } from 'app/config/constants';
 import {
   BiologicalVariant,
@@ -25,7 +25,7 @@ import {
   MainType,
   PortalAlteration,
   TumorType,
-  VariantAnnotation
+  VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
@@ -39,7 +39,7 @@ import {
   findCancerTypeFilter,
   findOncogenicityFilter,
   findPositionFilter,
-  ONCOGENICITY_FILTER_TYPE
+  ONCOGENICITY_FILTER_TYPE,
 } from 'app/components/oncokbMutationMapper/FilterUtils';
 
 interface IAnnotationStore {
@@ -61,7 +61,7 @@ export type TherapeuticImplication = {
 export function getCustomFilterAppliers() {
   return {
     [ONCOGENICITY_FILTER_TYPE]: applyOncogenicityFilter,
-    [DataFilterType.CANCER_TYPE]: applyCancerTypeFilter
+    [DataFilterType.CANCER_TYPE]: applyCancerTypeFilter,
   };
 }
 
@@ -126,7 +126,7 @@ export class AnnotationStore {
     await: () => [
       this.gene,
       this.mutationMapperData,
-      this.biologicalAlterations
+      this.biologicalAlterations,
     ],
     invoke: () => {
       return Promise.resolve({
@@ -137,10 +137,10 @@ export class AnnotationStore {
         data: this.mutationMapperData.result,
         oncogenicities: this.uniqOncogenicity,
         isoformOverrideSource: 'mskcc',
-        filterAppliersOverride: getCustomFilterAppliers()
+        filterAppliersOverride: getCustomFilterAppliers(),
       });
     },
-    default: MutationMapper.defaultProps
+    default: MutationMapper.defaultProps,
   });
 
   readonly mutationMapperStore = remoteData<MutationMapperStore | undefined>({
@@ -150,7 +150,7 @@ export class AnnotationStore {
         initDefaultMutationMapperStore(this.mutationMapperProps.result)
       );
     },
-    default: undefined
+    default: undefined,
   });
 
   readonly reactions: IReactionDisposer[] = [];
@@ -167,11 +167,11 @@ export class AnnotationStore {
   readonly gene = remoteData<Gene>({
     invoke: async () => {
       const genes = await apiClient.genesLookupGetUsingGET({
-        query: this.hugoSymbolQuery
+        query: this.hugoSymbolQuery,
       });
       return genes && genes.length > 0 ? genes[0] : DEFAULT_GENE;
     },
-    default: DEFAULT_GENE
+    default: DEFAULT_GENE,
   });
 
   // this is for easier access of the hugoSymbol from the gene call
@@ -185,14 +185,14 @@ export class AnnotationStore {
     invoke: async () => {
       const evidences = await apiClient.evidencesLookupGetUsingGET({
         hugoSymbol: this.gene.result.hugoSymbol,
-        evidenceTypes: EVIDENCE_TYPES.GENE_SUMMARY
+        evidenceTypes: EVIDENCE_TYPES.GENE_SUMMARY,
       });
       if (evidences.length > 0) {
         return evidences[0].description;
       } else {
         return undefined;
       }
-    }
+    },
   });
 
   readonly geneBackground = remoteData<string | undefined>({
@@ -200,21 +200,21 @@ export class AnnotationStore {
     invoke: async () => {
       const evidences = await apiClient.evidencesLookupGetUsingGET({
         hugoSymbol: this.gene.result.hugoSymbol,
-        evidenceTypes: EVIDENCE_TYPES.GENE_BACKGROUND
+        evidenceTypes: EVIDENCE_TYPES.GENE_BACKGROUND,
       });
       if (evidences.length > 0) {
         return evidences[0].description;
       } else {
         return undefined;
       }
-    }
+    },
   });
 
   readonly geneNumber = remoteData<GeneNumber>({
     await: () => [this.gene],
     invoke: async () => {
       return privateClient.utilsNumbersGeneGetUsingGET({
-        hugoSymbol: this.gene.result.hugoSymbol
+        hugoSymbol: this.gene.result.hugoSymbol,
       });
     },
     default: {
@@ -222,8 +222,8 @@ export class AnnotationStore {
       alteration: 0,
       highestSensitiveLevel: '',
       highestResistanceLevel: '',
-      tumorType: 0
-    }
+      tumorType: 0,
+    },
   });
 
   readonly mutationEffect = remoteData<Evidence[]>({
@@ -232,30 +232,30 @@ export class AnnotationStore {
       return apiClient.evidencesLookupGetUsingGET({
         hugoSymbol: this.gene.result.hugoSymbol,
         variant: this.alterationQuery,
-        evidenceTypes: EVIDENCE_TYPES.MUTATION_EFFECT
+        evidenceTypes: EVIDENCE_TYPES.MUTATION_EFFECT,
       });
     },
-    default: []
+    default: [],
   });
 
   readonly clinicalAlterations = remoteData<ClinicalVariant[]>({
     await: () => [this.gene],
     invoke: async () => {
       return privateClient.searchVariantsClinicalGetUsingGET({
-        hugoSymbol: this.gene.result.hugoSymbol
+        hugoSymbol: this.gene.result.hugoSymbol,
       });
     },
-    default: []
+    default: [],
   });
 
   readonly biologicalAlterations = remoteData<BiologicalVariant[]>({
     await: () => [this.gene],
     invoke: async () => {
       return privateClient.searchVariantsBiologicalGetUsingGET({
-        hugoSymbol: this.gene.result.hugoSymbol
+        hugoSymbol: this.gene.result.hugoSymbol,
       });
     },
-    default: []
+    default: [],
   });
 
   readonly mutationMapperDataExternal = remoteData<OncokbMutation[]>({
@@ -265,7 +265,7 @@ export class AnnotationStore {
         this.biologicalAlterations.result.map(alteration => {
           return {
             gene: {
-              hugoGeneSymbol: this.gene.result.hugoSymbol
+              hugoGeneSymbol: this.gene.result.hugoSymbol,
             },
             proteinChange: alteration.variant.alteration,
             proteinPosEnd: alteration.variant.proteinEnd,
@@ -273,22 +273,22 @@ export class AnnotationStore {
             referenceAllele: alteration.variant.refResidues,
             variantAllele: alteration.variant.variantResidues,
             mutationType: alteration.variant.consequence.term,
-            oncogenic: shortenOncogenicity(alteration.oncogenic)
+            oncogenic: shortenOncogenicity(alteration.oncogenic),
           };
         })
       );
-    }
+    },
   });
 
   readonly allMainTypes = remoteData<MainType[]>({
     await: () => [],
     async invoke() {
       const result = await privateClient.utilsOncoTreeMainTypesGetUsingGET({
-        excludeSpecialTumorType: true
+        excludeSpecialTumorType: true,
       });
       return result.sort();
     },
-    default: []
+    default: [],
   });
 
   readonly allSubtype = remoteData<TumorType[]>({
@@ -297,7 +297,7 @@ export class AnnotationStore {
       const result = await privateClient.utilsOncoTreeSubtypesGetUsingGET({});
       return result.sort();
     },
-    default: []
+    default: [],
   });
 
   readonly allTumorTypesOptions = remoteData<any>({
@@ -315,22 +315,22 @@ export class AnnotationStore {
             .map(tumorType => {
               return {
                 value: tumorType,
-                label: tumorType
+                label: tumorType,
               };
-            })
+            }),
         },
         {
           label: 'Cancer Type Detailed',
           options: _.sortBy(this.allSubtype.result, 'name').map(tumorType => {
             return {
               value: tumorType.code,
-              label: tumorType.name
+              label: tumorType.name,
             };
-          })
-        }
+          }),
+        },
       ]);
     },
-    default: []
+    default: [],
   });
 
   readonly annotationResult = remoteData<VariantAnnotation>({
@@ -340,10 +340,10 @@ export class AnnotationStore {
         hugoSymbol: this.gene.result.hugoSymbol,
         alteration: this.alterationQuery,
         tumorType: this.tumorTypeQuery,
-        referenceGenome: this.referenceGenomeQuery
+        referenceGenome: this.referenceGenomeQuery,
       });
     },
-    default: DEFAULT_ANNOTATION
+    default: DEFAULT_ANNOTATION,
   });
 
   readonly annotationResultByHgvsg = remoteData<VariantAnnotation>({
@@ -352,32 +352,32 @@ export class AnnotationStore {
       return privateClient.utilVariantAnnotationGetUsingGET({
         hgvsg: this.hgvsgQuery,
         tumorType: this.tumorTypeQuery,
-        referenceGenome: this.referenceGenomeQuery
+        referenceGenome: this.referenceGenomeQuery,
       });
     },
-    default: DEFAULT_ANNOTATION
+    default: DEFAULT_ANNOTATION,
   });
 
   readonly portalAlterationSampleCount = remoteData<CancerTypeCount[]>({
     async invoke() {
       return privateClient.utilPortalAlterationSampleCountGetUsingGET({});
     },
-    default: []
+    default: [],
   });
 
   readonly mutationMapperDataPortal = remoteData<PortalAlteration[]>({
     invoke: async () => {
       return privateClient.utilMutationMapperDataGetUsingGET({
-        hugoSymbol: this.hugoSymbol
+        hugoSymbol: this.hugoSymbol,
       });
     },
-    default: []
+    default: [],
   });
 
   readonly mutationMapperData = remoteData<OncokbMutation[]>({
     await: () => [
       this.mutationMapperDataExternal,
-      this.mutationMapperDataPortal
+      this.mutationMapperDataPortal,
     ],
     invoke: () => {
       // simply mapping by protein change, assuming that protein change is unique for alterations
@@ -399,7 +399,7 @@ export class AnnotationStore {
 
         return {
           gene: {
-            hugoGeneSymbol: mutation.gene.hugoSymbol
+            hugoGeneSymbol: mutation.gene.hugoSymbol,
           },
           proteinChange: mutation.proteinChange,
           proteinPosEnd: mutation.proteinEndPosition,
@@ -408,13 +408,13 @@ export class AnnotationStore {
           variantAllele,
           mutationType: mutation.alterationType,
           oncogenic: shortenOncogenicity(oncogenic),
-          cancerType: mutation.cancerType
+          cancerType: mutation.cancerType,
         };
       });
 
       return Promise.resolve(data);
     },
-    default: []
+    default: [],
   });
 
   @computed
@@ -442,7 +442,7 @@ export class AnnotationStore {
               (100 * numUniqSampleCountsInCancerType) /
               cancerGroups[cancerType].count,
             alterations: next,
-            overlay: ''
+            overlay: '',
           } as BarChartDatum);
         }
         return acc;
@@ -461,7 +461,7 @@ export class AnnotationStore {
         (acc, item) => {
           acc.push({
             ...item,
-            oncogenic: shortenOncogenicity(item.oncogenic)
+            oncogenic: shortenOncogenicity(item.oncogenic),
           });
           return acc;
         },
@@ -476,7 +476,7 @@ export class AnnotationStore {
         const datum = oncogenicities[oncogenicity];
         acc.push({
           oncogenicity,
-          counts: datum.length
+          counts: datum.length,
         });
         return acc;
       },
