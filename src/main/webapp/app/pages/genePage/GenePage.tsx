@@ -516,7 +516,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       const oncogenicAlts = this.store.filteredBiologicalAlterations.filter(
         (alteration: BiologicalVariant) =>
           ['oncogenic', 'likely oncogenic', 'predicted oncogenic'].includes(
-            alteration.oncogenic.toLowerCase()
+            alteration.oncogenic ? alteration.oncogenic.toLowerCase() : ''
           )
       );
       return _.reduce(
