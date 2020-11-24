@@ -116,7 +116,7 @@ class Header extends React.Component<IHeaderProps> {
             className="navbar-dark main-navbar"
             expanded={this.isNavExpanded}
           >
-            <Container fluid={!this.props.windowStore.isXLscreen}>
+            <Container fluid={!this.props.windowStore.isLargeScreen}>
               <Navbar.Brand>
                 <NavLink to="/">
                   <img height={38} src={oncokbImg} alt={'OncoKB'} />
