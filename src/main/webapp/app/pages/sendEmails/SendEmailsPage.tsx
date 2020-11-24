@@ -25,7 +25,11 @@ import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { filterByKeyword, toAppTimestampFormat } from 'app/shared/utils/Utils';
 import _ from 'lodash';
-import { COMPONENT_PADDING, ONCOKB_LICENSE_EMAIL } from 'app/config/constants';
+import {
+  COMPONENT_PADDING,
+  ONCOKB_LICENSE_EMAIL,
+  THRESHOLD_NUM_OF_USER,
+} from 'app/config/constants';
 import pluralize from 'pluralize';
 import Select from 'react-select';
 import classnames from 'classnames';
@@ -124,7 +128,7 @@ export default class UserManagementPage extends React.Component<{
 
   readonly users = remoteData<UserDTO[]>({
     invoke() {
-      return client.getAllUsersUsingGET({ size: 2000 });
+      return client.getAllUsersUsingGET({ size: THRESHOLD_NUM_OF_USER });
     },
     default: [],
   });
