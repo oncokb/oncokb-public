@@ -117,15 +117,62 @@ const EVIDENCE_TYPE = {
   BIOLOGICAL_EVIDENCE: 'Biological evidence',
 };
 
-export const LEVEL_BUTTON_DESCRIPTION = {
-  '1': EVIDENCE_TYPE.FDA_APPROVED,
-  '2': EVIDENCE_TYPE.STANDARD_CARE,
-  '3': EVIDENCE_TYPE.CLINICAL_EVIDENCE,
-  '4': EVIDENCE_TYPE.BIOLOGICAL_EVIDENCE,
-  R1: EVIDENCE_TYPE.STANDARD_CARE,
-  R2: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
+export enum LEVEL_TYPES {
+  TX = 'Tx',
+  DX = 'Dx',
+  PX = 'Px',
+}
+
+export const LEVEL_TYPE_NAMES = {
+  [LEVEL_TYPES.TX]: 'Therapeutic',
+  [LEVEL_TYPES.DX]: 'Diagnostic',
+  [LEVEL_TYPES.PX]: 'Prognostic',
 };
-export const LEVELS = ['1', '2', '3', '4', 'R1', 'R2'];
+
+export enum LEVELS {
+  Dx1 = 'Dx1',
+  Dx2 = 'Dx2',
+  Dx3 = 'Dx3',
+  Px1 = 'Px1',
+  Px2 = 'Px2',
+  Px3 = 'Px3',
+  Tx1 = '1',
+  Tx2 = '2',
+  Tx3 = '3',
+  Tx4 = '4',
+  R1 = 'R1',
+  R2 = 'R2',
+}
+
+export const LEVEL_BUTTON_DESCRIPTION = {
+  [LEVELS.Tx1]: EVIDENCE_TYPE.FDA_APPROVED,
+  [LEVELS.Tx2]: EVIDENCE_TYPE.STANDARD_CARE,
+  [LEVELS.Tx3]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
+  [LEVELS.Tx4]: EVIDENCE_TYPE.BIOLOGICAL_EVIDENCE,
+  [LEVELS.R1]: EVIDENCE_TYPE.STANDARD_CARE,
+  [LEVELS.R2]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
+  [LEVELS.Dx1]: 'Dx1 description',
+  [LEVELS.Dx2]: 'Dx2 description',
+  [LEVELS.Dx3]: 'Dx3 description',
+  [LEVELS.Px1]: 'Px1 description',
+  [LEVELS.Px2]: 'Px2 description',
+  [LEVELS.Px3]: 'Px3 description',
+};
+
+export const LEVEL_CLASSIFICATION = {
+  [LEVELS.Dx1]: LEVEL_TYPES.DX,
+  [LEVELS.Dx2]: LEVEL_TYPES.DX,
+  [LEVELS.Dx3]: LEVEL_TYPES.DX,
+  [LEVELS.Px1]: LEVEL_TYPES.PX,
+  [LEVELS.Px2]: LEVEL_TYPES.PX,
+  [LEVELS.Px3]: LEVEL_TYPES.PX,
+  [LEVELS.Tx1]: LEVEL_TYPES.TX,
+  [LEVELS.Tx2]: LEVEL_TYPES.TX,
+  [LEVELS.Tx3]: LEVEL_TYPES.TX,
+  [LEVELS.Tx4]: LEVEL_TYPES.TX,
+  [LEVELS.R1]: LEVEL_TYPES.TX,
+  [LEVELS.R2]: LEVEL_TYPES.TX,
+};
 export const LEVEL_OF_EVIDENCE = [
   'LEVEL_1',
   'LEVEL_2',
@@ -133,6 +180,12 @@ export const LEVEL_OF_EVIDENCE = [
   'LEVEL_4',
   'LEVEL_R1',
   'LEVEL_R2',
+  'LEVEL_Dx1',
+  'LEVEL_Dx2',
+  'LEVEL_Dx3',
+  'LEVEL_Px1',
+  'LEVEL_Px2',
+  'LEVEL_Px3',
 ];
 export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
   [ONCOGENICITY.NEUTRAL]: 'neutral',

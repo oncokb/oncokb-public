@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Collapse, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { remoteData, DefaultTooltip } from 'cbioportal-frontend-commons';
@@ -23,6 +23,7 @@ import {
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
+  getShowingLevelNumber,
   getTreatmentNameFromEvidence,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
@@ -40,6 +41,9 @@ import {
   COMPONENT_PADDING,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   DOCUMENT_TITLES,
+  LEVEL_TYPE_NAMES,
+  LEVEL_CLASSIFICATION,
+  LEVEL_TYPES,
 } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -50,6 +54,7 @@ import DocumentTitle from 'react-document-title';
 import { COLOR_BLUE } from 'app/config/theme';
 import WithSeparator from 'react-with-separator';
 import InfoIcon from 'app/shared/icons/InfoIcon';
+import { LevelSelectionRow } from './LevelSelectionRow';
 
 type Treatment = {
   level: string;
@@ -83,6 +88,12 @@ export default class ActionableGenesPage extends React.Component<
   @observable drugSearchKeyword = '';
   @observable geneSearchKeyword = '';
   @observable levelSelected = this.initLevelSelected();
+  @observable collapseStatus = {
+    [LEVEL_TYPES.TX]: true,
+    [LEVEL_TYPES.DX]: false,
+    [LEVEL_TYPES.PX]: false,
+  };
+  @observable collapseInit = false;
 
   readonly allMainTypes = remoteData<MainType[]>({
     await: () => [],
@@ -156,7 +167,18 @@ export default class ActionableGenesPage extends React.Component<
             (_.isArray(queryStrings.levels)
               ? queryStrings.levels
               : [queryStrings.levels]
-            ).forEach(level => (this.levelSelected[level] = true));
+            ).forEach(level => {
+              this.levelSelected[level] = true;
+            });
+            if (!this.collapseInit) {
+              (_.isArray(queryStrings.levels)
+                ? queryStrings.levels
+                : [queryStrings.levels]
+              ).forEach(level => {
+                this.collapseStatus[LEVEL_CLASSIFICATION[level]] = true;
+              });
+              this.collapseInit = true;
+            }
           }
           if (queryStrings.hugoSymbol) {
             this.geneSearchKeyword = queryStrings.hugoSymbol;
@@ -412,6 +434,12 @@ export default class ActionableGenesPage extends React.Component<
 
   @autobind
   @action
+  updateCollapseStatus(levelType: string) {
+    this.collapseStatus[levelType] = !this.collapseStatus[levelType];
+  }
+
+  @autobind
+  @action
   clearFilters() {
     this.levelSelected = this.initLevelSelected();
     this.relevantTumorTypeSearchKeyword = '';
@@ -540,6 +568,116 @@ export default class ActionableGenesPage extends React.Component<
   ];
 
   render() {
+    const levelSelectionSection = [];
+    for (const key in LEVEL_TYPES) {
+      if (LEVEL_TYPES[key]) {
+        const levelSelections = [];
+        for (const level in LEVELS) {
+          if (LEVELS[level]) {
+            levelSelections.push(
+              LEVEL_CLASSIFICATION[LEVELS[level]] === LEVEL_TYPES[key] && (
+                <Col
+                  className={classnames(...COMPONENT_PADDING)}
+                  lg={
+                    LEVEL_CLASSIFICATION[LEVELS[level]] === LEVEL_TYPES.TX
+                      ? 2
+                      : 4
+                  }
+                  xs={
+                    LEVEL_CLASSIFICATION[LEVELS[level]] === LEVEL_TYPES.TX
+                      ? 6
+                      : 4
+                  }
+                  key={LEVELS[level]}
+                >
+                  <LevelButton
+                    level={getShowingLevelNumber(
+                      LEVEL_CLASSIFICATION[LEVELS[level]],
+                      LEVELS[level]
+                    )}
+                    numOfGenes={this.levelNumbers[LEVELS[level]]}
+                    description={LEVEL_BUTTON_DESCRIPTION[LEVELS[level]]}
+                    active={this.levelSelected[LEVELS[level]]}
+                    className="mb-2"
+                    disabled={this.levelNumbers[LEVELS[level]] === 0}
+                    onClick={() => this.updateLevelSelection(LEVELS[level])}
+                  />
+                </Col>
+              )
+            );
+          }
+        }
+        levelSelectionSection.push(
+          // <LevelSelectionRow
+          //   levelType = {LEVEL_TYPES[key]}
+          //   collapseStatus = {this.collapseStatus}
+          //   levelNumbers = {this.levelNumbers}
+          //   levelSelected = {this.levelSelected}
+          //   updateCollapseStatus = {this.updateCollapseStatus}
+          //   updateLevelSelection = {this.updateLevelSelection}
+          // />
+          <>
+            <Row
+              style={{ paddingLeft: '1rem', paddingRight: '1rem' }}
+              className={'mb-2'}
+            >
+              <Button
+                style={{
+                  backgroundColor: 'white',
+                  border: 0,
+                  textAlign: 'left',
+                  paddingLeft: 0,
+                  boxShadow: 'none',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+                variant="light"
+                onClick={() => {
+                  this.updateCollapseStatus(LEVEL_TYPES[key]);
+                }}
+                block
+              >
+                <div style={{ flexGrow: 0, marginRight: '0.5em' }}>
+                  {this.collapseStatus[LEVEL_TYPES[key]] ? (
+                    <i className="fa fa-minus"></i>
+                  ) : (
+                    <i className="fa fa-plus"></i>
+                  )}
+                  {this.collapseStatus[LEVEL_TYPES[key]] ? (
+                    <span>
+                      {' '}
+                      Click to hide {LEVEL_TYPE_NAMES[LEVEL_TYPES[key]]} Levels
+                    </span>
+                  ) : (
+                    <span>
+                      {' '}
+                      Click to show {LEVEL_TYPE_NAMES[LEVEL_TYPES[key]]} Levels
+                    </span>
+                  )}
+                </div>
+                <div
+                  style={{
+                    flexGrow: 1,
+                    height: '0.5px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  }}
+                ></div>
+              </Button>
+            </Row>
+            <Collapse in={this.collapseStatus[LEVEL_TYPES[key]]}>
+              <Row
+                style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
+                className={'mb-2'}
+              >
+                {levelSelections}
+              </Row>
+            </Collapse>
+          </>
+        );
+      }
+    }
+
     return (
       <DocumentTitle title={DOCUMENT_TITLES.ACTIONABLE_GENES}>
         <If
@@ -548,29 +686,7 @@ export default class ActionableGenesPage extends React.Component<
           }
         >
           <Then>
-            <Row
-              style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
-              className={'mb-2'}
-            >
-              {LEVELS.map(level => (
-                <Col
-                  className={classnames(...COMPONENT_PADDING)}
-                  lg={2}
-                  xs={6}
-                  key={level}
-                >
-                  <LevelButton
-                    level={level}
-                    numOfGenes={this.levelNumbers[level]}
-                    description={LEVEL_BUTTON_DESCRIPTION[level]}
-                    active={this.levelSelected[level]}
-                    className="mb-2"
-                    disabled={this.levelNumbers[level] === 0}
-                    onClick={() => this.updateLevelSelection(level)}
-                  />
-                </Col>
-              ))}
-            </Row>
+            {levelSelectionSection}
             <Row
               style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
               className={'mb-2'}
