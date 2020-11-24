@@ -7,7 +7,7 @@ import {
   Row,
   Form,
   Col,
-  Container
+  Container,
 } from 'react-bootstrap';
 import classnames from 'classnames';
 import { getMomentInstance } from 'app/shared/utils/Utils';
@@ -16,7 +16,7 @@ import 'react-day-picker/lib/style.css';
 import moment from 'moment';
 import {
   APP_LOCAL_DATETIME_FORMAT_Z_FORCE,
-  APP_LOCAL_DATE_FORMAT
+  APP_LOCAL_DATE_FORMAT,
 } from 'app/config/constants';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
@@ -29,7 +29,7 @@ type CalendarButtonProps = {
 
 enum ExtensionType {
   FROM_TODAY = 'Today',
-  FROM_EXPIRATION = 'Expiration Day'
+  FROM_EXPIRATION = 'Expiration Day',
 }
 
 export const CalendarButton: React.FunctionComponent<CalendarButtonProps> = props => {
@@ -55,23 +55,23 @@ export const CalendarButton: React.FunctionComponent<CalendarButtonProps> = prop
     {
       amount: 1,
       unit: 'w',
-      unitText: 'week'
+      unitText: 'week',
     },
     {
       amount: 1,
       unit: 'M',
-      unitText: 'month'
+      unitText: 'month',
     },
     {
       amount: 6,
       unit: 'M',
-      unitText: 'month'
+      unitText: 'month',
     },
     {
       amount: 1,
       unit: 'y',
-      unitText: 'year'
-    }
+      unitText: 'year',
+    },
   ];
 
   return (
@@ -137,8 +137,8 @@ export const CalendarButton: React.FunctionComponent<CalendarButtonProps> = prop
             inputProps={{
               style: {
                 textAlign: 'center',
-                border: 'none'
-              }
+                border: 'none',
+              },
             }}
             style={{ margin: '0 auto' }}
             formatDate={MomentLocaleUtils.formatDate}

@@ -2,12 +2,12 @@ import React from 'react';
 import { MutationEffectResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   citationsHasInfo,
-  OncoKBOncogenicityIcon
+  OncoKBOncogenicityIcon,
 } from 'app/shared/utils/Utils';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import {
   COLOR_ICON_WITH_INFO,
-  COLOR_ICON_WITHOUT_INFO
+  COLOR_ICON_WITHOUT_INFO,
 } from 'app/config/theme';
 import { getHighestLevelStrings } from 'app/pages/genePage/GenePage';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
@@ -53,7 +53,7 @@ export const AlterationInfo: React.FunctionComponent<{
               fontSize: '0.8em',
               color: hasCitations
                 ? COLOR_ICON_WITH_INFO
-                : COLOR_ICON_WITHOUT_INFO
+                : COLOR_ICON_WITHOUT_INFO,
             }}
           ></i>
         </DefaultTooltip>

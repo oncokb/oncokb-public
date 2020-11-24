@@ -66,15 +66,17 @@ class App extends React.Component {
     return (
       <DocumentTitle title={DOCUMENT_TITLES.HOME}>
         <>
-          <Reaptcha
-            ref={this.stores.windowStore.recaptchaRef}
-            sitekey={RECAPTCHA_SITE_KEY}
-            onVerify={this.onExecuteChange}
-            onRender={() =>
-              this.stores.windowStore.recaptchaRef.current.execute()
-            }
-            size="invisible"
-          />
+          {!this.stores.authenticationStore.isUserAuthenticated && (
+            <Reaptcha
+              ref={this.stores.windowStore.recaptchaRef}
+              sitekey={RECAPTCHA_SITE_KEY}
+              onVerify={this.onExecuteChange}
+              onRender={() =>
+                this.stores.windowStore.recaptchaRef.current.execute()
+              }
+              size="invisible"
+            />
+          )}
           {
             <Provider {...this.stores}>
               <Router history={history}>

@@ -58,21 +58,21 @@ export default class UsageDetailsTable extends React.Component<
               accessor: 'resource',
               minWidth: 200,
               onFilter: (data: UsageRecord, keyword) =>
-                filterByKeyword(data.resource, keyword)
+                filterByKeyword(data.resource, keyword),
             },
             {
               id: 'usage',
               Header: <span>Usage</span>,
               minWidth: 100,
-              accessor: 'usage'
-            }
+              accessor: 'usage',
+            },
           ]}
           loading={this.props.loadedData ? false : true}
           defaultSorted={[
             {
               id: 'usage',
-              desc: true
-            }
+              desc: true,
+            },
           ]}
           showPagination={true}
           minRows={1}

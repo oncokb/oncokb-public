@@ -53,7 +53,7 @@ export default class UserUsagePage extends React.Component<{
       });
       return Promise.resolve(result);
     },
-    default: new Map()
+    default: new Map(),
   });
 
   render() {

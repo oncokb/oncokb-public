@@ -83,31 +83,37 @@ const AppRouts = (props: {
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
             path={PAGE_ROUTE.CANCER_GENES}
             component={CancerGenesPage}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
             path={PAGE_ROUTE.ACTIONABLE_GENE}
             component={ActionableGenesPage}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
             path={PAGE_ROUTE.GENE}
             component={GenePage}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
             path={PAGE_ROUTE.ALTERATION}
             component={AlterationPage}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
             path={PAGE_ROUTE.HGVSG}
             component={HgvsgPage}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
             component={AlterationPage}
           />

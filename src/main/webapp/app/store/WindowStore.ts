@@ -19,16 +19,6 @@ class WindowStore {
     this.windowObj = window;
     this.setWindowSize();
     this.windowObj.addEventListener('resize', this.handleWindowResize);
-    this.windowObj.addEventListener('click', () => {
-      this.executeRecaptcha();
-    });
-  }
-
-  @action
-  private executeRecaptcha() {
-    if (this.recaptchaRef) {
-      this.recaptchaRef.current.execute();
-    }
   }
 
   @autobind

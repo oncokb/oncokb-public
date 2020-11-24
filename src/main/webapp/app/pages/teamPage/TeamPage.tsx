@@ -11,85 +11,85 @@ export const TeamPage = () => {
       lastName: 'Chakravarty',
       title: [TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Jianjiong',
       lastName: 'Gao',
       title: [TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Sarah',
       lastName: 'Phillips',
       title: [TITLE.PHD],
       faculty: false,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Hongxin',
       lastName: 'Zhang',
       title: [TITLE.MSC],
       faculty: false,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Ritika',
       lastName: 'Kundra',
       title: [TITLE.MSC],
       faculty: false,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Moriah',
       lastName: 'Nissan',
       title: [TITLE.PHD],
       faculty: false,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Yifu',
       lastName: 'Yao',
       title: [TITLE.MSC],
       faculty: false,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Ederlinda',
       lastName: 'Paraiso',
       title: [TITLE.MPA],
       faculty: false,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Julia',
       lastName: 'Rudolph',
       title: [TITLE.MPA],
       faculty: false,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'David',
       lastName: 'Solit',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Paul',
       lastName: 'Sabbatini',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Nikolaus',
       lastName: 'Schultz',
       title: [TITLE.PHD],
       faculty: true,
-      showCOI: true
-    }
+      showCOI: true,
+    },
   ];
   const curators: ITeamMember[] = [
     {
@@ -97,29 +97,29 @@ export const TeamPage = () => {
       lastName: 'Gala',
       title: [TITLE.PHD],
       faculty: false,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Lindsay M.',
       lastName: 'LaFave',
       title: [TITLE.PHD],
       faculty: false,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Linde',
       lastName: 'Miles',
       title: [TITLE.PHD],
       faculty: false,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Emiliano',
       lastName: 'Cocco',
       title: [TITLE.PHD],
       faculty: false,
-      showCOI: true
-    }
+      showCOI: true,
+    },
   ];
   const cgac: ITeamMember[] = [
     {
@@ -127,295 +127,295 @@ export const TeamPage = () => {
       lastName: 'DeAngelis',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Phil',
       lastName: 'Kantoff',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'David',
       lastName: 'Klimstra',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Marc',
       lastName: 'Ladanyi',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Ross',
       lastName: 'Levine',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Michael',
       lastName: 'Berger',
       title: [TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Maria',
       lastName: 'Arcila',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Ahmet',
       lastName: 'Dogan',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Sarat',
       lastName: 'Chandarlapaty',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Ping',
       lastName: 'Chi',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Rona',
       lastName: 'Yaeger',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Wassim',
       lastName: 'Abida',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Alex',
       lastName: 'Drilon',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Diana',
       lastName: 'Mandelker',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Kamal',
       lastName: 'Menghrajani',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Alison',
       lastName: 'Schram',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Santosha',
       lastName: 'Vardhana',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Carol',
       lastName: 'Aghajanian',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Daniel',
       lastName: 'Danila',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Eli',
       lastName: 'Diamond',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'James',
       lastName: 'Fagin',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Alan',
       lastName: 'Ho',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Gopa',
       lastName: 'Iyer',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Komal',
       lastName: 'Jhaveri',
       title: [TITLE.MD, TITLE.FACP],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Andrew',
       lastName: 'Kung',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Ingo',
       lastName: 'Mellinghoff',
       title: [TITLE.MD, TITLE.FACP],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Kenneth',
       lastName: 'Offit',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Paul',
       lastName: 'Paik',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'David',
       lastName: 'Pfister',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Jonathan',
       lastName: 'Rosenberg',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Gregory',
       lastName: 'Riely',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Mark',
       lastName: 'Robson',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Neal',
       lastName: 'Rosen',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Leonard',
       lastName: 'Saltz',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Sohrab',
       lastName: 'Shah',
       title: [TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Maurizio',
       lastName: 'Scaltriti',
       title: [TITLE.PHD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Alexander',
       lastName: 'Shoushtari',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Neerav',
       lastName: 'Shukla',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Zsofia',
       lastName: 'Stadler',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'William',
       lastName: 'Tap',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Martin',
       lastName: 'Voss',
       title: [TITLE.MD],
       faculty: true,
-      showCOI: true
+      showCOI: true,
     },
     {
       firstName: 'Jedd',
       lastName: 'Wolchok',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
-      showCOI: true
-    }
+      showCOI: true,
+    },
   ];
   const pastContributors: {
     firstName: string;
@@ -427,7 +427,7 @@ export const TeamPage = () => {
     {
       firstName: 'Margaret',
       lastName: 'Callahan',
-      title: [TITLE.MD, TITLE.PHD]
+      title: [TITLE.MD, TITLE.PHD],
     },
     { firstName: 'Timothy A.', lastName: 'Chan', title: [TITLE.MD, TITLE.PHD] },
     { firstName: 'Luis Alberto', lastName: 'Diaz Jr.', title: [TITLE.MD] },
@@ -454,7 +454,7 @@ export const TeamPage = () => {
     { firstName: 'Tiffany A.', lastName: 'Traina', title: [TITLE.MD] },
     { firstName: 'Jiaojiao', lastName: 'Wang', title: [TITLE.MSC] },
     { firstName: 'Hannah', lastName: 'Wise', title: [TITLE.PHD] },
-    { firstName: 'Anas', lastName: 'Younes', title: [TITLE.MD] }
+    { firstName: 'Anas', lastName: 'Younes', title: [TITLE.MD] },
   ];
   return (
     <DocumentTitle title={DOCUMENT_TITLES.TEAM}>

@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import {
   getAccountInfoTitle,
-  getSectionClassName
+  getSectionClassName,
 } from 'app/pages/account/AccountUtils';
 import { ButtonSelections } from 'app/components/LicenseSelection';
 import {
@@ -11,7 +11,7 @@ import {
   AvField,
   AvForm,
   AvRadio,
-  AvRadioGroup
+  AvRadioGroup,
 } from 'availity-reactstrap-validation';
 import {
   ACCOUNT_TITLES,
@@ -19,12 +19,12 @@ import {
   NOT_CHANGEABLE_AUTHORITIES,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   USER_AUTHORITIES,
-  XREGEXP_VALID_LATIN_TEXT
+  XREGEXP_VALID_LATIN_TEXT,
 } from 'app/config/constants';
 import XRegExp from 'xregexp';
 import {
   ACCOUNT_TYPE_DEFAULT,
-  AccountType
+  AccountType,
 } from 'app/components/newAccountForm/NewAccountForm';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
@@ -36,7 +36,7 @@ import {
   computed,
   IReactionDisposer,
   observable,
-  reaction
+  reaction,
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
@@ -52,7 +52,7 @@ import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
-  INACTIVATED = 'Inactivated'
+  INACTIVATED = 'Inactivated',
 }
 
 interface MatchParams {
@@ -108,16 +108,16 @@ export default class UserPage extends React.Component<IUserPage> {
   readonly usersUserMails = remoteData<UserMailsDTO[]>({
     invoke: () => {
       return client.getUsersUserMailsUsingGET({
-        login: this.props.match.params.login
+        login: this.props.match.params.login,
       });
     },
-    default: []
+    default: [],
   });
 
   @action
   async getUserTokens() {
     this.userTokens = await client.getUserTokensUsingGET({
-      login: this.props.match.params.login
+      login: this.props.match.params.login,
     });
   }
 
@@ -155,8 +155,8 @@ export default class UserPage extends React.Component<IUserPage> {
       .updateTokenUsingPUT({
         token: {
           ...token,
-          expiration: newDate
-        }
+          expiration: newDate,
+        },
       })
       .then(
         () => {
@@ -183,12 +183,12 @@ export default class UserPage extends React.Component<IUserPage> {
         jobTitle: values.jobTitle,
         company: values.company,
         city: values.city,
-        country: values.country
+        country: values.country,
       };
       client
         .updateUserUsingPUT({
           userDto: updatedUser,
-          sendEmail: false
+          sendEmail: false,
         })
         .then(
           (updatedUserDTO: UserDTO) => {
@@ -202,7 +202,7 @@ export default class UserPage extends React.Component<IUserPage> {
             this.user = updatedUserDTO;
             client
               .getUserTokensUsingGET({
-                login: updatedUserDTO.login
+                login: updatedUserDTO.login,
               })
               .then(
                 tokens => {
@@ -222,8 +222,8 @@ export default class UserPage extends React.Component<IUserPage> {
                             renewable: tokenIsRenewable,
                             expiration: tokenValidDays
                               ? now.toISOString()
-                              : token.expiration
-                          }
+                              : token.expiration,
+                          },
                         })
                         .then(
                           () => {
@@ -253,7 +253,7 @@ export default class UserPage extends React.Component<IUserPage> {
     this.getUserStatus = PromiseStatus.pending;
     client
       .getUserUsingGET({
-        login: this.props.match.params.login
+        login: this.props.match.params.login,
       })
       .then(
         user => {
@@ -275,7 +275,7 @@ export default class UserPage extends React.Component<IUserPage> {
   generateResetKey() {
     client
       .generateResetKeyUsingPOST({
-        mail: this.props.match.params.login
+        mail: this.props.match.params.login,
       })
       .then(
         updatedUser => {
@@ -421,18 +421,18 @@ export default class UserPage extends React.Component<IUserPage> {
                             minLength: {
                               value: 1,
                               errorMessage:
-                                'Required to be at least 1 character'
+                                'Required to be at least 1 character',
                             },
                             pattern: {
                               value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
-                                'Sorry, we only support Latin letters for now.'
+                                'Sorry, we only support Latin letters for now.',
                             },
                             maxLength: {
                               value: 50,
                               errorMessage:
-                                'Cannot be longer than 50 characters'
-                            }
+                                'Cannot be longer than 50 characters',
+                            },
                           }}
                           value={this.user.jobTitle}
                         />
@@ -448,18 +448,18 @@ export default class UserPage extends React.Component<IUserPage> {
                             minLength: {
                               value: 1,
                               errorMessage:
-                                'Required to be at least 1 character'
+                                'Required to be at least 1 character',
                             },
                             pattern: {
                               value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
-                                'Sorry, we only support Latin letters for now.'
+                                'Sorry, we only support Latin letters for now.',
                             },
                             maxLength: {
                               value: 50,
                               errorMessage:
-                                'Cannot be longer than 50 characters'
-                            }
+                                'Cannot be longer than 50 characters',
+                            },
                           }}
                           value={this.user.company}
                         />
@@ -476,18 +476,18 @@ export default class UserPage extends React.Component<IUserPage> {
                             minLength: {
                               value: 1,
                               errorMessage:
-                                'Required to be at least 1 character'
+                                'Required to be at least 1 character',
                             },
                             pattern: {
                               value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
-                                'Sorry, we only support Latin letters for now.'
+                                'Sorry, we only support Latin letters for now.',
                             },
                             maxLength: {
                               value: 50,
                               errorMessage:
-                                'Cannot be longer than 50 characters'
-                            }
+                                'Cannot be longer than 50 characters',
+                            },
                           }}
                         />
                         <AvField
@@ -503,18 +503,18 @@ export default class UserPage extends React.Component<IUserPage> {
                             pattern: {
                               value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                               errorMessage:
-                                'Sorry, we only support Latin letters for now.'
+                                'Sorry, we only support Latin letters for now.',
                             },
                             minLength: {
                               value: 1,
                               errorMessage:
-                                'Required to be at least 1 character'
+                                'Required to be at least 1 character',
                             },
                             maxLength: {
                               value: 50,
                               errorMessage:
-                                'Cannot be longer than 50 characters'
-                            }
+                                'Cannot be longer than 50 characters',
+                            },
                           }}
                         />
                         <div className={'mb-2 font-weight-bold'}>

@@ -17,7 +17,7 @@ import UsageDetailsTable from './UsageDetailsTable';
 import {
   PAGE_ROUTE,
   USAGE_TOP_USERS_LIMIT,
-  USGAE_ALL_TIME_KEY
+  USGAE_ALL_TIME_KEY,
 } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
 
@@ -39,7 +39,7 @@ export default class UsageAnalysisPage extends React.Component<{
     async invoke() {
       return await Client.getUserUsageOverviewUsingGET({});
     },
-    default: []
+    default: [],
   });
 
   readonly usageDetail = remoteData<Map<string, UsageRecord[]>>({
@@ -68,7 +68,7 @@ export default class UsageAnalysisPage extends React.Component<{
 
       return Promise.resolve(result);
     },
-    default: new Map()
+    default: new Map(),
   });
 
   @autobind
@@ -95,7 +95,7 @@ export default class UsageAnalysisPage extends React.Component<{
               data={
                 this.toggleValue === 1
                   ? this.users.result
-                  : _.filter(this.users.result, function(user) {
+                  : _.filter(this.users.result, function (user) {
                       return (
                         parseInt(user.totalUsage, 10) >= USAGE_TOP_USERS_LIMIT
                       );
@@ -108,13 +108,13 @@ export default class UsageAnalysisPage extends React.Component<{
                   accessor: 'userEmail',
                   minWidth: 200,
                   onFilter: (data: UserUsageOverview, keyword) =>
-                    filterByKeyword(data.userEmail, keyword)
+                    filterByKeyword(data.userEmail, keyword),
                 },
                 {
                   id: 'totalUsage',
                   Header: <span>Total Usage</span>,
                   minWidth: 100,
-                  accessor: 'totalUsage'
+                  accessor: 'totalUsage',
                 },
                 {
                   id: 'endpoint',
@@ -122,7 +122,7 @@ export default class UsageAnalysisPage extends React.Component<{
                   minWidth: 200,
                   accessor: 'endpoint',
                   onFilter: (data: UserUsageOverview, keyword) =>
-                    filterByKeyword(data.endpoint, keyword)
+                    filterByKeyword(data.endpoint, keyword),
                 },
                 {
                   id: 'operations',
@@ -138,15 +138,15 @@ export default class UsageAnalysisPage extends React.Component<{
                         <i className="fa fa-info-circle"></i>
                       </Link>
                     );
-                  }
-                }
+                  },
+                },
               ]}
               loading={this.users.isComplete ? false : true}
               defaultSorted={[
                 {
                   id: 'totalUsage',
-                  desc: true
-                }
+                  desc: true,
+                },
               ]}
               showPagination={true}
               minRows={1}
