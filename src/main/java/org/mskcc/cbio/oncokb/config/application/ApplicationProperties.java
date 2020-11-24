@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
+    private String name;
     private String apiProxyUrl;
     private String userRegistrationWebhook;
     private ProjectProfile profile;
@@ -25,12 +26,22 @@ public class ApplicationProperties {
     private String accountApprovalWhitelist;
     private String academicEmailClarifyDomain;
     private String licensedDomains;
+    private String trialedDomains;
     private String googleWebmasterVerification;
     private EmailAddresses emailAddresses;
     private String tokenUsageCheck;
     private String tokenUsageCheckWhitelist;
     private int publicWebsiteApiThreshold;
     private FrontendProperties frontend;
+    private AWSProperties aws;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getApiProxyUrl() {
         return apiProxyUrl;
@@ -70,6 +81,14 @@ public class ApplicationProperties {
 
     public void setLicensedDomains(String licensedDomains) {
         this.licensedDomains = licensedDomains;
+    }
+
+    public String getTrialedDomains() {
+        return trialedDomains;
+    }
+
+    public void setTrialedDomains(String trialedDomains) {
+        this.trialedDomains = trialedDomains;
     }
 
     public ProjectProfile getProfile() {
@@ -151,11 +170,22 @@ public class ApplicationProperties {
     public List<String> getLicensedDomainsList() {
         return getDomains(this.getLicensedDomains());
     }
+    public List<String> getTrialedDomainsList() {
+        return getDomains(this.getTrialedDomains());
+    }
 
     private List<String> getDomains(String domainStr) {
         if (StringUtils.isEmpty(domainStr)) {
             return new ArrayList<>();
         }
         return Arrays.stream(domainStr.split(",")).map(domain -> domain.trim()).filter(domain -> !StringUtils.isEmpty(domain)).collect(Collectors.toList());
+    }
+
+    public AWSProperties getAws() {
+        return aws;
+    }
+
+    public void setAws(AWSProperties aws) {
+        this.aws = aws;
     }
 }

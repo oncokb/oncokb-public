@@ -3,7 +3,7 @@ import {
   Evidence,
   TreatmentDrug,
   TumorType,
-  Article
+  Article,
 } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
 import React, { ReactNode } from 'react';
@@ -14,18 +14,18 @@ import {
   GENERAL_ONCOGENICITY,
   ONCOGENICITY_CLASS_NAMES,
   PAGE_ROUTE,
-  TABLE_COLUMN_KEY
+  TABLE_COLUMN_KEY,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
   Alteration,
-  Treatment
+  Treatment,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   defaultSortMethod,
   mutationEffectSortMethod,
   oncogenicitySortMethod,
-  sortByAlteration
+  sortByAlteration,
 } from 'app/shared/utils/ReactTableUtils';
 import { TableCellRenderer } from 'react-table';
 import { LevelWithDescription } from 'app/components/LevelWithDescription';
@@ -35,7 +35,7 @@ import { CitationTooltip } from 'app/components/CitationTooltip';
 import {
   AlterationPageLink,
   GenePageLink,
-  TumorTypePageLink
+  TumorTypePageLink,
 } from 'app/shared/utils/UrlUtils';
 import moment from 'moment';
 
@@ -53,10 +53,6 @@ export function getCancerTypeNameFromOncoTreeType(
 
 export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
   return _.replace(levelOfEvidence, new RegExp('[AB]'), '');
-}
-
-export function getCenterAlignStyle() {
-  return { justifyContent: 'center', whiteSpace: 'normal' };
 }
 
 export function levelOfEvidence2Level(
@@ -82,10 +78,7 @@ export function getAllAlterationsName(alterations: Alteration[]) {
 
 export function getAllTumorTypesName(tumorTypes: TumorType[]) {
   return tumorTypes
-    ? tumorTypes
-        .map(getCancerTypeNameFromOncoTreeType)
-        .sort()
-        .join(', ')
+    ? tumorTypes.map(getCancerTypeNameFromOncoTreeType).sort().join(', ')
     : '';
 }
 
@@ -112,12 +105,12 @@ export function articles2Citations(articles: Article[]): Citations {
       .map(article => {
         return {
           abstract: article.abstract,
-          link: article.link
+          link: article.link,
         };
       }),
     pmids: articles
       .filter(article => !!article.pmid)
-      .map(article => article.pmid)
+      .map(article => article.pmid),
   };
 }
 
@@ -188,7 +181,10 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
   className?: string;
 }> = props => {
   return (
-    <span style={{ width: 16, marginTop: -3, marginLeft: 3 }}>
+    <span
+      style={{ width: 16, marginTop: -3, marginLeft: 3 }}
+      key={'oncokb-oncogenicity-icone'}
+    >
       <i
         className={classnames(
           `oncokb annotation-icon ${getAnnotationOncogenicityClassName(
@@ -200,15 +196,6 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
       />
     </span>
   );
-};
-
-export const reduceJoin = (
-  data: React.ReactNode[],
-  separator: string | JSX.Element
-) => {
-  return data.length === 0
-    ? null
-    : data.reduce((prev, curr) => [prev, separator, curr]);
 };
 
 export const OncoKBLevelIcon: React.FunctionComponent<{
@@ -231,6 +218,7 @@ export function getDefaultColumnDefinition<T>(
       Header: TableCellRenderer;
       accessor: string;
       minWidth: number;
+      width?: number;
       style?: object;
       defaultSortDesc: boolean;
       Cell?: TableCellRenderer;
@@ -248,7 +236,7 @@ export function getDefaultColumnDefinition<T>(
         sortMethod: defaultSortMethod,
         Cell(props: { original: any }) {
           return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
-        }
+        },
       };
     case TABLE_COLUMN_KEY.ALTERATION:
       return {
@@ -265,7 +253,7 @@ export function getDefaultColumnDefinition<T>(
               alteration={props.original.alteration}
             />
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.ALTERATIONS:
       return {
@@ -275,7 +263,7 @@ export function getDefaultColumnDefinition<T>(
         style: { whiteSpace: 'normal' },
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
       };
     case TABLE_COLUMN_KEY.TUMOR_TYPE:
       return {
@@ -294,7 +282,7 @@ export function getDefaultColumnDefinition<T>(
               tumorType={props.original.tumorType}
             />
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE:
       return {
@@ -304,7 +292,7 @@ export function getDefaultColumnDefinition<T>(
         style: { whiteSpace: 'normal' },
         minWidth: 110,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
       };
     case TABLE_COLUMN_KEY.DRUGS:
       return {
@@ -314,7 +302,7 @@ export function getDefaultColumnDefinition<T>(
         style: { whiteSpace: 'normal' },
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod
+        sortMethod: defaultSortMethod,
       };
     case TABLE_COLUMN_KEY.LEVEL:
       return {
@@ -322,17 +310,19 @@ export function getDefaultColumnDefinition<T>(
         Header: <span>Level</span>,
         accessor: 'level',
         minWidth: 70,
+        width: 70,
         defaultSortDesc: false,
-        style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
         Cell(props: any) {
           return (
-            <OncoKBLevelIcon
-              level={props.original.level}
-              withDescription={true}
-            />
+            <div className={'my-1'}>
+              <OncoKBLevelIcon
+                level={props.original.level}
+                withDescription={true}
+              />
+            </div>
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.CITATIONS:
       return {
@@ -341,7 +331,6 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'citations',
         minWidth: 90,
         defaultSortDesc: false,
-        style: getCenterAlignStyle(),
         sortMethod: defaultSortMethod,
         Cell(props: any) {
           const numOfReferences =
@@ -363,7 +352,7 @@ export function getDefaultColumnDefinition<T>(
               </DefaultTooltip>
             </div>
           );
-        }
+        },
       };
     case TABLE_COLUMN_KEY.ONCOGENICITY:
       return {
@@ -372,7 +361,7 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'oncogenic',
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: oncogenicitySortMethod
+        sortMethod: oncogenicitySortMethod,
       };
     case TABLE_COLUMN_KEY.MUTATION_EFFECT:
       return {
@@ -381,7 +370,7 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'mutationEffect',
         minWidth: 100,
         defaultSortDesc: false,
-        sortMethod: mutationEffectSortMethod
+        sortMethod: mutationEffectSortMethod,
       };
     default:
       return undefined;
@@ -404,7 +393,7 @@ export function getRouteFromPath(pathName: string) {
 
 export function getRedirectLoginState(pathName: string) {
   return {
-    from: getRouteFromPath(pathName)
+    from: getRouteFromPath(pathName),
   };
 }
 
@@ -426,6 +415,18 @@ export function getMomentInstance(utcTime: string) {
   return moment(utcTime, APP_LOCAL_DATETIME_FORMAT_Z);
 }
 
+export function daysDiff(date: string) {
+  const today = moment.utc();
+  const expiration = getMomentInstance(date);
+  return expiration.diff(today, 'days');
+}
+
+export function secDiff(date: string) {
+  const today = moment.utc();
+  const expiration = getMomentInstance(date);
+  return expiration.diff(today, 'hours');
+}
+
 const SLASH_HTML_ENTITY_CODE = '%2F';
 
 export function encodeSlash(content: string | undefined) {
@@ -442,13 +443,3 @@ export const scrollWidthOffsetInNews = (el?: any) => {
   const yOffset = -80;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
 };
-
-export const concatElementsByComma = (list: ReactNode[]) => {
-  return list.reduce((prev, curr) => [prev, ', ', curr]);
-};
-
-export function getGenePageLinks(genes: string): ReactNode {
-  return concatElementsByComma(
-    genes.split(',').map(gene => <GenePageLink hugoSymbol={gene.trim()} />)
-  );
-}

@@ -5,7 +5,7 @@ import {
   AvRadioGroup,
   AvRadio,
   AvCheckboxGroup,
-  AvCheckbox
+  AvCheckbox,
 } from 'availity-reactstrap-validation';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 import { observer } from 'mobx-react';
@@ -15,7 +15,9 @@ import { ManagedUserVM } from 'app/shared/api/generated/API';
 import {
   ACADEMIC_TERMS,
   ACCOUNT_TITLES,
-  LicenseType
+  LicenseType,
+  THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
+  XREGEXP_VALID_LATIN_TEXT,
 } from 'app/config/constants';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
@@ -24,7 +26,7 @@ import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 import * as XRegExp from 'xregexp';
 import {
   getSectionClassName,
-  getAccountInfoTitle
+  getAccountInfoTitle,
 } from 'app/pages/account/AccountUtils';
 import { If, Then, Else } from 'react-if';
 
@@ -38,11 +40,10 @@ export type INewAccountForm = {
 
 export enum AccountType {
   REGULAR = 'regular',
-  TRIAL = 'trial'
+  TRIAL = 'trial',
 }
 
 export const ACCOUNT_TYPE_DEFAULT = AccountType.REGULAR;
-export const TRIAL_TOKEN_VALID_DEFAULT = 30;
 @observer
 export class NewAccountForm extends React.Component<INewAccountForm> {
   @observable password = '';
@@ -51,7 +52,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   private defaultFormValue = {
     accountType: ACCOUNT_TYPE_DEFAULT,
-    tokenValidDays: TRIAL_TOKEN_VALID_DEFAULT
+    tokenValidDays: THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   };
 
   constructor(props: INewAccountForm) {
@@ -75,7 +76,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       jobTitle: values.jobTitle,
       company: values.company,
       city: values.city,
-      country: values.country
+      country: values.country,
     };
     if (values.tokenValidDays) {
       newUser.tokenValidDays = Number(values.tokenValidDays);
@@ -169,18 +170,18 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   validate={{
                     required: {
                       value: true,
-                      errorMessage: 'Your email is required.'
+                      errorMessage: 'Your email is required.',
                     },
                     minLength: {
                       value: 5,
                       errorMessage:
-                        'Your email is required to be at least 5 characters.'
+                        'Your email is required to be at least 5 characters.',
                     },
                     maxLength: {
                       value: 254,
                       errorMessage:
-                        'Your email cannot be longer than 50 characters.'
-                    }
+                        'Your email cannot be longer than 50 characters.',
+                    },
                   }}
                 />
                 <AvField
@@ -193,17 +194,17 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   validate={{
                     required: {
                       value: true,
-                      errorMessage: 'Your first name is required.'
+                      errorMessage: 'Your first name is required.',
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
-                        'Sorry, we only support Latin letters for now.'
+                        'Sorry, we only support Latin letters for now.',
                     },
                     minLength: {
                       value: 1,
-                      errorMessage: 'Your first can not be empty'
-                    }
+                      errorMessage: 'Your first can not be empty',
+                    },
                   }}
                 />
                 <AvField
@@ -216,17 +217,17 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   validate={{
                     required: {
                       value: true,
-                      errorMessage: 'Your last name is required.'
+                      errorMessage: 'Your last name is required.',
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
-                        'Sorry, we only support Latin letters for now.'
+                        'Sorry, we only support Latin letters for now.',
                     },
                     minLength: {
                       value: 1,
-                      errorMessage: 'Your last name can not be empty'
-                    }
+                      errorMessage: 'Your last name can not be empty',
+                    },
                   }}
                 />
                 <If condition={!this.props.byAdmin}>
@@ -241,18 +242,18 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       validate={{
                         required: {
                           value: true,
-                          errorMessage: 'Your password is required.'
+                          errorMessage: 'Your password is required.',
                         },
                         minLength: {
                           value: 4,
                           errorMessage:
-                            'Your password is required to be at least 4 characters.'
+                            'Your password is required to be at least 4 characters.',
                         },
                         maxLength: {
                           value: 50,
                           errorMessage:
-                            'Your password cannot be longer than 50 characters.'
-                        }
+                            'Your password cannot be longer than 50 characters.',
+                        },
                       }}
                     />
                     <PasswordStrengthBar password={this.password} />
@@ -266,23 +267,23 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         required: {
                           value: true,
                           errorMessage:
-                            'Your confirmation password is required.'
+                            'Your confirmation password is required.',
                         },
                         minLength: {
                           value: 4,
                           errorMessage:
-                            'Your confirmation password is required to be at least 4 characters.'
+                            'Your confirmation password is required to be at least 4 characters.',
                         },
                         maxLength: {
                           value: 50,
                           errorMessage:
-                            'Your confirmation password cannot be longer than 50 characters.'
+                            'Your confirmation password cannot be longer than 50 characters.',
                         },
                         match: {
                           value: 'firstPassword',
                           errorMessage:
-                            'The password and its confirmation do not match!'
-                        }
+                            'The password and its confirmation do not match!',
+                        },
                       }}
                     />
                   </Then>
@@ -299,7 +300,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 </h5>
               </Col>
               <Col md="9">
-                {/* Job Title */}
                 <AvField
                   name="jobTitle"
                   label={getAccountInfoTitle(
@@ -309,24 +309,23 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   validate={{
                     required: {
                       value: !this.props.byAdmin,
-                      errorMessage: 'Required.'
+                      errorMessage: 'Required.',
                     },
                     minLength: {
                       value: 1,
-                      errorMessage: 'Required to be at least 1 character'
+                      errorMessage: 'Required to be at least 1 character',
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
-                        'Sorry, we only support Latin letters for now.'
+                        'Sorry, we only support Latin letters for now.',
                     },
                     maxLength: {
                       value: 50,
-                      errorMessage: 'Cannot be longer than 50 characters'
-                    }
+                      errorMessage: 'Cannot be longer than 50 characters',
+                    },
                   }}
                 />
-                {/* Company */}
                 <AvField
                   name="company"
                   label={getAccountInfoTitle(
@@ -336,24 +335,23 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   validate={{
                     required: {
                       value: !this.props.byAdmin,
-                      errorMessage: 'Required.'
+                      errorMessage: 'Required.',
                     },
                     minLength: {
                       value: 1,
-                      errorMessage: 'Required to be at least 1 character'
+                      errorMessage: 'Required to be at least 1 character',
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
-                        'Sorry, we only support Latin letters for now.'
+                        'Sorry, we only support Latin letters for now.',
                     },
                     maxLength: {
                       value: 50,
-                      errorMessage: 'Cannot be longer than 50 characters'
-                    }
+                      errorMessage: 'Cannot be longer than 50 characters',
+                    },
                   }}
                 />
-                {/* City */}
                 <AvField
                   name="city"
                   label={getAccountInfoTitle(
@@ -363,24 +361,23 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   validate={{
                     required: {
                       value: !this.props.byAdmin,
-                      errorMessage: 'Required.'
+                      errorMessage: 'Required.',
                     },
                     minLength: {
                       value: 1,
-                      errorMessage: 'Required to be at least 1 character'
+                      errorMessage: 'Required to be at least 1 character',
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
-                        'Sorry, we only support Latin letters for now.'
+                        'Sorry, we only support Latin letters for now.',
                     },
                     maxLength: {
                       value: 50,
-                      errorMessage: 'Cannot be longer than 50 characters'
-                    }
+                      errorMessage: 'Cannot be longer than 50 characters',
+                    },
                   }}
                 />
-                {/* Country */}
                 <AvField
                   name="country"
                   label={getAccountInfoTitle(
@@ -390,21 +387,21 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   validate={{
                     required: {
                       value: !this.props.byAdmin,
-                      errorMessage: 'Required.'
+                      errorMessage: 'Required.',
                     },
                     pattern: {
-                      value: XRegExp('^[\\p{Latin}\\p{Common}\\s]+$'),
+                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
                       errorMessage:
-                        'Sorry, we only support Latin letters for now.'
+                        'Sorry, we only support Latin letters for now.',
                     },
                     minLength: {
                       value: 1,
-                      errorMessage: 'Required to be at least 1 character'
+                      errorMessage: 'Required to be at least 1 character',
                     },
                     maxLength: {
                       value: 50,
-                      errorMessage: 'Cannot be longer than 50 characters'
-                    }
+                      errorMessage: 'Cannot be longer than 50 characters',
+                    },
                   }}
                 />
               </Col>

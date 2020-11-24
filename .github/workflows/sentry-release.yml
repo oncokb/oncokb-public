@@ -7,12 +7,13 @@ on:
 # Make too releases since frontend/backend are in the same repo but two different sentry projects
 jobs:
   createSentryRelease:
+    if: github.repository == 'oncokb/oncokb-public'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@master
       - name: Create a Sentry.io release in oncokb-public-website
-        uses: tclindner/sentry-releases-action@v1.0.0
+        uses: tclindner/sentry-releases-action@v1.2.0
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: memorial-sloan-kettering
@@ -22,7 +23,7 @@ jobs:
           environment: production
           releaseNamePrefix: oncokb-public-
       - name: Create a Sentry.io release in oncokb-public-website-backend
-        uses: tclindner/sentry-releases-action@v1.0.0
+        uses: tclindner/sentry-releases-action@v1.2.0
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: memorial-sloan-kettering

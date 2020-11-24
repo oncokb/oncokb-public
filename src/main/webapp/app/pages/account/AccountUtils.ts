@@ -2,14 +2,17 @@ import {
   ACCOUNT_TITLES,
   License,
   LICENSE_TYPES,
-  LicenseType
+  LicenseType,
 } from 'app/config/constants';
 
 export function getSectionClassName(theFirst = false) {
   return `justify-content-center ${theFirst ? 'pb-3' : 'border-top py-3'}`;
 }
 
-export function getAccountInfoTitle(key: ACCOUNT_TITLES, license: LicenseType) {
+export function getAccountInfoTitle(
+  key: ACCOUNT_TITLES,
+  license: LicenseType | undefined
+) {
   if (key === ACCOUNT_TITLES.EMAIL) {
     return `${
       license === LicenseType.ACADEMIC ? 'Institution' : 'Company'

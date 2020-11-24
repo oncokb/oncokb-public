@@ -12,6 +12,8 @@ $grey: #808080; // grey
 $light-grey: #d3d3d3; // light grey
 $primary: $blue;
 $secondary: $grey;
+$warning: #ffc107;
+$danger: #dc3545;
 
 $navbar-padding-x: 0;
 $grid-breakpoints: (
@@ -19,14 +21,14 @@ $grid-breakpoints: (
   sm: 576px,
   md: 768px,
   lg: 1050px,
-  xl: 1450px
+  xl: 1450px,
 ) !default;
 
 $container-max-widths: (
   sm: 576px,
   md: 768px,
   lg: 1050px,
-  xl: 1450px
+  xl: 1450px,
 ) !default;
 
 $view-wrapper-default-p-y: 2rem;

@@ -3,31 +3,43 @@ import {
   action,
   computed,
   IReactionDisposer,
-  reaction
+  reaction,
 } from 'mobx';
 import { Storage } from 'react-jhipster';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
 import { Token, UserDTO } from 'app/shared/api/generated/API';
 import * as _ from 'lodash';
-import { AUTHORITIES } from 'app/config/constants';
+import {
+  AUTHORITIES,
+  TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS,
+} from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
 import {
   assignPublicToken,
   getPublicWebsiteToken,
   getStoredToken,
-  AUTH_UER_TOKEN_KEY
+  AUTH_UER_TOKEN_KEY,
 } from 'app/indexUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
+import { daysDiff } from 'app/shared/utils/Utils';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
   GET_SESSION: 'authentication/GET_SESSION',
   LOGOUT: 'authentication/LOGOUT',
   CLEAR_AUTH: 'authentication/CLEAR_AUTH',
-  ERROR_MESSAGE: 'authentication/ERROR_MESSAGE'
+  ERROR_MESSAGE: 'authentication/ERROR_MESSAGE',
 };
+
+export enum ACCOUNT_STATUS {
+  REGULAR,
+  ABOUT_2_EXPIRED,
+  TRIAL_ABOUT_2_EXPIRED,
+  TRIAL_EXPIRED,
+  EXPIRED,
+}
 
 class AuthenticationStore {
   @observable loading = false;
@@ -120,7 +132,7 @@ class AuthenticationStore {
     return new Promise((resolve, reject) => {
       client
         .deleteTokenUsingDELETE({
-          token
+          token,
         })
         .then(() => {
           if (token.token === this.idToken) {
@@ -159,6 +171,32 @@ class AuthenticationStore {
     return this.isAuthenticated && this.account !== undefined;
   }
 
+  @computed
+  get accountStatus() {
+    const tokenValid = this.tokens.filter(
+      token => new Date(token.expiration).getDate() <= Date.now()
+    );
+    const isTrialAccount =
+      this.tokens.filter(token => !token.renewable).length > 0;
+    if (tokenValid.length > 0) {
+      const tokenAbout2Expire = this.tokens.filter(
+        token =>
+          daysDiff(token.expiration) <= TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS
+      );
+      if (tokenAbout2Expire.length === tokenValid.length) {
+        return isTrialAccount
+          ? ACCOUNT_STATUS.TRIAL_ABOUT_2_EXPIRED
+          : ACCOUNT_STATUS.ABOUT_2_EXPIRED;
+      } else {
+        return ACCOUNT_STATUS.REGULAR;
+      }
+    } else {
+      return isTrialAccount
+        ? ACCOUNT_STATUS.TRIAL_EXPIRED
+        : ACCOUNT_STATUS.EXPIRED;
+    }
+  }
+
   @autobind
   @action
   public login(username: string, password: string) {
@@ -168,8 +206,8 @@ class AuthenticationStore {
         loginVm: {
           username,
           password,
-          rememberMe: false
-        }
+          rememberMe: false,
+        },
       })
       .then(this.loginSuccessCallback, this.loginErrorCallback);
   }

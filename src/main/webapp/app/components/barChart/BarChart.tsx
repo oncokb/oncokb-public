@@ -4,7 +4,7 @@ import {
   VictoryChart,
   VictoryBar,
   VictoryAxis,
-  VictorySelectionContainer
+  VictorySelectionContainer,
 } from 'victory';
 import WindowStore from 'app/store/WindowStore';
 import { observable, computed } from 'mobx';
@@ -15,10 +15,11 @@ import { COLOR_BLUE, COLOR_GREY } from 'app/config/theme';
 import {
   getTextHeight,
   getTextWidth,
-  getTextDiagonal
+  getTextDiagonal,
 } from 'cbioportal-frontend-commons';
 import _ from 'lodash';
 import { PortalAlteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { FONT_FAMILY } from 'app/config/constants';
 
 export type BarChartDatum = {
   x: string;
@@ -53,7 +54,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
 
   public static defaultProps = {
     filters: [],
-    height: 300
+    height: 300,
   };
 
   /*
@@ -73,8 +74,8 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 mutation(event: any) {
                   this.currentBarIndex = event.datum.eventKey;
                   this.toolTipModel = this.props.data[this.currentBarIndex].x;
-                }
-              }
+                },
+              },
             ];
           },
           onMouseLeave() {
@@ -83,12 +84,12 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 target: 'data',
                 mutation() {
                   this.toolTipModel = null;
-                }
-              }
+                },
+              },
             ];
-          }
-        }
-      }
+          },
+        },
+      },
     ];
   }
 
@@ -104,7 +105,7 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
       _.max(
         this.props.data.map(datum => {
           const content = datum.x;
-          const fontFamily = 'Helvetica Neue';
+          const fontFamily = FONT_FAMILY;
           const fontSize = `${FONT_SIZE}px`;
           const textHeight = getTextHeight(content, fontFamily, fontSize);
           const textWidth = getTextWidth(content, fontFamily, fontSize);
@@ -130,10 +131,10 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
       _.max(
         lastThreeElements.map(datum => {
           const content = datum.x;
-          const fontFamily = 'Helvetica Neue';
+          const fontFamily = FONT_FAMILY;
           const fontSize = `${FONT_SIZE}px`;
           const textWidth = getTextWidth(content, fontFamily, fontSize);
-          return textWidth/3*2;
+          return (textWidth / 3) * 2;
         })
       ) || MIN_PADDING;
     return padding < MAX_PADDING ? padding : MAX_PADDING;
@@ -173,18 +174,21 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                 }}
               />
             }
-            domainPadding={{ x: [this.domainPadding, this.domainPadding], y: [20, 20] }}
+            domainPadding={{
+              x: [this.domainPadding, this.domainPadding],
+              y: [20, 20],
+            }}
             style={{
               parent: {
                 width: '100%',
-                height: this.props.height
-              }
+                height: this.props.height,
+              },
             }}
             padding={{
               left: 50,
               right: this.rightPadding,
               top: 10,
-              bottom: this.bottomPadding
+              bottom: this.bottomPadding,
             }}
           >
             <VictoryAxis
@@ -193,31 +197,40 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                   angle: TILT_ANGLE,
                   verticalAnchor: 'middle',
                   textAnchor: 'start',
-                  fontSize: FONT_SIZE
-                },
-                axisLabel: {
-                  padding: 10
+                  fontFamily: FONT_FAMILY,
+                  fontSize: FONT_SIZE,
                 },
                 ticks: {
                   fill: 'transparent',
                   size: 4,
                   stroke: 'black',
-                  strokeWidth: 1
-                }
+                  strokeWidth: 1,
+                },
               }}
             />
             <VictoryAxis
               dependentAxis={true}
               tickFormat={(t: number) =>
-                Number.isInteger(t) ? `${t.toFixed(1)} %` : (t > 2 ? '' : `${t.toFixed(2)} %`)
+                Number.isInteger(t) ? t.toFixed(1) : t > 2 ? '' : t.toFixed(2)
               }
+              label="% altered"
               style={{
+                tickLabels: {
+                  textAnchor: 'end',
+                  fontFamily: FONT_FAMILY,
+                  fontSize: FONT_SIZE,
+                  padding: 5,
+                },
+                axisLabel: {
+                  padding: 40,
+                  fontFamily: FONT_FAMILY,
+                },
                 ticks: {
                   fill: 'transparent',
                   size: 4,
                   stroke: 'black',
-                  strokeWidth: 1
-                }
+                  strokeWidth: 1,
+                },
               }}
             />
             <VictoryBar
@@ -228,8 +241,8 @@ export default class BarChart extends React.Component<IBarChartProps, {}> {
                     this.isDataBinSelected(d, this.props.filters) ||
                     this.props.filters.length === 0
                       ? COLOR_BLUE
-                      : COLOR_GREY
-                }
+                      : COLOR_GREY,
+                },
               }}
               data={this.props.data}
               // events={this.barPlotEvents}

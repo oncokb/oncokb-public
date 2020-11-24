@@ -10,6 +10,7 @@ import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,7 +115,6 @@ public class UserDetailsResourceIT {
     @Transactional
     public void createUserDetails() throws Exception {
         int databaseSizeBeforeCreate = userDetailsRepository.findAll().size();
-
         // Create the UserDetails
         UserDetailsDTO userDetailsDTO = userDetailsMapper.toDto(userDetails);
         restUserDetailsMockMvc.perform(post("/api/user-details")
@@ -192,7 +192,6 @@ public class UserDetailsResourceIT {
             .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS));
     }
-
     @Test
     @Transactional
     public void getNonExistingUserDetails() throws Exception {

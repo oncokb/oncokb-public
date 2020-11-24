@@ -9,7 +9,7 @@ import { Stores } from 'app/App';
 import { withRouter } from 'react-router';
 import {
   AUTHORITIES,
-  NOTIFICATION_TIMEOUT_MILLISECONDS
+  NOTIFICATION_TIMEOUT_MILLISECONDS,
 } from 'app/config/constants';
 import { ToastContainer } from 'react-toastify';
 
@@ -50,6 +50,7 @@ class Main extends React.Component<IMainPage> {
           isInProduction={false}
           isSwaggerEnabled
           windowStore={this.props.windowStore}
+          authStore={this.props.authenticationStore}
           routing={this.props.routing}
         />
         <div className={'view-wrapper'}>

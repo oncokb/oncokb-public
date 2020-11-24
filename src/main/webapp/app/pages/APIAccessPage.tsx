@@ -11,7 +11,7 @@ import {
   DOCUMENT_TITLES,
   LicenseType,
   PAGE_ROUTE,
-  USER_AUTHORITY
+  USER_AUTHORITY,
 } from 'app/config/constants';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { ButtonSelections } from 'app/components/LicenseSelection';
@@ -46,28 +46,16 @@ const DownloadButtonGroups: React.FunctionComponent<{
 }> = props => {
   return (
     <>
-      {props.data.hasAllAnnotatedVariants ? (
+      {props.data.hasAllCuratedGenes ? (
         <AuthDownloadButton
           className={BUTTON_CLASS_NAME}
-          fileName={`all_annotated_variants_${props.data.version}.tsv`}
+          fileName={`all_curated_genes_${props.data.version}.tsv`}
           getDownloadData={() =>
-            oncokbClient.utilsAllAnnotatedVariantsTxtGetUsingGET({
-              version: props.data.version
+            oncokbClient.utilsAllCuratedGenesTxtGetUsingGET({
+              version: props.data.version,
             })
           }
-          buttonText="All Curated Alterations"
-        />
-      ) : null}
-      {props.data.hasAllActionableVariants ? (
-        <AuthDownloadButton
-          className={BUTTON_CLASS_NAME}
-          fileName={`all_actionable_variants_${props.data.version}.tsv`}
-          getDownloadData={() =>
-            oncokbClient.utilsAllActionableVariantsTxtGetUsingGET({
-              version: props.data.version
-            })
-          }
-          buttonText="Actionable Alterations"
+          buttonText="All Curated Genes"
         />
       ) : null}
       {props.data.hasCancerGeneList ? (
@@ -76,10 +64,23 @@ const DownloadButtonGroups: React.FunctionComponent<{
           fileName={`cancer_gene_list_${props.data.version}.tsv`}
           getDownloadData={() =>
             oncokbClient.utilsCancerGeneListTxtGetUsingGET({
-              version: props.data.version
+              version: props.data.version,
             })
           }
           buttonText="Cancer Gene List"
+        />
+      ) : null}
+      {props.data.hasAllActionableVariants ? (
+        <AuthDownloadButton
+          className={BUTTON_CLASS_NAME}
+          fileName={`oncokb_${props.data.version.replace('.', '_')}.sql.gz`}
+          getDownloadData={async () => {
+            const data = await oncokbPrivateClient.utilDataSqlDumpGetUsingGET({
+              version: props.data.version,
+            });
+            return data;
+          }}
+          buttonText="Data Dump"
         />
       ) : null}
     </>
@@ -99,7 +100,7 @@ export default class APIAccessPage extends React.Component<{
   };
   readonly dataAvailability = remoteData<DownloadAvailabilityWithDate[]>({
     async invoke() {
-      const result = await oncokbPrivateClient.utilDataReleaseDownloadAvailabilityGetUsingGET(
+      const result = await oncokbPrivateClient.utilDataAvailabilityGetUsingGET(
         {}
       );
       const availableVersions = _.reduce(
@@ -110,9 +111,12 @@ export default class APIAccessPage extends React.Component<{
         },
         {} as { [key: string]: DownloadAvailability }
       );
+      // do not provide data on version 1
       return _.reduce(
-        DATA_RELEASES.filter(release =>
-          _.has(availableVersions, release.version)
+        DATA_RELEASES.filter(
+          release =>
+            _.has(availableVersions, release.version) &&
+            !release.version.startsWith('v1')
         ),
         (acc, next) => {
           const currentVersionData: DownloadAvailability =
@@ -125,7 +129,7 @@ export default class APIAccessPage extends React.Component<{
           ) {
             acc.push({
               ...availableVersions[next.version],
-              date: next.date
+              date: next.date,
             });
           }
           return acc;
@@ -133,7 +137,7 @@ export default class APIAccessPage extends React.Component<{
         [] as DownloadAvailabilityWithDate[]
       );
     },
-    default: []
+    default: [],
   });
 
   @action
@@ -208,7 +212,7 @@ export default class APIAccessPage extends React.Component<{
                 Example:{' '}
                 <code>
                   curl -H &quot;Authorization: Bearer [your token]&quot;
-                  https://www.oncokb.org/api/v1/genes
+                  https://www.oncokb.org/api/v1/utils/allCuratedGenes
                 </code>
               </div>
               <div className={'mt-2'}>
@@ -226,7 +230,7 @@ export default class APIAccessPage extends React.Component<{
           </div>
           {this.props.authenticationStore.account &&
           this.props.authenticationStore.account.authorities.includes(
-            USER_AUTHORITY.ROLE_PREMIUM_USER
+            USER_AUTHORITY.ROLE_DATA_DOWNLOAD
           ) ? (
             <>
               <div className={'mb-3'}>
@@ -259,7 +263,7 @@ export default class APIAccessPage extends React.Component<{
                               .map(data => {
                                 return {
                                   value: data.version,
-                                  label: getDataTitle(data.date, data.version)
+                                  label: getDataTitle(data.date, data.version),
                                 };
                               })}
                             onChange={(selectedOption: any) =>
@@ -283,18 +287,6 @@ export default class APIAccessPage extends React.Component<{
                   ) : null}
                 </>
               ) : null}
-              <div>
-                {this.dataAvailability.error ? (
-                  <Alert variant={'warning'}>
-                    We are not able to provide data download at the moment,
-                    please{' '}
-                    <ContactLink emailSubject={'Unable to Download the Data'}>
-                      contact us
-                    </ContactLink>
-                    .
-                  </Alert>
-                ) : null}
-              </div>
             </>
           ) : null}
         </>

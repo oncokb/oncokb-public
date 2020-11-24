@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.service;
 
 import io.github.jhipster.config.JHipsterProperties;
 import org.mskcc.cbio.oncokb.config.Constants;
+import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
@@ -35,8 +36,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.mskcc.cbio.oncokb.config.Constants.DAY_IN_SECONDS;
-import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
+import static org.mskcc.cbio.oncokb.config.Constants.*;
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE;
 
 /**
  * Service class for managing users.
@@ -57,6 +59,8 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final CacheNameResolver cacheNameResolver;
+
     private final JHipsterProperties jHipsterProperties;
 
     private final TokenService tokenService;
@@ -74,6 +78,7 @@ public class UserService {
         JHipsterProperties jHipsterProperties,
         TokenService tokenService,
         TokenProvider tokenProvider,
+        CacheNameResolver cacheNameResolver,
         CacheManager cacheManager
     ) {
         this.userRepository = userRepository;
@@ -83,6 +88,7 @@ public class UserService {
         this.jHipsterProperties = jHipsterProperties;
         this.tokenService = tokenService;
         this.tokenProvider = tokenProvider;
+        this.cacheNameResolver = cacheNameResolver;
         this.cacheManager = cacheManager;
     }
 
@@ -112,7 +118,7 @@ public class UserService {
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         return userRepository.findOneByResetKey(key)
-            .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400)))
+            .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(RESET_TOKEN_VALID_SEC_FROM_CREATION)))
             .map(user -> {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
@@ -226,7 +232,7 @@ public class UserService {
 
         this.clearUserCaches(user);
 
-        generateTokenForUser(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable);
+        generateTokenForUserIfNotExist(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable);
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -276,7 +282,7 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        return Optional.of(userRepository
+        Optional<UserDTO> updatedUserDTO = Optional.of(userRepository
             .findById(userDTO.getId()))
             .filter(Optional::isPresent)
             .map(Optional::get)
@@ -304,6 +310,11 @@ public class UserService {
                 return new UserDTO(user, getUpdatedUserDetails(
                     user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
             });
+
+        if (updatedUserDTO.isPresent()) {
+            generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+        }
+        return updatedUserDTO;
     }
 
     private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String company, String city, String country) {
@@ -336,6 +347,7 @@ public class UserService {
         });
     }
 
+    @Transactional
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -362,11 +374,6 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthorities(Long id) {
-        return userRepository.findOneWithAuthoritiesById(id);
-    }
-
-    @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
@@ -387,12 +394,12 @@ public class UserService {
         }
         Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
         if (updatedUserDTO.isPresent()) {
-            generateTokenForUser(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+            generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
         }
         return updatedUserDTO;
     }
 
-    private void generateTokenForUser(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
+    private void generateTokenForUserIfNotExist(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
         // automatically generate a token for user if not exists
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
         if (tokens.isEmpty()) {
@@ -426,15 +433,16 @@ public class UserService {
      * Gets a list of all the authorities.
      * @return a list of all the authorities.
      */
+    @Transactional(readOnly = true)
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
 
 
     private void clearUserCaches(User user) {
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_LOGIN_CACHE))).evict(user.getLogin());
         if (user.getEmail() != null) {
-            Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+            Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE))).evict(user.getEmail());
         }
     }
 }

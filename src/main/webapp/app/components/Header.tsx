@@ -14,6 +14,8 @@ import UserMessage from 'app/components/userMessager/UserMessage';
 import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 import classnames from 'classnames';
 import autobind from 'autobind-decorator';
+import AuthenticationStore from 'app/store/AuthenticationStore';
+import AccountMessage from 'app/components/accountMessage/AccountMessage';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -22,6 +24,7 @@ export interface IHeaderProps {
   isInProduction: boolean;
   isSwaggerEnabled: boolean;
   windowStore: WindowStore;
+  authStore: AuthenticationStore;
   routing: RouterStore;
 }
 
@@ -43,7 +46,7 @@ class Header extends React.Component<IHeaderProps> {
     { title: 'Team', link: 'team' },
     { title: 'News', link: 'news' },
     { title: 'Terms', link: 'terms' },
-    { title: 'FAQ', link: 'faq' }
+    { title: 'FAQ', link: 'faq' },
   ];
 
   @observable isNavExpanded = false;
@@ -101,7 +104,11 @@ class Header extends React.Component<IHeaderProps> {
   public render() {
     return (
       <>
-        {/*<UserMessage windowStore={this.props.windowStore} />*/}
+        <UserMessage windowStore={this.props.windowStore} show={false} />
+        <AccountMessage
+          windowStore={this.props.windowStore}
+          authStore={this.props.authStore}
+        />
         <header className="sticky-top header">
           <Navbar
             bg="primary"

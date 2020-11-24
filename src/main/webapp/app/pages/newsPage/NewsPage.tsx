@@ -9,7 +9,7 @@ import {
   ONCOKB_CONTACT_EMAIL,
   ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK,
   PAGE_ROUTE,
-  SOP_LINK
+  SOP_LINK,
 } from 'app/config/constants';
 import { Link } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
@@ -77,6 +77,7 @@ export default class NewsPage extends React.Component<{
             <CitationText />
           </div>
           <div className="mt-2">
+            <NewsList date={'09172020'} />
             <NewsList date={'08282020'} />
             <NewsList date={'07232020'} />
             <NewsList date={'07092020'} />
@@ -194,7 +195,7 @@ export default class NewsPage extends React.Component<{
               <ul>
                 {getNews({
                   key: 'news-08172017',
-                  content: NEWS_BY_DATE['08172017'].news
+                  content: NEWS_BY_DATE['08172017'].news,
                 })}
               </ul>
             </div>
@@ -216,7 +217,7 @@ export default class NewsPage extends React.Component<{
               <ul>
                 {getNews({
                   key: 'news-07062016',
-                  content: NEWS_BY_DATE['07062016'].news
+                  content: NEWS_BY_DATE['07062016'].news,
                 })}
               </ul>
             </div>

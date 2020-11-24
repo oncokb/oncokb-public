@@ -1,6 +1,10 @@
 node_modules
 target
+build
 package-lock.json
 .yo-rc.json
 .git
+.mvn
+gradle
+.gradle
 src/main/webapp/app/shared/api/generated

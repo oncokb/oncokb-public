@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
 import { Button, Col, Row } from 'react-bootstrap';
@@ -10,18 +10,21 @@ import {
   computed,
   IReactionDisposer,
   observable,
-  reaction
+  reaction,
 } from 'mobx';
-import { Evidence, MainType } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  Alteration,
+  Evidence,
+  MainType,
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
 import {
-  concatElementsByComma,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
   getTreatmentNameFromEvidence,
-  levelOfEvidence2Level
+  levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
@@ -36,7 +39,7 @@ import {
   TABLE_COLUMN_KEY,
   COMPONENT_PADDING,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
-  DOCUMENT_TITLES
+  DOCUMENT_TITLES,
 } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -45,11 +48,13 @@ import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import DocumentTitle from 'react-document-title';
 import { COLOR_BLUE } from 'app/config/theme';
+import WithSeparator from 'react-with-separator';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 
 type Treatment = {
   level: string;
   hugoSymbol: string;
-  alterations: string[];
+  alterations: Alteration[];
   tumorType: string;
   treatments: {}[];
   uniqueDrugs: string[];
@@ -85,7 +90,7 @@ export default class ActionableGenesPage extends React.Component<
       const result = await privateClient.utilsOncoTreeMainTypesGetUsingGET({});
       return result.sort();
     },
-    default: []
+    default: [],
   });
 
   readonly allTumorTypes = remoteData<string[]>({
@@ -103,7 +108,7 @@ export default class ActionableGenesPage extends React.Component<
 
       return Promise.resolve(_.uniq(allTumorTypes));
     },
-    default: []
+    default: [],
   });
 
   readonly evidencesByLevel = remoteData<EvidencesByLevel>({
@@ -111,7 +116,7 @@ export default class ActionableGenesPage extends React.Component<
     async invoke() {
       return await privateClient.utilsEvidencesByLevelsGetUsingGET({});
     },
-    default: {}
+    default: {},
   });
 
   readonly relevantTumorTypes = remoteData<string[]>({
@@ -121,7 +126,7 @@ export default class ActionableGenesPage extends React.Component<
       if (this.relevantTumorTypeSearchKeyword) {
         const allRelevantTumorTypes = await privateClient.utilRelevantTumorTypesGetUsingGET(
           {
-            tumorType: this.relevantTumorTypeSearchKeyword
+            tumorType: this.relevantTumorTypeSearchKeyword,
           }
         );
         result = allRelevantTumorTypes.map(tumorType => {
@@ -132,7 +137,7 @@ export default class ActionableGenesPage extends React.Component<
       }
       return result.sort();
     },
-    default: []
+    default: [],
   });
 
   readonly reactions: IReactionDisposer[] = [];
@@ -144,7 +149,7 @@ export default class ActionableGenesPage extends React.Component<
         () => [props.routing.location.hash],
         ([hash]) => {
           const queryStrings = QueryString.parse(hash, {
-            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING
+            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING,
           }) as HashQueries;
           if (queryStrings.levels) {
             this.levelSelected = this.initLevelSelected();
@@ -169,7 +174,7 @@ export default class ActionableGenesPage extends React.Component<
         () => this.hashQueries,
         newHash => {
           const parsedHashQueryString = QueryString.stringify(newHash, {
-            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING
+            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING,
           });
           window.location.hash = parsedHashQueryString;
         }
@@ -187,11 +192,7 @@ export default class ActionableGenesPage extends React.Component<
       treatments.push({
         level: levelOfEvidence2Level(item.levelOfEvidence, true),
         hugoSymbol: item.gene.hugoSymbol || 'NA',
-        alterations: item.alterations
-          .map(function(alt) {
-            return alt.name ? alt.name : alt.alteration;
-          })
-          .sort(),
+        alterations: _.sortBy(item.alterations, 'name'),
         tumorType: getCancerTypeNameFromOncoTreeType(item.oncoTreeType),
         treatments: item.treatments,
         uniqueDrugs: _.uniq(
@@ -206,7 +207,7 @@ export default class ActionableGenesPage extends React.Component<
             [] as string[]
           )
         ),
-        drugs: getTreatmentNameFromEvidence(item)
+        drugs: getTreatmentNameFromEvidence(item),
       });
     });
     return treatments;
@@ -378,7 +379,7 @@ export default class ActionableGenesPage extends React.Component<
     return this.drugSearchKeyword
       ? {
           label: this.drugSearchKeyword,
-          value: this.drugSearchKeyword
+          value: this.drugSearchKeyword,
         }
       : null;
   }
@@ -388,7 +389,7 @@ export default class ActionableGenesPage extends React.Component<
     return this.relevantTumorTypeSearchKeyword
       ? {
           label: this.relevantTumorTypeSearchKeyword,
-          value: this.relevantTumorTypeSearchKeyword
+          value: this.relevantTumorTypeSearchKeyword,
         }
       : null;
   }
@@ -398,7 +399,7 @@ export default class ActionableGenesPage extends React.Component<
     return this.geneSearchKeyword
       ? {
           label: this.geneSearchKeyword,
-          value: this.geneSearchKeyword
+          value: this.geneSearchKeyword,
         }
       : null;
   }
@@ -421,30 +422,40 @@ export default class ActionableGenesPage extends React.Component<
   @autobind
   downloadAssociation() {
     const content = [
-      ['Level', 'Gene', 'Alterations', 'Tumor Type', 'Drugs'].join('\t')
+      ['Level', 'Gene', 'Alterations', 'Tumor Type', 'Drugs'].join('\t'),
     ];
     _.each(this.filteredTreatments, item => {
       content.push(
         [
           item.level,
           item.hugoSymbol,
-          item.alterations.join(', '),
+          item.alterations.map(alteration => alteration.name).join(', '),
           item.tumorType,
-          item.drugs
+          item.drugs,
         ].join('\t')
       );
     });
     return Promise.resolve(content.join('\n'));
   }
 
-  getAlterationCell(hugoSymbol: string, alterations: string[]) {
+  getAlterationCell(hugoSymbol: string, alterations: Alteration[]) {
     const linkedAlts = alterations.map<React.ReactNode>(
       (alteration, index: number) => (
-        <AlterationPageLink
-          key={index}
-          hugoSymbol={hugoSymbol}
-          alteration={alteration}
-        />
+        <>
+          <AlterationPageLink
+            key={index}
+            hugoSymbol={hugoSymbol}
+            alteration={alteration.name}
+          />
+          {alteration.referenceGenomes.length === 1 ? (
+            <InfoIcon
+              overlay={`Only in ${alteration.referenceGenomes[0]}`}
+              placement="top"
+              className="ml-1"
+              style={{ fontSize: '0.7rem' }}
+            />
+          ) : null}
+        </>
       )
     );
     if (linkedAlts.length > 5) {
@@ -454,11 +465,11 @@ export default class ActionableGenesPage extends React.Component<
           <DefaultTooltip
             overlay={
               <div style={{ maxWidth: '400px' }}>
-                {concatElementsByComma(linkedAlts)}
+                <WithSeparator separator={','}>{linkedAlts}</WithSeparator>
               </div>
             }
             overlayStyle={{
-              opacity: 1
+              opacity: 1,
             }}
             placement="right"
             destroyTooltipOnHide={true}
@@ -466,7 +477,7 @@ export default class ActionableGenesPage extends React.Component<
             <span
               style={{
                 textDecoration: 'underscore',
-                color: COLOR_BLUE
+                color: COLOR_BLUE,
               }}
             >
               {linkedAlts.length - 1} other alterations
@@ -475,20 +486,20 @@ export default class ActionableGenesPage extends React.Component<
         </span>
       );
     } else {
-      return concatElementsByComma(linkedAlts);
+      return <WithSeparator separator={', '}>{linkedAlts}</WithSeparator>;
     }
   }
 
   private columns = [
     {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL)
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
       style: { whiteSpace: 'normal' },
       Cell(props: { original: Treatment }) {
         return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
-      }
+      },
     },
     {
       id: 'alterations',
@@ -508,7 +519,7 @@ export default class ActionableGenesPage extends React.Component<
             )}
           </div>
         );
-      }
+      },
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
@@ -516,7 +527,7 @@ export default class ActionableGenesPage extends React.Component<
       accessor: 'tumorType',
       Cell(props: { original: Treatment }) {
         return <span>{props.original.tumorType}</span>;
-      }
+      },
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
@@ -524,8 +535,8 @@ export default class ActionableGenesPage extends React.Component<
       style: { whiteSpace: 'normal' },
       Cell(props: { original: Treatment }) {
         return <span>{props.original.drugs}</span>;
-      }
-    }
+      },
+    },
   ];
 
   render() {
@@ -573,7 +584,7 @@ export default class ActionableGenesPage extends React.Component<
                   options={this.filteredGenes.map(hugoSymbol => {
                     return {
                       value: hugoSymbol,
-                      label: hugoSymbol
+                      label: hugoSymbol,
                     };
                   })}
                   isClearable={true}
@@ -591,7 +602,7 @@ export default class ActionableGenesPage extends React.Component<
                   options={this.relevantTumorTypes.result.map(tumorType => {
                     return {
                       value: tumorType,
-                      label: tumorType
+                      label: tumorType,
                     };
                   })}
                   isClearable={true}
@@ -612,7 +623,7 @@ export default class ActionableGenesPage extends React.Component<
                   options={this.filteredDrugs.map(drug => {
                     return {
                       value: drug,
-                      label: drug
+                      label: drug,
                     };
                   })}
                   isClearable={true}
@@ -663,9 +674,7 @@ export default class ActionableGenesPage extends React.Component<
                   >
                     Reset filters
                   </Button>
-                ) : (
-                  undefined
-                )}
+                ) : undefined}
               </Col>
             </Row>
             <Row className="mt-2">
@@ -681,18 +690,19 @@ export default class ActionableGenesPage extends React.Component<
                       ? 1
                       : this.filteredTreatments.length
                   }
+                  fixedHeight={true}
                   style={{
-                    height: LG_TABLE_FIXED_HEIGHT
+                    height: LG_TABLE_FIXED_HEIGHT,
                   }}
                   defaultSorted={[
                     {
                       id: 'LEVEL',
-                      desc: false
+                      desc: false,
                     },
                     {
                       id: 'HUGO_SYMBOL',
-                      desc: false
-                    }
+                      desc: false,
+                    },
                   ]}
                 />
               </Col>

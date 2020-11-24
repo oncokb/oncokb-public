@@ -1,26 +1,31 @@
 import React from 'react';
 import { ErrorBoundaryRoute } from 'app/shared/error/error-boundary-route';
 import { PAGE_ROUTE } from 'app/config/constants';
-import UserManagementPage from 'app/pages/userManagement/UserManagementPage';
 import { Switch } from 'react-router-dom';
-import { PrivateRoute } from 'app/shared/auth/private-route';
 import PageNotFound from 'app/shared/error/page-not-found';
 import SendEmailsPage from 'app/pages/sendEmails/SendEmailsPage';
 import UserDetailsPage from '../pages/userManagement/UserDetailsPage';
 import { CreateAccountPage } from 'app/pages/CreateAccountPage';
+import UsageAnalysisPage from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
+import UserUsagePage from 'app/pages/usageAnalysisPage/UserUsagePage';
 
 const AdminRouts = () => {
   return (
     <Switch>
       <ErrorBoundaryRoute
         exact
-        path={PAGE_ROUTE.ADMIN_USER_MANAGEMENT}
-        component={UserManagementPage}
+        path={PAGE_ROUTE.ADMIN_USER_DETAILS}
+        component={UserDetailsPage}
       />
       <ErrorBoundaryRoute
         exact
-        path={PAGE_ROUTE.ADMIN_USER_DETAILS}
-        component={UserDetailsPage}
+        path={PAGE_ROUTE.ADMIN_USAGE_ANALYSIS}
+        component={UsageAnalysisPage}
+      />
+      <ErrorBoundaryRoute
+        exact
+        path={PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS}
+        component={UserUsagePage}
       />
       <ErrorBoundaryRoute
         exact

@@ -46,19 +46,22 @@ if (
           </ol>
         </div>
         `,
-      id: '2020_spring_webinars'
-    }
+      id: '2020_spring_webinars',
+    },
   ];
 }
 
+type UserMessageProps = {
+  dataUrl?: string;
+  show: boolean;
+  windowStore: WindowStore;
+};
 @observer
-export default class UserMessage extends React.Component<
-  {
-    dataUrl?: string;
-    windowStore: WindowStore;
-  },
-  {}
-> {
+export default class UserMessage extends React.Component<UserMessageProps> {
+  constructor(props: UserMessageProps) {
+    super(props);
+  }
+
   messageData = remoteData<IUserMessage[]>(async () => {
     return Promise.resolve(MESSAGE_DATA);
   });
@@ -87,7 +90,12 @@ export default class UserMessage extends React.Component<
   }
 
   render() {
-    if (!this.dismissed && this.messageData.isComplete && this.shownMessage) {
+    if (
+      this.props.show &&
+      !this.dismissed &&
+      this.messageData.isComplete &&
+      this.shownMessage
+    ) {
       return (
         <div className={styles.message}>
           <Container
@@ -96,7 +104,7 @@ export default class UserMessage extends React.Component<
           >
             <div
               dangerouslySetInnerHTML={{
-                __html: this.shownMessage.content
+                __html: this.shownMessage.content,
               }}
             ></div>
             <i

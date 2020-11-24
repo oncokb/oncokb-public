@@ -10,6 +10,7 @@ export type SearchColumn<T> = Column<T> & {
 interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   data: T[];
   disableSearch?: boolean;
+  fixedHeight?: boolean;
   pageSize?: number;
   minRows?: number;
   columns: SearchColumn<T>[];
@@ -24,7 +25,7 @@ export default class OncoKBTable<T> extends React.Component<
 
   public static defaultProps = {
     disableSearch: false,
-    searchIconClassName: 'fa fa-search'
+    searchIconClassName: 'fa fa-search',
   };
 
   @computed
@@ -46,9 +47,7 @@ export default class OncoKBTable<T> extends React.Component<
   render() {
     return (
       <div>
-        {this.props.disableSearch ? (
-          undefined
-        ) : (
+        {this.props.disableSearch ? undefined : (
           <div className="d-flex">
             <div className="ml-auto">
               <input
@@ -65,7 +64,9 @@ export default class OncoKBTable<T> extends React.Component<
         <div className="mt-2">
           <ReactTable
             showPagination={false}
-            className={'-striped -highlight oncokbReactTable'}
+            className={`-striped -highlight oncokbReactTable ${
+              this.props.fixedHeight ? 'fixedHeight' : ''
+            }`}
             {...this.props}
             data={this.filteredData}
           />

@@ -24,7 +24,7 @@ import {
   getPublicWebsiteToken,
   AUTH_UER_TOKEN_KEY,
   RECAPTCHA_KEY,
-  getRecaptchaToken
+  getRecaptchaToken,
 } from 'app/indexUtils';
 import { UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
 import _ from 'lodash';
@@ -42,17 +42,20 @@ const WEBSITE_RELOAD_TIMES_KEY = 'oncokb-website-reload-times';
 const WEBSITE_RELOAD_TIMES_THRESHOLD = 10;
 
 // @ts-ignore
-superagent.Request.prototype.query = function(queryParameters: any) {
+superagent.Request.prototype.query = function (queryParameters: any) {
   const token = getStoredToken();
   if (token) {
     this.set('Authorization', `Bearer ${token}`);
+    if (this.url.endsWith('sqlDump')) {
+      this.responseType('blob');
+    }
   }
 
   return query.call(this, queryParameters);
 };
 
 // @ts-ignore
-superagent.Request.prototype.end = function(callback) {
+superagent.Request.prototype.end = function (callback) {
   return end.call(this, (error: any, response: any) => {
     // the swagger coden only returns response body
     // But in the case of the text/plain, the response should come from the response.text
@@ -61,7 +64,7 @@ superagent.Request.prototype.end = function(callback) {
       response.statusCode === 200 &&
       response.headers &&
       response.headers['content-type'] &&
-      ['application/zip', 'text/plain;'].some(item =>
+      ['text/plain;'].some(item =>
         response.headers['content-type'].includes(item)
       )
     ) {
@@ -111,7 +114,7 @@ superagent.Request.prototype.end = function(callback) {
 if (AppConfig.serverConfig?.sentryProjectId) {
   Sentry.init({
     dsn: AppConfig.serverConfig.sentryProjectId,
-    blacklistUrls: [new RegExp('.*localhost.*')]
+    blacklistUrls: [new RegExp('.*localhost.*')],
   });
 }
 

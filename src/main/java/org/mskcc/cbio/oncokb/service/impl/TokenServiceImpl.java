@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
+import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.TokenRepository;
@@ -17,6 +18,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKENS_BY_USER_LOGIN_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKEN_BY_UUID_CACHE;
+
 /**
  * Service Implementation for managing {@link Token}.
  */
@@ -30,32 +34,24 @@ public class TokenServiceImpl implements TokenService {
 
     private final CacheManager cacheManager;
 
+    private final CacheNameResolver cacheNameResolver;
 
-    public TokenServiceImpl(TokenRepository tokenRepository, CacheManager cacheManager) {
+
+    public TokenServiceImpl(TokenRepository tokenRepository, CacheManager cacheManager, CacheNameResolver cacheNameResolver) {
         this.tokenRepository = tokenRepository;
         this.cacheManager = cacheManager;
+        this.cacheNameResolver = cacheNameResolver;
     }
 
-    /**
-     * Save a token.
-     *
-     * @param token the entity to save.
-     * @return the persisted entity.
-     */
     @Override
     public Token save(Token token) {
         log.debug("Request to save Token : {}", token);
 
-        Token updatedToken =  tokenRepository.save(token);
+        Token updatedToken = tokenRepository.save(token);
         this.clearTokenCaches(token);
         return updatedToken;
     }
 
-    /**
-     * Get all the tokens.
-     *
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
     public List<Token> findAll() {
@@ -63,12 +59,7 @@ public class TokenServiceImpl implements TokenService {
         return tokenRepository.findAll();
     }
 
-    /**
-     * Get one token by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
+
     @Override
     @Transactional(readOnly = true)
     public Optional<Token> findOne(Long id) {
@@ -93,12 +84,12 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public List<Token> findByUser(User user) {
-        return tokenRepository.findByUser(user);
+        return tokenRepository.findByUserLogin(user.getLogin());
     }
 
     @Override
     public List<Token> findValidByUser(User user) {
-        return tokenRepository.findByUser(user).stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
+        return tokenRepository.findByUserLogin(user.getLogin()).stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
     }
 
     @Override
@@ -115,11 +106,6 @@ public class TokenServiceImpl implements TokenService {
         return tokenRepository.findAllExpiresBeforeDate(date);
     }
 
-    /**
-     * Delete the token by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Token : {}", id);
@@ -127,7 +113,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     private void clearTokenCaches(Token token) {
-        Objects.requireNonNull(cacheManager.getCache(TokenRepository.TOKEN_BY_UUID_CACHE)).evict(token.getToken());
-        Objects.requireNonNull(cacheManager.getCache(TokenRepository.TOKENS_BY_USER_CACHE)).evict(token.getUser());
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(TOKEN_BY_UUID_CACHE))).evict(token.getToken());
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(TOKENS_BY_USER_LOGIN_CACHE))).evict(token.getUser().getLogin());
     }
 }

@@ -4,7 +4,7 @@ import {
   observable,
   computed,
   IReactionDisposer,
-  reaction
+  reaction,
 } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
@@ -13,13 +13,13 @@ import client from 'app/shared/api/clientInstance';
 import {
   MailTypeInfo,
   UserDTO,
-  UserMailsDTO
+  UserMailsDTO,
 } from 'app/shared/api/generated/API';
 import { match } from 'react-router';
 import { Row, Col } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
 import OncoKBTable, {
-  SearchColumn
+  SearchColumn,
 } from 'app/components/oncokbTable/OncoKBTable';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
@@ -35,6 +35,7 @@ import autobind from 'autobind-decorator';
 import { LoadingButton } from 'app/shared/button/LoadingButton';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 import { Else, If, Then } from 'react-if';
+import { EmailTable } from 'app/shared/table/EmailTable';
 
 @inject('routing', 'authenticationStore')
 @observer
@@ -85,7 +86,7 @@ export default class UserManagementPage extends React.Component<{
           from: this.selectedMailFrom!,
           cc: this.selectedMailCc,
           by: this.props.authenticationStore.account!.login,
-          mailType: this.selectedMailType!.mailType
+          mailType: this.selectedMailType!.mailType,
         })
         .then(() => {
           notifySuccess('Sent the email.');
@@ -102,7 +103,7 @@ export default class UserManagementPage extends React.Component<{
   @action
   async getUserMails() {
     this.userMails = await client.getUsersUserMailsUsingGET({
-      login: this.selectedUserLogin
+      login: this.selectedUserLogin,
     });
   }
 
@@ -125,7 +126,7 @@ export default class UserManagementPage extends React.Component<{
     invoke() {
       return client.getAllUsersUsingGET({ size: 2000 });
     },
-    default: []
+    default: [],
   });
 
   readonly mailTypes = remoteData<MailTypeInfo[]>({
@@ -134,58 +135,19 @@ export default class UserManagementPage extends React.Component<{
         return [];
       } else {
         return await client.getMailsTypesUsingGET({
-          licenseType: this.selectedUser.licenseType
+          licenseType: this.selectedUser.licenseType,
         });
       }
     },
-    default: []
+    default: [],
   });
 
   readonly mailsFrom = remoteData<string[]>({
     invoke() {
       return client.getMailsFromUsingGET({});
     },
-    default: []
+    default: [],
   });
-
-  private columns: SearchColumn<UserMailsDTO>[] = [
-    {
-      id: 'mailType',
-      Header: <span>Mail Type</span>,
-      accessor: 'mailType',
-      minWidth: 100,
-      defaultSortDesc: false,
-      sortMethod: defaultSortMethod,
-      onFilter: (data: UserMailsDTO, keyword) =>
-        filterByKeyword(data.mailType, keyword)
-    },
-    {
-      id: 'sentDate',
-      Header: <span>Sent Date</span>,
-      onFilter: (data: UserMailsDTO, keyword) =>
-        data.sentDate
-          ? filterByKeyword(toAppTimestampFormat(data.sentDate), keyword)
-          : false,
-      accessor: 'createdDate',
-      Cell(props: { original: UserMailsDTO }): any {
-        return <div>{toAppTimestampFormat(props.original.sentDate)}</div>;
-      }
-    },
-    {
-      id: 'sentFrom',
-      Header: <span>Sent From</span>,
-      onFilter: (data: UserMailsDTO, keyword) =>
-        data.sentFrom ? filterByKeyword(data.sentFrom, keyword) : false,
-      accessor: 'sentFrom'
-    },
-    {
-      id: 'sentBy',
-      Header: <span>Sent By</span>,
-      onFilter: (data: UserMailsDTO, keyword) =>
-        data.sentBy ? filterByKeyword(data.sentBy, keyword) : false,
-      accessor: 'sentBy'
-    }
-  ];
 
   componentWillUnmount(): void {
     this.reactions.forEach(componentReaction => componentReaction());
@@ -209,14 +171,14 @@ export default class UserManagementPage extends React.Component<{
                     this.selectedUserLogin
                       ? {
                           value: this.selectedUserLogin,
-                          label: this.selectedUserLogin
+                          label: this.selectedUserLogin,
                         }
                       : null
                   }
                   options={this.users.result.map(user => {
                     return {
                       value: user.login,
-                      label: user.login
+                      label: user.login,
                     };
                   })}
                   isClearable={true}
@@ -236,14 +198,14 @@ export default class UserManagementPage extends React.Component<{
                     this.selectedMailFrom
                       ? {
                           value: this.selectedMailFrom,
-                          label: this.selectedMailFrom
+                          label: this.selectedMailFrom,
                         }
                       : null
                   }
                   options={this.mailsFrom.result.map(from => {
                     return {
                       value: from,
-                      label: from
+                      label: from,
                     };
                   })}
                   isClearable={true}
@@ -264,14 +226,14 @@ export default class UserManagementPage extends React.Component<{
                   this.selectedMailType
                     ? {
                         value: this.selectedMailType.mailType,
-                        label: this.selectedMailType.description
+                        label: this.selectedMailType.description,
                       }
                     : null
                 }
                 options={this.mailTypes.result.map(type => {
                   return {
                     value: type.mailType,
-                    label: type.description
+                    label: type.description,
                   };
                 })}
                 isClearable={true}
@@ -279,7 +241,7 @@ export default class UserManagementPage extends React.Component<{
                   (this.selectedMailType = selectedOption
                     ? {
                         mailType: selectedOption.value,
-                        description: selectedOption.label
+                        description: selectedOption.label,
                       }
                     : undefined)
                 }
@@ -306,20 +268,7 @@ export default class UserManagementPage extends React.Component<{
               </Row>
               <Row className={getSectionClassName()}>
                 <Col>
-                  {this.userMails && (
-                    <OncoKBTable
-                      defaultSorted={[
-                        {
-                          id: 'sentDate',
-                          desc: true
-                        }
-                      ]}
-                      data={this.userMails}
-                      columns={this.columns}
-                      showPagination={true}
-                      minRows={1}
-                    />
-                  )}
+                  {this.userMails && <EmailTable data={this.userMails} />}
                 </Col>
               </Row>
             </>

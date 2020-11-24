@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LICENSE_TITLES,
   LICENSE_TYPES,
-  LicenseType
+  LicenseType,
 } from 'app/config/constants';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { COLOR_GREY, COLOR_LIGHT_GREY } from 'app/config/theme';
@@ -58,7 +58,7 @@ export const ButtonSelections: React.FunctionComponent<{
 }> = props => {
   return (
     <>
-      <Row className={"my-2"}>
+      <Row className={'my-2'}>
         <Col xl={3} sm={6} xs={12}>
           <SelectionButton
             selectedButton={props.selectedButton}

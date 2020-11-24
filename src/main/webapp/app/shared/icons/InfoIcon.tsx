@@ -17,16 +17,14 @@ const InfoIcon: React.FunctionComponent<{
       overlay={props.overlay ? props.overlay : <span></span>}
       placement={props.placement}
     >
-      <span
-        className={`fa-stack ${props.className}`}
+      <i
+        className={`fa fa-info-circle ${props.className}`}
         style={{
-          fontSize: '0.6rem',
-          ...props.style
+          color: 'grey',
+          fontSize: '0.8rem',
+          ...props.style,
         }}
-      >
-        <i className="fa fa-circle-thin fa-stack-2x"></i>
-        <i className="fa fa-info fa-stack-1x"></i>
-      </span>
+      ></i>
     </DefaultTooltip>
   );
 };
