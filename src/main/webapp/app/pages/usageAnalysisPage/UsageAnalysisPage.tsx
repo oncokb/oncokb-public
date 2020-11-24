@@ -12,7 +12,7 @@ import { UsageRecord, UserUsageOverview } from 'app/shared/api/generated/API';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import autobind from 'autobind-decorator';
-import { ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import { ToggleButton, ToggleButtonGroup, Row } from 'react-bootstrap';
 import UsageDetailsTable from './UsageDetailsTable';
 import {
   PAGE_ROUTE,
@@ -27,7 +27,8 @@ export default class UsageAnalysisPage extends React.Component<{
   routing: RouterStore;
   match: match;
 }> {
-  @observable toggleValue = 1;
+  @observable topUsersToggleValue = 1;
+  @observable resourcesTypeToggleValue = 2;
   @observable dropdownList: string[] = [];
 
   constructor(props: Readonly<{ routing: RouterStore; match: match }>) {
@@ -72,8 +73,13 @@ export default class UsageAnalysisPage extends React.Component<{
   });
 
   @autobind
-  handleToggleChange(value: any) {
-    this.toggleValue = value;
+  handleTopUsersToggleChange(value: any) {
+    this.topUsersToggleValue = value;
+  }
+
+  @autobind
+  handleResourcesTypeToggleChange(value: any) {
+    this.resourcesTypeToggleValue = value;
   }
 
   render() {
@@ -81,24 +87,35 @@ export default class UsageAnalysisPage extends React.Component<{
       <>
         <Tabs defaultActiveKey="users" id="uncontrolled-tab-example">
           <Tab eventKey="users" title="Users">
-            <ToggleButtonGroup
-              className="mt-2"
-              type="radio"
-              name="options"
-              defaultValue={1}
-              onChange={this.handleToggleChange}
-            >
-              <ToggleButton value={1}>All Users</ToggleButton>
-              <ToggleButton value={2}>Top Users</ToggleButton>
-            </ToggleButtonGroup>
+            <Row className="mt-2">
+              <ToggleButtonGroup
+                className="ml-3"
+                type="radio"
+                name="top-users-options"
+                defaultValue={1}
+                onChange={this.handleTopUsersToggleChange}
+              >
+                <ToggleButton value={1}>All Users</ToggleButton>
+                <ToggleButton value={2}>Top Users</ToggleButton>
+              </ToggleButtonGroup>
+
+              <ToggleButtonGroup
+                className="ml-2"
+                type="radio"
+                name="resources-type-options"
+                defaultValue={2}
+                onChange={this.handleResourcesTypeToggleChange}
+              >
+                <ToggleButton value={1}>All Resources</ToggleButton>
+                <ToggleButton value={2}>Only Public Resources</ToggleButton>
+              </ToggleButtonGroup>
+            </Row>
             <OncoKBTable
               data={
-                this.toggleValue === 1
+                this.topUsersToggleValue === 1
                   ? this.users.result
                   : _.filter(this.users.result, function (user) {
-                      return (
-                        parseInt(user.totalUsage, 10) >= USAGE_TOP_USERS_LIMIT
-                      );
+                      return user.totalUsage >= USAGE_TOP_USERS_LIMIT;
                     })
               }
               columns={[
@@ -116,14 +133,25 @@ export default class UsageAnalysisPage extends React.Component<{
                   minWidth: 100,
                   accessor: 'totalUsage',
                 },
-                {
-                  id: 'endpoint',
-                  Header: <span>Most frequently used endpoint</span>,
-                  minWidth: 200,
-                  accessor: 'endpoint',
-                  onFilter: (data: UserUsageOverview, keyword) =>
-                    filterByKeyword(data.endpoint, keyword),
-                },
+                this.resourcesTypeToggleValue === 1
+                  ? {
+                      id: 'endpoint',
+                      Header: <span>Most frequently used endpoint</span>,
+                      minWidth: 200,
+                      accessor: 'endpoint',
+                      onFilter: (data: UserUsageOverview, keyword) =>
+                        filterByKeyword(data.endpoint, keyword),
+                    }
+                  : {
+                      id: 'noPrivateEndpoint',
+                      Header: (
+                        <span>Most frequently used endpoint(only public)</span>
+                      ),
+                      minWidth: 200,
+                      accessor: 'noPrivateEndpoint',
+                      onFilter: (data: UserUsageOverview, keyword) =>
+                        filterByKeyword(data.noPrivateEndpoint, keyword),
+                    },
                 {
                   id: 'operations',
                   Header: <span>Details</span>,
@@ -157,6 +185,7 @@ export default class UsageAnalysisPage extends React.Component<{
               data={this.usageDetail.result}
               loadedData={this.usageDetail.isComplete}
               dropdownList={this.dropdownList}
+              defaultResourcesType={2}
             />
           </Tab>
         </Tabs>

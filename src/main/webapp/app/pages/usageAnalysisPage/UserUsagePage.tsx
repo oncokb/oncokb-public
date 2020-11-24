@@ -92,6 +92,7 @@ export default class UserUsagePage extends React.Component<{
           data={this.usageDetail.result}
           loadedData={this.usageDetail.isComplete}
           dropdownList={this.dropdownList}
+          defaultResourcesType={1}
         />
       </>
     );

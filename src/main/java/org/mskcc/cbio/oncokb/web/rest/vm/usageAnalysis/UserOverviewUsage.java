@@ -8,7 +8,9 @@ public class UserOverviewUsage {
     private String userId;
     private String userEmail;
     private String endpoint;
+    private String noPrivateEndpoint;
     private int maxUsage;
+    private int noPrivateMaxUsage;
     private int totalUsage;
 
     public String getEndpoint() {
@@ -49,6 +51,22 @@ public class UserOverviewUsage {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getNoPrivateEndpoint() {
+        return noPrivateEndpoint;
+    }
+
+    public void setNoPrivateEndpoint(String noPrivateEndpoint) {
+        this.noPrivateEndpoint = noPrivateEndpoint;
+    }
+
+    public int getNoPrivateMaxUsage() {
+        return noPrivateMaxUsage;
+    }
+
+    public void setNoPrivateMaxUsage(int noPrivateMaxUsage) {
+        this.noPrivateMaxUsage = noPrivateMaxUsage;
     }
 }
 
