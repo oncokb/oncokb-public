@@ -17,6 +17,7 @@ import { filterByKeyword, toAppTimestampFormat } from 'app/shared/utils/Utils';
 import _ from 'lodash';
 import {
   NOT_CHANGEABLE_AUTHORITIES,
+  THRESHOLD_NUM_OF_USER,
   USER_AUTHORITIES,
   USER_AUTHORITY,
 } from 'app/config/constants';
@@ -150,7 +151,9 @@ export default class UserManagementPage extends React.Component<{
   async getUsers() {
     try {
       // Hard code the max returned user size. Need to fix pagination issue.
-      this.users = await client.getAllUsersUsingGET({ size: 2000 });
+      this.users = await client.getAllUsersUsingGET({
+        size: THRESHOLD_NUM_OF_USER,
+      });
       this.loadedUsers = true;
     } catch (e) {
       notifyError(e, 'Error fetching users');

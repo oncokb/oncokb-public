@@ -188,6 +188,9 @@ export const H5_FONT_SIZE = '1.25rem';
 export const FONT_FAMILY =
   "'Helvetica Neue', Helvetica, Verdana, Arial, sans-serif";
 
+// we do not have the table component to support api pagination, have to set the threshold to pull the list of all users
+export const THRESHOLD_NUM_OF_USER = 5000;
+
 // Defaults for tooltip size
 export const TOOLTIP_MAX_HEIGHT = 300;
 
