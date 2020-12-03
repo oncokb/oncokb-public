@@ -39,7 +39,14 @@ const AppRouts = (props: {
   // Redirect needs to be defined first
   return (
     <Switch>
-      <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
+      <PrivateRoute
+        exact
+        path={PAGE_ROUTE.HOME}
+        component={HomePage}
+        authenticationStore={props.authenticationStore}
+        routing={props.routing}
+        hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+      />
       <Redirect exact from={'/updates'} to={PAGE_ROUTE.NEWS} />
       <Redirect exact from={'/genes'} to={PAGE_ROUTE.CANCER_GENES} />
       <Redirect
@@ -65,74 +72,141 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.LOGOUT}
             component={Logout}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.REGISTER}
             component={RegisterPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.API_ACCESS}
             component={APIAccessPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.FAQ_ACCESS}
             component={FAQPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.CANCER_GENES}
             component={CancerGenesPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.ACTIONABLE_GENE}
             component={ActionableGenesPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.GENE}
             component={GenePage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.ALTERATION}
             component={AlterationPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.HGVSG}
             component={HgvsgPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
             component={AlterationPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
-          <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
-          <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage} />
-          <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
-          <Route
+          <PrivateRoute
+            exact
+            path={PAGE_ROUTE.ABOUT}
+            component={AboutPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+          />
+          <PrivateRoute
+            exact
+            path={PAGE_ROUTE.TERMS}
+            component={TermsPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+          />
+          <PrivateRoute
+            exact
+            path={PAGE_ROUTE.TEAM}
+            component={TeamPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+          />
+          <PrivateRoute
+            exact
+            path={PAGE_ROUTE.NEWS}
+            component={NewsPage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+          />
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.LEVELS}
             component={LevelOfEvidencePage}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.ACCOUNT_VERIFY}
             component={ActivateAccount}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
             component={PasswordResetInit}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
-          <ErrorBoundaryRoute
+          <PrivateRoute
             exact
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}
             component={PasswordResetFinish}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <PrivateRoute
             authenticationStore={props.authenticationStore}
