@@ -172,9 +172,6 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
-      },
-      {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
         Cell: (props: { original: any }) => {
           return (
@@ -191,6 +188,9 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
             </Button>
           );
         },
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
