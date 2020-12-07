@@ -12,7 +12,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import { TermsPage } from 'app/pages/TermsPage';
 import { TeamPage } from 'app/pages/teamPage/TeamPage';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
-import ActionableGenesPage from 'app/pages/ActionableGenesPage';
+import ActionableGenesPage from 'app/pages/actionableGenesPage/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
 import GenePage from 'app/pages/genePage/GenePage';
 import AlterationPage from 'app/pages/alterationPage/AlterationPage';
