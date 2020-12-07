@@ -15,6 +15,7 @@ import {
   ONCOGENICITY_CLASS_NAMES,
   PAGE_ROUTE,
   TABLE_COLUMN_KEY,
+  LEVEL_TYPES,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
@@ -443,3 +444,7 @@ export const scrollWidthOffsetInNews = (el?: any) => {
   const yOffset = -80;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
 };
+
+export function getShowingLevelNumber(levelType: string, level: string) {
+  return levelType === LEVEL_TYPES.TX ? level : level.substring(2);
+}
