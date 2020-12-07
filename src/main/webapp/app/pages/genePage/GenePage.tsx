@@ -257,6 +257,10 @@ export default class GenePage extends React.Component<GenePageProps> {
   get clinicalTableColumns(): SearchColumn<ClinicalVariant>[] {
     return [
       {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+        accessor: 'level',
+      },
+      {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
         accessor: 'variant',
         onFilter: (data: ClinicalVariant, keyword) =>
@@ -313,10 +317,6 @@ export default class GenePage extends React.Component<GenePageProps> {
             </WithSeparator>
           );
         },
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-        accessor: 'level',
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
