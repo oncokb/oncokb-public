@@ -1534,7 +1534,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href="http://oncotree.mskcc.org/#/home?version=oncotree_2017_06_21"
+          href="http://oncotree.info/#/home?version=oncotree_2017_06_21"
         >
           2017_06_21
         </a>{' '}
@@ -1542,7 +1542,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href="http://oncotree.mskcc.org/#/home?version=oncotree_2018_06_15"
+          href="http://oncotree.info/#/home?version=oncotree_2018_06_15"
         >
           2018_06_15
         </a>
