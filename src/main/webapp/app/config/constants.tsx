@@ -151,12 +151,12 @@ export const LEVEL_BUTTON_DESCRIPTION = {
   [LEVELS.Tx4]: EVIDENCE_TYPE.BIOLOGICAL_EVIDENCE,
   [LEVELS.R1]: EVIDENCE_TYPE.STANDARD_CARE,
   [LEVELS.R2]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
-  [LEVELS.Dx1]: 'Dx1 description',
-  [LEVELS.Dx2]: 'Dx2 description',
-  [LEVELS.Dx3]: 'Dx3 description',
-  [LEVELS.Px1]: 'Px1 description',
-  [LEVELS.Px2]: 'Px2 description',
-  [LEVELS.Px3]: 'Px3 description',
+  [LEVELS.Dx1]: 'Required for diagnosis',
+  [LEVELS.Dx2]: 'Supports diagnosis',
+  [LEVELS.Dx3]: 'Investigative diagnosis',
+  [LEVELS.Px1]: 'Guideline-recognized with well-powered data',
+  [LEVELS.Px2]: 'Guideline-recognized with limited data',
+  [LEVELS.Px3]: 'Investigational',
 };
 
 export const LEVEL_CLASSIFICATION = {

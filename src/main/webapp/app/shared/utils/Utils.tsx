@@ -444,7 +444,3 @@ export const scrollWidthOffsetInNews = (el?: any) => {
   const yOffset = -80;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
 };
-
-export function getShowingLevelNumber(levelType: string, level: string) {
-  return levelType === LEVEL_TYPES.TX ? level : level.substring(2);
-}

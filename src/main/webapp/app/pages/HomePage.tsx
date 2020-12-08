@@ -21,10 +21,7 @@ import {
   PAGE_ROUTE,
 } from 'app/config/constants';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
-import {
-  getShowingLevelNumber,
-  levelOfEvidence2Level,
-} from 'app/shared/utils/Utils';
+import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import { CitationText } from 'app/components/CitationText';
 import _ from 'lodash';
@@ -226,15 +223,12 @@ class HomePage extends React.Component<IHomeProps> {
                 <Col
                   xs={12}
                   sm={6}
-                  lg={2}
+                  lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 2 : 3}
                   key={levelGadget.level}
                   className="px-0"
                 >
                   <LevelButton
-                    level={getShowingLevelNumber(
-                      this.levelTypeSelected,
-                      levelGadget.level
-                    )}
+                    level={levelGadget.level}
                     numOfGenes={this.getLevelNumber(levelGadget.combinedLevels)}
                     description={levelGadget.description}
                     title={levelGadget.title}
