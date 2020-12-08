@@ -10,7 +10,6 @@ import {
 import React from 'react';
 import { Button, Col, Collapse, Row } from 'react-bootstrap';
 import classnames from 'classnames';
-import { getShowingLevelNumber } from 'app/shared/utils/Utils';
 
 type LevelSelectionRowProps = {
   levelType: LEVEL_TYPES;
@@ -35,10 +34,7 @@ export const LevelSelectionRow: React.FunctionComponent<LevelSelectionRowProps> 
             key={LEVELS[level]}
           >
             <LevelButton
-              level={getShowingLevelNumber(
-                LEVEL_CLASSIFICATION[LEVELS[level]],
-                LEVELS[level]
-              )}
+              level={LEVELS[level]}
               numOfGenes={props.levelNumbers[LEVELS[level]]}
               description={LEVEL_BUTTON_DESCRIPTION[LEVELS[level]]}
               active={props.levelSelected[LEVELS[level]]}

@@ -23,7 +23,6 @@ import {
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
-  getShowingLevelNumber,
   getTreatmentNameFromEvidence,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
@@ -591,10 +590,7 @@ export default class ActionableGenesPage extends React.Component<
                   key={LEVELS[level]}
                 >
                   <LevelButton
-                    level={getShowingLevelNumber(
-                      LEVEL_CLASSIFICATION[LEVELS[level]],
-                      LEVELS[level]
-                    )}
+                    level={LEVELS[level]}
                     numOfGenes={this.levelNumbers[LEVELS[level]]}
                     description={LEVEL_BUTTON_DESCRIPTION[LEVELS[level]]}
                     active={this.levelSelected[LEVELS[level]]}
