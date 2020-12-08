@@ -168,3 +168,4 @@ application:
     s3-access-key:
     s3-secret-key:
     s3-region:
+  github-token:

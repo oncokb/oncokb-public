@@ -101,6 +101,14 @@ public class TokenProvider implements InitializingBean {
         return token;
     }
 
+    public void createToken(Token token){
+        Token newToken = createToken(token.getUser(), Optional.of(token.getExpiration()), Optional.of(token.isRenewable()));
+        newToken.setCreation(token.getCreation());
+        newToken.setCurrentUsage(token.getCurrentUsage());
+        newToken.setUsageLimit(token.getUsageLimit());
+        tokenService.save(newToken);
+    }
+
     public void expireToken(Token token) {
         token.setExpiration(Instant.now());
         tokenService.save(token);
