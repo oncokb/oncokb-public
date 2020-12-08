@@ -19,6 +19,9 @@ public enum MailType {
     , VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES("verifyEmailBeforeAccountExpires", "Verify user still owns the email address", null)
     , APPROVAL_MSK_IN_COMMERCIAL("approvalMSKInCommercial", "Autocorrect MSK user license to academic", null)
     , TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE("trialAccountIsAboutToExpire", "Trail account is about to expire", null)
+    , TOKEN_HAS_BEEN_EXPOSED("tokenHasBeenExposed", "Token has been exposed", null)
+    , TOKEN_HAS_BEEN_EXPOSED_USER("tokenHasBeenExposedToUser", "Token has been exposed", null)
+    , SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED("searchingResponseStructureHasChanged", "Searching Response Structure Has Changed", null)
     , TEST("testEmail", "Test", null)
     ;
 
