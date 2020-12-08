@@ -208,6 +208,8 @@ export type AnnotatedVariant = {
 
         'proteinChange': string
 
+        'referenceGenome': string
+
         'variant': string
 
 };

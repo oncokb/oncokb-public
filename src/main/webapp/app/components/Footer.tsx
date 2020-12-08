@@ -53,7 +53,7 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
             cBioPortal {this.externalLinkIcon}
           </a>
           <a
-            href="http://oncotree.mskcc.org"
+            href="http://oncotree.info"
             target="_blank"
             rel="noopener noreferrer"
           >
