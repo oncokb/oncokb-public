@@ -6,3 +6,9 @@
   //  line-height: 0.9em;
   //}
 }
+
+:global(.RRT__panel).panel {
+  border-width: 1px 0 0;
+  padding-left: 0;
+  padding-right: 0;
+}
