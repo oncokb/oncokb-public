@@ -164,7 +164,7 @@ class Header extends React.Component<IHeaderProps> {
                     isAuthenticated={this.props.isUserAuthenticated}
                     isAdmin={this.props.isAdmin}
                   />
-                  {(this.props.windowStore.isXLscreen ||
+                  {(this.props.windowStore.isLargeScreen ||
                     this.isNavExpanded) && (
                     <Nav.Item style={{ paddingRight: 0 }}>
                       <img alt="mskcc-logo" src={mskIcon} height={'37px'} />
