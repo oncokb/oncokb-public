@@ -214,6 +214,7 @@ public class CronJobController {
                                 .collect(Collectors.toList());
         log.info("Searching exposed tokens pipeline begins...");
         List<ExposedToken> results = new ArrayList<>();
+        List<ExposedToken> checkResults = new ArrayList<>();
         boolean googleSearching = true;
         googleSearching = googleSearchingTest();
         boolean baiduSearching = true;
@@ -261,7 +262,21 @@ public class CronJobController {
                 } 
             }         
 
-            if (githubCount > 0 || googleCount > 0 || baiduCount > 0){   
+            if (githubCount > 0){   
+                ExposedToken t = new ExposedToken();
+                UserDTO user = userMapper.userToUserDTO(token.getUser());
+                t.setToken(q);
+                t.setEmail(user.getEmail());
+                t.setFirstName(user.getFirstName());
+                t.setLastName(user.getLastName());
+                t.setLicenseType(user.getLicenseType() != null ? user.getLicenseType().name() : "");
+                t.setSource("GitHub");   
+                results.add(t);
+
+                updateExposedToken(token);
+                mailService.sendMailToUserWhenTokenExposed(user, t);
+            }
+            if (googleCount > 0 || baiduCount > 0){   
                 ExposedToken t = new ExposedToken();
                 UserDTO user = userMapper.userToUserDTO(token.getUser());
                 t.setToken(q);
@@ -270,9 +285,6 @@ public class CronJobController {
                 t.setLastName(user.getLastName());
                 t.setLicenseType(user.getLicenseType() != null ? user.getLicenseType().name() : "");
                 List<String> source = new ArrayList<>();
-                if(githubCount > 0){
-                    source.add("GitHub");
-                }
                 if (googleCount > 0){
                     source.add("Google");
                 }
@@ -280,16 +292,13 @@ public class CronJobController {
                     source.add("Baidu");
                 }
                 t.setSource(source.stream().collect(Collectors.joining(", ")));   
-                results.add(t);
-
-                updateExposedToken(token);
-                mailService.sendMailToUserWhenTokenExposed(user, t);
+                checkResults.add(t);
             }
             sleep(1000);
         }
         log.info("Searching exposed tokens pipeline finished!");
-        if (results.size() > 0){
-            mailService.sendExposedTokensInfoMail(results);
+        if (results.size() > 0 || checkResults.size() > 0){
+            mailService.sendExposedTokensInfoMail(results, checkResults);
         }
     }
 

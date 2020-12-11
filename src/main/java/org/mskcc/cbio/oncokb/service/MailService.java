@@ -241,9 +241,10 @@ public class MailService {
     }
 
     @Async
-    public void sendExposedTokensInfoMail(List<ExposedToken> tokens){
+    public void sendExposedTokensInfoMail(List<ExposedToken> tokens, List<ExposedToken> toCheck){
         Context context = new Context(Locale.US);
         context.setVariable("tokens", tokens);
+        context.setVariable("toCheck", toCheck);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("mail/" + TOKEN_HAS_BEEN_EXPOSED.getTemplateName(), context);
 
@@ -276,7 +277,7 @@ public class MailService {
         Context context = new Context(Locale.US);
         context.setVariable("token", token);
         sendEmailFromTemplate(user, MailType.TOKEN_HAS_BEEN_EXPOSED_USER, "OncoKB Token exposed", 
-        applicationProperties.getEmailAddresses().getRegistrationAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, context);
+        applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, context);
     }
 
     public MailType getIntakeFormMailType(LicenseType licenseType) {
