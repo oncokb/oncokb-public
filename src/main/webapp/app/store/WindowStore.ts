@@ -11,6 +11,7 @@ export interface IWindowSize {
 class WindowStore {
   @observable size: IWindowSize;
   public recaptchaRef: any;
+  @observable recaptchaVerified: boolean;
 
   private handleWindowResize = _.debounce(this.setWindowSize, 200);
   private windowObj: any;
@@ -19,6 +20,18 @@ class WindowStore {
     this.windowObj = window;
     this.setWindowSize();
     this.windowObj.addEventListener('resize', this.handleWindowResize);
+    this.windowObj.addEventListener('click', () => {
+      if (!this.recaptchaVerified && this.windowObj.location.pathname !== '/') {
+        this.executeRecaptcha();
+      }
+    });
+  }
+
+  @action
+  private executeRecaptcha() {
+    if (this.recaptchaRef) {
+      this.recaptchaRef.current.execute();
+    }
   }
 
   @autobind
@@ -26,7 +39,7 @@ class WindowStore {
   private setWindowSize() {
     this.size = {
       width: this.windowObj.innerWidth,
-      height: this.windowObj.innerHeight
+      height: this.windowObj.innerHeight,
     };
   }
 

@@ -28,18 +28,20 @@ class App extends React.Component {
     appStore: new AppStore(),
     authenticationStore: new AuthenticationStore(),
     windowStore: new WindowStore(),
-    routing: new RouterStore()
+    routing: new RouterStore(),
   };
 
   constructor(props: IAppConfig) {
     super(props);
     this.stores.windowStore.recaptchaRef = React.createRef();
+    this.stores.windowStore.recaptchaVerified = false;
   }
 
   @autobind
   @action
   onExecuteChange(value: string) {
     setRecaptchaToken(value);
+    this.stores.windowStore.recaptchaVerified = true;
   }
 
   componentWillUnmount(): void {
@@ -66,17 +68,20 @@ class App extends React.Component {
     return (
       <DocumentTitle title={DOCUMENT_TITLES.HOME}>
         <>
-          {!this.stores.authenticationStore.isUserAuthenticated && (
-            <Reaptcha
-              ref={this.stores.windowStore.recaptchaRef}
-              sitekey={RECAPTCHA_SITE_KEY}
-              onVerify={this.onExecuteChange}
-              onRender={() =>
-                this.stores.windowStore.recaptchaRef.current.execute()
+          <Reaptcha
+            ref={this.stores.windowStore.recaptchaRef}
+            sitekey={RECAPTCHA_SITE_KEY}
+            onVerify={this.onExecuteChange}
+            onRender={() => {
+              if (
+                !this.stores.authenticationStore.isUserAuthenticated &&
+                this.stores.routing.location.pathname !== '/'
+              ) {
+                this.stores.windowStore.recaptchaRef.current.execute();
               }
-              size="invisible"
-            />
-          )}
+            }}
+            size="invisible"
+          />
           {
             <Provider {...this.stores}>
               <Router history={history}>
