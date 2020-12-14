@@ -41,7 +41,7 @@
     "mobx-react": "^4.2.1",
     "mobx-react-router": "^4.0.7",
     "moment": "2.24.0",
-    "oncokb-styles": "^0.1.1",
+    "oncokb-styles": "0.2.0-alpha.5",
     "pluralize": "^8.0.0",
     "query-string": "^6.13.1",
     "react": "16.13.1",
