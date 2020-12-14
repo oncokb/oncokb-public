@@ -27,10 +27,11 @@ import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
   DEFAULT_GENE,
-  LG_TABLE_FIXED_HEIGHT,
+  LEVEL_CLASSIFICATION,
+  LEVEL_TYPES,
+  LEVEL_TYPE_NAMES,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
-  THRESHOLD_TABLE_FIXED_HEIGHT,
 } from 'app/config/constants';
 import {
   BiologicalVariant,
@@ -42,9 +43,7 @@ import {
   TumorTypePageLink,
 } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
-import OncoKBTable, {
-  SearchColumn,
-} from 'app/components/oncokbTable/OncoKBTable';
+import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import _ from 'lodash';
 import { MskimpactLink } from 'app/components/MskimpactLink';
 import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
@@ -58,6 +57,7 @@ import { Linkout } from 'app/shared/links/Linkout';
 import { ReferenceGenomeInfo } from './ReferenceGenomeInfo';
 import WithSeparator from 'react-with-separator';
 import InfoIcon from 'app/shared/icons/InfoIcon';
+import { GenePageTable } from './GenePageTable';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -78,6 +78,8 @@ const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
 export const getHighestLevelStrings = (
   highestSensitiveLevel: string | undefined,
   highestResistanceLevel: string | undefined,
+  highestDiagnosticImplicationLevel?: string | undefined,
+  highestPrognosticImplicationLevel?: string | undefined,
   separator: string | JSX.Element = ', '
 ) => {
   const levels: React.ReactNode[] = [];
@@ -93,6 +95,34 @@ export const getHighestLevelStrings = (
     const level = levelOfEvidence2Level(highestResistanceLevel, false);
     levels.push(
       <span className={`oncokb level-${level}`} key="highestResistanceLevel">
+        Level {level}
+      </span>
+    );
+  }
+  if (highestDiagnosticImplicationLevel) {
+    const level = levelOfEvidence2Level(
+      highestDiagnosticImplicationLevel,
+      false
+    );
+    levels.push(
+      <span
+        className={`oncokb level-${level}`}
+        key="highestDiagnosticImplicationLevel"
+      >
+        Level {level}
+      </span>
+    );
+  }
+  if (highestPrognosticImplicationLevel) {
+    const level = levelOfEvidence2Level(
+      highestPrognosticImplicationLevel,
+      false
+    );
+    levels.push(
+      <span
+        className={`oncokb level-${level}`}
+        key="highestPrognosticImplicationLevel"
+      >
         Level {level}
       </span>
     );
@@ -209,6 +239,8 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
 enum TAB_KEYS {
   'CLINICAL',
   'BIOLOGICAL',
+  'DX',
+  'PX',
 }
 
 const GeneBackground: React.FunctionComponent<{
@@ -252,6 +284,26 @@ export default class GenePage extends React.Component<GenePageProps> {
 
   private store: AnnotationStore;
   readonly reactions: IReactionDisposer[] = [];
+
+  @computed
+  get dxActionableAlterations() {
+    if (this.store.clinicalAlterations.result.length === 0) {
+      return [];
+    }
+    return _.filter(this.store.clinicalAlterations.result, alt => {
+      return LEVEL_CLASSIFICATION[alt.level] === LEVEL_TYPES.DX;
+    });
+  }
+
+  @computed
+  get pxActionableAlterations() {
+    if (this.store.clinicalAlterations.result.length === 0) {
+      return [];
+    }
+    return _.filter(this.store.clinicalAlterations.result, alt => {
+      return LEVEL_CLASSIFICATION[alt.level] === LEVEL_TYPES.PX;
+    });
+  }
 
   @computed
   get clinicalTableColumns(): SearchColumn<ClinicalVariant>[] {
@@ -320,6 +372,64 @@ export default class GenePage extends React.Component<GenePageProps> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+      },
+    ];
+  }
+
+  @computed
+  get dxpxTableColumns(): SearchColumn<ClinicalVariant>[] {
+    return [
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+        accessor: 'level',
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+        accessor: 'variant',
+        onFilter: (data: ClinicalVariant, keyword) =>
+          filterByKeyword(data.variant.name, keyword),
+        Cell: (props: { original: ClinicalVariant }) => {
+          return (
+            <>
+              <AlterationPageLink
+                hugoSymbol={this.store.hugoSymbol}
+                alteration={props.original.variant.name}
+              />
+              {props.original.variant.referenceGenomes.length === 1 ? (
+                <InfoIcon
+                  overlay={`Only in ${props.original.variant.referenceGenomes[0]}`}
+                  placement="top"
+                  className="ml-1"
+                  style={{ fontSize: '0.7rem' }}
+                />
+              ) : null}
+            </>
+          );
+        },
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
+        onFilter: (data: ClinicalVariant, keyword) =>
+          filterByKeyword(
+            getCancerTypeNameFromOncoTreeType(data.cancerType),
+            keyword
+          ),
+        Cell: (props: { original: ClinicalVariant }) => {
+          const tumorType = getCancerTypeNameFromOncoTreeType(
+            props.original.cancerType
+          );
+          return (
+            <TumorTypePageLink
+              hugoSymbol={this.store.hugoSymbol}
+              alteration={props.original.variant.name}
+              tumorType={tumorType}
+            />
+          );
+        },
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+        minWidth: 50,
       },
     ];
   }
@@ -441,83 +551,61 @@ export default class GenePage extends React.Component<GenePageProps> {
           <b>clinical actionability</b>.
         </span>
       );
+    } else if (key === TAB_KEYS.DX) {
+      return (
+        <span>
+          A list of {this.store.hugoSymbol} alterations with{' '}
+          {LEVEL_TYPE_NAMES.Dx.toLowerCase()} implications.
+        </span>
+      );
+    } else if (key === TAB_KEYS.PX) {
+      return (
+        <span>
+          A list of {this.store.hugoSymbol} alterations with{' '}
+          {LEVEL_TYPE_NAMES.Px.toLowerCase()} implications.
+        </span>
+      );
     }
     return null;
   }
 
   getTable(key: TAB_KEYS) {
-    if (key === TAB_KEYS.CLINICAL) {
-      return (
-        <OncoKBTable
-          data={this.store.filteredClinicalAlterations}
-          pageSize={
-            this.store.filteredClinicalAlterations.length === 0
-              ? 1
-              : this.store.filteredClinicalAlterations.length
-          }
-          columns={this.clinicalTableColumns}
-          style={
-            this.store.filteredBiologicalAlterations.length >
-            THRESHOLD_TABLE_FIXED_HEIGHT
-              ? {
-                  height: LG_TABLE_FIXED_HEIGHT,
-                }
-              : undefined
-          }
-          fixedHeight={
-            this.store.filteredBiologicalAlterations.length >
-            THRESHOLD_TABLE_FIXED_HEIGHT
-          }
-          loading={this.store.clinicalAlterations.isPending}
-          defaultSorted={[
-            {
-              id: TABLE_COLUMN_KEY.LEVEL,
-              desc: false,
-            },
-            {
-              id: TABLE_COLUMN_KEY.ALTERATION,
-              desc: false,
-            },
-          ]}
-        />
-      );
-    } else if (key === TAB_KEYS.BIOLOGICAL) {
-      return (
-        <OncoKBTable
-          data={this.store.filteredBiologicalAlterations}
-          columns={this.biologicalTableColumns}
-          pageSize={
-            this.store.filteredBiologicalAlterations.length === 0
-              ? 1
-              : this.store.filteredBiologicalAlterations.length
-          }
-          style={
-            this.store.filteredBiologicalAlterations.length >
-            THRESHOLD_TABLE_FIXED_HEIGHT
-              ? {
-                  height: LG_TABLE_FIXED_HEIGHT,
-                }
-              : undefined
-          }
-          fixedHeight={
-            this.store.filteredBiologicalAlterations.length >
-            THRESHOLD_TABLE_FIXED_HEIGHT
-          }
-          loading={this.store.biologicalAlterations.isPending}
-          defaultSorted={[
-            {
-              id: TABLE_COLUMN_KEY.ONCOGENICITY,
-              desc: false,
-            },
-            {
-              id: TABLE_COLUMN_KEY.ALTERATION,
-              desc: false,
-            },
-          ]}
-        />
-      );
+    switch (key) {
+      case TAB_KEYS.BIOLOGICAL:
+        return (
+          <GenePageTable
+            data={this.store.filteredBiologicalAlterations}
+            columns={this.biologicalTableColumns}
+            isPending={this.store.biologicalAlterations.isPending}
+          />
+        );
+      case TAB_KEYS.CLINICAL:
+        return (
+          <GenePageTable
+            data={this.store.filteredClinicalAlterations}
+            columns={this.clinicalTableColumns}
+            isPending={this.store.clinicalAlterations.isPending}
+          />
+        );
+      case TAB_KEYS.DX:
+        return (
+          <GenePageTable
+            data={this.dxActionableAlterations}
+            columns={this.dxpxTableColumns}
+            isPending={this.store.clinicalAlterations.isPending}
+          />
+        );
+      case TAB_KEYS.PX:
+        return (
+          <GenePageTable
+            data={this.pxActionableAlterations}
+            columns={this.dxpxTableColumns}
+            isPending={this.store.clinicalAlterations.isPending}
+          />
+        );
+      default:
+        return <span />;
     }
-    return <span />;
   }
 
   getTabContent(key: TAB_KEYS) {
@@ -546,6 +634,18 @@ export default class GenePage extends React.Component<GenePageProps> {
         key: TAB_KEYS.CLINICAL,
         title: 'Clinically Actionable Alterations',
       });
+      if (this.dxActionableAlterations.length > 0) {
+        tabs.push({
+          key: TAB_KEYS.DX,
+          title: `Alterations with ${LEVEL_TYPE_NAMES.Dx} Implications`,
+        });
+      }
+      if (this.pxActionableAlterations.length > 0) {
+        tabs.push({
+          key: TAB_KEYS.PX,
+          title: `Alterations with ${LEVEL_TYPE_NAMES.Px} Implications`,
+        });
+      }
     }
     return tabs.map(tab => {
       return {
