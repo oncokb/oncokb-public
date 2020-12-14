@@ -19,6 +19,8 @@ export const AlterationInfo: React.FunctionComponent<{
   isVus: boolean;
   highestSensitiveLevel: string | undefined;
   highestResistanceLevel: string | undefined;
+  highestDiagnosticImplicationLevel: string | undefined;
+  highestPrognosticImplicationLevel: string | undefined;
 }> = props => {
   const separator = <span className="mx-1">·</span>;
   const content = [];
@@ -65,6 +67,8 @@ export const AlterationInfo: React.FunctionComponent<{
       getHighestLevelStrings(
         props.highestSensitiveLevel,
         props.highestResistanceLevel,
+        props.highestDiagnosticImplicationLevel,
+        props.highestPrognosticImplicationLevel,
         separator
       )
     );
