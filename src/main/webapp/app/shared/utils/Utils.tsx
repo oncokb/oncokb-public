@@ -35,9 +35,11 @@ import { CitationTooltip } from 'app/components/CitationTooltip';
 import {
   AlterationPageLink,
   GenePageLink,
+  OncoTreeLink,
   TumorTypePageLink,
 } from 'app/shared/utils/UrlUtils';
 import moment from 'moment';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 
 // Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
 // Likely Neutral will be converted to Neutral
@@ -268,7 +270,7 @@ export function getDefaultColumnDefinition<T>(
     case TABLE_COLUMN_KEY.TUMOR_TYPE:
       return {
         id: TABLE_COLUMN_KEY.TUMOR_TYPE,
-        Header: <span>Tumor Type</span>,
+        Header: <span>Cancer Type</span>,
         accessor: 'cancerType',
         style: { whiteSpace: 'normal' },
         minWidth: 150,
@@ -287,7 +289,18 @@ export function getDefaultColumnDefinition<T>(
     case TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE:
       return {
         id: TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,
-        Header: <span>Level-associated cancer types</span>,
+        Header: (
+          <span>
+            Level-associated cancer types{' '}
+            <InfoIcon
+              overlay={
+                <span>
+                  The cancer type is curated using <OncoTreeLink />
+                </span>
+              }
+            />
+          </span>
+        ),
         accessor: 'cancerTypes',
         style: { whiteSpace: 'normal' },
         minWidth: 110,

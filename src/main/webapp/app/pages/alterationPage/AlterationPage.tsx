@@ -71,8 +71,8 @@ export default class AlterationPage extends React.Component<
     ) {
       this.store.alterationQuery = this.props.match.params.alteration;
     }
-    // When a tumor type changed from the URL, we need to propagate that to the store
-    // but if the tumor type is unset, we need to clear the query in the store
+    // When a cancer type changed from the URL, we need to propagate that to the store
+    // but if the cancer type is unset, we need to clear the query in the store
     if (
       this.props.match.params.tumorType !== prevProps.match.params.tumorType
     ) {
@@ -107,7 +107,7 @@ export default class AlterationPage extends React.Component<
       content.push(`Alteration: ${this.store.alterationQuery}`);
     }
     if (this.store.tumorTypeQuery) {
-      content.push(`Tumor Type: ${this.store.tumorTypeQuery}`);
+      content.push(`Cancer Type: ${this.store.tumorTypeQuery}`);
     }
     return content.join(', ');
   }

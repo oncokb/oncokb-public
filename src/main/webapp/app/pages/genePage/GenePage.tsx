@@ -435,7 +435,7 @@ export default class GenePage extends React.Component<GenePageProps> {
     } else if (key === TAB_KEYS.CLINICAL) {
       return (
         <span>
-          A list of the tumor type-specific {this.store.hugoSymbol} alterations
+          A list of the cancer type-specific {this.store.hugoSymbol} alterations
           that may predict response to a targeted drug and the corresponding
           OncoKB level of evidence assigning their level of{' '}
           <b>clinical actionability</b>.
