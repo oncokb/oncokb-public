@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { Button } from 'react-bootstrap';
 import { LEVEL_BUTTON_DESCRIPTION } from 'app/config/constants';
 import pluralize from 'pluralize';
@@ -15,6 +15,7 @@ type LevelButtonProps = {
   description: string;
   onClick?: () => void;
   className?: string;
+  style?: CSSProperties;
   active?: boolean;
   href?: string;
   disabled?: boolean;
@@ -37,6 +38,7 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
       active={props.active}
       href={props.href}
       disabled={props.disabled}
+      style={props.style}
       className={classnames(
         props.href ? styles.levelButtonLink : styles.levelButton,
         props.className

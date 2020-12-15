@@ -153,7 +153,7 @@ export const LEVEL_BUTTON_DESCRIPTION = {
   [LEVELS.R2]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
   [LEVELS.Dx1]: 'Required for diagnosis',
   [LEVELS.Dx2]: 'Supports diagnosis',
-  [LEVELS.Dx3]: 'Investigative diagnosis',
+  [LEVELS.Dx3]: 'Investigational diagnosis',
   [LEVELS.Px1]: 'Guideline-recognized with well-powered data',
   [LEVELS.Px2]: 'Guideline-recognized with limited data',
   [LEVELS.Px3]: 'Investigational',

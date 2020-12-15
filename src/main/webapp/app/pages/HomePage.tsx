@@ -45,7 +45,7 @@ export type ExtendedTypeaheadSearchResp = TypeaheadSearchResp & {
 class HomePage extends React.Component<IHomeProps> {
   @observable keyword = '';
   @observable levelTypeSelected = LEVEL_TYPES.TX;
-  private LevelGadgets = this.generateLevelGadgets();
+  private levelGadgets = this.generateLevelGadgets();
 
   generateLevelGadgets() {
     const levelGadgets: {
@@ -131,7 +131,7 @@ class HomePage extends React.Component<IHomeProps> {
       if (LEVEL_TYPES[key]) {
         levelTypeButtons.push(
           <Button
-            className="mr-5"
+            className="mx-2"
             variant={
               this.levelTypeSelected === LEVEL_TYPES[key] ? 'primary' : 'light'
             }
@@ -209,9 +209,12 @@ class HomePage extends React.Component<IHomeProps> {
         <Row className="mb-2">
           <div className="mx-auto">{levelTypeButtons}</div>
         </Row>
-        <Row className="mb-5 d-flex d-flex justify-content-between">
-          <Col xs={0} lg={1}></Col>
-          {this.LevelGadgets.map(
+        <Row className="my-3 d-flex d-flex justify-content-between">
+          <Col
+            xs={0}
+            lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 1 : 3}
+          ></Col>
+          {this.levelGadgets.map(
             levelGadget =>
               ((this.levelTypeSelected === LEVEL_TYPES.DX &&
                 LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.DX) ||
@@ -223,8 +226,9 @@ class HomePage extends React.Component<IHomeProps> {
                 <Col
                   xs={12}
                   sm={6}
-                  lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 2 : 3}
+                  lg={2}
                   key={levelGadget.level}
+                  style={{ minHeight: 125 }}
                   className="px-0"
                 >
                   <LevelButton
@@ -233,12 +237,19 @@ class HomePage extends React.Component<IHomeProps> {
                     description={levelGadget.description}
                     title={levelGadget.title}
                     className="mb-2"
+                    style={{
+                      lineHeight:
+                        levelGadget.level === LEVELS.Px3 ? '35px' : undefined,
+                    }}
                     href={`/actionableGenes#levels=${levelGadget.linkoutLevel}`}
                   />
                 </Col>
               )
           )}
-          <Col xs={0} lg={1}></Col>
+          <Col
+            xs={0}
+            lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 1 : 3}
+          ></Col>
         </Row>
         <Row className="mb-3">
           <Col className={'text-center'}>
