@@ -389,19 +389,19 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
     if (this.therapeuticImplications.length > 0) {
       tabs.push({
         key: LEVEL_TYPES.TX,
-        title: `${LEVEL_TYPE_NAMES.Tx} Implications`,
+        title: `${LEVEL_TYPE_NAMES.Tx}`,
       });
     }
     if (this.diagnosticImplications.length > 0) {
       tabs.push({
         key: LEVEL_TYPES.DX,
-        title: `${LEVEL_TYPE_NAMES.Dx} Implications`,
+        title: `${LEVEL_TYPE_NAMES.Dx}`,
       });
     }
     if (this.prognosticImplications.length > 0) {
       tabs.push({
         key: LEVEL_TYPES.PX,
-        title: `${LEVEL_TYPE_NAMES.Px} Implications`,
+        title: `${LEVEL_TYPE_NAMES.Px}`,
       });
     }
     return tabs.map(tab => {

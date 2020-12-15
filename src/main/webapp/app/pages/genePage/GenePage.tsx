@@ -237,8 +237,8 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
 };
 
 enum TAB_KEYS {
-  'CLINICAL',
   'BIOLOGICAL',
+  'TX',
   'DX',
   'PX',
 }
@@ -286,7 +286,17 @@ export default class GenePage extends React.Component<GenePageProps> {
   readonly reactions: IReactionDisposer[] = [];
 
   @computed
-  get dxActionableAlterations() {
+  get txAlterations() {
+    if (this.store.clinicalAlterations.result.length === 0) {
+      return [];
+    }
+    return _.filter(this.store.clinicalAlterations.result, alt => {
+      return LEVEL_CLASSIFICATION[alt.level] === LEVEL_TYPES.TX;
+    });
+  }
+
+  @computed
+  get dxAlterations() {
     if (this.store.clinicalAlterations.result.length === 0) {
       return [];
     }
@@ -296,7 +306,7 @@ export default class GenePage extends React.Component<GenePageProps> {
   }
 
   @computed
-  get pxActionableAlterations() {
+  get pxAlterations() {
     if (this.store.clinicalAlterations.result.length === 0) {
       return [];
     }
@@ -542,7 +552,7 @@ export default class GenePage extends React.Component<GenePageProps> {
           <b>all OncoKB curated</b> {this.store.hugoSymbol} alterations.
         </span>
       );
-    } else if (key === TAB_KEYS.CLINICAL) {
+    } else if (key === TAB_KEYS.TX) {
       return (
         <span>
           A list of the tumor type-specific {this.store.hugoSymbol} alterations
@@ -554,15 +564,15 @@ export default class GenePage extends React.Component<GenePageProps> {
     } else if (key === TAB_KEYS.DX) {
       return (
         <span>
-          A list of {this.store.hugoSymbol} alterations with{' '}
-          {LEVEL_TYPE_NAMES.Dx.toLowerCase()} implications.
+          A list of diagnostic {this.store.hugoSymbol} alterations and the
+          corresponding OncoKB diagnostic level of evidence.
         </span>
       );
     } else if (key === TAB_KEYS.PX) {
       return (
         <span>
-          A list of {this.store.hugoSymbol} alterations with{' '}
-          {LEVEL_TYPE_NAMES.Px.toLowerCase()} implications.
+          A list of tumor-type specific prognostic {this.store.hugoSymbol}{' '}
+          alterations and the corresponding OncoKB prognostic level of evidence.
         </span>
       );
     }
@@ -579,10 +589,10 @@ export default class GenePage extends React.Component<GenePageProps> {
             isPending={this.store.biologicalAlterations.isPending}
           />
         );
-      case TAB_KEYS.CLINICAL:
+      case TAB_KEYS.TX:
         return (
           <GenePageTable
-            data={this.store.filteredClinicalAlterations}
+            data={this.txAlterations}
             columns={this.clinicalTableColumns}
             isPending={this.store.clinicalAlterations.isPending}
           />
@@ -590,7 +600,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       case TAB_KEYS.DX:
         return (
           <GenePageTable
-            data={this.dxActionableAlterations}
+            data={this.dxAlterations}
             columns={this.dxpxTableColumns}
             isPending={this.store.clinicalAlterations.isPending}
           />
@@ -598,7 +608,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       case TAB_KEYS.PX:
         return (
           <GenePageTable
-            data={this.pxActionableAlterations}
+            data={this.pxAlterations}
             columns={this.dxpxTableColumns}
             isPending={this.store.clinicalAlterations.isPending}
           />
@@ -630,20 +640,22 @@ export default class GenePage extends React.Component<GenePageProps> {
       });
     }
     if (this.store.clinicalAlterations.result.length > 0) {
-      tabs.push({
-        key: TAB_KEYS.CLINICAL,
-        title: 'Clinically Actionable Alterations',
-      });
-      if (this.dxActionableAlterations.length > 0) {
+      if (this.txAlterations.length > 0) {
         tabs.push({
-          key: TAB_KEYS.DX,
-          title: `Alterations with ${LEVEL_TYPE_NAMES.Dx} Implications`,
+          key: TAB_KEYS.TX,
+          title: 'Therapeutic',
         });
       }
-      if (this.pxActionableAlterations.length > 0) {
+      if (this.dxAlterations.length > 0) {
+        tabs.push({
+          key: TAB_KEYS.DX,
+          title: `Diagnostic`,
+        });
+      }
+      if (this.pxAlterations.length > 0) {
         tabs.push({
           key: TAB_KEYS.PX,
-          title: `Alterations with ${LEVEL_TYPE_NAMES.Px} Implications`,
+          title: `Prognostic`,
         });
       }
     }
@@ -671,9 +683,16 @@ export default class GenePage extends React.Component<GenePageProps> {
 
   @computed
   get tabDefaultActiveKey() {
-    return this.store.clinicalAlterations.result.length > 0
-      ? TAB_KEYS.CLINICAL
-      : TAB_KEYS.BIOLOGICAL;
+    if (this.txAlterations.length > 0) {
+      return TAB_KEYS.TX;
+    }
+    if (this.dxAlterations.length > 0) {
+      return TAB_KEYS.DX;
+    }
+    if (this.pxAlterations.length > 0) {
+      return TAB_KEYS.PX;
+    }
+    return TAB_KEYS.BIOLOGICAL;
   }
 
   @computed
