@@ -6,6 +6,8 @@ import { PMIDLink } from 'app/shared/links/PMIDLink';
 import reactStringReplace from 'react-string-replace';
 import { ReactNodeArray } from 'prop-types';
 import { encodeSlash } from 'app/shared/utils/Utils';
+import { Linkout } from 'app/shared/links/Linkout';
+import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -104,4 +106,12 @@ export const CitationLink: React.FunctionComponent<{
     );
   });
   return <div>{contentWithLink}</div>;
+};
+
+export const OncoTreeLink: React.FunctionComponent<{}> = props => {
+  return (
+    <Linkout link={'http://oncotree.info'}>
+      OncoTree <ExternalLinkIcon />
+    </Linkout>
+  );
 };

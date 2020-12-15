@@ -155,7 +155,7 @@ export default class NewsPage extends React.Component<{
                     type based on compelling clinical evidence (currently Level
                     3A) are more likely to experience clinical benefit compared
                     to patients with predictive biomarkers that are considered
-                    standard care in a different tumor type (previously Level
+                    standard care in a different cancer type (previously Level
                     2B, now combined into Level 3B).
                   </li>
                 </ol>
