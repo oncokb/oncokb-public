@@ -231,11 +231,17 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
     return (
       <>
         <h2 className={'d-flex align-items-center'}>
-          <GenePageLink
-            hugoSymbol={this.props.hugoSymbol}
-            highlightContent={false}
-          />
-          <span className={'ml-2'}>{` ${this.props.alteration}`}</span>
+          {this.props.alteration
+            .toLowerCase()
+            .includes(this.props.hugoSymbol.toLowerCase()) ? null : (
+            <span className={'mr-2'}>
+              <GenePageLink
+                hugoSymbol={this.props.hugoSymbol}
+                highlightContent={false}
+              />
+            </span>
+          )}
+          <span>{`${this.props.alteration}`}</span>
         </h2>
         <AlterationInfo
           oncogenicity={this.props.annotation.oncogenic}
