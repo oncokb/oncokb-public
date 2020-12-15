@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { GenePageLink } from 'app/shared/utils/UrlUtils';
+import { GenePageLink, OncoTreeLink } from 'app/shared/utils/UrlUtils';
 import {
   DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
@@ -45,7 +45,7 @@ enum SummaryKey {
 const SUMMARY_TITLE = {
   [SummaryKey.GENE_SUMMARY]: 'Gene Summary',
   [SummaryKey.ALTERATION_SUMMARY]: 'Alteration Summary',
-  [SummaryKey.TUMOR_TYPE_SUMMARY]: 'Tumor Type Summary',
+  [SummaryKey.TUMOR_TYPE_SUMMARY]: 'Cancer Type Summary',
   [SummaryKey.DIAGNOSTIC_SUMMARY]: 'Diagnostic Summary',
   [SummaryKey.PROGNOSTIC_SUMMARY]: 'Prognostic Summary',
 };
@@ -289,7 +289,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                     }),
                   }}
                   value={this.tumorTypeSelectValue}
-                  placeholder="Select a tumor type"
+                  placeholder="Select a cancer type"
                   options={this.props.allTumorTypesOptions}
                   formatGroupLabel={this.formatGroupLabel}
                   isClearable={true}
@@ -299,7 +299,13 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                 />
               </span>
               <InfoIcon
-                overlay="For tumor type specific information, please select a tumor type from the dropdown"
+                overlay={
+                  <span>
+                    For cancer type specific information, please select a cancer
+                    type from the dropdown. The cancer type is curated using{' '}
+                    <OncoTreeLink />
+                  </span>
+                }
                 placement="top"
               />
             </div>

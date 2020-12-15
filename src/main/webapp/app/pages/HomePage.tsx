@@ -155,7 +155,7 @@ class HomePage extends React.Component<IHomeProps> {
                   href={PAGE_ROUTE.ACTIONABLE_GENE}
                   number={this.props.appStore.mainNumbers.result.tumorType}
                   title={`${pluralize(
-                    'Tumor Type',
+                    'Cancer Type',
                     this.props.appStore.mainNumbers.result.tumorType
                   )}`}
                 />
