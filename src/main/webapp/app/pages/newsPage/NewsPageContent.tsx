@@ -36,7 +36,7 @@ export type NewsData = {
 export const NEWLY_ADDED_LEVEL_FOUR_COLUMNS = [
   { name: 'Gene', size: 2 },
   { name: 'Mutation', size: 6 },
-  { name: 'Tumor Type', size: 2 },
+  { name: 'Cancer Type', size: 2 },
   { name: 'Drug', size: 2 },
 ];
 
@@ -44,7 +44,7 @@ export const UPDATED_IMPLICATION_COLUMNS = [
   { name: 'Level' },
   { name: 'Gene' },
   { name: 'Mutation' },
-  { name: 'Tumor Type' },
+  { name: 'Cancer Type' },
   { name: 'Drug' },
   { name: 'Evidence' },
 ];
@@ -57,7 +57,7 @@ export const UPDATED_IMPLICATION_OLD_FORMAT_COLUMNS = [
 export const CHANGED_ANNOTATION_COLUMNS = [
   { name: 'Gene' },
   { name: 'Mutation' },
-  { name: 'Tumor Type' },
+  { name: 'Cancer Type' },
   { name: 'Drug' },
   { name: 'Previous Level' },
   { name: 'Current Level' },
@@ -126,7 +126,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th>Level</th>
                 <th>Gene</th>
                 <th>Mutation</th>
-                <th>Tumor Type</th>
+                <th>Cancer Type</th>
                 <th>Drug</th>
                 <th>Evidence</th>
               </tr>
@@ -279,7 +279,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th>Level</th>
                 <th>Gene</th>
                 <th>Mutation</th>
-                <th>Tumor Type</th>
+                <th>Cancer Type</th>
                 <th>Drug</th>
                 <th>Evidence</th>
               </tr>
@@ -1220,7 +1220,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th className="col-xs-1">Level</th>
                 <th className="col-xs-1">Gene</th>
                 <th className="col-xs-4">Mutation</th>
-                <th className="col-xs-4">Tumor Type</th>
+                <th className="col-xs-4">Cancer Type</th>
                 <th className="col-xs-2">Drug</th>
               </tr>
             </thead>
@@ -2185,7 +2185,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           FGFR2 - Amplification - Breast Cancer - Dovitinib (<b>removed</b>)
         </span>,
         <span>
-          FGFR2/3 - Fusions - Various tumor types - Debio1347 (
+          FGFR2/3 - Fusions - Various cancer types - Debio1347 (
           <b>new association</b>)
         </span>,
         <span>
