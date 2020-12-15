@@ -109,6 +109,57 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '12172020': {
+    priorityNews: [
+      <span>Updated all gene names to the latest HUGO symbol</span>,
+    ],
+    updatedImplication: [
+      [
+        '1',
+        'RET',
+        'Fusions',
+        'Thyroid Cancer',
+        'Pralsetinib',
+        <span>
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-pralsetinib-ret-altered-thyroid-cancers'
+            }
+          >
+            FDA-approval of Pralsetinib
+          </Linkout>
+          ; Abstract:{' '}
+          <Linkout
+            link={
+              'https://oncologypro.esmo.org/meeting-resources/esmo-virtual-congress-2020/results-from-the-registrational-phase-i-ii-arrow-trial-of-pralsetinib-blu-667-in-patients-pts-with-advanced-ret-mutation-positive-medullary-thy'
+            }
+          >
+            Hu et al. Abstract# 19130, ESMO 2020
+          </Linkout>
+        </span>,
+      ],
+    ],
+    changedAnnotation: [
+      [
+        'RET',
+        'Oncogenic Mutations',
+        'Medullary Thyroid Cancer',
+        <div>Pralsetinib</div>,
+        '3A',
+        '1',
+        <div>
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-pralsetinib-ret-altered-thyroid-cancers'
+            }
+          >
+            FDA-approval of Pralsetinib
+          </Linkout>
+          ; <PMIDLink pmids={'29657135'} />
+        </div>,
+      ],
+    ],
+  },
   '11132020': {
     priorityNews: [
       <span>
