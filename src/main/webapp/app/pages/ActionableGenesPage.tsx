@@ -493,6 +493,8 @@ export default class ActionableGenesPage extends React.Component<
   private columns = [
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+      Header: <span>OncoKB Level</span>,
+      minWidth: 120,
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
