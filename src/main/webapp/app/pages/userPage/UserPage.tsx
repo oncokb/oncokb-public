@@ -37,6 +37,7 @@ import {
   IReactionDisposer,
   observable,
   reaction,
+  toJS,
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
@@ -185,6 +186,7 @@ export default class UserPage extends React.Component<IUserPage> {
         city: values.city,
         country: values.country,
       };
+      this.getUserStatus = PromiseStatus.pending;
       client
         .updateUserUsingPUT({
           userDto: updatedUser,
@@ -200,6 +202,7 @@ export default class UserPage extends React.Component<IUserPage> {
             }
             notifySuccess('Updated User');
             this.user = updatedUserDTO;
+            this.getUserStatus = PromiseStatus.complete;
             client
               .getUserTokensUsingGET({
                 login: updatedUserDTO.login,
@@ -594,7 +597,7 @@ export default class UserPage extends React.Component<IUserPage> {
                           inline
                           name="authorities"
                           label=""
-                          value={this.user.authorities}
+                          value={toJS(this.user.authorities)}
                           required
                         >
                           {USER_AUTHORITIES.map(authority => (
