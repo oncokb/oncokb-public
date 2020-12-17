@@ -214,7 +214,7 @@ public class CronJobController {
                                 .collect(Collectors.toList());
         log.info("Searching exposed tokens pipeline begins...");
         List<ExposedToken> results = new ArrayList<>();
-        List<ExposedToken> checkResults = new ArrayList<>();
+        List<ExposedToken> unverifiedResults = new ArrayList<>();
         boolean googleSearching = true;
         googleSearching = googleSearchingTest();
         boolean baiduSearching = true;
@@ -262,44 +262,40 @@ public class CronJobController {
                 } 
             }         
 
+            UserDTO user = userMapper.userToUserDTO(token.getUser());
             if (githubCount > 0){   
-                ExposedToken t = new ExposedToken();
-                UserDTO user = userMapper.userToUserDTO(token.getUser());
-                t.setToken(q);
-                t.setEmail(user.getEmail());
-                t.setFirstName(user.getFirstName());
-                t.setLastName(user.getLastName());
-                t.setLicenseType(user.getLicenseType() != null ? user.getLicenseType().name() : "");
-                t.setSource("GitHub");   
+                ExposedToken t = generateExposedToken(token, user, "GitHub");
                 results.add(t);
-
                 updateExposedToken(token);
                 mailService.sendMailToUserWhenTokenExposed(user, t);
             }
             if (googleCount > 0 || baiduCount > 0){   
-                ExposedToken t = new ExposedToken();
-                UserDTO user = userMapper.userToUserDTO(token.getUser());
-                t.setToken(q);
-                t.setEmail(user.getEmail());
-                t.setFirstName(user.getFirstName());
-                t.setLastName(user.getLastName());
-                t.setLicenseType(user.getLicenseType() != null ? user.getLicenseType().name() : "");
                 List<String> source = new ArrayList<>();
                 if (googleCount > 0){
                     source.add("Google");
                 }
                 if (baiduCount > 0){
                     source.add("Baidu");
-                }
-                t.setSource(source.stream().collect(Collectors.joining(", ")));   
-                checkResults.add(t);
+                }  
+                unverifiedResults.add(generateExposedToken(token, user, source.stream().collect(Collectors.joining(", "))));
             }
             sleep(1000);
         }
         log.info("Searching exposed tokens pipeline finished!");
-        if (results.size() > 0 || checkResults.size() > 0){
-            mailService.sendExposedTokensInfoMail(results, checkResults);
+        if (!results.isEmpty() || !unverifiedResults.isEmpty()){
+            mailService.sendExposedTokensInfoMail(results, unverifiedResults);
         }
+    }
+
+    private ExposedToken generateExposedToken(Token token, UserDTO user, String source){
+        ExposedToken t = new ExposedToken();
+        t.setToken(token.getToken().toString());
+        t.setEmail(user.getEmail());
+        t.setFirstName(user.getFirstName());
+        t.setLastName(user.getLastName());
+        t.setLicenseType(user.getLicenseType() != null ? user.getLicenseType().name() : "");
+        t.setSource(source);
+        return t;
     }
 
     private HttpResponse getGoogleResponse(String query) {

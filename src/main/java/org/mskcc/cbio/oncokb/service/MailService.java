@@ -241,10 +241,10 @@ public class MailService {
     }
 
     @Async
-    public void sendExposedTokensInfoMail(List<ExposedToken> tokens, List<ExposedToken> toCheck){
+    public void sendExposedTokensInfoMail(List<ExposedToken> exposedTokens, List<ExposedToken> tokensToVerify){
         Context context = new Context(Locale.US);
-        context.setVariable("tokens", tokens);
-        context.setVariable("toCheck", toCheck);
+        context.setVariable("exposedTokens", exposedTokens);
+        context.setVariable("tokensToVerify", tokensToVerify);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("mail/" + TOKEN_HAS_BEEN_EXPOSED.getTemplateName(), context);
 
