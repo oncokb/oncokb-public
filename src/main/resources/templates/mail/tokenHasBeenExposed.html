@@ -9,34 +9,66 @@
         <p>
             Dear members,
         </p>
-        <p>
-          The following OncoKB tokens have been exposed:
-        </p>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Token</th>
-              <th>Source</th>
-              <th>License Type</th>
-              <th>Email</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="token: ${tokens}">
-              <td th:text="${token.token}"/>
-              <td th:text="${token.source}"/>
-              <td th:text="${token.licenseType}"/>
-              <td th:text="${token.email}"/>
-              <td th:text="${token.firstName}"/>
-              <td th:text="${token.lastName}"/>
-            </tr>
-          </tbody>
-        </table>
-        <p>
-          New tokens for those users have been generated.
-        </p>
+        <div th:if="${!exposedTokens.isEmpty()}">
+          <p>
+            The following OncoKB tokens have been exposed:
+          </p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th>Source</th>
+                <th>License Type</th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="token: ${exposedTokens}">
+                <td th:text="${token.token}"/>
+                <td th:text="${token.source}"/>
+                <td th:text="${token.licenseType}"/>
+                <td th:text="${token.email}"/>
+                <td th:text="${token.firstName}"/>
+                <td th:text="${token.lastName}"/>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            New tokens for these users have been generated.
+          </p>
+        </div>       
+        <div th:if="${!tokensToVerify.isEmpty()}">
+          <p>
+            The following OncoKB tokens may have been exposed on <b>Google/Baidu</b>:
+          </p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th>Source</th>
+                <th>License Type</th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="token: ${tokensToVerify}">
+                <td th:text="${token.token}"/>
+                <td th:text="${token.source}"/>
+                <td th:text="${token.licenseType}"/>
+                <td th:text="${token.email}"/>
+                <td th:text="${token.firstName}"/>
+                <td th:text="${token.lastName}"/>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Please take a look if these tokens have been exposed.
+          </p>
+        </div>       
         <p>
             <div th:text="#{email.closing}">Sincerely, </div>
             <div th:text="#{email.signature}">The OncoKB Team</div>
