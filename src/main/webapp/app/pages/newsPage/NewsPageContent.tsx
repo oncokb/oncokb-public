@@ -131,10 +131,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ; Abstract:{' '}
           <Linkout
             link={
-              'https://oncologypro.esmo.org/meeting-resources/esmo-virtual-congress-2020/results-from-the-registrational-phase-i-ii-arrow-trial-of-pralsetinib-blu-667-in-patients-pts-with-advanced-ret-mutation-positive-medullary-thy'
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2020.38.15_suppl.109'
             }
           >
-            Hu et al. Abstract# 19130, ESMO 2020
+            Subbiah et al. Abstract# 109, ASCO 2020
           </Linkout>
         </span>,
       ],
@@ -155,7 +155,14 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           >
             FDA-approval of Pralsetinib
           </Linkout>
-          ; <PMIDLink pmids={'29657135'} />
+          ; Abstract:{' '}
+          <Linkout
+            link={
+              'https://oncologypro.esmo.org/meeting-resources/esmo-virtual-congress-2020/results-from-the-registrational-phase-i-ii-arrow-trial-of-pralsetinib-blu-667-in-patients-pts-with-advanced-ret-mutation-positive-medullary-thy'
+            }
+          >
+            Hu et al. Abstract# 19130, ESMO 2020
+          </Linkout>
         </div>,
       ],
     ],
