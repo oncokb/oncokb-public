@@ -76,6 +76,10 @@ import { Location } from 'history';
 import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
 import { Link } from 'react-router-dom';
 import { Version } from 'app/pages/LevelOfEvidencePage';
+import {
+  defaultSortMethod,
+  sortByAlteration,
+} from 'app/shared/utils/ReactTableUtils';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -357,6 +361,7 @@ export default class GenePage extends React.Component<GenePageProps> {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
         accessor: 'variant',
         width: 400,
+        sortMethod: defaultSortMethod,
         onFilter: (data: FdaVariant, keyword) =>
           filterByKeyword(data.alteration, keyword),
         Cell: (props: { original: FdaVariant }) => {
@@ -521,6 +526,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       predefinedFdaVariants.filter((alteration: FdaVariant) =>
         this.isOncogenicMutations(alteration.alteration)
       ).length > 0;
+    let fdaUpdatedVariants = predefinedFdaVariants;
     if (hasOncogenicMutations) {
       const oncogenicAlts = this.store.filteredBiologicalAlterations.filter(
         (alteration: BiologicalVariant) =>
@@ -528,7 +534,7 @@ export default class GenePage extends React.Component<GenePageProps> {
             alteration.oncogenic ? alteration.oncogenic.toLowerCase() : ''
           )
       );
-      return _.reduce(
+      fdaUpdatedVariants = _.reduce(
         predefinedFdaVariants,
         (acc, next) => {
           if (this.isOncogenicMutations(next.alteration)) {
@@ -548,7 +554,34 @@ export default class GenePage extends React.Component<GenePageProps> {
         [] as FdaVariant[]
       );
     }
-    return predefinedFdaVariants;
+
+    // specially map for PICK3CA
+    // we need to change the fda level
+    // only list of alterations within CDx can be marked as level 2
+    if (this.store.hugoSymbol === 'PIK3CA') {
+      const fdaLevel2Mutations = [
+        'C420R',
+        'E542K',
+        'E545A',
+        'E545D',
+        'E545G',
+        'E545K',
+        'Q546E',
+        'Q546R',
+        'H1047L',
+        'H1047R',
+        'H1047Y',
+      ];
+      fdaUpdatedVariants = fdaUpdatedVariants.map(variant => {
+        return {
+          ...variant,
+          level: fdaLevel2Mutations.includes(variant.alteration)
+            ? variant.level
+            : 'Level 3',
+        };
+      });
+    }
+    return fdaUpdatedVariants;
   }
 
   componentDidUpdate(prevProps: any) {
@@ -689,6 +722,20 @@ export default class GenePage extends React.Component<GenePageProps> {
         <OncoKBTable
           data={this.fdaVariants}
           columns={this.fdaTableColumns}
+          defaultSorted={[
+            {
+              id: TABLE_COLUMN_KEY.LEVEL,
+              desc: false,
+            },
+            {
+              id: TABLE_COLUMN_KEY.ALTERATION,
+              desc: false,
+            },
+            {
+              id: TABLE_COLUMN_KEY.TUMOR_TYPE,
+              desc: false,
+            },
+          ]}
           pageSize={this.fdaVariants.length === 0 ? 1 : this.fdaVariants.length}
           fixedHeight={this.fdaVariants.length > THRESHOLD_TABLE_FIXED_HEIGHT}
           style={
