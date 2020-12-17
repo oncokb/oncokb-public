@@ -88,13 +88,9 @@ const LEVEL_FILE_NAME: { [key in Version]: string } = {
 export default class LevelOfEvidencePage extends React.Component<
   LevelOfEvidencePageProps
 > {
-  @observable version: Version;
+  @observable version: Version = Version.V2;
 
   readonly reactions: IReactionDisposer[] = [];
-
-  getVersionDefault = () => {
-    return Version.V2;
-  };
 
   updateLocationHash = (newVersion: Version) => {
     window.location.hash = QueryString.stringify({ version: newVersion });
@@ -110,11 +106,7 @@ export default class LevelOfEvidencePage extends React.Component<
           if (queryStrings.version) {
             if (ALLOWED_VERSIONS.includes(queryStrings.version.toUpperCase())) {
               this.version = queryStrings.version;
-            } else {
-              this.version = this.getVersionDefault();
             }
-          } else {
-            this.version = this.getVersionDefault();
           }
         },
         { fireImmediately: true }
@@ -234,7 +226,11 @@ export default class LevelOfEvidencePage extends React.Component<
         <div className="levels-of-evidence">
           <>
             <Tabs
-              defaultActiveKey={Version[this.version]}
+              defaultActiveKey={
+                this.version === Version.DX || this.version === Version.PX
+                  ? Version[this.version]
+                  : Version.V2
+              }
               id="level-type-tabs"
               onSelect={k => this.toggleVersion(Version[k || Version.V2])}
             >

@@ -15,6 +15,7 @@ import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import styles from './GenePage.module.scss';
 import {
   filterByKeyword,
+  generateLoELink,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   levelOfEvidence2Level,
@@ -30,6 +31,7 @@ import {
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
   LEVEL_TYPE_NAMES,
+  PAGE_ROUTE,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
 } from 'app/config/constants';
@@ -58,6 +60,8 @@ import { ReferenceGenomeInfo } from './ReferenceGenomeInfo';
 import WithSeparator from 'react-with-separator';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { GenePageTable } from './GenePageTable';
+import { Link } from 'react-router-dom';
+import * as QueryString from 'query-string';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -558,21 +562,31 @@ export default class GenePage extends React.Component<GenePageProps> {
           A list of the tumor type-specific {this.store.hugoSymbol} alterations
           that may predict response to a targeted drug and the corresponding
           OncoKB level of evidence assigning their level of{' '}
-          <b>clinical actionability</b>.
+          <Link to={PAGE_ROUTE.LEVELS}>clinical actionability</Link>.
         </span>
       );
     } else if (key === TAB_KEYS.DX) {
       return (
         <span>
           A list of diagnostic {this.store.hugoSymbol} alterations and the
-          corresponding OncoKB diagnostic level of evidence.
+          corresponding
+          <Link to={generateLoELink(LEVEL_TYPES.DX)}>
+            {' '}
+            OncoKB diagnostic level of evidence
+          </Link>
+          .
         </span>
       );
     } else if (key === TAB_KEYS.PX) {
       return (
         <span>
           A list of tumor-type specific prognostic {this.store.hugoSymbol}{' '}
-          alterations and the corresponding OncoKB prognostic level of evidence.
+          alterations and the corresponding
+          <Link to={generateLoELink(LEVEL_TYPES.PX)}>
+            {' '}
+            OncoKB prognostic level of evidence
+          </Link>
+          .
         </span>
       );
     }

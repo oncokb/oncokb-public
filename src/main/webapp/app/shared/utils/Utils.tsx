@@ -444,3 +444,7 @@ export const scrollWidthOffsetInNews = (el?: any) => {
   const yOffset = -80;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
 };
+
+export function generateLoELink(levelType: string) {
+  return `${PAGE_ROUTE.LEVELS}#version=${levelType.toUpperCase()}`;
+}

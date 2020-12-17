@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { observable, action } from 'mobx';
+import { observable, action, IReactionDisposer, reaction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { remoteData } from 'cbioportal-frontend-commons';
 import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
@@ -28,6 +28,7 @@ import _ from 'lodash';
 import AppStore from 'app/store/AppStore';
 import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 import autobind from 'autobind-decorator';
+import * as QueryString from 'query-string';
 
 interface IHomeProps {
   content: string;
@@ -46,6 +47,40 @@ class HomePage extends React.Component<IHomeProps> {
   @observable keyword = '';
   @observable levelTypeSelected = LEVEL_TYPES.TX;
   private levelGadgets = this.generateLevelGadgets();
+
+  readonly reactions: IReactionDisposer[] = [];
+
+  updateLocationHash = (newSelectedType: LEVEL_TYPES) => {
+    window.location.hash = QueryString.stringify({
+      levelType: newSelectedType,
+    });
+  };
+
+  constructor(props: Readonly<IHomeProps>) {
+    super(props);
+    this.reactions.push(
+      reaction(
+        () => [props.routing.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(hash) as {
+            levelType: LEVEL_TYPES;
+          };
+          if (queryStrings.levelType) {
+            this.levelTypeSelected = queryStrings.levelType;
+          }
+        },
+        { fireImmediately: true }
+      ),
+      reaction(
+        () => this.levelTypeSelected,
+        newSelectedType => this.updateLocationHash(newSelectedType)
+      )
+    );
+  }
+
+  componentWillUnmount(): void {
+    this.reactions.forEach(componentReaction => componentReaction());
+  }
 
   generateLevelGadgets() {
     const levelGadgets: {
