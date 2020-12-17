@@ -15,7 +15,6 @@ import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import styles from './GenePage.module.scss';
 import {
   filterByKeyword,
-  generateLoELink,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   levelOfEvidence2Level,
@@ -62,6 +61,7 @@ import InfoIcon from 'app/shared/icons/InfoIcon';
 import { GenePageTable } from './GenePageTable';
 import { Link } from 'react-router-dom';
 import * as QueryString from 'query-string';
+import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -562,18 +562,20 @@ export default class GenePage extends React.Component<GenePageProps> {
           A list of the tumor type-specific {this.store.hugoSymbol} alterations
           that may predict response to a targeted drug and the corresponding
           OncoKB level of evidence assigning their level of{' '}
-          <Link to={PAGE_ROUTE.LEVELS}>clinical actionability</Link>.
+          <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX}>
+            clinical actionability
+          </LevelOfEvidencePageLink>
+          .
         </span>
       );
     } else if (key === TAB_KEYS.DX) {
       return (
         <span>
           A list of diagnostic {this.store.hugoSymbol} alterations and the
-          corresponding
-          <Link to={generateLoELink(LEVEL_TYPES.DX)}>
-            {' '}
+          corresponding{' '}
+          <LevelOfEvidencePageLink levelType={LEVEL_TYPES.DX}>
             OncoKB diagnostic level of evidence
-          </Link>
+          </LevelOfEvidencePageLink>
           .
         </span>
       );
@@ -581,11 +583,10 @@ export default class GenePage extends React.Component<GenePageProps> {
       return (
         <span>
           A list of tumor-type specific prognostic {this.store.hugoSymbol}{' '}
-          alterations and the corresponding
-          <Link to={generateLoELink(LEVEL_TYPES.PX)}>
-            {' '}
+          alterations and the corresponding{' '}
+          <LevelOfEvidencePageLink levelType={LEVEL_TYPES.PX}>
             OncoKB prognostic level of evidence
-          </Link>
+          </LevelOfEvidencePageLink>
           .
         </span>
       );
