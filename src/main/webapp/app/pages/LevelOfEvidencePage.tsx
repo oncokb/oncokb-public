@@ -45,7 +45,10 @@ const LEVEL_TITLE: { [key in Version]: ElementType } = {
     </>
   ),
   [Version.AAC]: (
-    <>Mapping between OncoKB and AMP/ASCO/CAP Levels of Evidence</>
+    <>
+      Mapping between the OncoKB Levels of Evidence and the AMP/ASCO/CAP
+      Consensus Recommendation
+    </>
   ),
 };
 const LEVEL_SUBTITLE: { [key in Version]: ElementType } = {
@@ -167,6 +170,25 @@ export default class LevelOfEvidencePage extends React.Component<
                 </DownloadButton>
               </Col>
             </Row>
+            <Row className={'justify-content-md-center mt-5'}>
+              <Col className={'col-md-auto text-center'}>
+                <h4>{LEVEL_TITLE[this.version]}</h4>
+                <div>
+                  <span
+                    onClick={() =>
+                      this.toggleVersion(
+                        V2_RELATED_LEVELS.includes(this.version)
+                          ? Version.V1
+                          : Version.V2
+                      )
+                    }
+                    className={mainStyles.btnLinkText}
+                  >
+                    {LEVEL_SUBTITLE[this.version]}
+                  </span>
+                </div>
+              </Col>
+            </Row>
             <Row>
               <Col className={'d-md-flex justify-content-center mt-2'}>
                 <div
@@ -195,29 +217,6 @@ export default class LevelOfEvidencePage extends React.Component<
                       </span>
                     </div>
                   ) : null}
-                </div>
-              </Col>
-            </Row>
-            <Row className={'justify-content-md-center mt-2'}>
-              <Col className={'col-md-auto text-center'}>
-                <div>
-                  <span className={'mr-1 font-weight-bold'}>
-                    {LEVEL_TITLE[this.version]}
-                  </span>
-                </div>
-                <div>
-                  <span
-                    onClick={() =>
-                      this.toggleVersion(
-                        V2_RELATED_LEVELS.includes(this.version)
-                          ? Version.V1
-                          : Version.V2
-                      )
-                    }
-                    className={mainStyles.btnLinkText}
-                  >
-                    {LEVEL_SUBTITLE[this.version]}
-                  </span>
                 </div>
               </Col>
             </Row>
