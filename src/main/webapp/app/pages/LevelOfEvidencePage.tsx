@@ -5,6 +5,7 @@ import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import {
   DOCUMENT_TITLES,
   IMG_MAX_WIDTH,
+  LEVEL_TYPES,
   PAGE_ROUTE,
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
@@ -36,6 +37,12 @@ const TAB_TITLES = {
   [Version.AAC]: 'Therapeutic Levels',
   [Version.DX]: 'Diagnostic Levels',
   [Version.PX]: 'Prognostic Levels',
+};
+
+export const LEVEL_TYPE_TO_VERSION: { [key in LEVEL_TYPES]: Version } = {
+  [LEVEL_TYPES.TX]: Version.V2,
+  [LEVEL_TYPES.DX]: Version.DX,
+  [LEVEL_TYPES.PX]: Version.PX,
 };
 
 const DEFAULT_LEVEL_FILE_NAME = 'LevelsOfEvidence';
