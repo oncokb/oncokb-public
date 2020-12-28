@@ -11,7 +11,7 @@ import {
 import { Else, If, Then } from 'react-if';
 import { Redirect, RouteComponentProps } from 'react-router';
 import { Col, Row } from 'react-bootstrap';
-import { Gene } from 'app/shared/api/generated/OncoKbAPI';
+import { Citations, Gene } from 'app/shared/api/generated/OncoKbAPI';
 import styles from './GenePage.module.scss';
 import {
   filterByKeyword,
@@ -320,6 +320,12 @@ export default class GenePage extends React.Component<GenePageProps> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+        accessor(d) {
+          return {
+            abstracts: d.drugAbstracts,
+            pmids: d.drugPmids,
+          } as Citations;
+        },
       },
     ];
   }
@@ -363,6 +369,12 @@ export default class GenePage extends React.Component<GenePageProps> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+        accessor(d) {
+          return {
+            abstracts: d.mutationEffectAbstracts,
+            pmids: d.mutationEffectPmids,
+          } as Citations;
+        },
         Cell(props: { original: BiologicalVariant }) {
           const numOfReferences =
             props.original.mutationEffectAbstracts.length +
