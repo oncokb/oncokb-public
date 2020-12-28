@@ -22,6 +22,7 @@ import {
   Treatment,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
+  citationsSortMethod,
   defaultSortMethod,
   mutationEffectSortMethod,
   oncogenicitySortMethod,
@@ -344,7 +345,7 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'citations',
         minWidth: 90,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod,
+        sortMethod: citationsSortMethod,
         Cell(props: any) {
           const numOfReferences =
             props.original.drugAbstracts.length +
