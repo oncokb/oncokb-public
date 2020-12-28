@@ -53,7 +53,7 @@ import DocumentTitle from 'react-document-title';
 import { COLOR_BLUE } from 'app/config/theme';
 import WithSeparator from 'react-with-separator';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import { LevelSelectionRow } from './LevelSelectionRow';
+import LevelSelectionRow from './LevelSelectionRow';
 
 type Treatment = {
   level: string;
@@ -570,106 +570,15 @@ export default class ActionableGenesPage extends React.Component<
     const levelSelectionSection = [];
     for (const key in LEVEL_TYPES) {
       if (LEVEL_TYPES[key]) {
-        const levelSelections = [];
-        for (const level in LEVELS) {
-          if (LEVELS[level]) {
-            levelSelections.push(
-              LEVEL_CLASSIFICATION[LEVELS[level]] === LEVEL_TYPES[key] && (
-                <Col
-                  className={classnames(...COMPONENT_PADDING)}
-                  lg={
-                    LEVEL_CLASSIFICATION[LEVELS[level]] === LEVEL_TYPES.TX
-                      ? 2
-                      : 4
-                  }
-                  xs={
-                    LEVEL_CLASSIFICATION[LEVELS[level]] === LEVEL_TYPES.TX
-                      ? 6
-                      : 4
-                  }
-                  key={LEVELS[level]}
-                >
-                  <LevelButton
-                    level={LEVELS[level]}
-                    numOfGenes={this.levelNumbers[LEVELS[level]]}
-                    description={LEVEL_BUTTON_DESCRIPTION[LEVELS[level]]}
-                    active={this.levelSelected[LEVELS[level]]}
-                    className="mb-2"
-                    disabled={this.levelNumbers[LEVELS[level]] === 0}
-                    onClick={() => this.updateLevelSelection(LEVELS[level])}
-                  />
-                </Col>
-              )
-            );
-          }
-        }
         levelSelectionSection.push(
-          // <LevelSelectionRow
-          //   levelType = {LEVEL_TYPES[key]}
-          //   collapseStatus = {this.collapseStatus}
-          //   levelNumbers = {this.levelNumbers}
-          //   levelSelected = {this.levelSelected}
-          //   updateCollapseStatus = {this.updateCollapseStatus}
-          //   updateLevelSelection = {this.updateLevelSelection}
-          // />
-          <>
-            <Row
-              style={{ paddingLeft: '1rem', paddingRight: '1rem' }}
-              className={'mb-2'}
-            >
-              <Button
-                style={{
-                  backgroundColor: 'white',
-                  border: 0,
-                  textAlign: 'left',
-                  paddingLeft: 0,
-                  boxShadow: 'none',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}
-                variant="light"
-                onClick={() => {
-                  this.updateCollapseStatus(LEVEL_TYPES[key]);
-                }}
-                block
-              >
-                <div style={{ flexGrow: 0, marginRight: '0.5em' }}>
-                  {this.collapseStatus[LEVEL_TYPES[key]] ? (
-                    <i className="fa fa-minus"></i>
-                  ) : (
-                    <i className="fa fa-plus"></i>
-                  )}
-                  {this.collapseStatus[LEVEL_TYPES[key]] ? (
-                    <span>
-                      {' '}
-                      Click to hide {LEVEL_TYPE_NAMES[LEVEL_TYPES[key]]} Levels
-                    </span>
-                  ) : (
-                    <span>
-                      {' '}
-                      Click to show {LEVEL_TYPE_NAMES[LEVEL_TYPES[key]]} Levels
-                    </span>
-                  )}
-                </div>
-                <div
-                  style={{
-                    flexGrow: 1,
-                    height: '0.5px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                  }}
-                ></div>
-              </Button>
-            </Row>
-            <Collapse in={this.collapseStatus[LEVEL_TYPES[key]]}>
-              <Row
-                style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
-                className={'mb-2'}
-              >
-                {levelSelections}
-              </Row>
-            </Collapse>
-          </>
+          <LevelSelectionRow
+            levelType={LEVEL_TYPES[key]}
+            collapseStatus={this.collapseStatus}
+            levelNumbers={this.levelNumbers}
+            levelSelected={this.levelSelected}
+            updateCollapseStatus={this.updateCollapseStatus}
+            updateLevelSelection={this.updateLevelSelection}
+          />
         );
       }
     }
