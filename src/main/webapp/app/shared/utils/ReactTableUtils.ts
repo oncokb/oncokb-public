@@ -1,6 +1,6 @@
 import { MUTATION_EFFECT, ONCOGENICITY } from 'app/config/constants';
 import _ from 'lodash';
-import { Alteration } from '../api/generated/OncoKbAPI';
+import { Alteration, Citations } from '../api/generated/OncoKbAPI';
 
 export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {
   if (aIndex === bIndex) {
@@ -65,7 +65,7 @@ const oncogenicityOrder = [
   ONCOGENICITY.NEUTRAL,
   ONCOGENICITY.LIKELY_NEUTRAL,
   ONCOGENICITY.INCONCLUSIVE,
-  ONCOGENICITY.UNKNOWN
+  ONCOGENICITY.UNKNOWN,
 ];
 const mutationEffectOrder = [
   MUTATION_EFFECT.GAIN_OF_FUNCTION,
@@ -77,8 +77,25 @@ const mutationEffectOrder = [
   MUTATION_EFFECT.SWITCH_OF_FUNCTION,
   MUTATION_EFFECT.LIKELY_SWITCH_OF_FUNCTION,
   MUTATION_EFFECT.INCONCLUSIVE,
-  MUTATION_EFFECT.UNKNOWN
+  MUTATION_EFFECT.UNKNOWN,
 ];
+
+export function numberStringSortMethod(a: string, b: string) {
+  if (isNaN(+a)) {
+    return isNaN(+b) ? 0 : 1;
+  } else if (isNaN(+b)) {
+    return -1;
+  } else {
+    return +a - +b;
+  }
+}
+
+export function citationsSortMethod(a: Citations, b: Citations) {
+  const numOfReferencesA = a.abstracts.length + a.pmids.length;
+  const numOfReferencesB = b.abstracts.length + b.pmids.length;
+
+  return numOfReferencesA - numOfReferencesB;
+}
 
 export function oncogenicitySortMethod(a: ONCOGENICITY, b: ONCOGENICITY) {
   return sortByArrayIndexAsc(

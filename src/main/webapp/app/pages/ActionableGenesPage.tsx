@@ -422,7 +422,7 @@ export default class ActionableGenesPage extends React.Component<
   @autobind
   downloadAssociation() {
     const content = [
-      ['Level', 'Gene', 'Alterations', 'Tumor Type', 'Drugs'].join('\t'),
+      ['Level', 'Gene', 'Alterations', 'Cancer Type', 'Drugs'].join('\t'),
     ];
     _.each(this.filteredTreatments, item => {
       content.push(
@@ -598,7 +598,7 @@ export default class ActionableGenesPage extends React.Component<
               <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
                 <Select
                   value={this.tumorTypeSelectValue}
-                  placeholder="Search Tumor Type"
+                  placeholder="Search a cancer type"
                   options={this.relevantTumorTypes.result.map(tumorType => {
                     return {
                       value: tumorType,
@@ -649,7 +649,7 @@ export default class ActionableGenesPage extends React.Component<
                     this.filteredGenes.length
                   )},
                 ${this.filteredTumorTypes.length} ${pluralize(
-                    'tumor type',
+                    'cancer type',
                     this.filteredTumorTypes.length
                   )},
                 ${this.filteredLevels.length} ${pluralize(

@@ -19,6 +19,7 @@ import {
   LicenseType,
   NOT_CHANGEABLE_AUTHORITIES,
   PAGE_ROUTE,
+  THRESHOLD_NUM_OF_USER,
   USER_AUTHORITIES,
   USER_AUTHORITY,
 } from 'app/config/constants';
@@ -73,7 +74,9 @@ export default class UserDetailsPage extends React.Component<{
   async getUsers() {
     try {
       // Hard code the max returned user size. Need to fix pagination issue.
-      this.users = await client.getAllUsersUsingGET({ size: 2000 });
+      this.users = await client.getAllUsersUsingGET({
+        size: THRESHOLD_NUM_OF_USER,
+      });
       // Display all commerical users by default
       this.toggleFilter(USER_BUTTON_TYPE.VERIFIED);
       this.loadedUsers = true;
