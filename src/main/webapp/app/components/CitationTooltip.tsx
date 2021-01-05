@@ -21,7 +21,7 @@ export class CitationTooltip extends React.Component<
           this.props.pmids.join(',')
       );
       return Promise.resolve(result.body);
-    }
+    },
   });
 
   findContent(pmid: string) {
@@ -52,7 +52,7 @@ export class CitationTooltip extends React.Component<
     const style = {
       maxHeight: TOOLTIP_MAX_HEIGHT,
       overflowY: 'scroll',
-      ...this.props.style
+      ...this.props.style,
     } as CSSProperties;
     return (
       <div>

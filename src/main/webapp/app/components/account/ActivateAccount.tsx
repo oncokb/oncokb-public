@@ -33,12 +33,12 @@ export default class ActivateAccount extends React.Component<{
     invoke: () => {
       if (this.activateKey) {
         return client.activateAccountUsingGET({
-          key: this.activateKey
+          key: this.activateKey,
         });
       } else {
         return Promise.reject('The key is empty');
       }
-    }
+    },
   });
 
   getSuccessfulMessage = () => {

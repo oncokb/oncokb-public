@@ -15,21 +15,16 @@ export interface IRecaptchaBoundaryRoute extends RouteProps {
 export class RecaptchaBoundaryRoute extends React.Component<
   IRecaptchaBoundaryRoute
 > {
-  @computed
-  get recaptchaVerifyed() {
-    return this.props.windowStore.recaptchaVerified;
-  }
-
   render() {
     if (this.props.isUserAuthenticated) {
       return <ErrorBoundaryRoute {...this.props} />;
     } else {
-      if (!this.recaptchaVerifyed) {
+      if (!this.props.windowStore.recaptchaVerified) {
         return (
           <>
             <div>
               <h3 style={{ textAlign: 'center' }}>
-                Verifying your behavior...
+                Verifying your identity using Google reCAPTCHA...
               </h3>
               <p style={{ textAlign: 'center' }}>
                 Please refresh if there is no response after few seconds.

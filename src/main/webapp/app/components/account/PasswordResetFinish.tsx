@@ -35,8 +35,8 @@ export default class PasswordResetFinish extends React.Component<{
       .finishPasswordResetUsingPOST({
         keyAndPassword: {
           key: this.activateKey,
-          newPassword: values.newPassword
-        }
+          newPassword: values.newPassword,
+        },
       })
       .then(() => {
         this.resetStatus = API_CALL_STATUS.SUCCESSFUL;
@@ -75,17 +75,18 @@ export default class PasswordResetFinish extends React.Component<{
           validate={{
             required: {
               value: true,
-              errorMessage: 'Your password is required.'
+              errorMessage: 'Your password is required.',
             },
             minLength: {
               value: 4,
               errorMessage:
-                'Your password is required to be at least 4 characters.'
+                'Your password is required to be at least 4 characters.',
             },
             maxLength: {
               value: 50,
-              errorMessage: 'Your password cannot be longer than 50 characters.'
-            }
+              errorMessage:
+                'Your password cannot be longer than 50 characters.',
+            },
           }}
           onChange={(event: any) => (this.password = event.target.value)}
         />
@@ -98,22 +99,22 @@ export default class PasswordResetFinish extends React.Component<{
           validate={{
             required: {
               value: true,
-              errorMessage: 'Your confirmation password is required.'
+              errorMessage: 'Your confirmation password is required.',
             },
             minLength: {
               value: 4,
               errorMessage:
-                'Your confirmation password is required to be at least 4 characters.'
+                'Your confirmation password is required to be at least 4 characters.',
             },
             maxLength: {
               value: 50,
               errorMessage:
-                'Your confirmation password cannot be longer than 50 characters.'
+                'Your confirmation password cannot be longer than 50 characters.',
             },
             match: {
               value: 'newPassword',
-              errorMessage: 'The password and its confirmation do not match!'
-            }
+              errorMessage: 'The password and its confirmation do not match!',
+            },
           }}
         />
         <Button color="success" type="submit">

@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import {
   PAGE_ROUTE,
-  REDIRECT_TIMEOUT_MILLISECONDS
+  REDIRECT_TIMEOUT_MILLISECONDS,
 } from 'app/config/constants';
 import { Redirect } from 'react-router';
 

@@ -3,7 +3,7 @@ import { ExtendedTypeaheadSearchResp } from 'app/pages/HomePage';
 import AsyncSelect from 'react-select/async';
 import {
   SearchOption,
-  SearchOptionType
+  SearchOptionType,
 } from 'app/components/searchOption/SearchOption';
 import { SuggestCuration } from 'app/components/SuggestCuration';
 import { components } from 'react-select';
@@ -11,7 +11,7 @@ import { RouterStore } from 'mobx-react-router';
 import oncokbPrivateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import {
   getAllAlterationsName,
-  getAllTumorTypesName
+  getAllTumorTypesName,
 } from 'app/shared/utils/Utils';
 import { observer, inject } from 'mobx-react';
 import autobind from 'autobind-decorator';
@@ -36,13 +36,13 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
     return _.reduce(
       await oncokbPrivateClient.searchTypeAheadGetUsingGET({
         query: keyword,
-        limit: 20
+        limit: 20,
       }),
       (acc, result) => {
         acc.push({
           tumorTypesName: getAllTumorTypesName(result.tumorTypes),
           alterationsName: getAllAlterationsName(result.variants),
-          ...result
+          ...result,
         });
         return acc;
       },
@@ -98,13 +98,13 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
           Option,
           DropdownIndicator: () => null,
           IndicatorSeparator: () => null,
-          NoOptionsMessage
+          NoOptionsMessage,
         }}
         styles={{
           input(styles) {
             return {
               ...styles,
-              lineHeight: '30px'
+              lineHeight: '30px',
             };
           },
           placeholder(styles) {
@@ -112,9 +112,9 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
               ...styles,
               width: '100%',
               lineHeight: '30px',
-              textAlign: 'center'
+              textAlign: 'center',
             };
-          }
+          },
         }}
         isFocused={true}
         defaultOptions={[] as ExtendedTypeaheadSearchResp[]}

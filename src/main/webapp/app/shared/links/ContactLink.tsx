@@ -2,7 +2,7 @@ import React from 'react';
 import {
   ONCOKB_CONTACT_EMAIL,
   ONCOKB_LICENSE_EMAIL,
-  PAGE_ROUTE
+  PAGE_ROUTE,
 } from 'app/config/constants';
 
 export const ContactLink: React.FunctionComponent<{

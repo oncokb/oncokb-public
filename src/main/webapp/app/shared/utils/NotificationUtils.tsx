@@ -14,22 +14,22 @@ const getErrorMessage = (error: Error, additionalInfo?: string) => {
 
 export const notifyInfo = (message: string) => {
   return toast.info(getFormattedMessage(message), {
-    className: 'bg-primary'
+    className: 'bg-primary',
   });
 };
 
 export const notifySuccess = (message: string) => {
   return toast.success(getFormattedMessage(message), {
-    className: 'bg-success'
+    className: 'bg-success',
   });
 };
 export const notifyWarning = (error: Error, additionalInfo?: string) => {
   return toast.warn(getErrorMessage(error, additionalInfo), {
-    className: 'bg-warning'
+    className: 'bg-warning',
   });
 };
 export const notifyError = (error: Error, additionalInfo?: string) => {
   return toast.error(getErrorMessage(error, additionalInfo), {
-    className: 'bg-danger'
+    className: 'bg-danger',
   });
 };

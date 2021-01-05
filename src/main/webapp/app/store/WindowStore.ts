@@ -1,7 +1,8 @@
 import { action, observable, computed } from 'mobx';
 import _ from 'lodash';
 import autobind from 'autobind-decorator';
-import { GRID_BREAKPOINTS } from 'app/config/constants';
+import { GRID_BREAKPOINTS, PAGE_ROUTE } from 'app/config/constants';
+import React from 'react';
 
 export interface IWindowSize {
   width: number;
@@ -10,9 +11,8 @@ export interface IWindowSize {
 
 class WindowStore {
   @observable size: IWindowSize;
-  public recaptchaRef: any;
   @observable recaptchaVerified: boolean;
-
+  public recaptchaRef: any;
   private handleWindowResize = _.debounce(this.setWindowSize, 200);
   private windowObj: any;
 
@@ -21,10 +21,15 @@ class WindowStore {
     this.setWindowSize();
     this.windowObj.addEventListener('resize', this.handleWindowResize);
     this.windowObj.addEventListener('click', () => {
-      if (!this.recaptchaVerified && this.windowObj.location.pathname !== '/') {
+      if (
+        !this.recaptchaVerified &&
+        this.windowObj.location.pathname !== PAGE_ROUTE.HOME
+      ) {
         this.executeRecaptcha();
       }
     });
+    this.recaptchaVerified = false;
+    this.recaptchaRef = React.createRef();
   }
 
   @action
