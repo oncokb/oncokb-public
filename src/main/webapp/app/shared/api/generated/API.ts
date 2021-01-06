@@ -1,6 +1,7 @@
 import * as request from "superagent";
 
 type CallbackHandler = (err: any, res ? : request.Response) => void;
+export type JSONObject = {};
 export type KeyAndPasswordVM = {
     'key': string
 
@@ -18,7 +19,7 @@ export type LoginVM = {
 export type MailTypeInfo = {
     'description': string
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TEST"
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "TEST"
 
 };
 export type ManagedUserVM = {
@@ -95,6 +96,12 @@ export type Token = {
         'usageLimit': number
 
         'user': User
+
+};
+export type UsageSummary = {
+    'month': {}
+
+    'year': {}
 
 };
 export type User = {
@@ -184,7 +191,7 @@ export type UserDetailsDTO = {
 export type UserMailsDTO = {
     'id': number
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TEST"
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "TEST"
 
         'sentBy': string
 
@@ -197,35 +204,38 @@ export type UserMailsDTO = {
         'userLogin': string
 
 };
-export type UserUsageOverview = {
-    'userId': string
-    'userEmail': string
+export type UserOverviewUsage = {
     'endpoint': string
-    'noPrivateEndpoint': string
-    'maxUsage': number
-    'noPrivateMaxUsage': number
-    'totalUsage': number
-}
 
+        'maxUsage': number
+
+        'noPrivateEndpoint': string
+
+        'noPrivateMaxUsage': number
+
+        'totalUsage': number
+
+        'userEmail': string
+
+        'userId': string
+
+};
 export type UserUsage = {
-    'userFirstName': string
-    'userLastName': string
-    'userEmail': string
-    'licenseType': string
-    'jobTitle': string
     'company': string
-    'summary': UsageSummary
-}
 
-export type UsageSummary = {
-    'month': Map<string, Map<string, number>>
-    'year': Map<string, number>
-}
+        'jobTitle': string
 
-export type UsageRecord = {
-    'resource': string,
-    'usage': number,
-}
+        'licenseType': string
+
+        'summary': UsageSummary
+
+        'userEmail': string
+
+        'userFirstName': string
+
+        'userLastName': string
+
+};
 
 /**
  * OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
@@ -1212,6 +1222,67 @@ export default class API {
             return response.body;
         });
     };
+    checkExposedTokensUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/cronjob/check-exposed-tokens';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * checkExposedTokens
+     * @method
+     * @name API#checkExposedTokensUsingGET
+     */
+    checkExposedTokensUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/cronjob/check-exposed-tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * checkExposedTokens
+     * @method
+     * @name API#checkExposedTokensUsingGET
+     */
+    checkExposedTokensUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < any > {
+        return this.checkExposedTokensUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     checkTrialAccountsUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
@@ -1784,7 +1855,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "TEST",
         'to': string,
         $queryParameters ? : any
     }): string {
@@ -1834,7 +1905,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -1917,7 +1988,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "SEND_INTAKE_FORM_COMMERCIAL" | "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL" | "SEND_INTAKE_FORM_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -2363,6 +2434,204 @@ export default class API {
         $domain ? : string
     }): Promise < any > {
         return this.deleteTokenUsingDELETE_1WithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    userOverviewUsageGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/usage/overview';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * userOverviewUsageGet
+     * @method
+     * @name API#userOverviewUsageGetUsingGET
+     */
+    userOverviewUsageGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/usage/overview';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * userOverviewUsageGet
+     * @method
+     * @name API#userOverviewUsageGetUsingGET
+     */
+    userOverviewUsageGetUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < UserOverviewUsage >
+        > {
+            return this.userOverviewUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    resourceUsageGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/usage/resource';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * resourceUsageGet
+     * @method
+     * @name API#resourceUsageGetUsingGET
+     */
+    resourceUsageGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/usage/resource';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * resourceUsageGet
+     * @method
+     * @name API#resourceUsageGetUsingGET
+     */
+    resourceUsageGetUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < UsageSummary > {
+        return this.resourceUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    userUsageGetUsingGETURL(parameters: {
+        'userId': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/usage/users/{userId}';
+
+        path = path.replace('{userId}', parameters['userId'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * userUsageGet
+     * @method
+     * @name API#userUsageGetUsingGET
+     * @param {string} userId - userId
+     */
+    userUsageGetUsingGETWithHttpInfo(parameters: {
+        'userId': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/usage/users/{userId}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{userId}', parameters['userId'] + '');
+
+            if (parameters['userId'] === undefined) {
+                reject(new Error('Missing required  parameter: userId'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * userUsageGet
+     * @method
+     * @name API#userUsageGetUsingGET
+     * @param {string} userId - userId
+     */
+    userUsageGetUsingGET(parameters: {
+        'userId': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < UserUsage > {
+        return this.userUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -3782,94 +4051,4 @@ export default class API {
                 return response.body;
             });
         };
-
-    getAllResourcesUsageUsingGETWithHttpInfo(parameters: {
-        $queryParameters ? : any,
-        $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/api/usage/resource';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'application/json';
-            headers['Content-Type'] = 'application/json';
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-        });
-    };
-
-    getAllResourcesUsageUsingGET( parameters: {
-            $queryParameters ? : any,
-            $domain ? : string
-        }): Promise < UsageSummary > {
-                return this.getAllResourcesUsageUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-                    return response.body;
-                });
-            };
-
-    getUserUsageOverviewUsingGETWithHttpInfo(parameters: {
-        $queryParameters ? : any,
-        $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/api/usage/overview';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'application/json';
-            headers['Content-Type'] = 'application/json';
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-        });
-    };
-
-    getUserUsageOverviewUsingGET( parameters: {
-            $queryParameters ? : any,
-            $domain ? : string
-        }): Promise < Array < UserUsageOverview > > {
-                return this.getUserUsageOverviewUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-                    return response.body;
-                });
-            };
-
-    
-    getUserUsageUsingGETWithHttpInfo(parameters: {
-        id: string, 
-        $queryParameters ? : any,
-        $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = `/api/usage/users/${parameters.id}`;
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'application/json';
-            headers['Content-Type'] = 'application/json';
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-        });
-    };
-
-    getUserUsageUsingGET( parameters: {
-            id: string,
-            $queryParameters ? : any,
-            $domain ? : string
-        }): Promise < UserUsage > {
-                return this.getUserUsageUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-                    return response.body;
-                });
-            };
 }
