@@ -36,7 +36,7 @@ export type NewsData = {
 export const NEWLY_ADDED_LEVEL_FOUR_COLUMNS = [
   { name: 'Gene', size: 2 },
   { name: 'Mutation', size: 6 },
-  { name: 'Tumor Type', size: 2 },
+  { name: 'Cancer Type', size: 2 },
   { name: 'Drug', size: 2 },
 ];
 
@@ -44,7 +44,7 @@ export const UPDATED_IMPLICATION_COLUMNS = [
   { name: 'Level' },
   { name: 'Gene' },
   { name: 'Mutation' },
-  { name: 'Tumor Type' },
+  { name: 'Cancer Type' },
   { name: 'Drug' },
   { name: 'Evidence' },
 ];
@@ -57,7 +57,7 @@ export const UPDATED_IMPLICATION_OLD_FORMAT_COLUMNS = [
 export const CHANGED_ANNOTATION_COLUMNS = [
   { name: 'Gene' },
   { name: 'Mutation' },
-  { name: 'Tumor Type' },
+  { name: 'Cancer Type' },
   { name: 'Drug' },
   { name: 'Previous Level' },
   { name: 'Current Level' },
@@ -109,6 +109,64 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '12172020': {
+    priorityNews: [
+      <span>Updated all gene names to the latest HUGO symbol</span>,
+    ],
+    updatedImplication: [
+      [
+        '1',
+        'RET',
+        'Fusions',
+        'Thyroid Cancer',
+        'Pralsetinib',
+        <span>
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-pralsetinib-ret-altered-thyroid-cancers'
+            }
+          >
+            FDA-approval of Pralsetinib
+          </Linkout>
+          ; Abstract:{' '}
+          <Linkout
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2020.38.15_suppl.109'
+            }
+          >
+            Subbiah et al. Abstract# 109, ASCO 2020
+          </Linkout>
+        </span>,
+      ],
+    ],
+    changedAnnotation: [
+      [
+        'RET',
+        'Oncogenic Mutations',
+        'Medullary Thyroid Cancer',
+        <div>Pralsetinib</div>,
+        '3A',
+        '1',
+        <div>
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-pralsetinib-ret-altered-thyroid-cancers'
+            }
+          >
+            FDA-approval of Pralsetinib
+          </Linkout>
+          ; Abstract:{' '}
+          <Linkout
+            link={
+              'https://oncologypro.esmo.org/meeting-resources/esmo-virtual-congress-2020/results-from-the-registrational-phase-i-ii-arrow-trial-of-pralsetinib-blu-667-in-patients-pts-with-advanced-ret-mutation-positive-medullary-thy'
+            }
+          >
+            Hu et al. Abstract# 19130, ESMO 2020
+          </Linkout>
+        </div>,
+      ],
+    ],
+  },
   '11132020': {
     priorityNews: [
       <span>
@@ -126,7 +184,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th>Level</th>
                 <th>Gene</th>
                 <th>Mutation</th>
-                <th>Tumor Type</th>
+                <th>Cancer Type</th>
                 <th>Drug</th>
                 <th>Evidence</th>
               </tr>
@@ -279,7 +337,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th>Level</th>
                 <th>Gene</th>
                 <th>Mutation</th>
-                <th>Tumor Type</th>
+                <th>Cancer Type</th>
                 <th>Drug</th>
                 <th>Evidence</th>
               </tr>
@@ -1220,7 +1278,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th className="col-xs-1">Level</th>
                 <th className="col-xs-1">Gene</th>
                 <th className="col-xs-4">Mutation</th>
-                <th className="col-xs-4">Tumor Type</th>
+                <th className="col-xs-4">Cancer Type</th>
                 <th className="col-xs-2">Drug</th>
               </tr>
             </thead>
@@ -1534,7 +1592,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href="http://oncotree.mskcc.org/#/home?version=oncotree_2017_06_21"
+          href="http://oncotree.info/#/home?version=oncotree_2017_06_21"
         >
           2017_06_21
         </a>{' '}
@@ -1542,7 +1600,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href="http://oncotree.mskcc.org/#/home?version=oncotree_2018_06_15"
+          href="http://oncotree.info/#/home?version=oncotree_2018_06_15"
         >
           2018_06_15
         </a>
@@ -2185,7 +2243,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           FGFR2 - Amplification - Breast Cancer - Dovitinib (<b>removed</b>)
         </span>,
         <span>
-          FGFR2/3 - Fusions - Various tumor types - Debio1347 (
+          FGFR2/3 - Fusions - Various cancer types - Debio1347 (
           <b>new association</b>)
         </span>,
         <span>

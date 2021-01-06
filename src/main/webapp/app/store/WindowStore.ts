@@ -51,12 +51,12 @@ class WindowStore {
 
   @computed
   get isXLscreen() {
-    return this.size.width > GRID_BREAKPOINTS.XL;
+    return this.size.width >= GRID_BREAKPOINTS.XL;
   }
 
   @computed
   get isLargeScreen() {
-    return this.size.width > GRID_BREAKPOINTS.LG;
+    return this.size.width >= GRID_BREAKPOINTS.LG;
   }
 }
 

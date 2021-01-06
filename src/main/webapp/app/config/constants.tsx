@@ -48,8 +48,8 @@ export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
 export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
-  LG: 1010,
-  XL: 1450,
+  LG: 1050,
+  XL: 1200,
 };
 export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
@@ -184,11 +184,14 @@ export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
 export const THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT = 30;
 export const LG_TABLE_FIXED_HEIGHT = 640;
 export const SM_TABLE_FIXED_HEIGHT = 400;
-export const IMG_MAX_WIDTH = 700;
+export const IMG_MAX_WIDTH = 800;
 export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
 export const H5_FONT_SIZE = '1.25rem';
 export const FONT_FAMILY =
   "'Helvetica Neue', Helvetica, Verdana, Arial, sans-serif";
+
+// we do not have the table component to support api pagination, have to set the threshold to pull the list of all users
+export const THRESHOLD_NUM_OF_USER = 5000;
 
 // Defaults for tooltip size
 export const TOOLTIP_MAX_HEIGHT = 300;
@@ -460,6 +463,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '12172020', version: 'v2.10' },
   { date: '11132020', version: 'v2.9' },
   { date: '09172020', version: 'v2.8' },
   { date: '08282020', version: 'v2.7' },

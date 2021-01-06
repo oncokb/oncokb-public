@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { GenePageLink } from 'app/shared/utils/UrlUtils';
+import { GenePageLink, OncoTreeLink } from 'app/shared/utils/UrlUtils';
 import {
   DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
@@ -45,7 +45,7 @@ enum SummaryKey {
 const SUMMARY_TITLE = {
   [SummaryKey.GENE_SUMMARY]: 'Gene Summary',
   [SummaryKey.ALTERATION_SUMMARY]: 'Alteration Summary',
-  [SummaryKey.TUMOR_TYPE_SUMMARY]: 'Tumor Type Summary',
+  [SummaryKey.TUMOR_TYPE_SUMMARY]: 'Cancer Type Summary',
   [SummaryKey.DIAGNOSTIC_SUMMARY]: 'Diagnostic Summary',
   [SummaryKey.PROGNOSTIC_SUMMARY]: 'Prognostic Summary',
 };
@@ -172,9 +172,6 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
-      },
-      {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
         Cell: (props: { original: any }) => {
           return (
@@ -191,6 +188,9 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
             </Button>
           );
         },
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
@@ -231,11 +231,17 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
     return (
       <>
         <h2 className={'d-flex align-items-center'}>
-          <GenePageLink
-            hugoSymbol={this.props.hugoSymbol}
-            highlightContent={false}
-          />
-          <span className={'ml-2'}>{` ${this.props.alteration}`}</span>
+          {this.props.alteration
+            .toLowerCase()
+            .includes(this.props.hugoSymbol.toLowerCase()) ? null : (
+            <span className={'mr-2'}>
+              <GenePageLink
+                hugoSymbol={this.props.hugoSymbol}
+                highlightContent={false}
+              />
+            </span>
+          )}
+          <span>{`${this.props.alteration}`}</span>
         </h2>
         <AlterationInfo
           oncogenicity={this.props.annotation.oncogenic}
@@ -289,7 +295,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                     }),
                   }}
                   value={this.tumorTypeSelectValue}
-                  placeholder="Select a tumor type"
+                  placeholder="Select a cancer type"
                   options={this.props.allTumorTypesOptions}
                   formatGroupLabel={this.formatGroupLabel}
                   isClearable={true}
@@ -299,7 +305,13 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                 />
               </span>
               <InfoIcon
-                overlay="For tumor type specific information, please select a tumor type from the dropdown"
+                overlay={
+                  <span>
+                    For cancer type specific information, please select a cancer
+                    type from the dropdown. The cancer type is curated using{' '}
+                    <OncoTreeLink />
+                  </span>
+                }
                 placement="top"
               />
             </div>
