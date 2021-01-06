@@ -24,7 +24,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
           <>
             <div>
               <h3 style={{ textAlign: 'center' }}>
-                Verifying your behavior...
+                Verifying your identity using Google reCAPTCHA...
               </h3>
               <p style={{ textAlign: 'center' }}>
                 Please refresh if there is no response after few seconds.

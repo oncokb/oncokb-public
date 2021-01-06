@@ -23,8 +23,6 @@ import {
   getStoredToken,
   getPublicWebsiteToken,
   AUTH_UER_TOKEN_KEY,
-  RECAPTCHA_KEY,
-  getRecaptchaToken,
 } from 'app/indexUtils';
 import { UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
 import _ from 'lodash';
