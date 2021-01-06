@@ -162,7 +162,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
       );
       if (matchedSubtype) {
         return {
-          label: matchedSubtype.name,
+          label: matchedSubtype.subtype,
           value: matchedSubtype.code,
         };
       } else {

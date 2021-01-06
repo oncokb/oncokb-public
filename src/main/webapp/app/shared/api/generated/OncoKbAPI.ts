@@ -132,8 +132,6 @@ export type Implication = {
 
 };
 export type TumorType = {
-    'children': {}
-
     'code': string
 
         'color': string
@@ -142,15 +140,13 @@ export type TumorType = {
 
         'level': number
 
-        'mainType': MainType
+        'mainType': string
 
-        'name': string
-
-        'parent': string
+        'subtype': string
 
         'tissue': string
 
-        'tumorForm': "SOLID" | "LIQUID"
+        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
 
 };
 export type Gene = {
@@ -212,7 +208,7 @@ export type Evidence = {
 
         'articles': Array < Article >
 
-        'cancerType': string
+        'cancerTypes': Array < TumorType >
 
         'description': string
 
@@ -232,11 +228,9 @@ export type Evidence = {
 
         'liquidPropagationLevel': "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO"
 
-        'oncoTreeType': TumorType
+        'relevantCancerTypes': Array < TumorType >
 
         'solidPropagationLevel': "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO"
-
-        'subtype': string
 
         'treatments': Array < Treatment >
 
@@ -471,14 +465,6 @@ export type Arms = {
     'armDescription': string
 
         'drugs': Array < Drug >
-
-};
-export type MainType = {
-    'id': number
-
-        'name': string
-
-        'tumorForm': "SOLID" | "LIQUID"
 
 };
 export type OncoKBInfo = {

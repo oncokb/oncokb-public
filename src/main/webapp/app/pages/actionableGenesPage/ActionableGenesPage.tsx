@@ -15,7 +15,6 @@ import {
 import {
   Alteration,
   Evidence,
-  MainType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
@@ -94,11 +93,16 @@ export default class ActionableGenesPage extends React.Component<
   };
   @observable collapseInit = false;
 
-  readonly allMainTypes = remoteData<MainType[]>({
+  readonly allMainTypes = remoteData<string[]>({
     await: () => [],
     async invoke() {
-      const result = await privateClient.utilsOncoTreeMainTypesGetUsingGET({});
-      return result.sort();
+      const result = await privateClient.utilsTumorTypesGetUsingGET({});
+      return _.chain(result)
+        .filter(cancerType => cancerType.level >= 0)
+        .map(cancerType => cancerType.mainType)
+        .uniq()
+        .value()
+        .sort();
     },
     default: [],
   });
@@ -108,8 +112,8 @@ export default class ActionableGenesPage extends React.Component<
     invoke: async () => {
       let allTumorTypes: string[] = _.uniq(
         this.allMainTypes.result
-          .filter(mainType => !mainType.name.endsWith('NOS'))
-          .map(mainType => mainType.name)
+          .filter(mainType => !mainType.endsWith('NOS'))
+          .map(mainType => mainType)
       );
 
       allTumorTypes = allTumorTypes.concat(
@@ -140,7 +144,7 @@ export default class ActionableGenesPage extends React.Component<
           }
         );
         result = allRelevantTumorTypes.map(tumorType => {
-          return tumorType.code ? tumorType.name : tumorType.mainType.name;
+          return tumorType.code ? tumorType.subtype : tumorType.mainType;
         });
       } else {
         result = this.allTumorTypes.result;
@@ -214,7 +218,9 @@ export default class ActionableGenesPage extends React.Component<
         level: levelOfEvidence2Level(item.levelOfEvidence, true),
         hugoSymbol: item.gene.hugoSymbol || 'NA',
         alterations: _.sortBy(item.alterations, 'name'),
-        tumorType: getCancerTypeNameFromOncoTreeType(item.oncoTreeType),
+        tumorType: item.cancerTypes
+          .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+          .join(', '),
         treatments: item.treatments,
         uniqueDrugs: _.uniq(
           _.reduce(
@@ -661,8 +667,8 @@ export default class ActionableGenesPage extends React.Component<
                 <span>
                   <b>{`Showing ${
                     this.filteredTreatments.length
-                  } biomarker-drug  ${pluralize(
-                    'association',
+                  } clinical  ${pluralize(
+                    'implication',
                     this.filteredTreatments.length
                   )}`}</b>
                   {` (${this.filteredGenes.length} ${pluralize(

@@ -22,7 +22,6 @@ import {
   CancerTypeCount,
   ClinicalVariant,
   GeneNumber,
-  MainType,
   PortalAlteration,
   TumorType,
   VariantAnnotation,
@@ -280,60 +279,58 @@ export class AnnotationStore {
     },
   });
 
-  readonly allMainTypes = remoteData<MainType[]>({
+  readonly allCancerTypes = remoteData<TumorType[]>({
     await: () => [],
     async invoke() {
-      const result = await privateClient.utilsOncoTreeMainTypesGetUsingGET({
-        excludeSpecialTumorType: true,
-      });
+      const result = await privateClient.utilsTumorTypesGetUsingGET({});
       return result.sort();
     },
     default: [],
   });
 
-  readonly allSubtype = remoteData<TumorType[]>({
-    await: () => [],
-    async invoke() {
-      const result = await privateClient.utilsOncoTreeSubtypesGetUsingGET({});
-      return result.sort();
-    },
-    default: [],
-  });
+  @computed
+  get allMainTypes() {
+    return _.uniq(
+      this.allCancerTypes.result
+        .filter(cancerType => cancerType.level >= 0)
+        .map(cancerType => cancerType.mainType)
+    ).sort();
+  }
 
-  readonly allTumorTypesOptions = remoteData<any>({
-    await: () => [this.allMainTypes, this.allSubtype],
-    invoke: () => {
-      return Promise.resolve([
-        {
-          label: 'Cancer Type',
-          options: _.uniq(
-            this.allMainTypes.result
-              .filter(mainType => !mainType.name.endsWith('NOS'))
-              .map(mainType => mainType.name)
-          )
-            .sort()
-            .map(tumorType => {
-              return {
-                value: tumorType,
-                label: tumorType,
-              };
-            }),
-        },
-        {
-          label: 'Cancer Type Detailed',
-          options: _.sortBy(_.uniq(this.allSubtype.result), 'name').map(
-            tumorType => {
-              return {
-                value: tumorType.code,
-                label: `${tumorType.name} (${tumorType.code})`,
-              };
-            }
-          ),
-        },
-      ]);
-    },
-    default: [],
-  });
+  @computed
+  get allSubtype() {
+    return _.uniq(
+      this.allCancerTypes.result.filter(cancerType => cancerType.subtype)
+    ).sort();
+  }
+
+  @computed
+  get allTumorTypesOptions() {
+    return [
+      {
+        label: 'Cancer Type',
+        options: _.uniq(
+          this.allMainTypes.filter(mainType => !mainType.endsWith('NOS'))
+        )
+          .sort()
+          .map(tumorType => {
+            return {
+              value: tumorType,
+              label: tumorType,
+            };
+          }),
+      },
+      {
+        label: 'Cancer Type Detailed',
+        options: _.sortBy(_.uniq(this.allSubtype), 'name').map(tumorType => {
+          return {
+            value: tumorType.code,
+            label: `${tumorType.subtype} (${tumorType.code})`,
+          };
+        }),
+      },
+    ];
+  }
 
   readonly annotationResult = remoteData<VariantAnnotation>({
     await: () => [this.gene],
@@ -541,9 +538,7 @@ export class AnnotationStore {
         }
         if (
           this.selectedCancerTypes.length > 0 &&
-          (!this.selectedCancerTypes.includes(
-            alteration.cancerType.mainType.name
-          ) ||
+          (!this.selectedCancerTypes.includes(alteration.cancerType.mainType) ||
             !this.filteredAlterationsByBarChart.includes(
               alteration.variant.alteration
             ))

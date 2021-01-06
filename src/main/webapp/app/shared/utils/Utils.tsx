@@ -52,7 +52,7 @@ export function shortenOncogenicity(oncogenicity: string): string {
 export function getCancerTypeNameFromOncoTreeType(
   oncoTreeType: TumorType
 ): string {
-  return oncoTreeType.name || oncoTreeType.mainType.name || 'NA';
+  return oncoTreeType.subtype || oncoTreeType.mainType || 'NA';
 }
 
 export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
@@ -206,7 +206,7 @@ export const OncoKBLevelIcon: React.FunctionComponent<{
   level: string;
   withDescription?: boolean;
 }> = ({ level, withDescription = true }) => {
-  const oncokbIcon = <i className={`oncokb level-icon level-${level}`} />;
+  const oncokbIcon = <i className={`oncokb icon level-${level}`} />;
   return withDescription ? (
     <LevelWithDescription level={level}>{oncokbIcon}</LevelWithDescription>
   ) : (
