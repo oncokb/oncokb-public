@@ -127,8 +127,8 @@ export default class AlterationPage extends React.Component<
                   alteration={this.store.alterationQuery}
                   tumorType={this.store.tumorTypeQuery}
                   annotation={this.store.annotationResult.result}
-                  allTumorTypesOptions={this.store.allTumorTypesOptions.result}
-                  allSubtypes={this.store.allSubtype.result}
+                  allTumorTypesOptions={this.store.allTumorTypesOptions}
+                  allSubtypes={this.store.allSubtype}
                   onChangeTumorType={newTumorType =>
                     (this.store.tumorTypeQuery = newTumorType)
                   }
