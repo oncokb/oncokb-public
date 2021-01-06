@@ -321,12 +321,14 @@ export class AnnotationStore {
         },
         {
           label: 'Cancer Type Detailed',
-          options: _.sortBy(this.allSubtype.result, 'name').map(tumorType => {
-            return {
-              value: tumorType.code,
-              label: tumorType.name,
-            };
-          }),
+          options: _.sortBy(_.uniq(this.allSubtype.result), 'name').map(
+            tumorType => {
+              return {
+                value: tumorType.code,
+                label: `${tumorType.name} (${tumorType.code})`,
+              };
+            }
+          ),
         },
       ]);
     },
