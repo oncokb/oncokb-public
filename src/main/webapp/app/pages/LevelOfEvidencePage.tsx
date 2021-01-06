@@ -16,9 +16,12 @@ import autobind from 'autobind-decorator';
 import { HashLink } from 'react-router-hash-link';
 import mainStyles from '../index.module.scss';
 import { ElementType } from 'app/components/SimpleTable';
+import WindowStore from 'app/store/WindowStore';
+import { Linkout } from 'app/shared/links/Linkout';
 
 type LevelOfEvidencePageProps = {
   routing: RouterStore;
+  windowStore: WindowStore;
 };
 
 // the level content should be all uppercase
@@ -42,7 +45,10 @@ const LEVEL_TITLE: { [key in Version]: ElementType } = {
     </>
   ),
   [Version.AAC]: (
-    <>Mapping between OncoKB and AMP/ASCO/CAP Levels of Evidence</>
+    <>
+      Mapping between the OncoKB Levels of Evidence and the AMP/ASCO/CAP
+      Consensus Recommendation
+    </>
   ),
 };
 const LEVEL_SUBTITLE: { [key in Version]: ElementType } = {
@@ -57,7 +63,7 @@ const LEVEL_FILE_NAME: { [key in Version]: string } = {
   [Version.AAC]: `Mapping_OncoKB_and_AMP_ASCO_CAP_LOfE`,
 };
 
-@inject('routing')
+@inject('routing', 'windowStore')
 @observer
 export default class LevelOfEvidencePage extends React.Component<
   LevelOfEvidencePageProps
@@ -164,28 +170,9 @@ export default class LevelOfEvidencePage extends React.Component<
                 </DownloadButton>
               </Col>
             </Row>
-            <Row>
-              <Col className={'d-md-flex justify-content-center mt-2'}>
-                <div
-                  style={{
-                    maxWidth:
-                      this.version === Version.AAC ? 900 : IMG_MAX_WIDTH,
-                  }}
-                >
-                  <img
-                    style={{ width: '100%' }}
-                    src={`content/images/level_${this.version}.png`}
-                  />
-                </div>
-              </Col>
-            </Row>
-            <Row className={'justify-content-md-center'}>
+            <Row className={'justify-content-md-center mt-5'}>
               <Col className={'col-md-auto text-center'}>
-                <div>
-                  <span className={'mr-1 font-weight-bold'}>
-                    {LEVEL_TITLE[this.version]}
-                  </span>
-                </div>
+                <h4>{LEVEL_TITLE[this.version]}</h4>
                 <div>
                   <span
                     onClick={() =>
@@ -199,6 +186,37 @@ export default class LevelOfEvidencePage extends React.Component<
                   >
                     {LEVEL_SUBTITLE[this.version]}
                   </span>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col className={'d-md-flex justify-content-center mt-2'}>
+                <div
+                  style={{
+                    maxWidth:
+                      this.version === Version.AAC ? 1000 : IMG_MAX_WIDTH,
+                  }}
+                >
+                  <img
+                    style={{ width: '100%' }}
+                    src={`content/images/level_${this.version}.png`}
+                  />
+                  {this.version === Version.AAC ? (
+                    <div className="text-right">
+                      <span
+                        style={{
+                          marginRight: this.props.windowStore.isLargeScreen
+                            ? '85px'
+                            : '35px',
+                        }}
+                      >
+                        <sup>1</sup>{' '}
+                        <Linkout link="https://www.sciencedirect.com/science/article/pii/S1525157816302239?via%3Dihub">
+                          Li, MM et al., J Mol Diagn 2017
+                        </Linkout>
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
               </Col>
             </Row>

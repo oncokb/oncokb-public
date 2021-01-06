@@ -108,7 +108,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
       );
     }
     if (this.store.tumorTypeQuery) {
-      content.push(`Tumor Type: ${this.store.tumorTypeQuery}`);
+      content.push(`Cancer Type: ${this.store.tumorTypeQuery}`);
     }
     return content.join(', ');
   }

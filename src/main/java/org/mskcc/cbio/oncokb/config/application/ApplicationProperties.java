@@ -34,6 +34,7 @@ public class ApplicationProperties {
     private int publicWebsiteApiThreshold;
     private FrontendProperties frontend;
     private AWSProperties aws;
+    private String githubToken;
 
     public String getName() {
         return name;
@@ -187,5 +188,13 @@ public class ApplicationProperties {
 
     public void setAws(AWSProperties aws) {
         this.aws = aws;
+    }
+
+    public String getGithubToken() {
+        return githubToken;
+    }
+
+    public void setGithubToken(String githubToken) {
+        this.githubToken = githubToken;
     }
 }
