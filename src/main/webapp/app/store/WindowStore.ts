@@ -11,9 +11,8 @@ export interface IWindowSize {
 
 class WindowStore {
   @observable size: IWindowSize;
-  public recaptchaRef: any;
   @observable recaptchaVerified: boolean;
-
+  public recaptchaRef: any;
   private handleWindowResize = _.debounce(this.setWindowSize, 200);
   private windowObj: any;
 

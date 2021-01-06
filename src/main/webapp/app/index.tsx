@@ -22,7 +22,6 @@ import {
   assignPublicToken,
   getStoredToken,
   getPublicWebsiteToken,
-  AUTH_UER_TOKEN_KEY,
 } from 'app/indexUtils';
 import { UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
 import _ from 'lodash';
