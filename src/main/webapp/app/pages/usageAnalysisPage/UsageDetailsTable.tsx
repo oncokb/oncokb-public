@@ -1,5 +1,4 @@
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
-import { UsageRecord } from 'app/shared/api/generated/API';
 import { filterByKeyword } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
 import _ from 'lodash';
@@ -13,6 +12,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from 'react-bootstrap';
+import { UsageRecord } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 
 type IUsageDetailsTableProps = {
   data: Map<string, UsageRecord[]>;
