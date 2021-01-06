@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   levelOfEvidence2Level,
-  OncoKBAnnotationIcon
+  OncoKBAnnotationIcon,
 } from 'app/shared/utils/Utils';
 import { If, Then, Else } from 'react-if';
 import Highlighter from 'react-highlight-words';
@@ -14,7 +14,7 @@ export enum SearchOptionType {
   GENE = 'GENE',
   VARIANT = 'VARIANT',
   DRUG = 'DRUG',
-  TEXT = 'TEXT'
+  TEXT = 'TEXT',
 }
 type SearchOptionProps = {
   search: string | undefined;
@@ -37,9 +37,7 @@ const LevelString: React.FunctionComponent<{
         >
           Level {props.highestSensitiveLevel}{' '}
         </span>
-      ) : (
-        undefined
-      )}
+      ) : undefined}
       {props.highestResistanceLevel ? (
         <span
           className={`oncokb level-${levelOfEvidence2Level(
@@ -49,9 +47,7 @@ const LevelString: React.FunctionComponent<{
         >
           Level {props.highestResistanceLevel}
         </span>
-      ) : (
-        undefined
-      )}
+      ) : undefined}
     </>
   );
 };
@@ -76,9 +72,7 @@ const GeneSearchOption: React.FunctionComponent<{
               highestResistanceLevel={props.data.highestResistanceLevel}
             />
           </span>
-        ) : (
-          undefined
-        )}
+        ) : undefined}
       </div>
       {props.data.gene.geneAliases.length > 0 ? (
         <i>
@@ -90,9 +84,7 @@ const GeneSearchOption: React.FunctionComponent<{
             />
           </div>
         </i>
-      ) : (
-        undefined
-      )}
+      ) : undefined}
     </>
   );
 };
@@ -131,9 +123,7 @@ const AlterationSearchOption: React.FunctionComponent<{
         <div className={styles.subTitle}>
           <span>{props.data.annotation}</span>
         </div>
-      ) : (
-        undefined
-      )}
+      ) : undefined}
     </>
   );
 };
