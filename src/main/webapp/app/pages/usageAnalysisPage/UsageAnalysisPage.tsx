@@ -8,7 +8,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { filterByKeyword } from 'app/shared/utils/Utils';
-import { UsageRecord, UserUsageOverview } from 'app/shared/api/generated/API';
+import { UserOverviewUsage, UsageSummary } from 'app/shared/api/generated/API';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import autobind from 'autobind-decorator';
@@ -20,6 +20,11 @@ import {
   USGAE_ALL_TIME_KEY,
 } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
+
+export type UsageRecord = {
+  resource: string;
+  usage: number;
+};
 
 @inject('routing')
 @observer
@@ -35,10 +40,10 @@ export default class UsageAnalysisPage extends React.Component<{
     super(props);
   }
 
-  readonly users = remoteData<UserUsageOverview[]>({
+  readonly users = remoteData<UserOverviewUsage[]>({
     await: () => [],
     async invoke() {
-      return await Client.getUserUsageOverviewUsingGET({});
+      return await Client.userOverviewUsageGetUsingGET({});
     },
     default: [],
   });
@@ -46,7 +51,7 @@ export default class UsageAnalysisPage extends React.Component<{
   readonly usageDetail = remoteData<Map<string, UsageRecord[]>>({
     await: () => [],
     invoke: async () => {
-      const resource = await Client.getAllResourcesUsageUsingGET({});
+      const resource = await Client.resourceUsageGetUsingGET({});
       const result = new Map<string, UsageRecord[]>();
       const yearSummary = resource.year;
       const yearUsage: UsageRecord[] = [];
@@ -124,7 +129,7 @@ export default class UsageAnalysisPage extends React.Component<{
                   Header: <span>Email</span>,
                   accessor: 'userEmail',
                   minWidth: 200,
-                  onFilter: (data: UserUsageOverview, keyword) =>
+                  onFilter: (data: UserOverviewUsage, keyword) =>
                     filterByKeyword(data.userEmail, keyword),
                 },
                 {
@@ -139,7 +144,7 @@ export default class UsageAnalysisPage extends React.Component<{
                       Header: <span>Most frequently used endpoint</span>,
                       minWidth: 200,
                       accessor: 'endpoint',
-                      onFilter: (data: UserUsageOverview, keyword) =>
+                      onFilter: (data: UserOverviewUsage, keyword) =>
                         filterByKeyword(data.endpoint, keyword),
                     }
                   : {
@@ -149,7 +154,7 @@ export default class UsageAnalysisPage extends React.Component<{
                       ),
                       minWidth: 200,
                       accessor: 'noPrivateEndpoint',
-                      onFilter: (data: UserUsageOverview, keyword) =>
+                      onFilter: (data: UserOverviewUsage, keyword) =>
                         filterByKeyword(data.noPrivateEndpoint, keyword),
                     },
                 {
@@ -158,7 +163,7 @@ export default class UsageAnalysisPage extends React.Component<{
                   maxWidth: 60,
                   sortable: false,
                   className: 'd-flex justify-content-center',
-                  Cell(props: { original: UserUsageOverview }) {
+                  Cell(props: { original: UserOverviewUsage }) {
                     return (
                       <Link
                         to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
