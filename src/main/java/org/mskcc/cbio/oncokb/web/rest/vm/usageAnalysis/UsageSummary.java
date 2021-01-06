@@ -1,5 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis;
 
+import org.json.simple.JSONObject;
+
 import java.util.Map;
 
 /**
@@ -7,14 +9,14 @@ import java.util.Map;
  */
 
 public class UsageSummary {
-    private Map<String, Map<String, Integer>> month;
+    private Map<String, JSONObject> month;
     private Map<String, Integer> year;
 
-    public Map<String, Map<String, Integer>> getMonth() {
+    public Map<String, JSONObject> getMonth() {
         return month;
     }
 
-    public void setMonth(Map<String, Map<String, Integer>> month) {
+    public void setMonth(Map<String, JSONObject> month) {
         this.month = month;
     }
 
