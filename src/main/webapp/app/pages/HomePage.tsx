@@ -6,7 +6,7 @@ import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
 import {
   Gene,
   LevelNumber,
-  TypeaheadSearchResp
+  TypeaheadSearchResp,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { Row, Col } from 'react-bootstrap';
 import oncokbImg from 'content/images/oncokb.png';
@@ -48,33 +48,33 @@ class HomePage extends React.Component<IHomeProps> {
       level: '1',
       description: LEVEL_BUTTON_DESCRIPTION['1'],
       linkoutLevel: '1',
-      combinedLevels: ['1']
+      combinedLevels: ['1'],
     },
     {
       level: '2',
       description: LEVEL_BUTTON_DESCRIPTION['2'],
       linkoutLevel: '2',
-      combinedLevels: ['2']
+      combinedLevels: ['2'],
     },
     {
       level: '3',
       description: LEVEL_BUTTON_DESCRIPTION['3'],
       linkoutLevel: '3',
-      combinedLevels: ['3']
+      combinedLevels: ['3'],
     },
     {
       level: '4',
       description: LEVEL_BUTTON_DESCRIPTION['4'],
       linkoutLevel: '4',
-      combinedLevels: ['4']
+      combinedLevels: ['4'],
     },
     {
       level: 'R1',
       description: 'Resistance',
       title: 'Level R1/R2',
       linkoutLevel: 'R1,R2',
-      combinedLevels: ['R1', 'R2']
-    }
+      combinedLevels: ['R1', 'R2'],
+    },
   ];
 
   readonly levelNumbers = remoteData<{ [level: string]: LevelNumber }>({
@@ -94,7 +94,7 @@ class HomePage extends React.Component<IHomeProps> {
         )
       );
     },
-    default: {}
+    default: {},
   });
 
   getLevelNumber(levels: string[]) {

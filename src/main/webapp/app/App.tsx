@@ -9,8 +9,11 @@ import { Router, withRouter } from 'react-router';
 import { syncHistoryWithStore } from 'mobx-react-router';
 import { createBrowserHistory } from 'history';
 import DocumentTitle from 'react-document-title';
-import { DOCUMENT_TITLES, RECAPTCHA_SITE_KEY } from 'app/config/constants';
-import { setRecaptchaToken } from 'app/indexUtils';
+import {
+  DOCUMENT_TITLES,
+  PAGE_ROUTE,
+  RECAPTCHA_SITE_KEY,
+} from 'app/config/constants';
 import { observable, action } from 'mobx';
 import autobind from 'autobind-decorator';
 import Reaptcha from 'reaptcha';
@@ -33,14 +36,11 @@ class App extends React.Component {
 
   constructor(props: IAppConfig) {
     super(props);
-    this.stores.windowStore.recaptchaRef = React.createRef();
-    this.stores.windowStore.recaptchaVerified = false;
   }
 
   @autobind
   @action
   onExecuteChange(value: string) {
-    setRecaptchaToken(value);
     this.stores.windowStore.recaptchaVerified = true;
   }
 
@@ -75,7 +75,7 @@ class App extends React.Component {
             onRender={() => {
               if (
                 !this.stores.authenticationStore.isUserAuthenticated &&
-                this.stores.routing.location.pathname !== '/'
+                this.stores.routing.location.pathname !== PAGE_ROUTE.HOME
               ) {
                 this.stores.windowStore.recaptchaRef.current.execute();
               }

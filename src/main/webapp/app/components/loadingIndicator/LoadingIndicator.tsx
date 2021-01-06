@@ -18,7 +18,7 @@ export interface ILoader {
 export default class LoadingIndicator extends React.Component<ILoader, {}> {
   public static defaultProps = {
     center: false,
-    size: 'small'
+    size: 'small',
   };
 
   public render() {
@@ -31,7 +31,7 @@ export default class LoadingIndicator extends React.Component<ILoader, {}> {
       [styles.small]: this.props.size === 'small',
       [styles.big]: this.props.size === 'big',
       'd-flex': true,
-      'justify-content-center': true
+      'justify-content-center': true,
     };
 
     const parentStyles = {
@@ -40,7 +40,7 @@ export default class LoadingIndicator extends React.Component<ILoader, {}> {
         .centerRelativeToContainer,
       [styles['centered-with-children']]:
         (this.props.center || this.props.centerRelativeToContainer) &&
-        React.Children.count(this.props.children) > 0
+        React.Children.count(this.props.children) > 0,
     };
 
     return (
