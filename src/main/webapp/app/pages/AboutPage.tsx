@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Row, Col, Button, Modal } from 'react-bootstrap';
-import processImg from 'content/images/process.jpg';
+import processImg from 'content/images/process.png';
 import AppStore from 'app/store/AppStore';
 import { inject, observer } from 'mobx-react';
 import { CitationText } from 'app/components/CitationText';
@@ -181,7 +181,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
                 OncoKB Webinar from May 7th, 2020 on {WEBINAR_LINKS_05072020}
               </p>
               <CitationText />
-              <p>
+              <p className={'mt-5'}>
                 <img src={processImg} style={{ width: '100%' }} />
               </p>
             </Col>

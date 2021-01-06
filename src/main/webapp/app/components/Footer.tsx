@@ -11,12 +11,10 @@ import classnames from 'classnames';
 import { ContactLink } from 'app/shared/links/ContactLink';
 import { API_DOCUMENT_LINK, PAGE_ROUTE } from 'app/config/constants';
 import { Linkout } from 'app/shared/links/Linkout';
+import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
+import { OncoTreeLink } from 'app/shared/utils/UrlUtils';
 
 class Footer extends React.Component<{ lastDataUpdate: string }> {
-  public get externalLinkIcon() {
-    return <i className={'fa fa-external-link'} />;
-  }
-
   public get externalLinks() {
     return (
       <>
@@ -36,29 +34,23 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
             target="_blank"
             rel="noopener noreferrer"
           >
-            MSK {this.externalLinkIcon}
+            MSK <ExternalLinkIcon />
           </a>
           <a
             href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology"
             target="_blank"
             rel="noopener noreferrer"
           >
-            CMO {this.externalLinkIcon}
+            CMO <ExternalLinkIcon />
           </a>
           <a
             href="https://www.cbioportal.org"
             target="_blank"
             rel="noopener noreferrer"
           >
-            cBioPortal {this.externalLinkIcon}
+            cBioPortal <ExternalLinkIcon />
           </a>
-          <a
-            href="http://oncotree.mskcc.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            OncoTree {this.externalLinkIcon}
-          </a>
+          <OncoTreeLink />
         </div>
       </>
     );
