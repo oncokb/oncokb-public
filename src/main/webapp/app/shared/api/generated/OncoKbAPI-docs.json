@@ -2559,12 +2559,6 @@
     "TumorType": {
       "type": "object",
       "properties": {
-        "children": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/TumorType"
-          }
-        },
         "code": {
           "type": "string"
         },
@@ -2580,12 +2574,9 @@
           "format": "int32"
         },
         "mainType": {
-          "$ref": "#/definitions/MainType"
-        },
-        "name": {
           "type": "string"
         },
-        "parent": {
+        "subtype": {
           "type": "string"
         },
         "tissue": {
@@ -2595,7 +2586,8 @@
           "type": "string",
           "enum": [
             "SOLID",
-            "LIQUID"
+            "LIQUID",
+            "MIXED"
           ]
         }
       },
@@ -2739,8 +2731,11 @@
             "$ref": "#/definitions/Article"
           }
         },
-        "cancerType": {
-          "type": "string"
+        "cancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
         },
         "description": {
           "type": "string"
@@ -2830,8 +2825,11 @@
             "NO"
           ]
         },
-        "oncoTreeType": {
-          "$ref": "#/definitions/TumorType"
+        "relevantCancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
         },
         "solidPropagationLevel": {
           "type": "string",
@@ -2855,9 +2853,6 @@
             "LEVEL_Dx3",
             "NO"
           ]
-        },
-        "subtype": {
-          "type": "string"
         },
         "treatments": {
           "type": "array",
@@ -3478,26 +3473,6 @@
           }
         }
       }
-    },
-    "MainType": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tumorForm": {
-          "type": "string",
-          "enum": [
-            "SOLID",
-            "LIQUID"
-          ]
-        }
-      },
-      "description": "OncoTree Cancer Type"
     },
     "OncoKBInfo": {
       "type": "object",

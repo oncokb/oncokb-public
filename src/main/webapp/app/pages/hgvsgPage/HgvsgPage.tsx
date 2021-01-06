@@ -133,8 +133,8 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
                   }
                   tumorType={this.store.tumorTypeQuery}
                   annotation={this.store.annotationResultByHgvsg.result}
-                  allTumorTypesOptions={this.store.allTumorTypesOptions.result}
-                  allSubtypes={this.store.allSubtype.result}
+                  allTumorTypesOptions={this.store.allTumorTypesOptions}
+                  allSubtypes={this.store.allSubtype}
                   onChangeTumorType={newTumorType =>
                     (this.tumorType = newTumorType)
                   }
