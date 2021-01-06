@@ -32,6 +32,10 @@
       "description": "Token Resource"
     },
     {
+      "name": "usage-analysis-controller",
+      "description": "Usage Analysis Controller"
+    },
+    {
       "name": "user-details-resource",
       "description": "User Details Resource"
     },
@@ -562,6 +566,33 @@
         "deprecated": false
       }
     },
+    "/api/cronjob/check-exposed-tokens": {
+      "get": {
+        "tags": [
+          "cron-job-controller"
+        ],
+        "summary": "checkExposedTokens",
+        "operationId": "checkExposedTokensUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/cronjob/check-trial-accounts": {
       "get": {
         "tags": [
@@ -889,6 +920,9 @@
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "APPROVAL_MSK_IN_COMMERCIAL",
               "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
+              "TOKEN_HAS_BEEN_EXPOSED",
+              "TOKEN_HAS_BEEN_EXPOSED_USER",
+              "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
               "TEST"
             ]
           },
@@ -1157,6 +1191,108 @@
           },
           "403": {
             "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/usage/overview": {
+      "get": {
+        "tags": [
+          "usage-analysis-controller"
+        ],
+        "summary": "userOverviewUsageGet",
+        "operationId": "userOverviewUsageGetUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserOverviewUsage"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/usage/resource": {
+      "get": {
+        "tags": [
+          "usage-analysis-controller"
+        ],
+        "summary": "resourceUsageGet",
+        "operationId": "resourceUsageGetUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UsageSummary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/usage/users/{userId}": {
+      "get": {
+        "tags": [
+          "usage-analysis-controller"
+        ],
+        "summary": "userUsageGet",
+        "operationId": "userUsageGetUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "userId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserUsage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "deprecated": false
@@ -1933,6 +2069,13 @@
     }
   },
   "definitions": {
+    "JSONObject": {
+      "type": "object",
+      "title": "JSONObject",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
     "KeyAndPasswordVM": {
       "type": "object",
       "properties": {
@@ -1992,6 +2135,9 @@
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
+            "TOKEN_HAS_BEEN_EXPOSED",
+            "TOKEN_HAS_BEEN_EXPOSED_USER",
+            "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
             "TEST"
           ]
         }
@@ -2159,6 +2305,28 @@
         }
       },
       "title": "Token"
+    },
+    "UsageSummary": {
+      "type": "object",
+      "properties": {
+        "month": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        },
+        "year": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "title": "UsageSummary"
     },
     "User": {
       "type": "object",
@@ -2378,6 +2546,9 @@
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
+            "TOKEN_HAS_BEEN_EXPOSED",
+            "TOKEN_HAS_BEEN_EXPOSED_USER",
+            "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
             "TEST"
           ]
         },
@@ -2400,6 +2571,63 @@
         }
       },
       "title": "UserMailsDTO"
+    },
+    "UserOverviewUsage": {
+      "type": "object",
+      "properties": {
+        "endpoint": {
+          "type": "string"
+        },
+        "maxUsage": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "noPrivateEndpoint": {
+          "type": "string"
+        },
+        "noPrivateMaxUsage": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalUsage": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "userEmail": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        }
+      },
+      "title": "UserOverviewUsage"
+    },
+    "UserUsage": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "type": "string"
+        },
+        "jobTitle": {
+          "type": "string"
+        },
+        "licenseType": {
+          "type": "string"
+        },
+        "summary": {
+          "$ref": "#/definitions/UsageSummary"
+        },
+        "userEmail": {
+          "type": "string"
+        },
+        "userFirstName": {
+          "type": "string"
+        },
+        "userLastName": {
+          "type": "string"
+        }
+      },
+      "title": "UserUsage"
     }
   }
 }

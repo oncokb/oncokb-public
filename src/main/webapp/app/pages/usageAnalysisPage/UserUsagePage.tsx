@@ -1,4 +1,4 @@
-import { UsageRecord, UserUsage } from 'app/shared/api/generated/API';
+import { UserUsage } from 'app/shared/api/generated/API';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
@@ -12,6 +12,7 @@ import UsageDetailsTable from './UsageDetailsTable';
 import { InfoRow } from '../AccountPage';
 import { USGAE_ALL_TIME_KEY } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
+import { UsageRecord } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 
 @inject('routing')
 @observer
@@ -31,7 +32,7 @@ export default class UserUsagePage extends React.Component<{
   readonly usageDetail = remoteData<Map<string, UsageRecord[]>>({
     await: () => [],
     invoke: async () => {
-      this.user = await Client.getUserUsageUsingGET({ id: this.userId });
+      this.user = await Client.userUsageGetUsingGET({ userId: this.userId });
       const result = new Map<string, UsageRecord[]>();
       const yearSummary = this.user.summary.year;
       const yearUsage: UsageRecord[] = [];
