@@ -20,6 +20,8 @@ export const SERVER_API_URL = process.env.SERVER_API_URL;
 export const LOCAL_DEV_OPT = 'localdev';
 export const DEV_URL = 'http://localhost:9095';
 
+export const RECAPTCHA_SITE_KEY = '6LcxRsMZAAAAAFYpXX6KAc9ASGSf8IptsIKehJby';
+
 export const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
   USER: 'ROLE_USER',

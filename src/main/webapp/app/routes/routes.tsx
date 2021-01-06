@@ -29,11 +29,14 @@ import React from 'react';
 import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
 import { FAQPage } from 'app/pages/FAQPage';
+import { RecaptchaBoundaryRoute } from '../shared/auth/RecaptchaBoundaryRoute';
 import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
 import UserPage from 'app/pages/userPage/UserPage';
+import WindowStore from 'app/store/WindowStore';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
+  windowStore: WindowStore;
   routing: RouterStore;
 }) => {
   // Redirect needs to be defined first
@@ -80,33 +83,45 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.FAQ_ACCESS}
             component={FAQPage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            windowStore={props.windowStore}
             path={PAGE_ROUTE.CANCER_GENES}
             component={CancerGenesPage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            windowStore={props.windowStore}
             path={PAGE_ROUTE.ACTIONABLE_GENE}
             component={ActionableGenesPage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            windowStore={props.windowStore}
             path={PAGE_ROUTE.GENE}
             component={GenePage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            windowStore={props.windowStore}
             path={PAGE_ROUTE.ALTERATION}
             component={AlterationPage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            windowStore={props.windowStore}
             path={PAGE_ROUTE.HGVSG}
             component={HgvsgPage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            windowStore={props.windowStore}
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
             component={AlterationPage}
           />

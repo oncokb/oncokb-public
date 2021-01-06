@@ -3,7 +3,10 @@ import LoadingIndicator from '../../components/loadingIndicator/LoadingIndicator
 import React from 'react';
 
 export const LoadingButton: React.FunctionComponent<
-  { loading: boolean } & ButtonProps & React.HTMLAttributes<HTMLButtonElement>
+  {
+    loading: boolean;
+  } & ButtonProps &
+    React.HTMLAttributes<HTMLButtonElement>
 > = props => {
   const { loading, ...rest } = props;
   return (
