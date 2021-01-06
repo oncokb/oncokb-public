@@ -4,7 +4,7 @@ import {
   ElementType,
   SimpleTableRows,
   SimpleTableCell,
-  SimpleTableRow
+  SimpleTableRow,
 } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
 import React from 'react';
@@ -24,7 +24,7 @@ export const UpdatedTxImplOldFormatListItem = (props: {
         content: [
           {
             key: `${key}-level-${level}`,
-            content: level
+            content: level,
           },
           {
             key: `${key}-level-${level}-list`,
@@ -34,9 +34,9 @@ export const UpdatedTxImplOldFormatListItem = (props: {
                   <li key={`${key}-${level}-list-${index}`}>{cell}</li>
                 ))}
               </ul>
-            )
-          }
-        ]
+            ),
+          },
+        ],
       });
       return acc;
     },

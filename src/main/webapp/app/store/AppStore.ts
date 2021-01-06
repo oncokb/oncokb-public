@@ -6,7 +6,7 @@ import { MainNumber } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import oncokbPrivateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import {
   DEFAULT_MAIN_NUMBERS,
-  DEFAULT_ONCOKB_INFO
+  DEFAULT_ONCOKB_INFO,
 } from 'app/config/constants';
 
 export interface IAppConfig {
@@ -22,7 +22,7 @@ class AppStore {
 
   readonly appInfo = remoteData<OncoKBInfo>({
     invoke: () => apiClient.infoGetUsingGET({}),
-    default: DEFAULT_ONCOKB_INFO
+    default: DEFAULT_ONCOKB_INFO,
   });
 
   readonly mainNumbers = remoteData<MainNumber>({
@@ -30,7 +30,7 @@ class AppStore {
     async invoke() {
       return oncokbPrivateClient.utilsNumbersMainGetUsingGET({});
     },
-    default: DEFAULT_MAIN_NUMBERS
+    default: DEFAULT_MAIN_NUMBERS,
   });
 
   constructor(props?: IAppConfig) {

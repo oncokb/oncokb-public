@@ -15,13 +15,13 @@ class ErrorBoundary extends React.Component<
 > {
   readonly state: IErrorBoundaryState = {
     error: undefined,
-    errorInfo: undefined
+    errorInfo: undefined,
   };
 
   componentDidCatch(error: any, errorInfo: any) {
     this.setState({
       error,
-      errorInfo
+      errorInfo,
     });
   }
 
@@ -35,9 +35,7 @@ class ErrorBoundary extends React.Component<
             <br />
             {errorInfo.componentStack}
           </details>
-        ) : (
-          undefined
-        );
+        ) : undefined;
       return (
         <div>
           <h2 className="error">An unexpected error has occurred.</h2>

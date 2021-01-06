@@ -15,7 +15,7 @@ export default class HashLink extends React.Component<{
       <span
         className={'ml-2'}
         style={{
-          display: this.props.show ? 'inline-block' : 'none'
+          display: this.props.show ? 'inline-block' : 'none',
         }}
       >
         <Link

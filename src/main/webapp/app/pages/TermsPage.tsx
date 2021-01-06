@@ -6,7 +6,7 @@ import {
   DOCUMENT_TITLES,
   ONCOKB_CONTACT_EMAIL,
   PAGE_ROUTE,
-  PAGE_TITLE
+  PAGE_TITLE,
 } from 'app/config/constants';
 import { OncoKBLink } from 'app/shared/links/OncoKBLink';
 import DocumentTitle from 'react-document-title';

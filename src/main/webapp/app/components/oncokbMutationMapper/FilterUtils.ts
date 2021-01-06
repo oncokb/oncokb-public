@@ -1,7 +1,7 @@
 import {
   CancerTypeFilter,
   DataFilter,
-  DataFilterType
+  DataFilterType,
 } from 'react-mutation-mapper';
 import { OncokbMutation } from 'app/components/oncokbMutationMapper/OncokbMutation';
 

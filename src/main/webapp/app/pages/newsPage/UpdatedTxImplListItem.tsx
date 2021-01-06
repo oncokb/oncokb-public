@@ -2,7 +2,7 @@ import { UPDATED_IMPLICATION_COLUMNS } from 'app/pages/newsPage/NewsPageContent'
 import {
   ElementType,
   SimpleTable,
-  SimpleTableRow
+  SimpleTableRow,
 } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
 import React from 'react';
