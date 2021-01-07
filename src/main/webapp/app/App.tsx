@@ -33,15 +33,39 @@ class App extends React.Component {
     windowStore: new WindowStore(),
     routing: new RouterStore(),
   };
+  public recaptchaRef: any = React.createRef();
+  public recaptchaRendered = false;
 
   constructor(props: IAppConfig) {
     super(props);
+    this.stores.windowStore.registerOnClickEvent(this.executeRecaptcha);
   }
 
   @autobind
   @action
-  onExecuteChange(value: string) {
-    this.stores.windowStore.recaptchaVerified = true;
+  public executeRecaptcha() {
+    if (
+      !this.stores.appStore.recaptchaVerified &&
+      !this.stores.authenticationStore.isUserAuthenticated &&
+      this.stores.routing.location.pathname !== PAGE_ROUTE.HOME &&
+      this.recaptchaRef &&
+      this.recaptchaRendered
+    ) {
+      this.recaptchaRef.current.execute();
+    }
+  }
+
+  @autobind
+  @action
+  onRecaptchaVerify(value: string) {
+    this.stores.appStore.recaptchaVerified = true;
+  }
+
+  @autobind
+  @action
+  onRecaptchaRender() {
+    this.recaptchaRendered = true;
+    this.executeRecaptcha();
   }
 
   componentWillUnmount(): void {
@@ -69,18 +93,10 @@ class App extends React.Component {
       <DocumentTitle title={DOCUMENT_TITLES.HOME}>
         <>
           <Reaptcha
-            ref={this.stores.windowStore.recaptchaRef}
+            ref={this.recaptchaRef}
             sitekey={RECAPTCHA_SITE_KEY}
-            onVerify={this.onExecuteChange}
-            onRender={() => {
-              this.stores.windowStore.recaptchaRendered = true;
-              if (
-                !this.stores.authenticationStore.isUserAuthenticated &&
-                this.stores.routing.location.pathname !== PAGE_ROUTE.HOME
-              ) {
-                this.stores.windowStore.recaptchaRef.current.execute();
-              }
-            }}
+            onVerify={this.onRecaptchaVerify}
+            onRender={this.onRecaptchaRender}
             size="invisible"
           />
           {
