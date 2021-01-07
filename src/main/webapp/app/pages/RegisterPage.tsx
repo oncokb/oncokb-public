@@ -23,7 +23,7 @@ import SmallPageContainer from 'app/components/SmallPageContainer';
 import MessageToContact from 'app/shared/texts/MessageToContact';
 import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import { NewAccountForm } from 'app/components/newAccountForm/NewAccountForm';
-import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
+import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -129,16 +129,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   @computed
   get errorRegisterMessage() {
-    if (
-      this.registerError &&
-      this.registerError.response &&
-      this.registerError.response.body &&
-      this.registerError.response.body.title
-    ) {
-      return this.getErrorMessage(this.registerError.response.body.title);
-    } else {
-      return this.getErrorMessage();
-    }
+    return this.getErrorMessage(getErrorMessage(this.registerError));
   }
 
   @autobind
