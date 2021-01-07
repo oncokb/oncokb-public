@@ -6,6 +6,7 @@ import * as styles from './LevelButton.module.scss';
 import classnames from 'classnames';
 import { inject } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
+import { OncoKBLevelIcon } from 'app/shared/utils/Utils';
 
 type LevelButtonProps = {
   level: string;
@@ -45,9 +46,15 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
       )}
     >
       <div
-        className={classnames(`oncokb level-${props.level}`, styles.levelName)}
+        className={classnames(
+          `oncokb level-${props.level} d-flex justify-content-center align-items-center`,
+          styles.levelName
+        )}
       >
-        {props.title ? props.title : `Level ${props.level}`}
+        <OncoKBLevelIcon level={props.level} withDescription={true} />
+        <span className={'ml-1 mr-4'}>
+          {props.title ? props.title : `Level ${props.level}`}
+        </span>
       </div>
       <div className={styles.levelDescription}>{props.description}</div>
       <div
