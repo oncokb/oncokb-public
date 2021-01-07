@@ -32,11 +32,11 @@ import { FAQPage } from 'app/pages/FAQPage';
 import { RecaptchaBoundaryRoute } from '../shared/auth/RecaptchaBoundaryRoute';
 import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
 import UserPage from 'app/pages/userPage/UserPage';
-import WindowStore from 'app/store/WindowStore';
+import AppStore from 'app/store/AppStore';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
-  windowStore: WindowStore;
+  appStore: AppStore;
   routing: RouterStore;
 }) => {
   // Redirect needs to be defined first
@@ -86,42 +86,42 @@ const AppRouts = (props: {
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            windowStore={props.windowStore}
+            appStore={props.appStore}
             path={PAGE_ROUTE.CANCER_GENES}
             component={CancerGenesPage}
           />
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            windowStore={props.windowStore}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ACTIONABLE_GENE}
             component={ActionableGenesPage}
           />
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            windowStore={props.windowStore}
+            appStore={props.appStore}
             path={PAGE_ROUTE.GENE}
             component={GenePage}
           />
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            windowStore={props.windowStore}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION}
             component={AlterationPage}
           />
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            windowStore={props.windowStore}
+            appStore={props.appStore}
             path={PAGE_ROUTE.HGVSG}
             component={HgvsgPage}
           />
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            windowStore={props.windowStore}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
             component={AlterationPage}
           />
