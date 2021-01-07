@@ -57,7 +57,7 @@ class Main extends React.Component<IMainPage> {
           <Container fluid={!this.props.windowStore.isXLscreen}>
             <AppRouts
               authenticationStore={this.props.authenticationStore}
-              windowStore={this.props.windowStore}
+              appStore={this.props.appStore}
               routing={this.props.routing}
             />
           </Container>
