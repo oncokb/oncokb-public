@@ -73,6 +73,7 @@ class App extends React.Component {
             sitekey={RECAPTCHA_SITE_KEY}
             onVerify={this.onExecuteChange}
             onRender={() => {
+              this.stores.windowStore.recaptchaRendered = true;
               if (
                 !this.stores.authenticationStore.isUserAuthenticated &&
                 this.stores.routing.location.pathname !== PAGE_ROUTE.HOME
