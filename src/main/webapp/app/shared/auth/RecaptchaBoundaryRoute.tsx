@@ -5,10 +5,11 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { RouteProps } from 'react-router-dom';
 import { ContactLink } from '../links/ContactLink';
+import AppStore from 'app/store/AppStore';
 
 export interface IRecaptchaBoundaryRoute extends RouteProps {
   isUserAuthenticated: boolean;
-  windowStore: WindowStore;
+  appStore: AppStore;
 }
 
 @observer
@@ -19,7 +20,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
     if (this.props.isUserAuthenticated) {
       return <ErrorBoundaryRoute {...this.props} />;
     } else {
-      if (!this.props.windowStore.recaptchaVerified) {
+      if (!this.props.appStore.recaptchaVerified) {
         return (
           <>
             <div>

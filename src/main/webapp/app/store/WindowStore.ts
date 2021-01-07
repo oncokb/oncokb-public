@@ -11,33 +11,21 @@ export interface IWindowSize {
 
 class WindowStore {
   @observable size: IWindowSize;
-  @observable recaptchaVerified: boolean;
-  public recaptchaRef: any;
-  public recaptchaRendered = false;
   private handleWindowResize = _.debounce(this.setWindowSize, 200);
   private windowObj: any;
+  private onClickEvents: { (event: any): void }[] = [];
 
   constructor() {
     this.windowObj = window;
     this.setWindowSize();
     this.windowObj.addEventListener('resize', this.handleWindowResize);
-    this.windowObj.addEventListener('click', () => {
-      if (
-        !this.recaptchaVerified &&
-        this.windowObj.location.pathname !== PAGE_ROUTE.HOME
-      ) {
-        this.executeRecaptcha();
-      }
+    this.windowObj.addEventListener('click', (event: any) => {
+      this.onClickEvents.forEach(item => item(event));
     });
-    this.recaptchaVerified = false;
-    this.recaptchaRef = React.createRef();
   }
 
-  @action
-  private executeRecaptcha() {
-    if (this.recaptchaRef && this.recaptchaRendered) {
-      this.recaptchaRef.current.execute();
-    }
+  public registerOnClickEvent(func: { (event: any): void }) {
+    this.onClickEvents.push(func);
   }
 
   @autobind
