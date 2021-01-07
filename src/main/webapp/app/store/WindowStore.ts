@@ -13,6 +13,7 @@ class WindowStore {
   @observable size: IWindowSize;
   @observable recaptchaVerified: boolean;
   public recaptchaRef: any;
+  public recaptchaRendered = false;
   private handleWindowResize = _.debounce(this.setWindowSize, 200);
   private windowObj: any;
 
@@ -34,7 +35,7 @@ class WindowStore {
 
   @action
   private executeRecaptcha() {
-    if (this.recaptchaRef) {
+    if (this.recaptchaRef && this.recaptchaRendered) {
       this.recaptchaRef.current.execute();
     }
   }
