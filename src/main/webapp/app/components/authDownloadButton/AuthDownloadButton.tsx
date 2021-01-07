@@ -39,7 +39,11 @@ export class AuthDownloadButton extends React.Component<IAuthDownloadButton> {
     } else {
       this.props.routing!.history.push(
         PAGE_ROUTE.LOGIN,
-        getRedirectLoginState(this.props.routing!.location.pathname)
+        getRedirectLoginState(
+          this.props.routing!.location.pathname,
+          this.props.routing!.location.search,
+          this.props.routing!.location.hash
+        )
       );
     }
   };

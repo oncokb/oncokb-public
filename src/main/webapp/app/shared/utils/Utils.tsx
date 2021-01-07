@@ -406,9 +406,13 @@ export function getRouteFromPath(pathName: string) {
     : pathName.substr(pathName.indexOf('/') + 1);
 }
 
-export function getRedirectLoginState(pathName: string) {
+export function getRedirectLoginState(
+  pathName: string,
+  search: string,
+  hash: string
+) {
   return {
-    from: getRouteFromPath(pathName),
+    from: { pathname: getRouteFromPath(pathName), search, hash },
   };
 }
 
