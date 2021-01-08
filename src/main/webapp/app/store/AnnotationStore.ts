@@ -221,6 +221,8 @@ export class AnnotationStore {
       alteration: 0,
       highestSensitiveLevel: '',
       highestResistanceLevel: '',
+      highestDiagnosticImplicationLevel: '',
+      highestPrognosticImplicationLevel: '',
       tumorType: 0,
     },
   });

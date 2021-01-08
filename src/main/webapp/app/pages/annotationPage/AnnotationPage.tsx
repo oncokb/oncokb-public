@@ -47,7 +47,7 @@ enum SummaryKey {
 const SUMMARY_TITLE = {
   [SummaryKey.GENE_SUMMARY]: 'Gene Summary',
   [SummaryKey.ALTERATION_SUMMARY]: 'Alteration Summary',
-  [SummaryKey.TUMOR_TYPE_SUMMARY]: 'Cancer Type Summary',
+  [SummaryKey.TUMOR_TYPE_SUMMARY]: 'Therapeutic Summary',
   [SummaryKey.DIAGNOSTIC_SUMMARY]: 'Diagnostic Summary',
   [SummaryKey.PROGNOSTIC_SUMMARY]: 'Prognostic Summary',
 };
@@ -519,6 +519,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                     className={DEFAULT_MARGIN_BOTTOM_LG}
                     key={`summary-${index}`}
                   >
+                    <h6 className={'mb-0'}>{summary.title}</h6>
                     {summary.content}
                   </div>
                 );

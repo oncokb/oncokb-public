@@ -2445,6 +2445,12 @@
         "gene": {
           "$ref": "#/definitions/Gene"
         },
+        "highestDiagnosticImplicationLevel": {
+          "type": "string"
+        },
+        "highestPrognosticImplicationLevel": {
+          "type": "string"
+        },
         "highestResistanceLevel": {
           "type": "string"
         },
