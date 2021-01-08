@@ -62,7 +62,12 @@ export const AlterationInfo: React.FunctionComponent<{
       </span>
     );
   }
-  if (props.highestSensitiveLevel || props.highestResistanceLevel) {
+  if (
+    props.highestSensitiveLevel ||
+    props.highestResistanceLevel ||
+    props.highestDiagnosticImplicationLevel ||
+    props.highestPrognosticImplicationLevel
+  ) {
     content.push(
       getHighestLevelStrings(
         props.highestSensitiveLevel,
