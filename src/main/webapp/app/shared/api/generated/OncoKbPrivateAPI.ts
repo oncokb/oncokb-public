@@ -484,6 +484,10 @@ export type GeneNumber = {
 
         'gene': Gene
 
+        'highestDiagnosticImplicationLevel': string
+
+        'highestPrognosticImplicationLevel': string
+
         'highestResistanceLevel': string
 
         'highestSensitiveLevel': string
