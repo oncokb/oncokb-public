@@ -18,6 +18,7 @@ import {
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   levelOfEvidence2Level,
+  OncoKBLevelIcon,
 } from 'app/shared/utils/Utils';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
@@ -62,6 +63,7 @@ import { GenePageTable } from './GenePageTable';
 import { Link } from 'react-router-dom';
 import * as QueryString from 'query-string';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
+import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -79,6 +81,20 @@ const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
   return geneTypes.join(', ');
 };
 
+const HighestLevelItem: React.FunctionComponent<{
+  level: string;
+  key?: string;
+}> = props => {
+  return (
+    <span className={'d-flex align-items-center'}>
+      <span className={`oncokb level-${props.level}`} key={props.key}>
+        Level {props.level}
+      </span>
+      <OncoKBLevelIcon level={props.level} withDescription />
+    </span>
+  );
+};
+
 export const getHighestLevelStrings = (
   highestSensitiveLevel: string | undefined,
   highestResistanceLevel: string | undefined,
@@ -90,17 +106,13 @@ export const getHighestLevelStrings = (
   if (highestSensitiveLevel) {
     const level = levelOfEvidence2Level(highestSensitiveLevel, false);
     levels.push(
-      <span className={`oncokb level-${level}`} key="highestSensitiveLevel">
-        Level {level}
-      </span>
+      <HighestLevelItem level={level} key={'highestSensitiveLevel'} />
     );
   }
   if (highestResistanceLevel) {
     const level = levelOfEvidence2Level(highestResistanceLevel, false);
     levels.push(
-      <span className={`oncokb level-${level}`} key="highestResistanceLevel">
-        Level {level}
-      </span>
+      <HighestLevelItem level={level} key={'highestResistanceLevel'} />
     );
   }
   if (highestDiagnosticImplicationLevel) {
@@ -109,12 +121,10 @@ export const getHighestLevelStrings = (
       false
     );
     levels.push(
-      <span
-        className={`oncokb level-${level}`}
-        key="highestDiagnosticImplicationLevel"
-      >
-        Level {level}
-      </span>
+      <HighestLevelItem
+        level={level}
+        key={'highestDiagnosticImplicationLevel'}
+      />
     );
   }
   if (highestPrognosticImplicationLevel) {
@@ -123,16 +133,17 @@ export const getHighestLevelStrings = (
       false
     );
     levels.push(
-      <span
-        className={`oncokb level-${level}`}
-        key="highestPrognosticImplicationLevel"
-      >
-        Level {level}
-      </span>
+      <HighestLevelItem
+        level={level}
+        key={'highestPrognosticImplicationLevel'}
+      />
     );
   }
   return (
-    <WithSeparator separator={separator} key={'highest-levels'}>
+    <WithSeparator
+      separator={<span className="mx-1">·</span>}
+      key={'highest-levels'}
+    >
       {levels}
     </WithSeparator>
   );
@@ -142,6 +153,8 @@ type GeneInfoProps = {
   gene: Gene;
   highestSensitiveLevel: string | undefined;
   highestResistanceLevel: string | undefined;
+  highestDiagnosticImplicationLevel?: string | undefined;
+  highestPrognosticImplicationLevel?: string | undefined;
 };
 
 type GeneInfoItem = {
@@ -166,16 +179,23 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   }
 
   // highest LoE
-  if (props.highestResistanceLevel || props.highestSensitiveLevel) {
+  if (
+    props.highestResistanceLevel ||
+    props.highestSensitiveLevel ||
+    props.highestDiagnosticImplicationLevel ||
+    props.highestPrognosticImplicationLevel
+  ) {
     info.push({
       key: 'loe',
       element: (
         <div>
-          <h5>
-            Highest level of evidence:{' '}
+          <h5 className={'d-flex'}>
+            <span className={'mr-2'}>Highest level of evidence:</span>
             {getHighestLevelStrings(
               props.highestSensitiveLevel,
-              props.highestResistanceLevel
+              props.highestResistanceLevel,
+              props.highestDiagnosticImplicationLevel,
+              props.highestPrognosticImplicationLevel
             )}
           </h5>
         </div>
@@ -797,6 +817,14 @@ export default class GenePage extends React.Component<GenePageProps> {
                               highestResistanceLevel={
                                 this.store.geneNumber.result
                                   .highestResistanceLevel
+                              }
+                              highestDiagnosticImplicationLevel={
+                                this.store.geneNumber.result
+                                  .highestDiagnosticImplicationLevel
+                              }
+                              highestPrognosticImplicationLevel={
+                                this.store.geneNumber.result
+                                  .highestPrognosticImplicationLevel
                               }
                             />
                             {this.store.geneSummary.result ? (
