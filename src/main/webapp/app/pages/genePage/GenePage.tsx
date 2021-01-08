@@ -470,6 +470,12 @@ export default class GenePage extends React.Component<GenePageProps> {
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
         minWidth: 50,
+        accessor(d) {
+          return {
+            abstracts: d.drugAbstracts,
+            pmids: d.drugPmids,
+          } as Citations;
+        },
       },
     ];
   }
