@@ -35,6 +35,7 @@ import Select from 'react-select';
 import _ from 'lodash';
 import { AnnotationPageTable } from './AnnotationPageTable';
 import Tabs from 'react-responsive-tabs';
+import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -60,8 +61,6 @@ export type IAnnotationPage = {
   alteration: string;
   tumorType: string;
   onChangeTumorType: (newTumorType: string) => void;
-  allTumorTypesOptions: any;
-  allSubtypes: TumorType[];
   annotation: VariantAnnotation;
 };
 export default class AnnotationPage extends React.Component<IAnnotationPage> {
@@ -151,29 +150,6 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
       },
       [] as TherapeuticImplication[]
     );
-  }
-
-  @computed
-  get tumorTypeSelectValue() {
-    if (this.props.tumorType) {
-      const matchedSubtype = _.find(
-        this.props.allSubtypes,
-        tumorType => tumorType.code === this.props.tumorType
-      );
-      if (matchedSubtype) {
-        return {
-          label: matchedSubtype.subtype,
-          value: matchedSubtype.code,
-        };
-      } else {
-        return {
-          label: this.props.tumorType,
-          value: this.props.tumorType,
-        };
-      }
-    } else {
-      return null;
-    }
   }
 
   @autobind
@@ -462,7 +438,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
               <span
                 className={classnames(styles.headerTumorTypeSelection, 'mr-2')}
               >
-                <Select
+                <CancerTypeSelect
                   styles={{
                     control: (base, state) => ({
                       ...base,
@@ -487,11 +463,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                       padding: 0,
                     }),
                   }}
-                  value={this.tumorTypeSelectValue}
-                  placeholder="Select a cancer type"
-                  options={this.props.allTumorTypesOptions}
-                  formatGroupLabel={this.formatGroupLabel}
-                  isClearable={true}
+                  tumorType={this.props.tumorType}
                   onChange={(selectedOption: any) =>
                     this.updateTumorTypeQuery(selectedOption)
                   }

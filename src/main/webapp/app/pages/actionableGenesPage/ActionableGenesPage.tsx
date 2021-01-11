@@ -53,6 +53,7 @@ import { COLOR_BLUE } from 'app/config/theme';
 import WithSeparator from 'react-with-separator';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import LevelSelectionRow from './LevelSelectionRow';
+import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 
 type Treatment = {
   level: string;
@@ -623,16 +624,8 @@ export default class ActionableGenesPage extends React.Component<
                 />
               </Col>
               <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
-                <Select
-                  value={this.tumorTypeSelectValue}
-                  placeholder="Search a cancer type"
-                  options={this.relevantTumorTypes.result.map(tumorType => {
-                    return {
-                      value: tumorType,
-                      label: tumorType,
-                    };
-                  })}
-                  isClearable={true}
+                <CancerTypeSelect
+                  tumorType={this.relevantTumorTypeSearchKeyword}
                   onChange={(selectedOption: any) =>
                     (this.relevantTumorTypeSearchKeyword = selectedOption
                       ? selectedOption.label
@@ -680,9 +673,9 @@ export default class ActionableGenesPage extends React.Component<
                     this.filteredTumorTypes.length
                   )},
                 ${this.filteredLevels.length} ${pluralize(
-                    'level of evidence',
+                    'level',
                     this.filteredLevels.length
-                  )})`}
+                  )} of evidence)`}
                 </span>
                 <AuthDownloadButton
                   size={'sm'}
