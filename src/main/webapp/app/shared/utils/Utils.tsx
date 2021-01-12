@@ -1,8 +1,6 @@
 import {
   Citations,
-  Evidence,
   TreatmentDrug,
-  TumorType,
   Article,
 } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
@@ -16,11 +14,13 @@ import {
   PAGE_ROUTE,
   TABLE_COLUMN_KEY,
   LEVEL_TYPES,
+  ONCOGENICITY,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
   Alteration,
-  Treatment,
+  Evidence,
+  TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   citationsSortMethod,
@@ -180,10 +180,14 @@ export const OncoKBAnnotationIcon: React.FunctionComponent<{
   );
 };
 export const OncoKBOncogenicityIcon: React.FunctionComponent<{
-  oncogenicity: string;
+  oncogenicity: string | undefined;
   isVus: boolean;
   className?: string;
 }> = props => {
+  let oncogenicity = props.oncogenicity;
+  if (oncogenicity === undefined) {
+    oncogenicity = ONCOGENICITY.UNKNOWN;
+  }
   return (
     <span
       style={{ width: 16, marginTop: -3, marginLeft: 3 }}
@@ -192,7 +196,7 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
       <i
         className={classnames(
           `oncokb annotation-icon ${getAnnotationOncogenicityClassName(
-            props.oncogenicity,
+            oncogenicity,
             props.isVus
           )} no-level`,
           props.className

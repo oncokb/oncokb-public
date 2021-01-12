@@ -191,6 +191,7 @@ export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
   [ONCOGENICITY.NEUTRAL]: 'neutral',
   [ONCOGENICITY.LIKELY_NEUTRAL]: 'neutral',
   [ONCOGENICITY.UNKNOWN]: 'unknown',
+  ['']: 'unknown',
   [ONCOGENICITY.INCONCLUSIVE]: 'inconclusive',
   [ONCOGENICITY.PREDICTED_ONCOGENIC]: 'oncogenic',
   [ONCOGENICITY.LIKELY_ONCOGENIC]: 'oncogenic',
@@ -198,6 +199,11 @@ export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
 };
 export const DEFAULT_MESSAGE_UNKNOWN_GENE =
   'We do not have any information for this gene';
+export const DEFAULT_MESSAGE_HEME_ONLY_DX =
+  'Diagnostic implications are curated for hematologic malignancies only.';
+export const DEFAULT_MESSAGE_HEME_ONLY_PX =
+  'Prognostic implications are curated for hematologic malignancies only.';
+
 export enum EVIDENCE_TYPES {
   GENE_SUMMARY = 'GENE_SUMMARY',
   GENE_BACKGROUND = 'GENE_BACKGROUND',

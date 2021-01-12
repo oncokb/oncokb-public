@@ -81,21 +81,16 @@ export default class LevelSelectionRow extends React.Component<
           >
             <div style={{ flexGrow: 0, marginRight: '0.5em' }}>
               {this.props.collapseStatus[this.props.levelType] ? (
-                <i className="fa fa-minus"></i>
+                <i className="fa fa-minus mr-2"></i>
               ) : (
-                <i className="fa fa-plus"></i>
+                <i className="fa fa-plus mr-2"></i>
               )}
-              {this.props.collapseStatus[this.props.levelType] ? (
-                <span>
-                  {' '}
-                  Click to hide {LEVEL_TYPE_NAMES[this.props.levelType]} Levels
-                </span>
-              ) : (
-                <span>
-                  {' '}
-                  Click to show {LEVEL_TYPE_NAMES[this.props.levelType]} Levels
-                </span>
-              )}
+              <span>
+                {LEVEL_TYPE_NAMES[this.props.levelType]} Levels{' '}
+                {[LEVEL_TYPES.DX, LEVEL_TYPES.PX].includes(this.props.levelType)
+                  ? '(for hematologic malignancies only)'
+                  : ''}
+              </span>
             </div>
             <div
               style={{
