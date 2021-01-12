@@ -86,7 +86,7 @@ class HomePage extends React.Component<IHomeProps> {
     const levelGadgets: {
       title?: string;
       description: string;
-      level: string;
+      level: LEVELS;
       linkoutLevel: string;
       combinedLevels: string[];
     }[] = [];

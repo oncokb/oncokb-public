@@ -36,6 +36,7 @@ import {
   TABLE_COLUMN_KEY,
   DEFAULT_MESSAGE_HEME_ONLY_DX,
   DEFAULT_MESSAGE_HEME_ONLY_PX,
+  LEVELS,
 } from 'app/config/constants';
 import {
   BiologicalVariant,
@@ -84,7 +85,7 @@ const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
 };
 
 const HighestLevelItem: React.FunctionComponent<{
-  level: string;
+  level: LEVELS;
   key?: string;
 }> = props => {
   return (
