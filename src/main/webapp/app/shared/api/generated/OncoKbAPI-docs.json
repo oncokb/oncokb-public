@@ -2559,6 +2559,12 @@
     "TumorType": {
       "type": "object",
       "properties": {
+        "children": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/TumorType"
+          }
+        },
         "code": {
           "type": "string"
         },
@@ -2574,9 +2580,12 @@
           "format": "int32"
         },
         "mainType": {
+          "$ref": "#/definitions/MainType"
+        },
+        "name": {
           "type": "string"
         },
-        "subtype": {
+        "parent": {
           "type": "string"
         },
         "tissue": {
@@ -3473,6 +3482,27 @@
           }
         }
       }
+    },
+    "MainType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tumorForm": {
+          "type": "string",
+          "enum": [
+            "SOLID",
+            "LIQUID",
+            "MIXED"
+          ]
+        }
+      },
+      "description": "OncoTree Cancer Type"
     },
     "OncoKBInfo": {
       "type": "object",

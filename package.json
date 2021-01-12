@@ -191,6 +191,7 @@
     "webpack:dev-verbose": "yarn run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
     "webpack:build:main": "yarn run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
     "webpack:build": "yarn run cleanup && yarn run webpack:build:main",
+    "build": "yarn run webpack:build",
     "webpack:prod:main": "yarn run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:prod": "yarn run cleanup && yarn run webpack:prod:main",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",

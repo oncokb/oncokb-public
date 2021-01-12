@@ -139,15 +139,19 @@ export enum LEVELS {
   Tx1 = '1',
   Tx2 = '2',
   Tx3 = '3',
+  Tx3A = '3A',
+  Tx3B = '3B',
   Tx4 = '4',
   R1 = 'R1',
   R2 = 'R2',
 }
 
-export const LEVEL_BUTTON_DESCRIPTION = {
+export const LEVEL_BUTTON_DESCRIPTION: { [key in LEVELS]: string } = {
   [LEVELS.Tx1]: EVIDENCE_TYPE.FDA_APPROVED,
   [LEVELS.Tx2]: EVIDENCE_TYPE.STANDARD_CARE,
   [LEVELS.Tx3]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
+  [LEVELS.Tx3A]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
+  [LEVELS.Tx3B]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
   [LEVELS.Tx4]: EVIDENCE_TYPE.BIOLOGICAL_EVIDENCE,
   [LEVELS.R1]: EVIDENCE_TYPE.STANDARD_CARE,
   [LEVELS.R2]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
@@ -191,6 +195,7 @@ export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
   [ONCOGENICITY.NEUTRAL]: 'neutral',
   [ONCOGENICITY.LIKELY_NEUTRAL]: 'neutral',
   [ONCOGENICITY.UNKNOWN]: 'unknown',
+  ['']: 'unknown',
   [ONCOGENICITY.INCONCLUSIVE]: 'inconclusive',
   [ONCOGENICITY.PREDICTED_ONCOGENIC]: 'oncogenic',
   [ONCOGENICITY.LIKELY_ONCOGENIC]: 'oncogenic',
@@ -198,6 +203,11 @@ export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
 };
 export const DEFAULT_MESSAGE_UNKNOWN_GENE =
   'We do not have any information for this gene';
+export const DEFAULT_MESSAGE_HEME_ONLY_DX =
+  'Diagnostic implications are curated for hematologic malignancies only.';
+export const DEFAULT_MESSAGE_HEME_ONLY_PX =
+  'Prognostic implications are curated for hematologic malignancies only.';
+
 export enum EVIDENCE_TYPES {
   GENE_SUMMARY = 'GENE_SUMMARY',
   GENE_BACKGROUND = 'GENE_BACKGROUND',
