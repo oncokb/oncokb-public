@@ -6,9 +6,10 @@ import { InfoLevel } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
 import { level2LevelOfEvidence } from 'app/shared/utils/Utils';
 import ReactHtmlParser from 'react-html-parser';
+import { LEVELS } from 'app/config/constants';
 
 export const LevelWithDescription: React.FunctionComponent<{
-  level: string;
+  level: LEVELS;
   appStore?: AppStore;
 }> = inject('appStore')(props => {
   const levelOfEvidence = level2LevelOfEvidence(props.level);

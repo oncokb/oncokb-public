@@ -15,6 +15,7 @@ import {
   TABLE_COLUMN_KEY,
   LEVEL_TYPES,
   ONCOGENICITY,
+  LEVELS,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
@@ -62,16 +63,23 @@ export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
 export function levelOfEvidence2Level(
   levelOfEvidence: string,
   trimSubversion = false
-) {
+): LEVELS {
   let level = levelOfEvidence.replace('LEVEL_', '');
   if (trimSubversion) {
     level = trimLevelOfEvidenceSubversion(level);
   }
-  return level;
+  return level as LEVELS;
 }
 
-export function level2LevelOfEvidence(level: string) {
-  return `LEVEL_${level}`;
+export function level2LevelOfEvidence(level: LEVELS) {
+  switch (level) {
+    case LEVELS.Tx3:
+    case LEVELS.Tx3A:
+      return 'LEVEL_3A';
+      break;
+    default:
+      return `LEVEL_${level}`;
+  }
 }
 
 export function getAllAlterationsName(alterations: Alteration[]) {
@@ -207,7 +215,7 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
 };
 
 export const OncoKBLevelIcon: React.FunctionComponent<{
-  level: string;
+  level: LEVELS;
   withDescription?: boolean;
 }> = ({ level, withDescription = true }) => {
   const oncokbIcon = <i className={`oncokb icon level-${level}`} />;
@@ -328,13 +336,13 @@ export function getDefaultColumnDefinition<T>(
         id: TABLE_COLUMN_KEY.LEVEL,
         Header: <span>Level</span>,
         accessor: 'level',
-        minWidth: 70,
-        width: 70,
+        minWidth: 60,
+        width: 60,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell(props: any) {
           return (
-            <div className={'my-1'}>
+            <div className={'my-1 d-flex justify-content-center'}>
               <OncoKBLevelIcon
                 level={props.original.level}
                 withDescription={true}
