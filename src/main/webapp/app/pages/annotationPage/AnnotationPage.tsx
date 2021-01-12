@@ -8,6 +8,8 @@ import {
   LEVEL_TYPE_NAMES,
   TABLE_COLUMN_KEY,
   TREATMENT_EVIDENCE_TYPES,
+  DEFAULT_MESSAGE_HEME_ONLY_DX,
+  DEFAULT_MESSAGE_HEME_ONLY_PX,
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import InfoIcon from 'app/shared/icons/InfoIcon';
@@ -355,8 +357,21 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
     }
   }
 
+  readonly tabDescription: { [key in LEVEL_TYPES]: string } = {
+    [LEVEL_TYPES.TX]: '',
+    [LEVEL_TYPES.DX]: DEFAULT_MESSAGE_HEME_ONLY_DX,
+    [LEVEL_TYPES.PX]: DEFAULT_MESSAGE_HEME_ONLY_PX,
+  };
+
   getTabContent(key: LEVEL_TYPES) {
-    return <div>{this.getTable(key)}</div>;
+    return (
+      <div>
+        {this.tabDescription[key] ? (
+          <div>{this.tabDescription[key]}</div>
+        ) : null}
+        {this.getTable(key)}
+      </div>
+    );
   }
 
   @computed
@@ -408,7 +423,11 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
         </h2>
         <AlterationInfo
           oncogenicity={this.props.annotation.oncogenic}
-          mutationEffect={this.props.annotation.mutationEffect}
+          mutationEffect={
+            this.isOncogenicMutations
+              ? undefined
+              : this.props.annotation.mutationEffect
+          }
           isVus={this.props.annotation.vus}
           highestSensitiveLevel={this.props.annotation.highestSensitiveLevel}
           highestResistanceLevel={this.props.annotation.highestResistanceLevel}
@@ -482,7 +501,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
             </div>
           </Col>
         </Row>
-        {this.props.tumorType ? (
+        {this.props.tumorType && !this.isOncogenicMutations ? (
           <Row>
             <Col>
               {this.tumorTypeSummaries.map((summary, index) => {

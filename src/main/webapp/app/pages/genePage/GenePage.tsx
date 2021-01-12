@@ -34,6 +34,8 @@ import {
   PAGE_ROUTE,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
+  DEFAULT_MESSAGE_HEME_ONLY_DX,
+  DEFAULT_MESSAGE_HEME_ONLY_PX,
 } from 'app/config/constants';
 import {
   BiologicalVariant,
@@ -614,7 +616,7 @@ export default class GenePage extends React.Component<GenePageProps> {
           <LevelOfEvidencePageLink levelType={LEVEL_TYPES.DX}>
             OncoKB diagnostic level of evidence
           </LevelOfEvidencePageLink>
-          .
+          . {DEFAULT_MESSAGE_HEME_ONLY_DX}
         </span>
       );
     } else if (key === TAB_KEYS.PX) {
@@ -625,7 +627,7 @@ export default class GenePage extends React.Component<GenePageProps> {
           <LevelOfEvidencePageLink levelType={LEVEL_TYPES.PX}>
             OncoKB prognostic level of evidence
           </LevelOfEvidencePageLink>
-          .
+          . {DEFAULT_MESSAGE_HEME_ONLY_PX}
         </span>
       );
     }

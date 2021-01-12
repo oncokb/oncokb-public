@@ -471,6 +471,14 @@ export type MatchVariantRequest = {
         'queries': Array < Query >
 
 };
+export type MainType = {
+    'id': number
+
+        'name': string
+
+        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
+
+};
 export type VariantConsequence = {
     'description': string
 

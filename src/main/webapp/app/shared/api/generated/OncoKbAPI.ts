@@ -132,6 +132,8 @@ export type Implication = {
 
 };
 export type TumorType = {
+    'children': {}
+
     'code': string
 
         'color': string
@@ -140,9 +142,11 @@ export type TumorType = {
 
         'level': number
 
-        'mainType': string
+        'mainType': MainType
 
-        'subtype': string
+        'name': string
+
+        'parent': string
 
         'tissue': string
 
@@ -465,6 +469,14 @@ export type Arms = {
     'armDescription': string
 
         'drugs': Array < Drug >
+
+};
+export type MainType = {
+    'id': number
+
+        'name': string
+
+        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
 
 };
 export type OncoKBInfo = {
