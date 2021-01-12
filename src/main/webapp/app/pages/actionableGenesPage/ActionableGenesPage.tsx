@@ -628,7 +628,7 @@ export default class ActionableGenesPage extends React.Component<
                   tumorType={this.relevantTumorTypeSearchKeyword}
                   onChange={(selectedOption: any) =>
                     (this.relevantTumorTypeSearchKeyword = selectedOption
-                      ? selectedOption.label
+                      ? selectedOption.value
                       : '')
                   }
                 />
