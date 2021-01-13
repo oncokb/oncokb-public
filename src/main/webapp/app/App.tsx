@@ -9,7 +9,14 @@ import { Router, withRouter } from 'react-router';
 import { syncHistoryWithStore } from 'mobx-react-router';
 import { createBrowserHistory } from 'history';
 import DocumentTitle from 'react-document-title';
-import { DOCUMENT_TITLES } from 'app/config/constants';
+import {
+  DOCUMENT_TITLES,
+  PAGE_ROUTE,
+  RECAPTCHA_SITE_KEY,
+} from 'app/config/constants';
+import { observable, action } from 'mobx';
+import autobind from 'autobind-decorator';
+import Reaptcha from 'reaptcha';
 
 export type Stores = {
   appStore: AppStore;
@@ -26,9 +33,39 @@ class App extends React.Component {
     windowStore: new WindowStore(),
     routing: new RouterStore(),
   };
+  public recaptchaRef: any = React.createRef();
+  public recaptchaRendered = false;
 
   constructor(props: IAppConfig) {
     super(props);
+    this.stores.windowStore.registerOnClickEvent(this.executeRecaptcha);
+  }
+
+  @autobind
+  @action
+  public executeRecaptcha() {
+    if (
+      !this.stores.appStore.recaptchaVerified &&
+      !this.stores.authenticationStore.isUserAuthenticated &&
+      this.stores.routing.location.pathname !== PAGE_ROUTE.HOME &&
+      this.recaptchaRef &&
+      this.recaptchaRendered
+    ) {
+      this.recaptchaRef.current.execute();
+    }
+  }
+
+  @autobind
+  @action
+  onRecaptchaVerify(value: string) {
+    this.stores.appStore.recaptchaVerified = true;
+  }
+
+  @autobind
+  @action
+  onRecaptchaRender() {
+    this.recaptchaRendered = true;
+    this.executeRecaptcha();
   }
 
   componentWillUnmount(): void {
@@ -54,11 +91,22 @@ class App extends React.Component {
 
     return (
       <DocumentTitle title={DOCUMENT_TITLES.HOME}>
-        <Provider {...this.stores}>
-          <Router history={history}>
-            <Main {...this.stores} />
-          </Router>
-        </Provider>
+        <>
+          <Reaptcha
+            ref={this.recaptchaRef}
+            sitekey={RECAPTCHA_SITE_KEY}
+            onVerify={this.onRecaptchaVerify}
+            onRender={this.onRecaptchaRender}
+            size="invisible"
+          />
+          {
+            <Provider {...this.stores}>
+              <Router history={history}>
+                <Main {...this.stores} />
+              </Router>
+            </Provider>
+          }
+        </>
       </DocumentTitle>
     );
   }

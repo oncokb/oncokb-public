@@ -10,6 +10,7 @@ import { Alert, Button } from 'react-bootstrap';
 import SmallPageContainer from '../SmallPageContainer';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
+import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 
 @observer
 export default class PasswordResetFinish extends React.Component<{}> {
@@ -29,9 +30,9 @@ export default class PasswordResetFinish extends React.Component<{}> {
       .then(() => {
         this.resetStatus = API_CALL_STATUS.SUCCESSFUL;
       })
-      .catch(error => {
+      .catch((error: OncoKBError) => {
         this.resetStatus = API_CALL_STATUS.FAILURE;
-        this.errorMessage = error.message;
+        this.errorMessage = getErrorMessage(error);
       });
   };
 

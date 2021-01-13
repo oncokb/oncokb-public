@@ -72,6 +72,7 @@
     "react-transition-group": "4.3.0",
     "react-with-separator": "^1.2.0",
     "reactstrap": "8.4.1",
+    "reaptcha": "^1.7.2",
     "string-strip-html": "^4.4.5",
     "tslib": "1.11.1",
     "typeface-open-sans": "^0.0.54",
