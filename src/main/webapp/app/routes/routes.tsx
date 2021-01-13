@@ -101,8 +101,6 @@ const AppRouts = (props: {
           />
           <PrivateRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            appStore={props.appStore}
             path={PAGE_ROUTE.CANCER_GENES}
             component={CancerGenesPage}
             authenticationStore={props.authenticationStore}
@@ -111,8 +109,6 @@ const AppRouts = (props: {
           />
           <PrivateRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            appStore={props.appStore}
             path={PAGE_ROUTE.ACTIONABLE_GENE}
             component={ActionableGenesPage}
             authenticationStore={props.authenticationStore}
@@ -121,8 +117,6 @@ const AppRouts = (props: {
           />
           <PrivateRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            appStore={props.appStore}
             path={PAGE_ROUTE.GENE}
             component={GenePage}
             authenticationStore={props.authenticationStore}
@@ -131,8 +125,6 @@ const AppRouts = (props: {
           />
           <PrivateRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION}
             component={AlterationPage}
             authenticationStore={props.authenticationStore}
@@ -141,8 +133,6 @@ const AppRouts = (props: {
           />
           <PrivateRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            appStore={props.appStore}
             path={PAGE_ROUTE.HGVSG}
             component={HgvsgPage}
             authenticationStore={props.authenticationStore}
@@ -151,8 +141,6 @@ const AppRouts = (props: {
           />
           <PrivateRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
-            appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
             component={AlterationPage}
             authenticationStore={props.authenticationStore}
