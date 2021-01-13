@@ -12,7 +12,11 @@ import {
 } from 'app/components/SimpleTable';
 import { NewlyAddedGeneType } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { Link } from 'react-router-dom';
-import { FAQ_URL_PATTERNS_LINK, PAGE_ROUTE } from 'app/config/constants';
+import {
+  FAQ_URL_PATTERNS_LINK,
+  LEVEL_TYPES,
+  PAGE_ROUTE,
+} from 'app/config/constants';
 import {
   AlterationPageLink,
   GenePageLink,
@@ -21,6 +25,7 @@ import {
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
 import { SHOW_MODAL_KEY } from '../AboutPage';
+import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -109,6 +114,27 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '01142021': {
+    priorityNews: [
+      <span>
+        We are excited to introduce the{' '}
+        <LevelOfEvidencePageLink levelType={LEVEL_TYPES.DX}>
+          OncoKB Diagnostic (Dx)
+        </LevelOfEvidencePageLink>{' '}
+        and{' '}
+        <LevelOfEvidencePageLink levelType={LEVEL_TYPES.DX}>
+          Prognostic (Px)
+        </LevelOfEvidencePageLink>{' '}
+        Levels of Evidence (currently applicable to hematologic disease). The
+        definitions of these levels of evidence can be found on the{' '}
+        <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX}>
+          Levels of Evidence
+        </LevelOfEvidencePageLink>{' '}
+        page. The complete list of biomarkers associated with a diagnostic or
+        prognostic level of evidence can be found on the actionable genes page
+      </span>,
+    ],
+  },
   '12172020': {
     priorityNews: [
       <span>Updated all gene names to the latest HUGO symbol</span>,
