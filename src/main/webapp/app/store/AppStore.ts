@@ -19,6 +19,7 @@ class AppStore {
   @observable ribbonEnv = '';
   @observable inProduction = true;
   @observable isSwaggerEnabled = false;
+  @observable recaptchaVerified = false;
 
   readonly appInfo = remoteData<OncoKBInfo>({
     invoke: () => apiClient.infoGetUsingGET({}),
