@@ -64,10 +64,10 @@ const AppRouts = (props: {
         <Switch>
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.LOGIN}
             component={Login}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
           <ErrorBoundaryRoute
             exact
@@ -76,68 +76,63 @@ const AppRouts = (props: {
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.REGISTER}
             component={RegisterPage}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
-          <RecaptchaBoundaryRoute
+          <ErrorBoundaryRoute
             exact
             path={PAGE_ROUTE.API_ACCESS}
             component={APIAccessPage}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
-          <RecaptchaBoundaryRoute
+          <ErrorBoundaryRoute
             exact
             path={PAGE_ROUTE.FAQ_ACCESS}
             component={FAQPage}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.CANCER_GENES}
             component={CancerGenesPage}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ACTIONABLE_GENE}
             component={ActionableGenesPage}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.GENE}
             component={GenePage}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION}
             component={AlterationPage}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.HGVSG}
             component={HgvsgPage}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
             component={AlterationPage}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
-
           <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
           <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
           <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage} />
@@ -149,24 +144,24 @@ const AppRouts = (props: {
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_VERIFY}
             component={ActivateAccount}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
             component={PasswordResetInit}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
           <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}
             component={PasswordResetFinish}
-            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
-            recaptchaVerified={props.appStore.recaptchaVerified}
           />
           <PrivateRoute
             authenticationStore={props.authenticationStore}
