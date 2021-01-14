@@ -12565,10 +12565,10 @@ once@1.x, once@^1.3.0, once@^1.3.1, once@^1.4.0:
   dependencies:
     wrappy "1"
 
-oncokb-styles@0.2.0-alpha.7:
-  version "0.2.0-alpha.7"
-  resolved "https://registry.yarnpkg.com/oncokb-styles/-/oncokb-styles-0.2.0-alpha.7.tgz#420339244ab8b980107442f2ee95e6fa4dc822fc"
-  integrity sha512-GiOiJTeDP3oTjjU9KW2fsuHeD3Kwf2A6rAB//+HPho9+wDjbkifQcSYjdata9UA9D0v1xhb5DIxHCGwTzxpN4w==
+oncokb-styles@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/oncokb-styles/-/oncokb-styles-1.0.0.tgz#a0d472ef20f07a84ab73b983e9e47ffa39ac8961"
+  integrity sha512-+87JFDD8eLL9m3H7eXxQcWT869CJoRnakzeM2BsSjBMq1GrNBDV29oLh1umazefllLYnI/Z23UcIyXKBamiVBQ==
 
 oncokb-styles@~0.1.2:
   version "0.1.2"
