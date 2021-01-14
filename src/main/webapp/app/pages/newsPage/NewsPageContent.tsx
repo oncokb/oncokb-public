@@ -122,16 +122,17 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           OncoKB Diagnostic (Dx)
         </LevelOfEvidencePageLink>{' '}
         and{' '}
-        <LevelOfEvidencePageLink levelType={LEVEL_TYPES.DX}>
+        <LevelOfEvidencePageLink levelType={LEVEL_TYPES.PX}>
           Prognostic (Px)
         </LevelOfEvidencePageLink>{' '}
         Levels of Evidence (currently applicable to hematologic disease). The
         definitions of these levels of evidence can be found on the{' '}
-        <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX}>
+        <LevelOfEvidencePageLink levelType={LEVEL_TYPES.DX}>
           Levels of Evidence
         </LevelOfEvidencePageLink>{' '}
         page. The complete list of biomarkers associated with a diagnostic or
-        prognostic level of evidence can be found on the actionable genes page
+        prognostic level of evidence can be found on the{' '}
+        <Link to={PAGE_ROUTE.ACTIONABLE_GENE}>actionable genes</Link> page
       </span>,
     ],
   },
