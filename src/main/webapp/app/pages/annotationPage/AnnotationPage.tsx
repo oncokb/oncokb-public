@@ -4,14 +4,16 @@ import { GenePageLink, OncoTreeLink } from 'app/shared/utils/UrlUtils';
 import {
   DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
+  LEVEL_TYPES,
+  LEVEL_TYPE_NAMES,
   TABLE_COLUMN_KEY,
   TREATMENT_EVIDENCE_TYPES,
+  DEFAULT_MESSAGE_HEME_ONLY_DX,
+  DEFAULT_MESSAGE_HEME_ONLY_PX,
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import OncoKBTable, {
-  SearchColumn,
-} from 'app/components/oncokbTable/OncoKBTable';
+import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
 import { Row, Col, Button } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -33,6 +35,9 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import Select from 'react-select';
 import _ from 'lodash';
+import { AnnotationPageTable } from './AnnotationPageTable';
+import Tabs from 'react-responsive-tabs';
+import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -45,7 +50,7 @@ enum SummaryKey {
 const SUMMARY_TITLE = {
   [SummaryKey.GENE_SUMMARY]: 'Gene Summary',
   [SummaryKey.ALTERATION_SUMMARY]: 'Alteration Summary',
-  [SummaryKey.TUMOR_TYPE_SUMMARY]: 'Cancer Type Summary',
+  [SummaryKey.TUMOR_TYPE_SUMMARY]: 'Therapeutic Summary',
   [SummaryKey.DIAGNOSTIC_SUMMARY]: 'Diagnostic Summary',
   [SummaryKey.PROGNOSTIC_SUMMARY]: 'Prognostic Summary',
 };
@@ -58,8 +63,6 @@ export type IAnnotationPage = {
   alteration: string;
   tumorType: string;
   onChangeTumorType: (newTumorType: string) => void;
-  allTumorTypesOptions: any;
-  allSubtypes: TumorType[];
   annotation: VariantAnnotation;
 };
 export default class AnnotationPage extends React.Component<IAnnotationPage> {
@@ -96,26 +99,59 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
   }
 
   @computed
-  get tumorTypeSelectValue() {
-    if (this.props.tumorType) {
-      const matchedSubtype = _.find(
-        this.props.allSubtypes,
-        tumorType => tumorType.code === this.props.tumorType
-      );
-      if (matchedSubtype) {
-        return {
-          label: matchedSubtype.name,
-          value: matchedSubtype.code,
-        };
-      } else {
-        return {
-          label: this.props.tumorType,
-          value: this.props.tumorType,
-        };
-      }
-    } else {
-      return null;
-    }
+  get diagnosticImplications(): TherapeuticImplication[] {
+    return _.reduce(
+      this.props.annotation.tumorTypes,
+      (acc, next) => {
+        const oncoTreeCancerType = getCancerTypeNameFromOncoTreeType(
+          next.tumorType
+        );
+        next.evidences.forEach(evidence => {
+          if (evidence.evidenceType === EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION) {
+            const level = levelOfEvidence2Level(evidence.levelOfEvidence);
+            acc.push({
+              level,
+              alterations: evidence.alterations
+                .map(alteration => alteration.name)
+                .join(', '),
+              drugs: getTreatmentNameFromEvidence(evidence),
+              cancerTypes: oncoTreeCancerType,
+              citations: articles2Citations(evidence.articles),
+            });
+          }
+        });
+        return acc;
+      },
+      [] as TherapeuticImplication[]
+    );
+  }
+
+  @computed
+  get prognosticImplications(): TherapeuticImplication[] {
+    return _.reduce(
+      this.props.annotation.tumorTypes,
+      (acc, next) => {
+        const oncoTreeCancerType = getCancerTypeNameFromOncoTreeType(
+          next.tumorType
+        );
+        next.evidences.forEach(evidence => {
+          if (evidence.evidenceType === EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION) {
+            const level = levelOfEvidence2Level(evidence.levelOfEvidence);
+            acc.push({
+              level,
+              alterations: evidence.alterations
+                .map(alteration => alteration.name)
+                .join(', '),
+              drugs: getTreatmentNameFromEvidence(evidence),
+              cancerTypes: oncoTreeCancerType,
+              citations: articles2Citations(evidence.articles),
+            });
+          }
+        });
+        return acc;
+      },
+      [] as TherapeuticImplication[]
+    );
   }
 
   @autobind
@@ -216,6 +252,59 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
     ];
   }
 
+  @computed
+  get dxpxTableColumns(): SearchColumn<TherapeuticImplication>[] {
+    return [
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
+        minWidth: 250,
+        Cell: (props: { original: any }) => {
+          return (
+            <Button
+              style={{
+                padding: 0,
+              }}
+              variant={'link'}
+              onClick={() =>
+                this.props.onChangeTumorType(props.original.cancerTypes)
+              }
+            >
+              {props.original.cancerTypes}
+            </Button>
+          );
+        },
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+        minWidth: 50,
+        Cell(props: { original: TherapeuticImplication }) {
+          const numOfReferences =
+            props.original.citations.abstracts.length +
+            props.original.citations.pmids.length;
+          return (
+            <DefaultTooltip
+              placement={'left'}
+              overlay={() => (
+                <CitationTooltip
+                  pmids={props.original.citations.pmids}
+                  abstracts={props.original.citations.abstracts}
+                />
+              )}
+            >
+              <span>{numOfReferences}</span>
+            </DefaultTooltip>
+          );
+        },
+      },
+    ];
+  }
+
   formatGroupLabel(data: any) {
     return <span>{data.label}</span>;
   }
@@ -225,6 +314,95 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
       this.props.alteration &&
       this.props.alteration.toLowerCase() === LOWERCASE_ONCOGENIC_MUTATIONS
     );
+  }
+
+  @computed
+  get tabDefaultActiveKey() {
+    if (this.therapeuticImplications.length > 0) {
+      return LEVEL_TYPES.TX;
+    } else if (this.diagnosticImplications.length > 0) {
+      return LEVEL_TYPES.DX;
+    }
+    return LEVEL_TYPES.PX;
+  }
+
+  getTable(key: LEVEL_TYPES) {
+    switch (key) {
+      case LEVEL_TYPES.TX:
+        return (
+          <AnnotationPageTable
+            implicationType={LEVEL_TYPES.TX}
+            implicationData={this.therapeuticImplications}
+            column={this.therapeuticTableColumns}
+          />
+        );
+      case LEVEL_TYPES.DX:
+        return (
+          <AnnotationPageTable
+            implicationType={LEVEL_TYPES.DX}
+            implicationData={this.diagnosticImplications}
+            column={this.dxpxTableColumns}
+          />
+        );
+      case LEVEL_TYPES.PX:
+        return (
+          <AnnotationPageTable
+            implicationType={LEVEL_TYPES.PX}
+            implicationData={this.prognosticImplications}
+            column={this.dxpxTableColumns}
+          />
+        );
+      default:
+        return <span />;
+    }
+  }
+
+  readonly tabDescription: { [key in LEVEL_TYPES]: string } = {
+    [LEVEL_TYPES.TX]: '',
+    [LEVEL_TYPES.DX]: DEFAULT_MESSAGE_HEME_ONLY_DX,
+    [LEVEL_TYPES.PX]: DEFAULT_MESSAGE_HEME_ONLY_PX,
+  };
+
+  getTabContent(key: LEVEL_TYPES) {
+    return (
+      <div>
+        {this.tabDescription[key] ? (
+          <div>{this.tabDescription[key]}</div>
+        ) : null}
+        {this.getTable(key)}
+      </div>
+    );
+  }
+
+  @computed
+  get tabs() {
+    const tabs: { title: string; key: LEVEL_TYPES }[] = [];
+    if (this.therapeuticImplications.length > 0) {
+      tabs.push({
+        key: LEVEL_TYPES.TX,
+        title: `${LEVEL_TYPE_NAMES.Tx}`,
+      });
+    }
+    if (this.diagnosticImplications.length > 0) {
+      tabs.push({
+        key: LEVEL_TYPES.DX,
+        title: `${LEVEL_TYPE_NAMES.Dx}`,
+      });
+    }
+    if (this.prognosticImplications.length > 0) {
+      tabs.push({
+        key: LEVEL_TYPES.PX,
+        title: `${LEVEL_TYPE_NAMES.Px}`,
+      });
+    }
+    return tabs.map(tab => {
+      return {
+        title: tab.title,
+        getContent: () => this.getTabContent(tab.key),
+        key: tab.key,
+        panelClassName: styles.panel,
+      };
+    });
   }
 
   render() {
@@ -245,10 +423,20 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
         </h2>
         <AlterationInfo
           oncogenicity={this.props.annotation.oncogenic}
-          mutationEffect={this.props.annotation.mutationEffect}
+          mutationEffect={
+            this.isOncogenicMutations
+              ? undefined
+              : this.props.annotation.mutationEffect
+          }
           isVus={this.props.annotation.vus}
           highestSensitiveLevel={this.props.annotation.highestSensitiveLevel}
           highestResistanceLevel={this.props.annotation.highestResistanceLevel}
+          highestDiagnosticImplicationLevel={
+            this.props.annotation.highestDiagnosticImplicationLevel
+          }
+          highestPrognosticImplicationLevel={
+            this.props.annotation.highestPrognosticImplicationLevel
+          }
         />
         <Row>
           <Col>
@@ -269,7 +457,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
               <span
                 className={classnames(styles.headerTumorTypeSelection, 'mr-2')}
               >
-                <Select
+                <CancerTypeSelect
                   styles={{
                     control: (base, state) => ({
                       ...base,
@@ -294,11 +482,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                       padding: 0,
                     }),
                   }}
-                  value={this.tumorTypeSelectValue}
-                  placeholder="Select a cancer type"
-                  options={this.props.allTumorTypesOptions}
-                  formatGroupLabel={this.formatGroupLabel}
-                  isClearable={true}
+                  tumorType={this.props.tumorType}
                   onChange={(selectedOption: any) =>
                     this.updateTumorTypeQuery(selectedOption)
                   }
@@ -317,7 +501,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
             </div>
           </Col>
         </Row>
-        {this.props.tumorType ? (
+        {this.props.tumorType && !this.isOncogenicMutations ? (
           <Row>
             <Col>
               {this.tumorTypeSummaries.map((summary, index) => {
@@ -326,6 +510,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                     className={DEFAULT_MARGIN_BOTTOM_LG}
                     key={`summary-${index}`}
                   >
+                    <h6 className={'mb-0'}>{summary.title}</h6>
                     {summary.content}
                   </div>
                 );
@@ -333,33 +518,15 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
             </Col>
           </Row>
         ) : null}
-        {this.therapeuticImplications.length > 0 ? (
-          <Row>
-            <Col>
-              <OncoKBTable
-                data={this.therapeuticImplications}
-                columns={this.therapeuticTableColumns}
-                pageSize={
-                  this.therapeuticImplications.length === 0
-                    ? 1
-                    : this.therapeuticImplications.length
-                }
-                // loading={this.props.annotationResult.isPending}
-                disableSearch={true}
-                defaultSorted={[
-                  {
-                    id: TABLE_COLUMN_KEY.LEVEL,
-                    desc: false,
-                  },
-                  {
-                    id: TABLE_COLUMN_KEY.ALTERATION,
-                    desc: false,
-                  },
-                ]}
-              />
-            </Col>
-          </Row>
-        ) : null}
+        <Row className="mt-2">
+          <Col>
+            <Tabs
+              items={this.tabs}
+              transform={false}
+              selectedTabKey={this.tabDefaultActiveKey}
+            />
+          </Col>
+        </Row>
       </>
     );
   }

@@ -1,8 +1,14 @@
 .headerTumorTypeSelection {
-  width: 300px;
+  width: 400px;
   height: 20%;
   //& * {
   //  font-size: 0.85em;
   //  line-height: 0.9em;
   //}
+}
+
+:global(.RRT__panel).panel {
+  border-width: 1px 0 0;
+  padding-left: 0;
+  padding-right: 0;
 }

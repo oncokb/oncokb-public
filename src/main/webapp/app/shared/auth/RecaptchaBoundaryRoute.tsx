@@ -1,6 +1,4 @@
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
-import WindowStore from 'app/store/WindowStore';
-import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { RouteProps } from 'react-router-dom';
@@ -25,7 +23,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
           <>
             <div>
               <h3 style={{ textAlign: 'center' }}>
-                Verifying your identity using Google reCAPTCHA...
+                Verifying your identity using Google reCAPTCHA
               </h3>
               <p style={{ textAlign: 'center' }}>
                 Please refresh if there is no response after few seconds.

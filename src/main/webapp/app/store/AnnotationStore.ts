@@ -22,7 +22,6 @@ import {
   CancerTypeCount,
   ClinicalVariant,
   GeneNumber,
-  MainType,
   PortalAlteration,
   TumorType,
   VariantAnnotation,
@@ -222,6 +221,8 @@ export class AnnotationStore {
       alteration: 0,
       highestSensitiveLevel: '',
       highestResistanceLevel: '',
+      highestDiagnosticImplicationLevel: '',
+      highestPrognosticImplicationLevel: '',
       tumorType: 0,
     },
   });
@@ -278,61 +279,6 @@ export class AnnotationStore {
         })
       );
     },
-  });
-
-  readonly allMainTypes = remoteData<MainType[]>({
-    await: () => [],
-    async invoke() {
-      const result = await privateClient.utilsOncoTreeMainTypesGetUsingGET({
-        excludeSpecialTumorType: true,
-      });
-      return result.sort();
-    },
-    default: [],
-  });
-
-  readonly allSubtype = remoteData<TumorType[]>({
-    await: () => [],
-    async invoke() {
-      const result = await privateClient.utilsOncoTreeSubtypesGetUsingGET({});
-      return result.sort();
-    },
-    default: [],
-  });
-
-  readonly allTumorTypesOptions = remoteData<any>({
-    await: () => [this.allMainTypes, this.allSubtype],
-    invoke: () => {
-      return Promise.resolve([
-        {
-          label: 'Cancer Type',
-          options: _.uniq(
-            this.allMainTypes.result
-              .filter(mainType => !mainType.name.endsWith('NOS'))
-              .map(mainType => mainType.name)
-          )
-            .sort()
-            .map(tumorType => {
-              return {
-                value: tumorType,
-                label: tumorType,
-              };
-            }),
-        },
-        {
-          label: 'Cancer Type Detailed',
-          options: _.sortBy(_.uniq(this.allSubtype.result), 'name').map(
-            tumorType => {
-              return {
-                value: tumorType.code,
-                label: `${tumorType.name} (${tumorType.code})`,
-              };
-            }
-          ),
-        },
-      ]);
-    },
-    default: [],
   });
 
   readonly annotationResult = remoteData<VariantAnnotation>({
@@ -541,9 +487,7 @@ export class AnnotationStore {
         }
         if (
           this.selectedCancerTypes.length > 0 &&
-          (!this.selectedCancerTypes.includes(
-            alteration.cancerType.mainType.name
-          ) ||
+          (!this.selectedCancerTypes.includes(alteration.cancerType.mainType) ||
             !this.filteredAlterationsByBarChart.includes(
               alteration.variant.alteration
             ))

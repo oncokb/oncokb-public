@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { observable, action } from 'mobx';
+import { observable, action, IReactionDisposer, reaction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { remoteData } from 'cbioportal-frontend-commons';
 import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
@@ -8,11 +8,18 @@ import {
   LevelNumber,
   TypeaheadSearchResp,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import oncokbImg from 'content/images/oncokb.png';
 import { HomePageNumber } from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
-import { LEVEL_BUTTON_DESCRIPTION, PAGE_ROUTE } from 'app/config/constants';
+import {
+  LEVELS,
+  LEVEL_BUTTON_DESCRIPTION,
+  LEVEL_CLASSIFICATION,
+  LEVEL_TYPES,
+  LEVEL_TYPE_NAMES,
+  PAGE_ROUTE,
+} from 'app/config/constants';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
 import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
@@ -20,6 +27,8 @@ import { CitationText } from 'app/components/CitationText';
 import _ from 'lodash';
 import AppStore from 'app/store/AppStore';
 import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
+import autobind from 'autobind-decorator';
+import * as QueryString from 'query-string';
 
 interface IHomeProps {
   content: string;
@@ -36,46 +45,77 @@ export type ExtendedTypeaheadSearchResp = TypeaheadSearchResp & {
 @observer
 class HomePage extends React.Component<IHomeProps> {
   @observable keyword = '';
+  @observable levelTypeSelected = LEVEL_TYPES.TX;
+  private levelGadgets = this.generateLevelGadgets();
 
-  private levelGadgets: {
-    title?: string;
-    description: string;
-    level: string;
-    linkoutLevel: string;
-    combinedLevels: string[];
-  }[] = [
-    {
-      level: '1',
-      description: LEVEL_BUTTON_DESCRIPTION['1'],
-      linkoutLevel: '1',
-      combinedLevels: ['1'],
-    },
-    {
-      level: '2',
-      description: LEVEL_BUTTON_DESCRIPTION['2'],
-      linkoutLevel: '2',
-      combinedLevels: ['2'],
-    },
-    {
-      level: '3',
-      description: LEVEL_BUTTON_DESCRIPTION['3'],
-      linkoutLevel: '3',
-      combinedLevels: ['3'],
-    },
-    {
-      level: '4',
-      description: LEVEL_BUTTON_DESCRIPTION['4'],
-      linkoutLevel: '4',
-      combinedLevels: ['4'],
-    },
-    {
-      level: 'R1',
-      description: 'Resistance',
-      title: 'Level R1/R2',
-      linkoutLevel: 'R1,R2',
-      combinedLevels: ['R1', 'R2'],
-    },
-  ];
+  readonly reactions: IReactionDisposer[] = [];
+
+  updateLocationHash = (newSelectedType: LEVEL_TYPES) => {
+    window.location.hash = QueryString.stringify({
+      levelType: newSelectedType,
+    });
+  };
+
+  constructor(props: Readonly<IHomeProps>) {
+    super(props);
+    this.reactions.push(
+      reaction(
+        () => [props.routing.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(hash) as {
+            levelType: LEVEL_TYPES;
+          };
+          if (queryStrings.levelType) {
+            this.levelTypeSelected = queryStrings.levelType;
+          }
+        },
+        { fireImmediately: true }
+      ),
+      reaction(
+        () => this.levelTypeSelected,
+        newSelectedType => this.updateLocationHash(newSelectedType)
+      )
+    );
+  }
+
+  componentWillUnmount(): void {
+    this.reactions.forEach(componentReaction => componentReaction());
+  }
+
+  generateLevelGadgets() {
+    const levelGadgets: {
+      title?: string;
+      description: string;
+      level: LEVELS;
+      linkoutLevel: string;
+      combinedLevels: string[];
+    }[] = [];
+    for (const level in LEVELS) {
+      if (LEVELS[level]) {
+        switch (level) {
+          case LEVELS.R1:
+            levelGadgets.push({
+              level: LEVELS.R1,
+              description: 'Resistance',
+              title: `Level ${LEVELS.R1}/${LEVELS.R2}`,
+              linkoutLevel: `${LEVELS.R1},${LEVELS.R2}`,
+              combinedLevels: [LEVELS.R1, LEVELS.R2],
+            });
+            break;
+          case LEVELS.R2:
+            break;
+          default:
+            levelGadgets.push({
+              level: LEVELS[level],
+              description: LEVEL_BUTTON_DESCRIPTION[LEVELS[level]],
+              linkoutLevel: LEVELS[level],
+              combinedLevels: [LEVELS[level]],
+            });
+        }
+      }
+    }
+    return levelGadgets;
+  }
 
   readonly levelNumbers = remoteData<{ [level: string]: LevelNumber }>({
     await: () => [],
@@ -114,7 +154,30 @@ class HomePage extends React.Component<IHomeProps> {
     ).length;
   }
 
+  @autobind
+  @action
+  handleLevelTypeButton(type: any) {
+    this.levelTypeSelected = type;
+  }
+
   public render() {
+    const levelTypeButtons = [];
+    for (const key in LEVEL_TYPES) {
+      if (LEVEL_TYPES[key]) {
+        levelTypeButtons.push(
+          <Button
+            className="mx-2"
+            variant={
+              this.levelTypeSelected === LEVEL_TYPES[key] ? 'primary' : 'light'
+            }
+            size="sm"
+            onClick={() => this.handleLevelTypeButton(LEVEL_TYPES[key])}
+          >
+            {LEVEL_TYPE_NAMES[LEVEL_TYPES[key]]} Levels
+          </Button>
+        );
+      }
+    }
     return (
       <div className="home">
         <Row className="mb-5">
@@ -178,21 +241,50 @@ class HomePage extends React.Component<IHomeProps> {
             <OncoKBSearch />
           </Col>
         </Row>
-        <Row className="mb-5">
-          <Col xs={0} lg={1}></Col>
-          {this.levelGadgets.map(levelGadget => (
-            <Col xs={12} sm={6} lg={2} key={levelGadget.level} className="px-0">
-              <LevelButton
-                level={levelGadget.level}
-                numOfGenes={this.getLevelNumber(levelGadget.combinedLevels)}
-                description={levelGadget.description}
-                title={levelGadget.title}
-                className="mb-2"
-                href={`/actionableGenes#levels=${levelGadget.linkoutLevel}`}
-              />
-            </Col>
-          ))}
-          <Col xs={0} lg={1}></Col>
+        <Row className="mb-2">
+          <div className="mx-auto">{levelTypeButtons}</div>
+        </Row>
+        <Row className="my-3 d-flex d-flex justify-content-between">
+          <Col
+            xs={0}
+            lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 1 : 3}
+          ></Col>
+          {this.levelGadgets.map(
+            levelGadget =>
+              ((this.levelTypeSelected === LEVEL_TYPES.DX &&
+                LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.DX) ||
+                (this.levelTypeSelected === LEVEL_TYPES.PX &&
+                  LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.PX) ||
+                (this.levelTypeSelected === LEVEL_TYPES.TX &&
+                  LEVEL_CLASSIFICATION[levelGadget.level] ===
+                    LEVEL_TYPES.TX)) && (
+                <Col
+                  xs={12}
+                  sm={6}
+                  lg={2}
+                  key={levelGadget.level}
+                  style={{ minHeight: 125 }}
+                  className="px-0"
+                >
+                  <LevelButton
+                    level={levelGadget.level}
+                    numOfGenes={this.getLevelNumber(levelGadget.combinedLevels)}
+                    description={levelGadget.description}
+                    title={levelGadget.title}
+                    className="mb-2"
+                    style={{
+                      lineHeight:
+                        levelGadget.level === LEVELS.Px3 ? '35px' : undefined,
+                    }}
+                    href={`/actionableGenes#levels=${levelGadget.linkoutLevel}`}
+                  />
+                </Col>
+              )
+          )}
+          <Col
+            xs={0}
+            lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 1 : 3}
+          ></Col>
         </Row>
         <Row className="mb-3">
           <Col className={'text-center'}>

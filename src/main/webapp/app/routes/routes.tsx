@@ -12,7 +12,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import { TermsPage } from 'app/pages/TermsPage';
 import { TeamPage } from 'app/pages/teamPage/TeamPage';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
-import ActionableGenesPage from 'app/pages/ActionableGenesPage';
+import ActionableGenesPage from 'app/pages/actionableGenesPage/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
 import GenePage from 'app/pages/genePage/GenePage';
 import AlterationPage from 'app/pages/alterationPage/AlterationPage';
@@ -62,14 +62,22 @@ const AppRouts = (props: {
       />
       <PageContainer>
         <Switch>
-          <ErrorBoundaryRoute exact path={PAGE_ROUTE.LOGIN} component={Login} />
+          <RecaptchaBoundaryRoute
+            exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
+            path={PAGE_ROUTE.LOGIN}
+            component={Login}
+          />
           <ErrorBoundaryRoute
             exact
             path={PAGE_ROUTE.LOGOUT}
             component={Logout}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.REGISTER}
             component={RegisterPage}
           />
@@ -85,42 +93,42 @@ const AppRouts = (props: {
           />
           <RecaptchaBoundaryRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.CANCER_GENES}
             component={CancerGenesPage}
           />
           <RecaptchaBoundaryRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ACTIONABLE_GENE}
             component={ActionableGenesPage}
           />
           <RecaptchaBoundaryRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.GENE}
             component={GenePage}
           />
           <RecaptchaBoundaryRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION}
             component={AlterationPage}
           />
           <RecaptchaBoundaryRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.HGVSG}
             component={HgvsgPage}
           />
           <RecaptchaBoundaryRoute
             exact
-            isUserAuthenticated={props.authenticationStore.isAuthenticated}
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
             component={AlterationPage}
@@ -134,18 +142,24 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.LEVELS}
             component={LevelOfEvidencePage}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_VERIFY}
             component={ActivateAccount}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
             component={PasswordResetInit}
           />
-          <ErrorBoundaryRoute
+          <RecaptchaBoundaryRoute
             exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}
             component={PasswordResetFinish}
           />
