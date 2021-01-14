@@ -3,10 +3,11 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { RouteProps } from 'react-router-dom';
 import { ContactLink } from '../links/ContactLink';
+import AppStore from 'app/store/AppStore';
 
 export interface IRecaptchaBoundaryRoute extends RouteProps {
   isUserAuthenticated: boolean;
-  recaptchaVerified: boolean;
+  appStore: AppStore;
 }
 
 @observer
@@ -17,12 +18,12 @@ export class RecaptchaBoundaryRoute extends React.Component<
     if (this.props.isUserAuthenticated) {
       return <ErrorBoundaryRoute {...this.props} />;
     } else {
-      if (!this.props.recaptchaVerified) {
+      if (!this.props.appStore.recaptchaVerified) {
         return (
           <>
             <div>
               <h3 style={{ textAlign: 'center' }}>
-                Verifying your identity using Google reCAPTCHA...
+                Verifying your identity using Google reCAPTCHA
               </h3>
               <p style={{ textAlign: 'center' }}>
                 Please refresh if there is no response after few seconds.

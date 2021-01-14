@@ -132,7 +132,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </LevelOfEvidencePageLink>{' '}
         page. The complete list of biomarkers associated with a diagnostic or
         prognostic level of evidence can be found on the{' '}
-        <Link to={PAGE_ROUTE.ACTIONABLE_GENE}>actionable genes</Link> page
+        <Link to={PAGE_ROUTE.ACTIONABLE_GENE}>Actionable Genes</Link> page
       </span>,
     ],
   },
