@@ -1,8 +1,6 @@
 import {
   Citations,
-  Evidence,
   TreatmentDrug,
-  TumorType,
   Article,
 } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
@@ -15,11 +13,15 @@ import {
   ONCOGENICITY_CLASS_NAMES,
   PAGE_ROUTE,
   TABLE_COLUMN_KEY,
+  LEVEL_TYPES,
+  ONCOGENICITY,
+  LEVELS,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
   Alteration,
-  Treatment,
+  Evidence,
+  TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   citationsSortMethod,
@@ -51,7 +53,7 @@ export function shortenOncogenicity(oncogenicity: string): string {
 export function getCancerTypeNameFromOncoTreeType(
   oncoTreeType: TumorType
 ): string {
-  return oncoTreeType.name || oncoTreeType.mainType.name || 'NA';
+  return oncoTreeType.subtype || oncoTreeType.mainType || 'NA';
 }
 
 export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
@@ -61,16 +63,23 @@ export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
 export function levelOfEvidence2Level(
   levelOfEvidence: string,
   trimSubversion = false
-) {
+): LEVELS {
   let level = levelOfEvidence.replace('LEVEL_', '');
   if (trimSubversion) {
     level = trimLevelOfEvidenceSubversion(level);
   }
-  return level;
+  return level as LEVELS;
 }
 
-export function level2LevelOfEvidence(level: string) {
-  return `LEVEL_${level}`;
+export function level2LevelOfEvidence(level: LEVELS) {
+  switch (level) {
+    case LEVELS.Tx3:
+    case LEVELS.Tx3A:
+      return 'LEVEL_3A';
+      break;
+    default:
+      return `LEVEL_${level}`;
+  }
 }
 
 export function getAllAlterationsName(alterations: Alteration[]) {
@@ -179,10 +188,14 @@ export const OncoKBAnnotationIcon: React.FunctionComponent<{
   );
 };
 export const OncoKBOncogenicityIcon: React.FunctionComponent<{
-  oncogenicity: string;
+  oncogenicity: string | undefined;
   isVus: boolean;
   className?: string;
 }> = props => {
+  let oncogenicity = props.oncogenicity;
+  if (oncogenicity === undefined) {
+    oncogenicity = ONCOGENICITY.UNKNOWN;
+  }
   return (
     <span
       style={{ width: 16, marginTop: -3, marginLeft: 3 }}
@@ -191,7 +204,7 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
       <i
         className={classnames(
           `oncokb annotation-icon ${getAnnotationOncogenicityClassName(
-            props.oncogenicity,
+            oncogenicity,
             props.isVus
           )} no-level`,
           props.className
@@ -202,10 +215,10 @@ export const OncoKBOncogenicityIcon: React.FunctionComponent<{
 };
 
 export const OncoKBLevelIcon: React.FunctionComponent<{
-  level: string;
+  level: LEVELS;
   withDescription?: boolean;
 }> = ({ level, withDescription = true }) => {
-  const oncokbIcon = <i className={`oncokb level-icon level-${level}`} />;
+  const oncokbIcon = <i className={`oncokb icon level-${level}`} />;
   return withDescription ? (
     <LevelWithDescription level={level}>{oncokbIcon}</LevelWithDescription>
   ) : (
@@ -323,13 +336,13 @@ export function getDefaultColumnDefinition<T>(
         id: TABLE_COLUMN_KEY.LEVEL,
         Header: <span>Level</span>,
         accessor: 'level',
-        minWidth: 70,
-        width: 70,
+        minWidth: 60,
+        width: 60,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell(props: any) {
           return (
-            <div className={'my-1'}>
+            <div className={'my-1 d-flex justify-content-center'}>
               <OncoKBLevelIcon
                 level={props.original.level}
                 withDescription={true}
@@ -405,9 +418,13 @@ export function getRouteFromPath(pathName: string) {
     : pathName.substr(pathName.indexOf('/') + 1);
 }
 
-export function getRedirectLoginState(pathName: string) {
+export function getRedirectLoginState(
+  pathName: string,
+  search: string,
+  hash: string
+) {
   return {
-    from: getRouteFromPath(pathName),
+    from: { pathname: getRouteFromPath(pathName), search, hash },
   };
 }
 

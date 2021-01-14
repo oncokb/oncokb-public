@@ -2595,7 +2595,8 @@
           "type": "string",
           "enum": [
             "SOLID",
-            "LIQUID"
+            "LIQUID",
+            "MIXED"
           ]
         }
       },
@@ -2739,8 +2740,11 @@
             "$ref": "#/definitions/Article"
           }
         },
-        "cancerType": {
-          "type": "string"
+        "cancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
         },
         "description": {
           "type": "string"
@@ -2830,8 +2834,11 @@
             "NO"
           ]
         },
-        "oncoTreeType": {
-          "$ref": "#/definitions/TumorType"
+        "relevantCancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
         },
         "solidPropagationLevel": {
           "type": "string",
@@ -2855,9 +2862,6 @@
             "LEVEL_Dx3",
             "NO"
           ]
-        },
-        "subtype": {
-          "type": "string"
         },
         "treatments": {
           "type": "array",
@@ -3493,7 +3497,8 @@
           "type": "string",
           "enum": [
             "SOLID",
-            "LIQUID"
+            "LIQUID",
+            "MIXED"
           ]
         }
       },

@@ -46,7 +46,11 @@ export const PrivateRoute = observer(
         return (
           <Redirect
             to={{
-              state: getRedirectLoginState(routing.location.pathname),
+              state: getRedirectLoginState(
+                routing.location.pathname,
+                routing.location.search,
+                routing.location.hash
+              ),
               pathname: PAGE_ROUTE.LOGIN,
             }}
           />

@@ -847,87 +847,6 @@
         }
       }
     },
-    "/utils/oncotree/mainTypes": {
-      "get": {
-        "tags": [
-          "Utils"
-        ],
-        "summary": "utilsOncoTreeMainTypesGet",
-        "description": "Get the full list of OncoTree Maintype.",
-        "operationId": "utilsOncoTreeMainTypesGetUsingGET",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "excludeSpecialTumorType",
-            "in": "query",
-            "description": "Exclude special general tumor type",
-            "required": false,
-            "type": "boolean"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/MainType"
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/utils/oncotree/subtypes": {
-      "get": {
-        "tags": [
-          "Utils"
-        ],
-        "summary": "utilsOncoTreeSubtypesGet",
-        "description": "Get the full list of OncoTree Subtypes.",
-        "operationId": "utilsOncoTreeSubtypesGetUsingGET",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/TumorType"
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/utils/portalAlterationSampleCount": {
       "get": {
         "tags": [
@@ -959,6 +878,93 @@
                 "$ref": "#/definitions/CancerTypeCount"
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/utils/relevantCancerTypes": {
+      "post": {
+        "tags": [
+          "Utils"
+        ],
+        "summary": "utilRelevantCancerTypesPost",
+        "description": "Get the list of relevant tumor types.",
+        "operationId": "utilRelevantCancerTypesPostUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "levelOfEvidence",
+            "in": "query",
+            "description": "Level of Evidence",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "LEVEL_0",
+              "LEVEL_1",
+              "LEVEL_2",
+              "LEVEL_2A",
+              "LEVEL_2B",
+              "LEVEL_3A",
+              "LEVEL_3B",
+              "LEVEL_4",
+              "LEVEL_R1",
+              "LEVEL_R2",
+              "LEVEL_R3",
+              "LEVEL_Px1",
+              "LEVEL_Px2",
+              "LEVEL_Px3",
+              "LEVEL_Dx1",
+              "LEVEL_Dx2",
+              "LEVEL_Dx3",
+              "NO"
+            ]
+          },
+          {
+            "name": "onlyDetailedCancerType",
+            "in": "query",
+            "description": "Return only Detailed Cancer Type.",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of queries.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/RelevantCancerTypeQuery"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TumorType"
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -1038,6 +1044,42 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/AnnotatedVariant"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/utils/tumorTypes": {
+      "get": {
+        "tags": [
+          "Utils"
+        ],
+        "summary": "utilsTumorTypesGet",
+        "description": "Get the full list of TumorTypes.",
+        "operationId": "utilsTumorTypesGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TumorType"
               }
             }
           },
@@ -1899,12 +1941,6 @@
     "TumorType": {
       "type": "object",
       "properties": {
-        "children": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/TumorType"
-          }
-        },
         "code": {
           "type": "string"
         },
@@ -1920,12 +1956,9 @@
           "format": "int32"
         },
         "mainType": {
-          "$ref": "#/definitions/MainType"
-        },
-        "name": {
           "type": "string"
         },
-        "parent": {
+        "subtype": {
           "type": "string"
         },
         "tissue": {
@@ -1935,7 +1968,8 @@
           "type": "string",
           "enum": [
             "SOLID",
-            "LIQUID"
+            "LIQUID",
+            "MIXED"
           ]
         }
       },
@@ -2110,8 +2144,11 @@
             "$ref": "#/definitions/Article"
           }
         },
-        "cancerType": {
-          "type": "string"
+        "cancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
         },
         "description": {
           "type": "string"
@@ -2201,8 +2238,11 @@
             "NO"
           ]
         },
-        "oncoTreeType": {
-          "$ref": "#/definitions/TumorType"
+        "relevantCancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
         },
         "solidPropagationLevel": {
           "type": "string",
@@ -2226,9 +2266,6 @@
             "LEVEL_Dx3",
             "NO"
           ]
-        },
-        "subtype": {
-          "type": "string"
         },
         "treatments": {
           "type": "array",
@@ -2342,6 +2379,17 @@
         }
       }
     },
+    "RelevantCancerTypeQuery": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "mainType": {
+          "type": "string"
+        }
+      }
+    },
     "TranscriptResult": {
       "type": "object",
       "properties": {
@@ -2387,7 +2435,8 @@
           "type": "string",
           "enum": [
             "SOLID",
-            "LIQUID"
+            "LIQUID",
+            "MIXED"
           ]
         }
       },
@@ -2416,6 +2465,12 @@
         },
         "gene": {
           "$ref": "#/definitions/Gene"
+        },
+        "highestDiagnosticImplicationLevel": {
+          "type": "string"
+        },
+        "highestPrognosticImplicationLevel": {
+          "type": "string"
         },
         "highestResistanceLevel": {
           "type": "string"

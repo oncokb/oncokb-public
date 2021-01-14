@@ -282,8 +282,6 @@ export type Gene = {
 
 };
 export type TumorType = {
-    'children': {}
-
     'code': string
 
         'color': string
@@ -292,15 +290,13 @@ export type TumorType = {
 
         'level': number
 
-        'mainType': MainType
+        'mainType': string
 
-        'name': string
-
-        'parent': string
+        'subtype': string
 
         'tissue': string
 
-        'tumorForm': "SOLID" | "LIQUID"
+        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
 
 };
 export type ClinicalVariant = {
@@ -376,7 +372,7 @@ export type Evidence = {
 
         'articles': Array < Article >
 
-        'cancerType': string
+        'cancerTypes': Array < TumorType >
 
         'description': string
 
@@ -396,11 +392,9 @@ export type Evidence = {
 
         'liquidPropagationLevel': "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO"
 
-        'oncoTreeType': TumorType
+        'relevantCancerTypes': Array < TumorType >
 
         'solidPropagationLevel': "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO"
-
-        'subtype': string
 
         'treatments': Array < Treatment >
 
@@ -457,6 +451,12 @@ export type Drug = {
         'uuid': string
 
 };
+export type RelevantCancerTypeQuery = {
+    'code': string
+
+        'mainType': string
+
+};
 export type TranscriptResult = {
     'grch37Transcript': EnsemblTranscript
 
@@ -476,7 +476,7 @@ export type MainType = {
 
         'name': string
 
-        'tumorForm': "SOLID" | "LIQUID"
+        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
 
 };
 export type VariantConsequence = {
@@ -491,6 +491,10 @@ export type GeneNumber = {
     'alteration': number
 
         'gene': Gene
+
+        'highestDiagnosticImplicationLevel': string
+
+        'highestPrognosticImplicationLevel': string
 
         'highestResistanceLevel': string
 
@@ -2001,144 +2005,6 @@ export default class OncoKbPrivateAPI {
             return response.body;
         });
     };
-    utilsOncoTreeMainTypesGetUsingGETURL(parameters: {
-        'excludeSpecialTumorType' ? : boolean,
-        $queryParameters ? : any
-    }): string {
-        let queryParameters: any = {};
-        let path = '/utils/oncotree/mainTypes';
-        if (parameters['excludeSpecialTumorType'] !== undefined) {
-            queryParameters['excludeSpecialTumorType'] = parameters['excludeSpecialTumorType'];
-        }
-
-        if (parameters.$queryParameters) {
-            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                var parameter = parameters.$queryParameters[parameterName];
-                queryParameters[parameterName] = parameter;
-            });
-        }
-        let keys = Object.keys(queryParameters);
-        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
-    };
-
-    /**
-     * Get the full list of OncoTree Maintype.
-     * @method
-     * @name OncoKbPrivateAPI#utilsOncoTreeMainTypesGetUsingGET
-     * @param {boolean} excludeSpecialTumorType - Exclude special general tumor type
-     */
-    utilsOncoTreeMainTypesGetUsingGETWithHttpInfo(parameters: {
-        'excludeSpecialTumorType' ? : boolean,
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/utils/oncotree/mainTypes';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'application/json';
-            headers['Content-Type'] = 'application/json';
-
-            if (parameters['excludeSpecialTumorType'] !== undefined) {
-                queryParameters['excludeSpecialTumorType'] = parameters['excludeSpecialTumorType'];
-            }
-
-            if (parameters.$queryParameters) {
-                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                    var parameter = parameters.$queryParameters[parameterName];
-                    queryParameters[parameterName] = parameter;
-                });
-            }
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-
-        });
-    };
-
-    /**
-     * Get the full list of OncoTree Maintype.
-     * @method
-     * @name OncoKbPrivateAPI#utilsOncoTreeMainTypesGetUsingGET
-     * @param {boolean} excludeSpecialTumorType - Exclude special general tumor type
-     */
-    utilsOncoTreeMainTypesGetUsingGET(parameters: {
-            'excludeSpecialTumorType' ? : boolean,
-            $queryParameters ? : any,
-                $domain ? : string
-        }): Promise < Array < MainType >
-        > {
-            return this.utilsOncoTreeMainTypesGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-                return response.body;
-            });
-        };
-    utilsOncoTreeSubtypesGetUsingGETURL(parameters: {
-        $queryParameters ? : any
-    }): string {
-        let queryParameters: any = {};
-        let path = '/utils/oncotree/subtypes';
-
-        if (parameters.$queryParameters) {
-            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                var parameter = parameters.$queryParameters[parameterName];
-                queryParameters[parameterName] = parameter;
-            });
-        }
-        let keys = Object.keys(queryParameters);
-        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
-    };
-
-    /**
-     * Get the full list of OncoTree Subtypes.
-     * @method
-     * @name OncoKbPrivateAPI#utilsOncoTreeSubtypesGetUsingGET
-     */
-    utilsOncoTreeSubtypesGetUsingGETWithHttpInfo(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/utils/oncotree/subtypes';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'application/json';
-            headers['Content-Type'] = 'application/json';
-
-            if (parameters.$queryParameters) {
-                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                    var parameter = parameters.$queryParameters[parameterName];
-                    queryParameters[parameterName] = parameter;
-                });
-            }
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-
-        });
-    };
-
-    /**
-     * Get the full list of OncoTree Subtypes.
-     * @method
-     * @name OncoKbPrivateAPI#utilsOncoTreeSubtypesGetUsingGET
-     */
-    utilsOncoTreeSubtypesGetUsingGET(parameters: {
-            $queryParameters ? : any,
-                $domain ? : string
-        }): Promise < Array < TumorType >
-        > {
-            return this.utilsOncoTreeSubtypesGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-                return response.body;
-            });
-        };
     utilPortalAlterationSampleCountGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
         $queryParameters ? : any
@@ -2211,6 +2077,108 @@ export default class OncoKbPrivateAPI {
         }): Promise < Array < CancerTypeCount >
         > {
             return this.utilPortalAlterationSampleCountGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilRelevantCancerTypesPostUsingPOSTURL(parameters: {
+        'levelOfEvidence' ? : "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO",
+        'onlyDetailedCancerType' ? : boolean,
+        'body': Array < RelevantCancerTypeQuery > ,
+            $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/relevantCancerTypes';
+        if (parameters['levelOfEvidence'] !== undefined) {
+            queryParameters['levelOfEvidence'] = parameters['levelOfEvidence'];
+        }
+
+        if (parameters['onlyDetailedCancerType'] !== undefined) {
+            queryParameters['onlyDetailedCancerType'] = parameters['onlyDetailedCancerType'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the list of relevant tumor types.
+     * @method
+     * @name OncoKbPrivateAPI#utilRelevantCancerTypesPostUsingPOST
+     * @param {string} levelOfEvidence - Level of Evidence
+     * @param {boolean} onlyDetailedCancerType - Return only Detailed Cancer Type.
+     * @param {} body - List of queries.
+     */
+    utilRelevantCancerTypesPostUsingPOSTWithHttpInfo(parameters: {
+        'levelOfEvidence' ? : "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO",
+        'onlyDetailedCancerType' ? : boolean,
+        'body': Array < RelevantCancerTypeQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/relevantCancerTypes';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['levelOfEvidence'] !== undefined) {
+                queryParameters['levelOfEvidence'] = parameters['levelOfEvidence'];
+            }
+
+            if (parameters['onlyDetailedCancerType'] !== undefined) {
+                queryParameters['onlyDetailedCancerType'] = parameters['onlyDetailedCancerType'];
+            }
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the list of relevant tumor types.
+     * @method
+     * @name OncoKbPrivateAPI#utilRelevantCancerTypesPostUsingPOST
+     * @param {string} levelOfEvidence - Level of Evidence
+     * @param {boolean} onlyDetailedCancerType - Return only Detailed Cancer Type.
+     * @param {} body - List of queries.
+     */
+    utilRelevantCancerTypesPostUsingPOST(parameters: {
+            'levelOfEvidence' ? : "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO",
+            'onlyDetailedCancerType' ? : boolean,
+            'body': Array < RelevantCancerTypeQuery > ,
+                $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < TumorType >
+        > {
+            return this.utilRelevantCancerTypesPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
@@ -2349,6 +2317,69 @@ export default class OncoKbPrivateAPI {
         }): Promise < Array < AnnotatedVariant >
         > {
             return this.utilsSuggestedVariantsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilsTumorTypesGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/tumorTypes';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the full list of TumorTypes.
+     * @method
+     * @name OncoKbPrivateAPI#utilsTumorTypesGetUsingGET
+     */
+    utilsTumorTypesGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/tumorTypes';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the full list of TumorTypes.
+     * @method
+     * @name OncoKbPrivateAPI#utilsTumorTypesGetUsingGET
+     */
+    utilsTumorTypesGetUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < TumorType >
+        > {
+            return this.utilsTumorTypesGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
