@@ -213,21 +213,25 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
     });
   }
 
-  const additionalInfo: React.ReactNode[] = [
-    <div key="geneId">
-      Gene ID:{' '}
-      {gene.entrezGeneId > 0 ? (
-        <Linkout
-          className={styles.lowKeyLinkout}
-          link={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}
-        >
-          {gene.entrezGeneId}
-        </Linkout>
-      ) : (
-        <span className={'ml-1'}>{gene.entrezGeneId}</span>
-      )}
-    </div>,
-  ];
+  const additionalInfo: React.ReactNode[] = [];
+
+  if (gene.entrezGeneId > 0) {
+    additionalInfo.push(
+      <div key="geneId">
+        Gene ID:{' '}
+        {gene.entrezGeneId > 0 ? (
+          <Linkout
+            className={styles.lowKeyLinkout}
+            link={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}
+          >
+            {gene.entrezGeneId}
+          </Linkout>
+        ) : (
+          <span className={'ml-1'}>{gene.entrezGeneId}</span>
+        )}
+      </div>
+    );
+  }
   if (gene.grch37Isoform || gene.grch37RefSeq) {
     additionalInfo.push(
       <ReferenceGenomeInfo
