@@ -15,31 +15,6 @@ export class RecaptchaBoundaryRoute extends React.Component<
   IRecaptchaBoundaryRoute
 > {
   render() {
-    if (this.props.isUserAuthenticated) {
-      return <ErrorBoundaryRoute {...this.props} />;
-    } else {
-      if (!this.props.appStore.recaptchaVerified) {
-        return (
-          <>
-            <div>
-              <h3 style={{ textAlign: 'center' }}>
-                Verifying your identity using Google reCAPTCHA
-              </h3>
-              <p style={{ textAlign: 'center' }}>
-                Please refresh if there is no response after few seconds.
-              </p>
-              <p style={{ textAlign: 'center' }}>
-                If you continue seeing this language after refreshing, please{' '}
-                <ContactLink emailSubject={'Unable to Access the Pages'}>
-                  contact us
-                </ContactLink>
-                .
-              </p>
-            </div>
-          </>
-        );
-      }
-    }
     return <ErrorBoundaryRoute {...this.props} />;
   }
 }
