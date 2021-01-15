@@ -5,8 +5,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
+import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
@@ -14,6 +17,9 @@ import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.ExposedToken;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.ResourceModel;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageSummary;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserUsage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +27,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.amazonaws.services.dynamodbv2.xspec.NULL;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 
@@ -34,6 +41,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -62,8 +70,12 @@ public class CronJobController {
 
     private final TokenStatsService tokenStatsService;
 
+    private final UserDetailsRepository userDetailsRepository;
+
     @Autowired
     private UserMapper userMapper;
+
+    private final S3Service s3Service;
 
     private final MailService mailService;
 
@@ -75,11 +87,15 @@ public class CronJobController {
 
     private final ApplicationProperties applicationProperties;
 
+    final String USERS_USAGE_SUMMARY_FILE = "usage-analysis/userSummary.json";
+    final String RESOURCES_USAGE_SUMMARY_FILE = "usage-analysis/resourceSummary.json";
+
     public CronJobController(UserService userService,
                              MailService mailService, TokenProvider tokenProvider,
                              TokenService tokenService, AuditEventService auditEventService,
                              TokenStatsService tokenStatsService, UserMailsService userMailsService,
-                             ApplicationProperties applicationProperties
+                             ApplicationProperties applicationProperties, UserDetailsRepository userDetailsRepository,
+                             S3Service s3Service
     ) {
 
         this.userService = userService;
@@ -90,6 +106,8 @@ public class CronJobController {
         this.tokenStatsService = tokenStatsService;
         this.userMailsService = userMailsService;
         this.applicationProperties = applicationProperties;
+        this.userDetailsRepository = userDetailsRepository;
+        this.s3Service = s3Service;
     }
 
     /**
@@ -179,6 +197,72 @@ public class CronJobController {
                 tokenService.save(token);
             }
         });
+    }
+    
+    /**
+     * {@code GET /user-usage-analysis}: Analyze user usage
+     * 
+     * @throws IOException
+     */
+    @GetMapping(path = "/user-usage-analysis")
+    public void analyzeUserUsage() throws IOException {
+        log.info("User usage analysis started...");
+        List<UserTokenUsageWithInfo> tokenStats =  tokenStatsService.getTokenUsageAnalysis(Instant.now().minus(365, ChronoUnit.DAYS));    
+        UsageSummary resourceSummary = new UsageSummary();       
+        Map<Long, UserUsage> userSummary = new HashMap<>();
+
+        for (UserTokenUsageWithInfo state: tokenStats){
+            calculateUsageSummary(resourceSummary, state);
+
+            long userId = state.getToken().getUser().getId();
+            User user = state.getToken().getUser();
+            if (!userSummary.containsKey(userId)){
+                userSummary.put(userId, new UserUsage());
+                UserUsage currentUsage = userSummary.get(userId);
+                currentUsage.setUserFirstName(user.getFirstName());
+                currentUsage.setUserLastName(user.getLastName());
+                currentUsage.setUserEmail(user.getEmail());
+                currentUsage.setSummary(new UsageSummary());
+                Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
+                if (userDetails.isPresent()){
+                    currentUsage.setJobTitle(userDetails.get().getJobTitle());
+                    currentUsage.setCompany(userDetails.get().getCompany());
+                    currentUsage.setLicenseType(userDetails.get().getLicenseType().getName());
+                }
+            }
+            UsageSummary currentUsageSummary = userSummary.get(userId).getSummary();
+            calculateUsageSummary(currentUsageSummary, state);
+        }
+        
+        ObjectMapper mapper = new ObjectMapper();
+        File resourceResult = new File("./resourceSummary.json");
+        File userResult = new File("./userSummary.json");
+        mapper.writeValue(resourceResult, resourceSummary);
+        mapper.writeValue(userResult, userSummary);
+
+        s3Service.saveObject("oncokb", RESOURCES_USAGE_SUMMARY_FILE, resourceResult);
+        s3Service.saveObject("oncokb", USERS_USAGE_SUMMARY_FILE, userResult);
+        resourceResult.delete();
+        userResult.delete();
+        log.info("User usage analysis completed!");
+    }
+
+    private void calculateUsageSummary(UsageSummary usageSummary, UserTokenUsageWithInfo info){
+        ResourceModel resource = new ResourceModel(info.getResource());
+        String endpoint = resource.getEndpoint();
+        int count = info.getCount();
+        String time = info.getTime();
+
+        // Deal with year summary
+        usageSummary.getYear().put(endpoint, usageSummary.getYear().getOrDefault(endpoint, 0) + count);
+        // Deal with month summary
+        if (!usageSummary.getMonth().containsKey(time)){
+            usageSummary.getMonth().put(time, new JSONObject());
+        }           
+        if (!usageSummary.getMonth().get(time).containsKey(endpoint)){
+            usageSummary.getMonth().get(time).put(endpoint, new Integer(0));
+        }
+        usageSummary.getMonth().get(time).put(endpoint, (Integer)usageSummary.getMonth().get(time).get(endpoint) + (Integer)count);
     }
 
     /**

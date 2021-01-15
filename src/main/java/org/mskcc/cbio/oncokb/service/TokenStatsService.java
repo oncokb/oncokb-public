@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.service;
 
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
+import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
 
 import java.time.Instant;
 import java.util.List;
@@ -46,4 +47,6 @@ public interface TokenStatsService {
     void removeOldTokenStats();
 
     List<UserTokenUsage> getUserTokenUsage(Instant before);
+
+    List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after);
 }
