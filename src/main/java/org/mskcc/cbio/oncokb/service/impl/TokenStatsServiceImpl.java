@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.service.impl;
 
 import io.github.jhipster.config.JHipsterProperties;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
+import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
 import org.mskcc.cbio.oncokb.service.TokenStatsService;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
@@ -76,5 +77,9 @@ public class TokenStatsServiceImpl implements TokenStatsService {
 
     public List<UserTokenUsage> getUserTokenUsage(Instant before) {
         return tokenStatsRepository.countTokenUsageByToken(before);
+    }
+
+    public List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after){
+        return tokenStatsRepository.countTokenUsageByTokenTimeResource(after);
     }
 }
