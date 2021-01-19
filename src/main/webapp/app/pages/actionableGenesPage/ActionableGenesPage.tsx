@@ -27,7 +27,10 @@ import {
 } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
-import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
+import {
+  defaultSortMethod,
+  sortByLevel,
+} from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
@@ -456,19 +459,52 @@ export default class ActionableGenesPage extends React.Component<
   @autobind
   downloadAssociation() {
     const content = [
-      ['Level', 'Gene', 'Alterations', 'Cancer Types', 'Drugs'].join('\t'),
+      [
+        'Level',
+        'Gene',
+        'Alterations',
+        'Cancer Types',
+        'Drugs (for therapeutic implications only)',
+      ].join('\t'),
     ];
-    _.each(this.filteredTreatments, item => {
-      content.push(
-        [
-          item.level,
-          item.hugoSymbol,
-          item.alterations.map(alteration => alteration.name).join(', '),
-          item.cancerTypes.join(', '),
-          item.drugs,
-        ].join('\t')
-      );
-    });
+    this.filteredTreatments
+      .map(treatment => ({
+        level: treatment.level,
+        hugoSymbol: treatment.hugoSymbol,
+        alterations: treatment.alterations
+          .map(alteration => alteration.name)
+          .sort()
+          .join(', '),
+        tumorType: treatment.cancerTypes.join(', '),
+        drugs: treatment.drugs,
+      }))
+      .sort((treatmentA, treatmentB) => {
+        let result = sortByLevel(treatmentA.level, treatmentB.level);
+        if (result === 0) {
+          result = treatmentA.hugoSymbol.localeCompare(treatmentB.hugoSymbol);
+        }
+        if (result === 0) {
+          result = treatmentA.alterations.localeCompare(treatmentB.alterations);
+        }
+        if (result === 0) {
+          result = treatmentA.tumorType.localeCompare(treatmentB.tumorType);
+        }
+        if (result === 0) {
+          result = treatmentA.drugs.localeCompare(treatmentB.drugs);
+        }
+        return result;
+      })
+      .forEach(item => {
+        content.push(
+          [
+            item.level,
+            item.hugoSymbol,
+            item.alterations,
+            item.tumorType,
+            item.drugs,
+          ].join('\t')
+        );
+      });
     return Promise.resolve(content.join('\n'));
   }
 

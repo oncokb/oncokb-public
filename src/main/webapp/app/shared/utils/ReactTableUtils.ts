@@ -1,4 +1,9 @@
-import { MUTATION_EFFECT, ONCOGENICITY } from 'app/config/constants';
+import {
+  LEVEL_PRIORITY,
+  LEVELS,
+  MUTATION_EFFECT,
+  ONCOGENICITY,
+} from 'app/config/constants';
 import _ from 'lodash';
 import { Alteration, Citations } from '../api/generated/OncoKbAPI';
 
@@ -12,6 +17,15 @@ export function sortByArrayIndexAsc(aIndex: number, bIndex: number) {
   } else {
     return aIndex - bIndex;
   }
+}
+
+export function sortByLevel(a: string, b: string) {
+  const aIndex = LEVEL_PRIORITY.indexOf(a as LEVELS);
+  const bIndex = LEVEL_PRIORITY.indexOf(b as LEVELS);
+  if (aIndex === bIndex) {
+    return 0;
+  }
+  return bIndex - aIndex;
 }
 
 export function defaultSortMethod(a: any, b: any): number {
