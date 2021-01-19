@@ -43,6 +43,7 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import moment from 'moment';
 import InfoIcon from 'app/shared/icons/InfoIcon';
+import WithSeparator from 'react-with-separator';
 
 // Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
 // Likely Neutral will be converted to Neutral
@@ -281,23 +282,26 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
-    case TABLE_COLUMN_KEY.TUMOR_TYPE:
+    case TABLE_COLUMN_KEY.CANCER_TYPES:
       return {
-        id: TABLE_COLUMN_KEY.TUMOR_TYPE,
-        Header: <span>Cancer Type</span>,
-        accessor: 'cancerType',
+        id: TABLE_COLUMN_KEY.CANCER_TYPES,
+        Header: <span>Cancer Types</span>,
+        accessor: 'cancerTypes',
         style: { whiteSpace: 'normal' },
         minWidth: 150,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
         Cell(props: { original: any }) {
-          return (
-            <TumorTypePageLink
-              hugoSymbol={props.original.hugoSymbol}
-              alteration={props.original.alteration}
-              tumorType={props.original.tumorType}
-            />
+          const cancerTypes = props.original.cancerTypes.map(
+            (cancerType: string) => (
+              <TumorTypePageLink
+                hugoSymbol={props.original.hugoSymbol}
+                alteration={props.original.alteration}
+                tumorType={cancerType}
+              />
+            )
           );
+          return <WithSeparator separator={', '}>{cancerTypes}</WithSeparator>;
         },
       };
     case TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE:
