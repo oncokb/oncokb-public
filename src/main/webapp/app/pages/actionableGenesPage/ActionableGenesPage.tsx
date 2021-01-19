@@ -45,6 +45,8 @@ import {
   LEVEL_TYPE_NAMES,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
+  REFERENCE_GENOME,
+  DEFAULT_REFERENCE_GENOME,
 } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -78,6 +80,7 @@ type HashQueries = {
   hugoSymbol?: string;
   tumorType?: string;
   drug?: string;
+  refGenome?: REFERENCE_GENOME;
 };
 
 type EvidencesByLevel = { [level: string]: Evidence[] };
@@ -89,6 +92,7 @@ export default class ActionableGenesPage extends React.Component<
   @observable relevantTumorTypeSearchKeyword = '';
   @observable drugSearchKeyword = '';
   @observable geneSearchKeyword = '';
+  @observable refGenome = DEFAULT_REFERENCE_GENOME;
   @observable levelSelected = this.initLevelSelected();
   @observable collapseStatus = {
     [LEVEL_TYPES.TX]: true,
@@ -196,6 +200,9 @@ export default class ActionableGenesPage extends React.Component<
           if (queryStrings.drug) {
             this.drugSearchKeyword = queryStrings.drug;
           }
+          if (queryStrings.refGenome) {
+            this.refGenome = queryStrings.refGenome;
+          }
         },
         { fireImmediately: true }
       ),
@@ -218,28 +225,33 @@ export default class ActionableGenesPage extends React.Component<
   getTreatments(evidences: Evidence[]) {
     const treatments: Treatment[] = [];
     _.forEach(evidences, (item: Evidence) => {
-      treatments.push({
-        level: levelOfEvidence2Level(item.levelOfEvidence, true),
-        hugoSymbol: item.gene.hugoSymbol || 'NA',
-        alterations: _.sortBy(item.alterations, 'name'),
-        cancerTypes: item.cancerTypes.map(cancerType =>
-          getCancerTypeNameFromOncoTreeType(cancerType)
-        ),
-        treatments: item.treatments,
-        uniqueDrugs: _.uniq(
-          _.reduce(
-            item.treatments,
-            (acc, treatment) => {
-              const result: string[] = treatment.drugs.map(drug =>
-                getDrugNameFromTreatment(drug)
-              );
-              return acc.concat(result);
-            },
-            [] as string[]
-          )
-        ),
-        drugs: getTreatmentNameFromEvidence(item),
-      });
+      const matchedAlterations = item.alterations.filter(alteration =>
+        alteration.referenceGenomes.includes(this.refGenome)
+      );
+      if (matchedAlterations.length > 0) {
+        treatments.push({
+          level: levelOfEvidence2Level(item.levelOfEvidence, true),
+          hugoSymbol: item.gene.hugoSymbol || 'NA',
+          alterations: _.sortBy(matchedAlterations, 'name'),
+          cancerTypes: item.cancerTypes.map(cancerType =>
+            getCancerTypeNameFromOncoTreeType(cancerType)
+          ),
+          treatments: item.treatments,
+          uniqueDrugs: _.uniq(
+            _.reduce(
+              item.treatments,
+              (acc, treatment) => {
+                const result: string[] = treatment.drugs.map(drug =>
+                  getDrugNameFromTreatment(drug)
+                );
+                return acc.concat(result);
+              },
+              [] as string[]
+            )
+          ),
+          drugs: getTreatmentNameFromEvidence(item),
+        });
+      }
     });
     return treatments;
   }
@@ -516,15 +528,10 @@ export default class ActionableGenesPage extends React.Component<
             key={index}
             hugoSymbol={hugoSymbol}
             alteration={alteration.name}
+            alterationRefGenomes={
+              alteration.referenceGenomes as REFERENCE_GENOME[]
+            }
           />
-          {alteration.referenceGenomes.length === 1 ? (
-            <InfoIcon
-              overlay={`Only in ${alteration.referenceGenomes[0]}`}
-              placement="top"
-              className="ml-1"
-              style={{ fontSize: '0.7rem' }}
-            />
-          ) : null}
         </>
       )
     );
