@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "These endpoints are for private use only.",
-    "version": "v1.2.0",
+    "version": "v1.2.1",
     "title": "OncoKB Private APIs",
     "contact": {
       "name": "OncoKB",
@@ -2519,6 +2519,12 @@
     "Implication": {
       "type": "object",
       "properties": {
+        "abstracts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ArticleAbstract"
+          }
+        },
         "alterations": {
           "type": "array",
           "items": {
@@ -2550,6 +2556,12 @@
             "LEVEL_Dx3",
             "NO"
           ]
+        },
+        "pmids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "tumorType": {
           "$ref": "#/definitions/TumorType"

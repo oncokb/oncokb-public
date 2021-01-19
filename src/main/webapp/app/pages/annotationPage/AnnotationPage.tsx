@@ -3,25 +3,26 @@ import React from 'react';
 import { GenePageLink, OncoTreeLink } from 'app/shared/utils/UrlUtils';
 import {
   DEFAULT_MARGIN_BOTTOM_LG,
-  EVIDENCE_TYPES,
-  LEVEL_TYPES,
-  LEVEL_TYPE_NAMES,
-  TABLE_COLUMN_KEY,
-  TREATMENT_EVIDENCE_TYPES,
   DEFAULT_MESSAGE_HEME_ONLY_DX,
   DEFAULT_MESSAGE_HEME_ONLY_PX,
+  EVIDENCE_TYPES,
+  LEVEL_TYPE_NAMES,
+  LEVEL_TYPES,
+  TABLE_COLUMN_KEY,
+  TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
-import { computed, action } from 'mobx';
+import { action, computed } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
-  TumorType,
+  Evidence,
   VariantAnnotation,
+  VariantAnnotationTumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { TherapeuticImplication } from 'app/store/AnnotationStore';
 import {
@@ -33,11 +34,11 @@ import {
 } from 'app/shared/utils/Utils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { CitationTooltip } from 'app/components/CitationTooltip';
-import Select from 'react-select';
 import _ from 'lodash';
 import { AnnotationPageTable } from './AnnotationPageTable';
 import Tabs from 'react-responsive-tabs';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
+import WithSeparator from 'react-with-separator';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -66,91 +67,65 @@ export type IAnnotationPage = {
   annotation: VariantAnnotation;
 };
 export default class AnnotationPage extends React.Component<IAnnotationPage> {
+  getTherapeuticImplications(evidences: Evidence[]) {
+    return evidences.map(evidence => {
+      const level = levelOfEvidence2Level(evidence.levelOfEvidence);
+      const cancerTypes = evidence.cancerTypes.map(cancerType =>
+        getCancerTypeNameFromOncoTreeType(cancerType)
+      );
+      return {
+        level,
+        alterations: evidence.alterations
+          .map(alteration => alteration.name)
+          .join(', '),
+        drugs: getTreatmentNameFromEvidence(evidence),
+        cancerTypes,
+        citations: articles2Citations(evidence.articles),
+      };
+    });
+  }
+
+  getEvidenceByEvidenceTypes(
+    cancerTypes: VariantAnnotationTumorType[],
+    evidenceTypes: EVIDENCE_TYPES[]
+  ) {
+    let uniqueEvidences: Evidence[] = [];
+    cancerTypes.forEach(cancerType => {
+      uniqueEvidences = uniqueEvidences.concat(
+        cancerType.evidences.filter(evidence =>
+          evidenceTypes.includes(evidence.evidenceType as EVIDENCE_TYPES)
+        )
+      );
+    });
+
+    return _.uniqBy(uniqueEvidences, evidence => evidence.id);
+  }
+
   @computed
   get therapeuticImplications(): TherapeuticImplication[] {
-    return _.reduce(
-      this.props.annotation.tumorTypes,
-      (acc, next) => {
-        const oncoTreeCancerType = getCancerTypeNameFromOncoTreeType(
-          next.tumorType
-        );
-        next.evidences.forEach(evidence => {
-          if (
-            TREATMENT_EVIDENCE_TYPES.includes(
-              evidence.evidenceType as EVIDENCE_TYPES
-            )
-          ) {
-            const level = levelOfEvidence2Level(evidence.levelOfEvidence);
-            acc.push({
-              level,
-              alterations: evidence.alterations
-                .map(alteration => alteration.name)
-                .join(', '),
-              drugs: getTreatmentNameFromEvidence(evidence),
-              cancerTypes: oncoTreeCancerType,
-              citations: articles2Citations(evidence.articles),
-            });
-          }
-        });
-        return acc;
-      },
-      [] as TherapeuticImplication[]
+    return this.getTherapeuticImplications(
+      this.getEvidenceByEvidenceTypes(
+        this.props.annotation.tumorTypes,
+        TREATMENT_EVIDENCE_TYPES
+      )
     );
   }
 
   @computed
   get diagnosticImplications(): TherapeuticImplication[] {
-    return _.reduce(
-      this.props.annotation.tumorTypes,
-      (acc, next) => {
-        const oncoTreeCancerType = getCancerTypeNameFromOncoTreeType(
-          next.tumorType
-        );
-        next.evidences.forEach(evidence => {
-          if (evidence.evidenceType === EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION) {
-            const level = levelOfEvidence2Level(evidence.levelOfEvidence);
-            acc.push({
-              level,
-              alterations: evidence.alterations
-                .map(alteration => alteration.name)
-                .join(', '),
-              drugs: getTreatmentNameFromEvidence(evidence),
-              cancerTypes: oncoTreeCancerType,
-              citations: articles2Citations(evidence.articles),
-            });
-          }
-        });
-        return acc;
-      },
-      [] as TherapeuticImplication[]
+    return this.getTherapeuticImplications(
+      this.getEvidenceByEvidenceTypes(this.props.annotation.tumorTypes, [
+        EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION,
+      ])
     );
   }
 
   @computed
   get prognosticImplications(): TherapeuticImplication[] {
-    return _.reduce(
-      this.props.annotation.tumorTypes,
-      (acc, next) => {
-        const oncoTreeCancerType = getCancerTypeNameFromOncoTreeType(
-          next.tumorType
-        );
-        next.evidences.forEach(evidence => {
-          if (evidence.evidenceType === EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION) {
-            const level = levelOfEvidence2Level(evidence.levelOfEvidence);
-            acc.push({
-              level,
-              alterations: evidence.alterations
-                .map(alteration => alteration.name)
-                .join(', '),
-              drugs: getTreatmentNameFromEvidence(evidence),
-              cancerTypes: oncoTreeCancerType,
-              citations: articles2Citations(evidence.articles),
-            });
-          }
-        });
-        return acc;
-      },
-      [] as TherapeuticImplication[]
+    return this.getTherapeuticImplications(
+      this.getEvidenceByEvidenceTypes(this.props.annotation.tumorTypes, [
+        EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION,
+      ])
     );
   }
 
@@ -209,19 +184,21 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
-        Cell: (props: { original: any }) => {
+        Cell: (props: { original: TherapeuticImplication }) => {
           return (
-            <Button
-              style={{
-                padding: 0,
-              }}
-              variant={'link'}
-              onClick={() =>
-                this.props.onChangeTumorType(props.original.cancerTypes)
-              }
-            >
-              {props.original.cancerTypes}
-            </Button>
+            <WithSeparator separator={', '}>
+              {props.original.cancerTypes.map((cancerType: string) => (
+                <Button
+                  style={{
+                    padding: 0,
+                  }}
+                  variant={'link'}
+                  onClick={() => this.props.onChangeTumorType(cancerType)}
+                >
+                  {cancerType}
+                </Button>
+              ))}
+            </WithSeparator>
           );
         },
       },
@@ -252,6 +229,24 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
     ];
   }
 
+  getCancerTypesCell(cancerTypes: string[]) {
+    return (
+      <WithSeparator separator={', '}>
+        {cancerTypes.map((cancerType: string) => (
+          <Button
+            style={{
+              padding: 0,
+            }}
+            variant={'link'}
+            onClick={() => this.props.onChangeTumorType(cancerType)}
+          >
+            {cancerType}
+          </Button>
+        ))}
+      </WithSeparator>
+    );
+  }
+
   @computed
   get dxpxTableColumns(): SearchColumn<TherapeuticImplication>[] {
     return [
@@ -264,21 +259,8 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
         minWidth: 250,
-        Cell: (props: { original: any }) => {
-          return (
-            <Button
-              style={{
-                padding: 0,
-              }}
-              variant={'link'}
-              onClick={() =>
-                this.props.onChangeTumorType(props.original.cancerTypes)
-              }
-            >
-              {props.original.cancerTypes}
-            </Button>
-          );
-        },
+        Cell: (props: { original: any }) =>
+          this.getCancerTypesCell(props.original.cancerTypes),
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
