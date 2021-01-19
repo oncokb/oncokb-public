@@ -59,7 +59,7 @@ type Treatment = {
   level: string;
   hugoSymbol: string;
   alterations: Alteration[];
-  tumorType: string;
+  cancerTypes: string[];
   treatments: {}[];
   uniqueDrugs: string[];
   drugs: string;
@@ -117,9 +117,9 @@ export default class ActionableGenesPage extends React.Component<
           .map(mainType => mainType)
       );
 
-      allTumorTypes = allTumorTypes.concat(
-        this.allTreatments.map(treatment => treatment.tumorType)
-      );
+      this.allTreatments.forEach(treatment => {
+        allTumorTypes = allTumorTypes.concat(treatment.cancerTypes);
+      });
 
       return Promise.resolve(_.uniq(allTumorTypes));
     },
@@ -219,9 +219,9 @@ export default class ActionableGenesPage extends React.Component<
         level: levelOfEvidence2Level(item.levelOfEvidence, true),
         hugoSymbol: item.gene.hugoSymbol || 'NA',
         alterations: _.sortBy(item.alterations, 'name'),
-        tumorType: item.cancerTypes
-          .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
-          .join(', '),
+        cancerTypes: item.cancerTypes.map(cancerType =>
+          getCancerTypeNameFromOncoTreeType(cancerType)
+        ),
         treatments: item.treatments,
         uniqueDrugs: _.uniq(
           _.reduce(
@@ -291,8 +291,8 @@ export default class ActionableGenesPage extends React.Component<
       }
       if (
         this.relevantTumorTypeSearchKeyword &&
-        this.relevantTumorTypes.result.filter(
-          tumorType => tumorType === treatment.tumorType
+        this.relevantTumorTypes.result.filter(tumorType =>
+          treatment.cancerTypes.includes(tumorType)
         ).length === 0
       ) {
         match = false;
@@ -344,7 +344,7 @@ export default class ActionableGenesPage extends React.Component<
   @computed
   get filteredTumorTypes() {
     return _.uniq(
-      this.filteredTreatments.map(treatment => treatment.tumorType)
+      this.filteredTreatments.map(treatment => treatment.cancerTypes.join(', '))
     );
   }
 
@@ -456,7 +456,7 @@ export default class ActionableGenesPage extends React.Component<
   @autobind
   downloadAssociation() {
     const content = [
-      ['Level', 'Gene', 'Alterations', 'Cancer Type', 'Drugs'].join('\t'),
+      ['Level', 'Gene', 'Alterations', 'Cancer Types', 'Drugs'].join('\t'),
     ];
     _.each(this.filteredTreatments, item => {
       content.push(
@@ -464,7 +464,7 @@ export default class ActionableGenesPage extends React.Component<
           item.level,
           item.hugoSymbol,
           item.alterations.map(alteration => alteration.name).join(', '),
-          item.tumorType,
+          item.cancerTypes.join(', '),
           item.drugs,
         ].join('\t')
       );
@@ -499,7 +499,7 @@ export default class ActionableGenesPage extends React.Component<
           <DefaultTooltip
             overlay={
               <div style={{ maxWidth: '400px' }}>
-                <WithSeparator separator={','}>{linkedAlts}</WithSeparator>
+                <WithSeparator separator={', '}>{linkedAlts}</WithSeparator>
               </div>
             }
             overlayStyle={{
@@ -556,11 +556,11 @@ export default class ActionableGenesPage extends React.Component<
       },
     },
     {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
       minWidth: 300,
       accessor: 'tumorType',
       Cell(props: { original: Treatment }) {
-        return <span>{props.original.tumorType}</span>;
+        return <span>{props.original.cancerTypes.join(', ')}</span>;
       },
     },
     {

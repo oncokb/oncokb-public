@@ -378,23 +378,23 @@ export default class GenePage extends React.Component<GenePageProps> {
         },
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
         onFilter: (data: ClinicalVariant, keyword) =>
           filterByKeyword(
-            getCancerTypeNameFromOncoTreeType(data.cancerType),
+            data.cancerTypes
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(', '),
             keyword
           ),
         Cell: (props: { original: ClinicalVariant }) => {
-          const tumorType = getCancerTypeNameFromOncoTreeType(
-            props.original.cancerType
-          );
-          return (
+          const cancerTypes = props.original.cancerTypes.map(cancerType => (
             <TumorTypePageLink
               hugoSymbol={this.store.hugoSymbol}
               alteration={props.original.variant.name}
-              tumorType={tumorType}
+              tumorType={getCancerTypeNameFromOncoTreeType(cancerType)}
             />
-          );
+          ));
+          return <WithSeparator separator={', '}>{cancerTypes}</WithSeparator>;
         },
       },
       {
@@ -455,23 +455,23 @@ export default class GenePage extends React.Component<GenePageProps> {
         },
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
         onFilter: (data: ClinicalVariant, keyword) =>
           filterByKeyword(
-            getCancerTypeNameFromOncoTreeType(data.cancerType),
+            data.cancerTypes
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(', '),
             keyword
           ),
         Cell: (props: { original: ClinicalVariant }) => {
-          const tumorType = getCancerTypeNameFromOncoTreeType(
-            props.original.cancerType
-          );
-          return (
+          const cancerTypes = props.original.cancerTypes.map(cancerType => (
             <TumorTypePageLink
               hugoSymbol={this.store.hugoSymbol}
               alteration={props.original.variant.name}
-              tumorType={tumorType}
+              tumorType={getCancerTypeNameFromOncoTreeType(cancerType)}
             />
-          );
+          ));
+          return <WithSeparator separator={', '}>{cancerTypes}</WithSeparator>;
         },
       },
       {

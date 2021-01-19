@@ -53,7 +53,7 @@ export type TherapeuticImplication = {
   level: string;
   alterations: string;
   drugs: string;
-  cancerTypes: string;
+  cancerTypes: string[];
   citations: Citations;
 };
 
@@ -487,7 +487,10 @@ export class AnnotationStore {
         }
         if (
           this.selectedCancerTypes.length > 0 &&
-          (!this.selectedCancerTypes.includes(alteration.cancerType.mainType) ||
+          (_.intersection(
+            this.selectedCancerTypes,
+            alteration.cancerTypes.map(cancerType => cancerType.mainType)
+          ).length === 0 ||
             !this.filteredAlterationsByBarChart.includes(
               alteration.variant.alteration
             ))
