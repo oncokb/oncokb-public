@@ -148,6 +148,24 @@ export enum LEVELS {
   R2 = 'R2',
 }
 
+// the bigger of the index, the higher the priority
+export const LEVEL_PRIORITY = [
+  LEVELS.Px3,
+  LEVELS.Px2,
+  LEVELS.Px1,
+  LEVELS.Dx3,
+  LEVELS.Dx2,
+  LEVELS.Dx1,
+  LEVELS.R2,
+  LEVELS.Tx4,
+  LEVELS.Tx3B,
+  LEVELS.Tx3A,
+  LEVELS.Tx3,
+  LEVELS.Tx2,
+  LEVELS.R1,
+  LEVELS.Tx1,
+];
+
 export const LEVEL_BUTTON_DESCRIPTION: { [key in LEVELS]: string } = {
   [LEVELS.Tx1]: EVIDENCE_TYPE.FDA_APPROVED,
   [LEVELS.Tx2]: EVIDENCE_TYPE.STANDARD_CARE,
