@@ -6,19 +6,15 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.google.gson.Gson;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.service.S3Service;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageSummary;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserOverviewUsage;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserUsage;
@@ -34,27 +30,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/api")
 public class UsageAnalysisController {
-
     @Autowired
-    private ApplicationProperties applicationProperties;
+    private S3Service s3Service;
 
     final String USERS_USAGE_SUMMARY_FILE = "usage-analysis/userSummary.json";
     final String RESOURCES_USAGE_SUMMARY_FILE = "usage-analysis/resourceSummary.json";
 
     private JSONObject requestData(String file)
             throws UnsupportedEncodingException, IOException, ParseException {
-        String s3AccessKey = applicationProperties.getAws().getS3AccessKey();
-        String s3SecretKey = applicationProperties.getAws().getS3SecretKey();
-        String s3Region = applicationProperties.getAws().getS3Region();
-
-        AWSCredentials credentials = new BasicAWSCredentials(s3AccessKey, s3SecretKey);
-        AmazonS3 s3client = AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(s3Region).build();
-
-        S3Object s3object = s3client.getObject("oncokb", file);
-        S3ObjectInputStream inputStream = s3object.getObjectContent();
-        JSONParser jsonParser = new JSONParser();
-        return (JSONObject) jsonParser.parse(new InputStreamReader(inputStream, "UTF-8"));
+        Optional<S3Object> s3object = s3Service.getObject("oncokb", file);
+        if (s3object.isPresent()){
+            S3ObjectInputStream inputStream = s3object.get().getObjectContent();
+            JSONParser jsonParser = new JSONParser();
+            return (JSONObject) jsonParser.parse(new InputStreamReader(inputStream, "UTF-8"));
+        }
+        return null;
     }
 
     @GetMapping("/usage/users/{userId}")
