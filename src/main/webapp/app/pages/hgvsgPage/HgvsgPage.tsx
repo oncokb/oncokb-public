@@ -132,6 +132,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
                     this.store.annotationResultByHgvsg.result.query.alteration
                   }
                   tumorType={this.store.tumorTypeQuery}
+                  refGenome={this.store.referenceGenomeQuery}
                   annotation={this.store.annotationResultByHgvsg.result}
                   onChangeTumorType={newTumorType =>
                     (this.tumorType = newTumorType)

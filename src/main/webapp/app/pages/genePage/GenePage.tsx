@@ -67,6 +67,7 @@ import { Link } from 'react-router-dom';
 import * as QueryString from 'query-string';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
+import { RouterStore } from 'mobx-react-router';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -163,6 +164,10 @@ type GeneInfoProps = {
 type GeneInfoItem = {
   key: string;
   element: JSX.Element | string;
+};
+
+type SearchQueries = {
+  refGenome?: REFERENCE_GENOME;
 };
 
 const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
@@ -305,9 +310,10 @@ interface MatchParams {
 interface GenePageProps extends RouteComponentProps<MatchParams> {
   appStore: AppStore;
   windowStore: WindowStore;
+  routing: RouterStore;
 }
 
-@inject('appStore', 'windowStore')
+@inject('appStore', 'windowStore', 'routing')
 @observer
 export default class GenePage extends React.Component<GenePageProps> {
   @observable hugoSymbolQuery: string;
@@ -364,15 +370,10 @@ export default class GenePage extends React.Component<GenePageProps> {
               <AlterationPageLink
                 hugoSymbol={this.store.hugoSymbol}
                 alteration={props.original.variant.name}
+                alterationRefGenomes={
+                  props.original.variant.referenceGenomes as REFERENCE_GENOME[]
+                }
               />
-              {props.original.variant.referenceGenomes.length === 1 ? (
-                <InfoIcon
-                  overlay={`Only in ${props.original.variant.referenceGenomes[0]}`}
-                  placement="top"
-                  className="ml-1"
-                  style={{ fontSize: '0.7rem' }}
-                />
-              ) : null}
             </>
           );
         },
@@ -441,15 +442,10 @@ export default class GenePage extends React.Component<GenePageProps> {
               <AlterationPageLink
                 hugoSymbol={this.store.hugoSymbol}
                 alteration={props.original.variant.name}
+                alterationRefGenomes={
+                  props.original.variant.referenceGenomes as REFERENCE_GENOME[]
+                }
               />
-              {props.original.variant.referenceGenomes.length === 1 ? (
-                <InfoIcon
-                  overlay={`Only in ${props.original.variant.referenceGenomes[0]}`}
-                  placement="top"
-                  className="ml-1"
-                  style={{ fontSize: '0.7rem' }}
-                />
-              ) : null}
             </>
           );
         },
@@ -501,15 +497,10 @@ export default class GenePage extends React.Component<GenePageProps> {
               <AlterationPageLink
                 hugoSymbol={this.store.hugoSymbol}
                 alteration={props.original.variant.name}
+                alterationRefGenomes={
+                  props.original.variant.referenceGenomes as REFERENCE_GENOME[]
+                }
               />
-              {props.original.variant.referenceGenomes.length === 1 ? (
-                <InfoIcon
-                  overlay={`Only in ${props.original.variant.referenceGenomes[0]}`}
-                  placement="top"
-                  className="ml-1"
-                  style={{ fontSize: '0.7rem' }}
-                />
-              ) : null}
             </>
           );
         },
@@ -574,6 +565,16 @@ export default class GenePage extends React.Component<GenePageProps> {
             this.showGeneBackground = defaultShowGeneBackground;
           }
         }
+      ),
+      reaction(
+        () => [props.routing.location.search],
+        ([search]) => {
+          const queryStrings = QueryString.parse(search) as SearchQueries;
+          if (queryStrings.refGenome) {
+            this.store.referenceGenomeQuery = queryStrings.refGenome;
+          }
+        },
+        { fireImmediately: true }
       )
     );
   }
