@@ -3,14 +3,15 @@ package org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis;
 import org.json.simple.JSONObject;
 
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Created by Yifu Yao on 2020-10-28
  */
 
 public class UsageSummary {
-    private Map<String, JSONObject> month;
-    private Map<String, Integer> year;
+    private Map<String, JSONObject> month = new HashMap<String, JSONObject>();
+    private Map<String, Integer> year = new HashMap<String, Integer>();
 
     public Map<String, JSONObject> getMonth() {
         return month;
