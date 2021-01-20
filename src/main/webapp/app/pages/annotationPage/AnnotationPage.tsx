@@ -8,6 +8,7 @@ import {
   EVIDENCE_TYPES,
   LEVEL_TYPE_NAMES,
   LEVEL_TYPES,
+  REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
   TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
@@ -63,6 +64,7 @@ export type IAnnotationPage = {
   hugoSymbol: string;
   alteration: string;
   tumorType: string;
+  refGenome: REFERENCE_GENOME;
   onChangeTumorType: (newTumorType: string) => void;
   annotation: VariantAnnotation;
 };
@@ -75,9 +77,13 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
       );
       return {
         level,
-        alterations: evidence.alterations
+        alterations: _.chain(evidence.alterations)
+          .filter(alteration =>
+            alteration.referenceGenomes.includes(this.props.refGenome)
+          )
           .map(alteration => alteration.name)
-          .join(', '),
+          .join(', ')
+          .value(),
         drugs: getTreatmentNameFromEvidence(evidence),
         cancerTypes,
         citations: articles2Citations(evidence.articles),

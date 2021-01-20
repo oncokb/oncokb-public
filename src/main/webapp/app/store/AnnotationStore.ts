@@ -242,9 +242,16 @@ export class AnnotationStore {
   readonly clinicalAlterations = remoteData<ClinicalVariant[]>({
     await: () => [this.gene],
     invoke: async () => {
-      return privateClient.searchVariantsClinicalGetUsingGET({
-        hugoSymbol: this.gene.result.hugoSymbol,
-      });
+      const clinicalVariants = await privateClient.searchVariantsClinicalGetUsingGET(
+        {
+          hugoSymbol: this.gene.result.hugoSymbol,
+        }
+      );
+      return clinicalVariants.filter(clinicalVariant =>
+        clinicalVariant.variant.referenceGenomes.includes(
+          this.referenceGenomeQuery
+        )
+      );
     },
     default: [],
   });

@@ -1,6 +1,13 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
-import { PAGE_ROUTE, REGEXP, REGEXP_LINK } from 'app/config/constants';
+import {
+  DEFAULT_REFERENCE_GENOME,
+  PAGE_ROUTE,
+  REFERENCE_GENOME,
+  REGEXP,
+  REGEXP_LINK,
+  SEARCH_QUERY_KEY,
+} from 'app/config/constants';
 import _ from 'lodash';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import reactStringReplace from 'react-string-replace';
@@ -29,13 +36,20 @@ export const GenePageLink: React.FunctionComponent<{
 export const AlterationPageLink: React.FunctionComponent<{
   hugoSymbol: string;
   alteration: string;
+  alterationRefGenomes?: REFERENCE_GENOME[];
   showGene?: boolean;
   content?: string;
 }> = props => {
+  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`;
+  if (
+    props.alterationRefGenomes &&
+    props.alterationRefGenomes.length > 0 &&
+    !props.alterationRefGenomes.includes(DEFAULT_REFERENCE_GENOME)
+  ) {
+    pageLink = `${pageLink}?${SEARCH_QUERY_KEY.REFERENCE_GENOME}=${props.alterationRefGenomes[0]}`;
+  }
   return (
-    <Link
-      to={`${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`}
-    >
+    <Link to={pageLink}>
       {props.content
         ? props.content
         : props.showGene
