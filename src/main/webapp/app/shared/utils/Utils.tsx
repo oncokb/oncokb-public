@@ -478,3 +478,11 @@ export const scrollWidthOffsetInNews = (el?: any) => {
   const yOffset = -80;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
 };
+
+export function encodeResourceUsageDetailPageURL(endpoint: string) {
+  return endpoint.split('/').join('!');
+}
+
+export function decodeResourceUsageDetailPageURL(url: string) {
+  return url.split('!').join('/');
+}

@@ -1,4 +1,10 @@
-import { observable } from 'mobx';
+import {
+  action,
+  computed,
+  IReactionDisposer,
+  observable,
+  reaction,
+} from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
 import React from 'react';
@@ -7,23 +13,51 @@ import { match } from 'react-router';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
-import { filterByKeyword } from 'app/shared/utils/Utils';
-import { UserOverviewUsage, UsageSummary } from 'app/shared/api/generated/API';
+import {
+  encodeResourceUsageDetailPageURL,
+  filterByKeyword,
+} from 'app/shared/utils/Utils';
+import { UserOverviewUsage } from 'app/shared/api/generated/API';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import autobind from 'autobind-decorator';
-import { ToggleButton, ToggleButtonGroup, Row } from 'react-bootstrap';
-import UsageDetailsTable from './UsageDetailsTable';
+import { Row, Dropdown, DropdownButton } from 'react-bootstrap';
 import {
   PAGE_ROUTE,
   USAGE_TOP_USERS_LIMIT,
   USGAE_ALL_TIME_KEY,
 } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
+import * as QueryString from 'query-string';
+import { UsageToggleGroup } from './UsageToggleGroup';
 
 export type UsageRecord = {
   resource: string;
   usage: number;
+  time: string;
+};
+
+enum UsageType {
+  USER = 'USER',
+  RESOURCE = 'RESOURCE',
+}
+
+export enum ToggleValue {
+  ALL_USERS = 'All Users',
+  TOP_USERS = 'Top Users',
+  ALL_RESOURCES = 'All Resources',
+  PUBLIC_RESOURCES = 'Only Public Resources',
+  RESULTS_IN_TOTAL = 'Total',
+  RESULTS_BY_MONTH = 'By Month',
+}
+
+const ALLOWED_USAGETYPE: string[] = [UsageType.USER, UsageType.RESOURCE];
+
+export const usageColumn = {
+  id: 'usage',
+  Header: <span>Usage</span>,
+  minWidth: 100,
+  accessor: 'usage',
 };
 
 @inject('routing')
@@ -32,12 +66,41 @@ export default class UsageAnalysisPage extends React.Component<{
   routing: RouterStore;
   match: match;
 }> {
-  @observable topUsersToggleValue = 1;
-  @observable resourcesTypeToggleValue = 2;
+  @observable topUsersToggleValue: ToggleValue = ToggleValue.ALL_USERS;
+  @observable userTabResourcesTypeToggleValue: ToggleValue =
+    ToggleValue.PUBLIC_RESOURCES;
+  @observable resourceTabResourcesTypeToggleValue: ToggleValue =
+    ToggleValue.PUBLIC_RESOURCES;
   @observable dropdownList: string[] = [];
+  @observable dropdownValue = 'All';
+  @observable usageType: UsageType = UsageType.USER;
+
+  readonly reactions: IReactionDisposer[] = [];
+
+  updateLocationHash = (newType: UsageType) => {
+    window.location.hash = QueryString.stringify({ type: newType });
+  };
 
   constructor(props: Readonly<{ routing: RouterStore; match: match }>) {
     super(props);
+    this.reactions.push(
+      reaction(
+        () => [props.routing.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(hash) as { type: UsageType };
+          if (queryStrings.type) {
+            if (ALLOWED_USAGETYPE.includes(queryStrings.type.toUpperCase())) {
+              this.usageType = queryStrings.type;
+            }
+          }
+        },
+        { fireImmediately: true }
+      ),
+      reaction(
+        () => this.usageType,
+        newVersion => this.updateLocationHash(newVersion)
+      )
+    );
   }
 
   readonly users = remoteData<UserOverviewUsage[]>({
@@ -56,7 +119,7 @@ export default class UsageAnalysisPage extends React.Component<{
       const yearSummary = resource.year;
       const yearUsage: UsageRecord[] = [];
       Object.keys(yearSummary).forEach(key => {
-        yearUsage.push({ resource: key, usage: yearSummary[key] });
+        yearUsage.push({ resource: key, usage: yearSummary[key], time: '' });
       });
       result.set(USGAE_ALL_TIME_KEY, yearUsage);
       this.dropdownList.push(USGAE_ALL_TIME_KEY);
@@ -66,7 +129,7 @@ export default class UsageAnalysisPage extends React.Component<{
         const month = monthSummary[key];
         const usage: UsageRecord[] = [];
         Object.keys(month).forEach(key2 => {
-          usage.push({ resource: key2, usage: month[key2] });
+          usage.push({ resource: key2, usage: month[key2], time: key });
         });
         result.set(key, usage);
         this.dropdownList.push(key);
@@ -78,46 +141,84 @@ export default class UsageAnalysisPage extends React.Component<{
   });
 
   @autobind
-  handleTopUsersToggleChange(value: any) {
+  @action
+  handleTopUsersToggleChange(value: ToggleValue) {
     this.topUsersToggleValue = value;
   }
 
   @autobind
-  handleResourcesTypeToggleChange(value: any) {
-    this.resourcesTypeToggleValue = value;
+  @action
+  handleUserTabResourcesTypeToggleChange(value: ToggleValue) {
+    this.userTabResourcesTypeToggleValue = value;
+  }
+
+  @autobind
+  @action
+  handleResourceTabResourcesTypeToggleChange(value: ToggleValue) {
+    this.resourceTabResourcesTypeToggleValue = value;
+  }
+
+  @autobind
+  @action
+  toggleType(usageType: UsageType) {
+    this.usageType = usageType;
+  }
+
+  @computed get calculateResourcesTabData(): UsageRecord[] {
+    if (
+      this.resourceTabResourcesTypeToggleValue === ToggleValue.ALL_RESOURCES
+    ) {
+      return this.usageDetail.result.get(this.dropdownValue) || [];
+    } else {
+      return (
+        _.filter(this.usageDetail.result.get(this.dropdownValue), function (
+          usage
+        ) {
+          return !usage.resource.includes('/private/');
+        }) || []
+      );
+    }
   }
 
   render() {
+    const monthDropdown: any = [];
+    if (this.usageDetail.isComplete) {
+      this.dropdownList
+        .sort()
+        .reverse()
+        .forEach(key => {
+          monthDropdown.push(
+            <Dropdown.Item eventKey={key}>{key}</Dropdown.Item>
+          );
+        });
+    }
+
     return (
       <>
-        <Tabs defaultActiveKey="users" id="uncontrolled-tab-example">
-          <Tab eventKey="users" title="Users">
+        <Tabs
+          defaultActiveKey={this.usageType}
+          id="uncontrolled-tab-example"
+          onSelect={k => this.toggleType(UsageType[k || UsageType.USER])}
+        >
+          <Tab eventKey={UsageType.USER} title="Users">
             <Row className="mt-2">
-              <ToggleButtonGroup
-                className="ml-3"
-                type="radio"
-                name="top-users-options"
-                defaultValue={1}
-                onChange={this.handleTopUsersToggleChange}
-              >
-                <ToggleButton value={1}>All Users</ToggleButton>
-                <ToggleButton value={2}>Top Users</ToggleButton>
-              </ToggleButtonGroup>
-
-              <ToggleButtonGroup
-                className="ml-2"
-                type="radio"
-                name="resources-type-options"
-                defaultValue={2}
-                onChange={this.handleResourcesTypeToggleChange}
-              >
-                <ToggleButton value={1}>All Resources</ToggleButton>
-                <ToggleButton value={2}>Only Public Resources</ToggleButton>
-              </ToggleButtonGroup>
+              <UsageToggleGroup
+                defaultValue={this.topUsersToggleValue}
+                toggleValues={[ToggleValue.ALL_USERS, ToggleValue.TOP_USERS]}
+                handleToggle={this.handleTopUsersToggleChange}
+              />
+              <UsageToggleGroup
+                defaultValue={this.userTabResourcesTypeToggleValue}
+                toggleValues={[
+                  ToggleValue.ALL_RESOURCES,
+                  ToggleValue.PUBLIC_RESOURCES,
+                ]}
+                handleToggle={this.handleUserTabResourcesTypeToggleChange}
+              />
             </Row>
             <OncoKBTable
               data={
-                this.topUsersToggleValue === 1
+                this.topUsersToggleValue === ToggleValue.ALL_USERS
                   ? this.users.result
                   : _.filter(this.users.result, function (user) {
                       return user.totalUsage >= USAGE_TOP_USERS_LIMIT;
@@ -138,7 +239,8 @@ export default class UsageAnalysisPage extends React.Component<{
                   minWidth: 100,
                   accessor: 'totalUsage',
                 },
-                this.resourcesTypeToggleValue === 1
+                this.userTabResourcesTypeToggleValue ===
+                ToggleValue.ALL_RESOURCES
                   ? {
                       id: 'endpoint',
                       Header: <span>Most frequently used endpoint</span>,
@@ -185,12 +287,84 @@ export default class UsageAnalysisPage extends React.Component<{
               minRows={1}
             />
           </Tab>
-          <Tab eventKey="resourses" title="Resources">
-            <UsageDetailsTable
-              data={this.usageDetail.result}
-              loadedData={this.usageDetail.isComplete}
-              dropdownList={this.dropdownList}
-              defaultResourcesType={2}
+          <Tab eventKey={UsageType.RESOURCE} title="Resources">
+            {this.usageDetail.isComplete ? (
+              <Row className="mt-2">
+                <DropdownButton
+                  className="ml-3"
+                  id="dropdown-basic-button"
+                  title={this.dropdownValue}
+                  onSelect={(evt: any) => (this.dropdownValue = evt)}
+                >
+                  {monthDropdown}
+                </DropdownButton>
+                <UsageToggleGroup
+                  defaultValue={this.resourceTabResourcesTypeToggleValue}
+                  toggleValues={[
+                    ToggleValue.ALL_RESOURCES,
+                    ToggleValue.PUBLIC_RESOURCES,
+                  ]}
+                  handleToggle={this.handleResourceTabResourcesTypeToggleChange}
+                />
+              </Row>
+            ) : (
+              <DropdownButton
+                className="mt-2"
+                id="dropdown-basic-button"
+                title={this.dropdownValue}
+                disabled
+              ></DropdownButton>
+            )}
+            <OncoKBTable
+              data={this.calculateResourcesTabData}
+              columns={[
+                {
+                  id: 'resource',
+                  Header: (
+                    <span>
+                      Resource{' '}
+                      {this.resourceTabResourcesTypeToggleValue ===
+                      ToggleValue.ALL_RESOURCES
+                        ? null
+                        : '(only public)'}
+                    </span>
+                  ),
+                  accessor: 'resource',
+                  minWidth: 200,
+                  onFilter: (data: UsageRecord, keyword) =>
+                    filterByKeyword(data.resource, keyword),
+                },
+                usageColumn,
+                {
+                  id: 'operations',
+                  Header: <span>Details</span>,
+                  maxWidth: 60,
+                  sortable: false,
+                  className: 'd-flex justify-content-center',
+                  Cell(props: { original: UsageRecord }) {
+                    return (
+                      <Link
+                        to={`${
+                          PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
+                        }${encodeResourceUsageDetailPageURL(
+                          props.original.resource
+                        )}`}
+                      >
+                        <i className="fa fa-info-circle"></i>
+                      </Link>
+                    );
+                  },
+                },
+              ]}
+              loading={this.usageDetail.isComplete ? false : true}
+              defaultSorted={[
+                {
+                  id: 'usage',
+                  desc: true,
+                },
+              ]}
+              showPagination={true}
+              minRows={1}
             />
           </Tab>
         </Tabs>

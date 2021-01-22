@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/api")
@@ -35,6 +36,7 @@ public class UsageAnalysisController {
 
     final String USERS_USAGE_SUMMARY_FILE = "usage-analysis/userSummary.json";
     final String RESOURCES_USAGE_SUMMARY_FILE = "usage-analysis/resourceSummary.json";
+    final String RESOURCES_DETAIL_SUMMARY_FILE = "usage-analysis/resourceDetail.json";
 
     private JSONObject requestData(String file)
             throws UnsupportedEncodingException, IOException, ParseException {
@@ -47,6 +49,13 @@ public class UsageAnalysisController {
         return null;
     }
 
+    /**
+     * API to get the detail usage info for specific user
+     * @param userId
+     * @return user usage infomation of given user
+     * @throws IOException
+     * @throws ParseException
+     */
     @GetMapping("/usage/users/{userId}")
     public ResponseEntity<UserUsage> userUsageGet(@PathVariable String userId)
         throws IOException, ParseException {
@@ -62,11 +71,16 @@ public class UsageAnalysisController {
             return new ResponseEntity<UserUsage>(userUsage, status);
         }
 
-        return new ResponseEntity<UserUsage>(new UserUsage(), status);
-        
+        return new ResponseEntity<UserUsage>(new UserUsage(), status);        
     }
 
-    @GetMapping("/usage/overview")
+    /**
+     * API to get the usage summary of all users
+     * @return a list of all users usage summary
+     * @throws IOException
+     * @throws ParseException
+     */
+    @GetMapping("/usage/summary/users")
     public ResponseEntity<List<UserOverviewUsage>> userOverviewUsageGet()
         throws IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
@@ -115,7 +129,13 @@ public class UsageAnalysisController {
         
     }
 
-    @GetMapping("/usage/resource")
+    /**
+     * API to return the usage summary of all resources
+     * @return Usage summary of all resources
+     * @throws IOException
+     * @throws ParseException
+     */
+    @GetMapping("/usage/summary/resources")
     public ResponseEntity<UsageSummary> resourceUsageGet()
         throws IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
@@ -126,5 +146,28 @@ public class UsageAnalysisController {
         UsageSummary summary = gson.fromJson(jsonObject.toString(), UsageSummary.class);
 
         return new ResponseEntity<UsageSummary>(summary, status);
+    }
+
+    /**
+     * API to get the usage of a sepcific resource
+     * @param endpoint
+     * @return usage of a specific endpoint
+     * @throws UnsupportedEncodingException
+     * @throws IOException
+     * @throws ParseException
+     */
+    @GetMapping("/usage/resources")
+    public ResponseEntity<UsageSummary> resourceDetailGet(@RequestParam String endpoint)
+            throws UnsupportedEncodingException, IOException, ParseException {
+        HttpStatus status = HttpStatus.OK;
+
+        JSONObject jsonObject = requestData(RESOURCES_DETAIL_SUMMARY_FILE);
+        if (jsonObject.containsKey(endpoint)){
+            JSONObject usageObject = (JSONObject)jsonObject.get(endpoint);
+            Gson gson = new Gson();
+            UsageSummary resourceDetail = gson.fromJson(usageObject.toString(), UsageSummary.class);
+            return new ResponseEntity<UsageSummary>(resourceDetail, status);
+        }
+        return new ResponseEntity<>(new UsageSummary(), status);
     }
 }
