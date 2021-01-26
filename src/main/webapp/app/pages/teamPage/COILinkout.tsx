@@ -8,7 +8,7 @@ import {
 export const COILinkout: React.FunctionComponent<{
   firstName: string;
   lastName: string;
-  faculty: boolean;
+  faculty?: boolean;
 }> = props => {
   const link = props.faculty
     ? `${FACULTY_COI_WEBSITE_LINK}?title=${props.lastName}, ${props.firstName}`
