@@ -1,0 +1,25 @@
+name: Screenshot Test
+
+on: [push, pull_request]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.16.1
+    - name: Install node.js packages
+      run: yarn install
+    - name: Run the test
+      run: yarn run screenshot-test
+    - name: Archive visual regression failures
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: visual-regression-diff-report
+        path: /home/runner/work/oncokb-public/oncokb-public/screenshot-test/__image_snapshots__/__diff_output__/
