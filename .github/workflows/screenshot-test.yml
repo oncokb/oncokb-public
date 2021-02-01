@@ -16,10 +16,16 @@ jobs:
     - name: Install node.js packages
       run: yarn install
     - name: Run the test
-      run: yarn run screenshot-test
+      run: yarn run screenshot-test-in-docker
+    - name: Archive screenshots
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: visual-regression-screenshots
+        path: /home/runner/work/oncokb-public/oncokb-public/screenshot-test/__latest_snapshots__/
     - name: Archive visual regression failures
       uses: actions/upload-artifact@v2
       if: failure()
       with:
         name: visual-regression-diff-report
-        path: /home/runner/work/oncokb-public/oncokb-public/screenshot-test/__image_snapshots__/__diff_output__/
+        path: /home/runner/work/oncokb-public/oncokb-public/screenshot-test/__diff_output__/

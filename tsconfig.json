@@ -25,10 +25,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": [
-    "src/main/webapp/app",
-    "src/main/webapp/content",
-    "screenshot-test/"
-  ],
+  "include": ["src/main/webapp/app", "src/main/webapp/content"],
   "exclude": ["node_modules"]
 }

@@ -152,3 +152,8 @@ Desktop.ini
 ######################
 bower_components
 /app
+
+######################
+# Jest screenshot
+######################
+screenshot-test/__latest_snapshots__/*.png

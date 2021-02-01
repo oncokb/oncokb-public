@@ -1,5 +1,5 @@
-const puppeteer = require('puppeteer');
-const fs = require('fs');
+import puppeteer from 'puppeteer';
+import fs from 'fs';
 
 const DATA_DIR = './screenshot-test/data/';
 const CLIENT_URL = 'http://localhost:9000/';
@@ -10,6 +10,14 @@ const viewPort_1080 = {
   deviceScaleFactor: 1,
 }
 const WAITING_TIME = 2000;
+const LONG_WAITING_TIME = 10000;
+const LATEST_SNAPSHOTS_DIR = './screenshot-test/__latest_snapshots__/';
+const browserConfig = { // Docker requires --no-sandbox to be able to run the tests
+  headless: true,
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  ignoreHTTPSErrors: true,
+  dumpio: false
+}
 
 const apiAccount = fs.readFileSync(`${DATA_DIR}api-account.json`).toString();
 const apiAccountToken = fs.readFileSync(`${DATA_DIR}api-account-token.json`).toString();
@@ -34,12 +42,23 @@ const userSize = fs.readFileSync(`${DATA_DIR}api-users-size.json`).toString();
 const userDetails = fs.readFileSync(`${DATA_DIR}api-users-details.json`).toString();
 const userToken = fs.readFileSync(`${DATA_DIR}api-users-tokens.json`).toString();
 
+function getScreenshotConfig(name){
+  return{
+    path: `${LATEST_SNAPSHOTS_DIR}${name}-snap.png`,
+    fullPage: true
+  }
+}
+
+if (!fs.existsSync(LATEST_SNAPSHOTS_DIR)){
+  fs.mkdirSync(LATEST_SNAPSHOTS_DIR);
+}
+
 describe('Tests with login', () => {
   let browser;
   let page;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch(browserConfig);
     page = await browser.newPage();
     await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled! 
     page.on('request', (request) => {
@@ -250,7 +269,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot();
+    let image = await page.screenshot(getScreenshotConfig('Home Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page with Login' });
   })
 
@@ -258,7 +277,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}#levelType=Dx`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot();
+    let image = await page.screenshot(getScreenshotConfig('Home Page DX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page DX with Login' });
   })
 
@@ -266,7 +285,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}#levelType=Px`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot();
+    let image = await page.screenshot(getScreenshotConfig('Home Page PX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page PX with Login' });
   })
 
@@ -274,7 +293,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}levels`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('LoE Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page with Login' });
   })
 
@@ -282,7 +301,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}levels#version=DX`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('LoE Page DX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page DX with Login' });
   })
 
@@ -290,7 +309,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}levels#version=PX`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('LoE Page PX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page PX with Login' });
   })
 
@@ -298,7 +317,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}levels#version=AAC`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('LoE Page AAC with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page AAC with Login' });
   })
 
@@ -306,7 +325,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}levels#version=V1`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('LoE Page V1 with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page V1 with Login' });
   })
 
@@ -314,7 +333,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}actionableGenes`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Actionable Genes Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Actionable Genes Page with Login' });
   })
 
@@ -322,7 +341,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}actionableGenes#levels=1,Dx1,Px1`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Actionable Genes Page Levels Selected with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Actionable Genes Page Levels Selected with Login' });
   })
 
@@ -330,7 +349,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}cancerGenes`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot();
+    let image = await page.screenshot(getScreenshotConfig('Cancer Genes Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Cancer Genes Page with Login' });
   })
 
@@ -338,7 +357,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}about`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('About Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'About Page with Login' });
   })
 
@@ -346,7 +365,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}team`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Team Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Team Page with Login' });
   })
 
@@ -354,23 +373,23 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}terms`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Terms Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Terms Page with Login' });
   })
 
   it('FAQ Page', async() => {
     await page.goto(`${CLIENT_URL}faq`);
     await page.setViewport(viewPort_1080);
-    await page.waitFor(5000);
-    const image = await page.screenshot({ fullPage: true });
+    await page.waitFor(LONG_WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('FAQ Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'FAQ Page with Login' });
   })
 
   it('Gene Page', async() => {
     await page.goto(`${CLIENT_URL}gene/ABL1`);
     await page.setViewport(viewPort_1080);
-    await page.waitFor(10000);
-    const image = await page.screenshot({ fullPage: true });
+    await page.waitFor(LONG_WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Gene Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Gene Page with Login' });
   })
 
@@ -378,7 +397,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}gene/ABL1/BCR-ABL1%20Fusion`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Login' });
   })
 
@@ -386,7 +405,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}account/settings`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Account Settings Page'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Account Settings Page' });
   })
 
@@ -394,7 +413,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}admin/user-details`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Users Infomation Page'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Users Infomation Page' });
   })
 
@@ -402,7 +421,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}users/admin`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('User Details Page'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'User Details Page' });
   })
 
@@ -416,7 +435,7 @@ describe('Tests without login', () => {
   let page;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch(browserConfig);
     page = await browser.newPage();
     await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled! 
     page.on('request', (request) => {
@@ -590,7 +609,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot();
+    let image = await page.screenshot(getScreenshotConfig('Home Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page without Login' });
   })
 
@@ -598,7 +617,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}#levelType=Dx`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot();
+    let image = await page.screenshot(getScreenshotConfig('Home Page DX without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page DX without Login' });
   })
 
@@ -606,7 +625,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}#levelType=Px`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot();
+    let image = await page.screenshot(getScreenshotConfig('Home Page PX without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page PX without Login' });
   })
 
@@ -614,7 +633,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}levels`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('LoE Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page without Login' });
   })
 
@@ -622,7 +641,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}levels#version=DX`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('LoE Page DX without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page DX without Login' });
   })
 
@@ -630,7 +649,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}levels#version=PX`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('LoE Page PX without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page PX without Login' });
   })
 
@@ -638,7 +657,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}levels#version=AAC`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('LoE Page AAC without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page AAC without Login' });
   })
 
@@ -646,7 +665,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}levels#version=V1`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('LoE Page V1 without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page V1 without Login' });
   })
 
@@ -654,7 +673,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}actionableGenes`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Actionable Genes Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Actionable Genes Page without Login' });
   })
 
@@ -662,7 +681,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}actionableGenes#levels=1,Dx1,Px1`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Actionable Genes Page Levels Selected without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Actionable Genes Page Levels Selected without Login' });
   })
 
@@ -670,7 +689,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}cancerGenes`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot();
+    let image = await page.screenshot(getScreenshotConfig('Cancer Genes Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Cancer Genes Page without Login' });
   })
 
@@ -678,7 +697,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}about`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('About Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'About Page without Login' });
   })
 
@@ -686,7 +705,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}team`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Team Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Team Page without Login' });
   })
 
@@ -694,23 +713,23 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}terms`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Terms Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Terms Page without Login' });
   })
 
   it('FAQ Page', async() => {
     await page.goto(`${CLIENT_URL}faq`);
     await page.setViewport(viewPort_1080);
-    await page.waitFor(5000);
-    const image = await page.screenshot({ fullPage: true });
+    await page.waitFor(LONG_WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('FAQ Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'FAQ Page without Login' });
   })
 
   it('Gene Page', async() => {
     await page.goto(`${CLIENT_URL}gene/ABL1`);
     await page.setViewport(viewPort_1080);
-    await page.waitFor(10000);
-    const image = await page.screenshot({ fullPage: true });
+    await page.waitFor(LONG_WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Gene Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Gene Page without Login' });
   })
 
@@ -718,7 +737,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}gene/ABL1/BCR-ABL1%20Fusion`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page without Login' });
   })
 
@@ -726,7 +745,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}login`);
     await page.setViewport(viewPort_1080);
     await page.waitFor(WAITING_TIME);
-    const image = await page.screenshot({ fullPage: true });
+    let image = await page.screenshot(getScreenshotConfig('Login Page'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Login Page' });
   })
 
