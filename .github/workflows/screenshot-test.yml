@@ -13,11 +13,6 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: 12.16.1
-    - name: Set current date # Fix the time to expiration date. 
-      run: |
-        sudo timedatectl set-ntp 0
-        sudo timedatectl set-time "2021-02-01 12:00:00"
-        sudo timedatectl set-timezone UTC
     - name: Install node.js packages
       run: yarn install
     - name: Run the test

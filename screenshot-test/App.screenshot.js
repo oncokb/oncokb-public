@@ -4,7 +4,7 @@ import fs from 'fs';
 const DATA_DIR = './screenshot-test/data/';
 const CLIENT_URL = 'http://localhost:9000/';
 const SERVER_URL = 'http://localhost:9095/';
-const viewPort_1080 = {
+const VIEW_PORT_1080 = {
   width: 1920,
   height: 1080,
   deviceScaleFactor: 1,
@@ -20,7 +20,6 @@ const browserConfig = { // Docker requires --no-sandbox to be able to run the te
 }
 
 const apiAccount = fs.readFileSync(`${DATA_DIR}api-account.json`).toString();
-const apiAccountToken = fs.readFileSync(`${DATA_DIR}api-account-token.json`).toString();
 const apiV1Info = fs.readFileSync(`${DATA_DIR}api-v1-info.json`).toString();
 const numbersLevels = fs.readFileSync(`${DATA_DIR}private-utils-numbers-levels.json`).toString();
 const numbersMain = fs.readFileSync(`${DATA_DIR}private-utils-numbers-main.json`).toString();
@@ -40,7 +39,21 @@ const genomenexusTranscript = fs.readFileSync(`${DATA_DIR}genomenexus-transcript
 const genomenexusCanonicalTranscript = fs.readFileSync(`${DATA_DIR}genomenexus-canonical-transcript.json`).toString();
 const userSize = fs.readFileSync(`${DATA_DIR}api-users-size.json`).toString();
 const userDetails = fs.readFileSync(`${DATA_DIR}api-users-details.json`).toString();
-const userToken = fs.readFileSync(`${DATA_DIR}api-users-tokens.json`).toString();
+
+// # Fix the time to expiration date. 
+function updateTokenExpirationDate(current){
+  let today = new Date()
+  today.setDate(today.getDate()+100);
+  current.forEach(token => {
+    token.expiration = today.toISOString();
+  })
+  return current;
+}
+let apiAccountToken = fs.readFileSync(`${DATA_DIR}api-account-token.json`).toString();
+apiAccountToken = JSON.stringify(updateTokenExpirationDate(JSON.parse(apiAccountToken)));
+let userToken = fs.readFileSync(`${DATA_DIR}api-users-tokens.json`).toString();
+userToken = JSON.stringify(updateTokenExpirationDate(JSON.parse(userToken)));
+
 
 function getScreenshotConfig(name){
   return{
@@ -53,6 +66,169 @@ if (!fs.existsSync(LATEST_SNAPSHOTS_DIR)){
   fs.mkdirSync(LATEST_SNAPSHOTS_DIR);
 }
 
+function getRes(url){
+  let res = undefined
+  switch (url) {
+    case `${SERVER_URL}api/account`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: apiAccount
+      };
+      break;
+    case `${SERVER_URL}api/account/tokens`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: apiAccountToken
+      };
+      break;
+    case `${SERVER_URL}api/v1/info`:
+      res =  {
+          status: 200,
+          contentType: 'application/json',
+          body: apiV1Info
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/numbers/main/`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: numbersMain
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/numbers/levels/`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: numbersLevels
+      };
+      break;
+    case `${SERVER_URL}api/v1/utils/cancerGeneList`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: geneList
+      };
+      break;
+    case `${SERVER_URL}api/v1/utils/allCuratedGenes`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: allCuratedGenes
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/evidences/levels`:
+      res =  {
+        status: 200,
+        contentType: 'application/json',
+        body: evidenceLevels
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/tumorTypes`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: tumorTypes
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/numbers/gene/ABL1`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: geneNumbers
+      };
+      break;
+    case `${SERVER_URL}api/v1/genes/lookup?query=ABL1`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: geneQuery
+      };
+      break;
+    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=ABL1`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: biologicalVariants
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/portalAlterationSampleCount`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: sampleCount
+      };
+      break;
+    case `${SERVER_URL}api/v1/evidences/lookup?hugoSymbol=ABL1&evidenceTypes=GENE_SUMMARY`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: evidenceSummary
+      };
+      break;
+    case `${SERVER_URL}api/v1/evidences/lookup?hugoSymbol=ABL1&evidenceTypes=GENE_BACKGROUND`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: evidenceBackground
+      };
+      break;
+    case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=ABL1`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: clinicalVariants
+      };
+      break;
+    case `https://www.genomenexus.org//ensembl/transcript`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: genomenexusTranscript
+      };
+      break;
+    case `https://www.genomenexus.org//ensembl/canonical-transcript/hgnc/?isoformOverrideSource=uniprot`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: genomenexusCanonicalTranscript
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=ABL1&referenceGenome=GRCh37&alteration=BCR-ABL1%20Fusion`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: variantAnnotation
+      };
+      break;
+    case `${SERVER_URL}api/users?size=5000`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: userSize
+      };
+      break;
+    case `${SERVER_URL}api/users/admin`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: userDetails
+      };
+      break;
+    case `${SERVER_URL}api/users/admin/tokens`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: userToken
+      };
+      break;
+    default:
+      res = undefined
+  }
+  return res;
+}
+
 describe('Tests with login', () => {
   let browser;
   let page;
@@ -63,200 +239,12 @@ describe('Tests with login', () => {
     await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled! 
     page.on('request', (request) => {
       let url = request.url()
-      switch (url) {
-        case `${SERVER_URL}api/account`:
-          request.respond({
-            status: 200,
-            contentType: 'application/json',
-            body: apiAccount
-          });
-          break;
-        case `${SERVER_URL}api/account/tokens`:
-          request.respond({
-            status: 200,
-            contentType: 'application/json',
-            body: apiAccountToken
-          });
-          break;
-        case `${SERVER_URL}api/v1/info`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: apiV1Info
-            }
-          );
-          break;
-        case `${SERVER_URL}api/private/utils/numbers/main/`:
-          request.respond({
-            status: 200,
-            contentType: 'application/json',
-            body: numbersMain
-          });
-          break;
-        case `${SERVER_URL}api/private/utils/numbers/levels/`:
-          request.respond({
-            status: 200,
-            contentType: 'application/json',
-            body: numbersLevels
-          });
-          break;
-        case `${SERVER_URL}api/v1/utils/cancerGeneList`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: geneList
-            }
-          );
-          break;
-        case `${SERVER_URL}api/v1/utils/allCuratedGenes`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: allCuratedGenes
-            }
-          );
-          break;
-        case `${SERVER_URL}api/private/utils/evidences/levels`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: evidenceLevels
-            }
-          );
-          break;
-        case `${SERVER_URL}api/private/utils/tumorTypes`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: tumorTypes
-            }
-          );
-          break;
-        case `${SERVER_URL}api/private/utils/numbers/gene/ABL1`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: geneNumbers
-            }
-          );
-          break;
-        case `${SERVER_URL}api/v1/genes/lookup?query=ABL1`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: geneQuery
-            }
-          );
-          break;
-        case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=ABL1`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: biologicalVariants
-            }
-          );
-          break;
-        case `${SERVER_URL}api/private/utils/portalAlterationSampleCount`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: sampleCount
-            }
-          );
-          break;
-        case `${SERVER_URL}api/v1/evidences/lookup?hugoSymbol=ABL1&evidenceTypes=GENE_SUMMARY`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: evidenceSummary
-            }
-          );
-          break;
-        case `${SERVER_URL}api/v1/evidences/lookup?hugoSymbol=ABL1&evidenceTypes=GENE_BACKGROUND`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: evidenceBackground
-            }
-          );
-          break;
-        case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=ABL1`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: clinicalVariants
-            }
-          );
-          break;
-        case `https://www.genomenexus.org//ensembl/transcript`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: genomenexusTranscript
-            }
-          )
-          break;
-        case `https://www.genomenexus.org//ensembl/canonical-transcript/hgnc/?isoformOverrideSource=uniprot`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: genomenexusCanonicalTranscript
-            }
-          )
-          break;
-        case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=ABL1&referenceGenome=GRCh37&alteration=BCR-ABL1%20Fusion`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: variantAnnotation
-            }
-          );
-          break;
-        case `${SERVER_URL}api/users?size=5000`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: userSize
-            }
-          );
-          break;
-        case `${SERVER_URL}api/users/admin`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: userDetails
-            }
-          );
-          break;
-        case `${SERVER_URL}api/users/admin/tokens`:
-          request.respond(
-            {
-              status: 200,
-              contentType: 'application/json',
-              body: userToken
-            }
-          );
-          break;
-        default:
-          request.continue();
+      if (getRes(url) !== undefined){
+        request.respond(
+          getRes(url)
+        )
       }
+      else request.continue();
     });
     await page.goto(`${CLIENT_URL}`);
     await page.evaluate(() => {
@@ -267,7 +255,7 @@ describe('Tests with login', () => {
 
   it('Home Page', async() => {
     await page.goto(`${CLIENT_URL}`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Home Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page with Login' });
@@ -275,7 +263,7 @@ describe('Tests with login', () => {
 
   it('Home Page #levelType=Dx', async() => {
     await page.goto(`${CLIENT_URL}#levelType=Dx`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Home Page DX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page DX with Login' });
@@ -283,7 +271,7 @@ describe('Tests with login', () => {
 
   it('Home Page #levelType=Px', async() => {
     await page.goto(`${CLIENT_URL}#levelType=Px`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Home Page PX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page PX with Login' });
@@ -291,7 +279,7 @@ describe('Tests with login', () => {
 
   it ('Levels of Evidence Page', async() => {
     await page.goto(`${CLIENT_URL}levels`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page with Login' });
@@ -299,7 +287,7 @@ describe('Tests with login', () => {
 
   it ('Levels of Evidence Page #version=DX', async() => {
     await page.goto(`${CLIENT_URL}levels#version=DX`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page DX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page DX with Login' });
@@ -307,7 +295,7 @@ describe('Tests with login', () => {
 
   it ('Levels of Evidence Page #version=PX', async() => {
     await page.goto(`${CLIENT_URL}levels#version=PX`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page PX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page PX with Login' });
@@ -315,7 +303,7 @@ describe('Tests with login', () => {
 
   it ('Levels of Evidence Page #version=AAC', async() => {
     await page.goto(`${CLIENT_URL}levels#version=AAC`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page AAC with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page AAC with Login' });
@@ -323,7 +311,7 @@ describe('Tests with login', () => {
 
   it ('Levels of Evidence Page #version=V1', async() => {
     await page.goto(`${CLIENT_URL}levels#version=V1`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page V1 with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page V1 with Login' });
@@ -331,7 +319,7 @@ describe('Tests with login', () => {
 
   it('Actionable Genes Page', async() => {
     await page.goto(`${CLIENT_URL}actionableGenes`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Actionable Genes Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Actionable Genes Page with Login' });
@@ -339,7 +327,7 @@ describe('Tests with login', () => {
 
   it('Actionable Genes Page #levels=1,Dx1,Px1', async() => {
     await page.goto(`${CLIENT_URL}actionableGenes#levels=1,Dx1,Px1`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Actionable Genes Page Levels Selected with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Actionable Genes Page Levels Selected with Login' });
@@ -347,7 +335,7 @@ describe('Tests with login', () => {
 
   it('Cancer Genes Page', async() => {
     await page.goto(`${CLIENT_URL}cancerGenes`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Cancer Genes Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Cancer Genes Page with Login' });
@@ -355,7 +343,7 @@ describe('Tests with login', () => {
 
   it('About Page', async() => {
     await page.goto(`${CLIENT_URL}about`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('About Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'About Page with Login' });
@@ -363,7 +351,7 @@ describe('Tests with login', () => {
 
   it('Team Page', async() => {
     await page.goto(`${CLIENT_URL}team`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Team Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Team Page with Login' });
@@ -371,7 +359,7 @@ describe('Tests with login', () => {
 
   it('Terms Page', async() => {
     await page.goto(`${CLIENT_URL}terms`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Terms Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Terms Page with Login' });
@@ -379,7 +367,7 @@ describe('Tests with login', () => {
 
   it('FAQ Page', async() => {
     await page.goto(`${CLIENT_URL}faq`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('FAQ Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'FAQ Page with Login' });
@@ -387,7 +375,7 @@ describe('Tests with login', () => {
 
   it('Gene Page', async() => {
     await page.goto(`${CLIENT_URL}gene/ABL1`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Gene Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Gene Page with Login' });
@@ -395,7 +383,7 @@ describe('Tests with login', () => {
 
   it('Alteration Page', async() => {
     await page.goto(`${CLIENT_URL}gene/ABL1/BCR-ABL1%20Fusion`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Login' });
@@ -403,7 +391,7 @@ describe('Tests with login', () => {
 
   it('Account Settings Page', async() =>{
     await page.goto(`${CLIENT_URL}account/settings`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Account Settings Page'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Account Settings Page' });
@@ -411,7 +399,7 @@ describe('Tests with login', () => {
 
   it('Users Infomation Page', async() =>{
     await page.goto(`${CLIENT_URL}admin/user-details`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Users Infomation Page'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Users Infomation Page' });
@@ -419,7 +407,7 @@ describe('Tests with login', () => {
 
   it('User Details Page', async() =>{
     await page.goto(`${CLIENT_URL}users/admin`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('User Details Page'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'User Details Page' });
@@ -444,159 +432,12 @@ describe('Tests without login', () => {
         request.abort();
       }
       else{
-        switch (url) {
-          case `${SERVER_URL}api/v1/info`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: apiV1Info
-              }
-            );
-            break;
-          case `${SERVER_URL}api/private/utils/numbers/main/`:
-            request.respond({
-              status: 200,
-              contentType: 'application/json',
-              body: numbersMain
-            });
-            break;
-          case `${SERVER_URL}api/private/utils/numbers/levels/`:
-            request.respond({
-              status: 200,
-              contentType: 'application/json',
-              body: numbersLevels
-            });
-            break;
-          case `${SERVER_URL}api/v1/utils/cancerGeneList`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: geneList
-              }
-            );
-            break;
-          case `${SERVER_URL}api/v1/utils/allCuratedGenes`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: allCuratedGenes
-              }
-            );
-            break;
-          case `${SERVER_URL}api/private/utils/evidences/levels`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: evidenceLevels
-              }
-            );
-            break;
-          case `${SERVER_URL}api/private/utils/tumorTypes`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: tumorTypes
-              }
-            );
-            break;
-          case `${SERVER_URL}api/private/utils/numbers/gene/ABL1`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: geneNumbers
-              }
-            );
-            break;
-          case `${SERVER_URL}api/v1/genes/lookup?query=ABL1`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: geneQuery
-              }
-            );
-            break;
-          case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=ABL1`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: biologicalVariants
-              }
-            );
-            break;
-          case `${SERVER_URL}api/private/utils/portalAlterationSampleCount`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: sampleCount
-              }
-            );
-            break;
-          case `${SERVER_URL}api/v1/evidences/lookup?hugoSymbol=ABL1&evidenceTypes=GENE_SUMMARY`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: evidenceSummary
-              }
-            );
-            break;
-          case `${SERVER_URL}api/v1/evidences/lookup?hugoSymbol=ABL1&evidenceTypes=GENE_BACKGROUND`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: evidenceBackground
-              }
-            );
-            break;
-          case `${SERVER_URL}api/private/search/variants/clinical?hugoSymbol=ABL1`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: clinicalVariants
-              }
-            );
-            break;
-          case `https://www.genomenexus.org//ensembl/transcript`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: genomenexusTranscript
-              }
-            )
-            break;
-          case `https://www.genomenexus.org//ensembl/canonical-transcript/hgnc/?isoformOverrideSource=uniprot`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: genomenexusCanonicalTranscript
-              }
-            )
-            break;
-          case `${SERVER_URL}api/private/utils/variantAnnotation?hugoSymbol=ABL1&referenceGenome=GRCh37&alteration=BCR-ABL1%20Fusion`:
-            request.respond(
-              {
-                status: 200,
-                contentType: 'application/json',
-                body: variantAnnotation
-              }
-            );
-            break;
-          default:
-            request.continue();
+        if (getRes(url) !== undefined){
+          request.respond(
+            getRes(url)
+          )
         }
+        else request.continue();
       }     
     });
     await page.goto(`${CLIENT_URL}`);
@@ -607,7 +448,7 @@ describe('Tests without login', () => {
 
   it('Home Page', async() => {
     await page.goto(`${CLIENT_URL}`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Home Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page without Login' });
@@ -615,7 +456,7 @@ describe('Tests without login', () => {
 
   it('Home Page #levelType=Dx', async() => {
     await page.goto(`${CLIENT_URL}#levelType=Dx`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Home Page DX without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page DX without Login' });
@@ -623,7 +464,7 @@ describe('Tests without login', () => {
 
   it('Home Page #levelType=Px', async() => {
     await page.goto(`${CLIENT_URL}#levelType=Px`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Home Page PX without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page PX without Login' });
@@ -631,7 +472,7 @@ describe('Tests without login', () => {
 
   it ('Levels of Evidence Page', async() => {
     await page.goto(`${CLIENT_URL}levels`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page without Login' });
@@ -639,7 +480,7 @@ describe('Tests without login', () => {
 
   it ('Levels of Evidence Page #version=DX', async() => {
     await page.goto(`${CLIENT_URL}levels#version=DX`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page DX without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page DX without Login' });
@@ -647,7 +488,7 @@ describe('Tests without login', () => {
 
   it ('Levels of Evidence Page #version=PX', async() => {
     await page.goto(`${CLIENT_URL}levels#version=PX`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page PX without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page PX without Login' });
@@ -655,7 +496,7 @@ describe('Tests without login', () => {
 
   it ('Levels of Evidence Page #version=AAC', async() => {
     await page.goto(`${CLIENT_URL}levels#version=AAC`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page AAC without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page AAC without Login' });
@@ -663,7 +504,7 @@ describe('Tests without login', () => {
 
   it ('Levels of Evidence Page #version=V1', async() => {
     await page.goto(`${CLIENT_URL}levels#version=V1`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page V1 without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page V1 without Login' });
@@ -671,7 +512,7 @@ describe('Tests without login', () => {
 
   it('Actionable Genes Page', async() => {
     await page.goto(`${CLIENT_URL}actionableGenes`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Actionable Genes Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Actionable Genes Page without Login' });
@@ -679,7 +520,7 @@ describe('Tests without login', () => {
 
   it('Actionable Genes Page #levels=1,Dx1,Px1', async() => {
     await page.goto(`${CLIENT_URL}actionableGenes#levels=1,Dx1,Px1`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Actionable Genes Page Levels Selected without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Actionable Genes Page Levels Selected without Login' });
@@ -687,7 +528,7 @@ describe('Tests without login', () => {
 
   it('Cancer Genes Page', async() => {
     await page.goto(`${CLIENT_URL}cancerGenes`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Cancer Genes Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Cancer Genes Page without Login' });
@@ -695,7 +536,7 @@ describe('Tests without login', () => {
 
   it('About Page', async() => {
     await page.goto(`${CLIENT_URL}about`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('About Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'About Page without Login' });
@@ -703,7 +544,7 @@ describe('Tests without login', () => {
 
   it('Team Page', async() => {
     await page.goto(`${CLIENT_URL}team`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Team Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Team Page without Login' });
@@ -711,7 +552,7 @@ describe('Tests without login', () => {
 
   it('Terms Page', async() => {
     await page.goto(`${CLIENT_URL}terms`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Terms Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Terms Page without Login' });
@@ -719,7 +560,7 @@ describe('Tests without login', () => {
 
   it('FAQ Page', async() => {
     await page.goto(`${CLIENT_URL}faq`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('FAQ Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'FAQ Page without Login' });
@@ -727,7 +568,7 @@ describe('Tests without login', () => {
 
   it('Gene Page', async() => {
     await page.goto(`${CLIENT_URL}gene/ABL1`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Gene Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Gene Page without Login' });
@@ -735,7 +576,7 @@ describe('Tests without login', () => {
 
   it('Alteration Page', async() => {
     await page.goto(`${CLIENT_URL}gene/ABL1/BCR-ABL1%20Fusion`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page without Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page without Login' });
@@ -743,7 +584,7 @@ describe('Tests without login', () => {
 
   it('Login Page', async() => {
     await page.goto(`${CLIENT_URL}login`);
-    await page.setViewport(viewPort_1080);
+    await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Login Page'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Login Page' });
