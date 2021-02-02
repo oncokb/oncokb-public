@@ -156,4 +156,5 @@ bower_components
 ######################
 # Jest screenshot
 ######################
-screenshot-test/__latest_snapshots__/*.png
+screenshot-test/__latest_snapshots__/
+screenshot-test/__diff_output__/
