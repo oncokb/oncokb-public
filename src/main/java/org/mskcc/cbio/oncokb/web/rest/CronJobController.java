@@ -145,8 +145,12 @@ public class CronJobController {
     public void tokensRenewCheck() {
         log.info("Started the cronjob to renew tokens");
 
-        Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase("jackson.zhang.828@gmail.com");
-        mailService.sendEmailDeclareEmailOwnership(userMapper.userToUserDTO(user.get()), VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES, 360);
+        // Since the send email is an async method, we need to record a list of users to prevent sending email multiple times
+        Set<String> notifiedUserIds = new HashSet<>();
+        int[] timePointsToCheck = new int[]{3, 14};
+        for (int daysToExpired : timePointsToCheck) {
+            tokenCheckByTime(daysToExpired, notifiedUserIds);
+        }
     }
 
     /**
