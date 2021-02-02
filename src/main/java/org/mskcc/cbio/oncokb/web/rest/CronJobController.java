@@ -198,17 +198,17 @@ public class CronJobController {
             }
         });
     }
-    
+
     /**
      * {@code GET /user-usage-analysis}: Analyze user usage
-     * 
+     *
      * @throws IOException
      */
     @GetMapping(path = "/user-usage-analysis")
     public void analyzeUserUsage() throws IOException {
         log.info("User usage analysis started...");
-        List<UserTokenUsageWithInfo> tokenStats =  tokenStatsService.getTokenUsageAnalysis(Instant.now().minus(365, ChronoUnit.DAYS));    
-        UsageSummary resourceSummary = new UsageSummary();       
+        List<UserTokenUsageWithInfo> tokenStats =  tokenStatsService.getTokenUsageAnalysis(Instant.now().minus(365, ChronoUnit.DAYS));
+        UsageSummary resourceSummary = new UsageSummary();
         Map<Long, UserUsage> userSummary = new HashMap<>();
 
         for (UserTokenUsageWithInfo state: tokenStats){
@@ -233,7 +233,7 @@ public class CronJobController {
             UsageSummary currentUsageSummary = userSummary.get(userId).getSummary();
             calculateUsageSummary(currentUsageSummary, state);
         }
-        
+
         ObjectMapper mapper = new ObjectMapper();
         File resourceResult = new File("./resourceSummary.json");
         File userResult = new File("./userSummary.json");
@@ -258,7 +258,7 @@ public class CronJobController {
         // Deal with month summary
         if (!usageSummary.getMonth().containsKey(time)){
             usageSummary.getMonth().put(time, new JSONObject());
-        }           
+        }
         if (!usageSummary.getMonth().get(time).containsKey(endpoint)){
             usageSummary.getMonth().get(time).put(endpoint, new Integer(0));
         }
@@ -333,7 +333,7 @@ public class CronJobController {
                     e.printStackTrace();
                 }
             }
-            
+
             int baiduCount = 0;
             if (baiduSearching){
                 try{
@@ -343,24 +343,24 @@ public class CronJobController {
                 }
                 catch (Exception e){
                     e.printStackTrace();
-                } 
-            }         
+                }
+            }
 
             UserDTO user = userMapper.userToUserDTO(token.getUser());
-            if (githubCount > 0){   
+            if (githubCount > 0){
                 ExposedToken t = generateExposedToken(token, user, "GitHub");
                 results.add(t);
                 updateExposedToken(token);
                 mailService.sendMailToUserWhenTokenExposed(user, t);
             }
-            if (googleCount > 0 || baiduCount > 0){   
+            if (googleCount > 0 || baiduCount > 0){
                 List<String> source = new ArrayList<>();
                 if (googleCount > 0){
                     source.add("Google");
                 }
                 if (baiduCount > 0){
                     source.add("Baidu");
-                }  
+                }
                 unverifiedResults.add(generateExposedToken(token, user, source.stream().collect(Collectors.joining(", "))));
             }
             sleep(1000);
@@ -416,7 +416,7 @@ public class CronJobController {
                 if (description.indexOf("test") == -1){
                     mailService.sendMailWhenSearchingStructrueChange("Google");
                     return false;
-                }              
+                }
             }
             else{
                 mailService.sendMailWhenSearchingStructrueChange("Google");
