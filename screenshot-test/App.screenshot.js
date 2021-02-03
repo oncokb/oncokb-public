@@ -66,7 +66,7 @@ if (!fs.existsSync(LATEST_SNAPSHOTS_DIR)){
   fs.mkdirSync(LATEST_SNAPSHOTS_DIR);
 }
 
-function getRes(url){
+function getMockResponse(url){
   let res = undefined
   switch (url) {
     case `${SERVER_URL}api/account`:
@@ -239,9 +239,9 @@ describe('Tests with login', () => {
     await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled! 
     page.on('request', (request) => {
       let url = request.url()
-      if (getRes(url) !== undefined){
+      if (getMockResponse(url) !== undefined){
         request.respond(
-          getRes(url)
+          getMockResponse(url)
         )
       }
       else request.continue();
@@ -432,9 +432,9 @@ describe('Tests without login', () => {
         request.abort();
       }
       else{
-        if (getRes(url) !== undefined){
+        if (getMockResponse(url) !== undefined){
           request.respond(
-            getRes(url)
+            getMockResponse(url)
           )
         }
         else request.continue();
