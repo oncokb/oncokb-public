@@ -131,8 +131,11 @@
     "husky": "4.2.5",
     "identity-obj-proxy": "3.0.0",
     "jest": "25.4.0",
+    "jest-image-snapshot": "^4.3.0",
     "jest-junit": "10.0.0",
+    "jest-puppeteer": "^4.4.0",
     "jest-sonar-reporter": "2.0.0",
+    "jsdom-screenshot": "^4.0.0",
     "json": "^9.0.6",
     "json-loader": "0.5.7",
     "lint-staged": "8.2.1",
@@ -196,6 +199,10 @@
     "webpack:prod:main": "yarn run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:prod": "yarn run cleanup && yarn run webpack:prod:main",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
+    "screenshot-test": "jest -c ./screenshot-test/jest-screenshot.config.js",
+    "screenshot-test:update": "jest -c ./screenshot-test/jest-screenshot.config.js -u",
+    "screenshot-test-in-docker": "make local_test",
+    "screenshot-test-in-docker:update": "make local_test_update"
   }
 }

@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  local_test:
+    build:
+      context: .
+    command: npm run screenshot-test
+    environment:
+      - CI=true
+    volumes:
+      - './screenshot-test:/app/screenshot-test'
+
+  local_test_update:
+    build:
+      context: .
+    environment:
+      - CI=true
+    command: npm run screenshot-test:update
+    volumes:
+      - './screenshot-test:/app/screenshot-test'
