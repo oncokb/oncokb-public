@@ -1,0 +1,7 @@
+node_modules/
+node/
+.github/
+.vscode/
+.target/
+screenshot-test/__latest_snapshots__/
+screenshot-test/__diff_output__/
