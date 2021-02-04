@@ -78,6 +78,8 @@ export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;
 export const TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS = 14;
 export const USAGE_TOP_USERS_LIMIT = 10000;
 export const USGAE_ALL_TIME_KEY = 'All';
+export const USGAE_ALL_TIME_VALUE = 'One year';
+export const USAGE_DETAIL_TIME_KEY = 'Detail';
 
 export enum ONCOGENICITY {
   ONCOGENIC = 'Oncogenic',
@@ -411,6 +413,8 @@ export enum PAGE_ROUTE {
   ADMIN_USAGE_ANALYSIS = '/admin/usage-analysis',
   ADMIN_USER_USAGE_DETAILS = '/admin/usage-analysis/users/:id',
   ADMIN_USER_USAGE_DETAILS_LINK = '/admin/usage-analysis/users/',
+  ADMIN_RESOURCE_DETAILS = '/admin/usage-analysis/resources/:endpoint',
+  ADMIN_RESOURCE_DETAILS_LINK = '/admin/usage-analysis/resources/',
   USER = '/users/:login',
   ACCOUNT = '/account',
   REGISTER = '/account/register',

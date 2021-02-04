@@ -7,7 +7,7 @@ public class ResourceModel {
     
     public ResourceModel(String s){
         this.method =  s.split(" ")[0];
-        this.endpoint = s.split(" ")[1];
+        this.endpoint = s.split(" ")[1].replaceAll("\\%20", "");
     }
 
     public String getMethod(){

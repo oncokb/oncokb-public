@@ -7,7 +7,8 @@ import SendEmailsPage from 'app/pages/sendEmails/SendEmailsPage';
 import UserDetailsPage from '../pages/userManagement/UserDetailsPage';
 import { CreateAccountPage } from 'app/pages/CreateAccountPage';
 import UsageAnalysisPage from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
-import UserUsagePage from 'app/pages/usageAnalysisPage/UserUsagePage';
+import UserUsageDetailsPage from 'app/pages/usageAnalysisPage/UserUsageDetailsPage';
+import ResourceUsageDetailsPage from 'app/pages/usageAnalysisPage/ResourceUsageDetailsPage';
 
 const AdminRouts = () => {
   return (
@@ -25,7 +26,12 @@ const AdminRouts = () => {
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS}
-        component={UserUsagePage}
+        component={UserUsageDetailsPage}
+      />
+      <ErrorBoundaryRoute
+        exact
+        path={PAGE_ROUTE.ADMIN_RESOURCE_DETAILS}
+        component={ResourceUsageDetailsPage}
       />
       <ErrorBoundaryRoute
         exact

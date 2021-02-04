@@ -89,6 +89,7 @@ public class CronJobController {
 
     final String USERS_USAGE_SUMMARY_FILE = "usage-analysis/userSummary.json";
     final String RESOURCES_USAGE_SUMMARY_FILE = "usage-analysis/resourceSummary.json";
+    final String RESOURCES_USAGE_DETAIL_FILE = "usage-analysis/resourceDetail.json";
 
     public CronJobController(UserService userService,
                              MailService mailService, TokenProvider tokenProvider,
@@ -210,10 +211,18 @@ public class CronJobController {
         List<UserTokenUsageWithInfo> tokenStats =  tokenStatsService.getTokenUsageAnalysis(Instant.now().minus(365, ChronoUnit.DAYS));
         UsageSummary resourceSummary = new UsageSummary();
         Map<Long, UserUsage> userSummary = new HashMap<>();
+        Map<String, UsageSummary> resourceDetail = new HashMap<>();
 
         for (UserTokenUsageWithInfo state: tokenStats){
-            calculateUsageSummary(resourceSummary, state);
+            ResourceModel resource = new ResourceModel(state.getResource());
+            String endpoint = resource.getEndpoint();
+            int count = state.getCount();
+            String time = state.getTime();
 
+            // Deal with resource summary
+            calculateUsageSummary(resourceSummary, endpoint, count, time);
+
+            // Deal with user usage
             long userId = state.getToken().getUser().getId();
             User user = state.getToken().getUser();
             if (!userSummary.containsKey(userId)){
@@ -231,38 +240,44 @@ public class CronJobController {
                 }
             }
             UsageSummary currentUsageSummary = userSummary.get(userId).getSummary();
-            calculateUsageSummary(currentUsageSummary, state);
+            calculateUsageSummary(currentUsageSummary, endpoint, count, time);
+
+            // Deal with resource detail
+            if (!resourceDetail.containsKey(endpoint)){
+                resourceDetail.put(endpoint, new UsageSummary());
+            }
+            String userEmail = user.getEmail();
+            calculateUsageSummary(resourceDetail.get(endpoint), userEmail, count, time);       
         }
 
         ObjectMapper mapper = new ObjectMapper();
         File resourceResult = new File("./resourceSummary.json");
         File userResult = new File("./userSummary.json");
+        File resourceDetailResult = new File("./resourceDetail.json");
         mapper.writeValue(resourceResult, resourceSummary);
         mapper.writeValue(userResult, userSummary);
+        mapper.writeValue(resourceDetailResult, resourceDetail);
 
         s3Service.saveObject("oncokb", RESOURCES_USAGE_SUMMARY_FILE, resourceResult);
         s3Service.saveObject("oncokb", USERS_USAGE_SUMMARY_FILE, userResult);
+        s3Service.saveObject("oncokb", RESOURCES_USAGE_DETAIL_FILE, resourceDetailResult);
         resourceResult.delete();
         userResult.delete();
+        resourceDetailResult.delete();
         log.info("User usage analysis completed!");
     }
 
-    private void calculateUsageSummary(UsageSummary usageSummary, UserTokenUsageWithInfo info){
-        ResourceModel resource = new ResourceModel(info.getResource());
-        String endpoint = resource.getEndpoint();
-        int count = info.getCount();
-        String time = info.getTime();
-
+    private void calculateUsageSummary(UsageSummary usageSummary, String key, int count, String time){
         // Deal with year summary
-        usageSummary.getYear().put(endpoint, usageSummary.getYear().getOrDefault(endpoint, 0) + count);
+        usageSummary.getYear().put(key, usageSummary.getYear().getOrDefault(key, 0) + count);
         // Deal with month summary
         if (!usageSummary.getMonth().containsKey(time)){
             usageSummary.getMonth().put(time, new JSONObject());
+        }           
+        if (!usageSummary.getMonth().get(time).containsKey(key)){
+            usageSummary.getMonth().get(time).put(key, new Integer(0));
         }
-        if (!usageSummary.getMonth().get(time).containsKey(endpoint)){
-            usageSummary.getMonth().get(time).put(endpoint, new Integer(0));
-        }
-        usageSummary.getMonth().get(time).put(endpoint, (Integer)usageSummary.getMonth().get(time).get(endpoint) + (Integer)count);
+        usageSummary.getMonth().get(time).put(key, (Integer)usageSummary.getMonth().get(time).get(key) + (Integer)count);
     }
 
     /**
