@@ -7,9 +7,10 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { Row } from 'react-bootstrap';
 import {
+  getUsageTableColumnDefinition,
   ToggleValue,
-  usageColumn,
   UsageRecord,
+  UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import {
   USAGE_DETAIL_TIME_KEY,
@@ -87,7 +88,7 @@ export default class UserUsageDetailsTable extends React.Component<
           data={this.calculateData}
           columns={[
             {
-              id: 'resource',
+              ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
               Header: (
                 <span>
                   Resource{' '}
@@ -96,14 +97,12 @@ export default class UserUsageDetailsTable extends React.Component<
                     : '(only public)'}
                 </span>
               ),
-              accessor: 'resource',
-              minWidth: 200,
               onFilter: (data: UsageRecord, keyword) =>
                 filterByKeyword(data.resource, keyword),
             },
-            usageColumn,
+            { ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE) },
             {
-              id: 'time',
+              ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
               Header: (
                 <span>
                   {this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
@@ -111,8 +110,6 @@ export default class UserUsageDetailsTable extends React.Component<
                     : 'Time'}
                 </span>
               ),
-              minWidth: 100,
-              accessor: 'time',
               onFilter: (data: UsageRecord, keyword) =>
                 filterByKeyword(data.time, keyword),
             },
@@ -120,11 +117,11 @@ export default class UserUsageDetailsTable extends React.Component<
           loading={this.props.loadedData ? false : true}
           defaultSorted={[
             {
-              id: 'time',
+              id: UsageTableColumnKey.TIME,
               desc: true,
             },
             {
-              id: 'usage',
+              id: UsageTableColumnKey.USAGE,
               desc: true,
             },
           ]}

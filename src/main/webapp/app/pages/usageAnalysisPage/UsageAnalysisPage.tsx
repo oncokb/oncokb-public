@@ -30,6 +30,7 @@ import {
 import { remoteData } from 'cbioportal-frontend-commons';
 import * as QueryString from 'query-string';
 import { UsageToggleGroup } from './UsageToggleGroup';
+import { TableCellRenderer } from 'react-table';
 
 export type UsageRecord = {
   resource: string;
@@ -53,12 +54,57 @@ export enum ToggleValue {
 
 const ALLOWED_USAGETYPE: string[] = [UsageType.USER, UsageType.RESOURCE];
 
-export const usageColumn = {
-  id: 'usage',
-  Header: <span>Usage</span>,
-  minWidth: 100,
-  accessor: 'usage',
-};
+export enum UsageTableColumnKey {
+  RESOURCES = 'resource',
+  USAGE = 'usage',
+  TIME = 'time',
+  OPERATION = 'operation',
+}
+
+export function getUsageTableColumnDefinition(
+  columnKey: string
+):
+  | {
+      id: string;
+      Header: TableCellRenderer;
+      minWidth?: number;
+      maxWidth?: number;
+      accessor: string;
+    }
+  | undefined {
+  switch (columnKey) {
+    case UsageTableColumnKey.RESOURCES:
+      return {
+        id: UsageTableColumnKey.RESOURCES,
+        Header: <span> Resource </span>,
+        accessor: UsageTableColumnKey.RESOURCES,
+        minWidth: 200,
+      };
+    case UsageTableColumnKey.USAGE:
+      return {
+        id: UsageTableColumnKey.USAGE,
+        Header: <span>Usage</span>,
+        minWidth: 100,
+        accessor: UsageTableColumnKey.USAGE,
+      };
+    case UsageTableColumnKey.TIME:
+      return {
+        id: UsageTableColumnKey.TIME,
+        Header: <span> Time </span>,
+        minWidth: 100,
+        accessor: UsageTableColumnKey.TIME,
+      };
+    case UsageTableColumnKey.OPERATION:
+      return {
+        id: UsageTableColumnKey.OPERATION,
+        Header: <span>Details</span>,
+        maxWidth: 60,
+        accessor: UsageTableColumnKey.OPERATION,
+      };
+    default:
+      return undefined;
+  }
+}
 
 @inject('routing')
 @observer
@@ -260,9 +306,9 @@ export default class UsageAnalysisPage extends React.Component<{
                         filterByKeyword(data.noPrivateEndpoint, keyword),
                     },
                 {
-                  id: 'operations',
-                  Header: <span>Details</span>,
-                  maxWidth: 60,
+                  ...getUsageTableColumnDefinition(
+                    UsageTableColumnKey.OPERATION
+                  ),
                   sortable: false,
                   className: 'd-flex justify-content-center',
                   Cell(props: { original: UserOverviewUsage }) {
@@ -319,7 +365,9 @@ export default class UsageAnalysisPage extends React.Component<{
               data={this.calculateResourcesTabData}
               columns={[
                 {
-                  id: 'resource',
+                  ...getUsageTableColumnDefinition(
+                    UsageTableColumnKey.RESOURCES
+                  ),
                   Header: (
                     <span>
                       Resource{' '}
@@ -329,16 +377,14 @@ export default class UsageAnalysisPage extends React.Component<{
                         : '(only public)'}
                     </span>
                   ),
-                  accessor: 'resource',
-                  minWidth: 200,
                   onFilter: (data: UsageRecord, keyword) =>
                     filterByKeyword(data.resource, keyword),
                 },
-                usageColumn,
+                { ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE) },
                 {
-                  id: 'operations',
-                  Header: <span>Details</span>,
-                  maxWidth: 60,
+                  ...getUsageTableColumnDefinition(
+                    UsageTableColumnKey.OPERATION
+                  ),
                   sortable: false,
                   className: 'd-flex justify-content-center',
                   Cell(props: { original: UsageRecord }) {
@@ -359,7 +405,7 @@ export default class UsageAnalysisPage extends React.Component<{
               loading={this.usageDetail.isComplete ? false : true}
               defaultSorted={[
                 {
-                  id: 'usage',
+                  id: UsageTableColumnKey.USAGE,
                   desc: true,
                 },
               ]}
