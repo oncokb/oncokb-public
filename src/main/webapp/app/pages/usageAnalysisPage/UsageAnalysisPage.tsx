@@ -198,7 +198,7 @@ export default class UsageAnalysisPage extends React.Component<{
         <Tabs
           defaultActiveKey={this.usageType}
           id="uncontrolled-tab-example"
-          onSelect={k => this.toggleType(UsageType[k || UsageType.USER])}
+          onSelect={k => this.toggleType(UsageType[k!])}
         >
           <Tab eventKey={UsageType.USER} title="Users">
             <Row className="mt-2">
