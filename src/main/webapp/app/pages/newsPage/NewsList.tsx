@@ -128,6 +128,7 @@ export default class NewsList extends React.Component<NewsListProps> {
               ) : undefined}
               {newsData.changedAnnotation ? (
                 <ChangedAnnotationListItem
+                  title={newsData.changedAnnotationTitle}
                   data={newsData.changedAnnotation.map((item, index) => {
                     return {
                       key: `changedAnnotation-${date}-${index}`,
