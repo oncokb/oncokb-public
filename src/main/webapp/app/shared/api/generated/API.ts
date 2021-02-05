@@ -1710,6 +1710,200 @@ export default class API {
             return response.body;
         });
     };
+    analyzeUserUsageUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/cronjob/user-usage-analysis';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * analyzeUserUsage
+     * @method
+     * @name API#analyzeUserUsageUsingGET
+     */
+    analyzeUserUsageUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/cronjob/user-usage-analysis';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * analyzeUserUsage
+     * @method
+     * @name API#analyzeUserUsageUsingGET
+     */
+    analyzeUserUsageUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < any > {
+        return this.analyzeUserUsageUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    sendFeedbackMailsUsingPOSTURL(parameters: {
+        'description': string,
+        'from': string,
+        'subject': string,
+        'userName': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/mails/feeback';
+        if (parameters['description'] !== undefined) {
+            queryParameters['description'] = parameters['description'];
+        }
+
+        if (parameters['from'] !== undefined) {
+            queryParameters['from'] = parameters['from'];
+        }
+
+        if (parameters['subject'] !== undefined) {
+            queryParameters['subject'] = parameters['subject'];
+        }
+
+        if (parameters['userName'] !== undefined) {
+            queryParameters['userName'] = parameters['userName'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * sendFeedbackMails
+     * @method
+     * @name API#sendFeedbackMailsUsingPOST
+     * @param {string} description - description
+     * @param {string} from - from
+     * @param {string} subject - subject
+     * @param {string} userName - userName
+     */
+    sendFeedbackMailsUsingPOSTWithHttpInfo(parameters: {
+        'description': string,
+        'from': string,
+        'subject': string,
+        'userName': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/mails/feeback';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['description'] !== undefined) {
+                queryParameters['description'] = parameters['description'];
+            }
+
+            if (parameters['description'] === undefined) {
+                reject(new Error('Missing required  parameter: description'));
+                return;
+            }
+
+            if (parameters['from'] !== undefined) {
+                queryParameters['from'] = parameters['from'];
+            }
+
+            if (parameters['from'] === undefined) {
+                reject(new Error('Missing required  parameter: from'));
+                return;
+            }
+
+            if (parameters['subject'] !== undefined) {
+                queryParameters['subject'] = parameters['subject'];
+            }
+
+            if (parameters['subject'] === undefined) {
+                reject(new Error('Missing required  parameter: subject'));
+                return;
+            }
+
+            if (parameters['userName'] !== undefined) {
+                queryParameters['userName'] = parameters['userName'];
+            }
+
+            if (parameters['userName'] === undefined) {
+                reject(new Error('Missing required  parameter: userName'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * sendFeedbackMails
+     * @method
+     * @name API#sendFeedbackMailsUsingPOST
+     * @param {string} description - description
+     * @param {string} from - from
+     * @param {string} subject - subject
+     * @param {string} userName - userName
+     */
+    sendFeedbackMailsUsingPOST(parameters: {
+        'description': string,
+        'from': string,
+        'subject': string,
+        'userName': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.sendFeedbackMailsUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     getMailsFromUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {

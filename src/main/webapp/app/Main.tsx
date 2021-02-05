@@ -9,9 +9,12 @@ import { Stores } from 'app/App';
 import { withRouter } from 'react-router';
 import {
   AUTHORITIES,
+  DEFAULT_FEEDBACK_ANNOTATION,
   NOTIFICATION_TIMEOUT_MILLISECONDS,
 } from 'app/config/constants';
 import { ToastContainer } from 'react-toastify';
+import { computed } from 'mobx';
+import { FeedbackModal } from './components/feedback/FeedbackModal';
 
 export type IMainPage = Stores;
 
@@ -19,6 +22,18 @@ export type IMainPage = Stores;
 @withRouter
 @observer
 class Main extends React.Component<IMainPage> {
+  @computed get feedbackAnnotation() {
+    const annotation = DEFAULT_FEEDBACK_ANNOTATION;
+    if (this.props.authenticationStore.account) {
+      annotation.email = this.props.authenticationStore.account.email;
+      annotation.name = `${this.props.authenticationStore.account.firstName} ${this.props.authenticationStore.account.lastName}`;
+    }
+    return {
+      ...annotation,
+      ...this.props.appStore.feedbackAnnotation,
+    };
+  }
+
   public render() {
     return (
       <div className="Main">
@@ -62,6 +77,14 @@ class Main extends React.Component<IMainPage> {
             />
           </Container>
         </div>
+        <FeedbackModal
+          showModal={this.props.appStore.showFeedbackFormModal}
+          feedback={this.feedbackAnnotation}
+          onHideModal={() => {
+            this.props.appStore.showFeedbackFormModal = false;
+            this.props.appStore.feedbackAnnotation = undefined;
+          }}
+        />
         <Footer
           lastDataUpdate={this.props.appStore.appInfo.result.dataVersion.date}
         />
