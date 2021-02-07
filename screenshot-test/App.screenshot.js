@@ -457,7 +457,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}admin/usage-analysis/users/2021`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(getScreenshotConfig('Usage Analysis Pag#User Detail'));
+    let image = await page.screenshot(getScreenshotConfig('Usage Analysis Page#User Detail'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Usage Analysis Page#User Detail' });
   })
 
@@ -465,7 +465,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}admin/usage-analysis/resources/!api!v1!example`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(getScreenshotConfig('Usage Analysis Pag#Resource Detail'));
+    let image = await page.screenshot(getScreenshotConfig('Usage Analysis Page#Resource Detail'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Usage Analysis Page#Resource Detail' });
   })
 
