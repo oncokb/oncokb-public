@@ -809,7 +809,7 @@
         "deprecated": false
       }
     },
-    "/api/mails/feeback": {
+    "/api/mails/feedback": {
       "post": {
         "tags": [
           "mails-controller"
@@ -1286,7 +1286,76 @@
         "deprecated": false
       }
     },
-    "/api/usage/overview": {
+    "/api/usage/resources": {
+      "get": {
+        "tags": [
+          "usage-analysis-controller"
+        ],
+        "summary": "resourceDetailGet",
+        "operationId": "resourceDetailGetUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "endpoint",
+            "in": "query",
+            "description": "endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UsageSummary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/usage/summary/resources": {
+      "get": {
+        "tags": [
+          "usage-analysis-controller"
+        ],
+        "summary": "resourceUsageGet",
+        "operationId": "resourceUsageGetUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UsageSummary"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/usage/summary/users": {
       "get": {
         "tags": [
           "usage-analysis-controller"
@@ -1304,36 +1373,6 @@
               "items": {
                 "$ref": "#/definitions/UserOverviewUsage"
               }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "deprecated": false
-      }
-    },
-    "/api/usage/resource": {
-      "get": {
-        "tags": [
-          "usage-analysis-controller"
-        ],
-        "summary": "resourceUsageGet",
-        "operationId": "resourceUsageGetUsingGET",
-        "produces": [
-          "*/*"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/UsageSummary"
             }
           },
           "401": {
