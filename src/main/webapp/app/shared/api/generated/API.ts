@@ -1779,7 +1779,7 @@ export default class API {
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
-        let path = '/api/mails/feeback';
+        let path = '/api/mails/feedback';
         if (parameters['description'] !== undefined) {
             queryParameters['description'] = parameters['description'];
         }
@@ -1826,7 +1826,7 @@ export default class API {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
         const request = this.request;
-        let path = '/api/mails/feeback';
+        let path = '/api/mails/feedback';
         let body: any;
         let queryParameters: any = {};
         let headers: any = {};
@@ -2631,6 +2631,160 @@ export default class API {
             return response.body;
         });
     };
+    resourceDetailGetUsingGETURL(parameters: {
+        'endpoint': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/usage/resources';
+        if (parameters['endpoint'] !== undefined) {
+            queryParameters['endpoint'] = parameters['endpoint'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * resourceDetailGet
+     * @method
+     * @name API#resourceDetailGetUsingGET
+     * @param {string} endpoint - endpoint
+     */
+    resourceDetailGetUsingGETWithHttpInfo(parameters: {
+        'endpoint': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/usage/resources';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters['endpoint'] !== undefined) {
+                queryParameters['endpoint'] = parameters['endpoint'];
+            }
+
+            if (parameters['endpoint'] === undefined) {
+                reject(new Error('Missing required  parameter: endpoint'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * resourceDetailGet
+     * @method
+     * @name API#resourceDetailGetUsingGET
+     * @param {string} endpoint - endpoint
+     */
+    resourceDetailGetUsingGET(parameters: {
+        'endpoint': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < UsageSummary > {
+        return this.resourceDetailGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    resourceUsageGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/usage/summary/resources';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * resourceUsageGet
+     * @method
+     * @name API#resourceUsageGetUsingGET
+     */
+    resourceUsageGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/usage/summary/resources';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * resourceUsageGet
+     * @method
+     * @name API#resourceUsageGetUsingGET
+     */
+    resourceUsageGetUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < UsageSummary > {
+        return this.resourceUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    userOverviewUsageGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/usage/summary/users';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
 
     /**
      * userOverviewUsageGet
@@ -2678,53 +2832,6 @@ export default class API {
                 return response.body;
             });
         };
-
-    /**
-     * resourceUsageGet
-     * @method
-     * @name API#resourceUsageGetUsingGET
-     */
-    resourceUsageGetUsingGETWithHttpInfo(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/api/usage/summary/resources';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
-
-            if (parameters.$queryParameters) {
-                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                    var parameter = parameters.$queryParameters[parameterName];
-                    queryParameters[parameterName] = parameter;
-                });
-            }
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-
-        });
-    };
-
-    /**
-     * resourceUsageGet
-     * @method
-     * @name API#resourceUsageGetUsingGET
-     */
-    resourceUsageGetUsingGET(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < UsageSummary > {
-        return this.resourceUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-            return response.body;
-        });
-    };
-
     userUsageGetUsingGETURL(parameters: {
         'userId': string,
         $queryParameters ? : any
@@ -2797,60 +2904,6 @@ export default class API {
         $domain ? : string
     }): Promise < UserUsage > {
         return this.userUsageGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-            return response.body;
-        });
-    };
-
-    /**
-     * Get specific resource detail.
-     * @method
-     * @name resourceDetailGetUsingGETWithHttpInfo
-     * @param {string} endpoint - The endpoint to be returned.
-     */
-    resourceDetailGetUsingGETWithHttpInfo(parameters: {
-        'endpoint': string,
-        $queryParameters ? : any,
-        $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/api/usage/resources';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
-
-            if (parameters['endpoint'] !== undefined) {
-                queryParameters['endpoint'] = parameters['endpoint'];
-            }
-
-            if (parameters.$queryParameters) {
-                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                    var parameter = parameters.$queryParameters[parameterName];
-                    queryParameters[parameterName] = parameter;
-                });
-            }
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-
-        });
-    };
-
-    /**
-     * resourceDetailGet
-     * @method
-     * @name API#resourceDetailGetUsingGET
-     * @param {string} endpoint - endpoint
-     */
-    resourceDetailGetUsingGET(parameters: {
-        'endpoint': string,
-        $queryParameters ? : any,
-        $domain ? : string
-    }): Promise < UsageSummary > {
-        return this.resourceDetailGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };

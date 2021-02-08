@@ -28,7 +28,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 public class MailsController {
 
     private final Logger log = LoggerFactory.getLogger(MailsController.class);
@@ -72,7 +71,7 @@ public class MailsController {
         }
     }
 
-    @PostMapping("/mails/feeback")
+    @PostMapping("/mails/feedback")
     public ResponseEntity<Void> sendFeedbackMails(
         @Valid @RequestParam String subject,
         @Valid @RequestParam String description,
