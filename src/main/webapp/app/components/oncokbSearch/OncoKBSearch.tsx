@@ -5,7 +5,6 @@ import {
   SearchOption,
   SearchOptionType,
 } from 'app/components/searchOption/SearchOption';
-import { SuggestCuration } from 'app/components/SuggestCuration';
 import { components } from 'react-select';
 import { RouterStore } from 'mobx-react-router';
 import oncokbPrivateClient from 'app/shared/api/oncokbPrivateClientInstance';
@@ -13,17 +12,21 @@ import {
   getAllAlterationsName,
   getAllTumorTypesName,
 } from 'app/shared/utils/Utils';
-import { observer, inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import autobind from 'autobind-decorator';
 import { action, observable } from 'mobx';
 import _ from 'lodash';
+import AppStore from 'app/store/AppStore';
+import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
+import { FeedbackType } from 'app/components/feedback/types';
 
 interface IOncoKBSearch {
   routing?: RouterStore;
   styles?: CSSRule;
+  appStore?: AppStore;
 }
 
-@inject('routing')
+@inject('routing', 'appStore')
 @observer
 export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
   @observable keyword: string;
@@ -68,6 +71,7 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
               search={this.keyword}
               type={props.data.queryType as SearchOptionType}
               data={props.data}
+              appStore={props.appStore}
             >
               <components.Option {...props} />
             </SearchOption>
@@ -83,7 +87,13 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
               No result found, please send us an email if you would like{' '}
               {this.keyword} to be curated.
             </span>
-            <SuggestCuration suggestion={this.keyword} />
+            <FeedbackIcon
+              feedback={{
+                type: FeedbackType.ANNOTATION,
+                annotation: this.keyword,
+              }}
+              appStore={this.props.appStore!}
+            />
           </components.Option>
         );
       } else {
