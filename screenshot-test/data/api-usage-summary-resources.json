@@ -1,0 +1,52 @@
+{
+    "month" : {
+      "2020-06" : {
+      },
+      "2020-05" : {
+      },
+      "2020-04" : {
+      },
+      "2020-03" : {
+      },
+      "2020-02" : {
+      },
+      "2020-12" : {
+      },
+      "2020-11" : {
+      },
+      "2021-01" : {
+      },
+      "2020-10" : {
+      },
+      "2020-09" : {
+      }
+    },
+    "year" : {
+      "/api/v2/screenshot/resource1/" : 100,
+      "/api/v2/screenshot/resource2/" : 100,
+      "/api/v2/screenshot/resource3/" : 100,
+      "/api/v2/screenshot/resource4/" : 100,
+      "/api/v2/screenshot/resource5/" : 1000,
+      "/api/v2/screenshot/resource6/" : 100,
+      "/api/v2/screenshot/resource7/" : 10000,
+      "/api/v2/screenshot/resource8/" : 100,
+      "/api/v2/screenshot/resource9/" : 10,
+      "/api/v2/screenshot/resource10/" : 1000000,
+      "/api/v2/screenshot/resource11/" : 1000,
+      "/api/v2/screenshot/resource12/" : 1000,
+      "/api/v2/screenshot/resource13/" : 100,
+      "/api/v2/screenshot/resource14/" : 100,
+      "/api/v2/screenshot/resource15/" : 10000,
+      "/api/v2/screenshot/resource16/" : 100,
+      "/api/v2/screenshot/resource17/" : 10000,
+      "/api/v2/screenshot/resource18/" : 100,
+      "/api/v2/screenshot/resource19/" : 100,
+      "/api/v2/screenshot/resource20/" : 100,
+      "/api/v2/screenshot/resource21/" : 100,
+      "/api/v2/screenshot/resource22/" : 100,
+      "/api/v2/screenshot/resource23/" : 100,
+      "/api/v2/screenshot/resource24/" : 100,
+      "/api/v2/screenshot/resource25/" : 100,
+      "/api/v2/screenshot/resource26/" : 100
+    }
+  }

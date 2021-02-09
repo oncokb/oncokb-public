@@ -39,6 +39,10 @@ const genomenexusTranscript = fs.readFileSync(`${DATA_DIR}genomenexus-transcript
 const genomenexusCanonicalTranscript = fs.readFileSync(`${DATA_DIR}genomenexus-canonical-transcript.json`).toString();
 const userSize = fs.readFileSync(`${DATA_DIR}api-users-size.json`).toString();
 const userDetails = fs.readFileSync(`${DATA_DIR}api-users-details.json`).toString();
+const usageUsersOverview = fs.readFileSync(`${DATA_DIR}api-usage-summary-users.json`).toString();
+const usageResourcesOverview = fs.readFileSync(`${DATA_DIR}api-usage-summary-resources.json`).toString();
+const usageUserDetail = fs.readFileSync(`${DATA_DIR}api-usage-users-2021.json`).toString();
+const usageResourceDetail = fs.readFileSync(`${DATA_DIR}api-usage-resources-example.json`).toString();
 
 // # Fix the time to expiration date. 
 function updateTokenExpirationDate(current){
@@ -221,6 +225,34 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: userToken
+      };
+      break;
+    case `${SERVER_URL}api/usage/summary/users`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: usageUsersOverview
+      };
+      break;
+    case `${SERVER_URL}api/usage/summary/resources`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: usageResourcesOverview
+      };
+      break;
+    case `${SERVER_URL}api/usage/users/2021`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: usageUserDetail
+      };
+      break;
+    case `${SERVER_URL}api/usage/resources?endpoint=%2Fapi%2Fv1%2Fexample`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: usageResourceDetail
       };
       break;
     default:
@@ -411,6 +443,38 @@ describe('Tests with login', () => {
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('User Details Page'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'User Details Page' });
+  })
+
+  it('Usage Analysis Page#User Overview', async()=>{
+    await page.goto(`${CLIENT_URL}admin/usage-analysis`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Usage Analysis Page#User Overview'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Usage Analysis Page#User Overview' });
+  })
+
+  it('Usage Analysis Page#User Detail', async()=>{
+    await page.goto(`${CLIENT_URL}admin/usage-analysis/users/2021`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Usage Analysis Page#User Detail'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Usage Analysis Page#User Detail' });
+  })
+
+  it('Usage Analysis Page#Resource Detail', async()=>{
+    await page.goto(`${CLIENT_URL}admin/usage-analysis/resources/!api!v1!example`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Usage Analysis Page#Resource Detail'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Usage Analysis Page#Resource Detail' });
+  })
+
+  it('Usage Analysis Page#Resource Overview', async()=>{
+    await page.goto(`${CLIENT_URL}admin/usage-analysis#type=RESOURCE`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Usage Analysis Page#Resource Overview'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Usage Analysis Page#Resource Overview' });
   })
 
   afterAll(async () => {
