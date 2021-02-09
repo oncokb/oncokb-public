@@ -422,7 +422,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
                 annotation: {
                   gene: this.props.hugoSymbol,
                   alteration: this.props.alteration,
-                  tumorType: this.props.tumorType,
+                  cancerType: this.props.tumorType,
                 },
               }}
               appStore={this.props.appStore!}

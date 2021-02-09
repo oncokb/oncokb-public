@@ -160,7 +160,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             link={
               'https://ascopubs.org/doi/abs/10.1200/JCO.2019.37.15_suppl.1000'
             }
-            abstract={'Rugo et al.'}
+            abstract={'Rugo et al. Abstract # 1000, ASCO 2019'}
           />
         </WithSeparator>,
       ],
@@ -182,17 +182,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </WithSeparator>,
       ],
     ],
-    changedAnnotationTitle: 'Changed annotation to adhere to OncoKB SOP V2',
+    changedAnnotationTitle:
+      'Changed annotation to adhere to our upcoming OncoKB SOP v2.0',
     changedAnnotation: [
-      [
-        'RET',
-        'Fusions',
-        'Non-Small Cell Lung Cancer',
-        'Vandetanib',
-        '2',
-        '3A',
-        'Level 2B in NSCLC NCCN',
-      ],
+      ['RET', 'Fusions', 'Non-Small Cell Lung Cancer', 'Vandetanib', '2', '3A'],
       [
         'NRAS',
         'Oncogenic Mutations',
@@ -200,7 +193,6 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Binimetinib + Ribociclib',
         '3A',
         '4',
-        '',
       ],
       [
         'MET',
@@ -209,7 +201,6 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Cabozantinib',
         '2',
         'None',
-        '',
       ],
       [
         'CDK4',
@@ -218,7 +209,6 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Palbociclib, Abemaciclib',
         '2',
         'None',
-        '',
       ],
       [
         'KIT',
@@ -227,17 +217,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Sorafenib',
         '2',
         'None',
-        '',
       ],
-      [
-        'KIT',
-        'Oncogenic Mutations',
-        'Thymic Tumor',
-        'Sunitinib',
-        '2',
-        'None',
-        '',
-      ],
+      ['KIT', 'Oncogenic Mutations', 'Thymic Tumor', 'Sunitinib', '2', 'None'],
     ],
   },
   '01142021': {

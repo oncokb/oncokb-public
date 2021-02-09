@@ -1,9 +1,9 @@
 type FormattedAnnotation = {
   gene: string;
   alteration?: string;
-  tumorType?: string;
+  cancerType?: string;
 };
-export type Annotation = string | FormattedAnnotation;
+export type Annotation = FormattedAnnotation;
 
 export type FeedbackContent = {
   annotation?: Annotation;
