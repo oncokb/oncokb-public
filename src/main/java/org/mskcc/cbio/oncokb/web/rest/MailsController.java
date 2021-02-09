@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.MailTypeInfo;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -26,7 +28,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 public class MailsController {
 
     private final Logger log = LoggerFactory.getLogger(MailsController.class);
@@ -68,6 +69,21 @@ public class MailsController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @PostMapping("/mails/feedback")
+    public ResponseEntity<Void> sendFeedbackMails(
+        @Valid @RequestParam String subject,
+        @Valid @RequestParam String description,
+        @Valid @RequestParam String from,
+        @RequestParam String userName
+    ) throws MessagingException {
+        String emailContenet = description;
+        if (StringUtils.isNotEmpty(userName)) {
+            emailContenet += "\n\n" + userName;
+        }
+        this.mailService.sendFeedback(from, subject, emailContenet);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**

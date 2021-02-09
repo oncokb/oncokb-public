@@ -114,6 +114,17 @@ public class MailService {
         javaMailSender.send(mimeMessage);
     }
 
+    public void sendFeedback(String from, String subject, String content) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, StandardCharsets.UTF_8.name());
+        message.setTo(applicationProperties.getEmailAddresses().getContactAddress());
+        message.setReplyTo(from);
+        message.setFrom(applicationProperties.getEmailAddresses().getContactAddress());
+        message.setSubject(subject);
+        message.setText(content, false);
+        javaMailSender.send(mimeMessage);
+    }
+
     private void addUserMailsRecord(UserDTO userDTO, MailType mailType, String sentFrom, String sentBy) {
         UserMailsDTO userMailsDTO = new UserMailsDTO();
         userMailsDTO.setMailType(mailType);
@@ -276,7 +287,7 @@ public class MailService {
     public void sendMailToUserWhenTokenExposed(UserDTO user, ExposedToken token){
         Context context = new Context(Locale.US);
         context.setVariable("token", token);
-        sendEmailFromTemplate(user, MailType.TOKEN_HAS_BEEN_EXPOSED_USER, "OncoKB Token exposed", 
+        sendEmailFromTemplate(user, MailType.TOKEN_HAS_BEEN_EXPOSED_USER, "OncoKB Token exposed",
         applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, context);
     }
 

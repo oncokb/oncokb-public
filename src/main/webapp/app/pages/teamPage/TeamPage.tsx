@@ -1,8 +1,14 @@
 import * as React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
+import _ from 'lodash';
 import { DOCUMENT_TITLES } from 'app/config/constants';
-import { ITeamMember, TeamMember, TITLE } from 'app/pages/teamPage/TeamMember';
+import {
+  INSTITUTION,
+  ITeamMember,
+  TeamMember,
+  TITLE,
+} from 'app/pages/teamPage/TeamMember';
 
 export const TeamPage = () => {
   const teamMembers: ITeamMember[] = [
@@ -22,7 +28,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Sarah',
-      lastName: 'Phillips',
+      lastName: 'Suehnholz',
       title: [TITLE.PHD],
       faculty: false,
       showCOI: true,
@@ -71,6 +77,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'David',
+      middleName: 'B',
       lastName: 'Solit',
       title: [TITLE.MD],
       faculty: true,
@@ -100,7 +107,8 @@ export const TeamPage = () => {
       showCOI: true,
     },
     {
-      firstName: 'Lindsay M.',
+      firstName: 'Lindsay',
+      middleName: 'M',
       lastName: 'LaFave',
       title: [TITLE.PHD],
       faculty: false,
@@ -108,14 +116,8 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Linde',
+      middleName: 'A',
       lastName: 'Miles',
-      title: [TITLE.PHD],
-      faculty: false,
-      showCOI: true,
-    },
-    {
-      firstName: 'Emiliano',
-      lastName: 'Cocco',
       title: [TITLE.PHD],
       faculty: false,
       showCOI: true,
@@ -124,13 +126,14 @@ export const TeamPage = () => {
   const cgac: ITeamMember[] = [
     {
       firstName: 'Lisa',
+      middleName: 'M',
       lastName: 'DeAngelis',
       title: [TITLE.MD],
       faculty: true,
       showCOI: true,
     },
     {
-      firstName: 'Phil',
+      firstName: 'Philip',
       lastName: 'Kantoff',
       title: [TITLE.MD],
       faculty: true,
@@ -138,6 +141,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'David',
+      middleName: 'S',
       lastName: 'Klimstra',
       title: [TITLE.MD],
       faculty: true,
@@ -152,6 +156,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Ross',
+      middleName: 'L',
       lastName: 'Levine',
       title: [TITLE.MD],
       faculty: true,
@@ -159,6 +164,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Michael',
+      middleName: 'F',
       lastName: 'Berger',
       title: [TITLE.PHD],
       faculty: true,
@@ -166,6 +172,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Maria',
+      middleName: 'E',
       lastName: 'Arcila',
       title: [TITLE.MD],
       faculty: true,
@@ -207,7 +214,7 @@ export const TeamPage = () => {
       showCOI: true,
     },
     {
-      firstName: 'Alex',
+      firstName: 'Alexander',
       lastName: 'Drilon',
       title: [TITLE.MD],
       faculty: true,
@@ -250,6 +257,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Daniel',
+      middleName: 'C',
       lastName: 'Danila',
       title: [TITLE.MD],
       faculty: true,
@@ -257,6 +265,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Eli',
+      middleName: 'L',
       lastName: 'Diamond',
       title: [TITLE.MD],
       faculty: true,
@@ -264,6 +273,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'James',
+      middleName: 'A',
       lastName: 'Fagin',
       title: [TITLE.MD],
       faculty: true,
@@ -271,6 +281,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Alan',
+      middleName: 'L',
       lastName: 'Ho',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
@@ -299,6 +310,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Ingo',
+      middleName: 'K',
       lastName: 'Mellinghoff',
       title: [TITLE.MD, TITLE.FACP],
       faculty: true,
@@ -313,6 +325,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Paul',
+      middleName: 'K',
       lastName: 'Paik',
       title: [TITLE.MD],
       faculty: true,
@@ -320,6 +333,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'David',
+      middleName: 'G',
       lastName: 'Pfister',
       title: [TITLE.MD],
       faculty: true,
@@ -327,6 +341,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Jonathan',
+      middleName: 'E',
       lastName: 'Rosenberg',
       title: [TITLE.MD],
       faculty: true,
@@ -334,6 +349,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Gregory',
+      middleName: 'J',
       lastName: 'Riely',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
@@ -341,6 +357,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Mark',
+      middleName: 'E',
       lastName: 'Robson',
       title: [TITLE.MD],
       faculty: true,
@@ -368,14 +385,8 @@ export const TeamPage = () => {
       showCOI: true,
     },
     {
-      firstName: 'Maurizio',
-      lastName: 'Scaltriti',
-      title: [TITLE.PHD],
-      faculty: true,
-      showCOI: true,
-    },
-    {
       firstName: 'Alexander',
+      middleName: 'N',
       lastName: 'Shoushtari',
       title: [TITLE.MD],
       faculty: true,
@@ -383,6 +394,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Neerav',
+      middleName: 'N',
       lastName: 'Shukla',
       title: [TITLE.MD],
       faculty: true,
@@ -390,6 +402,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Zsofia',
+      middleName: 'K',
       lastName: 'Stadler',
       title: [TITLE.MD],
       faculty: true,
@@ -397,6 +410,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'William',
+      middleName: 'D',
       lastName: 'Tap',
       title: [TITLE.MD],
       faculty: true,
@@ -404,6 +418,7 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Martin',
+      middleName: 'H',
       lastName: 'Voss',
       title: [TITLE.MD],
       faculty: true,
@@ -411,50 +426,144 @@ export const TeamPage = () => {
     },
     {
       firstName: 'Jedd',
+      middleName: 'D',
       lastName: 'Wolchok',
       title: [TITLE.MD, TITLE.PHD],
       faculty: true,
       showCOI: true,
     },
+    {
+      firstName: 'Steven',
+      lastName: 'Maron',
+      title: [TITLE.MD, TITLE.MSC],
+      faculty: true,
+      showCOI: true,
+    },
+    {
+      firstName: 'James',
+      middleName: 'J',
+      lastName: 'Harding',
+      title: [TITLE.MD],
+      faculty: true,
+      showCOI: true,
+    },
+    {
+      firstName: 'Anna',
+      middleName: 'M',
+      lastName: 'Varghese',
+      title: [TITLE.MD],
+      faculty: true,
+      showCOI: true,
+    },
   ];
-  const pastContributors: {
-    firstName: string;
-    lastName: string;
-    title: TITLE[];
-  }[] = [
-    { firstName: 'Tripti Shrestha', lastName: 'Bhattarai', title: [TITLE.PHD] },
+  const eab: ITeamMember[] = [
+    {
+      firstName: 'Alexander',
+      middleName: 'J',
+      lastName: 'Lazar',
+      title: [TITLE.MD, TITLE.PHD],
+      institution: INSTITUTION.MDANDERSON,
+      showCOI: true,
+    },
+    {
+      firstName: 'Lillian',
+      middleName: 'L',
+      lastName: 'Siu',
+      title: [TITLE.MD, TITLE.FRCPC],
+      institution: INSTITUTION.PRINCE,
+      showCOI: true,
+    },
+    {
+      firstName: 'Eliezer',
+      lastName: 'Van Allen',
+      title: [TITLE.MD],
+      institution: INSTITUTION.DFCI,
+      showCOI: true,
+    },
+    {
+      firstName: 'Victor',
+      middleName: 'E',
+      lastName: 'Velculescu',
+      title: [TITLE.MD, TITLE.PHD],
+      institution: INSTITUTION.JH,
+      showCOI: true,
+    },
+  ];
+  const pastContributors: ITeamMember[] = [
+    { firstName: 'Tripti', lastName: 'Shrestha Bhattarai', title: [TITLE.PHD] },
     { firstName: 'Fiona', lastName: 'Brown', title: [TITLE.PHD] },
     {
       firstName: 'Margaret',
       lastName: 'Callahan',
       title: [TITLE.MD, TITLE.PHD],
     },
-    { firstName: 'Timothy A.', lastName: 'Chan', title: [TITLE.MD, TITLE.PHD] },
+    {
+      firstName: 'Timothy',
+      middleName: 'A',
+      lastName: 'Chan',
+      title: [TITLE.MD, TITLE.PHD],
+    },
     { firstName: 'Luis Alberto', lastName: 'Diaz Jr.', title: [TITLE.MD] },
     { firstName: 'Renzo', lastName: 'DiNatale', title: [TITLE.MD] },
     { firstName: 'Mrinal M.', lastName: 'Gounder', title: [TITLE.MD] },
     { firstName: 'Aphrothiti', lastName: 'Hanrahan', title: [TITLE.PHD] },
-    { firstName: 'James J.', lastName: 'Harding', title: [TITLE.MD] },
-    { firstName: 'Matthew D.', lastName: 'Hellmann', title: [TITLE.MD] },
+    {
+      firstName: 'Matthew',
+      middleName: 'D',
+      lastName: 'Hellmann',
+      title: [TITLE.MD],
+    },
     { firstName: 'Anton', lastName: 'Henssen', title: [TITLE.MD] },
-    { firstName: 'David', lastName: ' Hyman', title: [TITLE.MD] },
-    { firstName: 'Edgar A.', lastName: 'Jaimes', title: [TITLE.MD] },
+    { firstName: 'David', lastName: 'Hyman', title: [TITLE.MD] },
+    {
+      firstName: 'Edgar',
+      middleName: 'A',
+      lastName: 'Jaimes',
+      title: [TITLE.MD],
+    },
     { firstName: 'Phillip', lastName: 'Jonsson', title: [TITLE.PHD] },
     { firstName: 'David', lastName: 'Knorr', title: [TITLE.MD, TITLE.PHD] },
     { firstName: 'Iñigo', lastName: 'Landa-Lopez', title: [TITLE.PHD] },
     { firstName: 'C. Ola', lastName: 'Landgren', title: [TITLE.MD, TITLE.PHD] },
-    { firstName: 'Dana E.', lastName: 'Rathkopf', title: [TITLE.MD] },
-    { firstName: 'Howard I.', lastName: 'Scher', title: [TITLE.MD] },
+    {
+      firstName: 'Dana',
+      middleName: 'E',
+      lastName: 'Rathkopf',
+      title: [TITLE.MD],
+    },
+    {
+      firstName: 'Howard',
+      middleName: 'I',
+      lastName: 'Scher',
+      title: [TITLE.MD],
+    },
     { firstName: 'Neel', lastName: 'Shah', title: [TITLE.PHD] },
     { firstName: 'Tara', lastName: 'Soumerai', title: [TITLE.MD] },
     { firstName: 'Jing', lastName: 'Su', title: [TITLE.MSC] },
-    { firstName: 'William D.', lastName: 'Tap', title: [TITLE.MD] },
-    { firstName: 'Barry S.', lastName: 'Taylor', title: [TITLE.PHD] },
+    {
+      firstName: 'William',
+      middleName: 'D',
+      lastName: 'Tap',
+      title: [TITLE.MD],
+    },
+    {
+      firstName: 'Barry',
+      middleName: 'S',
+      lastName: 'Taylor',
+      title: [TITLE.PHD],
+    },
     { firstName: 'Eneda', lastName: 'Toska', title: [TITLE.PHD] },
-    { firstName: 'Tiffany A.', lastName: 'Traina', title: [TITLE.MD] },
+    {
+      firstName: 'Tiffany',
+      middleName: 'A',
+      lastName: 'Traina',
+      title: [TITLE.MD],
+    },
     { firstName: 'Jiaojiao', lastName: 'Wang', title: [TITLE.MSC] },
     { firstName: 'Hannah', lastName: 'Wise', title: [TITLE.PHD] },
     { firstName: 'Anas', lastName: 'Younes', title: [TITLE.MD] },
+    { firstName: 'Emiliano', lastName: 'Cocco', title: [TITLE.PHD] },
+    { firstName: 'Maurizio', lastName: 'Scaltriti', title: [TITLE.MD] },
   ];
   return (
     <DocumentTitle title={DOCUMENT_TITLES.TEAM}>
@@ -474,7 +583,7 @@ export const TeamPage = () => {
         </Row>
         <Row>
           <Col xs={6} md>
-            <h6>Design &amp; Development</h6>
+            <h5>Design &amp; Development</h5>
             <ul>
               {teamMembers.map(member => (
                 <li>
@@ -482,9 +591,9 @@ export const TeamPage = () => {
                 </li>
               ))}
             </ul>
-            <h6>Current Curators</h6>
+            <h5>Current Curators</h5>
             <ul>
-              {curators.map(member => (
+              {_.sortBy(curators, member => member.lastName).map(member => (
                 <li>
                   <TeamMember {...member} />
                 </li>
@@ -492,9 +601,9 @@ export const TeamPage = () => {
             </ul>
           </Col>
           <Col xs={6} md>
-            <h6>Clinical Genomics Annotation Committee</h6>
+            <h5>Clinical Genomics Annotation Committee</h5>
             <ul>
-              {cgac.map(member => (
+              {_.sortBy(cgac, member => member.lastName).map(member => (
                 <li>
                   <TeamMember {...member} />
                 </li>
@@ -502,18 +611,28 @@ export const TeamPage = () => {
             </ul>
           </Col>
           <Col xs={6} md>
-            <h6>Past Contributors *</h6>
+            <h5>External Advisory Board</h5>
             <ul>
-              {pastContributors.map(member => (
+              {_.sortBy(eab, member => member.lastName).map(member => (
                 <li>
-                  <TeamMember {...member} faculty={false} showCOI={false} />
+                  <TeamMember {...member} />
                 </li>
               ))}
             </ul>
           </Col>
-        </Row>
-        <Row>
-          <div>* We do not track their conflicts of interests.</div>
+          <Col xs={6} md>
+            <h5>Past Contributors *</h5>
+            <ul>
+              {_.sortBy(pastContributors, member => member.lastName).map(
+                member => (
+                  <li>
+                    <TeamMember {...member} faculty={false} showCOI={false} />
+                  </li>
+                )
+              )}
+            </ul>
+            <div>* We do not track their conflicts of interest.</div>
+          </Col>
         </Row>
       </div>
     </DocumentTitle>

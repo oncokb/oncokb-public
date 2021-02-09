@@ -4,8 +4,8 @@ import { AnnotationStore } from 'app/store/AnnotationStore';
 import {
   action,
   computed,
-  observable,
   IReactionDisposer,
+  observable,
   reaction,
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
@@ -28,15 +28,13 @@ import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
   DEFAULT_GENE,
-  LEVEL_CLASSIFICATION,
-  LEVEL_TYPES,
-  LEVEL_TYPE_NAMES,
-  PAGE_ROUTE,
-  REFERENCE_GENOME,
-  TABLE_COLUMN_KEY,
   DEFAULT_MESSAGE_HEME_ONLY_DX,
   DEFAULT_MESSAGE_HEME_ONLY_PX,
+  LEVEL_CLASSIFICATION,
+  LEVEL_TYPES,
   LEVELS,
+  REFERENCE_GENOME,
+  TABLE_COLUMN_KEY,
 } from 'app/config/constants';
 import {
   BiologicalVariant,
@@ -61,13 +59,12 @@ import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { Linkout } from 'app/shared/links/Linkout';
 import { ReferenceGenomeInfo } from './ReferenceGenomeInfo';
 import WithSeparator from 'react-with-separator';
-import InfoIcon from 'app/shared/icons/InfoIcon';
 import { GenePageTable } from './GenePageTable';
-import { Link } from 'react-router-dom';
 import * as QueryString from 'query-string';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
-import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
 import { RouterStore } from 'mobx-react-router';
+import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
+import { FeedbackType } from 'app/components/feedback/types';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -684,7 +681,10 @@ export default class GenePage extends React.Component<GenePageProps> {
       <div>
         <div style={{ width: '80%', marginBottom: '-30px' }}>
           <div>{this.getTabDescription(key)}</div>
-          <ReportIssue />
+          <ReportIssue
+            appStore={this.props.appStore}
+            annotation={{ gene: this.store.hugoSymbol }}
+          />
         </div>
         {this.getTable(key)}
       </div>
@@ -821,7 +821,23 @@ export default class GenePage extends React.Component<GenePageProps> {
                       <Row>
                         <Col {...this.genePanelClass}>
                           <div className="">
-                            <h2>{this.store.hugoSymbol}</h2>
+                            <h2>
+                              {this.store.hugoSymbol}
+                              <span
+                                style={{ fontSize: '0.5em' }}
+                                className={'ml-2'}
+                              >
+                                <FeedbackIcon
+                                  feedback={{
+                                    type: FeedbackType.ANNOTATION,
+                                    annotation: {
+                                      gene: this.store.hugoSymbol,
+                                    },
+                                  }}
+                                  appStore={this.props.appStore}
+                                />
+                              </span>
+                            </h2>
                             <GeneInfo
                               gene={this.store.gene.result}
                               highestSensitiveLevel={

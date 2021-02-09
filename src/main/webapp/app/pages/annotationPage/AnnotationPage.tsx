@@ -1,4 +1,5 @@
 import React from 'react';
+import { inject } from 'mobx-react';
 
 import { GenePageLink, OncoTreeLink } from 'app/shared/utils/UrlUtils';
 import {
@@ -40,6 +41,9 @@ import { AnnotationPageTable } from './AnnotationPageTable';
 import Tabs from 'react-responsive-tabs';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import WithSeparator from 'react-with-separator';
+import AppStore from 'app/store/AppStore';
+import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
+import { FeedbackType } from 'app/components/feedback/types';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -61,6 +65,7 @@ const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';
 const LOWERCASE_ONCOGENIC_MUTATIONS = ONCOGENIC_MUTATIONS.toLowerCase();
 
 export type IAnnotationPage = {
+  appStore?: AppStore;
   hugoSymbol: string;
   alteration: string;
   tumorType: string;
@@ -68,6 +73,8 @@ export type IAnnotationPage = {
   onChangeTumorType: (newTumorType: string) => void;
   annotation: VariantAnnotation;
 };
+
+@inject('appStore')
 export default class AnnotationPage extends React.Component<IAnnotationPage> {
   getTherapeuticImplications(evidences: Evidence[]) {
     return evidences.map(evidence => {
@@ -396,7 +403,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
   render() {
     return (
       <>
-        <h2 className={'d-flex align-items-center'}>
+        <h2 className={'d-flex align-items-baseline'}>
           {this.props.alteration
             .toLowerCase()
             .includes(this.props.hugoSymbol.toLowerCase()) ? null : (
@@ -408,6 +415,19 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
             </span>
           )}
           <span>{`${this.props.alteration}`}</span>
+          <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
+            <FeedbackIcon
+              feedback={{
+                type: FeedbackType.ANNOTATION,
+                annotation: {
+                  gene: this.props.hugoSymbol,
+                  alteration: this.props.alteration,
+                  cancerType: this.props.tumorType,
+                },
+              }}
+              appStore={this.props.appStore!}
+            />
+          </span>
         </h2>
         <AlterationInfo
           oncogenicity={this.props.annotation.oncogenic}

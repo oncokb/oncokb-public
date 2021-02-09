@@ -4,7 +4,6 @@ import { CancerGene, CuratedGene } from 'app/shared/api/generated/OncoKbAPI';
 import { inject, observer } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { GenePageLink } from 'app/shared/utils/UrlUtils';
-import { SuggestCuration } from 'app/components/SuggestCuration';
 import { Col, Row } from 'react-bootstrap';
 import * as _ from 'lodash';
 import OncoKBTable, {
@@ -20,10 +19,11 @@ import {
   TABLE_COLUMN_KEY,
 } from 'app/config/constants';
 import AppStore from 'app/store/AppStore';
-import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
 import DocumentTitle from 'react-document-title';
 import { DownloadButtonWithPromise } from 'app/components/downloadButtonWithPromise/DownloadButtonWithPromise';
+import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
+import { FeedbackType } from 'app/components/feedback/types';
 
 const InfoIcon = (props: { overlay: string | JSX.Element }) => {
   return (
@@ -92,11 +92,19 @@ export default class CancerGenesPage extends React.Component<{
       style: { textAlign: 'center' },
       minWidth: 80,
       sortMethod: defaultSortMethod,
-      Cell(props: { original: ExtendCancerGene }) {
+      Cell: (props: { original: ExtendCancerGene }) => {
         return props.original.oncokbAnnotated ? (
           <i className="fa fa-check" />
         ) : (
-          <SuggestCuration suggestion={props.original.hugoSymbol} />
+          <FeedbackIcon
+            feedback={{
+              type: FeedbackType.ANNOTATION,
+              annotation: {
+                gene: props.original.hugoSymbol,
+              },
+            }}
+            appStore={this.props.appStore}
+          />
         );
       },
     },
