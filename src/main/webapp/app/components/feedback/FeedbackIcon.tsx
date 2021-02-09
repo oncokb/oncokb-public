@@ -11,9 +11,9 @@ export const FeedbackIcon = (props: {
   let tooltipOverlay = '';
   switch (props.feedback.type) {
     case FeedbackType.ANNOTATION:
-      tooltipOverlay = `Send annotation suggestion to OncoKB for ${getAnnotationString(
+      tooltipOverlay = `Send annotation suggestion for ${getAnnotationString(
         props.feedback.annotation
-      )}`;
+      )} to OncoKB`;
       break;
     case FeedbackType.GENERAL:
       tooltipOverlay = 'Send feedback to OncoKB';

@@ -681,7 +681,10 @@ export default class GenePage extends React.Component<GenePageProps> {
       <div>
         <div style={{ width: '80%', marginBottom: '-30px' }}>
           <div>{this.getTabDescription(key)}</div>
-          <ReportIssue appStore={this.props.appStore} />
+          <ReportIssue
+            appStore={this.props.appStore}
+            annotation={{ gene: this.store.hugoSymbol }}
+          />
         </div>
         {this.getTable(key)}
       </div>

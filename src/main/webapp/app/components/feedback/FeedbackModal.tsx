@@ -45,7 +45,7 @@ export const FeedbackModal: React.FunctionComponent<{
     let body = description ? description : '';
     switch (props.feedback.type) {
       case FeedbackType.ANNOTATION:
-        body = 'Reference (PMIDs, Abstracts, Links):\n\n' + body;
+        body = 'Justification (including references):\n\n' + body;
         break;
       default:
         break;

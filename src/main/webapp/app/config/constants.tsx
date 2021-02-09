@@ -647,5 +647,4 @@ export const DEFAULT_REFERENCE_GENOME = REFERENCE_GENOME.GRCh37;
 
 export const DEFAULT_FEEDBACK_ANNOTATION: Feedback = {
   type: FeedbackType.ANNOTATION,
-  annotation: '',
 };
