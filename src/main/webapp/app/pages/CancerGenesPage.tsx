@@ -99,7 +99,9 @@ export default class CancerGenesPage extends React.Component<{
           <FeedbackIcon
             feedback={{
               type: FeedbackType.ANNOTATION,
-              annotation: props.original.hugoSymbol,
+              annotation: {
+                gene: props.original.hugoSymbol,
+              },
             }}
             appStore={this.props.appStore}
           />
