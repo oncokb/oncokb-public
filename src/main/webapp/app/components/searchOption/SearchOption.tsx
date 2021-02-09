@@ -3,12 +3,14 @@ import {
   levelOfEvidence2Level,
   OncoKBAnnotationIcon,
 } from 'app/shared/utils/Utils';
-import { If, Then, Else } from 'react-if';
+import { Else, If, Then } from 'react-if';
 import Highlighter from 'react-highlight-words';
 import styles from './SearchOption.module.scss';
-import { SuggestCuration } from 'app/components/SuggestCuration';
 import { ExtendedTypeaheadSearchResp } from 'app/pages/HomePage';
 import classnames from 'classnames';
+import AppStore from 'app/store/AppStore';
+import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
+import { FeedbackType } from 'app/components/feedback/types';
 
 export enum SearchOptionType {
   GENE = 'GENE',
@@ -20,6 +22,7 @@ type SearchOptionProps = {
   search: string | undefined;
   type: SearchOptionType;
   data: ExtendedTypeaheadSearchResp;
+  appStore: AppStore;
 };
 const LevelString: React.FunctionComponent<{
   highestSensitiveLevel: string | undefined;
@@ -92,6 +95,7 @@ const GeneSearchOption: React.FunctionComponent<{
 const AlterationSearchOption: React.FunctionComponent<{
   search: string;
   data: ExtendedTypeaheadSearchResp;
+  appStore: AppStore;
 }> = props => {
   return (
     <>
@@ -115,7 +119,12 @@ const AlterationSearchOption: React.FunctionComponent<{
         <If condition={!props.data.variantExist}>
           <span className={'ml-auto'}>
             <span>Not annotated by OncoKB</span>
-            <SuggestCuration suggestion={props.search} />
+            <FeedbackIcon
+              feedback={{
+                type: FeedbackType.ANNOTATION,
+              }}
+              appStore={props.appStore}
+            />
           </span>
         </If>
       </div>
@@ -171,6 +180,7 @@ export const SearchOption: React.FunctionComponent<SearchOptionProps> = props =>
               <AlterationSearchOption
                 search={searchKeyword}
                 data={props.data}
+                appStore={props.appStore}
               />
             </Then>
             <Else>

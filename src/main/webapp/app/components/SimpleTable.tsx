@@ -12,6 +12,9 @@ export type SimpleTableColumn = {
 export type SimpleTableProps = {
   columns: SimpleTableColumn[];
   rows: SimpleTableRows;
+  tableClassName?: string;
+  theadClassName?: string;
+  tbodyClassName?: string;
 };
 
 export const SimpleTable = (props: SimpleTableProps) => {
@@ -23,15 +26,15 @@ export const SimpleTable = (props: SimpleTableProps) => {
       : null;
   };
   return (
-    <Table>
-      <thead>
+    <Table className={props.tableClassName}>
+      <thead className={props.theadClassName}>
         <tr>
           {props.columns.map(column => (
             <th key={column.name}>{column.name}</th>
           ))}
         </tr>
       </thead>
-      <tbody>
+      <tbody className={props.tbodyClassName}>
         {props.rows.map(row => (
           <tr key={row.key}>{getRow(row)}</tr>
         ))}

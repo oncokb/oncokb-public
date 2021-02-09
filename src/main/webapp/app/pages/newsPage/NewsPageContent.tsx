@@ -26,6 +26,8 @@ import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
 import { SHOW_MODAL_KEY } from '../AboutPage';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
+import { AbstractLink, FdaApprovalLink } from 'app/pages/newsPage/Links';
+import WithSeparator from 'react-with-separator';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -36,6 +38,7 @@ export type NewsData = {
   numOfAssociationsInUpdatedImplication?: number;
   updatedImplicationInOldFormat?: { [level: string]: ElementType[] };
   changedAnnotation?: ElementType[][];
+  changedAnnotationTitle?: string;
 };
 
 export const NEWLY_ADDED_LEVEL_FOUR_COLUMNS = [
@@ -110,10 +113,114 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
   ['SMARCB1', 'Oncogenic Mutations', 'All Tumors', 'Tazemetostat'],
 ];
 
+const EVIDENCE_COLUMN_SEPARATOR = '; ';
+
 // NOTE: cannot associate a type to the object literal in order to have the CHANGED_ANNOTATION_DATE type works
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '02102021': {
+    priorityNews: [
+      <span>
+        Members of the OncoKB External Advisory Board and their relevant COIs
+        are now listed on the <Link to={PAGE_ROUTE.TEAM}>OncoKB team page</Link>
+      </span>,
+    ],
+    updatedImplication: [
+      [
+        '1',
+        'ALK',
+        'Fusions',
+        'Anaplastic Large-Cell Lymphoma',
+        'Crizotinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-crizotinib-children-and-young-adults-relapsed-or-refractory-systemic-anaplastic-large'
+            }
+            approval={'Crizotinib'}
+          />
+          <PMIDLink pmids={'23598171, 28032129, 29352732'} />
+        </WithSeparator>,
+      ],
+      [
+        '1',
+        'ERBB2',
+        'Amplification',
+        'Breast Cancer',
+        'Margetuximab + Chemotherapy',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-margetuximab-metastatic-her2-positive-breast-cancer'
+            }
+            approval={'Margetuximab + Chemotherapy'}
+          />
+          <AbstractLink
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2019.37.15_suppl.1000'
+            }
+            abstract={'Rugo et al. Abstract # 1000, ASCO 2019'}
+          />
+        </WithSeparator>,
+      ],
+      [
+        '1',
+        'ERBB2',
+        'Amplification',
+        'Gastric or Gastroesophageal Adenocarcinoma',
+        'Trastuzumab Deruxtecan',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-fam-trastuzumab-deruxtecan-nxki-her2-positive-gastric-adenocarcinomas'
+            }
+          >
+            FDA-approval of Trastuzumab deruxtecan
+          </Linkout>
+          <PMIDLink pmids={'32469182'} />
+        </WithSeparator>,
+      ],
+    ],
+    changedAnnotationTitle:
+      'Changed annotation to adhere to our upcoming OncoKB SOP v2.0',
+    changedAnnotation: [
+      ['RET', 'Fusions', 'Non-Small Cell Lung Cancer', 'Vandetanib', '2', '3A'],
+      [
+        'NRAS',
+        'Oncogenic Mutations',
+        'Melanoma',
+        'Binimetinib + Ribociclib',
+        '3A',
+        '4',
+      ],
+      [
+        'MET',
+        'Amplification',
+        'Renal Cell Carcinoma',
+        'Cabozantinib',
+        '2',
+        'None',
+      ],
+      [
+        'CDK4',
+        'Amplification',
+        'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
+        'Palbociclib, Abemaciclib',
+        '2',
+        'None',
+      ],
+      [
+        'KIT',
+        'A829P, C809G, D816, D820, N822, Y823D',
+        'Gastrointestinal Stromal Tumor',
+        'Sorafenib',
+        '2',
+        'None',
+      ],
+      ['KIT', 'Oncogenic Mutations', 'Thymic Tumor', 'Sunitinib', '2', 'None'],
+    ],
+  },
   '01142021': {
     priorityNews: [
       <span>

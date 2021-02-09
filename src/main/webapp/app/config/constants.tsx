@@ -1,4 +1,4 @@
-import { OncoKBInfo, Gene } from 'app/shared/api/generated/OncoKbAPI';
+import { Gene, OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
 import {
   MainNumber,
   VariantAnnotation,
@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Linkout } from 'app/shared/links/Linkout';
+import { Feedback, FeedbackType } from 'app/components/feedback/types';
 
 /* eslint no-shadow: 0 */
 
@@ -552,6 +553,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '02102021', version: 'v3.1' },
   { date: '01142021', version: 'v3.0' },
   { date: '12172020', version: 'v2.10' },
   { date: '11132020', version: 'v2.9' },
@@ -642,3 +644,7 @@ export enum REFERENCE_GENOME {
 }
 
 export const DEFAULT_REFERENCE_GENOME = REFERENCE_GENOME.GRCh37;
+
+export const DEFAULT_FEEDBACK_ANNOTATION: Feedback = {
+  type: FeedbackType.ANNOTATION,
+};
