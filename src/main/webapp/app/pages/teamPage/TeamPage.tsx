@@ -514,7 +514,7 @@ export const TeamPage = () => {
       title: [TITLE.MD],
     },
     { firstName: 'Anton', lastName: 'Henssen', title: [TITLE.MD] },
-    { firstName: 'David', lastName: ' Hyman', title: [TITLE.MD] },
+    { firstName: 'David', lastName: 'Hyman', title: [TITLE.MD] },
     {
       firstName: 'Edgar',
       middleName: 'A',
@@ -631,7 +631,7 @@ export const TeamPage = () => {
                 )
               )}
             </ul>
-            <div>* We do not track their conflicts of interests.</div>
+            <div>* We do not track their conflicts of interest.</div>
           </Col>
         </Row>
       </div>
