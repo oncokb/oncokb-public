@@ -20,14 +20,16 @@ export function getAnnotationString(annotation?: Annotation) {
   const content = [
     annotation.gene,
     annotation.alteration,
-    annotation.tumorType,
+    annotation.cancerType,
   ].filter(item => !!item);
   return content.join(' / ');
 }
 
 export const FeedbackForm: React.FunctionComponent<FeedbackFormProps> = props => {
   const defaultModel = {
-    annotation: props.annotation ? getAnnotationString(props.annotation) : '',
+    gene: props.annotation ? props.annotation.gene : '',
+    alteration: props.annotation ? props.annotation.alteration : '',
+    cancerType: props.annotation ? props.annotation.cancerType : '',
     description: props.description,
     email: props.email,
     name: props.name,
@@ -42,51 +44,41 @@ export const FeedbackForm: React.FunctionComponent<FeedbackFormProps> = props =>
       <Row className={'mt-2'}>
         <Col>
           {props.annotation ? (
-            <AvField
-              name="annotation"
-              label={'Annotation to be added'}
-              type="input"
-              validate={{
-                required: {
-                  value: true,
-                  errorMessage:
-                    'Please try to include gene/alteration/tumor type or any info you like us to include',
-                },
-              }}
-            />
+            <>
+              <AvField
+                name="gene"
+                label={'Gene'}
+                type="input"
+                validate={{
+                  required: {
+                    value: true,
+                    errorMessage: 'Required',
+                  },
+                }}
+              />
+              <AvField name="alteration" label={'Alteration'} type="input" />
+              <AvField name="cancerType" label={'Cancer Type'} type="input" />
+            </>
           ) : null}
           <AvField
             name="description"
             label={
               props.type === FeedbackType.ANNOTATION
-                ? 'Reference (PMIDs, Abstracts, Links)'
+                ? 'Justification (including references)'
                 : 'Description'
             }
             type="textarea"
             validate={{
               required: {
                 value: true,
-                errorMessage:
-                  props.type === FeedbackType.ANNOTATION
-                    ? 'Any reference would help us to quickly add the annotation.'
-                    : 'Please provide more information.',
+                errorMessage: 'Required',
               },
             }}
           />
-          <AvField
-            name="email"
-            label={'Email'}
-            type="email"
-            validate={{
-              required: {
-                value: true,
-                errorMessage: 'Your email is required.',
-              },
-            }}
-          />
+          <AvField name="email" label={'Email (optional)'} type="email" />
           <AvField
             name="name"
-            label={'Name'}
+            label={'Name (optional)'}
             type="input"
             validate={{
               required: {

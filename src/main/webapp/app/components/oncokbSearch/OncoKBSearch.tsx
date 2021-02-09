@@ -90,7 +90,6 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
             <FeedbackIcon
               feedback={{
                 type: FeedbackType.ANNOTATION,
-                annotation: this.keyword,
               }}
               appStore={this.props.appStore!}
             />

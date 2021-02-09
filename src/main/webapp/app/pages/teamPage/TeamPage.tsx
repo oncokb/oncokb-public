@@ -490,36 +490,75 @@ export const TeamPage = () => {
     },
   ];
   const pastContributors: ITeamMember[] = [
-    { firstName: 'Tripti Shrestha', lastName: 'Bhattarai', title: [TITLE.PHD] },
+    { firstName: 'Tripti', lastName: 'Shrestha Bhattarai', title: [TITLE.PHD] },
     { firstName: 'Fiona', lastName: 'Brown', title: [TITLE.PHD] },
     {
       firstName: 'Margaret',
       lastName: 'Callahan',
       title: [TITLE.MD, TITLE.PHD],
     },
-    { firstName: 'Timothy A.', lastName: 'Chan', title: [TITLE.MD, TITLE.PHD] },
+    {
+      firstName: 'Timothy',
+      middleName: 'A',
+      lastName: 'Chan',
+      title: [TITLE.MD, TITLE.PHD],
+    },
     { firstName: 'Luis Alberto', lastName: 'Diaz Jr.', title: [TITLE.MD] },
     { firstName: 'Renzo', lastName: 'DiNatale', title: [TITLE.MD] },
     { firstName: 'Mrinal M.', lastName: 'Gounder', title: [TITLE.MD] },
     { firstName: 'Aphrothiti', lastName: 'Hanrahan', title: [TITLE.PHD] },
-    { firstName: 'James J.', lastName: 'Harding', title: [TITLE.MD] },
-    { firstName: 'Matthew D.', lastName: 'Hellmann', title: [TITLE.MD] },
+    {
+      firstName: 'Matthew',
+      middleName: 'D',
+      lastName: 'Hellmann',
+      title: [TITLE.MD],
+    },
     { firstName: 'Anton', lastName: 'Henssen', title: [TITLE.MD] },
     { firstName: 'David', lastName: ' Hyman', title: [TITLE.MD] },
-    { firstName: 'Edgar A.', lastName: 'Jaimes', title: [TITLE.MD] },
+    {
+      firstName: 'Edgar',
+      middleName: 'A',
+      lastName: 'Jaimes',
+      title: [TITLE.MD],
+    },
     { firstName: 'Phillip', lastName: 'Jonsson', title: [TITLE.PHD] },
     { firstName: 'David', lastName: 'Knorr', title: [TITLE.MD, TITLE.PHD] },
     { firstName: 'Iñigo', lastName: 'Landa-Lopez', title: [TITLE.PHD] },
     { firstName: 'C. Ola', lastName: 'Landgren', title: [TITLE.MD, TITLE.PHD] },
-    { firstName: 'Dana E.', lastName: 'Rathkopf', title: [TITLE.MD] },
-    { firstName: 'Howard I.', lastName: 'Scher', title: [TITLE.MD] },
+    {
+      firstName: 'Dana',
+      middleName: 'E',
+      lastName: 'Rathkopf',
+      title: [TITLE.MD],
+    },
+    {
+      firstName: 'Howard',
+      middleName: 'I',
+      lastName: 'Scher',
+      title: [TITLE.MD],
+    },
     { firstName: 'Neel', lastName: 'Shah', title: [TITLE.PHD] },
     { firstName: 'Tara', lastName: 'Soumerai', title: [TITLE.MD] },
     { firstName: 'Jing', lastName: 'Su', title: [TITLE.MSC] },
-    { firstName: 'William D.', lastName: 'Tap', title: [TITLE.MD] },
-    { firstName: 'Barry S.', lastName: 'Taylor', title: [TITLE.PHD] },
+    {
+      firstName: 'William',
+      middleName: 'D',
+      lastName: 'Tap',
+      title: [TITLE.MD],
+    },
+    {
+      firstName: 'Barry',
+      middleName: 'S',
+      lastName: 'Taylor',
+      title: [TITLE.PHD],
+    },
     { firstName: 'Eneda', lastName: 'Toska', title: [TITLE.PHD] },
-    { firstName: 'Tiffany A.', lastName: 'Traina', title: [TITLE.MD] },
+    {
+      firstName: 'Tiffany',
+      middleName: 'A',
+      lastName: 'Traina',
+      title: [TITLE.MD],
+    },
     { firstName: 'Jiaojiao', lastName: 'Wang', title: [TITLE.MSC] },
     { firstName: 'Hannah', lastName: 'Wise', title: [TITLE.PHD] },
     { firstName: 'Anas', lastName: 'Younes', title: [TITLE.MD] },
@@ -584,11 +623,13 @@ export const TeamPage = () => {
           <Col xs={6} md>
             <h5>Past Contributors *</h5>
             <ul>
-              {pastContributors.map(member => (
-                <li>
-                  <TeamMember {...member} faculty={false} showCOI={false} />
-                </li>
-              ))}
+              {_.sortBy(pastContributors, member => member.lastName).map(
+                member => (
+                  <li>
+                    <TeamMember {...member} faculty={false} showCOI={false} />
+                  </li>
+                )
+              )}
             </ul>
             <div>* We do not track their conflicts of interests.</div>
           </Col>
