@@ -194,7 +194,7 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
       key: 'loe',
       element: (
         <div>
-          <h5 className={'d-flex'}>
+          <h5 className={'d-flex align-items-center flex-wrap'}>
             <span className={'mr-2'}>Highest level of evidence:</span>
             {getHighestLevelStrings(
               props.highestSensitiveLevel,
@@ -676,21 +676,6 @@ export default class GenePage extends React.Component<GenePageProps> {
     }
   }
 
-  getTabContent(key: TAB_KEYS) {
-    return (
-      <div>
-        <div style={{ width: '80%', marginBottom: '-30px' }}>
-          <div>{this.getTabDescription(key)}</div>
-          <ReportIssue
-            appStore={this.props.appStore}
-            annotation={{ gene: this.store.hugoSymbol }}
-          />
-        </div>
-        {this.getTable(key)}
-      </div>
-    );
-  }
-
   @computed
   get tabs() {
     const tabs: { title: string; key: TAB_KEYS }[] = [];
@@ -720,10 +705,30 @@ export default class GenePage extends React.Component<GenePageProps> {
         });
       }
     }
+
+    const tabDescriptionStyle = this.props.windowStore.isLargeScreen
+      ? {
+          width: '80%',
+          marginBottom: '-30px',
+        }
+      : undefined;
     return tabs.map(tab => {
       return {
         title: tab.title,
-        getContent: () => this.getTabContent(tab.key),
+        getContent: () => {
+          return (
+            <div>
+              <div style={tabDescriptionStyle}>
+                <div>{this.getTabDescription(tab.key)}</div>
+                <ReportIssue
+                  appStore={this.props.appStore}
+                  annotation={{ gene: this.store.hugoSymbol }}
+                />
+              </div>
+              {this.getTable(tab.key)}
+            </div>
+          );
+        },
         /* Optional parameters */
         key: tab.key,
         tabClassName: styles.tab,

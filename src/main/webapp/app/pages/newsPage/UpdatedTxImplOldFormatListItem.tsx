@@ -45,7 +45,7 @@ export const UpdatedTxImplOldFormatListItem = (props: {
   return (
     <li>
       Updated therapeutic {pluralize('implication', rows.length)}
-      <Row>
+      <Row className={'overflow-auto'}>
         <SimpleTable
           columns={UPDATED_IMPLICATION_OLD_FORMAT_COLUMNS}
           rows={rows}

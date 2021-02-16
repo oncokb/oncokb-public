@@ -88,7 +88,7 @@ export const AlterationInfo: React.FunctionComponent<{
   }
   return (
     <div className="mt-2">
-      <h5 className={'d-flex align-items-center'}>
+      <h5 className={'d-flex align-items-center flex-wrap'}>
         <WithSeparator separator={separator}>{content}</WithSeparator>
       </h5>
     </div>
