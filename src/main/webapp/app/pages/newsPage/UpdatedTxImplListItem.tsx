@@ -19,7 +19,7 @@ export const UpdatedTxImplListItem = (props: {
     <li>
       Updated therapeutic implications - {numOFAssociations} new{' '}
       {pluralize('association', numOFAssociations)}
-      <Row>
+      <Row className={'overflow-auto'}>
         <SimpleTable columns={UPDATED_IMPLICATION_COLUMNS} rows={props.data} />
       </Row>
     </li>

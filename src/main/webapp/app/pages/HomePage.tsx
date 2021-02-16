@@ -186,7 +186,7 @@ class HomePage extends React.Component<IHomeProps> {
             className={'mx-auto d-flex flex-column align-items-center '}
           >
             <img src={oncokbImg} className="home-page-logo" />
-            <span className="home-page-logo-title">
+            <span className="home-page-logo-title text-center">
               Precision Oncology Knowledge Base
             </span>
           </Col>
@@ -242,7 +242,12 @@ class HomePage extends React.Component<IHomeProps> {
           </Col>
         </Row>
         <Row className="mb-2">
-          <div className="mx-auto">{levelTypeButtons}</div>
+          <div
+            className="d-flex justify-content-center"
+            style={{ width: '100%' }}
+          >
+            {levelTypeButtons}
+          </div>
         </Row>
         <Row className="my-3 d-flex d-flex justify-content-between">
           <Col
