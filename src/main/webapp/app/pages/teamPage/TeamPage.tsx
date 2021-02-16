@@ -582,7 +582,7 @@ export const TeamPage = () => {
           </Col>
         </Row>
         <Row>
-          <Col xs={6} md>
+          <Col sm={6} md>
             <h5>Design &amp; Development</h5>
             <ul>
               {teamMembers.map(member => (
@@ -600,7 +600,7 @@ export const TeamPage = () => {
               ))}
             </ul>
           </Col>
-          <Col xs={6} md>
+          <Col sm={6} md>
             <h5>Clinical Genomics Annotation Committee</h5>
             <ul>
               {_.sortBy(cgac, member => member.lastName).map(member => (
@@ -610,7 +610,7 @@ export const TeamPage = () => {
               ))}
             </ul>
           </Col>
-          <Col xs={6} md>
+          <Col sm={6} md>
             <h5>External Advisory Board</h5>
             <ul>
               {_.sortBy(eab, member => member.lastName).map(member => (
@@ -620,7 +620,7 @@ export const TeamPage = () => {
               ))}
             </ul>
           </Col>
-          <Col xs={6} md>
+          <Col sm={6} md>
             <h5>Past Contributors *</h5>
             <ul>
               {_.sortBy(pastContributors, member => member.lastName).map(
