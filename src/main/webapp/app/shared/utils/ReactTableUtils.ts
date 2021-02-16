@@ -70,6 +70,10 @@ export function sortByAlteration(a: Alteration, b: Alteration): number {
   if (result === 0) {
     result = sortNumber(a.proteinEnd, b.proteinEnd);
   }
+
+  if (result === 0) {
+    result = a.name.localeCompare(b.name);
+  }
   return result;
 }
 
