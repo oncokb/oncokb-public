@@ -311,7 +311,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       </span>,
       <span>
         Updated therapeutic implications
-        <Row>
+        <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
               <tr style={{ whiteSpace: 'nowrap' }}>
@@ -464,7 +464,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     priorityNews: [
       <span>
         Updated therapeutic implications - 4 new associations
-        <Row>
+        <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
               <tr>
@@ -1405,7 +1405,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     priorityNews: [
       <span>
         Addition of Actionable Genes for Hematologic Malignancies
-        <Row>
+        <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
               <tr>
@@ -1985,7 +1985,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         New Level 4 associations have been added:
-        <Row>
+        <Row className={'overflow-auto'}>
           <SimpleTable
             columns={NEWLY_ADDED_LEVEL_FOUR_COLUMNS}
             rows={NEWLY_ADDED_LEVEL_FOUR.map((record, index) => {
