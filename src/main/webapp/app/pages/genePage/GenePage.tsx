@@ -529,7 +529,7 @@ export default class GenePage extends React.Component<GenePageProps> {
         },
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
         width: 400,
         Header: <span>Cancer Type</span>,
         onFilter: (data: FdaVariant, keyword) =>
@@ -561,6 +561,7 @@ export default class GenePage extends React.Component<GenePageProps> {
             />
           </div>
         ),
+        width: undefined,
         accessor: 'level',
         onFilter: (data: FdaVariant, keyword) =>
           filterByKeyword(data.level, keyword),
@@ -641,11 +642,11 @@ export default class GenePage extends React.Component<GenePageProps> {
     this.store = new AnnotationStore({
       hugoSymbolQuery: this.hugoSymbolQuery,
     });
-    const queryStrings = QueryString.parse(window.location.hash) as {
+    const queryStringsHash = QueryString.parse(window.location.hash) as {
       selectedTab: string;
     };
-    if (queryStrings.selectedTab) {
-      this.selectedTab = queryStrings.selectedTab;
+    if (queryStringsHash.selectedTab) {
+      this.selectedTab = queryStringsHash.selectedTab;
     }
 
     this.reactions.push(
@@ -682,7 +683,9 @@ export default class GenePage extends React.Component<GenePageProps> {
     const predefinedFdaVariants: FdaVariant[] = this.store.filteredClinicalAlterations.map(
       clinicalAlt => {
         return {
-          cancerType: getCancerTypeNameFromOncoTreeType(clinicalAlt.cancerType),
+          cancerType: clinicalAlt.cancerTypes
+            .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+            .join(', '),
           level: getFdaLevel(clinicalAlt.level),
           alteration: clinicalAlt.variant.name,
         };
