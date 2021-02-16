@@ -773,7 +773,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       return (
         <span>
           A list of the oncogenic and mutation effects of{' '}
-          <b>all OncoKB annotated</b> {this.store.hugoSymbol} alterations.
+          <b>all OncoKB curated</b> {this.store.hugoSymbol} alterations.
         </span>
       );
     } else if (key === TAB_KEYS.TX) {
