@@ -77,6 +77,9 @@ export default class NewsPage extends React.Component<{
             <CitationText />
           </div>
           <div className="mt-2">
+            <NewsList date={'02102021'} />
+            <NewsList date={'01142021'} />
+            <NewsList date={'12172020'} />
             <NewsList date={'11132020'} />
             <NewsList date={'09172020'} />
             <NewsList date={'08282020'} />
@@ -155,7 +158,7 @@ export default class NewsPage extends React.Component<{
                     type based on compelling clinical evidence (currently Level
                     3A) are more likely to experience clinical benefit compared
                     to patients with predictive biomarkers that are considered
-                    standard care in a different tumor type (previously Level
+                    standard care in a different cancer type (previously Level
                     2B, now combined into Level 3B).
                   </li>
                 </ol>

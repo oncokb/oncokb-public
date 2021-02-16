@@ -1,18 +1,25 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-
 import io.github.jhipster.security.RandomUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
+import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.web.rest.vm.ExposedToken;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.ResourceModel;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageSummary;
+import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserUsage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +27,33 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.*;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.json.simple.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import org.kohsuke.github.*;
 
 import static org.mskcc.cbio.oncokb.config.Constants.DAY_IN_SECONDS;
 import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES;
+
+import static java.lang.Thread.sleep;
 
 /**
  * REST controller for managing crobjobs.
@@ -43,8 +70,12 @@ public class CronJobController {
 
     private final TokenStatsService tokenStatsService;
 
+    private final UserDetailsRepository userDetailsRepository;
+
     @Autowired
     private UserMapper userMapper;
+
+    private final S3Service s3Service;
 
     private final MailService mailService;
 
@@ -54,10 +85,18 @@ public class CronJobController {
 
     private final AuditEventService auditEventService;
 
+    private final ApplicationProperties applicationProperties;
+
+    final String USERS_USAGE_SUMMARY_FILE = "usage-analysis/userSummary.json";
+    final String RESOURCES_USAGE_SUMMARY_FILE = "usage-analysis/resourceSummary.json";
+    final String RESOURCES_USAGE_DETAIL_FILE = "usage-analysis/resourceDetail.json";
+
     public CronJobController(UserService userService,
                              MailService mailService, TokenProvider tokenProvider,
                              TokenService tokenService, AuditEventService auditEventService,
-                             TokenStatsService tokenStatsService, UserMailsService userMailsService
+                             TokenStatsService tokenStatsService, UserMailsService userMailsService,
+                             ApplicationProperties applicationProperties, UserDetailsRepository userDetailsRepository,
+                             S3Service s3Service
     ) {
 
         this.userService = userService;
@@ -67,6 +106,9 @@ public class CronJobController {
         this.auditEventService = auditEventService;
         this.tokenStatsService = tokenStatsService;
         this.userMailsService = userMailsService;
+        this.applicationProperties = applicationProperties;
+        this.userDetailsRepository = userDetailsRepository;
+        this.s3Service = s3Service;
     }
 
     /**
@@ -159,6 +201,86 @@ public class CronJobController {
     }
 
     /**
+     * {@code GET /user-usage-analysis}: Analyze user usage
+     *
+     * @throws IOException
+     */
+    @GetMapping(path = "/user-usage-analysis")
+    public void analyzeUserUsage() throws IOException {
+        log.info("User usage analysis started...");
+        List<UserTokenUsageWithInfo> tokenStats =  tokenStatsService.getTokenUsageAnalysis(Instant.now().minus(365, ChronoUnit.DAYS));
+        UsageSummary resourceSummary = new UsageSummary();
+        Map<Long, UserUsage> userSummary = new HashMap<>();
+        Map<String, UsageSummary> resourceDetail = new HashMap<>();
+
+        for (UserTokenUsageWithInfo state: tokenStats){
+            ResourceModel resource = new ResourceModel(state.getResource());
+            String endpoint = resource.getEndpoint();
+            int count = state.getCount();
+            String time = state.getTime();
+
+            // Deal with resource summary
+            calculateUsageSummary(resourceSummary, endpoint, count, time);
+
+            // Deal with user usage
+            long userId = state.getToken().getUser().getId();
+            User user = state.getToken().getUser();
+            if (!userSummary.containsKey(userId)){
+                userSummary.put(userId, new UserUsage());
+                UserUsage currentUsage = userSummary.get(userId);
+                currentUsage.setUserFirstName(user.getFirstName());
+                currentUsage.setUserLastName(user.getLastName());
+                currentUsage.setUserEmail(user.getEmail());
+                currentUsage.setSummary(new UsageSummary());
+                Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
+                if (userDetails.isPresent()){
+                    currentUsage.setJobTitle(userDetails.get().getJobTitle());
+                    currentUsage.setCompany(userDetails.get().getCompany());
+                    currentUsage.setLicenseType(userDetails.get().getLicenseType().getName());
+                }
+            }
+            UsageSummary currentUsageSummary = userSummary.get(userId).getSummary();
+            calculateUsageSummary(currentUsageSummary, endpoint, count, time);
+
+            // Deal with resource detail
+            if (!resourceDetail.containsKey(endpoint)){
+                resourceDetail.put(endpoint, new UsageSummary());
+            }
+            String userEmail = user.getEmail();
+            calculateUsageSummary(resourceDetail.get(endpoint), userEmail, count, time);       
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        File resourceResult = new File("./resourceSummary.json");
+        File userResult = new File("./userSummary.json");
+        File resourceDetailResult = new File("./resourceDetail.json");
+        mapper.writeValue(resourceResult, resourceSummary);
+        mapper.writeValue(userResult, userSummary);
+        mapper.writeValue(resourceDetailResult, resourceDetail);
+
+        s3Service.saveObject("oncokb", RESOURCES_USAGE_SUMMARY_FILE, resourceResult);
+        s3Service.saveObject("oncokb", USERS_USAGE_SUMMARY_FILE, userResult);
+        s3Service.saveObject("oncokb", RESOURCES_USAGE_DETAIL_FILE, resourceDetailResult);
+        resourceResult.delete();
+        userResult.delete();
+        resourceDetailResult.delete();
+        log.info("User usage analysis completed!");
+    }
+
+    private void calculateUsageSummary(UsageSummary usageSummary, String key, int count, String time){
+        // Deal with year summary
+        usageSummary.getYear().put(key, usageSummary.getYear().getOrDefault(key, 0) + count);
+        // Deal with month summary
+        if (!usageSummary.getMonth().containsKey(time)){
+            usageSummary.getMonth().put(time, new JSONObject());
+        }           
+        if (!usageSummary.getMonth().get(time).containsKey(key)){
+            usageSummary.getMonth().get(time).put(key, new Integer(0));
+        }
+        usageSummary.getMonth().get(time).put(key, (Integer)usageSummary.getMonth().get(time).get(key) + (Integer)count);
+    }
+
+    /**
      * {@code GET  /check-trial-accounts} : Check the status of trial accounts
      */
     @GetMapping(path = "/check-trial-accounts")
@@ -180,6 +302,161 @@ public class CronJobController {
             .collect(Collectors.toList());
 
         mailService.sendTrialAccountExpiresMail(DAYS_TO_CHECK, userDTOS);
+    }
+
+    @GetMapping(path = "/check-exposed-tokens")
+    public void checkExposedTokens() throws IOException, InterruptedException {
+        List<Token> tokens = tokenService
+                                .findAll()
+                                .stream()
+                                .filter(token -> token.getExpiration().isAfter(Instant.now()))
+                                .collect(Collectors.toList());
+        log.info("Searching exposed tokens pipeline begins...");
+        List<ExposedToken> results = new ArrayList<>();
+        List<ExposedToken> unverifiedResults = new ArrayList<>();
+        boolean googleSearching = true;
+        googleSearching = googleSearchingTest();
+        boolean baiduSearching = true;
+        baiduSearching = baiduSearchingTest();
+        for (Token token : tokens){
+            String q = token.getToken().toString();
+
+            int githubCount = 0;
+            try {
+                GitHub github = new GitHubBuilder().withOAuthToken(applicationProperties.getGithubToken()).build();
+                List<GHContent> gitRes = github.searchContent().q(q).list().toList();
+                githubCount = gitRes.size();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            int googleCount = 0;
+            if (googleSearching){
+                try{
+                    HttpEntity entity = getGoogleResponse(q).getEntity();
+                    Document googleDoc = Jsoup.parse(EntityUtils.toString(entity));
+                    Elements resultEle = googleDoc.select("h3");
+                    googleCount = resultEle.size();
+                    if (googleCount > 0) {
+                        String description = googleDoc.select(".kCrYT > div > div > div > div > div").text();
+                        if (description.indexOf(q) == -1)
+                            googleCount = 0;
+                    }
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            int baiduCount = 0;
+            if (baiduSearching){
+                try{
+                    Document document = Jsoup.connect(String.format("https://www.baidu.com/s?wd=\"%s\"", q)).get();
+                    Elements elements = document.select("div.result.c-container");
+                    baiduCount = elements.size();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            UserDTO user = userMapper.userToUserDTO(token.getUser());
+            if (githubCount > 0){
+                ExposedToken t = generateExposedToken(token, user, "GitHub");
+                results.add(t);
+                updateExposedToken(token);
+                mailService.sendMailToUserWhenTokenExposed(user, t);
+            }
+            if (googleCount > 0 || baiduCount > 0){
+                List<String> source = new ArrayList<>();
+                if (googleCount > 0){
+                    source.add("Google");
+                }
+                if (baiduCount > 0){
+                    source.add("Baidu");
+                }
+                unverifiedResults.add(generateExposedToken(token, user, source.stream().collect(Collectors.joining(", "))));
+            }
+            sleep(1000);
+        }
+        log.info("Searching exposed tokens pipeline finished!");
+        if (!results.isEmpty() || !unverifiedResults.isEmpty()){
+            mailService.sendExposedTokensInfoMail(results, unverifiedResults);
+        }
+    }
+
+    private ExposedToken generateExposedToken(Token token, UserDTO user, String source){
+        ExposedToken t = new ExposedToken();
+        t.setToken(token.getToken().toString());
+        t.setEmail(user.getEmail());
+        t.setFirstName(user.getFirstName());
+        t.setLastName(user.getLastName());
+        t.setLicenseType(user.getLicenseType() != null ? user.getLicenseType().name() : "");
+        t.setSource(source);
+        return t;
+    }
+
+    private HttpResponse getGoogleResponse(String query) {
+        String uri = String.format("https://www.google.com/search?q=%s", query);
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(uri);
+        HttpResponse result = null;
+        try {
+          result = client.execute(request);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+        return result;
+    }
+
+    private void updateExposedToken(Token token){
+        tokenProvider.createToken(token);
+        token.setExpiration(Instant.now());
+        tokenService.save(token);
+    }
+
+    private boolean googleSearchingTest(){
+        try{
+            HttpEntity entity = getGoogleResponse("test").getEntity();
+            Document googleDoc = Jsoup.parse(EntityUtils.toString(entity));
+            Elements resultEle = googleDoc.select("h3");
+            if (!resultEle.isEmpty()) {
+                Elements descriptionEle = googleDoc.select(".kCrYT > div > div > div > div > div");
+                if (descriptionEle.isEmpty()){
+                    mailService.sendMailWhenSearchingStructrueChange("Google");
+                    return false;
+                }
+                String description = descriptionEle.text();
+                if (description.indexOf("test") == -1){
+                    mailService.sendMailWhenSearchingStructrueChange("Google");
+                    return false;
+                }
+            }
+            else{
+                mailService.sendMailWhenSearchingStructrueChange("Google");
+                return false;
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    private boolean baiduSearchingTest(){
+        try{
+            Document document = Jsoup.connect(String.format("https://www.baidu.com/s?wd=\"%s\"", "test")).get();
+            Elements elements = document.select("div.result.c-container");
+            if (elements.isEmpty()){
+                mailService.sendMailWhenSearchingStructrueChange("Baidu");
+                return false;
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return true;
     }
 
     private void tokenCheckByTime(int daysToExpire, Set<String> notifiedUserIds) {

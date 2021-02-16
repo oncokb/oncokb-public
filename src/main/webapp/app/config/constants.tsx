@@ -1,4 +1,4 @@
-import { OncoKBInfo, Gene } from 'app/shared/api/generated/OncoKbAPI';
+import { Gene, OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
 import {
   MainNumber,
   VariantAnnotation,
@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Linkout } from 'app/shared/links/Linkout';
+import { Feedback, FeedbackType } from 'app/components/feedback/types';
 
 /* eslint no-shadow: 0 */
 
@@ -19,6 +20,8 @@ export const SERVER_API_URL = process.env.SERVER_API_URL;
 
 export const LOCAL_DEV_OPT = 'localdev';
 export const DEV_URL = 'http://localhost:9095';
+
+export const RECAPTCHA_SITE_KEY = '6LcxRsMZAAAAAFYpXX6KAc9ASGSf8IptsIKehJby';
 
 export const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
@@ -46,8 +49,8 @@ export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
 export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
-  LG: 1010,
-  XL: 1450,
+  LG: 1050,
+  XL: 1200,
 };
 export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
@@ -79,6 +82,8 @@ export const SHORTEN_TEXT_FROM_LIST_THRESHOLD = 5;
 export const TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS = 14;
 export const USAGE_TOP_USERS_LIMIT = 10000;
 export const USGAE_ALL_TIME_KEY = 'All';
+export const USGAE_ALL_TIME_VALUE = 'One year';
+export const USAGE_DETAIL_TIME_KEY = 'Detail';
 
 export enum ONCOGENICITY {
   ONCOGENIC = 'Oncogenic',
@@ -120,15 +125,84 @@ const EVIDENCE_TYPE = {
   BIOLOGICAL_EVIDENCE: 'Biological evidence',
 };
 
-export const LEVEL_BUTTON_DESCRIPTION = {
-  '1': EVIDENCE_TYPE.FDA_APPROVED,
-  '2': EVIDENCE_TYPE.STANDARD_CARE,
-  '3': EVIDENCE_TYPE.CLINICAL_EVIDENCE,
-  '4': EVIDENCE_TYPE.BIOLOGICAL_EVIDENCE,
-  R1: EVIDENCE_TYPE.STANDARD_CARE,
-  R2: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
+export enum LEVEL_TYPES {
+  TX = 'Tx',
+  DX = 'Dx',
+  PX = 'Px',
+}
+
+export const LEVEL_TYPE_NAMES = {
+  [LEVEL_TYPES.TX]: 'Therapeutic',
+  [LEVEL_TYPES.DX]: 'Diagnostic',
+  [LEVEL_TYPES.PX]: 'Prognostic',
 };
-export const LEVELS = ['1', '2', '3', '4', 'R1', 'R2'];
+
+export enum LEVELS {
+  Dx1 = 'Dx1',
+  Dx2 = 'Dx2',
+  Dx3 = 'Dx3',
+  Px1 = 'Px1',
+  Px2 = 'Px2',
+  Px3 = 'Px3',
+  Tx1 = '1',
+  Tx2 = '2',
+  Tx3 = '3',
+  Tx3A = '3A',
+  Tx3B = '3B',
+  Tx4 = '4',
+  R1 = 'R1',
+  R2 = 'R2',
+}
+
+// the bigger of the index, the higher the priority
+export const LEVEL_PRIORITY = [
+  LEVELS.Px3,
+  LEVELS.Px2,
+  LEVELS.Px1,
+  LEVELS.Dx3,
+  LEVELS.Dx2,
+  LEVELS.Dx1,
+  LEVELS.R2,
+  LEVELS.Tx4,
+  LEVELS.Tx3B,
+  LEVELS.Tx3A,
+  LEVELS.Tx3,
+  LEVELS.Tx2,
+  LEVELS.R1,
+  LEVELS.Tx1,
+];
+
+export const LEVEL_BUTTON_DESCRIPTION: { [key in LEVELS]: string } = {
+  [LEVELS.Tx1]: EVIDENCE_TYPE.FDA_APPROVED,
+  [LEVELS.Tx2]: EVIDENCE_TYPE.STANDARD_CARE,
+  [LEVELS.Tx3]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
+  [LEVELS.Tx3A]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
+  [LEVELS.Tx3B]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
+  [LEVELS.Tx4]: EVIDENCE_TYPE.BIOLOGICAL_EVIDENCE,
+  [LEVELS.R1]: EVIDENCE_TYPE.STANDARD_CARE,
+  [LEVELS.R2]: EVIDENCE_TYPE.CLINICAL_EVIDENCE,
+  [LEVELS.Dx1]: 'Required for diagnosis',
+  [LEVELS.Dx2]: 'Supports diagnosis',
+  [LEVELS.Dx3]: 'Investigational diagnosis',
+  [LEVELS.Px1]: 'Guideline-recognized with well-powered data',
+  [LEVELS.Px2]: 'Guideline-recognized with limited data',
+  [LEVELS.Px3]: 'Investigational',
+};
+
+export const LEVEL_CLASSIFICATION = {
+  [LEVELS.Dx1]: LEVEL_TYPES.DX,
+  [LEVELS.Dx2]: LEVEL_TYPES.DX,
+  [LEVELS.Dx3]: LEVEL_TYPES.DX,
+  [LEVELS.Px1]: LEVEL_TYPES.PX,
+  [LEVELS.Px2]: LEVEL_TYPES.PX,
+  [LEVELS.Px3]: LEVEL_TYPES.PX,
+  [LEVELS.Tx1]: LEVEL_TYPES.TX,
+  [LEVELS.Tx2]: LEVEL_TYPES.TX,
+  [LEVELS.Tx3]: LEVEL_TYPES.TX,
+  [LEVELS.Tx4]: LEVEL_TYPES.TX,
+  [LEVELS.R1]: LEVEL_TYPES.TX,
+  [LEVELS.R2]: LEVEL_TYPES.TX,
+};
 export const LEVEL_OF_EVIDENCE = [
   'LEVEL_1',
   'LEVEL_2',
@@ -136,11 +210,18 @@ export const LEVEL_OF_EVIDENCE = [
   'LEVEL_4',
   'LEVEL_R1',
   'LEVEL_R2',
+  'LEVEL_Dx1',
+  'LEVEL_Dx2',
+  'LEVEL_Dx3',
+  'LEVEL_Px1',
+  'LEVEL_Px2',
+  'LEVEL_Px3',
 ];
 export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
   [ONCOGENICITY.NEUTRAL]: 'neutral',
   [ONCOGENICITY.LIKELY_NEUTRAL]: 'neutral',
   [ONCOGENICITY.UNKNOWN]: 'unknown',
+  ['']: 'unknown',
   [ONCOGENICITY.INCONCLUSIVE]: 'inconclusive',
   [ONCOGENICITY.PREDICTED_ONCOGENIC]: 'oncogenic',
   [ONCOGENICITY.LIKELY_ONCOGENIC]: 'oncogenic',
@@ -148,6 +229,11 @@ export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
 };
 export const DEFAULT_MESSAGE_UNKNOWN_GENE =
   'We do not have any information for this gene';
+export const DEFAULT_MESSAGE_HEME_ONLY_DX =
+  'Diagnostic implications are curated for hematologic malignancies only.';
+export const DEFAULT_MESSAGE_HEME_ONLY_PX =
+  'Prognostic implications are curated for hematologic malignancies only.';
+
 export enum EVIDENCE_TYPES {
   GENE_SUMMARY = 'GENE_SUMMARY',
   GENE_BACKGROUND = 'GENE_BACKGROUND',
@@ -185,11 +271,14 @@ export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
 export const THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT = 30;
 export const LG_TABLE_FIXED_HEIGHT = 640;
 export const SM_TABLE_FIXED_HEIGHT = 400;
-export const IMG_MAX_WIDTH = 700;
+export const IMG_MAX_WIDTH = 800;
 export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
 export const H5_FONT_SIZE = '1.25rem';
 export const FONT_FAMILY =
   "'Helvetica Neue', Helvetica, Verdana, Arial, sans-serif";
+
+// we do not have the table component to support api pagination, have to set the threshold to pull the list of all users
+export const THRESHOLD_NUM_OF_USER = 5000;
 
 // Defaults for tooltip size
 export const TOOLTIP_MAX_HEIGHT = 300;
@@ -328,6 +417,8 @@ export enum PAGE_ROUTE {
   ADMIN_USAGE_ANALYSIS = '/admin/usage-analysis',
   ADMIN_USER_USAGE_DETAILS = '/admin/usage-analysis/users/:id',
   ADMIN_USER_USAGE_DETAILS_LINK = '/admin/usage-analysis/users/',
+  ADMIN_RESOURCE_DETAILS = '/admin/usage-analysis/resources/:endpoint',
+  ADMIN_RESOURCE_DETAILS_LINK = '/admin/usage-analysis/resources/',
   USER = '/users/:login',
   ACCOUNT = '/account',
   REGISTER = '/account/register',
@@ -342,13 +433,17 @@ export enum TABLE_COLUMN_KEY {
   HUGO_SYMBOL = 'HUGO_SYMBOL',
   ALTERATION = 'ALTERATION',
   ALTERATIONS = 'ALTERATIONS',
-  TUMOR_TYPE = 'TUMOR_TYPE',
+  CANCER_TYPES = 'CANCER_TYPES',
   EVIDENCE_CANCER_TYPE = 'EVIDENCE_CANCER_TYPE',
   DRUGS = 'DRUGS',
   LEVEL = 'LEVEL',
   CITATIONS = 'CITATIONS',
   ONCOGENICITY = 'ONCOGENICITY',
   MUTATION_EFFECT = 'MUTATION_EFFECT',
+}
+
+export enum SEARCH_QUERY_KEY {
+  REFERENCE_GENOME = 'refGenome',
 }
 
 export enum LicenseType {
@@ -461,6 +556,9 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '02102021', version: 'v3.1' },
+  { date: '01142021', version: 'v3.0' },
+  { date: '12172020', version: 'v2.10' },
   { date: '11132020', version: 'v2.9' },
   { date: '09172020', version: 'v2.8' },
   { date: '08282020', version: 'v2.7' },
@@ -547,3 +645,9 @@ export enum REFERENCE_GENOME {
   GRCh37 = 'GRCh37',
   GRCh38 = 'GRCh38',
 }
+
+export const DEFAULT_REFERENCE_GENOME = REFERENCE_GENOME.GRCh37;
+
+export const DEFAULT_FEEDBACK_ANNOTATION: Feedback = {
+  type: FeedbackType.ANNOTATION,
+};

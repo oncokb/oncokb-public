@@ -1,26 +1,32 @@
-import { UsageRecord, UserUsage } from 'app/shared/api/generated/API';
+import { UserUsage } from 'app/shared/api/generated/API';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
 import React from 'react';
 import { match } from 'react-router-dom';
 import Client from 'app/shared/api/clientInstance';
-import { notifyError } from 'app/shared/utils/NotificationUtils';
 import { getSectionClassName } from '../account/AccountUtils';
 import { Col, Row } from 'react-bootstrap';
-import UsageDetailsTable from './UsageDetailsTable';
+import UserUsageDetailsTable from './UserUsageDetailsTable';
 import { InfoRow } from '../AccountPage';
-import { USGAE_ALL_TIME_KEY } from 'app/config/constants';
+import {
+  USAGE_DETAIL_TIME_KEY,
+  USGAE_ALL_TIME_KEY,
+  USGAE_ALL_TIME_VALUE,
+} from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
+import {
+  ToggleValue,
+  UsageRecord,
+} from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 
 @inject('routing')
 @observer
-export default class UserUsagePage extends React.Component<{
+export default class UserUsageDetailsPage extends React.Component<{
   routing: RouterStore;
   match: match;
 }> {
   @observable user: UserUsage;
-  @observable dropdownList: string[] = [];
 
   userId = this.props.match.params['id'];
 
@@ -31,26 +37,28 @@ export default class UserUsagePage extends React.Component<{
   readonly usageDetail = remoteData<Map<string, UsageRecord[]>>({
     await: () => [],
     invoke: async () => {
-      this.user = await Client.getUserUsageUsingGET({ id: this.userId });
+      this.user = await Client.userUsageGetUsingGET({ userId: this.userId });
       const result = new Map<string, UsageRecord[]>();
       const yearSummary = this.user.summary.year;
       const yearUsage: UsageRecord[] = [];
       Object.keys(yearSummary).forEach(key => {
-        yearUsage.push({ resource: key, usage: yearSummary[key] });
+        yearUsage.push({
+          resource: key,
+          usage: yearSummary[key],
+          time: USGAE_ALL_TIME_VALUE,
+        });
       });
       result.set(USGAE_ALL_TIME_KEY, yearUsage);
-      this.dropdownList.push(USGAE_ALL_TIME_KEY);
 
       const monthSummary = this.user.summary.month;
+      const detailSummary: UsageRecord[] = [];
       Object.keys(monthSummary).forEach(key => {
         const month = monthSummary[key];
-        const usage: UsageRecord[] = [];
         Object.keys(month).forEach(key2 => {
-          usage.push({ resource: key2, usage: month[key2] });
+          detailSummary.push({ resource: key2, usage: month[key2], time: key });
         });
-        result.set(key, usage);
-        this.dropdownList.push(key);
       });
+      result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
       return Promise.resolve(result);
     },
     default: new Map(),
@@ -88,11 +96,11 @@ export default class UserUsagePage extends React.Component<{
           </Col>
         </Row>
 
-        <UsageDetailsTable
+        <UserUsageDetailsTable
           data={this.usageDetail.result}
           loadedData={this.usageDetail.isComplete}
-          dropdownList={this.dropdownList}
-          defaultResourcesType={1}
+          defaultResourcesType={ToggleValue.PUBLIC_RESOURCES}
+          defaultTimeType={ToggleValue.RESULTS_BY_MONTH}
         />
       </>
     );

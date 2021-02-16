@@ -11,7 +11,7 @@ This application was generated using JHipster 6.10.3, you can find documentation
 
 ## Info
 
-[![Gitter](https://img.shields.io/gitter/room/oncokb/public-chat)](https://gitter.im/oncokb/public-chat) <a href="https://ascopubs.org/doi/full/10.1200/PO.17.00011"><img src="https://img.shields.io/badge/DOI-10.1200%2FPO.17.00011-1c75cd" /></a>
+<a href="https://ascopubs.org/doi/full/10.1200/PO.17.00011"><img src="https://img.shields.io/badge/DOI-10.1200%2FPO.17.00011-1c75cd" /></a>
 
 ## Development
 
@@ -186,6 +186,50 @@ yarn test
 
 For more information, refer to the [Running tests page][].
 
+### Screenshot tests
+
+Screenshot tests are run by [Jest][], [Puppeteer][]. They're located in [screenshot-test/](screenshot-test/). Because different dev environments have different systems, which may cause the resulting image doesn’t quite match the expected one from the [`__baseline_snapshots__`](screenshot-test/__baseline_snapshots__/) directory saved in source control, we dockerized the test process and can be run with:
+
+```
+yarn run screenshot-test-in-docker
+```
+
+If you are confident with the changes from the [`__diff_output__`](screenshot-test/__diff_output__/) directory, you have two options to update the images stored in the [`__baseline_snapshots__`](screenshot-test/__baseline_snapshots__/) directory.
+
+```
+yarn run screenshot-test-in-docker:update
+```
+
+or
+
+repalce the out-of-date images with the up-to-date images stored in [`__latest_snapshots__`](screenshot-test/__latest_snapshots__/).
+
+> **NOTE:** The cmds above can only be executed in unix-based systems. If you are using Windows, please use `docker-compose build local_test` ,`docker-compose run --rm local_test` to run the tests, and use `docker-compose build local_test_update`, `docker-compose run --rm local_test_update` to update baseline images.
+
+If you don't want to use docker, you can just use
+
+```
+yarn run screenshot-test
+```
+
+to run the tests and use
+
+```
+yarn run screenshot-test:update
+```
+
+to update baseline images. However, please keep in mind that the result images may not match the baseline images even you didn't change any thing. And the tests in CI process may fail as well.
+
+**Why Puppeteer?**
+
+We used _jest w/ puppeteer_ instead of _Webdriverio w/ Selenium_ basically based on below pros:
+
+- Simple to set up, good document and easy to handle on.
+- Maintained by Google and it gives you direct access to the [CDP][].
+- Faster execution speed.
+- Network interception. Your test codes can record, modify, block or generate responses to requests made by the browser.
+- JavaScript first, so the code feels very natural
+
 ### Code quality
 
 Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
@@ -263,3 +307,5 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [protractor]: https://angular.github.io/protractor/
 [leaflet]: https://leafletjs.com/
 [definitelytyped]: https://definitelytyped.org/
+[puppeteer]: https://developers.google.com/web/tools/puppeteer
+[cdp]: https://chromedevtools.github.io/devtools-protocol/

@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { Button } from 'react-bootstrap';
-import { LEVEL_BUTTON_DESCRIPTION } from 'app/config/constants';
+import { LEVEL_BUTTON_DESCRIPTION, LEVELS } from 'app/config/constants';
 import pluralize from 'pluralize';
 import * as styles from './LevelButton.module.scss';
 import classnames from 'classnames';
 import { inject } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
+import { OncoKBLevelIcon } from 'app/shared/utils/Utils';
 
 type LevelButtonProps = {
-  level: string;
+  level: LEVELS;
   routing?: RouterStore;
   title?: string;
   numOfGenes: number;
   description: string;
   onClick?: () => void;
   className?: string;
+  style?: CSSProperties;
   active?: boolean;
   href?: string;
   disabled?: boolean;
@@ -37,15 +39,22 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
       active={props.active}
       href={props.href}
       disabled={props.disabled}
+      style={props.style}
       className={classnames(
         props.href ? styles.levelButtonLink : styles.levelButton,
         props.className
       )}
     >
       <div
-        className={classnames(`oncokb level-${props.level}`, styles.levelName)}
+        className={classnames(
+          `oncokb level-${props.level} d-flex justify-content-center align-items-center`,
+          styles.levelName
+        )}
       >
-        {props.title ? props.title : `Level ${props.level}`}
+        <OncoKBLevelIcon level={props.level} withDescription={true} />
+        <span className={'ml-1 mr-4'}>
+          {props.title ? props.title : `Level ${props.level}`}
+        </span>
       </div>
       <div className={styles.levelDescription}>{props.description}</div>
       <div

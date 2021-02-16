@@ -12,7 +12,11 @@ import {
 } from 'app/components/SimpleTable';
 import { NewlyAddedGeneType } from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { Link } from 'react-router-dom';
-import { FAQ_URL_PATTERNS_LINK, PAGE_ROUTE } from 'app/config/constants';
+import {
+  FAQ_URL_PATTERNS_LINK,
+  LEVEL_TYPES,
+  PAGE_ROUTE,
+} from 'app/config/constants';
 import {
   AlterationPageLink,
   GenePageLink,
@@ -21,6 +25,9 @@ import {
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
 import { SHOW_MODAL_KEY } from '../AboutPage';
+import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
+import { AbstractLink, FdaApprovalLink } from 'app/pages/newsPage/Links';
+import WithSeparator from 'react-with-separator';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -31,12 +38,13 @@ export type NewsData = {
   numOfAssociationsInUpdatedImplication?: number;
   updatedImplicationInOldFormat?: { [level: string]: ElementType[] };
   changedAnnotation?: ElementType[][];
+  changedAnnotationTitle?: string;
 };
 
 export const NEWLY_ADDED_LEVEL_FOUR_COLUMNS = [
   { name: 'Gene', size: 2 },
   { name: 'Mutation', size: 6 },
-  { name: 'Tumor Type', size: 2 },
+  { name: 'Cancer Type', size: 2 },
   { name: 'Drug', size: 2 },
 ];
 
@@ -44,7 +52,7 @@ export const UPDATED_IMPLICATION_COLUMNS = [
   { name: 'Level' },
   { name: 'Gene' },
   { name: 'Mutation' },
-  { name: 'Tumor Type' },
+  { name: 'Cancer Type' },
   { name: 'Drug' },
   { name: 'Evidence' },
 ];
@@ -57,7 +65,7 @@ export const UPDATED_IMPLICATION_OLD_FORMAT_COLUMNS = [
 export const CHANGED_ANNOTATION_COLUMNS = [
   { name: 'Gene' },
   { name: 'Mutation' },
-  { name: 'Tumor Type' },
+  { name: 'Cancer Type' },
   { name: 'Drug' },
   { name: 'Previous Level' },
   { name: 'Current Level' },
@@ -105,10 +113,194 @@ export const NEWLY_ADDED_LEVEL_FOUR = [
   ['SMARCB1', 'Oncogenic Mutations', 'All Tumors', 'Tazemetostat'],
 ];
 
+const EVIDENCE_COLUMN_SEPARATOR = '; ';
+
 // NOTE: cannot associate a type to the object literal in order to have the CHANGED_ANNOTATION_DATE type works
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '02102021': {
+    priorityNews: [
+      <span>
+        Members of the OncoKB External Advisory Board and their relevant COIs
+        are now listed on the <Link to={PAGE_ROUTE.TEAM}>OncoKB team page</Link>
+      </span>,
+    ],
+    updatedImplication: [
+      [
+        '1',
+        'ALK',
+        'Fusions',
+        'Anaplastic Large-Cell Lymphoma',
+        'Crizotinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-crizotinib-children-and-young-adults-relapsed-or-refractory-systemic-anaplastic-large'
+            }
+            approval={'Crizotinib'}
+          />
+          <PMIDLink pmids={'23598171, 28032129, 29352732'} />
+        </WithSeparator>,
+      ],
+      [
+        '1',
+        'ERBB2',
+        'Amplification',
+        'Breast Cancer',
+        'Margetuximab + Chemotherapy',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-margetuximab-metastatic-her2-positive-breast-cancer'
+            }
+            approval={'Margetuximab + Chemotherapy'}
+          />
+          <AbstractLink
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2019.37.15_suppl.1000'
+            }
+            abstract={'Rugo et al. Abstract # 1000, ASCO 2019'}
+          />
+        </WithSeparator>,
+      ],
+      [
+        '1',
+        'ERBB2',
+        'Amplification',
+        'Gastric or Gastroesophageal Adenocarcinoma',
+        'Trastuzumab Deruxtecan',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-fam-trastuzumab-deruxtecan-nxki-her2-positive-gastric-adenocarcinomas'
+            }
+          >
+            FDA-approval of Trastuzumab deruxtecan
+          </Linkout>
+          <PMIDLink pmids={'32469182'} />
+        </WithSeparator>,
+      ],
+    ],
+    changedAnnotationTitle:
+      'Changed annotation to adhere to our upcoming OncoKB SOP v2.0',
+    changedAnnotation: [
+      ['RET', 'Fusions', 'Non-Small Cell Lung Cancer', 'Vandetanib', '2', '3A'],
+      [
+        'NRAS',
+        'Oncogenic Mutations',
+        'Melanoma',
+        'Binimetinib + Ribociclib',
+        '3A',
+        '4',
+      ],
+      [
+        'MET',
+        'Amplification',
+        'Renal Cell Carcinoma',
+        'Cabozantinib',
+        '2',
+        'None',
+      ],
+      [
+        'CDK4',
+        'Amplification',
+        'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
+        'Palbociclib, Abemaciclib',
+        '2',
+        'None',
+      ],
+      [
+        'KIT',
+        'A829P, C809G, D816, D820, N822, Y823D',
+        'Gastrointestinal Stromal Tumor',
+        'Sorafenib',
+        '2',
+        'None',
+      ],
+      ['KIT', 'Oncogenic Mutations', 'Thymic Tumor', 'Sunitinib', '2', 'None'],
+    ],
+  },
+  '01142021': {
+    priorityNews: [
+      <span>
+        We are excited to introduce the{' '}
+        <LevelOfEvidencePageLink levelType={LEVEL_TYPES.DX}>
+          OncoKB Diagnostic (Dx)
+        </LevelOfEvidencePageLink>{' '}
+        and{' '}
+        <LevelOfEvidencePageLink levelType={LEVEL_TYPES.PX}>
+          Prognostic (Px)
+        </LevelOfEvidencePageLink>{' '}
+        Levels of Evidence (currently applicable to hematologic disease). The
+        definitions of these levels of evidence can be found on the{' '}
+        <LevelOfEvidencePageLink levelType={LEVEL_TYPES.DX}>
+          Levels of Evidence
+        </LevelOfEvidencePageLink>{' '}
+        page. The complete list of biomarkers associated with a diagnostic or
+        prognostic level of evidence can be found on the{' '}
+        <Link to={PAGE_ROUTE.ACTIONABLE_GENE}>Actionable Genes</Link> page
+      </span>,
+    ],
+  },
+  '12172020': {
+    priorityNews: [
+      <span>Updated all gene names to the latest HUGO symbol</span>,
+    ],
+    updatedImplication: [
+      [
+        '1',
+        'RET',
+        'Fusions',
+        'Thyroid Cancer',
+        'Pralsetinib',
+        <span>
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-pralsetinib-ret-altered-thyroid-cancers'
+            }
+          >
+            FDA-approval of Pralsetinib
+          </Linkout>
+          ; Abstract:{' '}
+          <Linkout
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2020.38.15_suppl.109'
+            }
+          >
+            Subbiah et al. Abstract# 109, ASCO 2020
+          </Linkout>
+        </span>,
+      ],
+    ],
+    changedAnnotation: [
+      [
+        'RET',
+        'Oncogenic Mutations',
+        'Medullary Thyroid Cancer',
+        <div>Pralsetinib</div>,
+        '3A',
+        '1',
+        <div>
+          <Linkout
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-pralsetinib-ret-altered-thyroid-cancers'
+            }
+          >
+            FDA-approval of Pralsetinib
+          </Linkout>
+          ; Abstract:{' '}
+          <Linkout
+            link={
+              'https://oncologypro.esmo.org/meeting-resources/esmo-virtual-congress-2020/results-from-the-registrational-phase-i-ii-arrow-trial-of-pralsetinib-blu-667-in-patients-pts-with-advanced-ret-mutation-positive-medullary-thy'
+            }
+          >
+            Hu et al. Abstract# 19130, ESMO 2020
+          </Linkout>
+        </div>,
+      ],
+    ],
+  },
   '11132020': {
     priorityNews: [
       <span>
@@ -126,7 +318,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th>Level</th>
                 <th>Gene</th>
                 <th>Mutation</th>
-                <th>Tumor Type</th>
+                <th>Cancer Type</th>
                 <th>Drug</th>
                 <th>Evidence</th>
               </tr>
@@ -279,7 +471,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th>Level</th>
                 <th>Gene</th>
                 <th>Mutation</th>
-                <th>Tumor Type</th>
+                <th>Cancer Type</th>
                 <th>Drug</th>
                 <th>Evidence</th>
               </tr>
@@ -1220,7 +1412,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th className="col-xs-1">Level</th>
                 <th className="col-xs-1">Gene</th>
                 <th className="col-xs-4">Mutation</th>
-                <th className="col-xs-4">Tumor Type</th>
+                <th className="col-xs-4">Cancer Type</th>
                 <th className="col-xs-2">Drug</th>
               </tr>
             </thead>
@@ -1534,7 +1726,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href="http://oncotree.mskcc.org/#/home?version=oncotree_2017_06_21"
+          href="http://oncotree.info/#/home?version=oncotree_2017_06_21"
         >
           2017_06_21
         </a>{' '}
@@ -1542,7 +1734,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href="http://oncotree.mskcc.org/#/home?version=oncotree_2018_06_15"
+          href="http://oncotree.info/#/home?version=oncotree_2018_06_15"
         >
           2018_06_15
         </a>
@@ -2185,7 +2377,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           FGFR2 - Amplification - Breast Cancer - Dovitinib (<b>removed</b>)
         </span>,
         <span>
-          FGFR2/3 - Fusions - Various tumor types - Debio1347 (
+          FGFR2/3 - Fusions - Various cancer types - Debio1347 (
           <b>new association</b>)
         </span>,
         <span>

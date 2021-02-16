@@ -21,3 +21,9 @@
 .biggerText {
   font-size: $bigger-default-font-size;
 }
+
+// Overwrite react-responsive-tabs
+// unassigned the z-index. The z-index makes the tab header higher than the menu in the alteration page
+:global(.RRT__tab) {
+  z-index: 0 !important;
+}

@@ -1,11 +1,20 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
-import { PAGE_ROUTE, REGEXP, REGEXP_LINK } from 'app/config/constants';
+import {
+  DEFAULT_REFERENCE_GENOME,
+  PAGE_ROUTE,
+  REFERENCE_GENOME,
+  REGEXP,
+  REGEXP_LINK,
+  SEARCH_QUERY_KEY,
+} from 'app/config/constants';
 import _ from 'lodash';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import reactStringReplace from 'react-string-replace';
 import { ReactNodeArray } from 'prop-types';
 import { encodeSlash } from 'app/shared/utils/Utils';
+import { Linkout } from 'app/shared/links/Linkout';
+import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -27,13 +36,20 @@ export const GenePageLink: React.FunctionComponent<{
 export const AlterationPageLink: React.FunctionComponent<{
   hugoSymbol: string;
   alteration: string;
+  alterationRefGenomes?: REFERENCE_GENOME[];
   showGene?: boolean;
   content?: string;
 }> = props => {
+  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`;
+  if (
+    props.alterationRefGenomes &&
+    props.alterationRefGenomes.length > 0 &&
+    !props.alterationRefGenomes.includes(DEFAULT_REFERENCE_GENOME)
+  ) {
+    pageLink = `${pageLink}?${SEARCH_QUERY_KEY.REFERENCE_GENOME}=${props.alterationRefGenomes[0]}`;
+  }
   return (
-    <Link
-      to={`${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`}
-    >
+    <Link to={pageLink}>
       {props.content
         ? props.content
         : props.showGene
@@ -104,4 +120,12 @@ export const CitationLink: React.FunctionComponent<{
     );
   });
   return <div>{contentWithLink}</div>;
+};
+
+export const OncoTreeLink: React.FunctionComponent<{}> = props => {
+  return (
+    <Linkout link={'http://oncotree.info'}>
+      OncoTree <ExternalLinkIcon />
+    </Linkout>
+  );
 };

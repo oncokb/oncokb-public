@@ -4,14 +4,19 @@ import { AnnotationStore } from 'app/store/AnnotationStore';
 import { computed, action, IReactionDisposer, reaction } from 'mobx';
 import AppStore from 'app/store/AppStore';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
-import { DEFAULT_GENE } from 'app/config/constants';
-import { decodeSlash, encodeSlash } from 'app/shared/utils/Utils';
+import { DEFAULT_GENE, REFERENCE_GENOME } from 'app/config/constants';
+import {
+  decodeSlash,
+  encodeSlash,
+  getRedirectLoginState,
+} from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import DocumentTitle from 'react-document-title';
 import { Else, If, Then } from 'react-if';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { RouteComponentProps } from 'react-router';
 import AnnotationPage from 'app/pages/annotationPage/AnnotationPage';
+import * as QueryString from 'query-string';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -23,6 +28,10 @@ interface AlterationPageProps extends RouteComponentProps<MatchParams> {
   appStore: AppStore;
   routing: RouterStore;
 }
+
+type SearchQueries = {
+  refGenome?: REFERENCE_GENOME;
+};
 
 @inject('appStore', 'routing')
 @observer
@@ -51,10 +60,21 @@ export default class AlterationPage extends React.Component<
         newTumorType => {
           let tumorTypeSection = encodeSlash(this.store.tumorTypeQuery);
           tumorTypeSection = tumorTypeSection ? `/${tumorTypeSection}` : '';
-          this.props.routing.history.replace(
-            `/gene/${this.store.hugoSymbolQuery}/${this.store.alterationQuery}${tumorTypeSection}`
-          );
+          this.props.routing.history.push({
+            pathname: `/gene/${this.store.hugoSymbolQuery}/${this.store.alterationQuery}${tumorTypeSection}`,
+            search: this.props.routing.location.search,
+          });
         }
+      ),
+      reaction(
+        () => [props.routing.location.search],
+        ([search]) => {
+          const queryStrings = QueryString.parse(search) as SearchQueries;
+          if (queryStrings.refGenome) {
+            this.store.referenceGenomeQuery = queryStrings.refGenome;
+          }
+        },
+        { fireImmediately: true }
       )
     );
   }
@@ -71,8 +91,8 @@ export default class AlterationPage extends React.Component<
     ) {
       this.store.alterationQuery = this.props.match.params.alteration;
     }
-    // When a tumor type changed from the URL, we need to propagate that to the store
-    // but if the tumor type is unset, we need to clear the query in the store
+    // When a cancer type changed from the URL, we need to propagate that to the store
+    // but if the cancer type is unset, we need to clear the query in the store
     if (
       this.props.match.params.tumorType !== prevProps.match.params.tumorType
     ) {
@@ -107,7 +127,7 @@ export default class AlterationPage extends React.Component<
       content.push(`Alteration: ${this.store.alterationQuery}`);
     }
     if (this.store.tumorTypeQuery) {
-      content.push(`Tumor Type: ${this.store.tumorTypeQuery}`);
+      content.push(`Cancer Type: ${this.store.tumorTypeQuery}`);
     }
     return content.join(', ');
   }
@@ -126,9 +146,8 @@ export default class AlterationPage extends React.Component<
                   hugoSymbol={this.store.hugoSymbol}
                   alteration={this.store.alterationQuery}
                   tumorType={this.store.tumorTypeQuery}
+                  refGenome={this.store.referenceGenomeQuery}
                   annotation={this.store.annotationResult.result}
-                  allTumorTypesOptions={this.store.allTumorTypesOptions.result}
-                  allSubtypes={this.store.allSubtype.result}
                   onChangeTumorType={newTumorType =>
                     (this.store.tumorTypeQuery = newTumorType)
                   }

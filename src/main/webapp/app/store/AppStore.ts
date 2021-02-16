@@ -5,9 +5,11 @@ import { OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
 import { MainNumber } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import oncokbPrivateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import {
+  DEFAULT_FEEDBACK_ANNOTATION,
   DEFAULT_MAIN_NUMBERS,
   DEFAULT_ONCOKB_INFO,
 } from 'app/config/constants';
+import { Feedback } from 'app/components/feedback/types';
 
 export interface IAppConfig {
   ribbonEnv: string;
@@ -19,6 +21,9 @@ class AppStore {
   @observable ribbonEnv = '';
   @observable inProduction = true;
   @observable isSwaggerEnabled = false;
+  @observable recaptchaVerified = false;
+  @observable showFeedbackFormModal = false;
+  @observable feedbackAnnotation: Feedback | undefined;
 
   readonly appInfo = remoteData<OncoKBInfo>({
     invoke: () => apiClient.infoGetUsingGET({}),

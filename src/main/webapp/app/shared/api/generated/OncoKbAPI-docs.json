@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "These endpoints are for private use only.",
-    "version": "v1.1.0",
+    "version": "v1.2.1",
     "title": "OncoKB Private APIs",
     "contact": {
       "name": "OncoKB",
@@ -22,6 +22,10 @@
     {
       "name": "Drugs",
       "description": "OncoKB Drugs"
+    },
+    {
+      "name": "Trials",
+      "description": "Clinical Trials Matching"
     },
     {
       "name": "Annotations",
@@ -115,7 +119,7 @@
           {
             "name": "tumorType",
             "in": "query",
-            "description": "OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
+            "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
             "required": false,
             "type": "string"
           },
@@ -221,7 +225,7 @@
           {
             "name": "tumorType",
             "in": "query",
-            "description": "OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
+            "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
             "required": false,
             "type": "string"
           },
@@ -327,7 +331,7 @@
           {
             "name": "tumorType",
             "in": "query",
-            "description": "OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
+            "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
             "required": false,
             "type": "string"
           },
@@ -482,7 +486,7 @@
           {
             "name": "tumorType",
             "in": "query",
-            "description": "OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
+            "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
             "required": false,
             "type": "string"
           },
@@ -635,7 +639,7 @@
           {
             "name": "tumorType",
             "in": "query",
-            "description": "OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
+            "description": "OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma",
             "required": false,
             "type": "string"
           },
@@ -1659,6 +1663,97 @@
         }
       }
     },
+    "/trials": {
+      "get": {
+        "tags": [
+          "Trials"
+        ],
+        "summary": "Return a list of trials using OncoTree Code and/or treatment",
+        "operationId": "trialsMatchingGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "oncoTreeCode",
+            "in": "query",
+            "description": "oncoTreeCode",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "treatment",
+            "in": "query",
+            "description": "treatment",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Trial"
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/trials/cancerTypes": {
+      "post": {
+        "tags": [
+          "Trials"
+        ],
+        "summary": "Return a list of trials using cancer types",
+        "operationId": "trialsGetByCancerTypesUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CancerTypesQuery"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/List"
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/utils/allActionableVariants": {
       "get": {
         "tags": [
@@ -2413,6 +2508,9 @@
         "proteinChange": {
           "type": "string"
         },
+        "referenceGenome": {
+          "type": "string"
+        },
         "variant": {
           "type": "string"
         }
@@ -2421,6 +2519,12 @@
     "Implication": {
       "type": "object",
       "properties": {
+        "abstracts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ArticleAbstract"
+          }
+        },
         "alterations": {
           "type": "array",
           "items": {
@@ -2452,6 +2556,12 @@
             "LEVEL_Dx3",
             "NO"
           ]
+        },
+        "pmids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "tumorType": {
           "$ref": "#/definitions/TumorType"
@@ -2497,7 +2607,8 @@
           "type": "string",
           "enum": [
             "SOLID",
-            "LIQUID"
+            "LIQUID",
+            "MIXED"
           ]
         }
       },
@@ -2641,8 +2752,11 @@
             "$ref": "#/definitions/Article"
           }
         },
-        "cancerType": {
-          "type": "string"
+        "cancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
         },
         "description": {
           "type": "string"
@@ -2732,8 +2846,11 @@
             "NO"
           ]
         },
-        "oncoTreeType": {
-          "$ref": "#/definitions/TumorType"
+        "relevantCancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
         },
         "solidPropagationLevel": {
           "type": "string",
@@ -2757,9 +2874,6 @@
             "LEVEL_Dx3",
             "NO"
           ]
-        },
-        "subtype": {
-          "type": "string"
         },
         "treatments": {
           "type": "array",
@@ -3087,6 +3201,9 @@
         "proteinChange": {
           "type": "string"
         },
+        "referenceGenome": {
+          "type": "string"
+        },
         "variant": {
           "type": "string"
         }
@@ -3147,15 +3264,6 @@
           "type": "string"
         },
         "ncitCode": {
-          "type": "string"
-        },
-        "synonyms": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "uuid": {
           "type": "string"
         }
       }
@@ -3269,6 +3377,32 @@
         }
       }
     },
+    "Trial": {
+      "type": "object",
+      "properties": {
+        "arms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Arms"
+          }
+        },
+        "briefTitle": {
+          "type": "string"
+        },
+        "currentTrialStatus": {
+          "type": "string"
+        },
+        "isUSTrial": {
+          "type": "boolean"
+        },
+        "nctId": {
+          "type": "string"
+        },
+        "principalInvestigator": {
+          "type": "string"
+        }
+      }
+    },
     "QueryGene": {
       "type": "object",
       "properties": {
@@ -3278,6 +3412,17 @@
         },
         "hugoSymbol": {
           "type": "string"
+        }
+      }
+    },
+    "CancerTypesQuery": {
+      "type": "object",
+      "properties": {
+        "cancerTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -3336,6 +3481,20 @@
         }
       }
     },
+    "Arms": {
+      "type": "object",
+      "properties": {
+        "armDescription": {
+          "type": "string"
+        },
+        "drugs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Drug"
+          }
+        }
+      }
+    },
     "MainType": {
       "type": "object",
       "properties": {
@@ -3350,7 +3509,8 @@
           "type": "string",
           "enum": [
             "SOLID",
-            "LIQUID"
+            "LIQUID",
+            "MIXED"
           ]
         }
       },

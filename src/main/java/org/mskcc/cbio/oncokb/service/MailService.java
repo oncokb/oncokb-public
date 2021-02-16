@@ -11,6 +11,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
+import org.mskcc.cbio.oncokb.web.rest.vm.ExposedToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -32,6 +33,9 @@ import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE;
+import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_EXPOSED;
+import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_EXPOSED_USER;
+import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED;
 
 /**
  * Service for sending emails.
@@ -107,6 +111,17 @@ public class MailService {
                 }
             });
         }
+        javaMailSender.send(mimeMessage);
+    }
+
+    public void sendFeedback(String from, String subject, String content) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, StandardCharsets.UTF_8.name());
+        message.setTo(applicationProperties.getEmailAddresses().getContactAddress());
+        message.setReplyTo(from);
+        message.setFrom(applicationProperties.getEmailAddresses().getContactAddress());
+        message.setSubject(subject);
+        message.setText(content, false);
         javaMailSender.send(mimeMessage);
     }
 
@@ -234,6 +249,46 @@ public class MailService {
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
         }
+    }
+
+    @Async
+    public void sendExposedTokensInfoMail(List<ExposedToken> exposedTokens, List<ExposedToken> tokensToVerify){
+        Context context = new Context(Locale.US);
+        context.setVariable("exposedTokens", exposedTokens);
+        context.setVariable("tokensToVerify", tokensToVerify);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process("mail/" + TOKEN_HAS_BEEN_EXPOSED.getTemplateName(), context);
+
+        try{
+            sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, "Exposed tokens", content, null, false, true);
+            log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getTechDevAddress());
+        }
+        catch (MailException | MessagingException e){
+            log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
+        }
+    }
+
+    @Async
+    public void sendMailWhenSearchingStructrueChange(String source){
+        Context context = new Context(Locale.US);
+        context.setVariable("source", source);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process("mail/" + SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED.getTemplateName(), context);
+        try{
+            sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, "Searching Response Structure Has Changed", content, null, false, true);
+            log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getTechDevAddress());
+        }
+        catch (MailException | MessagingException e){
+            log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
+        }
+    }
+
+    @Async
+    public void sendMailToUserWhenTokenExposed(UserDTO user, ExposedToken token){
+        Context context = new Context(Locale.US);
+        context.setVariable("token", token);
+        sendEmailFromTemplate(user, MailType.TOKEN_HAS_BEEN_EXPOSED_USER, "OncoKB Token exposed",
+        applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, context);
     }
 
     public MailType getIntakeFormMailType(LicenseType licenseType) {

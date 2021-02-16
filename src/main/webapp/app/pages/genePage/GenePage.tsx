@@ -4,20 +4,21 @@ import { AnnotationStore } from 'app/store/AnnotationStore';
 import {
   action,
   computed,
-  observable,
   IReactionDisposer,
+  observable,
   reaction,
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
+import { Citations, Gene } from 'app/shared/api/generated/OncoKbAPI';
 import { Redirect, RouteComponentProps, Prompt } from 'react-router';
 import { Button, Col, Row, Modal } from 'react-bootstrap';
-import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import styles from './GenePage.module.scss';
 import {
   filterByKeyword,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   levelOfEvidence2Level,
+  OncoKBLevelIcon,
 } from 'app/shared/utils/Utils';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
@@ -27,12 +28,16 @@ import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
   DEFAULT_GENE,
+  DEFAULT_MESSAGE_HEME_ONLY_DX,
+  DEFAULT_MESSAGE_HEME_ONLY_PX,
+  LEVEL_CLASSIFICATION,
+  LEVEL_TYPES,
+  LEVELS,
   FDA_LEVELS_OF_EVIDENCE_LINK,
   LG_TABLE_FIXED_HEIGHT,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
-  THRESHOLD_TABLE_FIXED_HEIGHT,
 } from 'app/config/constants';
 import {
   Alteration,
@@ -47,9 +52,7 @@ import {
   TumorTypePageLink,
 } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
-import OncoKBTable, {
-  SearchColumn,
-} from 'app/components/oncokbTable/OncoKBTable';
+import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import _ from 'lodash';
 import { MskimpactLink } from 'app/components/MskimpactLink';
 import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
@@ -62,6 +65,10 @@ import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { Linkout } from 'app/shared/links/Linkout';
 import { ReferenceGenomeInfo } from './ReferenceGenomeInfo';
 import WithSeparator from 'react-with-separator';
+import { GenePageTable } from './GenePageTable';
+import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
+import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
+import { FeedbackType } from 'app/components/feedback/types';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import * as QueryString from 'query-string';
@@ -97,30 +104,69 @@ const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
   return geneTypes.join(', ');
 };
 
+const HighestLevelItem: React.FunctionComponent<{
+  level: LEVELS;
+  key?: string;
+}> = props => {
+  return (
+    <span className={'d-flex align-items-center'}>
+      <span className={`oncokb level-${props.level}`} key={props.key}>
+        Level {props.level}
+      </span>
+      <OncoKBLevelIcon level={props.level} withDescription />
+    </span>
+  );
+};
+
 export const getHighestLevelStrings = (
   highestSensitiveLevel: string | undefined,
   highestResistanceLevel: string | undefined,
+  highestDiagnosticImplicationLevel?: string | undefined,
+  highestPrognosticImplicationLevel?: string | undefined,
   separator: string | JSX.Element = ', '
 ) => {
   const levels: React.ReactNode[] = [];
   if (highestSensitiveLevel) {
     const level = levelOfEvidence2Level(highestSensitiveLevel, false);
     levels.push(
-      <span className={`oncokb level-${level}`} key="highestSensitiveLevel">
-        Level {level}
-      </span>
+      <HighestLevelItem level={level} key={'highestSensitiveLevel'} />
     );
   }
   if (highestResistanceLevel) {
     const level = levelOfEvidence2Level(highestResistanceLevel, false);
     levels.push(
-      <span className={`oncokb level-${level}`} key="highestResistanceLevel">
-        Level {level}
-      </span>
+      <HighestLevelItem level={level} key={'highestResistanceLevel'} />
+    );
+  }
+  if (highestDiagnosticImplicationLevel) {
+    const level = levelOfEvidence2Level(
+      highestDiagnosticImplicationLevel,
+      false
+    );
+    levels.push(
+      <HighestLevelItem
+        level={level}
+        key={'highestDiagnosticImplicationLevel'}
+      />
+    );
+  }
+  if (highestPrognosticImplicationLevel) {
+    const level = levelOfEvidence2Level(
+      highestPrognosticImplicationLevel,
+      false
+    );
+    levels.push(
+      <HighestLevelItem
+        level={level}
+        key={'highestPrognosticImplicationLevel'}
+      />
     );
   }
   return (
-    <WithSeparator separator={separator} key={'highest-levels'}>
+    <WithSeparator
+      separator={<span className="mx-1">·</span>}
+      key={'highest-levels'}
+    >
       {levels}
     </WithSeparator>
   );
@@ -130,11 +176,17 @@ type GeneInfoProps = {
   gene: Gene;
   highestSensitiveLevel: string | undefined;
   highestResistanceLevel: string | undefined;
+  highestDiagnosticImplicationLevel?: string | undefined;
+  highestPrognosticImplicationLevel?: string | undefined;
 };
 
 type GeneInfoItem = {
   key: string;
   element: JSX.Element | string;
+};
+
+type SearchQueries = {
+  refGenome?: REFERENCE_GENOME;
 };
 
 const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
@@ -154,16 +206,23 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   }
 
   // highest LoE
-  if (props.highestResistanceLevel || props.highestSensitiveLevel) {
+  if (
+    props.highestResistanceLevel ||
+    props.highestSensitiveLevel ||
+    props.highestDiagnosticImplicationLevel ||
+    props.highestPrognosticImplicationLevel
+  ) {
     info.push({
       key: 'loe',
       element: (
         <div>
-          <h5>
-            Highest level of evidence:{' '}
+          <h5 className={'d-flex'}>
+            <span className={'mr-2'}>Highest level of evidence:</span>
             {getHighestLevelStrings(
               props.highestSensitiveLevel,
-              props.highestResistanceLevel
+              props.highestResistanceLevel,
+              props.highestDiagnosticImplicationLevel,
+              props.highestPrognosticImplicationLevel
             )}
           </h5>
         </div>
@@ -178,21 +237,25 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
     });
   }
 
-  const additionalInfo: React.ReactNode[] = [
-    <div key="geneId">
-      Gene ID:{' '}
-      {gene.entrezGeneId > 0 ? (
-        <Linkout
-          className={styles.lowKeyLinkout}
-          link={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}
-        >
-          {gene.entrezGeneId}
-        </Linkout>
-      ) : (
-        <span className={'ml-1'}>{gene.entrezGeneId}</span>
-      )}
-    </div>,
-  ];
+  const additionalInfo: React.ReactNode[] = [];
+
+  if (gene.entrezGeneId > 0) {
+    additionalInfo.push(
+      <div key="geneId">
+        Gene ID:{' '}
+        {gene.entrezGeneId > 0 ? (
+          <Linkout
+            className={styles.lowKeyLinkout}
+            link={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}
+          >
+            {gene.entrezGeneId}
+          </Linkout>
+        ) : (
+          <span className={'ml-1'}>{gene.entrezGeneId}</span>
+        )}
+      </div>
+    );
+  }
   if (gene.grch37Isoform || gene.grch37RefSeq) {
     additionalInfo.push(
       <ReferenceGenomeInfo
@@ -229,8 +292,10 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
 };
 
 enum TAB_KEYS {
-  'CLINICAL' = 'CLINICAL',
-  'BIOLOGICAL' = 'BIOLOGICAL',
+  'BIOLOGICAL',
+  'TX',
+  'DX',
+  'PX',
   'FDA' = 'FDA',
 }
 
@@ -284,8 +349,42 @@ export default class GenePage extends React.Component<GenePageProps> {
   readonly reactions: IReactionDisposer[] = [];
 
   @computed
+  get txAlterations() {
+    if (this.store.clinicalAlterations.result.length === 0) {
+      return [];
+    }
+    return _.filter(this.store.clinicalAlterations.result, alt => {
+      return LEVEL_CLASSIFICATION[alt.level] === LEVEL_TYPES.TX;
+    });
+  }
+
+  @computed
+  get dxAlterations() {
+    if (this.store.clinicalAlterations.result.length === 0) {
+      return [];
+    }
+    return _.filter(this.store.clinicalAlterations.result, alt => {
+      return LEVEL_CLASSIFICATION[alt.level] === LEVEL_TYPES.DX;
+    });
+  }
+
+  @computed
+  get pxAlterations() {
+    if (this.store.clinicalAlterations.result.length === 0) {
+      return [];
+    }
+    return _.filter(this.store.clinicalAlterations.result, alt => {
+      return LEVEL_CLASSIFICATION[alt.level] === LEVEL_TYPES.PX;
+    });
+  }
+
+  @computed
   get clinicalTableColumns(): SearchColumn<ClinicalVariant>[] {
     return [
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+        accessor: 'level',
+      },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
         accessor: 'variant',
@@ -297,37 +396,32 @@ export default class GenePage extends React.Component<GenePageProps> {
               <AlterationPageLink
                 hugoSymbol={this.store.hugoSymbol}
                 alteration={props.original.variant.name}
+                alterationRefGenomes={
+                  props.original.variant.referenceGenomes as REFERENCE_GENOME[]
+                }
               />
-              {props.original.variant.referenceGenomes.length === 1 ? (
-                <InfoIcon
-                  overlay={`Only in ${props.original.variant.referenceGenomes[0]}`}
-                  placement="top"
-                  className="ml-1"
-                  style={{ fontSize: '0.7rem' }}
-                />
-              ) : null}
             </>
           );
         },
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.TUMOR_TYPE),
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
         onFilter: (data: ClinicalVariant, keyword) =>
           filterByKeyword(
-            getCancerTypeNameFromOncoTreeType(data.cancerType),
+            data.cancerTypes
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(', '),
             keyword
           ),
         Cell: (props: { original: ClinicalVariant }) => {
-          const tumorType = getCancerTypeNameFromOncoTreeType(
-            props.original.cancerType
-          );
-          return (
+          const cancerTypes = props.original.cancerTypes.map(cancerType => (
             <TumorTypePageLink
               hugoSymbol={this.store.hugoSymbol}
               alteration={props.original.variant.name}
-              tumorType={tumorType}
+              tumorType={getCancerTypeNameFromOncoTreeType(cancerType)}
             />
-          );
+          ));
+          return <WithSeparator separator={', '}>{cancerTypes}</WithSeparator>;
         },
       },
       {
@@ -345,11 +439,72 @@ export default class GenePage extends React.Component<GenePageProps> {
         },
       },
       {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+        accessor(d) {
+          return {
+            abstracts: d.drugAbstracts,
+            pmids: d.drugPmids,
+          } as Citations;
+        },
+      },
+    ];
+  }
+
+  @computed
+  get dxpxTableColumns(): SearchColumn<ClinicalVariant>[] {
+    return [
+      {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
         accessor: 'level',
       },
       {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+        accessor: 'variant',
+        onFilter: (data: ClinicalVariant, keyword) =>
+          filterByKeyword(data.variant.name, keyword),
+        Cell: (props: { original: ClinicalVariant }) => {
+          return (
+            <>
+              <AlterationPageLink
+                hugoSymbol={this.store.hugoSymbol}
+                alteration={props.original.variant.name}
+                alterationRefGenomes={
+                  props.original.variant.referenceGenomes as REFERENCE_GENOME[]
+                }
+              />
+            </>
+          );
+        },
+      },
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
+        onFilter: (data: ClinicalVariant, keyword) =>
+          filterByKeyword(
+            data.cancerTypes
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(', '),
+            keyword
+          ),
+        Cell: (props: { original: ClinicalVariant }) => {
+          const cancerTypes = props.original.cancerTypes.map(cancerType => (
+            <TumorTypePageLink
+              hugoSymbol={this.store.hugoSymbol}
+              alteration={props.original.variant.name}
+              tumorType={getCancerTypeNameFromOncoTreeType(cancerType)}
+            />
+          ));
+          return <WithSeparator separator={', '}>{cancerTypes}</WithSeparator>;
+        },
+      },
+      {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+        minWidth: 50,
+        accessor(d) {
+          return {
+            abstracts: d.drugAbstracts,
+            pmids: d.drugPmids,
+          } as Citations;
+        },
       },
     ];
   }
@@ -430,15 +585,10 @@ export default class GenePage extends React.Component<GenePageProps> {
               <AlterationPageLink
                 hugoSymbol={this.store.hugoSymbol}
                 alteration={props.original.variant.name}
+                alterationRefGenomes={
+                  props.original.variant.referenceGenomes as REFERENCE_GENOME[]
+                }
               />
-              {props.original.variant.referenceGenomes.length === 1 ? (
-                <InfoIcon
-                  overlay={`Only in ${props.original.variant.referenceGenomes[0]}`}
-                  placement="top"
-                  className="ml-1"
-                  style={{ fontSize: '0.7rem' }}
-                />
-              ) : null}
             </>
           );
         },
@@ -455,6 +605,12 @@ export default class GenePage extends React.Component<GenePageProps> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+        accessor(d) {
+          return {
+            abstracts: d.mutationEffectAbstracts,
+            pmids: d.mutationEffectPmids,
+          } as Citations;
+        },
         Cell(props: { original: BiologicalVariant }) {
           const numOfReferences =
             props.original.mutationEffectAbstracts.length +
@@ -503,6 +659,16 @@ export default class GenePage extends React.Component<GenePageProps> {
             this.showGeneBackground = defaultShowGeneBackground;
           }
         }
+      ),
+      reaction(
+        () => [props.routing.location.search],
+        ([search]) => {
+          const queryStrings = QueryString.parse(search) as SearchQueries;
+          if (queryStrings.refGenome) {
+            this.store.referenceGenomeQuery = queryStrings.refGenome;
+          }
+        },
+        { fireImmediately: true }
       )
     );
   }
@@ -607,13 +773,38 @@ export default class GenePage extends React.Component<GenePageProps> {
           <b>all OncoKB annotated</b> {this.store.hugoSymbol} alterations.
         </span>
       );
-    } else if (key === TAB_KEYS.CLINICAL) {
+    } else if (key === TAB_KEYS.TX) {
       return (
         <span>
-          A list of the tumor type-specific {this.store.hugoSymbol} alterations
+          A list of the cancer type-specific {this.store.hugoSymbol} alterations
           that may predict response to a targeted drug and the corresponding
           OncoKB level of evidence assigning their level of{' '}
-          <b>clinical actionability</b>.
+          <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX}>
+            clinical actionability
+          </LevelOfEvidencePageLink>
+          .
+        </span>
+      );
+    } else if (key === TAB_KEYS.DX) {
+      return (
+        <span>
+          A list of diagnostic {this.store.hugoSymbol} alterations and the
+          corresponding{' '}
+          <LevelOfEvidencePageLink levelType={LEVEL_TYPES.DX}>
+            OncoKB diagnostic level of evidence
+          </LevelOfEvidencePageLink>
+          . {DEFAULT_MESSAGE_HEME_ONLY_DX}
+        </span>
+      );
+    } else if (key === TAB_KEYS.PX) {
+      return (
+        <span>
+          A list of tumor-type specific prognostic {this.store.hugoSymbol}{' '}
+          alterations and the corresponding{' '}
+          <LevelOfEvidencePageLink levelType={LEVEL_TYPES.PX}>
+            OncoKB prognostic level of evidence
+          </LevelOfEvidencePageLink>
+          . {DEFAULT_MESSAGE_HEME_ONLY_PX}
         </span>
       );
     } else if (key === TAB_KEYS.FDA) {
@@ -647,108 +838,50 @@ export default class GenePage extends React.Component<GenePageProps> {
   }
 
   getTable(key: TAB_KEYS) {
-    if (key === TAB_KEYS.CLINICAL) {
-      return (
-        <OncoKBTable
-          data={this.store.filteredClinicalAlterations}
-          pageSize={
-            this.store.filteredClinicalAlterations.length === 0
-              ? 1
-              : this.store.filteredClinicalAlterations.length
-          }
-          columns={this.clinicalTableColumns}
-          style={
-            this.store.filteredBiologicalAlterations.length >
-            THRESHOLD_TABLE_FIXED_HEIGHT
-              ? {
-                  height: LG_TABLE_FIXED_HEIGHT,
-                }
-              : undefined
-          }
-          fixedHeight={
-            this.store.filteredBiologicalAlterations.length >
-            THRESHOLD_TABLE_FIXED_HEIGHT
-          }
-          loading={this.store.clinicalAlterations.isPending}
-          defaultSorted={[
-            {
-              id: TABLE_COLUMN_KEY.LEVEL,
-              desc: false,
-            },
-            {
-              id: TABLE_COLUMN_KEY.ALTERATION,
-              desc: false,
-            },
-          ]}
-        />
-      );
-    } else if (key === TAB_KEYS.BIOLOGICAL) {
-      return (
-        <OncoKBTable
-          data={this.store.filteredBiologicalAlterations}
-          columns={this.biologicalTableColumns}
-          pageSize={
-            this.store.filteredBiologicalAlterations.length === 0
-              ? 1
-              : this.store.filteredBiologicalAlterations.length
-          }
-          style={
-            this.store.filteredBiologicalAlterations.length >
-            THRESHOLD_TABLE_FIXED_HEIGHT
-              ? {
-                  height: LG_TABLE_FIXED_HEIGHT,
-                }
-              : undefined
-          }
-          fixedHeight={
-            this.store.filteredBiologicalAlterations.length >
-            THRESHOLD_TABLE_FIXED_HEIGHT
-          }
-          loading={this.store.biologicalAlterations.isPending}
-          defaultSorted={[
-            {
-              id: TABLE_COLUMN_KEY.ONCOGENICITY,
-              desc: false,
-            },
-            {
-              id: TABLE_COLUMN_KEY.ALTERATION,
-              desc: false,
-            },
-          ]}
-        />
-      );
-    } else if (key === TAB_KEYS.FDA) {
-      return (
-        <OncoKBTable
-          data={this.fdaVariants}
-          columns={this.fdaTableColumns}
-          defaultSorted={[
-            {
-              id: TABLE_COLUMN_KEY.LEVEL,
-              desc: false,
-            },
-            {
-              id: TABLE_COLUMN_KEY.ALTERATION,
-              desc: false,
-            },
-            {
-              id: TABLE_COLUMN_KEY.TUMOR_TYPE,
-              desc: false,
-            },
-          ]}
-          pageSize={this.fdaVariants.length === 0 ? 1 : this.fdaVariants.length}
-          fixedHeight={this.fdaVariants.length > THRESHOLD_TABLE_FIXED_HEIGHT}
-          style={
-            this.fdaVariants.length > THRESHOLD_TABLE_FIXED_HEIGHT
-              ? {
-                  height: LG_TABLE_FIXED_HEIGHT,
-                }
-              : undefined
-          }
-        />
-      );
+    switch (key) {
+      case TAB_KEYS.BIOLOGICAL:
+        return (
+          <GenePageTable
+            data={this.store.filteredBiologicalAlterations}
+            columns={this.biologicalTableColumns}
+            isPending={this.store.biologicalAlterations.isPending}
+          />
+        );
+      case TAB_KEYS.TX:
+        return (
+          <GenePageTable
+            data={this.txAlterations}
+            columns={this.clinicalTableColumns}
+            isPending={this.store.clinicalAlterations.isPending}
+          />
+        );
+      case TAB_KEYS.DX:
+        return (
+          <GenePageTable
+            data={this.dxAlterations}
+            columns={this.dxpxTableColumns}
+            isPending={this.store.clinicalAlterations.isPending}
+          />
+        );
+      case TAB_KEYS.PX:
+        return (
+          <GenePageTable
+            data={this.pxAlterations}
+            columns={this.dxpxTableColumns}
+            isPending={this.store.clinicalAlterations.isPending}
+          />
+        );
+      case TAB_KEYS.FDA:
+        return (
+          <GenePageTable
+            data={this.fdaVariants}
+            columns={this.fdaTableColumns}
+            isPending={this.store.clinicalAlterations.isPending}
+          />
+        );
+      default:
+        return <span />;
     }
-    return <span />;
   }
 
   getTabContent(key: TAB_KEYS) {
@@ -756,7 +889,10 @@ export default class GenePage extends React.Component<GenePageProps> {
       <div>
         <div style={{ width: '80%', marginBottom: '-30px' }}>
           <div>{this.getTabDescription(key)}</div>
-          <ReportIssue />
+          <ReportIssue
+            appStore={this.props.appStore}
+            annotation={{ gene: this.store.hugoSymbol }}
+          />
         </div>
         {this.getTable(key)}
       </div>
@@ -784,10 +920,24 @@ export default class GenePage extends React.Component<GenePageProps> {
       });
     }
     if (this.store.clinicalAlterations.result.length > 0) {
-      tabs.push({
-        key: TAB_KEYS.CLINICAL,
-        title: 'Clinically Actionable Alterations',
-      });
+      if (this.txAlterations.length > 0) {
+        tabs.push({
+          key: TAB_KEYS.TX,
+          title: 'Therapeutic',
+        });
+      }
+      if (this.dxAlterations.length > 0) {
+        tabs.push({
+          key: TAB_KEYS.DX,
+          title: `Diagnostic`,
+        });
+      }
+      if (this.pxAlterations.length > 0) {
+        tabs.push({
+          key: TAB_KEYS.PX,
+          title: `Prognostic`,
+        });
+      }
     }
     if (this.fdaVariants.length > 0) {
       tabs.push({
@@ -819,11 +969,19 @@ export default class GenePage extends React.Component<GenePageProps> {
 
   @computed
   get tabDefaultActiveKey() {
-    return this.fdaVariants.length > 0
-      ? TAB_KEYS.FDA
-      : this.store.clinicalAlterations.result.length > 0
-      ? TAB_KEYS.CLINICAL
-      : TAB_KEYS.BIOLOGICAL;
+    if (this.fdaVariants.length > 0) {
+      return TAB_KEYS.FDA;
+    }
+    if (this.txAlterations.length > 0) {
+      return TAB_KEYS.TX;
+    }
+    if (this.dxAlterations.length > 0) {
+      return TAB_KEYS.DX;
+    }
+    if (this.pxAlterations.length > 0) {
+      return TAB_KEYS.PX;
+    }
+    return TAB_KEYS.BIOLOGICAL;
   }
 
   @computed
@@ -909,7 +1067,23 @@ export default class GenePage extends React.Component<GenePageProps> {
                       <Row>
                         <Col {...this.genePanelClass}>
                           <div className="">
-                            <h2>{this.store.hugoSymbol}</h2>
+                            <h2>
+                              {this.store.hugoSymbol}
+                              <span
+                                style={{ fontSize: '0.5em' }}
+                                className={'ml-2'}
+                              >
+                                <FeedbackIcon
+                                  feedback={{
+                                    type: FeedbackType.ANNOTATION,
+                                    annotation: {
+                                      gene: this.store.hugoSymbol,
+                                    },
+                                  }}
+                                  appStore={this.props.appStore}
+                                />
+                              </span>
+                            </h2>
                             <GeneInfo
                               gene={this.store.gene.result}
                               highestSensitiveLevel={
@@ -919,6 +1093,14 @@ export default class GenePage extends React.Component<GenePageProps> {
                               highestResistanceLevel={
                                 this.store.geneNumber.result
                                   .highestResistanceLevel
+                              }
+                              highestDiagnosticImplicationLevel={
+                                this.store.geneNumber.result
+                                  .highestDiagnosticImplicationLevel
+                              }
+                              highestPrognosticImplicationLevel={
+                                this.store.geneNumber.result
+                                  .highestPrognosticImplicationLevel
                               }
                             />
                             {this.store.geneSummary.result ? (

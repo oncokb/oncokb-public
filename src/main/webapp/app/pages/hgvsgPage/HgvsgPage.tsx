@@ -108,7 +108,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
       );
     }
     if (this.store.tumorTypeQuery) {
-      content.push(`Tumor Type: ${this.store.tumorTypeQuery}`);
+      content.push(`Cancer Type: ${this.store.tumorTypeQuery}`);
     }
     return content.join(', ');
   }
@@ -132,9 +132,8 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
                     this.store.annotationResultByHgvsg.result.query.alteration
                   }
                   tumorType={this.store.tumorTypeQuery}
+                  refGenome={this.store.referenceGenomeQuery}
                   annotation={this.store.annotationResultByHgvsg.result}
-                  allTumorTypesOptions={this.store.allTumorTypesOptions.result}
-                  allSubtypes={this.store.allSubtype.result}
                   onChangeTumorType={newTumorType =>
                     (this.tumorType = newTumorType)
                   }

@@ -116,15 +116,21 @@ export type AnnotatedVariant = {
 
         'proteinChange': string
 
+        'referenceGenome': string
+
         'variant': string
 
 };
 export type Implication = {
-    'alterations': Array < string >
+    'abstracts': Array < ArticleAbstract >
+
+        'alterations': Array < string >
 
         'description': string
 
         'levelOfEvidence': "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO"
+
+        'pmids': Array < string >
 
         'tumorType': TumorType
 
@@ -148,7 +154,7 @@ export type TumorType = {
 
         'tissue': string
 
-        'tumorForm': "SOLID" | "LIQUID"
+        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
 
 };
 export type Gene = {
@@ -210,7 +216,7 @@ export type Evidence = {
 
         'articles': Array < Article >
 
-        'cancerType': string
+        'cancerTypes': Array < TumorType >
 
         'description': string
 
@@ -230,11 +236,9 @@ export type Evidence = {
 
         'liquidPropagationLevel': "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO"
 
-        'oncoTreeType': TumorType
+        'relevantCancerTypes': Array < TumorType >
 
         'solidPropagationLevel': "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO"
-
-        'subtype': string
 
         'treatments': Array < Treatment >
 
@@ -334,6 +338,8 @@ export type ActionableGene = {
 
         'proteinChange': string
 
+        'referenceGenome': string
+
         'variant': string
 
 };
@@ -357,10 +363,6 @@ export type Drug = {
     'drugName': string
 
         'ncitCode': string
-
-        'synonyms': Array < string >
-
-        'uuid': string
 
 };
 export type CuratedGene = {
@@ -409,10 +411,28 @@ export type EvidenceQueryRes = {
         'query': Query
 
 };
+export type Trial = {
+    'arms': Array < Arms >
+
+        'briefTitle': string
+
+        'currentTrialStatus': string
+
+        'isUSTrial': boolean
+
+        'nctId': string
+
+        'principalInvestigator': string
+
+};
 export type QueryGene = {
     'entrezGeneId': number
 
         'hugoSymbol': string
+
+};
+export type CancerTypesQuery = {
+    'cancerTypes': Array < string >
 
 };
 export type CancerGene = {
@@ -449,12 +469,18 @@ export type CancerGene = {
         'vogelstein': boolean
 
 };
+export type Arms = {
+    'armDescription': string
+
+        'drugs': Array < Drug >
+
+};
 export type MainType = {
     'id': number
 
         'name': string
 
-        'tumorForm': "SOLID" | "LIQUID"
+        'tumorForm': "SOLID" | "LIQUID" | "MIXED"
 
 };
 export type OncoKBInfo = {
@@ -719,7 +745,7 @@ export default class OncoKbAPI {
      * @param {integer} entrezGeneId - The entrez gene ID. (Higher priority than hugoSymbol). Example: 673
      * @param {string} copyNameAlterationType - Copy number alteration type
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateCopyNumberAlterationsGetUsingGETWithHttpInfo(parameters: {
@@ -793,7 +819,7 @@ export default class OncoKbAPI {
      * @param {integer} entrezGeneId - The entrez gene ID. (Higher priority than hugoSymbol). Example: 673
      * @param {string} copyNameAlterationType - Copy number alteration type
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateCopyNumberAlterationsGetUsingGET(parameters: {
@@ -928,7 +954,7 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#annotateMutationsByGenomicChangeGetUsingGET
      * @param {string} genomicLocation - Genomic location. Example: 7,140453136,140453136,A,T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByGenomicChangeGetUsingGETWithHttpInfo(parameters: {
@@ -990,7 +1016,7 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#annotateMutationsByGenomicChangeGetUsingGET
      * @param {string} genomicLocation - Genomic location. Example: 7,140453136,140453136,A,T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByGenomicChangeGetUsingGET(parameters: {
@@ -1123,7 +1149,7 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#annotateMutationsByHGVSgGetUsingGET
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByHGVSgGetUsingGETWithHttpInfo(parameters: {
@@ -1185,7 +1211,7 @@ export default class OncoKbAPI {
      * @name OncoKbAPI#annotateMutationsByHGVSgGetUsingGET
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByHGVSgGetUsingGET(parameters: {
@@ -1348,7 +1374,7 @@ export default class OncoKbAPI {
      * @param {string} consequence - Consequence. Exacmple: missense_variant
      * @param {integer} proteinStart - Protein Start. Example: 600
      * @param {integer} proteinEnd - Protein End. Example: 600
-     * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByProteinChangeGetUsingGETWithHttpInfo(parameters: {
@@ -1435,7 +1461,7 @@ export default class OncoKbAPI {
      * @param {string} consequence - Consequence. Exacmple: missense_variant
      * @param {integer} proteinStart - Protein Start. Example: 600
      * @param {integer} proteinEnd - Protein End. Example: 600
-     * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateMutationsByProteinChangeGetUsingGET(parameters: {
@@ -1603,7 +1629,7 @@ export default class OncoKbAPI {
      * @param {string} structuralVariantType - Structural variant type
      * @param {boolean} isFunctionalFusion - Whether is functional fusion
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateStructuralVariantsGetUsingGETWithHttpInfo(parameters: {
@@ -1700,7 +1726,7 @@ export default class OncoKbAPI {
      * @param {string} structuralVariantType - Structural variant type
      * @param {boolean} isFunctionalFusion - Whether is functional fusion
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
-     * @param {string} tumorType - OncoTree(http://oncotree.mskcc.org) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
+     * @param {string} tumorType - OncoTree(http://oncotree.info) tumor type name. The field supports OncoTree Code, OncoTree Name and OncoTree Main type. Example: Melanoma
      * @param {string} evidenceType - Evidence type to compute. This could help to improve the performance if you only look for sub-content. Example: ONCOGENIC. All available evidence type are GENE_SUMMARY, MUTATION_SUMMARY, TUMOR_TYPE_SUMMARY, PROGNOSTIC_SUMMARY, DIAGNOSTIC_SUMMARY, ONCOGENIC, MUTATION_EFFECT, PROGNOSTIC_IMPLICATION, DIAGNOSTIC_IMPLICATION, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY, STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY, INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE. For multiple evidence types query, use ',' as separator.
      */
     annotateStructuralVariantsGetUsingGET(parameters: {
@@ -3728,6 +3754,175 @@ export default class OncoKbAPI {
                 return response.body;
             });
         };
+    trialsMatchingGetUsingGETURL(parameters: {
+        'oncoTreeCode': string,
+        'treatment' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/trials';
+        if (parameters['oncoTreeCode'] !== undefined) {
+            queryParameters['oncoTreeCode'] = parameters['oncoTreeCode'];
+        }
+
+        if (parameters['treatment'] !== undefined) {
+            queryParameters['treatment'] = parameters['treatment'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Return a list of trials using OncoTree Code and/or treatment
+     * @method
+     * @name OncoKbAPI#trialsMatchingGetUsingGET
+     * @param {string} oncoTreeCode - oncoTreeCode
+     * @param {string} treatment - treatment
+     */
+    trialsMatchingGetUsingGETWithHttpInfo(parameters: {
+        'oncoTreeCode': string,
+        'treatment' ? : string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/trials';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['oncoTreeCode'] !== undefined) {
+                queryParameters['oncoTreeCode'] = parameters['oncoTreeCode'];
+            }
+
+            if (parameters['oncoTreeCode'] === undefined) {
+                reject(new Error('Missing required  parameter: oncoTreeCode'));
+                return;
+            }
+
+            if (parameters['treatment'] !== undefined) {
+                queryParameters['treatment'] = parameters['treatment'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Return a list of trials using OncoTree Code and/or treatment
+     * @method
+     * @name OncoKbAPI#trialsMatchingGetUsingGET
+     * @param {string} oncoTreeCode - oncoTreeCode
+     * @param {string} treatment - treatment
+     */
+    trialsMatchingGetUsingGET(parameters: {
+            'oncoTreeCode': string,
+            'treatment' ? : string,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < Trial >
+        > {
+            return this.trialsMatchingGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    trialsGetByCancerTypesUsingPOSTURL(parameters: {
+        'body': CancerTypesQuery,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/trials/cancerTypes';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Return a list of trials using cancer types
+     * @method
+     * @name OncoKbAPI#trialsGetByCancerTypesUsingPOST
+     * @param {} body - body
+     */
+    trialsGetByCancerTypesUsingPOSTWithHttpInfo(parameters: {
+        'body': CancerTypesQuery,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/trials/cancerTypes';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Return a list of trials using cancer types
+     * @method
+     * @name OncoKbAPI#trialsGetByCancerTypesUsingPOST
+     * @param {} body - body
+     */
+    trialsGetByCancerTypesUsingPOST(parameters: {
+        'body': CancerTypesQuery,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < {} > {
+        return this.trialsGetByCancerTypesUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     utilsAllActionableVariantsGetUsingGETURL(parameters: {
         'version' ? : string,
         $queryParameters ? : any

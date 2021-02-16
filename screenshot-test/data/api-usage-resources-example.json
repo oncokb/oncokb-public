@@ -1,0 +1,104 @@
+{
+    "month" : {
+      "2020-06" : {
+        "example@email.com" : 5.0,
+        "example2@email.com" : 1.0,
+        "example3@email.com" : 1.0,
+        "example4@email.com" : 3.0,
+        "example5@email.com" : 1.0,
+        "example6@email.com" : 1.0
+      },
+      "2020-05" : {
+        "example7@email.com" : 2.0,
+        "example5@email.com" : 1.0
+      },
+      "2020-12" : {
+        "example8@email.com" : 1.0,
+        "example9@email.com" : 1.0,
+        "example10@email.com" : 1.0,
+        "example11@email.com" : 2.0
+      },
+      "2021-01" : {
+        "example12@email.com" : 2.0,
+        "example13@email.com" : 1.0,
+        "example14@email.com" : 1.0,
+        "example15@email.com" : 1.0
+      },
+      "2020-10" : {
+        "example16@email.com" : 1.0,
+        "example17@email.com" : 4.0,
+        "example18@email.com" : 2.0,
+        "example19@email.com" : 1.0,
+        "example20@email.com" : 4.0,
+        "example21@email.com" : 1.0
+      },
+      "2020-09" : {
+        "example22@email.com" : 1.0,
+        "example23@email.com" : 3.0,
+        "example7@email.com" : 1.0,
+        "example24@email.com" : 1.0,
+        "example25@email.com" : 1.0,
+        "example26@email.com" : 8.0,
+        "example27@email.com" : 1.0
+      },
+      "2020-08" : {
+        "example28@email.com" : 1.0,
+        "example29@email.com" : 1.0,
+        "example12@email.com" : 3.0,
+        "example24@email.com" : 1.0,
+        "example30@email.com" : 3.0,
+        "example31@email.com" : 1.0
+      },
+      "2020-07" : {
+        "example22@email.com" : 1.0,
+        "example32@email.com" : 3.0,
+        "example33@email.com" : 1.0,
+        "example34@email.com" : 2.0,
+        "example35@email.com" : 1.0,
+        "example36@email.com" : 2.0,
+        "example37@email.com" : 1.0,
+        "example31@email.com" : 1.0,
+        "example38@email.com" : 1.0
+      }
+    },
+    "year" : {
+      "example16@email.com" : 1,
+      "example17@email.com" : 4,
+      "example2@email.com" : 1,
+      "example28@email.com" : 1,
+      "example8@email.com" : 1,
+      "example3@email.com" : 1,
+      "example13@email.com" : 1,
+      "example9@email.com" : 1,
+      "example20@email.com" : 4,
+      "example21@email.com" : 1,
+      "example4@email.com" : 3,
+      "example38@email.com" : 1,
+      "example27@email.com" : 1,
+      "example32@email.com" : 3,
+      "example@email.com" : 5,
+      "example33@email.com" : 1,
+      "example7@email.com" : 3,
+      "example24@email.com" : 2,
+      "example25@email.com" : 1,
+      "example15@email.com" : 1,
+      "example26@email.com" : 8,
+      "example5@email.com" : 2,
+      "example6@email.com" : 1,
+      "example22@email.com" : 2,
+      "example18@email.com" : 2,
+      "example23@email.com" : 3,
+      "example34@email.com" : 2,
+      "example14@email.com" : 1,
+      "example37@email.com" : 1,
+      "example31@email.com" : 2,
+      "example29@email.com" : 1,
+      "example12@email.com" : 5,
+      "example35@email.com" : 1,
+      "example19@email.com" : 1,
+      "example10@email.com" : 1,
+      "example11@email.com" : 2,
+      "example36@email.com" : 2,
+      "example30@email.com" : 3
+    }
+  }

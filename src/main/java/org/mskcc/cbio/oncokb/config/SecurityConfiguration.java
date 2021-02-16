@@ -72,7 +72,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(problemSupport)
         .and()
             .headers()
-            .contentSecurityPolicy("default-src 'self'; frame-src 'self' https://*.oncokb.org https://*.youtube.com https://*.bilibili.com https://*.gitbook.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com; font-src 'self' data:; connect-src 'self' https://*")
+            .contentSecurityPolicy("default-src 'self'; frame-src 'self' https://*.google.com https://recaptcha.net https://*.oncokb.org https://*.youtube.com https://*.bilibili.com https://*.gitbook.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com www.google-analytics.com https://recaptcha.net https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com; font-src 'self' data:; connect-src 'self' https://*")
         .and()
             .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER_WHEN_DOWNGRADE)
         .and()
@@ -120,6 +120,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/token-stats/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/cronjob/**").hasAnyAuthority(AuthoritiesConstants.BOT)
+
+            .antMatchers("/api/mails/feedback").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
+            .antMatchers("/api/mails/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
 

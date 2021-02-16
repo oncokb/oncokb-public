@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head>
+        <title>Searching Response structure Changed</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p>
+            Dear members,
+        </p>
+        <p>
+            The response structures of the following searching engine has changed:
+        </p>
+        <p><b th:text="${source}"></b></p>
+        <p>Please make changes as soon as possible.</p>
+        <p>
+            <div th:text="#{email.closing}">Sincerely, </div>
+            <div th:text="#{email.signature}">The OncoKB Team</div>
+        </p>
+    </body>
+</html>

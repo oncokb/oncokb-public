@@ -47,6 +47,7 @@ superagent.Request.prototype.query = function (queryParameters: any) {
       this.responseType('blob');
     }
   }
+
   return query.call(this, queryParameters);
 };
 

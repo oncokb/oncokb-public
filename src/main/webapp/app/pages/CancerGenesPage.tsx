@@ -4,7 +4,6 @@ import { CancerGene, CuratedGene } from 'app/shared/api/generated/OncoKbAPI';
 import { inject, observer } from 'mobx-react';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import { GenePageLink } from 'app/shared/utils/UrlUtils';
-import { SuggestCuration } from 'app/components/SuggestCuration';
 import { Col, Row } from 'react-bootstrap';
 import * as _ from 'lodash';
 import OncoKBTable, {
@@ -20,10 +19,11 @@ import {
   TABLE_COLUMN_KEY,
 } from 'app/config/constants';
 import AppStore from 'app/store/AppStore';
-import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
 import DocumentTitle from 'react-document-title';
 import { DownloadButtonWithPromise } from 'app/components/downloadButtonWithPromise/DownloadButtonWithPromise';
+import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
+import { FeedbackType } from 'app/components/feedback/types';
 
 const InfoIcon = (props: { overlay: string | JSX.Element }) => {
   return (
@@ -64,7 +64,7 @@ type ExtendCancerGene = CancerGene & {
 export default class CancerGenesPage extends React.Component<{
   appStore: AppStore;
 }> {
-  private fetchedDate = '05/07/2019';
+  private fetchedDate = '11/17/2020';
 
   private columns: SearchColumn<ExtendCancerGene>[] = [
     {
@@ -92,11 +92,19 @@ export default class CancerGenesPage extends React.Component<{
       style: { textAlign: 'center' },
       minWidth: 80,
       sortMethod: defaultSortMethod,
-      Cell(props: { original: ExtendCancerGene }) {
+      Cell: (props: { original: ExtendCancerGene }) => {
         return props.original.oncokbAnnotated ? (
           <i className="fa fa-check" />
         ) : (
-          <SuggestCuration suggestion={props.original.hugoSymbol} />
+          <FeedbackIcon
+            feedback={{
+              type: FeedbackType.ANNOTATION,
+              annotation: {
+                gene: props.original.hugoSymbol,
+              },
+            }}
+            appStore={this.props.appStore}
+          />
         );
       },
     },
@@ -203,7 +211,7 @@ export default class CancerGenesPage extends React.Component<{
               <span>
                 Gene is part of the{' '}
                 <a
-                  href="https://www.accessdata.fda.gov/cdrh_docs/pdf17/P170019C.pdf"
+                  href="https://assets.ctfassets.net/w98cd481qyp0/YqqKHaqQmFeqc5ueQk48w/0a34fcdaa3a71dbe460cdcb01cebe8ad/F1CDx_Technical_Specifications_072020.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -241,7 +249,7 @@ export default class CancerGenesPage extends React.Component<{
               <span>
                 Gene is part of the{' '}
                 <a
-                  href="https://www.foundationmedicineasia.com/dam/assets/pdf/FOneHeme_Current_GeneList.pdf"
+                  href="https://assets.ctfassets.net/w98cd481qyp0/42r1cTE8VR4137CaHrsaen/baf91080cb3d78a52ada10c6358fa130/FoundationOne_Heme_Technical_Specifications.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -323,8 +331,8 @@ export default class CancerGenesPage extends React.Component<{
                 >
                   Cancer Gene Census Tier 1
                 </a>{' '}
-                ({getPanelGeneCount(props.data, 'sangerCGC')} genes, v89 - 15th
-                May 2019)
+                ({getPanelGeneCount(props.data, 'sangerCGC')} genes, v92 - 27th
+                August 2020)
               </span>
             }
           />
