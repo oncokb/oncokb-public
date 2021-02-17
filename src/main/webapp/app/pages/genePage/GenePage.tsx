@@ -12,6 +12,7 @@ import { Else, If, Then } from 'react-if';
 import { Redirect, RouteComponentProps } from 'react-router';
 import { Col, Row } from 'react-bootstrap';
 import { Citations, Gene } from 'app/shared/api/generated/OncoKbAPI';
+import { TumorType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import styles from './GenePage.module.scss';
 import {
   filterByKeyword,
@@ -65,6 +66,7 @@ import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLin
 import { RouterStore } from 'mobx-react-router';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
+import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -384,6 +386,16 @@ export default class GenePage extends React.Component<GenePageProps> {
               .join(', '),
             keyword
           ),
+        sortMethod(a: TumorType[], b: TumorType[]): number {
+          return defaultSortMethod(
+            a
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(','),
+            b
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(',')
+          );
+        },
         Cell: (props: { original: ClinicalVariant }) => {
           const cancerTypes = props.original.cancerTypes.map(cancerType => (
             <TumorTypePageLink
@@ -397,10 +409,15 @@ export default class GenePage extends React.Component<GenePageProps> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
+        accessor: 'drug',
+        sortMethod(a, b) {
+          return defaultSortMethod(a.join(','), b.join(','));
+        },
         onFilter: (data: ClinicalVariant, keyword) =>
           _.some(data.drug, (drug: string) =>
             drug.toLowerCase().includes(keyword)
           ),
+
         Cell(props: { original: ClinicalVariant }) {
           return (
             <WithSeparator separator={<br />}>
@@ -456,6 +473,16 @@ export default class GenePage extends React.Component<GenePageProps> {
               .join(', '),
             keyword
           ),
+        sortMethod(a: TumorType[], b: TumorType[]): number {
+          return defaultSortMethod(
+            a
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(','),
+            b
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(',')
+          );
+        },
         Cell: (props: { original: ClinicalVariant }) => {
           const cancerTypes = props.original.cancerTypes.map(cancerType => (
             <TumorTypePageLink

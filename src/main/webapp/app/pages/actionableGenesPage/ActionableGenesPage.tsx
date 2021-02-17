@@ -579,13 +579,18 @@ export default class ActionableGenesPage extends React.Component<
       },
     },
     {
-      id: 'alterations',
+      id: TABLE_COLUMN_KEY.ALTERATIONS,
       Header: <span>Alterations</span>,
       accessor: 'alterations',
       minWidth: 200,
       style: { whiteSpace: 'normal' },
       defaultSortDesc: false,
-      sortMethod: defaultSortMethod,
+      sortMethod(a: Alteration[], b: Alteration[]) {
+        return a
+          .map(datum => datum.name)
+          .join(', ')
+          .localeCompare(b.map(datum => datum.name).join(', '));
+      },
       Cell: (props: { original: Treatment }) => {
         return (
           <div style={{ display: 'block' }}>
@@ -601,7 +606,10 @@ export default class ActionableGenesPage extends React.Component<
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
       minWidth: 300,
-      accessor: 'tumorType',
+      accessor: 'cancerTypes',
+      sortMethod(a: string[], b: string[]) {
+        return a.join(', ').localeCompare(b.join(', '));
+      },
       Cell(props: { original: Treatment }) {
         return <span>{props.original.cancerTypes.join(', ')}</span>;
       },
@@ -759,11 +767,23 @@ export default class ActionableGenesPage extends React.Component<
                   }}
                   defaultSorted={[
                     {
-                      id: 'LEVEL',
+                      id: TABLE_COLUMN_KEY.LEVEL,
+                      desc: true,
+                    },
+                    {
+                      id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
                       desc: false,
                     },
                     {
-                      id: 'HUGO_SYMBOL',
+                      id: TABLE_COLUMN_KEY.ALTERATIONS,
+                      desc: false,
+                    },
+                    {
+                      id: TABLE_COLUMN_KEY.CANCER_TYPES,
+                      desc: false,
+                    },
+                    {
+                      id: TABLE_COLUMN_KEY.DRUGS,
                       desc: false,
                     },
                   ]}
