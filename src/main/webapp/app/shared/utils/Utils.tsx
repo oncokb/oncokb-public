@@ -17,6 +17,7 @@ import {
   LEVEL_TYPES,
   ONCOGENICITY,
   LEVELS,
+  LEVEL_PRIORITY,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
@@ -346,8 +347,10 @@ export function getDefaultColumnDefinition<T>(
         accessor: 'level',
         minWidth: 60,
         width: 60,
-        defaultSortDesc: false,
-        sortMethod: defaultSortMethod,
+        defaultSortDesc: true,
+        sortMethod(a: LEVELS, b: LEVELS) {
+          return LEVEL_PRIORITY.indexOf(a) - LEVEL_PRIORITY.indexOf(b);
+        },
         Cell(props: any) {
           return (
             <div className={'my-1 d-flex justify-content-center'}>

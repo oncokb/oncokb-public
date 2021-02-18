@@ -21,10 +21,18 @@ export const AnnotationPageTable: React.FunctionComponent<{
       defaultSorted={[
         {
           id: TABLE_COLUMN_KEY.LEVEL,
-          desc: false,
+          desc: true,
         },
         {
           id: TABLE_COLUMN_KEY.ALTERATION,
+          desc: false,
+        },
+        {
+          id: TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,
+          desc: false,
+        },
+        {
+          id: TABLE_COLUMN_KEY.DRUGS,
           desc: false,
         },
       ]}

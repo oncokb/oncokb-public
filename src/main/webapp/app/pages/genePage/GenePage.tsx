@@ -10,6 +10,7 @@ import {
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
 import { Citations, Gene } from 'app/shared/api/generated/OncoKbAPI';
+import { TumorType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { Redirect, RouteComponentProps, Prompt } from 'react-router';
 import { Button, Col, Row, Modal } from 'react-bootstrap';
 import styles from './GenePage.module.scss';
@@ -69,6 +70,7 @@ import { GenePageTable } from './GenePageTable';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
+import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import * as QueryString from 'query-string';
@@ -216,7 +218,7 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
       key: 'loe',
       element: (
         <div>
-          <h5 className={'d-flex'}>
+          <h5 className={'d-flex align-items-center flex-wrap'}>
             <span className={'mr-2'}>Highest level of evidence:</span>
             {getHighestLevelStrings(
               props.highestSensitiveLevel,
@@ -413,6 +415,16 @@ export default class GenePage extends React.Component<GenePageProps> {
               .join(', '),
             keyword
           ),
+        sortMethod(a: TumorType[], b: TumorType[]): number {
+          return defaultSortMethod(
+            a
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(','),
+            b
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(',')
+          );
+        },
         Cell: (props: { original: ClinicalVariant }) => {
           const cancerTypes = props.original.cancerTypes.map(cancerType => (
             <TumorTypePageLink
@@ -426,10 +438,15 @@ export default class GenePage extends React.Component<GenePageProps> {
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
+        accessor: 'drug',
+        sortMethod(a, b) {
+          return defaultSortMethod(a.join(','), b.join(','));
+        },
         onFilter: (data: ClinicalVariant, keyword) =>
           _.some(data.drug, (drug: string) =>
             drug.toLowerCase().includes(keyword)
           ),
+
         Cell(props: { original: ClinicalVariant }) {
           return (
             <WithSeparator separator={<br />}>
@@ -485,6 +502,16 @@ export default class GenePage extends React.Component<GenePageProps> {
               .join(', '),
             keyword
           ),
+        sortMethod(a: TumorType[], b: TumorType[]): number {
+          return defaultSortMethod(
+            a
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(','),
+            b
+              .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+              .join(',')
+          );
+        },
         Cell: (props: { original: ClinicalVariant }) => {
           const cancerTypes = props.original.cancerTypes.map(cancerType => (
             <TumorTypePageLink
@@ -887,21 +914,6 @@ export default class GenePage extends React.Component<GenePageProps> {
     }
   }
 
-  getTabContent(key: TAB_KEYS) {
-    return (
-      <div>
-        <div style={{ width: '80%', marginBottom: '-30px' }}>
-          <div>{this.getTabDescription(key)}</div>
-          <ReportIssue
-            appStore={this.props.appStore}
-            annotation={{ gene: this.store.hugoSymbol }}
-          />
-        </div>
-        {this.getTable(key)}
-      </div>
-    );
-  }
-
   @autobind
   @action
   handleBlockedNavigation(nextLocation: Location): boolean {
@@ -948,10 +960,30 @@ export default class GenePage extends React.Component<GenePageProps> {
         title: 'FDA-Recognized Alterations',
       });
     }
+
+    const tabDescriptionStyle = this.props.windowStore.isLargeScreen
+      ? {
+          width: '80%',
+          marginBottom: '-30px',
+        }
+      : undefined;
     return tabs.map(tab => {
       return {
         title: tab.title,
-        getContent: () => this.getTabContent(tab.key),
+        getContent: () => {
+          return (
+            <div>
+              <div style={tabDescriptionStyle}>
+                <div>{this.getTabDescription(tab.key)}</div>
+                <ReportIssue
+                  appStore={this.props.appStore}
+                  annotation={{ gene: this.store.hugoSymbol }}
+                />
+              </div>
+              {this.getTable(tab.key)}
+            </div>
+          );
+        },
         /* Optional parameters */
         key: tab.key,
         tabClassName: styles.tab,
