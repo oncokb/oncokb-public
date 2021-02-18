@@ -1,17 +1,16 @@
 import { LevelButton } from 'app/components/levelButton/LevelButton';
 import {
   COMPONENT_PADDING,
-  LEVELS,
   LEVEL_BUTTON_DESCRIPTION,
   LEVEL_CLASSIFICATION,
-  LEVEL_TYPES,
   LEVEL_TYPE_NAMES,
+  LEVEL_TYPES,
+  LEVELS,
 } from 'app/config/constants';
 import React from 'react';
 import { Button, Col, Collapse, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import { observer } from 'mobx-react';
-import { computed } from 'mobx';
 
 type LevelSelectionRowProps = {
   levelType: LEVEL_TYPES;
@@ -29,7 +28,10 @@ export default class LevelSelectionRow extends React.Component<
   render() {
     const levelSelections = [];
     for (const level in LEVELS) {
-      if (LEVELS[level]) {
+      if (
+        LEVELS[level] &&
+        ![LEVELS.Tx3A, LEVELS.Tx3B].includes(LEVELS[level])
+      ) {
         levelSelections.push(
           LEVEL_CLASSIFICATION[LEVELS[level]] === this.props.levelType && (
             <Col

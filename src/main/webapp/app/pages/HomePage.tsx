@@ -92,7 +92,7 @@ class HomePage extends React.Component<IHomeProps> {
     }[] = [];
     for (const level in LEVELS) {
       if (LEVELS[level]) {
-        switch (level) {
+        switch (LEVELS[level]) {
           case LEVELS.R1:
             levelGadgets.push({
               level: LEVELS.R1,
@@ -103,6 +103,10 @@ class HomePage extends React.Component<IHomeProps> {
             });
             break;
           case LEVELS.R2:
+            break;
+          case LEVELS.Tx3A:
+            break;
+          case LEVELS.Tx3B:
             break;
           default:
             levelGadgets.push({
