@@ -152,7 +152,7 @@ export enum LEVELS {
 }
 
 // the bigger of the index, the higher the priority
-export const LEVEL_PRIORITY = [
+export const LEVEL_PRIORITY: LEVELS[] = [
   LEVELS.Px3,
   LEVELS.Px2,
   LEVELS.Px1,
@@ -186,7 +186,7 @@ export const LEVEL_BUTTON_DESCRIPTION: { [key in LEVELS]: string } = {
   [LEVELS.Px3]: 'Investigational',
 };
 
-export const LEVEL_CLASSIFICATION = {
+export const LEVEL_CLASSIFICATION: { [key in LEVELS]: LEVEL_TYPES } = {
   [LEVELS.Dx1]: LEVEL_TYPES.DX,
   [LEVELS.Dx2]: LEVEL_TYPES.DX,
   [LEVELS.Dx3]: LEVEL_TYPES.DX,
@@ -196,24 +196,14 @@ export const LEVEL_CLASSIFICATION = {
   [LEVELS.Tx1]: LEVEL_TYPES.TX,
   [LEVELS.Tx2]: LEVEL_TYPES.TX,
   [LEVELS.Tx3]: LEVEL_TYPES.TX,
+  [LEVELS.Tx3A]: LEVEL_TYPES.TX,
+  [LEVELS.Tx3B]: LEVEL_TYPES.TX,
+  [LEVELS.Tx3]: LEVEL_TYPES.TX,
   [LEVELS.Tx4]: LEVEL_TYPES.TX,
   [LEVELS.R1]: LEVEL_TYPES.TX,
   [LEVELS.R2]: LEVEL_TYPES.TX,
 };
-export const LEVEL_OF_EVIDENCE = [
-  'LEVEL_1',
-  'LEVEL_2',
-  'LEVEL_3',
-  'LEVEL_4',
-  'LEVEL_R1',
-  'LEVEL_R2',
-  'LEVEL_Dx1',
-  'LEVEL_Dx2',
-  'LEVEL_Dx3',
-  'LEVEL_Px1',
-  'LEVEL_Px2',
-  'LEVEL_Px3',
-];
+
 export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
   [ONCOGENICITY.NEUTRAL]: 'neutral',
   [ONCOGENICITY.LIKELY_NEUTRAL]: 'neutral',
