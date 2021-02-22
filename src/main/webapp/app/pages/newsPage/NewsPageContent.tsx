@@ -28,6 +28,7 @@ import { SHOW_MODAL_KEY } from '../AboutPage';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 import { AbstractLink, FdaApprovalLink } from 'app/pages/newsPage/Links';
 import WithSeparator from 'react-with-separator';
+import PmidItem from 'app/components/PmidItem';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -119,6 +120,139 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '03122021': {
+    updatedImplication: [
+      [
+        '1',
+        'MET',
+        'Exon 14 Skipping Mutations',
+        'Non-Small Cell Lung Cancer',
+        'Tepotinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-grants-accelerated-approval-tepotinib-metastatic-non-small-cell-lung-cancer'
+            }
+            approval={'Tepotinib'}
+          />
+          <PMIDLink pmids={'32469185'} />
+        </WithSeparator>,
+      ],
+      [
+        '2',
+        'ERBB2',
+        'Amplification',
+        'Colorectal Cancer',
+        'Trastuzumab Deruxtecan',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>Listing in Colorectal Cancer NCCN, v2.2021</span>
+          <AbstractLink
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2020.38.15_suppl.4000'
+            }
+            abstract={'Siena et al. Abstract# 4000, ASCO 2020.'}
+          />
+        </WithSeparator>,
+      ],
+      [
+        '2',
+        'ERBB2',
+        'Oncogenic Mutations',
+        'Non-Small Cell Lung Cancer',
+        'Trastuzumab Deruxtecan',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>Listing in NSCLC NCCN, v2.2021</span>
+          <AbstractLink
+            link={'https://ascopubs.org/doi/10.1200/JCO.2020.38.15_suppl.9504'}
+            abstract={'Smit et al. Abstract# 9504, ASCO 2020.'}
+          />
+        </WithSeparator>,
+      ],
+      [
+        '2',
+        'ALK',
+        'Fusions',
+        'Inflammatory Myofibroblastic Tumor',
+        'Brigatinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>Listing in Soft Tissue Sarcoma NCCN, v1.2021</span>
+          <PMIDLink pmids={'27836716'} />
+        </WithSeparator>,
+      ],
+      [
+        '4',
+        'KIT',
+        'D816, D820, N822, Y823D, C809G, A829P',
+        'Gastrointestinal Stromal Tumors',
+        'Nilotinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <PMIDLink pmids={'19467857, 21456006'} />
+        </WithSeparator>,
+      ],
+      [
+        '4',
+        'KIT',
+        'D816, D820, N822, Y823D, C809G, A829P',
+        'Gastrointestinal Stromal Tumors',
+        'Pazopanib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <PMIDLink pmids={'24356634'} />
+        </WithSeparator>,
+      ],
+      [
+        'R1',
+        'NTRK3',
+        'G623R, G696A, F617L',
+        'All Solid Tumors',
+        'Larotrectinib',
+        <span>
+          Inclusion as resistance mutations in{' '}
+          <Linkout
+            link={
+              'https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/211710s000lbl.pdf'
+            }
+          >
+            FDA drug label
+          </Linkout>
+        </span>,
+      ],
+      [
+        'R2',
+        'NTRK1',
+        'G623R',
+        'All Solid Tumors',
+        'Entrectinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <PMIDLink pmids={'28751539, 28751539, 26546295'} />
+          <AbstractLink
+            link={
+              'https://tptherapeutics.com/wp-content/uploads/AACR_2019_TRK_Final_S.pdf'
+            }
+            abstract={'Drilon et al. Abstract# 4000, AACR 2019'}
+          />
+        </WithSeparator>,
+      ],
+    ],
+    changedAnnotation: [
+      ['NTRK1', 'G623R', 'All Solid Tumors', 'Larotrectinib', 'R2', 'R1'],
+      [
+        'KIT',
+        'D816, D820, N822, Y823D, C809G, A829P',
+        'Gastrointestinal Stromal Tumors',
+        'Sorafenib',
+        'None',
+        '2',
+      ],
+      [
+        'CDK4',
+        'Amplification',
+        'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
+        'Palbociclib, Abemaciclib',
+        'None',
+        '4',
+      ],
+    ],
+  },
   '02102021': {
     priorityNews: [
       <span>
