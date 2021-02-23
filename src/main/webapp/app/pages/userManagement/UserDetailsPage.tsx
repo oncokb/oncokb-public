@@ -53,11 +53,11 @@ export default class UserDetailsPage extends React.Component<{
   };
   @observable currentSelectedButton = USER_BUTTON_TYPE.VERIFIED;
   @observable currentSelectedFilter: {
-    activationKey: string | null | undefined;
-    licenseType: string[] | undefined;
+    emailVerified: boolean | undefined;
+    licenseTypes: string[] | undefined;
   } = {
-    activationKey: undefined,
-    licenseType: undefined,
+    emailVerified: undefined,
+    licenseTypes: undefined,
   };
   userButtons = [
     USER_BUTTON_TYPE.COMMERCIAL,
@@ -90,8 +90,8 @@ export default class UserDetailsPage extends React.Component<{
     this.currentSelectedButton = button;
     if (this.currentSelectedButton === USER_BUTTON_TYPE.COMMERCIAL) {
       this.currentSelectedFilter = {
-        activationKey: null,
-        licenseType: [
+        emailVerified: true,
+        licenseTypes: [
           LicenseType.HOSPITAL,
           LicenseType.RESEARCH_IN_COMMERCIAL,
           LicenseType.COMMERCIAL,
@@ -99,13 +99,13 @@ export default class UserDetailsPage extends React.Component<{
       };
     } else if (this.currentSelectedButton === USER_BUTTON_TYPE.VERIFIED) {
       this.currentSelectedFilter = {
-        activationKey: null,
-        licenseType: undefined,
+        emailVerified: true,
+        licenseTypes: undefined,
       };
     } else {
       this.currentSelectedFilter = {
-        activationKey: undefined,
-        licenseType: undefined,
+        emailVerified: undefined,
+        licenseTypes: undefined,
       };
     }
   }
@@ -167,17 +167,21 @@ export default class UserDetailsPage extends React.Component<{
       return this.users;
     } else {
       return this.users.filter((user: UserDTO) => {
-        const result =
-          (_.isUndefined(this.currentSelectedFilter.activationKey)
-            ? true
-            : user.activationKey ===
-              this.currentSelectedFilter.activationKey) &&
-          (_.isUndefined(this.currentSelectedFilter.licenseType)
-            ? true
-            : this.currentSelectedFilter.licenseType.includes(
-                user.licenseType
-              ));
-        return result;
+        let userMatched = true;
+        if (this.currentSelectedFilter.emailVerified) {
+          if (!user.emailVerified) {
+            userMatched = false;
+          }
+        }
+        if (userMatched) {
+          if (
+            this.currentSelectedFilter.licenseTypes !== undefined &&
+            !this.currentSelectedFilter.licenseTypes.includes(user.licenseType)
+          ) {
+            userMatched = false;
+          }
+        }
+        return userMatched;
       });
     }
   }

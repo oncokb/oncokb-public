@@ -83,7 +83,7 @@ public class UserDTO {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.activated = user.getActivated();
-        this.emailVerified = StringUtils.isEmpty(user.getActivationKey());
+        this.emailVerified = StringUtils.isEmpty(user.getActivationKey()) || user.getActivated();
         this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
         this.activationKey = user.getActivationKey();
