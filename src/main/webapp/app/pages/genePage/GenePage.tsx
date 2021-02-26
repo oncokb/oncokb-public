@@ -10,7 +10,6 @@ import {
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
 import { Citations, Gene } from 'app/shared/api/generated/OncoKbAPI';
-import { TumorType } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { Redirect, RouteComponentProps, Prompt } from 'react-router';
 import { Button, Col, Row, Modal } from 'react-bootstrap';
 import styles from './GenePage.module.scss';
@@ -39,10 +38,9 @@ import {
   PAGE_ROUTE,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
+  LEVEL_PRIORITY,
 } from 'app/config/constants';
 import {
-  Alteration,
-  ArticleAbstract,
   BiologicalVariant,
   ClinicalVariant,
   TumorType,
@@ -85,10 +83,6 @@ import { Location } from 'history';
 import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
 import { Link } from 'react-router-dom';
 import { Version } from 'app/pages/LevelOfEvidencePage';
-import {
-  defaultSortMethod,
-  sortByAlteration,
-} from 'app/shared/utils/ReactTableUtils';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -294,10 +288,10 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
 };
 
 enum TAB_KEYS {
-  'BIOLOGICAL',
-  'TX',
-  'DX',
-  'PX',
+  'BIOLOGICAL' = 'BIOLOGICAL',
+  'TX' = 'TX',
+  'DX' = 'DX',
+  'PX' = 'PX',
   'FDA' = 'FDA',
 }
 
@@ -541,22 +535,22 @@ export default class GenePage extends React.Component<GenePageProps> {
     return [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
-        accessor: 'variant',
+        accessor: 'alteration',
         width: 400,
-        sortMethod: defaultSortMethod,
         onFilter: (data: FdaVariant, keyword) =>
-          filterByKeyword(data.alteration, keyword),
+          filterByKeyword(data.alteration.name, keyword),
         Cell: (props: { original: FdaVariant }) => {
           return (
             <AlterationPageLink
               hugoSymbol={this.store.hugoSymbol}
-              alteration={props.original.alteration}
+              alteration={props.original.alteration.name}
             />
           );
         },
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
+        accessor: 'cancerType',
         width: 400,
         Header: <span>Cancer Type</span>,
         onFilter: (data: FdaVariant, keyword) =>
@@ -592,6 +586,12 @@ export default class GenePage extends React.Component<GenePageProps> {
         accessor: 'level',
         onFilter: (data: FdaVariant, keyword) =>
           filterByKeyword(data.level, keyword),
+        sortMethod(a: string, b: string) {
+          return (
+            LEVEL_PRIORITY.indexOf(a.replace('Level ', '') as LEVELS) -
+            LEVEL_PRIORITY.indexOf(b.replace('Level ', '') as LEVELS)
+          );
+        },
         Cell(props: { original: FdaVariant }) {
           return <span>FDA {props.original.level}</span>;
         },
@@ -707,20 +707,27 @@ export default class GenePage extends React.Component<GenePageProps> {
 
   @computed
   get fdaVariants() {
-    const predefinedFdaVariants: FdaVariant[] = this.store.filteredClinicalAlterations.map(
-      clinicalAlt => {
+    const predefinedFdaVariants: FdaVariant[] = _.uniqBy(
+      this.txAlterations.map(clinicalAlt => {
+        const cancerTypesName = clinicalAlt.cancerTypes
+          .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
+          .join(', ');
         return {
-          cancerType: clinicalAlt.cancerTypes
-            .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
-            .join(', '),
-          level: getFdaLevel(clinicalAlt.level),
-          alteration: clinicalAlt.variant.name,
+          cancerType: cancerTypesName,
+          level: getFdaLevel(
+            clinicalAlt.level,
+            this.store.hugoSymbol,
+            clinicalAlt.variant.name,
+            cancerTypesName
+          ),
+          alteration: clinicalAlt.variant,
         };
-      }
+      }),
+      alt => `${alt.alteration}${alt.cancerType}${alt.level}`
     );
     const hasOncogenicMutations =
       predefinedFdaVariants.filter((alteration: FdaVariant) =>
-        this.isOncogenicMutations(alteration.alteration)
+        this.isOncogenicMutations(alteration.alteration.name)
       ).length > 0;
     let fdaUpdatedVariants = predefinedFdaVariants;
     if (hasOncogenicMutations) {
@@ -733,12 +740,12 @@ export default class GenePage extends React.Component<GenePageProps> {
       fdaUpdatedVariants = _.reduce(
         predefinedFdaVariants,
         (acc, next) => {
-          if (this.isOncogenicMutations(next.alteration)) {
+          if (this.isOncogenicMutations(next.alteration.name)) {
             acc.push(
               ...oncogenicAlts.map(alt => {
                 return {
                   ...next,
-                  alteration: alt.variant.name,
+                  alteration: alt.variant,
                 };
               })
             );
@@ -771,7 +778,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       fdaUpdatedVariants = fdaUpdatedVariants.map(variant => {
         return {
           ...variant,
-          level: fdaLevel2Mutations.includes(variant.alteration)
+          level: fdaLevel2Mutations.includes(variant.alteration.name)
             ? variant.level
             : 'Level 3',
         };
