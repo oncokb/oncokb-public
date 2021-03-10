@@ -13,12 +13,7 @@ export const AbstractLink: React.FunctionComponent<{
 }> = props => {
   return (
     <span>
-      Abstract:{' '}
-      <Linkout
-        link={'https://ascopubs.org/doi/abs/10.1200/JCO.2019.37.15_suppl.1000'}
-      >
-        {props.abstract}
-      </Linkout>
+      Abstract: <Linkout link={props.link}>{props.abstract}</Linkout>
     </span>
   );
 };
