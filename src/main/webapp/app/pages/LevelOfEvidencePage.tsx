@@ -258,7 +258,9 @@ export default class LevelOfEvidencePage extends React.Component<
             <Col className={'d-md-flex justify-content-center mt-2'}>
               <div
                 style={{
-                  maxWidth: this.version === Version.AAC ? 1000 : IMG_MAX_WIDTH,
+                  maxWidth: [Version.AAC, Version.FDA].includes(this.version)
+                    ? 1000
+                    : IMG_MAX_WIDTH,
                 }}
               >
                 <img
