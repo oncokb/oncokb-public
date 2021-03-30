@@ -59,7 +59,7 @@
     "react-loadable": "5.5.0",
     "react-mutation-mapper": "^0.5.12",
     "react-portal": "latest",
-    "react-responsive-tabs": "^3.3.0",
+    "react-responsive-tabs": "^4.3.0",
     "react-router": "^5.1.2",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^5.1.2",
