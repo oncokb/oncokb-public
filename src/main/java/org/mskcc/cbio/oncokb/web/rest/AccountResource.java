@@ -365,6 +365,16 @@ public class AccountResource {
         }
     }
 
+    @PostMapping(path = "/account/active-trial/init")
+    public UserDTO initiateTrialAccountActivation(@RequestBody String mail) {
+        Optional<User> user = userService.initiateTrialAccountActivation(mail);
+        if (user.isPresent()) {
+            return userMapper.userToUserDTO(user.get());
+        } else {
+            throw new AccountResourceException("No user was found");
+        }
+    }
+
 
     @PostMapping(path = "/account/resend-verification")
     public void resendVerification(@RequestBody LoginVM loginVM) {
