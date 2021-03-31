@@ -1,6 +1,6 @@
-id;license_type;job_title;company;city;country;address;user_id
-1;COMMERCIAL;Forward Communications Planner;Dam;North Jadonhaven;Greece;Metal deposit;1
-2;HOSPITAL;Internal Factors Manager;Chips;New Elliottstad;Madagascar;web-readiness;2
-3;RESEARCH_IN_COMMERCIAL;Regional Marketing Associate;Coordinator;South Aubreemouth;Nauru;syndicate;3
-4;ACADEMIC;Senior Solutions Representative;Planner cross-platform access;East Markusberg;Japan;Rubber Buckinghamshire Games;4
-5;ACADEMIC;Senior Solutions Representative;Planner cross-platform access;East Markusberg;Japan;Rubber Buckinghamshire Games;5
+id;license_type;job_title;company;city;country;address;user_id;additional_info
+1;COMMERCIAL;Forward Communications Planner;Dam;North Jadonhaven;Greece;Metal deposit;1;
+2;HOSPITAL;Internal Factors Manager;Chips;New Elliottstad;Madagascar;web-readiness;2;
+3;RESEARCH_IN_COMMERCIAL;Regional Marketing Associate;Coordinator;South Aubreemouth;Nauru;syndicate;3;
+4;ACADEMIC;Senior Solutions Representative;Planner cross-platform access;East Markusberg;Japan;Rubber Buckinghamshire Games;4;
+5;ACADEMIC;Senior Solutions Representative;Planner cross-platform access;East Markusberg;Japan;Rubber Buckinghamshire Games;5;
