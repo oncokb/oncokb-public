@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import com.google.gson.Gson;
 import io.github.jhipster.config.JHipsterProperties;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
@@ -14,7 +15,11 @@ import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.service.dto.Activation;
+import org.mskcc.cbio.oncokb.service.dto.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.LicenseAgreement;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.oncokbcore.TrialAccount;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
 import io.github.jhipster.security.RandomUtil;
@@ -136,6 +141,44 @@ public class UserService {
                 this.clearUserCaches(user);
                 return user;
             });
+    }
+
+    public Optional<User> initiateTrialAccountActivation(String mail) {
+        Optional<User> userOptional = userRepository.findOneByEmailIgnoreCase(mail);
+        if (userOptional.isPresent()) {
+            Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(userOptional.get());
+
+            AdditionalInfoDTO additionalInfoDTO = null;
+            if (userDetails.isPresent()) {
+                additionalInfoDTO = new Gson().fromJson(userDetails.get().getAdditionalInfo(), AdditionalInfoDTO.class);
+            }
+            if (additionalInfoDTO == null) {
+                additionalInfoDTO = new AdditionalInfoDTO();
+            }
+            additionalInfoDTO.setTrialAccount(initiateTrialAccountInfo(additionalInfoDTO));
+            userDetails.get().setAdditionalInfo(new Gson().toJson(additionalInfoDTO));
+            return userOptional;
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private TrialAccount initiateTrialAccountInfo(AdditionalInfoDTO additionalInfoDTO) {
+        TrialAccount trialAccount = new TrialAccount();
+        if (additionalInfoDTO != null && additionalInfoDTO.getTrialAccount() != null) {
+            trialAccount = additionalInfoDTO.getTrialAccount();
+        } else {
+            Activation activation = new Activation();
+            activation.setInitiationDate(Instant.now());
+            activation.setKey(RandomUtil.generateResetKey());
+            trialAccount.setActivation(activation);
+
+            LicenseAgreement licenseAgreement = new LicenseAgreement();
+            licenseAgreement.setName("Trial License Agreement");
+            licenseAgreement.setVersion("v1");
+            trialAccount.setLicenseAgreement(licenseAgreement);
+        }
+        return trialAccount;
     }
 
     public User registerUser(UserDTO userDTO, String password) {
