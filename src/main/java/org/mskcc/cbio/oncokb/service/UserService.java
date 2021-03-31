@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.service;
 
 import com.google.gson.Gson;
 import io.github.jhipster.config.JHipsterProperties;
+import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Authority;
@@ -24,6 +25,7 @@ import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
 import io.github.jhipster.security.RandomUtil;
 
+import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndEmailVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,6 +163,38 @@ public class UserService {
         } else {
             return Optional.empty();
         }
+    }
+
+    public Optional<UserDTO> finishTrialAccountActivation(KeyAndEmailVM keyAndEmailVM) {
+        Optional<User> userOptional = userRepository.findOneByEmailIgnoreCase(keyAndEmailVM.getEmail());
+        UserDTO userDTO = userMapper.userToUserDTO(userOptional.get());
+        boolean userHasValidTrialActivation = Optional.ofNullable(userDTO)
+            .map(UserDTO::getAdditionalInfo)
+            .map(AdditionalInfoDTO::getTrialAccount)
+            .map(TrialAccount::getActivation)
+            .isPresent();
+
+        if (userHasValidTrialActivation) {
+            String userKey = userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey();
+            if (StringUtils.isNotEmpty(userKey) && userKey.equals(keyAndEmailVM.getKey())) {
+                // Update user account to trial account
+                userOptional.get().setActivated(true);
+                generateTokenForUserIfNotExist(userDTO, Optional.of(90), Optional.of(false));
+
+                // Reset the trial account info
+                Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(userOptional.get());
+                TrialAccount trialAccount = userDTO.getAdditionalInfo().getTrialAccount();
+                trialAccount.getActivation().setActivationDate(Instant.now());
+                trialAccount.getActivation().setKey(null);
+                trialAccount.getLicenseAgreement().setAcceptanceDate(Instant.now());
+                userDTO.getAdditionalInfo().setTrialAccount(trialAccount);
+
+                userDetails.get().setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
+                userDetailsRepository.save(userDetails.get());
+                return Optional.of(userDTO);
+            }
+        }
+        return Optional.empty();
     }
 
     private TrialAccount initiateTrialAccountInfo(AdditionalInfoDTO additionalInfoDTO) {
