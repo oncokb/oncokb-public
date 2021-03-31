@@ -10,12 +10,15 @@ import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
+import org.mskcc.cbio.oncokb.service.dto.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.oncokbcore.TrialAccount;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.*;
 import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.InvalidPasswordException;
+import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndEmailVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndPasswordVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.LoginVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
@@ -373,6 +376,18 @@ public class AccountResource {
         } else {
             throw new AccountResourceException("No user was found");
         }
+    }
+
+    @PostMapping(path = "/account/active-trial/finish")
+    public UserDTO finishPasswordReset(@RequestBody KeyAndEmailVM keyAndEmailVM) {
+        Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(keyAndEmailVM.getEmail());
+        if (user.isPresent()) {
+            Optional<UserDTO> userDTOOptional = userService.finishTrialAccountActivation(keyAndEmailVM);
+            if (userDTOOptional.isPresent()) {
+                return userDTOOptional.get();
+            }
+        }
+        throw new AccountResourceException("No user was found for this activation key");
     }
 
 
