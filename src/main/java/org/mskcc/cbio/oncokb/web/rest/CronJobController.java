@@ -304,8 +304,15 @@ public class CronJobController {
         mailService.sendTrialAccountExpiresMail(DAYS_TO_CHECK, userDTOS);
     }
 
+    /**
+     * Check if user tokens has been exposed on Internet.
+     * @throws IOException
+     * @throws InterruptedException
+     * @author Yifu Yao
+     */
     @GetMapping(path = "/check-exposed-tokens")
     public void checkExposedTokens() throws IOException, InterruptedException {
+        // Get all tokens from database
         List<Token> tokens = tokenService
                                 .findAll()
                                 .stream()
@@ -314,13 +321,19 @@ public class CronJobController {
         log.info("Searching exposed tokens pipeline begins...");
         List<ExposedToken> results = new ArrayList<>();
         List<ExposedToken> unverifiedResults = new ArrayList<>();
+        
+        // Check if current google searching process can be used
         boolean googleSearching = true;
         googleSearching = googleSearchingTest();
+        // Check if current baidu searching process can be used
         boolean baiduSearching = true;
         baiduSearching = baiduSearchingTest();
+        
+        // Check each token
         for (Token token : tokens){
             String q = token.getToken().toString();
 
+            // If can be found on GitHub. 
             int githubCount = 0;
             try {
                 GitHub github = new GitHubBuilder().withOAuthToken(applicationProperties.getGithubToken()).build();
@@ -331,15 +344,20 @@ public class CronJobController {
                 e.printStackTrace();
             }
 
+            // If can be found on Google
             int googleCount = 0;
             if (googleSearching){
                 try{
+                    // Get the number of google searching results.
                     HttpEntity entity = getGoogleResponse(q).getEntity();
                     Document googleDoc = Jsoup.parse(EntityUtils.toString(entity));
+                    // Result items will be wrapped within h3 tags.
                     Elements resultEle = googleDoc.select("h3");
                     googleCount = resultEle.size();
                     if (googleCount > 0) {
+                        // Get description of results.
                         String description = googleDoc.select(".kCrYT > div > div > div > div > div").text();
+                        // Check if token can be found.
                         if (description.indexOf(q) == -1)
                             googleCount = 0;
                     }
@@ -349,9 +367,11 @@ public class CronJobController {
                 }
             }
 
+            // If can be found on Baidu
             int baiduCount = 0;
             if (baiduSearching){
                 try{
+                    // Get the number of Baidu searching results.
                     Document document = Jsoup.connect(String.format("https://www.baidu.com/s?wd=\"%s\"", q)).get();
                     Elements elements = document.select("div.result.c-container");
                     baiduCount = elements.size();
@@ -362,12 +382,14 @@ public class CronJobController {
             }
 
             UserDTO user = userMapper.userToUserDTO(token.getUser());
+            // If token was found on GitHub, update it with a new token and send email to user.
             if (githubCount > 0){
                 ExposedToken t = generateExposedToken(token, user, "GitHub");
                 results.add(t);
                 updateExposedToken(token);
                 mailService.sendMailToUserWhenTokenExposed(user, t);
             }
+            // If token was found on Google/Baidu, send notification to dev team to check.
             if (googleCount > 0 || baiduCount > 0){
                 List<String> source = new ArrayList<>();
                 if (googleCount > 0){
@@ -381,11 +403,19 @@ public class CronJobController {
             sleep(1000);
         }
         log.info("Searching exposed tokens pipeline finished!");
+        // If any potential exposed tokens were be found, send notification to dev team. 
         if (!results.isEmpty() || !unverifiedResults.isEmpty()){
             mailService.sendExposedTokensInfoMail(results, unverifiedResults);
         }
     }
 
+    /**
+     * Generate a object with all information of an exposed token. Used to send email.
+     * @param token
+     * @param user
+     * @param source
+     * @return
+     */
     private ExposedToken generateExposedToken(Token token, UserDTO user, String source){
         ExposedToken t = new ExposedToken();
         t.setToken(token.getToken().toString());
@@ -397,6 +427,11 @@ public class CronJobController {
         return t;
     }
 
+    /**
+     * Request google search
+     * @param query
+     * @return
+     */
     private HttpResponse getGoogleResponse(String query) {
         String uri = String.format("https://www.google.com/search?q=%s", query);
         HttpClient client = HttpClientBuilder.create().build();
@@ -410,23 +445,34 @@ public class CronJobController {
         return result;
     }
 
+    /**
+     * Create a new token for exposed one
+     * @param token
+     */
     private void updateExposedToken(Token token){
         tokenProvider.createToken(token);
         token.setExpiration(Instant.now());
         tokenService.save(token);
     }
 
+    /**
+     * Google searching test process. Check if google search response structure has changed.
+     * @return
+     */
     private boolean googleSearchingTest(){
         try{
             HttpEntity entity = getGoogleResponse("test").getEntity();
             Document googleDoc = Jsoup.parse(EntityUtils.toString(entity));
+            // Result items will be wrapped under h3 tags.
             Elements resultEle = googleDoc.select("h3");
             if (!resultEle.isEmpty()) {
+                // Description of results can be located at this xpath.
                 Elements descriptionEle = googleDoc.select(".kCrYT > div > div > div > div > div");
                 if (descriptionEle.isEmpty()){
                     mailService.sendMailWhenSearchingStructrueChange("Google");
                     return false;
                 }
+                // Analysis description to see if keyword could be found. 
                 String description = descriptionEle.text();
                 if (description.indexOf("test") == -1){
                     mailService.sendMailWhenSearchingStructrueChange("Google");
@@ -444,10 +490,16 @@ public class CronJobController {
         return true;
     }
 
+    /**
+     * Baidu searching test process. Check if baidu search response structure has changed.
+     * @return
+     */
     private boolean baiduSearchingTest(){
         try{
+            // Get Baidu searching result items.
             Document document = Jsoup.connect(String.format("https://www.baidu.com/s?wd=\"%s\"", "test")).get();
             Elements elements = document.select("div.result.c-container");
+            // If nothing found, structure may has been changed.
             if (elements.isEmpty()){
                 mailService.sendMailWhenSearchingStructrueChange("Baidu");
                 return false;
