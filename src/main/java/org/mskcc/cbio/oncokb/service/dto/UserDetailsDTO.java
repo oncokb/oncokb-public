@@ -1,13 +1,14 @@
 package org.mskcc.cbio.oncokb.service.dto;
 
 import java.io.Serializable;
+import javax.persistence.Lob;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 
 /**
  * A DTO for the {@link org.mskcc.cbio.oncokb.domain.UserDetails} entity.
  */
 public class UserDetailsDTO implements Serializable {
-    
+
     private Long id;
 
     private LicenseType licenseType;
@@ -22,9 +23,11 @@ public class UserDetailsDTO implements Serializable {
 
     private String address;
 
+    @Lob
+    private AdditionalInfoDTO additionalInfo;
 
     private Long userId;
-    
+
     public Long getId() {
         return id;
     }
@@ -81,6 +84,14 @@ public class UserDetailsDTO implements Serializable {
         this.address = address;
     }
 
+    public AdditionalInfoDTO getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(AdditionalInfoDTO additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
     public Long getUserId() {
         return userId;
     }
@@ -117,6 +128,7 @@ public class UserDetailsDTO implements Serializable {
             ", city='" + getCity() + "'" +
             ", country='" + getCountry() + "'" +
             ", address='" + getAddress() + "'" +
+            ", additionalInfo='" + getAdditionalInfo() + "'" +
             ", userId=" + getUserId() +
             "}";
     }

@@ -1,7 +1,5 @@
 package org.mskcc.cbio.oncokb.domain;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -40,6 +38,10 @@ public class UserDetails implements Serializable {
 
     @Column(name = "address")
     private String address;
+
+    @Lob
+    @Column(name = "additional_info")
+    private String additionalInfo;
 
     @OneToOne
     @JoinColumn(unique = true)
@@ -132,6 +134,19 @@ public class UserDetails implements Serializable {
         this.address = address;
     }
 
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public UserDetails additionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+        return this;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
     public User getUser() {
         return user;
     }
@@ -173,6 +188,7 @@ public class UserDetails implements Serializable {
             ", city='" + getCity() + "'" +
             ", country='" + getCountry() + "'" +
             ", address='" + getAddress() + "'" +
+            ", additionalInfo='" + getAdditionalInfo() + "'" +
             "}";
     }
 }
