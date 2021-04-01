@@ -172,7 +172,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
                 about the OncoKB curation process, please refer to the version
                 controlled{' '}
                 <Linkout link={SOP_LINK}>
-                  OncoKB Curation Standard Operating Procedure v1.1
+                  OncoKB Curation Standard Operating Procedure v2.0
                 </Linkout>
                 .
               </p>
