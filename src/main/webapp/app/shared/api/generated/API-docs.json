@@ -141,11 +141,11 @@
         "parameters": [
           {
             "in": "body",
-            "name": "keyAndEmailVM",
-            "description": "keyAndEmailVM",
+            "name": "keyAndContactVM",
+            "description": "keyAndContactVM",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/KeyAndEmailVM"
+              "$ref": "#/definitions/KeyAndContactVM"
             }
           }
         ],
@@ -2318,6 +2318,18 @@
       },
       "title": "AdditionalInfoDTO"
     },
+    "Contact": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Contact"
+    },
     "JSONObject": {
       "type": "object",
       "title": "JSONObject",
@@ -2325,17 +2337,17 @@
         "type": "object"
       }
     },
-    "KeyAndEmailVM": {
+    "KeyAndContactVM": {
       "type": "object",
       "properties": {
-        "email": {
-          "type": "string"
+        "contact": {
+          "$ref": "#/definitions/Contact"
         },
         "key": {
           "type": "string"
         }
       },
-      "title": "KeyAndEmailVM"
+      "title": "KeyAndContactVM"
     },
     "KeyAndPasswordVM": {
       "type": "object",
@@ -2594,6 +2606,9 @@
         },
         "licenseAgreement": {
           "$ref": "#/definitions/LicenseAgreement"
+        },
+        "pointOfContact": {
+          "$ref": "#/definitions/Contact"
         }
       },
       "title": "TrialAccount"

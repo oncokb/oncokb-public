@@ -13,9 +13,15 @@ export type AdditionalInfoDTO = {
     'trialAccount': TrialAccount
 
 };
-export type JSONObject = {};
-export type KeyAndEmailVM = {
+export type Contact = {
     'email': string
+
+        'name': string
+
+};
+export type JSONObject = {};
+export type KeyAndContactVM = {
+    'contact': Contact
 
         'key': string
 
@@ -130,6 +136,8 @@ export type TrialAccount = {
     'activation': Activation
 
         'licenseAgreement': LicenseAgreement
+
+        'pointOfContact': Contact
 
 };
 export type UsageSummary = {
@@ -467,7 +475,7 @@ export default class API {
         });
     };
     finishTrialAccountActivationUsingPOSTURL(parameters: {
-        'keyAndEmailVm': KeyAndEmailVM,
+        'keyAndContactVm': KeyAndContactVM,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -487,10 +495,10 @@ export default class API {
      * finishTrialAccountActivation
      * @method
      * @name API#finishTrialAccountActivationUsingPOST
-     * @param {} keyAndEmailVm - keyAndEmailVM
+     * @param {} keyAndContactVm - keyAndContactVM
      */
     finishTrialAccountActivationUsingPOSTWithHttpInfo(parameters: {
-        'keyAndEmailVm': KeyAndEmailVM,
+        'keyAndContactVm': KeyAndContactVM,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -506,12 +514,12 @@ export default class API {
             headers['Accept'] = '*/*';
             headers['Content-Type'] = 'application/json';
 
-            if (parameters['keyAndEmailVm'] !== undefined) {
-                body = parameters['keyAndEmailVm'];
+            if (parameters['keyAndContactVm'] !== undefined) {
+                body = parameters['keyAndContactVm'];
             }
 
-            if (parameters['keyAndEmailVm'] === undefined) {
-                reject(new Error('Missing required  parameter: keyAndEmailVm'));
+            if (parameters['keyAndContactVm'] === undefined) {
+                reject(new Error('Missing required  parameter: keyAndContactVm'));
                 return;
             }
 
@@ -531,10 +539,10 @@ export default class API {
      * finishTrialAccountActivation
      * @method
      * @name API#finishTrialAccountActivationUsingPOST
-     * @param {} keyAndEmailVm - keyAndEmailVM
+     * @param {} keyAndContactVm - keyAndContactVM
      */
     finishTrialAccountActivationUsingPOST(parameters: {
-        'keyAndEmailVm': KeyAndEmailVM,
+        'keyAndContactVm': KeyAndContactVM,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < UserDTO > {

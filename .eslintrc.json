@@ -15,6 +15,7 @@
         "checksVoidReturn": false
       }
     ],
+    "react/no-unescaped-entities": ["error", { "forbid": [">", "}"] }],
     "react/jsx-key": "off"
   }
 }
