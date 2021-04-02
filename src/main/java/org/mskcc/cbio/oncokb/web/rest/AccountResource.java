@@ -379,7 +379,7 @@ public class AccountResource {
     }
 
     @PostMapping(path = "/account/active-trial/finish")
-    public UserDTO finishPasswordReset(@RequestBody KeyAndEmailVM keyAndEmailVM) {
+    public UserDTO finishTrialAccountActivation(@RequestBody KeyAndEmailVM keyAndEmailVM) {
         Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(keyAndEmailVM.getEmail());
         if (user.isPresent()) {
             Optional<UserDTO> userDTOOptional = userService.finishTrialAccountActivation(keyAndEmailVM);
