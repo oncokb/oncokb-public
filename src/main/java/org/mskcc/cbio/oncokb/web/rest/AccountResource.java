@@ -4,21 +4,21 @@ package org.mskcc.cbio.oncokb.web.rest;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
-import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
-import org.mskcc.cbio.oncokb.service.dto.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
-import org.mskcc.cbio.oncokb.service.dto.oncokbcore.TrialAccount;
+import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.*;
 import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.InvalidPasswordException;
-import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndEmailVM;
+import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndContactVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndPasswordVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.LoginVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
@@ -32,10 +32,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
 import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.*;
@@ -61,6 +59,8 @@ public class AccountResource {
 
     private final UserService userService;
 
+    private final UserDetailsService userDetailsService;
+
     private final SlackService slackService;
 
     private final EmailService emailService;
@@ -82,11 +82,12 @@ public class AccountResource {
                            MailService mailService, TokenProvider tokenProvider,
                            SlackService slackService, EmailService emailService,
                            AuthenticationManagerBuilder authenticationManagerBuilder,
-                           PasswordEncoder passwordEncoder,
+                           PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
                            TokenService tokenService, ApplicationProperties applicationProperties
                            ) {
 
         this.userRepository = userRepository;
+        this.userDetailsService = userDetailsService;
         this.userService = userService;
         this.mailService = mailService;
         this.tokenProvider = tokenProvider;
@@ -379,10 +380,10 @@ public class AccountResource {
     }
 
     @PostMapping(path = "/account/active-trial/finish")
-    public UserDTO finishTrialAccountActivation(@RequestBody KeyAndEmailVM keyAndEmailVM) {
-        Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(keyAndEmailVM.getEmail());
-        if (user.isPresent()) {
-            Optional<UserDTO> userDTOOptional = userService.finishTrialAccountActivation(keyAndEmailVM);
+    public UserDTO finishTrialAccountActivation(@RequestBody KeyAndContactVM keyAndContactVM) {
+        Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByTrialActivationKey(keyAndContactVM.getKey());
+        if (userDetailsDTO.isPresent()) {
+            Optional<UserDTO> userDTOOptional = userService.finishTrialAccountActivation(keyAndContactVM);
             if (userDTOOptional.isPresent()) {
                 return userDTOOptional.get();
             }
