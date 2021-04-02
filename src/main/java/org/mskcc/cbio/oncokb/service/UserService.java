@@ -157,7 +157,7 @@ public class UserService {
             if (additionalInfoDTO == null) {
                 additionalInfoDTO = new AdditionalInfoDTO();
             }
-            additionalInfoDTO.setTrialAccount(initiateTrialAccountInfo(additionalInfoDTO));
+            additionalInfoDTO.setTrialAccount(initiateTrialAccountInfo());
             userDetails.get().setAdditionalInfo(new Gson().toJson(additionalInfoDTO));
             return userOptional;
         } else {
@@ -197,21 +197,17 @@ public class UserService {
         return Optional.empty();
     }
 
-    private TrialAccount initiateTrialAccountInfo(AdditionalInfoDTO additionalInfoDTO) {
+    private TrialAccount initiateTrialAccountInfo() {
         TrialAccount trialAccount = new TrialAccount();
-        if (additionalInfoDTO != null && additionalInfoDTO.getTrialAccount() != null) {
-            trialAccount = additionalInfoDTO.getTrialAccount();
-        } else {
-            Activation activation = new Activation();
-            activation.setInitiationDate(Instant.now());
-            activation.setKey(RandomUtil.generateResetKey());
-            trialAccount.setActivation(activation);
+        Activation activation = new Activation();
+        activation.setInitiationDate(Instant.now());
+        activation.setKey(RandomUtil.generateResetKey());
+        trialAccount.setActivation(activation);
 
-            LicenseAgreement licenseAgreement = new LicenseAgreement();
-            licenseAgreement.setName("Trial License Agreement");
-            licenseAgreement.setVersion("v1");
-            trialAccount.setLicenseAgreement(licenseAgreement);
-        }
+        LicenseAgreement licenseAgreement = new LicenseAgreement();
+        licenseAgreement.setName("Trial License Agreement");
+        licenseAgreement.setVersion("v1");
+        trialAccount.setLicenseAgreement(licenseAgreement);
         return trialAccount;
     }
 

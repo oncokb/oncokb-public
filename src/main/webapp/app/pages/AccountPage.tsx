@@ -17,14 +17,11 @@ import {
 } from 'app/pages/account/AccountUtils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import classnames from 'classnames';
-import { Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import SmallPageContainer from 'app/components/SmallPageContainer';
-import CopyToClipboard from 'react-copy-to-clipboard';
 import { Token } from 'app/shared/api/generated/API';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
-import pluralize from 'pluralize';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import { daysDiff, secDiff } from 'app/shared/utils/Utils';
 import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import client from 'app/shared/api/clientInstance';
 
@@ -35,11 +32,17 @@ export type IRegisterProps = {
 export const InfoRow: React.FunctionComponent<{
   title: JSX.Element | string;
   content?: JSX.Element | string;
+  direction?: 'vertical' | 'horizontal';
 }> = props => {
+  let titleWidth = 4;
+  let contentWidth = 8;
+  if (props.direction && props.direction === 'vertical') {
+    titleWidth = contentWidth = 12;
+  }
   return (
     <Row className={'mb-2'}>
-      <Col sm="4">{props.title}</Col>
-      <Col sm="8">
+      <Col sm={titleWidth}>{props.title}</Col>
+      <Col sm={contentWidth}>
         {props.content}
         {props.children}
       </Col>
