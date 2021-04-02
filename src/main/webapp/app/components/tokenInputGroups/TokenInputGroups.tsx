@@ -10,6 +10,7 @@ import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import autobind from 'autobind-decorator';
 import { CalendarButton } from 'app/components/calendarButton/CalendarButton';
+import { CopyButton } from 'app/shared/button/CopyButton';
 
 type TokenInputGroupsProps = {
   changeTokenExpirationDate: boolean;
@@ -22,8 +23,6 @@ type TokenInputGroupsProps = {
 export default class TokenInputGroups extends React.Component<
   TokenInputGroupsProps
 > {
-  @observable copiedIdToken = false;
-
   constructor(props: TokenInputGroupsProps) {
     super(props);
   }
@@ -32,13 +31,6 @@ export default class TokenInputGroups extends React.Component<
     return expireInDays > 0
       ? `${expireInDays} ${pluralize('day', expireInDays)}`
       : `${expireInHours} ${pluralize('hour', expireInHours)}`;
-  }
-
-  @autobind
-  @action
-  onCopyToken() {
-    this.copiedIdToken = true;
-    setTimeout(() => (this.copiedIdToken = false), 5000);
   }
 
   render() {
@@ -71,18 +63,7 @@ export default class TokenInputGroups extends React.Component<
                   />
                 )}
                 <InputGroup.Append>
-                  <CopyToClipboard text={token.token} onCopy={this.onCopyToken}>
-                    <Button variant={'primary'}>
-                      <DefaultTooltip
-                        placement={'top'}
-                        overlay={
-                          this.copiedIdToken ? 'Copied' : 'Copy ID Token'
-                        }
-                      >
-                        <i className={classnames('fa fa-copy')}></i>
-                      </DefaultTooltip>
-                    </Button>
-                  </CopyToClipboard>
+                  <CopyButton text={token.token} />
                   <DefaultTooltip
                     placement={'top'}
                     overlay={
