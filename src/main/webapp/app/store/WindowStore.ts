@@ -46,6 +46,14 @@ class WindowStore {
   get isLargeScreen() {
     return this.size.width >= GRID_BREAKPOINTS.LG;
   }
+
+  @computed
+  get baseUrl() {
+    return (
+      window.location.hostname +
+      (window.location.port ? `:${window.location.port}` : '')
+    );
+  }
 }
 
 export default WindowStore;
