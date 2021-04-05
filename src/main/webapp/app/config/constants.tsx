@@ -58,6 +58,7 @@ export const FAQ_URL_PATTERNS_LINK = `${FAQ_LINK}/technical#what-are-the-url-pat
 export const API_DOCUMENT_LINK = 'https://api.oncokb.org/oncokb-website/api';
 export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
 export const FACULTY_COI_WEBSITE_LINK = 'https://www.mskcc.org/disclosures';
+export const ONCOKB_DATAHUB_LINK = 'https://github.com/oncokb/oncokb-datahub';
 export const NONE_FACULTY_COI_WEBSITE_LINK =
   'https://docs.google.com/spreadsheets/d/1PKHV8ArVm4AFu4Rj-URWHcCAqnbWlm7p2-LOxhe0aFU/edit?usp=sharing';
 export const WEBINAR_LINKS_05072020 = (
@@ -545,6 +546,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '04072021', version: 'v3.3' },
   { date: '03122021', version: 'v3.2' },
   { date: '02102021', version: 'v3.1' },
   { date: '01142021', version: 'v3.0' },
