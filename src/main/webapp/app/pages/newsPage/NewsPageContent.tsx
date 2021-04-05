@@ -16,6 +16,7 @@ import {
   FAQ_URL_PATTERNS_LINK,
   LEVEL_TYPES,
   PAGE_ROUTE,
+  ONCOKB_DATAHUB_LINK,
 } from 'app/config/constants';
 import {
   AlterationPageLink,
@@ -120,6 +121,116 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '04072021': {
+    priorityNews: [
+      <span>
+        An updated version of the OncoKB Curation Standard Operating Procedure,
+        v2.0, has been released. See the OncoKB{' '}
+        <Link to={PAGE_ROUTE.ABOUT}>About</Link> page or{' '}
+        <Linkout link={'https://sop.oncokb.org'}>
+          https://sop.oncokb.org
+        </Linkout>
+      </span>,
+      <span>
+        &quot;Resistance&quot; is now included as an oncogenic effect for
+        variants that are only found in the context of drug resistance
+      </span>,
+      <span>
+        Documentation of all data changes in each OncoKB release are now
+        publicly accessible on{' '}
+        <Linkout link={ONCOKB_DATAHUB_LINK}>GitHub</Linkout>
+      </span>,
+    ],
+    updatedImplication: [
+      [
+        '2',
+        'IDH1',
+        'Oncogenic Mutations',
+        'Chondrosarcoma',
+        'Ivosidenib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>Listing in Bone Cancer NCCN v1.2021</span>
+          <PMIDLink pmids={'32208957'} />
+        </WithSeparator>,
+      ],
+      [
+        '2',
+        'JAK2',
+        'Fusions',
+        'Myeloid/Lymphoid Neoplasms with Eosinophilia and Rearrangement of PDGFRA/PDGFRB or FGFR1 or with PCM1-JAK2',
+        'Ruxolitinib, Fedratinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>
+            Listing in Myeloid/Lymphoid Neoplasms with Eosinophilia and Tyrosine
+            Kinase Fusion Genes NCCN v3.2021
+          </span>
+          <PMIDLink pmids={'32279331'} />
+        </WithSeparator>,
+      ],
+      [
+        '2',
+        'FGFR1',
+        'Fusions',
+        'Myeloid/Lymphoid Neoplasms with FGFR1 Rearrangement',
+        'Pemigatinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>
+            Listing in Myeloid/Lymphoid Neoplasms with Eosinophilia and Tyrosine
+            Kinase Fusion Genes NCCN v3.2021
+          </span>
+          <PMIDLink pmids={'32472305'} />
+          <AbstractLink
+            link={
+              'https://ashpublications.org/blood/article/132/Supplement%201/690/266005/Interim-Results-from-Fight-203-a-Phase-2-Open'
+            }
+            abstract={'Verstovsek et al, Abstract# 690, ASH 2018.'}
+          />
+        </WithSeparator>,
+      ],
+      [
+        '3A',
+        'EGFR',
+        'Exon 20 Insertions',
+        'Non-Small Cell Lung Cancer',
+        'Mobocertinib',
+        <PMIDLink pmids={'33632775'} />,
+      ],
+      [
+        '3A',
+        'EGFR',
+        'Exon 20 Insertions',
+        'Non-Small Cell Lung Cancer',
+        'Amivantamab',
+        <AbstractLink
+          link={
+            'https://library.iaslc.org/conference-program?product_id=20&author=&category=&date=&session_type=&session=&presentation=&keyword=sabari&cme=undefined&'
+          }
+          abstract={'Sabari et al. Abstract# OA04.04, WCLC 2020.'}
+        />,
+      ],
+      [
+        '3A',
+        'KRAS',
+        'G12C',
+        'Non-Small Cell Lung Cancer',
+        'Adagrasib',
+        <AbstractLink
+          link={
+            'https://cm.eortc.org/cmPortal/Searchable/ENA2020/config/normal#!abstractdetails/0000902150'
+          }
+          abstract={'Janne et al. Abstract# LBA-03, EORTC 2020.'}
+        />,
+      ],
+      [
+        '3A',
+        'HRAS',
+        'Oncogenic Mutations',
+        'Bladder Urothelial Carcinoma',
+        'Tipifarnib',
+        <PMIDLink pmids={'32636318'} />,
+      ],
+    ],
+  },
   '03122021': {
     updatedImplication: [
       [
