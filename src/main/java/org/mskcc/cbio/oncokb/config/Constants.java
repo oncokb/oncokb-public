@@ -20,10 +20,14 @@ public final class Constants {
 
     public static final String PUBLIC_WEBSITE_LOGIN = "publicwebsite";
 
+    public static final String EXPIRATION = "expiration";
+
     public static final int DAY_IN_SECONDS = 60 * 60 * 24;
     public static final int HALF_YEAR_IN_SECONDS = DAY_IN_SECONDS * 180;
 
     public static final int RESET_TOKEN_VALID_SEC_FROM_CREATION = DAY_IN_SECONDS * 7;
+
+    public static final int TRIAL_PERIOD_IN_DAYS = 90;
 
     private Constants() {
     }

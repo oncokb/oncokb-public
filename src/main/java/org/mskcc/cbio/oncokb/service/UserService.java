@@ -71,6 +71,8 @@ public class UserService {
 
     private final TokenProvider tokenProvider;
 
+    private final SlackService slackService;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -83,6 +85,7 @@ public class UserService {
         TokenService tokenService,
         TokenProvider tokenProvider,
         CacheNameResolver cacheNameResolver,
+        SlackService slackService,
         CacheManager cacheManager
     ) {
         this.userRepository = userRepository;
@@ -94,6 +97,7 @@ public class UserService {
         this.tokenProvider = tokenProvider;
         this.cacheNameResolver = cacheNameResolver;
         this.cacheManager = cacheManager;
+        this.slackService = slackService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -177,7 +181,7 @@ public class UserService {
             if (StringUtils.isNotEmpty(userKey) && userKey.equals(key)) {
                 // Update user account to trial account
                 user.setActivated(true);
-                generateTokenForUserIfNotExist(userDTO, Optional.of(90), Optional.of(false));
+                generateTokenForUserIfNotExist(userDTO, Optional.of(TRIAL_PERIOD_IN_DAYS), Optional.of(false));
 
                 // Reset the trial account info
                 Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
@@ -189,6 +193,8 @@ public class UserService {
 
                 userDetails.get().setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
                 userDetailsRepository.save(userDetails.get());
+
+                slackService.sendConfirmationOnUserAcceptsTrialAgreement(userDTO, Instant.now().plusSeconds(TRIAL_PERIOD_IN_DAYS * DAY_IN_SECONDS));
                 return Optional.of(userDTO);
             }
         }
@@ -254,7 +260,7 @@ public class UserService {
 
     private boolean removeNonActivatedUser(User existingUser) {
         if (existingUser.getActivated()) {
-             return false;
+            return false;
         }
         userRepository.delete(existingUser);
         userRepository.flush();
@@ -388,15 +394,15 @@ public class UserService {
     }
 
     private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String company, String city, String country) {
-        Optional<UserDetails> userDetails= userDetailsRepository.findOneByUser(user);
-        if(userDetails.isPresent()) {
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
+        if (userDetails.isPresent()) {
             userDetails.get().setLicenseType(licenseType);
             userDetails.get().setJobTitle(jobTitle);
             userDetails.get().setCompany(company);
             userDetails.get().setCity(city);
             userDetails.get().setCountry(country);
             return userDetails.get();
-        }else{
+        } else {
             UserDetails newUserDetails = new UserDetails();
             newUserDetails.setLicenseType(licenseType);
             newUserDetails.setJobTitle(jobTitle);
@@ -482,7 +488,7 @@ public class UserService {
     }
 
     public List<UserDTO> getAllActivatedUsersWithoutTokens() {
-        return userRepository.findAllActivatedWithoutTokens().stream().map(user->userMapper.userToUserDTO(user)).collect(Collectors.toList());
+        return userRepository.findAllActivatedWithoutTokens().stream().map(user -> userMapper.userToUserDTO(user)).collect(Collectors.toList());
     }
 
     public void removeNotActivatedUsers() {
@@ -501,6 +507,7 @@ public class UserService {
 
     /**
      * Gets a list of all the authorities.
+     *
      * @return a list of all the authorities.
      */
     @Transactional(readOnly = true)
