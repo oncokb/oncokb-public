@@ -98,6 +98,9 @@ public class MailService {
             message.setCc(cc);
         }
         message.setFrom(from);
+        if (StringUtils.isEmpty(subject)) {
+            subject = "No subject specified";
+        }
         message.setSubject(subject);
         message.setText(content, isHtml);
 
@@ -142,9 +145,10 @@ public class MailService {
 
     @Async
     public void sendEmailFromTemplate(UserDTO user, MailType mailType, Context additionalContext) {
+        Optional<String> titleKey = getTitleKeyByMailType(mailType);
         sendEmailFromTemplate(
             user, mailType,
-            messageSource.getMessage(getTitleKeyByMailType(mailType).orElse(""), new Object[]{}, Locale.forLanguageTag(user.getLangKey())),
+            titleKey.isPresent() ? messageSource.getMessage(titleKey.get(), new Object[]{}, Locale.forLanguageTag(user.getLangKey())) : "",
             jHipsterProperties.getMail().getFrom(), null, jHipsterProperties.getMail().getFrom(), additionalContext);
     }
 
@@ -173,6 +177,11 @@ public class MailService {
 
     @Async
     public void sendEmailFromTemplate(UserDTO user, MailType mailType, String subject, String from, String cc, String by, Context additionalContext) {
+        sendEmailFromTemplate(user, mailType, subject, user.getEmail(), from, cc, by, additionalContext);
+    }
+
+    @Async
+    public void sendEmailFromTemplate(UserDTO user, MailType mailType, String subject, String to, String from, String cc, String by, Context additionalContext) {
         if (user.getEmail() == null) {
             log.debug("Email doesn't exist for user '{}'", user.getLogin());
             return;
@@ -195,9 +204,11 @@ public class MailService {
                 by = from;
             }
             List<String> attachmentFileNames = (mailType == null || mailType.getAttachmentFileNames() == null) ? null : Arrays.asList(StringUtils.split(mailType.getAttachmentFileNames(), ",")).stream().map(item -> item.trim()).collect(Collectors.toList());
-            sendEmail(user.getEmail(), from, cc, subject, content, attachmentFileNames, (attachmentFileNames == null || attachmentFileNames.size() == 0) ? false : true, true);
-            addUserMailsRecord(user, mailType, from, by);
-            log.info("Sent email to User '{}'", user.getEmail());
+            sendEmail(to, from, cc, subject, content, attachmentFileNames, (attachmentFileNames == null || attachmentFileNames.size() == 0) ? false : true, true);
+            if (to.equals(user.getEmail())) {
+                addUserMailsRecord(user, mailType, from, by);
+                log.info("Sent email to User '{}'", user.getEmail());
+            }
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", user.getEmail(), e);
         }
@@ -252,43 +263,41 @@ public class MailService {
     }
 
     @Async
-    public void sendExposedTokensInfoMail(List<ExposedToken> exposedTokens, List<ExposedToken> tokensToVerify){
+    public void sendExposedTokensInfoMail(List<ExposedToken> exposedTokens, List<ExposedToken> tokensToVerify) {
         Context context = new Context(Locale.US);
         context.setVariable("exposedTokens", exposedTokens);
         context.setVariable("tokensToVerify", tokensToVerify);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("mail/" + TOKEN_HAS_BEEN_EXPOSED.getTemplateName(), context);
 
-        try{
+        try {
             sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, "Exposed tokens", content, null, false, true);
             log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getTechDevAddress());
-        }
-        catch (MailException | MessagingException e){
+        } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
         }
     }
 
     @Async
-    public void sendMailWhenSearchingStructrueChange(String source){
+    public void sendMailWhenSearchingStructrueChange(String source) {
         Context context = new Context(Locale.US);
         context.setVariable("source", source);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("mail/" + SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED.getTemplateName(), context);
-        try{
+        try {
             sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, "Searching Response Structure Has Changed", content, null, false, true);
             log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getTechDevAddress());
-        }
-        catch (MailException | MessagingException e){
+        } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
         }
     }
 
     @Async
-    public void sendMailToUserWhenTokenExposed(UserDTO user, ExposedToken token){
+    public void sendMailToUserWhenTokenExposed(UserDTO user, ExposedToken token) {
         Context context = new Context(Locale.US);
         context.setVariable("token", token);
         sendEmailFromTemplate(user, MailType.TOKEN_HAS_BEEN_EXPOSED_USER, "OncoKB Token exposed",
-        applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, context);
+            applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, context);
     }
 
     public MailType getIntakeFormMailType(LicenseType licenseType) {
@@ -303,6 +312,7 @@ public class MailService {
                 return null;
         }
     }
+
     public List<String> getMailFrom() {
         List<String> mailFrom = new ArrayList<>();
         mailFrom.add(applicationProperties.getEmailAddresses().getRegistrationAddress());

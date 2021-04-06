@@ -25,10 +25,13 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.mskcc.cbio.oncokb.config.Constants.EXPIRATION;
 import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
+import static org.mskcc.cbio.oncokb.util.TimeUtil.toSystemDefaultZoneTime;
 
 
 /**
@@ -152,6 +155,33 @@ public class SlackService {
             Context context = new Context();
             context.setVariable(MAIL_LICENSE, registeredLicenseType.getName());
             mailService.sendEmailFromTemplate(userDTO, MailType.APPROVAL_MSK_IN_COMMERCIAL, context);
+        } catch (IOException e) {
+            log.warn("Failed to send message to slack");
+        }
+    }
+    @Async
+    public void sendConfirmationOnUserAcceptsTrialAgreement(UserDTO userDTO, Instant tokenExpiresOn) {
+        String expirationDate = toSystemDefaultZoneTime(tokenExpiresOn);
+        Payload payload = Payload.builder()
+            .text(userDTO.getEmail() + " has read and agreed to the trial license agreement. The account has been activated, the trial period ends at " + expirationDate)
+            .build();
+
+        Slack slack = Slack.getInstance();
+        try {
+            WebhookResponse response = slack.send(this.applicationProperties.getUserRegistrationWebhook(), payload);
+
+            Context context = new Context();
+            context.setVariable(EXPIRATION, expirationDate);
+            mailService.sendEmailFromTemplate(
+                userDTO,
+                MailType.TRIAL_ACCOUNT_IS_ACTIVATED,
+                "Trial Account Activated",
+                applicationProperties.getEmailAddresses().getLicenseAddress(),
+                applicationProperties.getEmailAddresses().getContactAddress(),
+                null,
+                null,
+                context
+            );
         } catch (IOException e) {
             log.warn("Failed to send message to slack");
         }
