@@ -141,11 +141,11 @@
         "parameters": [
           {
             "in": "body",
-            "name": "keyAndEmailVM",
-            "description": "keyAndEmailVM",
+            "name": "keyAndTermsVM",
+            "description": "keyAndTermsVM",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/KeyAndEmailVM"
+              "$ref": "#/definitions/KeyAndTermsVM"
             }
           }
         ],
@@ -158,6 +158,45 @@
           },
           "201": {
             "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/account/active-trial/info": {
+      "get": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "getTrialAccountActivationInfo",
+        "operationId": "getTrialAccountActivationInfoUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "key",
+            "in": "query",
+            "description": "key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserDTO"
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -2325,18 +2364,6 @@
         "type": "object"
       }
     },
-    "KeyAndEmailVM": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string"
-        },
-        "key": {
-          "type": "string"
-        }
-      },
-      "title": "KeyAndEmailVM"
-    },
     "KeyAndPasswordVM": {
       "type": "object",
       "properties": {
@@ -2348,6 +2375,18 @@
         }
       },
       "title": "KeyAndPasswordVM"
+    },
+    "KeyAndTermsVM": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "readAndAgreeWithTheTerms": {
+          "type": "boolean"
+        }
+      },
+      "title": "KeyAndTermsVM"
     },
     "LicenseAgreement": {
       "type": "object",

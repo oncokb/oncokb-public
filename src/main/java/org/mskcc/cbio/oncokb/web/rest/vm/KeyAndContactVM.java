@@ -1,10 +1,10 @@
 package org.mskcc.cbio.oncokb.web.rest.vm;
 
-public class KeyAndEmailVM {
+public class KeyAndContactVM {
 
     private String key;
 
-    private String email;
+    private Contact contact;
 
     public String getKey() {
         return key;
@@ -14,11 +14,11 @@ public class KeyAndEmailVM {
         this.key = key;
     }
 
-    public String getEmail() {
-        return email;
+    public Contact getContact() {
+        return contact;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 }
