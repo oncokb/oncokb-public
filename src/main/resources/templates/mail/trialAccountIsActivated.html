@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+    <head>
+        <title th:text="#{email.activation.title}">Trial Account Activated</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p>
+            Hi everyone,
+        </p>
+        <p>
+          The user <span th:text="${user.login}"></span> has read and agreed with the trial license agreement. The trial account has been activated and will expire on <span th:text="${expiration}"></span>
+        <p>
+            <div th:text="#{email.closing}">Sincerely, </div>
+            <div th:text="#{email.signature}">The OncoKB Team</div>
+        </p>
+    </body>
+</html>
