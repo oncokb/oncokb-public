@@ -10,7 +10,6 @@ import org.mskcc.cbio.oncokb.web.rest.vm.Contact;
 public class TrialAccount {
     Activation activation;
     LicenseAgreement licenseAgreement;
-    Contact pointOfContact;
 
     public Activation getActivation() {
         return activation;
@@ -26,13 +25,5 @@ public class TrialAccount {
 
     public void setLicenseAgreement(LicenseAgreement licenseAgreement) {
         this.licenseAgreement = licenseAgreement;
-    }
-
-    public Contact getPointOfContact() {
-        return pointOfContact;
-    }
-
-    public void setPointOfContact(Contact pointOfContact) {
-        this.pointOfContact = pointOfContact;
     }
 }

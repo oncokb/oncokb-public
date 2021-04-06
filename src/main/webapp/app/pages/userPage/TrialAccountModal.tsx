@@ -43,7 +43,10 @@ export const TrialAccountModal: React.FunctionComponent<{
                 disabled={true}
               />
               <InputGroup.Append>
-                <CopyButton text={getInitiationLink()} />
+                <CopyButton
+                  text={getInitiationLink()}
+                  disabled={!props.trialAccount?.activation?.key}
+                />
               </InputGroup.Append>
             </InputGroup>
           }

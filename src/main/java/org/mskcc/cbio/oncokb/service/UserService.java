@@ -25,8 +25,6 @@ import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
 import io.github.jhipster.security.RandomUtil;
 
-import org.mskcc.cbio.oncokb.web.rest.vm.Contact;
-import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndContactVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,8 +162,8 @@ public class UserService {
         }
     }
 
-    public Optional<UserDTO> finishTrialAccountActivation(KeyAndContactVM keyAndContactVM) {
-        Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByTrialActivationKey(keyAndContactVM.getKey());
+    public Optional<UserDTO> finishTrialAccountActivation(String key) {
+        Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByTrialActivationKey(key);
         User user = userDetailsOptional.get().getUser();
         UserDTO userDTO = userMapper.userToUserDTO(userDetailsOptional.get().getUser());
         boolean userHasValidTrialActivation = Optional.ofNullable(userDTO)
@@ -176,7 +174,7 @@ public class UserService {
 
         if (userHasValidTrialActivation) {
             String userKey = userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey();
-            if (StringUtils.isNotEmpty(userKey) && userKey.equals(keyAndContactVM.getKey())) {
+            if (StringUtils.isNotEmpty(userKey) && userKey.equals(key)) {
                 // Update user account to trial account
                 user.setActivated(true);
                 generateTokenForUserIfNotExist(userDTO, Optional.of(90), Optional.of(false));
@@ -187,7 +185,6 @@ public class UserService {
                 trialAccount.getActivation().setActivationDate(Instant.now());
                 trialAccount.getActivation().setKey(null);
                 trialAccount.getLicenseAgreement().setAcceptanceDate(Instant.now());
-                trialAccount.setPointOfContact(keyAndContactVM.getContact());
                 userDTO.getAdditionalInfo().setTrialAccount(trialAccount);
 
                 userDetails.get().setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));

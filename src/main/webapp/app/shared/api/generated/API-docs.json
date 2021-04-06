@@ -141,11 +141,11 @@
         "parameters": [
           {
             "in": "body",
-            "name": "keyAndContactVM",
-            "description": "keyAndContactVM",
+            "name": "keyAndTermsVM",
+            "description": "keyAndTermsVM",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/KeyAndContactVM"
+              "$ref": "#/definitions/KeyAndTermsVM"
             }
           }
         ],
@@ -158,6 +158,45 @@
           },
           "201": {
             "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/account/active-trial/info": {
+      "get": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "getTrialAccountActivationInfo",
+        "operationId": "getTrialAccountActivationInfoUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "key",
+            "in": "query",
+            "description": "key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserDTO"
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -2318,36 +2357,12 @@
       },
       "title": "AdditionalInfoDTO"
     },
-    "Contact": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "Contact"
-    },
     "JSONObject": {
       "type": "object",
       "title": "JSONObject",
       "additionalProperties": {
         "type": "object"
       }
-    },
-    "KeyAndContactVM": {
-      "type": "object",
-      "properties": {
-        "contact": {
-          "$ref": "#/definitions/Contact"
-        },
-        "key": {
-          "type": "string"
-        }
-      },
-      "title": "KeyAndContactVM"
     },
     "KeyAndPasswordVM": {
       "type": "object",
@@ -2360,6 +2375,18 @@
         }
       },
       "title": "KeyAndPasswordVM"
+    },
+    "KeyAndTermsVM": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "readAndAgreeWithTheTerms": {
+          "type": "boolean"
+        }
+      },
+      "title": "KeyAndTermsVM"
     },
     "LicenseAgreement": {
       "type": "object",
@@ -2606,9 +2633,6 @@
         },
         "licenseAgreement": {
           "$ref": "#/definitions/LicenseAgreement"
-        },
-        "pointOfContact": {
-          "$ref": "#/definitions/Contact"
         }
       },
       "title": "TrialAccount"
