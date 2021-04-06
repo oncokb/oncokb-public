@@ -18,10 +18,7 @@ import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.*;
 import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.InvalidPasswordException;
-import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndContactVM;
-import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndPasswordVM;
-import org.mskcc.cbio.oncokb.web.rest.vm.LoginVM;
-import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
+import org.mskcc.cbio.oncokb.web.rest.vm.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -380,15 +377,30 @@ public class AccountResource {
     }
 
     @PostMapping(path = "/account/active-trial/finish")
-    public UserDTO finishTrialAccountActivation(@RequestBody KeyAndContactVM keyAndContactVM) {
-        Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByTrialActivationKey(keyAndContactVM.getKey());
+    public UserDTO finishTrialAccountActivation(@RequestBody KeyAndTermsVM keyAndTermsVM) {
+        if (keyAndTermsVM.getReadAndAgreeWithTheTerms() != Boolean.TRUE) {
+            throw new AccountResourceException("You have to read and agree with the terms.");
+        }
+        Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByTrialActivationKey(keyAndTermsVM.getKey());
         if (userDetailsDTO.isPresent()) {
-            Optional<UserDTO> userDTOOptional = userService.finishTrialAccountActivation(keyAndContactVM);
+            Optional<UserDTO> userDTOOptional = userService.finishTrialAccountActivation(keyAndTermsVM.getKey());
             if (userDTOOptional.isPresent()) {
                 return userDTOOptional.get();
             }
         }
         throw new AccountResourceException("No user was found for this activation key");
+    }
+
+    @GetMapping(path = "/account/active-trial/info")
+    public UserDTO getTrialAccountActivationInfo(@RequestParam String key) {
+        Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByTrialActivationKey(key);
+        if (userDetailsDTO.isPresent()) {
+            Optional<User> userOptional = userRepository.findById(userDetailsDTO.get().getUserId());
+            if (userOptional.isPresent()) {
+                return userMapper.userToUserDTO(userOptional.get());
+            }
+        }
+        throw new AccountResourceException("No key found");
     }
 
 

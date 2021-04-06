@@ -305,6 +305,7 @@ export default class UserPage extends React.Component<IUserPage> {
         updatedUser => {
           this.user = updatedUser;
           notifySuccess('Initiated trial account');
+          this.showTrialAccountModal = true;
         },
         (error: Error) => notifyError(error)
       );
@@ -373,15 +374,19 @@ export default class UserPage extends React.Component<IUserPage> {
                             }
                             onConfirm={this.onConfirmInitiateTrialAccountButton}
                           />
-                          <TrialAccountModal
-                            baseUrl={this.props.windowStore.baseUrl}
-                            trialAccount={
-                              this.user.additionalInfo?.trialAccount
-                            }
-                            show={this.showTrialAccountModal}
-                            onClose={() => (this.showTrialAccountModal = false)}
-                            onRegenerate={this.generateTrialActivationKey}
-                          />
+                          {this.user.additionalInfo?.trialAccount ? (
+                            <TrialAccountModal
+                              baseUrl={this.props.windowStore.baseUrl}
+                              trialAccount={
+                                this.user.additionalInfo?.trialAccount
+                              }
+                              show={this.showTrialAccountModal}
+                              onClose={() =>
+                                (this.showTrialAccountModal = false)
+                              }
+                              onRegenerate={this.generateTrialActivationKey}
+                            />
+                          ) : null}
                         </div>
                       </Col>
                     </Row>
