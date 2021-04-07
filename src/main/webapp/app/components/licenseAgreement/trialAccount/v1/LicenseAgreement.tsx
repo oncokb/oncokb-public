@@ -1,11 +1,26 @@
 import React from 'react';
 import styles from '../../licenseAgreement.module.scss';
+import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
+import agreementPdf from './license_agreement.pdf';
+import { Row, Col } from 'react-bootstrap';
 
 export const LicenseAgreement = () => {
   return (
     <div>
       <h3>OncoKB KnowledgeBase Free Trial Access Terms and Conditions</h3>
-      <h5 style={{ textAlign: 'center' }}>("Terms and Conditions")</h5>
+      <h5 className={'text-center'}>("Terms and Conditions")</h5>
+      <Row>
+        <Col>
+          <DownloadButton
+            className="float-right"
+            size={'sm'}
+            href={agreementPdf}
+          >
+            <i className={'fa fa-cloud-download mr-1'} />
+            Download PDF
+          </DownloadButton>
+        </Col>
+      </Row>
       <p>
         These Terms and Conditions describe the rights granted by Memorial Sloan
         Kettering Cancer Center, a New York not-for-profit corporation with its
