@@ -100,7 +100,7 @@ export default class ActivateTrialFinish extends React.Component<{
                       <LicenseAgreement />
                     </Col>
                   </Row>
-                  <Row>
+                  <Row className="mt-2">
                     <Col>
                       <AvCheckboxGroup
                         name={'acceptTheAgreement'}
@@ -115,7 +115,7 @@ export default class ActivateTrialFinish extends React.Component<{
                       </AvCheckboxGroup>
                     </Col>
                   </Row>
-                  <Row>
+                  <Row className="mt-2">
                     <Col>
                       <Button color="success" type="submit">
                         Confirm
