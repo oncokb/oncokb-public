@@ -150,16 +150,25 @@ public class UserService {
         Optional<User> userOptional = userRepository.findOneByEmailIgnoreCase(mail);
         if (userOptional.isPresent()) {
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(userOptional.get());
+            UserDetails ud = null;
+            if (userDetails.isPresent()) {
+                ud = userDetails.get();
+            } else {
+                ud = new UserDetails();
+                ud.setUser(userOptional.get());
+            }
 
             AdditionalInfoDTO additionalInfoDTO = null;
             if (userDetails.isPresent()) {
-                additionalInfoDTO = new Gson().fromJson(userDetails.get().getAdditionalInfo(), AdditionalInfoDTO.class);
+                additionalInfoDTO = new Gson().fromJson(ud.getAdditionalInfo(), AdditionalInfoDTO.class);
             }
             if (additionalInfoDTO == null) {
                 additionalInfoDTO = new AdditionalInfoDTO();
             }
             additionalInfoDTO.setTrialAccount(initiateTrialAccountInfo());
-            userDetails.get().setAdditionalInfo(new Gson().toJson(additionalInfoDTO));
+            ud.setAdditionalInfo(new Gson().toJson(additionalInfoDTO));
+
+            userDetailsRepository.save(ud);
             return userOptional;
         } else {
             return Optional.empty();
