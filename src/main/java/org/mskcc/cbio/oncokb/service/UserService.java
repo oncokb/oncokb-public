@@ -181,7 +181,7 @@ public class UserService {
             if (StringUtils.isNotEmpty(userKey) && userKey.equals(key)) {
                 // Update user account to trial account
                 user.setActivated(true);
-                generateTokenForUserIfNotExist(userDTO, Optional.of(TRIAL_PERIOD_IN_DAYS), Optional.of(false));
+                generateTokenForUserIfNotExistOrOverwrite(userDTO, Optional.of(TRIAL_PERIOD_IN_DAYS), Optional.of(false));
 
                 // Reset the trial account info
                 Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
@@ -484,6 +484,24 @@ public class UserService {
                 tokenValidDays.isPresent() ? Optional.of(Instant.now().plusSeconds(DAY_IN_SECONDS * (long) tokenValidDays.get())) : Optional.empty(),
                 tokenIsRenewable
             );
+        }
+    }
+
+    private void generateTokenForUserIfNotExistOrOverwrite(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
+        // automatically generate a token for user if not exists
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        if (tokens.isEmpty()) {
+            tokenProvider.createToken(
+                userMapper.userDTOToUser(userDTO),
+                tokenValidDays.isPresent() ? Optional.of(Instant.now().plusSeconds(DAY_IN_SECONDS * (long) tokenValidDays.get())) : Optional.empty(),
+                tokenIsRenewable
+            );
+        } else {
+            tokens.forEach(token -> {
+                token.setRenewable(false);
+                token.setExpiration(Instant.now().plusSeconds(DAY_IN_SECONDS * tokenValidDays.get()));
+                tokenService.save(token);
+            });
         }
     }
 
