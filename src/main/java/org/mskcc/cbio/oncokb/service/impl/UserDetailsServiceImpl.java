@@ -65,4 +65,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         log.debug("Request to delete UserDetails : {}", id);
         userDetailsRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<UserDetailsDTO> findOneByTrialActivationKey(String key) {
+        return userDetailsRepository.findOneByTrialActivationKey(key)
+            .map(userDetailsMapper::toDto);
+    }
 }

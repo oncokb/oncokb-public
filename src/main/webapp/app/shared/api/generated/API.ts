@@ -1,11 +1,37 @@
 import * as request from "superagent";
 
 type CallbackHandler = (err: any, res ? : request.Response) => void;
+export type Activation = {
+    'activationDate': string
+
+        'initiationDate': string
+
+        'key': string
+
+};
+export type AdditionalInfoDTO = {
+    'trialAccount': TrialAccount
+
+};
 export type JSONObject = {};
 export type KeyAndPasswordVM = {
     'key': string
 
         'newPassword': string
+
+};
+export type KeyAndTermsVM = {
+    'key': string
+
+        'readAndAgreeWithTheTerms': boolean
+
+};
+export type LicenseAgreement = {
+    'acceptanceDate': string
+
+        'name': string
+
+        'version': string
 
 };
 export type LoginVM = {
@@ -26,6 +52,8 @@ export type ManagedUserVM = {
     'activated': boolean
 
         'activationKey': string
+
+        'additionalInfo': AdditionalInfoDTO
 
         'authorities': Array < string >
 
@@ -98,6 +126,12 @@ export type Token = {
         'user': User
 
 };
+export type TrialAccount = {
+    'activation': Activation
+
+        'licenseAgreement': LicenseAgreement
+
+};
 export type UsageSummary = {
     'month': {}
 
@@ -128,6 +162,8 @@ export type UserDTO = {
     'activated': boolean
 
         'activationKey': string
+
+        'additionalInfo': AdditionalInfoDTO
 
         'authorities': Array < string >
 
@@ -171,7 +207,9 @@ export type UserDTO = {
 
 };
 export type UserDetailsDTO = {
-    'address': string
+    'additionalInfo': AdditionalInfoDTO
+
+        'address': string
 
         'city': string
 
@@ -425,6 +463,236 @@ export default class API {
         $domain ? : string
     }): Promise < any > {
         return this.saveAccountUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    finishTrialAccountActivationUsingPOSTURL(parameters: {
+        'keyAndTermsVm': KeyAndTermsVM,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/active-trial/finish';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * finishTrialAccountActivation
+     * @method
+     * @name API#finishTrialAccountActivationUsingPOST
+     * @param {} keyAndTermsVm - keyAndTermsVM
+     */
+    finishTrialAccountActivationUsingPOSTWithHttpInfo(parameters: {
+        'keyAndTermsVm': KeyAndTermsVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/active-trial/finish';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['keyAndTermsVm'] !== undefined) {
+                body = parameters['keyAndTermsVm'];
+            }
+
+            if (parameters['keyAndTermsVm'] === undefined) {
+                reject(new Error('Missing required  parameter: keyAndTermsVm'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * finishTrialAccountActivation
+     * @method
+     * @name API#finishTrialAccountActivationUsingPOST
+     * @param {} keyAndTermsVm - keyAndTermsVM
+     */
+    finishTrialAccountActivationUsingPOST(parameters: {
+        'keyAndTermsVm': KeyAndTermsVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < UserDTO > {
+        return this.finishTrialAccountActivationUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getTrialAccountActivationInfoUsingGETURL(parameters: {
+        'key': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/active-trial/info';
+        if (parameters['key'] !== undefined) {
+            queryParameters['key'] = parameters['key'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getTrialAccountActivationInfo
+     * @method
+     * @name API#getTrialAccountActivationInfoUsingGET
+     * @param {string} key - key
+     */
+    getTrialAccountActivationInfoUsingGETWithHttpInfo(parameters: {
+        'key': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/active-trial/info';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters['key'] !== undefined) {
+                queryParameters['key'] = parameters['key'];
+            }
+
+            if (parameters['key'] === undefined) {
+                reject(new Error('Missing required  parameter: key'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getTrialAccountActivationInfo
+     * @method
+     * @name API#getTrialAccountActivationInfoUsingGET
+     * @param {string} key - key
+     */
+    getTrialAccountActivationInfoUsingGET(parameters: {
+        'key': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < UserDTO > {
+        return this.getTrialAccountActivationInfoUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    initiateTrialAccountActivationUsingPOSTURL(parameters: {
+        'mail': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/account/active-trial/init';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * initiateTrialAccountActivation
+     * @method
+     * @name API#initiateTrialAccountActivationUsingPOST
+     * @param {} mail - mail
+     */
+    initiateTrialAccountActivationUsingPOSTWithHttpInfo(parameters: {
+        'mail': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/account/active-trial/init';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['mail'] !== undefined) {
+                body = parameters['mail'];
+            }
+
+            if (parameters['mail'] === undefined) {
+                reject(new Error('Missing required  parameter: mail'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * initiateTrialAccountActivation
+     * @method
+     * @name API#initiateTrialAccountActivationUsingPOST
+     * @param {} mail - mail
+     */
+    initiateTrialAccountActivationUsingPOST(parameters: {
+        'mail': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < UserDTO > {
+        return this.initiateTrialAccountActivationUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };

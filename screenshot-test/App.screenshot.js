@@ -44,7 +44,7 @@ const usageResourcesOverview = fs.readFileSync(`${DATA_DIR}api-usage-summary-res
 const usageUserDetail = fs.readFileSync(`${DATA_DIR}api-usage-users-2021.json`).toString();
 const usageResourceDetail = fs.readFileSync(`${DATA_DIR}api-usage-resources-example.json`).toString();
 
-// # Fix the time to expiration date. 
+// # Fix the time to expiration date.
 function updateTokenExpirationDate(current){
   let today = new Date()
   today.setDate(today.getDate()+100);
@@ -268,7 +268,7 @@ describe('Tests with login', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch(browserConfig);
     page = await browser.newPage();
-    await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled! 
+    await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled!
     page.on('request', (request) => {
       let url = request.url()
       if (getMockResponse(url) !== undefined){
@@ -397,13 +397,13 @@ describe('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Terms Page with Login' });
   })
 
-  it('FAQ Page', async() => {
-    await page.goto(`${CLIENT_URL}faq`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(LONG_WAITING_TIME);
-    let image = await page.screenshot(getScreenshotConfig('FAQ Page with Login'));
-    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'FAQ Page with Login' });
-  })
+  // it('FAQ Page', async() => {
+  //   await page.goto(`${CLIENT_URL}faq`);
+  //   await page.setViewport(VIEW_PORT_1080);
+  //   await page.waitFor(LONG_WAITING_TIME);
+  //   let image = await page.screenshot(getScreenshotConfig('FAQ Page with Login'));
+  //   expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'FAQ Page with Login' });
+  // })
 
   it('Gene Page', async() => {
     await page.goto(`${CLIENT_URL}gene/ABL1`);
@@ -489,7 +489,7 @@ describe('Tests without login', () => {
   beforeAll(async () => {
     browser = await puppeteer.launch(browserConfig);
     page = await browser.newPage();
-    await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled! 
+    await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled!
     page.on('request', (request) => {
       let url = request.url()
       if (url.includes('recaptcha')){
@@ -502,7 +502,7 @@ describe('Tests without login', () => {
           )
         }
         else request.continue();
-      }     
+      }
     });
     await page.goto(`${CLIENT_URL}`);
     await page.evaluate(() => {
@@ -622,13 +622,13 @@ describe('Tests without login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Terms Page without Login' });
   })
 
-  it('FAQ Page', async() => {
-    await page.goto(`${CLIENT_URL}faq`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(LONG_WAITING_TIME);
-    let image = await page.screenshot(getScreenshotConfig('FAQ Page without Login'));
-    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'FAQ Page without Login' });
-  })
+  // it('FAQ Page', async() => {
+  //   await page.goto(`${CLIENT_URL}faq`);
+  //   await page.setViewport(VIEW_PORT_1080);
+  //   await page.waitFor(LONG_WAITING_TIME);
+  //   let image = await page.screenshot(getScreenshotConfig('FAQ Page without Login'));
+  //   expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'FAQ Page without Login' });
+  // })
 
   it('Gene Page', async() => {
     await page.goto(`${CLIENT_URL}gene/ABL1`);

@@ -25,6 +25,11 @@
     {
       "fieldName": "address",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "additionalInfo",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
     }
   ],
   "relationships": [
@@ -45,5 +50,8 @@
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,
   "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "searchEngine": false,
+  "databaseType": "sql",
+  "readOnly": false
 }

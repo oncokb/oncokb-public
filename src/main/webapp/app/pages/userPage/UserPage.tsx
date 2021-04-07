@@ -30,7 +30,7 @@ import { Alert, Button, Col, Row } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
 import { Token, UserDTO, UserMailsDTO } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
-import { remoteData } from 'cbioportal-frontend-commons';
+import { remoteData, getBrowserWindow } from 'cbioportal-frontend-commons';
 import {
   action,
   computed,
@@ -50,6 +50,9 @@ import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
 import { EmailTable } from 'app/shared/table/EmailTable';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
+import { QuickToolButton } from 'app/pages/userPage/QuickToolButton';
+import { TrialAccountModal } from './TrialAccountModal';
+import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -82,6 +85,8 @@ export default class UserPage extends React.Component<IUserPage> {
   @observable userTokens: Token[] = [];
   @observable user: UserDTO;
   @observable getUserStatus: PromiseStatus;
+  @observable showTrialAccountModal = false;
+  @observable showTrialAccountConfirmModal = false;
 
   readonly reactions: IReactionDisposer[] = [];
 
@@ -289,6 +294,50 @@ export default class UserPage extends React.Component<IUserPage> {
       );
   }
 
+  @autobind
+  @action
+  generateTrialActivationKey() {
+    client
+      .initiateTrialAccountActivationUsingPOST({
+        mail: this.user.email,
+      })
+      .then(
+        updatedUser => {
+          this.user = updatedUser;
+          notifySuccess('Initiated trial account');
+          this.showTrialAccountModal = true;
+        },
+        (error: Error) => notifyError(error)
+      );
+  }
+
+  @autobind
+  onClickTrialAccountButton() {
+    if (this.hasTrialAccountInfo) {
+      this.showTrialAccountModal = true;
+    } else {
+      this.showTrialAccountConfirmModal = true;
+    }
+  }
+
+  @autobind
+  onConfirmInitiateTrialAccountButton() {
+    this.showTrialAccountConfirmModal = false;
+    this.generateTrialActivationKey();
+  }
+
+  @computed
+  get hasTrialAccountInfo() {
+    return !!this.user.additionalInfo?.trialAccount?.activation?.initiationDate;
+  }
+
+  @computed
+  get trialAccountButtonText() {
+    return this.hasTrialAccountInfo
+      ? 'Show Trial Activation Info'
+      : 'Generate Trial Activation Link';
+  }
+
   render() {
     return (
       <If condition={this.getUserStatus === PromiseStatus.pending}>
@@ -310,13 +359,34 @@ export default class UserPage extends React.Component<IUserPage> {
                       <Col>
                         <div>Quick Tools</div>
                         <div>
-                          <Button
-                            variant="outline-primary"
-                            onClick={this.generateResetKey}
-                            className={'mb-2'}
-                          >
+                          <QuickToolButton onClick={this.generateResetKey}>
                             Generate Reset Key
-                          </Button>
+                          </QuickToolButton>
+                          <QuickToolButton
+                            onClick={this.onClickTrialAccountButton}
+                          >
+                            {this.trialAccountButtonText}
+                          </QuickToolButton>
+                          <SimpleConfirmModal
+                            show={this.showTrialAccountConfirmModal}
+                            onCancel={() =>
+                              (this.showTrialAccountConfirmModal = false)
+                            }
+                            onConfirm={this.onConfirmInitiateTrialAccountButton}
+                          />
+                          {this.user.additionalInfo?.trialAccount ? (
+                            <TrialAccountModal
+                              baseUrl={this.props.windowStore.baseUrl}
+                              trialAccount={
+                                this.user.additionalInfo?.trialAccount
+                              }
+                              show={this.showTrialAccountModal}
+                              onClose={() =>
+                                (this.showTrialAccountModal = false)
+                              }
+                              onRegenerate={this.generateTrialActivationKey}
+                            />
+                          ) : null}
                         </div>
                       </Col>
                     </Row>
