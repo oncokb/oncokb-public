@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
@@ -41,6 +42,8 @@ public class UserDTO {
     private String city;
 
     private String country;
+
+    private AdditionalInfoDTO additionalInfo;
 
     @Email
     @Size(min = 5, max = 254)
@@ -102,6 +105,7 @@ public class UserDTO {
             this.company = userDetails.getCompany();
             this.city = userDetails.getCity();
             this.country = userDetails.getCountry();
+            this.additionalInfo = new Gson().fromJson(userDetails.getAdditionalInfo(), AdditionalInfoDTO.class);
         }
     }
 
@@ -191,6 +195,14 @@ public class UserDTO {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public AdditionalInfoDTO getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(AdditionalInfoDTO additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 
     public String getImageUrl() {

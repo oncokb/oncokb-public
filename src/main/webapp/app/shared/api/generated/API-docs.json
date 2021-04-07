@@ -125,6 +125,139 @@
         "deprecated": false
       }
     },
+    "/api/account/active-trial/finish": {
+      "post": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "finishTrialAccountActivation",
+        "operationId": "finishTrialAccountActivationUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "keyAndTermsVM",
+            "description": "keyAndTermsVM",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/KeyAndTermsVM"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/account/active-trial/info": {
+      "get": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "getTrialAccountActivationInfo",
+        "operationId": "getTrialAccountActivationInfoUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "key",
+            "in": "query",
+            "description": "key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/account/active-trial/init": {
+      "post": {
+        "tags": [
+          "account-resource"
+        ],
+        "summary": "initiateTrialAccountActivation",
+        "operationId": "initiateTrialAccountActivationUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "mail",
+            "description": "mail",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/account/change-password": {
       "post": {
         "tags": [
@@ -2198,6 +2331,32 @@
     }
   },
   "definitions": {
+    "Activation": {
+      "type": "object",
+      "properties": {
+        "activationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "initiationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "key": {
+          "type": "string"
+        }
+      },
+      "title": "Activation"
+    },
+    "AdditionalInfoDTO": {
+      "type": "object",
+      "properties": {
+        "trialAccount": {
+          "$ref": "#/definitions/TrialAccount"
+        }
+      },
+      "title": "AdditionalInfoDTO"
+    },
     "JSONObject": {
       "type": "object",
       "title": "JSONObject",
@@ -2216,6 +2375,34 @@
         }
       },
       "title": "KeyAndPasswordVM"
+    },
+    "KeyAndTermsVM": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "readAndAgreeWithTheTerms": {
+          "type": "boolean"
+        }
+      },
+      "title": "KeyAndTermsVM"
+    },
+    "LicenseAgreement": {
+      "type": "object",
+      "properties": {
+        "acceptanceDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "title": "LicenseAgreement"
     },
     "LoginVM": {
       "type": "object",
@@ -2281,6 +2468,9 @@
         },
         "activationKey": {
           "type": "string"
+        },
+        "additionalInfo": {
+          "$ref": "#/definitions/AdditionalInfoDTO"
         },
         "authorities": {
           "type": "array",
@@ -2435,6 +2625,18 @@
       },
       "title": "Token"
     },
+    "TrialAccount": {
+      "type": "object",
+      "properties": {
+        "activation": {
+          "$ref": "#/definitions/Activation"
+        },
+        "licenseAgreement": {
+          "$ref": "#/definitions/LicenseAgreement"
+        }
+      },
+      "title": "TrialAccount"
+    },
     "UsageSummary": {
       "type": "object",
       "properties": {
@@ -2517,6 +2719,9 @@
         },
         "activationKey": {
           "type": "string"
+        },
+        "additionalInfo": {
+          "$ref": "#/definitions/AdditionalInfoDTO"
         },
         "authorities": {
           "type": "array",
@@ -2610,6 +2815,9 @@
     "UserDetailsDTO": {
       "type": "object",
       "properties": {
+        "additionalInfo": {
+          "$ref": "#/definitions/AdditionalInfoDTO"
+        },
         "address": {
           "type": "string"
         },

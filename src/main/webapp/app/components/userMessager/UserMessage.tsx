@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { remoteData, isWebdriver } from 'cbioportal-frontend-commons';
-import { action, computed, observable } from 'mobx';
+import { remoteData } from 'cbioportal-frontend-commons';
+import { action, observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import * as _ from 'lodash';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
-import { getBrowserWindow } from 'cbioportal-frontend-commons';
 import { Container } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
 
@@ -28,7 +27,7 @@ let MESSAGE_DATA: IUserMessage[];
 
 if (
   ['beta.oncokb.org', 'www.oncokb.org', 'localhost'].includes(
-    getBrowserWindow().location.hostname
+    window.location.hostname
   )
 ) {
   MESSAGE_DATA = [

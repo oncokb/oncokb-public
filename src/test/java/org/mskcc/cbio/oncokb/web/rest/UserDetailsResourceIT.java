@@ -1,7 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
+import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.service.UserDetailsService;
@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -56,6 +57,9 @@ public class UserDetailsResourceIT {
     private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
     private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
 
+    private static final String DEFAULT_ADDITIONAL_INFO = "AAAAAAAAAA";
+    private static final String UPDATED_ADDITIONAL_INFO = "BBBBBBBBBB";
+
     @Autowired
     private UserDetailsRepository userDetailsRepository;
 
@@ -86,7 +90,8 @@ public class UserDetailsResourceIT {
             .company(DEFAULT_COMPANY)
             .city(DEFAULT_CITY)
             .country(DEFAULT_COUNTRY)
-            .address(DEFAULT_ADDRESS);
+            .address(DEFAULT_ADDRESS)
+            .additionalInfo(DEFAULT_ADDITIONAL_INFO);
         return userDetails;
     }
     /**
@@ -102,7 +107,8 @@ public class UserDetailsResourceIT {
             .company(UPDATED_COMPANY)
             .city(UPDATED_CITY)
             .country(UPDATED_COUNTRY)
-            .address(UPDATED_ADDRESS);
+            .address(UPDATED_ADDRESS)
+            .additionalInfo(UPDATED_ADDITIONAL_INFO);
         return userDetails;
     }
 
@@ -132,6 +138,7 @@ public class UserDetailsResourceIT {
         assertThat(testUserDetails.getCity()).isEqualTo(DEFAULT_CITY);
         assertThat(testUserDetails.getCountry()).isEqualTo(DEFAULT_COUNTRY);
         assertThat(testUserDetails.getAddress()).isEqualTo(DEFAULT_ADDRESS);
+        assertThat(testUserDetails.getAdditionalInfo()).isEqualTo(DEFAULT_ADDITIONAL_INFO);
     }
 
     @Test
@@ -171,9 +178,10 @@ public class UserDetailsResourceIT {
             .andExpect(jsonPath("$.[*].company").value(hasItem(DEFAULT_COMPANY)))
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
             .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
-            .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)));
+            .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
+            .andExpect(jsonPath("$.[*].additionalInfo").value(hasItem(DEFAULT_ADDITIONAL_INFO.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getUserDetails() throws Exception {
@@ -190,7 +198,8 @@ public class UserDetailsResourceIT {
             .andExpect(jsonPath("$.company").value(DEFAULT_COMPANY))
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY))
             .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
-            .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS));
+            .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
+            .andExpect(jsonPath("$.additionalInfo").value(DEFAULT_ADDITIONAL_INFO.toString()));
     }
     @Test
     @Transactional
@@ -218,7 +227,8 @@ public class UserDetailsResourceIT {
             .company(UPDATED_COMPANY)
             .city(UPDATED_CITY)
             .country(UPDATED_COUNTRY)
-            .address(UPDATED_ADDRESS);
+            .address(UPDATED_ADDRESS)
+            .additionalInfo(UPDATED_ADDITIONAL_INFO);
         UserDetailsDTO userDetailsDTO = userDetailsMapper.toDto(updatedUserDetails);
 
         restUserDetailsMockMvc.perform(put("/api/user-details")
@@ -236,6 +246,7 @@ public class UserDetailsResourceIT {
         assertThat(testUserDetails.getCity()).isEqualTo(UPDATED_CITY);
         assertThat(testUserDetails.getCountry()).isEqualTo(UPDATED_COUNTRY);
         assertThat(testUserDetails.getAddress()).isEqualTo(UPDATED_ADDRESS);
+        assertThat(testUserDetails.getAdditionalInfo()).isEqualTo(UPDATED_ADDITIONAL_INFO);
     }
 
     @Test

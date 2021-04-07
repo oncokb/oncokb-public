@@ -40,4 +40,6 @@ public interface UserDetailsService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    Optional<UserDetailsDTO> findOneByTrialActivationKey(String key);
 }
