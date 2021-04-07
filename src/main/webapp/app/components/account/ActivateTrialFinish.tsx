@@ -25,6 +25,8 @@ import { observable } from 'mobx';
 import { Else, Then, If } from 'react-if';
 import { UserDTO } from 'app/shared/api/generated/API';
 import { Redirect } from 'react-router';
+import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
+import agreementPdf from 'app/components/licenseAgreement/trialAccount/v1/license_agreement.pdf';
 
 @inject('routing')
 @observer
@@ -55,7 +57,7 @@ export default class ActivateTrialFinish extends React.Component<{
       .then(
         () => {
           this.infoMessage =
-            'You account has been activated. You will be redirected to login page.';
+            'Your trial account has been activated. You will be redirected to login page.';
           setTimeout(() => {
             this.infoMessage = <Redirect to={PAGE_ROUTE.LOGIN} />;
           }, REDIRECT_TIMEOUT_MILLISECONDS);
@@ -76,7 +78,8 @@ export default class ActivateTrialFinish extends React.Component<{
           this.user = user;
         },
         (error: Error) => {
-          this.infoMessage = 'No information found with the activation key.';
+          this.infoMessage =
+            'This activation key is invalid. The key is either incorrect, or the license has already been activated.';
         }
       )
       .finally(() => {
@@ -86,49 +89,68 @@ export default class ActivateTrialFinish extends React.Component<{
 
   render() {
     return (
-      <SmallPageContainer size={'lg'}>
-        <If condition={this.loadingActivationInfo}>
-          <Then>
-            <LoadingIndicator isLoading />
-          </Then>
-          <Else>
-            <If condition={this.infoMessage === undefined}>
-              <Then>
-                <AvForm onValidSubmit={this.handleValidSubmit}>
-                  <Row>
-                    <Col sm={12}>
-                      <LicenseAgreement />
-                    </Col>
-                  </Row>
-                  <Row className="mt-2">
-                    <Col>
-                      <AvCheckboxGroup
-                        name={'acceptTheAgreement'}
-                        required
-                        key={'acceptTheAgreement'}
-                        errorMessage={'You have to accept the term'}
-                      >
-                        <AvCheckbox
-                          label={`I, ${this.user?.firstName} ${this.user?.lastName}, have read and agree with the terms and conditions above`}
-                          value={true}
-                        />
-                      </AvCheckboxGroup>
-                    </Col>
-                  </Row>
-                  <Row className="mt-2">
-                    <Col>
-                      <Button color="success" type="submit">
-                        Confirm
-                      </Button>
-                    </Col>
-                  </Row>
-                </AvForm>
-              </Then>
-              <Else>{this.infoMessage}</Else>
-            </If>
-          </Else>
-        </If>
-      </SmallPageContainer>
+      <If condition={this.loadingActivationInfo}>
+        <Then>
+          <LoadingIndicator isLoading />
+        </Then>
+        <Else>
+          <If condition={this.infoMessage === undefined}>
+            <Then>
+              <>
+                <Row>
+                  <Col>
+                    <DownloadButton
+                      className="float-right"
+                      size={'sm'}
+                      href={agreementPdf}
+                    >
+                      <i className={'fa fa-cloud-download mr-1'} />
+                      Download PDF
+                    </DownloadButton>
+                  </Col>
+                </Row>
+
+                <SmallPageContainer size={'lg'}>
+                  <AvForm onValidSubmit={this.handleValidSubmit}>
+                    <Row>
+                      <Col sm={12}>
+                        <LicenseAgreement />
+                      </Col>
+                    </Row>
+                    <Row className="mt-2">
+                      <Col>
+                        <AvCheckboxGroup
+                          name={'acceptTheAgreement'}
+                          required
+                          key={'acceptTheAgreement'}
+                          errorMessage={
+                            'You have to accept the terms to activate your license.'
+                          }
+                        >
+                          <AvCheckbox
+                            label={`I, ${this.user?.firstName} ${this.user?.lastName}, have read and agree with the terms and conditions above.`}
+                            value={true}
+                          />
+                        </AvCheckboxGroup>
+                      </Col>
+                    </Row>
+                    <Row className="mt-2">
+                      <Col>
+                        <Button color="success" type="submit">
+                          Confirm
+                        </Button>
+                      </Col>
+                    </Row>
+                  </AvForm>
+                </SmallPageContainer>
+              </>
+            </Then>
+            <Else>
+              <SmallPageContainer>{this.infoMessage}</SmallPageContainer>
+            </Else>
+          </If>
+        </Else>
+      </If>
     );
   }
 }
