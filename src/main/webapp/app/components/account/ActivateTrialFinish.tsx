@@ -57,7 +57,7 @@ export default class ActivateTrialFinish extends React.Component<{
       .then(
         () => {
           this.infoMessage =
-            'Your trial account has been activated. You will be redirected to login page.';
+            'Your trial account has been activated. You will be redirected to the login page.';
           setTimeout(() => {
             this.infoMessage = <Redirect to={PAGE_ROUTE.LOGIN} />;
           }, REDIRECT_TIMEOUT_MILLISECONDS);
