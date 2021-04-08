@@ -370,7 +370,7 @@ export enum PAGE_TITLE {
   ACCOUNT = 'Account',
   ACCOUNT_SETTINGS = 'Account Settings',
   ACCOUNT_PASSWORD = 'Change Password',
-  ADMIN_USER_DETAILS = 'Users Information',
+  ADMIN_USER_DETAILS = 'Registered Users',
   ADMIN_SEND_EMAILS = 'Send Emails to Users',
   ADMIN_CREATE_ACCOUNT = 'Create New Account',
   ADMIN_USAGE_ANALYSIS = 'Usage Analysis',
