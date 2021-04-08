@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.Constants.EXPIRATION;
 import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
-import static org.mskcc.cbio.oncokb.util.TimeUtil.toSystemDefaultZoneTime;
+import static org.mskcc.cbio.oncokb.util.TimeUtil.toNYZoneTime;
 
 
 /**
@@ -161,9 +161,9 @@ public class SlackService {
     }
     @Async
     public void sendConfirmationOnUserAcceptsTrialAgreement(UserDTO userDTO, Instant tokenExpiresOn) {
-        String expirationDate = toSystemDefaultZoneTime(tokenExpiresOn);
+        String expirationDate = toNYZoneTime(tokenExpiresOn);
         Payload payload = Payload.builder()
-            .text(userDTO.getEmail() + " has read and agreed to the trial license agreement. The account has been activated, the trial period ends at " + expirationDate)
+            .text(userDTO.getEmail() + " has read and agreed to the trial license agreement. The account has been activated, the trial period ends on " + expirationDate)
             .build();
 
         Slack slack = Slack.getInstance();

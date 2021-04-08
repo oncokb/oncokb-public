@@ -12,9 +12,17 @@ import java.util.Locale;
 public class TimeUtil {
     public static String toSystemDefaultZoneTime(Instant time) {
         DateTimeFormatter formatter =
-            DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+            DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL)
                 .withLocale(Locale.US)
                 .withZone(ZoneId.systemDefault());
+        return formatter.format(time);
+    }
+
+    public static String toNYZoneTime(Instant time) {
+        DateTimeFormatter formatter =
+            DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL)
+                .withLocale(Locale.US)
+                .withZone(ZoneId.of("US/Eastern"));
         return formatter.format(time);
     }
 }
