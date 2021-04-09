@@ -22,7 +22,12 @@ export const CopyButton: React.FunctionComponent<
 
   const { text, onClick, ...rest } = props;
   return (
-    <CopyToClipboard text={text}>
+    <CopyToClipboard
+      text={text}
+      options={{
+        format: 'text/plain',
+      }}
+    >
       <Button variant={'primary'} onClick={onCopy} {...rest}>
         <DefaultTooltip placement={'top'} overlay={copied ? 'Copied' : 'Copy'}>
           <i className={classnames('fa fa-copy')}></i>
