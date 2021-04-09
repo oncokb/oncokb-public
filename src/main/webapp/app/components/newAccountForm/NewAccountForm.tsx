@@ -1,15 +1,15 @@
 import React from 'react';
 import {
+  AvCheckbox,
+  AvCheckboxGroup,
   AvField,
   AvForm,
-  AvRadioGroup,
   AvRadio,
-  AvCheckboxGroup,
-  AvCheckbox,
+  AvRadioGroup,
 } from 'availity-reactstrap-validation';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 import { observer } from 'mobx-react';
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import autobind from 'autobind-decorator';
 import { ManagedUserVM } from 'app/shared/api/generated/API';
 import {
@@ -19,16 +19,16 @@ import {
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   XREGEXP_VALID_LATIN_TEXT,
 } from 'app/config/constants';
-import { Row, Col, Button, Form } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { ButtonSelections } from 'app/components/LicenseSelection';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 import * as XRegExp from 'xregexp';
 import {
-  getSectionClassName,
   getAccountInfoTitle,
+  getSectionClassName,
 } from 'app/pages/account/AccountUtils';
-import { If, Then, Else } from 'react-if';
+import { If, Then } from 'react-if';
 
 export type INewAccountForm = {
   isLargeScreen: boolean;
@@ -54,6 +54,31 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     accountType: ACCOUNT_TYPE_DEFAULT,
     tokenValidDays: THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   };
+
+  private textValidation = {
+    pattern: {
+      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
+      errorMessage: 'Sorry, we only support Latin letters for now.',
+    },
+    minLength: {
+      value: 1,
+      errorMessage: 'Required to be at least 1 character',
+    },
+    maxLength: {
+      value: 50,
+      errorMessage: 'Cannot be longer than 50 characters',
+    },
+  };
+
+  private shortTextValidation = {
+    ...this.textValidation,
+    maxLength: {
+      value: 50,
+      errorMessage: 'Cannot be longer than 50 characters',
+    },
+  };
+
+  private keyContactPlaceHolder = 'Provide emails and phone numbers';
 
   constructor(props: INewAccountForm) {
     super(props);
@@ -94,19 +119,55 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
           access.
         </div>
       );
-    } else {
+    } else if (licenseType === LicenseType.COMMERCIAL) {
       return (
         <div>
-          <div className="mt-2">
-            In order to be granted access to downloadable content and our API,
-            your company will need a license. If your company already has one,
-            we will grant you access. Otherwise, we will contact you to discuss
-            your needs and license terms. You can also reach out to{' '}
-            <LicenseInquireLink /> for more information.
-          </div>
+          <p>
+            In order to use OncoKB in a commercial product, your company needs a
+            license. The most typical use case is the incorporation of OncoKB
+            content in sequencing reports.
+          </p>
+          <p>
+            If your company already has a license, we will grant you API access
+            shortly. Otherwise, we will contact you with license terms. You can
+            also reach out to <LicenseInquireLink /> for more information.
+          </p>
+        </div>
+      );
+    } else if (licenseType === LicenseType.HOSPITAL) {
+      return (
+        <div>
+          <p>
+            In order to use OncoKB in patient reports, your hospital needs a
+            license.
+          </p>
+          <p>
+            If your hospital already has a license, we will grant you API access
+            shortly. Otherwise, we will contact you with license terms. You can
+            also reach out to <LicenseInquireLink /> for more information.
+          </p>
+        </div>
+      );
+    } else if (licenseType === LicenseType.RESEARCH_IN_COMMERCIAL) {
+      return (
+        <div>
+          <p>
+            In order to use OncoKB for research purposes in a commercial
+            setting, your company needs a license.
+          </p>
+          <p>
+            If your company already has a license, we will grant you API access
+            shortly. Otherwise, we will contact you with license terms. You can
+            also reach out to <LicenseInquireLink /> for more information.
+          </p>
         </div>
       );
     }
+  }
+
+  @computed
+  get isCommercialLicense() {
+    return this.selectedLicense !== LicenseType.ACADEMIC;
   }
 
   @autobind
@@ -196,15 +257,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       value: true,
                       errorMessage: 'Your first name is required.',
                     },
-                    pattern: {
-                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                      errorMessage:
-                        'Sorry, we only support Latin letters for now.',
-                    },
-                    minLength: {
-                      value: 1,
-                      errorMessage: 'Your first can not be empty',
-                    },
+                    ...this.textValidation,
                   }}
                 />
                 <AvField
@@ -219,15 +272,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       value: true,
                       errorMessage: 'Your last name is required.',
                     },
-                    pattern: {
-                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                      errorMessage:
-                        'Sorry, we only support Latin letters for now.',
-                    },
-                    minLength: {
-                      value: 1,
-                      errorMessage: 'Your last name can not be empty',
-                    },
+                    ...this.textValidation,
                   }}
                 />
                 <If condition={!this.props.byAdmin}>
@@ -311,19 +356,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       value: !this.props.byAdmin,
                       errorMessage: 'Required.',
                     },
-                    minLength: {
-                      value: 1,
-                      errorMessage: 'Required to be at least 1 character',
-                    },
-                    pattern: {
-                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                      errorMessage:
-                        'Sorry, we only support Latin letters for now.',
-                    },
-                    maxLength: {
-                      value: 50,
-                      errorMessage: 'Cannot be longer than 50 characters',
-                    },
+                    ...this.shortTextValidation,
                   }}
                 />
                 <AvField
@@ -337,19 +370,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       value: !this.props.byAdmin,
                       errorMessage: 'Required.',
                     },
-                    minLength: {
-                      value: 1,
-                      errorMessage: 'Required to be at least 1 character',
-                    },
-                    pattern: {
-                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                      errorMessage:
-                        'Sorry, we only support Latin letters for now.',
-                    },
-                    maxLength: {
-                      value: 50,
-                      errorMessage: 'Cannot be longer than 50 characters',
-                    },
+                    ...this.shortTextValidation,
                   }}
                 />
                 <AvField
@@ -363,19 +384,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       value: !this.props.byAdmin,
                       errorMessage: 'Required.',
                     },
-                    minLength: {
-                      value: 1,
-                      errorMessage: 'Required to be at least 1 character',
-                    },
-                    pattern: {
-                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                      errorMessage:
-                        'Sorry, we only support Latin letters for now.',
-                    },
-                    maxLength: {
-                      value: 50,
-                      errorMessage: 'Cannot be longer than 50 characters',
-                    },
+                    ...this.shortTextValidation,
                   }}
                 />
                 <AvField
@@ -389,21 +398,135 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       value: !this.props.byAdmin,
                       errorMessage: 'Required.',
                     },
-                    pattern: {
-                      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                      errorMessage:
-                        'Sorry, we only support Latin letters for now.',
-                    },
-                    minLength: {
-                      value: 1,
-                      errorMessage: 'Required to be at least 1 character',
-                    },
-                    maxLength: {
-                      value: 50,
-                      errorMessage: 'Cannot be longer than 50 characters',
-                    },
+                    ...this.shortTextValidation,
                   }}
                 />
+                <AvField
+                  name="companyDescription"
+                  label={'Description'}
+                  type={'textarea'}
+                  placeholder={
+                    'Provide a brief description of the ' +
+                    getAccountInfoTitle(
+                      ACCOUNT_TITLES.COMPANY,
+                      this.selectedLicense
+                    ).toLowerCase() +
+                    ':\n' +
+                    '\t- Key products and services\n' +
+                    '\t- Size of organization (e.g., FTEs, revenues, etc.) \n'
+                  }
+                  rows={4}
+                  validate={{
+                    required: {
+                      value: !this.props.byAdmin,
+                      errorMessage: 'Required.',
+                    },
+                    ...this.textValidation,
+                  }}
+                />
+              </Col>
+            </Row>
+            {this.isCommercialLicense && (
+              <Row className={getSectionClassName()}>
+                <Col md="3">
+                  <h5>Key Contacts</h5>
+                </Col>
+                <Col md="9">
+                  <AvField
+                    name="businessContact"
+                    label={'Business Contact'}
+                    placeholder={this.keyContactPlaceHolder}
+                    validate={{
+                      required: {
+                        value: !this.props.byAdmin,
+                        errorMessage: 'Required.',
+                      },
+                      ...this.shortTextValidation,
+                    }}
+                  />
+                  <AvField
+                    name="productContact"
+                    label={'Product Contact'}
+                    placeholder={this.keyContactPlaceHolder}
+                    validate={{
+                      required: {
+                        value: !this.props.byAdmin,
+                        errorMessage: 'Required.',
+                      },
+                      ...this.shortTextValidation,
+                    }}
+                  />
+                  <AvField
+                    name="legalContact"
+                    label={'Legal Contact'}
+                    placeholder={this.keyContactPlaceHolder}
+                    validate={{
+                      required: {
+                        value: !this.props.byAdmin,
+                        errorMessage: 'Required.',
+                      },
+                      ...this.shortTextValidation,
+                    }}
+                  />
+                </Col>
+              </Row>
+            )}
+            <Row className={getSectionClassName()}>
+              <Col md="3">
+                <h5>Additional Info</h5>
+              </Col>
+              <Col md="9">
+                <AvField
+                  name="userCase"
+                  label={'User Case'}
+                  type={'textarea'}
+                  placeholder={
+                    'Provide description of use case, leveraging OncoKB content.  \n' +
+                    '\t- How will you utilize OncoKB? What product or service will incorporate OncoKB content? \n' +
+                    '\t- Describe customer/user profiles (e.g., internal use, provider, hospital, lab, technology company, etc.)\n' +
+                    '\t- How will the product/service be delivered to the end user? (E.g., patient report, SaaS offering)\n'
+                  }
+                  rows={6}
+                  validate={{
+                    required: {
+                      value: !this.props.byAdmin,
+                      errorMessage: 'Required.',
+                    },
+                    ...this.textValidation,
+                  }}
+                />
+                {[LicenseType.COMMERCIAL, LicenseType.HOSPITAL].includes(
+                  this.selectedLicense
+                ) && (
+                  <AvField
+                    name="numOfReports"
+                    label={'Anticipated annual reports in years 1, 2, and 3'}
+                    type={'textarea'}
+                    validate={{
+                      required: {
+                        value: !this.props.byAdmin,
+                        errorMessage: 'Required.',
+                      },
+                      ...this.shortTextValidation,
+                    }}
+                  />
+                )}
+                {[LicenseType.RESEARCH_IN_COMMERCIAL].includes(
+                  this.selectedLicense
+                ) && (
+                  <AvField
+                    name="companySize"
+                    label={'Company Size (# of employees)'}
+                    type={'input'}
+                    validate={{
+                      required: {
+                        value: !this.props.byAdmin,
+                        errorMessage: 'Required.',
+                      },
+                      ...this.textValidation,
+                    }}
+                  />
+                )}
               </Col>
             </Row>
             {this.selectedLicense === LicenseType.ACADEMIC &&
