@@ -121,7 +121,7 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '04072021': {
+  '04142021': {
     priorityNews: [
       <span>
         An updated version of the OncoKB Curation Standard Operating Procedure,
@@ -228,6 +228,35 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Bladder Urothelial Carcinoma',
         'Tipifarnib',
         <PMIDLink pmids={'32636318'} />,
+      ],
+      [
+        '3A',
+        'BRAF',
+        'V600E',
+        'Biliary Tract Cancer',
+        'Dabrafenib + Trametinib',
+        <PMIDLink pmids={'32818466'} />,
+      ],
+      [
+        '3A',
+        'TSC2',
+        'Oncogenic Mutations',
+        'Perivascular Epithelioid Cell Tumor',
+        'ABI-009',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <AbstractLink
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2019.37.15_suppl.11005'
+            }
+            abstract={'Wagner et al. Abstract# 11005, ASCO 2019.'}
+          />
+          <AbstractLink
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2020.38.15_suppl.11516'
+            }
+            abstract={'Wagner et al. Abstract# 11516, ASCO 2020.'}
+          />
+        </WithSeparator>,
       ],
     ],
   },
