@@ -38,14 +38,11 @@ if (
       dateEnd: 100000000000000,
       content: `
         <div>
-          <div>We are excited to announce two upcoming OncoKB webinars.</div>
-          <ol style="margin-bottom: 0;">
-              <li><strong>June 30th, 12PM JST, for the Asia/Pacific region</strong>: Utilizing OncoKB, MSK’s Precision Oncology Knowledgebase. <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://meetmsk.zoom.us/webinar/register/WN_y8keM-CnTpmJ8vn0G0rhBA">Click here to register!</a></li>
-              <li><strong>June 30th, 1 PM EST</strong>: Utilizing APIs for annotation of variants in cancer. <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://meetmsk.zoom.us/webinar/register/WN_sduHSX3yTcaD2NKvDqTwAw">Click here to register!</a></li>
-          </ol>
+          <span>We have a new Software Engineer position open, come and join us! </span>
+          <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://careers.mskcc.org/jobs/job-details/2021-48797-software-engineer-oncokb">Apply Here</a>
         </div>
         `,
-      id: '2020_spring_webinars',
+      id: '2021_se_job_hiring',
     },
   ];
 }

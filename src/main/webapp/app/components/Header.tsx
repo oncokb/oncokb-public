@@ -104,7 +104,7 @@ class Header extends React.Component<IHeaderProps> {
   public render() {
     return (
       <>
-        <UserMessage windowStore={this.props.windowStore} show={false} />
+        <UserMessage windowStore={this.props.windowStore} show={true} />
         <AccountMessage
           windowStore={this.props.windowStore}
           authStore={this.props.authStore}
