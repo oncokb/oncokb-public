@@ -8,6 +8,7 @@ import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { Container } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
+import { DISABLE_BANNER_OPT } from 'app/config/constants';
 
 export interface IUserMessage {
   dateStart?: number;
@@ -65,6 +66,9 @@ export default class UserMessage extends React.Component<UserMessageProps> {
   @observable dismissed = false;
 
   get shownMessage() {
+    if (localStorage.getItem(DISABLE_BANNER_OPT) === 'true') {
+      return undefined;
+    }
     const messageToShow = _.find(this.messageData.result, message => {
       const notYetShown = !localStorage.getItem(makeMessageKey(message.id));
       const expired = Date.now() > message.dateEnd;
