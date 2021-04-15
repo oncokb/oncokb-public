@@ -38,7 +38,7 @@ if (
       dateEnd: 100000000000000,
       content: `
         <div>
-          <span>We have a new Software Engineer position open, come and join us! </span>
+          <span>We have a new Software Engineer position open. Come and join us! </span>
           <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://careers.mskcc.org/jobs/job-details/2021-48797-software-engineer-oncokb">Apply Here</a>
         </div>
         `,
