@@ -4,6 +4,7 @@ import fs from 'fs';
 const DATA_DIR = './screenshot-test/data/';
 const CLIENT_URL = 'http://localhost:9000/';
 const SERVER_URL = 'http://localhost:9095/';
+
 const VIEW_PORT_1080 = {
   width: 1920,
   height: 1080,
@@ -281,6 +282,7 @@ describe('Tests with login', () => {
     await page.goto(`${CLIENT_URL}`);
     await page.evaluate(() => {
       localStorage.setItem('localdev', 'true');
+      localStorage.setItem('disablebanner', 'true');
       localStorage.setItem('oncokb-user-token', 'oncokb-public-demo-admin-token');
     });
   })
@@ -507,6 +509,7 @@ describe('Tests without login', () => {
     await page.goto(`${CLIENT_URL}`);
     await page.evaluate(() => {
       localStorage.setItem('localdev', 'true');
+      localStorage.setItem('disablebanner', 'true');
     });
   })
 
