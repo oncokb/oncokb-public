@@ -162,7 +162,7 @@ export default class APIAccessPage extends React.Component<{
     return (
       <DocumentTitle title={DOCUMENT_TITLES.API_ACCESS}>
         <>
-          <If condition={this.props.authenticationStore.isAuthenticated}>
+          <If condition={this.props.authenticationStore.account !== undefined}>
             <Then>
               <Row>
                 <Col>
