@@ -78,8 +78,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     },
   };
 
-  private keyContactPlaceHolder = 'Provide emails and phone numbers';
-
   constructor(props: INewAccountForm) {
     super(props);
     if (props.defaultLicense) {
@@ -115,24 +113,25 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
         <div>
           OncoKB is accessible for no fee for research use in academic setting.
           This license type requires that you register your account using your
-          institution/university email address. Please register below for
-          access.
+          institution/university email address.{' '}
+          <b>Please complete the form below to create your OncoKB account.</b>
         </div>
       );
     } else if (licenseType === LicenseType.COMMERCIAL) {
       return (
         <div>
           <p>
-            In order to use OncoKB in a commercial product, your company needs a
-            license. The most typical use case is the incorporation of OncoKB
-            content in sequencing reports.
+            To use OncoKB in a commercial product, your company will need a
+            license. A typical example of this is if you are part of a company
+            that would like to incorporate OncoKB content into sequencing
+            reports.
           </p>
           <p>
-            <b>Please complete the form below to create an account.</b> If your
-            company already has a license, you can skip certain fields and we
-            will grant you API access shortly. Otherwise, we will contact you
-            with license terms. You can also reach out to <LicenseInquireLink />{' '}
-            for more information.
+            <b>Please complete the form below to create your OncoKB account.</b>{' '}
+            If your company already has a license, you can skip certain fields
+            and we will grant you API access shortly. Otherwise, we will contact
+            you with license terms. You can also reach out to{' '}
+            <LicenseInquireLink /> for more information.
           </p>
         </div>
       );
@@ -140,10 +139,11 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       return (
         <div>
           <p>
-            In order to use OncoKB in patient reports, your hospital needs a
-            license.
+            To incorporate OncoKB content into patient sequencing reports, your
+            hospital will need a license.
           </p>
           <p>
+            <b>Please complete the form below to create your OncoKB account.</b>{' '}
             If your hospital already has a license, we will grant you API access
             shortly. Otherwise, we will contact you with license terms. You can
             also reach out to <LicenseInquireLink /> for more information.
@@ -154,10 +154,11 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       return (
         <div>
           <p>
-            In order to use OncoKB for research purposes in a commercial
-            setting, your company needs a license.
+            To use OncoKB for research purposes in a commercial setting, your
+            company will need a license.
           </p>
           <p>
+            <b>Please complete the form below to create your OncoKB account.</b>{' '}
             If your company already has a license, we will grant you API access
             shortly. Otherwise, we will contact you with license terms. You can
             also reach out to <LicenseInquireLink /> for more information.
@@ -185,9 +186,8 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       return (
         commonDescription +
         ':\n' +
-        ' - key products and services that relate to OncoKB\n' +
-        ' - approximate size of the company (e.g., FTE, revenue, etc.)\n' +
-        'Leave blank if your company already has a license'
+        ' - Key products and services that relate to OncoKB\n' +
+        ' - Approximate size of the company (e.g., FTE, revenue, etc.)'
       );
     }
     return commonDescription;
@@ -238,7 +238,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
         </Row>
         <Row className={getSectionClassName(false)}>
           <Col md="3">
-            <h5>Choose License</h5>
+            <h5>Choose your license type</h5>
           </Col>
           <Col md="9">
             <ButtonSelections
@@ -318,9 +318,9 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   <Then>
                     <AvField
                       name="firstPassword"
-                      label="New password"
-                      autoComplete="new-password"
-                      placeholder={'New password'}
+                      label="Password"
+                      autoComplete="password"
+                      placeholder={'Password'}
                       type="password"
                       onChange={this.updatePassword}
                       validate={{
@@ -343,9 +343,9 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     <PasswordStrengthBar password={this.password} />
                     <AvField
                       name="secondPassword"
-                      label="New password confirmation"
-                      autoComplete="new-password"
-                      placeholder="Confirm the new password"
+                      label="Password confirmation"
+                      autoComplete="password"
+                      placeholder="Confirm the password"
                       type="password"
                       validate={{
                         required: {
@@ -372,6 +372,13 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     />
                   </Then>
                 </If>
+                <AvField
+                  name="jobTitle"
+                  label={getAccountInfoTitle(
+                    ACCOUNT_TITLES.POSITION,
+                    this.selectedLicense
+                  )}
+                />
               </Col>
             </Row>
             <Row className={getSectionClassName()}>
@@ -384,13 +391,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 </h5>
               </Col>
               <Col md="9">
-                <AvField
-                  name="jobTitle"
-                  label={getAccountInfoTitle(
-                    ACCOUNT_TITLES.POSITION,
-                    this.selectedLicense
-                  )}
-                />
                 <AvField
                   name="company"
                   label={getAccountInfoTitle(
@@ -414,7 +414,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 />
                 <AvField
                   name="companyDescription"
-                  label={'Description'}
+                  label={`${getAccountInfoTitle(
+                    ACCOUNT_TITLES.COMPANY,
+                    this.selectedLicense
+                  )} Description`}
                   type={'textarea'}
                   placeholder={this.companyDescriptionPlaceholder}
                   rows={4}
@@ -423,12 +426,12 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   <AvField
                     name="businessContact"
                     label={'Business Contact'}
-                    placeholder={this.keyContactPlaceHolder}
+                    placeholder={'Provide email and phone number'}
                   />
                 )}
                 <AvField
                   name="useCase"
-                  label={'Use Case'}
+                  label={'Describe how you plan to use OncoKB'}
                   type={'textarea'}
                   placeholder={this.useCasePlaceholder}
                   rows={6}
@@ -438,7 +441,9 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 ) && (
                   <AvField
                     name="numOfReports"
-                    label={'Anticipated annual reports in years 1, 2, and 3'}
+                    label={
+                      'Anticipated # of reports annually for years 1, 2 and 3'
+                    }
                     type={'textarea'}
                     placeholder={
                       'If you plan to incorporate OncoKB contents in sequencing reports, please provide an estimate of your anticipated volume over the next several years'
@@ -460,16 +465,14 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
             !this.props.byAdmin ? (
               <>
                 <Row className={getSectionClassName()}>
-                  <Col md="9" className={'ml-auto'}>
-                    In order to be granted access to downloadable content and
-                    our API, please agree to the following terms:
-                  </Col>
-                </Row>
-                <Row className={getSectionClassName()}>
                   <Col md="3">
                     <h5>Terms</h5>
                   </Col>
                   <Col md="9">
+                    <p>
+                      In order to be granted access to downloadable content and
+                      our API, please agree to the following terms:
+                    </p>
                     {ACADEMIC_TERMS.map(term => (
                       <AvCheckboxGroup
                         name={term.key}
