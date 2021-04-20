@@ -128,9 +128,11 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
             content in sequencing reports.
           </p>
           <p>
-            If your company already has a license, we will grant you API access
-            shortly. Otherwise, we will contact you with license terms. You can
-            also reach out to <LicenseInquireLink /> for more information.
+            <b>Please complete the form below to create an account.</b> If your
+            company already has a license, you can skip certain fields and we
+            will grant you API access shortly. Otherwise, we will contact you
+            with license terms. You can also reach out to <LicenseInquireLink />{' '}
+            for more information.
           </p>
         </div>
       );
@@ -168,6 +170,43 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   @computed
   get isCommercialLicense() {
     return this.selectedLicense !== LicenseType.ACADEMIC;
+  }
+
+  @computed
+  get companyDescriptionPlaceholder() {
+    const commonDescription =
+      'Provide a brief description of the ' +
+      getAccountInfoTitle(
+        ACCOUNT_TITLES.COMPANY,
+        this.selectedLicense
+      ).toLowerCase();
+
+    if (this.isCommercialLicense) {
+      return (
+        commonDescription +
+        ':\n' +
+        ' - key products and services that relate to OncoKB\n' +
+        ' - approximate size of the company (e.g., FTE, revenue, etc.)\n' +
+        'Leave blank if your company already has a license'
+      );
+    }
+    return commonDescription;
+  }
+
+  @computed
+  get useCasePlaceholder() {
+    const commonDescription =
+      'Provide a description of how you plan to use OncoKB';
+
+    if (this.isCommercialLicense) {
+      return (
+        commonDescription +
+        '\n' +
+        '  - What product or service do you plan to incorporate OncoKB content into?\n' +
+        '  - How will the product be delivered to the end user (e.g., patient report, SaaS offering)?'
+      );
+    }
+    return commonDescription;
   }
 
   @autobind
@@ -222,30 +261,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
               </Col>
               <Col md="9">
                 <AvField
-                  name="email"
-                  label={getAccountInfoTitle(
-                    ACCOUNT_TITLES.EMAIL,
-                    this.selectedLicense
-                  )}
-                  type="email"
-                  validate={{
-                    required: {
-                      value: true,
-                      errorMessage: 'Your email is required.',
-                    },
-                    minLength: {
-                      value: 5,
-                      errorMessage:
-                        'Your email is required to be at least 5 characters.',
-                    },
-                    maxLength: {
-                      value: 254,
-                      errorMessage:
-                        'Your email cannot be longer than 50 characters.',
-                    },
-                  }}
-                />
-                <AvField
                   name="firstName"
                   autoComplete="given-name"
                   label={getAccountInfoTitle(
@@ -273,6 +288,30 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       errorMessage: 'Your last name is required.',
                     },
                     ...this.textValidation,
+                  }}
+                />
+                <AvField
+                  name="email"
+                  label={getAccountInfoTitle(
+                    ACCOUNT_TITLES.EMAIL,
+                    this.selectedLicense
+                  )}
+                  type="email"
+                  validate={{
+                    required: {
+                      value: true,
+                      errorMessage: 'Your email is required.',
+                    },
+                    minLength: {
+                      value: 5,
+                      errorMessage:
+                        'Your email is required to be at least 5 characters.',
+                    },
+                    maxLength: {
+                      value: 254,
+                      errorMessage:
+                        'Your email cannot be longer than 50 characters.',
+                    },
                   }}
                 />
                 <If condition={!this.props.byAdmin}>
@@ -351,13 +390,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     ACCOUNT_TITLES.POSITION,
                     this.selectedLicense
                   )}
-                  validate={{
-                    required: {
-                      value: !this.props.byAdmin,
-                      errorMessage: 'Required.',
-                    },
-                    ...this.shortTextValidation,
-                  }}
                 />
                 <AvField
                   name="company"
@@ -365,13 +397,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     ACCOUNT_TITLES.COMPANY,
                     this.selectedLicense
                   )}
-                  validate={{
-                    required: {
-                      value: !this.props.byAdmin,
-                      errorMessage: 'Required.',
-                    },
-                    ...this.shortTextValidation,
-                  }}
                 />
                 <AvField
                   name="city"
@@ -379,13 +404,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     ACCOUNT_TITLES.CITY,
                     this.selectedLicense
                   )}
-                  validate={{
-                    required: {
-                      value: !this.props.byAdmin,
-                      errorMessage: 'Required.',
-                    },
-                    ...this.shortTextValidation,
-                  }}
                 />
                 <AvField
                   name="country"
@@ -393,107 +411,27 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     ACCOUNT_TITLES.COUNTRY,
                     this.selectedLicense
                   )}
-                  validate={{
-                    required: {
-                      value: !this.props.byAdmin,
-                      errorMessage: 'Required.',
-                    },
-                    ...this.shortTextValidation,
-                  }}
                 />
                 <AvField
                   name="companyDescription"
                   label={'Description'}
                   type={'textarea'}
-                  placeholder={
-                    'Provide a brief description of the ' +
-                    getAccountInfoTitle(
-                      ACCOUNT_TITLES.COMPANY,
-                      this.selectedLicense
-                    ).toLowerCase() +
-                    ':\n' +
-                    '\t- Key products and services\n' +
-                    '\t- Size of organization (e.g., FTEs, revenues, etc.) \n'
-                  }
+                  placeholder={this.companyDescriptionPlaceholder}
                   rows={4}
-                  validate={{
-                    required: {
-                      value: !this.props.byAdmin,
-                      errorMessage: 'Required.',
-                    },
-                    ...this.textValidation,
-                  }}
                 />
-              </Col>
-            </Row>
-            {this.isCommercialLicense && (
-              <Row className={getSectionClassName()}>
-                <Col md="3">
-                  <h5>Key Contacts</h5>
-                </Col>
-                <Col md="9">
+                {this.isCommercialLicense && (
                   <AvField
                     name="businessContact"
                     label={'Business Contact'}
                     placeholder={this.keyContactPlaceHolder}
-                    validate={{
-                      required: {
-                        value: !this.props.byAdmin,
-                        errorMessage: 'Required.',
-                      },
-                      ...this.shortTextValidation,
-                    }}
                   />
-                  <AvField
-                    name="productContact"
-                    label={'Product Contact'}
-                    placeholder={this.keyContactPlaceHolder}
-                    validate={{
-                      required: {
-                        value: !this.props.byAdmin,
-                        errorMessage: 'Required.',
-                      },
-                      ...this.shortTextValidation,
-                    }}
-                  />
-                  <AvField
-                    name="legalContact"
-                    label={'Legal Contact'}
-                    placeholder={this.keyContactPlaceHolder}
-                    validate={{
-                      required: {
-                        value: !this.props.byAdmin,
-                        errorMessage: 'Required.',
-                      },
-                      ...this.shortTextValidation,
-                    }}
-                  />
-                </Col>
-              </Row>
-            )}
-            <Row className={getSectionClassName()}>
-              <Col md="3">
-                <h5>Additional Info</h5>
-              </Col>
-              <Col md="9">
+                )}
                 <AvField
-                  name="userCase"
-                  label={'User Case'}
+                  name="useCase"
+                  label={'Use Case'}
                   type={'textarea'}
-                  placeholder={
-                    'Provide description of use case, leveraging OncoKB content.  \n' +
-                    '\t- How will you utilize OncoKB? What product or service will incorporate OncoKB content? \n' +
-                    '\t- Describe customer/user profiles (e.g., internal use, provider, hospital, lab, technology company, etc.)\n' +
-                    '\t- How will the product/service be delivered to the end user? (E.g., patient report, SaaS offering)\n'
-                  }
+                  placeholder={this.useCasePlaceholder}
                   rows={6}
-                  validate={{
-                    required: {
-                      value: !this.props.byAdmin,
-                      errorMessage: 'Required.',
-                    },
-                    ...this.textValidation,
-                  }}
                 />
                 {[LicenseType.COMMERCIAL, LicenseType.HOSPITAL].includes(
                   this.selectedLicense
@@ -502,13 +440,9 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     name="numOfReports"
                     label={'Anticipated annual reports in years 1, 2, and 3'}
                     type={'textarea'}
-                    validate={{
-                      required: {
-                        value: !this.props.byAdmin,
-                        errorMessage: 'Required.',
-                      },
-                      ...this.shortTextValidation,
-                    }}
+                    placeholder={
+                      'If you plan to incorporate OncoKB contents in sequencing reports, please provide an estimate of your anticipated volume over the next several years'
+                    }
                   />
                 )}
                 {[LicenseType.RESEARCH_IN_COMMERCIAL].includes(
@@ -518,13 +452,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     name="companySize"
                     label={'Company Size (# of employees)'}
                     type={'input'}
-                    validate={{
-                      required: {
-                        value: !this.props.byAdmin,
-                        errorMessage: 'Required.',
-                      },
-                      ...this.textValidation,
-                    }}
                   />
                 )}
               </Col>
