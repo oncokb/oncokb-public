@@ -404,7 +404,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     {getAccountInfoTitle(
                       ACCOUNT_TITLES.COMPANY,
                       this.selectedLicense
-                    ).toLowerCase()}
+                    ).toLowerCase()}{' '}
                     already has a license with us.
                   </p>
                 )}
