@@ -400,7 +400,11 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
               <Col md="9">
                 {this.selectedLicense !== LicenseType.ACADEMIC && (
                   <p>
-                    Please feel free to skip this section if your company
+                    Please feel free to skip this section if your{' '}
+                    {getAccountInfoTitle(
+                      ACCOUNT_TITLES.COMPANY,
+                      this.selectedLicense
+                    ).toLowerCase()}
                     already has a license with us.
                   </p>
                 )}
