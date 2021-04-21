@@ -448,7 +448,7 @@ export const LICENSE_TITLES: { [key: string]: string } = {
   [LicenseType.ACADEMIC]: 'Research use in an academic setting',
   [LicenseType.RESEARCH_IN_COMMERCIAL]: 'Research use in a commercial setting',
   [LicenseType.HOSPITAL]:
-    'Use for patient services or reports in hospital setting',
+    'Use for patient services or reports in a hospital setting',
   [LicenseType.COMMERCIAL]: 'Use in a commercial product',
 };
 
@@ -482,8 +482,9 @@ export enum ACCOUNT_TITLES {
   LAST_NAME = 'Last Name',
   NAME = 'Name',
   EMAIL = 'Email',
-  POSITION = 'Job Title',
+  POSITION = 'Job Title / Position',
   COMPANY = 'Company',
+  COMPANY_SECTION_TITLE = 'Company Information',
   CITY = 'City',
   COUNTRY = 'Country',
   API_TOKEN = 'API Token',

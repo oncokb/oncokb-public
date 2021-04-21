@@ -9,7 +9,7 @@ import {
 } from 'availity-reactstrap-validation';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 import { observer } from 'mobx-react';
-import { action, observable, computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import { ManagedUserVM } from 'app/shared/api/generated/API';
 import {
@@ -110,16 +110,16 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   getLicenseAdditionalInfo(licenseType: LicenseType) {
     if (licenseType === LicenseType.ACADEMIC) {
       return (
-        <div>
+        <p>
           OncoKB is accessible for no fee for research use in academic setting.
           This license type requires that you register your account using your
           institution/university email address.{' '}
           <b>Please complete the form below to create your OncoKB account.</b>
-        </div>
+        </p>
       );
     } else if (licenseType === LicenseType.COMMERCIAL) {
       return (
-        <div>
+        <>
           <p>
             To use OncoKB in a commercial product, your company will need a
             license. A typical example of this is if you are part of a company
@@ -133,11 +133,11 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
             you with license terms. You can also reach out to{' '}
             <LicenseInquireLink /> for more information.
           </p>
-        </div>
+        </>
       );
     } else if (licenseType === LicenseType.HOSPITAL) {
       return (
-        <div>
+        <>
           <p>
             To incorporate OncoKB content into patient sequencing reports, your
             hospital will need a license.
@@ -148,11 +148,11 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
             shortly. Otherwise, we will contact you with license terms. You can
             also reach out to <LicenseInquireLink /> for more information.
           </p>
-        </div>
+        </>
       );
     } else if (licenseType === LicenseType.RESEARCH_IN_COMMERCIAL) {
       return (
-        <div>
+        <>
           <p>
             To use OncoKB for research purposes in a commercial setting, your
             company will need a license.
@@ -163,7 +163,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
             shortly. Otherwise, we will contact you with license terms. You can
             also reach out to <LicenseInquireLink /> for more information.
           </p>
-        </div>
+        </>
       );
     }
   }
@@ -187,7 +187,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
         commonDescription +
         ':\n' +
         ' - Key products and services that relate to OncoKB\n' +
-        ' - Approximate size of the company (e.g., FTE, revenue, etc.)'
+        ` - Approximate size of the ${getAccountInfoTitle(
+          ACCOUNT_TITLES.COMPANY,
+          this.selectedLicense
+        ).toLowerCase()} (e.g., FTE, revenue, etc.)`
       );
     }
     return commonDescription;
@@ -203,7 +206,11 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
         commonDescription +
         '\n' +
         '  - What product or service do you plan to incorporate OncoKB content into?\n' +
-        '  - How will the product be delivered to the end user (e.g., patient report, SaaS offering)?'
+        `  - How will the product be delivered to the end user (e.g., patient report${
+          this.selectedLicense === LicenseType.COMMERCIAL
+            ? ', SaaS offering'
+            : ''
+        })?`
       );
     }
     return commonDescription;
@@ -250,7 +257,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
         </Row>
         {this.selectedLicense ? (
           <>
-            <Row className={getSectionClassName()}>
+            <Row>
               <Col md="9" className={'ml-auto'}>
                 {this.getLicenseAdditionalInfo(this.selectedLicense)}
               </Col>
@@ -289,6 +296,13 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     },
                     ...this.textValidation,
                   }}
+                />
+                <AvField
+                  name="jobTitle"
+                  label={getAccountInfoTitle(
+                    ACCOUNT_TITLES.POSITION,
+                    this.selectedLicense
+                  )}
                 />
                 <AvField
                   name="email"
@@ -372,25 +386,24 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     />
                   </Then>
                 </If>
-                <AvField
-                  name="jobTitle"
-                  label={getAccountInfoTitle(
-                    ACCOUNT_TITLES.POSITION,
-                    this.selectedLicense
-                  )}
-                />
               </Col>
             </Row>
             <Row className={getSectionClassName()}>
               <Col md="3">
                 <h5>
                   {getAccountInfoTitle(
-                    ACCOUNT_TITLES.COMPANY,
+                    ACCOUNT_TITLES.COMPANY_SECTION_TITLE,
                     this.selectedLicense
                   )}
                 </h5>
               </Col>
               <Col md="9">
+                {this.selectedLicense !== LicenseType.ACADEMIC && (
+                  <p>
+                    Please feel free to skip this section if your company
+                    already has a license with us.
+                  </p>
+                )}
                 <AvField
                   name="company"
                   label={getAccountInfoTitle(

@@ -14,13 +14,47 @@ export function getAccountInfoTitle(
   license: LicenseType | undefined
 ) {
   if (key === ACCOUNT_TITLES.EMAIL) {
-    return `${
-      license === LicenseType.ACADEMIC ? 'Institution' : 'Company'
-    } email`;
-  } else if (key === ACCOUNT_TITLES.COMPANY) {
-    return `${
-      license === LicenseType.ACADEMIC ? 'Institution / University' : 'Company'
-    }`;
+    let prefix: string;
+    switch (license) {
+      case LicenseType.ACADEMIC:
+        prefix = 'Institution Email';
+        break;
+      case LicenseType.COMMERCIAL:
+      case LicenseType.RESEARCH_IN_COMMERCIAL:
+        prefix = 'Company';
+        break;
+      case LicenseType.HOSPITAL:
+        prefix = 'Hospital';
+        break;
+      default:
+        prefix = '';
+        break;
+    }
+    return `${prefix ? `${prefix} ` : ''}Email`;
+  } else if (
+    [ACCOUNT_TITLES.COMPANY_SECTION_TITLE, ACCOUNT_TITLES.COMPANY].includes(key)
+  ) {
+    let title: string;
+    switch (license) {
+      case LicenseType.ACADEMIC:
+        title = 'Institution / University';
+        break;
+      case LicenseType.COMMERCIAL:
+      case LicenseType.RESEARCH_IN_COMMERCIAL:
+        title = 'Company';
+        break;
+      case LicenseType.HOSPITAL:
+        title = 'Hospital';
+        break;
+      default:
+        title = '';
+        break;
+    }
+
+    if (key === ACCOUNT_TITLES.COMPANY_SECTION_TITLE) {
+      title = `${title} Information`;
+    }
+    return title;
   } else {
     return key;
   }
