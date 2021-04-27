@@ -3,9 +3,9 @@ import { inject, observer } from 'mobx-react';
 import {
   action,
   computed,
+  IReactionDisposer,
   observable,
   reaction,
-  IReactionDisposer,
 } from 'mobx';
 import autobind from 'autobind-decorator';
 import { Redirect } from 'react-router-dom';
@@ -15,7 +15,7 @@ import {
   LicenseType,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
 } from 'app/config/constants';
-import { Alert, Row, Col, Button } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
 import * as QueryString from 'query-string';
 import WindowStore from 'app/store/WindowStore';
@@ -24,6 +24,7 @@ import MessageToContact from 'app/shared/texts/MessageToContact';
 import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import { NewAccountForm } from 'app/components/newAccountForm/NewAccountForm';
 import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
+import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -138,6 +139,36 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     this.selectedLicense = license;
   }
 
+  getRegisteredMessage(licenseType: LicenseType | undefined) {
+    if (licenseType == undefined) {
+      return '';
+    }
+    const companyName =
+      licenseType === LicenseType.HOSPITAL ? 'hospital' : 'company';
+    return (
+      <>
+        <p>
+          Thank you for creating an OncoKB account. We have sent you an email to
+          verify your email address. Please follow the instructions in the email
+          to complete registration.
+        </p>
+        <p>
+          Please allow 1-2 business days to review your request.{' '}
+          {licenseType === LicenseType.ACADEMIC ? (
+            ''
+          ) : (
+            <span>
+              If your {companyName} already has a license, we will grant you
+              access soon. If your {companyName} does not yet have a license, we
+              will contact you with terms. Please reach out to{' '}
+              <LicenseInquireLink /> with any questions.
+            </span>
+          )}
+        </p>
+      </>
+    );
+  }
+
   render() {
     if (this.registerStatus === RegisterStatus.READY_REDIRECT) {
       return <Redirect to={'/'} />;
@@ -148,16 +179,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         <SmallPageContainer className={'registerPage'}>
           <div>
             <Alert variant="info">
-              <p className={'mb-3'}>
-                Thank you for creating an OncoKB account. We have sent you an
-                email to verify your email address. Please follow the
-                instructions in the email to complete registration.
-              </p>
-              <MessageToContact emailTitle={'Registration Question'} />
-              <p>
-                <div>Sincerely,</div>
-                <div>The OncoKB Team</div>
-              </p>
+              {this.getRegisteredMessage(this.selectedLicense)}
             </Alert>
           </div>
         </SmallPageContainer>
