@@ -140,7 +140,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   }
 
   getRegisteredMessage(licenseType: LicenseType | undefined) {
-    if (licenseType == undefined) {
+    if (licenseType === undefined) {
       return '';
     }
     const companyName =
