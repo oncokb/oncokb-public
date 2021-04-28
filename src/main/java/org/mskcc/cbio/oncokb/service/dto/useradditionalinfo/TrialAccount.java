@@ -1,8 +1,4 @@
-package org.mskcc.cbio.oncokb.service.dto.oncokbcore;
-
-import org.mskcc.cbio.oncokb.service.dto.Activation;
-import org.mskcc.cbio.oncokb.service.dto.LicenseAgreement;
-import org.mskcc.cbio.oncokb.web.rest.vm.Contact;
+package org.mskcc.cbio.oncokb.service.dto.useradditionalinfo;
 
 /**
  * Created by Hongxin Zhang on 3/31/21.

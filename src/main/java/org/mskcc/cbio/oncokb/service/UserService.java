@@ -16,11 +16,11 @@ import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
-import org.mskcc.cbio.oncokb.service.dto.Activation;
-import org.mskcc.cbio.oncokb.service.dto.AdditionalInfoDTO;
-import org.mskcc.cbio.oncokb.service.dto.LicenseAgreement;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.Activation;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.LicenseAgreement;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
-import org.mskcc.cbio.oncokb.service.dto.oncokbcore.TrialAccount;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
 import io.github.jhipster.security.RandomUtil;
@@ -260,6 +260,9 @@ public class UserService {
         userDetails.setCompany(userDTO.getCompany());
         userDetails.setCity(userDTO.getCity());
         userDetails.setCountry(userDTO.getCountry());
+        if (userDTO.getAdditionalInfo() != null) {
+            userDetails.setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
+        }
         userDetailsRepository.save(userDetails);
 
         this.clearUserCaches(newUser);
