@@ -153,7 +153,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
           to complete registration.
         </p>
         <p>
-          Please allow 1-2 business days to review your request.{' '}
+          After validating your email address, please allow 1-2 business days
+          for us to review your request.{' '}
           {licenseType === LicenseType.ACADEMIC ? (
             ''
           ) : (
