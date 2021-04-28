@@ -1143,6 +1143,7 @@
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "APPROVAL_MSK_IN_COMMERCIAL",
               "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
+              "TRIAL_ACCOUNT_IS_ACTIVATED",
               "TOKEN_HAS_BEEN_EXPOSED",
               "TOKEN_HAS_BEEN_EXPOSED_USER",
               "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
@@ -2353,9 +2354,24 @@
       "properties": {
         "trialAccount": {
           "$ref": "#/definitions/TrialAccount"
+        },
+        "userCompany": {
+          "$ref": "#/definitions/UserCompany"
         }
       },
       "title": "AdditionalInfoDTO"
+    },
+    "Contact": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        }
+      },
+      "title": "Contact"
     },
     "JSONObject": {
       "type": "object",
@@ -2451,6 +2467,7 @@
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
+            "TRIAL_ACCOUNT_IS_ACTIVATED",
             "TOKEN_HAS_BEEN_EXPOSED",
             "TOKEN_HAS_BEEN_EXPOSED_USER",
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
@@ -2711,6 +2728,27 @@
       },
       "title": "User"
     },
+    "UserCompany": {
+      "type": "object",
+      "properties": {
+        "anticipatedReports": {
+          "type": "string"
+        },
+        "businessContact": {
+          "$ref": "#/definitions/Contact"
+        },
+        "description": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string"
+        },
+        "useCase": {
+          "type": "string"
+        }
+      },
+      "title": "UserCompany"
+    },
     "UserDTO": {
       "type": "object",
       "properties": {
@@ -2883,6 +2921,7 @@
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
+            "TRIAL_ACCOUNT_IS_ACTIVATED",
             "TOKEN_HAS_BEEN_EXPOSED",
             "TOKEN_HAS_BEEN_EXPOSED_USER",
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",

@@ -1,4 +1,4 @@
-package org.mskcc.cbio.oncokb.service.dto;
+package org.mskcc.cbio.oncokb.service.dto.useradditionalinfo;
 
 import java.time.Instant;
 

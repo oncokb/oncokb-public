@@ -11,7 +11,11 @@ import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 import { observer } from 'mobx-react';
 import { action, computed, observable } from 'mobx';
 import autobind from 'autobind-decorator';
-import { ManagedUserVM } from 'app/shared/api/generated/API';
+import {
+  AdditionalInfoDTO,
+  Contact,
+  ManagedUserVM,
+} from 'app/shared/api/generated/API';
 import {
   ACADEMIC_TERMS,
   ACCOUNT_TITLES,
@@ -29,6 +33,7 @@ import {
   getSectionClassName,
 } from 'app/pages/account/AccountUtils';
 import { If, Then } from 'react-if';
+import _ from 'lodash';
 
 export type INewAccountForm = {
   isLargeScreen: boolean;
@@ -41,6 +46,13 @@ export type INewAccountForm = {
 export enum AccountType {
   REGULAR = 'regular',
   TRIAL = 'trial',
+}
+
+enum FormKey {
+  ANTICIPATED_REPORTS = 'anticipatedReports',
+  COMPANY_DESCRIPTION = 'companyDescription',
+  USE_CASE = 'useCase',
+  COMPANY_SIZE = 'companySize',
 }
 
 export const ACCOUNT_TYPE_DEFAULT = AccountType.REGULAR;
@@ -78,6 +90,21 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     },
   };
 
+  private emailValidation = {
+    required: {
+      value: true,
+      errorMessage: 'Your email is required.',
+    },
+    minLength: {
+      value: 5,
+      errorMessage: 'Your email is required to be at least 5 characters.',
+    },
+    maxLength: {
+      value: 254,
+      errorMessage: 'Your email cannot be longer than 50 characters.',
+    },
+  };
+
   constructor(props: INewAccountForm) {
     super(props);
     if (props.defaultLicense) {
@@ -101,10 +128,48 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       city: values.city,
       country: values.country,
     };
+    const additionalInfo = this.constructAdditionalInfo(values);
+    if (_.keys(additionalInfo).length > 0) {
+      newUser.additionalInfo = additionalInfo;
+    }
     if (values.tokenValidDays) {
       newUser.tokenValidDays = Number(values.tokenValidDays);
     }
     this.props.onSubmit(newUser);
+  }
+
+  constructAdditionalInfo(values: any) {
+    const additionalInfo = {
+      userCompany: {},
+    } as AdditionalInfoDTO;
+
+    if (values[FormKey.COMPANY_SIZE]) {
+      additionalInfo.userCompany.size = values[FormKey.COMPANY_SIZE];
+    }
+    if (values[FormKey.COMPANY_DESCRIPTION]) {
+      additionalInfo.userCompany.description =
+        values[FormKey.COMPANY_DESCRIPTION];
+    }
+    [FormKey.ANTICIPATED_REPORTS, FormKey.USE_CASE].forEach(key => {
+      if (values[key]) {
+        additionalInfo.userCompany[key] = values[key];
+      }
+    });
+    if (values.businessContactEmail || values.businessContactPhone) {
+      additionalInfo.userCompany.businessContact = {} as Contact;
+      if (values.businessContactEmail) {
+        additionalInfo.userCompany.businessContact.email =
+          values.businessContactEmail;
+      }
+      if (values.businessContactPhone) {
+        additionalInfo.userCompany.businessContact.phone =
+          values.businessContactPhone;
+      }
+    }
+    if (_.keys(additionalInfo.userCompany).length === 0) {
+      delete additionalInfo.userCompany;
+    }
+    return additionalInfo;
   }
 
   getLicenseAdditionalInfo(licenseType: LicenseType) {
@@ -264,7 +329,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
             </Row>
             <Row className={getSectionClassName()}>
               <Col md="3">
-                <h5>Account</h5>
+                <h5>Account Information</h5>
               </Col>
               <Col md="9">
                 <AvField
@@ -311,22 +376,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     this.selectedLicense
                   )}
                   type="email"
-                  validate={{
-                    required: {
-                      value: true,
-                      errorMessage: 'Your email is required.',
-                    },
-                    minLength: {
-                      value: 5,
-                      errorMessage:
-                        'Your email is required to be at least 5 characters.',
-                    },
-                    maxLength: {
-                      value: 254,
-                      errorMessage:
-                        'Your email cannot be longer than 50 characters.',
-                    },
-                  }}
+                  validate={this.emailValidation}
                 />
                 <If condition={!this.props.byAdmin}>
                   <Then>
@@ -430,7 +480,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   )}
                 />
                 <AvField
-                  name="companyDescription"
+                  name={FormKey.COMPANY_DESCRIPTION}
                   label={`${getAccountInfoTitle(
                     ACCOUNT_TITLES.COMPANY,
                     this.selectedLicense
@@ -440,14 +490,21 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   rows={4}
                 />
                 {this.isCommercialLicense && (
-                  <AvField
-                    name="businessContact"
-                    label={'Business Contact'}
-                    placeholder={'Provide email and phone number'}
-                  />
+                  <>
+                    <AvField
+                      name="businessContactEmail"
+                      label={'Business Contact Email'}
+                      type="email"
+                      validate={this.emailValidation}
+                    />
+                    <AvField
+                      name="businessContactPhone"
+                      label={'Business Contact Phone Number'}
+                    />
+                  </>
                 )}
                 <AvField
-                  name="useCase"
+                  name={FormKey.USE_CASE}
                   label={'Describe how you plan to use OncoKB'}
                   type={'textarea'}
                   placeholder={this.useCasePlaceholder}
@@ -457,7 +514,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   this.selectedLicense
                 ) && (
                   <AvField
-                    name="numOfReports"
+                    name={FormKey.ANTICIPATED_REPORTS}
                     label={
                       'Anticipated # of reports annually for years 1, 2 and 3'
                     }
@@ -471,7 +528,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   this.selectedLicense
                 ) && (
                   <AvField
-                    name="companySize"
+                    name={FormKey.COMPANY_SIZE}
                     label={'Company Size (# of employees)'}
                     type={'input'}
                   />

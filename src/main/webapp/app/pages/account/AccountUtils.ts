@@ -17,7 +17,7 @@ export function getAccountInfoTitle(
     let prefix: string;
     switch (license) {
       case LicenseType.ACADEMIC:
-        prefix = 'Institution Email';
+        prefix = 'Institution';
         break;
       case LicenseType.COMMERCIAL:
       case LicenseType.RESEARCH_IN_COMMERCIAL:

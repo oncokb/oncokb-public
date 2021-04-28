@@ -1,6 +1,5 @@
 package org.mskcc.cbio.oncokb.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
@@ -8,8 +7,8 @@ import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
-import javax.persistence.Column;
 import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;
