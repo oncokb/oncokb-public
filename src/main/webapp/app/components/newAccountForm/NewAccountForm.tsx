@@ -53,6 +53,8 @@ enum FormKey {
   COMPANY_DESCRIPTION = 'companyDescription',
   USE_CASE = 'useCase',
   COMPANY_SIZE = 'companySize',
+  BUS_CONTACT_EMAIL = 'businessContactEmail',
+  BUS_CONTACT_PHONE = 'businessContactPhone',
 }
 
 export const ACCOUNT_TYPE_DEFAULT = AccountType.REGULAR;
@@ -155,15 +157,18 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
         additionalInfo.userCompany[key] = values[key];
       }
     });
-    if (values.businessContactEmail || values.businessContactPhone) {
+    if (
+      values[FormKey.BUS_CONTACT_EMAIL] ||
+      values[FormKey.BUS_CONTACT_PHONE]
+    ) {
       additionalInfo.userCompany.businessContact = {} as Contact;
-      if (values.businessContactEmail) {
+      if (values[FormKey.BUS_CONTACT_EMAIL]) {
         additionalInfo.userCompany.businessContact.email =
-          values.businessContactEmail;
+          values[FormKey.BUS_CONTACT_EMAIL];
       }
-      if (values.businessContactPhone) {
+      if (values[FormKey.BUS_CONTACT_PHONE]) {
         additionalInfo.userCompany.businessContact.phone =
-          values.businessContactPhone;
+          values[FormKey.BUS_CONTACT_PHONE];
       }
     }
     if (_.keys(additionalInfo.userCompany).length === 0) {
@@ -492,14 +497,15 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 {this.isCommercialLicense && (
                   <>
                     <AvField
-                      name="businessContactEmail"
+                      name={[FormKey.BUS_CONTACT_EMAIL]}
                       label={'Business Contact Email'}
                       type="email"
                       validate={this.emailValidation}
                     />
                     <AvField
-                      name="businessContactPhone"
+                      name={[FormKey.BUS_CONTACT_PHONE]}
                       label={'Business Contact Phone Number'}
+                      type="tel"
                     />
                   </>
                 )}

@@ -6,7 +6,6 @@ package org.mskcc.cbio.oncokb.service.dto.useradditionalinfo;
 public class TrialAccount {
     Activation activation;
     LicenseAgreement licenseAgreement;
-    UserCompany company;
 
     public Activation getActivation() {
         return activation;
