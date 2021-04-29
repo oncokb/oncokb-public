@@ -46,6 +46,7 @@ public class SlackService {
     private final Logger log = LoggerFactory.getLogger(SlackService.class);
 
     private static final String APPROVE_USER = "approve-user";
+    private static final String GIVE_TRIAL_ACCESS = "give-trial-access";
 
     private static final String ACADEMIC_CLARIFICATION_NOTE = "We have sent the clarification email to the user asking why they could not use an institution email to register.";
     private static final String LICENSED_DOMAIN_APPROVE_NOTE = ":star: *This email domain belongs to a licensed company. Please review and approve accordingly.*";
@@ -133,6 +134,21 @@ public class SlackService {
     }
 
     @Async
+    public void sendConfirmationAfterGivingFreeTrial(UserDTO userDTO) {
+        Payload payload = Payload.builder()
+            .text(userDTO.getEmail() + " has been notified about the free trial license agreement.")
+            .build();
+
+        Slack slack = Slack.getInstance();
+        try {
+            // This is an automatic message when user from whitelist is registered.
+            WebhookResponse response = slack.send(this.applicationProperties.getUserRegistrationWebhook(), payload);
+        } catch (IOException e) {
+            log.warn("Failed to send message to slack");
+        }
+    }
+
+    @Async
     public void sendApprovedConfirmationForMSKCommercialRequest(UserDTO userDTO, LicenseType registeredLicenseType) {
         Payload payload = Payload.builder()
             .text(userDTO.getEmail() + " has been approved and notified automatically. We also changed their license to Academic and clarified with the user.")
@@ -179,7 +195,15 @@ public class SlackService {
     }
 
     public Optional<BlockActionPayload.Action> getApproveUserAction(BlockActionPayload blockActionPayload) {
-        return blockActionPayload.getActions().stream().filter(action -> action.getActionId().equalsIgnoreCase(APPROVE_USER)).findFirst();
+        return getAction(blockActionPayload, APPROVE_USER);
+    }
+
+    public Optional<BlockActionPayload.Action> giveTrialAccessAction(BlockActionPayload blockActionPayload) {
+        return getAction(blockActionPayload, GIVE_TRIAL_ACCESS);
+    }
+
+    private Optional<BlockActionPayload.Action> getAction(BlockActionPayload blockActionPayload, String actionKey) {
+        return blockActionPayload.getActions().stream().filter(action -> action.getActionId().equalsIgnoreCase(actionKey)).findFirst();
     }
 
     private TextObject getTextObject(String title, String content) {
@@ -213,6 +237,7 @@ public class SlackService {
         if(!trialDomain) {
             // Add Approve button
             blocks.add(buildApproveButton(user));
+            blocks.add(buildGiveTrialAccessButton(user));
         }
 
         return blocks;
@@ -340,6 +365,19 @@ public class SlackService {
             .build();
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
             button.setConfirm(buildConfirmationDialogObject("You are going to approve a commercial account."));
+        }
+        return ActionsBlock.builder().elements(Arrays.asList(button)).build();
+    }
+
+    private LayoutBlock buildGiveTrialAccessButton(UserDTO user) {
+        ButtonElement button = ButtonElement.builder()
+            .text(PlainTextObject.builder().emoji(true).text("Give Trial Access").build())
+            .style("primary")
+            .actionId(GIVE_TRIAL_ACCESS)
+            .value(user.getLogin())
+            .build();
+        if (user.getLicenseType() != LicenseType.ACADEMIC) {
+            button.setConfirm(buildConfirmationDialogObject("You are going to give the user 3 month trial period. The user will get notified through email. Once they are ok with the free trial license agreement, their account will be activated."));
         }
         return ActionsBlock.builder().elements(Arrays.asList(button)).build();
     }
