@@ -18,6 +18,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -47,7 +48,6 @@ public class SlackService {
     private static final String APPROVE_USER = "approve-user";
 
     private static final String ACADEMIC_CLARIFICATION_NOTE = "We have sent the clarification email to the user asking why they could not use an institution email to register.";
-    private static final String COMMERCIAL_APPROVE_NOTE = "We have sent the intake form automatically.";
     private static final String LICENSED_DOMAIN_APPROVE_NOTE = ":star: *This email domain belongs to a licensed company. Please review and approve accordingly.*";
     private static final String TRIALED_DOMAIN_APPROVE_NOTE = ":bangbang: *This email domain belongs to a company that has trial license. The account will be approved by the IT team.*";
 
@@ -88,16 +88,7 @@ public class SlackService {
                     domainIsTrialed = true;
                 }
 
-                boolean isApprovedDomain = isApprovedDomain(domainIsLicensed, domainIsTrialed);
                 layoutBlocks = buildCommercialApprovalBlocks(user, domainIsLicensed, domainIsTrialed);
-
-                if (!isApprovedDomain) {
-                    // Send intake form email
-                    MailType intakeEmailMailType = mailService.getIntakeFormMailType(user.getLicenseType());
-                    if (intakeEmailMailType != null) {
-                        mailService.sendEmailWithLicenseContext(user, intakeEmailMailType, applicationProperties.getEmailAddresses().getLicenseAddress(), applicationProperties.getEmailAddresses().getLicenseAddress(), null);
-                    }
-                }
             }
             Payload payload = Payload.builder()
                 .blocks(layoutBlocks)
@@ -106,7 +97,7 @@ public class SlackService {
             Slack slack = Slack.getInstance();
             try {
                 WebhookResponse response = slack.send(this.applicationProperties.getUserRegistrationWebhook(), payload);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.warn("Failed to send message to slack");
             }
         }
@@ -210,7 +201,6 @@ public class SlackService {
             if (trialDomain)
                 blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(TRIALED_DOMAIN_APPROVE_NOTE).build()).build());
         } else {
-            // Add intake form note
             blocks.add(buildHereMentionBlock());
         }
 
@@ -218,16 +208,11 @@ public class SlackService {
         blocks.add(buildTitleBlock(user));
 
         // Add user info section
-        blocks.add(buildUserInfoBlock(user));
+        blocks.addAll(buildUserInfoBlocks(user));
 
         if(!trialDomain) {
             // Add Approve button
             blocks.add(buildApproveButton(user));
-        }
-
-        if (!isApprovedDomain) {
-            // Add intake form note
-            blocks.add(buildPlainTextBlock(COMMERCIAL_APPROVE_NOTE));
         }
 
         return blocks;
@@ -247,7 +232,7 @@ public class SlackService {
         blocks.add(buildTitleBlock(user));
 
         // Add user info section
-        blocks.add(buildUserInfoBlock(user));
+        blocks.addAll(buildUserInfoBlocks(user));
 
         if(withClarificationNote) {
             // Add clarification note
@@ -278,20 +263,72 @@ public class SlackService {
 
     private LayoutBlock buildTitleBlock(UserDTO user) {
         List<TextObject> title = new ArrayList<>();
-        title.add(getTextObject("The following user registered an " + user.getLicenseType() + " account", ""));
+        title.add(PlainTextObject.builder().text("The following user registered an " + user.getLicenseType() + " account").build());
         return SectionBlock.builder().fields(title).build();
     }
 
-    private LayoutBlock buildUserInfoBlock(UserDTO user) {
+    private List<LayoutBlock> buildUserInfoBlocks(UserDTO user) {
+        List<LayoutBlock> blocks = new ArrayList<>();
+        String companyName = "Company";
+
+        if (user.getLicenseType() != null) {
+            if (user.getLicenseType().equals(LicenseType.ACADEMIC)) {
+                companyName = "Institute";
+            } else if (user.getLicenseType().equals(LicenseType.HOSPITAL)) {
+                companyName = "Hospital";
+            }
+        }
+
+        // Add account information
+        blocks.add(SectionBlock.builder().fields(Collections.singletonList(MarkdownTextObject.builder().text(":sunny: *Account Information*").build())).build());
         List<TextObject> userInfo = new ArrayList<>();
         userInfo.add(getTextObject("Email", user.getEmail()));
         userInfo.add(getTextObject("Name", user.getFirstName() + " " + user.getLastName()));
-        userInfo.add(getTextObject("Company", user.getCompany()));
         userInfo.add(getTextObject("Job Title", user.getJobTitle()));
+        blocks.add(SectionBlock.builder().fields(userInfo).build());
+
+        // Add company information
+        blocks.add(SectionBlock.builder().fields(Collections.singletonList(MarkdownTextObject.builder().text(":sunflower: *"+companyName + " Information*").build())).build());
+        userInfo = new ArrayList<>();
+        userInfo.add(getTextObject(companyName, user.getCompany()));
         userInfo.add(getTextObject("City", user.getCity()));
         userInfo.add(getTextObject("Country", user.getCountry()));
+        AdditionalInfoDTO additionalInfoDTO = user.getAdditionalInfo();
+        if (additionalInfoDTO != null && additionalInfoDTO.getUserCompany() != null) {
+            if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getDescription())) {
+                userInfo.add(getTextObject(companyName + " Description", additionalInfoDTO.getUserCompany().getDescription()));
+            }
+            if (additionalInfoDTO.getUserCompany().getBusinessContact() != null) {
+                if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getBusinessContact().getEmail())) {
+                    userInfo.add(getTextObject("Business Contact Email", additionalInfoDTO.getUserCompany().getBusinessContact().getEmail()));
+                }
+                if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getBusinessContact().getPhone())) {
+                    userInfo.add(getTextObject("Business Contact Phone", additionalInfoDTO.getUserCompany().getBusinessContact().getPhone()));
+                }
+            }
+            if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getUseCase())) {
+                userInfo.add(getTextObject("Use Case", additionalInfoDTO.getUserCompany().getUseCase()));
+            }
+            if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getAnticipatedReports())) {
+                userInfo.add(getTextObject("Anticipated Reports", additionalInfoDTO.getUserCompany().getAnticipatedReports()));
+            }
+            if (StringUtils.isNotEmpty(additionalInfoDTO.getUserCompany().getSize())) {
+                userInfo.add(getTextObject(companyName + " Size", additionalInfoDTO.getUserCompany().getSize()));
+            }
+        }
+        blocks.add(SectionBlock.builder().fields(userInfo).build());
 
-        return SectionBlock.builder().fields(userInfo).build();
+        return blocks;
+    }
+
+    private ConfirmationDialogObject buildConfirmationDialogObject(String bodyText) {
+        ConfirmationDialogObject confirmationDialogObject = ConfirmationDialogObject.builder()
+            .title(PlainTextObject.builder().text("Are you sure?").build())
+            .text(PlainTextObject.builder().text(bodyText).build())
+            .confirm(PlainTextObject.builder().text("Yes").build())
+            .deny(PlainTextObject.builder().text("No").build())
+            .build();
+        return confirmationDialogObject;
     }
 
     private LayoutBlock buildApproveButton(UserDTO user) {
@@ -302,13 +339,7 @@ public class SlackService {
             .value(user.getLogin())
             .build();
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
-            ConfirmationDialogObject confirmationDialogObject = ConfirmationDialogObject.builder()
-                .title(PlainTextObject.builder().text("Are you sure?").build())
-                .text(PlainTextObject.builder().text("You are going to approve a commercial account.").build())
-                .confirm(PlainTextObject.builder().text("Yes").build())
-                .deny(PlainTextObject.builder().text("No").build())
-                .build();
-            button.setConfirm(confirmationDialogObject);
+            button.setConfirm(buildConfirmationDialogObject("You are going to approve a commercial account."));
         }
         return ActionsBlock.builder().elements(Arrays.asList(button)).build();
     }

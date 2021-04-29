@@ -300,19 +300,6 @@ public class MailService {
             applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, context);
     }
 
-    public MailType getIntakeFormMailType(LicenseType licenseType) {
-        switch (licenseType) {
-            case COMMERCIAL:
-                return MailType.SEND_INTAKE_FORM_COMMERCIAL;
-            case HOSPITAL:
-                return MailType.SEND_INTAKE_FORM_HOSPITAL;
-            case RESEARCH_IN_COMMERCIAL:
-                return MailType.SEND_INTAKE_FORM_RESEARCH_COMMERCIAL;
-            default:
-                return null;
-        }
-    }
-
     public List<String> getMailFrom() {
         List<String> mailFrom = new ArrayList<>();
         mailFrom.add(applicationProperties.getEmailAddresses().getRegistrationAddress());
@@ -338,12 +325,6 @@ public class MailService {
             case LICENSE_REVIEW_HOSPITAL:
                 return Optional.of("email.license.review.title");
             case LICENSE_REVIEW_RESEARCH_COMMERCIAL:
-                return Optional.of("email.license.review.title");
-            case SEND_INTAKE_FORM_COMMERCIAL:
-                return Optional.of("email.license.review.title");
-            case SEND_INTAKE_FORM_HOSPITAL:
-                return Optional.of("email.license.review.title");
-            case SEND_INTAKE_FORM_RESEARCH_COMMERCIAL:
                 return Optional.of("email.license.review.title");
             case CLARIFY_ACADEMIC_FOR_PROFIT:
                 return Optional.of("email.license.clarify.title");
