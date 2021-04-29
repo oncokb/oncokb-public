@@ -13,7 +13,6 @@ import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -71,6 +70,14 @@ public class SlackController {
                 } else {
                     slackService.sendApprovedConfirmation(userDTO, pl);
                 }
+            }
+        } else {
+            actionOptional = slackService.giveTrialAccessAction(pl);
+            if (actionOptional.isPresent()) {
+                Optional<User> user = userService.initiateTrialAccountActivation(actionOptional.get().getValue().toLowerCase());
+                UserDTO userDTO = userMapper.userToUserDTO(user.get());
+                mailService.sendActiveTrialMail(userDTO);
+                slackService.sendConfirmationAfterGivingFreeTrial(userDTO);
             }
         }
         return new ResponseEntity<>("", HttpStatus.OK);

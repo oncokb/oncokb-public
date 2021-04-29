@@ -239,6 +239,12 @@ public class MailService {
     }
 
     @Async
+    public void sendActiveTrialMail(UserDTO user) {
+        log.debug("Sending password reset email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, MailType.ACTIVATE_FREE_TRIAL);
+    }
+
+    @Async
     public void sendTrialAccountExpiresMail(int expiresInDays, List<UserDTO> users) {
         if (users == null || users.isEmpty()) {
             return;
@@ -334,6 +340,8 @@ public class MailService {
                 return Optional.of("email.account.expires.by.days.title");
             case APPROVAL_MSK_IN_COMMERCIAL:
                 return Optional.of("email.approval.title");
+            case ACTIVATE_FREE_TRIAL:
+                return Optional.of("email.active.free.trial.title");
             default:
                 return Optional.empty();
 
