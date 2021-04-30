@@ -6,6 +6,7 @@ import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
@@ -28,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.Context;
 
 import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +37,10 @@ import javax.validation.Valid;
 import java.time.Instant;
 import java.util.*;
 
+import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
 import static org.mskcc.cbio.oncokb.config.Constants.MSK_EMAIL_DOMAIN;
+import static org.mskcc.cbio.oncokb.util.MainUtil.isMSKCommercialUser;
+import static org.mskcc.cbio.oncokb.util.StringUtil.getEmailDomain;
 
 /**
  * REST controller for managing the current user's account.
@@ -129,7 +134,7 @@ public class AccountResource {
             userOptional = userService.activateRegistration(key);
             User user = userOptional.get();
             if (newUserActivation) {
-                if (emailService.getAccountApprovalWhitelistEmailsDomains().contains(emailService.getEmailDomain(user.getEmail()))) {
+                if (emailService.getAccountApprovalWhitelistEmailsDomains().contains(getEmailDomain(user.getEmail()))) {
                     Optional<User> existingUser = userRepository.findOneByLogin(user.getLogin());
                     if (existingUser.isPresent()) {
                         UserDTO userDTO = userMapper.userToUserDTO(existingUser.get());
@@ -138,13 +143,13 @@ public class AccountResource {
                             slackService.sendApprovedConfirmation(userMapper.userToUserDTO(userOptional.get()));
                             return true;
                         } else {
-                            return activateUser(userOptional, userDTO);
+                            return activateUser(userDTO);
                         }
                     } else {
                         throw new AccountResourceException("User could not be found");
                     }
                 } else {
-                    return activateUser(userOptional, userMapper.userToUserDTO(user));
+                    return activateUser(userMapper.userToUserDTO(user));
                 }
             } else {
                 // This user exists before, we are looking for to extend the expiration date of all tokens associated
@@ -166,20 +171,19 @@ public class AccountResource {
         }
     }
 
-    private boolean activateUser(Optional<User> userOptional, UserDTO userDTO) {
+    private boolean activateUser(UserDTO userDTO) {
         if (isMSKCommercialUser(userDTO)) {
             LicenseType registeredLicenseType = userDTO.getLicenseType();
             userDTO.setLicenseType(LicenseType.ACADEMIC);
             userService.approveUser(userDTO);
-            slackService.sendApprovedConfirmationForMSKCommercialRequest(userMapper.userToUserDTO(userOptional.get()), registeredLicenseType);
-        } else {
-            slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
-        }
-        return false;
-    }
 
-    private boolean isMSKCommercialUser(UserDTO userDTO) {
-        return emailService.getEmailDomain(userDTO.getEmail()).toLowerCase().endsWith(MSK_EMAIL_DOMAIN.toLowerCase()) && !userDTO.getLicenseType().equals(LicenseType.ACADEMIC);
+            // In this case, we also want to send an email to user to explain
+            Context context = new Context();
+            context.setVariable(MAIL_LICENSE, registeredLicenseType.getName());
+            mailService.sendEmailFromTemplate(userDTO, MailType.APPROVAL_MSK_IN_COMMERCIAL, context);
+        }
+        slackService.sendUserRegistrationToChannel(userDTO, userService.isTrialAccount(userDTO), userService.trialAccountInitiated(userDTO));
+        return false;
     }
 
     /**
@@ -225,18 +229,7 @@ public class AccountResource {
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
-        userService.updateUser(
-            userDTO.getFirstName(),
-            userDTO.getLastName(),
-            userDTO.getEmail(),
-            userDTO.getLicenseType(),
-            userDTO.getJobTitle(),
-            userDTO.getCompany(),
-            userDTO.getCity(),
-            userDTO.getCountry(),
-            userDTO.getLangKey(),
-            userDTO.getImageUrl()
-        );
+        userService.updateUser(this.userMapper.userToUserDTO(user.get()));
     }
 
     /**
