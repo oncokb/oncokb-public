@@ -1,8 +1,8 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import com.github.seratch.jslack.app_backend.interactive_messages.payload.BlockActionPayload;
-import com.github.seratch.jslack.common.json.GsonFactory;
 import com.google.gson.Gson;
+import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
+import com.slack.api.util.json.GsonFactory;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.MailService;
