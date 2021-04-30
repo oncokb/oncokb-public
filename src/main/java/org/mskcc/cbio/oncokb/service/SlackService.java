@@ -3,13 +3,13 @@ package org.mskcc.cbio.oncokb.service;
 import com.slack.api.Slack;
 import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
 import com.slack.api.model.block.ActionsBlock;
+import com.slack.api.model.block.DividerBlock;
 import com.slack.api.model.block.LayoutBlock;
 import com.slack.api.model.block.SectionBlock;
-import com.slack.api.model.block.composition.ConfirmationDialogObject;
-import com.slack.api.model.block.composition.MarkdownTextObject;
-import com.slack.api.model.block.composition.PlainTextObject;
-import com.slack.api.model.block.composition.TextObject;
+import com.slack.api.model.block.composition.*;
+import com.slack.api.model.block.element.BlockElement;
 import com.slack.api.model.block.element.ButtonElement;
+import com.slack.api.model.block.element.StaticSelectElement;
 import com.slack.api.webhook.Payload;
 import com.slack.api.webhook.WebhookResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +19,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -30,9 +31,11 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.mskcc.cbio.oncokb.config.Constants.EXPIRATION;
-import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
+import static org.mskcc.cbio.oncokb.config.Constants.*;
+import static org.mskcc.cbio.oncokb.util.MainUtil.isMSKUser;
+import static org.mskcc.cbio.oncokb.util.StringUtil.getEmailDomain;
 import static org.mskcc.cbio.oncokb.util.TimeUtil.toNYZoneTime;
+import static org.mskcc.cbio.oncokb.web.rest.slack.ActionId.*;
 
 
 /**
@@ -45,13 +48,7 @@ public class SlackService {
 
     private final Logger log = LoggerFactory.getLogger(SlackService.class);
 
-    private static final String APPROVE_USER = "approve-user";
-    private static final String GIVE_TRIAL_ACCESS = "give-trial-access";
-
-    private static final String ACADEMIC_CLARIFICATION_NOTE = "We have sent the clarification email to the user asking why they could not use an institution email to register.";
-    private static final String LICENSED_DOMAIN_APPROVE_NOTE = ":star: *This email domain belongs to a licensed company. Please review and approve accordingly.*";
-    private static final String TRIALED_DOMAIN_APPROVE_NOTE = ":bangbang: *This email domain belongs to a company that has trial license. The account will be approved by the IT team.*";
-
+    private final String VALUE_SEPARATOR = "-";
     private final ApplicationProperties applicationProperties;
     private final MailService mailService;
     private final EmailService emailService;
@@ -63,59 +60,19 @@ public class SlackService {
     }
 
     @Async
-    public void sendUserRegistrationToChannel(UserDTO user) {
+    public void sendUserRegistrationToChannel(UserDTO user, boolean isTrialAccount, boolean trialAccountInitiated) {
         log.debug("Sending notification to admin group that a user has registered a new account");
         if (StringUtils.isEmpty(this.applicationProperties.getUserRegistrationWebhook())) {
             log.debug("\tSkipped, the webhook is not configured");
         } else {
-            List<LayoutBlock> layoutBlocks = new ArrayList<>();
-            if (user.getLicenseType().equals(LicenseType.ACADEMIC)) {
-                boolean withClarificationNote = false;
-                if (this.applicationProperties.getAcademicEmailClarifyDomains().size() > 0 &&
-                    this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> user.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
-                    withClarificationNote = true;
-                    mailService.sendEmailWithLicenseContext(user, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
-                }
-                layoutBlocks = buildAcademicBlocks(user, withClarificationNote);
-            } else {
-                boolean domainIsLicensed = false;
-                boolean domainIsTrialed = false;
-                List<String> licensedDomains = applicationProperties.getLicensedDomainsList();
-                if (!licensedDomains.isEmpty() && licensedDomains.stream().anyMatch(domain -> emailService.getEmailDomain(user.getEmail().toLowerCase()).equals(domain.toLowerCase()))) {
-                    domainIsLicensed = true;
-                }
-                List<String> trialedDomains = applicationProperties.getTrialedDomainsList();
-                if (!trialedDomains.isEmpty() && trialedDomains.stream().anyMatch(domain -> emailService.getEmailDomain(user.getEmail().toLowerCase()).equals(domain.toLowerCase()))) {
-                    domainIsTrialed = true;
-                }
-
-                layoutBlocks = buildCommercialApprovalBlocks(user, domainIsLicensed, domainIsTrialed);
-            }
-            Payload payload = Payload.builder()
-                .blocks(layoutBlocks)
-                .build();
-
-            Slack slack = Slack.getInstance();
-            try {
-                WebhookResponse response = slack.send(this.applicationProperties.getUserRegistrationWebhook(), payload);
-            } catch (Exception e) {
-                log.warn("Failed to send message to slack");
-            }
+            List<LayoutBlock> layoutBlocks = this.buildBlocks(user, isTrialAccount, trialAccountInitiated);
+            this.sendBlocks(this.applicationProperties.getUserRegistrationWebhook(), layoutBlocks);
         }
     }
 
     @Async
-    public void sendApprovedConfirmation(UserDTO userDTO, BlockActionPayload blockActionPayload) {
-        Payload payload = Payload.builder()
-            .text(userDTO.getEmail() + " has been approved and notified by " + blockActionPayload.getUser().getName())
-            .build();
-
-        Slack slack = Slack.getInstance();
-        try {
-            WebhookResponse response = slack.send(blockActionPayload.getResponseUrl(), payload);
-        } catch (IOException e) {
-            log.warn("Failed to send message to slack");
-        }
+    public void sendLatestBlocks(String url, UserDTO userDTO, boolean isTrialAccount, boolean trialAccountInitiated) {
+        this.sendBlocks(url, this.buildBlocks(userDTO, isTrialAccount, trialAccountInitiated));
     }
 
     @Async
@@ -133,39 +90,6 @@ public class SlackService {
         }
     }
 
-    @Async
-    public void sendConfirmationAfterGivingFreeTrial(UserDTO userDTO) {
-        Payload payload = Payload.builder()
-            .text(userDTO.getEmail() + " has been notified about the free trial license agreement.")
-            .build();
-
-        Slack slack = Slack.getInstance();
-        try {
-            // This is an automatic message when user from whitelist is registered.
-            WebhookResponse response = slack.send(this.applicationProperties.getUserRegistrationWebhook(), payload);
-        } catch (IOException e) {
-            log.warn("Failed to send message to slack");
-        }
-    }
-
-    @Async
-    public void sendApprovedConfirmationForMSKCommercialRequest(UserDTO userDTO, LicenseType registeredLicenseType) {
-        Payload payload = Payload.builder()
-            .text(userDTO.getEmail() + " has been approved and notified automatically. We also changed their license to Academic and clarified with the user.")
-            .build();
-
-        Slack slack = Slack.getInstance();
-        try {
-            // This is an automatic message when user from whitelist is registered.
-            WebhookResponse response = slack.send(this.applicationProperties.getUserRegistrationWebhook(), payload);
-            // In this case, we also want to send an email to user to explain
-            Context context = new Context();
-            context.setVariable(MAIL_LICENSE, registeredLicenseType.getName());
-            mailService.sendEmailFromTemplate(userDTO, MailType.APPROVAL_MSK_IN_COMMERCIAL, context);
-        } catch (IOException e) {
-            log.warn("Failed to send message to slack");
-        }
-    }
     @Async
     public void sendConfirmationOnUserAcceptsTrialAgreement(UserDTO userDTO, Instant tokenExpiresOn) {
         String expirationDate = toNYZoneTime(tokenExpiresOn);
@@ -194,16 +118,19 @@ public class SlackService {
         }
     }
 
-    public Optional<BlockActionPayload.Action> getApproveUserAction(BlockActionPayload blockActionPayload) {
-        return getAction(blockActionPayload, APPROVE_USER);
+    public ActionId getActionId(BlockActionPayload blockActionPayload) {
+        List<String> actionIds = blockActionPayload.getActions().stream().map(action -> action.getActionId()).collect(Collectors.toList());
+        for (String actionIdStr : actionIds) {
+            ActionId actionId = ActionId.getById(actionIdStr);
+            if (actionId != null) {
+                return actionId;
+            }
+        }
+        return null;
     }
 
-    public Optional<BlockActionPayload.Action> giveTrialAccessAction(BlockActionPayload blockActionPayload) {
-        return getAction(blockActionPayload, GIVE_TRIAL_ACCESS);
-    }
-
-    private Optional<BlockActionPayload.Action> getAction(BlockActionPayload blockActionPayload, String actionKey) {
-        return blockActionPayload.getActions().stream().filter(action -> action.getActionId().equalsIgnoreCase(actionKey)).findFirst();
+    public Optional<BlockActionPayload.Action> getAction(BlockActionPayload blockActionPayload, ActionId actionKey) {
+        return blockActionPayload.getActions().stream().filter(action -> action.getActionId().equalsIgnoreCase(actionKey.getId())).findFirst();
     }
 
     private TextObject getTextObject(String title, String content) {
@@ -213,59 +140,43 @@ public class SlackService {
         return MarkdownTextObject.builder().text(sb.toString()).build();
     }
 
-    private List<LayoutBlock> buildCommercialApprovalBlocks(UserDTO user, boolean licensedDomain, boolean trialDomain) {
-        List<LayoutBlock> blocks = new ArrayList<>();
-        boolean isApprovedDomain = isApprovedDomain(licensedDomain, trialDomain);
+    private void sendBlocks(String url, List<LayoutBlock> layoutBlocks) {
+        Payload payload = Payload.builder()
+            .blocks(layoutBlocks)
+            .build();
 
-        // Add mention
-        if (isApprovedDomain) {
-            blocks.add(buildChannelMentionBlock());
-            if (licensedDomain)
-                blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(LICENSED_DOMAIN_APPROVE_NOTE).build()).build());
-            if (trialDomain)
-                blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(TRIALED_DOMAIN_APPROVE_NOTE).build()).build());
-        } else {
-            blocks.add(buildHereMentionBlock());
+        Slack slack = Slack.getInstance();
+        try {
+            WebhookResponse response = slack.send(url, payload);
+            log.info("Send the latest user blocks to slack with response code " + response.getCode());
+        } catch (Exception e) {
+            log.warn("Failed to send message to slack");
         }
-
-        // Add Title
-        blocks.add(buildTitleBlock(user));
-
-        // Add user info section
-        blocks.addAll(buildUserInfoBlocks(user));
-
-        if(!trialDomain) {
-            // Add Approve button
-            blocks.add(buildApproveButton(user));
-            blocks.add(buildGiveTrialAccessButton(user));
-        }
-
-        return blocks;
     }
 
-    private boolean isApprovedDomain(boolean licensedDomain, boolean trialDomain) {
-        return licensedDomain || trialDomain;
-    }
-
-    private List<LayoutBlock> buildAcademicBlocks(UserDTO user, boolean withClarificationNote) {
+    public List<LayoutBlock> buildBlocks(UserDTO userDTO, boolean isTrialAccount, boolean trialAccountInitiated) {
         List<LayoutBlock> blocks = new ArrayList<>();
 
         // Add mention
         blocks.add(buildHereMentionBlock());
 
-        // Add Title
-        blocks.add(buildTitleBlock(user));
+        // Add warning
+        blocks.addAll(buildWarningBlocks(userDTO));
+
+        // Add current license
+        blocks.addAll(buildCurrentLicense(userDTO));
+
+        // Add account status
+        blocks.addAll(buildAccountStatusBlocks(userDTO, isTrialAccount));
 
         // Add user info section
-        blocks.addAll(buildUserInfoBlocks(user));
+        blocks.addAll(buildUserInfoBlocks(userDTO));
 
-        if(withClarificationNote) {
-            // Add clarification note
-            blocks.add(buildPlainTextBlock(ACADEMIC_CLARIFICATION_NOTE));
-        } else {
-            // Add Approve button
-            blocks.add(buildApproveButton(user));
-        }
+        // Add additional info section
+        blocks.addAll(buildAdditionalInfoBlocks(userDTO, trialAccountInitiated));
+
+        // Add action section
+        blocks.addAll(buildActionBlocks(userDTO, trialAccountInitiated));
 
         return blocks;
     }
@@ -286,10 +197,112 @@ public class SlackService {
         }
     }
 
-    private LayoutBlock buildTitleBlock(UserDTO user) {
-        List<TextObject> title = new ArrayList<>();
-        title.add(PlainTextObject.builder().text("The following user registered an " + user.getLicenseType() + " account").build());
-        return SectionBlock.builder().fields(title).build();
+    private List<LayoutBlock> buildWarningBlocks(UserDTO userDTO) {
+        List<LayoutBlock> blocks = new ArrayList<>();
+        final String LICENSED_DOMAIN_APPROVE_NOTE = ":star: *This email domain belongs to a licensed company. Please review and approve accordingly.*";
+        final String TRIALED_DOMAIN_APPROVE_NOTE = ":bangbang: *This email domain belongs to a company that has trial license.*";
+
+        boolean domainIsLicensed = false;
+        boolean domainIsTrialed = false;
+        List<String> licensedDomains = applicationProperties.getLicensedDomainsList();
+        if (!licensedDomains.isEmpty() && licensedDomains.stream().anyMatch(domain -> getEmailDomain(userDTO.getEmail().toLowerCase()).equals(domain.toLowerCase()))) {
+            domainIsLicensed = true;
+        }
+        List<String> trialedDomains = applicationProperties.getTrialedDomainsList();
+        if (!trialedDomains.isEmpty() && trialedDomains.stream().anyMatch(domain -> getEmailDomain(userDTO.getEmail().toLowerCase()).equals(domain.toLowerCase()))) {
+            domainIsTrialed = true;
+        }
+
+        if (domainIsLicensed)
+            blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(LICENSED_DOMAIN_APPROVE_NOTE).build()).build());
+        if (domainIsTrialed)
+            blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(TRIALED_DOMAIN_APPROVE_NOTE).build()).build());
+
+        if (blocks.size() > 0) {
+            blocks.add(DividerBlock.builder().build());
+        } else {
+            return new ArrayList<>();
+        }
+
+        return blocks;
+    }
+
+    private List<LayoutBlock> buildCurrentLicense(UserDTO userDTO) {
+        List<LayoutBlock> blocks = new ArrayList<>();
+
+        blocks.add(
+            SectionBlock
+                .builder()
+                .fields(
+                    Collections.singletonList(
+                        MarkdownTextObject.builder().text(":key: *License:*").build()
+                    )
+                )
+                .build()
+        );
+
+        blocks.add(
+            SectionBlock
+                .builder()
+                .text(MarkdownTextObject.builder().text(userDTO.getLicenseType().getName()).build())
+                .accessory(this.getLicenseTypeElement(userDTO))
+                .build()
+        );
+
+        blocks.add(DividerBlock.builder().build());
+        return blocks;
+    }
+
+    private List<LayoutBlock> buildAccountStatusBlocks(UserDTO userDTO, boolean isTrialAccount) {
+        List<LayoutBlock> blocks = new ArrayList<>();
+        List<TextObject> userInfo = new ArrayList<>();
+
+        // Add account information
+        blocks.add(SectionBlock.builder().fields(Collections.singletonList(MarkdownTextObject.builder().text(":oncokb-9760: *Account Status*").build())).build());
+
+
+        userInfo.add(getTextObject("Account Status", userDTO.isActivated() ? "Activated" : (StringUtils.isNotEmpty(userDTO.getActivationKey()) ? "Email not validated" : "Not Activated")));
+        userInfo.add(getTextObject("Account Type", isTrialAccount ? "TRIAL" : "REGULAR"));
+        if (isTrialAccount) {
+            userInfo.add(getTextObject("Trial Expires On", toNYZoneTime(userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate().plusSeconds(DAY_IN_SECONDS * 90))));
+        }
+        blocks.add(SectionBlock.builder().fields(userInfo).build());
+
+        blocks.add(DividerBlock.builder().build());
+        return blocks;
+    }
+
+    private String getOptionValue(LicenseType licenseType, String login) {
+        return String.join(VALUE_SEPARATOR, licenseType.toString(), login);
+    }
+
+    public String getOptionValueLogin(String value) {
+        String[] values = value.split(VALUE_SEPARATOR);
+        return values[1];
+    }
+
+    public String getOptionValueLicenseType(String value) {
+        String[] values = value.split(VALUE_SEPARATOR);
+        return values[0];
+    }
+
+    private StaticSelectElement getLicenseTypeElement(UserDTO userDTO) {
+        List<OptionObject> options = new ArrayList<>();
+        for (LicenseType licenseType : LicenseType.values()) {
+            if (userDTO.getLicenseType() != licenseType) {
+                options.add(OptionObject
+                    .builder()
+                    .value(this.getOptionValue(licenseType, userDTO.getLogin()))
+                    .text(PlainTextObject.builder().text(licenseType.getName()).build())
+                    .build());
+            }
+        }
+        return StaticSelectElement
+            .builder()
+            .actionId(CHANGE_LICENSE_TYPE.getId())
+            .placeholder(PlainTextObject.builder().text("Update license type").build())
+            .options(options)
+            .build();
     }
 
     private List<LayoutBlock> buildUserInfoBlocks(UserDTO user) {
@@ -311,9 +324,10 @@ public class SlackService {
         userInfo.add(getTextObject("Name", user.getFirstName() + " " + user.getLastName()));
         userInfo.add(getTextObject("Job Title", user.getJobTitle()));
         blocks.add(SectionBlock.builder().fields(userInfo).build());
+        blocks.add(DividerBlock.builder().build());
 
         // Add company information
-        blocks.add(SectionBlock.builder().fields(Collections.singletonList(MarkdownTextObject.builder().text(":sunflower: *"+companyName + " Information*").build())).build());
+        blocks.add(SectionBlock.builder().fields(Collections.singletonList(MarkdownTextObject.builder().text(":sunflower: *" + companyName + " Information*").build())).build());
         userInfo = new ArrayList<>();
         userInfo.add(getTextObject(companyName, user.getCompany()));
         userInfo.add(getTextObject("City", user.getCity()));
@@ -342,8 +356,59 @@ public class SlackService {
             }
         }
         blocks.add(SectionBlock.builder().fields(userInfo).build());
+        blocks.add(DividerBlock.builder().build());
 
         return blocks;
+    }
+
+    private boolean withClarificationNote(UserDTO userDTO) {
+        boolean withClarificationNote = false;
+        if (this.applicationProperties.getAcademicEmailClarifyDomains().size() > 0 &&
+            this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> userDTO.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
+            withClarificationNote = true;
+            mailService.sendEmailWithLicenseContext(userDTO, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
+        }
+        return withClarificationNote;
+    }
+
+    private List<LayoutBlock> buildAdditionalInfoBlocks(UserDTO userDTO, boolean trialAccountInitiated) {
+        final String ACADEMIC_CLARIFICATION_NOTE = "We have sent the clarification email to the user asking why they could not use an institution email to register.";
+        List<LayoutBlock> layoutBlocks = new ArrayList<>();
+
+        if (withClarificationNote(userDTO)) {
+            layoutBlocks.add(buildPlainTextBlock(ACADEMIC_CLARIFICATION_NOTE));
+        }
+        if (trialAccountInitiated) {
+            layoutBlocks.add(buildPlainTextBlock("We have initialized the trial account for the user."));
+        }
+        if (isMSKUser(userDTO)) {
+            layoutBlocks.add(buildPlainTextBlock("The user has been approved and notified automatically. We also changed their license to Academic and clarified with the user."));
+        }
+
+        if (layoutBlocks.size() > 0) {
+            layoutBlocks.add(DividerBlock.builder().build());
+        }
+        return layoutBlocks;
+    }
+
+    private List<LayoutBlock> buildActionBlocks(UserDTO userDTO, boolean trialAccountInitiated) {
+        List<LayoutBlock> layoutBlocks = new ArrayList<>();
+        List<BlockElement> actionElements = new ArrayList<>();
+
+        // Add button - Approve
+        if (!userDTO.isActivated()) {
+            actionElements.add(buildApproveButton(userDTO));
+        }
+
+        // Add button - Give Trial Access
+        if (userDTO.getLicenseType() != LicenseType.ACADEMIC && !trialAccountInitiated && !userDTO.isActivated()) {
+            actionElements.add(buildGiveTrialAccessButton(userDTO));
+        }
+
+        // Add button - Update
+        actionElements.add(buildUpdateUserButton(userDTO));
+        layoutBlocks.add(ActionsBlock.builder().elements(actionElements).build());
+        return layoutBlocks;
     }
 
     private ConfirmationDialogObject buildConfirmationDialogObject(String bodyText) {
@@ -356,30 +421,34 @@ public class SlackService {
         return confirmationDialogObject;
     }
 
-    private LayoutBlock buildApproveButton(UserDTO user) {
-        ButtonElement button = ButtonElement.builder()
-            .text(PlainTextObject.builder().emoji(true).text("Approve").build())
-            .style("primary")
-            .actionId(APPROVE_USER)
-            .value(user.getLogin())
-            .build();
+    private ButtonElement buildUpdateUserButton(UserDTO user) {
+        return buildPrimaryButton("Update Info Above", user.getLogin(), UPDATE_USER);
+    }
+
+    private ButtonElement buildApproveButton(UserDTO user) {
+        ButtonElement button = buildPrimaryButton("Approve", user.getLogin(), APPROVE_USER);
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
             button.setConfirm(buildConfirmationDialogObject("You are going to approve a commercial account."));
         }
-        return ActionsBlock.builder().elements(Arrays.asList(button)).build();
+        return button;
     }
 
-    private LayoutBlock buildGiveTrialAccessButton(UserDTO user) {
-        ButtonElement button = ButtonElement.builder()
-            .text(PlainTextObject.builder().emoji(true).text("Give Trial Access").build())
-            .style("primary")
-            .actionId(GIVE_TRIAL_ACCESS)
-            .value(user.getLogin())
-            .build();
+    private ButtonElement buildGiveTrialAccessButton(UserDTO user) {
+        ButtonElement button = buildPrimaryButton("Give Trial Access", user.getLogin(), GIVE_TRIAL_ACCESS);
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
             button.setConfirm(buildConfirmationDialogObject("You are going to give the user 3 month trial period. The user will get notified through email. Once they are ok with the free trial license agreement, their account will be activated."));
         }
-        return ActionsBlock.builder().elements(Arrays.asList(button)).build();
+        return button;
+    }
+
+    private ButtonElement buildPrimaryButton(String text, String value, ActionId actionId) {
+        ButtonElement button = ButtonElement.builder()
+            .text(PlainTextObject.builder().emoji(true).text(text).build())
+            .style("primary")
+            .actionId(actionId.getId())
+            .value(value)
+            .build();
+        return button;
     }
 
     private LayoutBlock buildPlainTextBlock(String text) {

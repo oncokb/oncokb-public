@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE;
+import static org.mskcc.cbio.oncokb.util.StringUtil.getEmailDomain;
 
 /**
  * Service class for managing users.
@@ -270,14 +271,19 @@ public class UserService {
         return newUser;
     }
 
-    private boolean removeNonActivatedUser(User existingUser) {
-        if (existingUser.getActivated()) {
+    public boolean isTrialAccount(UserDTO userDTO) {
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        return tokens.stream().filter(token -> !token.isRenewable()).findAny().isPresent();
+    }
+    public boolean trialAccountInitiated(UserDTO userDTO) {
+        if (
+            userDTO.getAdditionalInfo() == null
+                || userDTO.getAdditionalInfo().getTrialAccount() == null
+                || userDTO.getAdditionalInfo().getTrialAccount().getActivation() == null
+        ) {
             return false;
         }
-        userRepository.delete(existingUser);
-        userRepository.flush();
-        this.clearUserCaches(existingUser);
-        return true;
+        return StringUtils.isNotEmpty(userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey()) || userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate() != null;
     }
 
     public User createUser(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
@@ -323,44 +329,6 @@ public class UserService {
         generateTokenForUserIfNotExist(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable);
         log.debug("Created Information for User: {}", user);
         return user;
-    }
-
-    /**
-     * Update basic information (first name, last name, email, language) for the current user.
-     *
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
-     */
-    public void updateUser(
-        String firstName
-        , String lastName
-        , String email
-        , LicenseType licenseType
-        , String jobTitle
-        , String company
-        , String city
-        , String country
-        , String langKey
-        , String imageUrl
-    ) {
-        SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
-            .ifPresent(user -> {
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                if (email != null) {
-                    user.setEmail(email.toLowerCase());
-                }
-                user.setLangKey(langKey);
-                user.setImageUrl(imageUrl);
-                this.clearUserCaches(user);
-
-                getUpdatedUserDetails(user, licenseType, jobTitle, company, city, country);
-                log.debug("Changed Information for User: {}", user);
-            });
     }
 
     /**
