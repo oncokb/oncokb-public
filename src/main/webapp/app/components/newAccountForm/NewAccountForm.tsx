@@ -35,10 +35,16 @@ import {
 import { If, Then } from 'react-if';
 import _ from 'lodash';
 
+export enum FormSection {
+  LICENSE = 'LICENSE',
+  ACCOUNT = 'ACCOUNT',
+  COMPANY = 'COMPANY',
+}
 export type INewAccountForm = {
   isLargeScreen: boolean;
   byAdmin: boolean;
   defaultLicense?: LicenseType;
+  visibleSections?: FormSection[];
   onSelectLicense?: (newLicenseType: LicenseType | undefined) => void;
   onSubmit: (newUser: Partial<ManagedUserVM>) => void;
 };
@@ -105,6 +111,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       value: 254,
       errorMessage: 'Your email cannot be longer than 50 characters.',
     },
+  };
+
+  public static defaultProps = {
+    visibleSections: Object.values(FormSection),
   };
 
   constructor(props: INewAccountForm) {
@@ -306,241 +316,257 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
         onValidSubmit={this.handleValidSubmit}
         model={this.defaultFormValue}
       >
-        <Row className={getSectionClassName(true)}>
-          <Col xs={12}>
-            <h6>
-              <LicenseExplanation />
-            </h6>
-          </Col>
-        </Row>
-        <Row className={getSectionClassName(false)}>
-          <Col md="3">
-            <h5>Choose your license type</h5>
-          </Col>
-          <Col md="9">
-            <ButtonSelections
-              isLargeScreen={this.props.isLargeScreen}
-              selectedButton={this.selectedLicense}
-              onSelectLicense={this.onSelectLicense}
-            />
-          </Col>
-        </Row>
+        {this.props.visibleSections!.includes(FormSection.LICENSE) && (
+          <>
+            <Row className={getSectionClassName(true)}>
+              <Col xs={12}>
+                <h6>
+                  <LicenseExplanation />
+                </h6>
+              </Col>
+            </Row>
+            <Row className={getSectionClassName(false)}>
+              <Col md="3">
+                <h5>Choose your license type</h5>
+              </Col>
+              <Col md="9">
+                <ButtonSelections
+                  isLargeScreen={this.props.isLargeScreen}
+                  selectedButton={this.selectedLicense}
+                  onSelectLicense={this.onSelectLicense}
+                />
+              </Col>
+            </Row>
+          </>
+        )}
         {this.selectedLicense ? (
           <>
-            <Row>
-              <Col md="9" className={'ml-auto'}>
-                {this.getLicenseAdditionalInfo(this.selectedLicense)}
-              </Col>
-            </Row>
-            <Row className={getSectionClassName()}>
-              <Col md="3">
-                <h5>Account Information</h5>
-              </Col>
-              <Col md="9">
-                <AvField
-                  name="firstName"
-                  autoComplete="given-name"
-                  label={getAccountInfoTitle(
-                    ACCOUNT_TITLES.FIRST_NAME,
-                    this.selectedLicense
-                  )}
-                  validate={{
-                    required: {
-                      value: true,
-                      errorMessage: 'Your first name is required.',
-                    },
-                    ...this.textValidation,
-                  }}
-                />
-                <AvField
-                  name="lastName"
-                  autoComplete="family-name"
-                  label={getAccountInfoTitle(
-                    ACCOUNT_TITLES.LAST_NAME,
-                    this.selectedLicense
-                  )}
-                  validate={{
-                    required: {
-                      value: true,
-                      errorMessage: 'Your last name is required.',
-                    },
-                    ...this.textValidation,
-                  }}
-                />
-                <AvField
-                  name="jobTitle"
-                  label={getAccountInfoTitle(
-                    ACCOUNT_TITLES.POSITION,
-                    this.selectedLicense
-                  )}
-                />
-                <AvField
-                  name="email"
-                  label={getAccountInfoTitle(
-                    ACCOUNT_TITLES.EMAIL,
-                    this.selectedLicense
-                  )}
-                  type="email"
-                  validate={this.emailValidation}
-                />
-                <If condition={!this.props.byAdmin}>
-                  <Then>
-                    <AvField
-                      name="firstPassword"
-                      label="Password"
-                      autoComplete="password"
-                      placeholder={'Password'}
-                      type="password"
-                      onChange={this.updatePassword}
-                      validate={{
-                        required: {
-                          value: true,
-                          errorMessage: 'Your password is required.',
-                        },
-                        minLength: {
-                          value: 4,
-                          errorMessage:
-                            'Your password is required to be at least 4 characters.',
-                        },
-                        maxLength: {
-                          value: 50,
-                          errorMessage:
-                            'Your password cannot be longer than 50 characters.',
-                        },
-                      }}
-                    />
-                    <PasswordStrengthBar password={this.password} />
-                    <AvField
-                      name="secondPassword"
-                      label="Password confirmation"
-                      autoComplete="password"
-                      placeholder="Confirm the password"
-                      type="password"
-                      validate={{
-                        required: {
-                          value: true,
-                          errorMessage:
-                            'Your confirmation password is required.',
-                        },
-                        minLength: {
-                          value: 4,
-                          errorMessage:
-                            'Your confirmation password is required to be at least 4 characters.',
-                        },
-                        maxLength: {
-                          value: 50,
-                          errorMessage:
-                            'Your confirmation password cannot be longer than 50 characters.',
-                        },
-                        match: {
-                          value: 'firstPassword',
-                          errorMessage:
-                            'The password and its confirmation do not match!',
-                        },
-                      }}
-                    />
-                  </Then>
-                </If>
-              </Col>
-            </Row>
-            <Row className={getSectionClassName()}>
-              <Col md="3">
-                <h5>
-                  {getAccountInfoTitle(
-                    ACCOUNT_TITLES.COMPANY_SECTION_TITLE,
-                    this.selectedLicense
-                  )}
-                </h5>
-              </Col>
-              <Col md="9">
-                {this.selectedLicense !== LicenseType.ACADEMIC && (
-                  <p>
-                    Please feel free to skip this section if your{' '}
+            {this.props.visibleSections!.includes(FormSection.LICENSE) && (
+              <Row>
+                <Col md="9" className={'ml-auto'}>
+                  {this.getLicenseAdditionalInfo(this.selectedLicense)}
+                </Col>
+              </Row>
+            )}
+            {this.props.visibleSections!.includes(FormSection.ACCOUNT) && (
+              <Row
+                className={
+                  this.props.visibleSections!.includes(FormSection.LICENSE)
+                    ? getSectionClassName()
+                    : undefined
+                }
+              >
+                <Col md="3">
+                  <h5>Account Information</h5>
+                </Col>
+                <Col md="9">
+                  <AvField
+                    name="firstName"
+                    autoComplete="given-name"
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.FIRST_NAME,
+                      this.selectedLicense
+                    )}
+                    validate={{
+                      required: {
+                        value: true,
+                        errorMessage: 'Your first name is required.',
+                      },
+                      ...this.textValidation,
+                    }}
+                  />
+                  <AvField
+                    name="lastName"
+                    autoComplete="family-name"
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.LAST_NAME,
+                      this.selectedLicense
+                    )}
+                    validate={{
+                      required: {
+                        value: true,
+                        errorMessage: 'Your last name is required.',
+                      },
+                      ...this.textValidation,
+                    }}
+                  />
+                  <AvField
+                    name="jobTitle"
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.POSITION,
+                      this.selectedLicense
+                    )}
+                  />
+                  <AvField
+                    name="email"
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.EMAIL,
+                      this.selectedLicense
+                    )}
+                    type="email"
+                    validate={this.emailValidation}
+                  />
+                  <If condition={!this.props.byAdmin}>
+                    <Then>
+                      <AvField
+                        name="firstPassword"
+                        label="Password"
+                        autoComplete="password"
+                        placeholder={'Password'}
+                        type="password"
+                        onChange={this.updatePassword}
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage: 'Your password is required.',
+                          },
+                          minLength: {
+                            value: 4,
+                            errorMessage:
+                              'Your password is required to be at least 4 characters.',
+                          },
+                          maxLength: {
+                            value: 50,
+                            errorMessage:
+                              'Your password cannot be longer than 50 characters.',
+                          },
+                        }}
+                      />
+                      <PasswordStrengthBar password={this.password} />
+                      <AvField
+                        name="secondPassword"
+                        label="Password confirmation"
+                        autoComplete="password"
+                        placeholder="Confirm the password"
+                        type="password"
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage:
+                              'Your confirmation password is required.',
+                          },
+                          minLength: {
+                            value: 4,
+                            errorMessage:
+                              'Your confirmation password is required to be at least 4 characters.',
+                          },
+                          maxLength: {
+                            value: 50,
+                            errorMessage:
+                              'Your confirmation password cannot be longer than 50 characters.',
+                          },
+                          match: {
+                            value: 'firstPassword',
+                            errorMessage:
+                              'The password and its confirmation do not match!',
+                          },
+                        }}
+                      />
+                    </Then>
+                  </If>
+                </Col>
+              </Row>
+            )}
+            {this.props.visibleSections!.includes(FormSection.COMPANY) && (
+              <Row className={getSectionClassName()}>
+                <Col md="3">
+                  <h5>
                     {getAccountInfoTitle(
+                      ACCOUNT_TITLES.COMPANY_SECTION_TITLE,
+                      this.selectedLicense
+                    )}
+                  </h5>
+                </Col>
+                <Col md="9">
+                  {this.selectedLicense !== LicenseType.ACADEMIC && (
+                    <p>
+                      Please feel free to skip this section if your{' '}
+                      {getAccountInfoTitle(
+                        ACCOUNT_TITLES.COMPANY,
+                        this.selectedLicense
+                      ).toLowerCase()}{' '}
+                      already has a license with us.
+                    </p>
+                  )}
+                  <AvField
+                    name="company"
+                    label={getAccountInfoTitle(
                       ACCOUNT_TITLES.COMPANY,
                       this.selectedLicense
-                    ).toLowerCase()}{' '}
-                    already has a license with us.
-                  </p>
-                )}
-                <AvField
-                  name="company"
-                  label={getAccountInfoTitle(
-                    ACCOUNT_TITLES.COMPANY,
-                    this.selectedLicense
-                  )}
-                />
-                <AvField
-                  name="city"
-                  label={getAccountInfoTitle(
-                    ACCOUNT_TITLES.CITY,
-                    this.selectedLicense
-                  )}
-                />
-                <AvField
-                  name="country"
-                  label={getAccountInfoTitle(
-                    ACCOUNT_TITLES.COUNTRY,
-                    this.selectedLicense
-                  )}
-                />
-                <AvField
-                  name={FormKey.COMPANY_DESCRIPTION}
-                  label={`${getAccountInfoTitle(
-                    ACCOUNT_TITLES.COMPANY,
-                    this.selectedLicense
-                  )} Description`}
-                  type={'textarea'}
-                  placeholder={this.companyDescriptionPlaceholder}
-                  rows={4}
-                />
-                {this.isCommercialLicense && (
-                  <>
-                    <AvField
-                      name={[FormKey.BUS_CONTACT_EMAIL]}
-                      label={'Business Contact Email'}
-                      type="email"
-                      validate={this.emailValidation}
-                    />
-                    <AvField
-                      name={[FormKey.BUS_CONTACT_PHONE]}
-                      label={'Business Contact Phone Number'}
-                      type="tel"
-                    />
-                  </>
-                )}
-                <AvField
-                  name={FormKey.USE_CASE}
-                  label={'Describe how you plan to use OncoKB'}
-                  type={'textarea'}
-                  placeholder={this.useCasePlaceholder}
-                  rows={6}
-                />
-                {[LicenseType.COMMERCIAL, LicenseType.HOSPITAL].includes(
-                  this.selectedLicense
-                ) && (
+                    )}
+                  />
                   <AvField
-                    name={FormKey.ANTICIPATED_REPORTS}
-                    label={
-                      'Anticipated # of reports annually for years 1, 2 and 3'
-                    }
+                    name="city"
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.CITY,
+                      this.selectedLicense
+                    )}
+                  />
+                  <AvField
+                    name="country"
+                    label={getAccountInfoTitle(
+                      ACCOUNT_TITLES.COUNTRY,
+                      this.selectedLicense
+                    )}
+                  />
+                  <AvField
+                    name={FormKey.COMPANY_DESCRIPTION}
+                    label={`${getAccountInfoTitle(
+                      ACCOUNT_TITLES.COMPANY,
+                      this.selectedLicense
+                    )} Description`}
                     type={'textarea'}
-                    placeholder={
-                      'If you plan to incorporate OncoKB contents in sequencing reports, please provide an estimate of your anticipated volume over the next several years'
-                    }
+                    placeholder={this.companyDescriptionPlaceholder}
+                    rows={4}
                   />
-                )}
-                {[LicenseType.RESEARCH_IN_COMMERCIAL].includes(
-                  this.selectedLicense
-                ) && (
+                  {this.isCommercialLicense && (
+                    <>
+                      <AvField
+                        name={[FormKey.BUS_CONTACT_EMAIL]}
+                        label={'Business Contact Email'}
+                        type="email"
+                        validate={this.emailValidation}
+                      />
+                      <AvField
+                        name={[FormKey.BUS_CONTACT_PHONE]}
+                        label={'Business Contact Phone Number'}
+                        type="tel"
+                      />
+                    </>
+                  )}
                   <AvField
-                    name={FormKey.COMPANY_SIZE}
-                    label={'Company Size (# of employees)'}
-                    type={'input'}
+                    name={FormKey.USE_CASE}
+                    label={'Describe how you plan to use OncoKB'}
+                    type={'textarea'}
+                    placeholder={this.useCasePlaceholder}
+                    rows={6}
                   />
-                )}
-              </Col>
-            </Row>
+                  {[LicenseType.COMMERCIAL, LicenseType.HOSPITAL].includes(
+                    this.selectedLicense
+                  ) && (
+                    <AvField
+                      name={FormKey.ANTICIPATED_REPORTS}
+                      label={
+                        'Anticipated # of reports annually for years 1, 2 and 3'
+                      }
+                      type={'textarea'}
+                      placeholder={
+                        'If you plan to incorporate OncoKB contents in sequencing reports, please provide an estimate of your anticipated volume over the next several years'
+                      }
+                    />
+                  )}
+                  {[LicenseType.RESEARCH_IN_COMMERCIAL].includes(
+                    this.selectedLicense
+                  ) && (
+                    <AvField
+                      name={FormKey.COMPANY_SIZE}
+                      label={'Company Size (# of employees)'}
+                      type={'input'}
+                    />
+                  )}
+                </Col>
+              </Row>
+            )}
             {this.selectedLicense === LicenseType.ACADEMIC &&
             !this.props.byAdmin ? (
               <>
