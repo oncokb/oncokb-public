@@ -22,9 +22,13 @@ import WindowStore from 'app/store/WindowStore';
 import SmallPageContainer from 'app/components/SmallPageContainer';
 import MessageToContact from 'app/shared/texts/MessageToContact';
 import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
-import { NewAccountForm } from 'app/components/newAccountForm/NewAccountForm';
+import {
+  FormSection,
+  NewAccountForm,
+} from 'app/components/newAccountForm/NewAccountForm';
 import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
+import _ from 'lodash';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -47,6 +51,7 @@ export type IRegisterProps = {
 };
 
 export const LICENSE_HASH_KEY = 'license';
+export const SHOW_HASH_KEY = 'show';
 
 @inject('routing', 'windowStore')
 @observer
@@ -54,6 +59,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   @observable registerStatus: RegisterStatus = RegisterStatus.NA;
   @observable registerError: OncoKBError;
   @observable selectedLicense: LicenseType | undefined;
+  @observable visibleSections: FormSection[] | undefined;
 
   readonly reactions: IReactionDisposer[] = [];
 
@@ -67,9 +73,32 @@ export class RegisterPage extends React.Component<IRegisterProps> {
             arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING,
           });
           if (queryStrings[LICENSE_HASH_KEY]) {
-            this.selectedLicense = queryStrings[
-              LICENSE_HASH_KEY
-            ] as LicenseType;
+            let urlLicense = queryStrings[LICENSE_HASH_KEY];
+            if (typeof urlLicense === 'string') {
+              urlLicense = urlLicense.toUpperCase();
+              this.selectedLicense = urlLicense as LicenseType;
+            }
+          }
+          if (queryStrings[LICENSE_HASH_KEY]) {
+            const showStr = queryStrings[SHOW_HASH_KEY];
+            switch (typeof showStr) {
+              case 'string':
+                if (showStr) {
+                  this.visibleSections = [
+                    showStr.toUpperCase(),
+                  ] as FormSection[];
+                }
+                break;
+              case 'object':
+                if (_.isArray(showStr)) {
+                  this.visibleSections = showStr.map(str =>
+                    str.toUpperCase()
+                  ) as FormSection[];
+                }
+                break;
+              default:
+                break;
+            }
           }
         },
         { fireImmediately: true }
@@ -194,6 +223,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
           isLargeScreen={this.props.windowStore.isLargeScreen}
           defaultLicense={this.selectedLicense}
           onSubmit={this.handleValidSubmit}
+          visibleSections={this.visibleSections}
           byAdmin={false}
           onSelectLicense={this.onSelectLicense}
         />
