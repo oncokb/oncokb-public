@@ -92,7 +92,7 @@ public class SlackController {
                 case GIVE_TRIAL_ACCESS:
                     user = userService.initiateTrialAccountActivation(action.getValue().toLowerCase());
                     userDTO = userMapper.userToUserDTO(user.get());
-                    mailService.sendActiveTrialMail(userDTO);
+                    mailService.sendActiveTrialMail(userDTO, false);
                     break;
                 case CHANGE_LICENSE_TYPE:
                     String value = action.getSelectedOption().getValue();

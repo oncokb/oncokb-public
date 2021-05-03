@@ -146,6 +146,9 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     }
     if (values.tokenValidDays) {
       newUser.tokenValidDays = Number(values.tokenValidDays);
+      newUser.notifyUserOnTrialCreation =
+        _.isArray(values.notifyUserOnTrialCreation) &&
+        values.notifyUserOnTrialCreation.length > 0;
     }
     this.props.onSubmit(newUser);
   }
@@ -522,13 +525,18 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   {this.isCommercialLicense && (
                     <>
                       <AvField
-                        name={[FormKey.BUS_CONTACT_EMAIL]}
+                        name={FormKey.BUS_CONTACT_EMAIL}
                         label={'Business Contact Email'}
                         type="email"
-                        validate={this.emailValidation}
+                        validate={{
+                          ...this.emailValidation,
+                          required: {
+                            value: false,
+                          },
+                        }}
                       />
                       <AvField
-                        name={[FormKey.BUS_CONTACT_PHONE]}
+                        name={FormKey.BUS_CONTACT_PHONE}
                         label={'Business Contact Phone Number'}
                         type="tel"
                       />
@@ -622,14 +630,24 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     />
                   </AvRadioGroup>
                   {this.selectedAccountType === AccountType.TRIAL ? (
-                    <div className={'mt-2'}>
-                      <AvField
-                        name="tokenValidDays"
-                        label="Account Expires in Days"
-                        required
-                        validate={{ number: true }}
-                      />
-                    </div>
+                    <>
+                      <div className={'mt-2'}>
+                        <AvField
+                          name="tokenValidDays"
+                          label="Account Expires in Days"
+                          required
+                          validate={{ number: true }}
+                        />
+                      </div>
+                      <div className={'mt-2'}>
+                        <AvCheckboxGroup name="notifyUserOnTrialCreation">
+                          <AvCheckbox
+                            label={'Send trial License agreement'}
+                            value={'true'}
+                          />
+                        </AvCheckboxGroup>
+                      </div>
+                    </>
                   ) : null}
                 </Col>
               </Row>

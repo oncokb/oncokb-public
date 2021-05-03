@@ -239,9 +239,12 @@ public class MailService {
     }
 
     @Async
-    public void sendActiveTrialMail(UserDTO user) {
+    public void sendActiveTrialMail(UserDTO user, Boolean newAccountCreation) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, MailType.ACTIVATE_FREE_TRIAL);
+
+        Context context = new Context();
+        context.setVariable("newAccountCreation", newAccountCreation);
+        sendEmailFromTemplate(user, MailType.ACTIVATE_FREE_TRIAL, context);
     }
 
     @Async
