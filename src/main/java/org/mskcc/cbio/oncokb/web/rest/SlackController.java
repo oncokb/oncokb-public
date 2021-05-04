@@ -100,6 +100,9 @@ public class SlackController {
                     userDTO.setLicenseType(newLicenseType);
                     this.userService.updateUser(userDTO);
                     break;
+                case CONVERT_TO_REGULAR_ACCOUNT:
+                    userService.convertTrialUserToRegular(userDTO);
+                    break;
                 case UPDATE_USER:
                     break;
                 default:

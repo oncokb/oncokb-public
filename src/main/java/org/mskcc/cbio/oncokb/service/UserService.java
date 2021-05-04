@@ -455,6 +455,20 @@ public class UserService {
         return updatedUserDTO;
     }
 
+    public void convertTrialUserToRegular(UserDTO userDTO) {
+        if (!userDTO.isActivated()) {
+            userDTO.setActivated(true);
+            Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+            userDTO = updatedUserDTO.get();
+        }
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        tokens.forEach(token -> {
+            token.setRenewable(true);
+            token.setExpiration(Instant.now().plusSeconds(HALF_YEAR_IN_SECONDS));
+            tokenService.save(token);
+        });
+    }
+
     private void generateTokenForUserIfNotExist(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
         // automatically generate a token for user if not exists
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
