@@ -176,7 +176,7 @@ public class SlackService {
         blocks.addAll(buildAdditionalInfoBlocks(userDTO, trialAccountInitiated));
 
         // Add action section
-        blocks.addAll(buildActionBlocks(userDTO, trialAccountInitiated));
+        blocks.addAll(buildActionBlocks(userDTO, trialAccountInitiated, isTrialAccount));
 
         return blocks;
     }
@@ -391,7 +391,7 @@ public class SlackService {
         return layoutBlocks;
     }
 
-    private List<LayoutBlock> buildActionBlocks(UserDTO userDTO, boolean trialAccountInitiated) {
+    private List<LayoutBlock> buildActionBlocks(UserDTO userDTO, boolean trialAccountInitiated, boolean isTrialAccount) {
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
         List<BlockElement> actionElements = new ArrayList<>();
 
@@ -403,6 +403,11 @@ public class SlackService {
         // Add button - Give Trial Access
         if (userDTO.getLicenseType() != LicenseType.ACADEMIC && !trialAccountInitiated && !userDTO.isActivated()) {
             actionElements.add(buildGiveTrialAccessButton(userDTO));
+        }
+
+        // Add button - Convert trial account to regular
+        if (isTrialAccount) {
+            actionElements.add(buildConvertToRegularAccountButton(userDTO));
         }
 
         // Add button - Update
@@ -437,6 +442,14 @@ public class SlackService {
         ButtonElement button = buildPrimaryButton("Give Trial Access", user.getLogin(), GIVE_TRIAL_ACCESS);
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
             button.setConfirm(buildConfirmationDialogObject("You are going to give the user 3 month trial period. The user will get notified through email. Once they are ok with the free trial license agreement, their account will be activated."));
+        }
+        return button;
+    }
+
+    private ButtonElement buildConvertToRegularAccountButton(UserDTO user) {
+        ButtonElement button = buildPrimaryButton("Convert to regular account", user.getLogin(), CONVERT_TO_REGULAR_ACCOUNT);
+        if (user.getLicenseType() != LicenseType.ACADEMIC) {
+            button.setConfirm(buildConfirmationDialogObject("You are going to convert a trial account to regular."));
         }
         return button;
     }
