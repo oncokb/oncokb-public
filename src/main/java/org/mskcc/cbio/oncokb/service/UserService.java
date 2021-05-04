@@ -16,11 +16,11 @@ import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
-import org.mskcc.cbio.oncokb.service.dto.Activation;
-import org.mskcc.cbio.oncokb.service.dto.AdditionalInfoDTO;
-import org.mskcc.cbio.oncokb.service.dto.LicenseAgreement;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.Activation;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.LicenseAgreement;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
-import org.mskcc.cbio.oncokb.service.dto.oncokbcore.TrialAccount;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
 import io.github.jhipster.security.RandomUtil;
@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE;
+import static org.mskcc.cbio.oncokb.util.StringUtil.getEmailDomain;
 
 /**
  * Service class for managing users.
@@ -260,6 +261,9 @@ public class UserService {
         userDetails.setCompany(userDTO.getCompany());
         userDetails.setCity(userDTO.getCity());
         userDetails.setCountry(userDTO.getCountry());
+        if (userDTO.getAdditionalInfo() != null) {
+            userDetails.setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
+        }
         userDetailsRepository.save(userDetails);
 
         this.clearUserCaches(newUser);
@@ -267,14 +271,19 @@ public class UserService {
         return newUser;
     }
 
-    private boolean removeNonActivatedUser(User existingUser) {
-        if (existingUser.getActivated()) {
+    public boolean isTrialAccount(UserDTO userDTO) {
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        return tokens.stream().filter(token -> !token.isRenewable()).findAny().isPresent();
+    }
+    public boolean trialAccountInitiated(UserDTO userDTO) {
+        if (
+            userDTO.getAdditionalInfo() == null
+                || userDTO.getAdditionalInfo().getTrialAccount() == null
+                || userDTO.getAdditionalInfo().getTrialAccount().getActivation() == null
+        ) {
             return false;
         }
-        userRepository.delete(existingUser);
-        userRepository.flush();
-        this.clearUserCaches(existingUser);
-        return true;
+        return StringUtils.isNotEmpty(userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey()) || userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate() != null;
     }
 
     public User createUser(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
@@ -320,44 +329,6 @@ public class UserService {
         generateTokenForUserIfNotExist(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable);
         log.debug("Created Information for User: {}", user);
         return user;
-    }
-
-    /**
-     * Update basic information (first name, last name, email, language) for the current user.
-     *
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
-     */
-    public void updateUser(
-        String firstName
-        , String lastName
-        , String email
-        , LicenseType licenseType
-        , String jobTitle
-        , String company
-        , String city
-        , String country
-        , String langKey
-        , String imageUrl
-    ) {
-        SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
-            .ifPresent(user -> {
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                if (email != null) {
-                    user.setEmail(email.toLowerCase());
-                }
-                user.setLangKey(langKey);
-                user.setImageUrl(imageUrl);
-                this.clearUserCaches(user);
-
-                getUpdatedUserDetails(user, licenseType, jobTitle, company, city, country);
-                log.debug("Changed Information for User: {}", user);
-            });
     }
 
     /**
@@ -482,6 +453,20 @@ public class UserService {
             generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
         }
         return updatedUserDTO;
+    }
+
+    public void convertTrialUserToRegular(UserDTO userDTO) {
+        if (!userDTO.isActivated()) {
+            userDTO.setActivated(true);
+            Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+            userDTO = updatedUserDTO.get();
+        }
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        tokens.forEach(token -> {
+            token.setRenewable(true);
+            token.setExpiration(Instant.now().plusSeconds(HALF_YEAR_IN_SECONDS));
+            tokenService.save(token);
+        });
     }
 
     private void generateTokenForUserIfNotExist(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {

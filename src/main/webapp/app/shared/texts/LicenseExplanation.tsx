@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 const LicenseExplanation: React.FunctionComponent = () => {
   return (
     <span>
-      A license is required to use OncoKB for commercial and/or clinical
-      purposes. OncoKB is accessible for no fee for research use in academic
-      setting.
+      A license is required to use OncoKB in a commercial setting or for
+      clinical purposes. OncoKB is freely accessible for research use in an
+      academic setting.
     </span>
   );
 };

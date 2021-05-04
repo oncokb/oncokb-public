@@ -126,7 +126,12 @@ public class UserResource {
                 managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
             }
             User newUser = userService.createUser(managedUserVM, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
-            mailService.sendCreationEmail(userMapper.userToUserDTO(newUser));
+            if (managedUserVM.getNotifyUserOnTrialCreation()) {
+                userService.initiateTrialAccountActivation(newUser.getEmail());
+                mailService.sendActiveTrialMail(userMapper.userToUserDTO(newUser), true);
+            } else {
+                mailService.sendCreationEmail(userMapper.userToUserDTO(newUser));
+            }
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
                 .body(newUser);

@@ -260,7 +260,7 @@ export const DEFAULT_MARGIN_BOTTOM_SM = 'mb-2';
 export const DEFAULT_MARGIN_BOTTOM_LG = 'mb-3';
 export const THRESHOLD_TABLE_FIXED_HEIGHT = 15;
 export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
-export const THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT = 30;
+export const THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT = 90;
 export const LG_TABLE_FIXED_HEIGHT = 640;
 export const SM_TABLE_FIXED_HEIGHT = 400;
 export const IMG_MAX_WIDTH = 800;
@@ -450,7 +450,7 @@ export const LICENSE_TITLES: { [key: string]: string } = {
   [LicenseType.ACADEMIC]: 'Research use in an academic setting',
   [LicenseType.RESEARCH_IN_COMMERCIAL]: 'Research use in a commercial setting',
   [LicenseType.HOSPITAL]:
-    'Use for patient services or reports in hospital/care setting',
+    'Use for patient services or reports in a hospital setting',
   [LicenseType.COMMERCIAL]: 'Use in a commercial product',
 };
 
@@ -484,8 +484,9 @@ export enum ACCOUNT_TITLES {
   LAST_NAME = 'Last Name',
   NAME = 'Name',
   EMAIL = 'Email',
-  POSITION = 'Job Title',
+  POSITION = 'Job Title / Position',
   COMPANY = 'Company',
+  COMPANY_SECTION_TITLE = 'Company Information',
   CITY = 'City',
   COUNTRY = 'Country',
   API_TOKEN = 'API Token',
