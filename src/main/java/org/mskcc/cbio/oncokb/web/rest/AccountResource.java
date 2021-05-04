@@ -4,10 +4,8 @@ package org.mskcc.cbio.oncokb.web.rest;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
-import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
@@ -38,8 +36,7 @@ import java.time.Instant;
 import java.util.*;
 
 import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
-import static org.mskcc.cbio.oncokb.config.Constants.MSK_EMAIL_DOMAIN;
-import static org.mskcc.cbio.oncokb.util.MainUtil.isMSKCommercialUser;
+import static org.mskcc.cbio.oncokb.util.MainUtil.isMSKUser;
 import static org.mskcc.cbio.oncokb.util.StringUtil.getEmailDomain;
 
 /**
@@ -172,7 +169,7 @@ public class AccountResource {
     }
 
     private boolean activateUser(UserDTO userDTO) {
-        if (isMSKCommercialUser(userDTO)) {
+        if (isMSKUser(userDTO)) {
             LicenseType registeredLicenseType = userDTO.getLicenseType();
             userDTO.setLicenseType(LicenseType.ACADEMIC);
             userService.approveUser(userDTO);
