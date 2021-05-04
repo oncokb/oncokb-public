@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.service.dto;
 import java.io.Serializable;
 import javax.persistence.Lob;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
 /**
  * A DTO for the {@link org.mskcc.cbio.oncokb.domain.UserDetails} entity.

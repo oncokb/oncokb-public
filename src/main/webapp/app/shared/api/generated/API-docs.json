@@ -1135,14 +1135,13 @@
               "LICENSE_REVIEW_COMMERCIAL",
               "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
               "LICENSE_REVIEW_HOSPITAL",
-              "SEND_INTAKE_FORM_COMMERCIAL",
-              "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL",
-              "SEND_INTAKE_FORM_HOSPITAL",
               "CLARIFY_ACADEMIC_FOR_PROFIT",
               "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "APPROVAL_MSK_IN_COMMERCIAL",
               "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
+              "TRIAL_ACCOUNT_IS_ACTIVATED",
+              "ACTIVATE_FREE_TRIAL",
               "TOKEN_HAS_BEEN_EXPOSED",
               "TOKEN_HAS_BEEN_EXPOSED_USER",
               "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
@@ -2353,9 +2352,24 @@
       "properties": {
         "trialAccount": {
           "$ref": "#/definitions/TrialAccount"
+        },
+        "userCompany": {
+          "$ref": "#/definitions/UserCompany"
         }
       },
       "title": "AdditionalInfoDTO"
+    },
+    "Contact": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        }
+      },
+      "title": "Contact"
     },
     "JSONObject": {
       "type": "object",
@@ -2443,14 +2457,13 @@
             "LICENSE_REVIEW_COMMERCIAL",
             "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
             "LICENSE_REVIEW_HOSPITAL",
-            "SEND_INTAKE_FORM_COMMERCIAL",
-            "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL",
-            "SEND_INTAKE_FORM_HOSPITAL",
             "CLARIFY_ACADEMIC_FOR_PROFIT",
             "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
+            "TRIAL_ACCOUNT_IS_ACTIVATED",
+            "ACTIVATE_FREE_TRIAL",
             "TOKEN_HAS_BEEN_EXPOSED",
             "TOKEN_HAS_BEEN_EXPOSED_USER",
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
@@ -2550,6 +2563,9 @@
           "minLength": 1,
           "maxLength": 50,
           "pattern": "^[_.@A-Za-z0-9-]*$"
+        },
+        "notifyUserOnTrialCreation": {
+          "type": "boolean"
         },
         "password": {
           "type": "string",
@@ -2710,6 +2726,27 @@
         }
       },
       "title": "User"
+    },
+    "UserCompany": {
+      "type": "object",
+      "properties": {
+        "anticipatedReports": {
+          "type": "string"
+        },
+        "businessContact": {
+          "$ref": "#/definitions/Contact"
+        },
+        "description": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string"
+        },
+        "useCase": {
+          "type": "string"
+        }
+      },
+      "title": "UserCompany"
     },
     "UserDTO": {
       "type": "object",
@@ -2875,14 +2912,13 @@
             "LICENSE_REVIEW_COMMERCIAL",
             "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
             "LICENSE_REVIEW_HOSPITAL",
-            "SEND_INTAKE_FORM_COMMERCIAL",
-            "SEND_INTAKE_FORM_RESEARCH_COMMERCIAL",
-            "SEND_INTAKE_FORM_HOSPITAL",
             "CLARIFY_ACADEMIC_FOR_PROFIT",
             "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
+            "TRIAL_ACCOUNT_IS_ACTIVATED",
+            "ACTIVATE_FREE_TRIAL",
             "TOKEN_HAS_BEEN_EXPOSED",
             "TOKEN_HAS_BEEN_EXPOSED_USER",
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",

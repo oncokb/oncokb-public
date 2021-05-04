@@ -55,11 +55,22 @@ export default class ActivateTrialFinish extends React.Component<{
         },
       })
       .then(
-        () => {
-          this.infoMessage =
-            'Your trial account has been activated. You will be redirected to the login page.';
+        user => {
+          this.infoMessage = `Your trial account has been activated. ${
+            user.resetKey
+              ? 'Please reset your password before logging in.'
+              : 'You will be redirected to the login page.'
+          }`;
           setTimeout(() => {
-            this.infoMessage = <Redirect to={PAGE_ROUTE.LOGIN} />;
+            if (user.resetKey) {
+              this.infoMessage = (
+                <Redirect
+                  to={`${PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}?key=${user.resetKey}`}
+                />
+              );
+            } else {
+              this.infoMessage = <Redirect to={PAGE_ROUTE.LOGIN} />;
+            }
           }, REDIRECT_TIMEOUT_MILLISECONDS);
         },
         (error: Error) => {

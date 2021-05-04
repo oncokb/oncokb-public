@@ -239,6 +239,15 @@ public class MailService {
     }
 
     @Async
+    public void sendActiveTrialMail(UserDTO user, Boolean newAccountCreation) {
+        log.debug("Sending password reset email to '{}'", user.getEmail());
+
+        Context context = new Context();
+        context.setVariable("newAccountCreation", newAccountCreation);
+        sendEmailFromTemplate(user, MailType.ACTIVATE_FREE_TRIAL, context);
+    }
+
+    @Async
     public void sendTrialAccountExpiresMail(int expiresInDays, List<UserDTO> users) {
         if (users == null || users.isEmpty()) {
             return;
@@ -300,19 +309,6 @@ public class MailService {
             applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, context);
     }
 
-    public MailType getIntakeFormMailType(LicenseType licenseType) {
-        switch (licenseType) {
-            case COMMERCIAL:
-                return MailType.SEND_INTAKE_FORM_COMMERCIAL;
-            case HOSPITAL:
-                return MailType.SEND_INTAKE_FORM_HOSPITAL;
-            case RESEARCH_IN_COMMERCIAL:
-                return MailType.SEND_INTAKE_FORM_RESEARCH_COMMERCIAL;
-            default:
-                return null;
-        }
-    }
-
     public List<String> getMailFrom() {
         List<String> mailFrom = new ArrayList<>();
         mailFrom.add(applicationProperties.getEmailAddresses().getRegistrationAddress());
@@ -339,12 +335,6 @@ public class MailService {
                 return Optional.of("email.license.review.title");
             case LICENSE_REVIEW_RESEARCH_COMMERCIAL:
                 return Optional.of("email.license.review.title");
-            case SEND_INTAKE_FORM_COMMERCIAL:
-                return Optional.of("email.license.review.title");
-            case SEND_INTAKE_FORM_HOSPITAL:
-                return Optional.of("email.license.review.title");
-            case SEND_INTAKE_FORM_RESEARCH_COMMERCIAL:
-                return Optional.of("email.license.review.title");
             case CLARIFY_ACADEMIC_FOR_PROFIT:
                 return Optional.of("email.license.clarify.title");
             case CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL:
@@ -353,6 +343,8 @@ public class MailService {
                 return Optional.of("email.account.expires.by.days.title");
             case APPROVAL_MSK_IN_COMMERCIAL:
                 return Optional.of("email.approval.title");
+            case ACTIVATE_FREE_TRIAL:
+                return Optional.of("email.active.free.trial.title");
             default:
                 return Optional.empty();
 
