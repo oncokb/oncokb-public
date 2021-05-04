@@ -363,7 +363,8 @@ public class SlackService {
 
     private boolean withClarificationNote(UserDTO userDTO) {
         boolean withClarificationNote = false;
-        if (this.applicationProperties.getAcademicEmailClarifyDomains().size() > 0 &&
+        if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) &&
+            this.applicationProperties.getAcademicEmailClarifyDomains().size() > 0 &&
             this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> userDTO.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
             withClarificationNote = true;
             mailService.sendEmailWithLicenseContext(userDTO, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
