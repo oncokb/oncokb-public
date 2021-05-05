@@ -140,10 +140,8 @@ export default class APIAccessPage extends React.Component<{
   });
 
   @action
-  onSelectLicense = (licenseKey: LicenseType) => {
-    this.props.routing.history.push(
-      `${PAGE_ROUTE.REGISTER}#${LICENSE_HASH_KEY}=${licenseKey}`
-    );
+  onApplyForLicense = () => {
+    this.props.routing.history.push(PAGE_ROUTE.REGISTER);
   };
 
   @computed
@@ -336,12 +334,7 @@ export default class APIAccessPage extends React.Component<{
               <Row>
                 <Col sm={12}>
                   <div className={'mb-4'}>
-                    <Button
-                      size={'lg'}
-                      onClick={() =>
-                        this.onSelectLicense(LicenseType.COMMERCIAL)
-                      }
-                    >
+                    <Button size={'lg'} onClick={this.onApplyForLicense}>
                       Apply for a license
                     </Button>
                   </div>
