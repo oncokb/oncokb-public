@@ -108,7 +108,7 @@ public class SlackController {
                 default:
                     break;
             }
-            this.slackService.sendLatestBlocks(pl.getResponseUrl(), userDTO, userService.isTrialAccount(userDTO), userService.trialAccountInitiated(userDTO));
+            this.slackService.sendLatestBlocks(pl.getResponseUrl(), userDTO, userService.isTrialAccount(userDTO), userService.trialAccountInitiated(userDTO), pl);
         }
         return new ResponseEntity<>("", HttpStatus.OK);
     }

@@ -65,14 +65,14 @@ public class SlackService {
         if (StringUtils.isEmpty(this.applicationProperties.getUserRegistrationWebhook())) {
             log.debug("\tSkipped, the webhook is not configured");
         } else {
-            List<LayoutBlock> layoutBlocks = this.buildBlocks(user, isTrialAccount, trialAccountInitiated);
+            List<LayoutBlock> layoutBlocks = this.buildBlocks(user, isTrialAccount, trialAccountInitiated, null);
             this.sendBlocks(this.applicationProperties.getUserRegistrationWebhook(), layoutBlocks);
         }
     }
 
     @Async
-    public void sendLatestBlocks(String url, UserDTO userDTO, boolean isTrialAccount, boolean trialAccountInitiated) {
-        this.sendBlocks(url, this.buildBlocks(userDTO, isTrialAccount, trialAccountInitiated));
+    public void sendLatestBlocks(String url, UserDTO userDTO, boolean isTrialAccount, boolean trialAccountInitiated, BlockActionPayload blockActionPayload) {
+        this.sendBlocks(url, this.buildBlocks(userDTO, isTrialAccount, trialAccountInitiated, blockActionPayload));
     }
 
     @Async
@@ -154,7 +154,7 @@ public class SlackService {
         }
     }
 
-    public List<LayoutBlock> buildBlocks(UserDTO userDTO, boolean isTrialAccount, boolean trialAccountInitiated) {
+    public List<LayoutBlock> buildBlocks(UserDTO userDTO, boolean isTrialAccount, boolean trialAccountInitiated, BlockActionPayload responseBlockActionPayload) {
         List<LayoutBlock> blocks = new ArrayList<>();
 
         // Add mention
@@ -173,7 +173,7 @@ public class SlackService {
         blocks.addAll(buildUserInfoBlocks(userDTO));
 
         // Add additional info section
-        blocks.addAll(buildAdditionalInfoBlocks(userDTO, trialAccountInitiated));
+        blocks.addAll(buildAdditionalInfoBlocks(userDTO, responseBlockActionPayload));
 
         // Add action section
         blocks.addAll(buildActionBlocks(userDTO, trialAccountInitiated, isTrialAccount));
@@ -372,24 +372,45 @@ public class SlackService {
         return withClarificationNote;
     }
 
-    private List<LayoutBlock> buildAdditionalInfoBlocks(UserDTO userDTO, boolean trialAccountInitiated) {
+    private List<LayoutBlock> buildAdditionalInfoBlocks(UserDTO userDTO, BlockActionPayload responseBlockActionPayload) {
         final String ACADEMIC_CLARIFICATION_NOTE = "We have sent the clarification email to the user asking why they could not use an institution email to register.";
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
+        ActionId actionId = null;
+        BlockActionPayload.User actionUser = null;
+
+        if (responseBlockActionPayload != null) {
+            actionId = getActionId(responseBlockActionPayload);
+            actionUser = responseBlockActionPayload.getUser();
+        }
 
         if (withClarificationNote(userDTO)) {
             layoutBlocks.add(buildPlainTextBlock(ACADEMIC_CLARIFICATION_NOTE));
         }
-        if (trialAccountInitiated) {
-            layoutBlocks.add(buildPlainTextBlock("We have initialized the trial account for the user."));
-        }
         if (isMSKUser(userDTO)) {
             layoutBlocks.add(buildPlainTextBlock("The user has been approved and notified automatically. We also changed their license to Academic and clarified with the user."));
         }
-
+        if (actionId != null) {
+            if (actionId.equals(GIVE_TRIAL_ACCESS)) {
+                layoutBlocks.add(buildPlainTextBlock(getTextWithUser("The trial account has been initialized and notified", actionUser.getName())));
+            }
+            if (actionId.equals(APPROVE_USER)) {
+                layoutBlocks.add(buildPlainTextBlock(getTextWithUser("The user has been approved and notified", actionUser.getName())));
+            }
+        }
         if (layoutBlocks.size() > 0) {
             layoutBlocks.add(DividerBlock.builder().build());
         }
         return layoutBlocks;
+    }
+
+    private String getTextWithUser(String body, String userName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(body);
+        if (StringUtils.isNotEmpty(userName)) {
+            sb.append(" by " + userName);
+        }
+        sb.append(".");
+        return sb.toString();
     }
 
     private List<LayoutBlock> buildActionBlocks(UserDTO userDTO, boolean trialAccountInitiated, boolean isTrialAccount) {
