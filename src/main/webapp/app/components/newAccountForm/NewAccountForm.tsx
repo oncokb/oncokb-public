@@ -211,10 +211,15 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
           </p>
           <p>
             <b>Please complete the form below to create your OncoKB account.</b>{' '}
-            If your company already has a license, you can skip certain fields
-            and we will grant you API access shortly. Otherwise, we will contact
-            you with license terms. You can also reach out to{' '}
-            <LicenseInquireLink /> for more information.
+            {this.props.visibleSections?.includes(FormSection.COMPANY) ? (
+              <span>
+                If your company already has a license, you can skip certain
+                fields and we will grant you API access shortly. Otherwise, we
+                will contact you with license terms.
+              </span>
+            ) : null}{' '}
+            You can also reach out to <LicenseInquireLink /> for more
+            information.
           </p>
         </>
       );
@@ -227,9 +232,15 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
           </p>
           <p>
             <b>Please complete the form below to create your OncoKB account.</b>{' '}
-            If your hospital already has a license, we will grant you API access
-            shortly. Otherwise, we will contact you with license terms. You can
-            also reach out to <LicenseInquireLink /> for more information.
+            {this.props.visibleSections?.includes(FormSection.COMPANY) ? (
+              <span>
+                If your hospital already has a license, we will grant you API
+                access shortly. Otherwise, we will contact you with license
+                terms.
+              </span>
+            ) : null}{' '}
+            You can also reach out to <LicenseInquireLink /> for more
+            information.
           </p>
         </>
       );
@@ -242,9 +253,15 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
           </p>
           <p>
             <b>Please complete the form below to create your OncoKB account.</b>{' '}
-            If your company already has a license, we will grant you API access
-            shortly. Otherwise, we will contact you with license terms. You can
-            also reach out to <LicenseInquireLink /> for more information.
+            {this.props.visibleSections?.includes(FormSection.COMPANY) ? (
+              <span>
+                If your company already has a license, we will grant you API
+                access shortly. Otherwise, we will contact you with license
+                terms.
+              </span>
+            ) : null}{' '}
+            You can also reach out to <LicenseInquireLink /> for more
+            information.
           </p>
         </>
       );
