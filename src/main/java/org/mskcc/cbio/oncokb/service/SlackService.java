@@ -29,6 +29,7 @@ import org.thymeleaf.context.Context;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.Constants.*;
@@ -428,7 +429,7 @@ public class SlackService {
     }
 
     private ButtonElement buildUpdateUserButton(UserDTO user) {
-        return buildPrimaryButton("Update Info Above", user.getLogin(), UPDATE_USER);
+        return buildButton("Update Info Above", user.getLogin(), UPDATE_USER);
     }
 
     private ButtonElement buildApproveButton(UserDTO user) {
@@ -440,7 +441,7 @@ public class SlackService {
     }
 
     private ButtonElement buildGiveTrialAccessButton(UserDTO user) {
-        ButtonElement button = buildPrimaryButton("Give Trial Access", user.getLogin(), GIVE_TRIAL_ACCESS);
+        ButtonElement button = buildButton("Give Trial Access", user.getLogin(), GIVE_TRIAL_ACCESS);
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
             button.setConfirm(buildConfirmationDialogObject("You are going to give the user 3 month trial period. The user will get notified through email. Once they are ok with the free trial license agreement, their account will be activated."));
         }
@@ -448,7 +449,7 @@ public class SlackService {
     }
 
     private ButtonElement buildConvertToRegularAccountButton(UserDTO user) {
-        ButtonElement button = buildPrimaryButton("Convert to regular account", user.getLogin(), CONVERT_TO_REGULAR_ACCOUNT);
+        ButtonElement button = buildButton("Convert to regular account", user.getLogin(), CONVERT_TO_REGULAR_ACCOUNT);
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
             button.setConfirm(buildConfirmationDialogObject("You are going to convert a trial account to regular."));
         }
@@ -456,9 +457,21 @@ public class SlackService {
     }
 
     private ButtonElement buildPrimaryButton(String text, String value, ActionId actionId) {
+        return buildButton(text, value, actionId, ButtonStyle.PRIMARY);
+    }
+
+    private ButtonElement buildDangerButton(String text, String value, ActionId actionId) {
+        return buildButton(text, value, actionId, ButtonStyle.DANGER);
+    }
+
+    private ButtonElement buildButton(String text, String value, ActionId actionId) {
+        return buildButton(text, value, actionId, ButtonStyle.DEFAULT);
+    }
+
+    private ButtonElement buildButton(String text, String value, ActionId actionId, ButtonStyle buttonStyle) {
         ButtonElement button = ButtonElement.builder()
             .text(PlainTextObject.builder().emoji(true).text(text).build())
-            .style("primary")
+            .style(buttonStyle == null ? ButtonStyle.DEFAULT.getStyle() : buttonStyle.getStyle())
             .actionId(actionId.getId())
             .value(value)
             .build();
@@ -467,5 +480,18 @@ public class SlackService {
 
     private LayoutBlock buildPlainTextBlock(String text) {
         return SectionBlock.builder().text(PlainTextObject.builder().text(text).build()).build();
+    }
+}
+
+enum ButtonStyle {
+    PRIMARY("primary"), DEFAULT("default"), DANGER("danger");
+    String style;
+
+    ButtonStyle(String style) {
+        this.style = style;
+    }
+
+    public String getStyle() {
+        return style;
     }
 }
