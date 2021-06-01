@@ -486,16 +486,18 @@ public class SlackService {
     }
 
     private ButtonElement buildButton(String text, String value, ActionId actionId) {
-        return buildButton(text, value, actionId, ButtonStyle.DEFAULT);
+        return buildButton(text, value, actionId, null);
     }
 
     private ButtonElement buildButton(String text, String value, ActionId actionId, ButtonStyle buttonStyle) {
         ButtonElement button = ButtonElement.builder()
             .text(PlainTextObject.builder().emoji(true).text(text).build())
-            .style(buttonStyle == null ? ButtonStyle.DEFAULT.getStyle() : buttonStyle.getStyle())
             .actionId(actionId.getId())
             .value(value)
             .build();
+        if (buttonStyle != null) {
+            button.setStyle(buttonStyle.getStyle());
+        }
         return button;
     }
 
@@ -505,7 +507,7 @@ public class SlackService {
 }
 
 enum ButtonStyle {
-    PRIMARY("primary"), DEFAULT("default"), DANGER("danger");
+    PRIMARY("primary"), DANGER("danger");
     String style;
 
     ButtonStyle(String style) {
