@@ -264,8 +264,8 @@ public class MailService {
         String content = templateEngine.process("mail/" + TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE.getTemplateName(), context);
 
         try {
-            sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getLicenseAddress(), null, "The list of expiring trial accounts", content, null, false, true);
-            log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getTechDevAddress());
+            sendEmail(applicationProperties.getEmailAddresses().getLicenseAddress(), applicationProperties.getEmailAddresses().getLicenseAddress(), null, "The list of expiring trial accounts", content, null, false, true);
+            log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getLicenseAddress());
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
         }
