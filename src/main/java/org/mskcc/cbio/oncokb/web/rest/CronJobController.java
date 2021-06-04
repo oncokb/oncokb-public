@@ -208,12 +208,12 @@ public class CronJobController {
     @GetMapping(path = "/user-usage-analysis")
     public void analyzeUserUsage() throws IOException {
         log.info("User usage analysis started...");
-        List<UserTokenUsageWithInfo> tokenStats =  tokenStatsService.getTokenUsageAnalysis(Instant.now().minus(365, ChronoUnit.DAYS));
+        List<UserTokenUsageWithInfo> tokenStats = tokenStatsService.getTokenUsageAnalysis(Instant.now().minus(365, ChronoUnit.DAYS));
         UsageSummary resourceSummary = new UsageSummary();
         Map<Long, UserUsage> userSummary = new HashMap<>();
         Map<String, UsageSummary> resourceDetail = new HashMap<>();
 
-        for (UserTokenUsageWithInfo state: tokenStats){
+        for (UserTokenUsageWithInfo state : tokenStats) {
             ResourceModel resource = new ResourceModel(state.getResource());
             String endpoint = resource.getEndpoint();
             int count = state.getCount();
@@ -225,7 +225,7 @@ public class CronJobController {
             // Deal with user usage
             long userId = state.getToken().getUser().getId();
             User user = state.getToken().getUser();
-            if (!userSummary.containsKey(userId)){
+            if (!userSummary.containsKey(userId)) {
                 userSummary.put(userId, new UserUsage());
                 UserUsage currentUsage = userSummary.get(userId);
                 currentUsage.setUserFirstName(user.getFirstName());
@@ -233,7 +233,7 @@ public class CronJobController {
                 currentUsage.setUserEmail(user.getEmail());
                 currentUsage.setSummary(new UsageSummary());
                 Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
-                if (userDetails.isPresent()){
+                if (userDetails.isPresent()) {
                     currentUsage.setJobTitle(userDetails.get().getJobTitle());
                     currentUsage.setCompany(userDetails.get().getCompany());
                     currentUsage.setLicenseType(userDetails.get().getLicenseType().getName());
@@ -243,11 +243,11 @@ public class CronJobController {
             calculateUsageSummary(currentUsageSummary, endpoint, count, time);
 
             // Deal with resource detail
-            if (!resourceDetail.containsKey(endpoint)){
+            if (!resourceDetail.containsKey(endpoint)) {
                 resourceDetail.put(endpoint, new UsageSummary());
             }
             String userEmail = user.getEmail();
-            calculateUsageSummary(resourceDetail.get(endpoint), userEmail, count, time);       
+            calculateUsageSummary(resourceDetail.get(endpoint), userEmail, count, time);
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -267,17 +267,17 @@ public class CronJobController {
         log.info("User usage analysis completed!");
     }
 
-    private void calculateUsageSummary(UsageSummary usageSummary, String key, int count, String time){
+    private void calculateUsageSummary(UsageSummary usageSummary, String key, int count, String time) {
         // Deal with year summary
         usageSummary.getYear().put(key, usageSummary.getYear().getOrDefault(key, 0) + count);
         // Deal with month summary
-        if (!usageSummary.getMonth().containsKey(time)){
+        if (!usageSummary.getMonth().containsKey(time)) {
             usageSummary.getMonth().put(time, new JSONObject());
-        }           
-        if (!usageSummary.getMonth().get(time).containsKey(key)){
+        }
+        if (!usageSummary.getMonth().get(time).containsKey(key)) {
             usageSummary.getMonth().get(time).put(key, new Integer(0));
         }
-        usageSummary.getMonth().get(time).put(key, (Integer)usageSummary.getMonth().get(time).get(key) + (Integer)count);
+        usageSummary.getMonth().get(time).put(key, (Integer) usageSummary.getMonth().get(time).get(key) + (Integer) count);
     }
 
     /**
@@ -286,7 +286,7 @@ public class CronJobController {
     @GetMapping(path = "/check-trial-accounts")
     public void checkTrialAccounts() {
         log.info("Started the cronjob to check the status of trial accounts");
-        final int DAYS_TO_CHECK = 3;
+        final int DAYS_TO_CHECK = 7;
         List<Token> tokens = tokenService
             .findAllExpiresBeforeDate(Instant.now().plusSeconds(DAY_IN_SECONDS * DAYS_TO_CHECK))
             .stream()
@@ -306,6 +306,7 @@ public class CronJobController {
 
     /**
      * Check if user tokens has been exposed on Internet.
+     *
      * @throws IOException
      * @throws InterruptedException
      * @author Yifu Yao
@@ -314,40 +315,39 @@ public class CronJobController {
     public void checkExposedTokens() throws IOException, InterruptedException {
         // Get all tokens from database
         List<Token> tokens = tokenService
-                                .findAll()
-                                .stream()
-                                .filter(token -> token.getExpiration().isAfter(Instant.now()))
-                                .collect(Collectors.toList());
+            .findAll()
+            .stream()
+            .filter(token -> token.getExpiration().isAfter(Instant.now()))
+            .collect(Collectors.toList());
         log.info("Searching exposed tokens pipeline begins...");
         List<ExposedToken> results = new ArrayList<>();
         List<ExposedToken> unverifiedResults = new ArrayList<>();
-        
+
         // Check if current google searching process can be used
         boolean googleSearching = true;
         googleSearching = googleSearchingTest();
         // Check if current baidu searching process can be used
         boolean baiduSearching = true;
         baiduSearching = baiduSearchingTest();
-        
+
         // Check each token
-        for (Token token : tokens){
+        for (Token token : tokens) {
             String q = token.getToken().toString();
 
-            // If can be found on GitHub. 
+            // If can be found on GitHub.
             int githubCount = 0;
             try {
                 GitHub github = new GitHubBuilder().withOAuthToken(applicationProperties.getGithubToken()).build();
                 List<GHContent> gitRes = github.searchContent().q(q).list().toList();
                 githubCount = gitRes.size();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
             // If can be found on Google
             int googleCount = 0;
-            if (googleSearching){
-                try{
+            if (googleSearching) {
+                try {
                     // Get the number of google searching results.
                     HttpEntity entity = getGoogleResponse(q).getEntity();
                     Document googleDoc = Jsoup.parse(EntityUtils.toString(entity));
@@ -361,41 +361,39 @@ public class CronJobController {
                         if (description.indexOf(q) == -1)
                             googleCount = 0;
                     }
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
             // If can be found on Baidu
             int baiduCount = 0;
-            if (baiduSearching){
-                try{
+            if (baiduSearching) {
+                try {
                     // Get the number of Baidu searching results.
                     Document document = Jsoup.connect(String.format("https://www.baidu.com/s?wd=\"%s\"", q)).get();
                     Elements elements = document.select("div.result.c-container");
                     baiduCount = elements.size();
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
             UserDTO user = userMapper.userToUserDTO(token.getUser());
             // If token was found on GitHub, update it with a new token and send email to user.
-            if (githubCount > 0){
+            if (githubCount > 0) {
                 ExposedToken t = generateExposedToken(token, user, "GitHub");
                 results.add(t);
                 updateExposedToken(token);
                 mailService.sendMailToUserWhenTokenExposed(user, t);
             }
             // If token was found on Google/Baidu, send notification to dev team to check.
-            if (googleCount > 0 || baiduCount > 0){
+            if (googleCount > 0 || baiduCount > 0) {
                 List<String> source = new ArrayList<>();
-                if (googleCount > 0){
+                if (googleCount > 0) {
                     source.add("Google");
                 }
-                if (baiduCount > 0){
+                if (baiduCount > 0) {
                     source.add("Baidu");
                 }
                 unverifiedResults.add(generateExposedToken(token, user, source.stream().collect(Collectors.joining(", "))));
@@ -403,20 +401,21 @@ public class CronJobController {
             sleep(1000);
         }
         log.info("Searching exposed tokens pipeline finished!");
-        // If any potential exposed tokens were be found, send notification to dev team. 
-        if (!results.isEmpty() || !unverifiedResults.isEmpty()){
+        // If any potential exposed tokens were be found, send notification to dev team.
+        if (!results.isEmpty() || !unverifiedResults.isEmpty()) {
             mailService.sendExposedTokensInfoMail(results, unverifiedResults);
         }
     }
 
     /**
      * Generate a object with all information of an exposed token. Used to send email.
+     *
      * @param token
      * @param user
      * @param source
      * @return
      */
-    private ExposedToken generateExposedToken(Token token, UserDTO user, String source){
+    private ExposedToken generateExposedToken(Token token, UserDTO user, String source) {
         ExposedToken t = new ExposedToken();
         t.setToken(token.getToken().toString());
         t.setEmail(user.getEmail());
@@ -429,6 +428,7 @@ public class CronJobController {
 
     /**
      * Request google search
+     *
      * @param query
      * @return
      */
@@ -438,18 +438,19 @@ public class CronJobController {
         HttpGet request = new HttpGet(uri);
         HttpResponse result = null;
         try {
-          result = client.execute(request);
+            result = client.execute(request);
         } catch (IOException e) {
-          e.printStackTrace();
+            e.printStackTrace();
         }
         return result;
     }
 
     /**
      * Create a new token for exposed one
+     *
      * @param token
      */
-    private void updateExposedToken(Token token){
+    private void updateExposedToken(Token token) {
         tokenProvider.createToken(token);
         token.setExpiration(Instant.now());
         tokenService.save(token);
@@ -457,10 +458,11 @@ public class CronJobController {
 
     /**
      * Google searching test process. Check if google search response structure has changed.
+     *
      * @return
      */
-    private boolean googleSearchingTest(){
-        try{
+    private boolean googleSearchingTest() {
+        try {
             HttpEntity entity = getGoogleResponse("test").getEntity();
             Document googleDoc = Jsoup.parse(EntityUtils.toString(entity));
             // Result items will be wrapped under h3 tags.
@@ -468,23 +470,21 @@ public class CronJobController {
             if (!resultEle.isEmpty()) {
                 // Description of results can be located at this xpath.
                 Elements descriptionEle = googleDoc.select(".kCrYT > div > div > div > div > div");
-                if (descriptionEle.isEmpty()){
+                if (descriptionEle.isEmpty()) {
                     mailService.sendMailWhenSearchingStructrueChange("Google");
                     return false;
                 }
-                // Analysis description to see if keyword could be found. 
+                // Analysis description to see if keyword could be found.
                 String description = descriptionEle.text();
-                if (description.indexOf("test") == -1){
+                if (description.indexOf("test") == -1) {
                     mailService.sendMailWhenSearchingStructrueChange("Google");
                     return false;
                 }
-            }
-            else{
+            } else {
                 mailService.sendMailWhenSearchingStructrueChange("Google");
                 return false;
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
@@ -492,20 +492,20 @@ public class CronJobController {
 
     /**
      * Baidu searching test process. Check if baidu search response structure has changed.
+     *
      * @return
      */
-    private boolean baiduSearchingTest(){
-        try{
+    private boolean baiduSearchingTest() {
+        try {
             // Get Baidu searching result items.
             Document document = Jsoup.connect(String.format("https://www.baidu.com/s?wd=\"%s\"", "test")).get();
             Elements elements = document.select("div.result.c-container");
             // If nothing found, structure may has been changed.
-            if (elements.isEmpty()){
+            if (elements.isEmpty()) {
                 mailService.sendMailWhenSearchingStructrueChange("Baidu");
                 return false;
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
