@@ -121,6 +121,90 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '06152021': {
+    updatedImplication: [
+      [
+        '1',
+        'ERBB2',
+        'Amplification',
+        'Esophagogastric Cancer',
+        'Pembrolizumab + Trastuzumab + Chemotherapy',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-grants-accelerated-approval-pembrolizumab-her2-positive-gastric-cancer'
+            }
+            approval={'Pembrolizumab + Trastuzumab + Chemotherapy'}
+          />
+          <PMIDLink pmids={'33167735'} />
+        </WithSeparator>,
+      ],
+      [
+        '1',
+        'FGFR2',
+        'Fusions',
+        'Cholangiocarcinoma',
+        'Infigratinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-grants-accelerated-approval-infigratinib-metastatic-cholangiocarcinoma'
+            }
+            approval={'Infigratinib'}
+          />
+          <AbstractLink
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2021.39.3_suppl.265?af=R'
+            }
+            abstract={'Javle et al. Abstract# 265, ASCO 2021'}
+          />
+        </WithSeparator>,
+      ],
+      [
+        '4',
+        'ARID1A',
+        'Truncating Mutations',
+        'All Solid Tumors',
+        'Tazemetostat',
+        <PMIDLink pmids={'25686104, 32506298'} />,
+      ],
+      [
+        '4',
+        'ARID1A',
+        'Truncating Mutations',
+        'All Solid Tumors',
+        'PLX2853',
+        <PMIDLink pmids={'29760405, 31913353'} />,
+      ],
+    ],
+    changedAnnotation: [
+      [
+        'KRAS',
+        'G12C',
+        'Non-Small Cell Lung Cancer',
+        'Sotorasib',
+        '3A',
+        '1',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-grants-accelerated-approval-sotorasib-kras-g12c-mutated-nsclc'
+            }
+            approval={'sotorasib'}
+          />
+          <PMIDLink pmids={'34096690'} />
+        </WithSeparator>,
+      ],
+    ],
+    news: [
+      <span>
+        Updated Level 1 alterations in EZH2, IDH1, IDH2 and PIK3CA to only
+        include alterations specified in the FDA-approved companion diagnostic
+        test required for use of the drug by the FDA-approved drug labels of
+        tazemetostat, ivosidenib, enasidenib and alpelisib respectively.
+      </span>,
+    ],
+  },
   '04142021': {
     priorityNews: [
       <span>
