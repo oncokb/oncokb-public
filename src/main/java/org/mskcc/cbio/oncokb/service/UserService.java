@@ -503,6 +503,10 @@ public class UserService {
         return userRepository.findAllActivatedWithoutTokens().stream().map(user -> userMapper.userToUserDTO(user)).collect(Collectors.toList());
     }
 
+    public List<UserDTO> getAllNotActivatedUsersCreatedAfterOneWeekAgo(){
+        return userRepository.findAllByActivatedIsFalseAndActivationKeyIsNullAndCreatedDateAfter(Instant.now().minus(7, ChronoUnit.DAYS)).stream().map(user -> userMapper.userToUserDTO(user)).collect(Collectors.toList());
+    }
+
     public void removeNotActivatedUsers() {
         userRepository
             .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(jHipsterProperties.getAuditEvents().getRetentionPeriod(), ChronoUnit.DAYS))
