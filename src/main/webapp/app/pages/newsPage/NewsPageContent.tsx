@@ -81,8 +81,8 @@ export const CDX_COLUMNS = [
   { name: 'Gene' },
   { name: 'Cancer Type' },
   { name: 'Drug' },
-  { name: 'Previous Biomarker association' },
-  { name: 'Current Biomarker association' },
+  { name: 'Previous Biomarker Association' },
+  { name: 'Current Biomarker Association' },
   { name: 'Evidence' },
 ];
 export const NEWLY_ADDED_LEVEL_FOUR = [
@@ -207,7 +207,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             link={
               'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-grants-accelerated-approval-sotorasib-kras-g12c-mutated-nsclc'
             }
-            approval={'sotorasib'}
+            approval={'Sotorasib'}
           />
           <PMIDLink pmids={'34096690'} />
         </WithSeparator>,
@@ -215,9 +215,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     news: [
       <span>
-        Updated several Level 1 therapeutic biomarker associations for EZH2,
-        IDH1, IDH2 and PIK3CA to align with the biomarkers specified in each
-        FDA-approved companion diagnostic test
+        Updated Level 1 therapeutic biomarker associations for EZH2, IDH1, IDH2
+        and PIK3CA to align with the biomarkers specified in each FDA-approved
+        companion diagnostic test
         <SimpleTable
           columns={CDX_COLUMNS}
           rows={[
