@@ -133,6 +133,12 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '06172021': {
+    priorityNews: [
+      <span>
+        The official OncoKB hugo symbols and gene aliases now come from the{' '}
+        <Linkout link={'https://www.genenames.org'}>HGNC</Linkout> gene list
+      </span>,
+    ],
     updatedImplication: [
       [
         '1',
@@ -278,10 +284,6 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           })}
           theadClassName={mainstyle.changedAnnotationTableHead}
         />
-      </span>,
-      <span>
-        The official OncoKB hugo symbols and gene aliases now come from the{' '}
-        <Linkout link={'https://www.genenames.org'}>HGNC</Linkout> gene list
       </span>,
     ],
   },
