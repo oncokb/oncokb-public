@@ -279,6 +279,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           theadClassName={mainstyle.changedAnnotationTableHead}
         />
       </span>,
+      <span>
+        The official OncoKB hugo symbols and gene aliases now come from the{' '}
+        <Linkout link={'https://www.genenames.org'}>HGNC</Linkout> gene list
+      </span>,
     ],
   },
   '04142021': {
