@@ -30,6 +30,8 @@ import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLin
 import { AbstractLink, FdaApprovalLink } from 'app/pages/newsPage/Links';
 import WithSeparator from 'react-with-separator';
 import PmidItem from 'app/components/PmidItem';
+import mainstyle from 'app/pages/newsPage/main.module.scss';
+import { PMALink } from 'app/shared/links/PMALink';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -74,6 +76,15 @@ export const CHANGED_ANNOTATION_COLUMNS = [
   { name: 'Reason' },
 ];
 
+export const CDX_COLUMNS = [
+  { name: 'Level' },
+  { name: 'Gene' },
+  { name: 'Cancer Type' },
+  { name: 'Drug' },
+  { name: 'Previous Biomarker association' },
+  { name: 'Current Biomarker association' },
+  { name: 'Evidence' },
+];
 export const NEWLY_ADDED_LEVEL_FOUR = [
   ['ATM', 'Oncogenic Mutations', 'Prostate Cancer', 'Olaparib'],
   [
@@ -121,7 +132,7 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '06152021': {
+  '06172021': {
     updatedImplication: [
       [
         '1',
@@ -198,10 +209,75 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     news: [
       <span>
-        Updated Level 1 alterations in EZH2, IDH1, IDH2 and PIK3CA to only
-        include alterations specified in the FDA-approved companion diagnostic
-        test required for use of the drug by the FDA-approved drug labels of
-        tazemetostat, ivosidenib, enasidenib and alpelisib respectively.
+        Updated several Level 1 therapeutic biomarker associations for EZH2,
+        IDH1, IDH2 and PIK3CA to align with the biomarkers specified in each
+        FDA-approved companion diagnostic test
+        <SimpleTable
+          columns={CDX_COLUMNS}
+          rows={[
+            [
+              '1',
+              'EZH2',
+              'Follicular Lymphoma',
+              'Tazemetostat',
+              'Oncogenic Mutations',
+              'Y646N, Y646F, Y646H, Y646S, Y646C, A682G, A692V',
+              <PMALink pma={'P200014'} />,
+            ],
+            [
+              '1',
+              'IDH1',
+              'AML',
+              'Ivosidenib',
+              'Oncogenic Mutations',
+              'R132C, R132H, R132G, R132S, R132L',
+              <PMALink pma={'P170041'} />,
+            ],
+            [
+              '1',
+              'IDH2',
+              'AML',
+              'Enasidenib',
+              'Oncogenic Mutations',
+              'R140Q, R140L, R140G, R140W, R172K, R172M, R172G, R172S, R172W',
+              <PMALink pma={'P170005'} />,
+            ],
+            [
+              '1',
+              'PIK3CA',
+              'Breast Cancer',
+              'Alpelisib + Fulvestrant',
+              'Oncogenic Mutations',
+              'C420R, E542K, E545A, E545D, E545G, E545K, Q546E, Q546R, H1047L, H1047R, H1047Y',
+              <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                <span>
+                  FoundationOne CDx - <PMALink pma={'P170019/S006'} />
+                </span>
+                <span>
+                  Therascreen - <PMALink pma={'P190001'} />
+                </span>
+                <span>
+                  FoundationOne Liquid CDx -{' '}
+                  <WithSeparator separator={', '}>
+                    <PMALink pma={'P200006'} />
+                    <PMALink pma={'P200016'} />
+                  </WithSeparator>
+                </span>
+              </WithSeparator>,
+            ],
+          ].map((record, index) => {
+            return {
+              key: `06172021-CDX-COLUMN-${index}`,
+              content: record.map((subItem, subIndex) => {
+                return {
+                  key: `06172021-CDX-COLUMN-${index}-${subIndex}`,
+                  content: subItem,
+                };
+              }),
+            };
+          })}
+          theadClassName={mainstyle.changedAnnotationTableHead}
+        />
       </span>,
     ],
   },
