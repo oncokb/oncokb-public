@@ -753,13 +753,13 @@
         "deprecated": false
       }
     },
-    "/api/cronjob/email-not-activated-users-list": {
+    "/api/cronjob/email-unapproved-users-list": {
       "get": {
         "tags": [
           "cron-job-controller"
         ],
-        "summary": "emailNotActivatedUsersList",
-        "operationId": "emailNotActivatedUsersListUsingGET",
+        "summary": "emailUnapprovedUsersList",
+        "operationId": "emailUnapprovedUsersListUsingGET",
         "produces": [
           "*/*"
         ],

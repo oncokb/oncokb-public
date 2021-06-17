@@ -503,7 +503,7 @@ public class UserService {
         return userRepository.findAllActivatedWithoutTokens().stream().map(user -> userMapper.userToUserDTO(user)).collect(Collectors.toList());
     }
 
-    public List<UserDTO> getAllNotActivatedUsersCreatedAfter(int daysAgo){
+    public List<UserDTO> getAllUnapprovedUsersCreatedAfter(int daysAgo){
         return userRepository.findAllByActivatedIsFalseAndActivationKeyIsNullAndCreatedDateAfter(Instant.now().minus(daysAgo, ChronoUnit.DAYS)).stream().map(user -> userMapper.userToUserDTO(user)).collect(Collectors.toList());
     }
 

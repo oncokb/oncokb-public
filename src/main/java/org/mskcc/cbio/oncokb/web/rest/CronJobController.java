@@ -142,11 +142,11 @@ public class CronJobController {
     /**
      * A list of not activated users should be emailed to the team every Monday.
      */
-    @GetMapping(path = "/email-not-activated-users-list")
+    @GetMapping(path = "/email-unactivated-users-list")
     public void emailNotActivatedUsersList() {
-        int daysAgo = 7;
-        List<UserDTO> users = userService.getAllNotActivatedUsersCreatedAfter(daysAgo);
-        mailService.sendNotActivatedUsersEmail(daysAgo, users);
+        final int DAYS_AGO = 7;
+        List<UserDTO> users = userService.getAllUnapprovedUsersCreatedAfter(DAYS_AGO);
+        mailService.sendUnapprovedUsersEmail(DAYS_AGO, users);
     }
 
     /**

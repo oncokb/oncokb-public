@@ -36,7 +36,7 @@ import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_EXPOSED;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_EXPOSED_USER;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED;
-import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.LIST_OF_NOT_ACTIVATED_USERS;
+import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.LIST_OF_UNAPPROVED_USERS;
 
 /**
  * Service for sending emails.
@@ -311,7 +311,7 @@ public class MailService {
     }
 
     @Async
-    public void sendNotActivatedUsersEmail(int daysAgo, List<UserDTO> users){
+    public void sendUnapprovedUsersEmail(int daysAgo, List<UserDTO> users){
         if (users == null || users.isEmpty()) {
             return;
         }
@@ -321,10 +321,10 @@ public class MailService {
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
 
         for (UserDTO user : users) {
-            addUserMailsRecord(user, LIST_OF_NOT_ACTIVATED_USERS, applicationProperties.getEmailAddresses().getTechDevAddress(), "bot");
+            addUserMailsRecord(user, LIST_OF_UNAPPROVED_USERS, applicationProperties.getEmailAddresses().getTechDevAddress(), "bot");
         }
 
-        String content = templateEngine.process("mail/" + LIST_OF_NOT_ACTIVATED_USERS.getTemplateName(), context);
+        String content = templateEngine.process("mail/" + LIST_OF_UNAPPROVED_USERS.getTemplateName(), context);
 
         try {
             sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, "The list of unapproved users", content, null, false, true);
