@@ -36,6 +36,7 @@ import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_EXPOSED;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_EXPOSED_USER;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED;
+import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.LIST_OF_NOT_ACTIVATED_USERS;
 
 /**
  * Service for sending emails.
@@ -307,6 +308,30 @@ public class MailService {
         context.setVariable("token", token);
         sendEmailFromTemplate(user, MailType.TOKEN_HAS_BEEN_EXPOSED_USER, "OncoKB Token exposed",
             applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, context);
+    }
+
+    @Async
+    public void sendNotActivatedUsersEmail(int daysAgo, List<UserDTO> users){
+        if (users == null || users.isEmpty()) {
+            return;
+        }
+        Context context = new Context(Locale.US);
+        context.setVariable("users", users);
+        context.setVariable("daysAgo", daysAgo);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+
+        for (UserDTO user : users) {
+            addUserMailsRecord(user, LIST_OF_NOT_ACTIVATED_USERS, applicationProperties.getEmailAddresses().getTechDevAddress(), "bot");
+        }
+
+        String content = templateEngine.process("mail/" + LIST_OF_NOT_ACTIVATED_USERS.getTemplateName(), context);
+
+        try {
+            sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, "The list of unapproved users", content, null, false, true);
+            log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getTechDevAddress());
+        } catch (MailException | MessagingException e) {
+            log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
+        }
     }
 
     public List<String> getMailFrom() {

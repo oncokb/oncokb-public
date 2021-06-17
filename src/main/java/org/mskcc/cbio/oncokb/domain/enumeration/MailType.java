@@ -21,6 +21,7 @@ public enum MailType {
     , TOKEN_HAS_BEEN_EXPOSED("tokenHasBeenExposed", "Token has been exposed", null)
     , TOKEN_HAS_BEEN_EXPOSED_USER("tokenHasBeenExposedToUser", "Token has been exposed", null)
     , SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED("searchingResponseStructureHasChanged", "Searching Response Structure Has Changed", null)
+    , LIST_OF_NOT_ACTIVATED_USERS("listOfNotActivatedUsers", "List of not activated users", null)
     , TEST("testEmail", "Test", null)
     ;
 
