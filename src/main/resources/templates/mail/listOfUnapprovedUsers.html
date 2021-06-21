@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Unapproved Accounts Created in Last Week</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+<p>
+  Dear members,
+</p>
+<p>
+  The following OncoKB account(s) have been created and verified in the last <span th:text="${daysAgo}">3</span> day(s) but have not been approved:
+</p>
+<table class="table table-bordered table-striped">
+  <thead>
+  <tr>
+    <th>License Type</th>
+    <th>Email</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Job Title</th>
+    <th>Company</th>
+    <th>Country</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="user: ${users}">
+    <td th:text="${user.licenseType}"/>
+    <td th:text="${user.email}"/>
+    <td th:text="${user.firstName}"/>
+    <td th:text="${user.lastName}"/>
+    <td th:text="${user.jobTitle}"/>
+    <td th:text="${user.company}"/>
+    <td th:text="${user.country}"/>
+  </tr>
+  </tbody>
+</table>
+<p>
+  Please consider reviewing the users' approval requests.
+</p>
+<p>
+<div th:text="#{email.closing}">Sincerely,</div>
+<div th:text="#{email.signature}">The OncoKB Team</div>
+</p>
+</body>
+</html>
