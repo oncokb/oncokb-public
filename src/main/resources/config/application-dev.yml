@@ -144,6 +144,9 @@ application:
   api-proxy-url: 'http://localhost:8888'
   sitemap-enabled: false
   user-registration-webhook:
+  user-registration-channel-id:
+  slack-bot-oauth-token:
+  slack-base-url:
   google-webmaster-verification:
   licensed-domains:
   trialed-domains:

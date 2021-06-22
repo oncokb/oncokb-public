@@ -8,6 +8,8 @@ public class AdditionalInfoDTO {
 
     UserCompany userCompany;
 
+    MessageDTO messageDTO;
+
     public TrialAccount getTrialAccount() {
         return trialAccount;
     }
@@ -23,4 +25,8 @@ public class AdditionalInfoDTO {
     public void setUserCompany(UserCompany userCompany) {
         this.userCompany = userCompany;
     }
+
+    public MessageDTO getMessageDTO() { return messageDTO; }
+
+    public void setMessageDTO(MessageDTO messageDTO) { this.messageDTO = messageDTO; }
 }

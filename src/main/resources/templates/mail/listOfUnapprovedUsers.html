@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <title>Unapproved Accounts Created in Last Week</title>
+  <title>Unapproved Accounts</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -11,7 +11,7 @@
   Dear members,
 </p>
 <p>
-  The following OncoKB account(s) have been created and verified in the last <span th:text="${daysAgo}">3</span> day(s) but have not been approved:
+  The following OncoKB account(s) have been email verified in the last <span th:text="${daysAgo}">3</span> day(s) but <strong>have not been discussed in Slack</strong> or approved:
 </p>
 <table class="table table-bordered table-striped">
   <thead>
@@ -23,10 +23,11 @@
     <th>Job Title</th>
     <th>Company</th>
     <th>Country</th>
+    <th>View Request in Slack</th>
   </tr>
   </thead>
   <tbody>
-  <tr th:each="user: ${users}">
+  <tr th:each="user: ${undiscussedUsers}">
     <td th:text="${user.licenseType}"/>
     <td th:text="${user.email}"/>
     <td th:text="${user.firstName}"/>
@@ -34,6 +35,40 @@
     <td th:text="${user.jobTitle}"/>
     <td th:text="${user.company}"/>
     <td th:text="${user.country}"/>
+    <td>
+      <a th:with="url=(@{|${slackBaseUrl}/archives/${channelID}/${user.additionalInfo.messageDTO.messageID}|})" th:href="${url}" th:text="${url}">Slack request link</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<p>
+  The following OncoKB account(s) have been email verified in the last <span th:text="${daysAgo}">3</span> day(s) and <strong>have been discussed in Slack</strong> but have not been approved:
+</p>
+<table class="table table-bordered table-striped">
+  <thead>
+  <tr>
+    <th>License Type</th>
+    <th>Email</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Job Title</th>
+    <th>Company</th>
+    <th>Country</th>
+    <th>View Request in Slack</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="user: ${discussedUsers}">
+    <td th:text="${user.licenseType}"/>
+    <td th:text="${user.email}"/>
+    <td th:text="${user.firstName}"/>
+    <td th:text="${user.lastName}"/>
+    <td th:text="${user.jobTitle}"/>
+    <td th:text="${user.company}"/>
+    <td th:text="${user.country}"/>
+    <td>
+      <a th:with="url=(@{|${slackBaseUrl}/archives/${channelID}/${user.additionalInfo.messageDTO.messageID}|})" th:href="${url}" th:text="${url}">Slack request link</a>
+    </td>
   </tr>
   </tbody>
 </table>

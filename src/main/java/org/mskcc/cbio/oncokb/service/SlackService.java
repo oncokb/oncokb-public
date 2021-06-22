@@ -2,6 +2,8 @@ package org.mskcc.cbio.oncokb.service;
 
 import com.slack.api.Slack;
 import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
+import com.slack.api.methods.SlackApiException;
+import com.slack.api.model.Message;
 import com.slack.api.model.block.ActionsBlock;
 import com.slack.api.model.block.DividerBlock;
 import com.slack.api.model.block.LayoutBlock;
@@ -14,9 +16,8 @@ import com.slack.api.webhook.Payload;
 import com.slack.api.webhook.WebhookResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
-import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
-import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
+import org.mskcc.cbio.oncokb.domain.EmailMessagePair;
+import org.mskcc.cbio.oncokb.domain.enumeration.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
@@ -402,6 +403,48 @@ public class SlackService {
             layoutBlocks.add(DividerBlock.builder().build());
         }
         return layoutBlocks;
+    }
+
+    public List<List<EmailMessagePair>> getSlackApprovalRequestDetailsForUsersVerifiedAfter(int daysAgo) {
+        List<List<EmailMessagePair>> userLists = new ArrayList<>();
+        for(UserListType userListType: UserListType.values()) {
+            userLists.add(new ArrayList<>());
+        }
+        Slack slack = Slack.getInstance();
+        try{
+            String daysAgoTs = Long.toString(Instant.now().getEpochSecond() - DAY_IN_SECONDS * daysAgo);
+            List<Message> messages = slack.methods().conversationsHistory(r -> r
+                .token(applicationProperties.getSlackBotOAuthToken())
+                .channel(applicationProperties.getUserRegistrationChannelID())
+                .oldest(daysAgoTs)
+                .inclusive(true))
+                .getMessages();
+            for (Message message : messages) {
+                if (Objects.nonNull(message.getText()) && message.getText().equals("This content can't be displayed.")) {
+                    SectionBlock accountStatusSection = (SectionBlock) message.getBlocks().get(5);
+                    MarkdownTextObject accountStatus = (MarkdownTextObject) accountStatusSection.getFields().get(0);
+                    if (accountStatus.getText() != "*Account Status:*\nActivated") {
+                        SectionBlock accountInfo = (SectionBlock) message.getBlocks().get(8);
+                        MarkdownTextObject emailObject = (MarkdownTextObject) accountInfo.getFields().get(0);
+                        String emailLink = emailObject.getText();
+                        String email = "";
+                        int index = 17;
+                        while (emailLink.charAt(index) != '|') {
+                            email += emailLink.charAt(index);
+                            index++;
+                        }
+                        if (Objects.isNull(message.getReplyCount())) {
+                            userLists.get(UserListType.UNDISCUSSED.ordinal()).add(new EmailMessagePair(email, message));
+                        } else if (Objects.nonNull(message.getReplyCount())) {
+                            userLists.get(UserListType.DISCUSSED.ordinal()).add(new EmailMessagePair(email, message));
+                        }
+                    }
+                }
+            }
+        } catch (IOException | SlackApiException e) {
+            log.error("error: {}", e.getMessage(), e);
+        }
+        return userLists;
     }
 
     private String getTextWithUser(String body, String userName) {
