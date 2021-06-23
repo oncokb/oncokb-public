@@ -849,9 +849,9 @@ export default class GenePage extends React.Component<GenePageProps> {
         <span>
           A list of the tumor type-specific {this.store.hugoSymbol} alterations
           and the corresponding{' '}
-          <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
+          <Linkout link={FDA_LEVELS_OF_EVIDENCE_LINK}>
             FDA Level of Evidence
-          </Link>{' '}
+          </Linkout>{' '}
           assigning their clinical significance. The assigned{' '}
           <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
             FDA level of evidence
