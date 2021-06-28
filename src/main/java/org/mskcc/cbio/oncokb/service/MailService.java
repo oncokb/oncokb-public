@@ -8,8 +8,8 @@ import org.mskcc.cbio.oncokb.domain.User;
 import javax.mail.MessagingException;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.UserMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
-import org.mskcc.cbio.oncokb.domain.enumeration.UserListType;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.web.rest.vm.ExposedToken;
@@ -312,22 +312,23 @@ public class MailService {
     }
 
     @Async
-    public void sendUnapprovedUsersEmail(int daysAgo, List<List<UserDTO>> userLists){
-        if (userLists == null || userLists.isEmpty()) {
+    public void sendUnapprovedUsersEmail(int daysAgo, Set<UserMessagePair> undiscussedUsers, Set<UserMessagePair> discussedUsers){
+        if ((undiscussedUsers == null || undiscussedUsers.isEmpty()) && (discussedUsers == null || discussedUsers.isEmpty())) {
             return;
         }
         Context context = new Context(Locale.US);
-        context.setVariable("undiscussedUsers", userLists.get(UserListType.UNDISCUSSED.ordinal()));
-        context.setVariable("discussedUsers", userLists.get(UserListType.DISCUSSED.ordinal()));
+        context.setVariable("undiscussedUsers", undiscussedUsers);
+        context.setVariable("discussedUsers", discussedUsers);
         context.setVariable("daysAgo", daysAgo);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-        context.setVariable("slackBaseUrl", applicationProperties.getSlackBaseURL());
-        context.setVariable("channelID", applicationProperties.getUserRegistrationChannelID());
+        context.setVariable("slackBaseUrl", applicationProperties.getSlack().getSlackBaseURL());
+        context.setVariable("channelID", applicationProperties.getSlack().getUserRegistrationChannelID());
 
-        for (List<UserDTO> userList : userLists) {
-            for(UserDTO user : userList) {
-                addUserMailsRecord(user, LIST_OF_UNAPPROVED_USERS, applicationProperties.getEmailAddresses().getTechDevAddress(), "bot");
-            }
+        for(UserMessagePair userMessagePair : undiscussedUsers) {
+            addUserMailsRecord(userMessagePair.getUserDTO(), LIST_OF_UNAPPROVED_USERS, applicationProperties.getEmailAddresses().getTechDevAddress(), "bot");
+        }
+        for(UserMessagePair userMessagePair : discussedUsers) {
+            addUserMailsRecord(userMessagePair.getUserDTO(), LIST_OF_UNAPPROVED_USERS, applicationProperties.getEmailAddresses().getTechDevAddress(), "bot");
         }
 
         String content = templateEngine.process("mail/" + LIST_OF_UNAPPROVED_USERS.getTemplateName(), context);

@@ -5,19 +5,19 @@ import com.slack.api.model.Message;
 /**
  * Created by Benjamin Xu on 6/22/21.
  */
-public class EmailMessagePair {
-    String email;
+public class UserIdMessagePair {
+    Long id;
 
     Message message;
 
-    public EmailMessagePair(String email, Message message) {
-        this.email = email;
+    public UserIdMessagePair(long id, Message message) {
+        this.id = id;
         this.message = message;
     }
 
-    public String getEmail() { return email; }
+    public long getId() { return id; }
 
-    public void setEmail(String email) { this.email = email; }
+    public void setId(long id) { this.id = id; }
 
     public Message getMessage() { return message; }
 

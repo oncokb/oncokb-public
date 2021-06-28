@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.service;
 import com.slack.api.Slack;
 import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
 import com.slack.api.methods.SlackApiException;
+import com.slack.api.methods.response.conversations.ConversationsHistoryResponse;
 import com.slack.api.model.Message;
 import com.slack.api.model.block.ActionsBlock;
 import com.slack.api.model.block.DividerBlock;
@@ -16,7 +17,7 @@ import com.slack.api.webhook.Payload;
 import com.slack.api.webhook.WebhookResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.domain.EmailMessagePair;
+import org.mskcc.cbio.oncokb.domain.UserIdMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
@@ -64,11 +65,11 @@ public class SlackService {
     @Async
     public void sendUserRegistrationToChannel(UserDTO user, boolean isTrialAccount, boolean trialAccountInitiated) {
         log.debug("Sending notification to admin group that a user has registered a new account");
-        if (StringUtils.isEmpty(this.applicationProperties.getUserRegistrationWebhook())) {
+        if (StringUtils.isEmpty(this.applicationProperties.getSlack().getUserRegistrationWebhook())) {
             log.debug("\tSkipped, the webhook is not configured");
         } else {
             List<LayoutBlock> layoutBlocks = this.buildBlocks(user, isTrialAccount, trialAccountInitiated, null);
-            this.sendBlocks(this.applicationProperties.getUserRegistrationWebhook(), layoutBlocks);
+            this.sendBlocks(this.applicationProperties.getSlack().getUserRegistrationWebhook(), layoutBlocks);
         }
     }
 
@@ -86,7 +87,7 @@ public class SlackService {
         Slack slack = Slack.getInstance();
         try {
             // This is an automatic message when user from whitelist is registered.
-            WebhookResponse response = slack.send(this.applicationProperties.getUserRegistrationWebhook(), payload);
+            WebhookResponse response = slack.send(this.applicationProperties.getSlack().getUserRegistrationWebhook(), payload);
         } catch (IOException e) {
             log.warn("Failed to send message to slack");
         }
@@ -101,7 +102,7 @@ public class SlackService {
 
         Slack slack = Slack.getInstance();
         try {
-            WebhookResponse response = slack.send(this.applicationProperties.getUserRegistrationWebhook(), payload);
+            WebhookResponse response = slack.send(this.applicationProperties.getSlack().getUserRegistrationWebhook(), payload);
 
             Context context = new Context();
             context.setVariable(EXPIRATION, expirationDate);
@@ -162,6 +163,9 @@ public class SlackService {
         // Add mention
         blocks.add(buildHereMentionBlock());
 
+        // Add user id
+        blocks.addAll(buildUserIdBlocks(userDTO));
+
         // Add warning
         blocks.addAll(buildWarningBlocks(userDTO));
 
@@ -180,6 +184,13 @@ public class SlackService {
         // Add action section
         blocks.addAll(buildActionBlocks(userDTO, trialAccountInitiated, isTrialAccount));
 
+        return blocks;
+    }
+
+    private List<LayoutBlock> buildUserIdBlocks(UserDTO userDTO) {
+        List<LayoutBlock> blocks = new ArrayList<>();
+        blocks.add(SectionBlock.builder().text(PlainTextObject.builder().text("User ID: " + userDTO.getId()).build()).blockId("userId").build());
+        blocks.add(DividerBlock.builder().build());
         return blocks;
     }
 
@@ -247,6 +258,7 @@ public class SlackService {
             SectionBlock
                 .builder()
                 .text(MarkdownTextObject.builder().text(userDTO.getLicenseType().getName()).build())
+                .blockId("licenseType")
                 .accessory(this.getLicenseTypeElement(userDTO))
                 .build()
         );
@@ -268,7 +280,7 @@ public class SlackService {
         if (isTrialAccount) {
             userInfo.add(getTextObject("Trial Expires On", toNYZoneTime(userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate().plusSeconds(DAY_IN_SECONDS * 90))));
         }
-        blocks.add(SectionBlock.builder().fields(userInfo).build());
+        blocks.add(SectionBlock.builder().fields(userInfo).blockId("accountStatus").build());
 
         blocks.add(DividerBlock.builder().build());
         return blocks;
@@ -325,7 +337,7 @@ public class SlackService {
         userInfo.add(getTextObject("Email", user.getEmail()));
         userInfo.add(getTextObject("Name", user.getFirstName() + " " + user.getLastName()));
         userInfo.add(getTextObject("Job Title", user.getJobTitle()));
-        blocks.add(SectionBlock.builder().fields(userInfo).build());
+        blocks.add(SectionBlock.builder().fields(userInfo).blockId("accountInfo").build());
         blocks.add(DividerBlock.builder().build());
 
         // Add company information
@@ -357,7 +369,7 @@ public class SlackService {
                 userInfo.add(getTextObject(companyName + " Size", additionalInfoDTO.getUserCompany().getSize()));
             }
         }
-        blocks.add(SectionBlock.builder().fields(userInfo).build());
+        blocks.add(SectionBlock.builder().fields(userInfo).blockId("companyInfo").build());
         blocks.add(DividerBlock.builder().build());
 
         return blocks;
@@ -386,17 +398,17 @@ public class SlackService {
         }
 
         if (withClarificationNote(userDTO)) {
-            layoutBlocks.add(buildPlainTextBlock(ACADEMIC_CLARIFICATION_NOTE));
+            layoutBlocks.add(buildPlainTextBlock(ACADEMIC_CLARIFICATION_NOTE, "academicClarificationNote"));
         }
         if (isMSKUser(userDTO)) {
-            layoutBlocks.add(buildPlainTextBlock("The user has been approved and notified automatically. We also changed their license to Academic and clarified with the user."));
+            layoutBlocks.add(buildPlainTextBlock("The user has been approved and notified automatically. We also changed their license to Academic and clarified with the user.", "mskUserNote"));
         }
         if (actionId != null) {
             if (actionId.equals(GIVE_TRIAL_ACCESS)) {
-                layoutBlocks.add(buildPlainTextBlock(getTextWithUser("The trial account has been initialized and notified", actionUser.getName())));
+                layoutBlocks.add(buildPlainTextBlock(getTextWithUser("The trial account has been initialized and notified", actionUser.getName()), "trialAccountNote"));
             }
             if (actionId.equals(APPROVE_USER)) {
-                layoutBlocks.add(buildPlainTextBlock(getTextWithUser("The user has been approved and notified", actionUser.getName())));
+                layoutBlocks.add(buildPlainTextBlock(getTextWithUser("The user has been approved and notified", actionUser.getName()), "approvedNote"));
             }
         }
         if (layoutBlocks.size() > 0) {
@@ -405,38 +417,43 @@ public class SlackService {
         return layoutBlocks;
     }
 
-    public List<List<EmailMessagePair>> getSlackApprovalRequestDetailsForUsersVerifiedAfter(int daysAgo) {
-        List<List<EmailMessagePair>> userLists = new ArrayList<>();
-        for(UserListType userListType: UserListType.values()) {
-            userLists.add(new ArrayList<>());
-        }
+    public Set<UserIdMessagePair> getSlackApprovalRequestDetailsForUsersVerifiedAfter(int daysAgo, UserSetType userSetType) {
+        Set<UserIdMessagePair> userSet = new HashSet<>();
         Slack slack = Slack.getInstance();
-        try{
+        try {
             String daysAgoTs = Long.toString(Instant.now().getEpochSecond() - DAY_IN_SECONDS * daysAgo);
-            List<Message> messages = slack.methods().conversationsHistory(r -> r
-                .token(applicationProperties.getSlackBotOAuthToken())
-                .channel(applicationProperties.getUserRegistrationChannelID())
+            ConversationsHistoryResponse conversationsHistory = slack.methods().conversationsHistory(r -> r
+                .token(applicationProperties.getSlack().getSlackBotOAuthToken())
+                .channel(applicationProperties.getSlack().getUserRegistrationChannelID())
                 .oldest(daysAgoTs)
-                .inclusive(true))
-                .getMessages();
-            for (Message message : messages) {
-                if (Objects.nonNull(message.getText()) && message.getText().equals("This content can't be displayed.")) {
-                    SectionBlock accountStatusSection = (SectionBlock) message.getBlocks().get(5);
-                    MarkdownTextObject accountStatus = (MarkdownTextObject) accountStatusSection.getFields().get(0);
-                    if (accountStatus.getText() != "*Account Status:*\nActivated") {
-                        SectionBlock accountInfo = (SectionBlock) message.getBlocks().get(8);
-                        MarkdownTextObject emailObject = (MarkdownTextObject) accountInfo.getFields().get(0);
-                        String emailLink = emailObject.getText();
-                        String email = "";
-                        int index = 17;
-                        while (emailLink.charAt(index) != '|') {
-                            email += emailLink.charAt(index);
-                            index++;
-                        }
-                        if (Objects.isNull(message.getReplyCount())) {
-                            userLists.get(UserListType.UNDISCUSSED.ordinal()).add(new EmailMessagePair(email, message));
-                        } else if (Objects.nonNull(message.getReplyCount())) {
-                            userLists.get(UserListType.DISCUSSED.ordinal()).add(new EmailMessagePair(email, message));
+                .inclusive(true));
+            if(conversationsHistory.isHasMore()) {
+                log.warn("Number of approval requests has exceeded maximum limit. Some requests will not be displayed in weekly email!");
+            }
+            for (Message message : conversationsHistory.getMessages()) {
+                if (Objects.nonNull(message.getText()) && message.getText().equals("This content can't be displayed.") && Objects.nonNull(message.getBlocks())) {
+                    if (
+                        !(getSectionBlockWithId(message.getBlocks(), "academicClarificationNote").isPresent()
+                            || getSectionBlockWithId(message.getBlocks(), "mskUserNote").isPresent()
+                            || getSectionBlockWithId(message.getBlocks(), "trialAccountNote").isPresent()
+                            || getSectionBlockWithId(message.getBlocks(), "approvedNote").isPresent())
+                    ) {
+                        if(getSectionBlockWithId(message.getBlocks(), "userId").isPresent()) {
+                            SectionBlock userIdBlock = (SectionBlock) getSectionBlockWithId(message.getBlocks(), "userId").get();
+                            PlainTextObject userIdText = (PlainTextObject) userIdBlock.getText();
+                            Long userId = Long.parseLong(userIdText.getText().substring(9));
+                            switch (userSetType) {
+                                case UNDISCUSSED:
+                                    if (Objects.isNull(message.getReplyCount())) {
+                                        userSet.add(new UserIdMessagePair(userId, message));
+                                    }
+                                    break;
+                                case DISCUSSED:
+                                    if (Objects.nonNull(message.getReplyCount())) {
+                                        userSet.add(new UserIdMessagePair(userId, message));
+                                    }
+                                    break;
+                            }
                         }
                     }
                 }
@@ -444,7 +461,7 @@ public class SlackService {
         } catch (IOException | SlackApiException e) {
             log.error("error: {}", e.getMessage(), e);
         }
-        return userLists;
+        return userSet;
     }
 
     private String getTextWithUser(String body, String userName) {
@@ -544,8 +561,20 @@ public class SlackService {
         return button;
     }
 
-    private LayoutBlock buildPlainTextBlock(String text) {
-        return SectionBlock.builder().text(PlainTextObject.builder().text(text).build()).build();
+    private LayoutBlock buildPlainTextBlock(String text, String id) {
+        return SectionBlock.builder().text(PlainTextObject.builder().text(text).build()).blockId(id).build();
+    }
+
+    private Optional<LayoutBlock> getSectionBlockWithId(List<LayoutBlock> blocks, String id) {
+        for (LayoutBlock block : blocks) {
+            if(block.getClass().getName().equals("com.slack.api.model.block.SectionBlock")) {
+                SectionBlock sectionBlock = (SectionBlock) block;
+                if (Objects.nonNull(sectionBlock.getBlockId()) && sectionBlock.getBlockId().equals(id)) {
+                    return Optional.of(block);
+                }
+            }
+        }
+        return Optional.empty();
     }
 }
 

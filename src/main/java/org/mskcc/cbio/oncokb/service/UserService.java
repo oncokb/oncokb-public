@@ -7,6 +7,7 @@ import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.UserSetType;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
@@ -141,8 +142,8 @@ public class UserService {
             });
     }
 
-    public Optional<User> initiateTrialAccountActivation(String mail) {
-        Optional<User> userOptional = userRepository.findOneByEmailIgnoreCase(mail);
+    public Optional<User> initiateTrialAccountActivation(String login) {
+        Optional<User> userOptional = userRepository.findOneByLogin(login);
         if (userOptional.isPresent()) {
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(userOptional.get());
             UserDetails ud = null;
@@ -497,23 +498,13 @@ public class UserService {
         return userRepository.findAllActivatedWithoutTokens().stream().map(user -> userMapper.userToUserDTO(user)).collect(Collectors.toList());
     }
 
-    public List<List<UserDTO>> getAllUnapprovedUsersVerifiedAfter(int daysAgo){
-        List<List<EmailMessagePair>> emailMessagePairLists = slackService.getSlackApprovalRequestDetailsForUsersVerifiedAfter(daysAgo);
-        List<List<UserDTO>> userLists = new ArrayList<>();
-        int userListIndex = 0;
-        for (List<EmailMessagePair> emailMessagePairList : emailMessagePairLists) {
-            userLists.add(new ArrayList<>());
-            for (EmailMessagePair emailMessagePair : emailMessagePairList) {
-                UserDTO userDTO = userMapper.userToUserDTO(userRepository.findOneByEmailIgnoreCase(emailMessagePair.getEmail()).get());
-                if (Objects.isNull(userDTO.getAdditionalInfo())) {
-                    userDTO.setAdditionalInfo(new AdditionalInfoDTO());
-                }
-                userDTO.getAdditionalInfo().setMessageDTO(new MessageDTO(emailMessagePair.getMessage().getTs()));
-                userLists.get(userListIndex).add(userDTO);
-            }
-            userListIndex++;
+    public Set<UserMessagePair> getAllUnapprovedUsersVerifiedAfter(int daysAgo, UserSetType userSetType) {
+        Set<UserIdMessagePair> idSet = slackService.getSlackApprovalRequestDetailsForUsersVerifiedAfter(daysAgo, userSetType);
+        Set<UserMessagePair> userSet = new HashSet<>();
+        for (UserIdMessagePair userIdMessagePair : idSet) {
+            userSet.add(new UserMessagePair(userMapper.userToUserDTO(userRepository.findOneById(userIdMessagePair.getId()).get()), userIdMessagePair.getMessage()));
         }
-        return userLists;
+        return userSet;
     }
 
     public void removeNotActivatedUsers() {

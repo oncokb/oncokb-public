@@ -37,7 +37,7 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/oncokb-public?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/oncokb-public?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
     username: root
     password: root
     hikari:
@@ -143,16 +143,17 @@ application:
   profile: dev
   api-proxy-url: 'http://localhost:8888'
   sitemap-enabled: false
-  user-registration-webhook:
-  user-registration-channel-id:
-  slack-bot-oauth-token:
-  slack-base-url:
   google-webmaster-verification:
   licensed-domains:
   trialed-domains:
   account-approval-whitelist:
   token-usage-check:
   token-usage-check-whitelist:
+  slack:
+    user-registration-webhook:
+    user-registration-channel-id:
+    slack-bot-oauth-token:
+    slack-base-url:
   redis:
     type: 'single'
     password: 'oncokb-public-redis-password'

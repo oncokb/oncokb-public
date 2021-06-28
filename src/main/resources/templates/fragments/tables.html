@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Table Fragments</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+  <table class="table table-bordered table-striped" th:fragment="userTableWithMessageLink(userMessagePairs, slackBaseURL, channelID)">
+    <thead>
+    <tr>
+      <th>License Type</th>
+      <th>Email</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Job Title</th>
+      <th>Company</th>
+      <th>Country</th>
+      <th>View Request in Slack</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="userMessagePair: ${userMessagePairs}">
+      <td th:text="${userMessagePair.UserDTO.licenseType}"/>
+      <td th:text="${userMessagePair.userDTO.email}"/>
+      <td th:text="${userMessagePair.userDTO.firstName}"/>
+      <td th:text="${userMessagePair.userDTO.lastName}"/>
+      <td th:text="${userMessagePair.userDTO.jobTitle}"/>
+      <td th:text="${userMessagePair.userDTO.company}"/>
+      <td th:text="${userMessagePair.userDTO.country}"/>
+      <td>
+        <a th:with="url=(@{|${slackBaseUrl}/archives/${channelID}/${userMessagePair.message.ts}|})" th:href="${url}">Slack request link</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</body>
+</html>

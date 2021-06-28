@@ -19,10 +19,7 @@ import java.util.stream.Collectors;
 public class ApplicationProperties {
     private String name;
     private String apiProxyUrl;
-    private String userRegistrationWebhook;
-    private String userRegistrationChannelID;
-    private String slackBotOAuthToken;
-    private String slackBaseURL;
+    private SlackProperties slack;
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
     private RedisProperties redis;
@@ -55,28 +52,9 @@ public class ApplicationProperties {
         this.apiProxyUrl = apiProxyUrl;
     }
 
-    public String getUserRegistrationWebhook() {
-        return userRegistrationWebhook;
-    }
+    public SlackProperties getSlack() { return slack; }
 
-    public void setUserRegistrationWebhook(String userRegistrationWebhook) {
-        this.userRegistrationWebhook = userRegistrationWebhook;
-    }
-    public String getUserRegistrationChannelID() { return userRegistrationChannelID; }
-
-    public void setUserRegistrationChannelID(String userRegistrationChannelID) {
-        this.userRegistrationChannelID = userRegistrationChannelID;
-    }
-
-    public String getSlackBotOAuthToken() { return slackBotOAuthToken; }
-
-    public void setSlackBotOAuthToken(String slackBotOAuthToken){
-        this.slackBotOAuthToken = slackBotOAuthToken;
-    }
-
-    public String getSlackBaseURL() { return slackBaseURL; }
-
-    public void setSlackBaseURL(String slackBaseURL) { this.slackBaseURL = slackBaseURL; }
+    public void setSlack( SlackProperties slack ) { this.slack = slack; }
 
     public String getAccountApprovalWhitelist() {
         return accountApprovalWhitelist;
