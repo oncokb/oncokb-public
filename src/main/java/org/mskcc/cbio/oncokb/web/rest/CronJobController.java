@@ -1,18 +1,14 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import io.github.jhipster.security.RandomUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
-import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.domain.UserMessagePair;
-import org.mskcc.cbio.oncokb.domain.enumeration.UserSetType;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
-import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
@@ -25,7 +21,6 @@ import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserUsage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -146,10 +141,9 @@ public class CronJobController {
      */
     @GetMapping(path = "/email-unapproved-users-list")
     public void emailUnapprovedUsersList() {
-        final int DAYS_AGO = 50;
-        Set<UserMessagePair> undiscussedUsers = userService.getAllUnapprovedUsersVerifiedAfter(DAYS_AGO, UserSetType.UNDISCUSSED);
-        Set<UserMessagePair> discussedUsers = userService.getAllUnapprovedUsersVerifiedAfter(DAYS_AGO, UserSetType.DISCUSSED);
-        mailService.sendUnapprovedUsersEmail(DAYS_AGO, undiscussedUsers, discussedUsers);
+        final int DAYS_AGO = 9;
+        List<UserMessagePair> users = userService.getAllUnapprovedUsersCreatedAfter(DAYS_AGO);
+        mailService.sendUnapprovedUsersEmail(DAYS_AGO, users);
     }
 
     /**

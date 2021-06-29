@@ -312,24 +312,33 @@ public class MailService {
     }
 
     @Async
-    public void sendUnapprovedUsersEmail(int daysAgo, Set<UserMessagePair> undiscussedUsers, Set<UserMessagePair> discussedUsers){
-        if ((undiscussedUsers == null || undiscussedUsers.isEmpty()) && (discussedUsers == null || discussedUsers.isEmpty())) {
+    public void sendUnapprovedUsersEmail(int daysAgo, List<UserMessagePair> users){
+        if (users == null || users.isEmpty()) {
             return;
         }
+
+        for(UserMessagePair userMessagePair : users) {
+            addUserMailsRecord(userMessagePair.getUserDTO(), LIST_OF_UNAPPROVED_USERS, applicationProperties.getEmailAddresses().getTechDevAddress(), "bot");
+        }
+
+        List<UserMessagePair> discussedUsers = users.stream().filter(user -> Objects.nonNull(user.getMessage().getReplyCount())).collect(Collectors.toList());
+        for(UserMessagePair user : discussedUsers) {
+            users.remove(user);
+            users.add(user);
+        }
+
+        List<UserMessagePair> commercialUsers = users.stream().filter(user -> user.getUserDTO().getLicenseType().equals(LicenseType.COMMERCIAL)  || user.getUserDTO().getLicenseType().equals(LicenseType.RESEARCH_IN_COMMERCIAL)).collect(Collectors.toList());
+        for(UserMessagePair user : commercialUsers) {
+            users.remove(user);
+        }
+
         Context context = new Context(Locale.US);
-        context.setVariable("undiscussedUsers", undiscussedUsers);
-        context.setVariable("discussedUsers", discussedUsers);
+        context.setVariable("commercialUsers", commercialUsers);
+        context.setVariable("otherUsers", users);
         context.setVariable("daysAgo", daysAgo);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         context.setVariable("slackBaseUrl", applicationProperties.getSlack().getSlackBaseURL());
         context.setVariable("channelID", applicationProperties.getSlack().getUserRegistrationChannelID());
-
-        for(UserMessagePair userMessagePair : undiscussedUsers) {
-            addUserMailsRecord(userMessagePair.getUserDTO(), LIST_OF_UNAPPROVED_USERS, applicationProperties.getEmailAddresses().getTechDevAddress(), "bot");
-        }
-        for(UserMessagePair userMessagePair : discussedUsers) {
-            addUserMailsRecord(userMessagePair.getUserDTO(), LIST_OF_UNAPPROVED_USERS, applicationProperties.getEmailAddresses().getTechDevAddress(), "bot");
-        }
 
         String content = templateEngine.process("mail/" + LIST_OF_UNAPPROVED_USERS.getTemplateName(), context);
 

@@ -179,7 +179,7 @@ public class SlackService {
         blocks.addAll(buildUserInfoBlocks(userDTO));
 
         // Add additional info section
-        blocks.addAll(buildAdditionalInfoBlocks(userDTO, responseBlockActionPayload));
+        blocks.addAll(buildAdditionalInfoBlocks(userDTO, trialAccountInitiated, responseBlockActionPayload));
 
         // Add action section
         blocks.addAll(buildActionBlocks(userDTO, trialAccountInitiated, isTrialAccount));
@@ -386,7 +386,7 @@ public class SlackService {
         return withClarificationNote;
     }
 
-    private List<LayoutBlock> buildAdditionalInfoBlocks(UserDTO userDTO, BlockActionPayload responseBlockActionPayload) {
+    private List<LayoutBlock> buildAdditionalInfoBlocks(UserDTO userDTO, boolean trialAccountInitiated, BlockActionPayload responseBlockActionPayload) {
         final String ACADEMIC_CLARIFICATION_NOTE = "We have sent the clarification email to the user asking why they could not use an institution email to register.";
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
         ActionId actionId = null;
@@ -406,9 +406,13 @@ public class SlackService {
         if (actionId != null) {
             if (actionId.equals(GIVE_TRIAL_ACCESS)) {
                 layoutBlocks.add(buildPlainTextBlock(getTextWithUser("The trial account has been initialized and notified", actionUser.getName()), "trialAccountNote"));
+            } else if (trialAccountInitiated) {
+                layoutBlocks.add(buildPlainTextBlock("The trial account has been initialized and notified.", "trialAccountNote"));
             }
             if (actionId.equals(APPROVE_USER)) {
                 layoutBlocks.add(buildPlainTextBlock(getTextWithUser("The user has been approved and notified", actionUser.getName()), "approvedNote"));
+            } else if (userDTO.isActivated()) {
+                layoutBlocks.add(buildPlainTextBlock("The user has been approved and notified.", "approvedNote"));
             }
         }
         if (layoutBlocks.size() > 0) {
@@ -417,8 +421,8 @@ public class SlackService {
         return layoutBlocks;
     }
 
-    public Set<UserIdMessagePair> getSlackApprovalRequestDetailsForUsersVerifiedAfter(int daysAgo, UserSetType userSetType) {
-        Set<UserIdMessagePair> userSet = new HashSet<>();
+    public List<UserIdMessagePair> getAllUnapprovedUserRequestsSentAfter(int daysAgo) {
+        List<UserIdMessagePair> userList = new ArrayList<>();
         Slack slack = Slack.getInstance();
         try {
             String daysAgoTs = Long.toString(Instant.now().getEpochSecond() - DAY_IN_SECONDS * daysAgo);
@@ -430,6 +434,7 @@ public class SlackService {
             if(conversationsHistory.isHasMore()) {
                 log.warn("Number of approval requests has exceeded maximum limit. Some requests will not be displayed in weekly email!");
             }
+            Collections.reverse(conversationsHistory.getMessages());
             for (Message message : conversationsHistory.getMessages()) {
                 if (Objects.nonNull(message.getText()) && message.getText().equals("This content can't be displayed.") && Objects.nonNull(message.getBlocks())) {
                     if (
@@ -442,18 +447,7 @@ public class SlackService {
                             SectionBlock userIdBlock = (SectionBlock) getSectionBlockWithId(message.getBlocks(), "userId").get();
                             PlainTextObject userIdText = (PlainTextObject) userIdBlock.getText();
                             Long userId = Long.parseLong(userIdText.getText().substring(9));
-                            switch (userSetType) {
-                                case UNDISCUSSED:
-                                    if (Objects.isNull(message.getReplyCount())) {
-                                        userSet.add(new UserIdMessagePair(userId, message));
-                                    }
-                                    break;
-                                case DISCUSSED:
-                                    if (Objects.nonNull(message.getReplyCount())) {
-                                        userSet.add(new UserIdMessagePair(userId, message));
-                                    }
-                                    break;
-                            }
+                            userList.add(new UserIdMessagePair(userId, message));
                         }
                     }
                 }
@@ -461,7 +455,7 @@ public class SlackService {
         } catch (IOException | SlackApiException e) {
             log.error("error: {}", e.getMessage(), e);
         }
-        return userSet;
+        return userList;
     }
 
     private String getTextWithUser(String body, String userName) {

@@ -11,13 +11,13 @@
   Dear members,
 </p>
 <p>
-  The following OncoKB account(s) have been email verified in the last <span th:text="${daysAgo}">3</span> day(s) but <strong>have not been discussed in Slack</strong> or approved:
+  The following <strong>commercial</strong> OncoKB account(s) have been created in the last <span th:text="${daysAgo}">3</span> day(s) but have not been approved:
 </p>
-<table th:insert="fragments/tables :: userTableWithMessageLink(${undiscussedUsers}, ${slackBaseUrl}, ${channelID})"></table>
+<table th:insert="fragments/tables :: userTableWithMessageLink(${commercialUsers}, ${slackBaseUrl}, ${channelID})"></table>
 <p>
-  The following OncoKB account(s) have been email verified in the last <span th:text="${daysAgo}">3</span> day(s) and <strong>have been discussed in Slack</strong> but have not been approved:
+  The following <strong>non-commercial</strong> OncoKB account(s) have been created in the last <span th:text="${daysAgo}">3</span> day(s) but have not been approved:
 </p>
-<table th:insert="fragments/tables :: userTableWithMessageLink(${discussedUsers}, ${slackBaseUrl}, ${channelID})"></table>
+<table th:insert="fragments/tables :: userTableWithMessageLink(${otherUsers}, ${slackBaseUrl}, ${channelID})"></table>
 <p>
   Please consider reviewing the users' approval requests.
 </p>

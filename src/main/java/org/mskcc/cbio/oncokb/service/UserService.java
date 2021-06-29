@@ -7,7 +7,6 @@ import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
-import org.mskcc.cbio.oncokb.domain.enumeration.UserSetType;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
@@ -38,7 +37,6 @@ import java.util.stream.Collectors;
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE;
-import static org.mskcc.cbio.oncokb.util.StringUtil.getEmailDomain;
 
 /**
  * Service class for managing users.
@@ -498,13 +496,13 @@ public class UserService {
         return userRepository.findAllActivatedWithoutTokens().stream().map(user -> userMapper.userToUserDTO(user)).collect(Collectors.toList());
     }
 
-    public Set<UserMessagePair> getAllUnapprovedUsersVerifiedAfter(int daysAgo, UserSetType userSetType) {
-        Set<UserIdMessagePair> idSet = slackService.getSlackApprovalRequestDetailsForUsersVerifiedAfter(daysAgo, userSetType);
-        Set<UserMessagePair> userSet = new HashSet<>();
-        for (UserIdMessagePair userIdMessagePair : idSet) {
-            userSet.add(new UserMessagePair(userMapper.userToUserDTO(userRepository.findOneById(userIdMessagePair.getId()).get()), userIdMessagePair.getMessage()));
+    public List<UserMessagePair> getAllUnapprovedUsersCreatedAfter(int daysAgo) {
+        List<UserIdMessagePair> idList = slackService.getAllUnapprovedUserRequestsSentAfter(daysAgo);
+        List<UserMessagePair> userList = new ArrayList<>();
+        for (UserIdMessagePair userIdMessagePair : idList) {
+            userList.add(new UserMessagePair(userMapper.userToUserDTO(userRepository.findOneById(userIdMessagePair.getId()).get()), userIdMessagePair.getMessage()));
         }
-        return userSet;
+        return userList;
     }
 
     public void removeNotActivatedUsers() {
