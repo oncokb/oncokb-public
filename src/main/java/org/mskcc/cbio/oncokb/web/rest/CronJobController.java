@@ -141,7 +141,7 @@ public class CronJobController {
      */
     @GetMapping(path = "/email-unapproved-users-list")
     public void emailUnapprovedUsersList() {
-        final int DAYS_AGO = 9;
+        final int DAYS_AGO = 7;
         List<UserMessagePair> users = userService.getAllUnapprovedUsersCreatedAfter(DAYS_AGO);
         mailService.sendUnapprovedUsersEmail(DAYS_AGO, users);
     }

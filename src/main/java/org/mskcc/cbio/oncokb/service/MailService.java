@@ -327,14 +327,14 @@ public class MailService {
             users.add(user);
         }
 
-        List<UserMessagePair> commercialUsers = users.stream().filter(user -> user.getUserDTO().getLicenseType().equals(LicenseType.COMMERCIAL)  || user.getUserDTO().getLicenseType().equals(LicenseType.RESEARCH_IN_COMMERCIAL)).collect(Collectors.toList());
+        List<UserMessagePair> commercialUsers = users.stream().filter(user -> !user.getUserDTO().getLicenseType().equals(LicenseType.ACADEMIC)).collect(Collectors.toList());
         for(UserMessagePair user : commercialUsers) {
             users.remove(user);
         }
 
         Context context = new Context(Locale.US);
         context.setVariable("commercialUsers", commercialUsers);
-        context.setVariable("otherUsers", users);
+        context.setVariable("academicUsers", users);
         context.setVariable("daysAgo", daysAgo);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         context.setVariable("slackBaseUrl", applicationProperties.getSlack().getSlackBaseURL());
