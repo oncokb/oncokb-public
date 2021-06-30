@@ -10,16 +10,12 @@ public class UserIdMessagePair {
 
     Message message;
 
-    public UserIdMessagePair(long id, Message message) {
+    public UserIdMessagePair(Long id, Message message) {
         this.id = id;
         this.message = message;
     }
 
     public long getId() { return id; }
 
-    public void setId(long id) { this.id = id; }
-
     public Message getMessage() { return message; }
-
-    public void setMessage(Message message) { this.message = message; }
 }

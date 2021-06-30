@@ -13,15 +13,15 @@ public class UserMessagePair {
 
     Message message;
 
-    String dateCreated;
+    final String dateCreated;
 
-    String dateLastReplied;
+    final String dateLastReplied;
 
     public UserMessagePair(UserDTO userDTO, Message message) {
         this.userDTO = userDTO;
         this.message = message;
         dateCreated = new java.util.Date((long) Double.parseDouble(message.getTs()) * 1000).toString();
-        if(Objects.nonNull(message.getLatestReply())) {
+        if (Objects.nonNull(message.getLatestReply())) {
             dateLastReplied = new java.util.Date((long) (Double.parseDouble(message.getLatestReply()) * 1000)).toString();
         } else {
             dateLastReplied = "n/a";
@@ -30,19 +30,7 @@ public class UserMessagePair {
 
     public UserDTO getUserDTO() { return userDTO; }
 
-    public void setUserDTO(UserDTO userDTO) { this.userDTO = userDTO; }
-
     public Message getMessage() { return message; }
-
-    public void setMessage(Message message) {
-        this.message = message;
-        dateCreated = new java.util.Date((long) Double.parseDouble(message.getTs()) * 1000).toString();
-        if(Objects.nonNull(message.getLatestReply())) {
-            dateLastReplied = new java.util.Date((long) (Double.parseDouble(message.getLatestReply()) * 1000)).toString();
-        } else {
-            dateLastReplied = "n/a";
-        }
-    }
 
     public String getDateCreated() { return dateCreated; }
 

@@ -3,8 +3,6 @@
 <head>
   <title>Table Fragments</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
 <body>
   <table th:fragment="userTableWithMessageLink(userMessagePairs, slackBaseURL, channelID)">
@@ -14,7 +12,7 @@
       <th>Date Created</th>
       <th>Last Discussed</th>
       <th>Name</th>
-      <th>Company</th>
+      <th>Organization</th>
       <th>Country</th>
       <th>View Request in Slack</th>
     </tr>
