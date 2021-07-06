@@ -162,7 +162,7 @@ public class SlackService {
             actionId = getActionId(responseBlockActionPayload);
         }
 
-        boolean collapsed = ((userDTO.isActivated() || trialAccountInitiated || isMSKUser(userDTO) || withClarificationNote(userDTO)) && !(actionId != null && (actionId.equals(EXPAND) || actionId.equals(UPDATE_USER) || actionId.equals(CHANGE_LICENSE_TYPE)))) || (actionId != null && actionId == COLLAPSE);
+        boolean collapsed = ((userDTO.isActivated() || trialAccountInitiated || isMSKUser(userDTO) || withClarificationNote(userDTO, false)) && !(actionId != null && (actionId.equals(EXPAND) || actionId.equals(UPDATE_USER) || actionId.equals(CHANGE_LICENSE_TYPE)))) || (actionId != null && actionId == COLLAPSE);
         if (collapsed) {
             // Add collapsed blocks
             blocks.add(buildCollapsedBlock(userDTO, isTrialAccount, trialAccountInitiated));
@@ -307,6 +307,19 @@ public class SlackService {
         return values[0];
     }
 
+    public boolean withClarificationNote(UserDTO userDTO, boolean sendEmail) {
+        boolean withClarificationNote = false;
+        if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) &&
+            this.applicationProperties.getAcademicEmailClarifyDomains().size() > 0 &&
+            this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> userDTO.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
+            withClarificationNote = true;
+            if(sendEmail) {
+                mailService.sendEmailWithLicenseContext(userDTO, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
+            }
+        }
+        return withClarificationNote;
+    }
+
     private StaticSelectElement getLicenseTypeElement(UserDTO userDTO) {
         List<OptionObject> options = new ArrayList<>();
         for (LicenseType licenseType : LicenseType.values()) {
@@ -377,21 +390,10 @@ public class SlackService {
         return blocks;
     }
 
-    private boolean withClarificationNote(UserDTO userDTO) {
-        boolean withClarificationNote = false;
-        if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) &&
-            this.applicationProperties.getAcademicEmailClarifyDomains().size() > 0 &&
-            this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> userDTO.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
-            withClarificationNote = true;
-            mailService.sendEmailWithLicenseContext(userDTO, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
-        }
-        return withClarificationNote;
-    }
-
     private List<LayoutBlock> buildAdditionalInfoBlocks(UserDTO userDTO, boolean isTrialAccount, boolean trialAccountInitiated) {
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
 
-        if (withClarificationNote(userDTO)) {
+        if (withClarificationNote(userDTO, false)) {
             layoutBlocks.add(buildPlainTextBlock("We have sent the clarification email to the user asking why they could not use an institution email to register.", ACADEMIC_CLARIFICATION_NOTE));
         }
         if (isMSKUser(userDTO)) {
