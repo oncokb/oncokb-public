@@ -5,10 +5,7 @@ import com.slack.api.app_backend.interactive_components.payload.BlockActionPaylo
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.response.conversations.ConversationsHistoryResponse;
 import com.slack.api.model.Message;
-import com.slack.api.model.block.ActionsBlock;
-import com.slack.api.model.block.DividerBlock;
-import com.slack.api.model.block.LayoutBlock;
-import com.slack.api.model.block.SectionBlock;
+import com.slack.api.model.block.*;
 import com.slack.api.model.block.composition.*;
 import com.slack.api.model.block.element.BlockElement;
 import com.slack.api.model.block.element.ButtonElement;
@@ -237,7 +234,9 @@ public class SlackService {
 
     private List<LayoutBlock> buildUserIdBlocks(UserDTO userDTO) {
         List<LayoutBlock> blocks = new ArrayList<>();
-        blocks.add(SectionBlock.builder().text(PlainTextObject.builder().text("User ID: " + userDTO.getId()).build()).blockId(USER_ID.getId()).build());
+        List<ContextBlockElement> elements = new ArrayList<>();
+        elements.add(PlainTextObject.builder().text("User ID: " + userDTO.getId()).build());
+        blocks.add(ContextBlock.builder().elements(elements).blockId(USER_ID.getId()).build());
         blocks.add(DividerBlock.builder().build());
         return blocks;
     }
@@ -436,23 +435,21 @@ public class SlackService {
                 .token(applicationProperties.getSlack().getSlackBotOAuthToken())
                 .channel(applicationProperties.getSlack().getUserRegistrationChannelID())
                 .oldest(daysAgoTs)
+                .limit(1000)
                 .inclusive(true));
-            if (conversationsHistory.isHasMore()) {
-                log.warn("Number of approval requests has exceeded maximum limit. Some requests will not be displayed in weekly email!");
-            }
             Collections.reverse(conversationsHistory.getMessages());
             for (Message message : conversationsHistory.getMessages()) {
                 if (Objects.nonNull(message.getText()) && message.getText().equals("This content can't be displayed.") && Objects.nonNull(message.getBlocks())) {
                     if (
-                        !(getSectionBlockWithId(message.getBlocks(), ACADEMIC_CLARIFICATION_NOTE).isPresent()
-                            || getSectionBlockWithId(message.getBlocks(), MSK_USER_NOTE).isPresent()
-                            || getSectionBlockWithId(message.getBlocks(), TRIAL_ACCOUNT_NOTE).isPresent()
-                            || getSectionBlockWithId(message.getBlocks(), APPROVED_NOTE).isPresent()
-                            || getSectionBlockWithId(message.getBlocks(), CONVERT_TO_REGULAR_ACCOUNT_NOTE).isPresent())
+                        !(getBlockWithId(message.getBlocks(), ACADEMIC_CLARIFICATION_NOTE).isPresent()
+                            || getBlockWithId(message.getBlocks(), MSK_USER_NOTE).isPresent()
+                            || getBlockWithId(message.getBlocks(), TRIAL_ACCOUNT_NOTE).isPresent()
+                            || getBlockWithId(message.getBlocks(), APPROVED_NOTE).isPresent()
+                            || getBlockWithId(message.getBlocks(), CONVERT_TO_REGULAR_ACCOUNT_NOTE).isPresent())
                     ) {
-                        if (getSectionBlockWithId(message.getBlocks(), USER_ID).isPresent()) {
-                            SectionBlock userIdBlock = getSectionBlockWithId(message.getBlocks(), USER_ID).get();
-                            PlainTextObject userIdText = (PlainTextObject) userIdBlock.getText();
+                        if (getBlockWithId(message.getBlocks(), USER_ID).isPresent()) {
+                            ContextBlock userIdBlock = (ContextBlock) getBlockWithId(message.getBlocks(), USER_ID).get();
+                            PlainTextObject userIdText = (PlainTextObject) userIdBlock.getElements().get(0);
                             Long userId = Long.parseLong(userIdText.getText().substring(9));
                             userList.add(new UserIdMessagePair(userId, message));
                         }
@@ -566,12 +563,17 @@ public class SlackService {
         return SectionBlock.builder().text(PlainTextObject.builder().text(text).build()).blockId(blockId.getId()).build();
     }
 
-    private Optional<SectionBlock> getSectionBlockWithId(List<LayoutBlock> blocks, BlockId blockId) {
+    private Optional<LayoutBlock> getBlockWithId(List<LayoutBlock> blocks, BlockId blockId) {
         for (LayoutBlock block : blocks) {
-            if(block.getClass().getName().equals("com.slack.api.model.block.SectionBlock")) {
+            if (block.getClass().getName().equals("com.slack.api.model.block.SectionBlock")) {
                 SectionBlock sectionBlock = (SectionBlock) block;
                 if (Objects.nonNull(sectionBlock.getBlockId()) && sectionBlock.getBlockId().equals(blockId.getId())) {
-                    return Optional.of(sectionBlock);
+                    return Optional.of(block);
+                }
+            } else if (block.getClass().getName().equals("com.slack.api.model.block.ContextBlock")) {
+                ContextBlock contextBlock = (ContextBlock) block;
+                if (Objects.nonNull(contextBlock.getBlockId()) && contextBlock.getBlockId().equals(blockId.getId())) {
+                    return Optional.of(block);
                 }
             }
         }
