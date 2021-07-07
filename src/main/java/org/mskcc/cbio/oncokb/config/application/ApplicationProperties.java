@@ -27,6 +27,7 @@ public class ApplicationProperties {
     private String academicEmailClarifyDomain;
     private String licensedDomains;
     private String trialedDomains;
+    private String embargoedCountries;
     private String googleWebmasterVerification;
     private EmailAddresses emailAddresses;
     private String tokenUsageCheck;
@@ -87,6 +88,10 @@ public class ApplicationProperties {
     public void setTrialedDomains(String trialedDomains) {
         this.trialedDomains = trialedDomains;
     }
+
+    public String getEmbargoedCountries() { return embargoedCountries; }
+
+    public void setEmbargoedCountries(String embargoedCountries) { this.embargoedCountries = embargoedCountries; }
 
     public ProjectProfile getProfile() {
         return profile;
@@ -169,6 +174,10 @@ public class ApplicationProperties {
     }
     public List<String> getTrialedDomainsList() {
         return getDomains(this.getTrialedDomains());
+    }
+
+    public List<String> getEmbargoedCountriesList() {
+        return getDomains(this.getEmbargoedCountries());
     }
 
     private List<String> getDomains(String domainStr) {

@@ -372,6 +372,8 @@ public class MailService {
                 return Optional.of("email.license.clarify.title");
             case CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL:
                 return Optional.of("email.license.clarify.title");
+            case COMPANY_IS_IN_EMBARGOED_COUNTRY:
+                return Optional.of("email.embargoed.country.title");
             case VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES:
                 return Optional.of("email.account.expires.by.days.title");
             case APPROVAL_MSK_IN_COMMERCIAL:

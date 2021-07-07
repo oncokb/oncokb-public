@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title th:text="#{embargoed.country.title(${license})}"></title>
+  <title th:text="#{email.embargoed.country.title(${license})}"></title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
 </head>
@@ -10,9 +10,9 @@
 
 <p th:text="'Thank you for your interest in the ' + ${license} + ' license for OncoKB.'"></p>
 
-<p th:text="'We noticed that you are affiliated with a company located in ' + ${user.country} + '. Under our current licensing model, we are unable to grant you the' + ${license} + 'license for OncoKB due to current relations between the United States and ' + ${user.country} + '.'"></p>
+<p th:text="'We noticed that you are affiliated with a company located in ' + ${user.country} + '. Unfortunately, we are unable to grant you the' + ${license} + ' license for OncoKB at this time due to the current relations between the United States and ' + ${user.country} + '.'"></p>
 
-<p th:text="'Feel free to contact us or re-register if you believe this is a mistake or that relations between the United States and ' + ${user.country} + '  have improved.'"></p>
+<p>Please contact us if you believe this is a mistake.</p>
 
 <p>
   <div th:text="#{email.closing}">Sincerely,</div>
