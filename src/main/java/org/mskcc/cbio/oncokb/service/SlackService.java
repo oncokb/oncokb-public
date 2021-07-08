@@ -313,7 +313,7 @@ public class SlackService {
             this.applicationProperties.getAcademicEmailClarifyDomains().size() > 0 &&
             this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> userDTO.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
             withClarificationNote = true;
-            if(sendEmail) {
+            if (sendEmail) {
                 mailService.sendEmailWithLicenseContext(userDTO, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
             }
         }
