@@ -8,6 +8,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import javax.mail.MessagingException;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.UserMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
@@ -36,6 +37,7 @@ import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_EXPOSED;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_EXPOSED_USER;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED;
+import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.LIST_OF_UNAPPROVED_USERS;
 
 /**
  * Service for sending emails.
@@ -307,6 +309,37 @@ public class MailService {
         context.setVariable("token", token);
         sendEmailFromTemplate(user, MailType.TOKEN_HAS_BEEN_EXPOSED_USER, "OncoKB Token exposed",
             applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, context);
+    }
+
+    @Async
+    public void sendUnapprovedUsersEmail(int daysAgo, List<UserMessagePair> users){
+        if (users == null || users.isEmpty()) {
+            return;
+        }
+
+        users.sort(Comparator.comparingDouble(user -> Objects.nonNull(user.getMessage().getLatestReply()) ? Double.parseDouble(user.getMessage().getLatestReply()) : 0));
+
+        List<UserMessagePair> commercialUsers = users.stream().filter(user -> !user.getUserDTO().getLicenseType().equals(LicenseType.ACADEMIC)).collect(Collectors.toList());
+        for(UserMessagePair user : commercialUsers) {
+            users.remove(user);
+        }
+
+        Context context = new Context(Locale.US);
+        context.setVariable("commercialUsers", commercialUsers);
+        context.setVariable("academicUsers", users);
+        context.setVariable("daysAgo", daysAgo);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        context.setVariable("slackBaseUrl", applicationProperties.getSlack().getSlackBaseURL());
+        context.setVariable("channelID", applicationProperties.getSlack().getUserRegistrationChannelID());
+
+        String content = templateEngine.process("mail/" + LIST_OF_UNAPPROVED_USERS.getTemplateName(), context);
+
+        try {
+            sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, "The list of unapproved users", content, null, false, true);
+            log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getTechDevAddress());
+        } catch (MailException | MessagingException e) {
+            log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
+        }
     }
 
     public List<String> getMailFrom() {

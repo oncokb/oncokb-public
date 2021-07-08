@@ -35,7 +35,6 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class SlackController {
 
-
     private final Logger log = LoggerFactory.getLogger(SlackController.class);
 
     private final SlackService slackService;
