@@ -5,10 +5,7 @@ import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
-import org.mskcc.cbio.oncokb.domain.Authority;
-import org.mskcc.cbio.oncokb.domain.Token;
-import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
@@ -16,11 +13,8 @@ import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.Activation;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.LicenseAgreement;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
 import io.github.jhipster.security.RandomUtil;
@@ -43,7 +37,6 @@ import java.util.stream.Collectors;
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE;
-import static org.mskcc.cbio.oncokb.util.StringUtil.getEmailDomain;
 
 /**
  * Service class for managing users.
@@ -147,8 +140,8 @@ public class UserService {
             });
     }
 
-    public Optional<User> initiateTrialAccountActivation(String mail) {
-        Optional<User> userOptional = userRepository.findOneByEmailIgnoreCase(mail);
+    public Optional<User> initiateTrialAccountActivation(String login) {
+        Optional<User> userOptional = userRepository.findOneByLogin(login);
         if (userOptional.isPresent()) {
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(userOptional.get());
             UserDetails ud = null;
@@ -501,6 +494,15 @@ public class UserService {
 
     public List<UserDTO> getAllActivatedUsersWithoutTokens() {
         return userRepository.findAllActivatedWithoutTokens().stream().map(user -> userMapper.userToUserDTO(user)).collect(Collectors.toList());
+    }
+
+    public List<UserMessagePair> getAllUnapprovedUsersCreatedAfter(int daysAgo) {
+        List<UserIdMessagePair> idList = slackService.getAllUnapprovedUserRequestsSentAfter(daysAgo);
+        List<UserMessagePair> userList = new ArrayList<>();
+        for (UserIdMessagePair userIdMessagePair : idList) {
+            userList.add(new UserMessagePair(userMapper.userToUserDTO(userRepository.findOneById(userIdMessagePair.getId()).get()), userIdMessagePair.getMessage()));
+        }
+        return userList;
     }
 
     public void removeNotActivatedUsers() {

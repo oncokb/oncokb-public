@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class ApplicationProperties {
     private String name;
     private String apiProxyUrl;
-    private String userRegistrationWebhook;
+    private SlackProperties slack;
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
     private RedisProperties redis;
@@ -52,13 +52,9 @@ public class ApplicationProperties {
         this.apiProxyUrl = apiProxyUrl;
     }
 
-    public String getUserRegistrationWebhook() {
-        return userRegistrationWebhook;
-    }
+    public SlackProperties getSlack() { return slack; }
 
-    public void setUserRegistrationWebhook(String userRegistrationWebhook) {
-        this.userRegistrationWebhook = userRegistrationWebhook;
-    }
+    public void setSlack( SlackProperties slack ) { this.slack = slack; }
 
     public String getAccountApprovalWhitelist() {
         return accountApprovalWhitelist;
