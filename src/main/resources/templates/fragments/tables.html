@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Table Fragments</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+  <table th:fragment="userTableWithMessageLink(userMessagePairs, slackBaseURL, channelID)">
+    <thead>
+    <tr>
+      <th>License Type</th>
+      <th>Date Created</th>
+      <th>Last Discussed</th>
+      <th>Name</th>
+      <th>Organization</th>
+      <th>Country</th>
+      <th>View Request in Slack</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="userMessagePair : ${userMessagePairs}">
+      <td th:text="${userMessagePair.userDTO.licenseType}"/>
+      <td th:text="${userMessagePair.dateCreated}"/>
+      <td th:text="${userMessagePair.dateLastReplied}"/>
+      <td th:text="${userMessagePair.userDTO.firstName + ' ' + userMessagePair.userDTO.lastName}"/>
+      <td th:text="${userMessagePair.userDTO.company}"/>
+      <td th:text="${userMessagePair.userDTO.country}"/>
+      <td>
+        <a th:with="url=(@{|${slackBaseUrl}/archives/${channelID}/p${userMessagePair.message.ts}|})" th:href="${url}">Slack request link</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</body>
+</html>

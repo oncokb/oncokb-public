@@ -8,6 +8,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 import javax.mail.MessagingException;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.UserMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
@@ -311,18 +312,25 @@ public class MailService {
     }
 
     @Async
-    public void sendUnapprovedUsersEmail(int daysAgo, List<UserDTO> users){
+    public void sendUnapprovedUsersEmail(int daysAgo, List<UserMessagePair> users){
         if (users == null || users.isEmpty()) {
             return;
         }
+
+        users.sort(Comparator.comparingDouble(user -> Objects.nonNull(user.getMessage().getLatestReply()) ? Double.parseDouble(user.getMessage().getLatestReply()) : 0));
+
+        List<UserMessagePair> commercialUsers = users.stream().filter(user -> !user.getUserDTO().getLicenseType().equals(LicenseType.ACADEMIC)).collect(Collectors.toList());
+        for(UserMessagePair user : commercialUsers) {
+            users.remove(user);
+        }
+
         Context context = new Context(Locale.US);
-        context.setVariable("users", users);
+        context.setVariable("commercialUsers", commercialUsers);
+        context.setVariable("academicUsers", users);
         context.setVariable("daysAgo", daysAgo);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-
-        for (UserDTO user : users) {
-            addUserMailsRecord(user, LIST_OF_UNAPPROVED_USERS, applicationProperties.getEmailAddresses().getTechDevAddress(), "bot");
-        }
+        context.setVariable("slackBaseUrl", applicationProperties.getSlack().getSlackBaseURL());
+        context.setVariable("channelID", applicationProperties.getSlack().getUserRegistrationChannelID());
 
         String content = templateEngine.process("mail/" + LIST_OF_UNAPPROVED_USERS.getTemplateName(), context);
 
