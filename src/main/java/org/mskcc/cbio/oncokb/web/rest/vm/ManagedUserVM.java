@@ -15,11 +15,11 @@ public class ManagedUserVM extends UserDTO {
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
-    private Boolean tokenIsRenewable;
+    private Boolean tokenIsRenewable = false;
 
     private Integer tokenValidDays;
 
-    private Boolean notifyUserOnTrialCreation;
+    private Boolean notifyUserOnTrialCreation = false;
 
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
