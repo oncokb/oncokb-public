@@ -179,13 +179,8 @@ public class SlackService {
     }
 
     private LayoutBlock buildCollapsedBlock(UserDTO userDTO, boolean isTrialAccount, boolean trialAccountInitiated) {
-        if (trialAccountInitiated && (!userDTO.isActivated() || isTrialAccount)) {
-            return SectionBlock.builder().text(MarkdownTextObject.builder().text(userDTO.getEmail() + "\n" + userDTO.getCompany() + " (" + userDTO.getLicenseType().getName() + ", *TRIAL*)").build()).accessory(buildExpandButton(userDTO)).blockId(COLLAPSED.getId()).build();
-        } else if (userDTO.isActivated()) {
-            return SectionBlock.builder().text(MarkdownTextObject.builder().text(userDTO.getEmail() + "\n" + userDTO.getCompany() + " (" + userDTO.getLicenseType().getName() + ")").build()).accessory(buildExpandButton(userDTO)).blockId(COLLAPSED.getId()).build();
-        } else {
-            return SectionBlock.builder().text(MarkdownTextObject.builder().text(userDTO.getEmail() + "\n" + userDTO.getCompany() + " (" + userDTO.getLicenseType().getName() + ", *NOT ACTIVATED*)").build()).accessory(buildExpandButton(userDTO)).blockId(COLLAPSED.getId()).build();
-        }
+        boolean isTrial = trialAccountInitiated && (!userDTO.isActivated() || isTrialAccount);
+        return SectionBlock.builder().text(MarkdownTextObject.builder().text(userDTO.getEmail() + "\n" + userDTO.getCompany() + " (" + userDTO.getLicenseType().getShortName() + (isTrial ? ", *TRIAL*" : userDTO.isActivated() ? "" : ", *NOT ACTIVATED*") + ")").build()).accessory(buildExpandButton(userDTO)).blockId(COLLAPSED.getId()).build();
     }
 
     private List<LayoutBlock> buildExpandedBlocks(UserDTO userDTO, boolean isTrialAccount, boolean trialAccountInitiated, BlockActionPayload responseBlockActionPayload) {
@@ -265,21 +260,12 @@ public class SlackService {
     }
 
     private LayoutBlock buildCurrentLicense(UserDTO userDTO) {
-        if (!userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
-            return SectionBlock
-                    .builder()
-                    .text(MarkdownTextObject.builder().text("*" + userDTO.getLicenseType().getName() + "* :cl:\n*" + userDTO.getCompany() + "*").build())
-                    .blockId(LICENSE_TYPE.getId())
-                    .accessory(this.getLicenseTypeElement(userDTO))
-                    .build();
-        } else {
-            return SectionBlock
-                    .builder()
-                    .text(MarkdownTextObject.builder().text("*" + userDTO.getLicenseType().getName() + "*\n*" + userDTO.getCompany() + "*").build())
-                    .blockId(LICENSE_TYPE.getId())
-                    .accessory(this.getLicenseTypeElement(userDTO))
-                    .build();
-        }
+        return SectionBlock
+                .builder()
+                .text(MarkdownTextObject.builder().text("*" + userDTO.getLicenseType().getName() + "*" + (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) ? "" : " :clap:") +"\n*" + userDTO.getCompany() + "*").build())
+                .blockId(LICENSE_TYPE.getId())
+                .accessory(this.getLicenseTypeElement(userDTO))
+                .build();
     }
 
     private LayoutBlock buildAccountStatusBlock(UserDTO userDTO, boolean isTrialAccount) {
