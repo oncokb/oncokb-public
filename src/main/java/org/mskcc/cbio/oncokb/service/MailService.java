@@ -319,7 +319,7 @@ public class MailService {
 
         users.sort(Comparator.comparingDouble(user -> Objects.nonNull(user.getMessage().getLatestReply()) ? Double.parseDouble(user.getMessage().getLatestReply()) : 0));
 
-        List<UserMessagePair> commercialUsers = users.stream().filter(user -> !user.getUserDTO().getLicenseType().equals(LicenseType.ACADEMIC)).collect(Collectors.toList());
+        List<UserMessagePair> commercialUsers = users.stream().filter(user -> user.getUserDTO().getLicenseType() != null && !user.getUserDTO().getLicenseType().equals(LicenseType.ACADEMIC)).collect(Collectors.toList());
         for(UserMessagePair user : commercialUsers) {
             users.remove(user);
         }
