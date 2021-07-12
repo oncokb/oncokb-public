@@ -266,7 +266,7 @@ public class MailService {
         String content = templateEngine.process("mail/" + TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE.getTemplateName(), context);
 
         try {
-            sendEmail(applicationProperties.getEmailAddresses().getLicenseAddress(), applicationProperties.getEmailAddresses().getLicenseAddress(), null, "The list of expiring trial accounts", content, null, false, true);
+            sendEmail(applicationProperties.getEmailAddresses().getLicenseAddress(), applicationProperties.getEmailAddresses().getLicenseAddress(), null, "The list of expiring trial OncoKB accounts", content, null, false, true);
             log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getLicenseAddress());
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
@@ -319,7 +319,7 @@ public class MailService {
 
         users.sort(Comparator.comparingDouble(user -> Objects.nonNull(user.getMessage().getLatestReply()) ? Double.parseDouble(user.getMessage().getLatestReply()) : 0));
 
-        List<UserMessagePair> commercialUsers = users.stream().filter(user -> !user.getUserDTO().getLicenseType().equals(LicenseType.ACADEMIC)).collect(Collectors.toList());
+        List<UserMessagePair> commercialUsers = users.stream().filter(user -> user.getUserDTO().getLicenseType() != null && !user.getUserDTO().getLicenseType().equals(LicenseType.ACADEMIC)).collect(Collectors.toList());
         for(UserMessagePair user : commercialUsers) {
             users.remove(user);
         }
@@ -335,7 +335,7 @@ public class MailService {
         String content = templateEngine.process("mail/" + LIST_OF_UNAPPROVED_USERS.getTemplateName(), context);
 
         try {
-            sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, "The list of unapproved users", content, null, false, true);
+            sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, "The list of unapproved OncoKB users", content, null, false, true);
             log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getTechDevAddress());
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
