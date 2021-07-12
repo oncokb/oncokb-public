@@ -179,6 +179,7 @@ public class AccountResource {
             context.setVariable(MAIL_LICENSE, registeredLicenseType.getName());
             mailService.sendEmailFromTemplate(userDTO, MailType.APPROVAL_MSK_IN_COMMERCIAL, context);
         }
+        slackService.withClarificationNote(userDTO, true);
         slackService.sendUserRegistrationToChannel(userDTO, userService.isTrialAccount(userDTO), userService.trialAccountInitiated(userDTO));
         return false;
     }

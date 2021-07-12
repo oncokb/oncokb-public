@@ -104,6 +104,10 @@ public class SlackController {
                     break;
                 case UPDATE_USER:
                     break;
+                case COLLAPSE:
+                    break;
+                case EXPAND:
+                    break;
                 default:
                     break;
             }

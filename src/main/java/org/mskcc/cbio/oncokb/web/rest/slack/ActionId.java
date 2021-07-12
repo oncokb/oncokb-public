@@ -10,6 +10,8 @@ public enum ActionId {
     , CHANGE_LICENSE_TYPE("change-license-type")
     , GIVE_TRIAL_ACCESS("give-trial-access")
     , CONVERT_TO_REGULAR_ACCOUNT("convert-to-regular-account")
+    , COLLAPSE("collapse")
+    , EXPAND("expand")
     ;
 
     String id;
