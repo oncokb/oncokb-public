@@ -158,7 +158,6 @@ application:
   profile: prod
   api-proxy-url: 'http://oncokb-core:8888'
   sitemap-enabled: true
-  user-registration-webhook:
   google-webmaster-verification:
   licensed-domains:
   trialed-domains:
