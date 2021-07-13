@@ -6,11 +6,11 @@
   <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
 </head>
 <body>
-<p th:text="'Dear ' + ${user.firstName} + ' ' + ${user.lastName}"></p>
+<p th:text="'Dear ' + ${user.firstName} + ' ' + ${user.lastName} + ','"></p>
 
 <p th:text="'Thank you for your interest in the ' + ${license} + ' license for OncoKB.'"></p>
 
-<p th:text="'We noticed that you are affiliated with a company located in ' + ${user.country} + '. Unfortunately, we are unable to grant you the' + ${license} + ' license for OncoKB at this time due to the current relations between the United States and ' + ${user.country} + '.'"></p>
+<p th:text="'We noticed that you are affiliated with a company located in ' + ${user.country} + '. Unfortunately, we are unable to grant you the ' + ${license} + ' license for OncoKB at this time due to the current relations between the United States and ' + ${user.country} + '.'"></p>
 
 <p>Please contact us if you believe this is a mistake.</p>
 

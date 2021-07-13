@@ -264,7 +264,7 @@ public class UserService {
         return newUser;
     }
 
-    public boolean isTrialAccount(UserDTO userDTO) {
+    public boolean isTrialAccountActivated(UserDTO userDTO) {
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
         return tokens.stream().filter(token -> !token.isRenewable()).findAny().isPresent();
     }
