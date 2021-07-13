@@ -432,8 +432,8 @@ public class SlackService {
         try {
             String daysAgoTs = Long.toString(Instant.now().getEpochSecond() - DAY_IN_SECONDS * daysAgo);
             ConversationsHistoryResponse conversationsHistory = slack.methods().conversationsHistory(r -> r
-                .token(applicationProperties.getSlack().getSlackBotOAuthToken())
-                .channel(applicationProperties.getSlack().getUserRegistrationChannelID())
+                .token(applicationProperties.getSlack().getSlackBotOauthToken())
+                .channel(applicationProperties.getSlack().getUserRegistrationChannelId())
                 .oldest(daysAgoTs)
                 .limit(1000)
                 .inclusive(true));
