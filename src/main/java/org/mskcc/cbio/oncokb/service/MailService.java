@@ -329,8 +329,8 @@ public class MailService {
         context.setVariable("academicUsers", users);
         context.setVariable("daysAgo", daysAgo);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-        context.setVariable("slackBaseUrl", applicationProperties.getSlack().getSlackBaseURL());
-        context.setVariable("channelID", applicationProperties.getSlack().getUserRegistrationChannelID());
+        context.setVariable("slackBaseUrl", applicationProperties.getSlack().getSlackBaseUrl());
+        context.setVariable("channelID", applicationProperties.getSlack().getUserRegistrationChannelId());
 
         String content = templateEngine.process("mail/" + LIST_OF_UNAPPROVED_USERS.getTemplateName(), context);
 
