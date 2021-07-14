@@ -5,9 +5,9 @@ package org.mskcc.cbio.oncokb.config.application;
  */
 public class SlackProperties {
     String userRegistrationWebhook;
-    String userRegistrationChannelID;
-    String slackBotOAuthToken;
-    String slackBaseURL;
+    String userRegistrationChannelId;
+    String slackBotOauthToken;
+    String slackBaseUrl;
 
     public String getUserRegistrationWebhook() {
         return userRegistrationWebhook;
@@ -17,27 +17,27 @@ public class SlackProperties {
         this.userRegistrationWebhook = userRegistrationWebhook;
     }
 
-    public String getUserRegistrationChannelID() {
-        return userRegistrationChannelID;
+    public String getUserRegistrationChannelId() {
+        return userRegistrationChannelId;
     }
 
-    public void setUserRegistrationChannelID(String userRegistrationChannelID) {
-        this.userRegistrationChannelID = userRegistrationChannelID;
+    public void setUserRegistrationChannelId(String userRegistrationChannelId) {
+        this.userRegistrationChannelId = userRegistrationChannelId;
     }
 
-    public String getSlackBotOAuthToken() {
-        return slackBotOAuthToken;
+    public String getSlackBotOauthToken() {
+        return slackBotOauthToken;
     }
 
-    public void setSlackBotOAuthToken(String slackBotOAuthToken) {
-        this.slackBotOAuthToken = slackBotOAuthToken;
+    public void setSlackBotOauthToken(String slackBotOauthToken) {
+        this.slackBotOauthToken = slackBotOauthToken;
     }
 
-    public String getSlackBaseURL() {
-        return slackBaseURL;
+    public String getSlackBaseUrl() {
+        return slackBaseUrl;
     }
 
-    public void setSlackBaseURL(String slackBaseURL) {
-        this.slackBaseURL = slackBaseURL;
+    public void setSlackBaseUrl(String slackBaseUrl) {
+        this.slackBaseUrl = slackBaseUrl;
     }
 }
