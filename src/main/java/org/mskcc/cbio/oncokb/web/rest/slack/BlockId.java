@@ -14,6 +14,7 @@ public enum BlockId {
     , APPROVED_NOTE("approved-note")
     , TRIAL_ACCOUNT_NOTE("trial-account-note")
     , CONVERT_TO_REGULAR_ACCOUNT_NOTE("convert-to-regular-account-note")
+    , COLLAPSED("collapsed")
     ;
 
     String id;
