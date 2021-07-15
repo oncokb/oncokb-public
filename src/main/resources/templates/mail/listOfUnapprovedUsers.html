@@ -10,13 +10,19 @@
   Dear members,
 </p>
 <p>
-  The following <strong>commercial</strong> OncoKB account(s) have been created in the last <span th:text="${daysAgo}">3</span> day(s) but have not been approved:
+  <span th:if="${#lists.size(commercialUsers)} == '0'">There are no unapproved <strong>commercial</strong> OncoKB account(s) that have been created in the last <span th:text="${daysAgo}">3</span> day(s).</span>
+  <div th:unless="${#lists.size(commercialUsers)} == '0'">
+    <p> The following <strong>commercial</strong> OncoKB account(s) have been created in the last <span th:text="${daysAgo}">3</span> day(s) but have not been approved:</p>
+    <table th:insert="fragments/tables :: userTableWithMessageLink(${commercialUsers}, ${slackBaseUrl}, ${channelId})"></table>
+  </div>
 </p>
-<table th:insert="fragments/tables :: userTableWithMessageLink(${commercialUsers}, ${slackBaseUrl}, ${channelID})"></table>
 <p>
-  The following <strong>academic</strong> OncoKB account(s) have been created in the last <span th:text="${daysAgo}">3</span> day(s) but have not been approved:
+  <span th:if="${#lists.size(academicUsers)} == '0'">There are no unapproved <strong>academic</strong> OncoKB account(s) that have been created in the last <span th:text="${daysAgo}">3</span> day(s).</span>
+  <div th:unless="${#lists.size(academicUsers)} == '0'">
+    <p> The following <strong>academic</strong> OncoKB account(s) have been created in the last <span th:text="${daysAgo}">3</span> day(s) but have not been approved:</p>
+    <table th:insert="fragments/tables :: userTableWithMessageLink(${academicUsers}, ${slackBaseUrl}, ${channelId})"></table>
+  </div>
 </p>
-<table th:insert="fragments/tables :: userTableWithMessageLink(${academicUsers}, ${slackBaseUrl}, ${channelID})"></table>
 <p>
   Please consider reviewing the users' approval requests.
 </p>
