@@ -320,7 +320,7 @@ public class MailService {
         users.sort(Comparator.comparingDouble(user -> Objects.nonNull(user.getMessage().getLatestReply()) ? Double.parseDouble(user.getMessage().getLatestReply()) : 0));
 
         List<UserMessagePair> commercialUsers = users.stream().filter(user -> user.getUserDTO().getLicenseType() != null && !user.getUserDTO().getLicenseType().equals(LicenseType.ACADEMIC)).collect(Collectors.toList());
-        for(UserMessagePair user : commercialUsers) {
+        for (UserMessagePair user : commercialUsers) {
             users.remove(user);
         }
 
@@ -330,7 +330,7 @@ public class MailService {
         context.setVariable("daysAgo", daysAgo);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         context.setVariable("slackBaseUrl", applicationProperties.getSlack().getSlackBaseUrl());
-        context.setVariable("channelID", applicationProperties.getSlack().getUserRegistrationChannelId());
+        context.setVariable("channelId", applicationProperties.getSlack().getUserRegistrationChannelId());
 
         String content = templateEngine.process("mail/" + LIST_OF_UNAPPROVED_USERS.getTemplateName(), context);
 
