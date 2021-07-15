@@ -132,6 +132,64 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '07162021': {
+    priorityNews: [
+      <span>
+        Release of OncoKB{' '}
+        <Linkout link={'https://sop.oncokb.org'}>SOP v2.1</Linkout>
+      </span>,
+    ],
+    changedAnnotation: [
+      [
+        'KIT',
+        'D816',
+        'Mastocytosis',
+        'Avapritinib',
+        '3A',
+        '1',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-avapritinib-advanced-systemic-mastocytosis'
+            }
+            approval={'Avapritinib'}
+          />
+          <AbstractLink
+            link={
+              'https://ashpublications.org/blood/article/136/Supplement%201/37/470030/Pure-Pathologic-Response-Is-Associated-with'
+            }
+            abstract={'Gotlib et al. Abstract# 634, ASH 2020'}
+          />
+          <AbstractLink
+            link={
+              'https://www.ashclinicalnews.org/on-location/other-meetings/pathfinder-avapritinib-induces-rapid-responses-advanced-systemic-mastocytosis/'
+            }
+            abstract={'DeAngelo et al. Absract# CT023, AACR 2021.'}
+          />
+        </WithSeparator>,
+      ],
+      [
+        'EGFR',
+        'Exon 20 Insertions',
+        'Non-Small Cell Lung Cancer',
+        'Amivantamab',
+        '3A',
+        '1',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-amivantamab-vmjw-metastatic-non-small-cell-lung-cancer'
+            }
+            approval={'Amivantamab'}
+          />
+          <AbstractLink
+            link={'https://www.jto.org/article/S1556-0864(21)00326-9/fulltext'}
+            abstract={'Sabari et al. Abstract# OA04.04, WCLC, 2021.'}
+          />
+        </WithSeparator>,
+      ],
+    ],
+  },
   '06172021': {
     priorityNews: [
       <span>
