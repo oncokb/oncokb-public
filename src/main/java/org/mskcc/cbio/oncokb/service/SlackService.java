@@ -137,10 +137,10 @@ public class SlackService {
 
     private TextObject getTextObject(String title, String content) {
         StringBuilder sb = new StringBuilder();
-        if (title != null) {
+        if (StringUtils.isNotEmpty(title)) {
             sb.append(title + ":\n");
         }
-        if (content != null) {
+        if (StringUtils.isNotEmpty(content)) {
             sb.append("*" + content + "*");
         }
         return MarkdownTextObject.builder().text(sb.toString()).build();
@@ -266,7 +266,7 @@ public class SlackService {
     private LayoutBlock buildCurrentLicense(UserDTO userDTO) {
         StringBuilder sb = new StringBuilder();
         sb.append("*" + userDTO.getLicenseType().getName() + "*" + (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) ? "" : " :clap:") +"\n");
-        if (userDTO.getCompany() != null) {
+        if (StringUtils.isNotEmpty(userDTO.getCompany())) {
             sb.append("*" + userDTO.getCompany() + "*");
         }
 
