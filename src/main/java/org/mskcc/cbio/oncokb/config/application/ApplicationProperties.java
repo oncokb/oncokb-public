@@ -166,25 +166,25 @@ public class ApplicationProperties {
     }
 
     public List<String> getAcademicEmailClarifyDomains() {
-        return getDomains(this.getAcademicEmailClarifyDomain());
+        return getList(this.getAcademicEmailClarifyDomain());
     }
 
     public List<String> getLicensedDomainsList() {
-        return getDomains(this.getLicensedDomains());
+        return getList(this.getLicensedDomains());
     }
     public List<String> getTrialedDomainsList() {
-        return getDomains(this.getTrialedDomains());
+        return getList(this.getTrialedDomains());
     }
 
     public List<String> getEmbargoedCountriesList() {
-        return getDomains(this.getEmbargoedCountries());
+        return getList(this.getEmbargoedCountries());
     }
 
-    private List<String> getDomains(String domainStr) {
-        if (StringUtils.isEmpty(domainStr)) {
+    private List<String> getList(String listStr) {
+        if (StringUtils.isEmpty(listStr)) {
             return new ArrayList<>();
         }
-        return Arrays.stream(domainStr.split(",")).map(domain -> domain.trim()).filter(domain -> !StringUtils.isEmpty(domain)).collect(Collectors.toList());
+        return Arrays.stream(listStr.split(",")).map(element -> element.trim()).filter(element -> !StringUtils.isEmpty(element)).collect(Collectors.toList());
     }
 
     public AWSProperties getAws() {

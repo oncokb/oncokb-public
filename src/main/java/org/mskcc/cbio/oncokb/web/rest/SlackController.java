@@ -82,7 +82,11 @@ public class SlackController {
         Optional<User> user = action == null ? Optional.empty() : userRepository.findOneByLogin(login);
         if (user.isPresent()) {
             UserDTO userDTO = userMapper.userToUserDTO(user.get());
-            UserStatusChecks userStatusChecks = new UserStatusChecks(userDTO, userService, slackService);
+            UserStatusChecks userStatusChecks = new UserStatusChecks(userDTO,
+                    userService.trialAccountActivated(userDTO),
+                    userService.trialAccountInitiated(userDTO),
+                    slackService.withClarificationNote(userDTO, false, false),
+                    slackService.withEmbargoNote(userDTO));
             if (actionId == ActionId.MORE_ACTIONS) {
                 actionId = slackService.getActionIdFromMoreActions(pl);
             }

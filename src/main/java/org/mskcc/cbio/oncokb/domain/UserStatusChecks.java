@@ -15,12 +15,12 @@ public class UserStatusChecks {
     boolean academicClarificationEmailSent;
     boolean embargoEmailSent;
 
-    public UserStatusChecks(UserDTO userDTO, UserService userService, SlackService slackService) {
+    public UserStatusChecks(UserDTO userDTO, boolean trialAccountActivated, boolean trialAccountInitiated, boolean academicClarificationEmailSent, boolean embargoEmailSent) {
         this.userDTO = userDTO;
-        trialAccountActivated = userService.isTrialAccountActivated(userDTO);
-        trialAccountInitiated = userService.trialAccountInitiated(userDTO);
-        academicClarificationEmailSent = slackService.withClarificationNote(userDTO, false, false);
-        embargoEmailSent = slackService.withEmbargoNote(userDTO);
+        this.trialAccountActivated = trialAccountActivated;
+        this.trialAccountInitiated = trialAccountInitiated;
+        this.academicClarificationEmailSent = academicClarificationEmailSent;
+        this.embargoEmailSent = embargoEmailSent;
     }
 
     public boolean isTrialAccountActivated() { return trialAccountActivated; }

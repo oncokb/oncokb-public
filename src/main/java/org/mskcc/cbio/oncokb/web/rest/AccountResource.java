@@ -181,7 +181,11 @@ public class AccountResource {
             mailService.sendEmailFromTemplate(userDTO, MailType.APPROVAL_MSK_IN_COMMERCIAL, context);
         }
         slackService.withClarificationNote(userDTO, true, true);
-        slackService.sendUserRegistrationToChannel(userDTO, new UserStatusChecks(userDTO, userService, slackService));
+        slackService.sendUserRegistrationToChannel(userDTO, new UserStatusChecks(userDTO,
+                userService.trialAccountActivated(userDTO),
+                userService.trialAccountInitiated(userDTO),
+                slackService.withClarificationNote(userDTO, false, false),
+                slackService.withEmbargoNote(userDTO)));
         return false;
     }
 
