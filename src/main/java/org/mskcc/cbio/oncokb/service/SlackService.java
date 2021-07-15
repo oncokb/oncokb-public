@@ -137,8 +137,12 @@ public class SlackService {
 
     private TextObject getTextObject(String title, String content) {
         StringBuilder sb = new StringBuilder();
-        sb.append(title + ":\n");
-        sb.append("*" + content + "*");
+        if (title != null) {
+            sb.append(title + ":\n");
+        }
+        if (content != null) {
+            sb.append("*" + content + "*");
+        }
         return MarkdownTextObject.builder().text(sb.toString()).build();
     }
 
@@ -260,12 +264,13 @@ public class SlackService {
     }
 
     private LayoutBlock buildCurrentLicense(UserDTO userDTO) {
-        return SectionBlock
-                .builder()
-                .text(MarkdownTextObject.builder().text("*" + userDTO.getLicenseType().getName() + "*" + (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) ? "" : " :clap:") +"\n*" + userDTO.getCompany() + "*").build())
-                .blockId(LICENSE_TYPE.getId())
-                .accessory(this.getLicenseTypeElement(userDTO))
-                .build();
+        StringBuilder sb = new StringBuilder();
+        sb.append("*" + userDTO.getLicenseType().getName() + "*" + (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) ? "" : " :clap:") +"\n");
+        if (userDTO.getCompany() != null) {
+            sb.append("*" + userDTO.getCompany() + "*");
+        }
+
+        return SectionBlock.builder().text(MarkdownTextObject.builder().text(sb.toString()).build()).accessory(getLicenseTypeElement(userDTO)).blockId(LICENSE_TYPE.getId()).build();
     }
 
     private LayoutBlock buildAccountStatusBlock(UserDTO userDTO, boolean isTrialAccount) {
