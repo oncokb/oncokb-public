@@ -572,6 +572,21 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     type={'textarea'}
                     placeholder={this.useCasePlaceholder}
                     rows={6}
+                    validate={{
+                      required: {
+                        value: true,
+                        errorMessage: 'Your use case is required.',
+                      },
+                      pattern: {
+                        value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
+                        errorMessage:
+                          'Sorry, we only support Latin letters for now.',
+                      },
+                      minLength: {
+                        value: 1,
+                        errorMessage: 'Required to be at least 1 character',
+                      },
+                    }}
                   />
                   {[LicenseType.COMMERCIAL, LicenseType.HOSPITAL].includes(
                     this.selectedLicense
