@@ -14,23 +14,17 @@ export function getAccountInfoTitle(
   license: LicenseType | undefined
 ) {
   if (key === ACCOUNT_TITLES.EMAIL) {
-    let prefix: string;
     switch (license) {
       case LicenseType.ACADEMIC:
-        prefix = 'Institution';
-        break;
+        return 'Institution Email (personal emails will not be approved)';
       case LicenseType.COMMERCIAL:
       case LicenseType.RESEARCH_IN_COMMERCIAL:
-        prefix = 'Company';
-        break;
+        return 'Company Email';
       case LicenseType.HOSPITAL:
-        prefix = 'Hospital';
-        break;
+        return 'Hospital Email';
       default:
-        prefix = '';
-        break;
+        return 'Email';
     }
-    return `${prefix ? `${prefix} ` : ''}Email`;
   } else if (
     [ACCOUNT_TITLES.COMPANY_SECTION_TITLE, ACCOUNT_TITLES.COMPANY].includes(key)
   ) {
