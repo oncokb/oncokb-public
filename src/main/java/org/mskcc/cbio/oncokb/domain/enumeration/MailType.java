@@ -6,6 +6,7 @@ package org.mskcc.cbio.oncokb.domain.enumeration;
 public enum MailType {
     ACTIVATION("activationEmail", "User Activation", null)
     , APPROVAL("approvalEmail", "User Approval", null)
+    , REJECTION("rejectionEmail", "User Rejection", null)
     , CREATION("creationEmail", "Account Creation", null)
     , PASSWORD_RESET("passwordResetEmail", "Reset Password", null)
     , LICENSE_REVIEW_COMMERCIAL("licenseReview", "License Review - Commercial", null)
@@ -13,6 +14,7 @@ public enum MailType {
     , LICENSE_REVIEW_HOSPITAL("licenseReview", "License Review - Hospital", null)
     , CLARIFY_ACADEMIC_FOR_PROFIT("clarifyLicenseInForProfileCompany", "Clarify - Requested academic license from a for-profit company", null)
     , CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL("clarifyAcademicUseWithoutInstituteEmail", "Clarify - Requested academic license from a non-institute email", null)
+    , CLARIFY_USE_CASE("clarifyUseCase", "Clarify - Use case unclear", null)
     , VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES("verifyEmailBeforeAccountExpires", "Verify user still owns the email address", null)
     , APPROVAL_MSK_IN_COMMERCIAL("approvalMSKInCommercial", "Autocorrect MSK user license to academic", null)
     , TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE("trialAccountIsAboutToExpire", "Trail account is about to expire", null)

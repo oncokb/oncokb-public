@@ -144,12 +144,7 @@ public class SlackService {
             Collections.reverse(conversationsHistory.getMessages());
             for (Message message : conversationsHistory.getMessages()) {
                 if (Objects.nonNull(message.getText()) && message.getText().equals(REQUEST_MESSAGE_TEXT) && Objects.nonNull(message.getBlocks())) {
-                    if (!(getBlockWithId(message.getBlocks(), COLLAPSED).isPresent()
-                        || getBlockWithId(message.getBlocks(), ACADEMIC_CLARIFICATION_NOTE).isPresent()
-                        || getBlockWithId(message.getBlocks(), MSK_USER_NOTE).isPresent()
-                        || getBlockWithId(message.getBlocks(), TRIAL_ACCOUNT_NOTE).isPresent()
-                        || getBlockWithId(message.getBlocks(), APPROVED_NOTE).isPresent()
-                        || getBlockWithId(message.getBlocks(), CONVERT_TO_REGULAR_ACCOUNT_NOTE).isPresent())
+                    if (!(getBlockWithId(message.getBlocks(), COLLAPSED).isPresent() || getBlockWithId(message.getBlocks(), SUMMARY_NOTE).isPresent())
                     ) {
                         if (getBlockWithId(message.getBlocks(), USER_ID).isPresent()) {
                             ContextBlock userIdBlock = (ContextBlock) getBlockWithId(message.getBlocks(), USER_ID).get();
@@ -234,13 +229,20 @@ public class SlackService {
 
     private LayoutBlock buildCollapsedBlock(UserDTO userDTO, UserStatusChecks userStatusChecks) {
         StringBuilder sb = new StringBuilder();
-        sb.append(userDTO.getEmail() + "\n" + userDTO.getCompany() + " (" + userDTO.getLicenseType().getShortName() + (userStatusChecks.isTrialAccount() ? ", *TRIAL*" : userDTO.isActivated() ? "" : ", *NOT ACTIVATED*"));
+        sb.append(userDTO.getEmail() + "\n" + userDTO.getCompany() + " (" + userDTO.getLicenseType().getShortName() + (userStatusChecks.isTrialAccount() ? ", *TRIAL*)" : userDTO.isActivated() ? ")" : ")\n*NOT ACTIVATED*: "));
         if (!userDTO.isActivated()) {
-            if (userStatusChecks.isAcademicClarificationEmailSent()) {
-                sb.append(":\nClarified with user on noninstitutional email");
+            if (userStatusChecks.isRejectionEmailSent()) {
+                sb.append("Sent rejection email");
+            } else if (userStatusChecks.isClarifyUseCaseEmailSent()) {
+                sb.append("Sent use case clarification");
+            } else if (userStatusChecks.isAcademicForProfitEmailSent()) {
+                sb.append("Clarified with user on for-profit affiliation");
+            } else if (userStatusChecks.isAcademicClarificationEmailSent()) {
+                sb.append("Clarified with user on noninstitutional email");
+            } else {
+                sb.append("Collapsed");
             }
         }
-        sb.append(")");
         return SectionBlock.builder()
             .text(MarkdownTextObject.builder().text(sb.toString()).build())
             .accessory(buildExpandButton(userDTO)).blockId(COLLAPSED.getId()).build();
@@ -358,20 +360,32 @@ public class SlackService {
         return values[0];
     }
 
-    public boolean withClarificationNote(UserDTO userDTO, boolean newUserActivation) {
-        boolean withClarificationNote = false;
+    public boolean withForProfitClarificationNote(UserDTO userDTO) {
+        return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_ACADEMIC_FOR_PROFIT, null).isEmpty();
+    }
+
+    public boolean withAcademicClarificationNote(UserDTO userDTO, boolean newUserActivation) {
+        boolean withAcademicClarificationNote = false;
         if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
             if (!this.applicationProperties.getAcademicEmailClarifyDomains().isEmpty() &&
                 this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> userDTO.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
-                withClarificationNote = true;
+                withAcademicClarificationNote = true;
                 if (newUserActivation) {
                     mailService.sendAcademicClarificationEmail(userDTO);
                 }
             } else if (!newUserActivation && !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, null).isEmpty()) {
-                withClarificationNote = true;
+                withAcademicClarificationNote = true;
             }
         }
-        return withClarificationNote;
+        return withAcademicClarificationNote;
+    }
+
+    public boolean withUseCaseClarificationNote(UserDTO userDTO) {
+        return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_USE_CASE, null).isEmpty();
+    }
+
+    public boolean withRejectionNote(UserDTO userDTO) {
+        return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.REJECTION, null).isEmpty();
     }
 
     private StaticSelectElement getLicenseTypeElement(UserDTO userDTO) {
@@ -447,8 +461,14 @@ public class SlackService {
     private List<LayoutBlock> buildAdditionalInfoBlocks(UserDTO userDTO, UserStatusChecks userStatusChecks) {
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
 
-        if (withClarificationNote(userDTO, false)) {
-            layoutBlocks.add(buildPlainTextBlock("We have sent the clarification email to the user asking why they could not use an institution email to register.", ACADEMIC_CLARIFICATION_NOTE));
+        if (userStatusChecks.isAcademicForProfitEmailSent()) {
+            layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking why they are applying for the academic license while affiliated with a for-profit company.", FOR_PROFIT_CLARIFICATION_NOTE));
+        }
+        if (userStatusChecks.isAcademicClarificationEmailSent()) {
+            layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking why they could not use an institution email to register.", ACADEMIC_CLARIFICATION_NOTE));
+        }
+        if (userStatusChecks.isClarifyUseCaseEmailSent()) {
+            layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user to further explain their use case.", USE_CASE_CLARIFICATION_NOTE));
         }
         if (isMSKUser(userDTO)) {
             layoutBlocks.add(buildPlainTextBlock("The user has been approved and notified automatically. We also changed their license to Academic and clarified with the user.", MSK_USER_NOTE));
@@ -461,6 +481,8 @@ public class SlackService {
             }
         } else if (userStatusChecks.isTrialAccountInitiated()) {
             layoutBlocks.add(buildPlainTextBlock("The trial account has been initialized and notified.", TRIAL_ACCOUNT_NOTE));
+        } else if (userStatusChecks.isRejectionEmailSent()) {
+            layoutBlocks.add(buildPlainTextBlock("The user has been rejected and notified.", REJECTION_NOTE));
         }
 
         return layoutBlocks;
@@ -517,11 +539,23 @@ public class SlackService {
             }
         }
 
-        // Add option group - Clarify
-        List<OptionObject> clarifyGroup = new ArrayList<>();
-        // Add option - Send Academic Clarification Email
-        clarifyGroup.add(buildAcademicClarificationOption(user));
-        optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("Clarify").build()).options(clarifyGroup).build());
+        if (!user.isActivated()) {
+            // Add option group - Clarify
+            List<OptionObject> clarifyGroup = new ArrayList<>();
+            // Add option - Send Academic For Profit Clarification Email
+            clarifyGroup.add(buildForProfitClarificationOption(user));
+            // Add option - Send Academic Clarification Email
+            clarifyGroup.add(buildAcademicClarificationOption(user));
+            // Add option - Send Use Case Clarification Email
+            clarifyGroup.add(buildUseCaseClarificationOption(user));
+            optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("Clarify").build()).options(clarifyGroup).build());
+
+            // Add option group - Deny
+            List<OptionObject> denyGroup = new ArrayList<>();
+            // Add option - Send Rejection Email
+            denyGroup.add(buildRejectionOption(user));
+            optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("Deny").build()).options(denyGroup).build());
+        }
 
         // Add option group - Other
         List<OptionObject> otherGroup = new ArrayList<>();
@@ -544,8 +578,20 @@ public class SlackService {
         return OptionObject.builder().value(getOptionValue(CONVERT_TO_REGULAR_ACCOUNT.toString(), user.getLogin())).text(PlainTextObject.builder().text("Convert To Regular Account").build()).build();
     }
 
+    private OptionObject buildForProfitClarificationOption(UserDTO user) {
+        return OptionObject.builder().value(getOptionValue(SEND_ACADEMIC_FOR_PROFIT_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Academic For Profit Email").build()).build();
+    }
+
     private OptionObject buildAcademicClarificationOption(UserDTO user) {
         return OptionObject.builder().value(getOptionValue(SEND_ACADEMIC_CLARIFICATION_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Academic Domain Clarification Email").build()).build();
+    }
+
+    private OptionObject buildUseCaseClarificationOption(UserDTO user) {
+        return OptionObject.builder().value(getOptionValue(SEND_USE_CASE_CLARIFICATION_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Use Case Clarification Email").build()).build();
+    }
+
+    private OptionObject buildRejectionOption(UserDTO user) {
+        return OptionObject.builder().value(getOptionValue(SEND_REJECTION_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Rejection Email").build()).build();
     }
 
     private OptionObject buildCollapseOption(UserDTO user) {
@@ -600,13 +646,19 @@ public class SlackService {
         for (LayoutBlock block : blocks) {
             if (block.getClass().getName().equals("com.slack.api.model.block.SectionBlock")) {
                 SectionBlock sectionBlock = (SectionBlock) block;
-                if (Objects.nonNull(sectionBlock.getBlockId()) && sectionBlock.getBlockId().equals(blockId.getId())) {
-                    return Optional.of(block);
+                if (Objects.nonNull(sectionBlock.getBlockId())) {
+                    if((blockId == SUMMARY_NOTE && BlockId.isSummaryNote(BlockId.getById(sectionBlock.getBlockId())))
+                        || sectionBlock.getBlockId().equals(blockId.getId())) {
+                        return Optional.of(block);
+                    }
                 }
             } else if (block.getClass().getName().equals("com.slack.api.model.block.ContextBlock")) {
                 ContextBlock contextBlock = (ContextBlock) block;
-                if (Objects.nonNull(contextBlock.getBlockId()) && contextBlock.getBlockId().equals(blockId.getId())) {
-                    return Optional.of(block);
+                if (Objects.nonNull(contextBlock.getBlockId())) {
+                    if ((blockId == SUMMARY_NOTE && BlockId.isSummaryNote(BlockId.getById(contextBlock.getBlockId())))
+                        || contextBlock.getBlockId().equals(blockId.getId())) {
+                        return Optional.of(block);
+                    }
                 }
             }
         }
