@@ -514,6 +514,13 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       ACCOUNT_TITLES.COMPANY,
                       this.selectedLicense
                     )}
+                    validate={{
+                      required: {
+                        value: true,
+                        errorMessage: 'Your organization name is required.',
+                      },
+                      ...this.textValidation,
+                    }}
                   />
                   <AvField
                     name="city"
