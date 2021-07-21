@@ -82,10 +82,7 @@ public class SlackController {
         Optional<User> user = action == null ? Optional.empty() : userRepository.findOneByLogin(login);
         if (user.isPresent()) {
             UserDTO userDTO = userMapper.userToUserDTO(user.get());
-            UserStatusChecks userStatusChecks = new UserStatusChecks(userDTO,
-                    userService.trialAccountActivated(userDTO),
-                    userService.trialAccountInitiated(userDTO),
-                    slackService.withClarificationNote(userDTO, false));
+            UserStatusChecks userStatusChecks = new UserStatusChecks(userDTO, false, userService, slackService);
             if (actionId == ActionId.MORE_ACTIONS) {
                 actionId = slackService.getActionIdFromMoreActions(pl);
             }
@@ -114,9 +111,21 @@ public class SlackController {
                     userStatusChecks.setTrialAccountActivated(false);
                     userService.convertTrialUserToRegular(userDTO);
                     break;
+                case SEND_ACADEMIC_FOR_PROFIT_EMAIL:
+                    userStatusChecks.setAcademicForProfitEmailSent(true);
+                    mailService.sendAcademicForProfitEmail(userDTO);
+                    break;
                 case SEND_ACADEMIC_CLARIFICATION_EMAIL:
                     userStatusChecks.setAcademicClarificationEmailSent(true);
                     mailService.sendAcademicClarificationEmail(userDTO);
+                    break;
+                case SEND_USE_CASE_CLARIFICATION_EMAIL:
+                    userStatusChecks.setClarifyUseCaseEmailSent(true);
+                    mailService.sendUseCaseClarificationEmail(userDTO);
+                    break;
+                case SEND_REJECTION_EMAIL:
+                    userStatusChecks.setRejectionEmailSent(true);
+                    mailService.sendRejectionEmail(userDTO);
                     break;
                 default:
                     break;

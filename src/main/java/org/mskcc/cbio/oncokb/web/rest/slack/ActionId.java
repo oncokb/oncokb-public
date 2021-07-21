@@ -9,10 +9,13 @@ public enum ActionId {
     , CHANGE_LICENSE_TYPE("change-license-type")
     , GIVE_TRIAL_ACCESS("give-trial-access")
     , CONVERT_TO_REGULAR_ACCOUNT("convert-to-regular-account")
-    , COLLAPSE("collapse")
     , EXPAND("expand")
     , MORE_ACTIONS("more-actions")
+    , SEND_ACADEMIC_FOR_PROFIT_EMAIL("send-academic-for-profit-email")
     , SEND_ACADEMIC_CLARIFICATION_EMAIL("send-academic-clarification-email")
+    , SEND_USE_CASE_CLARIFICATION_EMAIL("send-use-case-clarification-email")
+    , SEND_REJECTION_EMAIL("send-rejection-email")
+    , COLLAPSE("collapse")
     , UPDATE_USER("update-user")
     ;
 

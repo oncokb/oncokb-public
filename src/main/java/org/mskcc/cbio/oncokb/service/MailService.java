@@ -255,6 +255,21 @@ public class MailService {
     }
 
     @Async
+    public void sendAcademicForProfitEmail(UserDTO user) {
+        sendEmailWithLicenseContext(user, MailType.CLARIFY_ACADEMIC_FOR_PROFIT, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
+    }
+
+    @Async
+    public void sendUseCaseClarificationEmail(UserDTO user) {
+        sendEmailWithLicenseContext(user, MailType.CLARIFY_USE_CASE, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
+    }
+
+    @Async
+    public void sendRejectionEmail(UserDTO user) {
+        sendEmailWithLicenseContext(user, MailType.REJECTION, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
+    }
+
+    @Async
     public void sendTrialAccountExpiresMail(int expiresInDays, List<UserDTO> users) {
         if (users == null || users.isEmpty()) {
             return;
@@ -365,6 +380,8 @@ public class MailService {
                 return Optional.of("email.creation.title");
             case APPROVAL:
                 return Optional.of("email.approval.title");
+            case REJECTION:
+                return Optional.of("email.reject.title");
             case PASSWORD_RESET:
                 return Optional.of("email.reset.title");
             case LICENSE_REVIEW_COMMERCIAL:
@@ -377,6 +394,8 @@ public class MailService {
                 return Optional.of("email.license.clarify.title");
             case CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL:
                 return Optional.of("email.license.clarify.title");
+            case CLARIFY_USE_CASE:
+                return Optional.of("email.clarify.use.case.title");
             case VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES:
                 return Optional.of("email.account.expires.by.days.title");
             case APPROVAL_MSK_IN_COMMERCIAL:
