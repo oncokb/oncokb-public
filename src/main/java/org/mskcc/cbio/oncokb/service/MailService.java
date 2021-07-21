@@ -251,7 +251,7 @@ public class MailService {
 
     @Async
     public void sendAcademicClarificationEmail(UserDTO user) {
-        sendEmailWithLicenseContext(user, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
+        sendEmailWithLicenseContext(user, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
     }
 
     @Async
