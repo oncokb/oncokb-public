@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Possible OncoKB Token Exposure</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body>
+<p th:text="'Dear ' + ${user.firstName} + ' ' + ${user.lastName} + ','"></p>
+
+<p>We recently noticed that one of your OncoKB tokens has been accessed from an immoderate number of ip addresses since its creation.</p>
+
+<p>If you believe this does not reflect your usage of your OncoKB token and could be the result of the token being exposed, please contact us immediately and we will disable the exposed token and create a new one, which can be accessed in your account settings.</p>
+
+<p>Otherwise, could you please explain the reason for the high number of access ip's associated with your token? Thank you.</p>
+
+<p>
+<div th:text="#{email.closing}">Sincerely,</div>
+<div th:text="#{email.signature}">The OncoKB Team</div>
+</p>
+</body>
+</html>

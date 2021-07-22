@@ -326,6 +326,23 @@ export default class UserPage extends React.Component<IUserPage> {
     this.generateTrialActivationKey();
   }
 
+  @autobind
+  @action
+  sendIpUsageClarificationEmail() {
+    client
+      .sendIpUsageClarificationUsingPOST({
+        mail: this.user.email,
+      })
+      .then(
+        updatedUser => {
+          this.user = updatedUser;
+          notifySuccess('Sent ip usage clarification');
+          this.showTrialAccountModal = true;
+        },
+        (error: Error) => notifyError(error)
+      );
+  }
+
   @computed
   get hasTrialAccountInfo() {
     return !!this.user.additionalInfo?.trialAccount?.activation?.initiationDate;
@@ -387,6 +404,11 @@ export default class UserPage extends React.Component<IUserPage> {
                               onRegenerate={this.generateTrialActivationKey}
                             />
                           ) : null}
+                          <QuickToolButton
+                            onClick={this.sendIpUsageClarificationEmail}
+                          >
+                            Send Ip Usage Clarification
+                          </QuickToolButton>
                         </div>
                       </Col>
                     </Row>

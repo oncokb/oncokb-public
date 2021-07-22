@@ -257,6 +257,11 @@ public class MailService {
     }
 
     @Async
+    public void sendIpUsageClarificationEmail(UserDTO user) {
+        sendEmailFromTemplate(user, MailType.CLARIFY_IP_USAGE_EMAIL,"Possible OncoKB Token Exposure", applicationProperties.getEmailAddresses().getTechDevAddress(), null, null, null);
+    }
+
+    @Async
     public void sendTrialAccountExpiresMail(int expiresInDays, List<UserDTO> users) {
         if (users == null || users.isEmpty()) {
             return;

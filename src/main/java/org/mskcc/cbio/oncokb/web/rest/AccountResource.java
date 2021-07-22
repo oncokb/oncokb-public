@@ -407,6 +407,16 @@ public class AccountResource {
         }
     }
 
+    @PostMapping(path = "/account/send-ip-usage-clarification")
+    public UserDTO sendIpUsageClarification(@RequestBody String mail) {
+        Optional<User> userOptional = userRepository.findOneByEmailIgnoreCase(mail);
+        if (userOptional.isPresent()) {
+            mailService.sendIpUsageClarificationEmail(userMapper.userToUserDTO(userOptional.get()));
+            return userMapper.userToUserDTO(userOptional.get());
+        }
+        throw new AccountResourceException("No user found with this email");
+    }
+
     private static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) &&
             password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&

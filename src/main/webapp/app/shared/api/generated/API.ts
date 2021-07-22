@@ -1115,6 +1115,59 @@ export default class API {
     };
 
     /**
+     * sendIpUsageClarification
+     * @method
+     * @name API#sendIpUsageClarification
+     * @param {} mail - mail
+     */
+    sendIpUsageClarificationUsingPOSTWithHttpInfo(parameters: {
+      'mail': string,
+      $queryParameters ? : any,
+      $domain ? : string
+    }): Promise < request.Response > {
+      const domain = parameters.$domain ? parameters.$domain : this.domain;
+      const errorHandlers = this.errorHandlers;
+      const request = this.request;
+      let path = '/api/account/send-ip-usage-clarification';
+      let body: any;
+      let queryParameters: any = {};
+      let headers: any = {};
+      let form: any = {};
+      return new Promise(function(resolve, reject) {
+        headers['Accept'] = '*/*';
+        headers['Content-Type'] = 'application/json';
+
+        if (parameters['mail'] !== undefined) {
+          body = parameters['mail'];
+        }
+
+        if (parameters['mail'] === undefined) {
+          reject(new Error('Missing required  parameter: mail'));
+          return;
+        }
+
+        if (parameters.$queryParameters) {
+          Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+            var parameter = parameters.$queryParameters[parameterName];
+            queryParameters[parameterName] = parameter;
+          });
+        }
+
+        request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+      });
+    };
+    sendIpUsageClarificationUsingPOST(parameters: {
+      'mail': string,
+      $queryParameters ? : any,
+      $domain ? : string
+    }): Promise < UserDTO > {
+      return this.sendIpUsageClarificationUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+        return response.body;
+      });
+    };
+
+    /**
      * getTokens
      * @method
      * @name API#getTokensUsingGET

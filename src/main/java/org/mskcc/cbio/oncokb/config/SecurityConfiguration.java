@@ -115,6 +115,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/account/active-trial/init").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/account/active-trial/finish").permitAll()
             .antMatchers("/api/account/active-trial/info").permitAll()
+            .antMatchers("/api/account/send-ip-usage-clarification").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/account/**").hasAnyAuthority(AuthoritiesConstants.USER)
 
             .antMatchers("/api/users/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)

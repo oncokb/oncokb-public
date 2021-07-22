@@ -8,18 +8,18 @@
   <table th:fragment="userTable(tableType, userObjects, linkBaseUrl)">
     <thead>
     <tr style="text-align: left">
+      <div th:if="${tableType} == 'access-ip-outlier-users'">
+        <th>Token</th>
+        <th>Number of Ips</th>
+      </div>
       <th>License Type</th>
       <th>Email</th>
       <div th:if="${tableType} == 'unapproved-users'">
         <th>Date Created</th>
         <th>Last Discussed</th>
       </div>
-      <div th:if="${tableType} == 'access-ip-outlier-users'">
-        <th>Number of Access Ips</th>
-      </div>
       <th>Name</th>
       <th>Organization</th>
-      <th>Country</th>
       <div th:if="${tableType} == 'unapproved-users'">
         <th>View Request in Slack</th>
       </div>
@@ -30,20 +30,18 @@
     </thead>
     <tbody>
     <tr th:each="userObject : ${userObjects}">
+      <div th:if="${tableType} == 'access-ip-outlier-users'">
+        <td th:text="${userObject.token.token}"/>
+        <td th:text="${userObject.token.numAccessIps}"/>
+      </div>
       <td th:text="${userObject.userDTO.licenseType}"/>
       <td th:text="${userObject.userDTO.email}"/>
       <div th:if="${tableType} == 'unapproved-users'">
         <td th:text="${userObject.dateCreated}"/>
         <td th:text="${userObject.dateLastReplied}"/>
       </div>
-      <div th:if="${tableType} == 'access-ip-outlier-users'">
-        <td th:text="${userObject.token.numAccessIps}"/>
-      </div>
       <td th:text="${userObject.userDTO.firstName + ' ' + userObject.userDTO.lastName}"/>
       <td th:text="${userObject.userDTO.company}"/>
-      <td th:text="${userObject.userDTO.country}"/>
-      <td>
-      </td>
       <div th:if="${tableType} == 'unapproved-users'">
         <a th:with="url=(@{|${linkBaseUrl}/p${userObject.message.ts}|})" th:href="${url}">Slack request link</a>
       </div>
