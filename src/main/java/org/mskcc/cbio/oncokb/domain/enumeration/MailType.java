@@ -22,6 +22,7 @@ public enum MailType {
     , TOKEN_HAS_BEEN_EXPOSED_USER("tokenHasBeenExposedToUser", "Token has been exposed", null)
     , SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED("searchingResponseStructureHasChanged", "Searching Response Structure Has Changed", null)
     , LIST_OF_UNAPPROVED_USERS("listOfUnapprovedUsers", "List of unapproved users", null)
+    , LIST_OF_ACCESS_IP_OUTLIER_USERS("listOfAccessIpOutlierUsers", "List of access ip outlier users", null)
     , TEST("testEmail", "Test", null)
     ;
 

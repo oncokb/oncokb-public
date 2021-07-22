@@ -6,6 +6,8 @@ import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.UserMessagePair;
+import org.mskcc.cbio.oncokb.domain.UserTokenPair;
+import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
@@ -137,13 +139,30 @@ public class CronJobController {
     }
 
     /**
-     * A list of not activated users should be emailed to the team every Monday.
+     * A list of not activated users should be emailed to the team every week.
      */
     @GetMapping(path = "/email-unapproved-users-list")
     public void emailUnapprovedUsersList() {
         final int DAYS_AGO = 7;
         List<UserMessagePair> users = userService.getAllUnapprovedUsersCreatedAfter(DAYS_AGO);
         mailService.sendUnapprovedUsersEmail(DAYS_AGO, users);
+    }
+
+    /**
+     * A list of users who use an extreme number of ip addresses should be emailed to the team every week.
+     */
+    @GetMapping(path = "/email-access-ip-outlier-users-list")
+    public void emailAccessIpOutlierUsersList() {
+        final int DAYS_AGO = 7;
+        final int ACCESS_IP_LIMIT = 10;
+        List<Token> usedTokens = tokenService.findByHasBeenUsed();
+        List<UserTokenPair> users = usedTokens
+            .stream()
+            .filter(token -> token.getNumAccessIps() > ACCESS_IP_LIMIT && userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(token.getUser(), MailType.LIST_OF_ACCESS_IP_OUTLIER_USERS, null).isEmpty())
+            .map(token -> new UserTokenPair(userMapper.userToUserDTO(token.getUser()), token))
+            .collect(Collectors.toList());
+        Collections.reverse(users);
+        mailService.sendAccessIpOutlierUsersEmail(DAYS_AGO, ACCESS_IP_LIMIT, users);
     }
 
     /**
@@ -187,10 +206,11 @@ public class CronJobController {
 
         // Update tokens with token usage
         tokenUsages.stream().forEach(tokenUsage -> {
-            if (!tokenUsage.getToken().getCurrentUsage().equals(tokenUsage.getCount())) {
+            if (!(tokenUsage.getToken().getCurrentUsage().equals(tokenUsage.getCount()) || tokenUsage.getToken().getNumAccessIps().equals(tokenUsage.getNumAccessIps()))) {
                 Optional<Token> tokenOptional = tokenService.findByToken(tokenUsage.getToken().getToken());
                 if (tokenOptional.isPresent()) {
                     tokenOptional.get().setCurrentUsage(tokenUsage.getCount());
+                    tokenOptional.get().setNumAccessIps(tokenUsage.getNumAccessIps());
                     tokenService.save(tokenOptional.get());
                 }
             }

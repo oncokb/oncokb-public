@@ -7,5 +7,6 @@ import org.mskcc.cbio.oncokb.domain.Token;
  */
 public interface UserTokenUsage {
     Integer getCount();
+    Integer getNumAccessIps();
     Token getToken();
 }

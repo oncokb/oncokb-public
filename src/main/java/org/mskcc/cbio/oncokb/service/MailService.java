@@ -7,6 +7,7 @@ import org.mskcc.cbio.oncokb.domain.User;
 
 import javax.mail.MessagingException;
 
+import org.mskcc.cbio.oncokb.domain.UserTokenPair;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.UserMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
@@ -38,6 +39,7 @@ import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_E
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_EXPOSED_USER;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.LIST_OF_UNAPPROVED_USERS;
+import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.LIST_OF_ACCESS_IP_OUTLIER_USERS;
 
 /**
  * Service for sending emails.
@@ -334,8 +336,7 @@ public class MailService {
         context.setVariable("academicUsers", users);
         context.setVariable("daysAgo", daysAgo);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-        context.setVariable("slackBaseUrl", applicationProperties.getSlack().getSlackBaseUrl());
-        context.setVariable("channelId", applicationProperties.getSlack().getUserRegistrationChannelId());
+        context.setVariable("linkBaseUrl", applicationProperties.getSlack().getSlackBaseUrl() + "/archives/" + applicationProperties.getSlack().getUserRegistrationChannelId());
 
         String content = templateEngine.process("mail/" + LIST_OF_UNAPPROVED_USERS.getTemplateName(), context);
 
@@ -344,6 +345,37 @@ public class MailService {
             log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getLicenseAddress());
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getLicenseAddress(), e);
+        }
+    }
+
+    @Async
+    public void sendAccessIpOutlierUsersEmail(int daysAgo, int accessIpLimit, List<UserTokenPair> users) {
+        final String ACCOUNT_PAGE_BASE_URL = "https://www.oncokb.org/users";
+
+        if (users == null || users.isEmpty()) {
+            return;
+        }
+
+        users.sort(Comparator.comparingInt(user -> user.getToken().getNumAccessIps() * -1));
+
+        for (UserTokenPair userTokenPair : users) {
+            addUserMailsRecord(userTokenPair.getUserDTO(), LIST_OF_ACCESS_IP_OUTLIER_USERS, applicationProperties.getEmailAddresses().getTechDevAddress(), "bot");
+        }
+
+        Context context = new Context(Locale.US);
+        context.setVariable("users", users);
+        context.setVariable("daysAgo", daysAgo);
+        context.setVariable("accessIpLimit", accessIpLimit);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        context.setVariable("accountPageBaseUrl", ACCOUNT_PAGE_BASE_URL);
+
+        String content = templateEngine.process("mail/" + LIST_OF_ACCESS_IP_OUTLIER_USERS.getTemplateName(), context);
+
+        try {
+            sendEmail(applicationProperties.getEmailAddresses().getTechDevAddress(), applicationProperties.getEmailAddresses().getTechDevAddress(), null, "The list of access ip outlier OncoKB users", content, null, false, true);
+            log.info("Sent email to User '{}'", applicationProperties.getEmailAddresses().getTechDevAddress());
+        } catch (MailException | MessagingException e) {
+            log.warn("Email could not be sent to user '{}'", applicationProperties.getEmailAddresses().getTechDevAddress(), e);
         }
     }
 

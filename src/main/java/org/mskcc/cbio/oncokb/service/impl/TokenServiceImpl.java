@@ -83,6 +83,11 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
+    public List<Token> findByHasBeenUsed() {
+        return tokenRepository.findAllByNumAccessIpsGreaterThan(0);
+    }
+
+    @Override
     public List<Token> findByUser(User user) {
         return tokenRepository.findByUserLogin(user.getLogin());
     }

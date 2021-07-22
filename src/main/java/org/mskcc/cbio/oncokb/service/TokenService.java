@@ -43,6 +43,8 @@ public interface TokenService {
 
     List<Token> findByUserIsCurrentUser();
 
+    List<Token> findByHasBeenUsed();
+
     List<Token> findByUser(User user);
 
     List<Token> findValidByUser(User user);
