@@ -56,6 +56,9 @@ public class TokenResourceIT {
     private static final Boolean DEFAULT_RENEWABLE = false;
     private static final Boolean UPDATED_RENEWABLE = true;
 
+    private static final Integer DEFAULT_NUM_ACCESS_IPS = 1;
+    private static final Integer UPDATED_NUM_ACCESS_IPS = 2;
+
     @Autowired
     private TokenRepository tokenRepository;
 
@@ -83,7 +86,8 @@ public class TokenResourceIT {
             .expiration(DEFAULT_EXPIRATION)
             .usageLimit(DEFAULT_USAGE_LIMIT)
             .currentUsage(DEFAULT_CURRENT_USAGE)
-            .renewable(DEFAULT_RENEWABLE);
+            .renewable(DEFAULT_RENEWABLE)
+            .numAccessIps(DEFAULT_NUM_ACCESS_IPS);
         return token;
     }
     /**
@@ -99,7 +103,8 @@ public class TokenResourceIT {
             .expiration(UPDATED_EXPIRATION)
             .usageLimit(UPDATED_USAGE_LIMIT)
             .currentUsage(UPDATED_CURRENT_USAGE)
-            .renewable(UPDATED_RENEWABLE);
+            .renewable(UPDATED_RENEWABLE)
+            .numAccessIps(UPDATED_NUM_ACCESS_IPS);
         return token;
     }
 
@@ -128,6 +133,7 @@ public class TokenResourceIT {
         assertThat(testToken.getUsageLimit()).isEqualTo(DEFAULT_USAGE_LIMIT);
         assertThat(testToken.getCurrentUsage()).isEqualTo(DEFAULT_CURRENT_USAGE);
         assertThat(testToken.isRenewable()).isEqualTo(DEFAULT_RENEWABLE);
+        assertThat(testToken.getNumAccessIps()).isEqualTo(DEFAULT_NUM_ACCESS_IPS);
     }
 
     @Test
@@ -190,6 +196,25 @@ public class TokenResourceIT {
 
     @Test
     @Transactional
+    public void checkNumAccessIpsIsRequired() throws Exception {
+        int databaseSizeBeforeTest = tokenRepository.findAll().size();
+        // set the field null
+        token.setNumAccessIps(null);
+
+        // Create the Token, which fails.
+
+
+        restTokenMockMvc.perform(post("/api/tokens")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(token)))
+            .andExpect(status().isBadRequest());
+
+        List<Token> tokenList = tokenRepository.findAll();
+        assertThat(tokenList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllTokens() throws Exception {
         // Initialize the database
         tokenRepository.saveAndFlush(token);
@@ -204,7 +229,8 @@ public class TokenResourceIT {
             .andExpect(jsonPath("$.[*].expiration").value(hasItem(DEFAULT_EXPIRATION.toString())))
             .andExpect(jsonPath("$.[*].usageLimit").value(hasItem(DEFAULT_USAGE_LIMIT)))
             .andExpect(jsonPath("$.[*].currentUsage").value(hasItem(DEFAULT_CURRENT_USAGE)))
-            .andExpect(jsonPath("$.[*].renewable").value(hasItem(DEFAULT_RENEWABLE.booleanValue())));
+            .andExpect(jsonPath("$.[*].renewable").value(hasItem(DEFAULT_RENEWABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].numAccessIps").value(hasItem(DEFAULT_NUM_ACCESS_IPS)));
     }
     
     @Test
@@ -223,7 +249,8 @@ public class TokenResourceIT {
             .andExpect(jsonPath("$.expiration").value(DEFAULT_EXPIRATION.toString()))
             .andExpect(jsonPath("$.usageLimit").value(DEFAULT_USAGE_LIMIT))
             .andExpect(jsonPath("$.currentUsage").value(DEFAULT_CURRENT_USAGE))
-            .andExpect(jsonPath("$.renewable").value(DEFAULT_RENEWABLE.booleanValue()));
+            .andExpect(jsonPath("$.renewable").value(DEFAULT_RENEWABLE.booleanValue()))
+            .andExpect(jsonPath("$.numAccessIps").value(DEFAULT_NUM_ACCESS_IPS));
     }
     @Test
     @Transactional
@@ -251,7 +278,8 @@ public class TokenResourceIT {
             .expiration(UPDATED_EXPIRATION)
             .usageLimit(UPDATED_USAGE_LIMIT)
             .currentUsage(UPDATED_CURRENT_USAGE)
-            .renewable(UPDATED_RENEWABLE);
+            .renewable(UPDATED_RENEWABLE)
+            .numAccessIps(UPDATED_NUM_ACCESS_IPS);
 
         restTokenMockMvc.perform(put("/api/tokens")
             .contentType(MediaType.APPLICATION_JSON)
@@ -268,6 +296,7 @@ public class TokenResourceIT {
         assertThat(testToken.getUsageLimit()).isEqualTo(UPDATED_USAGE_LIMIT);
         assertThat(testToken.getCurrentUsage()).isEqualTo(UPDATED_CURRENT_USAGE);
         assertThat(testToken.isRenewable()).isEqualTo(UPDATED_RENEWABLE);
+        assertThat(testToken.getNumAccessIps()).isEqualTo(UPDATED_NUM_ACCESS_IPS);
     }
 
     @Test
