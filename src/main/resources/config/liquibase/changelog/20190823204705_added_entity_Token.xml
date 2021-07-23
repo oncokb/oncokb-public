@@ -31,12 +31,6 @@
             <column name="current_usage" type="integer">
                 <constraints nullable="false" />
             </column>
-            <column name="renewable" type="boolean">
-                <constraints nullable="false" />
-            </column>
-            <column name="num_access_ips" type="integer">
-                <constraints nullable="false" />
-            </column>
             <column name="user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -54,7 +48,7 @@
       </addColumn>
     </changeSet>
 
-    <changeSet author="xub2 (generated)" id="20190823204705-1-relations">
+    <changeSet author="xub2 (generated)" id="numAccessIps">
       <addColumn tableName="token">
         <column name="numAccessIps" type="integer" defaultValue="0">
           <constraints nullable="false"/>
