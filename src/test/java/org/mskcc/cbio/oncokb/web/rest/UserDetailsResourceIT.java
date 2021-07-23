@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountStatus;
 /**
  * Integration tests for the {@link UserDetailsResource} REST controller.
  */
@@ -59,6 +60,9 @@ public class UserDetailsResourceIT {
 
     private static final String DEFAULT_ADDITIONAL_INFO = "AAAAAAAAAA";
     private static final String UPDATED_ADDITIONAL_INFO = "BBBBBBBBBB";
+
+    private static final AccountStatus DEFAULT_STATUS = AccountStatus.NOT_VERIFIED;
+    private static final AccountStatus UPDATED_STATUS = AccountStatus.UNDER_REVIEW;
 
     @Autowired
     private UserDetailsRepository userDetailsRepository;
@@ -91,7 +95,8 @@ public class UserDetailsResourceIT {
             .city(DEFAULT_CITY)
             .country(DEFAULT_COUNTRY)
             .address(DEFAULT_ADDRESS)
-            .additionalInfo(DEFAULT_ADDITIONAL_INFO);
+            .additionalInfo(DEFAULT_ADDITIONAL_INFO)
+            .status(DEFAULT_STATUS);
         return userDetails;
     }
     /**
@@ -108,7 +113,8 @@ public class UserDetailsResourceIT {
             .city(UPDATED_CITY)
             .country(UPDATED_COUNTRY)
             .address(UPDATED_ADDRESS)
-            .additionalInfo(UPDATED_ADDITIONAL_INFO);
+            .additionalInfo(UPDATED_ADDITIONAL_INFO)
+            .status(UPDATED_STATUS);
         return userDetails;
     }
 
@@ -139,6 +145,7 @@ public class UserDetailsResourceIT {
         assertThat(testUserDetails.getCountry()).isEqualTo(DEFAULT_COUNTRY);
         assertThat(testUserDetails.getAddress()).isEqualTo(DEFAULT_ADDRESS);
         assertThat(testUserDetails.getAdditionalInfo()).isEqualTo(DEFAULT_ADDITIONAL_INFO);
+        assertThat(testUserDetails.getStatus()).isEqualTo(DEFAULT_STATUS);
     }
 
     @Test
@@ -164,6 +171,26 @@ public class UserDetailsResourceIT {
 
     @Test
     @Transactional
+    public void checkStatusIsRequired() throws Exception {
+        int databaseSizeBeforeTest = userDetailsRepository.findAll().size();
+        // set the field null
+        userDetails.setStatus(null);
+
+        // Create the UserDetails, which fails.
+        UserDetailsDTO userDetailsDTO = userDetailsMapper.toDto(userDetails);
+
+
+        restUserDetailsMockMvc.perform(post("/api/user-details")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(userDetailsDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<UserDetails> userDetailsList = userDetailsRepository.findAll();
+        assertThat(userDetailsList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllUserDetails() throws Exception {
         // Initialize the database
         userDetailsRepository.saveAndFlush(userDetails);
@@ -179,9 +206,10 @@ public class UserDetailsResourceIT {
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
             .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
-            .andExpect(jsonPath("$.[*].additionalInfo").value(hasItem(DEFAULT_ADDITIONAL_INFO.toString())));
+            .andExpect(jsonPath("$.[*].additionalInfo").value(hasItem(DEFAULT_ADDITIONAL_INFO.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getUserDetails() throws Exception {
@@ -199,7 +227,8 @@ public class UserDetailsResourceIT {
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY))
             .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
-            .andExpect(jsonPath("$.additionalInfo").value(DEFAULT_ADDITIONAL_INFO.toString()));
+            .andExpect(jsonPath("$.additionalInfo").value(DEFAULT_ADDITIONAL_INFO.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
     @Test
     @Transactional
@@ -228,7 +257,8 @@ public class UserDetailsResourceIT {
             .city(UPDATED_CITY)
             .country(UPDATED_COUNTRY)
             .address(UPDATED_ADDRESS)
-            .additionalInfo(UPDATED_ADDITIONAL_INFO);
+            .additionalInfo(UPDATED_ADDITIONAL_INFO)
+            .status(UPDATED_STATUS);
         UserDetailsDTO userDetailsDTO = userDetailsMapper.toDto(updatedUserDetails);
 
         restUserDetailsMockMvc.perform(put("/api/user-details")
@@ -247,6 +277,7 @@ public class UserDetailsResourceIT {
         assertThat(testUserDetails.getCountry()).isEqualTo(UPDATED_COUNTRY);
         assertThat(testUserDetails.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testUserDetails.getAdditionalInfo()).isEqualTo(UPDATED_ADDITIONAL_INFO);
+        assertThat(testUserDetails.getStatus()).isEqualTo(UPDATED_STATUS);
     }
 
     @Test

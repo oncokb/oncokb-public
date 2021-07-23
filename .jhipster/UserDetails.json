@@ -30,6 +30,12 @@
       "fieldName": "additionalInfo",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "AccountStatus",
+      "fieldValues": "ACTIVATED,TRIAL,UNDER_REVIEW,PENDING_FEEDBACK,NOT_VERIFIED,REJECTED",
+      "fieldValidateRules": ["required"]
     }
   ],
   "relationships": [

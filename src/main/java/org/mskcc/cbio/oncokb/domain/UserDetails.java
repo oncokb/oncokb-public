@@ -2,10 +2,13 @@ package org.mskcc.cbio.oncokb.domain;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountStatus;
 
 /**
  * A UserDetails.
@@ -42,6 +45,11 @@ public class UserDetails implements Serializable {
     @Lob
     @Column(name = "additional_info")
     private String additionalInfo;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private AccountStatus status;
 
     @OneToOne
     @JoinColumn(unique = true)
@@ -147,6 +155,19 @@ public class UserDetails implements Serializable {
         this.additionalInfo = additionalInfo;
     }
 
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public UserDetails status(AccountStatus status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
+    }
+
     public User getUser() {
         return user;
     }
@@ -189,6 +210,7 @@ public class UserDetails implements Serializable {
             ", country='" + getCountry() + "'" +
             ", address='" + getAddress() + "'" +
             ", additionalInfo='" + getAdditionalInfo() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 }

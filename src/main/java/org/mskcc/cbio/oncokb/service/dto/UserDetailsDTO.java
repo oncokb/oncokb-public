@@ -1,9 +1,11 @@
 package org.mskcc.cbio.oncokb.service.dto;
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import javax.persistence.Lob;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountStatus;
 
 /**
  * A DTO for the {@link org.mskcc.cbio.oncokb.domain.UserDetails} entity.
@@ -26,6 +28,10 @@ public class UserDetailsDTO implements Serializable {
 
     @Lob
     private AdditionalInfoDTO additionalInfo;
+
+    @NotNull
+    private AccountStatus status;
+
 
     private Long userId;
 
@@ -93,6 +99,14 @@ public class UserDetailsDTO implements Serializable {
         this.additionalInfo = additionalInfo;
     }
 
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
+    }
+
     public Long getUserId() {
         return userId;
     }
@@ -130,6 +144,7 @@ public class UserDetailsDTO implements Serializable {
             ", country='" + getCountry() + "'" +
             ", address='" + getAddress() + "'" +
             ", additionalInfo='" + getAdditionalInfo() + "'" +
+            ", status='" + getStatus() + "'" +
             ", userId=" + getUserId() +
             "}";
     }

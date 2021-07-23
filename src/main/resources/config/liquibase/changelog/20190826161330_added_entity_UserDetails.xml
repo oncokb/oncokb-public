@@ -47,6 +47,14 @@
     <changeSet id="20190826161330-1-relations" author="jhipster">
 
     </changeSet>
+
+    <changeSet author="xub2" id="status">
+      <addColumn tableName="user_details">
+        <column name="status" type="varchar(255)">
+          <constraints nullable="true"/>
+        </column>
+      </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
     <!--
