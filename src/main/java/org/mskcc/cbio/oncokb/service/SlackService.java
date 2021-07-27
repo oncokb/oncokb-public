@@ -214,6 +214,8 @@ public class SlackService {
             actionId = getActionId(responseBlockActionPayload);
             boolean expandedAction = actionId.equals(EXPAND) || (actionId.equals(MORE_ACTIONS) && getActionIdFromMoreActions(responseBlockActionPayload).equals(UPDATE_USER)) || actionId.equals(CHANGE_LICENSE_TYPE);
             buildCollapsed = (userStatusChecks.isReviewed() && !expandedAction) || actionId.equals(COLLAPSE);
+        } else {
+            buildCollapsed = userStatusChecks.isReviewed();
         }
 
         if (buildCollapsed) {
@@ -231,8 +233,16 @@ public class SlackService {
     }
 
     private LayoutBlock buildCollapsedBlock(UserDTO userDTO, UserStatusChecks userStatusChecks) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(userDTO.getEmail() + "\n" + userDTO.getCompany() + " (" + userDTO.getLicenseType().getShortName() + (userStatusChecks.isTrialAccount() ? ", *TRIAL*" : userDTO.isActivated() ? "" : ", *NOT ACTIVATED*"));
+        if (!userDTO.isActivated()) {
+            if (userStatusChecks.isAcademicClarificationEmailSent()) {
+                sb.append(":\nClarified with user on noninstitutional email");
+            }
+        }
+        sb.append(")");
         return SectionBlock.builder()
-            .text(MarkdownTextObject.builder().text(userDTO.getEmail() + "\n" + userDTO.getCompany() + " (" + userDTO.getLicenseType().getShortName() + (userStatusChecks.isTrialAccount() ? ", *TRIAL*" : userDTO.isActivated() ? "" : ", *NOT ACTIVATED*") + ")").build())
+            .text(MarkdownTextObject.builder().text(sb.toString()).build())
             .accessory(buildExpandButton(userDTO)).blockId(COLLAPSED.getId()).build();
     }
 
