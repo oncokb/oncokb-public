@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.*;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
@@ -357,7 +358,7 @@ public class UserService {
                 log.debug("Changed Information for User: {}", user);
 
                 return new UserDTO(user, getUpdatedUserDetails(
-                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
+                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry(), userDTO.getStatus()));
             });
 
         if (updatedUserDTO.isPresent()) {
@@ -366,7 +367,7 @@ public class UserService {
         return updatedUserDTO;
     }
 
-    private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String company, String city, String country) {
+    private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String company, String city, String country, AccountStatus status) {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
         if (userDetails.isPresent()) {
             userDetails.get().setLicenseType(licenseType);
@@ -374,6 +375,7 @@ public class UserService {
             userDetails.get().setCompany(company);
             userDetails.get().setCity(city);
             userDetails.get().setCountry(country);
+            userDetails.get().setStatus(status);
             return userDetails.get();
         } else {
             UserDetails newUserDetails = new UserDetails();
@@ -382,6 +384,7 @@ public class UserService {
             newUserDetails.setCompany(company);
             newUserDetails.setCity(city);
             newUserDetails.setCountry(country);
+            newUserDetails.setStatus(status);
             newUserDetails.setUser(user);
             userDetailsRepository.save(newUserDetails);
             return newUserDetails;

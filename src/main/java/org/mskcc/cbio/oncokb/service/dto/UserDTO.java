@@ -6,6 +6,7 @@ import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.enumeration.AccountStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
@@ -43,6 +44,8 @@ public class UserDTO {
     private String country;
 
     private AdditionalInfoDTO additionalInfo;
+
+    private AccountStatus status;
 
     @Email
     @Size(min = 5, max = 254)
@@ -105,6 +108,7 @@ public class UserDTO {
             this.city = userDetails.getCity();
             this.country = userDetails.getCountry();
             this.additionalInfo = new Gson().fromJson(userDetails.getAdditionalInfo(), AdditionalInfoDTO.class);
+            this.status = userDetails.getStatus();
         }
     }
 
@@ -203,6 +207,10 @@ public class UserDTO {
     public void setAdditionalInfo(AdditionalInfoDTO additionalInfo) {
         this.additionalInfo = additionalInfo;
     }
+
+    public AccountStatus getStatus() { return status; }
+
+    public void setStatus(AccountStatus status) { this.status = status; }
 
     public String getImageUrl() {
         return imageUrl;

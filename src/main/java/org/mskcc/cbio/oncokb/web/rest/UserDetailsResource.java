@@ -2,6 +2,8 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.UserDetailsService;
+import org.mskcc.cbio.oncokb.service.UserService;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 
@@ -10,6 +12,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +20,11 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import static org.mskcc.cbio.oncokb.domain.enumeration.AccountStatus.*;
+
 
 /**
  * REST controller for managing {@link org.mskcc.cbio.oncokb.domain.UserDetails}.
@@ -35,8 +42,11 @@ public class UserDetailsResource {
 
     private final UserDetailsService userDetailsService;
 
-    public UserDetailsResource(UserDetailsService userDetailsService) {
+    private final UserService userService;
+
+    public UserDetailsResource(UserDetailsService userDetailsService, UserService userService) {
         this.userDetailsService = userDetailsService;
+        this.userService = userService;
     }
 
     /**
@@ -115,5 +125,20 @@ public class UserDetailsResource {
         log.debug("REST request to delete UserDetails : {}", id);
         userDetailsService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * {@code POST  /update-user-status} : populate user status for current users.
+     *
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
+    @PostMapping ("/user-details/update-user-status")
+    public void updateUserStatus() {
+        log.info("REST request to update user status for current users.");
+        Page<UserDTO> users = userService.getAllManagedUsers(null);
+        users.stream().forEach(user -> {
+            user.setStatus(user.isActivated() ? (userService.trialAccountActivated(user) ? TRIAL : ACTIVATED) : (Objects.nonNull(user.getActivationKey()) ? NOT_VERIFIED : UNDER_REVIEW));
+            userService.updateUser(user);
+        });
     }
 }

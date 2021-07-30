@@ -1785,6 +1785,33 @@
         "deprecated": false
       }
     },
+    "/api/user-details/update-user-status": {
+      "post": {
+        "tags": [
+          "user-details-resource"
+        ],
+        "summary": "updateUserStatus",
+        "operationId": "updateUserStatusUsingPOST",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/user-mails": {
       "get": {
         "tags": [
