@@ -148,6 +148,7 @@ export default class AlterationPage extends React.Component<
                   tumorType={this.store.tumorTypeQuery}
                   refGenome={this.store.referenceGenomeQuery}
                   annotation={this.store.annotationResult.result}
+                  fdaAlterations={this.store.fdaAlterations.result}
                   onChangeTumorType={newTumorType =>
                     (this.store.tumorTypeQuery = newTumorType)
                   }

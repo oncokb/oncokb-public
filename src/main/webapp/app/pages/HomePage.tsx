@@ -1,34 +1,31 @@
 import * as React from 'react';
-import { observable, action, IReactionDisposer, reaction } from 'mobx';
-import { observer, inject } from 'mobx-react';
-import { remoteData } from 'cbioportal-frontend-commons';
+import {action, IReactionDisposer, observable, reaction} from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {remoteData} from 'cbioportal-frontend-commons';
 import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
-import {
-  Gene,
-  LevelNumber,
-  TypeaheadSearchResp,
-} from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { Row, Col, Button } from 'react-bootstrap';
+import {Gene, LevelNumber, TypeaheadSearchResp,} from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {Button, Col, Row} from 'react-bootstrap';
 import oncokbImg from 'content/images/oncokb.png';
-import { HomePageNumber } from 'app/components/HomePageNumber';
+import {HomePageNumber} from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
 import {
-  LEVELS,
   LEVEL_BUTTON_DESCRIPTION,
   LEVEL_CLASSIFICATION,
-  LEVEL_TYPES,
   LEVEL_TYPE_NAMES,
+  LEVEL_TYPES,
+  LEVELS,
   PAGE_ROUTE,
 } from 'app/config/constants';
-import { LevelButton } from 'app/components/levelButton/LevelButton';
-import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
-import { RouterStore } from 'mobx-react-router';
-import { CitationText } from 'app/components/CitationText';
+import {LevelButton} from 'app/components/levelButton/LevelButton';
+import {levelOfEvidence2Level} from 'app/shared/utils/Utils';
+import {RouterStore} from 'mobx-react-router';
+import {CitationText} from 'app/components/CitationText';
 import _ from 'lodash';
 import AppStore from 'app/store/AppStore';
 import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 import autobind from 'autobind-decorator';
 import * as QueryString from 'query-string';
+import {FDA_L1_DISABLED_BTN_TOOLTIP} from "app/pages/genePage/FdaUtils";
 
 interface IHomeProps {
   content: string;
@@ -88,7 +85,7 @@ class HomePage extends React.Component<IHomeProps> {
       description: string;
       level: LEVELS;
       linkoutLevel: string;
-      combinedLevels: string[];
+      combinedLevels: LEVELS[];
     }[] = [];
     for (const level in LEVELS) {
       if (LEVELS[level]) {
@@ -141,7 +138,7 @@ class HomePage extends React.Component<IHomeProps> {
     default: {},
   });
 
-  getLevelNumber(levels: string[]) {
+  getLevelGenes(levels: string[]) {
     return _.uniq(
       _.reduce(
         levels,
@@ -154,8 +151,20 @@ class HomePage extends React.Component<IHomeProps> {
           return acc;
         },
         [] as Gene[]
-      )
-    ).length;
+      ).map(gene => gene.hugoSymbol)
+    );
+  }
+
+  getLevelNumber(levels: LEVELS[]) {
+    const level = levels.length > 0 ? levels[0] : null;
+    switch (level) {
+      case LEVELS.FDAx1:
+      case LEVELS.FDAx2:
+      case LEVELS.FDAx3:
+        return this.props.appStore.fdaNumbers.result[level] ? this.props.appStore.fdaNumbers.result[level] : 0;
+      default:
+        return this.getLevelGenes(levels).length;
+    }
   }
 
   @autobind
@@ -170,11 +179,12 @@ class HomePage extends React.Component<IHomeProps> {
       if (LEVEL_TYPES[key]) {
         levelTypeButtons.push(
           <Button
+            key={`button-tab-${LEVEL_TYPES[key]}`}
             className="mx-2"
             variant={
               this.levelTypeSelected === LEVEL_TYPES[key] ? 'primary' : 'light'
             }
-            size="sm"
+            size={"lg"}
             onClick={() => this.handleLevelTypeButton(LEVEL_TYPES[key])}
           >
             {LEVEL_TYPE_NAMES[LEVEL_TYPES[key]]} Levels
@@ -261,12 +271,14 @@ class HomePage extends React.Component<IHomeProps> {
           {this.levelGadgets.map(
             levelGadget =>
               ((this.levelTypeSelected === LEVEL_TYPES.DX &&
-                LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.DX) ||
+                  LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.DX) ||
                 (this.levelTypeSelected === LEVEL_TYPES.PX &&
                   LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.PX) ||
                 (this.levelTypeSelected === LEVEL_TYPES.TX &&
-                  LEVEL_CLASSIFICATION[levelGadget.level] ===
-                    LEVEL_TYPES.TX)) && (
+                  LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.TX) ||
+                (this.levelTypeSelected === LEVEL_TYPES.FDA &&
+                  LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.FDA)
+              ) && (
                 <Col
                   xs={12}
                   sm={6}
@@ -276,16 +288,18 @@ class HomePage extends React.Component<IHomeProps> {
                   className="px-0"
                 >
                   <LevelButton
+                    key={`${levelGadget.level}-button`}
                     level={levelGadget.level}
+                    disabledTooltip={levelGadget.level === LEVELS.FDAx1 ? FDA_L1_DISABLED_BTN_TOOLTIP : ''}
                     numOfGenes={this.getLevelNumber(levelGadget.combinedLevels)}
                     description={levelGadget.description}
-                    title={levelGadget.title}
+                    title={LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.FDA ? `FDA Level ${levelGadget.level.toString().replace('FDAx', '')}` :levelGadget.title}
                     className="mb-2"
                     style={{
                       lineHeight:
                         levelGadget.level === LEVELS.Px3 ? '35px' : undefined,
                     }}
-                    href={`/actionableGenes#levels=${levelGadget.linkoutLevel}`}
+                    href={`${levelGadget.level.toString().startsWith('FDAx') ? PAGE_ROUTE.FDA_RECOGNIZED_CONTENT : PAGE_ROUTE.ACTIONABLE_GENE}#levels=${levelGadget.linkoutLevel}`}
                   />
                 </Col>
               )

@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import {
   DOCUMENT_TITLES,
-  FDA_LEVELS_OF_EVIDENCE_LINK,
   IMG_MAX_WIDTH,
   LEVEL_TYPES,
   PAGE_ROUTE,
@@ -31,6 +30,7 @@ export enum Version {
   V1 = 'V1',
   V2 = 'V2',
   FDA = 'FDA',
+  FDA_NGS = 'FDA_NGS',
   AAC = 'AAC',
   DX = 'DX',
   PX = 'PX',
@@ -42,12 +42,14 @@ const TAB_TITLES = {
   [Version.AAC]: 'Therapeutic Levels',
   [Version.DX]: 'Diagnostic Levels',
   [Version.PX]: 'Prognostic Levels',
+  [Version.FDA_NGS]: 'FDA Levels',
 };
 
 export const LEVEL_TYPE_TO_VERSION: { [key in LEVEL_TYPES]: Version } = {
   [LEVEL_TYPES.TX]: Version.V2,
   [LEVEL_TYPES.DX]: Version.DX,
   [LEVEL_TYPES.PX]: Version.PX,
+  [LEVEL_TYPES.FDA]: Version.FDA_NGS,
 };
 
 const DEFAULT_LEVEL_FILE_NAME = 'LevelsOfEvidence';
@@ -59,6 +61,7 @@ const ALLOWED_VERSIONS: string[] = [
   Version.DX,
   Version.PX,
   Version.FDA,
+  Version.FDA_NGS,
 ];
 const V2_RELATED_LEVELS = [Version.V2, Version.FDA, Version.AAC];
 
@@ -66,6 +69,7 @@ const LEVEL_NAME: { [key in Version]: ElementType } = {
   [Version.V1]: 'OncoKB Therapeutic Level of Evidence V1',
   [Version.V2]: 'OncoKB Therapeutic Level of Evidence V2',
   [Version.FDA]: 'FDA Levels of Evidence',
+  [Version.FDA_NGS]: 'FDA Levels of Evidence',
   [Version.AAC]: 'AMP/ASCO/CAP Consensus Recommendation',
   [Version.DX]: 'OncoKB Diagnostic Levels of Evidence',
   [Version.PX]: 'OncoKB Prognostic Levels of Evidence',
@@ -85,6 +89,7 @@ const LEVEL_TITLE: { [key in Version]: ElementType } = {
       {LEVEL_NAME[Version.FDA]}
     </>
   ),
+  [Version.FDA_NGS]: <></>,
   [Version.AAC]: (
     <>
       Mapping between the OncoKB Levels of Evidence and the{' '}
@@ -105,6 +110,7 @@ const LEVEL_SUBTITLE: { [key in Version]: ElementType } = {
   [Version.DX]: <></>,
   [Version.PX]: <></>,
   [Version.FDA]: <></>,
+  [Version.FDA_NGS]: <></>,
 };
 
 const LEVEL_FILE_NAME: { [key in Version]: string } = {
@@ -114,13 +120,12 @@ const LEVEL_FILE_NAME: { [key in Version]: string } = {
   [Version.AAC]: `Mapping_OncoKB_and_AMP_ASCO_CAP_LOfE`,
   [Version.DX]: DEFAULT_LEVEL_FILE_NAME,
   [Version.PX]: DEFAULT_LEVEL_FILE_NAME,
+  [Version.FDA_NGS]: 'CDRH’s-Approach-to-Tumor-Profiling-Next-Generation-Sequencing-Tests',
 };
 
 @inject('routing', 'windowStore')
 @observer
-export default class LevelOfEvidencePage extends React.Component<
-  LevelOfEvidencePageProps
-> {
+export default class LevelOfEvidencePage extends React.Component<LevelOfEvidencePageProps, any> {
   @observable version: Version = Version.V2;
 
   readonly reactions: IReactionDisposer[] = [];
@@ -184,7 +189,7 @@ export default class LevelOfEvidencePage extends React.Component<
 
   render() {
     const tabs: any[] = [];
-    [Version.V2, Version.DX, Version.PX].forEach(version => {
+    [Version.V2, Version.DX, Version.PX, Version.FDA_NGS].forEach(version => {
       tabs.push(
         <Tab eventKey={Version[version]} title={TAB_TITLES[version]}>
           <Row className="mt-2">
@@ -213,6 +218,7 @@ export default class LevelOfEvidencePage extends React.Component<
               )}
             </Col>
             <Col className={'col-auto'}>
+              {this.version !== Version.FDA_NGS && (
               <Button
                 size={'sm'}
                 className={classnames('ml-1')}
@@ -223,6 +229,7 @@ export default class LevelOfEvidencePage extends React.Component<
                 <i className={'fa fa-cloud-download mr-1'} />
                 Download Slide
               </Button>
+              )}
               <DownloadButton
                 size={'sm'}
                 className={classnames('ml-1')}
@@ -296,7 +303,7 @@ export default class LevelOfEvidencePage extends React.Component<
           <>
             <Tabs
               defaultActiveKey={
-                this.version === Version.DX || this.version === Version.PX
+                [Version.DX, Version.PX, Version.FDA_NGS].includes(this.version)
                   ? Version[this.version]
                   : Version.V2
               }

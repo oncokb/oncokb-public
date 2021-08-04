@@ -227,16 +227,6 @@ export type Implication = {
         'tumorType': TumorType
 
 };
-export type NCITDrug = {
-    'description': string
-
-        'drugName': string
-
-        'ncitCode': string
-
-        'synonyms': Array < string >
-
-};
 export type MainNumberLevel = {
     'level': string
 
@@ -431,6 +421,14 @@ export type TypeaheadSearchResp = {
         'vus': boolean
 
 };
+export type FdaAlteration = {
+    'alteration': Alteration
+
+        'cancerType': string
+
+        'level': string
+
+};
 export type VariantAnnotationTumorType = {
     'evidences': Array < Evidence >
 
@@ -513,6 +511,14 @@ export type PfamDomainRange = {
         'pfamDomainId': string
 
         'pfamDomainStart': number
+
+};
+export type DrugSynonym = {
+    'drug': Drug
+
+        'id': number
+
+        'name': string
 
 };
 export type IndicatorQueryTreatment = {
@@ -643,6 +649,13 @@ export default class OncoKbPrivateAPI {
     }): string {
         let queryParameters: any = {};
         let path = '/search/ncitDrugs';
+        if (parameters['query'] !== undefined) {
+            queryParameters['query'] = parameters['query'];
+        }
+
+        if (parameters['limit'] !== undefined) {
+            queryParameters['limit'] = parameters['limit'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -658,8 +671,8 @@ export default class OncoKbPrivateAPI {
      * Find NCIT matches based on blur query. This is not for search OncoKB curated drugs. Please use drugs/lookup for that purpose.
      * @method
      * @name OncoKbPrivateAPI#searchDrugGetUsingGET
-     * @param {} query - The search query, it could be drug name, NCIT code
-     * @param {} limit - The limit of returned result.
+     * @param {string} query - The search query, it could be drug name, NCIT code
+     * @param {integer} limit - The limit of returned result.
      */
     searchDrugGetUsingGETWithHttpInfo(parameters: {
         'query': string,
@@ -680,7 +693,7 @@ export default class OncoKbPrivateAPI {
             headers['Content-Type'] = 'application/json';
 
             if (parameters['query'] !== undefined) {
-                body = parameters['query'];
+                queryParameters['query'] = parameters['query'];
             }
 
             if (parameters['query'] === undefined) {
@@ -689,7 +702,7 @@ export default class OncoKbPrivateAPI {
             }
 
             if (parameters['limit'] !== undefined) {
-                body = parameters['limit'];
+                queryParameters['limit'] = parameters['limit'];
             }
 
             if (parameters.$queryParameters) {
@@ -708,15 +721,15 @@ export default class OncoKbPrivateAPI {
      * Find NCIT matches based on blur query. This is not for search OncoKB curated drugs. Please use drugs/lookup for that purpose.
      * @method
      * @name OncoKbPrivateAPI#searchDrugGetUsingGET
-     * @param {} query - The search query, it could be drug name, NCIT code
-     * @param {} limit - The limit of returned result.
+     * @param {string} query - The search query, it could be drug name, NCIT code
+     * @param {integer} limit - The limit of returned result.
      */
     searchDrugGetUsingGET(parameters: {
             'query': string,
             'limit' ? : number,
             $queryParameters ? : any,
             $domain ? : string
-        }): Promise < Array < NCITDrug >
+        }): Promise < Array < Drug >
         > {
             return this.searchDrugGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
@@ -1408,6 +1421,81 @@ export default class OncoKbPrivateAPI {
             return response.body;
         });
     };
+    utilsFdaAlterationsGetUsingGETURL(parameters: {
+        'hugoSymbol' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/fdaAlterations';
+        if (parameters['hugoSymbol'] !== undefined) {
+            queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the full list of FDA alterations.
+     * @method
+     * @name OncoKbPrivateAPI#utilsFdaAlterationsGetUsingGET
+     * @param {string} hugoSymbol - Gene hugo symbol
+     */
+    utilsFdaAlterationsGetUsingGETWithHttpInfo(parameters: {
+        'hugoSymbol' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/fdaAlterations';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['hugoSymbol'] !== undefined) {
+                queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the full list of FDA alterations.
+     * @method
+     * @name OncoKbPrivateAPI#utilsFdaAlterationsGetUsingGET
+     * @param {string} hugoSymbol - Gene hugo symbol
+     */
+    utilsFdaAlterationsGetUsingGET(parameters: {
+            'hugoSymbol' ? : string,
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < FdaAlteration >
+        > {
+            return this.utilsFdaAlterationsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     utilsHotspotMutationGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
         'variant' ? : string,
@@ -1745,6 +1833,68 @@ export default class OncoKbPrivateAPI {
                 return response.body;
             });
         };
+    utilsNumbersFdaGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/numbers/fda/';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get gene related numbers of all fda alterations. This is for main page word cloud.
+     * @method
+     * @name OncoKbPrivateAPI#utilsNumbersFdaGetUsingGET
+     */
+    utilsNumbersFdaGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/numbers/fda/';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get gene related numbers of all fda alterations. This is for main page word cloud.
+     * @method
+     * @name OncoKbPrivateAPI#utilsNumbersFdaGetUsingGET
+     */
+    utilsNumbersFdaGetUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < {} > {
+        return this.utilsNumbersFdaGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     utilsNumbersGeneGetUsingGETURL(parameters: {
         'hugoSymbol': string,
         $queryParameters ? : any
@@ -2086,7 +2236,6 @@ export default class OncoKbPrivateAPI {
         };
     utilRelevantCancerTypesPostUsingPOSTURL(parameters: {
         'levelOfEvidence' ? : "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO",
-        'onlyDetailedCancerType' ? : boolean,
         'body': Array < RelevantCancerTypeQuery > ,
             $queryParameters ? : any
     }): string {
@@ -2094,10 +2243,6 @@ export default class OncoKbPrivateAPI {
         let path = '/utils/relevantCancerTypes';
         if (parameters['levelOfEvidence'] !== undefined) {
             queryParameters['levelOfEvidence'] = parameters['levelOfEvidence'];
-        }
-
-        if (parameters['onlyDetailedCancerType'] !== undefined) {
-            queryParameters['onlyDetailedCancerType'] = parameters['onlyDetailedCancerType'];
         }
 
         if (parameters.$queryParameters) {
@@ -2115,12 +2260,10 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#utilRelevantCancerTypesPostUsingPOST
      * @param {string} levelOfEvidence - Level of Evidence
-     * @param {boolean} onlyDetailedCancerType - Return only Detailed Cancer Type.
      * @param {} body - List of queries.
      */
     utilRelevantCancerTypesPostUsingPOSTWithHttpInfo(parameters: {
         'levelOfEvidence' ? : "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO",
-        'onlyDetailedCancerType' ? : boolean,
         'body': Array < RelevantCancerTypeQuery > ,
             $queryParameters ? : any,
             $domain ? : string
@@ -2139,10 +2282,6 @@ export default class OncoKbPrivateAPI {
 
             if (parameters['levelOfEvidence'] !== undefined) {
                 queryParameters['levelOfEvidence'] = parameters['levelOfEvidence'];
-            }
-
-            if (parameters['onlyDetailedCancerType'] !== undefined) {
-                queryParameters['onlyDetailedCancerType'] = parameters['onlyDetailedCancerType'];
             }
 
             if (parameters['body'] !== undefined) {
@@ -2171,12 +2310,10 @@ export default class OncoKbPrivateAPI {
      * @method
      * @name OncoKbPrivateAPI#utilRelevantCancerTypesPostUsingPOST
      * @param {string} levelOfEvidence - Level of Evidence
-     * @param {boolean} onlyDetailedCancerType - Return only Detailed Cancer Type.
      * @param {} body - List of queries.
      */
     utilRelevantCancerTypesPostUsingPOST(parameters: {
             'levelOfEvidence' ? : "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO",
-            'onlyDetailedCancerType' ? : boolean,
             'body': Array < RelevantCancerTypeQuery > ,
                 $queryParameters ? : any,
                 $domain ? : string
@@ -2387,6 +2524,258 @@ export default class OncoKbPrivateAPI {
                 return response.body;
             });
         };
+    utilUpdateTranscriptGetUsingGETURL(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'grch37Isoform' ? : string,
+        'grch37RefSeq' ? : string,
+        'grch38Isoform' ? : string,
+        'grch38RefSeq' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/updateTranscript';
+        if (parameters['hugoSymbol'] !== undefined) {
+            queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+        }
+
+        if (parameters['entrezGeneId'] !== undefined) {
+            queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+        }
+
+        if (parameters['grch37Isoform'] !== undefined) {
+            queryParameters['grch37Isoform'] = parameters['grch37Isoform'];
+        }
+
+        if (parameters['grch37RefSeq'] !== undefined) {
+            queryParameters['grch37RefSeq'] = parameters['grch37RefSeq'];
+        }
+
+        if (parameters['grch38Isoform'] !== undefined) {
+            queryParameters['grch38Isoform'] = parameters['grch38Isoform'];
+        }
+
+        if (parameters['grch38RefSeq'] !== undefined) {
+            queryParameters['grch38RefSeq'] = parameters['grch38RefSeq'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * utilUpdateTranscriptGet
+     * @method
+     * @name OncoKbPrivateAPI#utilUpdateTranscriptGetUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} grch37Isoform - grch37Isoform
+     * @param {string} grch37RefSeq - grch37RefSeq
+     * @param {string} grch38Isoform - grch38Isoform
+     * @param {string} grch38RefSeq - grch38RefSeq
+     */
+    utilUpdateTranscriptGetUsingGETWithHttpInfo(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'grch37Isoform' ? : string,
+        'grch37RefSeq' ? : string,
+        'grch38Isoform' ? : string,
+        'grch38RefSeq' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/updateTranscript';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['hugoSymbol'] !== undefined) {
+                queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+            }
+
+            if (parameters['entrezGeneId'] !== undefined) {
+                queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+            }
+
+            if (parameters['grch37Isoform'] !== undefined) {
+                queryParameters['grch37Isoform'] = parameters['grch37Isoform'];
+            }
+
+            if (parameters['grch37RefSeq'] !== undefined) {
+                queryParameters['grch37RefSeq'] = parameters['grch37RefSeq'];
+            }
+
+            if (parameters['grch38Isoform'] !== undefined) {
+                queryParameters['grch38Isoform'] = parameters['grch38Isoform'];
+            }
+
+            if (parameters['grch38RefSeq'] !== undefined) {
+                queryParameters['grch38RefSeq'] = parameters['grch38RefSeq'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * utilUpdateTranscriptGet
+     * @method
+     * @name OncoKbPrivateAPI#utilUpdateTranscriptGetUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} grch37Isoform - grch37Isoform
+     * @param {string} grch37RefSeq - grch37RefSeq
+     * @param {string} grch38Isoform - grch38Isoform
+     * @param {string} grch38RefSeq - grch38RefSeq
+     */
+    utilUpdateTranscriptGetUsingGET(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'grch37Isoform' ? : string,
+        'grch37RefSeq' ? : string,
+        'grch38Isoform' ? : string,
+        'grch38RefSeq' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < any > {
+        return this.utilUpdateTranscriptGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    utilValidateTranscriptUpdateGetUsingGETURL(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'grch37Isoform' ? : string,
+        'grch38Isoform' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/validateTranscriptUpdate';
+        if (parameters['hugoSymbol'] !== undefined) {
+            queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+        }
+
+        if (parameters['entrezGeneId'] !== undefined) {
+            queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+        }
+
+        if (parameters['grch37Isoform'] !== undefined) {
+            queryParameters['grch37Isoform'] = parameters['grch37Isoform'];
+        }
+
+        if (parameters['grch38Isoform'] !== undefined) {
+            queryParameters['grch38Isoform'] = parameters['grch38Isoform'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * utilValidateTranscriptUpdateGet
+     * @method
+     * @name OncoKbPrivateAPI#utilValidateTranscriptUpdateGetUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} grch37Isoform - grch37Isoform
+     * @param {string} grch38Isoform - grch38Isoform
+     */
+    utilValidateTranscriptUpdateGetUsingGETWithHttpInfo(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'grch37Isoform' ? : string,
+        'grch38Isoform' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/validateTranscriptUpdate';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'text/plain';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['hugoSymbol'] !== undefined) {
+                queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+            }
+
+            if (parameters['entrezGeneId'] !== undefined) {
+                queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+            }
+
+            if (parameters['grch37Isoform'] !== undefined) {
+                queryParameters['grch37Isoform'] = parameters['grch37Isoform'];
+            }
+
+            if (parameters['grch38Isoform'] !== undefined) {
+                queryParameters['grch38Isoform'] = parameters['grch38Isoform'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * utilValidateTranscriptUpdateGet
+     * @method
+     * @name OncoKbPrivateAPI#utilValidateTranscriptUpdateGetUsingGET
+     * @param {string} hugoSymbol - hugoSymbol
+     * @param {integer} entrezGeneId - entrezGeneId
+     * @param {string} grch37Isoform - grch37Isoform
+     * @param {string} grch38Isoform - grch38Isoform
+     */
+    utilValidateTranscriptUpdateGetUsingGET(parameters: {
+        'hugoSymbol' ? : string,
+        'entrezGeneId' ? : number,
+        'grch37Isoform' ? : string,
+        'grch38Isoform' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < string > {
+        return this.utilValidateTranscriptUpdateGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     validateTrialsUsingGETURL(parameters: {
         'nctIds' ? : Array < string > ,
             $queryParameters ? : any

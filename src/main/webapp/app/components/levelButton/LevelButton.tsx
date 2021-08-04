@@ -6,7 +6,9 @@ import * as styles from './LevelButton.module.scss';
 import classnames from 'classnames';
 import { inject } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
-import { OncoKBLevelIcon } from 'app/shared/utils/Utils';
+import {FdaLevelIcon, OncoKBLevelIcon} from 'app/shared/utils/Utils';
+import {DefaultTooltip} from "cbioportal-frontend-commons";
+import WithSeparator from "react-with-separator";
 
 type LevelButtonProps = {
   level: LEVELS;
@@ -20,6 +22,7 @@ type LevelButtonProps = {
   active?: boolean;
   href?: string;
   disabled?: boolean;
+  disabledTooltip?: string | JSX.Element;
 };
 
 export const LevelButton = inject('routing')((props: LevelButtonProps) => {
@@ -31,14 +34,21 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
       props.onClick();
     }
   };
+  const buttonDisabled = props.disabled === undefined ? props.numOfGenes === 0 : props.disabled;
 
   return (
+    <DefaultTooltip
+      overlay={()=>props.disabledTooltip}
+      placement="bottom"
+      disabled={!buttonDisabled || !props.disabledTooltip}
+    >
+      <div>
     <Button
       variant="light"
       onClick={onClick}
       active={props.active}
       href={props.href}
-      disabled={props.disabled}
+      disabled={buttonDisabled}
       style={props.style}
       className={classnames(
         props.href ? styles.levelButtonLink : styles.levelButton,
@@ -51,7 +61,11 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
           styles.levelName
         )}
       >
-        <OncoKBLevelIcon level={props.level} withDescription={true} />
+        {props.level.startsWith('FDAx') ? (
+          <FdaLevelIcon level={props.level} withDescription={true} />
+        ) : (
+          <OncoKBLevelIcon level={props.level} withDescription={true} />
+        )}
         <span className={'ml-1 mr-4'}>
           {props.title ? props.title : `Level ${props.level}`}
         </span>
@@ -61,5 +75,7 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
         className={classnames(`oncokb level-${props.level}`, styles.geneNumber)}
       >{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
     </Button>
+      </div>
+</DefaultTooltip>
   );
 });

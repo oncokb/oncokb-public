@@ -232,6 +232,40 @@ export const OncoKBLevelIcon: React.FunctionComponent<{
   );
 };
 
+export const FdaLevelIcon: React.FunctionComponent<{
+  level: LEVELS;
+  withDescription?: boolean;
+}> = ({level, withDescription = true}) => {
+  const fdaIcon = (
+    <span className="fa-stack" style={{fontSize: 9}}>
+      <span className="fa fa-circle-o fa-stack-2x"></span>
+      <strong className="fa-stack-1x">
+        {level.toString().replace('FDAx', '')}
+      </strong>
+    </span>
+  );
+
+  let levelDescription = '';
+  switch (level) {
+    case LEVELS.FDAx1:
+      levelDescription = 'Companion Diagnostics';
+      break;
+    case LEVELS.FDAx2:
+      levelDescription = 'Cancer Mutations with Evidence of Clinical Significance';
+      break;
+    case LEVELS.FDAx3:
+      levelDescription = 'Cancer Mutations with Evidence of Potential Clinical Significance';
+      break;
+    default:
+      break;
+  }
+  return withDescription ? (
+      <LevelWithDescription level={level} description={levelDescription}>{fdaIcon}</LevelWithDescription>
+  ) : (
+      fdaIcon
+  );
+};
+
 export function getDefaultColumnDefinition<T>(
   columnKey: TABLE_COLUMN_KEY
 ):

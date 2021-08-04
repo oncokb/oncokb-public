@@ -1,8 +1,10 @@
 import React from 'react';
-import { inject } from 'mobx-react';
+import {inject} from 'mobx-react';
 
-import { GenePageLink, OncoTreeLink } from 'app/shared/utils/UrlUtils';
+import {GenePageLink, OncoTreeLink} from 'app/shared/utils/UrlUtils';
 import {
+  ANNOTATION_PAGE_TAB_KEYS,
+  ANNOTATION_PAGE_TAB_NAMES,
   DEFAULT_MARGIN_BOTTOM_LG,
   DEFAULT_MESSAGE_HEME_ONLY_DX,
   DEFAULT_MESSAGE_HEME_ONLY_PX,
@@ -15,18 +17,19 @@ import {
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
-import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
-import { Button, Col, Row } from 'react-bootstrap';
+import {SearchColumn} from 'app/components/oncokbTable/OncoKBTable';
+import {AlterationInfo} from 'app/pages/annotationPage/AlterationInfo';
+import {Button, Col, Row} from 'react-bootstrap';
 import classnames from 'classnames';
-import { action, computed } from 'mobx';
+import {action, computed} from 'mobx';
 import autobind from 'autobind-decorator';
 import {
   Evidence,
+  FdaAlteration,
   VariantAnnotation,
   VariantAnnotationTumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { TherapeuticImplication } from 'app/store/AnnotationStore';
+import {TherapeuticImplication} from 'app/store/AnnotationStore';
 import {
   articles2Citations,
   getCancerTypeNameFromOncoTreeType,
@@ -34,16 +37,18 @@ import {
   getTreatmentNameFromEvidence,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
-import { DefaultTooltip } from 'cbioportal-frontend-commons';
-import { CitationTooltip } from 'app/components/CitationTooltip';
+import {DefaultTooltip} from 'cbioportal-frontend-commons';
+import {CitationTooltip} from 'app/components/CitationTooltip';
 import _ from 'lodash';
-import { AnnotationPageTable } from './AnnotationPageTable';
+import {AnnotationPageTable} from './AnnotationPageTable';
 import Tabs from 'react-responsive-tabs';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import WithSeparator from 'react-with-separator';
 import AppStore from 'app/store/AppStore';
-import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
-import { FeedbackType } from 'app/components/feedback/types';
+import {FeedbackIcon} from 'app/components/feedback/FeedbackIcon';
+import {FeedbackType} from 'app/components/feedback/types';
+import {FDA_ALTERATIONS_TABLE_COLUMNS} from "app/pages/genePage/FdaUtils";
+import {GenePageTable} from "app/pages/genePage/GenePageTable";
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -72,6 +77,7 @@ export type IAnnotationPage = {
   refGenome: REFERENCE_GENOME;
   onChangeTumorType: (newTumorType: string) => void;
   annotation: VariantAnnotation;
+  fdaAlterations?: FdaAlteration[];
 };
 
 @inject('appStore')
@@ -347,6 +353,14 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
             column={this.dxpxTableColumns}
           />
         );
+      case LEVEL_TYPES.FDA:
+        return (
+          <GenePageTable
+            data={this.props.fdaAlterations ? this.props.fdaAlterations : []}
+            columns={FDA_ALTERATIONS_TABLE_COLUMNS}
+            isPending={false}
+          />
+        );
       default:
         return <span />;
     }
@@ -356,6 +370,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
     [LEVEL_TYPES.TX]: '',
     [LEVEL_TYPES.DX]: DEFAULT_MESSAGE_HEME_ONLY_DX,
     [LEVEL_TYPES.PX]: DEFAULT_MESSAGE_HEME_ONLY_PX,
+    [LEVEL_TYPES.FDA]: '',
   };
 
   getTabContent(key: LEVEL_TYPES) {
@@ -375,19 +390,25 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
     if (this.therapeuticImplications.length > 0) {
       tabs.push({
         key: LEVEL_TYPES.TX,
-        title: `${LEVEL_TYPE_NAMES.Tx}`,
+        title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.TX]}`,
       });
     }
     if (this.diagnosticImplications.length > 0) {
       tabs.push({
         key: LEVEL_TYPES.DX,
-        title: `${LEVEL_TYPE_NAMES.Dx}`,
+        title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.DX]}`,
       });
     }
     if (this.prognosticImplications.length > 0) {
       tabs.push({
         key: LEVEL_TYPES.PX,
-        title: `${LEVEL_TYPE_NAMES.Px}`,
+        title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.PX]}`,
+      });
+    }
+    if (this.props.fdaAlterations && this.props.fdaAlterations.length > 0) {
+      tabs.push({
+        key: LEVEL_TYPES.FDA,
+        title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.FDA]}`,
       });
     }
     return tabs.map(tab => {

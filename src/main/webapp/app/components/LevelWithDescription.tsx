@@ -11,10 +11,14 @@ import { LEVELS } from 'app/config/constants';
 export const LevelWithDescription: React.FunctionComponent<{
   level: LEVELS;
   appStore?: AppStore;
+  description?: string;
 }> = inject('appStore')(props => {
   const levelOfEvidence = level2LevelOfEvidence(props.level);
 
   function getLevelDescription() {
+    if(props.description) {
+      return <span>{props.description}</span>;
+    }
     const match: InfoLevel | undefined = _.find(
       props.appStore!.appInfo.result.levels,
       (level: InfoLevel) => level.levelOfEvidence === levelOfEvidence

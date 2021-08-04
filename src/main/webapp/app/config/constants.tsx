@@ -49,8 +49,8 @@ export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
 export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
-  LG: 1050,
-  XL: 1200,
+  LG: 1150,
+  XL: 1350,
 };
 export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
@@ -129,12 +129,30 @@ export enum LEVEL_TYPES {
   TX = 'Tx',
   DX = 'Dx',
   PX = 'Px',
+  FDA = 'FDA',
 }
 
-export const LEVEL_TYPE_NAMES = {
+export enum ANNOTATION_PAGE_TAB_KEYS {
+  BIOLOGICAL = 'BIOLOGICAL',
+  TX = 'TX',
+  DX = 'DX',
+  PX = 'PX',
+  FDA = 'FDA',
+}
+
+export const LEVEL_TYPE_NAMES:{[key: LEVEL_TYPES] : string} = {
   [LEVEL_TYPES.TX]: 'Therapeutic',
   [LEVEL_TYPES.DX]: 'Diagnostic',
   [LEVEL_TYPES.PX]: 'Prognostic',
+  [LEVEL_TYPES.FDA]: 'FDA',
+};
+
+export const ANNOTATION_PAGE_TAB_NAMES:{[key: ANNOTATION_PAGE_TAB_KEYS] : string} = {
+  [ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL]: 'Annotated Alterations',
+  [ANNOTATION_PAGE_TAB_KEYS.TX]: 'Therapeutic',
+  [ANNOTATION_PAGE_TAB_KEYS.DX]: 'Diagnostic',
+  [ANNOTATION_PAGE_TAB_KEYS.PX]: 'Prognostic',
+  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content',
 };
 
 export enum LEVELS {
@@ -152,11 +170,16 @@ export enum LEVELS {
   Tx4 = '4',
   R1 = 'R1',
   R2 = 'R2',
+  FDAx1 = 'FDAx1',
+  FDAx2 = 'FDAx2',
+  FDAx3 = 'FDAx3',
 }
 
 // the bigger of the index, the higher the priority
 export const LEVEL_PRIORITY: LEVELS[] = [
-  LEVELS.Px3,
+  LEVELS.FDAx3,
+  LEVELS.FDAx2,
+  LEVELS.FDAx1,
   LEVELS.Px2,
   LEVELS.Px1,
   LEVELS.Dx3,
@@ -187,6 +210,9 @@ export const LEVEL_BUTTON_DESCRIPTION: { [key in LEVELS]: string } = {
   [LEVELS.Px1]: 'Guideline-recognized with well-powered data',
   [LEVELS.Px2]: 'Guideline-recognized with limited data',
   [LEVELS.Px3]: 'Investigational',
+  [LEVELS.FDAx1]: 'With CDx',
+  [LEVELS.FDAx2]: 'Clinical Significance',
+  [LEVELS.FDAx3]: 'Potential Clinical Significance',
 };
 
 export const LEVEL_CLASSIFICATION: { [key in LEVELS]: LEVEL_TYPES } = {
@@ -205,6 +231,9 @@ export const LEVEL_CLASSIFICATION: { [key in LEVELS]: LEVEL_TYPES } = {
   [LEVELS.Tx4]: LEVEL_TYPES.TX,
   [LEVELS.R1]: LEVEL_TYPES.TX,
   [LEVELS.R2]: LEVEL_TYPES.TX,
+  [LEVELS.FDAx1]: LEVEL_TYPES.FDA,
+  [LEVELS.FDAx2]: LEVEL_TYPES.FDA,
+  [LEVELS.FDAx3]: LEVEL_TYPES.FDA,
 };
 
 export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
@@ -388,6 +417,7 @@ export enum PAGE_ROUTE {
   FAQ_ACCESS = '/faq',
   CANCER_GENES = '/cancerGenes',
   ACTIONABLE_GENE = '/actionableGenes',
+  FDA_RECOGNIZED_CONTENT = '/fdaRecognizedContent',
   GENE_HEADER = '/gene',
   GENE = '/gene/:hugoSymbol',
   ALTERATION = '/gene/:hugoSymbol/:alteration',

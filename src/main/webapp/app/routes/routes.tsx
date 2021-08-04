@@ -33,6 +33,7 @@ import { RecaptchaBoundaryRoute } from '../shared/auth/RecaptchaBoundaryRoute';
 import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
 import UserPage from 'app/pages/userPage/UserPage';
 import AppStore from 'app/store/AppStore';
+import FdaRecognizedContentPage from "app/pages/fdaRecognizedContentPage/FdaRecognizedContentPage";
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -104,6 +105,13 @@ const AppRouts = (props: {
             appStore={props.appStore}
             path={PAGE_ROUTE.ACTIONABLE_GENE}
             component={ActionableGenesPage}
+          />
+          <RecaptchaBoundaryRoute
+            exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
+            path={PAGE_ROUTE.FDA_RECOGNIZED_CONTENT}
+            component={FdaRecognizedContentPage}
           />
           <RecaptchaBoundaryRoute
             exact

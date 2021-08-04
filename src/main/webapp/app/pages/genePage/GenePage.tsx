@@ -33,16 +33,14 @@ import {
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
   LEVELS,
-  FDA_LEVELS_OF_EVIDENCE_LINK,
-  LG_TABLE_FIXED_HEIGHT,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
-  LEVEL_PRIORITY,
+  ANNOTATION_PAGE_TAB_KEYS, ANNOTATION_PAGE_TAB_NAMES,
 } from 'app/config/constants';
 import {
   BiologicalVariant,
-  ClinicalVariant,
+  ClinicalVariant, FdaAlteration,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
@@ -69,20 +67,12 @@ import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLin
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
-import InfoIcon from 'app/shared/icons/InfoIcon';
-import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import * as QueryString from 'query-string';
-import {
-  FdaVariant,
-  getFdaData,
-  getFdaLevel,
-  getReferenceCell,
-} from 'app/pages/genePage/FdaUtils';
 import { RouterStore } from 'mobx-react-router';
 import { Location } from 'history';
-import { LICENSE_HASH_KEY } from 'app/pages/RegisterPage';
 import { Link } from 'react-router-dom';
 import { Version } from 'app/pages/LevelOfEvidencePage';
+import {FDA_ALTERATIONS_TABLE_COLUMNS} from "app/pages/genePage/FdaUtils";
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -286,14 +276,6 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
     </>
   );
 };
-
-enum TAB_KEYS {
-  'BIOLOGICAL' = 'BIOLOGICAL',
-  'TX' = 'TX',
-  'DX' = 'DX',
-  'PX' = 'PX',
-  'FDA' = 'FDA',
-}
 
 const GeneBackground: React.FunctionComponent<{
   show: boolean;
@@ -531,75 +513,6 @@ export default class GenePage extends React.Component<GenePageProps> {
   }
 
   @computed
-  get fdaTableColumns(): SearchColumn<FdaVariant>[] {
-    return [
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
-        accessor: 'alteration',
-        width: 400,
-        onFilter: (data: FdaVariant, keyword) =>
-          filterByKeyword(data.alteration.name, keyword),
-        Cell: (props: { original: FdaVariant }) => {
-          return (
-            <AlterationPageLink
-              hugoSymbol={this.store.hugoSymbol}
-              alteration={props.original.alteration.name}
-            />
-          );
-        },
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
-        accessor: 'cancerType',
-        width: 400,
-        Header: <span>Cancer Type</span>,
-        onFilter: (data: FdaVariant, keyword) =>
-          filterByKeyword(data.cancerType, keyword),
-        Cell(props: { original: FdaVariant }) {
-          return <span>{props.original.cancerType}</span>;
-        },
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-        Header: (
-          <div>
-            <span>FDA Level of Evidence</span>
-            <InfoIcon
-              className={'ml-1'}
-              overlay={
-                <span>
-                  For more information about the FDA Level of Evidence, please
-                  see{' '}
-                  <Linkout
-                    link={FDA_LEVELS_OF_EVIDENCE_LINK}
-                    className={'font-weight-bold'}
-                  >
-                    HERE
-                  </Linkout>
-                  .
-                </span>
-              }
-            />
-          </div>
-        ),
-        width: undefined,
-        accessor: 'level',
-        onFilter: (data: FdaVariant, keyword) =>
-          filterByKeyword(data.level, keyword),
-        sortMethod(a: string, b: string) {
-          return (
-            LEVEL_PRIORITY.indexOf(a.replace('Level ', '') as LEVELS) -
-            LEVEL_PRIORITY.indexOf(b.replace('Level ', '') as LEVELS)
-          );
-        },
-        Cell(props: { original: FdaVariant }) {
-          return <span>FDA {props.original.level}</span>;
-        },
-      },
-    ];
-  }
-
-  @computed
   get biologicalTableColumns(): SearchColumn<BiologicalVariant>[] {
     return [
       {
@@ -705,88 +618,6 @@ export default class GenePage extends React.Component<GenePageProps> {
     return alteration.toLowerCase() === 'oncogenic mutations';
   }
 
-  @computed
-  get fdaVariants() {
-    const predefinedFdaVariants: FdaVariant[] = _.uniqBy(
-      this.txAlterations.map(clinicalAlt => {
-        const cancerTypesName = clinicalAlt.cancerTypes
-          .map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType))
-          .join(', ');
-        return {
-          cancerType: cancerTypesName,
-          level: getFdaLevel(
-            clinicalAlt.level,
-            this.store.hugoSymbol,
-            clinicalAlt.variant.name,
-            cancerTypesName
-          ),
-          alteration: clinicalAlt.variant,
-        };
-      }),
-      alt => `${alt.alteration}${alt.cancerType}${alt.level}`
-    );
-    const hasOncogenicMutations =
-      predefinedFdaVariants.filter((alteration: FdaVariant) =>
-        this.isOncogenicMutations(alteration.alteration.name)
-      ).length > 0;
-    let fdaUpdatedVariants = predefinedFdaVariants;
-    if (hasOncogenicMutations) {
-      const oncogenicAlts = this.store.filteredBiologicalAlterations.filter(
-        (alteration: BiologicalVariant) =>
-          ['oncogenic', 'likely oncogenic', 'predicted oncogenic'].includes(
-            alteration.oncogenic ? alteration.oncogenic.toLowerCase() : ''
-          )
-      );
-      fdaUpdatedVariants = _.reduce(
-        predefinedFdaVariants,
-        (acc, next) => {
-          if (this.isOncogenicMutations(next.alteration.name)) {
-            acc.push(
-              ...oncogenicAlts.map(alt => {
-                return {
-                  ...next,
-                  alteration: alt.variant,
-                };
-              })
-            );
-          } else {
-            acc.push(next);
-          }
-          return acc;
-        },
-        [] as FdaVariant[]
-      );
-    }
-
-    // specially map for PICK3CA
-    // we need to change the fda level
-    // only list of alterations within CDx can be marked as level 2
-    if (this.store.hugoSymbol === 'PIK3CA') {
-      const fdaLevel2Mutations = [
-        'C420R',
-        'E542K',
-        'E545A',
-        'E545D',
-        'E545G',
-        'E545K',
-        'Q546E',
-        'Q546R',
-        'H1047L',
-        'H1047R',
-        'H1047Y',
-      ];
-      fdaUpdatedVariants = fdaUpdatedVariants.map(variant => {
-        return {
-          ...variant,
-          level: fdaLevel2Mutations.includes(variant.alteration.name)
-            ? variant.level
-            : 'Level 3',
-        };
-      });
-    }
-    return fdaUpdatedVariants;
-  }
-
   componentDidUpdate(prevProps: any) {
     if (
       this.props.match.params.hugoSymbol !== prevProps.match.params.hugoSymbol
@@ -802,15 +633,15 @@ export default class GenePage extends React.Component<GenePageProps> {
     this.showGeneBackground = !this.showGeneBackground;
   }
 
-  getTabDescription(key: TAB_KEYS) {
-    if (key === TAB_KEYS.BIOLOGICAL) {
+  getTabDescription(key: ANNOTATION_PAGE_TAB_KEYS) {
+    if (key === ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL) {
       return (
         <span>
           A list of the oncogenic and mutation effects of{' '}
           <b>all OncoKB curated</b> {this.store.hugoSymbol} alterations.
         </span>
       );
-    } else if (key === TAB_KEYS.TX) {
+    } else if (key === ANNOTATION_PAGE_TAB_KEYS.TX) {
       return (
         <span>
           A list of the cancer type-specific {this.store.hugoSymbol} alterations
@@ -822,7 +653,7 @@ export default class GenePage extends React.Component<GenePageProps> {
           .
         </span>
       );
-    } else if (key === TAB_KEYS.DX) {
+    } else if (key === ANNOTATION_PAGE_TAB_KEYS.DX) {
       return (
         <span>
           A list of diagnostic {this.store.hugoSymbol} alterations and the
@@ -833,7 +664,7 @@ export default class GenePage extends React.Component<GenePageProps> {
           . {DEFAULT_MESSAGE_HEME_ONLY_DX}
         </span>
       );
-    } else if (key === TAB_KEYS.PX) {
+    } else if (key === ANNOTATION_PAGE_TAB_KEYS.PX) {
       return (
         <span>
           A list of tumor-type specific prognostic {this.store.hugoSymbol}{' '}
@@ -844,14 +675,14 @@ export default class GenePage extends React.Component<GenePageProps> {
           . {DEFAULT_MESSAGE_HEME_ONLY_PX}
         </span>
       );
-    } else if (key === TAB_KEYS.FDA) {
+    } else if (key === ANNOTATION_PAGE_TAB_KEYS.FDA) {
       return (
         <span>
           A list of the tumor type-specific {this.store.hugoSymbol} alterations
           and the corresponding{' '}
-          <Linkout link={FDA_LEVELS_OF_EVIDENCE_LINK}>
+          <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}>
             FDA Level of Evidence
-          </Linkout>{' '}
+          </Link>{' '}
           assigning their clinical significance. The assigned{' '}
           <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
             FDA level of evidence
@@ -868,15 +699,15 @@ export default class GenePage extends React.Component<GenePageProps> {
   @autobind
   @action
   onChangeTab(selectedTabKey: string) {
-    if (this.onFdaTab && selectedTabKey !== TAB_KEYS.FDA) {
+    if (this.onFdaTab && selectedTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA) {
       this.showModal = true;
     }
     this.selectedTab = selectedTabKey;
   }
 
-  getTable(key: TAB_KEYS) {
+  getTable(key: ANNOTATION_PAGE_TAB_KEYS) {
     switch (key) {
-      case TAB_KEYS.BIOLOGICAL:
+      case ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL:
         return (
           <GenePageTable
             data={this.store.filteredBiologicalAlterations}
@@ -884,7 +715,7 @@ export default class GenePage extends React.Component<GenePageProps> {
             isPending={this.store.biologicalAlterations.isPending}
           />
         );
-      case TAB_KEYS.TX:
+      case ANNOTATION_PAGE_TAB_KEYS.TX:
         return (
           <GenePageTable
             data={this.txAlterations}
@@ -892,7 +723,7 @@ export default class GenePage extends React.Component<GenePageProps> {
             isPending={this.store.clinicalAlterations.isPending}
           />
         );
-      case TAB_KEYS.DX:
+      case ANNOTATION_PAGE_TAB_KEYS.DX:
         return (
           <GenePageTable
             data={this.dxAlterations}
@@ -900,7 +731,7 @@ export default class GenePage extends React.Component<GenePageProps> {
             isPending={this.store.clinicalAlterations.isPending}
           />
         );
-      case TAB_KEYS.PX:
+      case ANNOTATION_PAGE_TAB_KEYS.PX:
         return (
           <GenePageTable
             data={this.pxAlterations}
@@ -908,11 +739,11 @@ export default class GenePage extends React.Component<GenePageProps> {
             isPending={this.store.clinicalAlterations.isPending}
           />
         );
-      case TAB_KEYS.FDA:
+      case ANNOTATION_PAGE_TAB_KEYS.FDA:
         return (
           <GenePageTable
-            data={this.fdaVariants}
-            columns={this.fdaTableColumns}
+            data={this.store.fdaAlterations.result}
+            columns={FDA_ALTERATIONS_TABLE_COLUMNS}
             isPending={this.store.clinicalAlterations.isPending}
           />
         );
@@ -934,37 +765,37 @@ export default class GenePage extends React.Component<GenePageProps> {
 
   @computed
   get tabs() {
-    const tabs: { title: string; key: TAB_KEYS }[] = [];
+    const tabs: { title: string; key: ANNOTATION_PAGE_TAB_KEYS }[] = [];
     if (this.store.biologicalAlterations.result.length > 0) {
       tabs.push({
-        key: TAB_KEYS.BIOLOGICAL,
-        title: 'Annotated Alterations',
+        key: ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL,
+        title: ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL],
       });
     }
     if (this.store.clinicalAlterations.result.length > 0) {
       if (this.txAlterations.length > 0) {
         tabs.push({
-          key: TAB_KEYS.TX,
-          title: 'Therapeutic',
+          key: ANNOTATION_PAGE_TAB_KEYS.TX,
+          title: ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.TX],
         });
       }
       if (this.dxAlterations.length > 0) {
         tabs.push({
-          key: TAB_KEYS.DX,
-          title: `Diagnostic`,
+          key: ANNOTATION_PAGE_TAB_KEYS.DX,
+          title: ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.DX],
         });
       }
       if (this.pxAlterations.length > 0) {
         tabs.push({
-          key: TAB_KEYS.PX,
-          title: `Prognostic`,
+          key: ANNOTATION_PAGE_TAB_KEYS.PX,
+          title: ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.PX],
         });
       }
     }
-    if (this.fdaVariants.length > 0) {
+    if (this.store.fdaAlterations.result.length > 0) {
       tabs.push({
-        key: TAB_KEYS.FDA,
-        title: 'FDA-Recognized Alterations',
+        key: ANNOTATION_PAGE_TAB_KEYS.FDA,
+        title: ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.FDA],
       });
     }
 
@@ -1011,26 +842,26 @@ export default class GenePage extends React.Component<GenePageProps> {
 
   @computed
   get tabDefaultActiveKey() {
-    if (this.fdaVariants.length > 0) {
-      return TAB_KEYS.FDA;
-    }
     if (this.txAlterations.length > 0) {
-      return TAB_KEYS.TX;
+      return ANNOTATION_PAGE_TAB_KEYS.TX;
     }
     if (this.dxAlterations.length > 0) {
-      return TAB_KEYS.DX;
+      return ANNOTATION_PAGE_TAB_KEYS.DX;
     }
     if (this.pxAlterations.length > 0) {
-      return TAB_KEYS.PX;
+      return ANNOTATION_PAGE_TAB_KEYS.PX;
     }
-    return TAB_KEYS.BIOLOGICAL;
+    if (this.store.fdaAlterations.result.length > 0) {
+      return ANNOTATION_PAGE_TAB_KEYS.FDA;
+    }
+    return ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL;
   }
 
   @computed
   get onFdaTab() {
     return this.selectedTab === undefined
-      ? this.tabDefaultActiveKey === TAB_KEYS.FDA
-      : this.selectedTab === TAB_KEYS.FDA;
+      ? this.tabDefaultActiveKey === ANNOTATION_PAGE_TAB_KEYS.FDA
+      : this.selectedTab === ANNOTATION_PAGE_TAB_KEYS.FDA;
   }
 
   @computed

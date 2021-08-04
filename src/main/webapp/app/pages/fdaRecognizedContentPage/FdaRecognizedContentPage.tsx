@@ -1,10 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { LevelButton } from 'app/components/levelButton/LevelButton';
-import { Button, Col, Collapse, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import { remoteData, DefaultTooltip } from 'cbioportal-frontend-commons';
+import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
 import {
   action,
   computed,
@@ -15,37 +14,31 @@ import {
 import {
   Alteration,
   Evidence,
+  FdaAlteration,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
 import {
-  getCancerTypeNameFromOncoTreeType,
+  FdaLevelIcon,
   getDefaultColumnDefinition,
-  getDrugNameFromTreatment,
-  getTreatmentNameFromEvidence,
-  levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
-import {
-  defaultSortMethod,
-  sortByLevel,
-} from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import {
-  LEVEL_BUTTON_DESCRIPTION,
-  LEVELS,
-  LG_TABLE_FIXED_HEIGHT,
-  TABLE_COLUMN_KEY,
+  ANNOTATION_PAGE_TAB_KEYS,
   COMPONENT_PADDING,
-  QUERY_SEPARATOR_FOR_QUERY_STRING,
+  DEFAULT_REFERENCE_GENOME,
   DOCUMENT_TITLES,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
+  LEVELS,
+  LG_TABLE_FIXED_HEIGHT,
+  QUERY_SEPARATOR_FOR_QUERY_STRING,
   REFERENCE_GENOME,
-  DEFAULT_REFERENCE_GENOME,
+  TABLE_COLUMN_KEY,
 } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -55,9 +48,8 @@ import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownlo
 import DocumentTitle from 'react-document-title';
 import { COLOR_BLUE } from 'app/config/theme';
 import WithSeparator from 'react-with-separator';
-import InfoIcon from 'app/shared/icons/InfoIcon';
-import LevelSelectionRow from './LevelSelectionRow';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
+import LevelSelectionRow from 'app/pages/actionableGenesPage/LevelSelectionRow';
 
 type Treatment = {
   level: string;
@@ -69,7 +61,7 @@ type Treatment = {
   drugs: string;
 };
 
-type ActionableGenesPageProps = {
+type FdaRecognizedContentPageProps = {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
 };
@@ -78,18 +70,17 @@ type HashQueries = {
   levels?: string[];
   hugoSymbol?: string;
   tumorType?: string;
-  drug?: string;
   refGenome?: REFERENCE_GENOME;
 };
 
 type EvidencesByLevel = { [level: string]: Evidence[] };
 @inject('routing', 'authenticationStore')
 @observer
-export default class ActionableGenesPage extends React.Component<
-  ActionableGenesPageProps, any
+export default class FdaRecognizedContentPage extends React.Component<
+  FdaRecognizedContentPageProps,
+  any
 > {
   @observable relevantTumorTypeSearchKeyword = '';
-  @observable drugSearchKeyword = '';
   @observable geneSearchKeyword = '';
   @observable refGenome = DEFAULT_REFERENCE_GENOME;
   @observable levelSelected = this.initLevelSelected();
@@ -115,7 +106,7 @@ export default class ActionableGenesPage extends React.Component<
   });
 
   readonly allTumorTypes = remoteData<string[]>({
-    await: () => [this.allMainTypes, this.evidencesByLevel],
+    await: () => [this.allMainTypes, this.allFdaAlterations],
     invoke: async () => {
       let allTumorTypes: string[] = _.uniq(
         this.allMainTypes.result
@@ -123,8 +114,8 @@ export default class ActionableGenesPage extends React.Component<
           .map(mainType => mainType)
       );
 
-      this.allTreatments.forEach(treatment => {
-        allTumorTypes = allTumorTypes.concat(treatment.cancerTypes);
+      this.allFdaAlterations.result.forEach(fdaVariant => {
+        allTumorTypes = allTumorTypes.concat(fdaVariant.cancerType);
       });
 
       return Promise.resolve(_.uniq(allTumorTypes));
@@ -132,12 +123,12 @@ export default class ActionableGenesPage extends React.Component<
     default: [],
   });
 
-  readonly evidencesByLevel = remoteData<EvidencesByLevel>({
+  readonly allFdaAlterations = remoteData<FdaAlteration[]>({
     await: () => [],
     async invoke() {
-      return await privateClient.utilsEvidencesByLevelsGetUsingGET({});
+      return await privateClient.utilsFdaAlterationsGetUsingGET({});
     },
-    default: {},
+    default: [],
   });
 
   readonly relevantTumorTypes = remoteData<string[]>({
@@ -163,7 +154,7 @@ export default class ActionableGenesPage extends React.Component<
 
   readonly reactions: IReactionDisposer[] = [];
 
-  constructor(props: Readonly<ActionableGenesPageProps>) {
+  constructor(props: Readonly<FdaRecognizedContentPageProps>) {
     super(props);
     this.reactions.push(
       reaction(
@@ -196,9 +187,6 @@ export default class ActionableGenesPage extends React.Component<
           if (queryStrings.tumorType) {
             this.relevantTumorTypeSearchKeyword = queryStrings.tumorType;
           }
-          if (queryStrings.drug) {
-            this.drugSearchKeyword = queryStrings.drug;
-          }
           if (queryStrings.refGenome) {
             this.refGenome = queryStrings.refGenome;
           }
@@ -219,40 +207,6 @@ export default class ActionableGenesPage extends React.Component<
 
   componentWillUnmount(): void {
     this.reactions.forEach(componentReaction => componentReaction());
-  }
-
-  getTreatments(evidences: Evidence[]) {
-    const treatments: Treatment[] = [];
-    _.forEach(evidences, (item: Evidence) => {
-      const matchedAlterations = item.alterations.filter(alteration =>
-        alteration.referenceGenomes.includes(this.refGenome)
-      );
-      if (matchedAlterations.length > 0) {
-        treatments.push({
-          level: levelOfEvidence2Level(item.levelOfEvidence, true),
-          hugoSymbol: item.gene.hugoSymbol || 'NA',
-          alterations: _.sortBy(matchedAlterations, 'name'),
-          cancerTypes: item.cancerTypes.map(cancerType =>
-            getCancerTypeNameFromOncoTreeType(cancerType)
-          ),
-          treatments: item.treatments,
-          uniqueDrugs: _.uniq(
-            _.reduce(
-              item.treatments,
-              (acc, treatment) => {
-                const result: string[] = treatment.drugs.map(drug =>
-                  getDrugNameFromTreatment(drug)
-                );
-                return acc.concat(result);
-              },
-              [] as string[]
-            )
-          ),
-          drugs: getTreatmentNameFromEvidence(item),
-        });
-      }
-    });
-    return treatments;
   }
 
   initLevelSelected(): { [level: string]: boolean } {
@@ -278,48 +232,30 @@ export default class ActionableGenesPage extends React.Component<
     if (this.relevantTumorTypeSearchKeyword) {
       queryString.tumorType = this.relevantTumorTypeSearchKeyword;
     }
-    if (this.drugSearchKeyword) {
-      queryString.drug = this.drugSearchKeyword;
-    }
     return queryString;
   }
 
   @computed
-  get allTreatments() {
-    let treatments: Treatment[] = [];
-    _.forEach(this.evidencesByLevel.result, (content, levelOfEvidence) => {
-      treatments = treatments.concat(this.getTreatments(content));
-    });
-    return treatments;
-  }
-
-  @computed
-  get filteredTreatments(): Treatment[] {
-    return this.allTreatments.filter(treatment => {
+  get filteredFdaAlterations(): FdaAlteration[] {
+    return this.allFdaAlterations.result.filter(fdaVariant => {
       let match = true;
       if (
         this.geneSearchKeyword &&
-        treatment.hugoSymbol !== this.geneSearchKeyword
+        fdaVariant.alteration.gene.hugoSymbol !== this.geneSearchKeyword
       ) {
         match = false;
       }
       if (
         this.relevantTumorTypeSearchKeyword &&
-        this.relevantTumorTypes.result.filter(tumorType =>
-          treatment.cancerTypes.includes(tumorType)
+        this.relevantTumorTypes.result.filter(
+          tumorType => tumorType === fdaVariant.cancerType
         ).length === 0
       ) {
         match = false;
       }
       if (
-        this.drugSearchKeyword &&
-        !treatment.uniqueDrugs.includes(this.drugSearchKeyword)
-      ) {
-        match = false;
-      }
-      if (
         this.selectedLevels.length > 0 &&
-        !this.selectedLevels.includes(treatment.level)
+        !this.selectedLevels.includes(fdaVariant.level)
       ) {
         match = false;
       }
@@ -329,36 +265,27 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get secondLayerFilterEnabled() {
-    return (
-      !!this.geneSearchKeyword ||
-      !!this.relevantTumorTypeSearchKeyword ||
-      !!this.drugSearchKeyword
-    );
+    return !!this.geneSearchKeyword || !!this.relevantTumorTypeSearchKeyword;
   }
 
   @computed
-  get treatmentsAreFiltered() {
+  get fdaVariantsAreFiltered() {
     return this.selectedLevels.length > 0 || this.secondLayerFilterEnabled;
   }
 
   @computed
   get filteredGenes() {
     return _.uniq(
-      this.filteredTreatments.map(treatment => treatment.hugoSymbol)
+      this.filteredFdaAlterations.map(
+        variant => variant.alteration.gene.hugoSymbol
+      )
     ).sort();
   }
 
   @computed
-  get filteredDrugs() {
+  get filteredCancerTypes() {
     return _.uniq(
-      _.flatten(this.filteredTreatments.map(treatment => treatment.uniqueDrugs))
-    ).sort();
-  }
-
-  @computed
-  get filteredTumorTypes() {
-    return _.uniq(
-      this.filteredTreatments.map(treatment => treatment.cancerTypes.join(', '))
+      this.filteredFdaAlterations.map(variant => variant.cancerType)
     );
   }
 
@@ -374,12 +301,12 @@ export default class ActionableGenesPage extends React.Component<
     );
 
     // when there is no second layer filtering enabled, we allow to choose multiple levels
-    const treatmentSource = this.secondLayerFilterEnabled
-      ? this.filteredTreatments
-      : this.allTreatments;
-    treatmentSource.map(treatment => {
-      if (levelNumbers[treatment.level]) {
-        levelNumbers[treatment.level].push(treatment.hugoSymbol);
+    const fdaVariantSource = this.secondLayerFilterEnabled
+      ? this.filteredFdaAlterations
+      : this.allFdaAlterations.result;
+    fdaVariantSource.map(variant => {
+      if (levelNumbers[variant.level]) {
+        levelNumbers[variant.level].push(variant.alteration.gene.hugoSymbol);
       }
     });
     return _.reduce(
@@ -394,7 +321,9 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get filteredLevels() {
-    return _.uniq(this.filteredTreatments.map(treatment => treatment.level));
+    return _.uniq(
+      this.filteredFdaAlterations.map(fdaVariant => fdaVariant.level)
+    );
   }
 
   @computed
@@ -414,16 +343,6 @@ export default class ActionableGenesPage extends React.Component<
       },
       [] as string[]
     );
-  }
-
-  @computed
-  get drugSelectValue() {
-    return this.drugSearchKeyword
-      ? {
-          label: this.drugSearchKeyword,
-          value: this.drugSearchKeyword,
-        }
-      : null;
   }
 
   @computed
@@ -463,60 +382,27 @@ export default class ActionableGenesPage extends React.Component<
   clearFilters() {
     this.levelSelected = this.initLevelSelected();
     this.relevantTumorTypeSearchKeyword = '';
-    this.drugSearchKeyword = '';
     this.geneSearchKeyword = '';
   }
 
   @autobind
   downloadAssociation() {
-    const content = [
-      [
-        'Level',
-        'Gene',
-        'Alterations',
-        'Cancer Types',
-        'Drugs (for therapeutic implications only)',
-      ].join('\t'),
+    const header = [
+      ['FDA Level', 'Gene', 'Alteration', 'Cancer Type'].join('\t'),
     ];
-    this.filteredTreatments
-      .map(treatment => ({
-        level: treatment.level,
-        hugoSymbol: treatment.hugoSymbol,
-        alterations: treatment.alterations
-          .map(alteration => alteration.name)
-          .sort()
-          .join(', '),
-        tumorType: treatment.cancerTypes.join(', '),
-        drugs: treatment.drugs,
-      }))
-      .sort((treatmentA, treatmentB) => {
-        let result = sortByLevel(treatmentA.level, treatmentB.level);
-        if (result === 0) {
-          result = treatmentA.hugoSymbol.localeCompare(treatmentB.hugoSymbol);
-        }
-        if (result === 0) {
-          result = treatmentA.alterations.localeCompare(treatmentB.alterations);
-        }
-        if (result === 0) {
-          result = treatmentA.tumorType.localeCompare(treatmentB.tumorType);
-        }
-        if (result === 0) {
-          result = treatmentA.drugs.localeCompare(treatmentB.drugs);
-        }
-        return result;
-      })
-      .forEach(item => {
-        content.push(
-          [
-            item.level,
-            item.hugoSymbol,
-            item.alterations,
-            item.tumorType,
-            item.drugs,
-          ].join('\t')
-        );
-      });
-    return Promise.resolve(content.join('\n'));
+    const content: string[] = [];
+    this.filteredFdaAlterations.forEach(item => {
+      content.push(
+        [
+          item.level.replace('FDAx', ''),
+          item.alteration.gene.hugoSymbol,
+          item.alteration.name,
+          item.cancerType,
+        ].join('\t')
+      );
+    });
+    content.sort();
+    return Promise.resolve(header.concat(content).join('\n'));
   }
 
   getAlterationCell(hugoSymbol: string, alterations: Alteration[]) {
@@ -569,37 +455,52 @@ export default class ActionableGenesPage extends React.Component<
   private columns = [
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-      Header: <span>OncoKB Level</span>,
+      Header: <span>FDA Level</span>,
+      accessor: 'level',
       minWidth: 120,
+      width: 120,
+      Cell(props: any) {
+        return (
+          <div className={'my-1 d-flex justify-content-center'}>
+            <FdaLevelIcon level={props.original.level} withDescription={true} />
+          </div>
+        );
+      },
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
       style: { whiteSpace: 'normal' },
-      Cell(props: { original: Treatment }) {
-        return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
+      accessor: 'alteration.gene.hugoSymbol',
+      Cell(props: { original: FdaAlteration }) {
+        return (
+          <GenePageLink
+            hugoSymbol={props.original.alteration.gene.hugoSymbol}
+            selectedTab={ANNOTATION_PAGE_TAB_KEYS.FDA}
+          />
+        );
       },
     },
     {
       id: TABLE_COLUMN_KEY.ALTERATIONS,
-      Header: <span>Alterations</span>,
-      accessor: 'alterations',
+      Header: <span>Alteration</span>,
+      accessor: 'alteration.name',
       minWidth: 200,
       style: { whiteSpace: 'normal' },
       defaultSortDesc: false,
-      sortMethod(a: Alteration[], b: Alteration[]) {
-        return a
-          .map(datum => datum.name)
-          .join(', ')
-          .localeCompare(b.map(datum => datum.name).join(', '));
+      sortMethod(a: string, b: string) {
+        if (a && b) {
+          return a.localeCompare(b);
+        } else {
+          return 0;
+        }
       },
-      Cell: (props: { original: Treatment }) => {
+      Cell: (props: { original: FdaAlteration }) => {
         return (
           <div style={{ display: 'block' }}>
             {' '}
-            {this.getAlterationCell(
-              props.original.hugoSymbol,
-              props.original.alterations
-            )}
+            {this.getAlterationCell(props.original.alteration.gene.hugoSymbol, [
+              props.original.alteration,
+            ])}
           </div>
         );
       },
@@ -607,46 +508,39 @@ export default class ActionableGenesPage extends React.Component<
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
       minWidth: 300,
-      accessor: 'cancerTypes',
-      sortMethod(a: string[], b: string[]) {
-        return a.join(', ').localeCompare(b.join(', '));
+      accessor: 'cancerType',
+      sortMethod(a: string, b: string) {
+        if (a && b) {
+          return a.localeCompare(b);
+        } else {
+          return 0;
+        }
       },
-      Cell(props: { original: Treatment }) {
-        return <span>{props.original.cancerTypes.join(', ')}</span>;
-      },
-    },
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
-      minWidth: 300,
-      style: { whiteSpace: 'normal' },
-      Cell(props: { original: Treatment }) {
-        return <span>{props.original.drugs}</span>;
+      Cell(props: { original: FdaAlteration }) {
+        return <span>{props.original.cancerType}</span>;
       },
     },
   ];
 
   render() {
-    const levelSelectionSection = [];
-    for (const key in LEVEL_TYPES) {
-      if (LEVEL_TYPES[key] && key !== LEVEL_TYPES.FDA) {
-        levelSelectionSection.push(
-          <LevelSelectionRow
-            levelType={LEVEL_TYPES[key]}
-            collapseStatus={this.collapseStatus}
-            levelNumbers={this.levelNumbers}
-            levelSelected={this.levelSelected}
-            updateCollapseStatus={this.updateCollapseStatus}
-            updateLevelSelection={this.updateLevelSelection}
-          />
-        );
-      }
-    }
+    const levelSelectionSection = [
+      <LevelSelectionRow
+        levelType={LEVEL_TYPES.FDA}
+        collapseStatus={{
+          [LEVEL_TYPES.FDA]: true,
+        }}
+        levelNumbers={this.levelNumbers}
+        levelSelected={this.levelSelected}
+        updateCollapseStatus={this.updateCollapseStatus}
+        updateLevelSelection={this.updateLevelSelection}
+      />,
+    ];
 
     return (
       <DocumentTitle title={DOCUMENT_TITLES.ACTIONABLE_GENES}>
         <If
           condition={
-            this.allTumorTypes.isComplete && this.evidencesByLevel.isComplete
+            this.allTumorTypes.isComplete && this.allFdaAlterations.isComplete
           }
         >
           <Then>
@@ -655,7 +549,7 @@ export default class ActionableGenesPage extends React.Component<
               style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
               className={'mb-2'}
             >
-              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
+              <Col className={classnames(...COMPONENT_PADDING)} lg={6} xs={12}>
                 <Select
                   value={this.geneSelectValue}
                   placeholder={`${
@@ -675,7 +569,7 @@ export default class ActionableGenesPage extends React.Component<
                   }
                 />
               </Col>
-              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
+              <Col className={classnames(...COMPONENT_PADDING)} lg={6} xs={12}>
                 <CancerTypeSelect
                   tumorType={this.relevantTumorTypeSearchKeyword}
                   onChange={(selectedOption: any) =>
@@ -685,58 +579,65 @@ export default class ActionableGenesPage extends React.Component<
                   }
                 />
               </Col>
-              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
-                <Select
-                  value={this.drugSelectValue}
-                  placeholder={`${this.filteredDrugs.length} ${pluralize(
-                    'drug',
-                    this.filteredDrugs.length
-                  )}`}
-                  options={this.filteredDrugs.map(drug => {
-                    return {
-                      value: drug,
-                      label: drug,
-                    };
-                  })}
-                  isClearable={true}
-                  onChange={(selectedOption: any) =>
-                    (this.drugSearchKeyword = selectedOption
-                      ? selectedOption.label
-                      : '')
-                  }
-                />
+            </Row>
+            <Row>
+              <Col>
+                <>
+                  <p>
+                    While the intended audience for OncoKB are primarily
+                    clinical oncologists, molecular pathologists and cancer
+                    researchers, NGS-test developers may also rely on OncoKB
+                    information to support the validity of their tests. The FDA
+                    regulates the process of FDA-approval of tumor-profiling and
+                    companion diagnostic tests. Therefore, the FDA introduced a
+                    process to recognize human variant databases such as OncoKB
+                    as a method to credential the robustness and transparency of
+                    OncoKB processes involved in variant evaluation.
+                  </p>
+                  <p>
+                    Below is a table of the FDA reviewed and recognized content
+                    in OncoKB which is a list of the tumor type-specific
+                    alterations and the corresponding FDA Level of Evidence
+                    assigning their clinical significance. The assigned FDA
+                    level of evidence is based on these alterations being tested
+                    in Formalin Fixed Paraffin Embedded (FFPE) specimen types,
+                    except in cases where specimen type is not specified.
+                  </p>
+                </>
               </Col>
             </Row>
             <Row className={'mb-2'}>
-              <Col className="d-flex">
+              <Col className="d-flex align-items-center">
                 <span>
-                  <b>{`Showing ${
-                    this.filteredTreatments.length
-                  } clinical  ${pluralize(
-                    'implication',
-                    this.filteredTreatments.length
-                  )}`}</b>
-                  {` (${this.filteredGenes.length} ${pluralize(
-                    'gene',
-                    this.filteredGenes.length
-                  )},
-                ${this.filteredTumorTypes.length} ${pluralize(
-                    'cancer type',
-                    this.filteredTumorTypes.length
-                  )},
+                  <b>
+                    {`Showing ${
+                      this.filteredFdaAlterations.length
+                    } clinical  ${pluralize(
+                      'implication',
+                      this.filteredFdaAlterations.length
+                    )}`}
+                    {` (${this.filteredGenes.length} ${pluralize(
+                      'gene',
+                      this.filteredGenes.length
+                    )},
+                ${this.filteredCancerTypes.length} ${pluralize(
+                      'cancer type',
+                      this.filteredCancerTypes.length
+                    )},
                 ${this.filteredLevels.length} ${pluralize(
-                    'level',
-                    this.filteredLevels.length
-                  )} of evidence)`}
+                      'level',
+                      this.filteredLevels.length
+                    )} of evidence)`}
+                  </b>
                 </span>
                 <AuthDownloadButton
                   size={'sm'}
                   className={classnames('ml-2')}
                   getDownloadData={this.downloadAssociation}
-                  fileName={'oncokb_biomarker_drug_associations.tsv'}
+                  fileName={'oncokb_fda_recongnized_genes.tsv'}
                   buttonText={'Associations'}
                 />
-                {this.treatmentsAreFiltered ? (
+                {this.fdaVariantsAreFiltered ? (
                   <Button
                     variant="link"
                     size={'sm'}
@@ -753,14 +654,14 @@ export default class ActionableGenesPage extends React.Component<
               <Col>
                 <OncoKBTable
                   disableSearch={true}
-                  data={this.filteredTreatments}
+                  data={this.filteredFdaAlterations}
                   loading={this.relevantTumorTypes.isPending}
                   columns={this.columns}
                   minRows={Math.round(LG_TABLE_FIXED_HEIGHT / 36) - 1}
                   pageSize={
-                    this.filteredTreatments.length === 0
+                    this.filteredFdaAlterations.length === 0
                       ? 1
-                      : this.filteredTreatments.length
+                      : this.filteredFdaAlterations.length
                   }
                   fixedHeight={true}
                   style={{
@@ -783,10 +684,6 @@ export default class ActionableGenesPage extends React.Component<
                       id: TABLE_COLUMN_KEY.CANCER_TYPES,
                       desc: false,
                     },
-                    {
-                      id: TABLE_COLUMN_KEY.DRUGS,
-                      desc: false,
-                    },
                   ]}
                 />
               </Col>
@@ -797,7 +694,7 @@ export default class ActionableGenesPage extends React.Component<
               size={'big'}
               center={true}
               isLoading={
-                this.allTumorTypes.isPending || this.evidencesByLevel.isPending
+                this.allTumorTypes.isPending || this.allFdaAlterations.isPending
               }
             />
           </Else>

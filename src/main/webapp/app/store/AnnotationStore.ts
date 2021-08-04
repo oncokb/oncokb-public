@@ -20,7 +20,7 @@ import {
 import {
   BiologicalVariant,
   CancerTypeCount,
-  ClinicalVariant,
+  ClinicalVariant, FdaAlteration,
   GeneNumber,
   PortalAlteration,
   TumorType,
@@ -252,6 +252,31 @@ export class AnnotationStore {
           this.referenceGenomeQuery
         )
       );
+    },
+    default: [],
+  });
+
+  readonly fdaAlterations = remoteData<FdaAlteration[]>({
+    await: () => [this.gene],
+    invoke: async () => {
+      const geneFdaAlterations = await privateClient.utilsFdaAlterationsGetUsingGET(
+        {
+          hugoSymbol: this.gene.result.hugoSymbol,
+        }
+      );
+      if (this.alterationQuery) {
+        const lowerCaseAltQuery = this.alterationQuery.toLowerCase();
+        return geneFdaAlterations.filter(alt => {
+          if (alt.alteration.alteration && alt.alteration.alteration.toLowerCase() === lowerCaseAltQuery) {
+            return true;
+          }
+          if (alt.alteration.name && alt.alteration.name.toLowerCase() === lowerCaseAltQuery) {
+            return true;
+          }
+          return false;
+        })
+      }
+      return geneFdaAlterations;
     },
     default: [],
   });

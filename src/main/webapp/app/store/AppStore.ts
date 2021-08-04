@@ -38,6 +38,15 @@ class AppStore {
     default: DEFAULT_MAIN_NUMBERS,
   });
 
+
+  readonly fdaNumbers = remoteData<{[key:string]: number}>({
+    await: () => [],
+    async invoke() {
+      return await oncokbPrivateClient.utilsNumbersFdaGetUsingGET({});
+    },
+    default: {},
+  });
+
   constructor(props?: IAppConfig) {
     if (props) {
       this.ribbonEnv = props.ribbonEnv;
