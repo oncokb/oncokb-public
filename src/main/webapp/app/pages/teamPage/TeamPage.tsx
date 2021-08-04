@@ -55,11 +55,8 @@ export const TeamPage = () => {
       showCOI: true,
     },
     {
-      firstName: 'Yifu',
-      lastName: 'Yao',
-      title: [TITLE.MSC],
-      faculty: false,
-      showCOI: true,
+      firstName: 'Benjamin',
+      lastName: 'Xu',
     },
     {
       firstName: 'Ederlinda',
@@ -564,6 +561,11 @@ export const TeamPage = () => {
     { firstName: 'Anas', lastName: 'Younes', title: [TITLE.MD] },
     { firstName: 'Emiliano', lastName: 'Cocco', title: [TITLE.PHD] },
     { firstName: 'Maurizio', lastName: 'Scaltriti', title: [TITLE.MD] },
+    {
+      firstName: 'Yifu',
+      lastName: 'Yao',
+      title: [TITLE.MSC],
+    },
   ];
   return (
     <DocumentTitle title={DOCUMENT_TITLES.TEAM}>

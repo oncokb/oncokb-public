@@ -36,7 +36,7 @@ if (
     // UNIQUE ID IS IMPORTANT B/C WE REMEMBER A MESSAGE HAS BEEN SHOWN
     // BASED ON USERS LOCALSTORAGE
     {
-      dateEnd: 100000000000000,
+      dateEnd: 1,
       content: `
         <div>
           <span>We have a new Software Engineer position open. Come and join us! </span>
