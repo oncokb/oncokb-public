@@ -178,6 +178,17 @@ public class MailService {
     }
 
     @Async
+    public void sendEmailFromSlack(UserDTO user, String subject, String body, MailType mailType) {
+        try {
+            sendEmail(user.getEmail(), applicationProperties.getEmailAddresses().getRegistrationAddress(), null, subject, body, null, false, false);
+            addUserMailsRecord(user, mailType, applicationProperties.getEmailAddresses().getRegistrationAddress(), "registrationAddress");
+            log.info("Sent email to User '{}'", user.getEmail());
+        } catch (MailException | MessagingException e) {
+            log.warn("Email could not be sent to user '{}'", user.getEmail(), e);
+        }
+    }
+
+    @Async
     public void sendEmailFromTemplate(UserDTO user, MailType mailType, String subject, String from, String cc, String by, Context additionalContext) {
         sendEmailFromTemplate(user, mailType, subject, user.getEmail(), from, cc, by, additionalContext);
     }
@@ -265,8 +276,18 @@ public class MailService {
     }
 
     @Async
+    public void sendDuplicateUserClarificationEmail(UserDTO user) {
+        sendEmailWithLicenseContext(user, MailType.CLARIFY_DUPLICATE_USER, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
+    }
+
+    @Async
     public void sendRejectionEmail(UserDTO user) {
         sendEmailWithLicenseContext(user, MailType.REJECTION, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
+    }
+
+    @Async
+    public void sendRejectAlumniAddressEmail(UserDTO user) {
+        sendEmailWithLicenseContext(user, MailType.REJECT_ALUMNI_ADDRESS, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
     }
 
     @Async
@@ -395,7 +416,11 @@ public class MailService {
             case CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL:
                 return Optional.of("email.license.clarify.title");
             case CLARIFY_USE_CASE:
-                return Optional.of("email.clarify.use.case.title");
+                return Optional.of("email.license.clarify.title");
+            case CLARIFY_DUPLICATE_USER:
+                return Optional.of("email.license.clarify.title");
+            case REJECT_ALUMNI_ADDRESS:
+                return Optional.of("email.reject.title");
             case VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES:
                 return Optional.of("email.account.expires.by.days.title");
             case APPROVAL_MSK_IN_COMMERCIAL:

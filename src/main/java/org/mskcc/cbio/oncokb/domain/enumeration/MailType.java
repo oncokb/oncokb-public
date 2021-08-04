@@ -15,6 +15,8 @@ public enum MailType {
     , CLARIFY_ACADEMIC_FOR_PROFIT("clarifyLicenseInForProfileCompany", "Clarify - Requested academic license from a for-profit company", null)
     , CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL("clarifyAcademicUseWithoutInstituteEmail", "Clarify - Requested academic license from a non-institute email", null)
     , CLARIFY_USE_CASE("clarifyUseCase", "Clarify - Use case unclear", null)
+    , CLARIFY_DUPLICATE_USER("clarifyDuplicateUser", "Clarify - User registered multiple accounts", null)
+    , REJECT_ALUMNI_ADDRESS("alumniEmailAddress", "Reject - Registered under alumni email address", null)
     , VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES("verifyEmailBeforeAccountExpires", "Verify user still owns the email address", null)
     , APPROVAL_MSK_IN_COMMERCIAL("approvalMSKInCommercial", "Autocorrect MSK user license to academic", null)
     , TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE("trialAccountIsAboutToExpire", "Trail account is about to expire", null)

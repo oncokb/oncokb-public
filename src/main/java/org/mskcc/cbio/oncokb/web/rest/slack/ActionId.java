@@ -12,11 +12,21 @@ public enum ActionId {
     , EXPAND("expand")
     , MORE_ACTIONS("more-actions")
     , SEND_ACADEMIC_FOR_PROFIT_EMAIL("send-academic-for-profit-email")
+    , CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL("confirm-send-academic-for-profit-email")
     , SEND_ACADEMIC_CLARIFICATION_EMAIL("send-academic-clarification-email")
+    , CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL("confirm-send-academic-clarification-email")
     , SEND_USE_CASE_CLARIFICATION_EMAIL("send-use-case-clarification-email")
+    , CONFIRM_SEND_USE_CASE_CLARIFICATION_EMAIL("confirm-send-use-case-clarification-email")
+    , SEND_DUPLICATE_USER_CLARIFICATION_EMAIL("send-duplicate-user-clarification-email")
+    , CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL("confirm-send-duplicate-user-clarification-email")
     , SEND_REJECTION_EMAIL("send-rejection-email")
+    , CONFIRM_SEND_REJECTION_EMAIL("confirm-send-rejection-email")
+    , SEND_REJECT_ALUMNI_ADDRESS_EMAIL("send-reject-alumni-address-email")
+    , CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL("confirm-send-reject-alumni-address-email")
     , COLLAPSE("collapse")
     , UPDATE_USER("update-user")
+    , INPUT_SUBJECT("input-subject")
+    , INPUT_BODY("input-body")
     ;
 
     String id;
@@ -36,5 +46,45 @@ public enum ActionId {
             }
         }
         return null;
+    }
+
+    public static boolean isEmailAction(ActionId actionId) {
+        if (actionId == null) {
+            return false;
+        }
+        return actionId == SEND_ACADEMIC_FOR_PROFIT_EMAIL
+            || actionId == SEND_ACADEMIC_CLARIFICATION_EMAIL
+            || actionId == SEND_USE_CASE_CLARIFICATION_EMAIL
+            || actionId == SEND_DUPLICATE_USER_CLARIFICATION_EMAIL
+            || actionId == SEND_REJECTION_EMAIL
+            || actionId == SEND_REJECT_ALUMNI_ADDRESS_EMAIL;
+    }
+
+    public static boolean isConfirmEmailAction(ActionId actionId) {
+        if (actionId == null) {
+            return false;
+        }
+        return actionId == CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL
+            || actionId == CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL
+            || actionId == CONFIRM_SEND_USE_CASE_CLARIFICATION_EMAIL
+            || actionId == CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL
+            || actionId == CONFIRM_SEND_REJECTION_EMAIL
+            || actionId == CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL;
+    }
+
+    public static boolean isDropdownAction(ActionId actionId) {
+        if (actionId == null) {
+            return false;
+        }
+        return actionId == SEND_ACADEMIC_FOR_PROFIT_EMAIL
+            || actionId == SEND_ACADEMIC_CLARIFICATION_EMAIL
+            || actionId == SEND_USE_CASE_CLARIFICATION_EMAIL
+            || actionId == SEND_DUPLICATE_USER_CLARIFICATION_EMAIL
+            || actionId == SEND_REJECTION_EMAIL
+            || actionId == SEND_REJECT_ALUMNI_ADDRESS_EMAIL
+            || actionId == GIVE_TRIAL_ACCESS
+            || actionId == CONVERT_TO_REGULAR_ACCOUNT
+            || actionId == UPDATE_USER
+            || actionId == COLLAPSE;
     }
 }
