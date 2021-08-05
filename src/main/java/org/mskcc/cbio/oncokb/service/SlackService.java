@@ -213,7 +213,7 @@ public class SlackService {
         if (responseBlockActionPayload != null) {
             actionId = getActionId(responseBlockActionPayload);
             boolean expandedAction = actionId.equals(EXPAND) || (actionId.equals(MORE_ACTIONS) && getActionIdFromMoreActions(responseBlockActionPayload).equals(UPDATE_USER)) || actionId.equals(CHANGE_LICENSE_TYPE);
-            buildCollapsed = (userStatusChecks.isReviewed() && !expandedAction) || actionId.equals(COLLAPSE);
+            buildCollapsed = (userStatusChecks.isReviewed() && !expandedAction) || (actionId.equals(MORE_ACTIONS) && getActionIdFromMoreActions(responseBlockActionPayload).equals(COLLAPSE));
         } else {
             buildCollapsed = userStatusChecks.isReviewed();
         }
