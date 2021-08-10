@@ -57,7 +57,7 @@ export class CitationTooltip extends React.Component<
     return (
       <div>
         {this.citationContent.isPending ? (
-          <LoadingIndicator isLoading={true} size={'small'} />
+          <LoadingIndicator isLoading={true} />
         ) : (
           <div style={style}>
             {this.getPmidItems()}

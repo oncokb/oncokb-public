@@ -1,13 +1,12 @@
 import React from 'react';
 import {
   action,
-  observable,
   computed,
   IReactionDisposer,
+  observable,
   reaction,
 } from 'mobx';
-import { observer, inject } from 'mobx-react';
-import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
+import { inject, observer } from 'mobx-react';
 import { remoteData } from 'cbioportal-frontend-commons';
 import client from 'app/shared/api/clientInstance';
 import {
@@ -16,24 +15,17 @@ import {
   UserMailsDTO,
 } from 'app/shared/api/generated/API';
 import { match } from 'react-router';
-import { Row, Col } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
-import OncoKBTable, {
-  SearchColumn,
-} from 'app/components/oncokbTable/OncoKBTable';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
-import { filterByKeyword, toAppTimestampFormat } from 'app/shared/utils/Utils';
 import _ from 'lodash';
-import {
-  COMPONENT_PADDING,
-  ONCOKB_LICENSE_EMAIL,
-  THRESHOLD_NUM_OF_USER,
-} from 'app/config/constants';
-import pluralize from 'pluralize';
+import { COMPONENT_PADDING, THRESHOLD_NUM_OF_USER } from 'app/config/constants';
 import Select from 'react-select';
 import classnames from 'classnames';
-import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import autobind from 'autobind-decorator';
 import { LoadingButton } from 'app/shared/button/LoadingButton';
@@ -287,7 +279,7 @@ export default class UserManagementPage extends React.Component<{
           />
         </Then>
         <Else>
-          <LoadingIndicator size={'big'} center={true} isLoading />
+          <LoadingIndicator size={LoaderSize.LARGE} center={true} isLoading />
         </Else>
       </If>
     );
