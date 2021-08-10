@@ -200,6 +200,7 @@ class HomePage extends React.Component<IHomeProps> {
             <Row>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
+                  isLoading={this.props.appStore.mainNumbers.isPending}
                   href={'/cancerGenes'}
                   number={this.props.appStore.mainNumbers.result.gene}
                   title={`${pluralize(
@@ -210,6 +211,7 @@ class HomePage extends React.Component<IHomeProps> {
               </Col>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
+                  isLoading={this.props.appStore.mainNumbers.isPending}
                   number={this.props.appStore.mainNumbers.result.alteration}
                   title={`${pluralize(
                     'Alteration',
@@ -219,6 +221,7 @@ class HomePage extends React.Component<IHomeProps> {
               </Col>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
+                  isLoading={this.props.appStore.mainNumbers.isPending}
                   href={PAGE_ROUTE.ACTIONABLE_GENE}
                   number={this.props.appStore.mainNumbers.result.tumorType}
                   title={`${pluralize(
@@ -229,6 +232,7 @@ class HomePage extends React.Component<IHomeProps> {
               </Col>
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
+                  isLoading={this.props.appStore.mainNumbers.isPending}
                   href={PAGE_ROUTE.ACTIONABLE_GENE}
                   number={this.props.appStore.mainNumbers.result.drug}
                   title={`${pluralize(
@@ -286,6 +290,7 @@ class HomePage extends React.Component<IHomeProps> {
                         levelGadget.level === LEVELS.Px3 ? '35px' : undefined,
                     }}
                     href={`/actionableGenes#levels=${levelGadget.linkoutLevel}`}
+                    isLoading={this.levelNumbers.isPending}
                   />
                 </Col>
               )
