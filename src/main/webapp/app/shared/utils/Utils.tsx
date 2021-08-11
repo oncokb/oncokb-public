@@ -489,3 +489,15 @@ export function encodeResourceUsageDetailPageURL(endpoint: string) {
 export function decodeResourceUsageDetailPageURL(url: string) {
   return url.split('!').join('/');
 }
+
+export function isPositionalAlteration(
+  proteinStart: number,
+  proteinEnd: number,
+  consequence: string
+) {
+  if (proteinStart && proteinEnd && consequence) {
+    return proteinStart === proteinEnd && consequence === 'NA';
+  } else {
+    return false;
+  }
+}
