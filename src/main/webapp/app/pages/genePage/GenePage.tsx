@@ -25,7 +25,9 @@ import {
   levelOfEvidence2Level,
   OncoKBLevelIcon,
 } from 'app/shared/utils/Utils';
-import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import BarChart from 'app/components/barChart/BarChart';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
@@ -1038,7 +1040,7 @@ export default class GenePage extends React.Component<GenePageProps> {
                     </Then>
                     <Else>
                       <LoadingIndicator
-                        size={'big'}
+                        size={LoaderSize.LARGE}
                         center={true}
                         isLoading={this.store.gene.isPending}
                       />
@@ -1048,7 +1050,7 @@ export default class GenePage extends React.Component<GenePageProps> {
               </Then>
               <Else>
                 <LoadingIndicator
-                  size={'big'}
+                  size={LoaderSize.LARGE}
                   center={true}
                   isLoading={this.store.gene.isPending}
                 />

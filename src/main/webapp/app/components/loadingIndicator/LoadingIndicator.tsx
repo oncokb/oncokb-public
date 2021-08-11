@@ -5,31 +5,38 @@ import classnames from 'classnames';
 import styles from './styles.module.scss';
 import { COLOR_BLUE } from 'app/config/theme';
 
+export enum LoaderSize {
+  LARGE,
+  SMALL,
+  EXTRA_SMALL,
+}
+
 export interface ILoader {
   isLoading: boolean;
   style?: any;
   color?: string;
   center?: boolean;
   centerRelativeToContainer?: boolean;
-  size?: 'big' | 'small';
+  size?: LoaderSize;
   className?: string;
 }
 
 export default class LoadingIndicator extends React.Component<ILoader, {}> {
   public static defaultProps = {
     center: false,
-    size: 'small',
+    size: LoaderSize.SMALL,
   };
 
   public render() {
     const color = this.props.color
       ? this.props.color
-      : this.props.size === 'small'
-      ? COLOR_BLUE
-      : 'white';
+      : this.props.size === LoaderSize.LARGE
+      ? 'white'
+      : COLOR_BLUE;
     const spinnerStyles = {
-      [styles.small]: this.props.size === 'small',
-      [styles.big]: this.props.size === 'big',
+      [styles.extraSmall]: this.props.size === LoaderSize.EXTRA_SMALL,
+      [styles.small]: this.props.size === LoaderSize.SMALL,
+      [styles.big]: this.props.size === LoaderSize.LARGE,
       'd-flex': true,
       'justify-content-center': true,
     };

@@ -7,6 +7,9 @@ import classnames from 'classnames';
 import { inject } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
 import { OncoKBLevelIcon } from 'app/shared/utils/Utils';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
 
 type LevelButtonProps = {
   level: LEVELS;
@@ -20,6 +23,7 @@ type LevelButtonProps = {
   active?: boolean;
   href?: string;
   disabled?: boolean;
+  isLoading?: boolean;
 };
 
 export const LevelButton = inject('routing')((props: LevelButtonProps) => {
@@ -57,9 +61,16 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
         </span>
       </div>
       <div className={styles.levelDescription}>{props.description}</div>
-      <div
-        className={classnames(`oncokb level-${props.level}`, styles.geneNumber)}
-      >{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
+      {props.isLoading ? (
+        <LoadingIndicator isLoading size={LoaderSize.EXTRA_SMALL} />
+      ) : (
+        <div
+          className={classnames(
+            `oncokb level-${props.level}`,
+            styles.geneNumber
+          )}
+        >{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
+      )}
     </Button>
   );
 });
