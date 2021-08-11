@@ -5,7 +5,7 @@ import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import client from 'app/shared/api/clientInstance';
 import { UserDTO } from 'app/shared/api/generated/API';
 import { match } from 'react-router';
-import { Button, Col, Row, Modal } from 'react-bootstrap';
+import { Button, Col, Modal, Row } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
 import OncoKBTable, {
   SearchColumn,
@@ -17,14 +17,13 @@ import _ from 'lodash';
 import {
   AUTHORITIES,
   LicenseType,
-  NOT_CHANGEABLE_AUTHORITIES,
-  PAGE_ROUTE,
   THRESHOLD_NUM_OF_USER,
-  USER_AUTHORITIES,
   USER_AUTHORITY,
 } from 'app/config/constants';
 import styles from './UserDetailsPage.module.scss';
-import LoadingIndicator from '../../components/loadingIndicator/LoadingIndicator';
+import LoadingIndicator, {
+  LoaderSize,
+} from '../../components/loadingIndicator/LoadingIndicator';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { Link } from 'react-router-dom';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
@@ -370,7 +369,7 @@ export default class UserDetailsPage extends React.Component<{
           </>
         ) : (
           <LoadingIndicator
-            size={'big'}
+            size={LoaderSize.LARGE}
             center={true}
             isLoading={!this.loadedUsers}
           />

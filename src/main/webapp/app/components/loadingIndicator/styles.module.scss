@@ -53,7 +53,14 @@
     width: 3px !important;
     margin: 0 2px !important;
     height: 12px !important;
-    width: 3px !important;
+  }
+}
+
+.extraSmall {
+  > div {
+    width: 1px !important;
+    margin: 0 2px !important;
+    height: 10px !important;
   }
 }
 

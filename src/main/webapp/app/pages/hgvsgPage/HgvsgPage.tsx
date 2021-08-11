@@ -1,9 +1,11 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { AnnotationStore } from 'app/store/AnnotationStore';
-import { computed, IReactionDisposer, reaction, observable } from 'mobx';
+import { computed, IReactionDisposer, observable, reaction } from 'mobx';
 import AppStore from 'app/store/AppStore';
-import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouterStore } from 'mobx-react-router';
 import DocumentTitle from 'react-document-title';
 import { Else, If, Then } from 'react-if';
@@ -154,7 +156,11 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
                 </Alert>
               </Then>
               <Else>
-                <LoadingIndicator size={'big'} center={true} isLoading={true} />
+                <LoadingIndicator
+                  size={LoaderSize.LARGE}
+                  center={true}
+                  isLoading={true}
+                />
               </Else>
             </If>
           </Else>
