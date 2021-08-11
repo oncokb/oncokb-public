@@ -36,6 +36,7 @@ import {
   LEVEL_TYPES,
   LEVELS,
   LG_TABLE_FIXED_HEIGHT,
+  PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
@@ -50,6 +51,8 @@ import { COLOR_BLUE } from 'app/config/theme';
 import WithSeparator from 'react-with-separator';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import LevelSelectionRow from 'app/pages/actionableGenesPage/LevelSelectionRow';
+import { Version } from 'app/pages/LevelOfEvidencePage';
+import { Link } from 'react-router-dom';
 
 type Treatment = {
   level: string;
@@ -584,24 +587,27 @@ export default class FdaRecognizedContentPage extends React.Component<
               <Col>
                 <>
                   <p>
-                    While the intended audience for OncoKB are primarily
-                    clinical oncologists, molecular pathologists and cancer
-                    researchers, NGS-test developers may also rely on OncoKB
-                    information to support the validity of their tests. The FDA
-                    regulates the process of FDA-approval of tumor-profiling and
-                    companion diagnostic tests. Therefore, the FDA introduced a
-                    process to recognize human variant databases such as OncoKB
-                    as a method to credential the robustness and transparency of
-                    OncoKB processes involved in variant evaluation.
+                    While the intended audience for OncoKB is primarily clinical
+                    oncologists, molecular pathologists and cancer researchers,
+                    NGS-test developers may also rely on OncoKB to support the
+                    validity of their tests. The FDA regulates the approval of
+                    tumor-profiling and companion diagnostic tests. Therefore,
+                    the FDA introduced a process to recognize human variant
+                    databases, such as OncoKB, to credential the robustness and
+                    transparency of databases involved in variant evaluation.
                   </p>
                   <p>
-                    Below is a table of the FDA reviewed and recognized content
-                    in OncoKB which is a list of the tumor type-specific
-                    alterations and the corresponding FDA Level of Evidence
-                    assigning their clinical significance. The assigned FDA
-                    level of evidence is based on these alterations being tested
-                    in Formalin Fixed Paraffin Embedded (FFPE) specimen types,
-                    except in cases where specimen type is not specified.
+                    Below is the FDA-recognized content in OncoKB, including
+                    tumor type-specific alterations and their corresponding{' '}
+                    <Link
+                      to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
+                    >
+                      FDA level of evidence
+                    </Link>
+                    . The assigned FDA level of evidence is based on these
+                    alterations being tested in Formalin Fixed Paraffin Embedded
+                    (FFPE) specimen types, except in cases where specimen type
+                    is not specified.
                   </p>
                 </>
               </Col>
