@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb;
 
+import io.sentry.Sentry;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 
 import io.github.jhipster.config.DefaultProfileUtil;
@@ -13,8 +14,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -62,6 +66,24 @@ public class OncokbPublicApp {
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
+        initSentry(env);
+    }
+
+    private static void initSentry(Environment env) {
+        Sentry.init(options -> {
+            options.setDsn(env.getProperty("sentry.dsn"));
+            options.setEnableUncaughtExceptionHandler(true);
+            // Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
+            // We recommend adjusting this value in production.
+            options.setTracesSampleRate(.2);
+            // When first trying Sentry it's good to see what the SDK is doing:
+            options.setDebug(false);
+
+            // Ignore the following exceptions
+            options.addIgnoredExceptionForType(BadCredentialsException.class);
+            options.addIgnoredExceptionForType(IOException.class);
+            options.addIgnoredExceptionForType(HttpClientErrorException.class);
+        });
     }
 
     private static void logApplicationStartup(Environment env) {

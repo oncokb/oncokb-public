@@ -12,6 +12,7 @@ import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
+import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +92,11 @@ public class ApiProxy {
         try {
             return restTemplate.exchange(uri, method, new HttpEntity<>(body, httpHeaders), String.class);
         } catch (HttpClientErrorException httpClientErrorException) {
-            throw new ResponseStatusException(httpClientErrorException.getStatusCode(), httpClientErrorException.getMessage());
+            if (httpClientErrorException.getStatusCode() != null && httpClientErrorException.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                throw new BadRequestAlertException(httpClientErrorException.getMessage(), "", "");
+            } else {
+                throw new ResponseStatusException(httpClientErrorException.getStatusCode(), httpClientErrorException.getMessage());
+            }
         }
     }
 
