@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.mail.MessagingException;
@@ -68,7 +70,7 @@ public class ApiProxy {
     private String IP_HEADER = "X-FORWARDED-FOR";
 
     @RequestMapping("/**")
-    public String proxy(@RequestBody(required = false) String body, HttpMethod method, HttpServletRequest request)
+    public ResponseEntity<String> proxy(@RequestBody(required = false) String body, HttpMethod method, HttpServletRequest request)
         throws URISyntaxException {
         URI uri = apiProxyService.prepareURI(request);
 
@@ -85,7 +87,12 @@ public class ApiProxy {
         HttpHeaders httpHeaders = apiProxyService.prepareHttpHeaders(request.getContentType());
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
-        return restTemplate.exchange(uri, method, new HttpEntity<>(body, httpHeaders), String.class).getBody();
+
+        try {
+            return restTemplate.exchange(uri, method, new HttpEntity<>(body, httpHeaders), String.class);
+        } catch (HttpClientErrorException httpClientErrorException) {
+            throw new ResponseStatusException(httpClientErrorException.getStatusCode(), httpClientErrorException.getMessage());
+        }
     }
 
     @RequestMapping("/private/utils/data/sqlDump")
