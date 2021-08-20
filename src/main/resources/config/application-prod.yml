@@ -137,9 +137,10 @@ jhipster:
 # ===================================================================
 # Sentry specific properties
 # How to configure Sentry Spring Boot: https://docs.sentry.io/clients/java/config/
-# Full reference is available at: https://github.com/getsentry/sentry-java/blob/master/sentry-spring-boot-starter/src/main/java/io/sentry/spring/autoconfigure/SentryProperties.java
+# Full reference is available at: https://github.com/getsentry/sentry-java/blob/main/sentry-spring-boot-starter/src/main/java/io/sentry/spring/boot/SentryProperties.java
 # ===================================================================
 sentry:
+  dsn:
   stacktrace:
     app:
       packages: org.mskcc.cbio.oncokb
