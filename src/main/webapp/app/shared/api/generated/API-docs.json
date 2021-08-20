@@ -1167,12 +1167,12 @@
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "APPROVAL_MSK_IN_COMMERCIAL",
               "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
-              "LIST_OF_UNAPPROVED_USERS",
               "TRIAL_ACCOUNT_IS_ACTIVATED",
               "ACTIVATE_FREE_TRIAL",
               "TOKEN_HAS_BEEN_EXPOSED",
               "TOKEN_HAS_BEEN_EXPOSED_USER",
               "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
+              "LIST_OF_UNAPPROVED_USERS",
               "TEST"
             ]
           },
@@ -2490,12 +2490,12 @@
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
-            "LIST_OF_UNAPPROVED_USERS",
             "TRIAL_ACCOUNT_IS_ACTIVATED",
             "ACTIVATE_FREE_TRIAL",
             "TOKEN_HAS_BEEN_EXPOSED",
             "TOKEN_HAS_BEEN_EXPOSED_USER",
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
+            "LIST_OF_UNAPPROVED_USERS",
             "TEST"
           ]
         }
@@ -2946,12 +2946,12 @@
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_MSK_IN_COMMERCIAL",
             "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
-            "LIST_OF_UNAPPROVED_USERS",
             "TRIAL_ACCOUNT_IS_ACTIVATED",
             "ACTIVATE_FREE_TRIAL",
             "TOKEN_HAS_BEEN_EXPOSED",
             "TOKEN_HAS_BEEN_EXPOSED_USER",
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
+            "LIST_OF_UNAPPROVED_USERS",
             "TEST"
           ]
         },
