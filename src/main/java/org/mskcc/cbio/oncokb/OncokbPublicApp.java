@@ -7,6 +7,10 @@ import io.github.jhipster.config.DefaultProfileUtil;
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.apache.commons.lang3.StringUtils;
+import org.mskcc.cbio.oncokb.service.EmailAlreadyUsedException;
+import org.mskcc.cbio.oncokb.service.InvalidPasswordException;
+import org.mskcc.cbio.oncokb.service.UsernameAlreadyUsedException;
+import org.mskcc.cbio.oncokb.web.rest.errors.TokenExpiredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +19,7 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.annotation.PostConstruct;
@@ -83,6 +88,11 @@ public class OncokbPublicApp {
             options.addIgnoredExceptionForType(BadCredentialsException.class);
             options.addIgnoredExceptionForType(IOException.class);
             options.addIgnoredExceptionForType(HttpClientErrorException.class);
+            options.addIgnoredExceptionForType(EmailAlreadyUsedException.class);
+            options.addIgnoredExceptionForType(InvalidPasswordException.class);
+            options.addIgnoredExceptionForType(UsernameAlreadyUsedException.class);
+            options.addIgnoredExceptionForType(HttpRequestMethodNotSupportedException.class);
+            options.addIgnoredExceptionForType(TokenExpiredException.class);
         });
     }
 
