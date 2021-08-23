@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Container, Dropdown, Nav, Navbar, NavItem} from 'react-bootstrap';
+import { Container, Dropdown, Nav, Navbar, NavItem } from 'react-bootstrap';
 import oncokbImg from 'content/images/oncokb-lg.png';
 import { observer } from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';
@@ -40,7 +40,6 @@ class Header extends React.Component<IHeaderProps> {
   private subPages: SubpageLink[] = [
     { title: 'Levels of Evidence', link: 'levels' },
     { title: 'Actionable Genes', link: 'actionableGenes' },
-    { title: 'FDA-Recognized Content', link: 'fdaRecognizedContent' },
     { title: 'Cancer Genes', link: 'cancerGenes' },
     { title: 'API Access', link: 'apiAccess' },
     { title: 'About', link: 'about' },

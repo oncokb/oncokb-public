@@ -1,4 +1,4 @@
-import {LevelButton} from 'app/components/levelButton/LevelButton';
+import { LevelButton } from 'app/components/levelButton/LevelButton';
 import {
   COMPONENT_PADDING,
   LEVEL_BUTTON_DESCRIPTION,
@@ -8,10 +8,10 @@ import {
   LEVELS,
 } from 'app/config/constants';
 import React from 'react';
-import {Button, Col, Collapse, Row} from 'react-bootstrap';
+import { Button, Col, Collapse, Row } from 'react-bootstrap';
 import classnames from 'classnames';
-import {observer} from 'mobx-react';
-import {FDA_L1_DISABLED_BTN_TOOLTIP} from "app/pages/genePage/FdaUtils";
+import { observer } from 'mobx-react';
+import { FDA_L1_DISABLED_BTN_TOOLTIP } from 'app/pages/genePage/FdaUtils';
 
 type LevelSelectionRowProps = {
   levelType: LEVEL_TYPES;
@@ -24,7 +24,8 @@ type LevelSelectionRowProps = {
 
 @observer
 export default class LevelSelectionRow extends React.Component<
-  LevelSelectionRowProps, any
+  LevelSelectionRowProps,
+  any
 > {
   render() {
     const levelSelections = [];
@@ -35,36 +36,39 @@ export default class LevelSelectionRow extends React.Component<
         LEVEL_CLASSIFICATION[LEVELS[level]] === this.props.levelType
       ) {
         levelSelections.push(
-            <Col
-              className={classnames(...COMPONENT_PADDING)}
-              lg={
-                LEVEL_CLASSIFICATION[LEVELS[level]] === LEVEL_TYPES.TX ? 2 : 4
+          <Col
+            className={classnames(...COMPONENT_PADDING)}
+            lg={LEVEL_CLASSIFICATION[LEVELS[level]] === LEVEL_TYPES.TX ? 2 : 4}
+            xs={LEVEL_CLASSIFICATION[LEVELS[level]] === LEVEL_TYPES.TX ? 6 : 4}
+            key={LEVELS[level]}
+          >
+            <LevelButton
+              title={
+                this.props.levelType === LEVEL_TYPES.FDA
+                  ? `FDA Level ${level.replace('FDAx', '')}`
+                  : ''
               }
-              xs={
-                LEVEL_CLASSIFICATION[LEVELS[level]] === LEVEL_TYPES.TX ? 6 : 4
+              level={LEVELS[level]}
+              numOfGenes={this.props.levelNumbers[LEVELS[level]]}
+              description={LEVEL_BUTTON_DESCRIPTION[LEVELS[level]]}
+              active={this.props.levelSelected[LEVELS[level]]}
+              className="mb-2"
+              disabled={this.props.levelNumbers[LEVELS[level]] === 0}
+              disabledTooltip={
+                LEVELS[level] === LEVELS.FDAx1
+                  ? FDA_L1_DISABLED_BTN_TOOLTIP
+                  : ''
               }
-              key={LEVELS[level]}
-            >
-              <LevelButton
-                title={this.props.levelType === LEVEL_TYPES.FDA ? `FDA Level ${level.replace('FDAx', '')}` : ''}
-                level={LEVELS[level]}
-                numOfGenes={this.props.levelNumbers[LEVELS[level]]}
-                description={LEVEL_BUTTON_DESCRIPTION[LEVELS[level]]}
-                active={this.props.levelSelected[LEVELS[level]]}
-                className="mb-2"
-                disabled={this.props.levelNumbers[LEVELS[level]] === 0}
-                disabledTooltip={LEVELS[level] === LEVELS.FDAx1 ? FDA_L1_DISABLED_BTN_TOOLTIP : ''}
-                onClick={() => this.props.updateLevelSelection(LEVELS[level])}
-              />
-            </Col>
-
+              onClick={() => this.props.updateLevelSelection(LEVELS[level])}
+            />
+          </Col>
         );
       }
     }
-    return this.props.levelType !== LEVEL_TYPES.FDA ? (
+    return (
       <>
         <Row
-          style={{paddingLeft: '1rem', paddingRight: '1rem'}}
+          style={{ paddingLeft: '1rem', paddingRight: '1rem' }}
           className={'mb-2'}
         >
           <Button
@@ -84,18 +88,18 @@ export default class LevelSelectionRow extends React.Component<
             }}
             block
           >
-            <div style={{flexGrow: 0, marginRight: '0.5em'}}>
+            <div style={{ flexGrow: 0, marginRight: '0.5em' }}>
               {this.props.collapseStatus[this.props.levelType] ? (
                 <i className="fa fa-minus mr-2"></i>
               ) : (
                 <i className="fa fa-plus mr-2"></i>
               )}
               <span>
-              {LEVEL_TYPE_NAMES[this.props.levelType]} Levels{' '}
+                {LEVEL_TYPE_NAMES[this.props.levelType]} Levels{' '}
                 {[LEVEL_TYPES.DX, LEVEL_TYPES.PX].includes(this.props.levelType)
                   ? '(for hematologic malignancies only)'
                   : ''}
-            </span>
+              </span>
             </div>
             <div
               style={{
@@ -108,21 +112,13 @@ export default class LevelSelectionRow extends React.Component<
         </Row>
         <Collapse in={this.props.collapseStatus[this.props.levelType]}>
           <Row
-            style={{paddingLeft: '0.5rem', paddingRight: '0.5rem'}}
+            style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
             className={'mb-2'}
           >
             {levelSelections}
           </Row>
         </Collapse>
-
       </>
-    ) : (
-      <Row
-        style={{paddingLeft: '0.5rem', paddingRight: '0.5rem'}}
-        className={'mb-2'}
-      >
-        {levelSelections}
-      </Row>
     );
   }
 }

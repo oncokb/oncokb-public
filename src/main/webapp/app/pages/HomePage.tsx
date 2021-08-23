@@ -1,12 +1,16 @@
 import * as React from 'react';
-import {action, IReactionDisposer, observable, reaction} from 'mobx';
-import {inject, observer} from 'mobx-react';
-import {remoteData} from 'cbioportal-frontend-commons';
+import { action, IReactionDisposer, observable, reaction } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { remoteData } from 'cbioportal-frontend-commons';
 import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
-import {Gene, LevelNumber, TypeaheadSearchResp,} from 'app/shared/api/generated/OncoKbPrivateAPI';
-import {Button, Col, Row} from 'react-bootstrap';
+import {
+  Gene,
+  LevelNumber,
+  TypeaheadSearchResp,
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { Button, Col, Row } from 'react-bootstrap';
 import oncokbImg from 'content/images/oncokb.png';
-import {HomePageNumber} from 'app/components/HomePageNumber';
+import { HomePageNumber } from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
 import {
   LEVEL_BUTTON_DESCRIPTION,
@@ -16,16 +20,16 @@ import {
   LEVELS,
   PAGE_ROUTE,
 } from 'app/config/constants';
-import {LevelButton} from 'app/components/levelButton/LevelButton';
-import {levelOfEvidence2Level} from 'app/shared/utils/Utils';
-import {RouterStore} from 'mobx-react-router';
-import {CitationText} from 'app/components/CitationText';
+import { LevelButton } from 'app/components/levelButton/LevelButton';
+import { levelOfEvidence2Level } from 'app/shared/utils/Utils';
+import { RouterStore } from 'mobx-react-router';
+import { CitationText } from 'app/components/CitationText';
 import _ from 'lodash';
 import AppStore from 'app/store/AppStore';
 import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 import autobind from 'autobind-decorator';
 import * as QueryString from 'query-string';
-import {FDA_L1_DISABLED_BTN_TOOLTIP} from "app/pages/genePage/FdaUtils";
+import { FDA_L1_DISABLED_BTN_TOOLTIP } from 'app/pages/genePage/FdaUtils';
 
 interface IHomeProps {
   content: string;
@@ -161,7 +165,9 @@ class HomePage extends React.Component<IHomeProps> {
       case LEVELS.FDAx1:
       case LEVELS.FDAx2:
       case LEVELS.FDAx3:
-        return this.props.appStore.fdaNumbers.result[level] ? this.props.appStore.fdaNumbers.result[level] : 0;
+        return this.props.appStore.fdaNumbers.result[level]
+          ? this.props.appStore.fdaNumbers.result[level]
+          : 0;
       default:
         return this.getLevelGenes(levels).length;
     }
@@ -184,7 +190,7 @@ class HomePage extends React.Component<IHomeProps> {
             variant={
               this.levelTypeSelected === LEVEL_TYPES[key] ? 'primary' : 'light'
             }
-            size={"lg"}
+            size={'lg'}
             onClick={() => this.handleLevelTypeButton(LEVEL_TYPES[key])}
           >
             {LEVEL_TYPE_NAMES[LEVEL_TYPES[key]]} Levels
@@ -271,14 +277,14 @@ class HomePage extends React.Component<IHomeProps> {
           {this.levelGadgets.map(
             levelGadget =>
               ((this.levelTypeSelected === LEVEL_TYPES.DX &&
-                  LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.DX) ||
+                LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.DX) ||
                 (this.levelTypeSelected === LEVEL_TYPES.PX &&
                   LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.PX) ||
                 (this.levelTypeSelected === LEVEL_TYPES.TX &&
                   LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.TX) ||
                 (this.levelTypeSelected === LEVEL_TYPES.FDA &&
-                  LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.FDA)
-              ) && (
+                  LEVEL_CLASSIFICATION[levelGadget.level] ===
+                    LEVEL_TYPES.FDA)) && (
                 <Col
                   xs={12}
                   sm={6}
@@ -290,16 +296,27 @@ class HomePage extends React.Component<IHomeProps> {
                   <LevelButton
                     key={`${levelGadget.level}-button`}
                     level={levelGadget.level}
-                    disabledTooltip={levelGadget.level === LEVELS.FDAx1 ? FDA_L1_DISABLED_BTN_TOOLTIP : ''}
+                    disabledTooltip={
+                      levelGadget.level === LEVELS.FDAx1
+                        ? FDA_L1_DISABLED_BTN_TOOLTIP
+                        : ''
+                    }
                     numOfGenes={this.getLevelNumber(levelGadget.combinedLevels)}
                     description={levelGadget.description}
-                    title={LEVEL_CLASSIFICATION[levelGadget.level] === LEVEL_TYPES.FDA ? `FDA Level ${levelGadget.level.toString().replace('FDAx', '')}` :levelGadget.title}
+                    title={
+                      LEVEL_CLASSIFICATION[levelGadget.level] ===
+                      LEVEL_TYPES.FDA
+                        ? `FDA Level ${levelGadget.level
+                            .toString()
+                            .replace('FDAx', '')}`
+                        : levelGadget.title
+                    }
                     className="mb-2"
                     style={{
                       lineHeight:
                         levelGadget.level === LEVELS.Px3 ? '35px' : undefined,
                     }}
-                    href={`${levelGadget.level.toString().startsWith('FDAx') ? PAGE_ROUTE.FDA_RECOGNIZED_CONTENT : PAGE_ROUTE.ACTIONABLE_GENE}#levels=${levelGadget.linkoutLevel}`}
+                    href={`${PAGE_ROUTE.ACTIONABLE_GENE}#levels=${levelGadget.linkoutLevel}`}
                   />
                 </Col>
               )

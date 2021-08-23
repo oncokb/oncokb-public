@@ -140,14 +140,16 @@ export enum ANNOTATION_PAGE_TAB_KEYS {
   FDA = 'FDA',
 }
 
-export const LEVEL_TYPE_NAMES:{[key: LEVEL_TYPES] : string} = {
+export const LEVEL_TYPE_NAMES: { [key: LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.TX]: 'Therapeutic',
   [LEVEL_TYPES.DX]: 'Diagnostic',
   [LEVEL_TYPES.PX]: 'Prognostic',
   [LEVEL_TYPES.FDA]: 'FDA',
 };
 
-export const ANNOTATION_PAGE_TAB_NAMES:{[key: ANNOTATION_PAGE_TAB_KEYS] : string} = {
+export const ANNOTATION_PAGE_TAB_NAMES: {
+  [key: ANNOTATION_PAGE_TAB_KEYS]: string;
+} = {
   [ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL]: 'Annotated Alterations',
   [ANNOTATION_PAGE_TAB_KEYS.TX]: 'Therapeutic',
   [ANNOTATION_PAGE_TAB_KEYS.DX]: 'Diagnostic',
@@ -417,7 +419,6 @@ export enum PAGE_ROUTE {
   FAQ_ACCESS = '/faq',
   CANCER_GENES = '/cancerGenes',
   ACTIONABLE_GENE = '/actionableGenes',
-  FDA_RECOGNIZED_CONTENT = '/fdaRecognizedContent',
   GENE_HEADER = '/gene',
   GENE = '/gene/:hugoSymbol',
   ALTERATION = '/gene/:hugoSymbol/:alteration',

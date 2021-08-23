@@ -15,15 +15,18 @@ import {
 import {
   Alteration,
   Evidence,
+  FdaAlteration,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
 import {
+  FdaLevelIcon,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
   getTreatmentNameFromEvidence,
   levelOfEvidence2Level,
+  OncoKBLevelIcon,
 } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
@@ -86,7 +89,8 @@ type EvidencesByLevel = { [level: string]: Evidence[] };
 @inject('routing', 'authenticationStore')
 @observer
 export default class ActionableGenesPage extends React.Component<
-  ActionableGenesPageProps, any
+  ActionableGenesPageProps,
+  any
 > {
   @observable relevantTumorTypeSearchKeyword = '';
   @observable drugSearchKeyword = '';
@@ -97,6 +101,7 @@ export default class ActionableGenesPage extends React.Component<
     [LEVEL_TYPES.TX]: true,
     [LEVEL_TYPES.DX]: false,
     [LEVEL_TYPES.PX]: false,
+    [LEVEL_TYPES.FDA]: false,
   };
   @observable collapseInit = false;
 
@@ -138,6 +143,14 @@ export default class ActionableGenesPage extends React.Component<
       return await privateClient.utilsEvidencesByLevelsGetUsingGET({});
     },
     default: {},
+  });
+
+  readonly allFdaAlterations = remoteData<FdaAlteration[]>({
+    await: () => [],
+    async invoke() {
+      return await privateClient.utilsFdaAlterationsGetUsingGET({});
+    },
+    default: [],
   });
 
   readonly relevantTumorTypes = remoteData<string[]>({
@@ -289,6 +302,15 @@ export default class ActionableGenesPage extends React.Component<
     let treatments: Treatment[] = [];
     _.forEach(this.evidencesByLevel.result, (content, levelOfEvidence) => {
       treatments = treatments.concat(this.getTreatments(content));
+    });
+
+    this.allFdaAlterations.result.forEach(fdaAlt => {
+      treatments.push({
+        level: fdaAlt.level,
+        hugoSymbol: fdaAlt.alteration.gene.hugoSymbol,
+        alterations: [fdaAlt.alteration],
+        cancerTypes: [fdaAlt.cancerType],
+      } as Treatment);
     });
     return treatments;
   }
@@ -569,8 +591,25 @@ export default class ActionableGenesPage extends React.Component<
   private columns = [
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-      Header: <span>OncoKB Level</span>,
+      Header: <span>Level</span>,
       minWidth: 120,
+      Cell(props: any) {
+        return (
+          <div className={'my-1 d-flex justify-content-center'}>
+            {_.startsWith(props.original.level, 'FDA') ? (
+              <FdaLevelIcon
+                level={props.original.level}
+                withDescription={true}
+              />
+            ) : (
+              <OncoKBLevelIcon
+                level={props.original.level}
+                withDescription={true}
+              />
+            )}
+          </div>
+        );
+      },
     },
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
@@ -628,7 +667,7 @@ export default class ActionableGenesPage extends React.Component<
   render() {
     const levelSelectionSection = [];
     for (const key in LEVEL_TYPES) {
-      if (LEVEL_TYPES[key] && key !== LEVEL_TYPES.FDA) {
+      if (LEVEL_TYPES[key]) {
         levelSelectionSection.push(
           <LevelSelectionRow
             levelType={LEVEL_TYPES[key]}
