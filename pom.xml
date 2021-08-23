@@ -47,7 +47,7 @@
         <jhipster-dependencies.version>3.9.0</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.2.7.RELEASE</spring-boot.version>
+        <spring-boot.version>2.4.4</spring-boot.version>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <hibernate.version>5.4.15.Final</hibernate.version>
@@ -90,6 +90,7 @@
         <junit.utReportFolder>${project.testresult.directory}/test</junit.utReportFolder>
         <junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
         <slack.version>1.7.1</slack.version>
+        <sentry.version>5.1.1</sentry.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -358,7 +359,7 @@
         <dependency>
             <groupId>io.sentry</groupId>
             <artifactId>sentry-spring-boot-starter</artifactId>
-            <version>1.7.30</version>
+            <version>${sentry.version}</version>
         </dependency>
       <dependency>
         <groupId>com.slack.api</groupId>
