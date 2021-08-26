@@ -1,17 +1,19 @@
-import { LevelButton } from 'app/components/levelButton/LevelButton';
+import {LevelButton} from 'app/components/levelButton/LevelButton';
 import {
   COMPONENT_PADDING,
   LEVEL_BUTTON_DESCRIPTION,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPE_NAMES,
   LEVEL_TYPES,
-  LEVELS,
+  LEVELS, PAGE_ROUTE,
 } from 'app/config/constants';
 import React from 'react';
-import { Button, Col, Collapse, Row } from 'react-bootstrap';
+import {Button, Col, Collapse, Row} from 'react-bootstrap';
 import classnames from 'classnames';
-import { observer } from 'mobx-react';
-import { FDA_L1_DISABLED_BTN_TOOLTIP } from 'app/pages/genePage/FdaUtils';
+import {observer} from 'mobx-react';
+import {FDA_L1_DISABLED_BTN_TOOLTIP} from 'app/pages/genePage/FdaUtils';
+import {Link} from "react-router-dom";
+import {Version} from "app/pages/LevelOfEvidencePage";
 
 type LevelSelectionRowProps = {
   levelType: LEVEL_TYPES;
@@ -111,12 +113,45 @@ export default class LevelSelectionRow extends React.Component<
           </Button>
         </Row>
         <Collapse in={this.props.collapseStatus[this.props.levelType]}>
+          <div>
+          {this.props.levelType === LEVEL_TYPES.FDA && (
+            <Row>
+              <Col>
+                <>
+                  <p>
+                    While the intended audience for OncoKB is primarily clinical
+                    oncologists, molecular pathologists and cancer researchers,
+                    NGS-test developers may also rely on OncoKB to support the
+                    validity of their tests. The FDA regulates the approval of
+                    tumor-profiling and companion diagnostic tests. Therefore,
+                    the FDA introduced a process to recognize human variant
+                    databases, such as OncoKB, to credential the robustness and
+                    transparency of databases involved in variant evaluation.
+                  </p>
+                  <p>
+                    Below is the FDA-recognized content in OncoKB, including
+                    tumor type-specific alterations and their corresponding{' '}
+                    <Link
+                      to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
+                    >
+                      FDA level of evidence
+                    </Link>
+                    . The assigned FDA level of evidence is based on these
+                    alterations being tested in Formalin Fixed Paraffin Embedded
+                    (FFPE) specimen types, except in cases where specimen type
+                    is not specified.
+                  </p>
+                </>
+              </Col>
+            </Row>
+          )}
           <Row
             style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
             className={'mb-2'}
           >
             {levelSelections}
           </Row>
+          </div>
         </Collapse>
       </>
     );

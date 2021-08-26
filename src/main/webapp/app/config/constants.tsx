@@ -177,6 +177,8 @@ export enum LEVELS {
   FDAx3 = 'FDAx3',
 }
 
+export const FDA_LEVELS = [LEVELS.FDAx1, LEVELS.FDAx2, LEVELS.FDAx3];
+
 // the bigger of the index, the higher the priority
 export const LEVEL_PRIORITY: LEVELS[] = [
   LEVELS.FDAx3,
