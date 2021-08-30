@@ -77,6 +77,7 @@ export default class NewsPage extends React.Component<{
             <CitationText />
           </div>
           <div className="mt-2">
+            <NewsList date={'08312021'} />
             <NewsList date={'07162021'} />
             <NewsList date={'06172021'} />
             <NewsList date={'04142021'} />
