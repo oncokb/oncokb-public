@@ -46,23 +46,20 @@
         ],
         "parameters": [
           {
-            "in": "body",
             "name": "query",
+            "in": "query",
             "description": "The search query, it could be drug name, NCIT code",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
-            "in": "body",
             "name": "limit",
+            "in": "query",
             "description": "The limit of returned result.",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+            "type": "integer",
+            "default": 5,
+            "format": "int32"
           }
         ],
         "responses": {
@@ -71,7 +68,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/NCITDrug"
+                "$ref": "#/definitions/Drug"
               }
             }
           },
@@ -934,13 +931,6 @@
             ]
           },
           {
-            "name": "onlyDetailedCancerType",
-            "in": "query",
-            "description": "Return only Detailed Cancer Type.",
-            "required": false,
-            "type": "boolean"
-          },
-          {
             "in": "body",
             "name": "body",
             "description": "List of queries.",
@@ -1081,6 +1071,143 @@
               "items": {
                 "$ref": "#/definitions/TumorType"
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/utils/updateTranscript": {
+      "get": {
+        "tags": [
+          "Utils"
+        ],
+        "summary": "utilUpdateTranscriptGet",
+        "operationId": "utilUpdateTranscriptGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hugoSymbol",
+            "in": "query",
+            "description": "hugoSymbol",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "entrezGeneId",
+            "in": "query",
+            "description": "entrezGeneId",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "grch37Isoform",
+            "in": "query",
+            "description": "grch37Isoform",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "grch37RefSeq",
+            "in": "query",
+            "description": "grch37RefSeq",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "grch38Isoform",
+            "in": "query",
+            "description": "grch38Isoform",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "grch38RefSeq",
+            "in": "query",
+            "description": "grch38RefSeq",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/utils/validateTranscriptUpdate": {
+      "get": {
+        "tags": [
+          "Utils"
+        ],
+        "summary": "utilValidateTranscriptUpdateGet",
+        "operationId": "utilValidateTranscriptUpdateGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "name": "hugoSymbol",
+            "in": "query",
+            "description": "hugoSymbol",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "entrezGeneId",
+            "in": "query",
+            "description": "entrezGeneId",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "grch37Isoform",
+            "in": "query",
+            "description": "grch37Isoform",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "grch38Isoform",
+            "in": "query",
+            "description": "grch38Isoform",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
             }
           },
           "401": {
@@ -1800,26 +1927,6 @@
         }
       }
     },
-    "NCITDrug": {
-      "type": "object",
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "drugName": {
-          "type": "string"
-        },
-        "ncitCode": {
-          "type": "string"
-        },
-        "synonyms": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "MainNumberLevel": {
       "type": "object",
       "properties": {
@@ -2520,6 +2627,21 @@
           "type": "integer",
           "format": "int32",
           "description": "Pfam domain start amino acid"
+        }
+      }
+    },
+    "DrugSynonym": {
+      "type": "object",
+      "properties": {
+        "drug": {
+          "$ref": "#/definitions/Drug"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
         }
       }
     },
