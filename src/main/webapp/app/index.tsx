@@ -61,7 +61,7 @@ superagent.Request.prototype.end = function (callback) {
       response.statusCode === 200 &&
       response.headers &&
       response.headers['content-type'] &&
-      ['text/plain;'].some(item =>
+      ['text/plain'].some(item =>
         response.headers['content-type'].includes(item)
       )
     ) {

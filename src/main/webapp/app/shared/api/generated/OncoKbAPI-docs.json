@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "These endpoints are for private use only.",
-    "version": "v1.2.1",
+    "version": "v1.2.2",
     "title": "OncoKB Private APIs",
     "contact": {
       "name": "OncoKB",
@@ -1773,7 +1773,7 @@
           {
             "name": "version",
             "in": "query",
-            "description": "version",
+            "description": "The data version",
             "required": false,
             "type": "string"
           }
@@ -1816,7 +1816,7 @@
           {
             "name": "version",
             "in": "query",
-            "description": "version",
+            "description": "The data version",
             "required": false,
             "type": "string"
           }
@@ -1856,7 +1856,7 @@
           {
             "name": "version",
             "in": "query",
-            "description": "version",
+            "description": "The data version",
             "required": false,
             "type": "string"
           }
@@ -1899,7 +1899,7 @@
           {
             "name": "version",
             "in": "query",
-            "description": "version",
+            "description": "The data version",
             "required": false,
             "type": "string"
           }
@@ -1938,9 +1938,17 @@
           {
             "name": "version",
             "in": "query",
-            "description": "version",
+            "description": "The data version",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "includeEvidence",
+            "in": "query",
+            "description": "Include gene summary and background",
+            "required": false,
+            "type": "boolean",
+            "default": true
           }
         ],
         "responses": {
@@ -1980,9 +1988,17 @@
           {
             "name": "version",
             "in": "query",
-            "description": "version",
+            "description": "The data version",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "includeEvidence",
+            "in": "query",
+            "description": "Include gene summary and background",
+            "required": false,
+            "type": "boolean",
+            "default": true
           }
         ],
         "responses": {
@@ -2019,7 +2035,7 @@
           {
             "name": "version",
             "in": "query",
-            "description": "version",
+            "description": "The data version",
             "required": false,
             "type": "string"
           }
@@ -2061,7 +2077,7 @@
           {
             "name": "version",
             "in": "query",
-            "description": "version",
+            "description": "The data version",
             "required": false,
             "type": "string"
           }
@@ -3271,6 +3287,9 @@
     "CuratedGene": {
       "type": "object",
       "properties": {
+        "background": {
+          "type": "string"
+        },
         "entrezGeneId": {
           "type": "integer",
           "format": "int32"
@@ -3333,6 +3352,9 @@
         },
         "exactMatchedAlteration": {
           "$ref": "#/definitions/Alteration"
+        },
+        "exactMatchedTumorType": {
+          "$ref": "#/definitions/TumorType"
         },
         "gene": {
           "$ref": "#/definitions/Gene"

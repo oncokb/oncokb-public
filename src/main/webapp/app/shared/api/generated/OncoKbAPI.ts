@@ -366,7 +366,9 @@ export type Drug = {
 
 };
 export type CuratedGene = {
-    'entrezGeneId': number
+    'background': string
+
+        'entrezGeneId': number
 
         'grch37Isoform': string
 
@@ -399,6 +401,8 @@ export type EvidenceQueryRes = {
         'evidences': Array < Evidence >
 
         'exactMatchedAlteration': Alteration
+
+        'exactMatchedTumorType': TumorType
 
         'gene': Gene
 
@@ -3947,7 +3951,7 @@ export default class OncoKbAPI {
      * Get All Actionable Variants.
      * @method
      * @name OncoKbAPI#utilsAllActionableVariantsGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsAllActionableVariantsGetUsingGETWithHttpInfo(parameters: {
         'version' ? : string,
@@ -3986,7 +3990,7 @@ export default class OncoKbAPI {
      * Get All Actionable Variants.
      * @method
      * @name OncoKbAPI#utilsAllActionableVariantsGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsAllActionableVariantsGetUsingGET(parameters: {
             'version' ? : string,
@@ -4022,7 +4026,7 @@ export default class OncoKbAPI {
      * Get All Actionable Variants in text file.
      * @method
      * @name OncoKbAPI#utilsAllActionableVariantsTxtGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsAllActionableVariantsTxtGetUsingGETWithHttpInfo(parameters: {
         'version' ? : string,
@@ -4061,7 +4065,7 @@ export default class OncoKbAPI {
      * Get All Actionable Variants in text file.
      * @method
      * @name OncoKbAPI#utilsAllActionableVariantsTxtGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsAllActionableVariantsTxtGetUsingGET(parameters: {
         'version' ? : string,
@@ -4096,7 +4100,7 @@ export default class OncoKbAPI {
      * Get All Annotated Variants.
      * @method
      * @name OncoKbAPI#utilsAllAnnotatedVariantsGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsAllAnnotatedVariantsGetUsingGETWithHttpInfo(parameters: {
         'version' ? : string,
@@ -4135,7 +4139,7 @@ export default class OncoKbAPI {
      * Get All Annotated Variants.
      * @method
      * @name OncoKbAPI#utilsAllAnnotatedVariantsGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsAllAnnotatedVariantsGetUsingGET(parameters: {
             'version' ? : string,
@@ -4171,7 +4175,7 @@ export default class OncoKbAPI {
      * Get All Annotated Variants in text file.
      * @method
      * @name OncoKbAPI#utilsAllAnnotatedVariantsTxtGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsAllAnnotatedVariantsTxtGetUsingGETWithHttpInfo(parameters: {
         'version' ? : string,
@@ -4210,7 +4214,7 @@ export default class OncoKbAPI {
      * Get All Annotated Variants in text file.
      * @method
      * @name OncoKbAPI#utilsAllAnnotatedVariantsTxtGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsAllAnnotatedVariantsTxtGetUsingGET(parameters: {
         'version' ? : string,
@@ -4223,12 +4227,17 @@ export default class OncoKbAPI {
     };
     utilsAllCuratedGenesGetUsingGETURL(parameters: {
         'version' ? : string,
+        'includeEvidence' ? : boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/allCuratedGenes';
         if (parameters['version'] !== undefined) {
             queryParameters['version'] = parameters['version'];
+        }
+
+        if (parameters['includeEvidence'] !== undefined) {
+            queryParameters['includeEvidence'] = parameters['includeEvidence'];
         }
 
         if (parameters.$queryParameters) {
@@ -4245,10 +4254,12 @@ export default class OncoKbAPI {
      * Get list of genes OncoKB curated
      * @method
      * @name OncoKbAPI#utilsAllCuratedGenesGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
+     * @param {boolean} includeEvidence - Include gene summary and background
      */
     utilsAllCuratedGenesGetUsingGETWithHttpInfo(parameters: {
         'version' ? : string,
+        'includeEvidence' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -4268,6 +4279,10 @@ export default class OncoKbAPI {
                 queryParameters['version'] = parameters['version'];
             }
 
+            if (parameters['includeEvidence'] !== undefined) {
+                queryParameters['includeEvidence'] = parameters['includeEvidence'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -4284,10 +4299,12 @@ export default class OncoKbAPI {
      * Get list of genes OncoKB curated
      * @method
      * @name OncoKbAPI#utilsAllCuratedGenesGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
+     * @param {boolean} includeEvidence - Include gene summary and background
      */
     utilsAllCuratedGenesGetUsingGET(parameters: {
             'version' ? : string,
+            'includeEvidence' ? : boolean,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < CuratedGene >
@@ -4298,12 +4315,17 @@ export default class OncoKbAPI {
         };
     utilsAllCuratedGenesTxtGetUsingGETURL(parameters: {
         'version' ? : string,
+        'includeEvidence' ? : boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/utils/allCuratedGenes.txt';
         if (parameters['version'] !== undefined) {
             queryParameters['version'] = parameters['version'];
+        }
+
+        if (parameters['includeEvidence'] !== undefined) {
+            queryParameters['includeEvidence'] = parameters['includeEvidence'];
         }
 
         if (parameters.$queryParameters) {
@@ -4320,10 +4342,12 @@ export default class OncoKbAPI {
      * Get list of genes OncoKB curated in text file.
      * @method
      * @name OncoKbAPI#utilsAllCuratedGenesTxtGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
+     * @param {boolean} includeEvidence - Include gene summary and background
      */
     utilsAllCuratedGenesTxtGetUsingGETWithHttpInfo(parameters: {
         'version' ? : string,
+        'includeEvidence' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -4343,6 +4367,10 @@ export default class OncoKbAPI {
                 queryParameters['version'] = parameters['version'];
             }
 
+            if (parameters['includeEvidence'] !== undefined) {
+                queryParameters['includeEvidence'] = parameters['includeEvidence'];
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -4359,10 +4387,12 @@ export default class OncoKbAPI {
      * Get list of genes OncoKB curated in text file.
      * @method
      * @name OncoKbAPI#utilsAllCuratedGenesTxtGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
+     * @param {boolean} includeEvidence - Include gene summary and background
      */
     utilsAllCuratedGenesTxtGetUsingGET(parameters: {
         'version' ? : string,
+        'includeEvidence' ? : boolean,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < string > {
@@ -4394,7 +4424,7 @@ export default class OncoKbAPI {
      * Get cancer gene list
      * @method
      * @name OncoKbAPI#utilsCancerGeneListGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsCancerGeneListGetUsingGETWithHttpInfo(parameters: {
         'version' ? : string,
@@ -4433,7 +4463,7 @@ export default class OncoKbAPI {
      * Get cancer gene list
      * @method
      * @name OncoKbAPI#utilsCancerGeneListGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsCancerGeneListGetUsingGET(parameters: {
             'version' ? : string,
@@ -4469,7 +4499,7 @@ export default class OncoKbAPI {
      * Get cancer gene list in text file.
      * @method
      * @name OncoKbAPI#utilsCancerGeneListTxtGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsCancerGeneListTxtGetUsingGETWithHttpInfo(parameters: {
         'version' ? : string,
@@ -4508,7 +4538,7 @@ export default class OncoKbAPI {
      * Get cancer gene list in text file.
      * @method
      * @name OncoKbAPI#utilsCancerGeneListTxtGetUsingGET
-     * @param {string} version - version
+     * @param {string} version - The data version
      */
     utilsCancerGeneListTxtGetUsingGET(parameters: {
         'version' ? : string,
