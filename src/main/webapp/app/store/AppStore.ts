@@ -38,8 +38,7 @@ class AppStore {
     default: DEFAULT_MAIN_NUMBERS,
   });
 
-
-  readonly fdaNumbers = remoteData<{[key:string]: number}>({
+  readonly fdaNumbers = remoteData<{ [key: string]: number }>({
     await: () => [],
     async invoke() {
       return await oncokbPrivateClient.utilsNumbersFdaGetUsingGET({});

@@ -6,9 +6,9 @@ import * as styles from './LevelButton.module.scss';
 import classnames from 'classnames';
 import { inject } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
-import {FdaLevelIcon, OncoKBLevelIcon} from 'app/shared/utils/Utils';
-import {DefaultTooltip} from "cbioportal-frontend-commons";
-import WithSeparator from "react-with-separator";
+import { FdaLevelIcon, OncoKBLevelIcon } from 'app/shared/utils/Utils';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import WithSeparator from 'react-with-separator';
 
 type LevelButtonProps = {
   level: LEVELS;
@@ -34,48 +34,52 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
       props.onClick();
     }
   };
-  const buttonDisabled = props.disabled === undefined ? props.numOfGenes === 0 : props.disabled;
+  const buttonDisabled =
+    props.disabled === undefined ? props.numOfGenes === 0 : props.disabled;
 
   return (
     <DefaultTooltip
-      overlay={()=>props.disabledTooltip}
+      overlay={() => props.disabledTooltip}
       placement="bottom"
       disabled={!buttonDisabled || !props.disabledTooltip}
     >
       <div>
-    <Button
-      variant="light"
-      onClick={onClick}
-      active={props.active}
-      href={props.href}
-      disabled={buttonDisabled}
-      style={props.style}
-      className={classnames(
-        props.href ? styles.levelButtonLink : styles.levelButton,
-        props.className
-      )}
-    >
-      <div
-        className={classnames(
-          `oncokb level-${props.level} d-flex justify-content-center align-items-center`,
-          styles.levelName
-        )}
-      >
-        {props.level.startsWith('FDAx') ? (
-          <FdaLevelIcon level={props.level} withDescription={true} />
-        ) : (
-          <OncoKBLevelIcon level={props.level} withDescription={true} />
-        )}
-        <span className={'ml-1 mr-4'}>
-          {props.title ? props.title : `Level ${props.level}`}
-        </span>
+        <Button
+          variant="light"
+          onClick={onClick}
+          active={props.active}
+          href={props.href}
+          disabled={buttonDisabled}
+          style={props.style}
+          className={classnames(
+            props.href ? styles.levelButtonLink : styles.levelButton,
+            props.className
+          )}
+        >
+          <div
+            className={classnames(
+              `oncokb level-${props.level} d-flex justify-content-center align-items-center`,
+              styles.levelName
+            )}
+          >
+            {props.level.startsWith('FDAx') ? (
+              <FdaLevelIcon level={props.level} withDescription={true} />
+            ) : (
+              <OncoKBLevelIcon level={props.level} withDescription={true} />
+            )}
+            <span className={'ml-1 mr-4'}>
+              {props.title ? props.title : `Level ${props.level}`}
+            </span>
+          </div>
+          <div className={styles.levelDescription}>{props.description}</div>
+          <div
+            className={classnames(
+              `oncokb level-${props.level}`,
+              styles.geneNumber
+            )}
+          >{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
+        </Button>
       </div>
-      <div className={styles.levelDescription}>{props.description}</div>
-      <div
-        className={classnames(`oncokb level-${props.level}`, styles.geneNumber)}
-      >{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
-    </Button>
-      </div>
-</DefaultTooltip>
+    </DefaultTooltip>
   );
 });

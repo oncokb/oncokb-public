@@ -6,16 +6,21 @@ import {
   concatElements,
   concatElementsByComma,
   filterByKeyword,
-  getDefaultColumnDefinition
+  getDefaultColumnDefinition,
 } from 'app/shared/utils/Utils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import * as styles from 'app/index.module.scss';
-import {FdaAlteration} from "app/shared/api/generated/OncoKbPrivateAPI";
-import {LEVEL_PRIORITY, LEVELS, PAGE_ROUTE, TABLE_COLUMN_KEY} from "app/config/constants";
-import {AlterationPageLink} from "app/shared/utils/UrlUtils";
-import InfoIcon from "app/shared/icons/InfoIcon";
-import {Link} from "react-router-dom";
-import {Version} from "app/pages/LevelOfEvidencePage";
+import { FdaAlteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  LEVEL_PRIORITY,
+  LEVELS,
+  PAGE_ROUTE,
+  TABLE_COLUMN_KEY,
+} from 'app/config/constants';
+import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
+import InfoIcon from 'app/shared/icons/InfoIcon';
+import { Link } from 'react-router-dom';
+import { Version } from 'app/pages/LevelOfEvidencePage';
 
 const DrugLabel: React.FunctionComponent<{ drug: any }> = props => {
   const drugLabelText = `drug label ${
@@ -139,7 +144,8 @@ export function getReferenceCell(data: any) {
   );
 }
 
-export const FDA_L1_DISABLED_BTN_TOOLTIP = 'OncoKB is not associated with a companion diagnostic test. Therefore by definition, no variants in OncoKB are considered FDA Level 1';
+export const FDA_L1_DISABLED_BTN_TOOLTIP =
+  'OncoKB is not associated with a companion diagnostic test. Therefore by definition, no variants in OncoKB are considered FDA Level 1';
 
 export const FDA_ALTERATIONS_TABLE_COLUMNS = [
   {
@@ -177,14 +183,15 @@ export const FDA_ALTERATIONS_TABLE_COLUMNS = [
           className={'ml-1'}
           overlay={
             <span>
-                  For more information about the FDA Level of Evidence, please
-                  see{' '}
-              <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
-                    className={'font-weight-bold'}>
-                    HERE
-                  </Link>
-                  .
-                </span>
+              For more information about the FDA Level of Evidence, please see{' '}
+              <Link
+                to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
+                className={'font-weight-bold'}
+              >
+                HERE
+              </Link>
+              .
+            </span>
           }
         />
       </div>
@@ -200,7 +207,11 @@ export const FDA_ALTERATIONS_TABLE_COLUMNS = [
       );
     },
     Cell(props: { original: FdaAlteration }) {
-      return <span>FDA Level {props.original.level.toString().replace('FDAx', '')}</span>;
+      return (
+        <span>
+          FDA Level {props.original.level.toString().replace('FDAx', '')}
+        </span>
+      );
     },
   },
 ];

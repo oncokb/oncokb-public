@@ -36,11 +36,13 @@ import {
   PAGE_ROUTE,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
-  ANNOTATION_PAGE_TAB_KEYS, ANNOTATION_PAGE_TAB_NAMES,
+  ANNOTATION_PAGE_TAB_KEYS,
+  ANNOTATION_PAGE_TAB_NAMES,
 } from 'app/config/constants';
 import {
   BiologicalVariant,
-  ClinicalVariant, FdaAlteration,
+  ClinicalVariant,
+  FdaAlteration,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
@@ -72,7 +74,7 @@ import { RouterStore } from 'mobx-react-router';
 import { Location } from 'history';
 import { Link } from 'react-router-dom';
 import { Version } from 'app/pages/LevelOfEvidencePage';
-import {FDA_ALTERATIONS_TABLE_COLUMNS} from "app/pages/genePage/FdaUtils";
+import { FDA_ALTERATIONS_TABLE_COLUMNS } from 'app/pages/genePage/FdaUtils';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',

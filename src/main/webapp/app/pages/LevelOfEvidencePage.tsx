@@ -120,12 +120,16 @@ const LEVEL_FILE_NAME: { [key in Version]: string } = {
   [Version.AAC]: `Mapping_OncoKB_and_AMP_ASCO_CAP_LOfE`,
   [Version.DX]: DEFAULT_LEVEL_FILE_NAME,
   [Version.PX]: DEFAULT_LEVEL_FILE_NAME,
-  [Version.FDA_NGS]: 'CDRH’s-Approach-to-Tumor-Profiling-Next-Generation-Sequencing-Tests',
+  [Version.FDA_NGS]:
+    'CDRH’s-Approach-to-Tumor-Profiling-Next-Generation-Sequencing-Tests',
 };
 
 @inject('routing', 'windowStore')
 @observer
-export default class LevelOfEvidencePage extends React.Component<LevelOfEvidencePageProps, any> {
+export default class LevelOfEvidencePage extends React.Component<
+  LevelOfEvidencePageProps,
+  any
+> {
   @observable version: Version = Version.V2;
 
   readonly reactions: IReactionDisposer[] = [];
@@ -219,16 +223,16 @@ export default class LevelOfEvidencePage extends React.Component<LevelOfEvidence
             </Col>
             <Col className={'col-auto'}>
               {this.version !== Version.FDA_NGS && (
-              <Button
-                size={'sm'}
-                className={classnames('ml-1')}
-                href={`content/files/levelOfEvidence/${this.version}/${
-                  LEVEL_FILE_NAME[this.version]
-                }.ppt`}
-              >
-                <i className={'fa fa-cloud-download mr-1'} />
-                Download Slide
-              </Button>
+                <Button
+                  size={'sm'}
+                  className={classnames('ml-1')}
+                  href={`content/files/levelOfEvidence/${this.version}/${
+                    LEVEL_FILE_NAME[this.version]
+                  }.ppt`}
+                >
+                  <i className={'fa fa-cloud-download mr-1'} />
+                  Download Slide
+                </Button>
               )}
               <DownloadButton
                 size={'sm'}

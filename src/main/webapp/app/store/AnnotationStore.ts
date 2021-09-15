@@ -20,7 +20,8 @@ import {
 import {
   BiologicalVariant,
   CancerTypeCount,
-  ClinicalVariant, FdaAlteration,
+  ClinicalVariant,
+  FdaAlteration,
   GeneNumber,
   PortalAlteration,
   TumorType,
@@ -267,14 +268,20 @@ export class AnnotationStore {
       if (this.alterationQuery) {
         const lowerCaseAltQuery = this.alterationQuery.toLowerCase();
         return geneFdaAlterations.filter(alt => {
-          if (alt.alteration.alteration && alt.alteration.alteration.toLowerCase() === lowerCaseAltQuery) {
+          if (
+            alt.alteration.alteration &&
+            alt.alteration.alteration.toLowerCase() === lowerCaseAltQuery
+          ) {
             return true;
           }
-          if (alt.alteration.name && alt.alteration.name.toLowerCase() === lowerCaseAltQuery) {
+          if (
+            alt.alteration.name &&
+            alt.alteration.name.toLowerCase() === lowerCaseAltQuery
+          ) {
             return true;
           }
           return false;
-        })
+        });
       }
       return geneFdaAlterations;
     },

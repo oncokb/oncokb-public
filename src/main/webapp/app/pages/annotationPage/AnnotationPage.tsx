@@ -1,7 +1,7 @@
 import React from 'react';
-import {inject} from 'mobx-react';
+import { inject } from 'mobx-react';
 
-import {GenePageLink, OncoTreeLink} from 'app/shared/utils/UrlUtils';
+import { GenePageLink, OncoTreeLink } from 'app/shared/utils/UrlUtils';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   ANNOTATION_PAGE_TAB_NAMES,
@@ -17,11 +17,11 @@ import {
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import {SearchColumn} from 'app/components/oncokbTable/OncoKBTable';
-import {AlterationInfo} from 'app/pages/annotationPage/AlterationInfo';
-import {Button, Col, Row} from 'react-bootstrap';
+import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
+import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
+import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
-import {action, computed} from 'mobx';
+import { action, computed } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
   Evidence,
@@ -29,7 +29,7 @@ import {
   VariantAnnotation,
   VariantAnnotationTumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import {TherapeuticImplication} from 'app/store/AnnotationStore';
+import { TherapeuticImplication } from 'app/store/AnnotationStore';
 import {
   articles2Citations,
   getCancerTypeNameFromOncoTreeType,
@@ -37,18 +37,18 @@ import {
   getTreatmentNameFromEvidence,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
-import {DefaultTooltip} from 'cbioportal-frontend-commons';
-import {CitationTooltip} from 'app/components/CitationTooltip';
+import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import { CitationTooltip } from 'app/components/CitationTooltip';
 import _ from 'lodash';
-import {AnnotationPageTable} from './AnnotationPageTable';
+import { AnnotationPageTable } from './AnnotationPageTable';
 import Tabs from 'react-responsive-tabs';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import WithSeparator from 'react-with-separator';
 import AppStore from 'app/store/AppStore';
-import {FeedbackIcon} from 'app/components/feedback/FeedbackIcon';
-import {FeedbackType} from 'app/components/feedback/types';
-import {FDA_ALTERATIONS_TABLE_COLUMNS} from "app/pages/genePage/FdaUtils";
-import {GenePageTable} from "app/pages/genePage/GenePageTable";
+import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
+import { FeedbackType } from 'app/components/feedback/types';
+import { FDA_ALTERATIONS_TABLE_COLUMNS } from 'app/pages/genePage/FdaUtils';
+import { GenePageTable } from 'app/pages/genePage/GenePageTable';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',

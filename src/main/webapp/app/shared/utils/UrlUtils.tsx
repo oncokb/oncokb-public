@@ -21,14 +21,16 @@ export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
   content?: string;
   highlightContent?: boolean;
-  selectedTab?: ANNOTATION_PAGE_TAB_KEYS
+  selectedTab?: ANNOTATION_PAGE_TAB_KEYS;
 }> = props => {
   const highlightContent =
     props.highlightContent === undefined ? true : props.highlightContent;
   return (
     <Link
-      style={{color: highlightContent ? undefined : 'black'}}
-      to={`${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}${props.selectedTab ? '#selectedTab=' + props.selectedTab : ''}`}
+      style={{ color: highlightContent ? undefined : 'black' }}
+      to={`${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}${
+        props.selectedTab ? '#selectedTab=' + props.selectedTab : ''
+      }`}
     >
       {props.content ? props.content : props.hugoSymbol}
     </Link>

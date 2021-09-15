@@ -16,7 +16,7 @@ export const LevelWithDescription: React.FunctionComponent<{
   const levelOfEvidence = level2LevelOfEvidence(props.level);
 
   function getLevelDescription() {
-    if(props.description) {
+    if (props.description) {
       return <span>{props.description}</span>;
     }
     const match: InfoLevel | undefined = _.find(
