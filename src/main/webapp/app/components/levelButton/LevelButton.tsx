@@ -76,15 +76,8 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
             </span>
           </div>
           <div className={styles.levelDescription}>{props.description}</div>
-          <div
-            className={classnames(
-              `oncokb level-${props.level}`,
-              styles.geneNumber
-            )}
-          >{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
-          <div className={styles.levelDescription}>{props.description}</div>
           {props.isLoading ? (
-            <LoadingIndicator isLoading size={LoaderSize.EXTRA_SMALL} />
+            <LoadingIndicator isLoading size={LoaderSize.SMALL} />
           ) : (
             <div
               className={classnames(

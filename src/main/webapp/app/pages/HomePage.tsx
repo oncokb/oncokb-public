@@ -324,7 +324,12 @@ class HomePage extends React.Component<IHomeProps> {
                         levelGadget.level === LEVELS.Px3 ? '35px' : undefined,
                     }}
                     href={`${PAGE_ROUTE.ACTIONABLE_GENE}#levels=${levelGadget.linkoutLevel}`}
-                    isLoading={this.levelNumbers.isPending}
+                    isLoading={
+                      LEVEL_CLASSIFICATION[levelGadget.level] ===
+                      LEVEL_TYPES.FDA
+                        ? this.props.appStore.fdaNumbers.isPending
+                        : this.levelNumbers.isPending
+                    }
                   />
                 </Col>
               )
