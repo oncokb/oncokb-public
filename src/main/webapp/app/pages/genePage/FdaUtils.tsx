@@ -145,7 +145,7 @@ export function getReferenceCell(data: any) {
 }
 
 export const FDA_L1_DISABLED_BTN_TOOLTIP =
-  'OncoKB is not associated with a companion diagnostic test. Therefore by definition, no variants in OncoKB are considered FDA Level 1';
+  'Since OncoKB does not include any CDx claims prescriptive for a specific therapeutic product, by definition, no variants in OncoKB are considered FDA Level 1.';
 
 export const FDA_ALTERATIONS_TABLE_COLUMNS = [
   {

@@ -44,6 +44,7 @@ import {
   LEVEL_TYPES,
   LEVELS,
   LG_TABLE_FIXED_HEIGHT,
+  ONCOKB_LEVELS,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
@@ -224,6 +225,37 @@ export default class ActionableGenesPage extends React.Component<
             arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING,
           });
           window.location.hash = parsedHashQueryString;
+        },
+        true
+      ),
+      reaction(
+        () => this.collapseStatus[LEVEL_TYPES.FDA],
+        newStatus => {
+          if (newStatus) {
+            this.collapseStatus[LEVEL_TYPES.TX] = false;
+            this.collapseStatus[LEVEL_TYPES.DX] = false;
+            this.collapseStatus[LEVEL_TYPES.PX] = false;
+            ONCOKB_LEVELS.forEach(oncokbLevel => {
+              if (this.levelSelected[oncokbLevel]) {
+                this.levelSelected[oncokbLevel] = false;
+              }
+            });
+          }
+        },
+        true
+      ),
+      reaction(
+        () =>
+          this.collapseStatus[LEVEL_TYPES.TX] ||
+          this.collapseStatus[LEVEL_TYPES.DX] ||
+          this.collapseStatus[LEVEL_TYPES.PX],
+        newStatus => {
+          if (newStatus) {
+            this.collapseStatus[LEVEL_TYPES.FDA] = false;
+            FDA_LEVELS.forEach(fdaLevel => {
+              this.levelSelected[fdaLevel] = false;
+            });
+          }
         }
       )
     );
@@ -298,18 +330,34 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get allTreatments() {
+    if (this.fdaSectionIsOpen) {
+      return this.allFdaTreatments;
+    } else {
+      return this.allOncokbTreatments;
+    }
+  }
+
+  @computed
+  get allOncokbTreatments() {
     let treatments: Treatment[] = [];
     _.forEach(this.evidencesByLevel.result, (content, levelOfEvidence) => {
       treatments = treatments.concat(this.getTreatments(content));
     });
+    return treatments;
+  }
 
+  @computed
+  get allFdaTreatments() {
+    const treatments: Treatment[] = [];
     this.allFdaAlterations.result.forEach(fdaAlt => {
-      treatments.push({
-        level: fdaAlt.level,
-        hugoSymbol: fdaAlt.alteration.gene.hugoSymbol,
-        alterations: [fdaAlt.alteration],
-        cancerTypes: [fdaAlt.cancerType],
-      } as Treatment);
+      if (!fdaAlt.cancerType.endsWith('NOS')) {
+        treatments.push({
+          level: fdaAlt.level,
+          hugoSymbol: fdaAlt.alteration.gene.hugoSymbol,
+          alterations: [fdaAlt.alteration],
+          cancerTypes: [fdaAlt.cancerType],
+        } as Treatment);
+      }
     });
     return treatments;
   }
@@ -349,16 +397,8 @@ export default class ActionableGenesPage extends React.Component<
   }
 
   @computed
-  get tableData() {
-    return this.filteredTreatments.filter(treatment => {
-      if (
-        _.intersection(this.selectedLevels, FDA_LEVELS).length === 0 &&
-        FDA_LEVELS.includes(treatment.level as LEVELS)
-      ) {
-        return false;
-      }
-      return true;
-    });
+  get noFdaLevelSelected() {
+    return _.intersection(this.selectedLevels, FDA_LEVELS).length === 0;
   }
 
   @computed
@@ -483,28 +523,6 @@ export default class ActionableGenesPage extends React.Component<
   @autobind
   @action
   updateLevelSelection(levelOfEvidence: LEVELS) {
-    if (FDA_LEVELS.includes(levelOfEvidence)) {
-      // remove all other types of level
-      for (const level of _.keys(this.levelSelected)) {
-        if (!FDA_LEVELS.includes(level as LEVELS)) {
-          this.levelSelected[level] = false;
-        }
-      }
-      // folder all other sections
-      for (const key of _.keys(this.collapseStatus)) {
-        if (key !== LEVEL_TYPES.FDA) {
-          this.collapseStatus[key] = false;
-        }
-      }
-    } else {
-      // remove all FDA level
-      for (const fdaLevel of FDA_LEVELS) {
-        if (this.levelSelected[fdaLevel]) {
-          this.levelSelected[fdaLevel] = false;
-        }
-      }
-      this.collapseStatus[LEVEL_TYPES.FDA] = false;
-    }
     this.levelSelected[levelOfEvidence] = !this.levelSelected[levelOfEvidence];
   }
 
@@ -512,6 +530,11 @@ export default class ActionableGenesPage extends React.Component<
   @action
   updateCollapseStatus(levelType: string) {
     this.collapseStatus[levelType] = !this.collapseStatus[levelType];
+  }
+
+  @computed
+  get fdaSectionIsOpen() {
+    return !!this.collapseStatus[LEVEL_TYPES.FDA];
   }
 
   @autobind
@@ -621,6 +644,9 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get drugRelatedLevelSelected() {
+    if (this.collapseStatus[LEVEL_TYPES.FDA]) {
+      return false;
+    }
     if (this.selectedLevels.length === 0) {
       return true;
     }
@@ -726,6 +752,11 @@ export default class ActionableGenesPage extends React.Component<
             levelSelected={this.levelSelected}
             updateCollapseStatus={this.updateCollapseStatus}
             updateLevelSelection={this.updateLevelSelection}
+            isLoading={
+              this.fdaSectionIsOpen
+                ? this.allFdaAlterations.isPending
+                : this.evidencesByLevel.isPending
+            }
           />
         );
       }
@@ -733,49 +764,51 @@ export default class ActionableGenesPage extends React.Component<
 
     return (
       <DocumentTitle title={DOCUMENT_TITLES.ACTIONABLE_GENES}>
-        <If
-          condition={
-            this.allTumorTypes.isComplete &&
-            this.evidencesByLevel.isComplete &&
-            this.allFdaAlterations.isComplete
-          }
-        >
-          <Then>
-            {levelSelectionSection}
-            <Row
-              style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
-              className={'mb-2'}
+        <>
+          {levelSelectionSection}
+          <Row
+            style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
+            className={'mb-2'}
+          >
+            <Col
+              className={classnames(...COMPONENT_PADDING)}
+              lg={this.drugRelatedLevelSelected ? 4 : 6}
+              xs={12}
             >
-              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
-                <Select
-                  value={this.geneSelectValue}
-                  placeholder={`${
-                    this.filteredGenes.length
-                  } actionable ${pluralize('gene', this.filteredGenes.length)}`}
-                  options={this.filteredGenes.map(hugoSymbol => {
-                    return {
-                      value: hugoSymbol,
-                      label: hugoSymbol,
-                    };
-                  })}
-                  isClearable={true}
-                  onChange={(selectedOption: any) =>
-                    (this.geneSearchKeyword = selectedOption
-                      ? selectedOption.label
-                      : '')
-                  }
-                />
-              </Col>
-              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
-                <CancerTypeSelect
-                  tumorType={this.relevantTumorTypeSearchKeyword}
-                  onChange={(selectedOption: any) =>
-                    (this.relevantTumorTypeSearchKeyword = selectedOption
-                      ? selectedOption.value
-                      : '')
-                  }
-                />
-              </Col>
+              <Select
+                value={this.geneSelectValue}
+                placeholder={`${
+                  this.filteredGenes.length
+                } actionable ${pluralize('gene', this.filteredGenes.length)}`}
+                options={this.filteredGenes.map(hugoSymbol => {
+                  return {
+                    value: hugoSymbol,
+                    label: hugoSymbol,
+                  };
+                })}
+                isClearable={true}
+                onChange={(selectedOption: any) =>
+                  (this.geneSearchKeyword = selectedOption
+                    ? selectedOption.label
+                    : '')
+                }
+              />
+            </Col>
+            <Col
+              className={classnames(...COMPONENT_PADDING)}
+              lg={this.drugRelatedLevelSelected ? 4 : 6}
+              xs={12}
+            >
+              <CancerTypeSelect
+                tumorType={this.relevantTumorTypeSearchKeyword}
+                onChange={(selectedOption: any) =>
+                  (this.relevantTumorTypeSearchKeyword = selectedOption
+                    ? selectedOption.value
+                    : '')
+                }
+              />
+            </Col>
+            {this.drugRelatedLevelSelected && (
               <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
                 <Select
                   value={this.drugSelectValue}
@@ -797,102 +830,98 @@ export default class ActionableGenesPage extends React.Component<
                   }
                 />
               </Col>
-            </Row>
-            <Row className={'mb-2'}>
-              <Col className="d-flex">
-                <span>
-                  <b>{`Showing ${
-                    this.filteredTreatments.length
-                  } clinical  ${pluralize(
-                    'implication',
-                    this.filteredTreatments.length
-                  )}`}</b>
-                  {` (${this.filteredGenes.length} ${pluralize(
-                    'gene',
-                    this.filteredGenes.length
-                  )},
+            )}
+          </Row>
+          <Row className={'mb-2'}>
+            <Col className="d-flex">
+              <span>
+                <b>{`Showing ${
+                  this.filteredTreatments.length
+                } clinical  ${pluralize(
+                  'implication',
+                  this.filteredTreatments.length
+                )}`}</b>
+                {` (${this.filteredGenes.length} ${pluralize(
+                  'gene',
+                  this.filteredGenes.length
+                )},
                 ${this.filteredTumorTypes.length} ${pluralize(
-                    'cancer type',
-                    this.filteredTumorTypes.length
-                  )},
+                  'cancer type',
+                  this.filteredTumorTypes.length
+                )},
                 ${this.filteredLevels.length} ${pluralize(
-                    'level',
-                    this.filteredLevels.length
-                  )} of evidence)`}
-                </span>
-                <AuthDownloadButton
+                  'level',
+                  this.filteredLevels.length
+                )} of evidence)`}
+              </span>
+              <AuthDownloadButton
+                size={'sm'}
+                className={classnames('ml-2')}
+                getDownloadData={this.downloadAssociation}
+                fileName={'oncokb_biomarker_drug_associations.tsv'}
+                buttonText={'Associations'}
+              />
+              {this.treatmentsAreFiltered ? (
+                <Button
+                  variant="link"
                   size={'sm'}
-                  className={classnames('ml-2')}
-                  getDownloadData={this.downloadAssociation}
-                  fileName={'oncokb_biomarker_drug_associations.tsv'}
-                  buttonText={'Associations'}
-                />
-                {this.treatmentsAreFiltered ? (
-                  <Button
-                    variant="link"
-                    size={'sm'}
-                    style={{ whiteSpace: 'nowrap' }}
-                    className={'ml-auto pr-0'}
-                    onClick={this.clearFilters}
-                  >
-                    Reset filters
-                  </Button>
-                ) : undefined}
-              </Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <OncoKBTable
-                  disableSearch={true}
-                  data={this.tableData}
-                  loading={this.relevantTumorTypes.isPending}
-                  columns={this.columns}
-                  minRows={Math.round(LG_TABLE_FIXED_HEIGHT / 36) - 1}
-                  pageSize={
-                    this.filteredTreatments.length === 0
-                      ? 1
-                      : this.filteredTreatments.length
-                  }
-                  fixedHeight={true}
-                  style={{
-                    height: LG_TABLE_FIXED_HEIGHT,
-                  }}
-                  defaultSorted={[
-                    {
-                      id: TABLE_COLUMN_KEY.LEVEL,
-                      desc: true,
-                    },
-                    {
-                      id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
-                      desc: false,
-                    },
-                    {
-                      id: TABLE_COLUMN_KEY.ALTERATIONS,
-                      desc: false,
-                    },
-                    {
-                      id: TABLE_COLUMN_KEY.CANCER_TYPES,
-                      desc: false,
-                    },
-                    {
-                      id: TABLE_COLUMN_KEY.DRUGS,
-                      desc: false,
-                    },
-                  ]}
-                />
-              </Col>
-            </Row>
-          </Then>
-          <Else>
-            <LoadingIndicator
-              size={LoaderSize.LARGE}
-              center={true}
-              isLoading={
-                this.allTumorTypes.isPending || this.evidencesByLevel.isPending
-              }
-            />
-          </Else>
-        </If>
+                  style={{ whiteSpace: 'nowrap' }}
+                  className={'ml-auto pr-0'}
+                  onClick={this.clearFilters}
+                >
+                  Reset filters
+                </Button>
+              ) : undefined}
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col>
+              <OncoKBTable
+                disableSearch={true}
+                data={this.filteredTreatments}
+                loading={
+                  this.relevantTumorTypes.isPending &&
+                  (this.fdaSectionIsOpen
+                    ? this.allFdaAlterations.isPending
+                    : this.evidencesByLevel.isPending)
+                }
+                columns={this.columns}
+                minRows={Math.round(LG_TABLE_FIXED_HEIGHT / 36) - 1}
+                pageSize={
+                  this.filteredTreatments.length === 0
+                    ? 1
+                    : this.filteredTreatments.length
+                }
+                fixedHeight={true}
+                style={{
+                  height: LG_TABLE_FIXED_HEIGHT,
+                }}
+                defaultSorted={[
+                  {
+                    id: TABLE_COLUMN_KEY.LEVEL,
+                    desc: true,
+                  },
+                  {
+                    id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
+                    desc: false,
+                  },
+                  {
+                    id: TABLE_COLUMN_KEY.ALTERATIONS,
+                    desc: false,
+                  },
+                  {
+                    id: TABLE_COLUMN_KEY.CANCER_TYPES,
+                    desc: false,
+                  },
+                  {
+                    id: TABLE_COLUMN_KEY.DRUGS,
+                    desc: false,
+                  },
+                ]}
+              />
+            </Col>
+          </Row>
+        </>
       </DocumentTitle>
     );
   }

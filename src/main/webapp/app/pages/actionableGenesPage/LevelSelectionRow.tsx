@@ -24,6 +24,7 @@ type LevelSelectionRowProps = {
   levelSelected: { [level: string]: boolean };
   updateCollapseStatus: (levelType: LEVEL_TYPES) => void;
   updateLevelSelection: (level: string) => void;
+  isLoading: boolean;
 };
 
 @observer
@@ -63,6 +64,7 @@ export default class LevelSelectionRow extends React.Component<
                   ? FDA_L1_DISABLED_BTN_TOOLTIP
                   : ''
               }
+              isLoading={this.props.isLoading}
               onClick={() => this.props.updateLevelSelection(LEVELS[level])}
             />
           </Col>
@@ -118,16 +120,16 @@ export default class LevelSelectionRow extends React.Component<
                     <p>
                       While the intended audience for OncoKB is primarily
                       clinical oncologists, molecular pathologists and cancer
-                      researchers, NGS-test developers may also rely on OncoKB
-                      to support the validity of their tests. The FDA regulates
-                      the approval of tumor-profiling and companion diagnostic
-                      tests. Therefore, the FDA introduced a process to
-                      recognize human variant databases, such as OncoKB, to
-                      credential the robustness and transparency of databases
-                      involved in variant evaluation.
+                      researchers, tumor profiling next generation sequencing
+                      (NGS) test developers may also rely on human variant
+                      databases such as OncoKB for variant information to
+                      support the clinical validity of their tests. Therefore,
+                      to credential the robustness and transparency of databases
+                      involved in variant evaluation, the FDA introduced a
+                      process to recognize human variant databases.
                     </p>
                     <p>
-                      Below is the FDA-recognized content(pending approval) in
+                      Below is the FDA-recognized content (under review) in
                       OncoKB, including tumor type-specific alterations and
                       their corresponding{' '}
                       <Link
@@ -138,7 +140,8 @@ export default class LevelSelectionRow extends React.Component<
                       . The assigned FDA level of evidence is based on these
                       alterations being tested in Formalin Fixed Paraffin
                       Embedded (FFPE) specimen types, except in cases where
-                      specimen type is not specified.
+                      specimen type is not specified.Below is the FDA-recognized
+                      content(under FDA review) in
                     </p>
                   </>
                 </Col>

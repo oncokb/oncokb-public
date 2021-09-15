@@ -195,7 +195,7 @@ class HomePage extends React.Component<IHomeProps> {
           >
             {LEVEL_TYPE_NAMES[LEVEL_TYPES[key]]} Levels
             {key === LEVEL_TYPES.FDA && (
-              <div style={{ fontSize: '0.8em' }}>(pending approval)</div>
+              <div style={{ fontSize: '0.8em' }}>(Under FDA review)</div>
             )}
           </Button>
         );

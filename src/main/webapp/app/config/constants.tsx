@@ -160,7 +160,7 @@ export const ACTIONABLE_GENES_LEVEL_TITLE: { [key: LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.PX]: `${
     LEVEL_TYPE_NAMES[LEVEL_TYPES.PX]
   } (for hematologic malignancies only)`,
-  [LEVEL_TYPES.FDA]: `${LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA]} (pending approval)`,
+  [LEVEL_TYPES.FDA]: `${LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA]} (under FDA review)`,
 };
 
 export const ANNOTATION_PAGE_TAB_NAMES: {
@@ -170,7 +170,7 @@ export const ANNOTATION_PAGE_TAB_NAMES: {
   [ANNOTATION_PAGE_TAB_KEYS.TX]: 'Therapeutic',
   [ANNOTATION_PAGE_TAB_KEYS.DX]: 'Diagnostic',
   [ANNOTATION_PAGE_TAB_KEYS.PX]: 'Prognostic',
-  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content (pending approval)',
+  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content (under FDA review)',
 };
 
 export enum LEVELS {
@@ -194,6 +194,19 @@ export enum LEVELS {
 }
 
 export const FDA_LEVELS = [LEVELS.FDAx1, LEVELS.FDAx2, LEVELS.FDAx3];
+export const TX_LEVELS = [
+  LEVELS.Tx1,
+  LEVELS.Tx2,
+  LEVELS.Tx3,
+  LEVELS.Tx3A,
+  LEVELS.Tx3B,
+  LEVELS.Tx4,
+  LEVELS.R1,
+  LEVELS.R2,
+];
+export const DX_LEVELS = [LEVELS.Dx1, LEVELS.Dx2, LEVELS.Dx3];
+export const PX_LEVELS = [LEVELS.Px1, LEVELS.Px2, LEVELS.Px3];
+export const ONCOKB_LEVELS = TX_LEVELS.concat(DX_LEVELS).concat(PX_LEVELS);
 
 // the bigger of the index, the higher the priority
 export const LEVEL_PRIORITY: LEVELS[] = [
