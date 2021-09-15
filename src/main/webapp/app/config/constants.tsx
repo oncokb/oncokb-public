@@ -147,6 +147,17 @@ export const LEVEL_TYPE_NAMES: { [key: LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.FDA]: 'FDA',
 };
 
+export const ACTIONABLE_GENES_LEVEL_TITLE: { [key: LEVEL_TYPES]: string } = {
+  [LEVEL_TYPES.TX]: LEVEL_TYPE_NAMES[LEVEL_TYPES.TX],
+  [LEVEL_TYPES.DX]: `${
+    LEVEL_TYPE_NAMES[LEVEL_TYPES.DX]
+  } (for hematologic malignancies only)`,
+  [LEVEL_TYPES.PX]: `${
+    LEVEL_TYPE_NAMES[LEVEL_TYPES.PX]
+  } (for hematologic malignancies only)`,
+  [LEVEL_TYPES.FDA]: `${LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA]} (pending approval)`,
+};
+
 export const ANNOTATION_PAGE_TAB_NAMES: {
   [key: ANNOTATION_PAGE_TAB_KEYS]: string;
 } = {
@@ -154,7 +165,7 @@ export const ANNOTATION_PAGE_TAB_NAMES: {
   [ANNOTATION_PAGE_TAB_KEYS.TX]: 'Therapeutic',
   [ANNOTATION_PAGE_TAB_KEYS.DX]: 'Diagnostic',
   [ANNOTATION_PAGE_TAB_KEYS.PX]: 'Prognostic',
-  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content',
+  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content (pending approval)',
 };
 
 export enum LEVELS {

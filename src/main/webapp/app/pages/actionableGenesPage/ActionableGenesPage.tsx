@@ -1,11 +1,21 @@
 import React from 'react';
-import {inject, observer} from 'mobx-react';
-import {Button, Col, Row} from 'react-bootstrap';
+import { inject, observer } from 'mobx-react';
+import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import {DefaultTooltip, remoteData} from 'cbioportal-frontend-commons';
-import {action, computed, IReactionDisposer, observable, reaction,} from 'mobx';
-import {Alteration, Evidence, FdaAlteration,} from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
+import {
+  action,
+  computed,
+  IReactionDisposer,
+  observable,
+  reaction,
+} from 'mobx';
+import {
+  Alteration,
+  Evidence,
+  FdaAlteration,
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
 import {
@@ -19,9 +29,9 @@ import {
 } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
-import {sortByLevel,} from 'app/shared/utils/ReactTableUtils';
-import {AlterationPageLink, GenePageLink} from 'app/shared/utils/UrlUtils';
-import {Else, If, Then} from 'react-if';
+import { sortByLevel } from 'app/shared/utils/ReactTableUtils';
+import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
+import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import {
   COMPONENT_PADDING,
@@ -36,13 +46,13 @@ import {
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
 } from 'app/config/constants';
-import {RouterStore} from 'mobx-react-router';
+import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import * as QueryString from 'query-string';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
-import {AuthDownloadButton} from 'app/components/authDownloadButton/AuthDownloadButton';
+import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import DocumentTitle from 'react-document-title';
-import {COLOR_BLUE} from 'app/config/theme';
+import { COLOR_BLUE } from 'app/config/theme';
 import WithSeparator from 'react-with-separator';
 import LevelSelectionRow from './LevelSelectionRow';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
@@ -81,7 +91,9 @@ export default class ActionableGenesPage extends React.Component<
   @observable drugSearchKeyword = '';
   @observable geneSearchKeyword = '';
   @observable refGenome = DEFAULT_REFERENCE_GENOME;
-  @observable levelSelected: {[level: LEVELS]: boolean } = this.initLevelSelected();
+  @observable levelSelected: {
+    [level: LEVELS]: boolean;
+  } = this.initLevelSelected();
   @observable collapseStatus = {
     [LEVEL_TYPES.TX]: true,
     [LEVEL_TYPES.DX]: false,
@@ -253,7 +265,7 @@ export default class ActionableGenesPage extends React.Component<
     return treatments;
   }
 
-  initLevelSelected(): { [level : LEVELS]: boolean } {
+  initLevelSelected(): { [level: LEVELS]: boolean } {
     return _.reduce(
       LEVELS,
       (acc, level) => {
@@ -337,13 +349,14 @@ export default class ActionableGenesPage extends React.Component<
   @computed
   get tableData() {
     return this.filteredTreatments.filter(treatment => {
-      if (_.intersection(this.selectedLevels, FDA_LEVELS).length === 0 &&
+      if (
+        _.intersection(this.selectedLevels, FDA_LEVELS).length === 0 &&
         FDA_LEVELS.includes(treatment.level as LEVELS)
       ) {
-        return false
+        return false;
       }
       return true;
-    })
+    });
   }
 
   @computed
@@ -393,7 +406,9 @@ export default class ActionableGenesPage extends React.Component<
     );
 
     // when there is no second layer filtering enabled, we allow to choose multiple levels
-    const treatmentSource = this.filteredTreatments;
+    const treatmentSource = this.secondLayerFilterEnabled
+      ? this.filteredTreatments
+      : this.allTreatments;
     treatmentSource.map(treatment => {
       if (levelNumbers[treatment.level]) {
         levelNumbers[treatment.level].push(treatment.hugoSymbol);
@@ -702,7 +717,9 @@ export default class ActionableGenesPage extends React.Component<
       <DocumentTitle title={DOCUMENT_TITLES.ACTIONABLE_GENES}>
         <If
           condition={
-            this.allTumorTypes.isComplete && this.evidencesByLevel.isComplete && this.allFdaAlterations.isComplete
+            this.allTumorTypes.isComplete &&
+            this.evidencesByLevel.isComplete &&
+            this.allFdaAlterations.isComplete
           }
         >
           <Then>
@@ -849,11 +866,7 @@ export default class ActionableGenesPage extends React.Component<
             </Row>
           </Then>
           <Else>
-            <LoadingIndicator
-              size={'big'}
-              center={true}
-              isLoading={true}
-            />
+            <LoadingIndicator size={'big'} center={true} isLoading={true} />
           </Else>
         </If>
       </DocumentTitle>

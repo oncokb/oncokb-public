@@ -597,8 +597,9 @@ export default class FdaRecognizedContentPage extends React.Component<
                     transparency of databases involved in variant evaluation.
                   </p>
                   <p>
-                    Below is the FDA-recognized content in OncoKB, including
-                    tumor type-specific alterations and their corresponding{' '}
+                    Below is the FDA-recognized content(pending approval) in
+                    OncoKB, including tumor type-specific alterations and their
+                    corresponding{' '}
                     <Link
                       to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
                     >
