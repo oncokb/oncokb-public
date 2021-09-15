@@ -26,7 +26,9 @@ import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Else, If, Then } from 'react-if';
-import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   COMPONENT_PADDING,
@@ -698,7 +700,7 @@ export default class FdaRecognizedContentPage extends React.Component<
           </Then>
           <Else>
             <LoadingIndicator
-              size={'big'}
+              size={LoaderSize.LARGE}
               center={true}
               isLoading={
                 this.allTumorTypes.isPending || this.allFdaAlterations.isPending
