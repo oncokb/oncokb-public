@@ -1,14 +1,14 @@
 package org.mskcc.cbio.oncokb.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
-import javax.persistence.Column;
 import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;
@@ -41,6 +41,8 @@ public class UserDTO {
     private String city;
 
     private String country;
+
+    private AdditionalInfoDTO additionalInfo;
 
     @Email
     @Size(min = 5, max = 254)
@@ -83,7 +85,7 @@ public class UserDTO {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.activated = user.getActivated();
-        this.emailVerified = StringUtils.isEmpty(user.getActivationKey());
+        this.emailVerified = StringUtils.isEmpty(user.getActivationKey()) || user.getActivated();
         this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
         this.activationKey = user.getActivationKey();
@@ -102,6 +104,7 @@ public class UserDTO {
             this.company = userDetails.getCompany();
             this.city = userDetails.getCity();
             this.country = userDetails.getCountry();
+            this.additionalInfo = new Gson().fromJson(userDetails.getAdditionalInfo(), AdditionalInfoDTO.class);
         }
     }
 
@@ -191,6 +194,14 @@ public class UserDTO {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public AdditionalInfoDTO getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(AdditionalInfoDTO additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 
     public String getImageUrl() {

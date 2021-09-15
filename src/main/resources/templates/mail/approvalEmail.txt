@@ -1,9 +1,0 @@
-Dear [(${user.login})],
-
-Your OncoKB account has been approved. Please click on the URL below to log in:
-
-[(${baseUrl})]/login
-
-Sincerely,
-The OncoKB Team
-

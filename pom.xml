@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>public-website</artifactId>
-    <version>3.0.5-fda.10</version>
+    <version>3.3.14</version>
     <packaging>jar</packaging>
     <name>OncoKB Public Website</name>
 
@@ -47,7 +47,7 @@
         <jhipster-dependencies.version>3.9.0</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.2.7.RELEASE</spring-boot.version>
+        <spring-boot.version>2.4.4</spring-boot.version>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <hibernate.version>5.4.15.Final</hibernate.version>
@@ -89,7 +89,8 @@
         <jacoco.itReportFile>${jacoco.itReportFolder}/integrationTest.exec</jacoco.itReportFile>
         <junit.utReportFolder>${project.testresult.directory}/test</junit.utReportFolder>
         <junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
-        <jslack.version>3.2.5</jslack.version>
+        <slack.version>1.7.1</slack.version>
+        <sentry.version>5.1.1</sentry.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -214,12 +215,12 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-          <version>${mapstruct.version}</version>
+            <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
-          <version>${mapstruct.version}</version>
+            <version>${mapstruct.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -347,30 +348,35 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5</version>
+            <version>4.5.13</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.8.2</version>
+            <version>1.14.2</version>
         </dependency>
         <!-- Sentry -->
         <dependency>
             <groupId>io.sentry</groupId>
             <artifactId>sentry-spring-boot-starter</artifactId>
-            <version>1.7.30</version>
+            <version>${sentry.version}</version>
         </dependency>
-        <dependency>
-          <groupId>com.github.seratch</groupId>
-          <artifactId>jslack</artifactId>
-          <version>${jslack.version}</version>
-          <exclusions>
-            <exclusion>
-              <groupId>org.jboss.slf4j</groupId>
-              <artifactId>slf4j-jboss-logging</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
+      <dependency>
+        <groupId>com.slack.api</groupId>
+        <artifactId>bolt</artifactId>
+        <version>${slack.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.slack.api</groupId>
+        <artifactId>bolt-servlet</artifactId>
+        <version>${slack.version}</version>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+      <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp</artifactId>
+        <version>4.9.1</version>
+      </dependency>
       <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
 
@@ -683,7 +689,7 @@
                         <driver>com.mysql.cj.jdbc.Driver</driver>
                         <url>jdbc:mysql://localhost:3306/oncokb-public?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC&amp;createDatabaseIfNotExist=true</url>
                         <username>root</username>
-                        <password></password>
+                        <password>root</password>
                         <referenceUrl>hibernate:spring:org.mskcc.cbio.oncokb.domain?dialect=org.hibernate.dialect.MySQL8Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                         <verbose>true</verbose>
                         <logging>debug</logging>

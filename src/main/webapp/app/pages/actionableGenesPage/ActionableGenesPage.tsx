@@ -32,7 +32,9 @@ import pluralize from 'pluralize';
 import { sortByLevel } from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
 import { Else, If, Then } from 'react-if';
-import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
 import {
   COMPONENT_PADDING,
   DEFAULT_REFERENCE_GENOME,
@@ -523,15 +525,11 @@ export default class ActionableGenesPage extends React.Component<
 
   @autobind
   downloadAssociation() {
-    const content = [
-      [
-        'Level',
-        'Gene',
-        'Alterations',
-        'Cancer Types',
-        'Drugs (for therapeutic implications only)',
-      ].join('\t'),
-    ];
+    const header = ['Level', 'Gene', 'Alterations', 'Cancer Types'];
+    if (this.drugRelatedLevelSelected) {
+      header.push('Drugs (for therapeutic implications only)');
+    }
+    const content = [header.join('\t')];
     this.filteredTreatments
       .map(treatment => ({
         level: treatment.level,
@@ -560,15 +558,16 @@ export default class ActionableGenesPage extends React.Component<
         return result;
       })
       .forEach(item => {
-        content.push(
-          [
-            item.level,
-            item.hugoSymbol,
-            item.alterations,
-            item.tumorType,
-            item.drugs,
-          ].join('\t')
-        );
+        const row = [
+          item.level,
+          item.hugoSymbol,
+          item.alterations,
+          item.tumorType,
+        ];
+        if (this.drugRelatedLevelSelected) {
+          row.push(item.drugs);
+        }
+        content.push(row.join('\t'));
       });
     return Promise.resolve(content.join('\n'));
   }
@@ -620,81 +619,100 @@ export default class ActionableGenesPage extends React.Component<
     }
   }
 
-  private columns = [
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-      Header: <span>Level</span>,
-      minWidth: 120,
-      Cell(props: any) {
-        return (
-          <div className={'my-1 d-flex justify-content-center'}>
-            {_.startsWith(props.original.level, 'FDA') ? (
-              <FdaLevelIcon
-                level={props.original.level}
-                withDescription={true}
-              />
-            ) : (
-              <OncoKBLevelIcon
-                level={props.original.level}
-                withDescription={true}
-              />
-            )}
-          </div>
-        );
+  @computed
+  get drugRelatedLevelSelected() {
+    if (this.selectedLevels.length === 0) {
+      return true;
+    }
+    return (
+      _.intersection(
+        [LEVELS.Tx1, LEVELS.Tx2, LEVELS.Tx3, LEVELS.Tx4, LEVELS.R1, LEVELS.R2],
+        this.selectedLevels
+      ).length > 0
+    );
+  }
+
+  @computed
+  get columns() {
+    const commonColumns = [
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+        Header: <span>Level</span>,
+        minWidth: 120,
+        Cell(props: any) {
+          return (
+            <div className={'my-1 d-flex justify-content-center'}>
+              {_.startsWith(props.original.level, 'FDA') ? (
+                <FdaLevelIcon
+                  level={props.original.level}
+                  withDescription={true}
+                />
+              ) : (
+                <OncoKBLevelIcon
+                  level={props.original.level}
+                  withDescription={true}
+                />
+              )}
+            </div>
+          );
+        },
       },
-    },
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
-      style: { whiteSpace: 'normal' },
-      Cell(props: { original: Treatment }) {
-        return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
+        style: { whiteSpace: 'normal' },
+        Cell(props: { original: Treatment }) {
+          return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
+        },
       },
-    },
-    {
-      id: TABLE_COLUMN_KEY.ALTERATIONS,
-      Header: <span>Alterations</span>,
-      accessor: 'alterations',
-      minWidth: 200,
-      style: { whiteSpace: 'normal' },
-      defaultSortDesc: false,
-      sortMethod(a: Alteration[], b: Alteration[]) {
-        return a
-          .map(datum => datum.name)
-          .join(', ')
-          .localeCompare(b.map(datum => datum.name).join(', '));
+      {
+        id: TABLE_COLUMN_KEY.ALTERATIONS,
+        Header: <span>Alterations</span>,
+        accessor: 'alterations',
+        minWidth: 200,
+        style: { whiteSpace: 'normal' },
+        defaultSortDesc: false,
+        sortMethod(a: Alteration[], b: Alteration[]) {
+          return a
+            .map(datum => datum.name)
+            .join(', ')
+            .localeCompare(b.map(datum => datum.name).join(', '));
+        },
+        Cell: (props: { original: Treatment }) => {
+          return (
+            <div style={{ display: 'block' }}>
+              {' '}
+              {this.getAlterationCell(
+                props.original.hugoSymbol,
+                props.original.alterations
+              )}
+            </div>
+          );
+        },
       },
-      Cell: (props: { original: Treatment }) => {
-        return (
-          <div style={{ display: 'block' }}>
-            {' '}
-            {this.getAlterationCell(
-              props.original.hugoSymbol,
-              props.original.alterations
-            )}
-          </div>
-        );
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
+        minWidth: 300,
+        accessor: 'cancerTypes',
+        sortMethod(a: string[], b: string[]) {
+          return a.join(', ').localeCompare(b.join(', '));
+        },
+        Cell(props: { original: Treatment }) {
+          return <span>{props.original.cancerTypes.join(', ')}</span>;
+        },
       },
-    },
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
-      minWidth: 300,
-      accessor: 'cancerTypes',
-      sortMethod(a: string[], b: string[]) {
-        return a.join(', ').localeCompare(b.join(', '));
-      },
-      Cell(props: { original: Treatment }) {
-        return <span>{props.original.cancerTypes.join(', ')}</span>;
-      },
-    },
-    {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
-      minWidth: 300,
-      style: { whiteSpace: 'normal' },
-      Cell(props: { original: Treatment }) {
-        return <span>{props.original.drugs}</span>;
-      },
-    },
-  ];
+    ];
+    if (this.drugRelatedLevelSelected) {
+      commonColumns.push({
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
+        minWidth: 300,
+        style: { whiteSpace: 'normal' },
+        Cell(props: { original: Treatment }) {
+          return <span>{props.original.drugs}</span>;
+        },
+      });
+    }
+    return commonColumns;
+  }
 
   render() {
     const levelSelectionSection = [];
@@ -866,7 +884,13 @@ export default class ActionableGenesPage extends React.Component<
             </Row>
           </Then>
           <Else>
-            <LoadingIndicator size={'big'} center={true} isLoading={true} />
+            <LoadingIndicator
+              size={LoaderSize.LARGE}
+              center={true}
+              isLoading={
+                this.allTumorTypes.isPending || this.evidencesByLevel.isPending
+              }
+            />
           </Else>
         </If>
       </DocumentTitle>

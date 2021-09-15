@@ -3,7 +3,9 @@ import { inject, observer } from 'mobx-react';
 import { AnnotationStore } from 'app/store/AnnotationStore';
 import { computed, action, IReactionDisposer, reaction } from 'mobx';
 import AppStore from 'app/store/AppStore';
-import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
 import { DEFAULT_GENE, REFERENCE_GENOME } from 'app/config/constants';
 import {
   decodeSlash,
@@ -158,7 +160,7 @@ export default class AlterationPage extends React.Component<
           </Then>
           <Else>
             <LoadingIndicator
-              size={'big'}
+              size={LoaderSize.LARGE}
               center={true}
               isLoading={
                 this.store.gene.isPending || !this.pageShouldBeRendered

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { remoteData, isWebdriver } from 'cbioportal-frontend-commons';
-import { action, computed, observable } from 'mobx';
+import { remoteData } from 'cbioportal-frontend-commons';
+import { action, observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import * as _ from 'lodash';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
-import { getBrowserWindow } from 'cbioportal-frontend-commons';
 import { Container } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
+import { DISABLE_BANNER_OPT } from 'app/config/constants';
 
 export interface IUserMessage {
   dateStart?: number;
@@ -28,7 +28,7 @@ let MESSAGE_DATA: IUserMessage[];
 
 if (
   ['beta.oncokb.org', 'www.oncokb.org', 'localhost'].includes(
-    getBrowserWindow().location.hostname
+    window.location.hostname
   )
 ) {
   MESSAGE_DATA = [
@@ -36,17 +36,14 @@ if (
     // UNIQUE ID IS IMPORTANT B/C WE REMEMBER A MESSAGE HAS BEEN SHOWN
     // BASED ON USERS LOCALSTORAGE
     {
-      dateEnd: 100000000000000,
+      dateEnd: 1,
       content: `
         <div>
-          <div>We are excited to announce two upcoming OncoKB webinars.</div>
-          <ol style="margin-bottom: 0;">
-              <li><strong>June 30th, 12PM JST, for the Asia/Pacific region</strong>: Utilizing OncoKB, MSK’s Precision Oncology Knowledgebase. <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://meetmsk.zoom.us/webinar/register/WN_y8keM-CnTpmJ8vn0G0rhBA">Click here to register!</a></li>
-              <li><strong>June 30th, 1 PM EST</strong>: Utilizing APIs for annotation of variants in cancer. <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://meetmsk.zoom.us/webinar/register/WN_sduHSX3yTcaD2NKvDqTwAw">Click here to register!</a></li>
-          </ol>
+          <span>We have a new Software Engineer position open. Come and join us! </span>
+          <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://careers.mskcc.org/jobs/job-details/2021-48797-software-engineer-oncokb">Apply Here</a>
         </div>
         `,
-      id: '2020_spring_webinars',
+      id: '2021_se_job_hiring',
     },
   ];
 }
@@ -69,6 +66,9 @@ export default class UserMessage extends React.Component<UserMessageProps> {
   @observable dismissed = false;
 
   get shownMessage() {
+    if (localStorage.getItem(DISABLE_BANNER_OPT) === 'true') {
+      return undefined;
+    }
     const messageToShow = _.find(this.messageData.result, message => {
       const notYetShown = !localStorage.getItem(makeMessageKey(message.id));
       const expired = Date.now() > message.dateEnd;

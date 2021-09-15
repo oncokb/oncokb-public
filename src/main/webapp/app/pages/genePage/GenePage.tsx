@@ -20,7 +20,9 @@ import {
   levelOfEvidence2Level,
   OncoKBLevelIcon,
 } from 'app/shared/utils/Utils';
-import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
 import autobind from 'autobind-decorator';
 import BarChart from 'app/components/barChart/BarChart';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
@@ -328,14 +330,35 @@ export default class GenePage extends React.Component<GenePageProps> {
   private store: AnnotationStore;
   readonly reactions: IReactionDisposer[] = [];
 
+  getAlterationsByLevelType(
+    alterations: ClinicalVariant[],
+    levelType: LEVEL_TYPES
+  ) {
+    return _.filter(alterations, alt => {
+      return LEVEL_CLASSIFICATION[alt.level] === levelType;
+    });
+  }
+
   @computed
   get txAlterations() {
     if (this.store.clinicalAlterations.result.length === 0) {
       return [];
     }
-    return _.filter(this.store.clinicalAlterations.result, alt => {
-      return LEVEL_CLASSIFICATION[alt.level] === LEVEL_TYPES.TX;
-    });
+    return this.getAlterationsByLevelType(
+      this.store.clinicalAlterations.result,
+      LEVEL_TYPES.TX
+    );
+  }
+
+  @computed
+  get filteredTxAlterations() {
+    if (this.store.filteredClinicalAlterations.length === 0) {
+      return [];
+    }
+    return this.getAlterationsByLevelType(
+      this.store.filteredClinicalAlterations,
+      LEVEL_TYPES.TX
+    );
   }
 
   @computed
@@ -343,9 +366,21 @@ export default class GenePage extends React.Component<GenePageProps> {
     if (this.store.clinicalAlterations.result.length === 0) {
       return [];
     }
-    return _.filter(this.store.clinicalAlterations.result, alt => {
-      return LEVEL_CLASSIFICATION[alt.level] === LEVEL_TYPES.DX;
-    });
+    return this.getAlterationsByLevelType(
+      this.store.clinicalAlterations.result,
+      LEVEL_TYPES.DX
+    );
+  }
+
+  @computed
+  get filteredDxAlterations() {
+    if (this.store.filteredClinicalAlterations.length === 0) {
+      return [];
+    }
+    return this.getAlterationsByLevelType(
+      this.store.filteredClinicalAlterations,
+      LEVEL_TYPES.DX
+    );
   }
 
   @computed
@@ -356,6 +391,17 @@ export default class GenePage extends React.Component<GenePageProps> {
     return _.filter(this.store.clinicalAlterations.result, alt => {
       return LEVEL_CLASSIFICATION[alt.level] === LEVEL_TYPES.PX;
     });
+  }
+
+  @computed
+  get filteredPxAlterations() {
+    if (this.store.filteredClinicalAlterations.length === 0) {
+      return [];
+    }
+    return this.getAlterationsByLevelType(
+      this.store.filteredClinicalAlterations,
+      LEVEL_TYPES.PX
+    );
   }
 
   @computed
@@ -707,6 +753,7 @@ export default class GenePage extends React.Component<GenePageProps> {
     this.selectedTab = selectedTabKey;
   }
 
+  @action
   getTable(key: ANNOTATION_PAGE_TAB_KEYS) {
     switch (key) {
       case ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL:
@@ -720,7 +767,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       case ANNOTATION_PAGE_TAB_KEYS.TX:
         return (
           <GenePageTable
-            data={this.txAlterations}
+            data={this.filteredTxAlterations}
             columns={this.clinicalTableColumns}
             isPending={this.store.clinicalAlterations.isPending}
           />
@@ -728,7 +775,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       case ANNOTATION_PAGE_TAB_KEYS.DX:
         return (
           <GenePageTable
-            data={this.dxAlterations}
+            data={this.filteredDxAlterations}
             columns={this.dxpxTableColumns}
             isPending={this.store.clinicalAlterations.isPending}
           />
@@ -736,7 +783,7 @@ export default class GenePage extends React.Component<GenePageProps> {
       case ANNOTATION_PAGE_TAB_KEYS.PX:
         return (
           <GenePageTable
-            data={this.pxAlterations}
+            data={this.filteredPxAlterations}
             columns={this.dxpxTableColumns}
             isPending={this.store.clinicalAlterations.isPending}
           />
@@ -800,36 +847,17 @@ export default class GenePage extends React.Component<GenePageProps> {
         title: ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.FDA],
       });
     }
+    return tabs;
+  }
 
-    const tabDescriptionStyle = this.props.windowStore.isLargeScreen
+  @computed
+  get tabDescriptionStyle() {
+    return this.props.windowStore.isLargeScreen
       ? {
           width: '80%',
           marginBottom: '-30px',
         }
       : undefined;
-    return tabs.map(tab => {
-      return {
-        title: tab.title,
-        getContent: () => {
-          return (
-            <div>
-              <div style={tabDescriptionStyle}>
-                <div>{this.getTabDescription(tab.key)}</div>
-                <ReportIssue
-                  appStore={this.props.appStore}
-                  annotation={{ gene: this.store.hugoSymbol }}
-                />
-              </div>
-              {this.getTable(tab.key)}
-            </div>
-          );
-        },
-        /* Optional parameters */
-        key: tab.key,
-        tabClassName: styles.tab,
-        panelClassName: styles.panel,
-      };
-    });
   }
 
   @computed
@@ -1072,7 +1100,33 @@ export default class GenePage extends React.Component<GenePageProps> {
                                 : this.tabDefaultActiveKey
                             }
                             onChange={this.onChangeTab}
-                            items={this.tabs}
+                            items={this.tabs.map(tab => {
+                              return {
+                                title: tab.title,
+                                getContent: () => {
+                                  return (
+                                    <div>
+                                      <div style={this.tabDescriptionStyle}>
+                                        <div>
+                                          {this.getTabDescription(tab.key)}
+                                        </div>
+                                        <ReportIssue
+                                          appStore={this.props.appStore}
+                                          annotation={{
+                                            gene: this.store.hugoSymbol,
+                                          }}
+                                        />
+                                      </div>
+                                      {this.getTable(tab.key)}
+                                    </div>
+                                  );
+                                },
+                                /* Optional parameters */
+                                key: tab.key,
+                                tabClassName: styles.tab,
+                                panelClassName: styles.panel,
+                              };
+                            })}
                             transform={false}
                           />
                         </Col>
@@ -1098,7 +1152,7 @@ export default class GenePage extends React.Component<GenePageProps> {
                     </Then>
                     <Else>
                       <LoadingIndicator
-                        size={'big'}
+                        size={LoaderSize.LARGE}
                         center={true}
                         isLoading={this.store.gene.isPending}
                       />
@@ -1108,7 +1162,7 @@ export default class GenePage extends React.Component<GenePageProps> {
               </Then>
               <Else>
                 <LoadingIndicator
-                  size={'big'}
+                  size={LoaderSize.LARGE}
                   center={true}
                   isLoading={this.store.gene.isPending}
                 />

@@ -620,3 +620,15 @@ export function getGenePageLinks(genes: string): ReactNode {
     genes.split(',').map(gene => <GenePageLink hugoSymbol={gene.trim()} />)
   );
 }
+
+export function isPositionalAlteration(
+  proteinStart: number,
+  proteinEnd: number,
+  consequence: string
+) {
+  if (proteinStart && proteinEnd && consequence) {
+    return proteinStart === proteinEnd && consequence === 'NA';
+  } else {
+    return false;
+  }
+}

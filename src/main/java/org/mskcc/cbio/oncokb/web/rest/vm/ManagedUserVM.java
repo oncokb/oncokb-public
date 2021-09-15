@@ -15,9 +15,11 @@ public class ManagedUserVM extends UserDTO {
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
-    private Boolean tokenIsRenewable;
+    private Boolean tokenIsRenewable = false;
 
     private Integer tokenValidDays;
+
+    private Boolean notifyUserOnTrialCreation = false;
 
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
@@ -45,6 +47,14 @@ public class ManagedUserVM extends UserDTO {
 
     public void setTokenValidDays(Integer tokenValidDays) {
         this.tokenValidDays = tokenValidDays;
+    }
+
+    public Boolean getNotifyUserOnTrialCreation() {
+        return notifyUserOnTrialCreation;
+    }
+
+    public void setNotifyUserOnTrialCreation(Boolean notifyUserOnTrialCreation) {
+        this.notifyUserOnTrialCreation = notifyUserOnTrialCreation;
     }
 
     // prettier-ignore

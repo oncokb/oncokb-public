@@ -81,7 +81,7 @@ server:
 jhipster:
   cache: # Cache configuration
     redis: # Redis configuration
-      expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+      expiration: 10 # By default objects stay 10s in the cache for development purpose
       server: redis://localhost:6379
       cluster: false
       # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
@@ -122,9 +122,10 @@ jhipster:
 # ===================================================================
 # Sentry specific properties
 # How to configure Sentry Spring Boot: https://docs.sentry.io/clients/java/config/
-# Full reference is available at: https://github.com/getsentry/sentry-java/blob/master/sentry-spring-boot-starter/src/main/java/io/sentry/spring/autoconfigure/SentryProperties.java
+# Full reference is available at: https://github.com/getsentry/sentry-java/blob/main/sentry-spring-boot-starter/src/main/java/io/sentry/spring/boot/SentryProperties.java
 # ===================================================================
 sentry:
+  dsn:
   stacktrace:
     app:
       packages: org.mskcc.cbio.oncokb
@@ -143,13 +144,19 @@ application:
   profile: dev
   api-proxy-url: 'http://localhost:8888'
   sitemap-enabled: false
-  user-registration-webhook:
   google-webmaster-verification:
   licensed-domains:
   trialed-domains:
   account-approval-whitelist:
   token-usage-check:
   token-usage-check-whitelist:
+  slack: # Add the following if you wish to integrate user registration to Slack and send the weekly unapproved users email
+    # specific to the app you install to your Slack workspace
+    user-registration-webhook: # for sending user requests to Slack
+    slack-bot-oauth-token: # for permission to read conversation history (generation of unapproved users list)
+    # for Slack link in weekly unapproved users email
+    slack-base-url:
+    user-registration-channel-id:
   redis:
     type: 'single'
     password: 'oncokb-public-redis-password'

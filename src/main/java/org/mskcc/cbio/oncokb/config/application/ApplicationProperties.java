@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class ApplicationProperties {
     private String name;
     private String apiProxyUrl;
-    private String userRegistrationWebhook;
+    private SlackProperties slack;
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
     private RedisProperties redis;
@@ -52,13 +52,9 @@ public class ApplicationProperties {
         this.apiProxyUrl = apiProxyUrl;
     }
 
-    public String getUserRegistrationWebhook() {
-        return userRegistrationWebhook;
-    }
+    public SlackProperties getSlack() { return slack; }
 
-    public void setUserRegistrationWebhook(String userRegistrationWebhook) {
-        this.userRegistrationWebhook = userRegistrationWebhook;
-    }
+    public void setSlack( SlackProperties slack ) { this.slack = slack; }
 
     public String getAccountApprovalWhitelist() {
         return accountApprovalWhitelist;
@@ -165,21 +161,21 @@ public class ApplicationProperties {
     }
 
     public List<String> getAcademicEmailClarifyDomains() {
-        return getDomains(this.getAcademicEmailClarifyDomain());
+        return getList(this.getAcademicEmailClarifyDomain());
     }
 
     public List<String> getLicensedDomainsList() {
-        return getDomains(this.getLicensedDomains());
+        return getList(this.getLicensedDomains());
     }
     public List<String> getTrialedDomainsList() {
-        return getDomains(this.getTrialedDomains());
+        return getList(this.getTrialedDomains());
     }
 
-    private List<String> getDomains(String domainStr) {
-        if (StringUtils.isEmpty(domainStr)) {
+    private List<String> getList(String listStr) {
+        if (StringUtils.isEmpty(listStr)) {
             return new ArrayList<>();
         }
-        return Arrays.stream(domainStr.split(",")).map(domain -> domain.trim()).filter(domain -> !StringUtils.isEmpty(domain)).collect(Collectors.toList());
+        return Arrays.stream(listStr.split(",")).map(element -> element.trim()).filter(element -> !StringUtils.isEmpty(element)).collect(Collectors.toList());
     }
 
     public AWSProperties getAws() {

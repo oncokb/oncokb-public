@@ -2,6 +2,7 @@ import React from 'react';
 import { MutationEffectResp } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   citationsHasInfo,
+  isPositionalAlteration,
   OncoKBOncogenicityIcon,
 } from 'app/shared/utils/Utils';
 import { CitationTooltip } from 'app/components/CitationTooltip';
@@ -15,6 +16,7 @@ import WithSeparator from 'react-with-separator';
 import { MUTATION_EFFECT, ONCOGENICITY } from 'app/config/constants';
 
 export const AlterationInfo: React.FunctionComponent<{
+  isPositionalAlteration: boolean;
   oncogenicity: string | undefined;
   mutationEffect: MutationEffectResp | undefined;
   isVus: boolean;
@@ -25,22 +27,30 @@ export const AlterationInfo: React.FunctionComponent<{
 }> = props => {
   const separator = <span className="mx-1">·</span>;
   const content = [];
-  content.push(
-    <span key={'oncogenicityContainer'} style={{ display: 'flex' }}>
-      <span key="oncogenicity">
-        {!props.oncogenicity || props.oncogenicity === ONCOGENICITY.UNKNOWN
-          ? `${ONCOGENICITY.UNKNOWN} Oncogenic Effect`
-          : props.oncogenicity}
+  const isUnknownOncogenicity =
+    !props.oncogenicity || props.oncogenicity === ONCOGENICITY.UNKNOWN;
+  if (!isUnknownOncogenicity || !props.isPositionalAlteration) {
+    content.push(
+      <span key={'oncogenicityContainer'} style={{ display: 'flex' }}>
+        <span key="oncogenicity">
+          {isUnknownOncogenicity
+            ? `${ONCOGENICITY.UNKNOWN} Oncogenic Effect`
+            : props.oncogenicity}
+        </span>
+        <OncoKBOncogenicityIcon
+          oncogenicity={props.oncogenicity}
+          isVus={props.isVus}
+        />
       </span>
-      <OncoKBOncogenicityIcon
-        oncogenicity={props.oncogenicity}
-        isVus={props.isVus}
-      />
-    </span>
-  );
+    );
+  }
 
-  if (props.mutationEffect) {
-    const hasCitations = citationsHasInfo(props.mutationEffect.citations);
+  const showMutationEffect =
+    props.mutationEffect &&
+    (props.mutationEffect.knownEffect !== MUTATION_EFFECT.UNKNOWN ||
+      !props.isPositionalAlteration);
+  if (showMutationEffect) {
+    const hasCitations = citationsHasInfo(props.mutationEffect!.citations);
     const tooltipOverlay = () => (
       <CitationTooltip
         pmids={props.mutationEffect!.citations.pmids}
@@ -50,9 +60,9 @@ export const AlterationInfo: React.FunctionComponent<{
     content.push(
       <span key="mutationEffectContainer">
         <span key="mutationEffect">
-          {props.mutationEffect.knownEffect === MUTATION_EFFECT.UNKNOWN
+          {props.mutationEffect!.knownEffect === MUTATION_EFFECT.UNKNOWN
             ? `${MUTATION_EFFECT.UNKNOWN} Biological Effect`
-            : props.mutationEffect.knownEffect}
+            : props.mutationEffect!.knownEffect}
         </span>
         {hasCitations ? (
           <DefaultTooltip overlay={tooltipOverlay} key="mutationEffectTooltip">

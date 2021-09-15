@@ -36,12 +36,12 @@
     "history": "^4.10.1",
     "js-file-download": "^0.4.8",
     "loaders.css": "0.1.2",
-    "lodash": "4.17.19",
+    "lodash": "4.17.21",
     "mobx": "^3.1.11",
     "mobx-react": "^4.2.1",
     "mobx-react-router": "^4.0.7",
     "moment": "2.24.0",
-    "oncokb-styles": "1.0.0",
+    "oncokb-styles": "~1.2.0",
     "pluralize": "^8.0.0",
     "query-string": "^6.13.1",
     "react": "16.13.1",
@@ -59,7 +59,7 @@
     "react-loadable": "5.5.0",
     "react-mutation-mapper": "^0.5.12",
     "react-portal": "latest",
-    "react-responsive-tabs": "^3.3.0",
+    "react-responsive-tabs": "^4.3.0",
     "react-router": "^5.1.2",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^5.1.2",
@@ -136,7 +136,7 @@
     "jest-puppeteer": "^4.4.0",
     "jest-sonar-reporter": "2.0.0",
     "jsdom-screenshot": "^4.0.0",
-    "json": "^9.0.6",
+    "json": "^10.0.0",
     "json-loader": "0.5.7",
     "lint-staged": "8.2.1",
     "mini-css-extract-plugin": "0.9.0",
@@ -175,7 +175,7 @@
     "@types/react": "16.9.34"
   },
   "engines": {
-    "node": ">=12.16.1",
+    "node": ">=12.16.1 <13",
     "yarn": ">=1.19.0"
   },
   "scripts": {

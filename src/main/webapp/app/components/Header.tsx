@@ -41,7 +41,7 @@ class Header extends React.Component<IHeaderProps> {
     { title: 'Levels of Evidence', link: 'levels' },
     { title: 'Actionable Genes', link: 'actionableGenes' },
     { title: 'Cancer Genes', link: 'cancerGenes' },
-    { title: 'API Access', link: 'apiAccess' },
+    { title: 'API / License', link: 'apiAccess' },
     { title: 'About', link: 'about' },
     { title: 'Team', link: 'team' },
     { title: 'News', link: 'news' },
@@ -104,7 +104,7 @@ class Header extends React.Component<IHeaderProps> {
   public render() {
     return (
       <>
-        <UserMessage windowStore={this.props.windowStore} show={false} />
+        <UserMessage windowStore={this.props.windowStore} show={true} />
         <AccountMessage
           windowStore={this.props.windowStore}
           authStore={this.props.authStore}

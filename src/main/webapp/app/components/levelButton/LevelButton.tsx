@@ -9,6 +9,9 @@ import { RouterStore } from 'mobx-react-router';
 import { FdaLevelIcon, OncoKBLevelIcon } from 'app/shared/utils/Utils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import WithSeparator from 'react-with-separator';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
 
 type LevelButtonProps = {
   level: LEVELS;
@@ -23,6 +26,7 @@ type LevelButtonProps = {
   href?: string;
   disabled?: boolean;
   disabledTooltip?: string | JSX.Element;
+  isLoading?: boolean;
 };
 
 export const LevelButton = inject('routing')((props: LevelButtonProps) => {
@@ -78,6 +82,17 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
               styles.geneNumber
             )}
           >{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
+        <div className={styles.levelDescription}>{props.description}</div>
+        {props.isLoading ? (
+          <LoadingIndicator isLoading size={LoaderSize.EXTRA_SMALL} />
+        ) : (
+          <div
+            className={classnames(
+              `oncokb level-${props.level}`,
+              styles.geneNumber
+            )}
+          >{`${props.numOfGenes} ${pluralize('Gene', props.numOfGenes)}`}</div>
+        )}
         </Button>
       </div>
     </DefaultTooltip>

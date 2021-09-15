@@ -4,21 +4,21 @@ package org.mskcc.cbio.oncokb.web.rest;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserStatusChecks;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
-import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.errors.*;
 import org.mskcc.cbio.oncokb.web.rest.errors.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.InvalidPasswordException;
-import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndPasswordVM;
-import org.mskcc.cbio.oncokb.web.rest.vm.LoginVM;
-import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
+import org.mskcc.cbio.oncokb.web.rest.vm.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -28,16 +28,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.Context;
 
-import javax.mail.MessagingException;
 import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.*;
 
-import static org.mskcc.cbio.oncokb.config.Constants.MSK_EMAIL_DOMAIN;
+import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
+import static org.mskcc.cbio.oncokb.util.MainUtil.isMSKUser;
+import static org.mskcc.cbio.oncokb.util.StringUtil.getEmailDomain;
 
 /**
  * REST controller for managing the current user's account.
@@ -57,6 +58,8 @@ public class AccountResource {
     private final UserRepository userRepository;
 
     private final UserService userService;
+
+    private final UserDetailsService userDetailsService;
 
     private final SlackService slackService;
 
@@ -79,11 +82,12 @@ public class AccountResource {
                            MailService mailService, TokenProvider tokenProvider,
                            SlackService slackService, EmailService emailService,
                            AuthenticationManagerBuilder authenticationManagerBuilder,
-                           PasswordEncoder passwordEncoder,
+                           PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
                            TokenService tokenService, ApplicationProperties applicationProperties
                            ) {
 
         this.userRepository = userRepository;
+        this.userDetailsService = userDetailsService;
         this.userService = userService;
         this.mailService = mailService;
         this.tokenProvider = tokenProvider;
@@ -128,7 +132,7 @@ public class AccountResource {
             userOptional = userService.activateRegistration(key);
             User user = userOptional.get();
             if (newUserActivation) {
-                if (emailService.getAccountApprovalWhitelistEmailsDomains().contains(emailService.getEmailDomain(user.getEmail()))) {
+                if (emailService.getAccountApprovalWhitelistEmailsDomains().contains(getEmailDomain(user.getEmail()))) {
                     Optional<User> existingUser = userRepository.findOneByLogin(user.getLogin());
                     if (existingUser.isPresent()) {
                         UserDTO userDTO = userMapper.userToUserDTO(existingUser.get());
@@ -137,13 +141,13 @@ public class AccountResource {
                             slackService.sendApprovedConfirmation(userMapper.userToUserDTO(userOptional.get()));
                             return true;
                         } else {
-                            return activateUser(userOptional, userDTO);
+                            return activateUser(userDTO);
                         }
                     } else {
                         throw new AccountResourceException("User could not be found");
                     }
                 } else {
-                    return activateUser(userOptional, userMapper.userToUserDTO(user));
+                    return activateUser(userMapper.userToUserDTO(user));
                 }
             } else {
                 // This user exists before, we are looking for to extend the expiration date of all tokens associated
@@ -165,20 +169,22 @@ public class AccountResource {
         }
     }
 
-    private boolean activateUser(Optional<User> userOptional, UserDTO userDTO) {
-        if (isMSKCommercialUser(userDTO)) {
+    private boolean activateUser(UserDTO userDTO) {
+        if (isMSKUser(userDTO)) {
             LicenseType registeredLicenseType = userDTO.getLicenseType();
             userDTO.setLicenseType(LicenseType.ACADEMIC);
             userService.approveUser(userDTO);
-            slackService.sendApprovedConfirmationForMSKCommercialRequest(userMapper.userToUserDTO(userOptional.get()), registeredLicenseType);
-        } else {
-            slackService.sendUserRegistrationToChannel(userMapper.userToUserDTO(userOptional.get()));
-        }
-        return false;
-    }
 
-    private boolean isMSKCommercialUser(UserDTO userDTO) {
-        return emailService.getEmailDomain(userDTO.getEmail()).toLowerCase().endsWith(MSK_EMAIL_DOMAIN.toLowerCase()) && !userDTO.getLicenseType().equals(LicenseType.ACADEMIC);
+            // In this case, we also want to send an email to user to explain
+            Context context = new Context();
+            context.setVariable(MAIL_LICENSE, registeredLicenseType.getName());
+            mailService.sendEmailFromTemplate(userDTO, MailType.APPROVAL_MSK_IN_COMMERCIAL, context);
+        }
+        slackService.sendUserRegistrationToChannel(userDTO, new UserStatusChecks(userDTO,
+                userService.trialAccountActivated(userDTO),
+                userService.trialAccountInitiated(userDTO),
+                slackService.withClarificationNote(userDTO, true)));
+        return false;
     }
 
     /**
@@ -224,18 +230,7 @@ public class AccountResource {
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
-        userService.updateUser(
-            userDTO.getFirstName(),
-            userDTO.getLastName(),
-            userDTO.getEmail(),
-            userDTO.getLicenseType(),
-            userDTO.getJobTitle(),
-            userDTO.getCompany(),
-            userDTO.getCity(),
-            userDTO.getCountry(),
-            userDTO.getLangKey(),
-            userDTO.getImageUrl()
-        );
+        userService.updateUser(this.userMapper.userToUserDTO(user.get()));
     }
 
     /**
@@ -363,6 +358,43 @@ public class AccountResource {
         } else {
             throw new AccountResourceException("No user was found");
         }
+    }
+
+    @PostMapping(path = "/account/active-trial/init")
+    public UserDTO initiateTrialAccountActivation(@RequestBody String mail) {
+        Optional<User> user = userService.initiateTrialAccountActivation(mail);
+        if (user.isPresent()) {
+            return userMapper.userToUserDTO(user.get());
+        } else {
+            throw new AccountResourceException("No user was found");
+        }
+    }
+
+    @PostMapping(path = "/account/active-trial/finish")
+    public UserDTO finishTrialAccountActivation(@RequestBody KeyAndTermsVM keyAndTermsVM) {
+        if (keyAndTermsVM.getReadAndAgreeWithTheTerms() != Boolean.TRUE) {
+            throw new AccountResourceException("You have to read and agree with the terms.");
+        }
+        Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByTrialActivationKey(keyAndTermsVM.getKey());
+        if (userDetailsDTO.isPresent()) {
+            Optional<UserDTO> userDTOOptional = userService.finishTrialAccountActivation(keyAndTermsVM.getKey());
+            if (userDTOOptional.isPresent()) {
+                return userDTOOptional.get();
+            }
+        }
+        throw new AccountResourceException("No user was found for this activation key");
+    }
+
+    @GetMapping(path = "/account/active-trial/info")
+    public UserDTO getTrialAccountActivationInfo(@RequestParam String key) {
+        Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByTrialActivationKey(key);
+        if (userDetailsDTO.isPresent()) {
+            Optional<User> userOptional = userRepository.findById(userDetailsDTO.get().getUserId());
+            if (userOptional.isPresent()) {
+                return userMapper.userToUserDTO(userOptional.get());
+            }
+        }
+        throw new AccountResourceException("No key found");
     }
 
 

@@ -12,7 +12,7 @@ export const LoadingButton: React.FunctionComponent<
   return (
     <Button {...rest}>
       {loading ? (
-        <LoadingIndicator isLoading={true} size={'small'} color="white" />
+        <LoadingIndicator isLoading={true} color="white" />
       ) : (
         props.children
       )}

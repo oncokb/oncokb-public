@@ -1,12 +1,11 @@
 package org.mskcc.cbio.oncokb.service;
 
+import com.google.gson.Gson;
 import io.github.jhipster.config.JHipsterProperties;
+import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
-import org.mskcc.cbio.oncokb.domain.Authority;
-import org.mskcc.cbio.oncokb.domain.Token;
-import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.domain.UserDetails;
+import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
@@ -14,6 +13,7 @@ import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
@@ -25,12 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -67,6 +65,8 @@ public class UserService {
 
     private final TokenProvider tokenProvider;
 
+    private final SlackService slackService;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -79,6 +79,7 @@ public class UserService {
         TokenService tokenService,
         TokenProvider tokenProvider,
         CacheNameResolver cacheNameResolver,
+        SlackService slackService,
         CacheManager cacheManager
     ) {
         this.userRepository = userRepository;
@@ -90,6 +91,7 @@ public class UserService {
         this.tokenProvider = tokenProvider;
         this.cacheNameResolver = cacheNameResolver;
         this.cacheManager = cacheManager;
+        this.slackService = slackService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -138,6 +140,84 @@ public class UserService {
             });
     }
 
+    public Optional<User> initiateTrialAccountActivation(String login) {
+        Optional<User> userOptional = userRepository.findOneByLogin(login);
+        if (userOptional.isPresent()) {
+            Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(userOptional.get());
+            UserDetails ud = null;
+            if (userDetails.isPresent()) {
+                ud = userDetails.get();
+            } else {
+                ud = new UserDetails();
+                ud.setUser(userOptional.get());
+            }
+
+            AdditionalInfoDTO additionalInfoDTO = null;
+            if (userDetails.isPresent()) {
+                additionalInfoDTO = new Gson().fromJson(ud.getAdditionalInfo(), AdditionalInfoDTO.class);
+            }
+            if (additionalInfoDTO == null) {
+                additionalInfoDTO = new AdditionalInfoDTO();
+            }
+            additionalInfoDTO.setTrialAccount(initiateTrialAccountInfo());
+            ud.setAdditionalInfo(new Gson().toJson(additionalInfoDTO));
+
+            userDetailsRepository.save(ud);
+            return userOptional;
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<UserDTO> finishTrialAccountActivation(String key) {
+        Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByTrialActivationKey(key);
+        User user = userDetailsOptional.get().getUser();
+        UserDTO userDTO = userMapper.userToUserDTO(userDetailsOptional.get().getUser());
+        boolean userHasValidTrialActivation = Optional.ofNullable(userDTO)
+            .map(UserDTO::getAdditionalInfo)
+            .map(AdditionalInfoDTO::getTrialAccount)
+            .map(TrialAccount::getActivation)
+            .isPresent();
+
+        if (userHasValidTrialActivation) {
+            String userKey = userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey();
+            if (StringUtils.isNotEmpty(userKey) && userKey.equals(key)) {
+                // Update user account to trial account
+                user.setActivated(true);
+                generateTokenForUserIfNotExistOrOverwrite(userDTO, Optional.of(TRIAL_PERIOD_IN_DAYS), Optional.of(false));
+
+                // Reset the trial account info
+                Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
+                TrialAccount trialAccount = userDTO.getAdditionalInfo().getTrialAccount();
+                trialAccount.getActivation().setActivationDate(Instant.now());
+                trialAccount.getActivation().setKey(null);
+                trialAccount.getLicenseAgreement().setAcceptanceDate(Instant.now());
+                userDTO.getAdditionalInfo().setTrialAccount(trialAccount);
+
+                userDetails.get().setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
+                userDetailsRepository.save(userDetails.get());
+
+                slackService.sendConfirmationOnUserAcceptsTrialAgreement(userDTO, Instant.now().plusSeconds(TRIAL_PERIOD_IN_DAYS * DAY_IN_SECONDS));
+                return Optional.of(userDTO);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private TrialAccount initiateTrialAccountInfo() {
+        TrialAccount trialAccount = new TrialAccount();
+        Activation activation = new Activation();
+        activation.setInitiationDate(Instant.now());
+        activation.setKey(RandomUtil.generateResetKey());
+        trialAccount.setActivation(activation);
+
+        LicenseAgreement licenseAgreement = new LicenseAgreement();
+        licenseAgreement.setName("Trial License Agreement");
+        licenseAgreement.setVersion("v1");
+        trialAccount.setLicenseAgreement(licenseAgreement);
+        return trialAccount;
+    }
+
     public User registerUser(UserDTO userDTO, String password) {
         userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
             throw new EmailAlreadyUsedException();
@@ -174,6 +254,9 @@ public class UserService {
         userDetails.setCompany(userDTO.getCompany());
         userDetails.setCity(userDTO.getCity());
         userDetails.setCountry(userDTO.getCountry());
+        if (userDTO.getAdditionalInfo() != null) {
+            userDetails.setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
+        }
         userDetailsRepository.save(userDetails);
 
         this.clearUserCaches(newUser);
@@ -181,14 +264,19 @@ public class UserService {
         return newUser;
     }
 
-    private boolean removeNonActivatedUser(User existingUser) {
-        if (existingUser.getActivated()) {
-             return false;
+    public boolean trialAccountActivated(UserDTO userDTO) {
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        return tokens.stream().filter(token -> !token.isRenewable()).findAny().isPresent();
+    }
+    public boolean trialAccountInitiated(UserDTO userDTO) {
+        if (
+            userDTO.getAdditionalInfo() == null
+                || userDTO.getAdditionalInfo().getTrialAccount() == null
+                || userDTO.getAdditionalInfo().getTrialAccount().getActivation() == null
+        ) {
+            return false;
         }
-        userRepository.delete(existingUser);
-        userRepository.flush();
-        this.clearUserCaches(existingUser);
-        return true;
+        return StringUtils.isNotEmpty(userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey()) || userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate() != null;
     }
 
     public User createUser(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
@@ -237,44 +325,6 @@ public class UserService {
     }
 
     /**
-     * Update basic information (first name, last name, email, language) for the current user.
-     *
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
-     */
-    public void updateUser(
-        String firstName
-        , String lastName
-        , String email
-        , LicenseType licenseType
-        , String jobTitle
-        , String company
-        , String city
-        , String country
-        , String langKey
-        , String imageUrl
-    ) {
-        SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
-            .ifPresent(user -> {
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                if (email != null) {
-                    user.setEmail(email.toLowerCase());
-                }
-                user.setLangKey(langKey);
-                user.setImageUrl(imageUrl);
-                this.clearUserCaches(user);
-
-                getUpdatedUserDetails(user, licenseType, jobTitle, company, city, country);
-                log.debug("Changed Information for User: {}", user);
-            });
-    }
-
-    /**
      * Update all information for a specific user, and return the modified user.
      *
      * @param userDTO user to update.
@@ -317,15 +367,15 @@ public class UserService {
     }
 
     private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String company, String city, String country) {
-        Optional<UserDetails> userDetails= userDetailsRepository.findOneByUser(user);
-        if(userDetails.isPresent()) {
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
+        if (userDetails.isPresent()) {
             userDetails.get().setLicenseType(licenseType);
             userDetails.get().setJobTitle(jobTitle);
             userDetails.get().setCompany(company);
             userDetails.get().setCity(city);
             userDetails.get().setCountry(country);
             return userDetails.get();
-        }else{
+        } else {
             UserDetails newUserDetails = new UserDetails();
             newUserDetails.setLicenseType(licenseType);
             newUserDetails.setJobTitle(jobTitle);
@@ -398,6 +448,20 @@ public class UserService {
         return updatedUserDTO;
     }
 
+    public void convertTrialUserToRegular(UserDTO userDTO) {
+        if (!userDTO.isActivated()) {
+            userDTO.setActivated(true);
+            Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+            userDTO = updatedUserDTO.get();
+        }
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        tokens.forEach(token -> {
+            token.setRenewable(true);
+            token.setExpiration(Instant.now().plusSeconds(HALF_YEAR_IN_SECONDS));
+            tokenService.save(token);
+        });
+    }
+
     private void generateTokenForUserIfNotExist(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
         // automatically generate a token for user if not exists
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
@@ -410,8 +474,35 @@ public class UserService {
         }
     }
 
+    private void generateTokenForUserIfNotExistOrOverwrite(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
+        // automatically generate a token for user if not exists
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        if (tokens.isEmpty()) {
+            tokenProvider.createToken(
+                userMapper.userDTOToUser(userDTO),
+                tokenValidDays.isPresent() ? Optional.of(Instant.now().plusSeconds(DAY_IN_SECONDS * (long) tokenValidDays.get())) : Optional.empty(),
+                tokenIsRenewable
+            );
+        } else {
+            tokens.forEach(token -> {
+                token.setRenewable(false);
+                token.setExpiration(Instant.now().plusSeconds(DAY_IN_SECONDS * tokenValidDays.get()));
+                tokenService.save(token);
+            });
+        }
+    }
+
     public List<UserDTO> getAllActivatedUsersWithoutTokens() {
-        return userRepository.findAllActivatedWithoutTokens().stream().map(user->userMapper.userToUserDTO(user)).collect(Collectors.toList());
+        return userRepository.findAllActivatedWithoutTokens().stream().map(user -> userMapper.userToUserDTO(user)).collect(Collectors.toList());
+    }
+
+    public List<UserMessagePair> getAllUnapprovedUsersCreatedAfter(int daysAgo) {
+        List<UserIdMessagePair> idList = slackService.getAllUnapprovedUserRequestsSentAfter(daysAgo);
+        List<UserMessagePair> userList = new ArrayList<>();
+        for (UserIdMessagePair userIdMessagePair : idList) {
+            userList.add(new UserMessagePair(userMapper.userToUserDTO(userRepository.findOneById(userIdMessagePair.getId()).get()), userIdMessagePair.getMessage()));
+        }
+        return userList;
     }
 
     public void removeNotActivatedUsers() {
@@ -430,6 +521,7 @@ public class UserService {
 
     /**
      * Gets a list of all the authorities.
+     *
      * @return a list of all the authorities.
      */
     @Transactional(readOnly = true)

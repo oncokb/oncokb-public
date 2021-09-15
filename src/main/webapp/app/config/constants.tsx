@@ -19,6 +19,8 @@ export default config;
 export const SERVER_API_URL = process.env.SERVER_API_URL;
 
 export const LOCAL_DEV_OPT = 'localdev';
+export const DISABLE_BANNER_OPT = 'disablebanner';
+
 export const DEV_URL = 'http://localhost:9095';
 
 export const RECAPTCHA_SITE_KEY = '6LcxRsMZAAAAAFYpXX6KAc9ASGSf8IptsIKehJby';
@@ -58,6 +60,7 @@ export const FAQ_URL_PATTERNS_LINK = `${FAQ_LINK}/technical#what-are-the-url-pat
 export const API_DOCUMENT_LINK = 'https://api.oncokb.org/oncokb-website/api';
 export const DEMO_WEBSITE_LINK = 'https://demo.oncokb.org';
 export const FACULTY_COI_WEBSITE_LINK = 'https://www.mskcc.org/disclosures';
+export const ONCOKB_DATAHUB_LINK = 'https://github.com/oncokb/oncokb-datahub';
 export const NONE_FACULTY_COI_WEBSITE_LINK =
   'https://docs.google.com/spreadsheets/d/1PKHV8ArVm4AFu4Rj-URWHcCAqnbWlm7p2-LOxhe0aFU/edit?usp=sharing';
 export const FDA_LEVELS_OF_EVIDENCE_LINK =
@@ -89,6 +92,7 @@ export enum ONCOGENICITY {
   ONCOGENIC = 'Oncogenic',
   LIKELY_ONCOGENIC = 'Likely Oncogenic',
   PREDICTED_ONCOGENIC = 'Predicted Oncogenic',
+  RESISTANCE = 'Resistance',
   LIKELY_NEUTRAL = 'Likely Neutral',
   NEUTRAL = 'Neutral',
   INCONCLUSIVE = 'Inconclusive',
@@ -99,6 +103,7 @@ export const GENERAL_ONCOGENICITY: { [key: string]: ONCOGENICITY } = {
   [ONCOGENICITY.ONCOGENIC]: ONCOGENICITY.ONCOGENIC,
   [ONCOGENICITY.LIKELY_ONCOGENIC]: ONCOGENICITY.ONCOGENIC,
   [ONCOGENICITY.PREDICTED_ONCOGENIC]: ONCOGENICITY.ONCOGENIC,
+  [ONCOGENICITY.RESISTANCE]: ONCOGENICITY.RESISTANCE,
   [ONCOGENICITY.NEUTRAL]: ONCOGENICITY.NEUTRAL,
   [ONCOGENICITY.LIKELY_NEUTRAL]: ONCOGENICITY.NEUTRAL,
   [ONCOGENICITY.INCONCLUSIVE]: ONCOGENICITY.INCONCLUSIVE,
@@ -251,12 +256,12 @@ export const LEVEL_CLASSIFICATION: { [key in LEVELS]: LEVEL_TYPES } = {
   [LEVELS.FDAx3]: LEVEL_TYPES.FDA,
 };
 
-export const ONCOGENICITY_CLASS_NAMES: { [oncogenic: string]: string } = {
+export const ONCOGENICITY_CLASS_NAMES: { [key in ONCOGENICITY]: string } = {
   [ONCOGENICITY.NEUTRAL]: 'neutral',
   [ONCOGENICITY.LIKELY_NEUTRAL]: 'neutral',
   [ONCOGENICITY.UNKNOWN]: 'unknown',
-  ['']: 'unknown',
   [ONCOGENICITY.INCONCLUSIVE]: 'inconclusive',
+  [ONCOGENICITY.RESISTANCE]: 'oncogenic',
   [ONCOGENICITY.PREDICTED_ONCOGENIC]: 'oncogenic',
   [ONCOGENICITY.LIKELY_ONCOGENIC]: 'oncogenic',
   [ONCOGENICITY.ONCOGENIC]: 'oncogenic',
@@ -302,7 +307,7 @@ export const DEFAULT_MARGIN_BOTTOM_SM = 'mb-2';
 export const DEFAULT_MARGIN_BOTTOM_LG = 'mb-3';
 export const THRESHOLD_TABLE_FIXED_HEIGHT = 15;
 export const THRESHOLD_ALTERATION_PAGE_TABLE_FIXED_HEIGHT = 5;
-export const THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT = 30;
+export const THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT = 90;
 export const LG_TABLE_FIXED_HEIGHT = 640;
 export const SM_TABLE_FIXED_HEIGHT = 400;
 export const IMG_MAX_WIDTH = 800;
@@ -414,7 +419,7 @@ export enum PAGE_TITLE {
   ACCOUNT = 'Account',
   ACCOUNT_SETTINGS = 'Account Settings',
   ACCOUNT_PASSWORD = 'Change Password',
-  ADMIN_USER_DETAILS = 'Users Information',
+  ADMIN_USER_DETAILS = 'Registered Users',
   ADMIN_SEND_EMAILS = 'Send Emails to Users',
   ADMIN_CREATE_ACCOUNT = 'Create New Account',
   ADMIN_USAGE_ANALYSIS = 'Usage Analysis',
@@ -461,6 +466,7 @@ export enum PAGE_ROUTE {
   ACCOUNT_PASSWORD = '/account/password',
   ACCOUNT_PASSWORD_RESET_REQUEST = '/account/reset/request',
   ACCOUNT_PASSWORD_RESET_FINISH = '/account/reset/finish',
+  ACCOUNT_ACTIVE_TRIAL_FINISH = '/account/active-trial/finish',
 }
 
 export enum TABLE_COLUMN_KEY {
@@ -491,7 +497,7 @@ export const LICENSE_TITLES: { [key: string]: string } = {
   [LicenseType.ACADEMIC]: 'Research use in an academic setting',
   [LicenseType.RESEARCH_IN_COMMERCIAL]: 'Research use in a commercial setting',
   [LicenseType.HOSPITAL]:
-    'Use for patient services or reports in hospital/care setting',
+    'Use for patient services or reports in a hospital setting',
   [LicenseType.COMMERCIAL]: 'Use in a commercial product',
 };
 
@@ -525,8 +531,9 @@ export enum ACCOUNT_TITLES {
   LAST_NAME = 'Last Name',
   NAME = 'Name',
   EMAIL = 'Email',
-  POSITION = 'Job Title',
+  POSITION = 'Job Title / Position',
   COMPANY = 'Company',
+  COMPANY_SECTION_TITLE = 'Company Information',
   CITY = 'City',
   COUNTRY = 'Country',
   API_TOKEN = 'API Token',
@@ -590,6 +597,11 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '08312021', version: 'v3.6' },
+  { date: '07162021', version: 'v3.5' },
+  { date: '06172021', version: 'v3.4' },
+  { date: '04142021', version: 'v3.3' },
+  { date: '03122021', version: 'v3.2' },
   { date: '02102021', version: 'v3.1' },
   { date: '01142021', version: 'v3.0' },
   { date: '12172020', version: 'v2.10' },

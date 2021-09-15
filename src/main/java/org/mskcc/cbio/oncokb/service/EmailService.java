@@ -23,8 +23,4 @@ public class EmailService {
     public Set<String> getAccountApprovalWhitelistEmailsDomains() {
         return Arrays.stream(this.applicationProperties.getAccountApprovalWhitelist().split(",")).map(email -> email.trim()).collect(Collectors.toSet());
     }
-
-    public String getEmailDomain(String email) {
-        return email.substring(email.indexOf("@") + 1);
-    }
 }

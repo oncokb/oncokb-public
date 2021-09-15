@@ -23,6 +23,16 @@ Make sure your running environment is the following:
 - **MySQL version: 5.7.28**
 - **Redis**
 
+### Setup Redis
+
+The following steps is one way to set up the redis. As long as you have redis setup and ready to connect, then that would work.
+
+- Install Docker
+- Install Kubernetes(k8s) (In Mac versin, you can enable k8s in Docker Preference)
+- Install helm
+- Install redis `helm install oncokb-public-redis bitnami/redis --set auth.password=oncokb-public-redis-password --set replica.replicaCount=1`
+- Follow the instructions after installing redis. Then you need to proxy the redis out, command looks like `kubectl port-forward --namespace default svc/oncokb-public-redis-master 6379:6379`
+
 ### Modify config
 
 `/src/main/resources/config/application-dev.yml`

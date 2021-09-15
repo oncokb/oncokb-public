@@ -34,6 +34,9 @@
             <column name="address" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="additional_info" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
             <column name="user_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_details_user_id" />
             </column>
@@ -66,6 +69,7 @@
             <column name="city" type="string"/>
             <column name="country" type="string"/>
             <column name="address" type="string"/>
+            <column name="additional_info" type="clob"/>
             <column name="user_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

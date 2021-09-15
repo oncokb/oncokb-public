@@ -35,6 +35,7 @@ import {
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getTreatmentNameFromEvidence,
+  isPositionalAlteration,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
@@ -451,6 +452,11 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
           </span>
         </h2>
         <AlterationInfo
+          isPositionalAlteration={isPositionalAlteration(
+            this.props.annotation.query.proteinStart,
+            this.props.annotation.query.proteinEnd,
+            this.props.annotation.query.consequence
+          )}
           oncogenicity={this.props.annotation.oncogenic}
           mutationEffect={
             this.isOncogenicMutations
