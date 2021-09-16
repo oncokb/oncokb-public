@@ -122,16 +122,16 @@ export default class LevelSelectionRow extends React.Component<
                       clinical oncologists, molecular pathologists and cancer
                       researchers, tumor profiling next generation sequencing
                       (NGS) test developers may also rely on human variant
-                      databases such as OncoKB for variant information to
+                      databases, such as OncoKB, for variant information to
                       support the clinical validity of their tests. Therefore,
                       to credential the robustness and transparency of databases
                       involved in variant evaluation, the FDA introduced a
                       process to recognize human variant databases.
                     </p>
                     <p>
-                      Below is the FDA-recognized content (under review) in
-                      OncoKB, including tumor type-specific alterations and
-                      their corresponding{' '}
+                      Below is the FDA-recognized content in OncoKB (currently
+                      under FDA review), including tumor type-specific
+                      alterations and their corresponding{' '}
                       <Link
                         to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
                       >
@@ -140,8 +140,7 @@ export default class LevelSelectionRow extends React.Component<
                       . The assigned FDA level of evidence is based on these
                       alterations being tested in Formalin Fixed Paraffin
                       Embedded (FFPE) specimen types, except in cases where
-                      specimen type is not specified.Below is the FDA-recognized
-                      content(under FDA review) in
+                      specimen type is not specified.
                     </p>
                   </>
                 </Col>

@@ -18,11 +18,13 @@ import {
   ONCOGENICITY,
   LEVELS,
   LEVEL_PRIORITY,
+  FDA_LEVELS,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
   Alteration,
   Evidence,
+  FdaAlteration,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
@@ -75,6 +77,20 @@ export function levelOfEvidence2Level(
     level = trimLevelOfEvidenceSubversion(level);
   }
   return level as LEVELS;
+}
+
+export function getHighestFdaLevel(fdaAlterations: FdaAlteration[]) {
+  let highestFdaLevelIndex = -1;
+  fdaAlterations.forEach(alteration => {
+    const levelIndex = FDA_LEVELS.indexOf(alteration.level as LEVELS);
+    if (
+      highestFdaLevelIndex === -1 ||
+      (levelIndex !== -1 && levelIndex < highestFdaLevelIndex)
+    ) {
+      highestFdaLevelIndex = levelIndex;
+    }
+  });
+  return FDA_LEVELS[highestFdaLevelIndex];
 }
 
 export function level2LevelOfEvidence(level: LEVELS) {
@@ -237,7 +253,10 @@ export const FdaLevelIcon: React.FunctionComponent<{
   withDescription?: boolean;
 }> = ({ level, withDescription = true }) => {
   const fdaIcon = (
-    <span className="fa-stack" style={{ fontSize: 9 }}>
+    <span
+      className="fa-stack"
+      style={{ fontSize: 9, lineHeight: '18px', margin: '0 3px' }}
+    >
       <span className="fa fa-circle-o fa-stack-2x"></span>
       <strong className="fa-stack-1x">
         {level.toString().replace('FDAx', '')}

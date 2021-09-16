@@ -740,6 +740,55 @@ export default class ActionableGenesPage extends React.Component<
     return commonColumns;
   }
 
+  @computed
+  get oncokbTableProps() {
+    if (this.fdaSectionIsOpen) {
+      return {
+        minRows: 10,
+        pageSize: 10,
+        showPagination: true,
+        fixedHeight: false,
+      };
+    } else {
+      return {
+        minRows: Math.round(LG_TABLE_FIXED_HEIGHT / 36) - 1,
+        pageSize:
+          this.filteredTreatments.length === 0
+            ? 1
+            : this.filteredTreatments.length,
+        showPagination: this.fdaSectionIsOpen,
+        fixedHeight: true,
+        style: {
+          height: LG_TABLE_FIXED_HEIGHT,
+        },
+      };
+    }
+  }
+
+  @computed
+  get filterResult() {
+    const evidencePostFix = this.fdaSectionIsOpen
+      ? `${pluralize('record', this.filteredTreatments.length)}`
+      : `clinical  ${pluralize('implication', this.filteredTreatments.length)}`;
+    return (
+      <>
+        <b>{`Showing ${this.filteredTreatments.length} ${evidencePostFix}`}</b>
+        {` (${this.filteredGenes.length} ${pluralize(
+          'gene',
+          this.filteredGenes.length
+        )},
+                ${this.filteredTumorTypes.length} ${pluralize(
+          'cancer type',
+          this.filteredTumorTypes.length
+        )},
+                ${this.filteredLevels.length} ${pluralize(
+          'level',
+          this.filteredLevels.length
+        )} of evidence)`}
+      </>
+    );
+  }
+
   render() {
     const levelSelectionSection = [];
     for (const key in LEVEL_TYPES) {
@@ -834,26 +883,7 @@ export default class ActionableGenesPage extends React.Component<
           </Row>
           <Row className={'mb-2'}>
             <Col className="d-flex">
-              <span>
-                <b>{`Showing ${
-                  this.filteredTreatments.length
-                } clinical  ${pluralize(
-                  'implication',
-                  this.filteredTreatments.length
-                )}`}</b>
-                {` (${this.filteredGenes.length} ${pluralize(
-                  'gene',
-                  this.filteredGenes.length
-                )},
-                ${this.filteredTumorTypes.length} ${pluralize(
-                  'cancer type',
-                  this.filteredTumorTypes.length
-                )},
-                ${this.filteredLevels.length} ${pluralize(
-                  'level',
-                  this.filteredLevels.length
-                )} of evidence)`}
-              </span>
+              <span>{this.filterResult}</span>
               <AuthDownloadButton
                 size={'sm'}
                 className={classnames('ml-2')}
@@ -877,6 +907,7 @@ export default class ActionableGenesPage extends React.Component<
           <Row className="mt-2">
             <Col>
               <OncoKBTable
+                {...this.oncokbTableProps}
                 disableSearch={true}
                 data={this.filteredTreatments}
                 loading={
@@ -886,16 +917,7 @@ export default class ActionableGenesPage extends React.Component<
                     : this.evidencesByLevel.isPending)
                 }
                 columns={this.columns}
-                minRows={Math.round(LG_TABLE_FIXED_HEIGHT / 36) - 1}
-                pageSize={
-                  this.filteredTreatments.length === 0
-                    ? 1
-                    : this.filteredTreatments.length
-                }
-                fixedHeight={true}
-                style={{
-                  height: LG_TABLE_FIXED_HEIGHT,
-                }}
+                defaultPageSize={10}
                 defaultSorted={[
                   {
                     id: TABLE_COLUMN_KEY.LEVEL,

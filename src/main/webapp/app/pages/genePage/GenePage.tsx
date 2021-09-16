@@ -14,6 +14,7 @@ import { Redirect, RouteComponentProps, Prompt } from 'react-router';
 import { Button, Col, Row, Modal } from 'react-bootstrap';
 import styles from './GenePage.module.scss';
 import {
+  FdaLevelIcon,
   filterByKeyword,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
@@ -98,12 +99,29 @@ const HighestLevelItem: React.FunctionComponent<{
   level: LEVELS;
   key?: string;
 }> = props => {
+  let isFdaLevel = false;
+  let levelText = '';
+  switch (props.level) {
+    case LEVELS.FDAx1:
+    case LEVELS.FDAx2:
+    case LEVELS.FDAx3:
+      levelText = `FDA Level ${props.level.replace('FDAx', '')}`;
+      isFdaLevel = true;
+      break;
+    default:
+      levelText = `Level ${props.level}`;
+      break;
+  }
   return (
     <span className={'d-flex align-items-center'}>
       <span className={`oncokb level-${props.level}`} key={props.key}>
-        Level {props.level}
+        {levelText}
       </span>
-      <OncoKBLevelIcon level={props.level} withDescription />
+      {isFdaLevel ? (
+        <FdaLevelIcon level={props.level} />
+      ) : (
+        <OncoKBLevelIcon level={props.level} withDescription />
+      )}
     </span>
   );
 };
@@ -113,6 +131,7 @@ export const getHighestLevelStrings = (
   highestResistanceLevel: string | undefined,
   highestDiagnosticImplicationLevel?: string | undefined,
   highestPrognosticImplicationLevel?: string | undefined,
+  highestFdaLevel: string | undefined,
   separator: string | JSX.Element = ', '
 ) => {
   const levels: React.ReactNode[] = [];
@@ -152,6 +171,10 @@ export const getHighestLevelStrings = (
       />
     );
   }
+  if (highestFdaLevel) {
+    const level = levelOfEvidence2Level(highestFdaLevel, false);
+    levels.push(<HighestLevelItem level={level} key={'highestFdaLevel'} />);
+  }
   return (
     <WithSeparator
       separator={<span className="mx-1">·</span>}
@@ -168,6 +191,7 @@ type GeneInfoProps = {
   highestResistanceLevel: string | undefined;
   highestDiagnosticImplicationLevel?: string | undefined;
   highestPrognosticImplicationLevel?: string | undefined;
+  highestFdaLevel?: string | undefined;
 };
 
 type GeneInfoItem = {
@@ -200,7 +224,8 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
     props.highestResistanceLevel ||
     props.highestSensitiveLevel ||
     props.highestDiagnosticImplicationLevel ||
-    props.highestPrognosticImplicationLevel
+    props.highestPrognosticImplicationLevel ||
+    props.highestFdaLevel
   ) {
     info.push({
       key: 'loe',
@@ -212,7 +237,8 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
               props.highestSensitiveLevel,
               props.highestResistanceLevel,
               props.highestDiagnosticImplicationLevel,
-              props.highestPrognosticImplicationLevel
+              props.highestPrognosticImplicationLevel,
+              props.highestFdaLevel
             )}
           </h5>
         </div>
@@ -320,7 +346,7 @@ const LEAVING_PAGE_MESSAGE =
 
 @inject('appStore', 'windowStore', 'routing')
 @observer
-export default class GenePage extends React.Component<GenePageProps> {
+export default class GenePage extends React.Component<GenePageProps, any> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground: boolean;
   @observable selectedTab: string;
@@ -1005,6 +1031,7 @@ export default class GenePage extends React.Component<GenePageProps> {
                                 this.store.geneNumber.result
                                   .highestPrognosticImplicationLevel
                               }
+                              highestFdaLevel={this.store.highestFdaLevel}
                             />
                             {this.store.geneSummary.result ? (
                               <div className="mt-2">

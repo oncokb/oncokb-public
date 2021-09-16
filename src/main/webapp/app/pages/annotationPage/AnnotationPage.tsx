@@ -34,6 +34,7 @@ import {
   articles2Citations,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
+  getHighestFdaLevel,
   getTreatmentNameFromEvidence,
   isPositionalAlteration,
   levelOfEvidence2Level,
@@ -472,6 +473,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
           highestPrognosticImplicationLevel={
             this.props.annotation.highestPrognosticImplicationLevel
           }
+          highestFdaLevel={getHighestFdaLevel(this.props.fdaAlterations || [])}
         />
         <Row>
           <Col>

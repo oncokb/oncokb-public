@@ -29,7 +29,10 @@ import {
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
-import { shortenOncogenicity } from 'app/shared/utils/Utils';
+import {
+  getHighestFdaLevel,
+  shortenOncogenicity,
+} from 'app/shared/utils/Utils';
 import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 import { Oncogenicity } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import { OncokbMutation } from 'app/components/oncokbMutationMapper/OncokbMutation';
@@ -256,6 +259,11 @@ export class AnnotationStore {
     },
     default: [],
   });
+
+  @computed
+  get highestFdaLevel() {
+    return getHighestFdaLevel(this.fdaAlterations.result);
+  }
 
   readonly fdaAlterations = remoteData<FdaAlteration[]>({
     await: () => [this.gene],

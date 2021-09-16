@@ -24,6 +24,7 @@ export const AlterationInfo: React.FunctionComponent<{
   highestResistanceLevel: string | undefined;
   highestDiagnosticImplicationLevel: string | undefined;
   highestPrognosticImplicationLevel: string | undefined;
+  highestFdaLevel: string | undefined;
 }> = props => {
   const separator = <span className="mx-1">·</span>;
   const content = [];
@@ -92,6 +93,7 @@ export const AlterationInfo: React.FunctionComponent<{
         props.highestResistanceLevel,
         props.highestDiagnosticImplicationLevel,
         props.highestPrognosticImplicationLevel,
+        props.highestFdaLevel,
         separator
       )
     );
