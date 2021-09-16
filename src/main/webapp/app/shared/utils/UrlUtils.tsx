@@ -16,21 +16,35 @@ import { ReactNodeArray } from 'prop-types';
 import { encodeSlash } from 'app/shared/utils/Utils';
 import { Linkout } from 'app/shared/links/Linkout';
 import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
+import {
+  AlterationPageHashQueries,
+  AlterationPageSearchQueries,
+  GenePageHashQueries,
+  GenePageSearchQueries,
+} from 'app/shared/route/types';
+import * as QueryString from 'querystring';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
   content?: string;
   highlightContent?: boolean;
-  selectedTab?: ANNOTATION_PAGE_TAB_KEYS;
+  searchQueries?: GenePageSearchQueries;
+  hashQueries?: GenePageHashQueries;
 }> = props => {
   const highlightContent =
     props.highlightContent === undefined ? true : props.highlightContent;
+  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}`;
+  if (props.searchQueries && Object.keys(props.searchQueries).length > 0) {
+    pageLink = `${pageLink}?${QueryString.stringify(props.searchQueries)}`;
+  }
+  if (props.hashQueries) {
+    pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
+  }
+
   return (
     <Link
       style={{ color: highlightContent ? undefined : 'black' }}
-      to={`${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}${
-        props.selectedTab ? '#selectedTab=' + props.selectedTab : ''
-      }`}
+      to={pageLink}
     >
       {props.content ? props.content : props.hugoSymbol}
     </Link>
@@ -41,16 +55,25 @@ export const AlterationPageLink: React.FunctionComponent<{
   hugoSymbol: string;
   alteration: string;
   alterationRefGenomes?: REFERENCE_GENOME[];
+  searchQueries?: AlterationPageSearchQueries;
+  hashQueries?: AlterationPageHashQueries;
   showGene?: boolean;
   content?: string;
 }> = props => {
   let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`;
-  if (
-    props.alterationRefGenomes &&
-    props.alterationRefGenomes.length > 0 &&
-    !props.alterationRefGenomes.includes(DEFAULT_REFERENCE_GENOME)
-  ) {
-    pageLink = `${pageLink}?${SEARCH_QUERY_KEY.REFERENCE_GENOME}=${props.alterationRefGenomes[0]}`;
+  const searchQueries = props.searchQueries || {};
+
+  // Prop alterationRefGenomes is just a convinient way to process reference genomes when it's a list.
+  if (!searchQueries.refGenome && props.alterationRefGenomes) {
+    if (!props.alterationRefGenomes.includes(DEFAULT_REFERENCE_GENOME)) {
+      searchQueries.refGenome = props.alterationRefGenomes[0];
+    }
+  }
+  if (Object.keys(searchQueries).length > 0) {
+    pageLink = `${pageLink}?${QueryString.stringify(searchQueries)}`;
+  }
+  if (props.hashQueries) {
+    pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
   }
   return (
     <Link to={pageLink}>

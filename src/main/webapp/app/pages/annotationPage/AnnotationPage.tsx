@@ -9,7 +9,6 @@ import {
   DEFAULT_MESSAGE_HEME_ONLY_DX,
   DEFAULT_MESSAGE_HEME_ONLY_PX,
   EVIDENCE_TYPES,
-  LEVEL_TYPE_NAMES,
   LEVEL_TYPES,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
@@ -24,6 +23,7 @@ import classnames from 'classnames';
 import { action, computed } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
+  ClinicalVariant,
   Evidence,
   FdaAlteration,
   VariantAnnotation,
@@ -51,6 +51,7 @@ import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import { FDA_ALTERATIONS_TABLE_COLUMNS } from 'app/pages/genePage/FdaUtils';
 import { GenePageTable } from 'app/pages/genePage/GenePageTable';
+import { getTabDefaultActiveKey } from 'app/shared/utils/TempAnnotationUtils';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -80,10 +81,15 @@ export type IAnnotationPage = {
   onChangeTumorType: (newTumorType: string) => void;
   annotation: VariantAnnotation;
   fdaAlterations?: FdaAlteration[];
+  defaultSelectedTab?: ANNOTATION_PAGE_TAB_KEYS;
+  onChangeTab?: (tabKey: ANNOTATION_PAGE_TAB_KEYS) => void;
 };
 
 @inject('appStore')
-export default class AnnotationPage extends React.Component<IAnnotationPage> {
+export default class AnnotationPage extends React.Component<
+  IAnnotationPage,
+  {}
+> {
   getTherapeuticImplications(evidences: Evidence[]) {
     return evidences.map(evidence => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
@@ -102,14 +108,14 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
         drugs: getTreatmentNameFromEvidence(evidence),
         cancerTypes,
         citations: articles2Citations(evidence.articles),
-      };
+      } as TherapeuticImplication;
     });
   }
 
   getEvidenceByEvidenceTypes(
     cancerTypes: VariantAnnotationTumorType[],
     evidenceTypes: EVIDENCE_TYPES[]
-  ) {
+  ): Evidence[] {
     let uniqueEvidences: Evidence[] = [];
     cancerTypes.forEach(cancerType => {
       uniqueEvidences = uniqueEvidences.concat(
@@ -321,17 +327,18 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
 
   @computed
   get tabDefaultActiveKey() {
-    if (this.therapeuticImplications.length > 0) {
-      return LEVEL_TYPES.TX;
-    } else if (this.diagnosticImplications.length > 0) {
-      return LEVEL_TYPES.DX;
-    }
-    return LEVEL_TYPES.PX;
+    return getTabDefaultActiveKey(
+      this.therapeuticImplications.length > 0,
+      this.diagnosticImplications.length > 0,
+      this.prognosticImplications.length > 0,
+      (this.props.fdaAlterations || []).length > 0,
+      this.props.defaultSelectedTab
+    );
   }
 
-  getTable(key: LEVEL_TYPES) {
+  getTable(key: ANNOTATION_PAGE_TAB_KEYS) {
     switch (key) {
-      case LEVEL_TYPES.TX:
+      case ANNOTATION_PAGE_TAB_KEYS.TX:
         return (
           <AnnotationPageTable
             implicationType={LEVEL_TYPES.TX}
@@ -339,7 +346,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
             column={this.therapeuticTableColumns}
           />
         );
-      case LEVEL_TYPES.DX:
+      case ANNOTATION_PAGE_TAB_KEYS.DX:
         return (
           <AnnotationPageTable
             implicationType={LEVEL_TYPES.DX}
@@ -347,7 +354,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
             column={this.dxpxTableColumns}
           />
         );
-      case LEVEL_TYPES.PX:
+      case ANNOTATION_PAGE_TAB_KEYS.PX:
         return (
           <AnnotationPageTable
             implicationType={LEVEL_TYPES.PX}
@@ -355,7 +362,7 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
             column={this.dxpxTableColumns}
           />
         );
-      case LEVEL_TYPES.FDA:
+      case ANNOTATION_PAGE_TAB_KEYS.FDA:
         return (
           <GenePageTable
             data={this.props.fdaAlterations ? this.props.fdaAlterations : []}
@@ -368,14 +375,16 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
     }
   }
 
-  readonly tabDescription: { [key in LEVEL_TYPES]: string } = {
-    [LEVEL_TYPES.TX]: '',
-    [LEVEL_TYPES.DX]: DEFAULT_MESSAGE_HEME_ONLY_DX,
-    [LEVEL_TYPES.PX]: DEFAULT_MESSAGE_HEME_ONLY_PX,
-    [LEVEL_TYPES.FDA]: '',
+  readonly tabDescription: {
+    [key: keyof typeof ANNOTATION_PAGE_TAB_KEYS]: string;
+  } = {
+    [ANNOTATION_PAGE_TAB_KEYS.TX]: '',
+    [ANNOTATION_PAGE_TAB_KEYS.DX]: DEFAULT_MESSAGE_HEME_ONLY_DX,
+    [ANNOTATION_PAGE_TAB_KEYS.PX]: DEFAULT_MESSAGE_HEME_ONLY_PX,
+    [ANNOTATION_PAGE_TAB_KEYS.FDA]: '',
   };
 
-  getTabContent(key: LEVEL_TYPES) {
+  getTabContent(key: ANNOTATION_PAGE_TAB_KEYS) {
     return (
       <div>
         {this.tabDescription[key] ? (
@@ -388,28 +397,28 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
 
   @computed
   get tabs() {
-    const tabs: { title: string; key: LEVEL_TYPES }[] = [];
+    const tabs: { title: string; key: ANNOTATION_PAGE_TAB_KEYS }[] = [];
     if (this.therapeuticImplications.length > 0) {
       tabs.push({
-        key: LEVEL_TYPES.TX,
+        key: ANNOTATION_PAGE_TAB_KEYS.TX,
         title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.TX]}`,
       });
     }
     if (this.diagnosticImplications.length > 0) {
       tabs.push({
-        key: LEVEL_TYPES.DX,
+        key: ANNOTATION_PAGE_TAB_KEYS.DX,
         title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.DX]}`,
       });
     }
     if (this.prognosticImplications.length > 0) {
       tabs.push({
-        key: LEVEL_TYPES.PX,
+        key: ANNOTATION_PAGE_TAB_KEYS.PX,
         title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.PX]}`,
       });
     }
     if (this.props.fdaAlterations && this.props.fdaAlterations.length > 0) {
       tabs.push({
-        key: LEVEL_TYPES.FDA,
+        key: ANNOTATION_PAGE_TAB_KEYS.FDA,
         title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.FDA]}`,
       });
     }
@@ -561,6 +570,11 @@ export default class AnnotationPage extends React.Component<IAnnotationPage> {
               items={this.tabs}
               transform={false}
               selectedTabKey={this.tabDefaultActiveKey}
+              onChange={(tabKey: ANNOTATION_PAGE_TAB_KEYS) => {
+                if (this.props.onChangeTab) {
+                  this.props.onChangeTab(tabKey);
+                }
+              }}
             />
           </Col>
         </Row>

@@ -1,12 +1,22 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { AnnotationStore } from 'app/store/AnnotationStore';
-import { computed, action, IReactionDisposer, reaction } from 'mobx';
+import {
+  computed,
+  action,
+  IReactionDisposer,
+  reaction,
+  observable,
+} from 'mobx';
 import AppStore from 'app/store/AppStore';
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
-import { DEFAULT_GENE, REFERENCE_GENOME } from 'app/config/constants';
+import {
+  ANNOTATION_PAGE_TAB_KEYS,
+  DEFAULT_GENE,
+  REFERENCE_GENOME,
+} from 'app/config/constants';
 import {
   decodeSlash,
   encodeSlash,
@@ -19,6 +29,10 @@ import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { RouteComponentProps } from 'react-router';
 import AnnotationPage from 'app/pages/annotationPage/AnnotationPage';
 import * as QueryString from 'query-string';
+import {
+  AlterationPageHashQueries,
+  AlterationPageSearchQueries,
+} from 'app/shared/route/types';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -31,18 +45,17 @@ interface AlterationPageProps extends RouteComponentProps<MatchParams> {
   routing: RouterStore;
 }
 
-type SearchQueries = {
-  refGenome?: REFERENCE_GENOME;
-};
-
 @inject('appStore', 'routing')
 @observer
 export default class AlterationPage extends React.Component<
-  AlterationPageProps
+  AlterationPageProps,
+  {}
 > {
   private store: AnnotationStore;
 
   readonly reactions: IReactionDisposer[] = [];
+
+  private defaultSelectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
   constructor(props: any) {
     super(props);
@@ -71,12 +84,26 @@ export default class AlterationPage extends React.Component<
       reaction(
         () => [props.routing.location.search],
         ([search]) => {
-          const queryStrings = QueryString.parse(search) as SearchQueries;
+          const queryStrings = QueryString.parse(
+            search
+          ) as AlterationPageSearchQueries;
           if (queryStrings.refGenome) {
             this.store.referenceGenomeQuery = queryStrings.refGenome;
           }
         },
         { fireImmediately: true }
+      ),
+      reaction(
+        () => [props.routing.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(
+            hash
+          ) as AlterationPageHashQueries;
+          if (queryStrings.tab) {
+            this.defaultSelectedTab = queryStrings.tab;
+          }
+        },
+        true
       )
     );
   }
@@ -134,6 +161,11 @@ export default class AlterationPage extends React.Component<
     return content.join(', ');
   }
 
+  onChangeTab(newTabKey: ANNOTATION_PAGE_TAB_KEYS) {
+    const newHash: AlterationPageHashQueries = { tab: newTabKey };
+    window.location.hash = QueryString.stringify(newHash);
+  }
+
   render() {
     return (
       <DocumentTitle title={this.documentTitle}>
@@ -154,6 +186,8 @@ export default class AlterationPage extends React.Component<
                   onChangeTumorType={newTumorType =>
                     (this.store.tumorTypeQuery = newTumorType)
                   }
+                  defaultSelectedTab={this.defaultSelectedTab}
+                  onChangeTab={this.onChangeTab}
                 />
               )
             )}

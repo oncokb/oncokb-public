@@ -31,11 +31,8 @@ import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
 import { sortByLevel } from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
-import { Else, If, Then } from 'react-if';
-import LoadingIndicator, {
-  LoaderSize,
-} from 'app/components/loadingIndicator/LoadingIndicator';
 import {
+  ANNOTATION_PAGE_TAB_KEYS,
   COMPONENT_PADDING,
   DEFAULT_REFERENCE_GENOME,
   DOCUMENT_TITLES,
@@ -59,6 +56,10 @@ import { COLOR_BLUE } from 'app/config/theme';
 import WithSeparator from 'react-with-separator';
 import LevelSelectionRow from './LevelSelectionRow';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
+import {
+  AlterationPageHashQueries,
+  GenePageHashQueries,
+} from 'app/shared/route/types';
 
 type Treatment = {
   level: string;
@@ -596,6 +597,10 @@ export default class ActionableGenesPage extends React.Component<
   }
 
   getAlterationCell(hugoSymbol: string, alterations: Alteration[]) {
+    const alterationPageHashQueries: AlterationPageHashQueries = {};
+    if (this.fdaSectionIsOpen) {
+      alterationPageHashQueries.tab = ANNOTATION_PAGE_TAB_KEYS.FDA;
+    }
     const linkedAlts = alterations.map<React.ReactNode>(
       (alteration, index: number) => (
         <>
@@ -606,6 +611,7 @@ export default class ActionableGenesPage extends React.Component<
             alterationRefGenomes={
               alteration.referenceGenomes as REFERENCE_GENOME[]
             }
+            hashQueries={alterationPageHashQueries}
           />
         </>
       )
@@ -686,8 +692,17 @@ export default class ActionableGenesPage extends React.Component<
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
         style: { whiteSpace: 'normal' },
-        Cell(props: { original: Treatment }) {
-          return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
+        Cell: (props: { original: Treatment }) => {
+          const hashQueries: GenePageHashQueries = {};
+          if (this.fdaSectionIsOpen) {
+            hashQueries.tab = ANNOTATION_PAGE_TAB_KEYS.FDA;
+          }
+          return (
+            <GenePageLink
+              hugoSymbol={props.original.hugoSymbol}
+              hashQueries={hashQueries}
+            />
+          );
         },
       },
       {

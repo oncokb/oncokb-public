@@ -10,8 +10,8 @@ import {
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
 import { Citations, Gene } from 'app/shared/api/generated/OncoKbAPI';
-import { Redirect, RouteComponentProps, Prompt } from 'react-router';
-import { Button, Col, Row, Modal } from 'react-bootstrap';
+import { Prompt, Redirect, RouteComponentProps } from 'react-router';
+import { Button, Col, Modal, Row } from 'react-bootstrap';
 import styles from './GenePage.module.scss';
 import {
   FdaLevelIcon,
@@ -30,6 +30,8 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
+  ANNOTATION_PAGE_TAB_KEYS,
+  ANNOTATION_PAGE_TAB_NAMES,
   DEFAULT_GENE,
   DEFAULT_MESSAGE_HEME_ONLY_DX,
   DEFAULT_MESSAGE_HEME_ONLY_PX,
@@ -39,13 +41,10 @@ import {
   PAGE_ROUTE,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
-  ANNOTATION_PAGE_TAB_KEYS,
-  ANNOTATION_PAGE_TAB_NAMES,
 } from 'app/config/constants';
 import {
   BiologicalVariant,
   ClinicalVariant,
-  FdaAlteration,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
@@ -78,6 +77,11 @@ import { Location } from 'history';
 import { Link } from 'react-router-dom';
 import { Version } from 'app/pages/LevelOfEvidencePage';
 import { FDA_ALTERATIONS_TABLE_COLUMNS } from 'app/pages/genePage/FdaUtils';
+import {
+  GenePageHashQueries,
+  GenePageSearchQueries,
+} from 'app/shared/route/types';
+import { getTabDefaultActiveKey } from 'app/shared/utils/TempAnnotationUtils';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -114,9 +118,7 @@ const HighestLevelItem: React.FunctionComponent<{
   }
   return (
     <span className={'d-flex align-items-center'}>
-      <span className={`oncokb level-${props.level}`} key={props.key}>
-        {levelText}
-      </span>
+      <span className={`oncokb level-${props.level}`}>{levelText}</span>
       {isFdaLevel ? (
         <FdaLevelIcon level={props.level} />
       ) : (
@@ -197,10 +199,6 @@ type GeneInfoProps = {
 type GeneInfoItem = {
   key: string;
   element: JSX.Element | string;
-};
-
-type SearchQueries = {
-  refGenome?: REFERENCE_GENOME;
 };
 
 const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
@@ -349,9 +347,11 @@ const LEAVING_PAGE_MESSAGE =
 export default class GenePage extends React.Component<GenePageProps, any> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground: boolean;
-  @observable selectedTab: string;
+  @observable selectedTab: ANNOTATION_PAGE_TAB_KEYS;
   @observable showModal = false;
   @observable lastLocation: Location;
+  @observable defaultSelectedTab: ANNOTATION_PAGE_TAB_KEYS =
+    ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL;
 
   private store: AnnotationStore;
   readonly reactions: IReactionDisposer[] = [];
@@ -656,11 +656,11 @@ export default class GenePage extends React.Component<GenePageProps, any> {
     this.store = new AnnotationStore({
       hugoSymbolQuery: this.hugoSymbolQuery,
     });
-    const queryStringsHash = QueryString.parse(window.location.hash) as {
-      selectedTab: string;
-    };
-    if (queryStringsHash.selectedTab) {
-      this.selectedTab = queryStringsHash.selectedTab;
+    const queryStringsHash = QueryString.parse(
+      window.location.hash
+    ) as GenePageHashQueries;
+    if (queryStringsHash.tab) {
+      this.selectedTab = queryStringsHash.tab;
     }
 
     this.reactions.push(
@@ -678,12 +678,24 @@ export default class GenePage extends React.Component<GenePageProps, any> {
       reaction(
         () => [props.routing.location.search],
         ([search]) => {
-          const queryStrings = QueryString.parse(search) as SearchQueries;
+          const queryStrings = QueryString.parse(
+            search
+          ) as GenePageSearchQueries;
           if (queryStrings.refGenome) {
             this.store.referenceGenomeQuery = queryStrings.refGenome;
           }
         },
         { fireImmediately: true }
+      ),
+      reaction(
+        () => [props.routing.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(hash) as GenePageHashQueries;
+          if (queryStrings.tab) {
+            this.defaultSelectedTab = queryStrings.tab;
+          }
+        },
+        true
       )
     );
   }
@@ -772,11 +784,14 @@ export default class GenePage extends React.Component<GenePageProps, any> {
 
   @autobind
   @action
-  onChangeTab(selectedTabKey: string) {
-    if (this.onFdaTab && selectedTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA) {
+  onChangeTab(newTabKey: ANNOTATION_PAGE_TAB_KEYS) {
+    if (this.onFdaTab && newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA) {
       this.showModal = true;
+    } else {
+      const newHash: GenePageHashQueries = { tab: newTabKey };
+      window.location.hash = QueryString.stringify(newHash);
     }
-    this.selectedTab = selectedTabKey;
+    this.selectedTab = newTabKey;
   }
 
   @action
@@ -898,19 +913,13 @@ export default class GenePage extends React.Component<GenePageProps, any> {
 
   @computed
   get tabDefaultActiveKey() {
-    if (this.txAlterations.length > 0) {
-      return ANNOTATION_PAGE_TAB_KEYS.TX;
-    }
-    if (this.dxAlterations.length > 0) {
-      return ANNOTATION_PAGE_TAB_KEYS.DX;
-    }
-    if (this.pxAlterations.length > 0) {
-      return ANNOTATION_PAGE_TAB_KEYS.PX;
-    }
-    if (this.store.fdaAlterations.result.length > 0) {
-      return ANNOTATION_PAGE_TAB_KEYS.FDA;
-    }
-    return ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL;
+    return getTabDefaultActiveKey(
+      this.txAlterations.length > 0,
+      this.dxAlterations.length > 0,
+      this.pxAlterations.length > 0,
+      this.store.fdaAlterations.result.length > 0,
+      this.defaultSelectedTab
+    );
   }
 
   @computed
