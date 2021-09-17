@@ -11,6 +11,7 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   data: T[];
   disableSearch?: boolean;
   fixedHeight?: boolean;
+  showPagination?: boolean;
   pageSize?: number;
   minRows?: number;
   columns: SearchColumn<T>[];
@@ -25,6 +26,7 @@ export default class OncoKBTable<T> extends React.Component<
 
   public static defaultProps = {
     disableSearch: false,
+    showPagination: false,
     searchIconClassName: 'fa fa-search',
   };
 
@@ -63,7 +65,7 @@ export default class OncoKBTable<T> extends React.Component<
         )}
         <div className="mt-2">
           <ReactTable
-            showPagination={false}
+            showPagination={this.props.showPagination}
             className={`-striped -highlight oncokbReactTable ${
               this.props.fixedHeight ? 'fixedHeight' : ''
             }`}

@@ -9,16 +9,12 @@ import {
   reaction,
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
+import { Citations, Gene } from 'app/shared/api/generated/OncoKbAPI';
 import { Redirect, RouteComponentProps } from 'react-router';
 import { Col, Row } from 'react-bootstrap';
-import { Citations, Gene } from 'app/shared/api/generated/OncoKbAPI';
-import {
-  BiologicalVariant,
-  ClinicalVariant,
-  TumorType,
-} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import styles from './GenePage.module.scss';
 import {
+  FdaLevelIcon,
   filterByKeyword,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
@@ -34,15 +30,24 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { ReportIssue } from 'app/components/ReportIssue';
 import Tabs from 'react-responsive-tabs';
 import {
+  ANNOTATION_PAGE_TAB_KEYS,
+  ANNOTATION_PAGE_TAB_NAMES,
   DEFAULT_GENE,
   DEFAULT_MESSAGE_HEME_ONLY_DX,
   DEFAULT_MESSAGE_HEME_ONLY_PX,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
   LEVELS,
+  PAGE_ROUTE,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
 } from 'app/config/constants';
+import {
+  BiologicalVariant,
+  ClinicalVariant,
+  FdaAlteration,
+  TumorType,
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
   AlterationPageLink,
   CitationLink,
@@ -63,12 +68,20 @@ import { Linkout } from 'app/shared/links/Linkout';
 import { ReferenceGenomeInfo } from './ReferenceGenomeInfo';
 import WithSeparator from 'react-with-separator';
 import { GenePageTable } from './GenePageTable';
-import * as QueryString from 'query-string';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
-import { RouterStore } from 'mobx-react-router';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
+import * as QueryString from 'query-string';
+import { RouterStore } from 'mobx-react-router';
+import { Link } from 'react-router-dom';
+import { Version } from 'app/pages/LevelOfEvidencePage';
+import { FDA_ALTERATIONS_TABLE_COLUMNS } from 'app/pages/genePage/FdaUtils';
+import {
+  GenePageHashQueries,
+  GenePageSearchQueries,
+} from 'app/shared/route/types';
+import { getTabDefaultActiveKey } from 'app/shared/utils/TempAnnotationUtils';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -90,12 +103,27 @@ const HighestLevelItem: React.FunctionComponent<{
   level: LEVELS;
   key?: string;
 }> = props => {
+  let isFdaLevel = false;
+  let levelText = '';
+  switch (props.level) {
+    case LEVELS.FDAx1:
+    case LEVELS.FDAx2:
+    case LEVELS.FDAx3:
+      levelText = `FDA Level ${props.level.replace('FDAx', '')}`;
+      isFdaLevel = true;
+      break;
+    default:
+      levelText = `Level ${props.level}`;
+      break;
+  }
   return (
     <span className={'d-flex align-items-center'}>
-      <span className={`oncokb level-${props.level}`} key={props.key}>
-        Level {props.level}
-      </span>
-      <OncoKBLevelIcon level={props.level} withDescription />
+      <span className={`oncokb level-${props.level}`}>{levelText}</span>
+      {isFdaLevel ? (
+        <FdaLevelIcon level={props.level} />
+      ) : (
+        <OncoKBLevelIcon level={props.level} withDescription />
+      )}
     </span>
   );
 };
@@ -105,6 +133,7 @@ export const getHighestLevelStrings = (
   highestResistanceLevel: string | undefined,
   highestDiagnosticImplicationLevel?: string | undefined,
   highestPrognosticImplicationLevel?: string | undefined,
+  highestFdaLevel: string | undefined,
   separator: string | JSX.Element = ', '
 ) => {
   const levels: React.ReactNode[] = [];
@@ -144,6 +173,10 @@ export const getHighestLevelStrings = (
       />
     );
   }
+  if (highestFdaLevel) {
+    const level = levelOfEvidence2Level(highestFdaLevel, false);
+    levels.push(<HighestLevelItem level={level} key={'highestFdaLevel'} />);
+  }
   return (
     <WithSeparator
       separator={<span className="mx-1">·</span>}
@@ -160,15 +193,12 @@ type GeneInfoProps = {
   highestResistanceLevel: string | undefined;
   highestDiagnosticImplicationLevel?: string | undefined;
   highestPrognosticImplicationLevel?: string | undefined;
+  highestFdaLevel?: string | undefined;
 };
 
 type GeneInfoItem = {
   key: string;
   element: JSX.Element | string;
-};
-
-type SearchQueries = {
-  refGenome?: REFERENCE_GENOME;
 };
 
 const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
@@ -192,7 +222,8 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
     props.highestResistanceLevel ||
     props.highestSensitiveLevel ||
     props.highestDiagnosticImplicationLevel ||
-    props.highestPrognosticImplicationLevel
+    props.highestPrognosticImplicationLevel ||
+    props.highestFdaLevel
   ) {
     info.push({
       key: 'loe',
@@ -204,7 +235,8 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
               props.highestSensitiveLevel,
               props.highestResistanceLevel,
               props.highestDiagnosticImplicationLevel,
-              props.highestPrognosticImplicationLevel
+              props.highestPrognosticImplicationLevel,
+              props.highestFdaLevel
             )}
           </h5>
         </div>
@@ -273,13 +305,6 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   );
 };
 
-enum TAB_KEYS {
-  'BIOLOGICAL',
-  'TX',
-  'DX',
-  'PX',
-}
-
 const GeneBackground: React.FunctionComponent<{
   show: boolean;
   geneBackground: string;
@@ -316,9 +341,12 @@ interface GenePageProps extends RouteComponentProps<MatchParams> {
 
 @inject('appStore', 'windowStore', 'routing')
 @observer
-export default class GenePage extends React.Component<GenePageProps> {
+export default class GenePage extends React.Component<GenePageProps, any> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground: boolean;
+  @observable selectedTab: ANNOTATION_PAGE_TAB_KEYS;
+  @observable defaultSelectedTab: ANNOTATION_PAGE_TAB_KEYS =
+    ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL;
 
   private store: AnnotationStore;
   readonly reactions: IReactionDisposer[] = [];
@@ -615,6 +643,31 @@ export default class GenePage extends React.Component<GenePageProps> {
     ];
   }
 
+  @computed
+  get fdaTableColumns() {
+    return [
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+        accessor: 'alteration',
+        width: 400,
+        onFilter: (data: FdaAlteration, keyword: string) =>
+          filterByKeyword(data.alteration.name, keyword),
+        Cell: (props: { original: FdaAlteration }) => {
+          return (
+            <AlterationPageLink
+              hugoSymbol={props.original.alteration.gene.hugoSymbol}
+              alteration={props.original.alteration.name}
+              hashQueries={{ tab: ANNOTATION_PAGE_TAB_KEYS.FDA }}
+              onClick={() => {
+                this.props.appStore.toFdaRecognizedContent = true;
+              }}
+            />
+          );
+        },
+      },
+      ...FDA_ALTERATIONS_TABLE_COLUMNS,
+    ];
+  }
   constructor(props: any) {
     super(props);
     this.hugoSymbolQuery = props.match.params
@@ -623,6 +676,12 @@ export default class GenePage extends React.Component<GenePageProps> {
     this.store = new AnnotationStore({
       hugoSymbolQuery: this.hugoSymbolQuery,
     });
+    const queryStringsHash = QueryString.parse(
+      window.location.hash
+    ) as GenePageHashQueries;
+    if (queryStringsHash.tab) {
+      this.selectedTab = queryStringsHash.tab;
+    }
 
     this.reactions.push(
       reaction(
@@ -639,14 +698,33 @@ export default class GenePage extends React.Component<GenePageProps> {
       reaction(
         () => [props.routing.location.search],
         ([search]) => {
-          const queryStrings = QueryString.parse(search) as SearchQueries;
+          const queryStrings = QueryString.parse(
+            search
+          ) as GenePageSearchQueries;
           if (queryStrings.refGenome) {
             this.store.referenceGenomeQuery = queryStrings.refGenome;
           }
         },
         { fireImmediately: true }
+      ),
+      reaction(
+        () => [props.routing.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(hash) as GenePageHashQueries;
+          if (queryStrings.tab) {
+            this.defaultSelectedTab = queryStrings.tab;
+            if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+              this.props.appStore.inFdaRecognizedContent = true;
+            }
+          }
+        },
+        true
       )
     );
+  }
+
+  isOncogenicMutations(alteration: string) {
+    return alteration.toLowerCase() === 'oncogenic mutations';
   }
 
   componentDidUpdate(prevProps: any) {
@@ -664,15 +742,15 @@ export default class GenePage extends React.Component<GenePageProps> {
     this.showGeneBackground = !this.showGeneBackground;
   }
 
-  getTabDescription(key: TAB_KEYS) {
-    if (key === TAB_KEYS.BIOLOGICAL) {
+  getTabDescription(key: ANNOTATION_PAGE_TAB_KEYS) {
+    if (key === ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL) {
       return (
         <span>
           A list of the oncogenic and mutation effects of{' '}
           <b>all OncoKB curated</b> {this.store.hugoSymbol} alterations.
         </span>
       );
-    } else if (key === TAB_KEYS.TX) {
+    } else if (key === ANNOTATION_PAGE_TAB_KEYS.TX) {
       return (
         <span>
           A list of the cancer type-specific {this.store.hugoSymbol} alterations
@@ -684,7 +762,7 @@ export default class GenePage extends React.Component<GenePageProps> {
           .
         </span>
       );
-    } else if (key === TAB_KEYS.DX) {
+    } else if (key === ANNOTATION_PAGE_TAB_KEYS.DX) {
       return (
         <span>
           A list of diagnostic {this.store.hugoSymbol} alterations and the
@@ -695,7 +773,7 @@ export default class GenePage extends React.Component<GenePageProps> {
           . {DEFAULT_MESSAGE_HEME_ONLY_DX}
         </span>
       );
-    } else if (key === TAB_KEYS.PX) {
+    } else if (key === ANNOTATION_PAGE_TAB_KEYS.PX) {
       return (
         <span>
           A list of tumor-type specific prognostic {this.store.hugoSymbol}{' '}
@@ -706,14 +784,46 @@ export default class GenePage extends React.Component<GenePageProps> {
           . {DEFAULT_MESSAGE_HEME_ONLY_PX}
         </span>
       );
+    } else if (key === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+      return (
+        <span>
+          A list of the tumor type-specific {this.store.hugoSymbol} alterations
+          and the corresponding{' '}
+          <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}>
+            FDA Level of Evidence
+          </Link>{' '}
+          assigning their clinical significance. The assigned{' '}
+          <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
+            FDA level of evidence
+          </Link>{' '}
+          is based on these alterations being tested in Formalin Fixed Paraffin
+          Embedded (FFPE) specimen types, except in cases where specimen type is
+          not specified.
+        </span>
+      );
     }
     return null;
   }
 
+  @autobind
   @action
-  getTable(key: TAB_KEYS) {
+  onChangeTab(newTabKey: ANNOTATION_PAGE_TAB_KEYS) {
+    if (newTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+      this.props.appStore.inFdaRecognizedContent = true;
+    }
+    if (this.onFdaTab && newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA) {
+      this.props.appStore.showFdaModal = true;
+    } else {
+      const newHash: GenePageHashQueries = { tab: newTabKey };
+      window.location.hash = QueryString.stringify(newHash);
+    }
+    this.selectedTab = newTabKey;
+  }
+
+  @action
+  getTable(key: ANNOTATION_PAGE_TAB_KEYS) {
     switch (key) {
-      case TAB_KEYS.BIOLOGICAL:
+      case ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL:
         return (
           <GenePageTable
             data={this.store.filteredBiologicalAlterations}
@@ -721,7 +831,7 @@ export default class GenePage extends React.Component<GenePageProps> {
             isPending={this.store.biologicalAlterations.isPending}
           />
         );
-      case TAB_KEYS.TX:
+      case ANNOTATION_PAGE_TAB_KEYS.TX:
         return (
           <GenePageTable
             data={this.filteredTxAlterations}
@@ -729,7 +839,7 @@ export default class GenePage extends React.Component<GenePageProps> {
             isPending={this.store.clinicalAlterations.isPending}
           />
         );
-      case TAB_KEYS.DX:
+      case ANNOTATION_PAGE_TAB_KEYS.DX:
         return (
           <GenePageTable
             data={this.filteredDxAlterations}
@@ -737,11 +847,19 @@ export default class GenePage extends React.Component<GenePageProps> {
             isPending={this.store.clinicalAlterations.isPending}
           />
         );
-      case TAB_KEYS.PX:
+      case ANNOTATION_PAGE_TAB_KEYS.PX:
         return (
           <GenePageTable
             data={this.filteredPxAlterations}
             columns={this.dxpxTableColumns}
+            isPending={this.store.clinicalAlterations.isPending}
+          />
+        );
+      case ANNOTATION_PAGE_TAB_KEYS.FDA:
+        return (
+          <GenePageTable
+            data={this.store.fdaAlterations.result}
+            columns={this.fdaTableColumns}
             isPending={this.store.clinicalAlterations.isPending}
           />
         );
@@ -752,32 +870,38 @@ export default class GenePage extends React.Component<GenePageProps> {
 
   @computed
   get tabs() {
-    const tabs: { title: string; key: TAB_KEYS }[] = [];
+    const tabs: { title: string; key: ANNOTATION_PAGE_TAB_KEYS }[] = [];
     if (this.store.biologicalAlterations.result.length > 0) {
       tabs.push({
-        key: TAB_KEYS.BIOLOGICAL,
-        title: 'Annotated Alterations',
+        key: ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL,
+        title: ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL],
       });
     }
     if (this.store.clinicalAlterations.result.length > 0) {
       if (this.txAlterations.length > 0) {
         tabs.push({
-          key: TAB_KEYS.TX,
-          title: 'Therapeutic',
+          key: ANNOTATION_PAGE_TAB_KEYS.TX,
+          title: ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.TX],
         });
       }
       if (this.dxAlterations.length > 0) {
         tabs.push({
-          key: TAB_KEYS.DX,
-          title: `Diagnostic`,
+          key: ANNOTATION_PAGE_TAB_KEYS.DX,
+          title: ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.DX],
         });
       }
       if (this.pxAlterations.length > 0) {
         tabs.push({
-          key: TAB_KEYS.PX,
-          title: `Prognostic`,
+          key: ANNOTATION_PAGE_TAB_KEYS.PX,
+          title: ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.PX],
         });
       }
+    }
+    if (this.store.fdaAlterations.result.length > 0) {
+      tabs.push({
+        key: ANNOTATION_PAGE_TAB_KEYS.FDA,
+        title: ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.FDA],
+      });
     }
     return tabs;
   }
@@ -804,16 +928,20 @@ export default class GenePage extends React.Component<GenePageProps> {
 
   @computed
   get tabDefaultActiveKey() {
-    if (this.txAlterations.length > 0) {
-      return TAB_KEYS.TX;
-    }
-    if (this.dxAlterations.length > 0) {
-      return TAB_KEYS.DX;
-    }
-    if (this.pxAlterations.length > 0) {
-      return TAB_KEYS.PX;
-    }
-    return TAB_KEYS.BIOLOGICAL;
+    return getTabDefaultActiveKey(
+      this.txAlterations.length > 0,
+      this.dxAlterations.length > 0,
+      this.pxAlterations.length > 0,
+      this.store.fdaAlterations.result.length > 0,
+      this.defaultSelectedTab
+    );
+  }
+
+  @computed
+  get onFdaTab() {
+    return this.selectedTab === undefined
+      ? this.tabDefaultActiveKey === ANNOTATION_PAGE_TAB_KEYS.FDA
+      : this.selectedTab === ANNOTATION_PAGE_TAB_KEYS.FDA;
   }
 
   @computed
@@ -916,6 +1044,7 @@ export default class GenePage extends React.Component<GenePageProps> {
                                 this.store.geneNumber.result
                                   .highestPrognosticImplicationLevel
                               }
+                              highestFdaLevel={this.store.highestFdaLevel}
                             />
                             {this.store.geneSummary.result ? (
                               <div className="mt-2">
@@ -1005,6 +1134,12 @@ export default class GenePage extends React.Component<GenePageProps> {
                       <Row className={'mt-2'}>
                         <Col>
                           <Tabs
+                            selectedTabKey={
+                              this.selectedTab
+                                ? this.selectedTab
+                                : this.tabDefaultActiveKey
+                            }
+                            onChange={this.onChangeTab}
                             items={this.tabs.map(tab => {
                               return {
                                 title: tab.title,
@@ -1033,7 +1168,6 @@ export default class GenePage extends React.Component<GenePageProps> {
                               };
                             })}
                             transform={false}
-                            selectedTabKey={this.tabDefaultActiveKey}
                           />
                         </Col>
                       </Row>

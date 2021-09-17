@@ -15,7 +15,7 @@ export const HomePageNumber: React.FunctionComponent<HomePageNumberProps> = prop
     <div className="d-flex flex-column align-items-center">
       <HighlightLinkButton href={props.href}>
         {props.isLoading ? (
-          <LoadingIndicator isLoading size={LoaderSize.EXTRA_SMALL} />
+          <LoadingIndicator isLoading size={LoaderSize.SMALL} />
         ) : (
           <span>{props.number}</span>
         )}

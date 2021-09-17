@@ -421,6 +421,14 @@ export type TypeaheadSearchResp = {
         'vus': boolean
 
 };
+export type FdaAlteration = {
+    'alteration': Alteration
+
+        'cancerType': string
+
+        'level': string
+
+};
 export type VariantAnnotationTumorType = {
     'evidences': Array < Evidence >
 
@@ -1413,6 +1421,81 @@ export default class OncoKbPrivateAPI {
             return response.body;
         });
     };
+    utilsFdaAlterationsGetUsingGETURL(parameters: {
+        'hugoSymbol' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/fdaAlterations';
+        if (parameters['hugoSymbol'] !== undefined) {
+            queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the full list of FDA alterations.
+     * @method
+     * @name OncoKbPrivateAPI#utilsFdaAlterationsGetUsingGET
+     * @param {string} hugoSymbol - Gene hugo symbol
+     */
+    utilsFdaAlterationsGetUsingGETWithHttpInfo(parameters: {
+        'hugoSymbol' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/fdaAlterations';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['hugoSymbol'] !== undefined) {
+                queryParameters['hugoSymbol'] = parameters['hugoSymbol'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the full list of FDA alterations.
+     * @method
+     * @name OncoKbPrivateAPI#utilsFdaAlterationsGetUsingGET
+     * @param {string} hugoSymbol - Gene hugo symbol
+     */
+    utilsFdaAlterationsGetUsingGET(parameters: {
+            'hugoSymbol' ? : string,
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < FdaAlteration >
+        > {
+            return this.utilsFdaAlterationsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     utilsHotspotMutationGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
         'variant' ? : string,
@@ -1750,6 +1833,68 @@ export default class OncoKbPrivateAPI {
                 return response.body;
             });
         };
+    utilsNumbersFdaGetUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/numbers/fda/';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get gene related numbers of all fda alterations. This is for main page word cloud.
+     * @method
+     * @name OncoKbPrivateAPI#utilsNumbersFdaGetUsingGET
+     */
+    utilsNumbersFdaGetUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/numbers/fda/';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get gene related numbers of all fda alterations. This is for main page word cloud.
+     * @method
+     * @name OncoKbPrivateAPI#utilsNumbersFdaGetUsingGET
+     */
+    utilsNumbersFdaGetUsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < {} > {
+        return this.utilsNumbersFdaGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     utilsNumbersGeneGetUsingGETURL(parameters: {
         'hugoSymbol': string,
         $queryParameters ? : any
