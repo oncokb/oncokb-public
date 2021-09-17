@@ -138,10 +138,10 @@ export enum LEVEL_TYPES {
 }
 
 export enum ANNOTATION_PAGE_TAB_KEYS {
-  BIOLOGICAL = 'BIOLOGICAL',
-  TX = 'TX',
-  DX = 'DX',
-  PX = 'PX',
+  BIOLOGICAL = 'Biological',
+  TX = 'Tx',
+  DX = 'Dx',
+  PX = 'Px',
   FDA = 'FDA',
 }
 

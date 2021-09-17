@@ -44,7 +44,7 @@ export type ExtendedTypeaheadSearchResp = TypeaheadSearchResp & {
 
 @inject('routing', 'appStore')
 @observer
-class HomePage extends React.Component<IHomeProps> {
+class HomePage extends React.Component<IHomeProps, {}> {
   @observable keyword = '';
   @observable levelTypeSelected = LEVEL_TYPES.TX;
   private levelGadgets = this.generateLevelGadgets();

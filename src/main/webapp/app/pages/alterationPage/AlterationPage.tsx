@@ -32,7 +32,9 @@ import * as QueryString from 'query-string';
 import {
   AlterationPageHashQueries,
   AlterationPageSearchQueries,
+  GenePageHashQueries,
 } from 'app/shared/route/types';
+import autobind from 'autobind-decorator';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -55,7 +57,7 @@ export default class AlterationPage extends React.Component<
 
   readonly reactions: IReactionDisposer[] = [];
 
-  private defaultSelectedTab: ANNOTATION_PAGE_TAB_KEYS;
+  private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
   constructor(props: any) {
     super(props);
@@ -100,7 +102,10 @@ export default class AlterationPage extends React.Component<
             hash
           ) as AlterationPageHashQueries;
           if (queryStrings.tab) {
-            this.defaultSelectedTab = queryStrings.tab;
+            this.selectedTab = queryStrings.tab;
+            if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+              this.props.appStore.inFdaRecognizedContent = true;
+            }
           }
         },
         true
@@ -161,9 +166,23 @@ export default class AlterationPage extends React.Component<
     return content.join(', ');
   }
 
+  @computed
+  get onFdaTab() {
+    return this.selectedTab === ANNOTATION_PAGE_TAB_KEYS.FDA;
+  }
+
+  @autobind
   onChangeTab(newTabKey: ANNOTATION_PAGE_TAB_KEYS) {
-    const newHash: AlterationPageHashQueries = { tab: newTabKey };
-    window.location.hash = QueryString.stringify(newHash);
+    if (newTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+      this.props.appStore.inFdaRecognizedContent = true;
+    }
+    if (this.onFdaTab && newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA) {
+      this.props.appStore.showFdaModal = true;
+    } else {
+      const newHash: AlterationPageHashQueries = { tab: newTabKey };
+      window.location.hash = QueryString.stringify(newHash);
+    }
+    this.selectedTab = newTabKey;
   }
 
   render() {
@@ -186,7 +205,7 @@ export default class AlterationPage extends React.Component<
                   onChangeTumorType={newTumorType =>
                     (this.store.tumorTypeQuery = newTumorType)
                   }
-                  defaultSelectedTab={this.defaultSelectedTab}
+                  defaultSelectedTab={this.selectedTab}
                   onChangeTab={this.onChangeTab}
                 />
               )

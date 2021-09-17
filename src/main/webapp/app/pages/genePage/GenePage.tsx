@@ -10,8 +10,8 @@ import {
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
 import { Citations, Gene } from 'app/shared/api/generated/OncoKbAPI';
-import { Prompt, Redirect, RouteComponentProps } from 'react-router';
-import { Button, Col, Modal, Row } from 'react-bootstrap';
+import { Redirect, RouteComponentProps } from 'react-router';
+import { Col, Row } from 'react-bootstrap';
 import styles from './GenePage.module.scss';
 import {
   FdaLevelIcon,
@@ -45,6 +45,7 @@ import {
 import {
   BiologicalVariant,
   ClinicalVariant,
+  FdaAlteration,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
@@ -73,7 +74,6 @@ import { FeedbackType } from 'app/components/feedback/types';
 import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import * as QueryString from 'query-string';
 import { RouterStore } from 'mobx-react-router';
-import { Location } from 'history';
 import { Link } from 'react-router-dom';
 import { Version } from 'app/pages/LevelOfEvidencePage';
 import { FDA_ALTERATIONS_TABLE_COLUMNS } from 'app/pages/genePage/FdaUtils';
@@ -339,17 +339,12 @@ interface GenePageProps extends RouteComponentProps<MatchParams> {
   routing: RouterStore;
 }
 
-const LEAVING_PAGE_MESSAGE =
-  'You are now leaving the FDA-recognized portion of this page.';
-
 @inject('appStore', 'windowStore', 'routing')
 @observer
 export default class GenePage extends React.Component<GenePageProps, any> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground: boolean;
   @observable selectedTab: ANNOTATION_PAGE_TAB_KEYS;
-  @observable showModal = false;
-  @observable lastLocation: Location;
   @observable defaultSelectedTab: ANNOTATION_PAGE_TAB_KEYS =
     ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL;
 
@@ -648,6 +643,31 @@ export default class GenePage extends React.Component<GenePageProps, any> {
     ];
   }
 
+  @computed
+  get fdaTableColumns() {
+    return [
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+        accessor: 'alteration',
+        width: 400,
+        onFilter: (data: FdaAlteration, keyword: string) =>
+          filterByKeyword(data.alteration.name, keyword),
+        Cell: (props: { original: FdaAlteration }) => {
+          return (
+            <AlterationPageLink
+              hugoSymbol={props.original.alteration.gene.hugoSymbol}
+              alteration={props.original.alteration.name}
+              hashQueries={{ tab: ANNOTATION_PAGE_TAB_KEYS.FDA }}
+              onClick={() => {
+                this.props.appStore.toFdaRecognizedContent = true;
+              }}
+            />
+          );
+        },
+      },
+      ...FDA_ALTERATIONS_TABLE_COLUMNS,
+    ];
+  }
   constructor(props: any) {
     super(props);
     this.hugoSymbolQuery = props.match.params
@@ -693,6 +713,9 @@ export default class GenePage extends React.Component<GenePageProps, any> {
           const queryStrings = QueryString.parse(hash) as GenePageHashQueries;
           if (queryStrings.tab) {
             this.defaultSelectedTab = queryStrings.tab;
+            if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+              this.props.appStore.inFdaRecognizedContent = true;
+            }
           }
         },
         true
@@ -785,8 +808,11 @@ export default class GenePage extends React.Component<GenePageProps, any> {
   @autobind
   @action
   onChangeTab(newTabKey: ANNOTATION_PAGE_TAB_KEYS) {
+    if (newTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+      this.props.appStore.inFdaRecognizedContent = true;
+    }
     if (this.onFdaTab && newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA) {
-      this.showModal = true;
+      this.props.appStore.showFdaModal = true;
     } else {
       const newHash: GenePageHashQueries = { tab: newTabKey };
       window.location.hash = QueryString.stringify(newHash);
@@ -833,24 +859,13 @@ export default class GenePage extends React.Component<GenePageProps, any> {
         return (
           <GenePageTable
             data={this.store.fdaAlterations.result}
-            columns={FDA_ALTERATIONS_TABLE_COLUMNS}
+            columns={this.fdaTableColumns}
             isPending={this.store.clinicalAlterations.isPending}
           />
         );
       default:
         return <span />;
     }
-  }
-
-  @autobind
-  @action
-  handleBlockedNavigation(nextLocation: Location): boolean {
-    if (!this.showModal && this.onFdaTab) {
-      this.showModal = true;
-      this.lastLocation = nextLocation;
-      return false;
-    }
-    return true;
   }
 
   @computed
@@ -976,17 +991,6 @@ export default class GenePage extends React.Component<GenePageProps, any> {
       return { size: windowSize };
     }
     return this.props.windowStore;
-  }
-
-  @autobind
-  @action
-  confirmLeavingFdaTab() {
-    if (this.lastLocation) {
-      this.props.routing.history.push(
-        this.lastLocation.pathname + this.lastLocation.hash
-      );
-    }
-    this.showModal = false;
   }
 
   render() {
@@ -1167,24 +1171,6 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                           />
                         </Col>
                       </Row>
-                      <Modal
-                        show={this.showModal}
-                        onHide={this.confirmLeavingFdaTab}
-                      >
-                        <Modal.Body>{LEAVING_PAGE_MESSAGE}</Modal.Body>
-                        <Modal.Footer>
-                          <Button
-                            variant="primary"
-                            onClick={this.confirmLeavingFdaTab}
-                          >
-                            OK
-                          </Button>
-                        </Modal.Footer>
-                      </Modal>
-                      <Prompt
-                        when={this.onFdaTab}
-                        message={this.handleBlockedNavigation}
-                      />
                     </Then>
                     <Else>
                       <LoadingIndicator

@@ -57,9 +57,11 @@ import WithSeparator from 'react-with-separator';
 import LevelSelectionRow from './LevelSelectionRow';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import {
+  ActionableGenesPageHashQueries,
   AlterationPageHashQueries,
   GenePageHashQueries,
 } from 'app/shared/route/types';
+import AppStore from 'app/store/AppStore';
 
 type Treatment = {
   level: string;
@@ -74,18 +76,11 @@ type Treatment = {
 type ActionableGenesPageProps = {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
-};
-
-type HashQueries = {
-  levels?: string[];
-  hugoSymbol?: string;
-  tumorType?: string;
-  drug?: string;
-  refGenome?: REFERENCE_GENOME;
+  appStore: AppStore;
 };
 
 type EvidencesByLevel = { [level: string]: Evidence[] };
-@inject('routing', 'authenticationStore')
+@inject('routing', 'authenticationStore', 'appStore')
 @observer
 export default class ActionableGenesPage extends React.Component<
   ActionableGenesPageProps,
@@ -98,7 +93,7 @@ export default class ActionableGenesPage extends React.Component<
   @observable levelSelected: {
     [level: LEVELS]: boolean;
   } = this.initLevelSelected();
-  @observable collapseStatus = {
+  @observable collapseStatus: { [key in LEVEL_TYPES]: boolean } = {
     [LEVEL_TYPES.TX]: true,
     [LEVEL_TYPES.DX]: false,
     [LEVEL_TYPES.PX]: false,
@@ -185,7 +180,7 @@ export default class ActionableGenesPage extends React.Component<
         ([hash]) => {
           const queryStrings = QueryString.parse(hash, {
             arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING,
-          }) as HashQueries;
+          }) as ActionableGenesPageHashQueries;
           if (queryStrings.levels) {
             this.levelSelected = this.initLevelSelected();
             (_.isArray(queryStrings.levels)
@@ -216,6 +211,17 @@ export default class ActionableGenesPage extends React.Component<
           if (queryStrings.refGenome) {
             this.refGenome = queryStrings.refGenome;
           }
+          if (queryStrings.sections) {
+            const visibleSections = _.isArray(queryStrings.sections)
+              ? queryStrings.sections
+              : [queryStrings.sections];
+            visibleSections.forEach(
+              section => (this.collapseStatus[section] = true)
+            );
+            if (visibleSections.includes(LEVEL_TYPES.FDA)) {
+              this.props.appStore.toFdaRecognizedContent = true;
+            }
+          }
         },
         { fireImmediately: true }
       ),
@@ -236,6 +242,7 @@ export default class ActionableGenesPage extends React.Component<
             this.collapseStatus[LEVEL_TYPES.TX] = false;
             this.collapseStatus[LEVEL_TYPES.DX] = false;
             this.collapseStatus[LEVEL_TYPES.PX] = false;
+            this.props.appStore.inFdaRecognizedContent = true;
             ONCOKB_LEVELS.forEach(oncokbLevel => {
               if (this.levelSelected[oncokbLevel]) {
                 this.levelSelected[oncokbLevel] = false;
@@ -256,6 +263,7 @@ export default class ActionableGenesPage extends React.Component<
             FDA_LEVELS.forEach(fdaLevel => {
               this.levelSelected[fdaLevel] = false;
             });
+            this.props.appStore.showFdaModal = true;
           }
         }
       )
@@ -313,7 +321,7 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get hashQueries() {
-    const queryString: Partial<HashQueries> = {};
+    const queryString: ActionableGenesPageHashQueries = {};
     if (this.selectedLevels.length > 0) {
       queryString.levels = this.selectedLevels;
     }
@@ -325,6 +333,19 @@ export default class ActionableGenesPage extends React.Component<
     }
     if (this.drugSearchKeyword) {
       queryString.drug = this.drugSearchKeyword;
+    }
+    const visibleSections = _.chain(this.collapseStatus)
+      .values()
+      .filter(sectionStatus => sectionStatus)
+      .value();
+    if (visibleSections.length > 0) {
+      const sections: LEVEL_TYPES[] = [];
+      for (const visibleSection in this.collapseStatus) {
+        if (this.collapseStatus[visibleSection]) {
+          sections.push(visibleSection as LEVEL_TYPES);
+        }
+      }
+      queryString.sections = sections;
     }
     return queryString;
   }
@@ -612,6 +633,11 @@ export default class ActionableGenesPage extends React.Component<
               alteration.referenceGenomes as REFERENCE_GENOME[]
             }
             hashQueries={alterationPageHashQueries}
+            onClick={() => {
+              if (this.fdaSectionIsOpen) {
+                this.props.appStore.toFdaRecognizedContent = true;
+              }
+            }}
           />
         </>
       )
@@ -701,6 +727,11 @@ export default class ActionableGenesPage extends React.Component<
             <GenePageLink
               hugoSymbol={props.original.hugoSymbol}
               hashQueries={hashQueries}
+              onClick={() => {
+                if (this.fdaSectionIsOpen) {
+                  this.props.appStore.toFdaRecognizedContent = true;
+                }
+              }}
             />
           );
         },

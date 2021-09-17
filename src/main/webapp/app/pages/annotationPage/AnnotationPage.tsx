@@ -1,7 +1,11 @@
 import React from 'react';
 import { inject } from 'mobx-react';
 
-import { GenePageLink, OncoTreeLink } from 'app/shared/utils/UrlUtils';
+import {
+  AlterationPageLink,
+  GenePageLink,
+  OncoTreeLink,
+} from 'app/shared/utils/UrlUtils';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   ANNOTATION_PAGE_TAB_NAMES,
@@ -23,7 +27,6 @@ import classnames from 'classnames';
 import { action, computed } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
-  ClinicalVariant,
   Evidence,
   FdaAlteration,
   VariantAnnotation,
@@ -32,6 +35,7 @@ import {
 import { TherapeuticImplication } from 'app/store/AnnotationStore';
 import {
   articles2Citations,
+  filterByKeyword,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getHighestFdaLevel,
@@ -90,6 +94,7 @@ export default class AnnotationPage extends React.Component<
   IAnnotationPage,
   {}
 > {
+  private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
   getTherapeuticImplications(evidences: Evidence[]) {
     return evidences.map(evidence => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
@@ -314,6 +319,32 @@ export default class AnnotationPage extends React.Component<
     ];
   }
 
+  @computed
+  get fdaTableColumns() {
+    return [
+      {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
+        accessor: 'alteration',
+        width: 400,
+        onFilter: (data: FdaAlteration, keyword: string) =>
+          filterByKeyword(data.alteration.name, keyword),
+        Cell: (props: { original: FdaAlteration }) => {
+          return (
+            <AlterationPageLink
+              hugoSymbol={props.original.alteration.gene.hugoSymbol}
+              alteration={props.original.alteration.name}
+              hashQueries={{ tab: ANNOTATION_PAGE_TAB_KEYS.FDA }}
+              onClick={() => {
+                this.props.appStore!.toFdaRecognizedContent = true;
+              }}
+            />
+          );
+        },
+      },
+      ...FDA_ALTERATIONS_TABLE_COLUMNS,
+    ];
+  }
+
   formatGroupLabel(data: any) {
     return <span>{data.label}</span>;
   }
@@ -366,7 +397,7 @@ export default class AnnotationPage extends React.Component<
         return (
           <GenePageTable
             data={this.props.fdaAlterations ? this.props.fdaAlterations : []}
-            columns={FDA_ALTERATIONS_TABLE_COLUMNS}
+            columns={this.fdaTableColumns}
             isPending={false}
           />
         );
@@ -571,6 +602,7 @@ export default class AnnotationPage extends React.Component<
               transform={false}
               selectedTabKey={this.tabDefaultActiveKey}
               onChange={(tabKey: ANNOTATION_PAGE_TAB_KEYS) => {
+                this.selectedTab = tabKey;
                 if (this.props.onChangeTab) {
                   this.props.onChangeTab(tabKey);
                 }

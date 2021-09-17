@@ -1,5 +1,6 @@
 import {
   ANNOTATION_PAGE_TAB_KEYS,
+  LEVEL_TYPES,
   REFERENCE_GENOME,
 } from 'app/config/constants';
 
@@ -15,3 +16,12 @@ export type GenePageHashQueries = AnnotationPageHashQueries & {};
 
 export type AlterationPageSearchQueries = AnnotationPageSearchQueries & {};
 export type AlterationPageHashQueries = AnnotationPageHashQueries & {};
+
+export type ActionableGenesPageHashQueries = {
+  sections?: LEVEL_TYPES[];
+  levels?: string[];
+  hugoSymbol?: string;
+  tumorType?: string;
+  drug?: string;
+  refGenome?: REFERENCE_GENOME;
+};

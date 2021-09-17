@@ -30,6 +30,7 @@ export const GenePageLink: React.FunctionComponent<{
   highlightContent?: boolean;
   searchQueries?: GenePageSearchQueries;
   hashQueries?: GenePageHashQueries;
+  onClick?: () => void;
 }> = props => {
   const highlightContent =
     props.highlightContent === undefined ? true : props.highlightContent;
@@ -45,6 +46,7 @@ export const GenePageLink: React.FunctionComponent<{
     <Link
       style={{ color: highlightContent ? undefined : 'black' }}
       to={pageLink}
+      onClick={props.onClick}
     >
       {props.content ? props.content : props.hugoSymbol}
     </Link>
@@ -59,6 +61,7 @@ export const AlterationPageLink: React.FunctionComponent<{
   hashQueries?: AlterationPageHashQueries;
   showGene?: boolean;
   content?: string;
+  onClick?: () => void;
 }> = props => {
   let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`;
   const searchQueries = props.searchQueries || {};
@@ -76,7 +79,7 @@ export const AlterationPageLink: React.FunctionComponent<{
     pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
   }
   return (
-    <Link to={pageLink}>
+    <Link to={pageLink} onClick={props.onClick}>
       {props.content
         ? props.content
         : props.showGene

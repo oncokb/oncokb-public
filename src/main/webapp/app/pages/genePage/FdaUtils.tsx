@@ -12,6 +12,7 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import * as styles from 'app/index.module.scss';
 import { FdaAlteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
+  ANNOTATION_PAGE_TAB_KEYS,
   LEVEL_PRIORITY,
   LEVELS,
   PAGE_ROUTE,
@@ -148,21 +149,6 @@ export const FDA_L1_DISABLED_BTN_TOOLTIP =
   'Since OncoKB does not include any CDx claims prescriptive for a specific therapeutic product, by definition, no variants in OncoKB are considered FDA Level 1.';
 
 export const FDA_ALTERATIONS_TABLE_COLUMNS = [
-  {
-    ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
-    accessor: 'alteration',
-    width: 400,
-    onFilter: (data: FdaAlteration, keyword: string) =>
-      filterByKeyword(data.alteration.name, keyword),
-    Cell(props: { original: FdaAlteration }) {
-      return (
-        <AlterationPageLink
-          hugoSymbol={props.original.alteration.gene.hugoSymbol}
-          alteration={props.original.alteration.name}
-        />
-      );
-    },
-  },
   {
     ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
     accessor: 'cancerType',
