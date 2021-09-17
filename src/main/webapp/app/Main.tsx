@@ -4,9 +4,9 @@ import Header from './components/Header';
 import { observer } from 'mobx-react';
 import AppRouts from 'app/routes/routes';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
 import { Stores } from 'app/App';
-import { withRouter } from 'react-router';
+import { Prompt, withRouter } from 'react-router';
 import {
   AUTHORITIES,
   DEFAULT_FEEDBACK_ANNOTATION,
@@ -15,6 +15,9 @@ import {
 import { ToastContainer } from 'react-toastify';
 import { computed } from 'mobx';
 import { FeedbackModal } from './components/feedback/FeedbackModal';
+import { FdaModal } from 'app/components/fdaModal/FdaModal';
+import { Location } from 'history';
+import autobind from 'autobind-decorator';
 
 export type IMainPage = Stores;
 
@@ -32,6 +35,28 @@ class Main extends React.Component<IMainPage> {
       ...annotation,
       ...this.props.appStore.feedbackAnnotation,
     };
+  }
+
+  @autobind
+  handleBlockedNavigation(nextLocation: Location): boolean {
+    // The clause of includes FDA is very broad. This is used for the Link component.
+    if (
+      this.props.appStore.inFdaRecognizedContent &&
+      !(
+        this.props.appStore.toFdaRecognizedContent ||
+        (nextLocation.hash || '').includes('FDA')
+      )
+    ) {
+      this.props.appStore.showFdaModal = true;
+    }
+    return true;
+  }
+
+  @autobind
+  afterConfirm() {
+    this.props.appStore.showFdaModal = false;
+    this.props.appStore.inFdaRecognizedContent = false;
+    this.props.appStore.toFdaRecognizedContent = false;
   }
 
   public render() {
@@ -84,6 +109,16 @@ class Main extends React.Component<IMainPage> {
             this.props.appStore.showFeedbackFormModal = false;
             this.props.appStore.feedbackAnnotation = undefined;
           }}
+        />
+        <Prompt
+          when={this.props.appStore.inFdaRecognizedContent}
+          message={this.handleBlockedNavigation}
+        />
+        <FdaModal
+          routing={this.props.routing}
+          show={this.props.appStore.showFdaModal}
+          onHide={this.afterConfirm}
+          lastLocation={this.props.appStore.fdaRedirectLastLocation}
         />
         <Footer
           lastDataUpdate={this.props.appStore.appInfo.result.dataVersion.date}

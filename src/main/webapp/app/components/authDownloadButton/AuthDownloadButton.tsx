@@ -63,10 +63,10 @@ export class AuthDownloadButton extends React.Component<IAuthDownloadButton> {
         loading={this.downloading}
         {...rest}
       >
-        <>
+        <span style={{ whiteSpace: 'nowrap' }}>
           <i className={'fa fa-cloud-download mr-1'} />
           {buttonText}
-        </>
+        </span>
       </LoadingButton>
     );
   }

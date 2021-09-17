@@ -63,6 +63,8 @@ export const FACULTY_COI_WEBSITE_LINK = 'https://www.mskcc.org/disclosures';
 export const ONCOKB_DATAHUB_LINK = 'https://github.com/oncokb/oncokb-datahub';
 export const NONE_FACULTY_COI_WEBSITE_LINK =
   'https://docs.google.com/spreadsheets/d/1PKHV8ArVm4AFu4Rj-URWHcCAqnbWlm7p2-LOxhe0aFU/edit?usp=sharing';
+export const FDA_LEVELS_OF_EVIDENCE_LINK =
+  'https://www.fda.gov/media/109050/download';
 export const WEBINAR_LINKS_05072020 = (
   <span>
     <Linkout
@@ -79,6 +81,7 @@ export const WEBINAR_LINKS_05072020 = (
 
 export const REDIRECT_TIMEOUT_MILLISECONDS = 10000;
 export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;
+export const SHORTEN_TEXT_FROM_LIST_THRESHOLD = 5;
 export const TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS = 14;
 export const USAGE_TOP_USERS_LIMIT = 10000;
 export const USGAE_ALL_TIME_KEY = 'All';
@@ -131,12 +134,43 @@ export enum LEVEL_TYPES {
   TX = 'Tx',
   DX = 'Dx',
   PX = 'Px',
+  FDA = 'FDA',
 }
 
-export const LEVEL_TYPE_NAMES = {
+export enum ANNOTATION_PAGE_TAB_KEYS {
+  BIOLOGICAL = 'Biological',
+  TX = 'Tx',
+  DX = 'Dx',
+  PX = 'Px',
+  FDA = 'FDA',
+}
+
+export const LEVEL_TYPE_NAMES: { [key: LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.TX]: 'Therapeutic',
   [LEVEL_TYPES.DX]: 'Diagnostic',
   [LEVEL_TYPES.PX]: 'Prognostic',
+  [LEVEL_TYPES.FDA]: 'FDA',
+};
+
+export const ACTIONABLE_GENES_LEVEL_TITLE: { [key: LEVEL_TYPES]: string } = {
+  [LEVEL_TYPES.TX]: LEVEL_TYPE_NAMES[LEVEL_TYPES.TX],
+  [LEVEL_TYPES.DX]: `${
+    LEVEL_TYPE_NAMES[LEVEL_TYPES.DX]
+  } (for hematologic malignancies only)`,
+  [LEVEL_TYPES.PX]: `${
+    LEVEL_TYPE_NAMES[LEVEL_TYPES.PX]
+  } (for hematologic malignancies only)`,
+  [LEVEL_TYPES.FDA]: `${LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA]} (under FDA review)`,
+};
+
+export const ANNOTATION_PAGE_TAB_NAMES: {
+  [key: ANNOTATION_PAGE_TAB_KEYS]: string;
+} = {
+  [ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL]: 'Annotated Alterations',
+  [ANNOTATION_PAGE_TAB_KEYS.TX]: 'Therapeutic',
+  [ANNOTATION_PAGE_TAB_KEYS.DX]: 'Diagnostic',
+  [ANNOTATION_PAGE_TAB_KEYS.PX]: 'Prognostic',
+  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content (under FDA review)',
 };
 
 export enum LEVELS {
@@ -154,11 +188,31 @@ export enum LEVELS {
   Tx4 = '4',
   R1 = 'R1',
   R2 = 'R2',
+  FDAx1 = 'FDAx1',
+  FDAx2 = 'FDAx2',
+  FDAx3 = 'FDAx3',
 }
+
+export const FDA_LEVELS = [LEVELS.FDAx1, LEVELS.FDAx2, LEVELS.FDAx3];
+export const TX_LEVELS = [
+  LEVELS.Tx1,
+  LEVELS.Tx2,
+  LEVELS.Tx3,
+  LEVELS.Tx3A,
+  LEVELS.Tx3B,
+  LEVELS.Tx4,
+  LEVELS.R1,
+  LEVELS.R2,
+];
+export const DX_LEVELS = [LEVELS.Dx1, LEVELS.Dx2, LEVELS.Dx3];
+export const PX_LEVELS = [LEVELS.Px1, LEVELS.Px2, LEVELS.Px3];
+export const ONCOKB_LEVELS = TX_LEVELS.concat(DX_LEVELS).concat(PX_LEVELS);
 
 // the bigger of the index, the higher the priority
 export const LEVEL_PRIORITY: LEVELS[] = [
-  LEVELS.Px3,
+  LEVELS.FDAx3,
+  LEVELS.FDAx2,
+  LEVELS.FDAx1,
   LEVELS.Px2,
   LEVELS.Px1,
   LEVELS.Dx3,
@@ -189,6 +243,9 @@ export const LEVEL_BUTTON_DESCRIPTION: { [key in LEVELS]: string } = {
   [LEVELS.Px1]: 'Guideline-recognized with well-powered data',
   [LEVELS.Px2]: 'Guideline-recognized with limited data',
   [LEVELS.Px3]: 'Investigational',
+  [LEVELS.FDAx1]: 'With CDx',
+  [LEVELS.FDAx2]: 'Clinical Significance',
+  [LEVELS.FDAx3]: 'Potential Clinical Significance',
 };
 
 export const LEVEL_CLASSIFICATION: { [key in LEVELS]: LEVEL_TYPES } = {
@@ -207,6 +264,9 @@ export const LEVEL_CLASSIFICATION: { [key in LEVELS]: LEVEL_TYPES } = {
   [LEVELS.Tx4]: LEVEL_TYPES.TX,
   [LEVELS.R1]: LEVEL_TYPES.TX,
   [LEVELS.R2]: LEVEL_TYPES.TX,
+  [LEVELS.FDAx1]: LEVEL_TYPES.FDA,
+  [LEVELS.FDAx2]: LEVEL_TYPES.FDA,
+  [LEVELS.FDAx3]: LEVEL_TYPES.FDA,
 };
 
 export const ONCOGENICITY_CLASS_NAMES: { [key in ONCOGENICITY]: string } = {
@@ -244,7 +304,7 @@ export enum EVIDENCE_TYPES {
   INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE = 'INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE',
 }
 
-export const TREATMENT_EVIDENCE_TYPES = [
+export const TREATMENT_EVIDENCE_TYPES: EVIDENCE_TYPES[] = [
   EVIDENCE_TYPES.STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY,
   EVIDENCE_TYPES.STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE,
   EVIDENCE_TYPES.INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY,
