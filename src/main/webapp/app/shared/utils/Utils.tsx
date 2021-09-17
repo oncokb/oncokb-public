@@ -12,16 +12,19 @@ import {
   GENERAL_ONCOGENICITY,
   ONCOGENICITY_CLASS_NAMES,
   PAGE_ROUTE,
+  SHORTEN_TEXT_FROM_LIST_THRESHOLD,
   TABLE_COLUMN_KEY,
   LEVEL_TYPES,
   ONCOGENICITY,
   LEVELS,
   LEVEL_PRIORITY,
+  FDA_LEVELS,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
   Alteration,
   Evidence,
+  FdaAlteration,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
@@ -45,6 +48,9 @@ import {
 import moment from 'moment';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import WithSeparator from 'react-with-separator';
+import { COLOR_BLUE } from 'app/config/theme';
+import { Linkout } from 'app/shared/links/Linkout';
+import * as styles from 'app/index.module.scss';
 
 // Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
 // Likely Neutral will be converted to Neutral
@@ -71,6 +77,20 @@ export function levelOfEvidence2Level(
     level = trimLevelOfEvidenceSubversion(level);
   }
   return level as LEVELS;
+}
+
+export function getHighestFdaLevel(fdaAlterations: FdaAlteration[]) {
+  let highestFdaLevelIndex = -1;
+  fdaAlterations.forEach(alteration => {
+    const levelIndex = FDA_LEVELS.indexOf(alteration.level as LEVELS);
+    if (
+      highestFdaLevelIndex === -1 ||
+      (levelIndex !== -1 && levelIndex < highestFdaLevelIndex)
+    ) {
+      highestFdaLevelIndex = levelIndex;
+    }
+  });
+  return FDA_LEVELS[highestFdaLevelIndex];
 }
 
 export function level2LevelOfEvidence(level: LEVELS) {
@@ -225,6 +245,47 @@ export const OncoKBLevelIcon: React.FunctionComponent<{
     <LevelWithDescription level={level}>{oncokbIcon}</LevelWithDescription>
   ) : (
     oncokbIcon
+  );
+};
+
+export const FdaLevelIcon: React.FunctionComponent<{
+  level: LEVELS;
+  withDescription?: boolean;
+}> = ({ level, withDescription = true }) => {
+  const fdaIcon = (
+    <span
+      className="fa-stack"
+      style={{ fontSize: 9, lineHeight: '18px', margin: '0 3px' }}
+    >
+      <span className="fa fa-circle-o fa-stack-2x"></span>
+      <strong className="fa-stack-1x">
+        {level.toString().replace('FDAx', '')}
+      </strong>
+    </span>
+  );
+
+  let levelDescription = '';
+  switch (level) {
+    case LEVELS.FDAx1:
+      levelDescription = 'Companion Diagnostics';
+      break;
+    case LEVELS.FDAx2:
+      levelDescription =
+        'Cancer Mutations with Evidence of Clinical Significance';
+      break;
+    case LEVELS.FDAx3:
+      levelDescription =
+        'Cancer Mutations with Evidence of Potential Clinical Significance';
+      break;
+    default:
+      break;
+  }
+  return withDescription ? (
+    <LevelWithDescription level={level} description={levelDescription}>
+      {fdaIcon}
+    </LevelWithDescription>
+  ) : (
+    fdaIcon
   );
 };
 
@@ -488,6 +549,95 @@ export function encodeResourceUsageDetailPageURL(endpoint: string) {
 
 export function decodeResourceUsageDetailPageURL(url: string) {
   return url.split('!').join('/');
+}
+
+export const concatElements = (
+  list: ReactNode[],
+  separator: string | JSX.Element
+) => {
+  return list.length === 0 ? (
+    <></>
+  ) : (
+    list.reduce((prev, curr) => [prev, separator, curr])
+  );
+};
+
+export const concatElementsByComma = (list: ReactNode[]) => {
+  return concatElements(list, ', ');
+};
+
+export function getShortenTextFromList(data: JSX.Element[] | string[]) {
+  if (data.length > SHORTEN_TEXT_FROM_LIST_THRESHOLD) {
+    return (
+      <span>
+        {data[0]} and{' '}
+        <DefaultTooltip
+          overlay={
+            <div style={{ maxWidth: '400px' }}>
+              {concatElementsByComma(data)}
+            </div>
+          }
+          overlayStyle={{
+            opacity: 1,
+          }}
+          placement="right"
+          destroyTooltipOnHide={true}
+        >
+          <span
+            style={{
+              textDecoration: 'underscore',
+              color: COLOR_BLUE,
+            }}
+          >
+            {data.length - 1} others
+          </span>
+        </DefaultTooltip>
+      </span>
+    );
+  } else {
+    return concatElementsByComma(data);
+  }
+}
+
+export function getShortenPmidsFromList(pmidList: string[]) {
+  const pmidLinkouts = pmidList.map(pmid => (
+    <DefaultTooltip overlay={<CitationTooltip pmids={[pmid]} abstracts={[]} />}>
+      <span className={styles.linkOutText}>{pmid}</span>
+    </DefaultTooltip>
+  ));
+
+  if (pmidList.length > SHORTEN_TEXT_FROM_LIST_THRESHOLD) {
+    return (
+      <span>
+        <span>{pmidLinkouts[0]}</span> and{' '}
+        <DefaultTooltip
+          overlay={<CitationTooltip pmids={pmidList.slice(1)} abstracts={[]} />}
+          overlayStyle={{
+            opacity: 1,
+          }}
+          placement="right"
+          destroyTooltipOnHide={true}
+        >
+          <span
+            style={{
+              textDecoration: 'underscore',
+              color: COLOR_BLUE,
+            }}
+          >
+            {pmidList.length - 1} others
+          </span>
+        </DefaultTooltip>
+      </span>
+    );
+  } else {
+    return concatElementsByComma(pmidLinkouts);
+  }
+}
+
+export function getGenePageLinks(genes: string): ReactNode {
+  return concatElementsByComma(
+    genes.split(',').map(gene => <GenePageLink hugoSymbol={gene.trim()} />)
+  );
 }
 
 export function isPositionalAlteration(
