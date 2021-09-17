@@ -1,10 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { LevelButton } from 'app/components/levelButton/LevelButton';
-import { Button, Col, Collapse, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import { remoteData, DefaultTooltip } from 'cbioportal-frontend-commons';
+import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
 import {
   action,
   computed,
@@ -15,40 +14,37 @@ import {
 import {
   Alteration,
   Evidence,
+  FdaAlteration,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
 import {
+  FdaLevelIcon,
   getCancerTypeNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
   getTreatmentNameFromEvidence,
   levelOfEvidence2Level,
+  OncoKBLevelIcon,
 } from 'app/shared/utils/Utils';
 import autobind from 'autobind-decorator';
 import pluralize from 'pluralize';
-import {
-  defaultSortMethod,
-  sortByLevel,
-} from 'app/shared/utils/ReactTableUtils';
+import { sortByLevel } from 'app/shared/utils/ReactTableUtils';
 import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
-import { Else, If, Then } from 'react-if';
-import LoadingIndicator, {
-  LoaderSize,
-} from 'app/components/loadingIndicator/LoadingIndicator';
 import {
-  LEVEL_BUTTON_DESCRIPTION,
-  LEVELS,
-  LG_TABLE_FIXED_HEIGHT,
-  TABLE_COLUMN_KEY,
+  ANNOTATION_PAGE_TAB_KEYS,
   COMPONENT_PADDING,
-  QUERY_SEPARATOR_FOR_QUERY_STRING,
+  DEFAULT_REFERENCE_GENOME,
   DOCUMENT_TITLES,
-  LEVEL_TYPE_NAMES,
+  FDA_LEVELS,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
+  LEVELS,
+  LG_TABLE_FIXED_HEIGHT,
+  ONCOKB_LEVELS,
+  QUERY_SEPARATOR_FOR_QUERY_STRING,
   REFERENCE_GENOME,
-  DEFAULT_REFERENCE_GENOME,
+  TABLE_COLUMN_KEY,
 } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -58,9 +54,14 @@ import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownlo
 import DocumentTitle from 'react-document-title';
 import { COLOR_BLUE } from 'app/config/theme';
 import WithSeparator from 'react-with-separator';
-import InfoIcon from 'app/shared/icons/InfoIcon';
 import LevelSelectionRow from './LevelSelectionRow';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
+import {
+  ActionableGenesPageHashQueries,
+  AlterationPageHashQueries,
+  GenePageHashQueries,
+} from 'app/shared/route/types';
+import AppStore from 'app/store/AppStore';
 
 type Treatment = {
   level: string;
@@ -75,31 +76,28 @@ type Treatment = {
 type ActionableGenesPageProps = {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
-};
-
-type HashQueries = {
-  levels?: string[];
-  hugoSymbol?: string;
-  tumorType?: string;
-  drug?: string;
-  refGenome?: REFERENCE_GENOME;
+  appStore: AppStore;
 };
 
 type EvidencesByLevel = { [level: string]: Evidence[] };
-@inject('routing', 'authenticationStore')
+@inject('routing', 'authenticationStore', 'appStore')
 @observer
 export default class ActionableGenesPage extends React.Component<
-  ActionableGenesPageProps
+  ActionableGenesPageProps,
+  any
 > {
   @observable relevantTumorTypeSearchKeyword = '';
   @observable drugSearchKeyword = '';
   @observable geneSearchKeyword = '';
   @observable refGenome = DEFAULT_REFERENCE_GENOME;
-  @observable levelSelected = this.initLevelSelected();
-  @observable collapseStatus = {
+  @observable levelSelected: {
+    [level: LEVELS]: boolean;
+  } = this.initLevelSelected();
+  @observable collapseStatus: { [key in LEVEL_TYPES]: boolean } = {
     [LEVEL_TYPES.TX]: true,
     [LEVEL_TYPES.DX]: false,
     [LEVEL_TYPES.PX]: false,
+    [LEVEL_TYPES.FDA]: false,
   };
   @observable collapseInit = false;
 
@@ -143,6 +141,14 @@ export default class ActionableGenesPage extends React.Component<
     default: {},
   });
 
+  readonly allFdaAlterations = remoteData<FdaAlteration[]>({
+    await: () => [],
+    async invoke() {
+      return await privateClient.utilsFdaAlterationsGetUsingGET({});
+    },
+    default: [],
+  });
+
   readonly relevantTumorTypes = remoteData<string[]>({
     await: () => [this.allTumorTypes],
     invoke: async () => {
@@ -174,7 +180,7 @@ export default class ActionableGenesPage extends React.Component<
         ([hash]) => {
           const queryStrings = QueryString.parse(hash, {
             arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING,
-          }) as HashQueries;
+          }) as ActionableGenesPageHashQueries;
           if (queryStrings.levels) {
             this.levelSelected = this.initLevelSelected();
             (_.isArray(queryStrings.levels)
@@ -205,6 +211,17 @@ export default class ActionableGenesPage extends React.Component<
           if (queryStrings.refGenome) {
             this.refGenome = queryStrings.refGenome;
           }
+          if (queryStrings.sections) {
+            const visibleSections = _.isArray(queryStrings.sections)
+              ? queryStrings.sections
+              : [queryStrings.sections];
+            visibleSections.forEach(
+              section => (this.collapseStatus[section] = true)
+            );
+            if (visibleSections.includes(LEVEL_TYPES.FDA)) {
+              this.props.appStore.toFdaRecognizedContent = true;
+            }
+          }
         },
         { fireImmediately: true }
       ),
@@ -215,6 +232,39 @@ export default class ActionableGenesPage extends React.Component<
             arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING,
           });
           window.location.hash = parsedHashQueryString;
+        },
+        true
+      ),
+      reaction(
+        () => this.collapseStatus[LEVEL_TYPES.FDA],
+        newStatus => {
+          if (newStatus) {
+            this.collapseStatus[LEVEL_TYPES.TX] = false;
+            this.collapseStatus[LEVEL_TYPES.DX] = false;
+            this.collapseStatus[LEVEL_TYPES.PX] = false;
+            this.props.appStore.inFdaRecognizedContent = true;
+            ONCOKB_LEVELS.forEach(oncokbLevel => {
+              if (this.levelSelected[oncokbLevel]) {
+                this.levelSelected[oncokbLevel] = false;
+              }
+            });
+          }
+        },
+        true
+      ),
+      reaction(
+        () =>
+          this.collapseStatus[LEVEL_TYPES.TX] ||
+          this.collapseStatus[LEVEL_TYPES.DX] ||
+          this.collapseStatus[LEVEL_TYPES.PX],
+        newStatus => {
+          if (newStatus) {
+            this.collapseStatus[LEVEL_TYPES.FDA] = false;
+            FDA_LEVELS.forEach(fdaLevel => {
+              this.levelSelected[fdaLevel] = false;
+            });
+            this.props.appStore.showFdaModal = true;
+          }
         }
       )
     );
@@ -258,20 +308,20 @@ export default class ActionableGenesPage extends React.Component<
     return treatments;
   }
 
-  initLevelSelected(): { [level: string]: boolean } {
+  initLevelSelected(): { [level: LEVELS]: boolean } {
     return _.reduce(
       LEVELS,
       (acc, level) => {
         acc[level] = false;
         return acc;
       },
-      {} as { [level: string]: boolean }
+      {} as { [level in keyof LEVELS]: boolean }
     );
   }
 
   @computed
   get hashQueries() {
-    const queryString: Partial<HashQueries> = {};
+    const queryString: ActionableGenesPageHashQueries = {};
     if (this.selectedLevels.length > 0) {
       queryString.levels = this.selectedLevels;
     }
@@ -284,14 +334,52 @@ export default class ActionableGenesPage extends React.Component<
     if (this.drugSearchKeyword) {
       queryString.drug = this.drugSearchKeyword;
     }
+    const visibleSections = _.chain(this.collapseStatus)
+      .values()
+      .filter(sectionStatus => sectionStatus)
+      .value();
+    if (visibleSections.length > 0) {
+      const sections: LEVEL_TYPES[] = [];
+      for (const visibleSection in this.collapseStatus) {
+        if (this.collapseStatus[visibleSection]) {
+          sections.push(visibleSection as LEVEL_TYPES);
+        }
+      }
+      queryString.sections = sections;
+    }
     return queryString;
   }
 
   @computed
   get allTreatments() {
+    if (this.fdaSectionIsOpen) {
+      return this.allFdaTreatments;
+    } else {
+      return this.allOncokbTreatments;
+    }
+  }
+
+  @computed
+  get allOncokbTreatments() {
     let treatments: Treatment[] = [];
     _.forEach(this.evidencesByLevel.result, (content, levelOfEvidence) => {
       treatments = treatments.concat(this.getTreatments(content));
+    });
+    return treatments;
+  }
+
+  @computed
+  get allFdaTreatments() {
+    const treatments: Treatment[] = [];
+    this.allFdaAlterations.result.forEach(fdaAlt => {
+      if (!fdaAlt.cancerType.endsWith('NOS')) {
+        treatments.push({
+          level: fdaAlt.level,
+          hugoSymbol: fdaAlt.alteration.gene.hugoSymbol,
+          alterations: [fdaAlt.alteration],
+          cancerTypes: [fdaAlt.cancerType],
+        } as Treatment);
+      }
     });
     return treatments;
   }
@@ -328,6 +416,11 @@ export default class ActionableGenesPage extends React.Component<
       }
       return match;
     });
+  }
+
+  @computed
+  get noFdaLevelSelected() {
+    return _.intersection(this.selectedLevels, FDA_LEVELS).length === 0;
   }
 
   @computed
@@ -451,7 +544,7 @@ export default class ActionableGenesPage extends React.Component<
 
   @autobind
   @action
-  updateLevelSelection(levelOfEvidence: string) {
+  updateLevelSelection(levelOfEvidence: LEVELS) {
     this.levelSelected[levelOfEvidence] = !this.levelSelected[levelOfEvidence];
   }
 
@@ -459,6 +552,11 @@ export default class ActionableGenesPage extends React.Component<
   @action
   updateCollapseStatus(levelType: string) {
     this.collapseStatus[levelType] = !this.collapseStatus[levelType];
+  }
+
+  @computed
+  get fdaSectionIsOpen() {
+    return !!this.collapseStatus[LEVEL_TYPES.FDA];
   }
 
   @autobind
@@ -520,6 +618,10 @@ export default class ActionableGenesPage extends React.Component<
   }
 
   getAlterationCell(hugoSymbol: string, alterations: Alteration[]) {
+    const alterationPageHashQueries: AlterationPageHashQueries = {};
+    if (this.fdaSectionIsOpen) {
+      alterationPageHashQueries.tab = ANNOTATION_PAGE_TAB_KEYS.FDA;
+    }
     const linkedAlts = alterations.map<React.ReactNode>(
       (alteration, index: number) => (
         <>
@@ -530,6 +632,12 @@ export default class ActionableGenesPage extends React.Component<
             alterationRefGenomes={
               alteration.referenceGenomes as REFERENCE_GENOME[]
             }
+            hashQueries={alterationPageHashQueries}
+            onClick={() => {
+              if (this.fdaSectionIsOpen) {
+                this.props.appStore.toFdaRecognizedContent = true;
+              }
+            }}
           />
         </>
       )
@@ -568,6 +676,9 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get drugRelatedLevelSelected() {
+    if (this.collapseStatus[LEVEL_TYPES.FDA]) {
+      return false;
+    }
     if (this.selectedLevels.length === 0) {
       return true;
     }
@@ -584,12 +695,45 @@ export default class ActionableGenesPage extends React.Component<
     const commonColumns = [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+        Header: <span>Level</span>,
+        minWidth: 120,
+        Cell(props: any) {
+          return (
+            <div className={'my-1 d-flex justify-content-center'}>
+              {_.startsWith(props.original.level, 'FDA') ? (
+                <FdaLevelIcon
+                  level={props.original.level}
+                  withDescription={true}
+                />
+              ) : (
+                <OncoKBLevelIcon
+                  level={props.original.level}
+                  withDescription={true}
+                />
+              )}
+            </div>
+          );
+        },
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
         style: { whiteSpace: 'normal' },
-        Cell(props: { original: Treatment }) {
-          return <GenePageLink hugoSymbol={props.original.hugoSymbol} />;
+        Cell: (props: { original: Treatment }) => {
+          const hashQueries: GenePageHashQueries = {};
+          if (this.fdaSectionIsOpen) {
+            hashQueries.tab = ANNOTATION_PAGE_TAB_KEYS.FDA;
+          }
+          return (
+            <GenePageLink
+              hugoSymbol={props.original.hugoSymbol}
+              hashQueries={hashQueries}
+              onClick={() => {
+                if (this.fdaSectionIsOpen) {
+                  this.props.appStore.toFdaRecognizedContent = true;
+                }
+              }}
+            />
+          );
         },
       },
       {
@@ -642,6 +786,53 @@ export default class ActionableGenesPage extends React.Component<
     return commonColumns;
   }
 
+  @computed
+  get oncokbTableProps() {
+    if (this.fdaSectionIsOpen) {
+      return {
+        showPagination: true,
+        fixedHeight: false,
+      };
+    } else {
+      return {
+        minRows: Math.round(LG_TABLE_FIXED_HEIGHT / 36) - 1,
+        pageSize:
+          this.filteredTreatments.length === 0
+            ? 1
+            : this.filteredTreatments.length,
+        showPagination: this.fdaSectionIsOpen,
+        fixedHeight: true,
+        style: {
+          height: LG_TABLE_FIXED_HEIGHT,
+        },
+      };
+    }
+  }
+
+  @computed
+  get filterResult() {
+    const evidencePostFix = this.fdaSectionIsOpen
+      ? `${pluralize('record', this.filteredTreatments.length)}`
+      : `clinical  ${pluralize('implication', this.filteredTreatments.length)}`;
+    return (
+      <>
+        <b>{`Showing ${this.filteredTreatments.length} ${evidencePostFix}`}</b>
+        {` (${this.filteredGenes.length} ${pluralize(
+          'gene',
+          this.filteredGenes.length
+        )},
+                ${this.filteredTumorTypes.length} ${pluralize(
+          'cancer type',
+          this.filteredTumorTypes.length
+        )},
+                ${this.filteredLevels.length} ${pluralize(
+          'level',
+          this.filteredLevels.length
+        )} of evidence)`}
+      </>
+    );
+  }
+
   render() {
     const levelSelectionSection = [];
     for (const key in LEVEL_TYPES) {
@@ -654,6 +845,11 @@ export default class ActionableGenesPage extends React.Component<
             levelSelected={this.levelSelected}
             updateCollapseStatus={this.updateCollapseStatus}
             updateLevelSelection={this.updateLevelSelection}
+            isLoading={
+              this.fdaSectionIsOpen
+                ? this.allFdaAlterations.isPending
+                : this.evidencesByLevel.isPending
+            }
           />
         );
       }
@@ -661,47 +857,51 @@ export default class ActionableGenesPage extends React.Component<
 
     return (
       <DocumentTitle title={DOCUMENT_TITLES.ACTIONABLE_GENES}>
-        <If
-          condition={
-            this.allTumorTypes.isComplete && this.evidencesByLevel.isComplete
-          }
-        >
-          <Then>
-            {levelSelectionSection}
-            <Row
-              style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
-              className={'mb-2'}
+        <>
+          {levelSelectionSection}
+          <Row
+            style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}
+            className={'mb-2'}
+          >
+            <Col
+              className={classnames(...COMPONENT_PADDING)}
+              lg={this.drugRelatedLevelSelected ? 4 : 6}
+              xs={12}
             >
-              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
-                <Select
-                  value={this.geneSelectValue}
-                  placeholder={`${
-                    this.filteredGenes.length
-                  } actionable ${pluralize('gene', this.filteredGenes.length)}`}
-                  options={this.filteredGenes.map(hugoSymbol => {
-                    return {
-                      value: hugoSymbol,
-                      label: hugoSymbol,
-                    };
-                  })}
-                  isClearable={true}
-                  onChange={(selectedOption: any) =>
-                    (this.geneSearchKeyword = selectedOption
-                      ? selectedOption.label
-                      : '')
-                  }
-                />
-              </Col>
-              <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
-                <CancerTypeSelect
-                  tumorType={this.relevantTumorTypeSearchKeyword}
-                  onChange={(selectedOption: any) =>
-                    (this.relevantTumorTypeSearchKeyword = selectedOption
-                      ? selectedOption.value
-                      : '')
-                  }
-                />
-              </Col>
+              <Select
+                value={this.geneSelectValue}
+                placeholder={`${
+                  this.filteredGenes.length
+                } actionable ${pluralize('gene', this.filteredGenes.length)}`}
+                options={this.filteredGenes.map(hugoSymbol => {
+                  return {
+                    value: hugoSymbol,
+                    label: hugoSymbol,
+                  };
+                })}
+                isClearable={true}
+                onChange={(selectedOption: any) =>
+                  (this.geneSearchKeyword = selectedOption
+                    ? selectedOption.label
+                    : '')
+                }
+              />
+            </Col>
+            <Col
+              className={classnames(...COMPONENT_PADDING)}
+              lg={this.drugRelatedLevelSelected ? 4 : 6}
+              xs={12}
+            >
+              <CancerTypeSelect
+                tumorType={this.relevantTumorTypeSearchKeyword}
+                onChange={(selectedOption: any) =>
+                  (this.relevantTumorTypeSearchKeyword = selectedOption
+                    ? selectedOption.value
+                    : '')
+                }
+              />
+            </Col>
+            {this.drugRelatedLevelSelected && (
               <Col className={classnames(...COMPONENT_PADDING)} lg={4} xs={12}>
                 <Select
                   value={this.drugSelectValue}
@@ -723,102 +923,71 @@ export default class ActionableGenesPage extends React.Component<
                   }
                 />
               </Col>
-            </Row>
-            <Row className={'mb-2'}>
-              <Col className="d-flex">
-                <span>
-                  <b>{`Showing ${
-                    this.filteredTreatments.length
-                  } clinical  ${pluralize(
-                    'implication',
-                    this.filteredTreatments.length
-                  )}`}</b>
-                  {` (${this.filteredGenes.length} ${pluralize(
-                    'gene',
-                    this.filteredGenes.length
-                  )},
-                ${this.filteredTumorTypes.length} ${pluralize(
-                    'cancer type',
-                    this.filteredTumorTypes.length
-                  )},
-                ${this.filteredLevels.length} ${pluralize(
-                    'level',
-                    this.filteredLevels.length
-                  )} of evidence)`}
-                </span>
-                <AuthDownloadButton
+            )}
+          </Row>
+          <Row className={'mb-2'}>
+            <Col className="d-flex">
+              <span>{this.filterResult}</span>
+              <AuthDownloadButton
+                size={'sm'}
+                className={classnames('ml-2')}
+                getDownloadData={this.downloadAssociation}
+                fileName={'oncokb_biomarker_drug_associations.tsv'}
+                buttonText={'Associations'}
+              />
+              {this.treatmentsAreFiltered ? (
+                <Button
+                  variant="link"
                   size={'sm'}
-                  className={classnames('ml-2')}
-                  getDownloadData={this.downloadAssociation}
-                  fileName={'oncokb_biomarker_drug_associations.tsv'}
-                  buttonText={'Associations'}
-                />
-                {this.treatmentsAreFiltered ? (
-                  <Button
-                    variant="link"
-                    size={'sm'}
-                    style={{ whiteSpace: 'nowrap' }}
-                    className={'ml-auto pr-0'}
-                    onClick={this.clearFilters}
-                  >
-                    Reset filters
-                  </Button>
-                ) : undefined}
-              </Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <OncoKBTable
-                  disableSearch={true}
-                  data={this.filteredTreatments}
-                  loading={this.relevantTumorTypes.isPending}
-                  columns={this.columns}
-                  minRows={Math.round(LG_TABLE_FIXED_HEIGHT / 36) - 1}
-                  pageSize={
-                    this.filteredTreatments.length === 0
-                      ? 1
-                      : this.filteredTreatments.length
-                  }
-                  fixedHeight={true}
-                  style={{
-                    height: LG_TABLE_FIXED_HEIGHT,
-                  }}
-                  defaultSorted={[
-                    {
-                      id: TABLE_COLUMN_KEY.LEVEL,
-                      desc: true,
-                    },
-                    {
-                      id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
-                      desc: false,
-                    },
-                    {
-                      id: TABLE_COLUMN_KEY.ALTERATIONS,
-                      desc: false,
-                    },
-                    {
-                      id: TABLE_COLUMN_KEY.CANCER_TYPES,
-                      desc: false,
-                    },
-                    {
-                      id: TABLE_COLUMN_KEY.DRUGS,
-                      desc: false,
-                    },
-                  ]}
-                />
-              </Col>
-            </Row>
-          </Then>
-          <Else>
-            <LoadingIndicator
-              size={LoaderSize.LARGE}
-              center={true}
-              isLoading={
-                this.allTumorTypes.isPending || this.evidencesByLevel.isPending
-              }
-            />
-          </Else>
-        </If>
+                  style={{ whiteSpace: 'nowrap' }}
+                  className={'ml-auto pr-0'}
+                  onClick={this.clearFilters}
+                >
+                  Reset filters
+                </Button>
+              ) : undefined}
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col>
+              <OncoKBTable
+                {...this.oncokbTableProps}
+                disableSearch={true}
+                data={this.filteredTreatments}
+                loading={
+                  this.relevantTumorTypes.isPending &&
+                  (this.fdaSectionIsOpen
+                    ? this.allFdaAlterations.isPending
+                    : this.evidencesByLevel.isPending)
+                }
+                columns={this.columns}
+                defaultPageSize={10}
+                defaultSorted={[
+                  {
+                    id: TABLE_COLUMN_KEY.LEVEL,
+                    desc: true,
+                  },
+                  {
+                    id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
+                    desc: false,
+                  },
+                  {
+                    id: TABLE_COLUMN_KEY.ALTERATIONS,
+                    desc: false,
+                  },
+                  {
+                    id: TABLE_COLUMN_KEY.CANCER_TYPES,
+                    desc: false,
+                  },
+                  {
+                    id: TABLE_COLUMN_KEY.DRUGS,
+                    desc: false,
+                  },
+                ]}
+              />
+            </Col>
+          </Row>
+        </>
       </DocumentTitle>
     );
   }

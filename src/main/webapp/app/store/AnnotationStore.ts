@@ -21,6 +21,7 @@ import {
   BiologicalVariant,
   CancerTypeCount,
   ClinicalVariant,
+  FdaAlteration,
   GeneNumber,
   PortalAlteration,
   TumorType,
@@ -28,7 +29,10 @@ import {
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
-import { shortenOncogenicity } from 'app/shared/utils/Utils';
+import {
+  getHighestFdaLevel,
+  shortenOncogenicity,
+} from 'app/shared/utils/Utils';
 import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 import { Oncogenicity } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import { OncokbMutation } from 'app/components/oncokbMutationMapper/OncokbMutation';
@@ -252,6 +256,42 @@ export class AnnotationStore {
           this.referenceGenomeQuery
         )
       );
+    },
+    default: [],
+  });
+
+  @computed
+  get highestFdaLevel() {
+    return getHighestFdaLevel(this.fdaAlterations.result);
+  }
+
+  readonly fdaAlterations = remoteData<FdaAlteration[]>({
+    await: () => [this.gene],
+    invoke: async () => {
+      const geneFdaAlterations = await privateClient.utilsFdaAlterationsGetUsingGET(
+        {
+          hugoSymbol: this.gene.result.hugoSymbol,
+        }
+      );
+      if (this.alterationQuery) {
+        const lowerCaseAltQuery = this.alterationQuery.toLowerCase();
+        return geneFdaAlterations.filter(alt => {
+          if (
+            alt.alteration.alteration &&
+            alt.alteration.alteration.toLowerCase() === lowerCaseAltQuery
+          ) {
+            return true;
+          }
+          if (
+            alt.alteration.name &&
+            alt.alteration.name.toLowerCase() === lowerCaseAltQuery
+          ) {
+            return true;
+          }
+          return false;
+        });
+      }
+      return geneFdaAlterations;
     },
     default: [],
   });
