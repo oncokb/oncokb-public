@@ -323,7 +323,9 @@ class HomePage extends React.Component<IHomeProps, {}> {
                       lineHeight:
                         levelGadget.level === LEVELS.Px3 ? '35px' : undefined,
                     }}
-                    href={`${PAGE_ROUTE.ACTIONABLE_GENE}#levels=${levelGadget.linkoutLevel}`}
+                    href={`${PAGE_ROUTE.ACTIONABLE_GENE}#levels=${
+                      levelGadget.linkoutLevel
+                    }&sections=${LEVEL_CLASSIFICATION[levelGadget.level]}`}
                     isLoading={
                       LEVEL_CLASSIFICATION[levelGadget.level] ===
                       LEVEL_TYPES.FDA

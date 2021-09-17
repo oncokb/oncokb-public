@@ -790,8 +790,6 @@ export default class ActionableGenesPage extends React.Component<
   get oncokbTableProps() {
     if (this.fdaSectionIsOpen) {
       return {
-        minRows: 10,
-        pageSize: 10,
         showPagination: true,
         fixedHeight: false,
       };

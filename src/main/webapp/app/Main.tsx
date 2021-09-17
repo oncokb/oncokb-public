@@ -39,18 +39,15 @@ class Main extends React.Component<IMainPage> {
 
   @autobind
   handleBlockedNavigation(nextLocation: Location): boolean {
+    // The clause of includes FDA is very broad. This is used for the Link component.
     if (
-      !this.props.appStore.showFdaModal &&
-      this.props.appStore.inFdaRecognizedContent
+      this.props.appStore.inFdaRecognizedContent &&
+      !(
+        this.props.appStore.toFdaRecognizedContent ||
+        (nextLocation.hash || '').includes('FDA')
+      )
     ) {
-      if (this.props.appStore.toFdaRecognizedContent) {
-        this.props.appStore.toFdaRecognizedContent = false;
-        return true;
-      } else {
-        this.props.appStore.showFdaModal = true;
-        this.props.appStore.fdaRedirectLastLocation = nextLocation;
-        return false;
-      }
+      this.props.appStore.showFdaModal = true;
     }
     return true;
   }
@@ -59,6 +56,7 @@ class Main extends React.Component<IMainPage> {
   afterConfirm() {
     this.props.appStore.showFdaModal = false;
     this.props.appStore.inFdaRecognizedContent = false;
+    this.props.appStore.toFdaRecognizedContent = false;
   }
 
   public render() {
