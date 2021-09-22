@@ -683,6 +683,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
       this.selectedTab = queryStringsHash.tab;
     }
 
+    this.props.appStore.toFdaRecognizedContent = false;
     this.reactions.push(
       reaction(
         () => this.defaultShowGeneBackground,

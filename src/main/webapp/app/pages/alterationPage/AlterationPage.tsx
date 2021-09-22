@@ -70,6 +70,7 @@ export default class AlterationPage extends React.Component<
           : props.match.params.tumorType,
       });
     }
+    this.props.appStore.toFdaRecognizedContent = false;
 
     this.reactions.push(
       reaction(
