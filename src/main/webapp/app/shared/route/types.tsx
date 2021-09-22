@@ -6,6 +6,7 @@ import {
 
 type AnnotationPageSearchQueries = {
   refGenome?: REFERENCE_GENOME;
+  tumorType?: string;
 };
 type AnnotationPageHashQueries = {
   tab?: ANNOTATION_PAGE_TAB_KEYS;

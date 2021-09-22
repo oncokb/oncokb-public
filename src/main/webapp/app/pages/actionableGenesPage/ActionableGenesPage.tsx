@@ -218,9 +218,6 @@ export default class ActionableGenesPage extends React.Component<
             visibleSections.forEach(
               section => (this.collapseStatus[section] = true)
             );
-            if (visibleSections.includes(LEVEL_TYPES.FDA)) {
-              this.props.appStore.toFdaRecognizedContent = true;
-            }
           }
         },
         { fireImmediately: true }
@@ -243,11 +240,18 @@ export default class ActionableGenesPage extends React.Component<
             this.collapseStatus[LEVEL_TYPES.DX] = false;
             this.collapseStatus[LEVEL_TYPES.PX] = false;
             this.props.appStore.inFdaRecognizedContent = true;
-            ONCOKB_LEVELS.forEach(oncokbLevel => {
-              if (this.levelSelected[oncokbLevel]) {
-                this.levelSelected[oncokbLevel] = false;
-              }
-            });
+            this.clearSelectedLevels('ONCOKB');
+          } else {
+            if (
+              !(
+                this.collapseStatus[LEVEL_TYPES.TX] ||
+                this.collapseStatus[LEVEL_TYPES.DX] ||
+                this.collapseStatus[LEVEL_TYPES.PX]
+              )
+            ) {
+              this.collapseStatus[LEVEL_TYPES.TX] = true;
+              this.clearSelectedLevels('FDA');
+            }
           }
         },
         true
@@ -263,11 +267,23 @@ export default class ActionableGenesPage extends React.Component<
             FDA_LEVELS.forEach(fdaLevel => {
               this.levelSelected[fdaLevel] = false;
             });
+          }
+          if (newStatus && this.props.appStore.inFdaRecognizedContent) {
             this.props.appStore.showFdaModal = true;
+            this.props.appStore.inFdaRecognizedContent = false;
           }
         }
       )
     );
+  }
+
+  @action
+  clearSelectedLevels(type: 'FDA' | 'ONCOKB') {
+    (type === 'ONCOKB' ? ONCOKB_LEVELS : FDA_LEVELS).forEach(oncokbLevel => {
+      if (this.levelSelected[oncokbLevel]) {
+        this.levelSelected[oncokbLevel] = false;
+      }
+    });
   }
 
   componentWillUnmount(): void {
