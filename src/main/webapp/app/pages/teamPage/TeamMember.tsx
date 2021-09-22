@@ -8,6 +8,7 @@ export enum TITLE {
   MPA = 'MPA',
   FACP = 'FACP',
   FRCPC = 'FRCPC',
+  BSC = 'BSc',
 }
 
 export enum INSTITUTION {
