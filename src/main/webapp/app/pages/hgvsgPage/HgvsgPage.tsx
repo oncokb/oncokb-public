@@ -13,19 +13,20 @@ import { RouteComponentProps } from 'react-router';
 import AnnotationPage from 'app/pages/annotationPage/AnnotationPage';
 import * as QueryString from 'query-string';
 import {
+  ANNOTATION_PAGE_TAB_KEYS,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   REFERENCE_GENOME,
 } from 'app/config/constants';
 import { Alert } from 'react-bootstrap';
+import autobind from 'autobind-decorator';
+import {
+  AlterationPageHashQueries,
+  AlterationPageSearchQueries,
+} from 'app/shared/route/types';
 
 interface MatchParams {
   hgvsg: string;
 }
-
-type SearchQueries = {
-  refGenome?: REFERENCE_GENOME;
-  tumorType?: string;
-};
 
 interface HgvsgPageProps extends RouteComponentProps<MatchParams> {
   appStore: AppStore;
@@ -37,6 +38,7 @@ interface HgvsgPageProps extends RouteComponentProps<MatchParams> {
 export default class HgvsgPage extends React.Component<HgvsgPageProps> {
   @observable tumorType = '';
   @observable refGenome = REFERENCE_GENOME.GRCh37;
+  private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
   private store: AnnotationStore;
   readonly reactions: IReactionDisposer[] = [];
@@ -51,12 +53,15 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
         referenceGenomeQuery: this.refGenome,
       });
     }
+    this.props.appStore.toFdaRecognizedContent = false;
 
     this.reactions.push(
       reaction(
         () => [props.routing.location.search],
         ([search]) => {
-          const queryStrings = QueryString.parse(search) as SearchQueries;
+          const queryStrings = QueryString.parse(
+            search
+          ) as AlterationPageSearchQueries;
           if (queryStrings.refGenome) {
             this.refGenome = queryStrings.refGenome;
             this.store.referenceGenomeQuery = this.refGenome;
@@ -67,6 +72,21 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
           }
         },
         { fireImmediately: true }
+      ),
+      reaction(
+        () => [props.routing.location.hash],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(
+            hash
+          ) as AlterationPageHashQueries;
+          if (queryStrings.tab) {
+            this.selectedTab = queryStrings.tab;
+            if (queryStrings.tab === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+              this.props.appStore.inFdaRecognizedContent = true;
+            }
+          }
+        },
+        true
       ),
       reaction(
         () => this.searchQueries,
@@ -82,7 +102,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
 
   @computed
   get searchQueries() {
-    const queryString: Partial<SearchQueries> = {};
+    const queryString: Partial<AlterationPageSearchQueries> = {};
     if (this.refGenome) {
       queryString.refGenome = this.refGenome;
     }
@@ -115,6 +135,25 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
     return content.join(', ');
   }
 
+  @computed
+  get onFdaTab() {
+    return this.selectedTab === ANNOTATION_PAGE_TAB_KEYS.FDA;
+  }
+
+  @autobind
+  onChangeTab(newTabKey: ANNOTATION_PAGE_TAB_KEYS) {
+    if (newTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA) {
+      this.props.appStore.inFdaRecognizedContent = true;
+    }
+    if (this.onFdaTab && newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA) {
+      this.props.appStore.showFdaModal = true;
+    } else {
+      const newHash: AlterationPageHashQueries = { tab: newTabKey };
+      window.location.hash = QueryString.stringify(newHash);
+    }
+    this.selectedTab = newTabKey;
+  }
+
   render() {
     return (
       <DocumentTitle title={this.documentTitle}>
@@ -140,6 +179,8 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
                   onChangeTumorType={newTumorType =>
                     (this.tumorType = newTumorType)
                   }
+                  defaultSelectedTab={this.selectedTab}
+                  onChangeTab={this.onChangeTab}
                 />
               </Then>
               <Else>
