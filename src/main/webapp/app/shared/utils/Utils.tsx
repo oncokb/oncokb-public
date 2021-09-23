@@ -651,3 +651,13 @@ export function isPositionalAlteration(
     return false;
   }
 }
+
+export function getYouTubeLink(type: 'embed' | 'regular', videoId: string) {
+  return `https://www.youtube.com/${
+    type === 'embed' ? 'embed/' : 'watch?v='
+  }${videoId}`;
+}
+
+export function getBilibiliLink(videoId: string) {
+  return `//player.bilibili.com/player.html?aid=${videoId}`;
+}
