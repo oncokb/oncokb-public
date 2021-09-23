@@ -110,8 +110,11 @@ superagent.Request.prototype.end = function (callback) {
 
 if (AppConfig.serverConfig?.sentryProjectId) {
   Sentry.init({
+    // Adjust tracesSampleRate for production.
+    // For more information, please see https://docs.sentry.io/platforms/javascript/guides/react/configuration/options/#tracing-options
     dsn: AppConfig.serverConfig.sentryProjectId,
     blacklistUrls: [new RegExp('.*localhost.*')],
+    tracesSampleRate: 0.5,
   });
 }
 

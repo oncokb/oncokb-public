@@ -75,25 +75,28 @@ public class OncokbPublicApp {
     }
 
     private static void initSentry(Environment env) {
-        Sentry.init(options -> {
-            options.setDsn(env.getProperty("sentry.dsn"));
-            options.setEnableUncaughtExceptionHandler(true);
-            // Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
-            // We recommend adjusting this value in production.
-            options.setTracesSampleRate(.2);
-            // When first trying Sentry it's good to see what the SDK is doing:
-            options.setDebug(false);
+        Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
+        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+            Sentry.init(options -> {
+                options.setDsn(env.getProperty("sentry.dsn"));
+                options.setEnableUncaughtExceptionHandler(true);
+                // Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
+                // We recommend adjusting this value in production.
+                options.setTracesSampleRate(.2);
+                // When first trying Sentry it's good to see what the SDK is doing:
+                options.setDebug(false);
 
-            // Ignore the following exceptions
-            options.addIgnoredExceptionForType(BadCredentialsException.class);
-            options.addIgnoredExceptionForType(IOException.class);
-            options.addIgnoredExceptionForType(HttpClientErrorException.class);
-            options.addIgnoredExceptionForType(EmailAlreadyUsedException.class);
-            options.addIgnoredExceptionForType(InvalidPasswordException.class);
-            options.addIgnoredExceptionForType(UsernameAlreadyUsedException.class);
-            options.addIgnoredExceptionForType(HttpRequestMethodNotSupportedException.class);
-            options.addIgnoredExceptionForType(TokenExpiredException.class);
-        });
+                // Ignore the following exceptions
+                options.addIgnoredExceptionForType(BadCredentialsException.class);
+                options.addIgnoredExceptionForType(IOException.class);
+                options.addIgnoredExceptionForType(HttpClientErrorException.class);
+                options.addIgnoredExceptionForType(EmailAlreadyUsedException.class);
+                options.addIgnoredExceptionForType(InvalidPasswordException.class);
+                options.addIgnoredExceptionForType(UsernameAlreadyUsedException.class);
+                options.addIgnoredExceptionForType(HttpRequestMethodNotSupportedException.class);
+                options.addIgnoredExceptionForType(TokenExpiredException.class);
+            });
+        }
     }
 
     private static void logApplicationStartup(Environment env) {
