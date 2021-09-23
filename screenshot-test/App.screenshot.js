@@ -378,7 +378,7 @@ describe('Tests with login', () => {
   it('About Page', async() => {
     await page.goto(`${CLIENT_URL}about`);
     await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
+    await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('About Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'About Page with Login' });
   })
