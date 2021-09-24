@@ -104,29 +104,6 @@ export const TeamPage = () => {
   ];
   const curators: ITeamMember[] = [
     {
-      firstName: 'Kinisha',
-      lastName: 'Gala',
-      title: [TITLE.PHD],
-      faculty: false,
-      showCOI: true,
-    },
-    {
-      firstName: 'Lindsay',
-      middleName: 'M',
-      lastName: 'LaFave',
-      title: [TITLE.PHD],
-      faculty: false,
-      showCOI: true,
-    },
-    {
-      firstName: 'Linde',
-      middleName: 'A',
-      lastName: 'Miles',
-      title: [TITLE.PHD],
-      faculty: false,
-      showCOI: true,
-    },
-    {
       firstName: 'Katja',
       lastName: 'Srpan',
       title: [TITLE.PHD],
@@ -614,6 +591,29 @@ export const TeamPage = () => {
       firstName: 'Yifu',
       lastName: 'Yao',
       title: [TITLE.MSC],
+    },
+    {
+      firstName: 'Kinisha',
+      lastName: 'Gala',
+      title: [TITLE.PHD],
+      faculty: false,
+      showCOI: true,
+    },
+    {
+      firstName: 'Lindsay',
+      middleName: 'M',
+      lastName: 'LaFave',
+      title: [TITLE.PHD],
+      faculty: false,
+      showCOI: true,
+    },
+    {
+      firstName: 'Linde',
+      middleName: 'A',
+      lastName: 'Miles',
+      title: [TITLE.PHD],
+      faculty: false,
+      showCOI: true,
     },
   ];
   return (
