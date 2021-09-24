@@ -387,6 +387,7 @@ public class MailService {
         List<String> mailFrom = new ArrayList<>();
         mailFrom.add(applicationProperties.getEmailAddresses().getRegistrationAddress());
         mailFrom.add(applicationProperties.getEmailAddresses().getLicenseAddress());
+        mailFrom.add(applicationProperties.getEmailAddresses().getContactAddress());
         return mailFrom;
     }
 
@@ -427,8 +428,10 @@ public class MailService {
                 return Optional.of("email.approval.title");
             case ACTIVATE_FREE_TRIAL:
                 return Optional.of("email.active.free.trial.title");
+            case DATA_USAGE_EXCEEDS_THRESHOLD:
+                return Optional.of("email.unusual.activities.title");
             default:
-                return Optional.empty();
+                return Optional.of("email.default.title");
 
         }
     }

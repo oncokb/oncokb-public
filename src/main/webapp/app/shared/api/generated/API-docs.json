@@ -1,4 +1,3 @@
-
 {
   "swagger": "2.0",
   "info": {
@@ -1076,21 +1075,6 @@
         "produces": [
           "*/*"
         ],
-        "parameters": [
-          {
-            "name": "licenseType",
-            "in": "query",
-            "description": "licenseType",
-            "required": true,
-            "type": "string",
-            "enum": [
-              "ACADEMIC",
-              "COMMERCIAL",
-              "RESEARCH_IN_COMMERCIAL",
-              "HOSPITAL"
-            ]
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1158,8 +1142,8 @@
             "enum": [
               "ACTIVATION",
               "APPROVAL",
-              "CREATION",
               "REJECTION",
+              "CREATION",
               "PASSWORD_RESET",
               "LICENSE_REVIEW_COMMERCIAL",
               "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
@@ -1178,6 +1162,7 @@
               "TOKEN_HAS_BEEN_EXPOSED_USER",
               "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
               "LIST_OF_UNAPPROVED_USERS",
+              "DATA_USAGE_EXCEEDS_THRESHOLD",
               "TEST"
             ]
           },
@@ -2485,8 +2470,8 @@
           "enum": [
             "ACTIVATION",
             "APPROVAL",
-            "CREATION",
             "REJECTION",
+            "CREATION",
             "PASSWORD_RESET",
             "LICENSE_REVIEW_COMMERCIAL",
             "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
@@ -2505,6 +2490,7 @@
             "TOKEN_HAS_BEEN_EXPOSED_USER",
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
             "LIST_OF_UNAPPROVED_USERS",
+            "DATA_USAGE_EXCEEDS_THRESHOLD",
             "TEST"
           ]
         }
@@ -2945,8 +2931,8 @@
           "enum": [
             "ACTIVATION",
             "APPROVAL",
-            "CREATION",
             "REJECTION",
+            "CREATION",
             "PASSWORD_RESET",
             "LICENSE_REVIEW_COMMERCIAL",
             "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
@@ -2965,6 +2951,7 @@
             "TOKEN_HAS_BEEN_EXPOSED_USER",
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
             "LIST_OF_UNAPPROVED_USERS",
+            "DATA_USAGE_EXCEEDS_THRESHOLD",
             "TEST"
           ]
         },

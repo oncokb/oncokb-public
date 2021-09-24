@@ -26,3 +26,7 @@ export type ActionableGenesPageHashQueries = {
   drug?: string;
   refGenome?: REFERENCE_GENOME;
 };
+
+export type AdminSendEmailPageSearchQueries = {
+  to?: string;
+};

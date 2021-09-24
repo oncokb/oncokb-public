@@ -9,6 +9,7 @@ import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -67,7 +68,7 @@ public class MailsController {
             mailService.sendEmailWithLicenseContext(userMapper.userToUserDTO(user.get()), mailType, from, cc, by);
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            throw new BadRequestAlertException("The user does not exist.");
         }
     }
 
@@ -102,15 +103,10 @@ public class MailsController {
      * @return the {@link ResponseEntity} with status {@code 200 (Success)} and with body the list of mail types String
      */
     @GetMapping("/mails/types")
-    public List<MailTypeInfo> getMailsTypes(
-        @RequestParam(value = "licenseType") LicenseType licenseType
-    ) {
+    public List<MailTypeInfo> getMailsTypes() {
         List<MailTypeInfo> mailTypeInfos = new ArrayList<>();
-        if (licenseType != null) {
-            if(licenseType.equals(LicenseType.ACADEMIC)) {
-                mailTypeInfos.add(new MailTypeInfo(MailType.CLARIFY_ACADEMIC_FOR_PROFIT));
-                mailTypeInfos.add(new MailTypeInfo(MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL));
-            }
+        for (MailType mailType : MailType.values()) {
+            mailTypeInfos.add(new MailTypeInfo(mailType));
         }
         return mailTypeInfos;
     }

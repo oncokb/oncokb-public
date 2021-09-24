@@ -17,6 +17,7 @@ import {
   ACCOUNT_TITLES,
   LicenseType,
   NOT_CHANGEABLE_AUTHORITIES,
+  PAGE_ROUTE,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   USER_AUTHORITIES,
   XREGEXP_VALID_LATIN_TEXT,
@@ -53,6 +54,8 @@ import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { QuickToolButton } from 'app/pages/userPage/QuickToolButton';
 import { TrialAccountModal } from './TrialAccountModal';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
+import { Link } from 'react-router-dom';
+import { RouterStore } from 'mobx-react-router';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -65,6 +68,7 @@ interface MatchParams {
 
 interface IUserPage extends RouteComponentProps<MatchParams> {
   windowStore: WindowStore;
+  routing: RouterStore;
 }
 
 const BoldAccountTitle: React.FunctionComponent<{
@@ -77,7 +81,7 @@ const BoldAccountTitle: React.FunctionComponent<{
     </span>
   );
 };
-@inject('windowStore')
+@inject('windowStore', 'routing')
 @observer
 export default class UserPage extends React.Component<IUserPage> {
   @observable selectedLicense: LicenseType | undefined;
@@ -366,6 +370,15 @@ export default class UserPage extends React.Component<IUserPage> {
                             onClick={this.onClickTrialAccountButton}
                           >
                             {this.trialAccountButtonText}
+                          </QuickToolButton>
+                          <QuickToolButton
+                            onClick={() =>
+                              this.props.routing.history.push(
+                                `${PAGE_ROUTE.ADMIN_SEND_EMAILS}?to=${this.user.email}`
+                              )
+                            }
+                          >
+                            Send Email
                           </QuickToolButton>
                           <SimpleConfirmModal
                             show={this.showTrialAccountConfirmModal}
