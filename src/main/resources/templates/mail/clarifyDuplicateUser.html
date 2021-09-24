@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{email.reject.title(${license})}"></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body>
+<p th:text="'Dear ' + ${user.firstName} + ' ' + ${user.lastName} + ','"></p>
+
+<p th:text="'Thank you for your interest in the ' + ${license} + ' license for OncoKB.'"></p>
+
+<p>We noticed that you already have a registered OncoKB account. Users are generally not allowed to have more than one OncoKB account.</p>
+
+<p>If you have forgotten your login credentials or if you believe you may have received this message in error, please contact us. Thank you.</p>
+
+<p>
+<div th:text="#{email.closing}">Sincerely,</div>
+<div th:text="#{email.signature}">The OncoKB Team</div>
+</p>
+</body>
+</html>

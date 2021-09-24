@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{email.license.clarify.title(${license})}"></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body>
+<p th:text="'Dear ' + ${user.firstName} + ' ' + ${user.lastName} + ','"></p>
+
+<p th:text="'Thank you for your interest in the ' + ${license} + ' license for OncoKB.'"></p>
+
+<p>
+  Upon reviewing your license request, we were not able to fully understand and approve of the use case you provided.
+</p>
+
+<p>Therefore, could you please further clarify your use case of OncoKB? Thank you.</p>
+
+<p>
+<div th:text="#{email.closing}">Sincerely,</div>
+<div th:text="#{email.signature}">The OncoKB Team</div>
+</p>
+</body>
+</html>
