@@ -8,12 +8,13 @@ import {
   REGEXP,
   REGEXP_LINK,
   SEARCH_QUERY_KEY,
+  YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
 import _ from 'lodash';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import reactStringReplace from 'react-string-replace';
 import { ReactNodeArray } from 'prop-types';
-import { encodeSlash } from 'app/shared/utils/Utils';
+import { encodeSlash, getYouTubeLink } from 'app/shared/utils/Utils';
 import { Linkout } from 'app/shared/links/Linkout';
 import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
 import {
@@ -157,5 +158,21 @@ export const OncoTreeLink: React.FunctionComponent<{}> = props => {
     <Linkout link={'http://oncotree.info'}>
       OncoTree <ExternalLinkIcon />
     </Linkout>
+  );
+};
+
+export const WebinarLink: React.FunctionComponent<{}> = props => {
+  return (
+    <span>
+      <Linkout
+        link={getYouTubeLink('regular', YOUTUBE_VIDEO_IDS.WEBINAR_INTRO)}
+      >
+        YouTube.com
+      </Linkout>{' '}
+      or{' '}
+      <Linkout link={'https://www.bilibili.com/video/BV1pZ4y1s7ou'}>
+        bilibili.com
+      </Linkout>
+    </span>
   );
 };
