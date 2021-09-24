@@ -6,10 +6,11 @@ import { inject, observer } from 'mobx-react';
 import { CitationText } from 'app/components/CitationText';
 import { Link } from 'react-router-dom';
 import {
+  BILIBILI_VIDEO_IDS,
   DOCUMENT_TITLES,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   SOP_LINK,
-  WEBINAR_LINKS_05072020,
+  YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -19,6 +20,8 @@ import Iframe from 'react-iframe';
 import * as QueryString from 'query-string';
 import _ from 'lodash';
 import { RouterStore } from 'mobx-react-router';
+import { getBilibiliLink, getYouTubeLink } from 'app/shared/utils/Utils';
+import { WebinarLink } from 'app/shared/utils/UrlUtils';
 
 type AboutPageProps = { appStore: AppStore; routing: RouterStore };
 const ONCOKB_TUTORIAL = 'OncoKB Tutorials';
@@ -123,64 +126,43 @@ export class AboutPage extends React.Component<AboutPageProps> {
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col md={6} xs={12}>
               <p>
-                OncoKB is a precision oncology knowledge base and contains
-                information about the effects and treatment implications of
-                specific cancer gene alterations. It is developed and maintained
-                by the Knowledge Systems group in the{' '}
-                <a
-                  href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Marie Josée and Henry R. Kravis Center for Molecular Oncology
-                </a>{' '}
-                at Memorial Sloan Kettering Cancer Center (MSK). Curated by a
-                network of clinical fellows, research fellows, and faculty
-                members at MSK, OncoKB contains detailed information about
-                specific alterations in{' '}
-                {this.props.appStore.mainNumbers.result.gene} cancer genes. The
-                information is curated from various sources, such as guidelines
-                from the FDA, NCCN, or ASCO,{' '}
-                <a
-                  href="https://clinicaltrials.gov/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  ClinicalTrials.gov
-                </a>{' '}
-                and the scientific literature.
+                OncoKB is a precision oncology knowledge base developed at
+                Memorial Sloan Kettering Cancer Center (MSK) and reflects the
+                understanding of the biological and clinical relevance of
+                various genomic alterations in cancer from experts at MSK.
               </p>
               <p>
-                For each alteration, we have curated the biological effect,
-                prevalence and prognostic information, as well as treatment
-                implications. Treatment information is classified using the{' '}
-                <Link to="/levels">Levels of Evidence</Link> system which
-                assigns the clinical actionability (ranging from
-                standard-of-care to investigational or hypothetical treatments)
-                to individual mutational events. OncoKB currently contains
-                treatment information for Level 1 and Level 2 (those alterations
-                which are FDA-recognized or considered standard care biomarkers
-                predictive of response to FDA-approved drugs in specific disease
-                settings), Level 3 alterations (those alterations which are
-                considered predictive of response based on promising clinical
-                data to targeted agents being tested in clinical trials) and
-                Level 4 (those alterations which are considered predictive of
-                response based on compelling biological evidence to targeted
-                agents being tested in clinical trials). For additional details
-                about the OncoKB curation process, please refer to the version
-                controlled{' '}
+                Alterations are annotated with their biological and oncogenic
+                effects. Additionally, alteration- and tumor type-specific
+                therapeutic implications are classified using the{' '}
+                <Link to="/levels">OncoKB Levels of Evidence</Link> system,
+                which assigns clinical actionability to individual mutational
+                events.
+              </p>
+              <p>
+                For additional details about the OncoKB curation process, please
+                refer to the version-controlled{' '}
                 <Linkout link={SOP_LINK}>
-                  OncoKB Curation Standard Operating Procedure v2.0
+                  OncoKB Curation Standard Operating Procedure v2.1
                 </Linkout>
-                .
+                . <CitationText />
               </p>
-              <p>
-                To learn more about how to utilize OncoKB, watch our first
-                OncoKB Webinar from May 7th, 2020 on {WEBINAR_LINKS_05072020}
-              </p>
-              <CitationText />
+            </Col>
+            <Col md={6} xs={12}>
+              <Iframe
+                width="100%"
+                height="300"
+                url={getYouTubeLink('embed', YOUTUBE_VIDEO_IDS.INTRO_LONG)}
+                frameBorder={0}
+                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></Iframe>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
               <p className={'mt-5'}>
                 <img src={processImg} style={{ width: '100%' }} />
               </p>
@@ -199,9 +181,11 @@ export class AboutPage extends React.Component<AboutPageProps> {
                 <h5>Webinar #1: Introduction to OncoKB</h5>
                 <Tabs
                   items={this.getTabs({
-                    youTube: 'https://www.youtube.com/embed/XqoKrrm2Boc',
-                    bilibili:
-                      '//player.bilibili.com/player.html?aid=370552044&bvid=BV1pZ4y1s7ou&cid=188401136&page=1',
+                    youTube: getYouTubeLink(
+                      'embed',
+                      YOUTUBE_VIDEO_IDS.WEBINAR_INTRO
+                    ),
+                    bilibili: getBilibiliLink(BILIBILI_VIDEO_IDS.WEBINAR_INTRO),
                   })}
                   transform={false}
                 />
@@ -211,9 +195,11 @@ export class AboutPage extends React.Component<AboutPageProps> {
                 </h5>
                 <Tabs
                   items={this.getTabs({
-                    youTube: 'https://www.youtube.com/embed/mTTe7CTdw-g',
-                    bilibili:
-                      '//player.bilibili.com/player.html?aid=328647655&bvid=BV1sA411i7F9&cid=207918006&page=1',
+                    youTube: getYouTubeLink(
+                      'embed',
+                      YOUTUBE_VIDEO_IDS.WEBINAR_API
+                    ),
+                    bilibili: getBilibiliLink(BILIBILI_VIDEO_IDS.WEBINAR_API),
                   })}
                   transform={false}
                 />

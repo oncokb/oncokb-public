@@ -65,19 +65,25 @@ export const NONE_FACULTY_COI_WEBSITE_LINK =
   'https://docs.google.com/spreadsheets/d/1PKHV8ArVm4AFu4Rj-URWHcCAqnbWlm7p2-LOxhe0aFU/edit?usp=sharing';
 export const FDA_LEVELS_OF_EVIDENCE_LINK =
   'https://www.fda.gov/media/109050/download';
-export const WEBINAR_LINKS_05072020 = (
-  <span>
-    <Linkout
-      link={'https://www.youtube.com/watch?v=XqoKrrm2Boc&feature=youtu.be'}
-    >
-      YouTube.com
-    </Linkout>{' '}
-    or{' '}
-    <Linkout link={'https://www.bilibili.com/video/BV1pZ4y1s7ou'}>
-      bilibili.com
-    </Linkout>
-  </span>
-);
+export enum VIDEO_TYPES {
+  WEBINAR_INTRO = 'WEBINAR_INTRO',
+  WEBINAR_API = 'WEBINAR_API',
+  INTRO = 'INTRO',
+  INTRO_LONG = 'INTRO_LONG',
+}
+
+export const YOUTUBE_VIDEO_IDS: { [key in VIDEO_TYPES]: string } = {
+  [VIDEO_TYPES.WEBINAR_INTRO]: 'XqoKrrm2Boc',
+  [VIDEO_TYPES.WEBINAR_API]: 'mTTe7CTdw-g',
+  [VIDEO_TYPES.INTRO]: 'IoH7JdJ0fsA',
+  [VIDEO_TYPES.INTRO_LONG]: 'aA8j3EMxgy8',
+};
+export const BILIBILI_VIDEO_IDS: { [key in VIDEO_TYPES]: string } = {
+  [VIDEO_TYPES.WEBINAR_INTRO]: '370552044',
+  [VIDEO_TYPES.WEBINAR_API]: '328647655',
+  [VIDEO_TYPES.INTRO]: '',
+  [VIDEO_TYPES.INTRO_LONG]: '',
+};
 
 export const REDIRECT_TIMEOUT_MILLISECONDS = 10000;
 export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;
