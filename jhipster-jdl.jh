@@ -1,25 +1,85 @@
 entity Token {
-	token String,
-    creation LocalDate,
-    expiration LocalDate
+	token UUID,
+    creation Instant,
+    expiration Instant,
+    usageLimit Integer,
+    currentUsage Integer required,
+    renewable Boolean required
 }
 
 entity TokenStats {
 	accessIp String,
-    resource String
+    resource String,
+    accessTime Instant required,
+    usageCount Integer required
 }
 
 entity UserDetails {
-	accountType AccountType,
+	licenseType LicenseType,
     jobTitle String,
     company String,
     city String,
     country String,
-    address String
+    address String,
+    additionalInfo String
 }
 
-enum AccountType {
- ACADEMIC, COMMERCIAL, NONAFFILIATED
+entity UserMails {
+	sentDate Instant required,
+    sentBy String required,
+    mailType MailType,
+    sentFrom String required,
+}
+
+entity Company {
+	name String required,
+    description String,
+    companyType CompanyType required,
+    licenseType LicenseType required,
+    licenseStatus LicenseStatus required,
+    businessContact String,
+    legalContact String,
+}
+
+entity CompanyDomain {
+	name String required
+}
+
+enum LicenseType {
+	ACADEMIC ("Research Use in an Academic Setting"),
+    COMMERCIAL ("Commercial Use"),
+    RESEARCH_IN_COMMERCIAL ("Research Use in a Commercial Setting"),
+    HOSPITAL ("Hospital Use")
+}
+
+enum MailType {
+	ACTIVATION("activationEmail"),
+    APPROVAL("approvalEmail"),
+    CREATION("creationEmail"),
+    PASSWORD_RESET("passwordResetEmail"),
+    LICENSE_REVIEW_COMMERCIAL("licenseReview"),
+    LICENSE_REVIEW_RESEARCH_COMMERCIAL("licenseReview"),
+    LICENSE_REVIEW_HOSPITAL("licenseReview"),
+    CLARIFY_ACADEMIC_FOR_PROFIT("clarifyLicenseInForProfileCompany"),
+    CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL("clarifyAcademicUseWithoutInstituteEmail"),
+    VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES("verifyEmailBeforeAccountExpires"),
+    APPROVAL_MSK_IN_COMMERCIAL("approvalMSKInCommercial"),
+    TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE("trialAccountIsAboutToExpire"),
+    TRIAL_ACCOUNT_IS_ACTIVATED("trialAccountIsActivated"),
+    ACTIVATE_FREE_TRIAL("activateFreeTrial"),
+    TOKEN_HAS_BEEN_EXPOSED("tokenHasBeenExposed"),
+    TOKEN_HAS_BEEN_EXPOSED_USER("tokenHasBeenExposedToUser"),
+    SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED("searchingResponseStructureHasChanged"),
+    LIST_OF_UNAPPROVED_USERS("listOfUnapprovedUsers"),
+    TEST("testEmail")
+}
+
+enum CompanyType {
+	PARENT, BRANCH, UNKNOWN
+}
+
+enum LicenseStatus {
+	TRIAL, REGULAR, TRIAL_EXPIRED, EXPIRED, UNKNOWN
 }
 
 relationship OneToOne {
@@ -32,6 +92,18 @@ relationship ManyToOne {
 
 relationship ManyToOne {
 	Token{user} to User
+}
+
+relationship ManyToOne {
+	UserMails{user} to User
+}
+
+relationship ManyToOne {
+	CompanyDomain{company} to Company
+}
+
+relationship ManyToOne {
+	UserDetails{company} to Company
 }
 
 // Set pagination options
