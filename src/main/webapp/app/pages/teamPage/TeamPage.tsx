@@ -163,14 +163,6 @@ export const TeamPage = () => {
       showCOI: true,
     },
     {
-      firstName: 'David',
-      middleName: 'S',
-      lastName: 'Klimstra',
-      title: [TITLE.MD],
-      faculty: true,
-      showCOI: true,
-    },
-    {
       firstName: 'Marc',
       lastName: 'Ladanyi',
       title: [TITLE.MD],
@@ -613,6 +605,14 @@ export const TeamPage = () => {
       lastName: 'Miles',
       title: [TITLE.PHD],
       faculty: false,
+      showCOI: true,
+    },
+    {
+      firstName: 'David',
+      middleName: 'S',
+      lastName: 'Klimstra',
+      title: [TITLE.MD],
+      faculty: true,
       showCOI: true,
     },
   ];
