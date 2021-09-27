@@ -3,13 +3,14 @@ import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
 import React from 'react';
-import { match } from 'react-router-dom';
+import { Link, match } from 'react-router-dom';
 import Client from 'app/shared/api/clientInstance';
 import { getSectionClassName } from '../account/AccountUtils';
 import { Col, Row } from 'react-bootstrap';
 import UserUsageDetailsTable from './UserUsageDetailsTable';
 import { InfoRow } from '../AccountPage';
 import {
+  PAGE_ROUTE,
   USAGE_DETAIL_TIME_KEY,
   USGAE_ALL_TIME_KEY,
   USGAE_ALL_TIME_VALUE,
@@ -19,6 +20,7 @@ import {
   ToggleValue,
   UsageRecord,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
+import { Linkout } from 'app/shared/links/Linkout';
 
 @inject('routing')
 @observer
@@ -69,7 +71,7 @@ export default class UserUsageDetailsPage extends React.Component<{
       <>
         <Row className={getSectionClassName(true)}>
           <Col>
-            <h5>User Infomation</h5>
+            <h5>User Usage Information</h5>
             <hr />
             {this.user && (
               <>
@@ -81,7 +83,11 @@ export default class UserUsageDetailsPage extends React.Component<{
                   title="Last Name"
                   content={this.user.userLastName}
                 ></InfoRow>
-                <InfoRow title="Email" content={this.user.userEmail}></InfoRow>
+                <InfoRow title="Email">
+                  <Link to={`${PAGE_ROUTE.USER}/${this.user.userEmail}`}>
+                    {this.user.userEmail}
+                  </Link>
+                </InfoRow>
                 <InfoRow title="Company" content={this.user.company}></InfoRow>
                 <InfoRow
                   title="Job Title"
