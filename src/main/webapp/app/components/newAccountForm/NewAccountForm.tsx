@@ -136,7 +136,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       licenseType: this.selectedLicense,
       tokenIsRenewable: this.selectedAccountType !== AccountType.TRIAL,
       jobTitle: values.jobTitle,
-      company: values.company,
+      company: values.companyName,
       city: values.city,
       country: values.country,
     };

@@ -50,7 +50,7 @@ public class UserMapperTest {
         userDetails = new UserDetails();
         userDetails.setLicenseType(LicenseType.ACADEMIC);
         userDetails.setJobTitle("Engineer");
-        userDetails.setCompany("MSK");
+        userDetails.setCompanyName("MSK");
         userDetails.setCity("NYC");
         userDetails.setCountry("USA");
 

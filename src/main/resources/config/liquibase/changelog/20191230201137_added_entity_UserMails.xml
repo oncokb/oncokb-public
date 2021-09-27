@@ -22,11 +22,11 @@
             <column name="sent_by" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="sent_from" type="varchar(255)">
-              <constraints nullable="false" />
-            </column>
             <column name="mail_type" type="varchar(255)">
                 <constraints nullable="true" />
+            </column>
+            <column name="sent_from" type="varchar(255)">
+                <constraints nullable="false" />
             </column>
             <column name="user_id" type="bigint">
                 <constraints nullable="true" />

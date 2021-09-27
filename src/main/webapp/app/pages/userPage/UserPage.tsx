@@ -187,7 +187,7 @@ export default class UserPage extends React.Component<IUserPage> {
         authorities: values.authorities,
         activated: values.accountStatus === AccountStatus.ACTIVATED,
         jobTitle: values.jobTitle,
-        company: values.company,
+        company: values.companyName,
         city: values.city,
         country: values.country,
       };
@@ -534,7 +534,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 'Cannot be longer than 50 characters',
                             },
                           }}
-                          value={this.user.company}
+                          value={this.user.companyName}
                         />
                         <AvField
                           name="city"
