@@ -43,5 +43,6 @@
   "readOnly": false,
   "embedded": false,
   "applications": "*",
-  "skipClient": true
+  "skipClient": true,
+  "skipFakeData": true
 }

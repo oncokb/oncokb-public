@@ -50,5 +50,6 @@
   "embedded": false,
   "clientRootFolder": "",
   "applications": "*",
-  "skipClient": true
+  "skipClient": true,
+  "skipFakeData": true
 }
