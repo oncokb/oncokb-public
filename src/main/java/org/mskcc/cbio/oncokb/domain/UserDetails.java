@@ -28,8 +28,8 @@ public class UserDetails implements Serializable {
     @Column(name = "job_title")
     private String jobTitle;
 
-    @Column(name = "company")
-    private String company;
+    @Column(name = "company_name")
+    private String companyName;
 
     @Column(name = "city")
     private String city;
@@ -87,17 +87,17 @@ public class UserDetails implements Serializable {
         this.jobTitle = jobTitle;
     }
 
-    public String getCompany() {
-        return company;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public UserDetails company(String company) {
-        this.company = company;
+    public UserDetails companyName(String companyName) {
+        this.companyName = companyName;
         return this;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getCity() {
@@ -202,7 +202,7 @@ public class UserDetails implements Serializable {
             "id=" + getId() +
             ", licenseType='" + getLicenseType() + "'" +
             ", jobTitle='" + getJobTitle() + "'" +
-            ", company='" + getCompany() + "'" +
+            ", companyName='" + getCompanyName() + "'" +
             ", city='" + getCity() + "'" +
             ", country='" + getCountry() + "'" +
             ", address='" + getAddress() + "'" +

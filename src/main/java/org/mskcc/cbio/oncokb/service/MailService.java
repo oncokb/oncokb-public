@@ -132,7 +132,7 @@ public class MailService {
 
     private void addUserMailsRecord(UserDTO userDTO, MailType mailType, String sentFrom, String sentBy) {
         UserMailsDTO userMailsDTO = new UserMailsDTO();
-        userMailsDTO.setMailType(mailType);
+        userMailsDTO.setMailType(mailType.name());
         userMailsDTO.setSentDate(Instant.now());
         userMailsDTO.setSentFrom(sentFrom);
         userMailsDTO.setSentBy(sentBy);

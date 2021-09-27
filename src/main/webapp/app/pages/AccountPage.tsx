@@ -187,7 +187,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
                 ACCOUNT_TITLES.COMPANY,
                 this.account.licenseType as LicenseType
               )}
-              content={this.account.company}
+              content={this.account.companyName}
             />
             <InfoRow
               title={getAccountInfoTitle(

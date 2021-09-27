@@ -17,7 +17,7 @@ entity TokenStats {
 entity UserDetails {
 	licenseType LicenseType,
     jobTitle String,
-    company String,
+    companyName String,
     city String,
     country String,
     address String,

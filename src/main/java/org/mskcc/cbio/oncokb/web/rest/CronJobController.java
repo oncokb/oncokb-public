@@ -242,7 +242,7 @@ public class CronJobController {
                 Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
                 if (userDetails.isPresent()) {
                     currentUsage.setJobTitle(userDetails.get().getJobTitle());
-                    currentUsage.setCompany(userDetails.get().getCompany());
+                    currentUsage.setCompany(userDetails.get().getCompanyName());
                     currentUsage.setLicenseType(userDetails.get().getLicenseType().getName());
                 }
             }

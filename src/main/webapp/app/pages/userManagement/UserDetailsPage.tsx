@@ -224,11 +224,11 @@ export default class UserDetailsPage extends React.Component<{
       accessor: 'jobTitle',
     },
     {
-      id: 'company',
+      id: 'companyName',
       Header: <span className={styles.tableHeader}>Company</span>,
       onFilter: (data: UserDTO, keyword) =>
-        data.company ? filterByKeyword(data.company, keyword) : false,
-      accessor: 'company',
+        data.companyName ? filterByKeyword(data.companyName, keyword) : false,
+      accessor: 'companyName',
     },
     {
       id: 'city',

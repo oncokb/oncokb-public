@@ -251,7 +251,7 @@ public class UserService {
         userDetails.setUser(newUser);
         userDetails.setLicenseType(userDTO.getLicenseType());
         userDetails.setJobTitle(userDTO.getJobTitle());
-        userDetails.setCompany(userDTO.getCompany());
+        userDetails.setCompanyName(userDTO.getCompanyName());
         userDetails.setCity(userDTO.getCity());
         userDetails.setCountry(userDTO.getCountry());
         if (userDTO.getAdditionalInfo() != null) {
@@ -312,7 +312,7 @@ public class UserService {
         userDetails.setUser(user);
         userDetails.setLicenseType(userDTO.getLicenseType());
         userDetails.setJobTitle(userDTO.getJobTitle());
-        userDetails.setCompany(userDTO.getCompany());
+        userDetails.setCompanyName(userDTO.getCompanyName());
         userDetails.setCity(userDTO.getCity());
         userDetails.setCountry(userDTO.getCountry());
         userDetailsRepository.save(userDetails);
@@ -357,7 +357,7 @@ public class UserService {
                 log.debug("Changed Information for User: {}", user);
 
                 return new UserDTO(user, getUpdatedUserDetails(
-                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
+                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCity(), userDTO.getCountry()));
             });
 
         if (updatedUserDTO.isPresent()) {
@@ -371,7 +371,7 @@ public class UserService {
         if (userDetails.isPresent()) {
             userDetails.get().setLicenseType(licenseType);
             userDetails.get().setJobTitle(jobTitle);
-            userDetails.get().setCompany(company);
+            userDetails.get().setCompanyName(company);
             userDetails.get().setCity(city);
             userDetails.get().setCountry(country);
             return userDetails.get();
@@ -379,7 +379,7 @@ public class UserService {
             UserDetails newUserDetails = new UserDetails();
             newUserDetails.setLicenseType(licenseType);
             newUserDetails.setJobTitle(jobTitle);
-            newUserDetails.setCompany(company);
+            newUserDetails.setCompanyName(company);
             newUserDetails.setCity(city);
             newUserDetails.setCountry(country);
             newUserDetails.setUser(user);

@@ -16,7 +16,7 @@ public class UserDetailsDTO implements Serializable {
 
     private String jobTitle;
 
-    private String company;
+    private String companyName;
 
     private String city;
 
@@ -55,12 +55,12 @@ public class UserDetailsDTO implements Serializable {
         this.jobTitle = jobTitle;
     }
 
-    public String getCompany() {
-        return company;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getCity() {
@@ -135,7 +135,7 @@ public class UserDetailsDTO implements Serializable {
             "id=" + getId() +
             ", licenseType='" + getLicenseType() + "'" +
             ", jobTitle='" + getJobTitle() + "'" +
-            ", company='" + getCompany() + "'" +
+            ", companyName='" + getCompanyName() + "'" +
             ", city='" + getCity() + "'" +
             ", country='" + getCountry() + "'" +
             ", address='" + getAddress() + "'" +
