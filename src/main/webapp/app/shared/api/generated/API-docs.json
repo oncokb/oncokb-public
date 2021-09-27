@@ -1,4 +1,3 @@
-
 {
   "swagger": "2.0",
   "info": {
@@ -19,6 +18,14 @@
     {
       "name": "account-resource",
       "description": "Account Resource"
+    },
+    {
+      "name": "company-domain-resource",
+      "description": "Company Domain Resource"
+    },
+    {
+      "name": "company-resource",
+      "description": "Company Resource"
     },
     {
       "name": "cron-job-controller",
@@ -700,6 +707,402 @@
         "deprecated": false
       }
     },
+    "/api/companies": {
+      "get": {
+        "tags": [
+          "company-resource"
+        ],
+        "summary": "getAllCompanies",
+        "operationId": "getAllCompaniesUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CompanyDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "company-resource"
+        ],
+        "summary": "createCompany",
+        "operationId": "createCompanyUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "companyDTO",
+            "description": "companyDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CompanyDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CompanyDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "put": {
+        "tags": [
+          "company-resource"
+        ],
+        "summary": "updateCompany",
+        "operationId": "updateCompanyUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "companyDTO",
+            "description": "companyDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CompanyDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CompanyDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/companies/{id}": {
+      "get": {
+        "tags": [
+          "company-resource"
+        ],
+        "summary": "getCompany",
+        "operationId": "getCompanyUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CompanyDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "tags": [
+          "company-resource"
+        ],
+        "summary": "deleteCompany",
+        "operationId": "deleteCompanyUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/company-domains": {
+      "get": {
+        "tags": [
+          "company-domain-resource"
+        ],
+        "summary": "getAllCompanyDomains",
+        "operationId": "getAllCompanyDomainsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CompanyDomainDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "company-domain-resource"
+        ],
+        "summary": "createCompanyDomain",
+        "operationId": "createCompanyDomainUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "companyDomainDTO",
+            "description": "companyDomainDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CompanyDomainDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CompanyDomainDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "put": {
+        "tags": [
+          "company-domain-resource"
+        ],
+        "summary": "updateCompanyDomain",
+        "operationId": "updateCompanyDomainUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "companyDomainDTO",
+            "description": "companyDomainDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CompanyDomainDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CompanyDomainDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/company-domains/{id}": {
+      "get": {
+        "tags": [
+          "company-domain-resource"
+        ],
+        "summary": "getCompanyDomain",
+        "operationId": "getCompanyDomainUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CompanyDomainDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "tags": [
+          "company-domain-resource"
+        ],
+        "summary": "deleteCompanyDomain",
+        "operationId": "deleteCompanyDomainUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/cronjob/check-exposed-tokens": {
       "get": {
         "tags": [
@@ -1158,8 +1561,8 @@
             "enum": [
               "ACTIVATION",
               "APPROVAL",
-              "CREATION",
               "REJECTION",
+              "CREATION",
               "PASSWORD_RESET",
               "LICENSE_REVIEW_COMMERCIAL",
               "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
@@ -2392,6 +2795,136 @@
       },
       "title": "AdditionalInfoDTO"
     },
+    "Company": {
+      "type": "object",
+      "required": [
+        "companyType",
+        "licenseStatus",
+        "licenseType",
+        "name"
+      ],
+      "properties": {
+        "businessContact": {
+          "type": "string"
+        },
+        "companyType": {
+          "type": "string",
+          "enum": [
+            "PARENT",
+            "BRANCH",
+            "UNKNOWN"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "legalContact": {
+          "type": "string"
+        },
+        "licenseStatus": {
+          "type": "string",
+          "enum": [
+            "TRIAL",
+            "REGULAR",
+            "TRIAL_EXPIRED",
+            "EXPIRED",
+            "UNKNOWN"
+          ]
+        },
+        "licenseType": {
+          "type": "string",
+          "enum": [
+            "ACADEMIC",
+            "COMMERCIAL",
+            "RESEARCH_IN_COMMERCIAL",
+            "HOSPITAL"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Company"
+    },
+    "CompanyDTO": {
+      "type": "object",
+      "required": [
+        "companyType",
+        "licenseStatus",
+        "licenseType",
+        "name"
+      ],
+      "properties": {
+        "businessContact": {
+          "type": "string"
+        },
+        "companyType": {
+          "type": "string",
+          "enum": [
+            "PARENT",
+            "BRANCH",
+            "UNKNOWN"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "legalContact": {
+          "type": "string"
+        },
+        "licenseStatus": {
+          "type": "string",
+          "enum": [
+            "TRIAL",
+            "REGULAR",
+            "TRIAL_EXPIRED",
+            "EXPIRED",
+            "UNKNOWN"
+          ]
+        },
+        "licenseType": {
+          "type": "string",
+          "enum": [
+            "ACADEMIC",
+            "COMMERCIAL",
+            "RESEARCH_IN_COMMERCIAL",
+            "HOSPITAL"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "CompanyDTO"
+    },
+    "CompanyDomainDTO": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "companyId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "CompanyDomainDTO"
+    },
     "Contact": {
       "type": "object",
       "properties": {
@@ -2485,8 +3018,8 @@
           "enum": [
             "ACTIVATION",
             "APPROVAL",
-            "CREATION",
             "REJECTION",
+            "CREATION",
             "PASSWORD_RESET",
             "LICENSE_REVIEW_COMMERCIAL",
             "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
@@ -2533,6 +3066,9 @@
           "type": "string"
         },
         "company": {
+          "$ref": "#/definitions/Company"
+        },
+        "companyName": {
           "type": "string"
         },
         "country": {
@@ -2808,6 +3344,9 @@
           "type": "string"
         },
         "company": {
+          "$ref": "#/definitions/Company"
+        },
+        "companyName": {
           "type": "string"
         },
         "country": {
@@ -2899,7 +3438,11 @@
         "city": {
           "type": "string"
         },
-        "company": {
+        "companyId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "companyName": {
           "type": "string"
         },
         "country": {
@@ -2941,32 +3484,7 @@
           "format": "int64"
         },
         "mailType": {
-          "type": "string",
-          "enum": [
-            "ACTIVATION",
-            "APPROVAL",
-            "CREATION",
-            "REJECTION",
-            "PASSWORD_RESET",
-            "LICENSE_REVIEW_COMMERCIAL",
-            "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
-            "LICENSE_REVIEW_HOSPITAL",
-            "CLARIFY_ACADEMIC_FOR_PROFIT",
-            "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
-            "CLARIFY_USE_CASE",
-            "CLARIFY_DUPLICATE_USER",
-            "REJECT_ALUMNI_ADDRESS",
-            "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
-            "APPROVAL_MSK_IN_COMMERCIAL",
-            "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
-            "TRIAL_ACCOUNT_IS_ACTIVATED",
-            "ACTIVATE_FREE_TRIAL",
-            "TOKEN_HAS_BEEN_EXPOSED",
-            "TOKEN_HAS_BEEN_EXPOSED_USER",
-            "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
-            "LIST_OF_UNAPPROVED_USERS",
-            "TEST"
-          ]
+          "type": "string"
         },
         "sentBy": {
           "type": "string"
@@ -2981,9 +3499,6 @@
         "userId": {
           "type": "integer",
           "format": "int64"
-        },
-        "userLogin": {
-          "type": "string"
         }
       },
       "title": "UserMailsDTO"

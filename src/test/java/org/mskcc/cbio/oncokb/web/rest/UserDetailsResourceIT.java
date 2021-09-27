@@ -45,8 +45,8 @@ public class UserDetailsResourceIT {
     private static final String DEFAULT_JOB_TITLE = "AAAAAAAAAA";
     private static final String UPDATED_JOB_TITLE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_COMPANY = "AAAAAAAAAA";
-    private static final String UPDATED_COMPANY = "BBBBBBBBBB";
+    private static final String DEFAULT_COMPANY_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_COMPANY_NAME = "BBBBBBBBBB";
 
     private static final String DEFAULT_CITY = "AAAAAAAAAA";
     private static final String UPDATED_CITY = "BBBBBBBBBB";
@@ -87,7 +87,7 @@ public class UserDetailsResourceIT {
         UserDetails userDetails = new UserDetails()
             .licenseType(DEFAULT_LICENSE_TYPE)
             .jobTitle(DEFAULT_JOB_TITLE)
-            .company(DEFAULT_COMPANY)
+            .companyName(DEFAULT_COMPANY_NAME)
             .city(DEFAULT_CITY)
             .country(DEFAULT_COUNTRY)
             .address(DEFAULT_ADDRESS)
@@ -104,7 +104,7 @@ public class UserDetailsResourceIT {
         UserDetails userDetails = new UserDetails()
             .licenseType(UPDATED_LICENSE_TYPE)
             .jobTitle(UPDATED_JOB_TITLE)
-            .company(UPDATED_COMPANY)
+            .companyName(UPDATED_COMPANY_NAME)
             .city(UPDATED_CITY)
             .country(UPDATED_COUNTRY)
             .address(UPDATED_ADDRESS)
@@ -134,7 +134,7 @@ public class UserDetailsResourceIT {
         UserDetails testUserDetails = userDetailsList.get(userDetailsList.size() - 1);
         assertThat(testUserDetails.getLicenseType()).isEqualTo(DEFAULT_LICENSE_TYPE);
         assertThat(testUserDetails.getJobTitle()).isEqualTo(DEFAULT_JOB_TITLE);
-        assertThat(testUserDetails.getCompany()).isEqualTo(DEFAULT_COMPANY);
+        assertThat(testUserDetails.getCompanyName()).isEqualTo(DEFAULT_COMPANY_NAME);
         assertThat(testUserDetails.getCity()).isEqualTo(DEFAULT_CITY);
         assertThat(testUserDetails.getCountry()).isEqualTo(DEFAULT_COUNTRY);
         assertThat(testUserDetails.getAddress()).isEqualTo(DEFAULT_ADDRESS);
@@ -175,7 +175,7 @@ public class UserDetailsResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(userDetails.getId().intValue())))
             .andExpect(jsonPath("$.[*].licenseType").value(hasItem(DEFAULT_LICENSE_TYPE.toString())))
             .andExpect(jsonPath("$.[*].jobTitle").value(hasItem(DEFAULT_JOB_TITLE)))
-            .andExpect(jsonPath("$.[*].company").value(hasItem(DEFAULT_COMPANY)))
+            .andExpect(jsonPath("$.[*].companyName").value(hasItem(DEFAULT_COMPANY_NAME)))
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
             .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
@@ -195,7 +195,7 @@ public class UserDetailsResourceIT {
             .andExpect(jsonPath("$.id").value(userDetails.getId().intValue()))
             .andExpect(jsonPath("$.licenseType").value(DEFAULT_LICENSE_TYPE.toString()))
             .andExpect(jsonPath("$.jobTitle").value(DEFAULT_JOB_TITLE))
-            .andExpect(jsonPath("$.company").value(DEFAULT_COMPANY))
+            .andExpect(jsonPath("$.companyName").value(DEFAULT_COMPANY_NAME))
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY))
             .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
@@ -224,7 +224,7 @@ public class UserDetailsResourceIT {
         updatedUserDetails
             .licenseType(UPDATED_LICENSE_TYPE)
             .jobTitle(UPDATED_JOB_TITLE)
-            .company(UPDATED_COMPANY)
+            .companyName(UPDATED_COMPANY_NAME)
             .city(UPDATED_CITY)
             .country(UPDATED_COUNTRY)
             .address(UPDATED_ADDRESS)
@@ -242,7 +242,7 @@ public class UserDetailsResourceIT {
         UserDetails testUserDetails = userDetailsList.get(userDetailsList.size() - 1);
         assertThat(testUserDetails.getLicenseType()).isEqualTo(UPDATED_LICENSE_TYPE);
         assertThat(testUserDetails.getJobTitle()).isEqualTo(UPDATED_JOB_TITLE);
-        assertThat(testUserDetails.getCompany()).isEqualTo(UPDATED_COMPANY);
+        assertThat(testUserDetails.getCompanyName()).isEqualTo(UPDATED_COMPANY_NAME);
         assertThat(testUserDetails.getCity()).isEqualTo(UPDATED_CITY);
         assertThat(testUserDetails.getCountry()).isEqualTo(UPDATED_COUNTRY);
         assertThat(testUserDetails.getAddress()).isEqualTo(UPDATED_ADDRESS);

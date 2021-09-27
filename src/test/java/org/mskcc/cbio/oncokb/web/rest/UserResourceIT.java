@@ -320,7 +320,7 @@ public class UserResourceIT {
         managedUserVM.setLangKey(UPDATED_LANGKEY);
         managedUserVM.setLicenseType(LicenseType.RESEARCH_IN_COMMERCIAL);
         managedUserVM.setJobTitle("test title");
-        managedUserVM.setCompany("test company");
+        managedUserVM.setCompanyName("test company");
         managedUserVM.setCity("test city");
         managedUserVM.setCountry("test country");
         managedUserVM.setCreatedBy(updatedUser.getCreatedBy());

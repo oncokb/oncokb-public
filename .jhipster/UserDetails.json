@@ -11,7 +11,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "company",
+      "fieldName": "companyName",
       "fieldType": "String"
     },
     {
