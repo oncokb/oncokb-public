@@ -132,6 +132,47 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '09292021': {
+    priorityNews: [
+      <span>
+        New to OncoKB? Watch our introductory videos to get you started. See the
+        OncoKB <Link to={PAGE_ROUTE.ABOUT}>About page</Link>.
+      </span>,
+    ],
+    updatedImplication: [
+      [
+        'R2',
+        'EGFR',
+        'G724S',
+        'Non-Small Cell Lung Cancer' + 'Osimertinib',
+        <PMIDLink pmids={'28838405, 30405134, 30228210, 30796031'} />,
+      ],
+    ],
+    changedAnnotation: [
+      [
+        'EGFR',
+        'Exon 20 Insertions',
+        'Non-Small Cell Lung Cancer',
+        'Mobocertinib',
+        '3A',
+        '1',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-mobocertinib-metastatic-non-small-cell-lung-cancer-egfr-exon-20'
+            }
+            approval={'Mobocertinib'}
+          />
+          <AbstractLink
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2021.39.15_suppl.9014'
+            }
+            abstract={'Ramalingham et al. Abstract # 9014, ASCO 2021'}
+          />
+        </WithSeparator>,
+      ],
+    ],
+  },
   '08312021': {
     updatedImplication: [
       [
