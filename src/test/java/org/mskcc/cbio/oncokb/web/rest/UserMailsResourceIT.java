@@ -1,16 +1,12 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
+import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.UserMails;
 import org.mskcc.cbio.oncokb.repository.UserMailsRepository;
-import org.mskcc.cbio.oncokb.service.MailService;
 import org.mskcc.cbio.oncokb.service.UserMailsService;
-import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMailsMapper;
-import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
-import org.mskcc.cbio.oncokb.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +30,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 /**
  * Integration tests for the {@link UserMailsResource} REST controller.
  */
@@ -50,11 +45,11 @@ public class UserMailsResourceIT {
     private static final String DEFAULT_SENT_BY = "AAAAAAAAAA";
     private static final String UPDATED_SENT_BY = "BBBBBBBBBB";
 
+    private static final String DEFAULT_MAIL_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_MAIL_TYPE = "BBBBBBBBBB";
+
     private static final String DEFAULT_SENT_FROM = "AAAAAAAAAA";
     private static final String UPDATED_SENT_FROM = "BBBBBBBBBB";
-
-    private static final MailType DEFAULT_MAIL_TYPE = MailType.ACTIVATION;
-    private static final MailType UPDATED_MAIL_TYPE = MailType.APPROVAL;
 
     @Autowired
     private UserMailsRepository userMailsRepository;
@@ -64,9 +59,6 @@ public class UserMailsResourceIT {
 
     @Autowired
     private UserMailsService userMailsService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private EntityManager em;
@@ -86,8 +78,8 @@ public class UserMailsResourceIT {
         UserMails userMails = new UserMails()
             .sentDate(DEFAULT_SENT_DATE)
             .sentBy(DEFAULT_SENT_BY)
-            .sentFrom(DEFAULT_SENT_FROM)
-            .mailType(DEFAULT_MAIL_TYPE);
+            .mailType(DEFAULT_MAIL_TYPE)
+            .sentFrom(DEFAULT_SENT_FROM);
         return userMails;
     }
     /**
@@ -100,8 +92,8 @@ public class UserMailsResourceIT {
         UserMails userMails = new UserMails()
             .sentDate(UPDATED_SENT_DATE)
             .sentBy(UPDATED_SENT_BY)
-            .sentFrom(UPDATED_SENT_FROM)
-            .mailType(UPDATED_MAIL_TYPE);
+            .mailType(UPDATED_MAIL_TYPE)
+            .sentFrom(UPDATED_SENT_FROM);
         return userMails;
     }
 
@@ -127,8 +119,8 @@ public class UserMailsResourceIT {
         UserMails testUserMails = userMailsList.get(userMailsList.size() - 1);
         assertThat(testUserMails.getSentDate()).isEqualTo(DEFAULT_SENT_DATE);
         assertThat(testUserMails.getSentBy()).isEqualTo(DEFAULT_SENT_BY);
-        assertThat(testUserMails.getSentFrom()).isEqualTo(DEFAULT_SENT_FROM);
         assertThat(testUserMails.getMailType()).isEqualTo(DEFAULT_MAIL_TYPE);
+        assertThat(testUserMails.getSentFrom()).isEqualTo(DEFAULT_SENT_FROM);
     }
 
     @Test
@@ -225,10 +217,10 @@ public class UserMailsResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(userMails.getId().intValue())))
             .andExpect(jsonPath("$.[*].sentDate").value(hasItem(DEFAULT_SENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].sentBy").value(hasItem(DEFAULT_SENT_BY)))
-            .andExpect(jsonPath("$.[*].sentFrom").value(hasItem(DEFAULT_SENT_FROM)))
-            .andExpect(jsonPath("$.[*].mailType").value(hasItem(DEFAULT_MAIL_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].mailType").value(hasItem(DEFAULT_MAIL_TYPE)))
+            .andExpect(jsonPath("$.[*].sentFrom").value(hasItem(DEFAULT_SENT_FROM)));
     }
-
+    
     @Test
     @Transactional
     public void getUserMails() throws Exception {
@@ -242,8 +234,8 @@ public class UserMailsResourceIT {
             .andExpect(jsonPath("$.id").value(userMails.getId().intValue()))
             .andExpect(jsonPath("$.sentDate").value(DEFAULT_SENT_DATE.toString()))
             .andExpect(jsonPath("$.sentBy").value(DEFAULT_SENT_BY))
-            .andExpect(jsonPath("$.sentFrom").value(DEFAULT_SENT_FROM))
-            .andExpect(jsonPath("$.mailType").value(DEFAULT_MAIL_TYPE.toString()));
+            .andExpect(jsonPath("$.mailType").value(DEFAULT_MAIL_TYPE))
+            .andExpect(jsonPath("$.sentFrom").value(DEFAULT_SENT_FROM));
     }
     @Test
     @Transactional
@@ -268,8 +260,8 @@ public class UserMailsResourceIT {
         updatedUserMails
             .sentDate(UPDATED_SENT_DATE)
             .sentBy(UPDATED_SENT_BY)
-            .sentFrom(UPDATED_SENT_FROM)
-            .mailType(UPDATED_MAIL_TYPE);
+            .mailType(UPDATED_MAIL_TYPE)
+            .sentFrom(UPDATED_SENT_FROM);
         UserMailsDTO userMailsDTO = userMailsMapper.toDto(updatedUserMails);
 
         restUserMailsMockMvc.perform(put("/api/user-mails")
@@ -283,8 +275,8 @@ public class UserMailsResourceIT {
         UserMails testUserMails = userMailsList.get(userMailsList.size() - 1);
         assertThat(testUserMails.getSentDate()).isEqualTo(UPDATED_SENT_DATE);
         assertThat(testUserMails.getSentBy()).isEqualTo(UPDATED_SENT_BY);
-        assertThat(testUserMails.getSentFrom()).isEqualTo(UPDATED_SENT_FROM);
         assertThat(testUserMails.getMailType()).isEqualTo(UPDATED_MAIL_TYPE);
+        assertThat(testUserMails.getSentFrom()).isEqualTo(UPDATED_SENT_FROM);
     }
 
     @Test

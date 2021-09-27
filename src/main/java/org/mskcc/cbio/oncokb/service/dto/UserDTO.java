@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
+import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
@@ -36,7 +37,9 @@ public class UserDTO {
 
     private String jobTitle;
 
-    private String company;
+    private Company company;
+
+    private String companyName;
 
     private String city;
 
@@ -101,6 +104,7 @@ public class UserDTO {
         if(userDetails != null) {
             this.licenseType = userDetails.getLicenseType();
             this.jobTitle = userDetails.getJobTitle();
+            this.companyName = userDetails.getCompanyName();
             this.company = userDetails.getCompany();
             this.city = userDetails.getCity();
             this.country = userDetails.getCountry();
@@ -172,12 +176,16 @@ public class UserDTO {
         this.jobTitle = jobTitle;
     }
 
-    public String getCompany() {
-        return company;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public Company getCompany() {
+        return company;
     }
 
     public String getCity() {

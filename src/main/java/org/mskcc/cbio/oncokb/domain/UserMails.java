@@ -1,16 +1,12 @@
 package org.mskcc.cbio.oncokb.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.time.Instant;
-
-import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 
 /**
  * A UserMails.
@@ -33,9 +29,8 @@ public class UserMails implements Serializable {
     @Column(name = "sent_by", nullable = false)
     private String sentBy;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "mail_type")
-    private MailType mailType;
+    private String mailType;
 
     @NotNull
     @Column(name = "sent_from", nullable = false)
@@ -80,16 +75,16 @@ public class UserMails implements Serializable {
         this.sentBy = sentBy;
     }
 
-    public MailType getMailType() {
+    public String getMailType() {
         return mailType;
     }
 
-    public UserMails mailType(MailType mailType) {
+    public UserMails mailType(String mailType) {
         this.mailType = mailType;
         return this;
     }
 
-    public void setMailType(MailType mailType) {
+    public void setMailType(String mailType) {
         this.mailType = mailType;
     }
 

@@ -356,8 +356,8 @@ public class SlackService {
     private LayoutBlock buildCurrentLicense(UserDTO userDTO) {
         StringBuilder sb = new StringBuilder();
         sb.append("*" + userDTO.getLicenseType().getName() + "*" + (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) ? "" : " :clap:") +"\n");
-        if (StringUtils.isNotEmpty(userDTO.getCompany())) {
-            sb.append("*" + userDTO.getCompany() + "*");
+        if (StringUtils.isNotEmpty(userDTO.getCompanyName())) {
+            sb.append("*" + userDTO.getCompanyName() + "*");
         }
 
         return SectionBlock.builder().text(MarkdownTextObject.builder().text(sb.toString()).build()).accessory(getLicenseTypeElement(userDTO)).blockId(LICENSE_TYPE.getId()).build();
@@ -487,7 +487,7 @@ public class SlackService {
         userInfo.add(MarkdownTextObject.builder().text("Email:\n" + user.getEmail()).build());
         userInfo.add(getTextObject("Name", user.getFirstName() + " " + user.getLastName()));
         userInfo.add(getTextObject("Job Title", user.getJobTitle()));
-        userInfo.add(getTextObject(companyName, user.getCompany()));
+        userInfo.add(getTextObject(companyName, user.getCompanyName()));
         blocks.add(SectionBlock.builder().fields(userInfo).blockId(ACCOUNT_INFO.getId()).build());
 
         // Add company information

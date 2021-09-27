@@ -23,7 +23,7 @@
       <td th:text="${userMessagePair.dateCreated}"/>
       <td th:text="${userMessagePair.dateLastReplied}"/>
       <td th:text="${userMessagePair.userDTO.firstName + ' ' + userMessagePair.userDTO.lastName}"/>
-      <td th:text="${userMessagePair.userDTO.company}"/>
+      <td th:text="${userMessagePair.userDTO.companyName}"/>
       <td th:text="${userMessagePair.userDTO.country}"/>
       <td>
         <a th:with="url=(@{|${slackBaseUrl}/archives/${channelID}/p${userMessagePair.message.ts}|})" th:href="${url}">Slack request link</a>

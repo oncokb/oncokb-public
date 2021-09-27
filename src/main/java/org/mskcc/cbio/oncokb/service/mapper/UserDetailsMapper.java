@@ -11,13 +11,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link UserDetails} and its DTO {@link UserDetailsDTO}.
  */
-@Mapper(componentModel = "spring", uses = {UserMapper.class})
+@Mapper(componentModel = "spring", uses = {UserMapper.class, CompanyMapper.class})
 public interface UserDetailsMapper extends EntityMapper<UserDetailsDTO, UserDetails> {
 
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "company.id", target = "companyId")
     UserDetailsDTO toDto(UserDetails userDetails);
 
     @Mapping(source = "userId", target = "user")
+    @Mapping(source = "companyId", target = "company")
     UserDetails toEntity(UserDetailsDTO userDetailsDTO);
 
     default UserDetails fromId(Long id) {

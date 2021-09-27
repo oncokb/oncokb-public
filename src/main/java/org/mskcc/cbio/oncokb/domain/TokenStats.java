@@ -1,8 +1,6 @@
 package org.mskcc.cbio.oncokb.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -15,7 +13,6 @@ import java.time.Instant;
  */
 @Entity
 @Table(name = "token_stats")
-//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class TokenStats implements Serializable {
 
     private static final long serialVersionUID = 1L;
