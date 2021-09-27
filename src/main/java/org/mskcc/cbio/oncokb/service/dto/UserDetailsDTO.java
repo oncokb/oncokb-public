@@ -29,6 +29,8 @@ public class UserDetailsDTO implements Serializable {
 
     private Long userId;
 
+    private Long companyId;
+
     public Long getId() {
         return id;
     }
@@ -101,6 +103,14 @@ public class UserDetailsDTO implements Serializable {
         this.userId = userId;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -131,6 +141,7 @@ public class UserDetailsDTO implements Serializable {
             ", address='" + getAddress() + "'" +
             ", additionalInfo='" + getAdditionalInfo() + "'" +
             ", userId=" + getUserId() +
+            ", companyId=" + getCompanyId() +
             "}";
     }
 }

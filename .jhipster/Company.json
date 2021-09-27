@@ -1,0 +1,54 @@
+{
+  "name": "Company",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "companyType",
+      "fieldType": "CompanyType",
+      "fieldValues": "PARENT,BRANCH,UNKNOWN",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "licenseType",
+      "fieldType": "LicenseType",
+      "fieldValues": "ACADEMIC,COMMERCIAL,RESEARCH_IN_COMMERCIAL,HOSPITAL",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "licenseStatus",
+      "fieldType": "LicenseStatus",
+      "fieldValues": "TRIAL,REGULAR,TRIAL_EXPIRED,EXPIRED,UNKNOWN",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "businessContact",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "legalContact",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "changelogDate": "20210927165433",
+  "entityTableName": "company",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
+}

@@ -3,7 +3,6 @@ package org.mskcc.cbio.oncokb.service.dto;
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 
 /**
  * A DTO for the {@link org.mskcc.cbio.oncokb.domain.UserMails} entity.
@@ -18,15 +17,13 @@ public class UserMailsDTO implements Serializable {
     @NotNull
     private String sentBy;
 
+    private String mailType;
+
     @NotNull
     private String sentFrom;
 
-    private MailType mailType;
-
 
     private Long userId;
-
-    private String userLogin;
     
     public Long getId() {
         return id;
@@ -52,6 +49,14 @@ public class UserMailsDTO implements Serializable {
         this.sentBy = sentBy;
     }
 
+    public String getMailType() {
+        return mailType;
+    }
+
+    public void setMailType(String mailType) {
+        this.mailType = mailType;
+    }
+
     public String getSentFrom() {
         return sentFrom;
     }
@@ -60,28 +65,12 @@ public class UserMailsDTO implements Serializable {
         this.sentFrom = sentFrom;
     }
 
-    public MailType getMailType() {
-        return mailType;
-    }
-
-    public void setMailType(MailType mailType) {
-        this.mailType = mailType;
-    }
-
     public Long getUserId() {
         return userId;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public String getUserLogin() {
-        return userLogin;
-    }
-
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
     }
 
     @Override
@@ -108,10 +97,9 @@ public class UserMailsDTO implements Serializable {
             "id=" + getId() +
             ", sentDate='" + getSentDate() + "'" +
             ", sentBy='" + getSentBy() + "'" +
-            ", sentFrom='" + getSentFrom() + "'" +
             ", mailType='" + getMailType() + "'" +
-            ", user=" + getUserId() +
-            ", user='" + getUserLogin() + "'" +
+            ", sentFrom='" + getSentFrom() + "'" +
+            ", userId=" + getUserId() +
             "}";
     }
 }

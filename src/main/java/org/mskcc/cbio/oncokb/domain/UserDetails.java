@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
@@ -46,6 +47,10 @@ public class UserDetails implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private User user;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "userDetails", allowSetters = true)
+    private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -158,6 +163,19 @@ public class UserDetails implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public UserDetails company(Company company) {
+        this.company = company;
+        return this;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

@@ -40,5 +40,7 @@
   "pagination": "no",
   "name": "TokenStats",
   "applications": "*",
-  "readOnly": false
+  "readOnly": false,
+  "embedded": false,
+  "skipClient": true
 }

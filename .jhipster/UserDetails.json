@@ -40,6 +40,13 @@
       "relationshipName": "user",
       "otherEntityField": "id",
       "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "company",
+      "otherEntityRelationshipName": "userDetails",
+      "relationshipName": "company",
+      "otherEntityField": "id"
     }
   ],
   "changelogDate": "20190826161330",
@@ -53,5 +60,7 @@
   "applications": "*",
   "searchEngine": false,
   "databaseType": "sql",
-  "readOnly": false
+  "readOnly": false,
+  "embedded": false,
+  "skipClient": true
 }
