@@ -12,6 +12,7 @@ const VIEW_PORT_1080 = {
 }
 const WAITING_TIME = 2000;
 const LONG_WAITING_TIME = 10000;
+const ABOUT_PAGE_WAITING_TIME = 20000;
 const LATEST_SNAPSHOTS_DIR = './screenshot-test/__latest_snapshots__/';
 const browserConfig = { // Docker requires --no-sandbox to be able to run the tests
   headless: true,
@@ -378,7 +379,7 @@ describe('Tests with login', () => {
   it('About Page', async() => {
     await page.goto(`${CLIENT_URL}about`);
     await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(LONG_WAITING_TIME);
+    await page.waitFor(ABOUT_PAGE_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('About Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'About Page with Login' });
   })
@@ -601,14 +602,13 @@ describe('Tests without login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Cancer Genes Page without Login' });
   })
 
-  // Disabling the about page after including the embed youtube video. The e2e screenshot always fail on youtube icon.
-  // it('About Page', async() => {
-  //   await page.goto(`${CLIENT_URL}about`);
-  //   await page.setViewport(VIEW_PORT_1080);
-  //   await page.waitFor(WAITING_TIME);
-  //   let image = await page.screenshot(getScreenshotConfig('About Page without Login'));
-  //   expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'About Page without Login' });
-  // })
+  it('About Page', async() => {
+    await page.goto(`${CLIENT_URL}about`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(ABOUT_PAGE_WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('About Page without Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'About Page without Login' });
+  })
 
   it('Team Page', async() => {
     await page.goto(`${CLIENT_URL}team`);
