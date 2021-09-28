@@ -190,13 +190,10 @@ class HomePage extends React.Component<IHomeProps, {}> {
             variant={
               this.levelTypeSelected === LEVEL_TYPES[key] ? 'primary' : 'light'
             }
-            // size={'lg'}
+            size={'lg'}
             onClick={() => this.handleLevelTypeButton(LEVEL_TYPES[key])}
           >
             {LEVEL_TYPE_NAMES[LEVEL_TYPES[key]]} Levels
-            {key === LEVEL_TYPES.FDA && (
-              <div style={{ fontSize: '0.8em' }}>(Under FDA review)</div>
-            )}
           </Button>
         );
       }
