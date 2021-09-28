@@ -255,10 +255,10 @@ export const FdaLevelIcon: React.FunctionComponent<{
   const fdaIcon = (
     <span
       className="fa-stack"
-      style={{ fontSize: 9, lineHeight: '18px', margin: '0 3px' }}
+      style={{ fontSize: 9, lineHeight: '18px', margin: '1px 3px' }}
     >
-      <span className="fa fa-circle-o fa-stack-2x"></span>
-      <strong className="fa-stack-1x">
+      <span className="fa fa-circle-thin fa-stack-2x"></span>
+      <strong className="fa-stack-1x" style={{ fontSize: '1.3em' }}>
         {level.toString().replace('FDAx', '')}
       </strong>
     </span>
