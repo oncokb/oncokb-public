@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { CitationText } from 'app/components/CitationText';
 import { Link } from 'react-router-dom';
 import {
+  ANNOTATION_PAGE_TAB_KEYS,
   BILIBILI_VIDEO_IDS,
   DOCUMENT_TITLES,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
@@ -24,71 +25,32 @@ import { getBilibiliLink, getYouTubeLink } from 'app/shared/utils/Utils';
 import { WebinarLink } from 'app/shared/utils/UrlUtils';
 
 type AboutPageProps = { appStore: AppStore; routing: RouterStore };
-const ONCOKB_TUTORIAL = 'OncoKB Tutorials';
-export const SHOW_MODAL_KEY = 'showModal';
-export const SHOW_TUTORIALS_KEY = 'showTutorials';
 
-type HashQueries = {
-  [SHOW_MODAL_KEY]?: string;
-  [SHOW_TUTORIALS_KEY]?: string;
-};
+enum VIDEO_TAB_EKY {
+  INTRO = 'INTRO',
+  DEMO = 'DEMO',
+  TUTORIALS = 'TUTORIALS',
+}
 
 @inject('appStore', 'routing')
 @observer
 export class AboutPage extends React.Component<AboutPageProps> {
-  @observable [SHOW_TUTORIALS_KEY] = false;
+  @observable selectedVideoTabKey: VIDEO_TAB_EKY = VIDEO_TAB_EKY.INTRO;
 
   readonly reactions: IReactionDisposer[] = [];
 
   constructor(props: AboutPageProps) {
     super(props);
-
-    this.reactions.push(
-      reaction(
-        () => [props.routing.location.hash],
-        ([hash]) => {
-          const queryStrings = QueryString.parse(
-            window.location.hash
-          ) as HashQueries;
-          if (_.has(queryStrings, SHOW_MODAL_KEY)) {
-            this[SHOW_TUTORIALS_KEY] = queryStrings[SHOW_MODAL_KEY] === 'true';
-          }
-          if (_.has(queryStrings, SHOW_TUTORIALS_KEY)) {
-            this[SHOW_TUTORIALS_KEY] =
-              queryStrings[SHOW_TUTORIALS_KEY] === 'true';
-          }
-        },
-        { fireImmediately: true }
-      ),
-      reaction(
-        () => this.hashQueries,
-        newHash => {
-          const parsedHashQueryString = QueryString.stringify(newHash, {
-            arrayFormat: QUERY_SEPARATOR_FOR_QUERY_STRING,
-          });
-          window.location.hash = parsedHashQueryString;
-        }
-      )
-    );
   }
 
   componentWillUnmount() {
     this.reactions.forEach(componentReaction => componentReaction());
   }
 
-  @computed
-  get hashQueries() {
-    const queryString: Partial<HashQueries> = {};
-    if (this[SHOW_TUTORIALS_KEY]) {
-      queryString[SHOW_TUTORIALS_KEY] = `${this[SHOW_TUTORIALS_KEY]}`;
-    }
-    return queryString;
-  }
-
   private getTabIframe = (link: string) => (
     <Iframe
       width="100%"
-      height="400"
+      height="300"
       url={link}
       frameBorder={0}
       allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
@@ -96,7 +58,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
     ></Iframe>
   );
 
-  private getTabs = (links: { youTube: string; bilibili: string }) => [
+  private getTutorialTabs = (links: { youTube: string; bilibili: string }) => [
     {
       title: 'YouTube.com',
       getContent: () => this.getTabIframe(links.youTube),
@@ -109,25 +71,63 @@ export class AboutPage extends React.Component<AboutPageProps> {
     },
   ];
 
+  getVideoTabs = () => [
+    {
+      title: 'Intro',
+      getContent: () =>
+        this.getTabIframe(getYouTubeLink('embed', YOUTUBE_VIDEO_IDS.INTRO)),
+      key: VIDEO_TAB_EKY.INTRO,
+    },
+    {
+      title: 'Demo',
+      getContent: () =>
+        this.getTabIframe(
+          getYouTubeLink('embed', YOUTUBE_VIDEO_IDS.INTRO_LONG)
+        ),
+      key: VIDEO_TAB_EKY.DEMO,
+    },
+    {
+      title: 'Tutorials',
+      getContent: () => {
+        return (
+          <div>
+            <h5>Webinar #1: Introduction to OncoKB</h5>
+            <Tabs
+              items={this.getTutorialTabs({
+                youTube: getYouTubeLink(
+                  'embed',
+                  YOUTUBE_VIDEO_IDS.WEBINAR_INTRO
+                ),
+                bilibili: getBilibiliLink(BILIBILI_VIDEO_IDS.WEBINAR_INTRO),
+              })}
+              transform={false}
+            />
+
+            <h5 className={'mt-3'}>
+              Webinar #2: Introduction to OncoKB Web API
+            </h5>
+            <Tabs
+              items={this.getTutorialTabs({
+                youTube: getYouTubeLink('embed', YOUTUBE_VIDEO_IDS.WEBINAR_API),
+                bilibili: getBilibiliLink(BILIBILI_VIDEO_IDS.WEBINAR_API),
+              })}
+              transform={false}
+            />
+          </div>
+        );
+      },
+      key: VIDEO_TAB_EKY.TUTORIALS,
+    },
+  ];
+
   render() {
     return (
       <DocumentTitle title={DOCUMENT_TITLES.ABOUT}>
         <>
           <Row>
-            <Col className="d-flex justify-content-between">
-              <h2>About OncoKB</h2>
-              <Button
-                className={'mb-2'}
-                onClick={() => (this[SHOW_TUTORIALS_KEY] = true)}
-              >
-                <span>{ONCOKB_TUTORIAL}</span>
-                <i className={'fa fa-play-circle-o fa-lg ml-2'} />
-              </Button>
-            </Col>
-          </Row>
-          <Row>
             <Col md={6} xs={12}>
-              <p>
+              <h2 className={'mt-1'}>About OncoKB</h2>
+              <p className={'mt-3'}>
                 OncoKB is a precision oncology knowledge base developed at
                 Memorial Sloan Kettering Cancer Center (MSK) and reflects the
                 understanding of the biological and clinical relevance of
@@ -151,61 +151,23 @@ export class AboutPage extends React.Component<AboutPageProps> {
               </p>
             </Col>
             <Col md={6} xs={12}>
-              <Iframe
-                width="100%"
-                height="300"
-                url={getYouTubeLink('embed', YOUTUBE_VIDEO_IDS.INTRO_LONG)}
-                frameBorder={0}
-                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></Iframe>
+              <Tabs
+                transform={false}
+                items={this.getVideoTabs()}
+                selectedTabKey={this.selectedVideoTabKey}
+                onChange={(tabKey: VIDEO_TAB_EKY) => {
+                  this.selectedVideoTabKey = tabKey;
+                }}
+              />
             </Col>
           </Row>
           <Row>
             <Col>
-              <p className={'mt-5'}>
+              <p className={'mt-2'}>
                 <img src={processImg} style={{ width: '100%' }} />
               </p>
             </Col>
           </Row>
-          <Modal
-            show={this[SHOW_TUTORIALS_KEY]}
-            onHide={() => (this[SHOW_TUTORIALS_KEY] = false)}
-            size={'xl'}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>{ONCOKB_TUTORIAL}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div>
-                <h5>Webinar #1: Introduction to OncoKB</h5>
-                <Tabs
-                  items={this.getTabs({
-                    youTube: getYouTubeLink(
-                      'embed',
-                      YOUTUBE_VIDEO_IDS.WEBINAR_INTRO
-                    ),
-                    bilibili: getBilibiliLink(BILIBILI_VIDEO_IDS.WEBINAR_INTRO),
-                  })}
-                  transform={false}
-                />
-
-                <h5 className={'mt-3'}>
-                  Webinar #2: Introduction to OncoKB Web API
-                </h5>
-                <Tabs
-                  items={this.getTabs({
-                    youTube: getYouTubeLink(
-                      'embed',
-                      YOUTUBE_VIDEO_IDS.WEBINAR_API
-                    ),
-                    bilibili: getBilibiliLink(BILIBILI_VIDEO_IDS.WEBINAR_API),
-                  })}
-                  transform={false}
-                />
-              </div>
-            </Modal.Body>
-          </Modal>
         </>
       </DocumentTitle>
     );
