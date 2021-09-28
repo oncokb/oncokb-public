@@ -25,11 +25,9 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
-import { SHOW_MODAL_KEY } from '../AboutPage';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 import { AbstractLink, FdaApprovalLink } from 'app/pages/newsPage/Links';
 import WithSeparator from 'react-with-separator';
-import PmidItem from 'app/components/PmidItem';
 import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
 
@@ -1297,7 +1295,6 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <Link
           to={{
             pathname: PAGE_ROUTE.ABOUT,
-            hash: `#${SHOW_MODAL_KEY}=true`,
           }}
         >
           here
