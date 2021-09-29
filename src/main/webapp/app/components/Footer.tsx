@@ -19,11 +19,8 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
     return (
       <>
         <div className={'mb-2'}>
-          Please review the{' '}
-          <Link to={'/terms'} className={indexStyles.orange}>
-            terms of use
-          </Link>{' '}
-          before continuing.
+          Please review the <Link to={'/terms'}>terms of use</Link> before
+          continuing.
         </div>
         <div className={'mb-2'}>
           <CitationText highlightLinkout={true} />
