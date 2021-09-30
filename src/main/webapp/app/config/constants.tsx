@@ -442,6 +442,7 @@ export enum PAGE_TITLE {
   ADMIN_SEND_EMAILS = 'Send Emails to Users',
   ADMIN_CREATE_ACCOUNT = 'Create New Account',
   ADMIN_USAGE_ANALYSIS = 'Usage Analysis',
+  ADMIN_ADD_COMPANY = 'Add New Company',
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
   REGISTER = 'Register',
@@ -477,6 +478,7 @@ export enum PAGE_ROUTE {
   ADMIN_USER_USAGE_DETAILS_LINK = '/admin/usage-analysis/users/',
   ADMIN_RESOURCE_DETAILS = '/admin/usage-analysis/resources/:endpoint',
   ADMIN_RESOURCE_DETAILS_LINK = '/admin/usage-analysis/resources/',
+  ADMIN_ADD_COMPANY = '/admin/create-company',
   USER = '/users/:login',
   ACCOUNT = '/account',
   REGISTER = '/account/register',
@@ -543,6 +545,34 @@ export const LICENSE_TYPES: License[] = [
     title: LICENSE_TITLES[LicenseType.COMMERCIAL],
   },
 ];
+
+export enum CompanyType {
+  PARENT = 'PARENT',
+  BRANCH = 'BRANCH',
+  UNKNOWN = 'UNKNOWN',
+}
+
+export const COMPANY_TYPE_TITLES: { [key: string]: string } = {
+  [CompanyType.PARENT]: 'Parent',
+  [CompanyType.BRANCH]: 'Branch',
+  [CompanyType.UNKNOWN]: 'Unknown',
+};
+
+export enum LicenseStatus {
+  TRIAL = 'TRIAL',
+  TRIAL_EXPIRED = 'TRIAL_EXPIRED',
+  REGULAR = 'REGULAR',
+  EXPIRED = 'EXPIRED',
+  UNKNOWN = 'UNKNOWN',
+}
+
+export const LICENSE_STATUS_TITLES: { [key: string]: string } = {
+  [LicenseStatus.TRIAL]: 'Trial',
+  [LicenseStatus.TRIAL_EXPIRED]: 'Trial Expired',
+  [LicenseStatus.REGULAR]: 'Regular',
+  [LicenseStatus.EXPIRED]: 'Expired',
+  [LicenseStatus.UNKNOWN]: 'Unknown',
+};
 
 export enum ACCOUNT_TITLES {
   USER_NAME = 'Username',
