@@ -9,6 +9,7 @@ import { CreateAccountPage } from 'app/pages/CreateAccountPage';
 import UsageAnalysisPage from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import UserUsageDetailsPage from 'app/pages/usageAnalysisPage/UserUsageDetailsPage';
 import ResourceUsageDetailsPage from 'app/pages/usageAnalysisPage/ResourceUsageDetailsPage';
+import { CreateCompanyPage } from 'app/pages/CreateCompanyPage';
 
 const AdminRouts = () => {
   return (
@@ -42,6 +43,11 @@ const AdminRouts = () => {
         exact
         path={PAGE_ROUTE.ADMIN_CREATE_ACCOUNT}
         component={CreateAccountPage}
+      />
+      <ErrorBoundaryRoute
+        exact
+        path={PAGE_ROUTE.ADMIN_ADD_COMPANY}
+        component={CreateCompanyPage}
       />
       <ErrorBoundaryRoute component={PageNotFound} />
     </Switch>
