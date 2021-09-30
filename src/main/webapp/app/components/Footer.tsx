@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import MskccLogo from './MskccLogo';
 
 import styles from './Footer.module.scss';
-import indexStyles from '../index.module.scss';
 import { CitationText } from 'app/components/CitationText';
 import classnames from 'classnames';
 import { ContactLink } from 'app/shared/links/ContactLink';
@@ -19,11 +18,8 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
     return (
       <>
         <div className={'mb-2'}>
-          Please review the{' '}
-          <Link to={'/terms'} className={indexStyles.orange}>
-            terms of use
-          </Link>{' '}
-          before continuing.
+          Please review the <Link to={'/terms'}>terms of use</Link> before
+          continuing.
         </div>
         <div className={'mb-2'}>
           <CitationText highlightLinkout={true} />

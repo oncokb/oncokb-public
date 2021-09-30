@@ -13,7 +13,6 @@ export const CitationText = ({
       When using OncoKB, please cite:{' '}
       <a
         href="https://ascopubs.org/doi/full/10.1200/PO.17.00011"
-        className={highlightLinkout ? indexStyles.orange : ''}
         style={boldLinkout ? { fontWeight: 'bold' } : undefined}
         target="_blank"
         rel="noopener noreferrer"

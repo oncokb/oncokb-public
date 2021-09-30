@@ -1,3 +1,5 @@
+@import '~@mskcc/core/utils/font-utilities';
+@import 'variables';
 html {
   font-size: $oncokb-font-font-size;
 }
@@ -8,23 +10,33 @@ body,
   height: 100%;
 }
 
+h1,
+h2 {
+  @include font-gotham('bold');
+}
+
+h3,
+h4,
+h5,
+h6 {
+  @include font-gotham('medium');
+}
+
+b {
+  @include font-gotham('medium');
+}
+
 .Main {
   min-height: 100%;
   position: relative;
 }
-
 @import '~bootstrap/scss/bootstrap';
+@import 'font';
 @import 'layout';
 
-.home {
-  .home-page-logo-title {
-    font-weight: 500;
-    color: $orange;
-  }
-}
-
-.orange {
-  color: $oncokb-orange;
+.nav-tabs > a,
+.RRT__tab {
+  font-family: 'Gotham Medium';
 }
 
 .user-messager-container-button {
@@ -41,6 +53,7 @@ body,
   }
 
   .navbar {
+    background-color: $nav-bg-color;
     padding-top: 0;
     padding-bottom: 0;
 
@@ -53,10 +66,10 @@ body,
       & > .nav-item {
         color: white;
         line-height: 2.75rem;
-        border-bottom: 0.25rem solid $primary;
+        border-bottom: 0.3rem solid $nav-bg-color;
 
         &.active {
-          border-bottom-color: $oncokb-orange;
+          border-bottom-color: $oncokb-darker-blue;
         }
 
         &:hover {

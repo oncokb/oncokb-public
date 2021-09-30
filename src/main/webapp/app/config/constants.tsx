@@ -52,8 +52,9 @@ export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
 export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
   LG: 1050,
-  XL: 1200,
+  XL: 1370,
 };
+export const MSK_LOGO_ICON_CUTOFF = 1260;
 export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
 export const FAQ_URL_PATTERNS_LINK = `${FAQ_LINK}/technical#what-are-the-url-patterns-of-oncokb-website`;
@@ -166,7 +167,7 @@ export const ACTIONABLE_GENES_LEVEL_TITLE: { [key: LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.PX]: `${
     LEVEL_TYPE_NAMES[LEVEL_TYPES.PX]
   } (for hematologic malignancies only)`,
-  [LEVEL_TYPES.FDA]: `${LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA]} (under FDA review)`,
+  [LEVEL_TYPES.FDA]: LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA],
 };
 
 export const ANNOTATION_PAGE_TAB_NAMES: {
@@ -176,7 +177,7 @@ export const ANNOTATION_PAGE_TAB_NAMES: {
   [ANNOTATION_PAGE_TAB_KEYS.TX]: 'Therapeutic',
   [ANNOTATION_PAGE_TAB_KEYS.DX]: 'Diagnostic',
   [ANNOTATION_PAGE_TAB_KEYS.PX]: 'Prognostic',
-  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content (under FDA review)',
+  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content',
 };
 
 export enum LEVELS {
@@ -466,6 +467,7 @@ export enum PAGE_ROUTE {
   TERMS = '/terms',
   TEAM = '/team',
   NEWS = '/news',
+  FDA_RECOGNITION = '/fda-recognition',
   LEVELS = '/levels',
   SWAGGER_UI = '/swagger-ui/index.html',
   ADMIN = '/admin',
