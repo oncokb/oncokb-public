@@ -57,7 +57,8 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
           style={props.style}
           className={classnames(
             props.href ? styles.levelButtonLink : styles.levelButton,
-            props.className
+            props.className,
+            'font-medium'
           )}
         >
           <div

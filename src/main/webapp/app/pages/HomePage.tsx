@@ -9,7 +9,6 @@ import {
   TypeaheadSearchResp,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { Button, Col, Row } from 'react-bootstrap';
-import oncokbImg from 'content/images/oncokb.png';
 import { HomePageNumber } from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
 import {
@@ -30,6 +29,7 @@ import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 import autobind from 'autobind-decorator';
 import * as QueryString from 'query-string';
 import { FDA_L1_DISABLED_BTN_TOOLTIP } from 'app/pages/genePage/FdaUtils';
+import { COLOR_DARK_BLUE } from 'app/config/theme';
 
 interface IHomeProps {
   content: string;
@@ -202,13 +202,18 @@ class HomePage extends React.Component<IHomeProps, {}> {
       <div className="home">
         <Row className="mb-5">
           <Col
-            md={6}
+            md={8}
             className={'mx-auto d-flex flex-column align-items-center '}
           >
-            <img src={oncokbImg} className="home-page-logo" />
-            <span className="home-page-logo-title text-center">
-              Precision Oncology Knowledge Base
-            </span>
+            <div
+              className="text-center font-bold"
+              style={{ fontSize: '3.5em', color: COLOR_DARK_BLUE }}
+            >
+              Welcome to OncoKB
+            </div>
+            <div className="text-center" style={{ fontSize: '2em' }}>
+              MSK's Precision Oncology Knowledge Base
+            </div>
           </Col>
         </Row>
         <Row className="mb-5">
@@ -340,7 +345,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
         </Row>
         <Row className="mb-3">
           <Col className={'text-center'}>
-            <div className={'font-weight-bold'}>
+            <div className={'font-bold'}>
               Powered by the clinical expertise of Memorial Sloan Kettering
               Cancer Center
             </div>

@@ -3,6 +3,7 @@ import { HighlightLinkButton } from 'app/components/highlightLinkButton/Highligh
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
+import { COLOR_BLUE } from 'app/config/theme';
 
 type HomePageNumberProps = {
   number: number;

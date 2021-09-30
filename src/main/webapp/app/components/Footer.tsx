@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import MskccLogo from './MskccLogo';
 
 import styles from './Footer.module.scss';
-import indexStyles from '../index.module.scss';
 import { CitationText } from 'app/components/CitationText';
 import classnames from 'classnames';
 import { ContactLink } from 'app/shared/links/ContactLink';

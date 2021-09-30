@@ -1,21 +1,21 @@
 import * as React from 'react';
 import { Container, Dropdown, Nav, Navbar, NavItem } from 'react-bootstrap';
-import oncokbImg from 'content/images/oncokb-lg.png';
+import oncokbImg from 'content/images/oncokb-white.svg';
 import { observer } from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';
 import { RouterStore } from 'mobx-react-router';
 import { withRouter } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import AccountMenu from 'app/pages/menus/account';
-import mskIcon from 'content/images/msk-icon-fff-sm.png';
 import { action, observable } from 'mobx';
-import { PAGE_TITLE } from 'app/config/constants';
+import { MSK_LOGO_ICON_CUTOFF, PAGE_TITLE } from 'app/config/constants';
 import UserMessage from 'app/components/userMessager/UserMessage';
 import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 import classnames from 'classnames';
 import autobind from 'autobind-decorator';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import AccountMessage from 'app/components/accountMessage/AccountMessage';
+import MskccLogo from 'app/components/MskccLogo';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -43,8 +43,6 @@ class Header extends React.Component<IHeaderProps> {
     { title: 'Cancer Genes', link: 'cancerGenes' },
     { title: 'API / License', link: 'apiAccess' },
     { title: 'About', link: 'about' },
-    { title: 'Team', link: 'team' },
-    { title: 'News', link: 'news' },
     { title: 'Terms', link: 'terms' },
     { title: 'FAQ', link: 'faq' },
   ];
@@ -111,7 +109,7 @@ class Header extends React.Component<IHeaderProps> {
         />
         <header className="sticky-top header">
           <Navbar
-            bg="primary"
+            bg="oncokb"
             expand="lg"
             className="navbar-dark main-navbar"
             expanded={this.isNavExpanded}
@@ -119,7 +117,7 @@ class Header extends React.Component<IHeaderProps> {
             <Container fluid={!this.props.windowStore.isLargeScreen}>
               <Navbar.Brand>
                 <NavLink to="/">
-                  <img height={38} src={oncokbImg} alt={'OncoKB'} />
+                  <img height={30} src={oncokbImg} alt={'OncoKB'} />
                 </NavLink>
               </Navbar.Brand>
               <Navbar.Toggle onClick={this.toggleNav} />
@@ -164,12 +162,18 @@ class Header extends React.Component<IHeaderProps> {
                     isAuthenticated={this.props.isUserAuthenticated}
                     isAdmin={this.props.isAdmin}
                   />
-                  {(this.props.windowStore.isLargeScreen ||
-                    this.isNavExpanded) && (
-                    <Nav.Item style={{ paddingRight: 0 }}>
-                      <img alt="mskcc-logo" src={mskIcon} height={'37px'} />
-                    </Nav.Item>
-                  )}
+                  <Nav.Item style={{ paddingRight: 0 }}>
+                    <MskccLogo
+                      imageHeight={35}
+                      size={
+                        this.props.windowStore.isLargeScreen &&
+                        this.props.windowStore.size.width <=
+                          MSK_LOGO_ICON_CUTOFF
+                          ? 'sm'
+                          : 'lg'
+                      }
+                    />
+                  </Nav.Item>
                 </Nav>
               </Navbar.Collapse>
             </Container>

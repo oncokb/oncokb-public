@@ -52,8 +52,9 @@ export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
 export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
   LG: 1050,
-  XL: 1200,
+  XL: 1370,
 };
+export const MSK_LOGO_ICON_CUTOFF = 1260;
 export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
 export const FAQ_URL_PATTERNS_LINK = `${FAQ_LINK}/technical#what-are-the-url-patterns-of-oncokb-website`;
@@ -466,6 +467,7 @@ export enum PAGE_ROUTE {
   TERMS = '/terms',
   TEAM = '/team',
   NEWS = '/news',
+  FDA_RECOGNITION = '/fda-recognition',
   LEVELS = '/levels',
   SWAGGER_UI = '/swagger-ui/index.html',
   ADMIN = '/admin',

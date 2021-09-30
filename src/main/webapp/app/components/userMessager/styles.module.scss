@@ -1,8 +1,10 @@
+@import '../../variables';
+
 .message {
   padding: 10px 0;
   background: green;
   color: #fff;
-  font-size: 14px;
+  font-size: $oncokb-font-font-size;
   position: relative;
 
   .messageContainer {

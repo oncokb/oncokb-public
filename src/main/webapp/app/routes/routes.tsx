@@ -34,6 +34,7 @@ import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
 import UserPage from 'app/pages/userPage/UserPage';
 import AppStore from 'app/store/AppStore';
 import ActivateTrialFinish from 'app/components/account/ActivateTrialFinish';
+import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -134,10 +135,15 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
             component={AlterationPage}
           />
-          <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
+          <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPageNavTab} />
+          <Route exact path={PAGE_ROUTE.TEAM} component={AboutPageNavTab} />
+          <Route exact path={PAGE_ROUTE.NEWS} component={AboutPageNavTab} />
+          <Route
+            exact
+            path={PAGE_ROUTE.FDA_RECOGNITION}
+            component={AboutPageNavTab}
+          />
           <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
-          <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage} />
-          <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
           <Route
             exact
             path={PAGE_ROUTE.LEVELS}

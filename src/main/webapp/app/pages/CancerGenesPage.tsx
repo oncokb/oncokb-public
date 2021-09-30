@@ -90,7 +90,7 @@ export default class CancerGenesPage extends React.Component<{
       ),
       accessor: 'oncokbAnnotated',
       style: { textAlign: 'center' },
-      minWidth: 80,
+      minWidth: 100,
       sortMethod: defaultSortMethod,
       Cell: (props: { original: ExtendCancerGene }) => {
         return props.original.oncokbAnnotated ? (
@@ -116,7 +116,7 @@ export default class CancerGenesPage extends React.Component<{
           <InfoIcon overlay={'As categorised by OncoKB'} />
         </>
       ),
-      minWidth: 120,
+      minWidth: 140,
       accessor: 'geneType',
       onFilter: (data: ExtendCancerGene, keyword) =>
         filterByKeyword(data.geneType, keyword),

@@ -1,15 +1,20 @@
 import * as React from 'react';
 
-import mskLogo from 'content/images/msk-logo-fff-sm.png';
+import mskLogo from 'content/images/msk-logo-white.svg';
+import mskIcon from 'content/images/msk-icon-white.svg';
 
 class MskccLogo extends React.Component<{
   imageHeight?: number;
+  size?: 'sm' | 'lg';
   className?: string;
 }> {
+  public static defaultProps = {
+    size: 'lg',
+  };
   public render() {
     return (
       <a
-        href="http://mskcc.org"
+        href="https://www.mskcc.org"
         target="_blank"
         rel="noopener noreferrer"
         className={this.props.className}
@@ -17,7 +22,7 @@ class MskccLogo extends React.Component<{
       >
         <img
           alt="mskcc-logo"
-          src={mskLogo}
+          src={this.props.size === 'lg' ? mskLogo : mskIcon}
           style={{
             height: this.props.imageHeight || 50,
           }}

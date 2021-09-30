@@ -1858,6 +1858,13 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
+"@mskcc/core@^10.2.0":
+  version "10.2.0"
+  resolved "https://registry.yarnpkg.com/@mskcc/core/-/core-10.2.0.tgz#584f70a1fdd654f2dceab19e7ac0ffc26c231e80"
+  integrity sha512-H+RFYkRaTntR9B68tLxuo+J6amro8RXZsBWJbA+Jo2rRPn6f6KzgQ+d/Ikmyqp+vueLqOylReM/3K525cF32zA==
+  dependencies:
+    sass-migrator "^1.5.1"
+
 "@nodelib/fs.stat@^1.1.2":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
@@ -12837,10 +12844,10 @@ oncokb-styles@~0.1.2:
   resolved "https://registry.yarnpkg.com/oncokb-styles/-/oncokb-styles-0.1.2.tgz#8b26c0a0829787cdc1b595d3a021b3266607102b"
   integrity sha512-tuy5s3qFxgf1ogMATQSRPNgLlAMrvOOTCAN1dm/wJ+VZoStbJ7g36/qHwc99UPfh3vrB05broLodF+k58p5tUw==
 
-oncokb-styles@~1.3.0-alpha.0:
-  version "1.3.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/oncokb-styles/-/oncokb-styles-1.3.0-alpha.0.tgz#6c73220c8139f24ce879c47d39feb30ab1482695"
-  integrity sha512-DY7AORkDpN3PE8McZ0CSbV0XKG/atkca408ltuw687xtW3SuWO4bFQly21Cn2ALjN2MrI51+/gjbM2eJqbld0g==
+oncokb-styles@~1.3.0-alpha.2:
+  version "1.3.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/oncokb-styles/-/oncokb-styles-1.3.0-alpha.2.tgz#f3f72effd80195b49d369f2a1e7f17e53dc36cf5"
+  integrity sha512-sZiU0FkEuHq5umUb8cbn4Sk0SogGy4xfmIB251jm787pRkM3fNVHn5Kd98ek4D+FFqjPF/h1ENrhjqGkhxI06w==
 
 oncokb-ts-api-client@^1.0.4:
   version "1.0.4"
@@ -15905,6 +15912,11 @@ sass-loader@8.0.0:
     neo-async "^2.6.1"
     schema-utils "^2.1.0"
     semver "^6.3.0"
+
+sass-migrator@^1.5.1:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/sass-migrator/-/sass-migrator-1.5.2.tgz#a6a865e0fc74cb027dcc7b2aa7d029d48992bed0"
+  integrity sha512-PPriZrqP6Pg3BSm6BsQiHjI0wn9IpdrgsTCgkGEPvLeEQovP2ooF+e6b3nL+dFYKlxWXkPz4sJ87/lFPdOl4OA==
 
 sass-resources-loader@^2.0.1:
   version "2.0.1"
