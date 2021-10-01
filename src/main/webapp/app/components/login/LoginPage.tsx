@@ -18,6 +18,7 @@ import {
 import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import client from 'app/shared/api/clientInstance';
 import { LoginVM } from 'app/shared/api/generated/API';
+import { PAGE_ROUTE } from 'app/config/constants';
 
 export interface ILoginProps {
   authenticationStore: AuthenticationStore;
@@ -141,13 +142,13 @@ export default class LoginPage extends React.Component<ILoginProps> {
           </Row>
           <div className="mt-1">&nbsp;</div>
           <Alert variant="warning">
-            <Link to="/account/reset/request">
+            <Link to={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}>
               Did you forget your password?
             </Link>
           </Alert>
           <Alert variant="warning">
             <span>You don&apos;t have an account yet?</span>{' '}
-            <Link to="/account/register">Register a new account</Link>
+            <Link to={PAGE_ROUTE.REGISTER}>Register a new account</Link>
           </Alert>
           <LoadingButton
             variant="primary"

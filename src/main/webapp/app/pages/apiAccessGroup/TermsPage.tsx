@@ -21,11 +21,7 @@ export const TermsPage = () => {
     <div className="terms">
       <Row>
         <Col>
-          <Tabs
-            defaultActiveKey={TabKey.ACADEMIC}
-            className={'mt-2'}
-            id="terms-tabs"
-          >
+          <Tabs defaultActiveKey={TabKey.ACADEMIC} id="terms-tabs">
             <Tab eventKey={TabKey.ACADEMIC} title={'Academic Research'}>
               <div className={'mt-2'}>
                 <p>
@@ -89,9 +85,10 @@ export const TermsPage = () => {
             </Tab>
             <Tab eventKey={TabKey.COMMERCIAL} title={'Commercial'}>
               <p className={'m-2'}>
-                Please use the button above to request the license which best
-                describes your anticipated use of OncoKB. You can also send us
-                an email with your use case at{' '}
+                Please visit the{' '}
+                <Link to={PAGE_ROUTE.REGISTER}>registration page</Link> and
+                request the license which best describes your anticipated use of
+                OncoKB. You can also send us an email with your use case at{' '}
                 <ContactLink
                   emailSubject={'Request for OncoKB Commercial License'}
                 />

@@ -4,13 +4,9 @@ import Login from 'app/components/login/LoginPage';
 import { Logout } from 'app/components/login/logout';
 import { RegisterPage } from 'app/pages/RegisterPage';
 import { PrivateRoute } from 'app/shared/auth/private-route';
-import { AboutPage } from 'app/pages/AboutPage';
-import Loadable from 'react-loadable';
 import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import { TermsPage } from 'app/pages/TermsPage';
-import { TeamPage } from 'app/pages/teamPage/TeamPage';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
 import ActionableGenesPage from 'app/pages/actionableGenesPage/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
@@ -21,7 +17,6 @@ import ActivateAccount from 'app/components/account/ActivateAccount';
 import { PasswordResetInit } from 'app/components/account/PasswordResetInit';
 import PasswordResetFinish from 'app/components/account/PasswordResetFinish';
 import PageNotFound from 'app/shared/error/page-not-found';
-import APIAccessPage from 'app/pages/APIAccessPage';
 import AccountPassword from 'app/components/account/AccountPassword';
 import AdminRouts from 'app/routes/AdminRoutes';
 import PageContainer from 'app/components/PageContainer';
@@ -35,6 +30,7 @@ import UserPage from 'app/pages/userPage/UserPage';
 import AppStore from 'app/store/AppStore';
 import ActivateTrialFinish from 'app/components/account/ActivateTrialFinish';
 import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
+import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTab';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -86,7 +82,7 @@ const AppRouts = (props: {
           <ErrorBoundaryRoute
             exact
             path={PAGE_ROUTE.API_ACCESS}
-            component={APIAccessPage}
+            component={ApiAccessPageNavTab}
           />
           <ErrorBoundaryRoute
             exact
@@ -143,7 +139,11 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.FDA_RECOGNITION}
             component={AboutPageNavTab}
           />
-          <Route exact path={PAGE_ROUTE.TERMS} component={APIAccessPage} />
+          <Route
+            exact
+            path={PAGE_ROUTE.TERMS}
+            component={ApiAccessPageNavTab}
+          />
           <Route
             exact
             path={PAGE_ROUTE.LEVELS}

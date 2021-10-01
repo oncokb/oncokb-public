@@ -20,7 +20,7 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
         <div className={'mb-2'}>
           Please review the{' '}
           <b>
-            <Link to={'/terms'}>terms of use</Link>
+            <Link to={PAGE_ROUTE.TERMS}>terms of use</Link>
           </b>{' '}
           before continuing.
         </div>

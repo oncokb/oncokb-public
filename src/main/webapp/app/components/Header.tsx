@@ -116,7 +116,7 @@ class Header extends React.Component<IHeaderProps> {
           >
             <Container fluid={!this.props.windowStore.isLargeScreen}>
               <Navbar.Brand>
-                <NavLink to="/">
+                <NavLink to={PAGE_ROUTE.HOME}>
                   <img height={30} src={oncokbImg} alt={'OncoKB'} />
                 </NavLink>
               </Navbar.Brand>

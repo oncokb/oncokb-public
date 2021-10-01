@@ -13,6 +13,7 @@ import client from 'app/shared/api/clientInstance';
 import { ManagedUserVM } from 'app/shared/api/generated/API';
 import {
   LicenseType,
+  PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
 } from 'app/config/constants';
 import { Alert } from 'react-bootstrap';
@@ -201,7 +202,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   render() {
     if (this.registerStatus === RegisterStatus.READY_REDIRECT) {
-      return <Redirect to={'/'} />;
+      return <Redirect to={PAGE_ROUTE.HOME} />;
     }
 
     if (this.registerStatus === RegisterStatus.REGISTERED) {

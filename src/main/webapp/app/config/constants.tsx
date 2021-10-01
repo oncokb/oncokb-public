@@ -152,14 +152,14 @@ export enum ANNOTATION_PAGE_TAB_KEYS {
   FDA = 'FDA',
 }
 
-export const LEVEL_TYPE_NAMES: { [key: LEVEL_TYPES]: string } = {
+export const LEVEL_TYPE_NAMES: { [key in LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.TX]: 'Therapeutic',
   [LEVEL_TYPES.DX]: 'Diagnostic',
   [LEVEL_TYPES.PX]: 'Prognostic',
   [LEVEL_TYPES.FDA]: 'FDA',
 };
 
-export const ACTIONABLE_GENES_LEVEL_TITLE: { [key: LEVEL_TYPES]: string } = {
+export const ACTIONABLE_GENES_LEVEL_TITLE: { [key in LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.TX]: LEVEL_TYPE_NAMES[LEVEL_TYPES.TX],
   [LEVEL_TYPES.DX]: `${
     LEVEL_TYPE_NAMES[LEVEL_TYPES.DX]
@@ -171,7 +171,7 @@ export const ACTIONABLE_GENES_LEVEL_TITLE: { [key: LEVEL_TYPES]: string } = {
 };
 
 export const ANNOTATION_PAGE_TAB_NAMES: {
-  [key: ANNOTATION_PAGE_TAB_KEYS]: string;
+  [key in ANNOTATION_PAGE_TAB_KEYS]: string;
 } = {
   [ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL]: 'Annotated Alterations',
   [ANNOTATION_PAGE_TAB_KEYS.TX]: 'Therapeutic',
@@ -581,7 +581,7 @@ export enum DOCUMENT_TITLES {
   ACTIONABLE_GENES = 'OncoKB Actionable Genes',
   TERMS = 'OncoKB Terms of Use - Academic Research',
   NEWS = 'OncoKB Latest News',
-  API_ACCESS = 'OncoKB Data Access',
+  API_ACCESS = 'OncoKB API Access',
   CANCER_GENES = 'OncoKB Cancer Gene List',
 }
 
