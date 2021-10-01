@@ -11,6 +11,7 @@ import {
   DOCUMENT_TITLES,
   LicenseType,
   PAGE_ROUTE,
+  PAGE_TITLE,
   USER_AUTHORITY,
 } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
@@ -32,6 +33,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Linkout } from 'app/shared/links/Linkout';
 import SmallPageContainer from 'app/components/SmallPageContainer';
 import { If, Then, Else } from 'react-if';
+import { TermsPage } from 'app/pages/TermsPage';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 
@@ -332,12 +334,22 @@ export default class APIAccessPage extends React.Component<{
                 </Col>
               </Row>
               <Row>
-                <Col sm={12}>
-                  <div className={'mb-4'}>
-                    <Button size={'lg'} onClick={this.onApplyForLicense}>
+                <Col>
+                  <h5>
+                    {PAGE_TITLE.TERMS}
+                    <Button
+                      className={'ml-2'}
+                      size={'sm'}
+                      onClick={this.onApplyForLicense}
+                    >
                       Apply for a license
                     </Button>
-                  </div>
+                  </h5>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <TermsPage />
                 </Col>
               </Row>
             </Else>

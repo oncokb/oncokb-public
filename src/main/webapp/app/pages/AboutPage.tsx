@@ -165,6 +165,9 @@ export class AboutPage extends React.Component<AboutPageProps> {
             <Col>
               <p className={'mt-2'}>
                 <img src={processImg} style={{ width: '100%' }} />
+                <div className={'text-center'}>
+                  <h5>Overview of OncoKB Process</h5>
+                </div>
               </p>
             </Col>
           </Row>

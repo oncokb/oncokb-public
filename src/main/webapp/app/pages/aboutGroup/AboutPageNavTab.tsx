@@ -15,7 +15,6 @@ export enum TabKey {
   ABOUT = PAGE_ROUTE.ABOUT,
   TEAM = PAGE_ROUTE.TEAM,
   FDA_RECOGNITION = PAGE_ROUTE.FDA_RECOGNITION,
-  NEWS = PAGE_ROUTE.NEWS,
 }
 
 @inject('appStore', 'routing')
@@ -74,9 +73,6 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                     FDA Recognition
                   </Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey={TabKey.NEWS}>News</Nav.Link>
-                </Nav.Item>
               </Nav>
             </Col>
             <Col sm={10}>
@@ -90,9 +86,13 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                 <Tab.Pane eventKey={TabKey.TEAM}>
                   <TeamPage />
                 </Tab.Pane>
-                <Tab.Pane eventKey={TabKey.FDA_RECOGNITION}></Tab.Pane>
-                <Tab.Pane eventKey={TabKey.NEWS}>
-                  <NewsPage routing={this.props.routing} />
+                <Tab.Pane eventKey={TabKey.FDA_RECOGNITION}>
+                  <Row>
+                    <Col>
+                      <h2>FDA Recognized Human Variant Database</h2>
+                      <p>[Placeholder]</p>
+                    </Col>
+                  </Row>
                 </Tab.Pane>
               </Tab.Content>
             </Col>
