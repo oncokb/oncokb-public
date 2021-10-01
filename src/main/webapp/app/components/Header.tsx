@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Dropdown, Nav, Navbar, NavItem } from 'react-bootstrap';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 import oncokbImg from 'content/images/oncokb-white.svg';
 import { observer } from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';
@@ -8,7 +8,11 @@ import { withRouter } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import AccountMenu from 'app/pages/menus/account';
 import { action, observable } from 'mobx';
-import { MSK_LOGO_ICON_CUTOFF, PAGE_TITLE } from 'app/config/constants';
+import {
+  MSK_LOGO_ICON_CUTOFF,
+  PAGE_ROUTE,
+  PAGE_TITLE,
+} from 'app/config/constants';
 import UserMessage from 'app/components/userMessager/UserMessage';
 import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 import classnames from 'classnames';
@@ -38,13 +42,13 @@ type SubpageLink = {
 @observer
 class Header extends React.Component<IHeaderProps> {
   private subPages: SubpageLink[] = [
-    { title: 'Levels of Evidence', link: 'levels' },
-    { title: 'Actionable Genes', link: 'actionableGenes' },
-    { title: 'Cancer Genes', link: 'cancerGenes' },
-    { title: 'API / License', link: 'apiAccess' },
-    { title: 'About', link: 'about' },
-    { title: 'Terms', link: 'terms' },
-    { title: 'FAQ', link: 'faq' },
+    { title: 'Levels of Evidence', link: PAGE_ROUTE.LEVELS },
+    { title: 'Actionable Genes', link: PAGE_ROUTE.ACTIONABLE_GENE },
+    { title: 'Cancer Genes', link: PAGE_ROUTE.CANCER_GENES },
+    { title: 'API / License', link: PAGE_ROUTE.API_ACCESS },
+    { title: 'About', link: PAGE_ROUTE.ABOUT },
+    { title: 'News', link: PAGE_ROUTE.NEWS },
+    { title: 'FAQ', link: PAGE_ROUTE.FAQ_ACCESS },
   ];
 
   @observable isNavExpanded = false;
@@ -65,11 +69,7 @@ class Header extends React.Component<IHeaderProps> {
 
   getLink(page: SubpageLink) {
     return (
-      <NavLink
-        to={`/${page.link}`}
-        key={page.title}
-        className={'mr-auto nav-item'}
-      >
+      <NavLink to={page.link} key={page.title} className={'mr-auto nav-item'}>
         {page.title}
       </NavLink>
     );

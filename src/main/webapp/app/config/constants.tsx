@@ -446,7 +446,7 @@ export enum PAGE_TITLE {
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
   REGISTER = 'Register',
-  TERMS = 'Terms of Use - Academic Research',
+  TERMS = 'Terms of Use',
 }
 
 export enum PAGE_ROUTE {
