@@ -9,6 +9,7 @@ import {
   ANNOTATION_PAGE_TAB_KEYS,
   BILIBILI_VIDEO_IDS,
   DOCUMENT_TITLES,
+  PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   SOP_LINK,
   YOUTUBE_VIDEO_IDS,
@@ -137,9 +138,9 @@ export class AboutPage extends React.Component<AboutPageProps> {
                 Alterations are annotated with their biological and oncogenic
                 effects. Additionally, alteration- and tumor type-specific
                 therapeutic implications are classified using the{' '}
-                <Link to="/levels">OncoKB Levels of Evidence</Link> system,
-                which assigns clinical actionability to individual mutational
-                events.
+                <Link to={PAGE_ROUTE.LEVELS}>OncoKB Levels of Evidence</Link>{' '}
+                system, which assigns clinical actionability to individual
+                mutational events.
               </p>
               <p>
                 For additional details about the OncoKB curation process, please

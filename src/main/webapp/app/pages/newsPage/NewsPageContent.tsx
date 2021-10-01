@@ -1579,7 +1579,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     priorityNews: [
       <span>
         The version controlled OncoKB Curation Standard Operating Procedure v1.0
-        has been released in the <Link to="/about">OncoKB About</Link> page.
+        has been released in the <Link to={PAGE_ROUTE.ABOUT}>OncoKB About</Link>{' '}
+        page.
       </span>,
     ],
     updatedImplication: [

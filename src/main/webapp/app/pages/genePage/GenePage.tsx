@@ -1193,7 +1193,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
             </If>
           </Then>
           <Else>
-            <Redirect to={'/'} />
+            <Redirect to={PAGE_ROUTE.HOME} />
           </Else>
         </If>
       </DocumentTitle>
