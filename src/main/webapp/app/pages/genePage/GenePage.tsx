@@ -133,7 +133,7 @@ export const getHighestLevelStrings = (
   highestResistanceLevel: string | undefined,
   highestDiagnosticImplicationLevel?: string | undefined,
   highestPrognosticImplicationLevel?: string | undefined,
-  highestFdaLevel: string | undefined,
+  highestFdaLevel?: string | undefined,
   separator: string | JSX.Element = ', '
 ) => {
   const levels: React.ReactNode[] = [];
