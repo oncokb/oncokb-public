@@ -23,6 +23,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -179,32 +182,37 @@ public class CronJobController {
 
     /**
      * {@code GET  /update-token-stats} : Update token stats.
+     *
+     * @throws IOException
      */
     @GetMapping(path = "/update-token-stats")
-    public void updateTokenStats() {
+    public void updateTokenStats() throws IOException{
         log.info("Started the cronjob to update token stats");
         List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(Instant.now());
 
         // Update tokens with token usage
         tokenUsages.stream().forEach(tokenUsage -> {
-            if (!tokenUsage.getToken().getCurrentUsage().equals(tokenUsage.getCount())) {
+            if (tokenUsage.getCount() > 0) {
                 Optional<Token> tokenOptional = tokenService.findByToken(tokenUsage.getToken().getToken());
                 if (tokenOptional.isPresent()) {
-                    tokenOptional.get().setCurrentUsage(tokenUsage.getCount());
+                    tokenOptional.get().setCurrentUsage(tokenOptional.get().getCurrentUsage() + tokenUsage.getCount());
                     tokenService.save(tokenOptional.get());
                 }
             }
         });
 
-        // Update tokens without token usage
-        List<Long> tokenWithStats = tokenUsages.stream().map(tokenUsage -> tokenUsage.getToken().getId()).collect(Collectors.toList());
-        List<Token> tokens = tokenService.findAll().stream().filter(token -> !tokenWithStats.contains(token.getId())).collect(Collectors.toList());
-        tokens.stream().forEach(token -> {
-            if (!token.getCurrentUsage().equals(0)) {
-                token.setCurrentUsage(0);
-                tokenService.save(token);
-            }
-        });
+        // Move current csv file and creates new one
+        String currentTS = new java.util.Date().toString();
+        Path path = Files.move
+            (Paths.get("src/main/resources/config/liquibase/data/token_stats.csv"),
+            Paths.get("src/main/resources/config/liquibase/old-token-stats/token_stats_" + currentTS + ".csv"));
+        FileWriter fileWriter = new FileWriter("src/main/resources/config/liquibase/data/token_stats.csv", true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        bufferedWriter.write("id;access_ip;resource;access_time;usage_count;token_id\n");
+        bufferedWriter.close();
+
+        // Deletes old TokenStats
+        tokenStatsService.clearTokenStats();
     }
 
     /**

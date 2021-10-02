@@ -12,10 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedWriter;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Service Implementation for managing {@link TokenStats}.
@@ -38,7 +41,16 @@ public class TokenStatsServiceImpl implements TokenStatsService {
     @Override
     public TokenStats save(TokenStats tokenStats) {
         log.debug("Request to save TokenStats : {}", tokenStats);
-        return tokenStatsRepository.save(tokenStats);
+        tokenStats = tokenStatsRepository.save(tokenStats);
+        try {
+            FileWriter fileWriter = new FileWriter("src/main/resources/config/liquibase/data/token_stats.csv", true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.append(tokenStats.toCSV() + "\n");
+            bufferedWriter.close();
+        } catch (IOException e) {
+            log.warn("Failed to save TokenStats : {}", tokenStats);
+        }
+        return tokenStats;
     }
 
     @Override
@@ -73,6 +85,10 @@ public class TokenStatsServiceImpl implements TokenStatsService {
                 log.debug("Deleting token stats", tokenStat);
                 tokenStatsRepository.delete(tokenStat);
             });
+    }
+
+    public void clearTokenStats() {
+        tokenStatsRepository.deleteAll();
     }
 
     public List<UserTokenUsage> getUserTokenUsage(Instant before) {

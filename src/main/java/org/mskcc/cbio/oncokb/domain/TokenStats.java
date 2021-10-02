@@ -144,4 +144,13 @@ public class TokenStats implements Serializable {
             ", usageCount=" + getUsageCount() +
             "}";
     }
+
+    public String toCSV() {
+        return getId() +
+            ";" + getAccessIp() +
+            ";" + getResource() +
+            ";" + getAccessTime() +
+            ";" + getUsageCount() +
+            ";" + getToken().getId();
+    }
 }

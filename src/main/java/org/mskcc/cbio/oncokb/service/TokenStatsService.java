@@ -46,6 +46,8 @@ public interface TokenStatsService {
 
     void removeOldTokenStats();
 
+    void clearTokenStats();
+
     List<UserTokenUsage> getUserTokenUsage(Instant before);
 
     List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after);
