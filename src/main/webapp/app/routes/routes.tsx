@@ -77,7 +77,7 @@ const AppRouts = (props: {
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.REGISTER}
-            component={RegisterPage}
+            component={ApiAccessPageNavTab}
           />
           <ErrorBoundaryRoute
             exact

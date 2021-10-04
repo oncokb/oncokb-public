@@ -48,7 +48,6 @@ enum RegisterStatus {
 export type IRegisterProps = {
   routing: RouterStore;
   windowStore: WindowStore;
-  handleRegister: (newUser: NewUserRequiredFields) => void;
 };
 
 export const LICENSE_HASH_KEY = 'license';
