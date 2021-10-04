@@ -44,7 +44,7 @@ const SelectionButton: React.FunctionComponent<{
       variant="outline-primary"
       onClick={() => props.onSelectLicense(props.license)}
       className={'mb-2'}
-      style={{ width: '100%', maxWidth: 300, minHeight: 50 }}
+      style={{ width: '100%', maxWidth: 300, minHeight: 50, height: '90%' }}
     >
       {LICENSE_TITLES[props.license]}
     </Button>

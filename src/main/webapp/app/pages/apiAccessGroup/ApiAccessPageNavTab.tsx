@@ -2,13 +2,14 @@ import * as React from 'react';
 import { Row, Col, Tab, Nav } from 'react-bootstrap';
 import AppStore from 'app/store/AppStore';
 import { inject, observer } from 'mobx-react';
-import { PAGE_ROUTE } from 'app/config/constants';
+import { PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
 import { observable, IReactionDisposer, reaction, computed } from 'mobx';
 import { RouterStore } from 'mobx-react-router';
 import APIAccessPage from 'app/pages/apiAccessGroup/APIAccessPage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { TermsPage } from 'app/pages/apiAccessGroup/TermsPage';
 import WindowStore from 'app/store/WindowStore';
+import { RegisterPage } from 'app/pages/RegisterPage';
 
 type ApiAccessPageNavTabProps = {
   appStore: AppStore;
@@ -24,7 +25,7 @@ export enum TabKey {
 }
 
 const TAB_TITLES: { [key in TabKey]: string } = {
-  [TabKey.TERMS]: 'Terms of use',
+  [TabKey.TERMS]: PAGE_TITLE.TERMS,
   [TabKey.REGISTER]: 'Apply for a license',
   [TabKey.API_ACCESS]: 'API Access',
 };
@@ -77,7 +78,12 @@ export class ApiAccessPageNavTab extends React.Component<
       case TabKey.TERMS:
         return <TermsPage />;
       case TabKey.REGISTER:
-        return <></>;
+        return (
+          <RegisterPage
+            routing={this.props.routing}
+            windowStore={this.props.windowStore}
+          />
+        );
       default:
         return <></>;
     }
