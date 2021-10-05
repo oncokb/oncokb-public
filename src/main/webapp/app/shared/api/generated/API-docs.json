@@ -754,11 +754,11 @@
         "parameters": [
           {
             "in": "body",
-            "name": "companyDTO",
-            "description": "companyDTO",
+            "name": "companyVM",
+            "description": "companyVM",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CompanyDTO"
+              "$ref": "#/definitions/CompanyVM"
             }
           }
         ],
@@ -2924,6 +2924,67 @@
         }
       },
       "title": "CompanyDomainDTO"
+    },
+    "CompanyVM": {
+      "type": "object",
+      "required": [
+        "companyType",
+        "licenseStatus",
+        "licenseType",
+        "name"
+      ],
+      "properties": {
+        "businessContact": {
+          "type": "string"
+        },
+        "companyDomains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "companyType": {
+          "type": "string",
+          "enum": [
+            "PARENT",
+            "BRANCH",
+            "UNKNOWN"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "legalContact": {
+          "type": "string"
+        },
+        "licenseStatus": {
+          "type": "string",
+          "enum": [
+            "TRIAL",
+            "REGULAR",
+            "TRIAL_EXPIRED",
+            "EXPIRED",
+            "UNKNOWN"
+          ]
+        },
+        "licenseType": {
+          "type": "string",
+          "enum": [
+            "ACADEMIC",
+            "COMMERCIAL",
+            "RESEARCH_IN_COMMERCIAL",
+            "HOSPITAL"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "CompanyVM"
     },
     "Contact": {
       "type": "object",

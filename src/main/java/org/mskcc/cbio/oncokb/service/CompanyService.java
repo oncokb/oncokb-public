@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.service;
 
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
+import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,10 +14,10 @@ public interface CompanyService {
     /**
      * Save a company.
      *
-     * @param companyDTO the entity to save.
+     * @param companyVm the entity to save.
      * @return the persisted entity.
      */
-    CompanyDTO save(CompanyDTO companyDTO);
+    CompanyDTO save(CompanyVM companyVm);
 
     /**
      * Get all the companies.
