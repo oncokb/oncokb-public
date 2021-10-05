@@ -6,6 +6,8 @@ import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import { NewCompanyForm } from 'app/components/newCompanyForm/NewCompanyForm';
 import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { Alert } from 'react-bootstrap';
+import { CompanyVM } from 'app/shared/api/generated/API';
+import client from 'app/shared/api/clientInstance';
 
 enum CreateCompanyStatus {
   CREATE_SUCCESS,
@@ -23,8 +25,12 @@ export class CreateCompanyPage extends React.Component<{
   @observable CreateCompanyError: OncoKBError | undefined;
 
   @action.bound
-  afterCreateCompany(error?: any) {
-    error ? this.createCompanyError(error) : this.createCompanySuccess();
+  handleValidSubmit(newCompany: Partial<CompanyVM>) {
+    client
+      .createCompanyUsingPOST({
+        companyVm: newCompany as CompanyVM,
+      })
+      .then(this.createCompanySuccess, this.createCompanyFailure);
   }
 
   @action.bound
@@ -35,7 +41,7 @@ export class CreateCompanyPage extends React.Component<{
   }
 
   @action.bound
-  createCompanyError(error: OncoKBError) {
+  createCompanyFailure(error: OncoKBError) {
     this.CreateCompanyStatus = CreateCompanyStatus.CREATE_ERROR;
     this.CreateCompanyError = error;
     window.scrollTo(0, 0);
@@ -50,7 +56,7 @@ export class CreateCompanyPage extends React.Component<{
         {this.CreateCompanyError ? (
           <ErrorAlert error={this.CreateCompanyError} />
         ) : null}
-        <NewCompanyForm afterCreateCompany={this.afterCreateCompany} />
+        <NewCompanyForm onValidSubmit={this.handleValidSubmit} />
       </div>
     );
   }

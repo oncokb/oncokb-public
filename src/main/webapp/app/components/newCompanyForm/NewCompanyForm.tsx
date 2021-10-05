@@ -20,11 +20,15 @@ import {
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
-import { CompanyDTO, CompanyDomainDTO } from 'app/shared/api/generated/API';
+import {
+  CompanyDTO,
+  CompanyDomainDTO,
+  CompanyVM,
+} from 'app/shared/api/generated/API';
 import styles from './styles.module.scss';
 
 type INewCompanyFormProps = {
-  afterCreateCompany: (error?: any) => void;
+  onValidSubmit: (newCompany: Partial<CompanyVM>) => void;
 };
 
 type IDomainListBoxProps = {
@@ -109,8 +113,8 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   }
 
   @action.bound
-  async handleValidSubmit(event: any, values: any) {
-    const newCompany: Partial<CompanyDTO> = {
+  handleValidSubmit(event: any, values: any) {
+    const newCompany: Partial<CompanyVM> = {
       businessContact: values.businessContact,
       companyType: values.companyType,
       description: this.companyDescription,
@@ -118,22 +122,9 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
       licenseStatus: values.licenseStatus,
       licenseType: values.licenseType,
       name: values.companyName,
+      companyDomains: this.companyDomains,
     };
-
-    try {
-      const createdCompany = await client.createCompanyUsingPOST({
-        companyDto: newCompany as CompanyDTO,
-      });
-      const companyId = createdCompany.id;
-      for (const name of this.companyDomains) {
-        client.createCompanyDomainUsingPOST({
-          companyDomainDto: { companyId, name } as CompanyDomainDTO,
-        });
-      }
-      this.props.afterCreateCompany();
-    } catch (error) {
-      this.props.afterCreateCompany(error);
-    }
+    this.props.onValidSubmit(newCompany);
   }
 
   render() {
