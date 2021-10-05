@@ -36,6 +36,7 @@ entity Company {
     description TextBlob,
     companyType CompanyType required,
     licenseType LicenseType required,
+    licenseModel LicenseModel required,
     licenseStatus LicenseStatus required,
     businessContact String,
     legalContact String,
@@ -58,6 +59,11 @@ enum CompanyType {
 
 enum LicenseStatus {
 	TRIAL, REGULAR, TRIAL_EXPIRED, EXPIRED, UNKNOWN
+}
+
+enum LicenseModel {
+	REGULAR,
+    MICRO
 }
 
 relationship OneToOne {
