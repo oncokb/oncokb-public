@@ -77,12 +77,7 @@ const LEVEL_NAME: { [key in Version]: ElementType } = {
 
 const LEVEL_TITLE: { [key in Version]: ElementType } = {
   [Version.V1]: <>{LEVEL_NAME[Version.V1]}</>,
-  [Version.V2]: (
-    <>
-      {LEVEL_NAME[Version.V2]} ({' '}
-      <HashLink to={`${PAGE_ROUTE.NEWS}#12202019`}>News 12/20/2019</HashLink> )
-    </>
-  ),
+  [Version.V2]: <>{LEVEL_NAME[Version.V2]}</>,
   [Version.FDA]: (
     <>
       Mapping between the OncoKB Levels of Evidence and the{' '}
