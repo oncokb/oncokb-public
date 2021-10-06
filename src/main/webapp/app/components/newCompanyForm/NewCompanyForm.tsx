@@ -1,6 +1,13 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { observable, action } from 'mobx';
+import styles from './styles.module.scss';
+import autobind from 'autobind-decorator';
+import { Button, Col, Row } from 'react-bootstrap';
+import { observable, action, computed } from 'mobx';
+import { CompanyVM } from 'app/shared/api/generated/API';
+import { getSectionClassName } from 'app/pages/account/AccountUtils';
+import { FormTextAreaField } from '../../shared/textarea/FormTextAreaField';
+import { FormSelectWithLabelField } from '../../shared/select/FormSelectWithLabelField';
 import {
   AvField,
   AvForm,
@@ -8,7 +15,6 @@ import {
   AvInput,
   AvFeedback,
 } from 'availity-reactstrap-validation';
-import { Button, Col, Row } from 'react-bootstrap';
 import {
   LicenseType,
   LICENSE_TITLES,
@@ -17,17 +23,8 @@ import {
   COMPANY_TYPE_TITLES,
   LICENSE_STATUS_TITLES,
   LicenseModel,
-  LICENSE_MODEL_TITLE,
+  LICENSE_MODEL_TITLES,
 } from 'app/config/constants';
-import { getSectionClassName } from 'app/pages/account/AccountUtils';
-import autobind from 'autobind-decorator';
-import client from 'app/shared/api/clientInstance';
-import {
-  CompanyDTO,
-  CompanyDomainDTO,
-  CompanyVM,
-} from 'app/shared/api/generated/API';
-import styles from './styles.module.scss';
 
 type INewCompanyFormProps = {
   onValidSubmit: (newCompany: Partial<CompanyVM>) => void;
@@ -47,10 +44,20 @@ enum DomainListActions {
 class DomainListBox extends React.Component<IDomainListBoxProps> {
   render() {
     return (
-      <div className={styles.domain_box}>
+      <div
+        style={{
+          border: '1px solid #ced4da',
+          borderRadius: '0.25rem',
+          padding: '0.375rem 0.75rem',
+          overflowY: 'scroll',
+          minHeight: '100px',
+          maxHeight: '100px',
+          marginTop: '28px',
+        }}
+      >
         <div className={styles.main}>
-          {this.props.domainList.map((domain, idx) => (
-            <div key={idx} className={styles.content_container}>
+          {this.props.domainList.map(domain => (
+            <div key={domain} className={styles.content_container}>
               <span
                 className={styles.delete}
                 onClick={() =>
@@ -68,11 +75,42 @@ class DomainListBox extends React.Component<IDomainListBoxProps> {
   }
 }
 
+export const COMPANY_FORM_OPTIONS = {
+  companyType: Object.keys(CompanyType).map(type => {
+    return {
+      value: CompanyType[type],
+      label: COMPANY_TYPE_TITLES[CompanyType[type]],
+    };
+  }),
+  licenseType: Object.keys(LicenseType).map(type => {
+    return {
+      value: LicenseType[type],
+      label: LICENSE_TITLES[LicenseType[type]],
+    };
+  }),
+  licenseModel: Object.keys(LicenseModel).map(type => {
+    return {
+      value: LicenseModel[type],
+      label: LICENSE_MODEL_TITLES[LicenseModel[type]],
+    };
+  }),
+  licenseStatus: Object.keys(LicenseStatus).map(type => {
+    return {
+      value: LicenseStatus[type],
+      label: LICENSE_STATUS_TITLES[LicenseStatus[type]],
+    };
+  }),
+};
+
 @observer
 export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   @observable companyDescription = '';
   @observable currentDomainText = '';
   @observable companyDomains: string[] = [];
+  @observable selectedCompanyType: CompanyType = CompanyType.PARENT;
+  @observable selectedLicenseModel: LicenseModel = LicenseModel.REGULAR;
+  @observable selectedLicenseType: LicenseType = LicenseType.COMMERCIAL;
+  @observable selectedLicenseStatus: LicenseStatus = LicenseStatus.REGULAR;
 
   @autobind
   domainValidation(value: any, context: any, input: any, cb: any) {
@@ -118,12 +156,12 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   handleValidSubmit(event: any, values: any) {
     const newCompany: Partial<CompanyVM> = {
       businessContact: values.businessContact,
-      companyType: values.companyType,
+      companyType: this.selectedCompanyType,
       description: this.companyDescription,
       legalContact: values.legalContact,
-      licenseStatus: values.licenseStatus,
-      licenseModel: values.licenseModel,
-      licenseType: values.licenseType,
+      licenseStatus: this.selectedLicenseStatus,
+      licenseModel: this.selectedLicenseModel,
+      licenseType: this.selectedLicenseType,
       name: values.companyName,
       companyDomains: this.companyDomains,
     };
@@ -148,34 +186,22 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
                 },
               }}
             />
-            <div className="form-group">
-              <label className="form-label">Company Description</label>
-              <textarea
-                onChange={this.updateCompanyDescription}
-                style={{ minHeight: '50px' }}
-                className="form-control"
-              ></textarea>
-            </div>
-            <AvField
-              type="select"
-              name="companyType"
-              label="Company Type"
-              validate={{
-                required: {
-                  value: true,
-                  errorMessage: 'The company type is required.',
-                },
+            <FormTextAreaField
+              onTextAreaChange={this.updateCompanyDescription}
+              label={'Company Description'}
+            />
+            <FormSelectWithLabelField
+              labelText={'Company Type'}
+              name={'companyType'}
+              defaultValue={{
+                value: CompanyType.PARENT,
+                label: COMPANY_TYPE_TITLES[CompanyType.PARENT],
               }}
-            >
-              <option value="" disabled selected hidden>
-                Choose a company type
-              </option>
-              {Object.keys(CompanyType).map((type, idx) => (
-                <option value={CompanyType[type]}>
-                  {COMPANY_TYPE_TITLES[CompanyType[type]]}
-                </option>
-              ))}
-            </AvField>
+              options={COMPANY_FORM_OPTIONS.companyType}
+              onSelection={(selectedOption: any) =>
+                (this.selectedCompanyType = selectedOption)
+              }
+            />
             <AvField name="businessContact" label="Business Contact" />
             <AvField name="legalContact" label="Legal Contact" />
             <AvGroup>
@@ -187,6 +213,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
                       id="companyDomains"
                       name="companyDomains"
                       label="Company Domains"
+                      placeHolder="oncokb.org"
                       value={this.currentDomainText}
                       onChange={this.updateCompanyDomainText}
                       validate={{
@@ -226,66 +253,42 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
             <h5>License Information</h5>
           </Col>
           <Col md="9">
-            <AvField
-              type="select"
-              name="licenseModel"
-              label="License Model"
-              validate={{
-                required: {
-                  value: true,
-                  errorMessage: 'The license model is required.',
-                },
+            <FormSelectWithLabelField
+              labelText={'License Model'}
+              name={'licenseModel'}
+              defaultValue={{
+                value: LicenseModel.REGULAR,
+                label: LICENSE_MODEL_TITLES[LicenseModel.REGULAR],
               }}
-            >
-              <option value="" disabled selected hidden>
-                Choose a license model
-              </option>
-              {Object.keys(LicenseModel).map((type, idx) => (
-                <option value={LicenseModel[type]}>
-                  {LICENSE_MODEL_TITLE[LicenseModel[type]]}
-                </option>
-              ))}
-            </AvField>
-            <AvField
-              type="select"
-              name="licenseType"
-              label="License Type"
-              validate={{
-                required: {
-                  value: true,
-                  errorMessage: 'The license type is required.',
-                },
+              options={COMPANY_FORM_OPTIONS.licenseModel}
+              onSelection={(selectedOption: any) =>
+                (this.selectedLicenseModel = selectedOption)
+              }
+            />
+            <FormSelectWithLabelField
+              labelText={'License Type'}
+              name={'licenseType'}
+              defaultValue={{
+                value: LicenseType.COMMERCIAL,
+                label: LICENSE_TITLES[LicenseType.COMMERCIAL],
               }}
-            >
-              <option value="" disabled selected hidden>
-                Choose a license type
-              </option>
-              {Object.keys(LicenseType).map((type, idx) => (
-                <option value={LicenseType[type]}>
-                  {LICENSE_TITLES[LicenseType[type]]}
-                </option>
-              ))}
-            </AvField>
-            <AvField
-              type="select"
-              name="licenseStatus"
-              label="License Status"
-              validate={{
-                required: {
-                  value: true,
-                  errorMessage: 'The license status is required.',
-                },
+              options={COMPANY_FORM_OPTIONS.licenseType}
+              onSelection={(selectedOption: any) =>
+                (this.selectedLicenseType = selectedOption)
+              }
+            />
+            <FormSelectWithLabelField
+              labelText={'License Status'}
+              name={'licenseStatus'}
+              defaultValue={{
+                value: LicenseStatus.REGULAR,
+                label: LICENSE_STATUS_TITLES[LicenseStatus.REGULAR],
               }}
-            >
-              <option value="" disabled selected hidden>
-                Choose a license status
-              </option>
-              {Object.keys(LicenseStatus).map((type, idx) => (
-                <option value={LicenseStatus[type]}>
-                  {LICENSE_STATUS_TITLES[LicenseStatus[type]]}
-                </option>
-              ))}
-            </AvField>
+              options={COMPANY_FORM_OPTIONS.licenseStatus}
+              onSelection={(selectedOption: any) =>
+                (this.selectedLicenseStatus = selectedOption)
+              }
+            />
           </Col>
         </Row>
         <Row className={getSectionClassName()}>
