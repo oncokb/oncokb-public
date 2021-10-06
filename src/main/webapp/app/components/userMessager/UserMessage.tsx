@@ -63,7 +63,7 @@ if (
           text={
             <span>
               OncoKB is now an FDA-Recognized Public Human Genetic Variant
-              Database. For more details, please see our{' '}
+              Database<span>&#42;</span>. For more details, please see our{' '}
               <Link
                 to={PAGE_ROUTE.FDA_RECOGNITION}
                 style={{ color: 'white', textDecoration: 'underline' }}
