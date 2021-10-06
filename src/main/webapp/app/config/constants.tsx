@@ -574,6 +574,16 @@ export const LICENSE_STATUS_TITLES: { [key: string]: string } = {
   [LicenseStatus.UNKNOWN]: 'Unknown',
 };
 
+export enum LicenseModel {
+  REGULAR = 'REGULAR',
+  MICRO = 'MICRO',
+}
+
+export const LICENSE_MODEL_TITLE: { [key: string]: string } = {
+  [LicenseModel.REGULAR]: 'Regular Tier',
+  [LicenseModel.MICRO]: 'Micro Tier',
+};
+
 export enum ACCOUNT_TITLES {
   USER_NAME = 'Username',
   FIRST_NAME = 'First Name',

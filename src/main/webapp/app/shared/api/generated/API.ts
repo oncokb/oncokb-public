@@ -26,6 +26,8 @@ export type Company = {
 
         'legalContact': string
 
+        'licenseModel': "REGULAR" | "MICRO"
+
         'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
 
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
@@ -43,6 +45,8 @@ export type CompanyDTO = {
         'id': number
 
         'legalContact': string
+
+        'licenseModel': "REGULAR" | "MICRO"
 
         'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
 
@@ -71,6 +75,8 @@ export type CompanyVM = {
         'id': number
 
         'legalContact': string
+
+        'licenseModel': "REGULAR" | "MICRO"
 
         'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
 
@@ -1719,7 +1725,7 @@ export default class API {
         });
     };
     updateCompanyUsingPUTURL(parameters: {
-        'companyDto': CompanyDTO,
+        'companyVm': CompanyVM,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -1739,10 +1745,10 @@ export default class API {
      * updateCompany
      * @method
      * @name API#updateCompanyUsingPUT
-     * @param {} companyDto - companyDTO
+     * @param {} companyVm - companyVM
      */
     updateCompanyUsingPUTWithHttpInfo(parameters: {
-        'companyDto': CompanyDTO,
+        'companyVm': CompanyVM,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1758,12 +1764,12 @@ export default class API {
             headers['Accept'] = '*/*';
             headers['Content-Type'] = 'application/json';
 
-            if (parameters['companyDto'] !== undefined) {
-                body = parameters['companyDto'];
+            if (parameters['companyVm'] !== undefined) {
+                body = parameters['companyVm'];
             }
 
-            if (parameters['companyDto'] === undefined) {
-                reject(new Error('Missing required  parameter: companyDto'));
+            if (parameters['companyVm'] === undefined) {
+                reject(new Error('Missing required  parameter: companyVm'));
                 return;
             }
 
@@ -1783,10 +1789,10 @@ export default class API {
      * updateCompany
      * @method
      * @name API#updateCompanyUsingPUT
-     * @param {} companyDto - companyDTO
+     * @param {} companyVm - companyVM
      */
     updateCompanyUsingPUT(parameters: {
-        'companyDto': CompanyDTO,
+        'companyVm': CompanyVM,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < CompanyDTO > {
