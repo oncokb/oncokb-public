@@ -190,13 +190,10 @@ class HomePage extends React.Component<IHomeProps, {}> {
             variant={
               this.levelTypeSelected === LEVEL_TYPES[key] ? 'primary' : 'light'
             }
-            // size={'lg'}
+            size={'lg'}
             onClick={() => this.handleLevelTypeButton(LEVEL_TYPES[key])}
           >
             {LEVEL_TYPE_NAMES[LEVEL_TYPES[key]]} Levels
-            {key === LEVEL_TYPES.FDA && (
-              <div style={{ fontSize: '0.8em' }}>(Under FDA review)</div>
-            )}
           </Button>
         );
       }
@@ -216,6 +213,9 @@ class HomePage extends React.Component<IHomeProps, {}> {
             </div>
             <div className="text-center" style={{ fontSize: '2em' }}>
               MSK's Precision Oncology Knowledge Base
+            </div>
+            <div className="text-center" style={{ fontSize: '1.5em' }}>
+              An FDA recognized Human Genetic Variant Database<span>&#42;</span>
             </div>
           </Col>
         </Row>
@@ -354,6 +354,10 @@ class HomePage extends React.Component<IHomeProps, {}> {
             </div>
             <div>
               <CitationText boldLinkout={true} />
+            </div>
+            <div>
+              <span>&#42;</span> recognition is for the FDA recognized content
+              portion of the database
             </div>
           </Col>
         </Row>
