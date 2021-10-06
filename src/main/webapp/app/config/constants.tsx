@@ -447,6 +447,7 @@ export enum PAGE_TITLE {
   LOGIN = 'Log in',
   REGISTER = 'Register',
   TERMS = 'Terms of Use',
+  SOP = 'Standard Operating Procedure',
 }
 
 export enum PAGE_ROUTE {
@@ -465,6 +466,7 @@ export enum PAGE_ROUTE {
   HOME = '/',
   ABOUT = '/about',
   TERMS = '/terms',
+  SOP = '/sop',
   TEAM = '/team',
   NEWS = '/news',
   FDA_RECOGNITION = '/fda-recognition',

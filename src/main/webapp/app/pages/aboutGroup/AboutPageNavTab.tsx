@@ -2,19 +2,21 @@ import * as React from 'react';
 import { Row, Col, Tab, Nav } from 'react-bootstrap';
 import AppStore from 'app/store/AppStore';
 import { inject, observer } from 'mobx-react';
-import { PAGE_ROUTE } from 'app/config/constants';
+import { PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
 import { observable, IReactionDisposer, reaction } from 'mobx';
 import { RouterStore } from 'mobx-react-router';
 import { AboutPage } from 'app/pages/AboutPage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
 import { TeamPage } from 'app/pages/teamPage/TeamPage';
+import Iframe from 'react-iframe';
 
 type AboutPageNavTabProps = { appStore: AppStore; routing: RouterStore };
 
 export enum TabKey {
   ABOUT = PAGE_ROUTE.ABOUT,
   TEAM = PAGE_ROUTE.TEAM,
-  FDA_RECOGNITION = PAGE_ROUTE.FDA_RECOGNITION,
+  // FDA_RECOGNITION = PAGE_ROUTE.FDA_RECOGNITION,
+  SOP = PAGE_ROUTE.SOP,
 }
 
 @inject('appStore', 'routing')
@@ -60,7 +62,7 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
           }}
         >
           <Row>
-            <Col sm={2}>
+            <Col sm={3}>
               <Nav variant="pills" className="flex-column">
                 <Nav.Item>
                   <Nav.Link eventKey={TabKey.ABOUT}>About</Nav.Link>
@@ -68,14 +70,17 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                 <Nav.Item>
                   <Nav.Link eventKey={TabKey.TEAM}>Team</Nav.Link>
                 </Nav.Item>
+                {/*<Nav.Item>*/}
+                {/*  <Nav.Link eventKey={TabKey.FDA_RECOGNITION}>*/}
+                {/*    FDA Recognition*/}
+                {/*  </Nav.Link>*/}
+                {/*</Nav.Item>*/}
                 <Nav.Item>
-                  <Nav.Link eventKey={TabKey.FDA_RECOGNITION}>
-                    FDA Recognition
-                  </Nav.Link>
+                  <Nav.Link eventKey={TabKey.SOP}>{PAGE_TITLE.SOP}</Nav.Link>
                 </Nav.Item>
               </Nav>
             </Col>
-            <Col sm={10}>
+            <Col sm={9}>
               <Tab.Content>
                 <Tab.Pane eventKey={TabKey.ABOUT}>
                   <AboutPage
@@ -86,13 +91,27 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                 <Tab.Pane eventKey={TabKey.TEAM}>
                   <TeamPage />
                 </Tab.Pane>
-                <Tab.Pane eventKey={TabKey.FDA_RECOGNITION}>
-                  <Row>
-                    <Col>
-                      <h2>FDA Recognized Human Variant Database</h2>
-                      <p>[Placeholder]</p>
-                    </Col>
-                  </Row>
+                <Tab.Pane eventKey={TabKey.TEAM}>
+                  <TeamPage />
+                </Tab.Pane>
+                {/*<Tab.Pane eventKey={TabKey.FDA_RECOGNITION}>*/}
+                {/*  <Row>*/}
+                {/*    <Col>*/}
+                {/*      <h2>FDA Recognized Human Variant Database</h2>*/}
+                {/*      <p>[Placeholder]</p>*/}
+                {/*    </Col>*/}
+                {/*  </Row>*/}
+                {/*</Tab.Pane>*/}
+                <Tab.Pane eventKey={TabKey.SOP}>
+                  <h2>OncoKB Standard Operating Procedure</h2>
+                  <Iframe
+                    width="100%"
+                    height="1000px"
+                    url="https://sop.oncokb.org"
+                    frameBorder={0}
+                    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
                 </Tab.Pane>
               </Tab.Content>
             </Col>
