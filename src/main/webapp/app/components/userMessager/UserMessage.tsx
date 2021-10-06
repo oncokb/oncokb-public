@@ -9,11 +9,12 @@ import classNames from 'classnames';
 import { Container } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
 import { DISABLE_BANNER_OPT } from 'app/config/constants';
+import TextScroller from 'app/shared/texts/TextScroller';
 
 export interface IUserMessage {
   dateStart?: number;
   dateEnd: number;
-  content: string;
+  content: JSX.Element;
   id: string;
 }
 
@@ -37,13 +38,33 @@ if (
     // BASED ON USERS LOCALSTORAGE
     {
       dateEnd: 1,
-      content: `
+      content: (
         <div>
-          <span>We have a new Software Engineer position open. Come and join us! </span>
-          <a class="btn btn-primary btn-sm ml-2 user-messager-container-button" target="_blank" href="https://careers.mskcc.org/jobs/job-details/2021-48797-software-engineer-oncokb">Apply Here</a>
+          <span>
+            We have a new Software Engineer position open. Come and join us!{' '}
+          </span>
+          <a
+            className="btn btn-primary btn-sm ml-2 user-messager-container-button"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://careers.mskcc.org/jobs/job-details/2021-48797-software-engineer-oncokb"
+          >
+            Apply Here
+          </a>
         </div>
-        `,
+      ),
       id: '2021_se_job_hiring',
+    },
+    {
+      dateEnd: 100000000000000,
+      content: (
+        <TextScroller
+          text={
+            'OncoKB is now an FDA-recognized Public Human Genetic Variant Database. For more details, please see our About page.'
+          }
+        />
+      ),
+      id: '2021-fda-recognition',
     },
   ];
 }
@@ -102,11 +123,7 @@ export default class UserMessage extends React.Component<UserMessageProps> {
             fluid={!this.props.windowStore.isXLscreen}
             className={styles.messageContainer}
           >
-            <div
-              dangerouslySetInnerHTML={{
-                __html: this.shownMessage.content,
-              }}
-            ></div>
+            <div>{this.shownMessage.content}</div>
             <i
               className={classNames(styles.close, 'fa', 'fa-close')}
               onClick={this.close}
