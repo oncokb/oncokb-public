@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,5 +65,13 @@ public class CompanyDomainServiceImpl implements CompanyDomainService {
     public void delete(Long id) {
         log.debug("Request to delete CompanyDomain : {}", id);
         companyDomainRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CompanyDomainDTO> findAllCompanyDomainsByCompanyId(Long companyId) {
+        return companyDomainRepository.findAllCompanyDomainsByCompanyId(companyId)
+            .stream()
+            .map(companyDomainMapper::toDto)
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 }

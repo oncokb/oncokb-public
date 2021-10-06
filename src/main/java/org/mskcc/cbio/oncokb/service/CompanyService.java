@@ -12,12 +12,18 @@ import java.util.Optional;
 public interface CompanyService {
 
     /**
-     * Save a company.
-     *
-     * @param companyVm the entity to save.
-     * @return the persisted entity.
+     * Save a new company
+     * @param companyDTO the entity to save
+     * @return the persisted entity
      */
-    CompanyDTO save(CompanyVM companyVm);
+    CompanyDTO createCompany(CompanyDTO companyDTO);
+
+    /**
+     * Update an existing company's information
+     * @param companyDTO the entity to save
+     * @return the persisted entity
+     */
+    CompanyDTO updateCompany(CompanyVM companyVm);
 
     /**
      * Get all the companies.

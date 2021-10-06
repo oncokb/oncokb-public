@@ -136,7 +136,7 @@ public class AccountResource {
                     if (existingUser.isPresent()) {
                         UserDTO userDTO = userMapper.userToUserDTO(existingUser.get());
                         if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
-                            userService.approveUser(userDTO);
+                            userService.approveUser(userDTO, false);
                             slackService.sendApprovedConfirmation(userMapper.userToUserDTO(userOptional.get()));
                             return true;
                         } else {
@@ -172,7 +172,7 @@ public class AccountResource {
         if (isMSKUser(userDTO)) {
             LicenseType registeredLicenseType = userDTO.getLicenseType();
             userDTO.setLicenseType(LicenseType.ACADEMIC);
-            userService.approveUser(userDTO);
+            userService.approveUser(userDTO, false);
 
             // In this case, we also want to send an email to user to explain
             Context context = new Context();

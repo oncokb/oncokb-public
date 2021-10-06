@@ -86,7 +86,7 @@ public class SlackController {
                 switch (actionId) {
                     case APPROVE_USER:
                         if (!userDTO.isActivated()) {
-                            Optional<UserDTO> updatedUser = userService.approveUser(userDTO);
+                            Optional<UserDTO> updatedUser = userService.approveUser(userDTO, false);
                             if (updatedUser.isPresent() && updatedUser.get().isActivated()) {
                                 mailService.sendApprovalEmail(userDTO);
                             }
