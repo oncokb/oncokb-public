@@ -15,7 +15,7 @@ type AboutPageNavTabProps = { appStore: AppStore; routing: RouterStore };
 export enum TabKey {
   ABOUT = PAGE_ROUTE.ABOUT,
   TEAM = PAGE_ROUTE.TEAM,
-  // FDA_RECOGNITION = PAGE_ROUTE.FDA_RECOGNITION,
+  FDA_RECOGNITION = PAGE_ROUTE.FDA_RECOGNITION,
   SOP = PAGE_ROUTE.SOP,
 }
 
@@ -70,11 +70,11 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                 <Nav.Item>
                   <Nav.Link eventKey={TabKey.TEAM}>Team</Nav.Link>
                 </Nav.Item>
-                {/*<Nav.Item>*/}
-                {/*  <Nav.Link eventKey={TabKey.FDA_RECOGNITION}>*/}
-                {/*    FDA Recognition*/}
-                {/*  </Nav.Link>*/}
-                {/*</Nav.Item>*/}
+                <Nav.Item>
+                  <Nav.Link eventKey={TabKey.FDA_RECOGNITION}>
+                    FDA Recognition
+                  </Nav.Link>
+                </Nav.Item>
                 <Nav.Item>
                   <Nav.Link eventKey={TabKey.SOP}>{PAGE_TITLE.SOP}</Nav.Link>
                 </Nav.Item>
@@ -91,14 +91,14 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                 <Tab.Pane eventKey={TabKey.TEAM}>
                   <TeamPage />
                 </Tab.Pane>
-                {/*<Tab.Pane eventKey={TabKey.FDA_RECOGNITION}>*/}
-                {/*  <Row>*/}
-                {/*    <Col>*/}
-                {/*      <h2>FDA Recognized Human Variant Database</h2>*/}
-                {/*      <p>[Placeholder]</p>*/}
-                {/*    </Col>*/}
-                {/*  </Row>*/}
-                {/*</Tab.Pane>*/}
+                <Tab.Pane eventKey={TabKey.FDA_RECOGNITION}>
+                  <Row>
+                    <Col>
+                      <h2>FDA Recognized Human Variant Database</h2>
+                      <p>[Placeholder]</p>
+                    </Col>
+                  </Row>
+                </Tab.Pane>
                 <Tab.Pane eventKey={TabKey.SOP}>
                   <div>
                     <div style={{ marginTop: '-5px' }}>

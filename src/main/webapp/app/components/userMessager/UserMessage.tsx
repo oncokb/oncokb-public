@@ -8,8 +8,9 @@ import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { Container } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
-import { DISABLE_BANNER_OPT } from 'app/config/constants';
+import { DISABLE_BANNER_OPT, PAGE_ROUTE } from 'app/config/constants';
 import TextScroller from 'app/shared/texts/TextScroller';
+import { Link } from 'react-router-dom';
 
 export interface IUserMessage {
   dateStart?: number;
@@ -60,7 +61,12 @@ if (
       content: (
         <TextScroller
           text={
-            'OncoKB is now an FDA-recognized Public Human Genetic Variant Database. For more details, please see our About page.'
+            <span>
+              OncoKB is now an FDA-recognized Public Human Genetic Variant
+              Database. For more details, please see our{' '}
+              <Link to={PAGE_ROUTE.FDA_RECOGNITION}>FDA Recognition</Link> page.
+              🏃🏃🏃
+            </span>
           }
         />
       ),

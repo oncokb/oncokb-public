@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 
 const TextScroller: React.FunctionComponent<{
-  text: string;
+  text: string | JXS.element;
 }> = ({ text }) => {
   const [key, setKey] = useState(1);
 
