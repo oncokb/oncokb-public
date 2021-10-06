@@ -4,7 +4,9 @@
     {
       "fieldName": "name",
       "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "description",
@@ -15,19 +17,33 @@
       "fieldName": "companyType",
       "fieldType": "CompanyType",
       "fieldValues": "PARENT,BRANCH,UNKNOWN",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "licenseType",
       "fieldType": "LicenseType",
       "fieldValues": "ACADEMIC,COMMERCIAL,RESEARCH_IN_COMMERCIAL,HOSPITAL",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "licenseModel",
+      "fieldType": "LicenseModel",
+      "fieldValues": "REGULAR,MICRO",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "licenseStatus",
       "fieldType": "LicenseStatus",
       "fieldValues": "TRIAL,REGULAR,TRIAL_EXPIRED,EXPIRED,UNKNOWN",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "businessContact",
