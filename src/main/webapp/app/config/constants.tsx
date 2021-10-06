@@ -77,7 +77,7 @@ export const YOUTUBE_VIDEO_IDS: { [key in VIDEO_TYPES]: string } = {
   [VIDEO_TYPES.WEBINAR_INTRO]: 'XqoKrrm2Boc',
   [VIDEO_TYPES.WEBINAR_API]: 'mTTe7CTdw-g',
   [VIDEO_TYPES.INTRO]: 'IoH7JdJ0fsA',
-  [VIDEO_TYPES.INTRO_LONG]: 'aA8j3EMxgy8',
+  [VIDEO_TYPES.INTRO_LONG]: '1Ohq19p8ldo',
 };
 export const BILIBILI_VIDEO_IDS: { [key in VIDEO_TYPES]: string } = {
   [VIDEO_TYPES.WEBINAR_INTRO]: '370552044',
