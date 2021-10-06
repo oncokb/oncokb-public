@@ -133,6 +133,7 @@ const AppRouts = (props: {
           />
           <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPageNavTab} />
           <Route exact path={PAGE_ROUTE.TEAM} component={AboutPageNavTab} />
+          <Route exact path={PAGE_ROUTE.SOP} component={AboutPageNavTab} />
           <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
           <Route
             exact

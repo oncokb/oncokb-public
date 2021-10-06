@@ -167,7 +167,7 @@ export const ACTIONABLE_GENES_LEVEL_TITLE: { [key in LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.PX]: `${
     LEVEL_TYPE_NAMES[LEVEL_TYPES.PX]
   } (for hematologic malignancies only)`,
-  [LEVEL_TYPES.FDA]: LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA],
+  [LEVEL_TYPES.FDA]: `${LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA]} (under FDA review)`,
 };
 
 export const ANNOTATION_PAGE_TAB_NAMES: {
@@ -177,7 +177,7 @@ export const ANNOTATION_PAGE_TAB_NAMES: {
   [ANNOTATION_PAGE_TAB_KEYS.TX]: 'Therapeutic',
   [ANNOTATION_PAGE_TAB_KEYS.DX]: 'Diagnostic',
   [ANNOTATION_PAGE_TAB_KEYS.PX]: 'Prognostic',
-  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content',
+  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content (under FDA review)',
 };
 
 export enum LEVELS {
@@ -447,6 +447,7 @@ export enum PAGE_TITLE {
   LOGIN = 'Log in',
   REGISTER = 'Register',
   TERMS = 'Terms of Use',
+  SOP = 'Standard Operating Procedure',
 }
 
 export enum PAGE_ROUTE {
@@ -465,6 +466,7 @@ export enum PAGE_ROUTE {
   HOME = '/',
   ABOUT = '/about',
   TERMS = '/terms',
+  SOP = '/sop',
   TEAM = '/team',
   NEWS = '/news',
   FDA_RECOGNITION = '/fda-recognition',
