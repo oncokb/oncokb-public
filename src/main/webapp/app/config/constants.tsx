@@ -447,7 +447,7 @@ export enum PAGE_TITLE {
   LOGIN = 'Log in',
   REGISTER = 'Register',
   TERMS = 'Terms of Use',
-  SOP = 'Standard Operating Procedure',
+  SOP = 'SOP',
 }
 
 export enum PAGE_ROUTE {

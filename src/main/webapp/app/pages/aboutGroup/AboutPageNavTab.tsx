@@ -62,7 +62,7 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
           }}
         >
           <Row>
-            <Col sm={3}>
+            <Col sm={2}>
               <Nav variant="pills" className="flex-column">
                 <Nav.Item>
                   <Nav.Link eventKey={TabKey.ABOUT}>About</Nav.Link>
@@ -80,7 +80,7 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                 </Nav.Item>
               </Nav>
             </Col>
-            <Col sm={9}>
+            <Col sm={10}>
               <Tab.Content>
                 <Tab.Pane eventKey={TabKey.ABOUT}>
                   <AboutPage
@@ -103,15 +103,21 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                 {/*  </Row>*/}
                 {/*</Tab.Pane>*/}
                 <Tab.Pane eventKey={TabKey.SOP}>
-                  <h2>OncoKB Standard Operating Procedure</h2>
-                  <Iframe
-                    width="100%"
-                    height="1000px"
-                    url="https://sop.oncokb.org"
-                    frameBorder={0}
-                    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
+                  <div>
+                    <div style={{ marginTop: '-5px' }}>
+                      <Iframe
+                        width="100%"
+                        height="1000px"
+                        url="https://sop.oncokb.org"
+                        frameBorder={0}
+                        allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
+                    <h2 style={{ position: 'absolute', top: 0 }}>
+                      OncoKB Standard Operating Procedure
+                    </h2>
+                  </div>
                 </Tab.Pane>
               </Tab.Content>
             </Col>
