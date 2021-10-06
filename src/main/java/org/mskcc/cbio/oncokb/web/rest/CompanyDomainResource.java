@@ -48,7 +48,6 @@ public class CompanyDomainResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/company-domains")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CompanyDomainDTO> createCompanyDomain(@Valid @RequestBody CompanyDomainDTO companyDomainDTO) throws URISyntaxException {
         log.debug("REST request to save CompanyDomain : {}", companyDomainDTO);
         if (companyDomainDTO.getId() != null) {
@@ -70,7 +69,6 @@ public class CompanyDomainResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/company-domains")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CompanyDomainDTO> updateCompanyDomain(@Valid @RequestBody CompanyDomainDTO companyDomainDTO) throws URISyntaxException {
         log.debug("REST request to update CompanyDomain : {}", companyDomainDTO);
         if (companyDomainDTO.getId() == null) {
@@ -88,7 +86,6 @@ public class CompanyDomainResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of companyDomains in body.
      */
     @GetMapping("/company-domains")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<CompanyDomainDTO> getAllCompanyDomains() {
         log.debug("REST request to get all CompanyDomains");
         return companyDomainService.findAll();
@@ -101,7 +98,6 @@ public class CompanyDomainResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the companyDomainDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/company-domains/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CompanyDomainDTO> getCompanyDomain(@PathVariable Long id) {
         log.debug("REST request to get CompanyDomain : {}", id);
         Optional<CompanyDomainDTO> companyDomainDTO = companyDomainService.findOne(id);
@@ -115,7 +111,6 @@ public class CompanyDomainResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/company-domains/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteCompanyDomain(@PathVariable Long id) {
         log.debug("REST request to delete CompanyDomain : {}", id);
         companyDomainService.delete(id);
