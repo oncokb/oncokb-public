@@ -91,9 +91,6 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                 <Tab.Pane eventKey={TabKey.TEAM}>
                   <TeamPage />
                 </Tab.Pane>
-                <Tab.Pane eventKey={TabKey.TEAM}>
-                  <TeamPage />
-                </Tab.Pane>
                 {/*<Tab.Pane eventKey={TabKey.FDA_RECOGNITION}>*/}
                 {/*  <Row>*/}
                 {/*    <Col>*/}
