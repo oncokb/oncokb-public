@@ -799,11 +799,11 @@
         "parameters": [
           {
             "in": "body",
-            "name": "companyDTO",
-            "description": "companyDTO",
+            "name": "companyVM",
+            "description": "companyVM",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CompanyDTO"
+              "$ref": "#/definitions/CompanyVM"
             }
           }
         ],
@@ -2799,6 +2799,7 @@
       "type": "object",
       "required": [
         "companyType",
+        "licenseModel",
         "licenseStatus",
         "licenseType",
         "name"
@@ -2824,6 +2825,13 @@
         },
         "legalContact": {
           "type": "string"
+        },
+        "licenseModel": {
+          "type": "string",
+          "enum": [
+            "REGULAR",
+            "MICRO"
+          ]
         },
         "licenseStatus": {
           "type": "string",
@@ -2854,6 +2862,7 @@
       "type": "object",
       "required": [
         "companyType",
+        "licenseModel",
         "licenseStatus",
         "licenseType",
         "name"
@@ -2879,6 +2888,13 @@
         },
         "legalContact": {
           "type": "string"
+        },
+        "licenseModel": {
+          "type": "string",
+          "enum": [
+            "REGULAR",
+            "MICRO"
+          ]
         },
         "licenseStatus": {
           "type": "string",
@@ -2929,6 +2945,7 @@
       "type": "object",
       "required": [
         "companyType",
+        "licenseModel",
         "licenseStatus",
         "licenseType",
         "name"
@@ -2960,6 +2977,13 @@
         },
         "legalContact": {
           "type": "string"
+        },
+        "licenseModel": {
+          "type": "string",
+          "enum": [
+            "REGULAR",
+            "MICRO"
+          ]
         },
         "licenseStatus": {
           "type": "string",

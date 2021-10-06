@@ -16,6 +16,8 @@ import {
   CompanyType,
   COMPANY_TYPE_TITLES,
   LICENSE_STATUS_TITLES,
+  LicenseModel,
+  LICENSE_MODEL_TITLE,
 } from 'app/config/constants';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import autobind from 'autobind-decorator';
@@ -120,6 +122,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
       description: this.companyDescription,
       legalContact: values.legalContact,
       licenseStatus: values.licenseStatus,
+      licenseModel: values.licenseModel,
       licenseType: values.licenseType,
       name: values.companyName,
       companyDomains: this.companyDomains,
@@ -223,6 +226,26 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
             <h5>License Information</h5>
           </Col>
           <Col md="9">
+            <AvField
+              type="select"
+              name="licenseModel"
+              label="License Model"
+              validate={{
+                required: {
+                  value: true,
+                  errorMessage: 'The license model is required.',
+                },
+              }}
+            >
+              <option value="" disabled selected hidden>
+                Choose a license model
+              </option>
+              {Object.keys(LicenseModel).map((type, idx) => (
+                <option value={LicenseModel[type]}>
+                  {LICENSE_MODEL_TITLE[LicenseModel[type]]}
+                </option>
+              ))}
+            </AvField>
             <AvField
               type="select"
               name="licenseType"
