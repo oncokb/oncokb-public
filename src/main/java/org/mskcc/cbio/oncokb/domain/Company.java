@@ -10,6 +10,8 @@ import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
+
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 
 /**
@@ -42,6 +44,11 @@ public class Company implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "license_type", nullable = false)
     private LicenseType licenseType;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "license_model", nullable = false)
+    private LicenseModel licenseModel;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -115,6 +122,19 @@ public class Company implements Serializable {
         this.licenseType = licenseType;
     }
 
+    public LicenseModel getLicenseModel() {
+        return licenseModel;
+    }
+
+    public Company licenseModel(LicenseModel licenseModel) {
+        this.licenseModel = licenseModel;
+        return this;
+    }
+
+    public void setLicenseModel(LicenseModel licenseModel) {
+        this.licenseModel = licenseModel;
+    }
+
     public LicenseStatus getLicenseStatus() {
         return licenseStatus;
     }
@@ -180,6 +200,7 @@ public class Company implements Serializable {
             ", description='" + getDescription() + "'" +
             ", companyType='" + getCompanyType() + "'" +
             ", licenseType='" + getLicenseType() + "'" +
+            ", licenseModel='" + getLicenseModel() + "'" +
             ", licenseStatus='" + getLicenseStatus() + "'" +
             ", businessContact='" + getBusinessContact() + "'" +
             ", legalContact='" + getLegalContact() + "'" +

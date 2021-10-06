@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Lob;
 import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 
 /**
@@ -25,6 +26,9 @@ public class CompanyDTO implements Serializable {
 
     @NotNull
     private LicenseType licenseType;
+
+    @NotNull
+    private LicenseModel licenseModel;
 
     @NotNull
     private LicenseStatus licenseStatus;
@@ -72,6 +76,14 @@ public class CompanyDTO implements Serializable {
 
     public void setLicenseType(LicenseType licenseType) {
         this.licenseType = licenseType;
+    }
+
+    public LicenseModel getLicenseModel() {
+        return licenseModel;
+    }
+
+    public void setLicenseModel(LicenseModel licenseModel) {
+        this.licenseModel = licenseModel;
     }
 
     public LicenseStatus getLicenseStatus() {
@@ -124,6 +136,7 @@ public class CompanyDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", companyType='" + getCompanyType() + "'" +
             ", licenseType='" + getLicenseType() + "'" +
+            ", licenseModel='" + getLicenseModel() + "'" +
             ", licenseStatus='" + getLicenseStatus() + "'" +
             ", businessContact='" + getBusinessContact() + "'" +
             ", legalContact='" + getLegalContact() + "'" +

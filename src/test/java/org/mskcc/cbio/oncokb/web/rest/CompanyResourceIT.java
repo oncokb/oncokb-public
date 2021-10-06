@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 /**
  * Integration tests for the {@link CompanyResource} REST controller.
@@ -52,6 +53,9 @@ public class CompanyResourceIT {
 
     private static final LicenseType DEFAULT_LICENSE_TYPE = LicenseType.ACADEMIC;
     private static final LicenseType UPDATED_LICENSE_TYPE = LicenseType.COMMERCIAL;
+
+    private static final LicenseModel DEFAULT_LICENSE_MODEL = LicenseModel.REGULAR;
+    private static final LicenseModel UPDATED_LICENSE_MODEL = LicenseModel.MICRO;
 
     private static final LicenseStatus DEFAULT_LICENSE_STATUS = LicenseStatus.TRIAL;
     private static final LicenseStatus UPDATED_LICENSE_STATUS = LicenseStatus.REGULAR;
@@ -91,6 +95,7 @@ public class CompanyResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .companyType(DEFAULT_COMPANY_TYPE)
             .licenseType(DEFAULT_LICENSE_TYPE)
+            .licenseModel(DEFAULT_LICENSE_MODEL)
             .licenseStatus(DEFAULT_LICENSE_STATUS)
             .businessContact(DEFAULT_BUSINESS_CONTACT)
             .legalContact(DEFAULT_LEGAL_CONTACT);
@@ -108,6 +113,7 @@ public class CompanyResourceIT {
             .description(UPDATED_DESCRIPTION)
             .companyType(UPDATED_COMPANY_TYPE)
             .licenseType(UPDATED_LICENSE_TYPE)
+            .licenseModel(UPDATED_LICENSE_MODEL)
             .licenseStatus(UPDATED_LICENSE_STATUS)
             .businessContact(UPDATED_BUSINESS_CONTACT)
             .legalContact(UPDATED_LEGAL_CONTACT);
@@ -138,6 +144,7 @@ public class CompanyResourceIT {
         assertThat(testCompany.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCompany.getCompanyType()).isEqualTo(DEFAULT_COMPANY_TYPE);
         assertThat(testCompany.getLicenseType()).isEqualTo(DEFAULT_LICENSE_TYPE);
+        assertThat(testCompany.getLicenseModel()).isEqualTo(DEFAULT_LICENSE_MODEL);
         assertThat(testCompany.getLicenseStatus()).isEqualTo(DEFAULT_LICENSE_STATUS);
         assertThat(testCompany.getBusinessContact()).isEqualTo(DEFAULT_BUSINESS_CONTACT);
         assertThat(testCompany.getLegalContact()).isEqualTo(DEFAULT_LEGAL_CONTACT);
@@ -226,6 +233,26 @@ public class CompanyResourceIT {
 
     @Test
     @Transactional
+    public void checkLicenseModelIsRequired() throws Exception {
+        int databaseSizeBeforeTest = companyRepository.findAll().size();
+        // set the field null
+        company.setLicenseModel(null);
+
+        // Create the Company, which fails.
+        CompanyDTO companyDTO = companyMapper.toDto(company);
+
+
+        restCompanyMockMvc.perform(post("/api/companies")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(companyDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Company> companyList = companyRepository.findAll();
+        assertThat(companyList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void checkLicenseStatusIsRequired() throws Exception {
         int databaseSizeBeforeTest = companyRepository.findAll().size();
         // set the field null
@@ -259,6 +286,7 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].companyType").value(hasItem(DEFAULT_COMPANY_TYPE.toString())))
             .andExpect(jsonPath("$.[*].licenseType").value(hasItem(DEFAULT_LICENSE_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].licenseModel").value(hasItem(DEFAULT_LICENSE_MODEL.toString())))
             .andExpect(jsonPath("$.[*].licenseStatus").value(hasItem(DEFAULT_LICENSE_STATUS.toString())))
             .andExpect(jsonPath("$.[*].businessContact").value(hasItem(DEFAULT_BUSINESS_CONTACT)))
             .andExpect(jsonPath("$.[*].legalContact").value(hasItem(DEFAULT_LEGAL_CONTACT)));
@@ -279,6 +307,7 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.companyType").value(DEFAULT_COMPANY_TYPE.toString()))
             .andExpect(jsonPath("$.licenseType").value(DEFAULT_LICENSE_TYPE.toString()))
+            .andExpect(jsonPath("$.licenseModel").value(DEFAULT_LICENSE_MODEL.toString()))
             .andExpect(jsonPath("$.licenseStatus").value(DEFAULT_LICENSE_STATUS.toString()))
             .andExpect(jsonPath("$.businessContact").value(DEFAULT_BUSINESS_CONTACT))
             .andExpect(jsonPath("$.legalContact").value(DEFAULT_LEGAL_CONTACT));
@@ -308,6 +337,7 @@ public class CompanyResourceIT {
             .description(UPDATED_DESCRIPTION)
             .companyType(UPDATED_COMPANY_TYPE)
             .licenseType(UPDATED_LICENSE_TYPE)
+            .licenseModel(UPDATED_LICENSE_MODEL)
             .licenseStatus(UPDATED_LICENSE_STATUS)
             .businessContact(UPDATED_BUSINESS_CONTACT)
             .legalContact(UPDATED_LEGAL_CONTACT);
@@ -326,6 +356,7 @@ public class CompanyResourceIT {
         assertThat(testCompany.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCompany.getCompanyType()).isEqualTo(UPDATED_COMPANY_TYPE);
         assertThat(testCompany.getLicenseType()).isEqualTo(UPDATED_LICENSE_TYPE);
+        assertThat(testCompany.getLicenseModel()).isEqualTo(UPDATED_LICENSE_MODEL);
         assertThat(testCompany.getLicenseStatus()).isEqualTo(UPDATED_LICENSE_STATUS);
         assertThat(testCompany.getBusinessContact()).isEqualTo(UPDATED_BUSINESS_CONTACT);
         assertThat(testCompany.getLegalContact()).isEqualTo(UPDATED_LEGAL_CONTACT);

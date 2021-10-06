@@ -28,6 +28,9 @@
             <column name="license_type" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="license_model" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="license_status" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
