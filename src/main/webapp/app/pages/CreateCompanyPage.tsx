@@ -28,7 +28,7 @@ export class CreateCompanyPage extends React.Component<{
   handleValidSubmit(newCompany: Partial<CompanyVM>) {
     client
       .createCompanyUsingPOST({
-        companyVm: newCompany as CompanyVM,
+        companyDto: newCompany as CompanyVM,
       })
       .then(this.createCompanySuccess, this.createCompanyFailure);
   }

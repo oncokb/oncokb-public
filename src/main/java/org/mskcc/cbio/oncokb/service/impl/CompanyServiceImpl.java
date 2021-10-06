@@ -9,9 +9,9 @@ import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyDomainMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
+import org.mskcc.cbio.oncokb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,26 +37,51 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyDomainMapper companyDomainMapper;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, CompanyMapper companyMapper, CompanyDomainService companyDomainService, CompanyDomainMapper companyDomainMapper) {
+    private final UserService userService;
+
+    public CompanyServiceImpl(
+        CompanyRepository companyRepository, 
+        CompanyMapper companyMapper, 
+        CompanyDomainService companyDomainService,
+        CompanyDomainMapper companyDomainMapper,
+        UserService userService
+    ) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
         this.companyDomainService = companyDomainService;
         this.companyDomainMapper = companyDomainMapper;
+        this.userService = userService;
 
     }
 
     @Override
-    public CompanyDTO save(CompanyVM companyVm) {
-        log.debug("Request to save Company : {}", companyVm);
-        Company company = companyMapper.toEntity(companyVm);
+    public CompanyDTO createCompany(CompanyDTO companyDTO) {
+        log.debug("Request to save Company : {}", companyDTO);
+        Company company = companyMapper.toEntity(companyDTO);
         company = companyRepository.save(company);
 
-        for(String domainName: companyVm.getCompanyDomains()){
+        // Save the new company domains
+        for(String domainName: companyDTO.getCompanyDomains()){
             CompanyDomain domain = new CompanyDomain();
             domain.setName(domainName);
             domain.setCompany(company);
             companyDomainService.save(companyDomainMapper.toDto(domain));
         }
+
+        return companyMapper.toDto(company);
+    }
+
+    @Override
+    public CompanyDTO updateCompany(CompanyVM companyVm) {
+        log.debug("Request to save Company : {}", companyVm);
+        Company company = companyMapper.toEntity(companyVm);
+        company = companyRepository.save(company);
+
+        userService.updateNewCompanyUsers(
+            companyVm.getCompanyDomains(), 
+            company, 
+            companyVm.getCompanyUserDTOs().size() >= 0 ? Optional.of(companyVm.getCompanyUserDTOs()) : Optional.empty()
+        );
 
         return companyMapper.toDto(company);
     }
@@ -69,7 +94,6 @@ public class CompanyServiceImpl implements CompanyService {
             .map(companyMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -84,4 +108,5 @@ public class CompanyServiceImpl implements CompanyService {
         log.debug("Request to delete Company : {}", id);
         companyRepository.deleteById(id);
     }
+
 }
