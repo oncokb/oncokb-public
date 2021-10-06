@@ -20,9 +20,9 @@ enum CreateCompanyStatus {
 export class CreateCompanyPage extends React.Component<{
   windowStore: WindowStore;
 }> {
-  @observable CreateCompanyStatus: CreateCompanyStatus =
+  @observable createCompanyStatus: CreateCompanyStatus =
     CreateCompanyStatus.PENDING;
-  @observable CreateCompanyError: OncoKBError | undefined;
+  @observable createCompanyError: OncoKBError | undefined;
 
   @action.bound
   handleValidSubmit(newCompany: Partial<CompanyVM>) {
@@ -35,26 +35,26 @@ export class CreateCompanyPage extends React.Component<{
 
   @action.bound
   createCompanySuccess() {
-    this.CreateCompanyStatus = CreateCompanyStatus.CREATE_SUCCESS;
-    this.CreateCompanyError = undefined;
+    this.createCompanyStatus = CreateCompanyStatus.CREATE_SUCCESS;
+    this.createCompanyError = undefined;
     window.scrollTo(0, 0);
   }
 
   @action.bound
   createCompanyFailure(error: OncoKBError) {
-    this.CreateCompanyStatus = CreateCompanyStatus.CREATE_ERROR;
-    this.CreateCompanyError = error;
+    this.createCompanyStatus = CreateCompanyStatus.CREATE_ERROR;
+    this.createCompanyError = error;
     window.scrollTo(0, 0);
   }
 
   render() {
     return (
       <div>
-        {this.CreateCompanyStatus === CreateCompanyStatus.CREATE_SUCCESS ? (
+        {this.createCompanyStatus === CreateCompanyStatus.CREATE_SUCCESS ? (
           <Alert variant={'info'}>Company created!</Alert>
         ) : null}
-        {this.CreateCompanyError ? (
-          <ErrorAlert error={this.CreateCompanyError} />
+        {this.createCompanyError ? (
+          <ErrorAlert error={this.createCompanyError} />
         ) : null}
         <NewCompanyForm onValidSubmit={this.handleValidSubmit} />
       </div>

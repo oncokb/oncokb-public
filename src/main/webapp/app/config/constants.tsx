@@ -514,7 +514,7 @@ export enum LicenseType {
   COMMERCIAL = 'COMMERCIAL',
 }
 
-export const LICENSE_TITLES: { [key: string]: string } = {
+export const LICENSE_TITLES: { [key in LicenseType]: string } = {
   [LicenseType.ACADEMIC]: 'Research use in an academic setting',
   [LicenseType.RESEARCH_IN_COMMERCIAL]: 'Research use in a commercial setting',
   [LicenseType.HOSPITAL]:
@@ -552,7 +552,7 @@ export enum CompanyType {
   UNKNOWN = 'UNKNOWN',
 }
 
-export const COMPANY_TYPE_TITLES: { [key: string]: string } = {
+export const COMPANY_TYPE_TITLES: { [key in CompanyType]: string } = {
   [CompanyType.PARENT]: 'Parent',
   [CompanyType.BRANCH]: 'Branch',
   [CompanyType.UNKNOWN]: 'Unknown',
@@ -566,7 +566,7 @@ export enum LicenseStatus {
   UNKNOWN = 'UNKNOWN',
 }
 
-export const LICENSE_STATUS_TITLES: { [key: string]: string } = {
+export const LICENSE_STATUS_TITLES: { [key in LicenseStatus]: string } = {
   [LicenseStatus.TRIAL]: 'Trial',
   [LicenseStatus.TRIAL_EXPIRED]: 'Trial Expired',
   [LicenseStatus.REGULAR]: 'Regular',
@@ -579,7 +579,7 @@ export enum LicenseModel {
   MICRO = 'MICRO',
 }
 
-export const LICENSE_MODEL_TITLE: { [key: string]: string } = {
+export const LICENSE_MODEL_TITLES: { [key in LicenseModel]: string } = {
   [LicenseModel.REGULAR]: 'Regular Tier',
   [LicenseModel.MICRO]: 'Micro Tier',
 };
