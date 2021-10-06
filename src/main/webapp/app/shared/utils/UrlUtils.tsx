@@ -24,6 +24,7 @@ import {
   GenePageSearchQueries,
 } from 'app/shared/route/types';
 import * as QueryString from 'querystring';
+import { LEVEL_TYPE_TO_VERSION, Version } from 'app/pages/LevelOfEvidencePage';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -175,4 +176,8 @@ export const WebinarLink: React.FunctionComponent<{}> = props => {
       </Linkout>
     </span>
   );
+};
+
+export const getLoEPageLink = (version: Version) => {
+  return `${PAGE_ROUTE.LEVELS}#version=${version}`;
 };

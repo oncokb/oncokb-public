@@ -58,7 +58,7 @@ module.exports = options => ({
         exclude: [utils.root('node_modules')]
       },
       {
-        test: /\.(jpe?g|png|gif|svg|woff2?|otf|ttf|eot|ppt|pdf)$/i,
+        test: /\.(jpe?g|png|gif|svg|woff2?|otf|ttf|eot|ppt|pdf|zip)$/i,
         loader: 'file-loader',
         options: {
           digest: 'hex',

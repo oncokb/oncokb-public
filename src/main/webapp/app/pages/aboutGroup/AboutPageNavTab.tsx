@@ -9,6 +9,7 @@ import { AboutPage } from 'app/pages/AboutPage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
 import { TeamPage } from 'app/pages/teamPage/TeamPage';
 import Iframe from 'react-iframe';
+import FdaRecognitionPage from 'app/pages/aboutGroup/FdaRecognitionPage';
 
 type AboutPageNavTabProps = { appStore: AppStore; routing: RouterStore };
 
@@ -92,12 +93,7 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                   <TeamPage />
                 </Tab.Pane>
                 <Tab.Pane eventKey={TabKey.FDA_RECOGNITION}>
-                  <Row>
-                    <Col>
-                      <h2>FDA Recognized Human Variant Database</h2>
-                      <p>[Placeholder]</p>
-                    </Col>
-                  </Row>
+                  <FdaRecognitionPage />
                 </Tab.Pane>
                 <Tab.Pane eventKey={TabKey.SOP}>
                   <div>

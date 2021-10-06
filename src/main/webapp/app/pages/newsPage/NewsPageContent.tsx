@@ -130,6 +130,17 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '10072021': {
+    priorityNews: [
+      <span>
+        OncoKB is officially the first somatic human genetic variant database to
+        achieve FDA recognition!{' '}
+        <Link to={PAGE_ROUTE.FDA_RECOGNITION}>Read more</Link> about the scope
+        of the recognition, the process OncoKB underwent in order to obtain it,
+        as well as what it means for the knowledge base and our users.
+      </span>,
+    ],
+  },
   '09292021': {
     priorityNews: [
       <span>

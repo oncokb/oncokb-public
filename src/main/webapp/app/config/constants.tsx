@@ -167,7 +167,7 @@ export const ACTIONABLE_GENES_LEVEL_TITLE: { [key in LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.PX]: `${
     LEVEL_TYPE_NAMES[LEVEL_TYPES.PX]
   } (for hematologic malignancies only)`,
-  [LEVEL_TYPES.FDA]: LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA],
+  [LEVEL_TYPES.FDA]: `${LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA]}-Recognized Content`,
 };
 
 export const ANNOTATION_PAGE_TAB_NAMES: {
@@ -585,6 +585,7 @@ export enum DOCUMENT_TITLES {
   NEWS = 'OncoKB Latest News',
   API_ACCESS = 'OncoKB API Access',
   CANCER_GENES = 'OncoKB Cancer Gene List',
+  FDA_RECOGNITION = 'OncoKB is now an FDA-recognized Public Human Genetic Variant Database',
 }
 
 export const ACADEMIC_TERMS = [

@@ -214,7 +214,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
             <div className="text-center" style={{ fontSize: '2em' }}>
               MSK's Precision Oncology Knowledge Base
             </div>
-            <div className="text-center" style={{ fontSize: '1.5em' }}>
+            <div className="text-center" style={{ fontSize: '1.4em' }}>
               An FDA-Recognized Human Genetic Variant Database<span>&#42;</span>
             </div>
           </Col>
@@ -356,7 +356,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
               <CitationText boldLinkout={true} />
             </div>
             <div>
-              <span>&#42;</span> FDA-recognition is for the FDA-recognized
+              <span>&#42;</span>FDA-recognition is for the FDA-recognized
               content portion of the database portion of the database
             </div>
           </Col>

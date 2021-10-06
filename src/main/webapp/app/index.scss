@@ -99,10 +99,14 @@ b {
   border-bottom: 0.25rem $primary;
 }
 
-.team {
+.team,
+.fda-recognition {
   ul {
     padding-left: 0;
     list-style-type: none;
+  }
+  ol {
+    padding-left: 20px;
   }
 }
 
