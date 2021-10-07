@@ -56,8 +56,8 @@ const FdaRecognitionPage = () => {
               Data and assertions within an FDA-recognized database are
               considered valid scientific evidence that can be used to
               streamline the next generation sequencing (NGS)-based tumor
-              profiling test development and validation processes.
-              FDA-recognition also incentivizes human variant data-sharing by
+              profiling test development and validation processes. FDA
+              recognition also incentivizes human variant data-sharing by
               recognizing the importance of transparency and peer-review for
               accurate human variant interpretation and pathogenicity
               classification. Thus, all data in an FDA-recognized human variant

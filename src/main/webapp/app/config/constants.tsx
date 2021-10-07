@@ -590,8 +590,8 @@ export enum DOCUMENT_TITLES {
 
 export const FDA_RECOGNITION_DISCLAIMER = (
   <span>
-    <Link to={PAGE_ROUTE.FDA_RECOGNITION}>FDA recognition</Link> is for part of
-    OncoKB content and is clearly marked
+    <Link to={PAGE_ROUTE.FDA_RECOGNITION}>FDA recognition</Link> of OncoKB is
+    for the content that is clearly marked
   </span>
 );
 export const AsteriskMark = () => <span>&#42;</span>;
