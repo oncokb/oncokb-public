@@ -589,7 +589,7 @@ export enum DOCUMENT_TITLES {
 }
 
 export const FDA_RECOGNITION_DISCLAIMER =
-  'FDA-recognition is for the FDA-recognized content portion of the database';
+  'FDA-recognition is for the FDA-recognized content of the database';
 export const AsteriskMark = () => <span>&#42;</span>;
 export const FdaRecognitionDisclaimer = () => (
   <span>

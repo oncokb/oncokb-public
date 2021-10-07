@@ -89,13 +89,24 @@ const FdaRecognitionPage = () => {
               <li>
                 For a full list of FDA recognized variants in OncoKB please see
                 the{' '}
-                <Link to={PAGE_ROUTE.ACTIONABLE_GENE}>Actionable Genes</Link>{' '}
+                <Link
+                  to={getActionableGenesPageLink(undefined, LEVEL_TYPES.FDA)}
+                >
+                  Actionable Genes
+                </Link>{' '}
                 page
               </li>
             </ul>
             <h5>OncoKB Application Links</h5>
             <ul>
-              <li>FDA Recognition Letter (pending)</li>
+              <li>
+                <a
+                  href={`content/files/fdaRecognition/OncoKB_FDA_Recognition_Recognition_Letter.pdf`}
+                  download
+                >
+                  FDA Recognition Letter
+                </a>
+              </li>
               <li>FDA Decision Summary for OncoKB (pending)</li>
               <li>
                 <a
