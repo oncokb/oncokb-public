@@ -7,17 +7,23 @@
   .footer {
     height: $footer-height;
   }
-  .faq-iframe {
+  .faq-iframe,
+  .faq-iframe-high-top {
     position: fixed;
     background: white;
     border: none;
-    top: 80px;
     right: 0;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 100%;
     padding-bottom: $footer-height + 6;
+  }
+  .faq-iframe {
+    top: 120px;
+  }
+  .faq-iframe-high-top {
+    top: 120px;
   }
 }
 

@@ -3,6 +3,8 @@ import React from 'react';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_REFERENCE_GENOME,
+  LEVEL_CLASSIFICATION,
+  LEVELS,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   REGEXP,
@@ -180,4 +182,20 @@ export const WebinarLink: React.FunctionComponent<{}> = props => {
 
 export const getLoEPageLink = (version: Version) => {
   return `${PAGE_ROUTE.LEVELS}#version=${version}`;
+};
+
+export const getActionableGenesPageLink = (
+  levels?: string,
+  sections?: string
+) => {
+  const hashes = [];
+  if (levels) {
+    hashes.push(`levels=${levels}`);
+  }
+  if (sections) {
+    hashes.push(`sections=${sections}`);
+  }
+  return `${PAGE_ROUTE.ACTIONABLE_GENE}${
+    hashes.length > 0 ? '#' : ''
+  }${hashes.join('&')}`;
 };

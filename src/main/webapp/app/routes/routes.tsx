@@ -23,7 +23,6 @@ import PageContainer from 'app/components/PageContainer';
 import React from 'react';
 import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
-import { FAQPage } from 'app/pages/FAQPage';
 import { RecaptchaBoundaryRoute } from '../shared/auth/RecaptchaBoundaryRoute';
 import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
 import UserPage from 'app/pages/userPage/UserPage';
@@ -31,6 +30,7 @@ import AppStore from 'app/store/AppStore';
 import ActivateTrialFinish from 'app/components/account/ActivateTrialFinish';
 import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
 import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTab';
+import FAQPage from 'app/pages/FAQPage';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;

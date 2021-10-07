@@ -588,6 +588,16 @@ export enum DOCUMENT_TITLES {
   FDA_RECOGNITION = 'OncoKB is now an FDA-recognized Public Human Genetic Variant Database',
 }
 
+export const FDA_RECOGNITION_DISCLAIMER =
+  'FDA-recognition is for the FDA-recognized content portion of the database';
+export const AsteriskMark = () => <span>&#42;</span>;
+export const FdaRecognitionDisclaimer = () => (
+  <span>
+    <AsteriskMark />
+    {FDA_RECOGNITION_DISCLAIMER}
+  </span>
+);
+
 export const ACADEMIC_TERMS = [
   {
     key: TERM_DEFINITION.IS_ACADEMIC_GROUP,

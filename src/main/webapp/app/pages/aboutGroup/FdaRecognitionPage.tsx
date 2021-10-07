@@ -1,11 +1,20 @@
-import { DOCUMENT_TITLES, PAGE_ROUTE } from 'app/config/constants';
+import {
+  AsteriskMark,
+  DOCUMENT_TITLES,
+  FdaRecognitionDisclaimer,
+  LEVEL_TYPES,
+  PAGE_ROUTE,
+} from 'app/config/constants';
 import React from 'react';
 import DocumentTitle from 'react-document-title';
 import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Linkout } from 'app/shared/links/Linkout';
 import { Version } from 'app/pages/LevelOfEvidencePage';
-import { getLoEPageLink } from 'app/shared/utils/UrlUtils';
+import {
+  getActionableGenesPageLink,
+  getLoEPageLink,
+} from 'app/shared/utils/UrlUtils';
 import styles from 'app/components/downloadButton/DownloadButton.module.scss';
 
 const FdaRecognitionPage = () => {
@@ -14,14 +23,19 @@ const FdaRecognitionPage = () => {
       <div className="fda-recognition">
         <Row>
           <Col>
-            <h4>{DOCUMENT_TITLES.FDA_RECOGNITION}</h4>
+            <h4>
+              {DOCUMENT_TITLES.FDA_RECOGNITION}
+              <AsteriskMark />
+            </h4>
             <p>
               In October 2021, OncoKB became the first somatic human variant
               database to be recognized by the FDA. FDA recognition of OncoKB is
               “partial” and is limited to the information provided in the
               “FDA-Recognized Content” tab which can be found on the{' '}
-              <Link to={PAGE_ROUTE.ACTIONABLE_GENE}>Actionable Genes</Link> page
-              and on each individual gene pages within OncoKB.
+              <Link to={getActionableGenesPageLink(undefined, LEVEL_TYPES.FDA)}>
+                Actionable Genes
+              </Link>{' '}
+              page and on each individual gene page within OncoKB.
             </p>
             <p>
               As background, in April 2018, the FDA announced their regulatory
@@ -54,7 +68,7 @@ const FdaRecognitionPage = () => {
           </Col>
         </Row>
         <Row>
-          <Col sm={6} md>
+          <Col md={5}>
             <h5>Important Database Links</h5>
             <ul>
               <li>
@@ -64,8 +78,7 @@ const FdaRecognitionPage = () => {
               </li>
               <li>
                 <Link to={getLoEPageLink(Version.FDA)}>
-                  Mapping between the OncoKB Levels of Evidence and the FDA
-                  Levels of Evidence
+                  Mapping to the FDA Levels of Evidence
                 </Link>
               </li>
               <li>
@@ -110,18 +123,21 @@ const FdaRecognitionPage = () => {
               </li>
             </ul>
           </Col>
-          <Col sm={6} md>
+          <Col md={7}>
             <h5>Scope of OncoKB Recognition</h5>
             <p>
-              The FDA has reviewed all OncoKB processes documented in the OncoKB
-              SOP V2.0, which include the following:
+              The FDA has reviewed all OncoKB processes documented in the{' '}
+              <Linkout link={'https://sop.oncokb.org/?version=v2'}>
+                OncoKB SOP v2.0
+              </Linkout>
+              , which include the following:
             </p>
             <ol>
               <li>
                 Part of the OncoKB annotation content: Annotation of variants
-                curated in OncoKB with an FDA level of evidence. FDA recognized
+                curated in OncoKB with an FDA level of evidence. FDA-recognized
                 content is clearly marked on the website and a pop-up message
-                will appear when the user exits an FDA recognized portion of the
+                will appear when the user exits an FDA-recognized portion of the
                 OncoKB website.
               </li>
               <li>
@@ -142,10 +158,16 @@ const FdaRecognitionPage = () => {
               <li>OncoKB’s policies of oversight and governance.</li>
               <li>
                 OncoKB’s processes for ensuring its members’ conflicts of
-                interest are minimized and transparent.portion of the OncoKB
-                website.
+                interest are minimized and transparent.
               </li>
             </ol>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <p>
+              <FdaRecognitionDisclaimer />
+            </p>
           </Col>
         </Row>
       </div>

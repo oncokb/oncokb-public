@@ -92,6 +92,7 @@ class Main extends React.Component<IMainPage> {
           windowStore={this.props.windowStore}
           authStore={this.props.authenticationStore}
           routing={this.props.routing}
+          appStore={this.props.appStore}
         />
         <div className={'view-wrapper'}>
           <Container fluid={!this.props.windowStore.isXLscreen}>

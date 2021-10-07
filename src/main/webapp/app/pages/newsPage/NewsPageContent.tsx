@@ -133,11 +133,13 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '10072021': {
     priorityNews: [
       <span>
-        OncoKB is officially the first somatic human genetic variant database to
-        achieve FDA recognition!{' '}
-        <Link to={PAGE_ROUTE.FDA_RECOGNITION}>Read more</Link> about the scope
-        of the recognition, the process OncoKB underwent in order to obtain it,
-        as well as what it means for the knowledge base and our users.
+        OncoKB is the first somatic human genetic variant database to achieve{' '}
+        <Linkout link={'https://www.fda.gov/media/99200/download'}>
+          FDA partial recognition
+        </Linkout>
+        ! Read more about the scope of the recognition, the recognition process,
+        and what it means for the knowledge base and our users on our{' '}
+        <Link to={PAGE_ROUTE.FDA_RECOGNITION}>About Page</Link>.
       </span>,
     ],
   },

@@ -12,6 +12,8 @@ import { Button, Col, Row } from 'react-bootstrap';
 import { HomePageNumber } from 'app/components/HomePageNumber';
 import pluralize from 'pluralize';
 import {
+  AsteriskMark,
+  FdaRecognitionDisclaimer,
   LEVEL_BUTTON_DESCRIPTION,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPE_NAMES,
@@ -356,8 +358,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
               <CitationText boldLinkout={true} />
             </div>
             <div>
-              <span>&#42;</span>FDA-recognition is for the FDA-recognized
-              content portion of the database portion of the database
+              <FdaRecognitionDisclaimer />
             </div>
           </Col>
         </Row>

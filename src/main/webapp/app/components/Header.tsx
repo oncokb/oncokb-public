@@ -20,6 +20,7 @@ import autobind from 'autobind-decorator';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import AccountMessage from 'app/components/accountMessage/AccountMessage';
 import MskccLogo from 'app/components/MskccLogo';
+import AppStore from 'app/store/AppStore';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -30,6 +31,7 @@ export interface IHeaderProps {
   windowStore: WindowStore;
   authStore: AuthenticationStore;
   routing: RouterStore;
+  appStore: AppStore;
 }
 
 type SubpageLink = {
@@ -102,7 +104,11 @@ class Header extends React.Component<IHeaderProps> {
   public render() {
     return (
       <>
-        <UserMessage windowStore={this.props.windowStore} show={true} />
+        <UserMessage
+          windowStore={this.props.windowStore}
+          show={true}
+          appStore={this.props.appStore}
+        />
         <AccountMessage
           windowStore={this.props.windowStore}
           authStore={this.props.authStore}
