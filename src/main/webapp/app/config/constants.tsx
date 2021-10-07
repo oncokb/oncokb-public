@@ -588,8 +588,12 @@ export enum DOCUMENT_TITLES {
   FDA_RECOGNITION = 'OncoKB is now an FDA-recognized Public Human Genetic Variant Database',
 }
 
-export const FDA_RECOGNITION_DISCLAIMER =
-  'FDA-recognition is for the FDA-recognized content of the database';
+export const FDA_RECOGNITION_DISCLAIMER = (
+  <span>
+    <Link to={PAGE_ROUTE.FDA_RECOGNITION}>FDA recognition</Link> is for part of
+    OncoKB content and is clearly marked
+  </span>
+);
 export const AsteriskMark = () => <span>&#42;</span>;
 export const FdaRecognitionDisclaimer = () => (
   <span>
