@@ -107,7 +107,11 @@ const FdaRecognitionPage = () => {
                   FDA Recognition Letter
                 </a>
               </li>
-              <li>FDA Decision Summary for OncoKB (pending)</li>
+              <li>
+                <a href={`https://www.fda.gov/media/152847/download`} download>
+                  FDA Decision Summary for OncoKB
+                </a>
+              </li>
               <li>
                 <a
                   href={`content/files/fdaRecognition/OncoKB_FDA_Recognition_Application_May_2019.zip`}
