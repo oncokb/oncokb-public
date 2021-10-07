@@ -358,7 +358,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
               <CitationText boldLinkout={true} />
             </div>
             <div>
-              <FdaRecognitionDisclaimer />
+              <FdaRecognitionDisclaimer enableLink />
             </div>
           </Col>
         </Row>

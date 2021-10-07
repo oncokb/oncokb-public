@@ -132,15 +132,15 @@ export default class NewsPage extends React.Component<{
               <div>Introducing Simplified OncoKB Levels of Evidence:</div>
               <ul>
                 <li>
-                  <b>New Level 2</b>, defined as “Standard care biomarker
+                  <b>New Level 2</b>, defined as "Standard care biomarker
                   recommended by the NCCN or other expert panels predictive of
-                  response to an FDA-approved drug in this indication” (formerly
+                  response to an FDA-approved drug in this indication" (formerly
                   Level 2A).
                 </li>
                 <li>
-                  <b>Unified Level 3B</b>, defined as “Standard care or
+                  <b>Unified Level 3B</b>, defined as "Standard care or
                   investigational biomarker predictive of response to an
-                  FDA-approved or investigational drug in another indication”
+                  FDA-approved or investigational drug in another indication"
                   (combination of previous Levels 2B and 3B).
                 </li>
               </ul>

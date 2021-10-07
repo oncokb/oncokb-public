@@ -30,8 +30,8 @@ const FdaRecognitionPage = () => {
             <p>
               In October 2021, OncoKB became the first somatic human variant
               database to be recognized by the FDA. FDA recognition of OncoKB is
-              “partial” and is limited to the information provided in the
-              “FDA-Recognized Content” tab which can be found on the{' '}
+              "partial" and is limited to the information provided in the
+              "FDA-Recognized Content" tab which can be found on the{' '}
               <Link to={getActionableGenesPageLink(undefined, LEVEL_TYPES.FDA)}>
                 Actionable Genes
               </Link>{' '}
@@ -43,14 +43,10 @@ const FdaRecognitionPage = () => {
               <Linkout link={'https://www.fda.gov/media/99200/download'}>
                 Use of Public Human Genetic Variant Database
               </Linkout>{' '}
-              to support the Agency’s precision medicine initiatives. "The goal
+              to support the Agency's precision medicine initiatives. "The goal
               of this effort is to help ensure patients receive accurate,
               reliable, and clinically meaningful test results, while promoting
-              innovation in test development” (
-              <Linkout link={'https://www.fda.gov/media/99200/download'}>
-                www.fda.gov/media/99200/download
-              </Linkout>
-              ).
+              innovation in test development".
             </p>
             <p>
               Data and assertions within an FDA-recognized database are
@@ -102,13 +98,12 @@ const FdaRecognitionPage = () => {
               <li>
                 <a
                   href={`content/files/fdaRecognition/OncoKB_FDA_Recognition_Recognition_Letter.pdf`}
-                  download
                 >
                   FDA Recognition Letter
                 </a>
               </li>
               <li>
-                <a href={`https://www.fda.gov/media/152847/download`} download>
+                <a href={`https://www.fda.gov/media/152847/download`}>
                   FDA Decision Summary for OncoKB
                 </a>
               </li>
@@ -137,6 +132,18 @@ const FdaRecognitionPage = () => {
                 </a>
               </li>
             </ul>
+            <h5>Press Releases</h5>
+            <ul>
+              <li>
+                <a
+                  href={
+                    'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-recognizes-memorial-sloan-kettering-database-molecular-tumor-marker-information'
+                  }
+                >
+                  FDA Recognition Announcement
+                </a>
+              </li>
+            </ul>
           </Col>
           <Col md={7}>
             <h5>Scope of OncoKB Recognition</h5>
@@ -160,19 +167,19 @@ const FdaRecognitionPage = () => {
                 evidence.
               </li>
               <li>
-                OncoKB’s processes and validation studies for variant evaluation
+                OncoKB's processes and validation studies for variant evaluation
                 and assertion, data integrity and security, and transparency of
                 all evidence.
               </li>
               <li>
-                OncoKB’s administration policies for hiring, training and
+                OncoKB's administration policies for hiring, training and
                 continuing the education of its curators and Scientific Content
                 Management Team who evaluate and approve inclusion of variants
                 into the database.
               </li>
-              <li>OncoKB’s policies of oversight and governance.</li>
+              <li>OncoKB's policies of oversight and governance.</li>
               <li>
-                OncoKB’s processes for ensuring its members’ conflicts of
+                OncoKB's processes for ensuring its members' conflicts of
                 interest are minimized and transparent.
               </li>
             </ol>
@@ -181,7 +188,7 @@ const FdaRecognitionPage = () => {
         <Row>
           <Col>
             <p>
-              <FdaRecognitionDisclaimer />
+              <FdaRecognitionDisclaimer enableLink={false} />
             </p>
           </Col>
         </Row>

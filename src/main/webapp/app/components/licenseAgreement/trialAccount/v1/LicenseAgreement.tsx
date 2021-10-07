@@ -10,8 +10,8 @@ export const LicenseAgreement = () => {
         These Terms and Conditions describe the rights granted by Memorial Sloan
         Kettering Cancer Center, a New York not-for-profit corporation with its
         principal place of business at 1275 York Avenue, New York, New York
-        10065 ("<b>MSKCC</b>" or “<b>Licensor</b>”) to you ("<b>Licensee</b>" or
-        “<b>you</b>”) to access the OncoKB KnowledgeBase provided by MSKCC as
+        10065 ("<b>MSKCC</b>" or "<b>Licensor</b>") to you ("<b>Licensee</b>" or
+        "<b>you</b>") to access the OncoKB KnowledgeBase provided by MSKCC as
         part of its free trial program.
       </p>
       <p>
@@ -24,7 +24,7 @@ export const LicenseAgreement = () => {
           <u>Conditional License Grant</u>. Subject to these Terms and
           Conditions, MSKCC hereby grants Licensee a temporary, limited,
           non-exclusive, non-sublicensable, and non-transferable license for a
-          term of three (3) months (the “<b>Term</b>”) to access OncoKB
+          term of three (3) months (the "<b>Term</b>") to access OncoKB
           KnowledgeBase through the OncoKB API, commencing on the date LICENSEE
           is first granted access to the OncoKB KnowledgeBase.
         </li>

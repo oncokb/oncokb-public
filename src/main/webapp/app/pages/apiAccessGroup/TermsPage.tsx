@@ -28,7 +28,7 @@ export const TermsPage = () => {
                   OncoKB is a precision oncology knowledge base maintained by
                   Memorial Sloan Kettering Cancer Center (MSK). MSK may, from
                   time to time, update the content on <OncoKBLink />{' '}
-                  (“Content”). MSK makes no warranties or representations,
+                  ("Content"). MSK makes no warranties or representations,
                   express or implied, with respect to any of the Content,
                   including as to the present accuracy, completeness,
                   timeliness, adequacy, or usefulness of any of the Content. By

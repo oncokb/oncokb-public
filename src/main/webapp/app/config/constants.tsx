@@ -588,17 +588,25 @@ export enum DOCUMENT_TITLES {
   FDA_RECOGNITION = 'OncoKB is now an FDA-recognized Public Human Genetic Variant Database',
 }
 
-export const FDA_RECOGNITION_DISCLAIMER = (
+export const FDA_RECOGNITION_DISCLAIMER: React.FunctionComponent<{
+  enableLink: boolean;
+}> = props => (
   <span>
-    <Link to={PAGE_ROUTE.FDA_RECOGNITION}>FDA recognition</Link> of OncoKB is
-    for the content that is clearly marked
+    {props.enableLink ? (
+      <Link to={PAGE_ROUTE.FDA_RECOGNITION}>FDA recognition</Link>
+    ) : (
+      'FDA recognition'
+    )}{' '}
+    of OncoKB is for the content that is clearly marked
   </span>
 );
 export const AsteriskMark = () => <span>&#42;</span>;
-export const FdaRecognitionDisclaimer = () => (
+export const FdaRecognitionDisclaimer: React.FunctionComponent<{
+  enableLink: boolean;
+}> = props => (
   <span>
     <AsteriskMark />
-    {FDA_RECOGNITION_DISCLAIMER}
+    <FDA_RECOGNITION_DISCLAIMER enableLink={props.enableLink} />
   </span>
 );
 
