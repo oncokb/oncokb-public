@@ -30,6 +30,7 @@ import { AbstractLink, FdaApprovalLink } from 'app/pages/newsPage/Links';
 import WithSeparator from 'react-with-separator';
 import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -2805,12 +2806,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <br />
         <Row>
           <Col lg={6} md={8} xs={12}>
-            <img src={SearchOneImg} />
+            <OptimizedImage src={SearchOneImg} />
           </Col>
         </Row>
         <Row>
           <Col lg={6} md={8} xs={12}>
-            <img className="md-auto" src={SearchTwoImg} />
+            <OptimizedImage className="md-auto" src={SearchTwoImg} />
           </Col>
         </Row>
       </>,
@@ -2843,7 +2844,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <br />
         <Row>
           <Col xs={12} md={8} xl={6}>
-            <img src={ERBBImg} />
+            <OptimizedImage src={ERBBImg} />
           </Col>
         </Row>
       </>,
@@ -3052,10 +3053,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <br />
         <Row>
           <Col xs={12} md={8} xl={6}>
-            <img src={ClinicalImg} />
+            <OptimizedImage src={ClinicalImg} />
           </Col>
           <Col xs={12} md={8} xl={6}>
-            <img src={BiologicalImg} />
+            <OptimizedImage src={BiologicalImg} />
           </Col>
         </Row>
       </>,

@@ -24,6 +24,7 @@ import _ from 'lodash';
 import { RouterStore } from 'mobx-react-router';
 import { getBilibiliLink, getYouTubeLink } from 'app/shared/utils/Utils';
 import { WebinarLink } from 'app/shared/utils/UrlUtils';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
 
 type AboutPageProps = { appStore: AppStore; routing: RouterStore };
 
@@ -165,7 +166,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
           <Row>
             <Col>
               <p className={'mt-2'}>
-                <img src={processImg} style={{ width: '100%' }} />
+                <OptimizedImage src={processImg} style={{ width: '100%' }} />
                 <div className={'text-center'}>
                   <h5>Overview of OncoKB Process</h5>
                 </div>

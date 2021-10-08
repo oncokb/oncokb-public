@@ -21,6 +21,7 @@ import { scrollWidthOffsetInNews } from 'app/shared/utils/Utils';
 import { inject, observer } from 'mobx-react';
 import indexStyles from 'app/index.module.scss';
 import { Version } from 'app/pages/LevelOfEvidencePage';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
 @inject('routing')
 @observer
 export default class NewsPage extends React.Component<{
@@ -120,7 +121,7 @@ export default class NewsPage extends React.Component<{
                   </Link>{' '}
                   page.
                 </li>
-                <img
+                <OptimizedImage
                   className="md-auto"
                   style={{ maxWidth: IMG_MAX_WIDTH }}
                   src={AAC_IMAGE}
@@ -144,7 +145,7 @@ export default class NewsPage extends React.Component<{
                   (combination of previous Levels 2B and 3B).
                 </li>
               </ul>
-              <img className="md-auto" src={LevelChange} />
+              <OptimizedImage className="md-auto" src={LevelChange} />
               <div>
                 We have implemented these changes for 2 reasons:
                 <ol>
