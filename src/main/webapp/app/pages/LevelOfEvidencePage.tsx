@@ -19,6 +19,7 @@ import mainStyles from '../index.module.scss';
 import { ElementType } from 'app/components/SimpleTable';
 import WindowStore from 'app/store/WindowStore';
 import { Linkout } from 'app/shared/links/Linkout';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
 
 type LevelOfEvidencePageProps = {
   routing: RouterStore;
@@ -264,12 +265,17 @@ export default class LevelOfEvidencePage extends React.Component<
             <Col className={'d-md-flex justify-content-center mt-2'}>
               <div
                 style={{
-                  maxWidth: [Version.AAC, Version.FDA].includes(this.version)
-                    ? 1000
+                  maxWidth: [
+                    Version.AAC,
+                    Version.FDA,
+                    Version.V1,
+                    Version.V2,
+                  ].includes(this.version)
+                    ? undefined
                     : IMG_MAX_WIDTH,
                 }}
               >
-                <img
+                <OptimizedImage
                   style={{ width: '100%' }}
                   src={`content/images/level_${this.version}.png`}
                 />
@@ -278,7 +284,7 @@ export default class LevelOfEvidencePage extends React.Component<
                     <span
                       style={{
                         marginRight: this.props.windowStore.isLargeScreen
-                          ? '85px'
+                          ? '130px'
                           : '35px',
                       }}
                     >

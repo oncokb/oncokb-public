@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import mskLogo from 'content/images/msk-logo-white.svg';
 import mskIcon from 'content/images/msk-icon-white.svg';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
 
 class MskccLogo extends React.Component<{
   imageHeight?: number;
@@ -20,7 +21,7 @@ class MskccLogo extends React.Component<{
         className={this.props.className}
         style={{ display: 'block' }}
       >
-        <img
+        <OptimizedImage
           alt="mskcc-logo"
           src={this.props.size === 'lg' ? mskLogo : mskIcon}
           style={{

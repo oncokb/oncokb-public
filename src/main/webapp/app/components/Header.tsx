@@ -21,6 +21,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import AccountMessage from 'app/components/accountMessage/AccountMessage';
 import MskccLogo from 'app/components/MskccLogo';
 import AppStore from 'app/store/AppStore';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -123,7 +124,7 @@ class Header extends React.Component<IHeaderProps> {
             <Container fluid={!this.props.windowStore.isLargeScreen}>
               <Navbar.Brand>
                 <NavLink to={PAGE_ROUTE.HOME}>
-                  <img height={30} src={oncokbImg} alt={'OncoKB'} />
+                  <OptimizedImage height={30} src={oncokbImg} alt={'OncoKB'} />
                 </NavLink>
               </Navbar.Brand>
               <Navbar.Toggle onClick={this.toggleNav} />
