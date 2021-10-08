@@ -277,6 +277,7 @@ export default class LevelOfEvidencePage extends React.Component<
               >
                 <OptimizedImage
                   style={{ width: '100%' }}
+                  progressiveLoading
                   src={`content/images/level_${this.version}.png`}
                 />
                 {this.version === Version.AAC ? (
