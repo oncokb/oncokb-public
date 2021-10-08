@@ -96,52 +96,54 @@ const FdaRecognitionPage = () => {
             <h5>OncoKB Application Links</h5>
             <ul>
               <li>
-                <a
-                  href={`content/files/fdaRecognition/OncoKB_FDA_Recognition_Recognition_Letter.pdf`}
+                <Linkout
+                  link={`content/files/fdaRecognition/OncoKB_FDA_Recognition_Recognition_Letter.pdf`}
                 >
                   FDA Recognition Letter
-                </a>
+                </Linkout>
               </li>
               <li>
-                <a href={`https://www.fda.gov/media/152847/download`}>
+                <Linkout link={`https://www.fda.gov/media/152847/download`}>
                   FDA Decision Summary for OncoKB
-                </a>
+                </Linkout>
               </li>
               <li>
                 <a
-                  href={`content/files/fdaRecognition/OncoKB_FDA_Recognition_Application_May_2019.zip`}
+                  href={`content/files/fdaRecognition/OncoKB_FDA_Recognition_Final_Application_March_2021.zip`}
                   download
                 >
-                  Application May 2019 (Original Application)
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`content/files/fdaRecognition/OncoKB_FDA_Recognition_Application_March_2020.zip`}
-                  download
-                >
-                  Application March 2020
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`content/files/fdaRecognition/OncoKB_FDA_Recognition_Application_March_2021.zip`}
-                  download
-                >
-                  Application March 2021
+                  Final Application March 2021
                 </a>
               </li>
             </ul>
             <h5>Press Releases</h5>
             <ul>
               <li>
-                <a
-                  href={
+                <Linkout
+                  link={
                     'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-recognizes-memorial-sloan-kettering-database-molecular-tumor-marker-information'
                   }
                 >
                   FDA Recognition Announcement
-                </a>
+                </Linkout>
+              </li>
+              <li>
+                <Linkout
+                  link={
+                    'https://www.mskcc.org/news-releases/fda-grants-partial-recognition-status-mskcc-precision-oncology-knowledge-database'
+                  }
+                >
+                  MSK Press Release
+                </Linkout>
+              </li>
+              <li>
+                <Linkout
+                  link={
+                    'https://ascopost.com/news/october-2021/fda-recognizes-memorial-sloan-kettering-database-of-molecular-tumor-marker-information'
+                  }
+                >
+                  ASCO Post Update
+                </Linkout>
               </li>
             </ul>
           </Col>
