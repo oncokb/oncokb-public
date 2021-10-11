@@ -7,11 +7,11 @@
   .footer {
     height: $footer-height;
   }
-  .faq-iframe {
+  .faq-iframe,
+  .faq-iframe-high-top {
     position: fixed;
     background: white;
     border: none;
-    top: 80px;
     right: 0;
     bottom: 0;
     left: 0;
@@ -19,36 +19,21 @@
     height: 100%;
     padding-bottom: $footer-height + 6;
   }
-}
-
-@mixin home-page-logo($size) {
-  @if $size == xs {
-    .home-page-logo {
-      width: 200px;
-    }
-    .home-page-logo-title {
-      font-size: 18px;
-    }
-  } @else if $size == md {
-    .home-page-logo {
-      width: 320px;
-    }
-  } @else if $size == lg {
-    .home-page-logo {
-      width: 400px;
-    }
-    .home-page-logo-title {
-      font-size: 20px;
-    }
+  .faq-iframe {
+    top: 120px;
+  }
+  .faq-iframe-high-top {
+    top: 120px;
   }
 }
 
 @include media-breakpoint-up(xs) {
   $footer-height: 20rem;
   @include sticky-footer($footer-height);
-  @include home-page-logo(xs);
   .navbar-brand {
     margin-right: 1rem;
+    margin-bottom: 0.3rem;
+    padding: 1rem 0;
   }
 
   .navbar-nav > .nav-item {
@@ -69,17 +54,15 @@
 @include media-breakpoint-up(md) {
   $footer-height: 20rem;
   @include sticky-footer($footer-height);
-  @include home-page-logo(md);
 }
 
 @include media-breakpoint-up(lg) {
-  $footer-height: 13rem;
+  $footer-height: 14rem;
   @include sticky-footer($footer-height);
-  @include home-page-logo(lg);
 
   .navbar-nav > .nav-item,
   #account-menu > a {
-    padding: 1rem 0.5rem;
+    padding: 1rem 0.3rem;
     margin: 0;
   }
 }
@@ -87,7 +70,7 @@
 @include media-breakpoint-up(xl) {
   .navbar-nav > .nav-item,
   #account-menu > a {
-    padding: 1rem 0.875rem;
+    padding: 1rem 0.6rem;
     margin: 0;
   }
 }

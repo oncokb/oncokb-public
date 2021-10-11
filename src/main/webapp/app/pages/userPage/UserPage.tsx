@@ -76,7 +76,7 @@ const BoldAccountTitle: React.FunctionComponent<{
   licenseType: LicenseType | undefined;
 }> = props => {
   return (
-    <span className={'font-weight-bold'}>
+    <span className={'font-bold'}>
       {getAccountInfoTitle(props.title, props.licenseType)}
     </span>
   );
@@ -603,9 +603,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             },
                           }}
                         />
-                        <div className={'mb-2 font-weight-bold'}>
-                          Account Type
-                        </div>
+                        <div className={'mb-2 font-bold'}>Account Type</div>
                         <AvRadioGroup
                           inline
                           name="accountType"
@@ -644,7 +642,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             />
                           </div>
                         ) : null}
-                        <div className={'mb-2 mt-1 font-weight-bold'}>
+                        <div className={'mb-2 mt-1 font-bold'}>
                           <span>Account Status</span>
                           <InfoIcon
                             className={'ml-2'}
@@ -673,9 +671,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             value={AccountStatus.INACTIVATED}
                           />
                         </AvRadioGroup>
-                        <div className={'my-2 font-weight-bold'}>
-                          User Authorities
-                        </div>
+                        <div className={'my-2 font-bold'}>User Authorities</div>
                         <AvCheckboxGroup
                           inline
                           name="authorities"
@@ -709,9 +705,7 @@ export default class UserPage extends React.Component<IUserPage> {
                     </Row>
                     <Row>
                       <Col className={getSectionClassName()}>
-                        <div className={'my-2 font-weight-bold'}>
-                          Email history
-                        </div>
+                        <div className={'my-2 font-bold'}>Email history</div>
                         <EmailTable data={this.usersUserMails.result} />
                       </Col>
                     </Row>

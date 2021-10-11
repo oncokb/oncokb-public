@@ -30,6 +30,7 @@ import { AbstractLink, FdaApprovalLink } from 'app/pages/newsPage/Links';
 import WithSeparator from 'react-with-separator';
 import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -130,6 +131,19 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '10072021': {
+    priorityNews: [
+      <span>
+        OncoKB is the first somatic human genetic variant database to achieve{' '}
+        <Linkout link={'https://www.fda.gov/media/99200/download'}>
+          FDA partial recognition
+        </Linkout>
+        ! Read more about the scope of the recognition, the recognition process,
+        and what it means for the knowledge base and our users on our{' '}
+        <Link to={PAGE_ROUTE.FDA_RECOGNITION}>About Page</Link>.
+      </span>,
+    ],
+  },
   '09292021': {
     priorityNews: [
       <span>
@@ -1579,7 +1593,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     priorityNews: [
       <span>
         The version controlled OncoKB Curation Standard Operating Procedure v1.0
-        has been released in the <Link to="/about">OncoKB About</Link> page.
+        has been released in the <Link to={PAGE_ROUTE.ABOUT}>OncoKB About</Link>{' '}
+        page.
       </span>,
     ],
     updatedImplication: [
@@ -2791,12 +2806,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <br />
         <Row>
           <Col lg={6} md={8} xs={12}>
-            <img src={SearchOneImg} />
+            <OptimizedImage src={SearchOneImg} />
           </Col>
         </Row>
         <Row>
           <Col lg={6} md={8} xs={12}>
-            <img className="md-auto" src={SearchTwoImg} />
+            <OptimizedImage className="md-auto" src={SearchTwoImg} />
           </Col>
         </Row>
       </>,
@@ -2829,7 +2844,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <br />
         <Row>
           <Col xs={12} md={8} xl={6}>
-            <img src={ERBBImg} />
+            <OptimizedImage src={ERBBImg} />
           </Col>
         </Row>
       </>,
@@ -3038,10 +3053,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <br />
         <Row>
           <Col xs={12} md={8} xl={6}>
-            <img src={ClinicalImg} />
+            <OptimizedImage src={ClinicalImg} />
           </Col>
           <Col xs={12} md={8} xl={6}>
-            <img src={BiologicalImg} />
+            <OptimizedImage src={BiologicalImg} />
           </Col>
         </Row>
       </>,

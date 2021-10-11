@@ -718,8 +718,6 @@ export const TeamPage = () => {
                 </li>
               ))}
             </ul>
-          </Col>
-          <Col sm={6} md>
             <h5>Past Contributors *</h5>
             <ul>
               {_.sortBy(pastContributors, member => member.lastName).map(

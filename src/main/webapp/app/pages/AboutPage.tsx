@@ -9,6 +9,7 @@ import {
   ANNOTATION_PAGE_TAB_KEYS,
   BILIBILI_VIDEO_IDS,
   DOCUMENT_TITLES,
+  PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   SOP_LINK,
   YOUTUBE_VIDEO_IDS,
@@ -23,6 +24,7 @@ import _ from 'lodash';
 import { RouterStore } from 'mobx-react-router';
 import { getBilibiliLink, getYouTubeLink } from 'app/shared/utils/Utils';
 import { WebinarLink } from 'app/shared/utils/UrlUtils';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
 
 type AboutPageProps = { appStore: AppStore; routing: RouterStore };
 
@@ -137,16 +139,16 @@ export class AboutPage extends React.Component<AboutPageProps> {
                 Alterations are annotated with their biological and oncogenic
                 effects. Additionally, alteration- and tumor type-specific
                 therapeutic implications are classified using the{' '}
-                <Link to="/levels">OncoKB Levels of Evidence</Link> system,
-                which assigns clinical actionability to individual mutational
-                events.
+                <Link to={PAGE_ROUTE.LEVELS}>OncoKB Levels of Evidence</Link>{' '}
+                system, which assigns clinical actionability to individual
+                mutational events.
               </p>
               <p>
                 For additional details about the OncoKB curation process, please
                 refer to the version-controlled{' '}
-                <Linkout link={SOP_LINK}>
-                  OncoKB Curation Standard Operating Procedure v2.1
-                </Linkout>
+                <Link to={PAGE_ROUTE.SOP}>
+                  OncoKB Curation Standard Operating Procedure
+                </Link>
                 . <CitationText />
               </p>
             </Col>
@@ -164,7 +166,10 @@ export class AboutPage extends React.Component<AboutPageProps> {
           <Row>
             <Col>
               <p className={'mt-2'}>
-                <img src={processImg} style={{ width: '100%' }} />
+                <OptimizedImage src={processImg} style={{ width: '100%' }} />
+                <div className={'text-center'}>
+                  <h5>Overview of OncoKB Process</h5>
+                </div>
               </p>
             </Col>
           </Row>
