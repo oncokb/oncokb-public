@@ -64,7 +64,7 @@ export default class LoadingIndicator extends React.Component<ILoader, {}> {
               style={this.props.style}
               name="line-scale-pulse-out"
             />
-            <div className={styles.progressUI}>{this.props.children}</div>
+            <div>{this.props.children}</div>
           </div>
         </Then>
       </If>

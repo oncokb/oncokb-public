@@ -3,6 +3,8 @@ import React from 'react';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_REFERENCE_GENOME,
+  LEVEL_CLASSIFICATION,
+  LEVELS,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   REGEXP,
@@ -24,6 +26,7 @@ import {
   GenePageSearchQueries,
 } from 'app/shared/route/types';
 import * as QueryString from 'querystring';
+import { LEVEL_TYPE_TO_VERSION, Version } from 'app/pages/LevelOfEvidencePage';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -175,4 +178,24 @@ export const WebinarLink: React.FunctionComponent<{}> = props => {
       </Linkout>
     </span>
   );
+};
+
+export const getLoEPageLink = (version: Version) => {
+  return `${PAGE_ROUTE.LEVELS}#version=${version}`;
+};
+
+export const getActionableGenesPageLink = (
+  levels?: string,
+  sections?: string
+) => {
+  const hashes = [];
+  if (levels) {
+    hashes.push(`levels=${levels}`);
+  }
+  if (sections) {
+    hashes.push(`sections=${sections}`);
+  }
+  return `${PAGE_ROUTE.ACTIONABLE_GENE}${
+    hashes.length > 0 ? '#' : ''
+  }${hashes.join('&')}`;
 };

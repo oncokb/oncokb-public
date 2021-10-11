@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import MskccLogo from './MskccLogo';
 
 import styles from './Footer.module.scss';
-import indexStyles from '../index.module.scss';
 import { CitationText } from 'app/components/CitationText';
 import classnames from 'classnames';
 import { ContactLink } from 'app/shared/links/ContactLink';
@@ -20,13 +19,13 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
       <>
         <div className={'mb-2'}>
           Please review the{' '}
-          <Link to={'/terms'} className={indexStyles.orange}>
-            terms of use
-          </Link>{' '}
+          <b>
+            <Link to={PAGE_ROUTE.TERMS}>terms of use</Link>
+          </b>{' '}
           before continuing.
         </div>
         <div className={'mb-2'}>
-          <CitationText highlightLinkout={true} />
+          <CitationText highlightLinkout={true} boldLinkout />
         </div>
         <div className={classnames(styles.footerAList, 'mb-2')}>
           <a
@@ -60,7 +59,7 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
     return (
       <>
         <div className={classnames(styles.footerAList, 'mb-2')}>
-          <Link to="/terms">Terms of Use</Link>
+          <Link to={PAGE_ROUTE.TERMS}>Terms of Use</Link>
           <ContactLink emailSubject={'Contact us'}>Contact Us</ContactLink>
           <a
             href="https://twitter.com/OncoKB"

@@ -5,6 +5,7 @@ import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import { Redirect } from 'react-router-dom';
 import { Row } from 'react-bootstrap';
+import { PAGE_ROUTE } from 'app/config/constants';
 
 @inject('authenticationStore')
 @observer
@@ -34,7 +35,7 @@ export class Logout extends React.Component<{
     }
 
     if (this.redirect) {
-      return <Redirect to={'/'} />;
+      return <Redirect to={PAGE_ROUTE.HOME} />;
     } else {
       return (
         <Row className="justify-content-center">

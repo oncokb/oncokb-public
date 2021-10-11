@@ -133,7 +133,7 @@ export const getHighestLevelStrings = (
   highestResistanceLevel: string | undefined,
   highestDiagnosticImplicationLevel?: string | undefined,
   highestPrognosticImplicationLevel?: string | undefined,
-  highestFdaLevel: string | undefined,
+  highestFdaLevel?: string | undefined,
   separator: string | JSX.Element = ', '
 ) => {
   const levels: React.ReactNode[] = [];
@@ -1193,7 +1193,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
             </If>
           </Then>
           <Else>
-            <Redirect to={'/'} />
+            <Redirect to={PAGE_ROUTE.HOME} />
           </Else>
         </If>
       </DocumentTitle>

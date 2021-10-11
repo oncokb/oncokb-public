@@ -172,7 +172,7 @@ export const FDA_ALTERATIONS_TABLE_COLUMNS = [
               For more information about the FDA Level of Evidence, please see{' '}
               <Link
                 to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
-                className={'font-weight-bold'}
+                className={'font-bold'}
               >
                 HERE
               </Link>

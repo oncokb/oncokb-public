@@ -1,0 +1,24 @@
+.terms {
+  .highlight {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+
+  ol {
+    counter-reset: list;
+    padding-left: 3rem;
+
+    li {
+      line-height: 2rem;
+      list-style: none;
+      position: relative;
+    }
+
+    li:before {
+      counter-increment: list;
+      content: '(' counter(list, lower-roman) ') ';
+      position: absolute;
+      left: -2em;
+    }
+  }
+}
