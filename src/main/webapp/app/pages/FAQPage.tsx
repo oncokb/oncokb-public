@@ -3,18 +3,18 @@ import Iframe from 'react-iframe';
 import { inject } from 'mobx-react';
 
 const FAQPageContent: React.FunctionComponent<{
-  userMessageBannerIsShown: boolean;
+  userMessageBannerEnabled: boolean;
 }> = props => {
   return (
     <Iframe
       url="https://faq.oncokb.org"
       className={
-        props.userMessageBannerIsShown ? 'faq-iframe-high-top' : 'faq-iframe'
+        props.userMessageBannerEnabled ? 'faq-iframe-high-top' : 'faq-iframe'
       }
     />
   );
 };
 const FAQPage = inject((stores: any) => ({
-  userMessageBannerIsShown: stores.appStore.userMessageBannerIsShown,
+  userMessageBannerEnabled: stores.appStore.userMessageBannerEnabled,
 }))(FAQPageContent);
 export default FAQPage;

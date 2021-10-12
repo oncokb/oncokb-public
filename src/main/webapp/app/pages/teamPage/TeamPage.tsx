@@ -685,7 +685,7 @@ export const TeamPage = () => {
             <h5>Design &amp; Development</h5>
             <ul>
               {teamMembers.map(member => (
-                <li>
+                <li key={`${member.lastName}-${member.firstName}`}>
                   <TeamMember {...member} />
                 </li>
               ))}
@@ -693,7 +693,7 @@ export const TeamPage = () => {
             <h5>Current Curators</h5>
             <ul>
               {_.sortBy(curators, member => member.lastName).map(member => (
-                <li>
+                <li key={`${member.lastName}-${member.firstName}`}>
                   <TeamMember {...member} />
                 </li>
               ))}
@@ -703,7 +703,7 @@ export const TeamPage = () => {
             <h5>Clinical Genomics Annotation Committee</h5>
             <ul>
               {_.sortBy(cgac, member => member.lastName).map(member => (
-                <li>
+                <li key={`${member.lastName}-${member.firstName}`}>
                   <TeamMember {...member} />
                 </li>
               ))}
@@ -713,7 +713,7 @@ export const TeamPage = () => {
             <h5>External Advisory Board</h5>
             <ul>
               {_.sortBy(eab, member => member.lastName).map(member => (
-                <li>
+                <li key={`${member.lastName}-${member.firstName}`}>
                   <TeamMember {...member} />
                 </li>
               ))}
@@ -722,7 +722,7 @@ export const TeamPage = () => {
             <ul>
               {_.sortBy(pastContributors, member => member.lastName).map(
                 member => (
-                  <li>
+                  <li key={`${member.lastName}-${member.firstName}`}>
                     <TeamMember {...member} faculty={false} showCOI={false} />
                   </li>
                 )
