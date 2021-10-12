@@ -298,7 +298,7 @@ describe('Tests with login', () => {
   it('Home Page #levelType=Dx', async() => {
     await page.goto(`${CLIENT_URL}#levelType=Dx`);
     await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
+    await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Home Page DX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page DX with Login' });
   })
@@ -306,7 +306,7 @@ describe('Tests with login', () => {
   it('Home Page #levelType=Px', async() => {
     await page.goto(`${CLIENT_URL}#levelType=Px`);
     await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
+    await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Home Page PX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page PX with Login' });
   })
@@ -322,7 +322,7 @@ describe('Tests with login', () => {
   it ('Levels of Evidence Page #version=DX', async() => {
     await page.goto(`${CLIENT_URL}levels#version=DX`);
     await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
+    await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page DX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page DX with Login' });
   })
@@ -330,7 +330,7 @@ describe('Tests with login', () => {
   it ('Levels of Evidence Page #version=PX', async() => {
     await page.goto(`${CLIENT_URL}levels#version=PX`);
     await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
+    await page.waitFor(LONG_WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('LoE Page PX with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page PX with Login' });
   })
