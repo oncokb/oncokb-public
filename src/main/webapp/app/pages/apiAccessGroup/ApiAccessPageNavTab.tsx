@@ -103,7 +103,7 @@ export class ApiAccessPageNavTab extends React.Component<
             <Col sm={2}>
               <Nav variant="pills" className="flex-column">
                 {this.tabKeys.map(tabKey => (
-                  <Nav.Item>
+                  <Nav.Item key={tabKey}>
                     <Nav.Link eventKey={tabKey}>{TAB_TITLES[tabKey]}</Nav.Link>
                   </Nav.Item>
                 ))}
@@ -112,7 +112,7 @@ export class ApiAccessPageNavTab extends React.Component<
             <Col sm={10}>
               <Tab.Content>
                 {this.tabKeys.map(tabKey => (
-                  <Tab.Pane eventKey={tabKey}>
+                  <Tab.Pane eventKey={tabKey} key={tabKey}>
                     {this.getTabPane(tabKey)}
                   </Tab.Pane>
                 ))}
