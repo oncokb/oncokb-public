@@ -333,8 +333,7 @@ export const SM_TABLE_FIXED_HEIGHT = 400;
 export const IMG_MAX_WIDTH = 800;
 export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
 export const H5_FONT_SIZE = '1.25rem';
-export const FONT_FAMILY =
-  "'Helvetica Neue', Helvetica, Verdana, Arial, sans-serif";
+export const FONT_FAMILY = "'Gotham Book', sans-serif";
 
 // we do not have the table component to support api pagination, have to set the threshold to pull the list of all users
 export const THRESHOLD_NUM_OF_USER = 5000;
