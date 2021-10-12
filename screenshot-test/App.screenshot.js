@@ -399,14 +399,6 @@ describe('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Terms Page with Login' });
   })
 
-  // it('FAQ Page', async() => {
-  //   await page.goto(`${CLIENT_URL}faq`);
-  //   await page.setViewport(VIEW_PORT_1080);
-  //   await page.waitFor(LONG_WAITING_TIME);
-  //   let image = await page.screenshot(getScreenshotConfig('FAQ Page with Login'));
-  //   expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'FAQ Page with Login' });
-  // })
-
   it('Gene Page', async() => {
     await page.goto(`${CLIENT_URL}gene/ABL1`);
     await page.setViewport(VIEW_PORT_1080);
