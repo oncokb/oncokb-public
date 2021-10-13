@@ -58,7 +58,7 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
   public get internalLinks() {
     return (
       <>
-        <div className={classnames(styles.footerAList, 'mb-2')}>
+        <div className={classnames(styles.footerAList)}>
           <Link to={PAGE_ROUTE.TERMS}>Terms of Use</Link>
           <ContactLink emailSubject={'Contact us'}>Contact Us</ContactLink>
           <a
@@ -70,7 +70,7 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
           </a>
           <Linkout link={API_DOCUMENT_LINK}>API</Linkout>
         </div>
-        <div className={classnames(styles.footerAList, 'mb-2')}>
+        <div className={classnames(styles.footerAList)}>
           <Link to={PAGE_ROUTE.NEWS}>
             Last data update: {this.props.lastDataUpdate}
           </Link>
@@ -83,17 +83,17 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
     return (
       <footer className={classnames('footer', styles.footer)}>
         <Container>
-          <Row className="text-center mb-4">
+          <Row className="text-center mb-2">
             <Col>{this.externalLinks}</Col>
           </Row>
           <Row className="text-center">
-            <Col lg md={12} className={'mb-4'}>
+            <Col lg md={12} className={'d-flex flex-column justify-content-center align-items-center my-1'}>
               {this.internalLinks}
             </Col>
-            <Col lg md={12}>
-              <MskccLogo imageHeight={50} className="mb-2" />
+            <Col lg md={12} className={'d-flex flex-column justify-content-center align-items-center my-1'}>
+              <MskccLogo imageHeight={50} />
             </Col>
-            <Col lg md={12}>
+            <Col lg md={12} className={'d-flex flex-column justify-content-center align-items-center my-1'}>
               <div>
                 &copy; {new Date().getFullYear()} Memorial Sloan Kettering
                 Cancer Center
