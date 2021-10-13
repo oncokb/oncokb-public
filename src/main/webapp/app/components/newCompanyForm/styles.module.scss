@@ -1,0 +1,22 @@
+.main {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.content_container {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  color: white;
+  background-color: $primary;
+  border-radius: 5px;
+  margin: 0 8px 12px 0;
+}
+
+.delete {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 5px;
+  cursor: pointer;
+}
