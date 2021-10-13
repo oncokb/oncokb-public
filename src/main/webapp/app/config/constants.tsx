@@ -51,6 +51,8 @@ export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
 export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
+  SM: 576,
+  MD: 768,
   LG: 1050,
   XL: 1370,
 };

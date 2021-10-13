@@ -206,7 +206,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
     if (this.registerStatus === RegisterStatus.REGISTERED) {
       return (
-        <SmallPageContainer className={'registerPage'}>
+        <SmallPageContainer>
           <div>
             <Alert variant="info">
               {this.getRegisteredMessage(this.selectedLicense)}
@@ -217,7 +217,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     }
 
     return (
-      <div className={'registerPage'}>
+      <div>
         {this.registerError ? <ErrorAlert error={this.registerError} /> : null}
         <NewAccountForm
           isLargeScreen={this.props.windowStore.isLargeScreen}

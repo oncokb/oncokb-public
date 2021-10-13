@@ -28,7 +28,7 @@
 }
 
 @include media-breakpoint-up(xs) {
-  $footer-height: 20rem;
+  $footer-height: 22rem;
   @include sticky-footer($footer-height);
   .navbar-brand {
     margin-right: 1rem;
@@ -51,13 +51,13 @@
   }
 }
 
-@include media-breakpoint-up(md) {
-  $footer-height: 20rem;
+@include media-breakpoint-up(sm) {
+  $footer-height: 17rem;
   @include sticky-footer($footer-height);
 }
 
 @include media-breakpoint-up(lg) {
-  $footer-height: 14rem;
+  $footer-height: 12rem;
   @include sticky-footer($footer-height);
 
   .navbar-nav > .nav-item,
