@@ -107,14 +107,6 @@ const FdaRecognitionPage = () => {
                   FDA Decision Summary for OncoKB
                 </Linkout>
               </li>
-              <li>
-                <a
-                  href={`content/files/fdaRecognition/OncoKB_FDA_Recognition_Final_Application_March_2021.zip`}
-                  download
-                >
-                  Final Application March 2021
-                </a>
-              </li>
             </ul>
             <h5>Press Releases</h5>
             <ul>
