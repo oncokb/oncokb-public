@@ -39,21 +39,6 @@
                     </execution>
 
                     <execution>
-                        <id>bower install</id>
-                        <goals>
-                            <goal>bower</goal>
-                        </goals>
-
-                        <configuration>
-                            <!-- optional: The default argument is actually
-                            "install", so unless you need to run some other bower command,
-                            you can remove this whole <configuration> section.
-                            -->
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution>
-
-                    <execution>
                         <id>grunt build</id>
                         <goals>
                             <goal>grunt</goal>

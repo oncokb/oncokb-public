@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 
     // Configurable paths for the application
     var appConfig = {
-        app: require('./bower.json').appPath || 'app',
+        app: 'app',
         dist: 'dist'
     };
 
@@ -27,93 +27,6 @@ module.exports = function(grunt) {
 
         // Project settings
         yeoman: appConfig,
-
-        // Watches files for changes and runs tasks based on the changed files
-        watch: {
-            bower: {
-                files: ['bower.json'],
-                tasks: ['wiredep']
-            },
-            js: {
-                files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
-                tasks: ['newer:eslint:all'],
-                options: {
-                    livereload: '<%= connect.options.livereload %>'
-                }
-            },
-            sass: {
-                files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                tasks: ['sass', 'postcss']
-            },
-            jsTest: {
-                files: ['test/spec/{,*/}*.js'],
-                tasks: ['newer:eslint:test', 'karma']
-            },
-            gruntfile: {
-                files: ['Gruntfile.js']
-            },
-            livereload: {
-                options: {
-                    livereload: '<%= connect.options.livereload %>'
-                },
-                files: [
-                    '<%= yeoman.app %>/{,*/}*.html',
-                    '.tmp/styles/{,*/}*.css',
-                    '<%= yeoman.app %>/resources/{,*/}*.{png,jpg,jpeg,gif,webp,svg,pptx,ppt,csv.json,pdf}'
-                ]
-            }
-        },
-
-        // The actual grunt server settings
-        connect: {
-            options: {
-                port: 9010,
-                // Change this to '0.0.0.0' to access the server from outside.
-                hostname: 'localhost',
-                livereload: 35739
-            },
-            livereload: {
-                options: {
-                    open: true,
-                    middleware: function(connect) {
-                        return [
-                            connect.static('.tmp'),
-                            connect().use(
-                                '/bower_components',
-                                connect.static('./bower_components')
-                            ),
-                            connect().use(
-                                '/app/styles',
-                                connect.static('./app/styles')
-                            ),
-                            connect.static(appConfig.app)
-                        ];
-                    }
-                }
-            },
-            test: {
-                options: {
-                    port: 9001,
-                    middleware: function(connect) {
-                        return [
-                            connect.static('.tmp'),
-                            connect.static('test'),
-                            connect().use(
-                                '/bower_components',
-                                connect.static('./bower_components')
-                            ),
-                            connect.static(appConfig.app)
-                        ];
-                    }
-                }
-            },
-            dist: {
-                options: {
-                    open: true,
-                    base: '<%= yeoman.dist %>'
-                }
-            }
-        },
 
         eslint: {
             target: [
@@ -164,34 +77,6 @@ module.exports = function(grunt) {
                     src: '{,*/}*.css',
                     dest: '.tmp/styles/'
                 }]
-            }
-        },
-
-        // Automatically inject Bower components into the app
-        wiredep: {
-            app: {
-                src: ['<%= yeoman.app %>/index.html'],
-                ignorePath: /\.\.\//
-            },
-            test: {
-                devDependencies: true,
-                src: '<%= karma.unit.configFile %>',
-                ignorePath: /\.\.\//,
-                fileTypes: {
-                    js: {
-                        block: /(([\s\t]*)\/{2}\s*?bower:\s*?(\S*))(\n|\r|.)*?(\/{2}\s*endbower)/gi,
-                        detect: {
-                            js: /'(.*\.js)'/gi
-                        },
-                        replace: {
-                            js: '\'{{filePath}}\','
-                        }
-                    }
-                }
-            },
-            sass: {
-                src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                ignorePath: /(\.\.\/){1,2}bower_components\//
             }
         },
 
@@ -339,13 +224,6 @@ module.exports = function(grunt) {
             }
         },
 
-        // Replace Google CDN references
-        cdnify: {
-            dist: {
-                html: ['<%= yeoman.dist %>/*.html']
-            }
-        },
-
         // Copies remaining files to places other tasks can use
         copy: {
             dist: {
@@ -410,29 +288,8 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('serve', 'Compile then start a connect web server', function(target) {
-        if (target === 'dist') {
-            return grunt.task.run(['build', 'connect:dist:keepalive']);
-        }
-
-        grunt.task.run([
-            'clean:server',
-            'wiredep',
-            'sass',
-            'postcss:server',
-            'connect:livereload',
-            'watch'
-        ]);
-    });
-
-    grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function(target) {
-        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-        grunt.task.run(['serve:' + target]);
-    });
-
     grunt.registerTask('test', [
         'clean:server',
-        'wiredep',
         'postcss',
         'connect:test',
         'karma'
@@ -440,16 +297,11 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        'wiredep',
         'useminPrepare',
         'concurrent:dist',
         'postcss',
-        'concat',
         'ngAnnotate',
         'copy:dist',
-        'cdnify',
-        'cssmin',
-        'uglify:dist',
         'filerev',
         'usemin',
         'htmlmin'
