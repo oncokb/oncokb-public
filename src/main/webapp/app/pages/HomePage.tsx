@@ -2,6 +2,7 @@ import * as React from 'react';
 import { action, IReactionDisposer, observable, reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { remoteData } from 'cbioportal-frontend-commons';
+import classnames from 'classnames';
 import oncokbPrivateClient from '../shared/api/oncokbPrivateClientInstance';
 import {
   Gene,
@@ -32,11 +33,13 @@ import autobind from 'autobind-decorator';
 import * as QueryString from 'query-string';
 import { FDA_L1_DISABLED_BTN_TOOLTIP } from 'app/pages/genePage/FdaUtils';
 import { COLOR_DARK_BLUE } from 'app/config/theme';
+import WindowStore from "app/store/WindowStore";
 
 interface IHomeProps {
   content: string;
   routing: RouterStore;
   appStore: AppStore;
+  windowStore: WindowStore;
 }
 
 export type ExtendedTypeaheadSearchResp = TypeaheadSearchResp & {
@@ -44,7 +47,7 @@ export type ExtendedTypeaheadSearchResp = TypeaheadSearchResp & {
   tumorTypesName: string;
 };
 
-@inject('routing', 'appStore')
+@inject('routing', 'appStore', 'windowStore')
 @observer
 class HomePage extends React.Component<IHomeProps, {}> {
   @observable keyword = '';
@@ -188,7 +191,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
         levelTypeButtons.push(
           <Button
             key={`button-tab-${LEVEL_TYPES[key]}`}
-            className="mx-2"
+            className="my-2"
             variant={
               this.levelTypeSelected === LEVEL_TYPES[key] ? 'primary' : 'light'
             }
@@ -276,17 +279,30 @@ class HomePage extends React.Component<IHomeProps, {}> {
           </Col>
         </Row>
         <Row className="mb-2">
-          <div
-            className="d-flex justify-content-center"
-            style={{ width: '100%' }}
+          <Col
+            xs={0}
+            lg={2}
+          ></Col>
+          <Col
+            xs={12}
+            lg={8}
           >
-            {levelTypeButtons}
-          </div>
+            <div
+              className={classnames("d-flex justify-content-around", this.props.windowStore.isMDScreen ? undefined : 'flex-column')}
+              style={{width: '100%'}}
+            >
+              {levelTypeButtons}
+            </div>
+          </Col>
+          <Col
+            xs={0}
+            lg={2}
+          ></Col>
         </Row>
         <Row className="my-3 d-flex d-flex justify-content-between">
           <Col
             xs={0}
-            lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 1 : 3}
+            lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 1 : 1}
           ></Col>
           {this.levelGadgets.map(
             levelGadget =>
@@ -302,10 +318,9 @@ class HomePage extends React.Component<IHomeProps, {}> {
                 <Col
                   xs={12}
                   sm={6}
-                  lg={2}
+                  lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 2 : 3}
                   key={levelGadget.level}
                   style={{ minHeight: 125 }}
-                  className="px-0"
                 >
                   <LevelButton
                     key={`${levelGadget.level}-button`}
@@ -345,7 +360,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
           )}
           <Col
             xs={0}
-            lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 1 : 3}
+            lg={this.levelTypeSelected === LEVEL_TYPES.TX ? 1 : 1}
           ></Col>
         </Row>
         <Row className="mb-3">
