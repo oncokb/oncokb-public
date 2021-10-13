@@ -33,7 +33,7 @@ import autobind from 'autobind-decorator';
 import * as QueryString from 'query-string';
 import { FDA_L1_DISABLED_BTN_TOOLTIP } from 'app/pages/genePage/FdaUtils';
 import { COLOR_DARK_BLUE } from 'app/config/theme';
-import WindowStore from "app/store/WindowStore";
+import WindowStore from 'app/store/WindowStore';
 
 interface IHomeProps {
   content: string;
@@ -279,25 +279,19 @@ class HomePage extends React.Component<IHomeProps, {}> {
           </Col>
         </Row>
         <Row className="mb-2">
-          <Col
-            xs={0}
-            lg={2}
-          ></Col>
-          <Col
-            xs={12}
-            lg={8}
-          >
+          <Col xs={0} lg={2}></Col>
+          <Col xs={12} lg={8}>
             <div
-              className={classnames("d-flex justify-content-around", this.props.windowStore.isMDScreen ? undefined : 'flex-column')}
-              style={{width: '100%'}}
+              className={classnames(
+                'd-flex justify-content-around',
+                this.props.windowStore.isMDScreen ? undefined : 'flex-column'
+              )}
+              style={{ width: '100%' }}
             >
               {levelTypeButtons}
             </div>
           </Col>
-          <Col
-            xs={0}
-            lg={2}
-          ></Col>
+          <Col xs={0} lg={2}></Col>
         </Row>
         <Row className="my-3 d-flex d-flex justify-content-between">
           <Col

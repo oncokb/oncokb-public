@@ -2792,11 +2792,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       </span>,
       <span>
         Addition of gene-alterations pages with alteration level annotation.{' '}
-        <AlterationPageLink
-          hugoSymbol={'BRAF'}
-          alteration={'V600E'}
-          content={'e.g. BRAF V600E'}
-        />
+        <AlterationPageLink hugoSymbol={'BRAF'} alteration={'V600E'}>
+          e.g. BRAF V600E
+        </AlterationPageLink>
         .
       </span>,
       <>
