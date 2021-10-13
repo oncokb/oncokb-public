@@ -1,10 +1,14 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
+import org.mskcc.cbio.oncokb.service.CompanyDomainService;
 import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.domain.Company;
+import org.mskcc.cbio.oncokb.domain.CompanyDomain;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
+import org.mskcc.cbio.oncokb.service.mapper.CompanyDomainMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
+import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,16 +33,31 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyMapper companyMapper;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, CompanyMapper companyMapper) {
+    private final CompanyDomainService companyDomainService;
+
+    private final CompanyDomainMapper companyDomainMapper;
+
+    public CompanyServiceImpl(CompanyRepository companyRepository, CompanyMapper companyMapper, CompanyDomainService companyDomainService, CompanyDomainMapper companyDomainMapper) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
+        this.companyDomainService = companyDomainService;
+        this.companyDomainMapper = companyDomainMapper;
+
     }
 
     @Override
-    public CompanyDTO save(CompanyDTO companyDTO) {
-        log.debug("Request to save Company : {}", companyDTO);
-        Company company = companyMapper.toEntity(companyDTO);
+    public CompanyDTO save(CompanyVM companyVm) {
+        log.debug("Request to save Company : {}", companyVm);
+        Company company = companyMapper.toEntity(companyVm);
         company = companyRepository.save(company);
+
+        for(String domainName: companyVm.getCompanyDomains()){
+            CompanyDomain domain = new CompanyDomain();
+            domain.setName(domainName);
+            domain.setCompany(company);
+            companyDomainService.save(companyDomainMapper.toDto(domain));
+        }
+
         return companyMapper.toDto(company);
     }
 

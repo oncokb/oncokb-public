@@ -1,7 +1,9 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
+import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -10,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,17 +44,17 @@ public class CompanyResource {
     /**
      * {@code POST  /companies} : Create a new company.
      *
-     * @param companyDTO the companyDTO to create.
+     * @param companyVM the companyVM to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new companyDTO, or with status {@code 400 (Bad Request)} if the company has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/companies")
-    public ResponseEntity<CompanyDTO> createCompany(@Valid @RequestBody CompanyDTO companyDTO) throws URISyntaxException {
-        log.debug("REST request to save Company : {}", companyDTO);
-        if (companyDTO.getId() != null) {
+    public ResponseEntity<CompanyDTO> createCompany(@Valid @RequestBody CompanyVM companyVM) throws URISyntaxException {
+        log.debug("REST request to save Company : {}", companyVM);
+        if (companyVM.getId() != null) {
             throw new BadRequestAlertException("A new company cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        CompanyDTO result = companyService.save(companyDTO);
+        CompanyDTO result = companyService.save(companyVM);
         return ResponseEntity.created(new URI("/api/companies/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -60,21 +63,21 @@ public class CompanyResource {
     /**
      * {@code PUT  /companies} : Updates an existing company.
      *
-     * @param companyDTO the companyDTO to update.
+     * @param companyVm the companyVm to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated companyDTO,
      * or with status {@code 400 (Bad Request)} if the companyDTO is not valid,
      * or with status {@code 500 (Internal Server Error)} if the companyDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/companies")
-    public ResponseEntity<CompanyDTO> updateCompany(@Valid @RequestBody CompanyDTO companyDTO) throws URISyntaxException {
-        log.debug("REST request to update Company : {}", companyDTO);
-        if (companyDTO.getId() == null) {
+    public ResponseEntity<CompanyDTO> updateCompany(@Valid @RequestBody CompanyVM companyVM) throws URISyntaxException {
+        log.debug("REST request to update Company : {}", companyVM);
+        if (companyVM.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        CompanyDTO result = companyService.save(companyDTO);
+        CompanyDTO result = companyService.save(companyVM);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, companyDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, companyVM.getId().toString()))
             .body(result);
     }
 
