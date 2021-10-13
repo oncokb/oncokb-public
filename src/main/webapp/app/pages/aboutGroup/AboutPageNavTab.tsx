@@ -58,6 +58,7 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
         <Tab.Container
           id="about-page-nav-tabs"
           activeKey={this.selectedTab}
+          unmountOnExit
           onSelect={(selectedTab: string) => {
             this.selectedTab = selectedTab as any;
           }}
