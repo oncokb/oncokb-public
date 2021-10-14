@@ -46,6 +46,8 @@ export type Column = {
 };
 export interface IEvidenceTableTabProps {
   hugoSymbol: string;
+  alteration?: string;
+  cancerType?: string;
   biological: BiologicalVariant[];
   tx: TherapeuticImplication[];
   dx: TherapeuticImplication[];
@@ -218,6 +220,8 @@ export default class AlterationTableTabs extends React.Component<
                   appStore={this.props.appStore!}
                   annotation={{
                     gene: this.props.hugoSymbol,
+                    alteration: this.props.alteration,
+                    cancerType: this.props.cancerType
                   }}
                 />
               </div>

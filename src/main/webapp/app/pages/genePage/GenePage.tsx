@@ -324,8 +324,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
   @observable hugoSymbolQuery: string;
   @observable showGeneBackground: boolean;
   @observable selectedTab: ANNOTATION_PAGE_TAB_KEYS;
-  @observable defaultSelectedTab: ANNOTATION_PAGE_TAB_KEYS =
-    ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL;
+  @observable defaultSelectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
   private store: AnnotationStore;
   readonly reactions: IReactionDisposer[] = [];
