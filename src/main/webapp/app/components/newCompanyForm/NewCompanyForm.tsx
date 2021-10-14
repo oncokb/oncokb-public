@@ -199,7 +199,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
               }}
               options={COMPANY_FORM_OPTIONS.companyType}
               onSelection={(selectedOption: any) =>
-                (this.selectedCompanyType = selectedOption)
+                (this.selectedCompanyType = selectedOption.value)
               }
             />
             <AvField name="businessContact" label="Business Contact" />
@@ -262,7 +262,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
               }}
               options={COMPANY_FORM_OPTIONS.licenseModel}
               onSelection={(selectedOption: any) =>
-                (this.selectedLicenseModel = selectedOption)
+                (this.selectedLicenseModel = selectedOption.value)
               }
             />
             <FormSelectWithLabelField
@@ -274,7 +274,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
               }}
               options={COMPANY_FORM_OPTIONS.licenseType}
               onSelection={(selectedOption: any) =>
-                (this.selectedLicenseType = selectedOption)
+                (this.selectedLicenseType = selectedOption.value)
               }
             />
             <FormSelectWithLabelField
@@ -286,7 +286,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
               }}
               options={COMPANY_FORM_OPTIONS.licenseStatus}
               onSelection={(selectedOption: any) =>
-                (this.selectedLicenseStatus = selectedOption)
+                (this.selectedLicenseStatus = selectedOption.value)
               }
             />
           </Col>
