@@ -61,13 +61,16 @@ export const AlterationPageLink: React.FunctionComponent<{
   hugoSymbol: string;
   alteration: string;
   alterationRefGenomes?: REFERENCE_GENOME[];
+  cancerType?: string;
   searchQueries?: AlterationPageSearchQueries;
   hashQueries?: AlterationPageHashQueries;
   showGene?: boolean;
-  content?: string;
   onClick?: () => void;
 }> = props => {
   let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`;
+  if (props.cancerType) {
+    pageLink = `${pageLink}/${props.cancerType}`;
+  }
   const searchQueries = props.searchQueries || {};
 
   // Prop alterationRefGenomes is just a convinient way to process reference genomes when it's a list.
@@ -84,8 +87,8 @@ export const AlterationPageLink: React.FunctionComponent<{
   }
   return (
     <Link to={pageLink} onClick={props.onClick}>
-      {props.content
-        ? props.content
+      {props.children
+        ? props.children
         : props.showGene
         ? `${props.hugoSymbol} ${props.alteration}`
         : props.alteration}
@@ -112,11 +115,9 @@ export const TumorTypePageLink: React.FunctionComponent<{
 
 export const MSILink: React.FunctionComponent<{}> = () => {
   return (
-    <AlterationPageLink
-      hugoSymbol={'Other Biomarkers'}
-      alteration={'MSI-H'}
-      content={'microsatellite instability high (MSI-H)'}
-    />
+    <AlterationPageLink hugoSymbol={'Other Biomarkers'} alteration={'MSI-H'}>
+      microsatellite instability high (MSI-H)
+    </AlterationPageLink>
   );
 };
 

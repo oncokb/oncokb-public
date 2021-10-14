@@ -1,27 +1,13 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { AnnotationStore } from 'app/store/AnnotationStore';
-import {
-  computed,
-  action,
-  IReactionDisposer,
-  reaction,
-  observable,
-} from 'mobx';
+import { computed, action, IReactionDisposer, reaction } from 'mobx';
 import AppStore from 'app/store/AppStore';
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
-import {
-  ANNOTATION_PAGE_TAB_KEYS,
-  DEFAULT_GENE,
-  REFERENCE_GENOME,
-} from 'app/config/constants';
-import {
-  decodeSlash,
-  encodeSlash,
-  getRedirectLoginState,
-} from 'app/shared/utils/Utils';
+import { ANNOTATION_PAGE_TAB_KEYS, DEFAULT_GENE } from 'app/config/constants';
+import { decodeSlash, encodeSlash } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import DocumentTitle from 'react-document-title';
 import { Else, If, Then } from 'react-if';
@@ -32,7 +18,6 @@ import * as QueryString from 'query-string';
 import {
   AlterationPageHashQueries,
   AlterationPageSearchQueries,
-  GenePageHashQueries,
 } from 'app/shared/route/types';
 import autobind from 'autobind-decorator';
 
@@ -47,7 +32,7 @@ interface AlterationPageProps extends RouteComponentProps<MatchParams> {
   routing: RouterStore;
 }
 
-@inject('appStore', 'routing')
+@inject('appStore', 'routing', 'windowStore')
 @observer
 export default class AlterationPage extends React.Component<
   AlterationPageProps,
@@ -167,17 +152,18 @@ export default class AlterationPage extends React.Component<
     return content.join(', ');
   }
 
-  @computed
-  get onFdaTab() {
-    return this.selectedTab === ANNOTATION_PAGE_TAB_KEYS.FDA;
-  }
-
   @autobind
-  onChangeTab(newTabKey: ANNOTATION_PAGE_TAB_KEYS) {
+  onChangeTab(
+    selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
+    newTabKey: ANNOTATION_PAGE_TAB_KEYS
+  ) {
     if (newTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA) {
       this.props.appStore.inFdaRecognizedContent = true;
     }
-    if (this.onFdaTab && newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA) {
+    if (
+      selectedTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA &&
+      newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA
+    ) {
       this.props.appStore.showFdaModal = true;
     } else {
       const newHash: AlterationPageHashQueries = { tab: newTabKey };
@@ -197,6 +183,7 @@ export default class AlterationPage extends React.Component<
             ) : (
               this.pageShouldBeRendered && (
                 <AnnotationPage
+                  appStore={this.props.appStore}
                   hugoSymbol={this.store.hugoSymbol}
                   alteration={this.store.alterationQuery}
                   tumorType={this.store.tumorTypeQuery}

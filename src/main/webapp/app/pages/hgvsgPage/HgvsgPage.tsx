@@ -23,6 +23,7 @@ import {
   AlterationPageHashQueries,
   AlterationPageSearchQueries,
 } from 'app/shared/route/types';
+import WindowStore from 'app/store/WindowStore';
 
 interface MatchParams {
   hgvsg: string;
@@ -31,9 +32,10 @@ interface MatchParams {
 interface HgvsgPageProps extends RouteComponentProps<MatchParams> {
   appStore: AppStore;
   routing: RouterStore;
+  windowStore: WindowStore;
 }
 
-@inject('appStore', 'routing')
+@inject('appStore', 'routing', 'windowStore')
 @observer
 export default class HgvsgPage extends React.Component<HgvsgPageProps> {
   @observable tumorType = '';
@@ -135,17 +137,18 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
     return content.join(', ');
   }
 
-  @computed
-  get onFdaTab() {
-    return this.selectedTab === ANNOTATION_PAGE_TAB_KEYS.FDA;
-  }
-
   @autobind
-  onChangeTab(newTabKey: ANNOTATION_PAGE_TAB_KEYS) {
+  onChangeTab(
+    selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
+    newTabKey: ANNOTATION_PAGE_TAB_KEYS
+  ) {
     if (newTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA) {
       this.props.appStore.inFdaRecognizedContent = true;
     }
-    if (this.onFdaTab && newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA) {
+    if (
+      selectedTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA &&
+      newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA
+    ) {
       this.props.appStore.showFdaModal = true;
     } else {
       const newHash: AlterationPageHashQueries = { tab: newTabKey };
