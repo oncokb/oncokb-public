@@ -778,7 +778,8 @@ export default class ActionableGenesPage extends React.Component<
         },
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
+        Header: <span>Cancer Types</span>,
         minWidth: 300,
         accessor: 'cancerTypes',
         sortMethod(a: string[], b: string[]) {
@@ -992,7 +993,7 @@ export default class ActionableGenesPage extends React.Component<
                     desc: false,
                   },
                   {
-                    id: TABLE_COLUMN_KEY.CANCER_TYPES,
+                    id: TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,
                     desc: false,
                   },
                   {

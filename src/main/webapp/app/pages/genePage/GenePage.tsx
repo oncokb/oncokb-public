@@ -252,6 +252,7 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   if (gene.grch37Isoform || gene.grch37RefSeq) {
     additionalInfo.push(
       <ReferenceGenomeInfo
+        key={REFERENCE_GENOME.GRCh37}
         referenceGenomeName={REFERENCE_GENOME.GRCh37}
         isoform={gene.grch37Isoform}
         refseq={gene.grch37RefSeq}
@@ -261,6 +262,7 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   if (gene.grch38Isoform || gene.grch38RefSeq) {
     additionalInfo.push(
       <ReferenceGenomeInfo
+        key={REFERENCE_GENOME.GRCh38}
         referenceGenomeName={REFERENCE_GENOME.GRCh38}
         isoform={gene.grch38Isoform}
         refseq={gene.grch38RefSeq}
@@ -353,10 +355,13 @@ export default class GenePage extends React.Component<GenePageProps, any> {
     clinicalVariants: ClinicalVariant[]
   ): TherapeuticImplication[] {
     return clinicalVariants.map(variant => {
+      const cancerTypeNames = variant.cancerTypes.map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType));
       return {
         level: variant.level,
-        alterations: (
+        alterations: variant.variant.name,
+        alterationsView: (
           <AlterationPageLink
+            key={variant.variant.name}
             hugoSymbol={this.store.hugoSymbol}
             alteration={variant.variant.name}
             alterationRefGenomes={
@@ -365,18 +370,20 @@ export default class GenePage extends React.Component<GenePageProps, any> {
           />
         ),
         drugs: variant.drug.join(', '),
-        cancerTypes: (
+        cancerTypes: cancerTypeNames.join(', '),
+        cancerTypesView: (
           <WithSeparator separator={', '}>
-            {variant.cancerTypes.map(cancerType => (
+            {cancerTypeNames.map(cancerType => (
               <AlterationPageLink
+                key={`${variant.variant.name}-${cancerType}`}
                 hugoSymbol={this.store.hugoSymbol}
                 alteration={variant.variant.name}
                 alterationRefGenomes={
                   variant.variant.referenceGenomes as REFERENCE_GENOME[]
                 }
-                cancerType={getCancerTypeNameFromOncoTreeType(cancerType)}
+                cancerType={cancerType}
               >
-                {getCancerTypeNameFromOncoTreeType(cancerType)}
+                {cancerType}
               </AlterationPageLink>
             ))}
           </WithSeparator>
