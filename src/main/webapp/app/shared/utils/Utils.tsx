@@ -344,28 +344,6 @@ export function getDefaultColumnDefinition<T>(
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
       };
-    case TABLE_COLUMN_KEY.CANCER_TYPES:
-      return {
-        id: TABLE_COLUMN_KEY.CANCER_TYPES,
-        Header: <span>Cancer Types</span>,
-        accessor: 'cancerTypes',
-        style: { whiteSpace: 'normal' },
-        minWidth: 150,
-        defaultSortDesc: false,
-        sortMethod: defaultSortMethod,
-        Cell(props: { original: any }) {
-          const cancerTypes = props.original.cancerTypes.map(
-            (cancerType: string) => (
-              <TumorTypePageLink
-                hugoSymbol={props.original.hugoSymbol}
-                alteration={props.original.alteration}
-                tumorType={cancerType}
-              />
-            )
-          );
-          return <WithSeparator separator={', '}>{cancerTypes}</WithSeparator>;
-        },
-      };
     case TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE:
       return {
         id: TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,

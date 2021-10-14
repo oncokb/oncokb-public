@@ -55,9 +55,11 @@ interface IAnnotationStore {
 
 export type TherapeuticImplication = {
   level: string;
-  alterations: string | JSX.Element;
+  alterations: string;
+  alterationsView: JSX.Element;
   drugs: string;
-  cancerTypes: string | JSX.Element;
+  cancerTypes: string;
+  cancerTypesView: JSX.Element;
   citations: Citations;
 };
 

@@ -245,9 +245,15 @@ export default class AlterationTableTabs extends React.Component<
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
+        Cell(props: { original: TherapeuticImplication }) {
+          return props.original.alterationsView;
+        },
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
+        Cell(props: { original: TherapeuticImplication }) {
+          return props.original.cancerTypesView;
+        },
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
@@ -399,7 +405,7 @@ export default class AlterationTableTabs extends React.Component<
         },
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
         accessor: 'cancerType',
         width: 400,
         Header: <span>Cancer Type</span>,

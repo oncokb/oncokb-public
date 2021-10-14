@@ -86,32 +86,33 @@ export default class AnnotationPage extends React.Component<
   getTherapeuticImplications(evidences: Evidence[]) {
     return evidences.map(evidence => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
+      const alterations = _.chain(evidence.alterations)
+        .filter(alteration =>
+          alteration.referenceGenomes.includes(this.props.refGenome)
+        ).value();
       const cancerTypes = evidence.cancerTypes.map(cancerType =>
         getCancerTypeNameFromOncoTreeType(cancerType)
       );
       return {
         level,
-        alterations: (
+        alterations: alterations.map(alteration => alteration.name).join(', '),
+        alterationsView: (
           <WithSeparator separator={', '}>
-            {_.chain(evidence.alterations)
-              .filter(alteration =>
-                alteration.referenceGenomes.includes(this.props.refGenome)
-              )
-              .map(alteration => (
-                <AlterationPageLink
-                  key={alteration.name}
-                  hugoSymbol={this.props.hugoSymbol}
-                  alteration={alteration.name}
-                  alterationRefGenomes={
-                    alteration.referenceGenomes as REFERENCE_GENOME[]
-                  }
-                />
-              ))
-              .value()}
+            {alterations.map(alteration => (
+              <AlterationPageLink
+                key={alteration.name}
+                hugoSymbol={this.props.hugoSymbol}
+                alteration={alteration.name}
+                alterationRefGenomes={
+                  alteration.referenceGenomes as REFERENCE_GENOME[]
+                }
+              />
+            ))}
           </WithSeparator>
         ),
         drugs: getTreatmentNameFromEvidence(evidence),
-        cancerTypes: (
+        cancerTypes: cancerTypes.join(', '),
+        cancerTypesView: (
           <WithSeparator separator={', '}>
             {cancerTypes.map(cancerType => (
               <AlterationPageLink
