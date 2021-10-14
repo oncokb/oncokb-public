@@ -368,6 +368,8 @@ export default class AnnotationPage extends React.Component<
               selectedTab={this.props.defaultSelectedTab}
               appStore={this.props.appStore}
               hugoSymbol={this.props.hugoSymbol}
+              alteration={this.props.alteration}
+              cancerType={this.props.tumorType}
               biological={[]}
               tx={this.therapeuticImplications}
               dx={this.diagnosticImplications}
