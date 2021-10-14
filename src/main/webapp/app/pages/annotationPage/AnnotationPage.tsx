@@ -89,7 +89,8 @@ export default class AnnotationPage extends React.Component<
       const alterations = _.chain(evidence.alterations)
         .filter(alteration =>
           alteration.referenceGenomes.includes(this.props.refGenome)
-        ).value();
+        )
+        .value();
       const cancerTypes = evidence.cancerTypes.map(cancerType =>
         getCancerTypeNameFromOncoTreeType(cancerType)
       );

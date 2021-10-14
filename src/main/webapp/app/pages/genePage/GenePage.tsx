@@ -355,7 +355,9 @@ export default class GenePage extends React.Component<GenePageProps, any> {
     clinicalVariants: ClinicalVariant[]
   ): TherapeuticImplication[] {
     return clinicalVariants.map(variant => {
-      const cancerTypeNames = variant.cancerTypes.map(cancerType => getCancerTypeNameFromOncoTreeType(cancerType));
+      const cancerTypeNames = variant.cancerTypes.map(cancerType =>
+        getCancerTypeNameFromOncoTreeType(cancerType)
+      );
       return {
         level: variant.level,
         alterations: variant.variant.name,
