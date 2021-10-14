@@ -87,13 +87,31 @@ class Footer extends React.Component<{ lastDataUpdate: string }> {
             <Col>{this.externalLinks}</Col>
           </Row>
           <Row className="text-center">
-            <Col lg md={12} className={'d-flex flex-column justify-content-center align-items-center my-1'}>
+            <Col
+              lg
+              md={12}
+              className={
+                'd-flex flex-column justify-content-center align-items-center my-1'
+              }
+            >
               {this.internalLinks}
             </Col>
-            <Col lg md={12} className={'d-flex flex-column justify-content-center align-items-center my-1'}>
+            <Col
+              lg
+              md={12}
+              className={
+                'd-flex flex-column justify-content-center align-items-center my-1'
+              }
+            >
               <MskccLogo imageHeight={50} />
             </Col>
-            <Col lg md={12} className={'d-flex flex-column justify-content-center align-items-center my-1'}>
+            <Col
+              lg
+              md={12}
+              className={
+                'd-flex flex-column justify-content-center align-items-center my-1'
+              }
+            >
               <div>
                 &copy; {new Date().getFullYear()} Memorial Sloan Kettering
                 Cancer Center

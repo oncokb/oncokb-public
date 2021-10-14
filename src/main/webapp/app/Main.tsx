@@ -10,7 +10,8 @@ import { Prompt, withRouter } from 'react-router';
 import {
   AUTHORITIES,
   DEFAULT_FEEDBACK_ANNOTATION,
-  NOTIFICATION_TIMEOUT_MILLISECONDS, PAGE_ROUTE,
+  NOTIFICATION_TIMEOUT_MILLISECONDS,
+  PAGE_ROUTE,
 } from 'app/config/constants';
 import { ToastContainer } from 'react-toastify';
 import { computed } from 'mobx';
@@ -41,7 +42,9 @@ class Main extends React.Component<IMainPage> {
 
   @computed
   get showFooter() {
-    return !this.FOOTER_ROUTE_EXCLUSION.includes(this.props.routing.location.pathname as PAGE_ROUTE);
+    return !this.FOOTER_ROUTE_EXCLUSION.includes(
+      this.props.routing.location.pathname as PAGE_ROUTE
+    );
   }
 
   @autobind
