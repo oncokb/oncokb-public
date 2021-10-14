@@ -131,14 +131,12 @@ export class AboutPage extends React.Component<AboutPageProps> {
               <h2 className={'mt-1'}>About OncoKB</h2>
               <p className={'mt-3'}>
                 OncoKB is a precision oncology knowledge base developed at
-                Memorial Sloan Kettering Cancer Center (MSK) and reflects the
-                understanding of the biological and clinical relevance of
-                various genomic alterations in cancer from experts at MSK.
+                Memorial Sloan Kettering Cancer Center that contains biological
+                and clinical information about genomic alterations in cancer.
               </p>
               <p>
-                Alterations are annotated with their biological and oncogenic
-                effects. Additionally, alteration- and tumor type-specific
-                therapeutic implications are classified using the{' '}
+                Alteration- and tumor type-specific therapeutic implications are
+                classified using the{' '}
                 <Link to={PAGE_ROUTE.LEVELS}>OncoKB Levels of Evidence</Link>{' '}
                 system, which assigns clinical actionability to individual
                 mutational events.
