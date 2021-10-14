@@ -221,7 +221,7 @@ export default class AlterationTableTabs extends React.Component<
                   annotation={{
                     gene: this.props.hugoSymbol,
                     alteration: this.props.alteration,
-                    cancerType: this.props.cancerType
+                    cancerType: this.props.cancerType,
                   }}
                 />
               </div>
