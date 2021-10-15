@@ -143,6 +143,101 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '10212021': {
+    updatedImplication: [
+      [
+        '2',
+        'BRAF',
+        'V600E',
+        'Encapsulated Glioma, Diffuse Glioma, Glioblastoma',
+        'Dabrafenib + Trametinib, Vemurafenib + Cobimetinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>Listing in the CNS NCCN v1.2021</span>
+          <PMIDLink pmids={'28984141, 29380516, 26287849, 30351999'} />
+        </WithSeparator>,
+      ],
+      [
+        '2',
+        'ARAF, BRAF, RAF1, KRAS, NRAS, MAP2K1, MAP2K2',
+        'Oncogenic Mutations',
+        <table className="table">
+          <tbody>
+            <tr>
+              <td
+                style={{
+                  border: 'none',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                  paddingTop: '0',
+                }}
+              >
+                Erdheim-Chester Disease
+              </td>
+            </tr>
+            <tr>
+              <td style={{ paddingLeft: '0', paddingRight: '0' }}>
+                Langerhans Cell Histiocytosis
+              </td>
+            </tr>
+            <tr>
+              <td style={{ paddingLeft: '0', paddingRight: '0' }}>
+                Rosai-Dorman Disease
+              </td>
+            </tr>
+          </tbody>
+        </table>,
+        'Cobimetinib, Trametinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+          <PMIDLink pmids={'30867592'} />
+        </WithSeparator>,
+      ],
+      [
+        '3A',
+        'BRAF',
+        'V600',
+        'Histiocytosis',
+        'Vemurafenib, Dabrafenib',
+        <PMIDLink pmids={'25209580, 31213430, 31376203'} />,
+      ],
+      [
+        '3A',
+        'KRAS',
+        'Oncogenic Mutations',
+        'Histiocytosis',
+        'Cobimetinib, Trametinib',
+        <PMIDLink pmids={'30361829'} />,
+      ],
+      [
+        'R2',
+        'BTK',
+        'C481R, C481F, C481Y, T474I, T474S, T316A',
+        'Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma',
+        'Ibrutinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <PMIDLink pmids={'28049639, 29381098, 28418267, 32670873'} />
+          <AbstractLink
+            link={
+              'https://ashpublications.org/blood/article/134/Supplement_1/504/426369/Resistance-to-Acalabrutinib-in-CLL-Is-Mediated'
+            }
+            abstract={'Woyach et al. Abstract# 642-CLL, ASH 2019'}
+          />
+        </WithSeparator>,
+      ],
+    ],
+    numOfAssociationsInUpdatedImplication: 7,
+    changedAnnotation: [
+      [
+        '3A',
+        'ARAF, BRAF, MAP2K2, NRAS, RAF1',
+        'Oncogenic Mutations',
+        'Histiocytosis',
+        'Cobimetinib',
+        'Cobimetinub, Trametinib',
+        <PMIDLink pmids={'30361829'} />,
+      ],
+    ],
+  },
   '10072021': {
     priorityNews: [
       <span>
