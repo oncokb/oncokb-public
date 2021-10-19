@@ -181,7 +181,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </tr>
             <tr>
               <td style={{ paddingLeft: '0', paddingRight: '0' }}>
-                Rosai-Dorman Disease
+                Rosai-Dorfman Disease
               </td>
             </tr>
           </tbody>
@@ -237,6 +237,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <PMIDLink pmids={'30361829'} />,
       ],
     ],
+    changedAnnotationColumnHeaderType: AnnotationColumnHeaderType.DRUG,
   },
   '10072021': {
     priorityNews: [
