@@ -138,6 +138,7 @@ export default class UserDetailsPage extends React.Component<{
       .updateUserUsingPUT({
         userDto: updatedUser,
         sendEmail,
+        unlinkUser: false,
       })
       .then(() => {
         notifySuccess('Updated');
