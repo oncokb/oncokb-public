@@ -144,88 +144,157 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '10212021': {
-    updatedImplication: [
-      [
-        '2',
-        'BRAF',
-        'V600E',
-        'Encapsulated Glioma, Diffuse Glioma, Glioblastoma',
-        'Dabrafenib + Trametinib, Vemurafenib + Cobimetinib',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <span>Listing in the CNS NCCN v1.2021</span>
-          <PMIDLink pmids={'28984141, 29380516, 26287849, 30351999'} />
-        </WithSeparator>,
-      ],
-      [
-        '2',
-        'ARAF, BRAF, RAF1, KRAS, NRAS, MAP2K1, MAP2K2',
-        'Oncogenic Mutations',
-        <table className="table">
-          <tbody>
-            <tr>
-              <td
-                style={{
-                  border: 'none',
-                  paddingLeft: '0',
-                  paddingRight: '0',
-                  paddingTop: '0',
-                }}
-              >
-                Erdheim-Chester Disease
-              </td>
-            </tr>
-            <tr>
-              <td style={{ paddingLeft: '0', paddingRight: '0' }}>
-                Langerhans Cell Histiocytosis
-              </td>
-            </tr>
-            <tr>
-              <td style={{ paddingLeft: '0', paddingRight: '0' }}>
-                Rosai-Dorfman Disease
-              </td>
-            </tr>
-          </tbody>
-        </table>,
-        'Cobimetinib, Trametinib',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
-          <PMIDLink pmids={'30867592'} />
-        </WithSeparator>,
-      ],
-      [
-        '3A',
-        'BRAF',
-        'V600',
-        'Histiocytosis',
-        'Vemurafenib, Dabrafenib',
-        <PMIDLink pmids={'25209580, 31213430, 31376203'} />,
-      ],
-      [
-        '3A',
-        'KRAS',
-        'Oncogenic Mutations',
-        'Histiocytosis',
-        'Cobimetinib, Trametinib',
-        <PMIDLink pmids={'30361829'} />,
-      ],
-      [
-        'R2',
-        'BTK',
-        'C481R, C481F, C481Y, T474I, T474S, T316A',
-        'Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma',
-        'Ibrutinib',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <PMIDLink pmids={'28049639, 29381098, 28418267, 32670873'} />
-          <AbstractLink
-            link={
-              'https://ashpublications.org/blood/article/134/Supplement_1/504/426369/Resistance-to-Acalabrutinib-in-CLL-Is-Mediated'
-            }
-            abstract={'Woyach et al. Abstract# 642-CLL, ASH 2019'}
-          />
-        </WithSeparator>,
-      ],
+    priorityNews: [
+      <span>
+        Updated therapeutic implications - 7 new associations
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr style={{ whiteSpace: 'nowrap' }}>
+                <th>Level</th>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Drug</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2</td>
+                <td>BRAF</td>
+                <td>V600E</td>
+                <td>Encapsulated Glioma, Diffuse Glioma, Glioblastoma</td>
+                <td>Dabrafenib + Trametinib, Vemurafenib + Cobimetinib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in the CNS NCCN v1.2021</span>
+                    <PMIDLink
+                      pmids={'28984141, 29380516, 26287849, 30351999'}
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>BRAF</td>
+                <td>V600</td>
+                <td>Langerhans Cell Histiocytosis</td>
+                <td>Vemurafenib, Dabrafenib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'30867592'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={3}>2</td>
+                <td rowSpan={3}>BRAF</td>
+                <td rowSpan={3}>Oncogenic Mutations, excluding V600</td>
+                <td>Erdheim-Chester Disease</td>
+                <td rowSpan={3}>Cobimetinib, Trametinib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'30867592'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Langerhans Cell Histiocytosis</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'30867592, 32991018'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Rosai-Dorfman Disease</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'29236635'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={3}>2</td>
+                <td rowSpan={3}>ARAF, RAF1, KRAS, NRAS, MAP2K1, MAP2K2</td>
+                <td rowSpan={3}>Oncogenic Mutations</td>
+                <td>Erdheim-Chester Disease</td>
+                <td rowSpan={3}>Cobimetinib, Trametinib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'30867592'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Langerhans Cell Histiocytosis</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'30867592, 32991018'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Rosai-Dorfman Disease</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'29236635'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>3A</td>
+                <td>BRAF</td>
+                <td>V600</td>
+                <td>Histiocytosis</td>
+                <td>Vemurafenib, Dabrafenib</td>
+                <td>
+                  <PMIDLink pmids={'25209580, 31213430, 31376203'} />
+                </td>
+              </tr>
+              <tr>
+                <td>3A</td>
+                <td>KRAS</td>
+                <td>Oncogenic Mutations</td>
+                <td>Histiocytosis</td>
+                <td>Cobimetinib, Trametinib</td>
+                <td>
+                  <PMIDLink pmids={'30361829'} />
+                </td>
+              </tr>
+              <tr>
+                <td>R2</td>
+                <td>BTK</td>
+                <td>C481R, C481F, C481Y, T474I, T474S, T316A</td>
+                <td>Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma</td>
+                <td>Ibrutini</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <PMIDLink
+                      pmids={'28049639, 29381098, 28418267, 32670873'}
+                    />
+                    <AbstractLink
+                      link={
+                        'https://ashpublications.org/blood/article/134/Supplement_1/504/426369/Resistance-to-Acalabrutinib-in-CLL-Is-Mediated'
+                      }
+                      abstract={'Woyach et al. Abstract# 642-CLL, ASH 2019'}
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
     ],
-    numOfAssociationsInUpdatedImplication: 7,
     changedAnnotation: [
       [
         '3A',
