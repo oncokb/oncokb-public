@@ -275,7 +275,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>BTK</td>
                 <td>C481R, C481F, C481Y, T474I, T474S, T316A</td>
                 <td>Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma</td>
-                <td>Ibrutini</td>
+                <td>Ibrutinib</td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <PMIDLink
