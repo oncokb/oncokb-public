@@ -1954,6 +1954,82 @@ export default class API {
             return response.body;
         });
     };
+    getCompanyUsersUsingGETURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/{id}/users';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getCompanyUsers
+     * @method
+     * @name API#getCompanyUsersUsingGET
+     * @param {integer} id - id
+     */
+    getCompanyUsersUsingGETWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/{id}/users';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getCompanyUsers
+     * @method
+     * @name API#getCompanyUsersUsingGET
+     * @param {integer} id - id
+     */
+    getCompanyUsersUsingGET(parameters: {
+            'id': number,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < UserDTO >
+        > {
+            return this.getCompanyUsersUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     getAllCompanyDomainsUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
@@ -4910,6 +4986,7 @@ export default class API {
     };
     updateUserUsingPUTURL(parameters: {
         'sendEmail': boolean,
+        'unlinkUser': boolean,
         'userDto': UserDTO,
         $queryParameters ? : any
     }): string {
@@ -4917,6 +4994,10 @@ export default class API {
         let path = '/api/users';
         if (parameters['sendEmail'] !== undefined) {
             queryParameters['sendEmail'] = parameters['sendEmail'];
+        }
+
+        if (parameters['unlinkUser'] !== undefined) {
+            queryParameters['unlinkUser'] = parameters['unlinkUser'];
         }
 
         if (parameters.$queryParameters) {
@@ -4934,10 +5015,12 @@ export default class API {
      * @method
      * @name API#updateUserUsingPUT
      * @param {boolean} sendEmail - sendEmail
+     * @param {boolean} unlinkUser - unlinkUser
      * @param {} userDto - userDTO
      */
     updateUserUsingPUTWithHttpInfo(parameters: {
         'sendEmail': boolean,
+        'unlinkUser': boolean,
         'userDto': UserDTO,
         $queryParameters ? : any,
         $domain ? : string
@@ -4960,6 +5043,15 @@ export default class API {
 
             if (parameters['sendEmail'] === undefined) {
                 reject(new Error('Missing required  parameter: sendEmail'));
+                return;
+            }
+
+            if (parameters['unlinkUser'] !== undefined) {
+                queryParameters['unlinkUser'] = parameters['unlinkUser'];
+            }
+
+            if (parameters['unlinkUser'] === undefined) {
+                reject(new Error('Missing required  parameter: unlinkUser'));
                 return;
             }
 
@@ -4989,10 +5081,12 @@ export default class API {
      * @method
      * @name API#updateUserUsingPUT
      * @param {boolean} sendEmail - sendEmail
+     * @param {boolean} unlinkUser - unlinkUser
      * @param {} userDto - userDTO
      */
     updateUserUsingPUT(parameters: {
         'sendEmail': boolean,
+        'unlinkUser': boolean,
         'userDto': UserDTO,
         $queryParameters ? : any,
         $domain ? : string
@@ -5251,6 +5345,83 @@ export default class API {
         }): Promise < Array < UserDTO >
         > {
             return this.getAllRegisteredUsersUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getUsersTokensUsingPOSTURL(parameters: {
+        'logins': Array < string > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/users/tokens';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getUsersTokens
+     * @method
+     * @name API#getUsersTokensUsingPOST
+     * @param {} logins - logins
+     */
+    getUsersTokensUsingPOSTWithHttpInfo(parameters: {
+        'logins': Array < string > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/users/tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['logins'] !== undefined) {
+                body = parameters['logins'];
+            }
+
+            if (parameters['logins'] === undefined) {
+                reject(new Error('Missing required  parameter: logins'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getUsersTokens
+     * @method
+     * @name API#getUsersTokensUsingPOST
+     * @param {} logins - logins
+     */
+    getUsersTokensUsingPOST(parameters: {
+            'logins': Array < string > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < Token >
+        > {
+            return this.getUsersTokensUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };

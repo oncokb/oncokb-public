@@ -1,20 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import styles from './styles.module.scss';
 import autobind from 'autobind-decorator';
 import { Button, Col, Row } from 'react-bootstrap';
 import { observable, action, computed } from 'mobx';
 import { CompanyVM } from 'app/shared/api/generated/API';
+import { FormListField } from 'app/shared/list/FormListField';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { FormTextAreaField } from '../../shared/textarea/FormTextAreaField';
 import { FormSelectWithLabelField } from '../../shared/select/FormSelectWithLabelField';
-import {
-  AvField,
-  AvForm,
-  AvGroup,
-  AvInput,
-  AvFeedback,
-} from 'availity-reactstrap-validation';
+import { AvField, AvForm } from 'availity-reactstrap-validation';
 import {
   LicenseType,
   LICENSE_TITLES,
@@ -25,55 +19,16 @@ import {
   LicenseModel,
   LICENSE_MODEL_TITLES,
 } from 'app/config/constants';
+import _ from 'lodash';
+import {
+  notifyError,
+  notifyInfo,
+  notifyWarning,
+} from 'app/shared/utils/NotificationUtils';
 
 type INewCompanyFormProps = {
   onValidSubmit: (newCompany: Partial<CompanyVM>) => void;
 };
-
-type IDomainListBoxProps = {
-  domainList: string[];
-  updateDomainList: (actionType: DomainListActions, event: any) => void;
-};
-
-enum DomainListActions {
-  ADD,
-  DELETE,
-}
-
-@observer
-class DomainListBox extends React.Component<IDomainListBoxProps> {
-  render() {
-    return (
-      <div
-        style={{
-          border: '1px solid #ced4da',
-          borderRadius: '0.25rem',
-          padding: '0.375rem 0.75rem',
-          overflowY: 'scroll',
-          minHeight: '100px',
-          maxHeight: '100px',
-          marginTop: '28px',
-        }}
-      >
-        <div className={styles.main}>
-          {this.props.domainList.map(domain => (
-            <div key={domain} className={styles.content_container}>
-              <span
-                className={styles.delete}
-                onClick={() =>
-                  this.props.updateDomainList(DomainListActions.DELETE, domain)
-                }
-              >
-                <i className="fa fa-times-circle"></i>
-              </span>
-              <span style={{ margin: '5px 10px 5px 5px' }}>{domain}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-}
 
 export const COMPANY_FORM_OPTIONS = {
   companyType: Object.keys(CompanyType).map(type => {
@@ -105,51 +60,23 @@ export const COMPANY_FORM_OPTIONS = {
 @observer
 export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   @observable companyDescription = '';
-  @observable currentDomainText = '';
   @observable companyDomains: string[] = [];
   @observable selectedCompanyType: CompanyType = CompanyType.PARENT;
   @observable selectedLicenseModel: LicenseModel = LicenseModel.REGULAR;
   @observable selectedLicenseType: LicenseType = LicenseType.COMMERCIAL;
   @observable selectedLicenseStatus: LicenseStatus = LicenseStatus.REGULAR;
 
-  @autobind
-  domainValidation(value: any, context: any, input: any, cb: any) {
-    if (this.companyDomains.length > 0) {
-      cb(true);
-    } else {
-      cb(false); // Can also return a string as error message
-    }
-  }
-
   @action.bound
   updateCompanyDescription(event: any) {
     this.companyDescription = event.target.value;
   }
 
-  @action.bound
-  updateCompanyDomainText(event: any) {
-    this.currentDomainText = event.target.value;
-  }
-
-  @action.bound
-  updateCompanyDomainList(actionType: DomainListActions, payload?: string) {
-    switch (actionType) {
-      case DomainListActions.ADD:
-        if (this.currentDomainText.length < 1) break;
-        if (!this.companyDomains.includes(this.currentDomainText)) {
-          this.companyDomains.push(this.currentDomainText);
-        }
-        this.currentDomainText = ''; // Reset current text so user can add more domains
-        break;
-      case DomainListActions.DELETE:
-        if (payload) {
-          this.companyDomains = this.companyDomains.filter(
-            domain => domain !== payload
-          );
-        }
-        break;
-      default:
-    }
+  @computed
+  get licenseStatusOptions() {
+    const optionSubset = [LicenseStatus.TRIAL, LicenseStatus.REGULAR];
+    return COMPANY_FORM_OPTIONS.licenseStatus.filter(option =>
+      optionSubset.includes(option.value)
+    );
   }
 
   @action.bound
@@ -170,7 +97,14 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
 
   render() {
     return (
-      <AvForm onValidSubmit={this.handleValidSubmit}>
+      <AvForm
+        onValidSubmit={this.handleValidSubmit}
+        onKeyPress={(event: any) => {
+          if (event.which === 13) {
+            event.preventDefault();
+          }
+        }}
+      >
         <Row>
           <Col md="3">
             <h5>Company Information</h5>
@@ -204,48 +138,17 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
             />
             <AvField name="businessContact" label="Business Contact" />
             <AvField name="legalContact" label="Legal Contact" />
-            <AvGroup>
-              <Row>
-                <Col>
-                  <label htmlFor="companyDomains">Company Domain Name</label>
-                  <div className="input-group">
-                    <AvInput
-                      id="companyDomains"
-                      name="companyDomains"
-                      label="Company Domains"
-                      placeHolder="oncokb.org"
-                      value={this.currentDomainText}
-                      onChange={this.updateCompanyDomainText}
-                      validate={{
-                        minLength: {
-                          value: 1,
-                          errorMessage: 'Required to be at least 1 character',
-                        },
-                        custom: this.domainValidation,
-                      }}
-                    />
-                    <div className="input-group-append">
-                      <button
-                        className="btn btn-outline-secondary"
-                        type="button"
-                        onClick={() =>
-                          this.updateCompanyDomainList(DomainListActions.ADD)
-                        }
-                      >
-                        Add
-                      </button>
-                    </div>
-                    <AvFeedback>Must have atleast one (1) domain.</AvFeedback>
-                  </div>
-                </Col>
-                <Col>
-                  <DomainListBox
-                    domainList={this.companyDomains}
-                    updateDomainList={this.updateCompanyDomainList}
-                  />
-                </Col>
-              </Row>
-            </AvGroup>
+            <FormListField
+              list={this.companyDomains}
+              addItem={(domain: string) => this.companyDomains.push(domain)}
+              deleteItem={(domain: string) =>
+                (this.companyDomains = this.companyDomains.filter(
+                  domainName => domainName !== domain
+                ))
+              }
+              labelText={'Company Domains'}
+              placeholder={'Include at least one domain. ie) oncokb.org'}
+            />
           </Col>
         </Row>
         <Row className={getSectionClassName()}>
@@ -284,7 +187,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
                 value: LicenseStatus.REGULAR,
                 label: LICENSE_STATUS_TITLES[LicenseStatus.REGULAR],
               }}
-              options={COMPANY_FORM_OPTIONS.licenseStatus}
+              options={this.licenseStatusOptions}
               onSelection={(selectedOption: any) =>
                 (this.selectedLicenseStatus = selectedOption.value)
               }

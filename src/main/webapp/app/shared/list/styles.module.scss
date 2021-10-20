@@ -1,0 +1,19 @@
+.main {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.list_container {
+  border: 1px solid;
+  border-color: $oncokb-border-color;
+  border-radius: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  overflow-y: scroll;
+  min-height: 100px;
+  max-height: 100px;
+  margin-top: 28px;
+}
+
+.add {
+  border-color: $oncokb-border-color !important;
+}
