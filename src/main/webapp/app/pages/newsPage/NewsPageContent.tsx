@@ -298,7 +298,16 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     changedAnnotation: [
       [
         '3A',
-        'ARAF, BRAF, MAP2K2, NRAS, RAF1',
+        'BRAF',
+        'Oncogenic Mutations, excluding V600',
+        'Histiocytosis',
+        'Cobimetinib',
+        'Cobimetinib, Trametinib',
+        <PMIDLink pmids={'30361829'} />,
+      ],
+      [
+        '3A',
+        'ARAF, RAF1, NRAS, MAP2K2',
         'Oncogenic Mutations',
         'Histiocytosis',
         'Cobimetinib',
