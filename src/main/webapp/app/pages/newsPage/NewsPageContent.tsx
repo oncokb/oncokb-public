@@ -31,6 +31,7 @@ import WithSeparator from 'react-with-separator';
 import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
+import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -42,6 +43,7 @@ export type NewsData = {
   updatedImplicationInOldFormat?: { [level: string]: ElementType[] };
   changedAnnotation?: ElementType[][];
   changedAnnotationTitle?: string;
+  changedAnnotationColumnHeaderType?: AnnotationColumnHeaderType;
 };
 
 export const NEWLY_ADDED_LEVEL_FOUR_COLUMNS = [
@@ -65,13 +67,23 @@ export const UPDATED_IMPLICATION_OLD_FORMAT_COLUMNS = [
   { name: 'Update' },
 ];
 
-export const CHANGED_ANNOTATION_COLUMNS = [
+export const CHANGED_ANNOTATION_LEVEL_COLUMNS = [
   { name: 'Gene' },
   { name: 'Mutation' },
   { name: 'Cancer Type' },
   { name: 'Drug' },
   { name: 'Previous Level' },
   { name: 'Current Level' },
+  { name: 'Reason' },
+];
+
+export const CHANGED_ANNOTATION_DRUG_COLUMNS = [
+  { name: 'Level' },
+  { name: 'Gene' },
+  { name: 'Mutation' },
+  { name: 'Cancer Type' },
+  { name: 'Previous Drug' },
+  { name: 'Current Drug' },
   { name: 'Reason' },
 ];
 
