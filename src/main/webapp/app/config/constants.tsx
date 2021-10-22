@@ -576,16 +576,16 @@ export enum TERM_DEFINITION {
 }
 
 export enum DOCUMENT_TITLES {
-  HOME = 'OncoKB',
-  LEVELS = 'OncoKB Levels of Evidence',
-  TEAM = 'OncoKB Team',
-  ABOUT = 'About OncoKB',
-  ACTIONABLE_GENES = 'OncoKB Actionable Genes',
-  TERMS = 'OncoKB Terms of Use - Academic Research',
-  NEWS = 'OncoKB Latest News',
-  API_ACCESS = 'OncoKB API Access',
-  CANCER_GENES = 'OncoKB Cancer Gene List',
-  FDA_RECOGNITION = 'OncoKB is now an FDA-recognized Public Human Genetic Variant Database',
+  HOME = "OncoKB - MSK's Precision Oncology Knowledge Base",
+  LEVELS = 'Levels of Evidence',
+  TEAM = 'Team',
+  ABOUT = 'About',
+  ACTIONABLE_GENES = 'Actionable Genes',
+  TERMS = 'Terms of Use',
+  NEWS = 'Latest News',
+  API_ACCESS = 'API Access',
+  CANCER_GENES = 'Cancer Gene List',
+  FDA_RECOGNITION = 'OncoKB is now an FDA-recognized Public Human Genetic Variant Database*',
 }
 
 export const FDA_RECOGNITION_DISCLAIMER: React.FunctionComponent<{
@@ -643,7 +643,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
-  { date: '10212021', version: 'v3.8' },
+  { date: '10252021', version: 'v3.8' },
   { date: '09292021', version: 'v3.7' },
   { date: '08312021', version: 'v3.6' },
   { date: '07162021', version: 'v3.5' },
