@@ -133,7 +133,8 @@ export default class AlterationPage extends React.Component<
       this.store.geneNumber.isComplete &&
       this.store.clinicalAlterations.isComplete &&
       this.store.biologicalAlterations.isComplete &&
-      this.store.annotationResult.isComplete
+      this.store.annotationResult.isComplete &&
+      this.store.fdaAlterations.isComplete
     );
   }
 
@@ -175,7 +176,7 @@ export default class AlterationPage extends React.Component<
   render() {
     return (
       <DocumentTitle title={this.documentTitle}>
-        <If condition={this.store.gene.isComplete}>
+        <If condition={this.pageShouldBeRendered}>
           <Then>
             {this.store.gene.isError ||
             this.store.gene.result === DEFAULT_GENE ? (
@@ -203,9 +204,7 @@ export default class AlterationPage extends React.Component<
             <LoadingIndicator
               size={LoaderSize.LARGE}
               center={true}
-              isLoading={
-                this.store.gene.isPending || !this.pageShouldBeRendered
-              }
+              isLoading={true}
             />
           </Else>
         </If>

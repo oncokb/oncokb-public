@@ -61,6 +61,7 @@ import {
   GenePageSearchQueries,
 } from 'app/shared/route/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
+import { COLOR_BLUE } from 'app/config/theme';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -710,24 +711,31 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                       </If>
                       <Row className={'mt-2'}>
                         <Col>
-                          <AlterationTableTabs
-                            selectedTab={this.defaultSelectedTab}
-                            hugoSymbol={this.store.hugoSymbol}
-                            biological={
-                              this.store.filteredBiologicalAlterations
-                            }
-                            tx={this.getClinicalImplications(
-                              this.filteredTxAlterations
-                            )}
-                            dx={this.getClinicalImplications(
-                              this.filteredDxAlterations
-                            )}
-                            px={this.getClinicalImplications(
-                              this.filteredPxAlterations
-                            )}
-                            fda={this.store.fdaAlterations.result}
-                            onChangeTab={this.onChangeTab}
-                          />
+                          <If condition={this.store.fdaAlterations.isPending}>
+                            <Then>
+                              <LoadingIndicator isLoading={true} />
+                            </Then>
+                            <Else>
+                              <AlterationTableTabs
+                                selectedTab={this.defaultSelectedTab}
+                                hugoSymbol={this.store.hugoSymbol}
+                                biological={
+                                  this.store.filteredBiologicalAlterations
+                                }
+                                tx={this.getClinicalImplications(
+                                  this.filteredTxAlterations
+                                )}
+                                dx={this.getClinicalImplications(
+                                  this.filteredDxAlterations
+                                )}
+                                px={this.getClinicalImplications(
+                                  this.filteredPxAlterations
+                                )}
+                                fda={this.store.fdaAlterations.result}
+                                onChangeTab={this.onChangeTab}
+                              />
+                            </Else>
+                          </If>
                         </Col>
                       </Row>
                     </Then>

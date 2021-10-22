@@ -143,7 +143,7 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '10212021': {
+  '10252021': {
     priorityNews: [
       <span>
         Updated therapeutic implications - 7 new associations
@@ -164,7 +164,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>2</td>
                 <td>BRAF</td>
                 <td>V600E</td>
-                <td>Encapsulated Glioma, Diffuse Glioma, Glioblastoma</td>
+                <td>Encapsulated Glioma, Diffuse Glioma</td>
                 <td>Dabrafenib + Trametinib, Vemurafenib + Cobimetinib</td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
