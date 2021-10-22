@@ -164,7 +164,8 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
           <Then>
             <If
               condition={
-                !!this.store.annotationResultByHgvsg.result.query.hugoSymbol
+                !!this.store.annotationResultByHgvsg.result.query.hugoSymbol &&
+                this.store.fdaAlterations.isComplete
               }
             >
               <Then>
