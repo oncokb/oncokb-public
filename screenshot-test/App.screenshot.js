@@ -32,6 +32,7 @@ const geneNumbers = fs.readFileSync(`${DATA_DIR}private-utils-numbers-gene-ABL1.
 const geneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-ABL1.json`).toString();
 const biologicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-bio-ABL1.json`).toString();
 const clinicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-cli-ABL1.json`).toString();
+const fdaVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-fda-ABL1.json`).toString();
 const sampleCount = fs.readFileSync(`${DATA_DIR}api-private-utils-portalAlterationSampleCount.json`).toString();
 const evidenceSummary = fs.readFileSync(`${DATA_DIR}api-v1-evidences-ABL1-summary.json`).toString();
 const evidenceBackground = fs.readFileSync(`${DATA_DIR}api-v1-evidences-ABL1-background.json`).toString();
@@ -184,6 +185,13 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: clinicalVariants
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/fdaAlterations?hugoSymbol=ABL1`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: fdaVariants
       };
       break;
     case `https://www.genomenexus.org//ensembl/transcript`:
