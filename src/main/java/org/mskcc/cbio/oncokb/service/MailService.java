@@ -123,7 +123,9 @@ public class MailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, StandardCharsets.UTF_8.name());
         message.setTo(applicationProperties.getEmailAddresses().getContactAddress());
-        message.setReplyTo(from);
+        if (StringUtils.isNotEmpty(from)) {
+            message.setReplyTo(from);
+        }
         message.setFrom(applicationProperties.getEmailAddresses().getContactAddress());
         message.setSubject(subject);
         message.setText(content, false);

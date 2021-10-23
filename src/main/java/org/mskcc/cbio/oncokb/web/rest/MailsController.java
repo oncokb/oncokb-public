@@ -83,6 +83,9 @@ public class MailsController {
         if (StringUtils.isNotEmpty(userName)) {
             emailContenet += "\n\n" + userName;
         }
+        if (StringUtils.isNotEmpty(from)) {
+            emailContenet = " (" + from + ")";
+        }
         this.mailService.sendFeedback(from, subject, emailContenet);
         return new ResponseEntity<>(HttpStatus.OK);
     }
