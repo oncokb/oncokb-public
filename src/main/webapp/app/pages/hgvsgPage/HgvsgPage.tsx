@@ -122,17 +122,13 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
   get documentTitle() {
     const content = [];
     if (this.store.annotationResultByHgvsg.result.query.hugoSymbol) {
-      content.push(
-        `Gene: ${this.store.annotationResultByHgvsg.result.query.hugoSymbol}`
-      );
+      content.push(this.store.annotationResultByHgvsg.result.query.hugoSymbol);
     }
     if (this.store.annotationResultByHgvsg.result.query.alteration) {
-      content.push(
-        `Alteration: ${this.store.annotationResultByHgvsg.result.query.alteration}`
-      );
+      content.push(this.store.annotationResultByHgvsg.result.query.alteration);
     }
     if (this.store.tumorTypeQuery) {
-      content.push(`Cancer Type: ${this.store.tumorTypeQuery}`);
+      content.push(this.store.tumorTypeQuery);
     }
     return content.join(', ');
   }

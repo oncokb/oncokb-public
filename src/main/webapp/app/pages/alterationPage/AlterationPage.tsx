@@ -142,13 +142,13 @@ export default class AlterationPage extends React.Component<
   get documentTitle() {
     const content = [];
     if (this.store.hugoSymbol) {
-      content.push(`Gene: ${this.store.hugoSymbol}`);
+      content.push(this.store.hugoSymbol);
     }
     if (this.store.alterationQuery) {
-      content.push(`Alteration: ${this.store.alterationQuery}`);
+      content.push(this.store.alterationQuery);
     }
     if (this.store.tumorTypeQuery) {
-      content.push(`Cancer Type: ${this.store.tumorTypeQuery}`);
+      content.push(this.store.tumorTypeQuery);
     }
     return content.join(', ');
   }
