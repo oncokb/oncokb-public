@@ -538,11 +538,6 @@ export default class GenePage extends React.Component<GenePageProps, any> {
   }
 
   @computed
-  get documentTitle() {
-    return `Gene: ${this.store.hugoSymbol}`;
-  }
-
-  @computed
   get defaultShowGeneBackground() {
     if (this.store.biologicalAlterations.isComplete) {
       return this.store.biologicalAlterations.result.length === 0;
@@ -573,7 +568,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
 
   render() {
     return (
-      <DocumentTitle title={this.documentTitle}>
+      <DocumentTitle title={this.store.hugoSymbol}>
         <If condition={!!this.hugoSymbolQuery}>
           <Then>
             <If condition={this.store.gene.isComplete}>
