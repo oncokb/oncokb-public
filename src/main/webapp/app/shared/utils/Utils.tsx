@@ -123,7 +123,7 @@ export function getDrugNameFromTreatment(drug: TreatmentDrug) {
 }
 
 export function getTreatmentNameFromEvidence(evidence: Evidence) {
-  return evidence.treatments
+  return _.sortBy(evidence.treatments, 'priority')
     .map(treatment =>
       _.sortBy(treatment.drugs, 'priority')
         .map(drug => getDrugNameFromTreatment(drug))
