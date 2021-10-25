@@ -143,7 +143,7 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '10252021': {
+  '10262021': {
     priorityNews: [
       <span>
         Updated therapeutic implications - 7 new associations
@@ -268,6 +268,21 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>Cobimetinib, Trametinib</td>
                 <td>
                   <PMIDLink pmids={'30361829'} />
+                </td>
+              </tr>
+              <tr>
+                <td>3A</td>
+                <td>NRG1</td>
+                <td>Fusions</td>
+                <td>All Solid Tumors</td>
+                <td>Zenocutuzumab</td>
+                <td>
+                  <AbstractLink
+                    link={
+                      'https://ascopubs.org/doi/abs/10.1200/JCO.2021.39.15_suppl.3003'
+                    }
+                    abstract={'Schram et al. Abstract#  3003, ASCO 2021'}
+                  />
                 </td>
               </tr>
               <tr>
