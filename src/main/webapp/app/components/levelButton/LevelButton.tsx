@@ -72,7 +72,7 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
             ) : (
               <OncoKBLevelIcon level={props.level} withDescription={true} />
             )}
-            <span className={'ml-1 mr-4'}>
+            <span className={'ml-1 mr-3'}>
               {props.title ? props.title : `Level ${props.level}`}
             </span>
           </div>

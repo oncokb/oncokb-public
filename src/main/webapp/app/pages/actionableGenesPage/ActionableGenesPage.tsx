@@ -62,6 +62,7 @@ import {
   GenePageHashQueries,
 } from 'app/shared/route/types';
 import AppStore from 'app/store/AppStore';
+import { If, Else, Then } from 'react-if';
 
 type Treatment = {
   level: string;
@@ -805,25 +806,71 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get oncokbTableProps() {
-    if (this.fdaSectionIsOpen) {
+    const tableProps = {
+      disableSearch: true,
+      data: this.filteredTreatments,
+      loading:
+        this.relevantTumorTypes.isPending &&
+        (this.fdaSectionIsOpen
+          ? this.allFdaAlterations.isPending
+          : this.evidencesByLevel.isPending),
+      columns: this.columns,
+      defaultPageSize: 10,
+      defaultSorted: [
+        {
+          id: TABLE_COLUMN_KEY.LEVEL,
+          desc: true,
+        },
+        {
+          id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
+          desc: false,
+        },
+        {
+          id: TABLE_COLUMN_KEY.ALTERATIONS,
+          desc: false,
+        },
+        {
+          id: TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,
+          desc: false,
+        },
+        {
+          id: TABLE_COLUMN_KEY.DRUGS,
+          desc: false,
+        },
+      ],
+      showPagination: this.fdaSectionIsOpen,
+      fixedHeight: !this.fdaSectionIsOpen,
+    };
+    if (!this.fdaSectionIsOpen) {
       return {
-        showPagination: true,
-        fixedHeight: false,
-      };
-    } else {
-      return {
+        ...tableProps,
         minRows: Math.round(LG_TABLE_FIXED_HEIGHT / 36) - 1,
         pageSize:
           this.filteredTreatments.length === 0
             ? 1
             : this.filteredTreatments.length,
-        showPagination: this.fdaSectionIsOpen,
-        fixedHeight: true,
         style: {
           height: LG_TABLE_FIXED_HEIGHT,
         },
       };
+    } else {
+      return tableProps;
     }
+  }
+
+  getTable() {
+    // We need to render two tables, one with fixed header, one with pagination.
+    // Once page size is specified in the fixed header table, it cannot be overwritten by the defaultPageSize
+    return (
+      <If condition={this.fdaSectionIsOpen}>
+        <Then>
+          <OncoKBTable {...this.oncokbTableProps} />
+        </Then>
+        <Else>
+          <OncoKBTable {...this.oncokbTableProps} />
+        </Else>
+      </If>
+    );
   }
 
   @computed
@@ -966,43 +1013,7 @@ export default class ActionableGenesPage extends React.Component<
             </Col>
           </Row>
           <Row className="mt-2">
-            <Col>
-              <OncoKBTable
-                {...this.oncokbTableProps}
-                disableSearch={true}
-                data={this.filteredTreatments}
-                loading={
-                  this.relevantTumorTypes.isPending &&
-                  (this.fdaSectionIsOpen
-                    ? this.allFdaAlterations.isPending
-                    : this.evidencesByLevel.isPending)
-                }
-                columns={this.columns}
-                defaultPageSize={10}
-                defaultSorted={[
-                  {
-                    id: TABLE_COLUMN_KEY.LEVEL,
-                    desc: true,
-                  },
-                  {
-                    id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
-                    desc: false,
-                  },
-                  {
-                    id: TABLE_COLUMN_KEY.ALTERATIONS,
-                    desc: false,
-                  },
-                  {
-                    id: TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,
-                    desc: false,
-                  },
-                  {
-                    id: TABLE_COLUMN_KEY.DRUGS,
-                    desc: false,
-                  },
-                ]}
-              />
-            </Col>
+            <Col>{this.getTable()}</Col>
           </Row>
         </>
       </DocumentTitle>
