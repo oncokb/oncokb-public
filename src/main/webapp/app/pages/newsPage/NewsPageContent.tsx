@@ -146,7 +146,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '10262021': {
     priorityNews: [
       <span>
-        Updated therapeutic implications - 7 new associations
+        Updated therapeutic implications - 8 new associations
         <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
