@@ -228,7 +228,9 @@ export default class AnnotationPage extends React.Component<
   @computed get isOncogenicMutations() {
     return (
       this.props.alteration &&
-      this.props.alteration.toLowerCase() === LOWERCASE_ONCOGENIC_MUTATIONS
+      this.props.alteration
+        .toLowerCase()
+        .startsWith(LOWERCASE_ONCOGENIC_MUTATIONS)
     );
   }
 
