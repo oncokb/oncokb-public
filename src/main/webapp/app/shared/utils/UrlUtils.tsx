@@ -69,7 +69,7 @@ export const AlterationPageLink: React.FunctionComponent<{
 }> = props => {
   let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`;
   if (props.cancerType) {
-    pageLink = `${pageLink}/${props.cancerType}`;
+    pageLink = `${pageLink}/${encodeSlash(props.cancerType)}`;
   }
   const searchQueries = props.searchQueries || {};
 
