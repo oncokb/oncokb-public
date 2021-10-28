@@ -40,4 +40,11 @@ public interface CompanyDomainService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Get the list of company domains associated with a company
+     * @param companyId the id of the company
+     * @return the list of company domains
+     */
+    List<CompanyDomainDTO> findAllCompanyDomainsByCompanyId(Long companyId);
 }
