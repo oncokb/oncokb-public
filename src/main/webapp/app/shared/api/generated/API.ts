@@ -38,6 +38,8 @@ export type Company = {
 export type CompanyDTO = {
     'businessContact': string
 
+        'companyDomains': Array < string >
+
         'companyType': "PARENT" | "BRANCH" | "UNKNOWN"
 
         'description': string
@@ -69,6 +71,8 @@ export type CompanyVM = {
         'companyDomains': Array < string >
 
         'companyType': "PARENT" | "BRANCH" | "UNKNOWN"
+
+        'companyUserDTOs': Array < UserDTO >
 
         'description': string
 
@@ -1649,7 +1653,7 @@ export default class API {
             });
         };
     createCompanyUsingPOSTURL(parameters: {
-        'companyVm': CompanyVM,
+        'companyDto': CompanyDTO,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -1669,10 +1673,10 @@ export default class API {
      * createCompany
      * @method
      * @name API#createCompanyUsingPOST
-     * @param {} companyVm - companyVM
+     * @param {} companyDto - companyDTO
      */
     createCompanyUsingPOSTWithHttpInfo(parameters: {
-        'companyVm': CompanyVM,
+        'companyDto': CompanyDTO,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1688,12 +1692,12 @@ export default class API {
             headers['Accept'] = '*/*';
             headers['Content-Type'] = 'application/json';
 
-            if (parameters['companyVm'] !== undefined) {
-                body = parameters['companyVm'];
+            if (parameters['companyDto'] !== undefined) {
+                body = parameters['companyDto'];
             }
 
-            if (parameters['companyVm'] === undefined) {
-                reject(new Error('Missing required  parameter: companyVm'));
+            if (parameters['companyDto'] === undefined) {
+                reject(new Error('Missing required  parameter: companyDto'));
                 return;
             }
 
@@ -1713,10 +1717,10 @@ export default class API {
      * createCompany
      * @method
      * @name API#createCompanyUsingPOST
-     * @param {} companyVm - companyVM
+     * @param {} companyDto - companyDTO
      */
     createCompanyUsingPOST(parameters: {
-        'companyVm': CompanyVM,
+        'companyDto': CompanyDTO,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < CompanyDTO > {

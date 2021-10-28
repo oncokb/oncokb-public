@@ -6,8 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.*;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
+import org.mskcc.cbio.oncokb.repository.CompanyDomainRepository;
+import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
@@ -16,6 +19,8 @@ import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
+import org.mskcc.cbio.oncokb.util.StringUtil;
 
 import io.github.jhipster.security.RandomUtil;
 
@@ -33,6 +38,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import javax.swing.text.DefaultStyledDocument.ElementSpec;
 
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
@@ -67,8 +74,19 @@ public class UserService {
 
     private final SlackService slackService;
 
+    private final UserDetailsService userDetailsService;
+
+    private final MailService mailService;
+
+    private final CompanyDomainRepository companyDomainRepository;
+
+    private final CompanyRepository companyRepository;
+
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserDetailsMapper userDetailsMapper;
 
     public UserService(
         UserRepository userRepository,
@@ -80,7 +98,11 @@ public class UserService {
         TokenProvider tokenProvider,
         CacheNameResolver cacheNameResolver,
         SlackService slackService,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        UserDetailsService userDetailsService,
+        MailService mailService,
+        CompanyDomainRepository companyDomainRepository,
+        CompanyRepository companyRepository
     ) {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
@@ -92,6 +114,10 @@ public class UserService {
         this.cacheNameResolver = cacheNameResolver;
         this.cacheManager = cacheManager;
         this.slackService = slackService;
+        this.userDetailsService = userDetailsService;
+        this.mailService = mailService;
+        this.companyDomainRepository = companyDomainRepository;
+        this.companyRepository = companyRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -101,6 +127,17 @@ public class UserService {
                 // we only set the activation key to null after verifying the email.
                 // the account needs to be manually verified by the admin
                 user.setActivationKey(null);
+
+                // Check if the user is apart of licensed company and then continue with approval procedure
+                UserDTO userDTO = userMapper.userToUserDTO(user);
+                Optional<Company> company = findAssociatedCompany(userDTO);
+                company.ifPresent(
+                    c -> {
+                        mapSingleUserToCompany(user, c);
+                        updateUserWithCompanyLicense(userDTO, c);
+                    }
+                );
+
                 this.clearUserCaches(user);
                 log.debug("Activated user: {}", user);
                 return user;
@@ -173,18 +210,12 @@ public class UserService {
         Optional<UserDetails> userDetailsOptional = userDetailsRepository.findOneByTrialActivationKey(key);
         User user = userDetailsOptional.get().getUser();
         UserDTO userDTO = userMapper.userToUserDTO(userDetailsOptional.get().getUser());
-        boolean userHasValidTrialActivation = Optional.ofNullable(userDTO)
-            .map(UserDTO::getAdditionalInfo)
-            .map(AdditionalInfoDTO::getTrialAccount)
-            .map(TrialAccount::getActivation)
-            .isPresent();
 
-        if (userHasValidTrialActivation) {
+        if (userHasValidTrialActivation(userDTO)) {
             String userKey = userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey();
             if (StringUtils.isNotEmpty(userKey) && userKey.equals(key)) {
                 // Update user account to trial account
-                user.setActivated(true);
-                generateTokenForUserIfNotExistOrOverwrite(userDTO, Optional.of(TRIAL_PERIOD_IN_DAYS), Optional.of(false));
+                approveUser(userDTO, true);
 
                 // Reset the trial account info
                 Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
@@ -317,6 +348,15 @@ public class UserService {
         userDetails.setCountry(userDTO.getCountry());
         userDetailsRepository.save(userDetails);
 
+        // Check if the user is apart of licensed company and then continue with approval procedure
+        Optional<Company> company = findAssociatedCompany(userDTO);
+        company.ifPresent(
+            c -> {
+                mapSingleUserToCompany(user, c);
+                updateUserWithCompanyLicense(userMapper.userToUserDTO(updatedUser), c);
+            }
+        );
+
         this.clearUserCaches(user);
 
         generateTokenForUserIfNotExist(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable);
@@ -359,11 +399,24 @@ public class UserService {
                 return new UserDTO(user, getUpdatedUserDetails(
                     user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCity(), userDTO.getCountry()));
             });
-
-        if (updatedUserDTO.isPresent()) {
-            generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
-        }
         return updatedUserDTO;
+    }
+
+    public Optional<UserDTO> updateUser(UserDTO userDTO, Boolean newUpdate) {
+        if(newUpdate){
+            Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+            if(updatedUserDTO.isPresent()){
+                Optional<Company> company = findAssociatedCompany(userDTO);
+                if(company.isPresent()){
+                    mapSingleUserToCompany(userMapper.userDTOToUser(updatedUserDTO.get()), company.get());
+                    updateUserWithCompanyLicense(updatedUserDTO.get(), company.get());
+                }else {
+                    generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+                }
+            }
+            return updatedUserDTO;
+        }
+        return null;
     }
 
     private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String company, String city, String country) {
@@ -437,13 +490,25 @@ public class UserService {
         return userRepository.findAllByActivatedIsTrueOrderByCreatedBy(pageable).map(user -> userMapper.userToUserDTO(user));
     }
 
-    public Optional<UserDTO> approveUser(UserDTO userDTO) {
+    public Optional<UserDTO> approveUser(UserDTO userDTO, Boolean isTrial) {
         if (!userDTO.isActivated()) {
             userDTO.setActivated(true);
         }
         Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
         if (updatedUserDTO.isPresent()) {
-            generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+            List<Token> tokens = 
+                generateTokenForUserIfNotExist(
+                    updatedUserDTO.get(),
+                    isTrial ? Optional.of(TRIAL_PERIOD_IN_DAYS) : Optional.empty(),
+                    isTrial ? Optional.of(false) : Optional.empty()
+                );
+            if(isTrial){
+                tokens.forEach(token -> {
+                    token.setRenewable(false);
+                    token.setExpiration(Instant.now().plusSeconds(DAY_IN_SECONDS * TRIAL_PERIOD_IN_DAYS));
+                    tokenService.save(token);
+                });
+            }
         }
         return updatedUserDTO;
     }
@@ -462,7 +527,7 @@ public class UserService {
         });
     }
 
-    private void generateTokenForUserIfNotExist(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
+    private List<Token> generateTokenForUserIfNotExist(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
         // automatically generate a token for user if not exists
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
         if (tokens.isEmpty()) {
@@ -472,24 +537,7 @@ public class UserService {
                 tokenIsRenewable
             );
         }
-    }
-
-    private void generateTokenForUserIfNotExistOrOverwrite(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
-        // automatically generate a token for user if not exists
-        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
-        if (tokens.isEmpty()) {
-            tokenProvider.createToken(
-                userMapper.userDTOToUser(userDTO),
-                tokenValidDays.isPresent() ? Optional.of(Instant.now().plusSeconds(DAY_IN_SECONDS * (long) tokenValidDays.get())) : Optional.empty(),
-                tokenIsRenewable
-            );
-        } else {
-            tokens.forEach(token -> {
-                token.setRenewable(false);
-                token.setExpiration(Instant.now().plusSeconds(DAY_IN_SECONDS * tokenValidDays.get()));
-                tokenService.save(token);
-            });
-        }
+        return tokens;
     }
 
     public List<UserDTO> getAllActivatedUsersWithoutTokens() {
@@ -529,6 +577,101 @@ public class UserService {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
 
+    /**
+     * Updates the user to company mappings. By default, this will automatically
+     * create a mapping with users that have the same email domain. If a list is provided,
+     * then only the specified users will be mapped to this company.
+     * @param companyDomains set of domains
+     * @param company the company entity
+     * @param newCompanyUsers users to add to the company
+     */
+    public void updateNewCompanyUsers(Set<String> companyDomains, Company company, Optional<List<UserDTO>> newCompanyUsers){
+        if(newCompanyUsers.isPresent()){
+            newCompanyUsers.get()
+                .forEach(userDTO -> {
+                    mapSingleUserToCompany(userMapper.userDTOToUser(userDTO), company);
+                    updateUserWithCompanyLicense(userDTO, company);
+                });
+
+        }else{
+            userRepository
+                .findAllWithEmailDomainMatchingCompanyDomain(companyDomains)
+                .forEach(user -> {
+                    mapSingleUserToCompany(user, company);
+                    updateUserWithCompanyLicense(userMapper.userToUserDTO(user), company);
+                });
+        }
+    }
+
+    /**
+     * Proceed to send approval and activation emails as needed based on the company license
+     * and the current user license, if any.
+     * @param userDTO the userDTO
+     * @param companyLicenseStatus the company's license status
+     */
+    private void updateUserWithCompanyLicense(UserDTO userDTO, Company company){
+        LicenseStatus companyLicenseStatus = company.getLicenseStatus();
+
+        if(companyLicenseStatus.equals(LicenseStatus.REGULAR)) {
+            // Currently, we approve all users with the same domain, but will need to modify this for mixed usages
+            if(userHasValidTrialActivation(userDTO)){ // Convert user if they're on trial
+                convertTrialUserToRegular(userDTO);
+            } else { // Approve the user for regular use
+                approveUser(userDTO, false);
+            }
+            mailService.sendApprovalEmail(userDTO);
+        }else if(companyLicenseStatus.equals(LicenseStatus.TRIAL)){
+            if(userHasValidTrialActivation(userDTO)){ //If user is already under trial and company under trial
+                // Activate user trial and align with the company trial
+                approveUser(userDTO, true);
+            }else{ // Let user activate trial if they dont have already
+                Optional<User> updatedUser = initiateTrialAccountActivation(userDTO.getLogin());
+                updatedUser.ifPresent(
+                    u -> mailService.sendActiveTrialMail(userMapper.userToUserDTO(u), false)
+                );
+            } 
+        }
+    }
+
+    /**
+     * User with an email that is associated with a company's domain
+     * will maintain a reference to the company.
+     * @param user the user entity
+     * @param company the company entity
+     */
+    private void mapSingleUserToCompany(User user, Company company){
+        Optional<UserDetails> userDetails = this.userDetailsRepository.findOneByUser(user);
+        userDetails.ifPresent(ud -> {
+            ud.setCompany(company);
+            this.userDetailsService.save(this.userDetailsMapper.toDto(ud));
+        });
+    }
+
+    /**
+     * Find the company entity associated with the user by the domain part of their
+     * email. Modifications are needed for mixed usages and micro licenses.
+     * @param userDTO the user
+     */
+    private Optional<Company> findAssociatedCompany(UserDTO userDTO) {
+        String domain = StringUtil.getEmailDomain(userDTO.getEmail());
+        List<CompanyDomain> companyDomains = companyDomainRepository.findByName(domain);
+        if(companyDomains.size() > 0) {
+            if(companyDomains.size() == 1){
+                return companyRepository.findById(companyDomains.get(0).getCompany().getId());
+            }else{  // Mixed usage, same company domain is used 
+                // Todo
+            }
+        }
+        return Optional.ofNullable(null);
+    }
+
+    private Boolean userHasValidTrialActivation(UserDTO userDTO){
+        return Optional.ofNullable(userDTO)
+            .map(UserDTO::getAdditionalInfo)
+            .map(AdditionalInfoDTO::getTrialAccount)
+            .map(TrialAccount::getActivation)
+            .isPresent();
+    }
 
     private void clearUserCaches(User user) {
         Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_LOGIN_CACHE))).evict(user.getLogin());

@@ -1,6 +1,5 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -49,12 +47,12 @@ public class CompanyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/companies")
-    public ResponseEntity<CompanyDTO> createCompany(@Valid @RequestBody CompanyVM companyVM) throws URISyntaxException {
-        log.debug("REST request to save Company : {}", companyVM);
-        if (companyVM.getId() != null) {
+    public ResponseEntity<CompanyDTO> createCompany(@Valid @RequestBody CompanyDTO companyDTO) throws URISyntaxException {
+        log.debug("REST request to save Company : {}", companyDTO);
+        if (companyDTO.getId() != null) {
             throw new BadRequestAlertException("A new company cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        CompanyDTO result = companyService.save(companyVM);
+        CompanyDTO result = companyService.createCompany(companyDTO);
         return ResponseEntity.created(new URI("/api/companies/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -75,7 +73,7 @@ public class CompanyResource {
         if (companyVM.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        CompanyDTO result = companyService.save(companyVM);
+        CompanyDTO result = companyService.updateCompany(companyVM);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, companyVM.getId().toString()))
             .body(result);

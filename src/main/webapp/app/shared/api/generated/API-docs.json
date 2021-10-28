@@ -754,11 +754,11 @@
         "parameters": [
           {
             "in": "body",
-            "name": "companyVM",
-            "description": "companyVM",
+            "name": "companyDTO",
+            "description": "companyDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CompanyVM"
+              "$ref": "#/definitions/CompanyDTO"
             }
           }
         ],
@@ -2871,6 +2871,12 @@
         "businessContact": {
           "type": "string"
         },
+        "companyDomains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "companyType": {
           "type": "string",
           "enum": [
@@ -2967,6 +2973,12 @@
             "BRANCH",
             "UNKNOWN"
           ]
+        },
+        "companyUserDTOs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserDTO"
+          }
         },
         "description": {
           "type": "string"

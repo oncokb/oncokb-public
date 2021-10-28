@@ -3,7 +3,6 @@ package org.mskcc.cbio.oncokb.service;
 import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.domain.User;
 
 import javax.mail.MessagingException;
 

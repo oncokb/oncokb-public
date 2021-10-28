@@ -1,24 +1,20 @@
 package org.mskcc.cbio.oncokb.web.rest.vm;
 
 import java.util.List;
-
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 
 public class CompanyVM extends CompanyDTO {
-
-    private List<String> companyDomains;
+    private List<UserDTO> companyUserDTOs;
     
-    public CompanyVM(){
-
+    public CompanyVM() {
     }
-
-    public List<String> getCompanyDomains() {
-        return this.companyDomains;
+    
+    public List<UserDTO> getCompanyUserDTOs() {
+        return this.companyUserDTOs;
     }
-
-    public void setCompanyDomains(List<String> companyDomains) {
-        this.companyDomains = companyDomains;
+    
+    public void setCompanyUserDTOs(List<UserDTO> companyUserDTOs) {
+        this.companyUserDTOs = companyUserDTOs;
     }
-
-
 }

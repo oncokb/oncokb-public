@@ -16,6 +16,10 @@
           <a th:with="url=(@{|${baseUrl}/login|})" th:href="${url}"
                th:text="${url}">Login link</a>
         </p>
+        <p th:if="${licenseMismatch}">
+            Be aware that your account was registered with a different license and has
+            been changed to match your company's license.
+        </p>
         <p>
             <div th:text="#{email.closing}">Sincerely, </div>
             <div th:text="#{email.signature}">The OncoKB Team</div>
