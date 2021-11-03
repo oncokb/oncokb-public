@@ -23,10 +23,12 @@ const FdaRecognitionPage = () => {
       <div className="fda-recognition">
         <Row>
           <Col>
-            <h4>
-              {DOCUMENT_TITLES.FDA_RECOGNITION}
-              <AsteriskMark />
-            </h4>
+            <h4>{DOCUMENT_TITLES.FDA_RECOGNITION}</h4>
+            <p>
+              <i>
+                <FdaRecognitionDisclaimer enableLink={false} />
+              </i>
+            </p>
             <p>
               In October 2021, OncoKB became the first somatic human variant
               database to be recognized by the FDA. FDA recognition of OncoKB is
@@ -177,13 +179,6 @@ const FdaRecognitionPage = () => {
                 interest are minimized and transparent.
               </li>
             </ol>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <p>
-              <FdaRecognitionDisclaimer enableLink={false} />
-            </p>
           </Col>
         </Row>
       </div>
