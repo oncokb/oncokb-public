@@ -60,6 +60,11 @@ export const TrialAccountModal: React.FunctionComponent<{
           direction={'vertical'}
         />
         <InfoRow
+          title={<h6>Trial Account Initiated By</h6>}
+          content={props.trialAccount.activation.initiatedBy}
+          direction={'vertical'}
+        />
+        <InfoRow
           title={<h6>Trial Account Activation Key</h6>}
           content={props.trialAccount.activation.key}
           direction={'vertical'}
