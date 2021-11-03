@@ -63,6 +63,7 @@ import {
 } from 'app/shared/route/types';
 import AppStore from 'app/store/AppStore';
 import { If, Else, Then } from 'react-if';
+import ShortenTextWithTooltip from 'app/shared/texts/ShortenTextWithTooltip';
 
 type Treatment = {
   level: string;
@@ -639,7 +640,7 @@ export default class ActionableGenesPage extends React.Component<
     if (this.fdaSectionIsOpen) {
       alterationPageHashQueries.tab = ANNOTATION_PAGE_TAB_KEYS.FDA;
     }
-    const linkedAlts = alterations.map<React.ReactNode>(
+    const linkedAlts = alterations.map<JSX.Element>(
       (alteration, index: number) => (
         <>
           <AlterationPageLink
@@ -659,36 +660,7 @@ export default class ActionableGenesPage extends React.Component<
         </>
       )
     );
-    if (linkedAlts.length > 5) {
-      return (
-        <span>
-          {linkedAlts[0]} and{' '}
-          <DefaultTooltip
-            overlay={
-              <div style={{ maxWidth: '400px' }}>
-                <WithSeparator separator={', '}>{linkedAlts}</WithSeparator>
-              </div>
-            }
-            overlayStyle={{
-              opacity: 1,
-            }}
-            placement="right"
-            destroyTooltipOnHide={true}
-          >
-            <span
-              style={{
-                textDecoration: 'underscore',
-                color: COLOR_BLUE,
-              }}
-            >
-              {linkedAlts.length - 1} other alterations
-            </span>
-          </DefaultTooltip>
-        </span>
-      );
-    } else {
-      return <WithSeparator separator={', '}>{linkedAlts}</WithSeparator>;
-    }
+    return <ShortenTextWithTooltip threshold={5} data={linkedAlts} />;
   }
 
   @computed
