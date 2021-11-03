@@ -62,6 +62,7 @@ import {
 } from 'app/shared/route/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { COLOR_BLUE } from 'app/config/theme';
+import GeneAliasesDescription from 'app/shared/texts/GeneAliasesDescription';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -227,7 +228,11 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
   if (gene.geneAliases.length > 0) {
     info.push({
       key: 'aliases',
-      element: <div>{`Also known as ${gene.geneAliases.join(', ')}`}</div>,
+      element: (
+        <div>
+          <GeneAliasesDescription geneAliases={gene.geneAliases} />
+        </div>
+      ),
     });
   }
 

@@ -1837,7 +1837,7 @@ export default class OncoKbPrivateAPI {
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
-        let path = '/utils/numbers/fda/';
+        let path = '/utils/numbers/fda';
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -1861,7 +1861,7 @@ export default class OncoKbPrivateAPI {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
         const request = this.request;
-        let path = '/utils/numbers/fda/';
+        let path = '/utils/numbers/fda';
         let body: any;
         let queryParameters: any = {};
         let headers: any = {};

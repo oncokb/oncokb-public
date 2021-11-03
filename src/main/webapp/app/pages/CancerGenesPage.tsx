@@ -13,23 +13,24 @@ import {
   filterByKeyword,
   getDefaultColumnDefinition,
 } from 'app/shared/utils/Utils';
-import {
-  DOCUMENT_TITLES,
-  LG_TABLE_FIXED_HEIGHT,
-  TABLE_COLUMN_KEY,
-} from 'app/config/constants';
+import { DOCUMENT_TITLES, TABLE_COLUMN_KEY } from 'app/config/constants';
 import AppStore from 'app/store/AppStore';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
 import DocumentTitle from 'react-document-title';
 import { DownloadButtonWithPromise } from 'app/components/downloadButtonWithPromise/DownloadButtonWithPromise';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
+import WithSeparator from 'react-with-separator';
+import GeneAliasesDescription from 'app/shared/texts/GeneAliasesDescription';
+import CommonInfoIcon from 'app/shared/icons/InfoIcon';
 
 const InfoIcon = (props: { overlay: string | JSX.Element }) => {
   return (
-    <DefaultTooltip overlay={props.overlay}>
-      <i className="fa fa-question-circle-o ml-2" />
-    </DefaultTooltip>
+    <CommonInfoIcon
+      overlay={props.overlay}
+      type="question"
+      className={'ml-2'}
+    />
   );
 };
 
@@ -70,13 +71,31 @@ export default class CancerGenesPage extends React.Component<{
     {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.HUGO_SYMBOL),
       onFilter: (data: ExtendCancerGene, keyword) =>
-        filterByKeyword(data.hugoSymbol, keyword),
+        filterByKeyword(data.hugoSymbol, keyword) ||
+        filterByKeyword(data.geneAliases.join(', '), keyword),
       Cell(props: { original: ExtendCancerGene }) {
-        return props.original.annotated ? (
-          <GenePageLink hugoSymbol={props.original.hugoSymbol} />
-        ) : (
-          `${props.original.hugoSymbol}`
-        );
+        const hugoInfo = [
+          props.original.annotated ? (
+            <GenePageLink hugoSymbol={props.original.hugoSymbol} />
+          ) : (
+            `${props.original.hugoSymbol}`
+          ),
+        ];
+        if (
+          props.original.geneAliases &&
+          props.original.geneAliases.length > 0
+        ) {
+          hugoInfo.push(
+            <CommonInfoIcon
+              overlay={
+                <GeneAliasesDescription
+                  geneAliases={props.original.geneAliases}
+                />
+              }
+            />
+          );
+        }
+        return <WithSeparator separator={' '}>{hugoInfo}</WithSeparator>;
       },
     },
     {
@@ -226,7 +245,7 @@ export default class CancerGenesPage extends React.Component<{
       ),
       style: { textAlign: 'center' },
       accessor: 'foundation',
-      minWidth: 120,
+      minWidth: 100,
       sortable: true,
       Cell(props: { original: ExtendCancerGene }) {
         return props.original.foundation ? <i className="fa fa-check" /> : '';
@@ -411,6 +430,7 @@ export default class CancerGenesPage extends React.Component<{
               ),
               geneType: getGeneType(cancerGene.oncogene, cancerGene.tsg),
               annotated: !!annotatedGenes[cancerGene.entrezGeneId],
+              geneAliases: cancerGene.geneAliases,
             });
             return cancerGenesAcc;
           },
@@ -461,12 +481,10 @@ export default class CancerGenesPage extends React.Component<{
               <OncoKBTable
                 data={this.extendedCancerGene.result}
                 columns={this.columns}
-                style={{
-                  height: LG_TABLE_FIXED_HEIGHT,
-                }}
                 showPagination={true}
                 minRows={1}
                 loading={this.extendedCancerGene.isPending}
+                defaultPageSize={10}
                 defaultSorted={[
                   {
                     id: 'oncokbAnnotated',
