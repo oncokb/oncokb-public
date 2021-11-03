@@ -7,6 +7,7 @@ import java.time.Instant;
  */
 public class Activation {
     Instant initiationDate;
+    String initiatedBy;
     Instant activationDate;
     String key;
 
@@ -16,6 +17,14 @@ public class Activation {
 
     public void setInitiationDate(Instant initiationDate) {
         this.initiationDate = initiationDate;
+    }
+
+    public String getInitiatedBy() {
+        return initiatedBy;
+    }
+
+    public void setInitiatedBy(String initiatedBy) {
+        this.initiatedBy = initiatedBy;
     }
 
     public Instant getActivationDate() {

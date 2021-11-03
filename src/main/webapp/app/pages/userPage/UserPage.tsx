@@ -303,7 +303,7 @@ export default class UserPage extends React.Component<IUserPage> {
   generateTrialActivationKey() {
     client
       .initiateTrialAccountActivationUsingPOST({
-        mail: this.user.email,
+        login: this.user.login,
       })
       .then(
         updatedUser => {

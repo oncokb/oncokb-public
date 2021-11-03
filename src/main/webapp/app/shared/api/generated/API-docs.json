@@ -227,8 +227,8 @@
         "parameters": [
           {
             "in": "body",
-            "name": "mail",
-            "description": "mail",
+            "name": "login",
+            "description": "login",
             "required": true,
             "schema": {
               "type": "string"
@@ -2354,6 +2354,9 @@
         "activationDate": {
           "type": "string",
           "format": "date-time"
+        },
+        "initiatedBy": {
+          "type": "string"
         },
         "initiationDate": {
           "type": "string",
