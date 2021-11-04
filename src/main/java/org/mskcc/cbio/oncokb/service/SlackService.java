@@ -409,10 +409,17 @@ public class SlackService {
     private boolean withAcademicClarificationNote(UserDTO userDTO, ActionId actionId, boolean newUserActivation) {
         boolean withAcademicClarificationNote = false;
         if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
-            if (!this.applicationProperties.getAcademicEmailClarifyDomains().isEmpty() &&
-                this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> userDTO.getEmail().endsWith(domain)).collect(Collectors.toList()).size() > 0) {
-                withAcademicClarificationNote = true;
-                if (newUserActivation) {
+            if (!this.applicationProperties.getAcademicEmailClarifyDomains().isEmpty()) {
+                List<String> matchedExclusionDomains = this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> domain.startsWith("!") && userDTO.getEmail().endsWith(domain.substring(1))).map(domain -> domain.substring(1)).collect(Collectors.toList());
+                if (matchedExclusionDomains.size() > 0) {
+                    withAcademicClarificationNote = false;
+                } else {
+                    List<String> matchedDomains = this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> userDTO.getEmail().endsWith(domain)).collect(Collectors.toList());
+                    if (matchedDomains.size() > 0) {
+                        withAcademicClarificationNote = true;
+                    }
+                }
+                if (withAcademicClarificationNote && newUserActivation) {
                     mailService.sendAcademicClarificationEmail(userDTO);
                 }
             } else if (!newUserActivation && !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, null).isEmpty()) {

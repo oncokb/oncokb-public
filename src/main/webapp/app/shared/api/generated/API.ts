@@ -4,6 +4,8 @@ type CallbackHandler = (err: any, res ? : request.Response) => void;
 export type Activation = {
     'activationDate': string
 
+        'initiatedBy': string
+
         'initiationDate': string
 
         'key': string
@@ -643,7 +645,7 @@ export default class API {
         });
     };
     initiateTrialAccountActivationUsingPOSTURL(parameters: {
-        'mail': string,
+        'login': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -663,10 +665,10 @@ export default class API {
      * initiateTrialAccountActivation
      * @method
      * @name API#initiateTrialAccountActivationUsingPOST
-     * @param {} mail - mail
+     * @param {} login - login
      */
     initiateTrialAccountActivationUsingPOSTWithHttpInfo(parameters: {
-        'mail': string,
+        'login': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -682,12 +684,12 @@ export default class API {
             headers['Accept'] = '*/*';
             headers['Content-Type'] = 'application/json';
 
-            if (parameters['mail'] !== undefined) {
-                body = parameters['mail'];
+            if (parameters['login'] !== undefined) {
+                body = parameters['login'];
             }
 
-            if (parameters['mail'] === undefined) {
-                reject(new Error('Missing required  parameter: mail'));
+            if (parameters['login'] === undefined) {
+                reject(new Error('Missing required  parameter: login'));
                 return;
             }
 
@@ -707,10 +709,10 @@ export default class API {
      * initiateTrialAccountActivation
      * @method
      * @name API#initiateTrialAccountActivationUsingPOST
-     * @param {} mail - mail
+     * @param {} login - login
      */
     initiateTrialAccountActivationUsingPOST(parameters: {
-        'mail': string,
+        'login': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < UserDTO > {

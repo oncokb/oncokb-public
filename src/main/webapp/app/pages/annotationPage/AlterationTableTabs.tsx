@@ -242,21 +242,29 @@ export default class AlterationTableTabs extends React.Component<
     return [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+        onFilter: (data: TherapeuticImplication, keyword) =>
+          filterByKeyword(data.level, keyword),
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
         Cell(props: { original: TherapeuticImplication }) {
           return props.original.alterationsView;
         },
+        onFilter: (data: TherapeuticImplication, keyword) =>
+          filterByKeyword(data.alterations, keyword),
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
         Cell(props: { original: TherapeuticImplication }) {
           return props.original.cancerTypesView;
         },
+        onFilter: (data: TherapeuticImplication, keyword) =>
+          filterByKeyword(data.cancerTypes, keyword),
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
+        onFilter: (data: TherapeuticImplication, keyword) =>
+          filterByKeyword(data.drugs, keyword),
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
@@ -349,12 +357,24 @@ export default class AlterationTableTabs extends React.Component<
     return [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
+        onFilter: (data: TherapeuticImplication, keyword) =>
+          filterByKeyword(data.level, keyword),
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
+        Cell(props: { original: TherapeuticImplication }) {
+          return props.original.alterationsView;
+        },
+        onFilter: (data: TherapeuticImplication, keyword) =>
+          filterByKeyword(data.alterations, keyword),
       },
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
+        onFilter: (data: TherapeuticImplication, keyword) =>
+          filterByKeyword(data.cancerTypes, keyword),
+        Cell(props: { original: TherapeuticImplication }) {
+          return props.original.cancerTypesView;
+        },
         minWidth: 250,
       },
       {
