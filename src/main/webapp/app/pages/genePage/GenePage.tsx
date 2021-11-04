@@ -61,7 +61,6 @@ import {
   GenePageSearchQueries,
 } from 'app/shared/route/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
-import { COLOR_BLUE } from 'app/config/theme';
 import GeneAliasesDescription from 'app/shared/texts/GeneAliasesDescription';
 
 enum GENE_TYPE_DESC {
@@ -731,7 +730,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                                 px={this.getClinicalImplications(
                                   this.filteredPxAlterations
                                 )}
-                                fda={this.store.fdaAlterations.result}
+                                fda={this.store.filteredFdaAlterations}
                                 onChangeTab={this.onChangeTab}
                               />
                             </Else>
