@@ -17,6 +17,7 @@ import {
   ACCOUNT_TITLES,
   LicenseType,
   NOT_CHANGEABLE_AUTHORITIES,
+  PAGE_ROUTE,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   USER_AUTHORITIES,
   XREGEXP_VALID_LATIN_TEXT,
@@ -53,6 +54,8 @@ import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { QuickToolButton } from 'app/pages/userPage/QuickToolButton';
 import { TrialAccountModal } from './TrialAccountModal';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
+import { Link } from 'react-router-dom';
+import { RouterStore } from 'mobx-react-router';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -65,6 +68,7 @@ interface MatchParams {
 
 interface IUserPage extends RouteComponentProps<MatchParams> {
   windowStore: WindowStore;
+  routing: RouterStore;
 }
 
 const BoldAccountTitle: React.FunctionComponent<{
@@ -72,12 +76,12 @@ const BoldAccountTitle: React.FunctionComponent<{
   licenseType: LicenseType | undefined;
 }> = props => {
   return (
-    <span className={'font-weight-bold'}>
+    <span className={'font-bold'}>
       {getAccountInfoTitle(props.title, props.licenseType)}
     </span>
   );
 };
-@inject('windowStore')
+@inject('windowStore', 'routing')
 @observer
 export default class UserPage extends React.Component<IUserPage> {
   @observable selectedLicense: LicenseType | undefined;
@@ -299,7 +303,7 @@ export default class UserPage extends React.Component<IUserPage> {
   generateTrialActivationKey() {
     client
       .initiateTrialAccountActivationUsingPOST({
-        mail: this.user.email,
+        login: this.user.login,
       })
       .then(
         updatedUser => {
@@ -366,6 +370,15 @@ export default class UserPage extends React.Component<IUserPage> {
                             onClick={this.onClickTrialAccountButton}
                           >
                             {this.trialAccountButtonText}
+                          </QuickToolButton>
+                          <QuickToolButton
+                            onClick={() =>
+                              this.props.routing.history.push(
+                                `${PAGE_ROUTE.ADMIN_SEND_EMAILS}?to=${this.user.email}`
+                              )
+                            }
+                          >
+                            Send Email
                           </QuickToolButton>
                           <SimpleConfirmModal
                             show={this.showTrialAccountConfirmModal}
@@ -590,9 +603,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             },
                           }}
                         />
-                        <div className={'mb-2 font-weight-bold'}>
-                          Account Type
-                        </div>
+                        <div className={'mb-2 font-bold'}>Account Type</div>
                         <AvRadioGroup
                           inline
                           name="accountType"
@@ -631,7 +642,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             />
                           </div>
                         ) : null}
-                        <div className={'mb-2 mt-1 font-weight-bold'}>
+                        <div className={'mb-2 mt-1 font-bold'}>
                           <span>Account Status</span>
                           <InfoIcon
                             className={'ml-2'}
@@ -660,9 +671,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             value={AccountStatus.INACTIVATED}
                           />
                         </AvRadioGroup>
-                        <div className={'my-2 font-weight-bold'}>
-                          User Authorities
-                        </div>
+                        <div className={'my-2 font-bold'}>User Authorities</div>
                         <AvCheckboxGroup
                           inline
                           name="authorities"
@@ -696,9 +705,7 @@ export default class UserPage extends React.Component<IUserPage> {
                     </Row>
                     <Row>
                       <Col className={getSectionClassName()}>
-                        <div className={'my-2 font-weight-bold'}>
-                          Email history
-                        </div>
+                        <div className={'my-2 font-bold'}>Email history</div>
                         <EmailTable data={this.usersUserMails.result} />
                       </Col>
                     </Row>

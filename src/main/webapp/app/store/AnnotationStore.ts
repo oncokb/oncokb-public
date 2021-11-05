@@ -56,8 +56,10 @@ interface IAnnotationStore {
 export type TherapeuticImplication = {
   level: string;
   alterations: string;
+  alterationsView: JSX.Element;
   drugs: string;
-  cancerTypes: string[];
+  cancerTypes: string;
+  cancerTypesView: JSX.Element;
   citations: Citations;
 };
 
@@ -588,6 +590,30 @@ export class AnnotationStore {
       });
     } else {
       return this.biologicalAlterations.result;
+    }
+  }
+
+  @computed
+  get filteredFdaAlterations() {
+    const alterations = _.uniq(
+      this.filteredBiologicalAlterations.map(alt => alt.variant.name)
+    );
+    if (this.isFiltered) {
+      return this.fdaAlterations.result.filter(alteration => {
+        let isMatch = true;
+        if (
+          this.selectedCancerTypes.length > 0 &&
+          !this.selectedCancerTypes.includes(alteration.cancerType)
+        ) {
+          isMatch = false;
+        }
+        if (isMatch && !alterations.includes(alteration.alteration.name)) {
+          isMatch = false;
+        }
+        return isMatch;
+      });
+    } else {
+      return this.fdaAlterations.result;
     }
   }
 

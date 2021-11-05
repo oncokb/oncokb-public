@@ -7,11 +7,11 @@ type OncoKBErrorResponseBody = {
   message: string;
 };
 type OncoKBResponse = Response & {
-  body: OncoKBErrorResponseBody;
+  body?: OncoKBErrorResponseBody;
 };
 
 export type OncoKBError = Error & {
-  response: OncoKBResponse;
+  response?: OncoKBResponse;
 };
 
 export const getErrorMessage = (error: OncoKBError) => {

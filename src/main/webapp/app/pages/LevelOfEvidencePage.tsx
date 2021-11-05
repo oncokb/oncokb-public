@@ -19,6 +19,7 @@ import mainStyles from '../index.module.scss';
 import { ElementType } from 'app/components/SimpleTable';
 import WindowStore from 'app/store/WindowStore';
 import { Linkout } from 'app/shared/links/Linkout';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
 
 type LevelOfEvidencePageProps = {
   routing: RouterStore;
@@ -77,12 +78,7 @@ const LEVEL_NAME: { [key in Version]: ElementType } = {
 
 const LEVEL_TITLE: { [key in Version]: ElementType } = {
   [Version.V1]: <>{LEVEL_NAME[Version.V1]}</>,
-  [Version.V2]: (
-    <>
-      {LEVEL_NAME[Version.V2]} ({' '}
-      <HashLink to={`${PAGE_ROUTE.NEWS}#12202019`}>News 12/20/2019</HashLink> )
-    </>
-  ),
+  [Version.V2]: <>{LEVEL_NAME[Version.V2]}</>,
   [Version.FDA]: (
     <>
       Mapping between the OncoKB Levels of Evidence and the{' '}
@@ -269,13 +265,19 @@ export default class LevelOfEvidencePage extends React.Component<
             <Col className={'d-md-flex justify-content-center mt-2'}>
               <div
                 style={{
-                  maxWidth: [Version.AAC, Version.FDA].includes(this.version)
-                    ? 1000
+                  maxWidth: [
+                    Version.AAC,
+                    Version.FDA,
+                    Version.V1,
+                    Version.V2,
+                  ].includes(this.version)
+                    ? undefined
                     : IMG_MAX_WIDTH,
                 }}
               >
-                <img
+                <OptimizedImage
                   style={{ width: '100%' }}
+                  progressiveLoading
                   src={`content/images/level_${this.version}.png`}
                 />
                 {this.version === Version.AAC ? (
@@ -283,7 +285,7 @@ export default class LevelOfEvidencePage extends React.Component<
                     <span
                       style={{
                         marginRight: this.props.windowStore.isLargeScreen
-                          ? '85px'
+                          ? '130px'
                           : '35px',
                       }}
                     >

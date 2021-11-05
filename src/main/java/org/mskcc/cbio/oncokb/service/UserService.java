@@ -239,6 +239,7 @@ public class UserService {
         TrialAccount trialAccount = new TrialAccount();
         Activation activation = new Activation();
         activation.setInitiationDate(Instant.now());
+        activation.setInitiatedBy(SecurityUtils.getCurrentUserLogin().orElse(""));
         activation.setKey(RandomUtil.generateResetKey());
         trialAccount.setActivation(activation);
 

@@ -2,26 +2,9 @@ import React from 'react';
 import _ from 'lodash';
 import { Linkout } from 'app/shared/links/Linkout';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
-import {
-  concatElements,
-  concatElementsByComma,
-  filterByKeyword,
-  getDefaultColumnDefinition,
-} from 'app/shared/utils/Utils';
+import { concatElements, concatElementsByComma } from 'app/shared/utils/Utils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import * as styles from 'app/index.module.scss';
-import { FdaAlteration } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import {
-  ANNOTATION_PAGE_TAB_KEYS,
-  LEVEL_PRIORITY,
-  LEVELS,
-  PAGE_ROUTE,
-  TABLE_COLUMN_KEY,
-} from 'app/config/constants';
-import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
-import InfoIcon from 'app/shared/icons/InfoIcon';
-import { Link } from 'react-router-dom';
-import { Version } from 'app/pages/LevelOfEvidencePage';
 
 const DrugLabel: React.FunctionComponent<{ drug: any }> = props => {
   const drugLabelText = `drug label ${
@@ -147,57 +130,3 @@ export function getReferenceCell(data: any) {
 
 export const FDA_L1_DISABLED_BTN_TOOLTIP =
   'Since OncoKB does not include any CDx claims prescriptive for a specific therapeutic product, by definition, no variants in OncoKB are considered FDA Level 1.';
-
-export const FDA_ALTERATIONS_TABLE_COLUMNS = [
-  {
-    ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
-    accessor: 'cancerType',
-    width: 400,
-    Header: <span>Cancer Type</span>,
-    onFilter: (data: FdaAlteration, keyword: string) =>
-      filterByKeyword(data.cancerType, keyword),
-    Cell(props: { original: FdaAlteration }) {
-      return <span>{props.original.cancerType}</span>;
-    },
-  },
-  {
-    ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-    Header: (
-      <div>
-        <span>FDA Level of Evidence</span>
-        <InfoIcon
-          className={'ml-1'}
-          overlay={
-            <span>
-              For more information about the FDA Level of Evidence, please see{' '}
-              <Link
-                to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
-                className={'font-weight-bold'}
-              >
-                HERE
-              </Link>
-              .
-            </span>
-          }
-        />
-      </div>
-    ),
-    width: undefined,
-    accessor: 'level',
-    onFilter: (data: FdaAlteration, keyword: string) =>
-      filterByKeyword(data.level, keyword),
-    sortMethod(a: string, b: string) {
-      return (
-        LEVEL_PRIORITY.indexOf(a.replace('Level ', '') as LEVELS) -
-        LEVEL_PRIORITY.indexOf(b.replace('Level ', '') as LEVELS)
-      );
-    },
-    Cell(props: { original: FdaAlteration }) {
-      return (
-        <span>
-          FDA Level {props.original.level.toString().replace('FDAx', '')}
-        </span>
-      );
-    },
-  },
-];

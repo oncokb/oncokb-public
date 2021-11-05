@@ -357,8 +357,8 @@ public class AccountResource {
     }
 
     @PostMapping(path = "/account/active-trial/init")
-    public UserDTO initiateTrialAccountActivation(@RequestBody String mail) {
-        Optional<User> user = userService.initiateTrialAccountActivation(mail);
+    public UserDTO initiateTrialAccountActivation(@RequestBody String login) {
+        Optional<User> user = userService.initiateTrialAccountActivation(login);
         if (user.isPresent()) {
             return userMapper.userToUserDTO(user.get());
         } else {

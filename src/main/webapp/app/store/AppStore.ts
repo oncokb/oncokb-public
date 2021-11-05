@@ -21,6 +21,7 @@ export interface IAppConfig {
 
 class AppStore {
   @observable ribbonEnv = '';
+  @observable userMessageBannerEnabled = false;
   @observable inProduction = true;
   @observable isSwaggerEnabled = false;
   @observable recaptchaVerified = false;

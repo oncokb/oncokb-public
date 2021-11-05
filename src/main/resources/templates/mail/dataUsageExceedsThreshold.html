@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Unusual OncoKB account activities</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}"/>
+</head>
+<body>
+<p th:text="'Dear ' + ${user.firstName} + ' ' + ${user.lastName} + ','"></p>
+
+<p>
+  Thank you for using OncoKB in your workflow. In recent months, it has come to our attention that your OncoKB token has
+  been using our APIs quite extensively. We would like to know more about your usage and potentially help to avoid
+  unnecessary data calls. Would you please clarify your OncoKB use case?
+</p>
+
+<p>
+  If you think this email was sent in error, it is possible that your token might have been leaked to the public, in
+  which case we need to revoke your token and issue you a new one. Please let us know if you do not believe you have
+  been responsible for the usage seen with your token.
+</p>
+
+<p>
+<div th:text="#{email.closing}">Sincerely,</div>
+<div th:text="#{email.signature}">The OncoKB Team</div>
+</p>
+</body>
+</html>

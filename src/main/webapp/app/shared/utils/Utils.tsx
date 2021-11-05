@@ -123,7 +123,7 @@ export function getDrugNameFromTreatment(drug: TreatmentDrug) {
 }
 
 export function getTreatmentNameFromEvidence(evidence: Evidence) {
-  return evidence.treatments
+  return _.sortBy(evidence.treatments, 'priority')
     .map(treatment =>
       _.sortBy(treatment.drugs, 'priority')
         .map(drug => getDrugNameFromTreatment(drug))
@@ -257,8 +257,8 @@ export const FdaLevelIcon: React.FunctionComponent<{
       className="fa-stack"
       style={{ fontSize: 9, lineHeight: '18px', margin: '0 3px' }}
     >
-      <span className="fa fa-circle-o fa-stack-2x"></span>
-      <strong className="fa-stack-1x">
+      <span className="fa fa-circle-thin fa-stack-2x"></span>
+      <strong className="fa-stack-1x" style={{ fontSize: '1.2em' }}>
         {level.toString().replace('FDAx', '')}
       </strong>
     </span>
@@ -343,28 +343,6 @@ export function getDefaultColumnDefinition<T>(
         minWidth: 100,
         defaultSortDesc: false,
         sortMethod: defaultSortMethod,
-      };
-    case TABLE_COLUMN_KEY.CANCER_TYPES:
-      return {
-        id: TABLE_COLUMN_KEY.CANCER_TYPES,
-        Header: <span>Cancer Types</span>,
-        accessor: 'cancerTypes',
-        style: { whiteSpace: 'normal' },
-        minWidth: 150,
-        defaultSortDesc: false,
-        sortMethod: defaultSortMethod,
-        Cell(props: { original: any }) {
-          const cancerTypes = props.original.cancerTypes.map(
-            (cancerType: string) => (
-              <TumorTypePageLink
-                hugoSymbol={props.original.hugoSymbol}
-                alteration={props.original.alteration}
-                tumorType={cancerType}
-              />
-            )
-          );
-          return <WithSeparator separator={', '}>{cancerTypes}</WithSeparator>;
-        },
       };
     case TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE:
       return {

@@ -8,21 +8,15 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
-  ANNOTATION_PAGE_TAB_NAMES,
   DEFAULT_MARGIN_BOTTOM_LG,
-  DEFAULT_MESSAGE_HEME_ONLY_DX,
-  DEFAULT_MESSAGE_HEME_ONLY_PX,
   EVIDENCE_TYPES,
-  LEVEL_TYPES,
   REFERENCE_GENOME,
-  TABLE_COLUMN_KEY,
   TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import { action, computed } from 'mobx';
 import autobind from 'autobind-decorator';
@@ -35,27 +29,19 @@ import {
 import { TherapeuticImplication } from 'app/store/AnnotationStore';
 import {
   articles2Citations,
-  filterByKeyword,
   getCancerTypeNameFromOncoTreeType,
-  getDefaultColumnDefinition,
   getHighestFdaLevel,
   getTreatmentNameFromEvidence,
   isPositionalAlteration,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
-import { DefaultTooltip } from 'cbioportal-frontend-commons';
-import { CitationTooltip } from 'app/components/CitationTooltip';
 import _ from 'lodash';
-import { AnnotationPageTable } from './AnnotationPageTable';
-import Tabs from 'react-responsive-tabs';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import WithSeparator from 'react-with-separator';
 import AppStore from 'app/store/AppStore';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
-import { FDA_ALTERATIONS_TABLE_COLUMNS } from 'app/pages/genePage/FdaUtils';
-import { GenePageTable } from 'app/pages/genePage/GenePageTable';
-import { getTabDefaultActiveKey } from 'app/shared/utils/TempAnnotationUtils';
+import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -86,7 +72,10 @@ export type IAnnotationPage = {
   annotation: VariantAnnotation;
   fdaAlterations?: FdaAlteration[];
   defaultSelectedTab?: ANNOTATION_PAGE_TAB_KEYS;
-  onChangeTab?: (tabKey: ANNOTATION_PAGE_TAB_KEYS) => void;
+  onChangeTab?: (
+    selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
+    newTabKey: ANNOTATION_PAGE_TAB_KEYS
+  ) => void;
 };
 
 @inject('appStore')
@@ -94,24 +83,51 @@ export default class AnnotationPage extends React.Component<
   IAnnotationPage,
   {}
 > {
-  private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
   getTherapeuticImplications(evidences: Evidence[]) {
     return evidences.map(evidence => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
+      const alterations = _.chain(evidence.alterations)
+        .filter(alteration =>
+          alteration.referenceGenomes.includes(this.props.refGenome)
+        )
+        .value();
       const cancerTypes = evidence.cancerTypes.map(cancerType =>
         getCancerTypeNameFromOncoTreeType(cancerType)
       );
       return {
         level,
-        alterations: _.chain(evidence.alterations)
-          .filter(alteration =>
-            alteration.referenceGenomes.includes(this.props.refGenome)
-          )
-          .map(alteration => alteration.name)
-          .join(', ')
-          .value(),
+        alterations: alterations.map(alteration => alteration.name).join(', '),
+        alterationsView: (
+          <WithSeparator separator={', '}>
+            {alterations.map(alteration => (
+              <AlterationPageLink
+                key={alteration.name}
+                hugoSymbol={this.props.hugoSymbol}
+                alteration={alteration.name}
+                alterationRefGenomes={
+                  alteration.referenceGenomes as REFERENCE_GENOME[]
+                }
+              />
+            ))}
+          </WithSeparator>
+        ),
         drugs: getTreatmentNameFromEvidence(evidence),
-        cancerTypes,
+        cancerTypes: cancerTypes.join(', '),
+        cancerTypesView: (
+          <WithSeparator separator={', '}>
+            {cancerTypes.map(cancerType => (
+              <AlterationPageLink
+                key={`${this.props.alteration}-${cancerType}`}
+                hugoSymbol={this.props.hugoSymbol}
+                alteration={this.props.alteration}
+                alterationRefGenomes={[this.props.refGenome]}
+                cancerType={cancerType}
+              >
+                {cancerType}
+              </AlterationPageLink>
+            ))}
+          </WithSeparator>
+        ),
         citations: articles2Citations(evidence.articles),
       } as TherapeuticImplication;
     });
@@ -205,146 +221,6 @@ export default class AnnotationPage extends React.Component<
     );
   }
 
-  @computed
-  get therapeuticTableColumns(): SearchColumn<TherapeuticImplication>[] {
-    return [
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
-        Cell: (props: { original: TherapeuticImplication }) => {
-          return (
-            <WithSeparator separator={', '}>
-              {props.original.cancerTypes.map((cancerType: string) => (
-                <Button
-                  style={{
-                    padding: 0,
-                  }}
-                  variant={'link'}
-                  onClick={() => this.props.onChangeTumorType(cancerType)}
-                >
-                  {cancerType}
-                </Button>
-              ))}
-            </WithSeparator>
-          );
-        },
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DRUGS),
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
-        Cell(props: { original: TherapeuticImplication }) {
-          const numOfReferences =
-            props.original.citations.abstracts.length +
-            props.original.citations.pmids.length;
-          return (
-            <DefaultTooltip
-              placement={'left'}
-              overlay={() => (
-                <CitationTooltip
-                  pmids={props.original.citations.pmids}
-                  abstracts={props.original.citations.abstracts}
-                />
-              )}
-            >
-              <span>{numOfReferences}</span>
-            </DefaultTooltip>
-          );
-        },
-      },
-    ];
-  }
-
-  getCancerTypesCell(cancerTypes: string[]) {
-    return (
-      <WithSeparator separator={', '}>
-        {cancerTypes.map((cancerType: string) => (
-          <Button
-            style={{
-              padding: 0,
-            }}
-            variant={'link'}
-            onClick={() => this.props.onChangeTumorType(cancerType)}
-          >
-            {cancerType}
-          </Button>
-        ))}
-      </WithSeparator>
-    );
-  }
-
-  @computed
-  get dxpxTableColumns(): SearchColumn<TherapeuticImplication>[] {
-    return [
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATIONS),
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
-        minWidth: 250,
-        Cell: (props: { original: any }) =>
-          this.getCancerTypesCell(props.original.cancerTypes),
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
-        minWidth: 50,
-        Cell(props: { original: TherapeuticImplication }) {
-          const numOfReferences =
-            props.original.citations.abstracts.length +
-            props.original.citations.pmids.length;
-          return (
-            <DefaultTooltip
-              placement={'left'}
-              overlay={() => (
-                <CitationTooltip
-                  pmids={props.original.citations.pmids}
-                  abstracts={props.original.citations.abstracts}
-                />
-              )}
-            >
-              <span>{numOfReferences}</span>
-            </DefaultTooltip>
-          );
-        },
-      },
-    ];
-  }
-
-  @computed
-  get fdaTableColumns() {
-    return [
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
-        accessor: 'alteration',
-        width: 400,
-        onFilter: (data: FdaAlteration, keyword: string) =>
-          filterByKeyword(data.alteration.name, keyword),
-        Cell: (props: { original: FdaAlteration }) => {
-          return (
-            <AlterationPageLink
-              hugoSymbol={props.original.alteration.gene.hugoSymbol}
-              alteration={props.original.alteration.name}
-              hashQueries={{ tab: ANNOTATION_PAGE_TAB_KEYS.FDA }}
-              onClick={() => {
-                this.props.appStore!.toFdaRecognizedContent = true;
-              }}
-            />
-          );
-        },
-      },
-      ...FDA_ALTERATIONS_TABLE_COLUMNS,
-    ];
-  }
-
   formatGroupLabel(data: any) {
     return <span>{data.label}</span>;
   }
@@ -352,115 +228,10 @@ export default class AnnotationPage extends React.Component<
   @computed get isOncogenicMutations() {
     return (
       this.props.alteration &&
-      this.props.alteration.toLowerCase() === LOWERCASE_ONCOGENIC_MUTATIONS
+      this.props.alteration
+        .toLowerCase()
+        .startsWith(LOWERCASE_ONCOGENIC_MUTATIONS)
     );
-  }
-
-  @computed
-  get tabDefaultActiveKey() {
-    return getTabDefaultActiveKey(
-      this.therapeuticImplications.length > 0,
-      this.diagnosticImplications.length > 0,
-      this.prognosticImplications.length > 0,
-      (this.props.fdaAlterations || []).length > 0,
-      this.props.defaultSelectedTab
-    );
-  }
-
-  getTable(key: ANNOTATION_PAGE_TAB_KEYS) {
-    switch (key) {
-      case ANNOTATION_PAGE_TAB_KEYS.TX:
-        return (
-          <AnnotationPageTable
-            implicationType={LEVEL_TYPES.TX}
-            implicationData={this.therapeuticImplications}
-            column={this.therapeuticTableColumns}
-          />
-        );
-      case ANNOTATION_PAGE_TAB_KEYS.DX:
-        return (
-          <AnnotationPageTable
-            implicationType={LEVEL_TYPES.DX}
-            implicationData={this.diagnosticImplications}
-            column={this.dxpxTableColumns}
-          />
-        );
-      case ANNOTATION_PAGE_TAB_KEYS.PX:
-        return (
-          <AnnotationPageTable
-            implicationType={LEVEL_TYPES.PX}
-            implicationData={this.prognosticImplications}
-            column={this.dxpxTableColumns}
-          />
-        );
-      case ANNOTATION_PAGE_TAB_KEYS.FDA:
-        return (
-          <GenePageTable
-            data={this.props.fdaAlterations ? this.props.fdaAlterations : []}
-            columns={this.fdaTableColumns}
-            isPending={false}
-          />
-        );
-      default:
-        return <span />;
-    }
-  }
-
-  readonly tabDescription: {
-    [key: keyof typeof ANNOTATION_PAGE_TAB_KEYS]: string;
-  } = {
-    [ANNOTATION_PAGE_TAB_KEYS.TX]: '',
-    [ANNOTATION_PAGE_TAB_KEYS.DX]: DEFAULT_MESSAGE_HEME_ONLY_DX,
-    [ANNOTATION_PAGE_TAB_KEYS.PX]: DEFAULT_MESSAGE_HEME_ONLY_PX,
-    [ANNOTATION_PAGE_TAB_KEYS.FDA]: '',
-  };
-
-  getTabContent(key: ANNOTATION_PAGE_TAB_KEYS) {
-    return (
-      <div>
-        {this.tabDescription[key] ? (
-          <div>{this.tabDescription[key]}</div>
-        ) : null}
-        {this.getTable(key)}
-      </div>
-    );
-  }
-
-  @computed
-  get tabs() {
-    const tabs: { title: string; key: ANNOTATION_PAGE_TAB_KEYS }[] = [];
-    if (this.therapeuticImplications.length > 0) {
-      tabs.push({
-        key: ANNOTATION_PAGE_TAB_KEYS.TX,
-        title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.TX]}`,
-      });
-    }
-    if (this.diagnosticImplications.length > 0) {
-      tabs.push({
-        key: ANNOTATION_PAGE_TAB_KEYS.DX,
-        title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.DX]}`,
-      });
-    }
-    if (this.prognosticImplications.length > 0) {
-      tabs.push({
-        key: ANNOTATION_PAGE_TAB_KEYS.PX,
-        title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.PX]}`,
-      });
-    }
-    if (this.props.fdaAlterations && this.props.fdaAlterations.length > 0) {
-      tabs.push({
-        key: ANNOTATION_PAGE_TAB_KEYS.FDA,
-        title: `${ANNOTATION_PAGE_TAB_NAMES[ANNOTATION_PAGE_TAB_KEYS.FDA]}`,
-      });
-    }
-    return tabs.map(tab => {
-      return {
-        title: tab.title,
-        getContent: () => this.getTabContent(tab.key),
-        key: tab.key,
-        panelClassName: styles.panel,
-      };
-    });
   }
 
   render() {
@@ -597,16 +368,18 @@ export default class AnnotationPage extends React.Component<
         ) : null}
         <Row className="mt-2">
           <Col>
-            <Tabs
-              items={this.tabs}
-              transform={false}
-              selectedTabKey={this.tabDefaultActiveKey}
-              onChange={(tabKey: ANNOTATION_PAGE_TAB_KEYS) => {
-                this.selectedTab = tabKey;
-                if (this.props.onChangeTab) {
-                  this.props.onChangeTab(tabKey);
-                }
-              }}
+            <AlterationTableTabs
+              selectedTab={this.props.defaultSelectedTab}
+              appStore={this.props.appStore}
+              hugoSymbol={this.props.hugoSymbol}
+              alteration={this.props.alteration}
+              cancerType={this.props.tumorType}
+              biological={[]}
+              tx={this.therapeuticImplications}
+              dx={this.diagnosticImplications}
+              px={this.prognosticImplications}
+              fda={this.props.fdaAlterations || []}
+              onChangeTab={this.props.onChangeTab}
             />
           </Col>
         </Row>

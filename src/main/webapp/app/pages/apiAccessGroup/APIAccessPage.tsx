@@ -11,6 +11,7 @@ import {
   DOCUMENT_TITLES,
   LicenseType,
   PAGE_ROUTE,
+  PAGE_TITLE,
   USER_AUTHORITY,
 } from 'app/config/constants';
 import { RouterStore } from 'mobx-react-router';
@@ -30,7 +31,6 @@ import Select from 'react-select';
 import DocumentTitle from 'react-document-title';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Linkout } from 'app/shared/links/Linkout';
-import SmallPageContainer from 'app/components/SmallPageContainer';
 import { If, Then, Else } from 'react-if';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
@@ -288,8 +288,9 @@ export default class APIAccessPage extends React.Component<{
                     license. Research licenses in an academic setting are free,
                     all other uses require a fee. Please review the{' '}
                     <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before
-                    proceeding. <CitationText /> Please see the link at the
-                    bottom of this page to apply for a license.
+                    proceeding. <CitationText /> Please visit the{' '}
+                    <Link to={PAGE_ROUTE.REGISTER}>registration page</Link> to
+                    apply for a license.
                   </p>
                   <p>
                     You can also use our{' '}
@@ -326,17 +327,12 @@ export default class APIAccessPage extends React.Component<{
                       <Link to={PAGE_ROUTE.ACCOUNT_SETTINGS}>
                         Account Settings
                       </Link>
-                      .
+                      . Please see our detailed{' '}
+                      <Linkout link={API_DOCUMENT_LINK}>
+                        API documentation
+                      </Linkout>{' '}
+                      for more information.
                     </p>
-                  </div>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={12}>
-                  <div className={'mb-4'}>
-                    <Button size={'lg'} onClick={this.onApplyForLicense}>
-                      Apply for a license
-                    </Button>
                   </div>
                 </Col>
               </Row>

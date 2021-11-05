@@ -3,6 +3,8 @@ import React from 'react';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_REFERENCE_GENOME,
+  LEVEL_CLASSIFICATION,
+  LEVELS,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   REGEXP,
@@ -24,6 +26,7 @@ import {
   GenePageSearchQueries,
 } from 'app/shared/route/types';
 import * as QueryString from 'querystring';
+import { LEVEL_TYPE_TO_VERSION, Version } from 'app/pages/LevelOfEvidencePage';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -58,13 +61,16 @@ export const AlterationPageLink: React.FunctionComponent<{
   hugoSymbol: string;
   alteration: string;
   alterationRefGenomes?: REFERENCE_GENOME[];
+  cancerType?: string;
   searchQueries?: AlterationPageSearchQueries;
   hashQueries?: AlterationPageHashQueries;
   showGene?: boolean;
-  content?: string;
   onClick?: () => void;
 }> = props => {
   let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`;
+  if (props.cancerType) {
+    pageLink = `${pageLink}/${encodeSlash(props.cancerType)}`;
+  }
   const searchQueries = props.searchQueries || {};
 
   // Prop alterationRefGenomes is just a convinient way to process reference genomes when it's a list.
@@ -81,8 +87,8 @@ export const AlterationPageLink: React.FunctionComponent<{
   }
   return (
     <Link to={pageLink} onClick={props.onClick}>
-      {props.content
-        ? props.content
+      {props.children
+        ? props.children
         : props.showGene
         ? `${props.hugoSymbol} ${props.alteration}`
         : props.alteration}
@@ -109,11 +115,9 @@ export const TumorTypePageLink: React.FunctionComponent<{
 
 export const MSILink: React.FunctionComponent<{}> = () => {
   return (
-    <AlterationPageLink
-      hugoSymbol={'Other Biomarkers'}
-      alteration={'MSI-H'}
-      content={'microsatellite instability high (MSI-H)'}
-    />
+    <AlterationPageLink hugoSymbol={'Other Biomarkers'} alteration={'MSI-H'}>
+      microsatellite instability high (MSI-H)
+    </AlterationPageLink>
   );
 };
 
@@ -175,4 +179,24 @@ export const WebinarLink: React.FunctionComponent<{}> = props => {
       </Linkout>
     </span>
   );
+};
+
+export const getLoEPageLink = (version: Version) => {
+  return `${PAGE_ROUTE.LEVELS}#version=${version}`;
+};
+
+export const getActionableGenesPageLink = (
+  levels?: string,
+  sections?: string
+) => {
+  const hashes = [];
+  if (levels) {
+    hashes.push(`levels=${levels}`);
+  }
+  if (sections) {
+    hashes.push(`sections=${sections}`);
+  }
+  return `${PAGE_ROUTE.ACTIONABLE_GENE}${
+    hashes.length > 0 ? '#' : ''
+  }${hashes.join('&')}`;
 };

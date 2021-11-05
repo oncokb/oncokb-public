@@ -25,13 +25,13 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
-import { SHOW_MODAL_KEY } from '../AboutPage';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 import { AbstractLink, FdaApprovalLink } from 'app/pages/newsPage/Links';
 import WithSeparator from 'react-with-separator';
-import PmidItem from 'app/components/PmidItem';
 import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
+import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
 
 export type NewsData = {
   priorityNews?: ElementType[];
@@ -43,6 +43,7 @@ export type NewsData = {
   updatedImplicationInOldFormat?: { [level: string]: ElementType[] };
   changedAnnotation?: ElementType[][];
   changedAnnotationTitle?: string;
+  changedAnnotationColumnHeaderType?: AnnotationColumnHeaderType;
 };
 
 export const NEWLY_ADDED_LEVEL_FOUR_COLUMNS = [
@@ -66,13 +67,23 @@ export const UPDATED_IMPLICATION_OLD_FORMAT_COLUMNS = [
   { name: 'Update' },
 ];
 
-export const CHANGED_ANNOTATION_COLUMNS = [
+export const CHANGED_ANNOTATION_LEVEL_COLUMNS = [
   { name: 'Gene' },
   { name: 'Mutation' },
   { name: 'Cancer Type' },
   { name: 'Drug' },
   { name: 'Previous Level' },
   { name: 'Current Level' },
+  { name: 'Reason' },
+];
+
+export const CHANGED_ANNOTATION_DRUG_COLUMNS = [
+  { name: 'Level' },
+  { name: 'Gene' },
+  { name: 'Mutation' },
+  { name: 'Cancer Type' },
+  { name: 'Previous Drug' },
+  { name: 'Current Drug' },
   { name: 'Reason' },
 ];
 
@@ -132,6 +143,250 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '10262021': {
+    priorityNews: [
+      <span>
+        Updated therapeutic implications - 8 new associations
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr style={{ whiteSpace: 'nowrap' }}>
+                <th>Level</th>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Drug</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2</td>
+                <td>BRAF</td>
+                <td>V600E</td>
+                <td>Encapsulated Glioma, Diffuse Glioma</td>
+                <td>Dabrafenib + Trametinib, Vemurafenib + Cobimetinib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in the CNS NCCN v1.2021</span>
+                    <PMIDLink
+                      pmids={'28984141, 29380516, 26287849, 30351999'}
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>BRAF</td>
+                <td>V600</td>
+                <td>Langerhans Cell Histiocytosis</td>
+                <td>Vemurafenib, Dabrafenib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'30867592'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={3}>2</td>
+                <td rowSpan={3}>BRAF</td>
+                <td rowSpan={3}>Oncogenic Mutations, excluding V600</td>
+                <td>Erdheim-Chester Disease</td>
+                <td rowSpan={3}>Cobimetinib, Trametinib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'30867592'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Langerhans Cell Histiocytosis</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'30867592, 32991018'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Rosai-Dorfman Disease</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'29236635'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={3}>2</td>
+                <td rowSpan={3}>ARAF, RAF1, KRAS, NRAS, MAP2K1, MAP2K2</td>
+                <td rowSpan={3}>Oncogenic Mutations</td>
+                <td>Erdheim-Chester Disease</td>
+                <td rowSpan={3}>Cobimetinib, Trametinib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'30867592'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Langerhans Cell Histiocytosis</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'30867592, 32991018'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Rosai-Dorfman Disease</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in Histiocytic Neoplasms NCCN v2.2021</span>
+                    <PMIDLink pmids={'29236635'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>3A</td>
+                <td>BRAF</td>
+                <td>V600</td>
+                <td>Histiocytosis</td>
+                <td>Vemurafenib, Dabrafenib</td>
+                <td>
+                  <PMIDLink pmids={'25209580, 31213430, 31376203'} />
+                </td>
+              </tr>
+              <tr>
+                <td>3A</td>
+                <td>KRAS</td>
+                <td>Oncogenic Mutations</td>
+                <td>Histiocytosis</td>
+                <td>Cobimetinib, Trametinib</td>
+                <td>
+                  <PMIDLink pmids={'30361829'} />
+                </td>
+              </tr>
+              <tr>
+                <td>3A</td>
+                <td>NRG1</td>
+                <td>Fusions</td>
+                <td>All Solid Tumors</td>
+                <td>Zenocutuzumab</td>
+                <td>
+                  <AbstractLink
+                    link={
+                      'https://ascopubs.org/doi/abs/10.1200/JCO.2021.39.15_suppl.3003'
+                    }
+                    abstract={'Schram et al. Abstract#  3003, ASCO 2021'}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>R2</td>
+                <td>BTK</td>
+                <td>C481R, C481F, C481Y, T474I, T474S, T316A</td>
+                <td>Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma</td>
+                <td>Ibrutinib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <PMIDLink
+                      pmids={'28049639, 29381098, 28418267, 32670873'}
+                    />
+                    <AbstractLink
+                      link={
+                        'https://ashpublications.org/blood/article/134/Supplement_1/504/426369/Resistance-to-Acalabrutinib-in-CLL-Is-Mediated'
+                      }
+                      abstract={'Woyach et al. Abstract# 642-CLL, ASH 2019'}
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    changedAnnotation: [
+      [
+        '3A',
+        'BRAF',
+        'Oncogenic Mutations, excluding V600',
+        'Histiocytosis',
+        'Cobimetinib',
+        'Cobimetinib, Trametinib',
+        <PMIDLink pmids={'30361829'} />,
+      ],
+      [
+        '3A',
+        'ARAF, RAF1, NRAS, MAP2K2',
+        'Oncogenic Mutations',
+        'Histiocytosis',
+        'Cobimetinib',
+        'Cobimetinub, Trametinib',
+        <PMIDLink pmids={'30361829'} />,
+      ],
+    ],
+    changedAnnotationColumnHeaderType: AnnotationColumnHeaderType.DRUG,
+  },
+  '10072021': {
+    priorityNews: [
+      <span>
+        OncoKB is the first somatic human genetic variant database to achieve{' '}
+        <Linkout link={'https://www.fda.gov/media/99200/download'}>
+          FDA partial recognition
+        </Linkout>
+        ! Read more about the scope of the recognition, the recognition process,
+        and what it means for the knowledge base and our users on our{' '}
+        <Link to={PAGE_ROUTE.FDA_RECOGNITION}>About Page</Link>.
+      </span>,
+    ],
+  },
+  '09292021': {
+    priorityNews: [
+      <span>
+        New to OncoKB? Watch our introductory videos to get you started. See the
+        OncoKB <Link to={PAGE_ROUTE.ABOUT}>About page</Link>.
+      </span>,
+    ],
+    updatedImplication: [
+      [
+        'R2',
+        'EGFR',
+        'G724S',
+        'Non-Small Cell Lung Cancer',
+        'Osimertinib',
+        <PMIDLink pmids={'28838405, 30405134, 30228210, 30796031'} />,
+      ],
+    ],
+    changedAnnotation: [
+      [
+        'EGFR',
+        'Exon 20 Insertions',
+        'Non-Small Cell Lung Cancer',
+        'Mobocertinib',
+        '3A',
+        '1',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-mobocertinib-metastatic-non-small-cell-lung-cancer-egfr-exon-20'
+            }
+            approval={'Mobocertinib'}
+          />
+          <AbstractLink
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2021.39.15_suppl.9014'
+            }
+            abstract={'Ramalingham et al. Abstract # 9014, ASCO 2021'}
+          />
+        </WithSeparator>,
+      ],
+    ],
+  },
   '08312021': {
     updatedImplication: [
       [
@@ -1255,7 +1510,6 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <Link
           to={{
             pathname: PAGE_ROUTE.ABOUT,
-            hash: `#${SHOW_MODAL_KEY}=true`,
           }}
         >
           here
@@ -1540,7 +1794,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     priorityNews: [
       <span>
         The version controlled OncoKB Curation Standard Operating Procedure v1.0
-        has been released in the <Link to="/about">OncoKB About</Link> page.
+        has been released in the <Link to={PAGE_ROUTE.ABOUT}>OncoKB About</Link>{' '}
+        page.
       </span>,
     ],
     updatedImplication: [
@@ -2738,11 +2993,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       </span>,
       <span>
         Addition of gene-alterations pages with alteration level annotation.{' '}
-        <AlterationPageLink
-          hugoSymbol={'BRAF'}
-          alteration={'V600E'}
-          content={'e.g. BRAF V600E'}
-        />
+        <AlterationPageLink hugoSymbol={'BRAF'} alteration={'V600E'}>
+          e.g. BRAF V600E
+        </AlterationPageLink>
         .
       </span>,
       <>
@@ -2752,12 +3005,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <br />
         <Row>
           <Col lg={6} md={8} xs={12}>
-            <img src={SearchOneImg} />
+            <OptimizedImage src={SearchOneImg} />
           </Col>
         </Row>
         <Row>
           <Col lg={6} md={8} xs={12}>
-            <img className="md-auto" src={SearchTwoImg} />
+            <OptimizedImage className="md-auto" src={SearchTwoImg} />
           </Col>
         </Row>
       </>,
@@ -2790,7 +3043,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <br />
         <Row>
           <Col xs={12} md={8} xl={6}>
-            <img src={ERBBImg} />
+            <OptimizedImage src={ERBBImg} />
           </Col>
         </Row>
       </>,
@@ -2999,10 +3252,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <br />
         <Row>
           <Col xs={12} md={8} xl={6}>
-            <img src={ClinicalImg} />
+            <OptimizedImage src={ClinicalImg} />
           </Col>
           <Col xs={12} md={8} xl={6}>
-            <img src={BiologicalImg} />
+            <OptimizedImage src={BiologicalImg} />
           </Col>
         </Row>
       </>,

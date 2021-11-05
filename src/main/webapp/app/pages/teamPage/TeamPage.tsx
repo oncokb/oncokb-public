@@ -104,29 +104,6 @@ export const TeamPage = () => {
   ];
   const curators: ITeamMember[] = [
     {
-      firstName: 'Kinisha',
-      lastName: 'Gala',
-      title: [TITLE.PHD],
-      faculty: false,
-      showCOI: true,
-    },
-    {
-      firstName: 'Lindsay',
-      middleName: 'M',
-      lastName: 'LaFave',
-      title: [TITLE.PHD],
-      faculty: false,
-      showCOI: true,
-    },
-    {
-      firstName: 'Linde',
-      middleName: 'A',
-      lastName: 'Miles',
-      title: [TITLE.PHD],
-      faculty: false,
-      showCOI: true,
-    },
-    {
       firstName: 'Katja',
       lastName: 'Srpan',
       title: [TITLE.PHD],
@@ -174,21 +151,6 @@ export const TeamPage = () => {
       firstName: 'Lisa',
       middleName: 'M',
       lastName: 'DeAngelis',
-      title: [TITLE.MD],
-      faculty: true,
-      showCOI: true,
-    },
-    {
-      firstName: 'Philip',
-      lastName: 'Kantoff',
-      title: [TITLE.MD],
-      faculty: true,
-      showCOI: true,
-    },
-    {
-      firstName: 'David',
-      middleName: 'S',
-      lastName: 'Klimstra',
       title: [TITLE.MD],
       faculty: true,
       showCOI: true,
@@ -355,14 +317,6 @@ export const TeamPage = () => {
       showCOI: true,
     },
     {
-      firstName: 'Ingo',
-      middleName: 'K',
-      lastName: 'Mellinghoff',
-      title: [TITLE.MD, TITLE.FACP],
-      faculty: true,
-      showCOI: true,
-    },
-    {
       firstName: 'Kenneth',
       lastName: 'Offit',
       title: [TITLE.MD],
@@ -501,6 +455,54 @@ export const TeamPage = () => {
       faculty: true,
       showCOI: true,
     },
+    {
+      firstName: 'Tejus',
+      middleName: 'A',
+      lastName: 'Bale',
+      title: [TITLE.MD, TITLE.PHD],
+      faculty: true,
+      showCOI: true,
+    },
+    {
+      firstName: 'Adrienne',
+      middleName: 'A',
+      lastName: 'Boire',
+      title: [TITLE.MD, TITLE.PHD],
+      faculty: true,
+      showCOI: true,
+    },
+    {
+      firstName: 'Thomas',
+      middleName: 'J',
+      lastName: 'Kaley',
+      title: [TITLE.MD],
+      faculty: true,
+      showCOI: true,
+    },
+    {
+      firstName: 'Bob',
+      middleName: 'T',
+      lastName: 'Li',
+      title: [TITLE.MD, TITLE.PHD, TITLE.MPH],
+      faculty: true,
+      showCOI: true,
+    },
+    {
+      firstName: 'Eileen',
+      middleName: 'M',
+      lastName: "O'Reilly",
+      title: [TITLE.MD],
+      faculty: true,
+      showCOI: true,
+    },
+    {
+      firstName: 'Eric',
+      middleName: 'J',
+      lastName: 'Sherman',
+      title: [TITLE.MD],
+      faculty: true,
+      showCOI: true,
+    },
   ];
   const eab: ITeamMember[] = [
     {
@@ -615,6 +617,52 @@ export const TeamPage = () => {
       lastName: 'Yao',
       title: [TITLE.MSC],
     },
+    {
+      firstName: 'Kinisha',
+      lastName: 'Gala',
+      title: [TITLE.PHD],
+      faculty: false,
+      showCOI: true,
+    },
+    {
+      firstName: 'Lindsay',
+      middleName: 'M',
+      lastName: 'LaFave',
+      title: [TITLE.PHD],
+      faculty: false,
+      showCOI: true,
+    },
+    {
+      firstName: 'Linde',
+      middleName: 'A',
+      lastName: 'Miles',
+      title: [TITLE.PHD],
+      faculty: false,
+      showCOI: true,
+    },
+    {
+      firstName: 'David',
+      middleName: 'S',
+      lastName: 'Klimstra',
+      title: [TITLE.MD],
+      faculty: true,
+      showCOI: true,
+    },
+    {
+      firstName: 'Philip',
+      lastName: 'Kantoff',
+      title: [TITLE.MD],
+      faculty: true,
+      showCOI: true,
+    },
+    {
+      firstName: 'Ingo',
+      middleName: 'K',
+      lastName: 'Mellinghoff',
+      title: [TITLE.MD, TITLE.FACP],
+      faculty: true,
+      showCOI: true,
+    },
   ];
   return (
     <DocumentTitle title={DOCUMENT_TITLES.TEAM}>
@@ -637,7 +685,7 @@ export const TeamPage = () => {
             <h5>Design &amp; Development</h5>
             <ul>
               {teamMembers.map(member => (
-                <li>
+                <li key={`${member.lastName}-${member.firstName}`}>
                   <TeamMember {...member} />
                 </li>
               ))}
@@ -645,7 +693,7 @@ export const TeamPage = () => {
             <h5>Current Curators</h5>
             <ul>
               {_.sortBy(curators, member => member.lastName).map(member => (
-                <li>
+                <li key={`${member.lastName}-${member.firstName}`}>
                   <TeamMember {...member} />
                 </li>
               ))}
@@ -655,7 +703,7 @@ export const TeamPage = () => {
             <h5>Clinical Genomics Annotation Committee</h5>
             <ul>
               {_.sortBy(cgac, member => member.lastName).map(member => (
-                <li>
+                <li key={`${member.lastName}-${member.firstName}`}>
                   <TeamMember {...member} />
                 </li>
               ))}
@@ -665,18 +713,16 @@ export const TeamPage = () => {
             <h5>External Advisory Board</h5>
             <ul>
               {_.sortBy(eab, member => member.lastName).map(member => (
-                <li>
+                <li key={`${member.lastName}-${member.firstName}`}>
                   <TeamMember {...member} />
                 </li>
               ))}
             </ul>
-          </Col>
-          <Col sm={6} md>
             <h5>Past Contributors *</h5>
             <ul>
               {_.sortBy(pastContributors, member => member.lastName).map(
                 member => (
-                  <li>
+                  <li key={`${member.lastName}-${member.firstName}`}>
                     <TeamMember {...member} faculty={false} showCOI={false} />
                   </li>
                 )

@@ -1,27 +1,13 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { AnnotationStore } from 'app/store/AnnotationStore';
-import {
-  computed,
-  action,
-  IReactionDisposer,
-  reaction,
-  observable,
-} from 'mobx';
+import { computed, action, IReactionDisposer, reaction } from 'mobx';
 import AppStore from 'app/store/AppStore';
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
-import {
-  ANNOTATION_PAGE_TAB_KEYS,
-  DEFAULT_GENE,
-  REFERENCE_GENOME,
-} from 'app/config/constants';
-import {
-  decodeSlash,
-  encodeSlash,
-  getRedirectLoginState,
-} from 'app/shared/utils/Utils';
+import { ANNOTATION_PAGE_TAB_KEYS, DEFAULT_GENE } from 'app/config/constants';
+import { decodeSlash, encodeSlash } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import DocumentTitle from 'react-document-title';
 import { Else, If, Then } from 'react-if';
@@ -32,7 +18,6 @@ import * as QueryString from 'query-string';
 import {
   AlterationPageHashQueries,
   AlterationPageSearchQueries,
-  GenePageHashQueries,
 } from 'app/shared/route/types';
 import autobind from 'autobind-decorator';
 
@@ -47,7 +32,7 @@ interface AlterationPageProps extends RouteComponentProps<MatchParams> {
   routing: RouterStore;
 }
 
-@inject('appStore', 'routing')
+@inject('appStore', 'routing', 'windowStore')
 @observer
 export default class AlterationPage extends React.Component<
   AlterationPageProps,
@@ -148,7 +133,8 @@ export default class AlterationPage extends React.Component<
       this.store.geneNumber.isComplete &&
       this.store.clinicalAlterations.isComplete &&
       this.store.biologicalAlterations.isComplete &&
-      this.store.annotationResult.isComplete
+      this.store.annotationResult.isComplete &&
+      this.store.fdaAlterations.isComplete
     );
   }
 
@@ -156,28 +142,29 @@ export default class AlterationPage extends React.Component<
   get documentTitle() {
     const content = [];
     if (this.store.hugoSymbol) {
-      content.push(`Gene: ${this.store.hugoSymbol}`);
+      content.push(this.store.hugoSymbol);
     }
     if (this.store.alterationQuery) {
-      content.push(`Alteration: ${this.store.alterationQuery}`);
+      content.push(this.store.alterationQuery);
     }
     if (this.store.tumorTypeQuery) {
-      content.push(`Cancer Type: ${this.store.tumorTypeQuery}`);
+      content.push(this.store.tumorTypeQuery);
     }
     return content.join(', ');
   }
 
-  @computed
-  get onFdaTab() {
-    return this.selectedTab === ANNOTATION_PAGE_TAB_KEYS.FDA;
-  }
-
   @autobind
-  onChangeTab(newTabKey: ANNOTATION_PAGE_TAB_KEYS) {
+  onChangeTab(
+    selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
+    newTabKey: ANNOTATION_PAGE_TAB_KEYS
+  ) {
     if (newTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA) {
       this.props.appStore.inFdaRecognizedContent = true;
     }
-    if (this.onFdaTab && newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA) {
+    if (
+      selectedTabKey === ANNOTATION_PAGE_TAB_KEYS.FDA &&
+      newTabKey !== ANNOTATION_PAGE_TAB_KEYS.FDA
+    ) {
       this.props.appStore.showFdaModal = true;
     } else {
       const newHash: AlterationPageHashQueries = { tab: newTabKey };
@@ -189,7 +176,7 @@ export default class AlterationPage extends React.Component<
   render() {
     return (
       <DocumentTitle title={this.documentTitle}>
-        <If condition={this.store.gene.isComplete}>
+        <If condition={this.pageShouldBeRendered}>
           <Then>
             {this.store.gene.isError ||
             this.store.gene.result === DEFAULT_GENE ? (
@@ -197,6 +184,7 @@ export default class AlterationPage extends React.Component<
             ) : (
               this.pageShouldBeRendered && (
                 <AnnotationPage
+                  appStore={this.props.appStore}
                   hugoSymbol={this.store.hugoSymbol}
                   alteration={this.store.alterationQuery}
                   tumorType={this.store.tumorTypeQuery}
@@ -216,9 +204,7 @@ export default class AlterationPage extends React.Component<
             <LoadingIndicator
               size={LoaderSize.LARGE}
               center={true}
-              isLoading={
-                this.store.gene.isPending || !this.pageShouldBeRendered
-              }
+              isLoading={true}
             />
           </Else>
         </If>

@@ -127,7 +127,7 @@ public class UserResource {
             }
             User newUser = userService.createUser(managedUserVM, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
             if (managedUserVM.getNotifyUserOnTrialCreation()) {
-                userService.initiateTrialAccountActivation(newUser.getEmail());
+                userService.initiateTrialAccountActivation(newUser.getLogin());
                 mailService.sendActiveTrialMail(userMapper.userToUserDTO(newUser), true);
             } else {
                 mailService.sendCreationEmail(userMapper.userToUserDTO(newUser));

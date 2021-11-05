@@ -21,6 +21,7 @@ import { scrollWidthOffsetInNews } from 'app/shared/utils/Utils';
 import { inject, observer } from 'mobx-react';
 import indexStyles from 'app/index.module.scss';
 import { Version } from 'app/pages/LevelOfEvidencePage';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
 @inject('routing')
 @observer
 export default class NewsPage extends React.Component<{
@@ -77,6 +78,9 @@ export default class NewsPage extends React.Component<{
             <CitationText />
           </div>
           <div className="mt-2">
+            <NewsList date={'10262021'} />
+            <NewsList date={'10072021'} />
+            <NewsList date={'09292021'} />
             <NewsList date={'08312021'} />
             <NewsList date={'07162021'} />
             <NewsList date={'06172021'} />
@@ -118,7 +122,7 @@ export default class NewsPage extends React.Component<{
                   </Link>{' '}
                   page.
                 </li>
-                <img
+                <OptimizedImage
                   className="md-auto"
                   style={{ maxWidth: IMG_MAX_WIDTH }}
                   src={AAC_IMAGE}
@@ -130,19 +134,19 @@ export default class NewsPage extends React.Component<{
               <div>Introducing Simplified OncoKB Levels of Evidence:</div>
               <ul>
                 <li>
-                  <b>New Level 2</b>, defined as “Standard care biomarker
+                  <b>New Level 2</b>, defined as "Standard care biomarker
                   recommended by the NCCN or other expert panels predictive of
-                  response to an FDA-approved drug in this indication” (formerly
+                  response to an FDA-approved drug in this indication" (formerly
                   Level 2A).
                 </li>
                 <li>
-                  <b>Unified Level 3B</b>, defined as “Standard care or
+                  <b>Unified Level 3B</b>, defined as "Standard care or
                   investigational biomarker predictive of response to an
-                  FDA-approved or investigational drug in another indication”
+                  FDA-approved or investigational drug in another indication"
                   (combination of previous Levels 2B and 3B).
                 </li>
               </ul>
-              <img className="md-auto" src={LevelChange} />
+              <OptimizedImage className="md-auto" src={LevelChange} />
               <div>
                 We have implemented these changes for 2 reasons:
                 <ol>

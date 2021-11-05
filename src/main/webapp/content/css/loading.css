@@ -1,5 +1,5 @@
 .app-loading {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Gotham Book', Arial, sans-serif;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -34,7 +34,7 @@
   margin: 0 auto;
   width: 15%;
   height: 15%;
-  background-color: #1c75cd;
+  background-color: #0968c3;
   border-radius: 100%;
   -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
   animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;

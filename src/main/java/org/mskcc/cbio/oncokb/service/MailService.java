@@ -122,7 +122,9 @@ public class MailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, StandardCharsets.UTF_8.name());
         message.setTo(applicationProperties.getEmailAddresses().getContactAddress());
-        message.setReplyTo(from);
+        if (StringUtils.isNotEmpty(from)) {
+            message.setReplyTo(from);
+        }
         message.setFrom(applicationProperties.getEmailAddresses().getContactAddress());
         message.setSubject(subject);
         message.setText(content, false);
@@ -386,6 +388,7 @@ public class MailService {
         List<String> mailFrom = new ArrayList<>();
         mailFrom.add(applicationProperties.getEmailAddresses().getRegistrationAddress());
         mailFrom.add(applicationProperties.getEmailAddresses().getLicenseAddress());
+        mailFrom.add(applicationProperties.getEmailAddresses().getContactAddress());
         return mailFrom;
     }
 
@@ -426,8 +429,10 @@ public class MailService {
                 return Optional.of("email.approval.title");
             case ACTIVATE_FREE_TRIAL:
                 return Optional.of("email.active.free.trial.title");
+            case DATA_USAGE_EXCEEDS_THRESHOLD:
+                return Optional.of("email.unusual.activities.title");
             default:
-                return Optional.empty();
+                return Optional.of("email.default.title");
 
         }
     }
