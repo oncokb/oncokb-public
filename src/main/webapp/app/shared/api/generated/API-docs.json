@@ -318,8 +318,8 @@
         "parameters": [
           {
             "in": "body",
-            "name": "mail",
-            "description": "mail",
+            "name": "login",
+            "description": "login",
             "required": true,
             "schema": {
               "type": "string"
