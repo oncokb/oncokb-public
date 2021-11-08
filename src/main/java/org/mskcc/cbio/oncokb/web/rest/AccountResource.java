@@ -316,8 +316,9 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
-        Optional<User> user = userService.requestPasswordReset(mail);
+        Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
         if (user.isPresent()) {
+            userService.requestPasswordReset(user.get().getLogin());
             mailService.sendPasswordResetMail(userMapper.userToUserDTO(user.get()));
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
@@ -347,8 +348,8 @@ public class AccountResource {
     }
 
     @PostMapping(path = "/account/generate-reset-key")
-    public UserDTO generateResetKey(@RequestBody String mail) {
-        Optional<User> user = userService.requestPasswordReset(mail);
+    public UserDTO generateResetKey(@RequestBody String login) {
+        Optional<User> user = userService.requestPasswordReset(login);
         if (user.isPresent()) {
             return userMapper.userToUserDTO(user.get());
         } else {
