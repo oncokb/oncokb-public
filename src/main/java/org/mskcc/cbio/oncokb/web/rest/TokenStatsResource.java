@@ -4,7 +4,6 @@ import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.service.TokenStatsService;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 
-import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +52,6 @@ public class TokenStatsResource {
         }
         TokenStats result = tokenStatsService.save(tokenStats);
         return ResponseEntity.created(new URI("/api/token-stats/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -74,7 +72,6 @@ public class TokenStatsResource {
         }
         TokenStats result = tokenStatsService.save(tokenStats);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, tokenStats.getId().toString()))
             .body(result);
     }
 
@@ -112,6 +109,6 @@ public class TokenStatsResource {
     public ResponseEntity<Void> deleteTokenStats(@PathVariable Long id) {
         log.debug("REST request to delete TokenStats : {}", id);
         tokenStatsService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.ok().build();
     }
 }
