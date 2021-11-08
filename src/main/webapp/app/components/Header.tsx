@@ -171,6 +171,7 @@ class Header extends React.Component<IHeaderProps> {
                   />
                   <Nav.Item style={{ paddingRight: 0 }}>
                     <MskccLogo
+                      className={'msk-logo'}
                       imageHeight={35}
                       size={
                         this.props.windowStore.isLargeScreen &&

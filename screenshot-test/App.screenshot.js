@@ -293,6 +293,8 @@ describe('Tests with login', () => {
       localStorage.setItem('disablebanner', 'true');
       localStorage.setItem('oncokb-user-token', 'oncokb-public-demo-admin-token');
     });
+    // we want to make sure the logo is properly generated
+    await page.waitFor('.msk-logo')
   })
 
   it('Home Page', async() => {
