@@ -287,7 +287,7 @@ export default class UserPage extends React.Component<IUserPage> {
   generateResetKey() {
     client
       .generateResetKeyUsingPOST({
-        mail: this.props.match.params.login,
+        login: this.props.match.params.login,
       })
       .then(
         updatedUser => {
