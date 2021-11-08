@@ -797,7 +797,7 @@ export default class API {
         });
     };
     generateResetKeyUsingPOSTURL(parameters: {
-        'mail': string,
+        'login': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -817,10 +817,10 @@ export default class API {
      * generateResetKey
      * @method
      * @name API#generateResetKeyUsingPOST
-     * @param {} mail - mail
+     * @param {} login - login
      */
     generateResetKeyUsingPOSTWithHttpInfo(parameters: {
-        'mail': string,
+        'login': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -836,12 +836,12 @@ export default class API {
             headers['Accept'] = '*/*';
             headers['Content-Type'] = 'application/json';
 
-            if (parameters['mail'] !== undefined) {
-                body = parameters['mail'];
+            if (parameters['login'] !== undefined) {
+                body = parameters['login'];
             }
 
-            if (parameters['mail'] === undefined) {
-                reject(new Error('Missing required  parameter: mail'));
+            if (parameters['login'] === undefined) {
+                reject(new Error('Missing required  parameter: login'));
                 return;
             }
 
@@ -861,10 +861,10 @@ export default class API {
      * generateResetKey
      * @method
      * @name API#generateResetKeyUsingPOST
-     * @param {} mail - mail
+     * @param {} login - login
      */
     generateResetKeyUsingPOST(parameters: {
-        'mail': string,
+        'login': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < UserDTO > {
