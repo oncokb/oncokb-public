@@ -443,6 +443,7 @@ export enum PAGE_TITLE {
   ADMIN_CREATE_ACCOUNT = 'Create New Account',
   ADMIN_USAGE_ANALYSIS = 'Usage Analysis',
   ADMIN_ADD_COMPANY = 'Add New Company',
+  ADMIN_COMPANY_DETAILS = 'Companies',
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
   REGISTER = 'Register',
@@ -479,6 +480,8 @@ export enum PAGE_ROUTE {
   ADMIN_RESOURCE_DETAILS = '/admin/usage-analysis/resources/:endpoint',
   ADMIN_RESOURCE_DETAILS_LINK = '/admin/usage-analysis/resources/',
   ADMIN_ADD_COMPANY = '/admin/create-company',
+  ADMIN_COMPANY_DETAILS = '/admin/company-details',
+  COMPANY = '/companies/:id',
   USER = '/users/:login',
   ACCOUNT = '/account',
   REGISTER = '/account/register',
@@ -559,17 +562,17 @@ export const COMPANY_TYPE_TITLES: { [key in CompanyType]: string } = {
 };
 
 export enum LicenseStatus {
+  REGULAR = 'REGULAR',
   TRIAL = 'TRIAL',
   TRIAL_EXPIRED = 'TRIAL_EXPIRED',
-  REGULAR = 'REGULAR',
   EXPIRED = 'EXPIRED',
   UNKNOWN = 'UNKNOWN',
 }
 
 export const LICENSE_STATUS_TITLES: { [key in LicenseStatus]: string } = {
+  [LicenseStatus.REGULAR]: 'Regular',
   [LicenseStatus.TRIAL]: 'Trial',
   [LicenseStatus.TRIAL_EXPIRED]: 'Trial Expired',
-  [LicenseStatus.REGULAR]: 'Regular',
   [LicenseStatus.EXPIRED]: 'Expired',
   [LicenseStatus.UNKNOWN]: 'Unknown',
 };

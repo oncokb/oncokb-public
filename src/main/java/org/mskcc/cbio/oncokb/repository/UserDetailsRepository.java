@@ -6,6 +6,7 @@ import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -20,4 +21,6 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> 
 
     @Query("select ud from UserDetails ud where ud.additionalInfo like %?1%")
     Optional<UserDetails> findOneByTrialActivationKey(String key);
+
+    List<UserDetails> findByCompanyId(Long companyId);
 }
