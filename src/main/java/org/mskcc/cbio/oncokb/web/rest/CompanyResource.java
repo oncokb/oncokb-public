@@ -1,9 +1,12 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.service.CompanyService;
+import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -35,8 +38,11 @@ public class CompanyResource {
 
     private final CompanyService companyService;
 
-    public CompanyResource(CompanyService companyService) {
+    private final UserService userService;
+
+    public CompanyResource(CompanyService companyService, UserService userService) {
         this.companyService = companyService;
+        this.userService = userService;
     }
 
     /**
@@ -101,6 +107,12 @@ public class CompanyResource {
         log.debug("REST request to get Company : {}", id);
         Optional<CompanyDTO> companyDTO = companyService.findOne(id);
         return ResponseUtil.wrapOrNotFound(companyDTO);
+    }
+
+    @GetMapping("/companies/{id}/users")
+    public List<UserDTO> getCompanyUsers(@PathVariable Long id) {
+        log.debug("REST request to all users associated to Company : {}", id);
+        return userService.getUsersOfCompany(id);
     }
 
     /**

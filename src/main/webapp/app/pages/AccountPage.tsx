@@ -60,10 +60,6 @@ export class AccountPage extends React.Component<IRegisterProps> {
     super(props);
   }
 
-  @autobind
-  @action
-  handleValidSubmit(event: any, values: any) {}
-
   @computed
   get account() {
     return this.props.authenticationStore.account;

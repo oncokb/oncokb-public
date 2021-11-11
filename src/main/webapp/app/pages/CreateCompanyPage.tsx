@@ -5,9 +5,10 @@ import WindowStore from 'app/store/WindowStore';
 import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import { NewCompanyForm } from 'app/components/newCompanyForm/NewCompanyForm';
 import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
-import { Alert } from 'react-bootstrap';
-import { CompanyVM } from 'app/shared/api/generated/API';
+import { CompanyDTO, CompanyVM } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
+import { RouterStore } from 'mobx-react-router';
+import { notifySuccess } from 'app/shared/utils/NotificationUtils';
 
 enum CreateCompanyStatus {
   CREATE_SUCCESS,
@@ -15,10 +16,11 @@ enum CreateCompanyStatus {
   PENDING,
 }
 
-@inject('windowStore')
+@inject('windowStore', 'routing')
 @observer
 export class CreateCompanyPage extends React.Component<{
   windowStore: WindowStore;
+  routing: RouterStore;
 }> {
   @observable createCompanyStatus: CreateCompanyStatus =
     CreateCompanyStatus.PENDING;
@@ -30,14 +32,16 @@ export class CreateCompanyPage extends React.Component<{
       .createCompanyUsingPOST({
         companyDto: newCompany as CompanyVM,
       })
-      .then(this.createCompanySuccess, this.createCompanyFailure);
+      .then(
+        (company: CompanyDTO) => this.createCompanySuccess(company.id),
+        this.createCompanyFailure
+      );
   }
 
   @action.bound
-  createCompanySuccess() {
-    this.createCompanyStatus = CreateCompanyStatus.CREATE_SUCCESS;
-    this.createCompanyError = undefined;
-    window.scrollTo(0, 0);
+  createCompanySuccess(companyId: number) {
+    notifySuccess('Company created successfully!');
+    this.props.routing.history.push(`/companies/${companyId}`);
   }
 
   @action.bound
@@ -50,9 +54,6 @@ export class CreateCompanyPage extends React.Component<{
   render() {
     return (
       <div>
-        {this.createCompanyStatus === CreateCompanyStatus.CREATE_SUCCESS ? (
-          <Alert variant={'info'}>Company created!</Alert>
-        ) : null}
         {this.createCompanyError ? (
           <ErrorAlert error={this.createCompanyError} />
         ) : null}

@@ -905,6 +905,49 @@
         "deprecated": false
       }
     },
+    "/api/companies/{id}/users": {
+      "get": {
+        "tags": [
+          "company-resource"
+        ],
+        "summary": "getCompanyUsers",
+        "operationId": "getCompanyUsersUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/company-domains": {
       "get": {
         "tags": [
@@ -2477,6 +2520,13 @@
             "type": "boolean"
           },
           {
+            "name": "unlinkUser",
+            "in": "query",
+            "description": "unlinkUser",
+            "required": true,
+            "type": "boolean"
+          },
+          {
             "in": "body",
             "name": "userDTO",
             "description": "userDTO",
@@ -2635,6 +2685,59 @@
                 "$ref": "#/definitions/UserDTO"
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/users/tokens": {
+      "post": {
+        "tags": [
+          "user-resource"
+        ],
+        "summary": "getUsersTokens",
+        "operationId": "getUsersTokensUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "logins",
+            "description": "logins",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Token"
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
