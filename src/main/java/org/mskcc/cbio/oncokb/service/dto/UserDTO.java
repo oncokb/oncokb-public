@@ -188,6 +188,10 @@ public class UserDTO {
         return company;
     }
 
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
     public String getCity() {
         return city;
     }

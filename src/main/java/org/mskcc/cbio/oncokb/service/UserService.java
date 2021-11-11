@@ -39,8 +39,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.swing.text.DefaultStyledDocument.ElementSpec;
-
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE;
@@ -341,8 +339,10 @@ public class UserService {
         userDetails.setCompanyName(userDTO.getCompanyName());
         userDetails.setCity(userDTO.getCity());
         userDetails.setCountry(userDTO.getCountry());
+        userDetails.setCompany(userDTO.getCompany());
         userDetailsRepository.save(userDetails);
 
+        
         // Check if the user is apart of licensed company and then continue with approval procedure
         Optional<Company> company = findAssociatedCompany(userDTO);
         company.ifPresent(c -> updateUserWithCompanyLicense(user, c));
@@ -623,6 +623,11 @@ public class UserService {
      * @param userDTO the user
      */
     private Optional<Company> findAssociatedCompany(UserDTO userDTO) {
+        
+        if(userDTO.getCompany() != null){
+            return companyRepository.findById(userDTO.getCompany().getId());
+        }
+
         String domain = StringUtil.getEmailDomain(userDTO.getEmail());
         List<CompanyDomain> companyDomains = companyDomainRepository.findByName(domain);
         if(companyDomains.size() > 0) {

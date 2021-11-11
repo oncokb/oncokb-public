@@ -5,9 +5,11 @@ export type IFormSelectWithLabelProps = {
   onSelection: (selectedOption: any) => void;
   labelText: string;
   name: string;
-  defaultValue: { value: string; label: string };
-  options: { value: string; label: string }[];
+  defaultValue?: { value: any; label: any };
+  options: { value: any; label: any }[];
   boldLabel?: boolean;
+  isClearable?: boolean;
+  value?: { value: any; label: any } | null;
 };
 
 export const FormSelectWithLabelField: React.FunctionComponent<IFormSelectWithLabelProps> = props => {
@@ -24,6 +26,8 @@ export const FormSelectWithLabelField: React.FunctionComponent<IFormSelectWithLa
         defaultValue={props.defaultValue}
         options={props.options}
         onChange={props.onSelection}
+        isClearable={props.isClearable}
+        value={props.value}
       />
     </div>
   );

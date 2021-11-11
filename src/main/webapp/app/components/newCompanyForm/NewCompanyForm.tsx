@@ -1,6 +1,5 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import autobind from 'autobind-decorator';
 import { Button, Col, Row } from 'react-bootstrap';
 import { observable, action, computed } from 'mobx';
 import { CompanyVM } from 'app/shared/api/generated/API';
@@ -19,12 +18,8 @@ import {
   LicenseModel,
   LICENSE_MODEL_TITLES,
 } from 'app/config/constants';
+import client from 'app/shared/api/clientInstance';
 import _ from 'lodash';
-import {
-  notifyError,
-  notifyInfo,
-  notifyWarning,
-} from 'app/shared/utils/NotificationUtils';
 
 type INewCompanyFormProps = {
   onValidSubmit: (newCompany: Partial<CompanyVM>) => void;
@@ -79,6 +74,16 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
     );
   }
 
+  private debouncedLookup = _.debounce(
+    (value: string, ctx, input, cb: (isValid: boolean | string) => void) => {
+      client
+        .getCompanyByNameUsingGET({ name: value })
+        .then(company => cb('Company name in use!'))
+        .catch(error => cb(true));
+    },
+    500
+  );
+
   @action.bound
   handleValidSubmit(event: any, values: any) {
     const newCompany: Partial<CompanyVM> = {
@@ -118,6 +123,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
                   value: true,
                   errorMessage: 'The company name is required.',
                 },
+                async: this.debouncedLookup,
               }}
             />
             <FormTextAreaField
