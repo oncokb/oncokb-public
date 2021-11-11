@@ -6,7 +6,6 @@ import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
-import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -57,6 +56,8 @@ public class CompanyResource {
         log.debug("REST request to save Company : {}", companyDTO);
         if (companyDTO.getId() != null) {
             throw new BadRequestAlertException("A new company cannot already have an ID", ENTITY_NAME, "idexists");
+        }else if(companyService.findOneByNameIgnoreCase(companyDTO.getName()).isPresent()){
+            throw new BadRequestAlertException("Company name already in use.", ENTITY_NAME, "nameexists");
         }
         CompanyDTO result = companyService.createCompany(companyDTO);
         return ResponseEntity.created(new URI("/api/companies/" + result.getId()))
@@ -113,6 +114,18 @@ public class CompanyResource {
     public List<UserDTO> getCompanyUsers(@PathVariable Long id) {
         log.debug("REST request to all users associated to Company : {}", id);
         return userService.getUsersOfCompany(id);
+    }
+
+    /**
+     * {@code GET /companies?name} : get the "name" company.
+     *
+     * @param name the name of the company to find.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the "name" company, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/companies/name/{name}")
+    public ResponseEntity<CompanyDTO> getCompanyByName(@PathVariable String name) {
+        log.debug("REST request to get Company : {}", name);
+        return ResponseUtil.wrapOrNotFound(companyService.findOneByNameIgnoreCase(name));
     }
 
     /**

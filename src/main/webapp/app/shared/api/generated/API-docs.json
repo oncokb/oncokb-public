@@ -830,6 +830,45 @@
         "deprecated": false
       }
     },
+    "/api/companies/name/{name}": {
+      "get": {
+        "tags": [
+          "company-resource"
+        ],
+        "summary": "getCompanyByName",
+        "operationId": "getCompanyByNameUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CompanyDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/companies/{id}": {
       "get": {
         "tags": [
