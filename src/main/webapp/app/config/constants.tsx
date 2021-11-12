@@ -505,6 +505,9 @@ export enum TABLE_COLUMN_KEY {
   MUTATION_EFFECT = 'MUTATION_EFFECT',
 }
 
+export const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';
+export const OTHER_BIOMARKERS = 'Other Biomarkers';
+
 export enum SEARCH_QUERY_KEY {
   REFERENCE_GENOME = 'refGenome',
 }

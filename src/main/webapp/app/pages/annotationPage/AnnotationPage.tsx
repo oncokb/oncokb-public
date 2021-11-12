@@ -10,6 +10,8 @@ import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
+  ONCOGENIC_MUTATIONS,
+  OTHER_BIOMARKERS,
   REFERENCE_GENOME,
   TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
@@ -29,9 +31,11 @@ import {
 import { TherapeuticImplication } from 'app/store/AnnotationStore';
 import {
   articles2Citations,
+  getAlterationName,
   getCancerTypeNameFromOncoTreeType,
   getHighestFdaLevel,
   getTreatmentNameFromEvidence,
+  IAlteration,
   isPositionalAlteration,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
@@ -42,6 +46,7 @@ import AppStore from 'app/store/AppStore';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
+import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -59,13 +64,11 @@ const SUMMARY_TITLE = {
   [SummaryKey.PROGNOSTIC_SUMMARY]: 'Prognostic Summary',
 };
 
-const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';
-const LOWERCASE_ONCOGENIC_MUTATIONS = ONCOGENIC_MUTATIONS.toLowerCase();
-
 export type IAnnotationPage = {
   appStore?: AppStore;
   hugoSymbol: string;
   alteration: string;
+  matchedAlteration: Alteration | undefined;
   tumorType: string;
   refGenome: REFERENCE_GENOME;
   onChangeTumorType: (newTumorType: string) => void;
@@ -103,7 +106,10 @@ export default class AnnotationPage extends React.Component<
               <AlterationPageLink
                 key={alteration.name}
                 hugoSymbol={this.props.hugoSymbol}
-                alteration={alteration.name}
+                alteration={{
+                  alteration: alteration.alteration,
+                  name: alteration.name,
+                }}
                 alterationRefGenomes={
                   alteration.referenceGenomes as REFERENCE_GENOME[]
                 }
@@ -230,17 +236,25 @@ export default class AnnotationPage extends React.Component<
       this.props.alteration &&
       this.props.alteration
         .toLowerCase()
-        .startsWith(LOWERCASE_ONCOGENIC_MUTATIONS)
+        .startsWith(ONCOGENIC_MUTATIONS.toLowerCase())
     );
+  }
+
+  @computed
+  get showGeneNameLink() {
+    const lHugo = this.props.hugoSymbol.toLowerCase();
+    const altNameIncludesGene = this.props.alteration
+      .toLowerCase()
+      .includes(lHugo);
+    const isOtherBiomarkers = lHugo === OTHER_BIOMARKERS.toLowerCase();
+    return !altNameIncludesGene && !isOtherBiomarkers;
   }
 
   render() {
     return (
       <>
         <h2 className={'d-flex align-items-baseline'}>
-          {this.props.alteration
-            .toLowerCase()
-            .includes(this.props.hugoSymbol.toLowerCase()) ? null : (
+          {this.showGeneNameLink && (
             <span className={'mr-2'}>
               <GenePageLink
                 hugoSymbol={this.props.hugoSymbol}
@@ -248,7 +262,14 @@ export default class AnnotationPage extends React.Component<
               />
             </span>
           )}
-          <span>{`${this.props.alteration}`}</span>
+          <span>{`${getAlterationName(
+            this.props.matchedAlteration === undefined
+              ? this.props.alteration
+              : {
+                  alteration: this.props.matchedAlteration.alteration,
+                  name: this.props.matchedAlteration.name,
+                }
+          )}`}</span>
           <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
             <FeedbackIcon
               feedback={{
@@ -372,7 +393,17 @@ export default class AnnotationPage extends React.Component<
               selectedTab={this.props.defaultSelectedTab}
               appStore={this.props.appStore}
               hugoSymbol={this.props.hugoSymbol}
-              alteration={this.props.alteration}
+              alteration={
+                this.props.matchedAlteration
+                  ? {
+                      alteration: this.props.matchedAlteration.alteration,
+                      name: this.props.matchedAlteration.name,
+                    }
+                  : {
+                      alteration: this.props.alteration,
+                      name: this.props.alteration,
+                    }
+              }
               cancerType={this.props.tumorType}
               biological={[]}
               tx={this.therapeuticImplications}

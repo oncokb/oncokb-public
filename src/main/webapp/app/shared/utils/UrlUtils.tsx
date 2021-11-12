@@ -16,7 +16,12 @@ import _ from 'lodash';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import reactStringReplace from 'react-string-replace';
 import { ReactNodeArray } from 'prop-types';
-import { encodeSlash, getYouTubeLink } from 'app/shared/utils/Utils';
+import {
+  encodeSlash,
+  getAlterationName,
+  getYouTubeLink,
+  IAlteration,
+} from 'app/shared/utils/Utils';
 import { Linkout } from 'app/shared/links/Linkout';
 import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
 import {
@@ -59,7 +64,7 @@ export const GenePageLink: React.FunctionComponent<{
 
 export const AlterationPageLink: React.FunctionComponent<{
   hugoSymbol: string;
-  alteration: string;
+  alteration: IAlteration | string;
   alterationRefGenomes?: REFERENCE_GENOME[];
   cancerType?: string;
   searchQueries?: AlterationPageSearchQueries;
@@ -67,7 +72,11 @@ export const AlterationPageLink: React.FunctionComponent<{
   showGene?: boolean;
   onClick?: () => void;
 }> = props => {
-  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`;
+  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${
+    typeof props.alteration === 'string'
+      ? props.alteration
+      : props.alteration.name
+  }`;
   if (props.cancerType) {
     pageLink = `${pageLink}/${encodeSlash(props.cancerType)}`;
   }
@@ -85,13 +94,14 @@ export const AlterationPageLink: React.FunctionComponent<{
   if (props.hashQueries) {
     pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
   }
+  const alterationName = getAlterationName(props.alteration);
   return (
     <Link to={pageLink} onClick={props.onClick}>
       {props.children
         ? props.children
         : props.showGene
-        ? `${props.hugoSymbol} ${props.alteration}`
-        : props.alteration}
+        ? `${props.hugoSymbol} ${alterationName}`
+        : alterationName}
     </Link>
   );
 };
