@@ -646,7 +646,10 @@ export default class ActionableGenesPage extends React.Component<
           <AlterationPageLink
             key={index}
             hugoSymbol={hugoSymbol}
-            alteration={alteration.name}
+            alteration={{
+              alteration: alteration.alteration,
+              name: alteration.name,
+            }}
             alterationRefGenomes={
               alteration.referenceGenomes as REFERENCE_GENOME[]
             }

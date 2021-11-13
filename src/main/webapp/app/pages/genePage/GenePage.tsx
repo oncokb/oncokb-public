@@ -370,7 +370,10 @@ export default class GenePage extends React.Component<GenePageProps, any> {
           <AlterationPageLink
             key={variant.variant.name}
             hugoSymbol={this.store.hugoSymbol}
-            alteration={variant.variant.name}
+            alteration={{
+              alteration: variant.variant.alteration,
+              name: variant.variant.name,
+            }}
             alterationRefGenomes={
               variant.variant.referenceGenomes as REFERENCE_GENOME[]
             }
@@ -384,7 +387,10 @@ export default class GenePage extends React.Component<GenePageProps, any> {
               <AlterationPageLink
                 key={`${variant.variant.name}-${cancerType}`}
                 hugoSymbol={this.store.hugoSymbol}
-                alteration={variant.variant.name}
+                alteration={{
+                  alteration: variant.variant.alteration,
+                  name: variant.variant.name,
+                }}
                 alterationRefGenomes={
                   variant.variant.referenceGenomes as REFERENCE_GENOME[]
                 }
