@@ -639,3 +639,22 @@ export function getYouTubeLink(type: 'embed' | 'regular', videoId: string) {
 export function getBilibiliLink(videoId: string) {
   return `//player.bilibili.com/player.html?aid=${videoId}`;
 }
+
+export interface IAlteration {
+  alteration: string;
+  name: string;
+}
+
+export function getAlterationName(alteration: IAlteration | string): string {
+  let alt: string =
+    typeof alteration === 'string' ? alteration : alteration.alteration;
+  if (alt.includes('{')) {
+    alt = alt.replace('{', '(');
+    alt = alt.replace('}', ')');
+  }
+  return typeof alteration === 'string'
+    ? alteration
+    : alteration.name === alt
+    ? alteration.name
+    : `${alteration.name} (${alt})`;
+}

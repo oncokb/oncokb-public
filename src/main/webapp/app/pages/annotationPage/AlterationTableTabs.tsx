@@ -33,6 +33,7 @@ import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
 import {
   filterByKeyword,
   getDefaultColumnDefinition,
+  IAlteration,
 } from 'app/shared/utils/Utils';
 import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
 import { Citations } from 'app/shared/api/generated/OncoKbAPI';
@@ -46,7 +47,7 @@ export type Column = {
 };
 export interface IEvidenceTableTabProps {
   hugoSymbol: string;
-  alteration?: string;
+  alteration?: IAlteration;
   cancerType?: string;
   biological: BiologicalVariant[];
   tx: TherapeuticImplication[];
@@ -220,7 +221,7 @@ export default class AlterationTableTabs extends React.Component<
                   appStore={this.props.appStore!}
                   annotation={{
                     gene: this.props.hugoSymbol,
-                    alteration: this.props.alteration,
+                    alteration: this.props.alteration?.name,
                     cancerType: this.props.cancerType,
                   }}
                 />
@@ -303,7 +304,10 @@ export default class AlterationTableTabs extends React.Component<
             <>
               <AlterationPageLink
                 hugoSymbol={this.props.hugoSymbol}
-                alteration={props.original.variant.name}
+                alteration={{
+                  alteration: props.original.variant.alteration,
+                  name: props.original.variant.name,
+                }}
                 alterationRefGenomes={
                   props.original.variant.referenceGenomes as REFERENCE_GENOME[]
                 }
@@ -415,7 +419,10 @@ export default class AlterationTableTabs extends React.Component<
           return (
             <AlterationPageLink
               hugoSymbol={props.original.alteration.gene.hugoSymbol}
-              alteration={props.original.alteration.name}
+              alteration={{
+                alteration: props.original.alteration.alteration,
+                name: props.original.alteration.name,
+              }}
               hashQueries={{ tab: ANNOTATION_PAGE_TAB_KEYS.FDA }}
               onClick={() => {
                 this.props.appStore!.toFdaRecognizedContent = true;
@@ -435,7 +442,10 @@ export default class AlterationTableTabs extends React.Component<
           return (
             <AlterationPageLink
               hugoSymbol={this.props.hugoSymbol}
-              alteration={props.original.alteration.name}
+              alteration={{
+                alteration: props.original.alteration.alteration,
+                name: props.original.alteration.name,
+              }}
               alterationRefGenomes={
                 props.original.alteration.referenceGenomes as REFERENCE_GENOME[]
               }

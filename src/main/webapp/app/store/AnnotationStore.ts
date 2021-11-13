@@ -10,7 +10,12 @@ import {
 import apiClient from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { computed, IReactionDisposer, observable } from 'mobx';
-import { Citations, Evidence, Gene } from 'app/shared/api/generated/OncoKbAPI';
+import {
+  Alteration,
+  Citations,
+  Evidence,
+  Gene,
+} from 'app/shared/api/generated/OncoKbAPI';
 import {
   DEFAULT_ANNOTATION,
   DEFAULT_GENE,
@@ -591,6 +596,17 @@ export class AnnotationStore {
     } else {
       return this.biologicalAlterations.result;
     }
+  }
+
+  @computed
+  get matedAlteration(): Alteration | undefined {
+    const altLowerCaseQuery = this.alterationQuery.toLowerCase();
+    const matched = this.biologicalAlterations.result.filter(
+      alt =>
+        alt.variant.alteration.toLowerCase().includes(altLowerCaseQuery) ||
+        alt.variant.name.toLowerCase().includes(altLowerCaseQuery)
+    );
+    return matched.length > 0 ? matched[0].variant : undefined;
   }
 
   @computed
