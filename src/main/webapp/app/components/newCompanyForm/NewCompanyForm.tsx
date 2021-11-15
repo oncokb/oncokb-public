@@ -77,7 +77,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   private debouncedLookup = _.debounce(
     (value: string, ctx, input, cb: (isValid: boolean | string) => void) => {
       client
-        .getCompanyByNameUsingGET({ name: value })
+        .getCompanyByNameUsingGET({ name: value.trim() })
         .then(company => cb('Company name in use!'))
         .catch(error => cb(true));
     },
