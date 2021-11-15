@@ -367,7 +367,7 @@ public class AccountResource {
     }
 
     @PostMapping(path = "/account/active-trial/finish")
-    public UserDTO finishTrialAccountActivation(@RequestBody KeyAndTermsVM keyAndTermsVM) {
+    public UserDTO finishTrialAccountActivation(@RequestBody KeyAndTermsVM keyAndTermsVM, @RequestParam Boolean newAccountCreation) {
         if (keyAndTermsVM.getReadAndAgreeWithTheTerms() != Boolean.TRUE) {
             throw new AccountResourceException("You have to read and agree with the terms.");
         }
@@ -375,6 +375,10 @@ public class AccountResource {
         if (userDetailsDTO.isPresent()) {
             Optional<UserDTO> userDTOOptional = userService.finishTrialAccountActivation(keyAndTermsVM.getKey());
             if (userDTOOptional.isPresent()) {
+                // After the user agrees with the terms and is a newly created user, send the OncoKB account is created email.
+                if(newAccountCreation){
+                    mailService.sendCreationEmail(userDTOOptional.get());
+                }
                 return userDTOOptional.get();
             }
         }

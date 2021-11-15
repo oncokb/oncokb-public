@@ -36,6 +36,7 @@ export default class ActivateTrialFinish extends React.Component<{
   @observable loadingActivationInfo = true;
   @observable user: UserDTO;
   private activateKey: string;
+  private newAccountCreation: boolean;
   @observable infoMessage: string | JSX.Element;
 
   constructor(props: Readonly<{ routing: RouterStore }>) {
@@ -43,6 +44,9 @@ export default class ActivateTrialFinish extends React.Component<{
     const queryStrings = QueryString.parse(props.routing.location.search);
     if (queryStrings.key) {
       this.activateKey = queryStrings.key as string;
+    }
+    if (queryStrings.newAccountCreation) {
+      this.newAccountCreation = queryStrings.newAccountCreation === 'true';
     }
   }
 
@@ -53,6 +57,7 @@ export default class ActivateTrialFinish extends React.Component<{
           key: this.activateKey,
           readAndAgreeWithTheTerms: true,
         },
+        newAccountCreation: this.newAccountCreation,
       })
       .then(
         user => {
