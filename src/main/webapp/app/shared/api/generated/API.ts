@@ -1804,6 +1804,81 @@ export default class API {
             return response.body;
         });
     };
+    getCompanyByNameUsingGETURL(parameters: {
+        'name': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/name/{name}';
+
+        path = path.replace('{name}', parameters['name'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getCompanyByName
+     * @method
+     * @name API#getCompanyByNameUsingGET
+     * @param {string} name - name
+     */
+    getCompanyByNameUsingGETWithHttpInfo(parameters: {
+        'name': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/name/{name}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{name}', parameters['name'] + '');
+
+            if (parameters['name'] === undefined) {
+                reject(new Error('Missing required  parameter: name'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getCompanyByName
+     * @method
+     * @name API#getCompanyByNameUsingGET
+     * @param {string} name - name
+     */
+    getCompanyByNameUsingGET(parameters: {
+        'name': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < CompanyDTO > {
+        return this.getCompanyByNameUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     getCompanyUsingGETURL(parameters: {
         'id': number,
         $queryParameters ? : any

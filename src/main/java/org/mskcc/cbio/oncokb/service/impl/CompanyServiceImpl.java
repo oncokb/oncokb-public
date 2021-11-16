@@ -152,6 +152,13 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Optional<CompanyDTO> findOneByNameIgnoreCase(String name) {
+        log.debug("Request to get Company by name: {}", name);
+        return companyRepository.findOneByNameIgnoreCase(name).map(company -> companyMapper.toDto(company));
+    }
+
+    @Override
     public void delete(Long id) {
         log.debug("Request to delete Company : {}", id);
         companyRepository.deleteById(id);
