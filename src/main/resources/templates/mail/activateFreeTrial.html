@@ -8,17 +8,26 @@
 <body>
 <p th:text="'Dear ' + ${user.firstName} + ' ' + ${user.lastName} + ','"></p>
 
+<p th:if="${newAccountCreation}">
+  Your OncoKB account has been created.
+</p>
+
 <p>
   As part of your company's trial and evaluation of OncoKB, below is your activation link for a 3 month trial of OncoKB:
 </p>
 
 <p>
-  <a th:with="url=(@{|${baseUrl}/account/active-trial/finish?key=${user.additionalInfo.trialAccount.activation.key}&newAccountCreation=${newAccountCreation}|})" th:href="${url}"
+  <a th:with="url=(@{|${baseUrl}/account/active-trial/finish?key=${user.additionalInfo.trialAccount.activation.key}|})" th:href="${url}"
      th:text="${url}">Trial Activation Link</a>
 </p>
 
-<p>
-  After accepting the terms, you will receive an email to activate your OncoKB account.
+<p th:if="${newAccountCreation}">
+  After accepting the terms, please follow the instruction to reset your password. Below is the URL for your convenience.
+</p>
+
+<p th:if="${newAccountCreation}">
+  <a th:with="url=(@{|${baseUrl}/account/reset/finish?key=${user.resetKey}|})" th:href="${url}"
+     th:text="${url}">Reset Password link</a>
 </p>
 
 <p>Please let us know if you have any questions. We look forward to working with you.</p>

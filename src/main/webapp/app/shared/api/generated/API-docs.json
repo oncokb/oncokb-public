@@ -155,13 +155,6 @@
             "schema": {
               "$ref": "#/definitions/KeyAndTermsVM"
             }
-          },
-          {
-            "name": "newAccountCreation",
-            "in": "query",
-            "description": "newAccountCreation",
-            "required": true,
-            "type": "boolean"
           }
         ],
         "responses": {

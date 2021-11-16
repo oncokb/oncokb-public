@@ -164,9 +164,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     }
     if (values.tokenValidDays) {
       newUser.tokenValidDays = Number(values.tokenValidDays);
-      newUser.notifyUserOnTrialCreation =
-        _.isArray(values.notifyUserOnTrialCreation) &&
-        values.notifyUserOnTrialCreation.length > 0;
+      newUser.notifyUserOnTrialCreation = true;
     }
     this.props.onSubmit(newUser);
   }
@@ -771,14 +769,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                           validate={{ number: true }}
                         />
                       </div>
-                      <div className={'mt-2'}>
-                        <AvCheckboxGroup name="notifyUserOnTrialCreation">
-                          <AvCheckbox
-                            label={'Send trial License agreement'}
-                            value={'true'}
-                          />
-                        </AvCheckboxGroup>
-                      </div>
+                      <span>
+                        A trial license agreement email will be sent to the
+                        user.
+                      </span>
                     </>
                   ) : null}
                 </Col>
