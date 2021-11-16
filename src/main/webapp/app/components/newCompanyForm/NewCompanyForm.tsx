@@ -20,6 +20,7 @@ import {
 } from 'app/config/constants';
 import client from 'app/shared/api/clientInstance';
 import _ from 'lodash';
+import { notifyError } from 'app/shared/utils/NotificationUtils';
 
 type INewCompanyFormProps = {
   onValidSubmit: (newCompany: Partial<CompanyVM>) => void;
@@ -76,10 +77,24 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
 
   private debouncedLookup = _.debounce(
     (value: string, ctx, input, cb: (isValid: boolean | string) => void) => {
+      if (value.trim() === '') {
+        cb(false);
+        return;
+      }
       client
         .getCompanyByNameUsingGET({ name: value.trim() })
         .then(company => cb('Company name in use!'))
-        .catch(error => cb(true));
+        .catch((error: any) => {
+          if (error.response.status === 404) {
+            // If the company is not found with the entered name, then
+            // it is available to use. The api will return 404 NOT FOUND.
+            cb(true);
+          } else {
+            // If the api fails, then we show an error message
+            cb(false);
+            notifyError(error, 'Error finding company with name');
+          }
+        });
     },
     500
   );

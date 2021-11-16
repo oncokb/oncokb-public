@@ -568,15 +568,10 @@ export default class API {
     };
     finishTrialAccountActivationUsingPOSTURL(parameters: {
         'keyAndTermsVm': KeyAndTermsVM,
-        'newAccountCreation': boolean,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/account/active-trial/finish';
-
-        if (parameters['newAccountCreation'] !== undefined) {
-            queryParameters['newAccountCreation'] = parameters['newAccountCreation'];
-        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -593,11 +588,9 @@ export default class API {
      * @method
      * @name API#finishTrialAccountActivationUsingPOST
      * @param {} keyAndTermsVm - keyAndTermsVM
-     * @param {boolean} newAccountCreation - newAccountCreation
      */
     finishTrialAccountActivationUsingPOSTWithHttpInfo(parameters: {
         'keyAndTermsVm': KeyAndTermsVM,
-        'newAccountCreation': boolean,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -622,15 +615,6 @@ export default class API {
                 return;
             }
 
-            if (parameters['newAccountCreation'] !== undefined) {
-                queryParameters['newAccountCreation'] = parameters['newAccountCreation'];
-            }
-
-            if (parameters['newAccountCreation'] === undefined) {
-                reject(new Error('Missing required  parameter: newAccountCreation'));
-                return;
-            }
-
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -648,11 +632,9 @@ export default class API {
      * @method
      * @name API#finishTrialAccountActivationUsingPOST
      * @param {} keyAndTermsVm - keyAndTermsVM
-     * @param {boolean} newAccountCreation - newAccountCreation
      */
     finishTrialAccountActivationUsingPOST(parameters: {
         'keyAndTermsVm': KeyAndTermsVM,
-        'newAccountCreation': boolean,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < UserDTO > {
