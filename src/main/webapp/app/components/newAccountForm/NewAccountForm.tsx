@@ -13,17 +13,19 @@ import { action, computed, observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
   AdditionalInfoDTO,
+  CompanyDTO,
   Contact,
   ManagedUserVM,
 } from 'app/shared/api/generated/API';
 import {
   ACADEMIC_TERMS,
   ACCOUNT_TITLES,
+  LicenseStatus,
   LicenseType,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   XREGEXP_VALID_LATIN_TEXT,
 } from 'app/config/constants';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Row } from 'react-bootstrap';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { ButtonSelections } from 'app/components/LicenseSelection';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
@@ -34,6 +36,10 @@ import {
 } from 'app/pages/account/AccountUtils';
 import { If, Then } from 'react-if';
 import _ from 'lodash';
+import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
+import client from 'app/shared/api/clientInstance';
+import { notifyError } from 'app/shared/utils/NotificationUtils';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 
 export enum FormSection {
   LICENSE = 'LICENSE',
@@ -63,12 +69,20 @@ enum FormKey {
   BUS_CONTACT_PHONE = 'businessContactPhone',
 }
 
+type CompanySelectOptionType = {
+  label: string;
+  value: CompanyDTO;
+};
+
 export const ACCOUNT_TYPE_DEFAULT = AccountType.REGULAR;
 @observer
 export class NewAccountForm extends React.Component<INewAccountForm> {
   @observable password = '';
+  @observable email = '';
   @observable selectedLicense: LicenseType | undefined;
   @observable selectedAccountType = ACCOUNT_TYPE_DEFAULT;
+  @observable companyOptions: CompanySelectOptionType[] = [];
+  @observable selectedCompanyOption: CompanySelectOptionType | undefined;
 
   private defaultFormValue = {
     accountType: ACCOUNT_TYPE_DEFAULT,
@@ -122,6 +136,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     if (props.defaultLicense) {
       this.selectedLicense = props.defaultLicense;
     }
+    this.getAllCompanies();
   }
 
   @autobind
@@ -136,7 +151,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       licenseType: this.selectedLicense,
       tokenIsRenewable: this.selectedAccountType !== AccountType.TRIAL,
       jobTitle: values.jobTitle,
-      company: values.companyName,
+      company: this.selectedCompanyOption?.value,
+      companyName: this.selectedCompanyOption
+        ? this.selectedCompanyOption.value.name
+        : values.companyName,
       city: values.city,
       country: values.country,
     };
@@ -146,9 +164,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     }
     if (values.tokenValidDays) {
       newUser.tokenValidDays = Number(values.tokenValidDays);
-      newUser.notifyUserOnTrialCreation =
-        _.isArray(values.notifyUserOnTrialCreation) &&
-        values.notifyUserOnTrialCreation.length > 0;
+      newUser.notifyUserOnTrialCreation = true;
     }
     this.props.onSubmit(newUser);
   }
@@ -330,6 +346,45 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     this.password = event.target.value;
   }
 
+  @action
+  getAllCompanies() {
+    client
+      .getAllCompaniesUsingGET({})
+      .then(
+        companies =>
+          (this.companyOptions = companies.map(company => ({
+            label: `${company.name} (${company.companyType})`,
+            value: company,
+          })))
+      )
+      .catch(error => notifyError(error));
+  }
+
+  @action.bound
+  onSelectCompany(selectedOption: CompanySelectOptionType) {
+    this.selectedCompanyOption = selectedOption;
+    this.selectedAccountType =
+      this.selectedCompanyOption.value.licenseStatus === LicenseStatus.TRIAL
+        ? AccountType.TRIAL
+        : AccountType.REGULAR;
+    if (selectedOption) {
+      this.onSelectLicense(selectedOption.value.licenseType as LicenseType);
+    }
+  }
+
+  @computed
+  get showEmailMismatchConfirmation() {
+    const emailDomain = this.email.substring(
+      this.email.includes('@') ? this.email.indexOf('@') + 1 : this.email.length
+    );
+    const hasADomainMatch = this.selectedCompanyOption?.value.companyDomains.some(
+      domain => domain === emailDomain
+    );
+    return (
+      this.email.length > 5 && this.selectedCompanyOption && !hasADomainMatch
+    );
+  }
+
   render() {
     return (
       <AvForm
@@ -354,7 +409,14 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   isLargeScreen={this.props.isLargeScreen}
                   selectedButton={this.selectedLicense}
                   onSelectLicense={this.onSelectLicense}
+                  disabled={!!this.selectedCompanyOption}
                 />
+                {!this.selectedCompanyOption ? null : (
+                  <span>
+                    User should have same license status as company. Unselect
+                    company to enable license selection.
+                  </span>
+                )}
               </Col>
             </Row>
           </>
@@ -424,8 +486,21 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       this.selectedLicense
                     )}
                     type="email"
+                    value={this.email}
+                    onChange={(event: any) => {
+                      this.email = event.target.value;
+                    }}
                     validate={this.emailValidation}
                   />
+                  {this.showEmailMismatchConfirmation ? (
+                    <Alert variant={'warning'}>
+                      <i className={'mr-2 fa fa-exclamation-triangle'}></i>
+                      <span>
+                        The entered email address domain does not match any of
+                        the company's domains. Please confirm before proceeding.
+                      </span>
+                    </Alert>
+                  ) : null}
                   <If condition={!this.props.byAdmin}>
                     <Then>
                       <AvField
@@ -498,118 +573,132 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   </h5>
                 </Col>
                 <Col md="9">
-                  {this.selectedLicense !== LicenseType.ACADEMIC && (
-                    <p>
-                      Please feel free to skip this section if your{' '}
-                      {getAccountInfoTitle(
-                        ACCOUNT_TITLES.COMPANY,
-                        this.selectedLicense
-                      ).toLowerCase()}{' '}
-                      already has a license with us.
-                    </p>
-                  )}
-                  <AvField
-                    name="company"
-                    label={getAccountInfoTitle(
-                      ACCOUNT_TITLES.COMPANY,
-                      this.selectedLicense
-                    )}
-                    validate={{
-                      required: {
-                        value: true,
-                        errorMessage: 'Your organization name is required.',
-                      },
-                      ...this.textValidation,
+                  <FormSelectWithLabelField
+                    onSelection={(selectedOption: CompanySelectOptionType) => {
+                      this.onSelectCompany(selectedOption);
                     }}
+                    labelText={'Select a company to register a user under'}
+                    name={'companyDropdown'}
+                    options={this.companyOptions}
+                    isClearable={true}
+                    value={this.selectedCompanyOption}
                   />
-                  <AvField
-                    name="city"
-                    label={getAccountInfoTitle(
-                      ACCOUNT_TITLES.CITY,
-                      this.selectedLicense
-                    )}
-                  />
-                  <AvField
-                    name="country"
-                    label={getAccountInfoTitle(
-                      ACCOUNT_TITLES.COUNTRY,
-                      this.selectedLicense
-                    )}
-                  />
-                  <AvField
-                    name={FormKey.COMPANY_DESCRIPTION}
-                    label={`${getAccountInfoTitle(
-                      ACCOUNT_TITLES.COMPANY,
-                      this.selectedLicense
-                    )} Description`}
-                    type={'textarea'}
-                    placeholder={this.companyDescriptionPlaceholder}
-                    rows={4}
-                  />
-                  {this.isCommercialLicense && (
-                    <>
+                  {this.selectedCompanyOption ? null : (
+                    <div className="border-top py-3">
+                      {this.selectedLicense !== LicenseType.ACADEMIC && (
+                        <p>
+                          Please feel free to skip this section if your{' '}
+                          {getAccountInfoTitle(
+                            ACCOUNT_TITLES.COMPANY,
+                            this.selectedLicense
+                          ).toLowerCase()}{' '}
+                          already has a license with us.
+                        </p>
+                      )}
                       <AvField
-                        name={FormKey.BUS_CONTACT_EMAIL}
-                        label={'Business Contact Email'}
-                        type="email"
+                        name="company"
+                        label={getAccountInfoTitle(
+                          ACCOUNT_TITLES.COMPANY,
+                          this.selectedLicense
+                        )}
                         validate={{
-                          ...this.emailValidation,
                           required: {
-                            value: false,
+                            value: true,
+                            errorMessage: 'Your organization name is required.',
                           },
+                          ...this.textValidation,
                         }}
                       />
                       <AvField
-                        name={FormKey.BUS_CONTACT_PHONE}
-                        label={'Business Contact Phone Number'}
-                        type="tel"
+                        name="city"
+                        label={getAccountInfoTitle(
+                          ACCOUNT_TITLES.CITY,
+                          this.selectedLicense
+                        )}
                       />
-                    </>
-                  )}
-                  <AvField
-                    name={FormKey.USE_CASE}
-                    label={'Describe how you plan to use OncoKB'}
-                    type={'textarea'}
-                    placeholder={this.useCasePlaceholder}
-                    rows={6}
-                    validate={{
-                      required: {
-                        value: true,
-                        errorMessage: 'Your use case is required.',
-                      },
-                      pattern: {
-                        value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                        errorMessage:
-                          'Sorry, we only support Latin letters for now.',
-                      },
-                      minLength: {
-                        value: 1,
-                        errorMessage: 'Required to be at least 1 character',
-                      },
-                    }}
-                  />
-                  {[LicenseType.COMMERCIAL, LicenseType.HOSPITAL].includes(
-                    this.selectedLicense
-                  ) && (
-                    <AvField
-                      name={FormKey.ANTICIPATED_REPORTS}
-                      label={
-                        'Anticipated # of reports annually for years 1, 2 and 3'
-                      }
-                      type={'textarea'}
-                      placeholder={
-                        'If you plan to incorporate OncoKB contents in sequencing reports, please provide an estimate of your anticipated volume over the next several years'
-                      }
-                    />
-                  )}
-                  {[LicenseType.RESEARCH_IN_COMMERCIAL].includes(
-                    this.selectedLicense
-                  ) && (
-                    <AvField
-                      name={FormKey.COMPANY_SIZE}
-                      label={'Company Size (# of employees)'}
-                      type={'input'}
-                    />
+                      <AvField
+                        name="country"
+                        label={getAccountInfoTitle(
+                          ACCOUNT_TITLES.COUNTRY,
+                          this.selectedLicense
+                        )}
+                      />
+                      <AvField
+                        name={FormKey.COMPANY_DESCRIPTION}
+                        label={`${getAccountInfoTitle(
+                          ACCOUNT_TITLES.COMPANY,
+                          this.selectedLicense
+                        )} Description`}
+                        type={'textarea'}
+                        placeholder={this.companyDescriptionPlaceholder}
+                        rows={4}
+                      />
+                      {this.isCommercialLicense && (
+                        <>
+                          <AvField
+                            name={FormKey.BUS_CONTACT_EMAIL}
+                            label={'Business Contact Email'}
+                            type="email"
+                            validate={{
+                              ...this.emailValidation,
+                              required: {
+                                value: false,
+                              },
+                            }}
+                          />
+                          <AvField
+                            name={FormKey.BUS_CONTACT_PHONE}
+                            label={'Business Contact Phone Number'}
+                            type="tel"
+                          />
+                        </>
+                      )}
+                      <AvField
+                        name={FormKey.USE_CASE}
+                        label={'Describe how you plan to use OncoKB'}
+                        type={'textarea'}
+                        placeholder={this.useCasePlaceholder}
+                        rows={6}
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage: 'Your use case is required.',
+                          },
+                          pattern: {
+                            value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
+                            errorMessage:
+                              'Sorry, we only support Latin letters for now.',
+                          },
+                          minLength: {
+                            value: 1,
+                            errorMessage: 'Required to be at least 1 character',
+                          },
+                        }}
+                      />
+                      {[LicenseType.COMMERCIAL, LicenseType.HOSPITAL].includes(
+                        this.selectedLicense
+                      ) && (
+                        <AvField
+                          name={FormKey.ANTICIPATED_REPORTS}
+                          label={
+                            'Anticipated # of reports annually for years 1, 2 and 3'
+                          }
+                          type={'textarea'}
+                          placeholder={
+                            'If you plan to incorporate OncoKB contents in sequencing reports, please provide an estimate of your anticipated volume over the next several years'
+                          }
+                        />
+                      )}
+                      {[LicenseType.RESEARCH_IN_COMMERCIAL].includes(
+                        this.selectedLicense
+                      ) && (
+                        <AvField
+                          name={FormKey.COMPANY_SIZE}
+                          label={'Company Size (# of employees)'}
+                          type={'input'}
+                        />
+                      )}
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -658,6 +747,8 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         this.selectedAccountType = ACCOUNT_TYPE_DEFAULT;
                       }
                     }}
+                    value={this.selectedAccountType}
+                    disabled={this.selectedCompanyOption ? true : false}
                   >
                     <AvRadio
                       label={AccountType.REGULAR}
@@ -678,14 +769,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                           validate={{ number: true }}
                         />
                       </div>
-                      <div className={'mt-2'}>
-                        <AvCheckboxGroup name="notifyUserOnTrialCreation">
-                          <AvCheckbox
-                            label={'Send trial License agreement'}
-                            value={'true'}
-                          />
-                        </AvCheckboxGroup>
-                      </div>
+                      <span>
+                        A trial license agreement email will be sent to the
+                        user.
+                      </span>
                     </>
                   ) : null}
                 </Col>
