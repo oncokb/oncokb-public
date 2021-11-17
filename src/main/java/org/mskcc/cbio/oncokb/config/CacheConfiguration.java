@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.config;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.RedisType;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
+import org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver;
 import org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver;
 import org.mskcc.cbio.oncokb.config.cache.UserCacheResolver;
 import org.redisson.api.RedissonClient;
@@ -73,6 +74,9 @@ public class CacheConfiguration {
 
             createCache(cm, org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKEN_BY_UUID_CACHE, jcacheConfiguration, cacheNameResolver);
             createCache(cm, org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver.TOKENS_BY_USER_LOGIN_CACHE, jcacheConfiguration, cacheNameResolver);
+
+            createCache(cm, org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_ID_CACHE, jcacheConfiguration, cacheNameResolver);
+            createCache(cm, org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_NAME_CACHE, jcacheConfiguration, cacheNameResolver);
             // jhipster-needle-redis-add-entry
         };
     }
@@ -82,10 +86,14 @@ public class CacheConfiguration {
         return new TokenCacheResolver(cm, applicationProperties, cacheNameResolver);
     }
 
-
     @Bean
     public CacheResolver userCacheResolver(CacheManager cm, ApplicationProperties applicationProperties, CacheNameResolver cacheNameResolver) {
         return new UserCacheResolver(cm, applicationProperties, cacheNameResolver);
+    }
+
+    @Bean
+    public CacheResolver companyCacheResolver(CacheManager cm, ApplicationProperties applicationProperties, CacheNameResolver cacheNameResolver) {
+        return new CompanyCacheResolver(cm, applicationProperties, cacheNameResolver);
     }
 
     private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration, CacheNameResolver cacheNameResolver) {
