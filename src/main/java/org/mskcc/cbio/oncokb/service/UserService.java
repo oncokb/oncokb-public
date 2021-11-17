@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.*;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
@@ -17,8 +18,10 @@ import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.*;
+import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
 import org.mskcc.cbio.oncokb.util.StringUtil;
 
@@ -86,6 +89,9 @@ public class UserService {
     @Autowired
     private UserDetailsMapper userDetailsMapper;
 
+    @Autowired
+    private CompanyMapper companyMapper;
+
     public UserService(
         UserRepository userRepository,
         UserDetailsRepository userDetailsRepository,
@@ -125,12 +131,6 @@ public class UserService {
                 // we only set the activation key to null after verifying the email.
                 // the account needs to be manually verified by the admin
                 user.setActivationKey(null);
-
-                // Check if the user is apart of licensed company and then continue with approval procedure
-                UserDTO userDTO = userMapper.userToUserDTO(user);
-                Optional<Company> company = findAssociatedCompany(userDTO);
-                company.ifPresent(c -> updateUserWithCompanyLicense(userMapper.userDTOToUser(userDTO), c));
-
                 this.clearUserCaches(user);
                 log.debug("Activated user: {}", user);
                 return user;
@@ -339,13 +339,17 @@ public class UserService {
         userDetails.setCompanyName(userDTO.getCompanyName());
         userDetails.setCity(userDTO.getCity());
         userDetails.setCountry(userDTO.getCountry());
-        userDetails.setCompany(userDTO.getCompany());
+        userDetails.setCompany(companyMapper.toEntity(userDTO.getCompany()));
         userDetailsRepository.save(userDetails);
 
         
         // Check if the user is apart of licensed company and then continue with approval procedure
-        Optional<Company> company = findAssociatedCompany(userDTO);
-        company.ifPresent(c -> updateUserWithCompanyLicense(user, c));
+        if(userDetails.getCompany() != null){
+            companyRepository.findById(userDetails.getCompany().getId())
+                .ifPresent(c -> {
+                    updateUserWithCompanyLicense(userMapper.userToUserDTO(updatedUser), c, false);
+                });
+        }
 
         this.clearUserCaches(user);
 
@@ -387,7 +391,7 @@ public class UserService {
                 log.debug("Changed Information for User: {}", user);
 
                 return new UserDTO(user, getUpdatedUserDetails(
-                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCity(), userDTO.getCountry()));
+                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
             });
 
         if (updatedUserDTO.isPresent()) {
@@ -396,16 +400,17 @@ public class UserService {
         return updatedUserDTO;
     }
 
-    private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String companyName, String city, String country) {
+    private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String companyName, CompanyDTO companyDTO, String city, String country) {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
         if (userDetails.isPresent()) {
             //If a user has an associated company, align their licenseStatus with the company's
-            Company company = userDetails.get().getCompany();
-            userDetails.get().setLicenseType(company != null ? company.getLicenseType() : licenseType);
+            userDetails.get().setLicenseType(companyDTO != null ? companyDTO.getLicenseType() : licenseType);
             userDetails.get().setJobTitle(jobTitle);
+            userDetails.get().setCompany(companyMapper.toEntity(companyDTO));
             userDetails.get().setCompanyName(companyName);
             userDetails.get().setCity(city);
             userDetails.get().setCountry(country);
+            userDetailsRepository.save(userDetails.get());
             return userDetails.get();
         } else {
             UserDetails newUserDetails = new UserDetails();
@@ -561,45 +566,64 @@ public class UserService {
      * the user's license with their company's license.
      * @param userDTO the userDTO
      * @param company the company to update the user with
+     * @param keepOriginalLicense allow a user to keep their regular license when added to trial company
      */
-    public void updateUserWithCompanyLicense(User user, Company company){
+    public Optional<UserDTO> updateUserWithCompanyLicense(UserDTO userDTO, Company company, boolean keepOriginalLicense){
+
+        LicenseType registeredLicense = userDTO.getLicenseType();
 
         // Map the user to the company
-        Optional<UserDetails> userDetails = this.userDetailsRepository.findOneByUser(user);
-        userDetails.ifPresent(ud -> {
-            ud.setCompany(company);
-            ud.setLicenseType(company.getLicenseType());
-            this.userDetailsService.save(this.userDetailsMapper.toDto(ud));
-        });
-        
-        // Update the user with the company's license
-        UserDTO userDTO = userMapper.userToUserDTO(user);
-        LicenseStatus companyLicenseStatus = company.getLicenseStatus();
-        if(companyLicenseStatus.equals(LicenseStatus.REGULAR)) {
-            // Currently, we approve all users with the same domain, but will need to modify this for mixed usages
-            if(userHasValidTrialActivation(userDTO)){ 
-                // Convert user if they're on trial
-                convertTrialUserToRegular(userDTO);
-            } else { 
-                // Approve the user for regular use
-                approveUser(userDTO, false);
+        userDTO.setCompanyName(company.getName());
+        userDTO.setCompany(companyMapper.toDto(company));
+        userDTO.setLicenseType(company.getLicenseType());
+        Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
+
+        if(updatedUserDTO.isPresent()){
+            // Update the user with the company's license
+            LicenseStatus companyLicenseStatus = company.getLicenseStatus();
+            if(companyLicenseStatus.equals(LicenseStatus.REGULAR)) {
+                if(userHasValidTrialActivation(userDTO)){ 
+                    // Convert user if they're on trial
+                    convertTrialUserToRegular(userDTO);
+                } else { 
+                    // Approve the user for regular use
+                    approveUser(userDTO, false);
+                }
+                // When the license the user registers with doesn't match their company's license,
+                // we send an email explaining this.
+                if(!registeredLicense.equals(company.getLicenseType())){
+                    mailService.sendApprovalWithClarificationEmail(userDTO, userDTO.getLicenseType(), company);
+                }else{
+                    mailService.sendApprovalEmail(userDTO);
+                }
+            }else if(companyLicenseStatus.equals(LicenseStatus.TRIAL)){
+                // If the user is activated and allowed to keep their regular license
+                // then we don't need to update their license, just add them to the company.
+                if(keepOriginalLicense && userDTO.isActivated()){
+                    return updatedUserDTO;
+                }
+                if(userHasValidTrialActivation(userDTO)){
+                    // When a user has an active or expired trial, we just need to approve and update their tokens.
+                    approveUser(userDTO, true);
+                }else{
+                    List<Token> userTokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+                    userTokens.forEach(token -> {
+                        token.setRenewable(false);
+                        token.setExpiration(Instant.now().plusSeconds(DAY_IN_SECONDS * TRIAL_PERIOD_IN_DAYS));
+                        tokenService.save(token);
+                    });
+                    Optional<User> updatedUser = initiateTrialAccountActivation(userDTO.getLogin());
+                    if(updatedUser.isPresent()){
+                        mailService.sendActiveTrialMail(userMapper.userToUserDTO(updatedUser.get()), false);
+                        updatedUserDTO = Optional.of(userMapper.userToUserDTO(updatedUser.get()));
+                    }
+                } 
+            }else if(companyLicenseStatus.equals(LicenseStatus.TRIAL_EXPIRED) || companyLicenseStatus.equals(LicenseStatus.EXPIRED)){
+                expireUserAccount(userDTO);
             }
-            mailService.sendApprovalEmail(userDTO);
-        }else if(companyLicenseStatus.equals(LicenseStatus.TRIAL)){
-            if(userHasValidTrialActivation(userDTO)){ 
-                //If user is already under trial and company under trial
-                // Activate user trial and align with the company trial
-                approveUser(userDTO, true);
-            }else{ 
-                // Let user activate trial if they dont have already
-                Optional<User> updatedUser = initiateTrialAccountActivation(userDTO.getLogin());
-                updatedUser.ifPresent(
-                    u -> mailService.sendActiveTrialMail(userMapper.userToUserDTO(u), false)
-                );
-            } 
-        }else if(companyLicenseStatus.equals(LicenseStatus.TRIAL_EXPIRED) || companyLicenseStatus.equals(LicenseStatus.EXPIRED)){
-            expireUserAccount(userDTO);
         }
+
+        return updatedUserDTO;
     }
 
     /**
@@ -618,29 +642,41 @@ public class UserService {
     }
 
     /**
-     * Find the company entity associated with the user by the domain part of their
-     * email. Modifications are needed for mixed usages and micro licenses.
+     * Find a company based on the user's email address domain.
      * @param userDTO the user
      */
-    private Optional<Company> findAssociatedCompany(UserDTO userDTO) {
-        
-        if(userDTO.getCompany() != null){
-            return companyRepository.findById(userDTO.getCompany().getId());
-        }
+    public CompanyCandidate findCompanyCandidate(UserDTO userDTO) {
 
-        String domain = StringUtil.getEmailDomain(userDTO.getEmail());
-        List<CompanyDomain> companyDomains = companyDomainRepository.findByName(domain);
-        if(companyDomains.size() > 0) {
-            if(companyDomains.size() == 1){
-                return companyRepository.findById(companyDomains.get(0).getCompany().getId());
-            }else{  // Mixed usage, same company domain is used 
-                // Todo
+        // Using the email domain, find a company, if possible.
+        String emailDomain = StringUtil.getEmailDomain(userDTO.getEmail());
+        Optional<CompanyDomain> optionalCompanyDomain = companyDomainRepository.findOneByNameIgnoreCase(emailDomain);
+        if(optionalCompanyDomain.isPresent()){
+            Set<Company> companies = optionalCompanyDomain.get().getCompanies();
+            if(companies.size() == 1){
+                Company company = companies.iterator().next();
+                if(company.getLicenseModel().equals(LicenseModel.MICRO)){
+                    return new CompanyCandidate(Optional.of(company), false);
+                }
+                if(company.getLicenseModel().equals(LicenseModel.REGULAR)){
+                    // If only a regular license model exists for domain, then auto approve user with company.
+                    return new CompanyCandidate(Optional.of(company), true);
+                }
+            }else if(companies.size() > 1){
+                // If there are mutliple companies with the domain, then we find a company with a regular license.
+                Optional<Company> foundCompany = companies
+                    .stream()
+                    .filter(c -> {
+                        return c.getLicenseModel().equals(LicenseModel.REGULAR);
+                    })
+                    .findAny();
+                return new CompanyCandidate(foundCompany, true);
             }
         }
-        return Optional.ofNullable(null);
+        
+        return new CompanyCandidate(Optional.empty(), false);
     }
 
-    private Boolean userHasValidTrialActivation(UserDTO userDTO){
+    private boolean userHasValidTrialActivation(UserDTO userDTO){
         return Optional.ofNullable(userDTO)
             .map(UserDTO::getAdditionalInfo)
             .map(AdditionalInfoDTO::getTrialAccount)

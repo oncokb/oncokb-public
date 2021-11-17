@@ -74,8 +74,11 @@ relationship ManyToOne {
 	TokenStats{token} to Token
 	Token{user} to User
 	UserMails{user} to User
-	CompanyDomain{company} to Company
 	UserDetails{company} to Company
+}
+
+relationship ManyToMany {
+    Company{companyDomain} to CompanyDomain{company}
 }
 
 // Set pagination options

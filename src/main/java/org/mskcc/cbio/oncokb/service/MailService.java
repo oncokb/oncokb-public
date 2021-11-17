@@ -7,6 +7,7 @@ import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import javax.mail.MessagingException;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.UserMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -244,6 +245,19 @@ public class MailService {
         sendEmailFromTemplate(user, MailType.APPROVAL);
     }
 
+    // This method should be used when we want to explain to the user that their
+    // company has a different license type and they've been approved to use that.
+    @Async
+    public void sendApprovalWithClarificationEmail(UserDTO userDTO, LicenseType registeredLicenseType, Company company) {
+        log.debug("Sending approval email with clarification to '{}", userDTO.getEmail());
+
+        Context context = new Context();
+        context.setVariable(MAIL_LICENSE, registeredLicenseType.getName());
+        context.setVariable("companyName", company.getName());
+        context.setVariable("companyLicenseType", company.getLicenseType().getShortName());
+        sendEmailFromTemplate(userDTO, MailType.APPROVAL_ALIGN_LICENSE_WITH_COMPANY, context);
+    }
+
     @Async
     public void sendPasswordResetMail(UserDTO user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
@@ -422,7 +436,7 @@ public class MailService {
                 return Optional.of("email.reject.title");
             case VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES:
                 return Optional.of("email.account.expires.by.days.title");
-            case APPROVAL_MSK_IN_COMMERCIAL:
+            case APPROVAL_ALIGN_LICENSE_WITH_COMPANY:
                 return Optional.of("email.approval.title");
             case ACTIVATE_FREE_TRIAL:
                 return Optional.of("email.active.free.trial.title");

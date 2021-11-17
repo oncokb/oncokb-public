@@ -1,13 +1,12 @@
 package org.mskcc.cbio.oncokb.service.mapper;
 
-
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.Mapping;
 import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.repository.CompanyDomainRepository;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
@@ -16,27 +15,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Mapper for the entity {@link Company} and its DTO {@link CompanyDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {CompanyDomainMapper.class})
 public abstract class CompanyMapper implements EntityMapper<CompanyDTO, Company> {
 
     @Autowired
     CompanyDomainRepository companyDomainRepository;
 
-    /**
-     * Called after a Company is mapped to a CompanyDTO. The domains
-     * associated with the company will be retrieved and added to the 
-     * companyDTO.
-     * @param companyDTO the companyDTO mapped from company entity
-     */
-    @AfterMapping
-    protected void updateResult(@MappingTarget CompanyDTO companyDTO){
-        Set<String> domainNames = 
-            companyDomainRepository
-                .findAllCompanyDomainsByCompanyId(companyDTO.getId())
-                .stream()
-                .map(companyDomainDTO -> companyDomainDTO.getName())
-                .collect(Collectors.toCollection(HashSet::new));
-        companyDTO.setCompanyDomains(domainNames);
+    @Mapping(target = "removeDomain", ignore = true)
+
+    protected Set<String> fromCompanyDomain(Set<CompanyDomain> companyDomains) {
+        return companyDomains.stream()
+            .map(companyDomain -> companyDomain.getName())
+            .collect(Collectors.toCollection(HashSet::new));
+    }
+
+    protected Set<CompanyDomain> fromCompanyDomainString(Set<String> companyDomainStrings) {
+        return companyDomainStrings.stream()
+            .map(name -> {
+                // When the name of the company domain exists, then use that companyDomain entity
+                // Otherwise, we save the new domain entity with the company
+                Optional<CompanyDomain> optionalDomain = companyDomainRepository.findOneByNameIgnoreCase(name);
+                if(optionalDomain.isPresent()){
+                    return optionalDomain.get();
+                }
+                CompanyDomain domain = new CompanyDomain();
+                domain.setName(name);
+                return domain;
+            })
+            .collect(Collectors.toCollection(HashSet::new));
     }
 
     protected Company fromId(Long id) {

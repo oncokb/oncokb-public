@@ -176,11 +176,7 @@ public class UserResource {
 
         // Remove mapping between the user and the company
         if(existingUser.isPresent() && unlinkUser){
-            Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(existingUser.get());
-            userDetails.ifPresent(ud -> {
-                ud.setCompany(null);
-                userDetailsRepository.save(ud);
-            });
+            userDTO.setCompany(null);
         }
 
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);

@@ -16,16 +16,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -69,8 +73,14 @@ public class CompanyResourceIT {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Mock
+    private CompanyRepository companyRepositoryMock;
+
     @Autowired
     private CompanyMapper companyMapper;
+
+    @Mock
+    private CompanyService companyServiceMock;
 
     @Autowired
     private CompanyService companyService;
@@ -291,7 +301,7 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.[*].businessContact").value(hasItem(DEFAULT_BUSINESS_CONTACT)))
             .andExpect(jsonPath("$.[*].legalContact").value(hasItem(DEFAULT_LEGAL_CONTACT)));
     }
-    
+
     @Test
     @Transactional
     public void getCompany() throws Exception {

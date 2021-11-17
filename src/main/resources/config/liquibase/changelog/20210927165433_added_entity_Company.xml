@@ -46,6 +46,17 @@
 
     <changeSet id="20210927165433-1-relations" author="jhipster">
 
+        <createTable tableName="company_company_domain">
+            <column name="company_domain_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="company_id, company_domain_id" tableName="company_company_domain"/>
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
