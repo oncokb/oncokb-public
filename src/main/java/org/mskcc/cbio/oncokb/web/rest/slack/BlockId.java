@@ -17,7 +17,6 @@ public enum BlockId {
     , DUPLICATE_USER_CLARIFICATION_NOTE("duplicate-user-clarification-note")
     , REJECTION_NOTE("rejection-note")
     , REJECT_ALUMNI_ADDRESS_NOTE("reject-alumni-address-note")
-    , MSK_USER_NOTE("msk-user-note")
     , APPROVED_NOTE("approved-note")
     , TRIAL_ACCOUNT_NOTE("trial-account-note")
     , CONVERT_TO_REGULAR_ACCOUNT_NOTE("convert-to-regular-account-note")
@@ -54,7 +53,6 @@ public enum BlockId {
             || blockId == FOR_PROFIT_CLARIFICATION_NOTE
             || blockId == USE_CASE_CLARIFICATION_NOTE
             || blockId == DUPLICATE_USER_CLARIFICATION_NOTE
-            || blockId == MSK_USER_NOTE
             || blockId == APPROVED_NOTE
             || blockId == TRIAL_ACCOUNT_NOTE
             || blockId == CONVERT_TO_REGULAR_ACCOUNT_NOTE

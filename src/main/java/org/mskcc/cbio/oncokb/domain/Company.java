@@ -5,6 +5,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 
@@ -28,7 +30,7 @@ public class Company implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
     @Lob
@@ -60,6 +62,12 @@ public class Company implements Serializable {
 
     @Column(name = "legal_contact")
     private String legalContact;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "company_company_domain",
+               joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "company_domain_id", referencedColumnName = "id"))
+    private Set<CompanyDomain> companyDomains = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -172,6 +180,31 @@ public class Company implements Serializable {
 
     public void setLegalContact(String legalContact) {
         this.legalContact = legalContact;
+    }
+
+    public Set<CompanyDomain> getCompanyDomains() {
+        return companyDomains;
+    }
+
+    public Company companyDomains(Set<CompanyDomain> companyDomains) {
+        this.companyDomains = companyDomains;
+        return this;
+    }
+
+    public Company addCompanyDomain(CompanyDomain companyDomain) {
+        this.companyDomains.add(companyDomain);
+        companyDomain.getCompanies().add(this);
+        return this;
+    }
+
+    public Company removeCompanyDomain(CompanyDomain companyDomain) {
+        this.companyDomains.remove(companyDomain);
+        companyDomain.getCompanies().remove(this);
+        return this;
+    }
+
+    public void setCompanyDomains(Set<CompanyDomain> companyDomains) {
+        this.companyDomains = companyDomains;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

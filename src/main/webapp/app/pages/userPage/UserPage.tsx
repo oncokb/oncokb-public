@@ -188,7 +188,7 @@ export default class UserPage extends React.Component<IUserPage> {
         authorities: values.authorities,
         activated: values.accountStatus === AccountStatus.ACTIVATED,
         jobTitle: values.jobTitle,
-        company: values.companyName,
+        companyName: values.companyName,
         city: values.city,
         country: values.country,
       };

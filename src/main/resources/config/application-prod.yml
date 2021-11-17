@@ -160,9 +160,6 @@ application:
   api-proxy-url: 'http://oncokb-core:8888'
   sitemap-enabled: true
   google-webmaster-verification:
-  licensed-domains:
-  trialed-domains:
-  account-approval-whitelist:
   token-usage-check:
   token-usage-check-whitelist:
   slack: # Add the following if you wish to integrate user registration to Slack and send the weekly unapproved users email

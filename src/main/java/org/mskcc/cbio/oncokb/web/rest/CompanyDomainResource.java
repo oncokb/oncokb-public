@@ -1,6 +1,5 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.CompanyDomainService;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDomainDTO;
@@ -10,8 +9,8 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -102,6 +101,13 @@ public class CompanyDomainResource {
         log.debug("REST request to get CompanyDomain : {}", id);
         Optional<CompanyDomainDTO> companyDomainDTO = companyDomainService.findOne(id);
         return ResponseUtil.wrapOrNotFound(companyDomainDTO);
+    }
+
+    @PostMapping("/company-domains/verify")
+    public ResponseEntity<List<CompanyDomainDTO>> verifyCompanyDomain(@RequestBody List<String> names, @RequestParam(required = false) Long companyId) {
+        log.debug("REST request to verify CompanyDomains");
+        List<CompanyDomainDTO> companyDomainDTOs = companyDomainService.verifyCompanyDomains(names, companyId);
+        return new ResponseEntity<>(companyDomainDTOs, HttpStatus.OK);
     }
 
     /**

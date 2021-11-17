@@ -23,16 +23,24 @@ public class UserMapper {
     @Autowired
     UserDetailsRepository userDetailsRepository;
 
+    @Autowired
+    CompanyMapper companyMapper;
+
     public List<UserDTO> usersToUserDTOs(List<User> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToUserDTO)
-            .collect(Collectors.toList());
+            .collect(Collectors.toList()); 
     }
 
     public UserDTO userToUserDTO(User user) {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
-        return new UserDTO(user, userDetails.isPresent() ? userDetails.get() : null);
+        if(userDetails.isPresent()) {
+            UserDTO userDTO = new UserDTO(user, userDetails.get());
+            userDTO.setCompany(companyMapper.toDto(userDetails.get().getCompany()));
+            return userDTO;
+        }
+        return new UserDTO(user, null);
     }
 
     public List<User> userDTOsToUsers(List<UserDTO> userDTOs) {

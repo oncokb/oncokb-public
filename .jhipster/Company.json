@@ -4,9 +4,7 @@
     {
       "fieldName": "name",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "description",
@@ -17,33 +15,25 @@
       "fieldName": "companyType",
       "fieldType": "CompanyType",
       "fieldValues": "PARENT,BRANCH,UNKNOWN",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "licenseType",
       "fieldType": "LicenseType",
       "fieldValues": "ACADEMIC,COMMERCIAL,RESEARCH_IN_COMMERCIAL,HOSPITAL",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "licenseModel",
       "fieldType": "LicenseModel",
       "fieldValues": "REGULAR,MICRO",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "licenseStatus",
       "fieldType": "LicenseStatus",
       "fieldValues": "TRIAL,REGULAR,TRIAL_EXPIRED,EXPIRED,UNKNOWN",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "businessContact",
@@ -54,7 +44,16 @@
       "fieldType": "String"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "companyDomain",
+      "otherEntityRelationshipName": "company",
+      "relationshipName": "companyDomain",
+      "otherEntityField": "id",
+      "ownerSide": true
+    }
+  ],
   "changelogDate": "20210927165433",
   "entityTableName": "company",
   "dto": "mapstruct",

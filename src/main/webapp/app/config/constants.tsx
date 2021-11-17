@@ -587,6 +587,12 @@ export const LICENSE_MODEL_TITLES: { [key in LicenseModel]: string } = {
   [LicenseModel.MICRO]: 'Micro Tier',
 };
 
+export const LICENSE_MODEL_DESCRIPTIONS: { [key in LicenseModel]: string } = {
+  [LicenseModel.REGULAR]: `This tier will allow any user with a matching email address domain to be automatically approved.`,
+  [LicenseModel.MICRO]:
+    'This tier is appropriate when we want to restrict the license to a group of users. ',
+};
+
 export enum ACCOUNT_TITLES {
   USER_NAME = 'Username',
   FIRST_NAME = 'First Name',

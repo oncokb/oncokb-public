@@ -9,11 +9,12 @@
   ],
   "relationships": [
     {
-      "relationshipType": "many-to-one",
+      "relationshipType": "many-to-many",
       "otherEntityName": "company",
       "otherEntityRelationshipName": "companyDomain",
       "relationshipName": "company",
-      "otherEntityField": "id"
+      "otherEntityField": "id",
+      "ownerSide": false
     }
   ],
   "changelogDate": "20210927165533",

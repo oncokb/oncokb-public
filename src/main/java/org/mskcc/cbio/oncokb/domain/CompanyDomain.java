@@ -1,11 +1,13 @@
 package org.mskcc.cbio.oncokb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A CompanyDomain.
@@ -24,9 +26,9 @@ public class CompanyDomain implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "companyDomains", allowSetters = true)
-    private Company company;
+    @ManyToMany(mappedBy = "companyDomains")
+    @JsonIgnore
+    private Set<Company> companies = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -50,17 +52,29 @@ public class CompanyDomain implements Serializable {
         this.name = name;
     }
 
-    public Company getCompany() {
-        return company;
+    public Set<Company> getCompanies() {
+        return companies;
     }
 
-    public CompanyDomain company(Company company) {
-        this.company = company;
+    public CompanyDomain companies(Set<Company> companies) {
+        this.companies = companies;
         return this;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public CompanyDomain addCompany(Company company) {
+        this.companies.add(company);
+        company.getCompanyDomains().add(this);
+        return this;
+    }
+
+    public CompanyDomain removeCompany(Company company) {
+        this.companies.remove(company);
+        company.getCompanyDomains().remove(this);
+        return this;
+    }
+
+    public void setCompanies(Set<Company> companies) {
+        this.companies = companies;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
