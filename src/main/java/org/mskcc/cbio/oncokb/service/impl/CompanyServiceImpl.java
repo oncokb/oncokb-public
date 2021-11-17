@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.service.impl;
 
 import org.mskcc.cbio.oncokb.service.CompanyDomainService;
 import org.mskcc.cbio.oncokb.service.CompanyService;
+import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.CompanyDomain;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
@@ -15,14 +16,19 @@ import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_ID_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_NAME_CACHE;
 
 /**
  * Service Implementation for managing {@link Company}.
@@ -44,6 +50,10 @@ public class CompanyServiceImpl implements CompanyService {
     private final UserService userService;
 
     private final UserMapper userMapper;
+    
+    private final CacheManager cacheManager;
+
+    private final CacheNameResolver cacheNameResolver;
 
     public CompanyServiceImpl(
         CompanyRepository companyRepository, 
@@ -51,7 +61,9 @@ public class CompanyServiceImpl implements CompanyService {
         CompanyDomainService companyDomainService,
         CompanyDomainMapper companyDomainMapper,
         UserService userService,
-        UserMapper userMapper
+        UserMapper userMapper,
+        CacheManager cacheManager,
+        CacheNameResolver cacheNameResolver
     ) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
@@ -59,6 +71,8 @@ public class CompanyServiceImpl implements CompanyService {
         this.companyDomainMapper = companyDomainMapper;
         this.userService = userService;
         this.userMapper = userMapper;
+        this.cacheManager = cacheManager;
+        this.cacheNameResolver = cacheNameResolver;
     }
 
     @Override
@@ -69,6 +83,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         updateCompanyDomains(companyDTO.getCompanyDomains(), company);
 
+        this.clearCompanyCaches(company);
         return companyMapper.toDto(company);
     }
 
@@ -98,6 +113,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyVm.getCompanyUserDTOs()
             .forEach(userDTO -> userService.updateUserWithCompanyLicense(userMapper.userDTOToUser(userDTO), company));
 
+        this.clearCompanyCaches(company);
         return companyMapper.toDto(company);
     }
 
@@ -162,6 +178,11 @@ public class CompanyServiceImpl implements CompanyService {
     public void delete(Long id) {
         log.debug("Request to delete Company : {}", id);
         companyRepository.deleteById(id);
+    }
+
+    private void clearCompanyCaches(Company company) {
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(COMPANIES_BY_ID_CACHE))).evict(company.getId());
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(COMPANIES_BY_NAME_CACHE))).evict(company.getName());
     }
 
 }
