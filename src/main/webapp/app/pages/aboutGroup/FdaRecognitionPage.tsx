@@ -14,6 +14,7 @@ import { Version } from 'app/pages/LevelOfEvidencePage';
 import {
   getActionableGenesPageLink,
   getLoEPageLink,
+  SopPageLink,
 } from 'app/shared/utils/UrlUtils';
 import styles from 'app/components/downloadButton/DownloadButton.module.scss';
 
@@ -70,9 +71,7 @@ const FdaRecognitionPage = () => {
             <h5>Important Database Links</h5>
             <ul>
               <li>
-                <Linkout link={'https://sop.oncokb.org/?version=v2'}>
-                  OncoKB SOP v2.0
-                </Linkout>
+                <SopPageLink version={2.0} />
               </li>
               <li>
                 <Link to={getLoEPageLink(Version.FDA)}>
@@ -145,10 +144,7 @@ const FdaRecognitionPage = () => {
             <h5>Scope of OncoKB Recognition</h5>
             <p>
               The FDA has reviewed all OncoKB processes documented in the{' '}
-              <Linkout link={'https://sop.oncokb.org/?version=v2'}>
-                OncoKB SOP v2.0
-              </Linkout>
-              , which include the following:
+              <SopPageLink version={2.0} />, which include the following:
             </p>
             <ol>
               <li>
