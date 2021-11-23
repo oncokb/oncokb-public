@@ -63,7 +63,11 @@ export default class NewsList extends React.Component<NewsListProps> {
       if (newsData.newlyAddedGenesTypes) {
         componentProps.geneTypes = newsData.newlyAddedGenesTypes;
       }
-      return <NewlyAddedGenesListItem {...componentProps} />;
+      return (
+        <li>
+          <NewlyAddedGenesListItem {...componentProps} />
+        </li>
+      );
     } else {
       return undefined;
     }

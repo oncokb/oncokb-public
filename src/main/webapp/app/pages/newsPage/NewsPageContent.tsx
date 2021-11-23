@@ -10,7 +10,10 @@ import {
   SimpleTable,
   SimpleTableCell,
 } from 'app/components/SimpleTable';
-import { NewlyAddedGeneType } from 'app/pages/newsPage/NewlyAddedGenesListItem';
+import {
+  NewlyAddedGenesListItem,
+  NewlyAddedGeneType,
+} from 'app/pages/newsPage/NewlyAddedGenesListItem';
 import { Link } from 'react-router-dom';
 import {
   FAQ_URL_PATTERNS_LINK,
@@ -22,6 +25,7 @@ import {
   AlterationPageLink,
   GenePageLink,
   MSILink,
+  SopPageLink,
 } from 'app/shared/utils/UrlUtils';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -143,6 +147,299 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '11242021': {
+    priorityNews: [
+      <span>
+        Release of <SopPageLink version={2.2} />
+      </span>,
+      <NewlyAddedGenesListItem
+        genes={['POLG', 'IL6ST', 'WWP1']}
+        title={'New Genes Added'}
+      />,
+    ],
+    updatedImplication: [
+      [
+        '1',
+        'ABL1',
+        'T315I',
+        'Chronic Myelogenous Leukemia',
+        'Asciminib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-asciminib-philadelphia-chromosome-positive-chronic-myeloid-leukemia'
+            }
+            approval={'Asciminib'}
+          />
+          <AbstractLink
+            link={'https://ash.confex.com/ash/2020/webprogram/Paper143816.html'}
+            abstract={'Hochhaus et al. Abstract #LBA-4, ASH 2020'}
+          />
+        </WithSeparator>,
+      ],
+      [
+        '3A',
+        'IDH1',
+        'R132',
+        'Glioma',
+        'Ivosidenib',
+        <PMIDLink pmids={'29670690, 32530764'} />,
+      ],
+      [
+        '3A',
+        'KRAS',
+        'G12C',
+        'Colorectal Cancer',
+        'Adagrasib, Adagrasib + Cetuximab',
+        <AbstractLink
+          link={
+            'https://oncologypro.esmo.org/meeting-resources/esmo-congress-2021/krystal-1-adagrasib-mrtx849-as-monotherapy-or-combined-with-cetuximab-cetux-in-patients-pts-with-colorectal-cancer-crc-harboring-a-krasg12'
+          }
+          abstract={'Weiss et al. Abstract# LBA6, ESMO 2021'}
+        />,
+      ],
+      [
+        '4',
+        'MDM2',
+        'Amplification',
+        'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
+        'Milademetan',
+        <PMIDLink pmids={'23400593'} />,
+      ],
+    ],
+    changedAnnotation: [
+      [
+        'ABL1',
+        'BCR-ABL1 Fusion',
+        'Chronic Myelogenous Leukemia',
+        'Asciminib',
+        '3A',
+        '1',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            link={
+              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-asciminib-philadelphia-chromosome-positive-chronic-myeloid-leukemia'
+            }
+            approval={'Asciminib'}
+          />
+          <PMIDLink pmids={'34407542'} />
+        </WithSeparator>,
+      ],
+      [
+        'BRCA1/BRCA2',
+        'Oncogenic mutations',
+        'Breast Cancer',
+        'Olaparib, Talazoparib',
+        '2',
+        '3A',
+        <span>
+          Strict adherence to FDA drug labels for{' '}
+          <Linkout
+            link={
+              'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/208558s014lbl.pdf'
+            }
+          >
+            olaparib
+          </Linkout>{' '}
+          and{' '}
+          <Linkout
+            link={
+              'https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/211651s000lbl.pdf'
+            }
+          >
+            talazoparib
+          </Linkout>
+        </span>,
+      ],
+      [
+        'MET',
+        'Y1003mut',
+        'Non-Small Cell Lung Cancer',
+        'Tepotinib, Capmatinib',
+        '1',
+        '3A',
+        <span>
+          Strict adherence to FDA drug labels for{' '}
+          <Linkout
+            link={
+              'https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/214096s000lbl.pdf'
+            }
+          >
+            tepotinib
+          </Linkout>{' '}
+          and{' '}
+          <Linkout
+            link={
+              'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/213591s000lbl.pdf'
+            }
+          >
+            capmatinib
+          </Linkout>
+        </span>,
+      ],
+      [
+        'MET',
+        'Y1003mut',
+        'Non-Small Cell Lung Cancer',
+        'Crizotinib',
+        '2',
+        '3A',
+        <span>Strict adherence to listing in NSCLC NCCN</span>,
+      ],
+    ],
+    news: [
+      <span>
+        Updated therapeutic implications - 7 updated variant annotation to more
+        accurately reflect the evidence
+        <SimpleTable
+          columns={[
+            { name: 'Level' },
+            { name: 'Gene' },
+            { name: 'Previous Variant Annotation' },
+            { name: 'Current Variant Annotation' },
+            { name: 'Cancer Type' },
+            { name: 'Drug' },
+            { name: 'Evidence' },
+          ]}
+          rows={[
+            [
+              '1',
+              'ALK',
+              'Oncogenic Mutations',
+              'Fusions',
+              'Non-Small Cell Lung Cancer',
+              'Brigatinib',
+              <span>
+                <Linkout
+                  link={
+                    'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/208772s008lbl.pdf'
+                  }
+                >
+                  FDA drug label for brigatinib
+                </Linkout>{' '}
+                and adherence to <SopPageLink version={2.1} />
+              </span>,
+            ],
+            [
+              '2',
+              'BRAF',
+              'V600',
+              'V600 (Excluding V600E)',
+              'Anaplastic Thyroid Cancer',
+              'Trametinib + Dabrafenib',
+              <span>BRAF V600E is Level 1 in this cancer type</span>,
+            ],
+            [
+              '2',
+              'BRAF',
+              'V600',
+              'V600 (Excluding V600E, V600K)',
+              'Melanoma',
+              'Binimetinib + Encorafenib, Trametinib + Dabrafenib, Cobimetinib + Vemurafenib',
+              <span>BRAF V600E/K are Level 1 in this cancer type</span>,
+            ],
+            [
+              '2',
+              'EZH2',
+              'Oncogenic Mutations',
+              'Oncogenic Mutations (Excluding Y646F, A692V, Y646C, Y646S, Y646N, Y646H, A682G)',
+              'Follicular Lymphoma',
+              'Tazemetostat',
+              <span>
+                EZH2 Y646F, A692V, Y646C, Y646S, Y646N, Y646H, and A682G are
+                Level 1 in this cancer type
+              </span>,
+            ],
+            [
+              '2',
+              'IDH1',
+              'Oncogenic Mutations',
+              'Oncogenic Mutations (Excluding R132S, R132C, R132H, R132G, R132L)',
+              'Acute Myeloid Leukemia',
+              'Ivosidenib',
+              <span>
+                IDH1 R132S, R132C, R132H, R132G, and R132L are Level 1 in this
+                cancer type
+              </span>,
+            ],
+            [
+              '2',
+              'IDH2',
+              'Oncogenic Mutations',
+              'Oncogenic Mutations (Excluding R172G, R140L, R140Q, R172M, R172S, R172K, R140W, R140G, R172W)',
+              'Acute Myeloid Leukemia',
+              'Enasidenib',
+              <span>
+                IDH2 R172G, R140L, R140Q, R172M, R172S, R172K, R140W, R140G, and
+                R172W are Level 1 in this cancer type
+              </span>,
+            ],
+            [
+              '2',
+              'PIK3CA',
+              'Oncogenic Mutations',
+              'Oncogenic Mutations (Excluding E545G, Q546E, E545A, H1047R, C420R, H1047Y, Q546R, H1047L, E542K, E545D, E545K)',
+              'Breast Cancer',
+              'Alpelisib+Fulvestrant',
+              <span>
+                PIK3CA E545G, Q546E, E545A, H1047R, C420R, H1047Y, Q546R,
+                H1047L, E542K, E545D, and E545K are Level 1 in this cancer type
+              </span>,
+            ],
+          ].map((record, index) => {
+            return {
+              key: `11242021-ACCURATE-COLUMN-${index}`,
+              content: record.map((subItem, subIndex) => {
+                return {
+                  key: `11242021-ACCURATE-COLUMN-${index}-${subIndex}`,
+                  content: subItem,
+                };
+              }),
+            };
+          })}
+          theadClassName={mainstyle.changedAnnotationTableHead}
+        />
+      </span>,
+      <span>
+        Updated therapeutic implications - updated cancer type
+        <SimpleTable
+          columns={[
+            { name: 'Level' },
+            { name: 'Gene' },
+            { name: 'Mutation' },
+            { name: 'Previous Cancer Type' },
+            { name: 'Current Cancer Type' },
+            { name: 'Drug' },
+            { name: 'Evidence' },
+          ]}
+          rows={[
+            [
+              '3A',
+              'PTCH1',
+              'Truncating Mutations',
+              'Embryonal Tumor',
+              'Medulloblastoma',
+              'Sonidegib, Vismodegib',
+              <PMIDLink
+                pmids={'24523439, 32923880, 26169613, 31362788, 29515801'}
+              />,
+            ],
+          ].map((record, index) => {
+            return {
+              key: `11242021-UPDATED-CANCER-TYPE-COLUMN-${index}`,
+              content: record.map((subItem, subIndex) => {
+                return {
+                  key: `11242021-ACCURATE-COLUMN-${index}-${subIndex}`,
+                  content: subItem,
+                };
+              }),
+            };
+          })}
+          theadClassName={mainstyle.changedAnnotationTableHead}
+        />
+      </span>,
+    ],
+  },
   '10262021': {
     priorityNews: [
       <span>
@@ -424,8 +721,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '07162021': {
     priorityNews: [
       <span>
-        Release of OncoKB{' '}
-        <Linkout link={'https://sop.oncokb.org'}>SOP v2.1</Linkout>
+        Release of <SopPageLink version={2.1} />
       </span>,
     ],
     changedAnnotation: [
@@ -640,9 +936,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         An updated version of the OncoKB Curation Standard Operating Procedure,
         v2.0, has been released. See the OncoKB{' '}
         <Link to={PAGE_ROUTE.ABOUT}>About</Link> page or{' '}
-        <Linkout link={'https://sop.oncokb.org'}>
-          https://sop.oncokb.org
-        </Linkout>
+        <SopPageLink content={'https://sop.oncokb.org'} />
       </span>,
       <span>
         &quot;Resistance&quot; is now included as an oncogenic effect for
