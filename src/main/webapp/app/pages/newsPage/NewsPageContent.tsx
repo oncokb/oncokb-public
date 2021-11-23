@@ -289,7 +289,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     news: [
       <span>
-        Updated therapeutic implications - 7 updated variant annotation to more
+        Updated therapeutic implications - 7 updated variant annotations to more
         accurately reflect the evidence
         <SimpleTable
           columns={[
