@@ -10,6 +10,7 @@ import {
   REGEXP,
   REGEXP_LINK,
   SEARCH_QUERY_KEY,
+  SOP_LINK,
   YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
 import _ from 'lodash';
@@ -209,4 +210,17 @@ export const getActionableGenesPageLink = (
   return `${PAGE_ROUTE.ACTIONABLE_GENE}${
     hashes.length > 0 ? '#' : ''
   }${hashes.join('&')}`;
+};
+
+export const SopPageLink: React.FunctionComponent<{
+  version?: number;
+  content?: string;
+}> = props => {
+  let link = SOP_LINK;
+  let defaultContent = 'OncoKB SOP';
+  if (props.version) {
+    link += `/?version=v${props.version}`;
+    defaultContent += ` v${props.version}`;
+  }
+  return <Linkout link={link}>{props.content || defaultContent}</Linkout>;
 };
