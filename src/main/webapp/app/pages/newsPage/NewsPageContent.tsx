@@ -326,7 +326,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               'V600',
               'V600 (Excluding V600E)',
               'Anaplastic Thyroid Cancer',
-              'Trametinib + Dabrafenib',
+              'Dabrafenib + Trametinib',
               <span>BRAF V600E is Level 1 in this cancer type</span>,
             ],
             [
@@ -335,7 +335,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               'V600',
               'V600 (Excluding V600E, V600K)',
               'Melanoma',
-              'Binimetinib + Encorafenib, Trametinib + Dabrafenib, Cobimetinib + Vemurafenib',
+              'Binimetinib + Encorafenib, Dabrafenib + Trametinib, Cobimetinib + Vemurafenib',
               <span>BRAF V600E/K are Level 1 in this cancer type</span>,
             ],
             [
