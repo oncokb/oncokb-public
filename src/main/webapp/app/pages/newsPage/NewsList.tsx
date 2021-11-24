@@ -108,6 +108,7 @@ export default class NewsList extends React.Component<NewsListProps> {
               })}
               {newsData.updatedImplication ? (
                 <UpdatedTxImplListItem
+                  title={newsData.updatedImplicationTitle}
                   data={newsData.updatedImplication.map((item, index) => {
                     return {
                       key: `updatedImplication-${date}-${index}`,

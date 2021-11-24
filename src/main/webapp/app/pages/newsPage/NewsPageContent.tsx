@@ -43,6 +43,7 @@ export type NewsData = {
   newlyAddedGenes?: string[];
   newlyAddedGenesTypes?: NewlyAddedGeneType[];
   updatedImplication?: ElementType[][];
+  updatedImplicationTitle?: string;
   numOfAssociationsInUpdatedImplication?: number;
   updatedImplicationInOldFormat?: { [level: string]: ElementType[] };
   changedAnnotation?: ElementType[][];
@@ -207,6 +208,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <PMIDLink pmids={'23400593'} />,
       ],
     ],
+    updatedImplicationTitle:
+      'Updated therapeutic implications: New variants with a level of evidence',
     changedAnnotation: [
       [
         'ABL1',
@@ -284,12 +287,16 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'Crizotinib',
         '2',
         '3A',
-        <span>Strict adherence to listing in NSCLC NCCN</span>,
+        <span>
+          Strict adherence to listing in NCCN Non-Small Cell Lung Cancer v7.2021
+        </span>,
       ],
     ],
+    changedAnnotationTitle:
+      'Updated therapeutic implications: Changed annotations',
     news: [
       <span>
-        Updated therapeutic implications - 7 updated variant annotations to more
+        Updated therapeutic implications: Updated variant annotations to more
         accurately reflect the evidence
         <SimpleTable
           columns={[
@@ -317,17 +324,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 >
                   FDA drug label for brigatinib
                 </Linkout>{' '}
-                and adherence to <SopPageLink version={2.1} />
+                and adherence to <SopPageLink version={2.2} />
               </span>,
-            ],
-            [
-              '2',
-              'BRAF',
-              'V600',
-              'V600 (Excluding V600E)',
-              'Anaplastic Thyroid Cancer',
-              'Dabrafenib + Trametinib',
-              <span>BRAF V600E is Level 1 in this cancer type</span>,
             ],
             [
               '2',
@@ -336,7 +334,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               'V600 (Excluding V600E, V600K)',
               'Melanoma',
               'Binimetinib + Encorafenib, Dabrafenib + Trametinib, Cobimetinib + Vemurafenib',
-              <span>BRAF V600E/K are Level 1 in this cancer type</span>,
+              <span>
+                The NCCN Melanoma: Cutaneous v2.2021 lists “BRAF V600” and is
+                not limited to V600E/K. Therefore, according to the{' '}
+                <SopPageLink version={2.2} /> BRAF V600 is considered Level 2,
+                while V600E/K are Level 1.
+              </span>,
             ],
             [
               '2',
@@ -346,32 +349,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               'Follicular Lymphoma',
               'Tazemetostat',
               <span>
-                EZH2 Y646F, A692V, Y646C, Y646S, Y646N, Y646H, and A682G are
-                Level 1 in this cancer type
-              </span>,
-            ],
-            [
-              '2',
-              'IDH1',
-              'Oncogenic Mutations',
-              'Oncogenic Mutations (Excluding R132S, R132C, R132H, R132G, R132L)',
-              'Acute Myeloid Leukemia',
-              'Ivosidenib',
-              <span>
-                IDH1 R132S, R132C, R132H, R132G, and R132L are Level 1 in this
-                cancer type
-              </span>,
-            ],
-            [
-              '2',
-              'IDH2',
-              'Oncogenic Mutations',
-              'Oncogenic Mutations (Excluding R172G, R140L, R140Q, R172M, R172S, R172K, R140W, R140G, R172W)',
-              'Acute Myeloid Leukemia',
-              'Enasidenib',
-              <span>
-                IDH2 R172G, R140L, R140Q, R172M, R172S, R172K, R140W, R140G, and
-                R172W are Level 1 in this cancer type
+                The NCCN B-cell lymphoma v5.2021 lists “EZH2 mutation” and is
+                not limited to the mutations listed in the FDA-approved CDx.
+                Therefore, according to the <SopPageLink version={2.2} /> EZH2
+                Oncogenic mutations are considered Level 2, with the exception
+                of those mutations listed in the CDx, which are Level 1.
               </span>,
             ],
             [
@@ -382,8 +364,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               'Breast Cancer',
               'Alpelisib+Fulvestrant',
               <span>
-                PIK3CA E545G, Q546E, E545A, H1047R, C420R, H1047Y, Q546R,
-                H1047L, E542K, E545D, and E545K are Level 1 in this cancer type
+                The NCCN Breast Cancer V8.2021 lists “PIK3CA activating
+                mutation” and is not limited to the mutations listed in the
+                FDA-approved CDx. Therefore, PIK3CA Oncogenic mutations by{' '}
+                <SopPageLink version={2.2} /> are considered Level 2, with the
+                exception of those mutations listed in the CDx, which are Level
+                1.
               </span>,
             ],
           ].map((record, index) => {
@@ -401,7 +387,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         />
       </span>,
       <span>
-        Updated therapeutic implications - updated cancer type
+        Updated therapeutic implications: Updated tumor type
         <SimpleTable
           columns={[
             { name: 'Level' },

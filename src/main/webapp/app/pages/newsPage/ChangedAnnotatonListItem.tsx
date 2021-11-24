@@ -38,7 +38,7 @@ export const ChangedAnnotationListItem = (props: {
 
   return (
     <li>
-      {props.title ? props.title : 'Changed Annotation'}:
+      {props.title ? props.title : 'Changed Annotation:'}
       <Row className={'overflow-auto'}>
         <SimpleTable
           columns={annotationColumnHeader.slice(0, longestRow)}
