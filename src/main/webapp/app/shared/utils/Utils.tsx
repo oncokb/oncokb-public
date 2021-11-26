@@ -19,6 +19,7 @@ import {
   LEVELS,
   LEVEL_PRIORITY,
   FDA_LEVELS,
+  ONCOGENIC_MUTATIONS,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
@@ -645,16 +646,26 @@ export interface IAlteration {
   name: string;
 }
 
-export function getAlterationName(alteration: IAlteration | string): string {
-  let alt: string =
+/**
+ *
+ * @param alteration Alteration, either in string or in IAlteration
+ * @param showNameDiff show alteration when name is different. Default: false
+ */
+export function getAlterationName(
+  alteration: IAlteration | string,
+  showNameDiff?: boolean
+): string {
+  const alt: string =
     typeof alteration === 'string' ? alteration : alteration.alteration;
-  if (alt.includes('{')) {
-    alt = alt.replace('{', '(');
-    alt = alt.replace('}', ')');
+  const name: string =
+    typeof alteration === 'string' ? alteration : alteration.name;
+  if (
+    !showNameDiff ||
+    alt === name ||
+    name.toLowerCase().startsWith(ONCOGENIC_MUTATIONS.toLowerCase())
+  ) {
+    return name;
+  } else {
+    return `${name} (${alt})`;
   }
-  return typeof alteration === 'string'
-    ? alteration
-    : alteration.name === alt
-    ? alteration.name
-    : `${alteration.name} (${alt})`;
 }
