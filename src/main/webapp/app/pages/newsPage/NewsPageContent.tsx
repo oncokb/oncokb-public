@@ -148,7 +148,7 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '11242021': {
+  '11292021': {
     priorityNews: [
       <span>
         Release of <SopPageLink version={2.2} />
@@ -374,10 +374,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             ],
           ].map((record, index) => {
             return {
-              key: `11242021-ACCURATE-COLUMN-${index}`,
+              key: `11292021-ACCURATE-COLUMN-${index}`,
               content: record.map((subItem, subIndex) => {
                 return {
-                  key: `11242021-ACCURATE-COLUMN-${index}-${subIndex}`,
+                  key: `11292021-ACCURATE-COLUMN-${index}-${subIndex}`,
                   content: subItem,
                 };
               }),
@@ -412,10 +412,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             ],
           ].map((record, index) => {
             return {
-              key: `11242021-UPDATED-CANCER-TYPE-COLUMN-${index}`,
+              key: `11292021-UPDATED-CANCER-TYPE-COLUMN-${index}`,
               content: record.map((subItem, subIndex) => {
                 return {
-                  key: `11242021-ACCURATE-COLUMN-${index}-${subIndex}`,
+                  key: `11292021-ACCURATE-COLUMN-${index}-${subIndex}`,
                   content: subItem,
                 };
               }),
