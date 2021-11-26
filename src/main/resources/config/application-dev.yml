@@ -178,3 +178,4 @@ application:
     s3-secret-key:
     s3-region:
   github-token:
+  db-read-only: false # Certain endpoints will be disabled when readonly is set to true

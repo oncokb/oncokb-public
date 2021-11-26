@@ -10,6 +10,7 @@ import WindowStore from 'app/store/WindowStore';
 import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import { NewAccountForm } from 'app/components/newAccountForm/NewAccountForm';
 import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
+import { ReadonlyContent } from 'app/components/ReadonlyContent';
 
 enum RegisterStatus {
   REGISTERED,
@@ -62,12 +63,17 @@ export class CreateAccountPage extends React.Component<{
           <Alert variant={'info'}>Registered</Alert>
         ) : null}
         {this.registerError ? <ErrorAlert error={this.registerError} /> : null}
-        <NewAccountForm
-          isLargeScreen={this.props.windowStore.isLargeScreen}
-          defaultLicense={this.selectedLicense}
-          onSubmit={this.handleValidSubmit}
-          byAdmin={true}
-        />
+        <ReadonlyContent
+          messageTitle={'User registration is temporarily disabled.'}
+          messageDescription={'Registrations will reopen shortly.'}
+        >
+          <NewAccountForm
+            isLargeScreen={this.props.windowStore.isLargeScreen}
+            defaultLicense={this.selectedLicense}
+            onSubmit={this.handleValidSubmit}
+            byAdmin={true}
+          />
+        </ReadonlyContent>
       </div>
     );
   }

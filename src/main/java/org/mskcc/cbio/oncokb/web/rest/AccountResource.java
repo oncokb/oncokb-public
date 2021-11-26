@@ -1,6 +1,6 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-
+import org.mskcc.cbio.oncokb.aop.api.APIConditionallyEnabled;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
@@ -105,6 +105,7 @@ public class AccountResource {
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
      */
+    @APIConditionallyEnabled
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
@@ -314,6 +315,7 @@ public class AccountResource {
      *
      * @param mail the mail of the user.
      */
+    @APIConditionallyEnabled
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
         Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
