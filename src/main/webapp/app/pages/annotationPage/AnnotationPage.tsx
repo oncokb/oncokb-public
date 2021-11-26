@@ -268,7 +268,8 @@ export default class AnnotationPage extends React.Component<
               : {
                   alteration: this.props.matchedAlteration.alteration,
                   name: this.props.matchedAlteration.name,
-                }
+                },
+            true
           )}`}</span>
           <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
             <FeedbackIcon
