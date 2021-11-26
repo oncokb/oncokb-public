@@ -8,6 +8,7 @@ type ServerConfig = {
   token: string;
   googleAnalyticsProjectId: string;
   sentryProjectId: string;
+  readonly: boolean;
 };
 
 interface IAppConfig {

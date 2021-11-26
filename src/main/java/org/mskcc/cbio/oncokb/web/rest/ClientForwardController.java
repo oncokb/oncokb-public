@@ -34,6 +34,7 @@ public class ClientForwardController {
         Context context = new Context();
         context.setVariable("appProfile", applicationProperties.getProfile());
         context.setVariable("frontConfig", applicationProperties.getFrontend());
+        context.setVariable("readonly", applicationProperties.getDbReadOnly());
         context.setVariable("publicToken", tokenProvider.getPubWebToken());
 
         HttpHeaders httpHeaders = new HttpHeaders();
