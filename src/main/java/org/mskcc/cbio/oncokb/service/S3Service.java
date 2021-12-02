@@ -24,12 +24,14 @@ public class S3Service {
     public S3Service(ApplicationProperties applicationProperties){
         this.applicationProperties = applicationProperties;
 
-        String s3AccessKey = applicationProperties.getAws().getS3AccessKey();
-        String s3SecretKey = applicationProperties.getAws().getS3SecretKey();
-        String s3Region = applicationProperties.getAws().getS3Region();
-        credentials = new BasicAWSCredentials(s3AccessKey, s3SecretKey);
-        s3client = AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(s3Region).build();     
+        if (applicationProperties.getAws() != null) {
+            String s3AccessKey = applicationProperties.getAws().getS3AccessKey();
+            String s3SecretKey = applicationProperties.getAws().getS3SecretKey();
+            String s3Region = applicationProperties.getAws().getS3Region();
+            credentials = new BasicAWSCredentials(s3AccessKey, s3SecretKey);
+            s3client = AmazonS3ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(s3Region).build();
+        }
     }
 
     /**
@@ -50,7 +52,7 @@ public class S3Service {
      */
     public Optional<S3Object> getObject(String bucket, String objectPath){
         try {
-            S3Object s3object = s3client.getObject(bucket, objectPath); 
+            S3Object s3object = s3client.getObject(bucket, objectPath);
             return Optional.of(s3object);
         } catch (Exception e) {
             return Optional.empty();

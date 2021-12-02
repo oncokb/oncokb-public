@@ -3,7 +3,6 @@ package org.mskcc.cbio.oncokb.security.uuid;
 import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
@@ -37,18 +36,13 @@ public class TokenProvider implements InitializingBean {
     // This is for the public website
     private static final int EXPIRATION_TIME_PUBLIC_WEBSITE_IN_SECONDS = 60 * 60;
 
-    private Key key;
-
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private TokenService tokenService;
 
-    @Autowired
-    private TokenStatsRepository tokenStatsRepository;
-
-    public TokenProvider() {
+    public TokenProvider(UserRepository userRepository, TokenService tokenService) {
+        this.userRepository = userRepository;
+        this.tokenService = tokenService;
     }
 
     @Override
