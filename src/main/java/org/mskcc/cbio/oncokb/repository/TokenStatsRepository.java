@@ -21,9 +21,9 @@ public interface TokenStatsRepository extends JpaRepository<TokenStats, Long> {
     @Query("select sum(tokenStats.usageCount) as count, tokenStats.token as token from TokenStats tokenStats where tokenStats.accessTime < ?1 group by tokenStats.token")
     List<UserTokenUsage> countTokenUsageByToken(Instant before);
 
-    @Query("select sum(tokenStats.usageCount) as count, tokenStats.token as token, DATE_FORMAT(tokenStats.accessTime,'%Y-%m') as time, tokenStats.resource as resource " + 
-    " from TokenStats tokenStats " + 
-    " where tokenStats.accessTime > ?1 " + 
-    " group by tokenStats.token, DATE_FORMAT(tokenStats.accessTime,'%Y-%m'), tokenStats.resource")
+    @Query(value = "select sum(tokenStats.usageCount) as count, tokenStats.token as token, DATE_FORMAT(tokenStats.accessTime,'%Y-%m') as time, tokenStats.resource as resource " +
+    " from TokenStats tokenStats " +
+    " where tokenStats.accessTime > ?1 " +
+    " group by tokenStats.token, DATE_FORMAT(tokenStats.accessTime,'%Y-%m'), tokenStats.resource", nativeQuery = true)
     List<UserTokenUsageWithInfo> countTokenUsageByTokenTimeResource(Instant after);
 }
