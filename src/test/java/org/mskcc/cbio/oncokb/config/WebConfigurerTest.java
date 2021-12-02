@@ -2,10 +2,12 @@ package org.mskcc.cbio.oncokb.config;
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
-import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
+import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
+import org.mskcc.cbio.oncokb.service.TokenService;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.env.MockEnvironment;
@@ -53,7 +55,11 @@ public class WebConfigurerTest {
 
         env = new MockEnvironment();
         props = new JHipsterProperties();
-        tokenProvider = new TokenProvider();
+
+        UserRepository userRepository = mock(UserRepository.class);
+        TokenService tokenService = mock(TokenService.class);
+
+        tokenProvider = new TokenProvider(userRepository, tokenService);
 
         webConfigurer = new WebConfigurer(env, props, tokenProvider);
     }
