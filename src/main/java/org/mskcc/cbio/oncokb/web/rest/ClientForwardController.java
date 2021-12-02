@@ -43,7 +43,7 @@ public class ClientForwardController {
         return responseEntity;
     }
 
-    @RequestMapping(value = "/${application.google-webmaster-verification}.html")
+    @RequestMapping(value = "/${application.google-webmaster-verification:google-test}.html")
     public ResponseEntity<String> googleDomain() {
         Context context = new Context();
         context.setVariable("verification", applicationProperties.getGoogleWebmasterVerification());
