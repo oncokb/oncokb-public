@@ -1,14 +1,21 @@
 import React from 'react';
+import classnames from 'classnames';
 import './PillButton.scss';
 
 type PillButtonProps = {
   content: string;
+  hasWarning?: boolean;
   onDelete: (item: string) => void;
 };
 
 export const PillButton: React.FunctionComponent<PillButtonProps> = props => {
   return (
-    <div className={'content_container'}>
+    <div
+      className={classnames(
+        'content_container',
+        props.hasWarning ? 'warning_content' : ''
+      )}
+    >
       <span
         className={'pill-delete'}
         onClick={() => props.onDelete(props.content)}

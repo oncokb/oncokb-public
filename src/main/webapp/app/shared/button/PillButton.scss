@@ -8,6 +8,10 @@
   margin: 0 8px 12px 0;
 }
 
+.warning_content {
+  background-color: $warning !important;
+}
+
 .pill-delete {
   display: flex;
   flex-direction: column;

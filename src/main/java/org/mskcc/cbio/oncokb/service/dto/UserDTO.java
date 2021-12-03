@@ -37,7 +37,7 @@ public class UserDTO {
 
     private String jobTitle;
 
-    private Company company;
+    private CompanyDTO company;
 
     private String companyName;
 
@@ -105,7 +105,6 @@ public class UserDTO {
             this.licenseType = userDetails.getLicenseType();
             this.jobTitle = userDetails.getJobTitle();
             this.companyName = userDetails.getCompanyName();
-            this.company = userDetails.getCompany();
             this.city = userDetails.getCity();
             this.country = userDetails.getCountry();
             this.additionalInfo = new Gson().fromJson(userDetails.getAdditionalInfo(), AdditionalInfoDTO.class);
@@ -184,11 +183,11 @@ public class UserDTO {
         this.companyName = companyName;
     }
 
-    public Company getCompany() {
+    public CompanyDTO getCompany() {
         return company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(CompanyDTO company) {
         this.company = company;
     }
 

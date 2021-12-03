@@ -13,8 +13,6 @@ public class CompanyDomainDTO implements Serializable {
     @NotNull
     private String name;
 
-
-    private Long companyId;
     
     public Long getId() {
         return id;
@@ -30,14 +28,6 @@ public class CompanyDomainDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
     }
 
     @Override
@@ -63,7 +53,6 @@ public class CompanyDomainDTO implements Serializable {
         return "CompanyDomainDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", companyId=" + getCompanyId() +
             "}";
     }
 }

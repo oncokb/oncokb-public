@@ -1,7 +1,9 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
 import org.mskcc.cbio.oncokb.service.CompanyDomainService;
+import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.CompanyDomain;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.repository.CompanyDomainRepository;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDomainDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyDomainMapper;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,16 +63,41 @@ public class CompanyDomainServiceImpl implements CompanyDomainService {
     }
 
     @Override
-    public void delete(Long id) {
-        log.debug("Request to delete CompanyDomain : {}", id);
-        companyDomainRepository.deleteById(id);
+    public List<CompanyDomainDTO> verifyCompanyDomains(List<String> names, Long companyId){
+        // Get a list of company domains based on the name
+        List<CompanyDomain> companyDomains = names.stream()
+            .map(name -> companyDomainRepository.findOneByNameIgnoreCase(name))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toCollection(LinkedList::new));
+
+        // Check if a companyDomain is associated with another company that is on a regular license
+        // If so, then we return the conflicting companyDomains
+        List<CompanyDomain> conflictingCompanyDomains = new LinkedList<>();
+        for(CompanyDomain companyDomain: companyDomains){
+            boolean hasConflict = companyDomain
+                .getCompanies()
+                .stream()
+                .filter(company -> {
+                    boolean isRegular = company.getLicenseModel().equals(LicenseModel.REGULAR);
+                    boolean dontSkipCompany = true;
+                    if(companyId != null){
+                        dontSkipCompany = !company.getId().equals(companyId);
+                    }
+                    return isRegular && dontSkipCompany;
+                })
+                .collect(Collectors.toCollection(LinkedList::new))
+                .size() > 0;
+            if(hasConflict){
+                conflictingCompanyDomains.add(companyDomain);
+            }
+        }
+        return companyDomainMapper.toDto(conflictingCompanyDomains);
     }
 
     @Override
-    public List<CompanyDomainDTO> findAllCompanyDomainsByCompanyId(Long companyId) {
-        return companyDomainRepository.findAllCompanyDomainsByCompanyId(companyId)
-            .stream()
-            .map(companyDomainMapper::toDto)
-            .collect(Collectors.toCollection(ArrayList::new));
+    public void delete(Long id) {
+        log.debug("Request to delete CompanyDomain : {}", id);
+        companyDomainRepository.deleteById(id);
     }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Row } from 'react-bootstrap';
 import { observable, action, computed } from 'mobx';
 import { CompanyVM } from 'app/shared/api/generated/API';
 import { FormListField } from 'app/shared/list/FormListField';
@@ -17,10 +17,12 @@ import {
   LICENSE_STATUS_TITLES,
   LicenseModel,
   LICENSE_MODEL_TITLES,
+  LICENSE_MODEL_DESCRIPTIONS,
 } from 'app/config/constants';
 import client from 'app/shared/api/clientInstance';
 import _ from 'lodash';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
+import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
 
 type INewCompanyFormProps = {
   onValidSubmit: (newCompany: Partial<CompanyVM>) => void;
@@ -43,6 +45,7 @@ export const COMPANY_FORM_OPTIONS = {
     return {
       value: LicenseModel[type],
       label: LICENSE_MODEL_TITLES[LicenseModel[type]],
+      description: LICENSE_MODEL_DESCRIPTIONS[LicenseModel[type]],
     };
   }),
   licenseStatus: Object.keys(LicenseStatus).map(type => {
@@ -61,6 +64,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   @observable selectedLicenseModel: LicenseModel = LicenseModel.REGULAR;
   @observable selectedLicenseType: LicenseType = LicenseType.COMMERCIAL;
   @observable selectedLicenseStatus: LicenseStatus = LicenseStatus.REGULAR;
+  @observable conflictingDomains: string[] = [];
 
   @action.bound
   updateCompanyDescription(event: any) {
@@ -90,7 +94,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
             // it is available to use. The api will return 404 NOT FOUND.
             cb(true);
           } else {
-            // If the api fails, then we show an error message
+            // If the api fails, then we show an error messageP
             cb(false);
             notifyError(error, 'Error finding company with name');
           }
@@ -98,6 +102,23 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
     },
     500
   );
+
+  @action
+  verifyCompanyDomains() {
+    if (this.selectedLicenseModel !== LicenseModel.REGULAR) {
+      this.conflictingDomains = [];
+      return;
+    }
+    client
+      .verifyCompanyDomainUsingPOST({ names: Array.from(this.companyDomains) })
+      .then(
+        conflictingDomains =>
+          (this.conflictingDomains = conflictingDomains.map(
+            domainDTO => domainDTO.name
+          ))
+      )
+      .catch((error: Error) => notifyError(error));
+  }
 
   @action.bound
   handleValidSubmit(event: any, values: any) {
@@ -161,15 +182,31 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
             <AvField name="legalContact" label="Legal Contact" />
             <FormListField
               list={this.companyDomains}
-              addItem={(domain: string) => this.companyDomains.push(domain)}
-              deleteItem={(domain: string) =>
-                (this.companyDomains = this.companyDomains.filter(
+              addItem={(domain: string) => {
+                this.companyDomains.push(domain);
+                this.verifyCompanyDomains();
+              }}
+              deleteItem={(domain: string) => {
+                this.companyDomains = this.companyDomains.filter(
                   domainName => domainName !== domain
-                ))
-              }
+                );
+                this.conflictingDomains = this.conflictingDomains.filter(
+                  domainName => domainName !== domain
+                );
+              }}
               labelText={'Company Domains'}
               placeholder={'Include at least one domain. ie) oncokb.org'}
+              conflictingItems={this.conflictingDomains}
             />
+            {this.conflictingDomains.length > 0 ? (
+              <Alert variant="warning">
+                <i className={'mr-2 fa fa-exclamation-triangle'} />
+                <span>
+                  The domains highlighted in yellow are associated with another
+                  regular tiered company.
+                </span>
+              </Alert>
+            ) : null}
           </Col>
         </Row>
         <Row className={getSectionClassName()}>
@@ -177,18 +214,21 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
             <h5>License Information</h5>
           </Col>
           <Col md="9">
-            <FormSelectWithLabelField
-              labelText={'License Model'}
-              name={'licenseModel'}
-              defaultValue={{
-                value: LicenseModel.REGULAR,
-                label: LICENSE_MODEL_TITLES[LicenseModel.REGULAR],
-              }}
-              options={COMPANY_FORM_OPTIONS.licenseModel}
-              onSelection={(selectedOption: any) =>
-                (this.selectedLicenseModel = selectedOption.value)
-              }
-            />
+            <div className="form-group">
+              <div className={`mb-2`}>License Model</div>
+              <AdditionalInfoSelect
+                name={'licenseModel'}
+                defaultValue={{
+                  value: LicenseModel.REGULAR,
+                  label: LICENSE_MODEL_TITLES[LicenseModel.REGULAR],
+                }}
+                options={COMPANY_FORM_OPTIONS.licenseModel}
+                onSelection={(selectedOption: any) => {
+                  this.selectedLicenseModel = selectedOption.value;
+                  this.verifyCompanyDomains();
+                }}
+              />
+            </div>
             <FormSelectWithLabelField
               labelText={'License Type'}
               name={'licenseType'}
