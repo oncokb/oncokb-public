@@ -117,14 +117,14 @@ public class CompanyResource {
     }
 
     /**
-     * {@code GET /companies?name} : get the "name" company.
+     * {@code GET /companies/lookup?name} : get the "name" company.
      *
      * @param name the name of the company to find.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the "name" company, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/companies/name/{name}")
-    public ResponseEntity<CompanyDTO> getCompanyByName(@PathVariable String name) {
-        log.debug("REST request to get Company : {}", name);
+    @GetMapping("/companies/lookup")
+    public ResponseEntity<CompanyDTO> getCompanyByName(@RequestParam String name) {
+        log.debug("REST request to get Company with name : {}", name);
         return ResponseUtil.wrapOrNotFound(companyService.findOneByNameIgnoreCase(name));
     }
 

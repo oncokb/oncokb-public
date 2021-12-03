@@ -9,6 +9,7 @@ import { PillButton } from '../button/PillButton';
 
 type IListBoxProps = {
   list: string[];
+  conflictingItems?: string[];
   onDelete: (item: string) => void;
 };
 
@@ -23,6 +24,7 @@ class ListBox extends React.Component<IListBoxProps> {
               key={item}
               content={item}
               onDelete={this.props.onDelete}
+              hasWarning={this.props.conflictingItems?.includes(item)}
             />
           ))}
         </div>
@@ -33,11 +35,12 @@ class ListBox extends React.Component<IListBoxProps> {
 
 type IFormListFieldProps = {
   list: string[];
+  conflictingItems?: string[];
   addItem: (item: string) => void;
   deleteItem: (item: string) => void;
   labelText: string;
   placeholder?: string;
-  boldLabeL?: boolean;
+  boldLabel?: boolean;
 };
 
 @observer
@@ -45,6 +48,7 @@ export class FormListField extends React.Component<IFormListFieldProps> {
   @observable isInputValid = false;
   @observable inputText = '';
   @observable errorMessage = '';
+  @observable showError = false;
 
   @autobind
   listLengthValidation(
@@ -93,7 +97,7 @@ export class FormListField extends React.Component<IFormListFieldProps> {
           <Col>
             <div
               className={`mb-2 ${
-                this.props.boldLabeL ? 'font-weight-bold' : ''
+                this.props.boldLabel ? 'font-weight-bold' : ''
               }`}
             >
               {this.props.labelText}
@@ -111,6 +115,12 @@ export class FormListField extends React.Component<IFormListFieldProps> {
                   customLength: this.listLengthValidation,
                 }}
                 onKeyPress={this.onEnterKey}
+                onBlur={() => {
+                  // Only show the list length error message when the user clicks off the input
+                  if (this.errorMessage) {
+                    this.showError = true;
+                  }
+                }}
               />
               <div className="input-group-append">
                 <Button
@@ -134,7 +144,7 @@ export class FormListField extends React.Component<IFormListFieldProps> {
                   fontSize: '80%',
                 }}
               >
-                {this.errorMessage}
+                {this.showError && this.errorMessage}
               </span>
             </div>
           </Col>
@@ -142,6 +152,7 @@ export class FormListField extends React.Component<IFormListFieldProps> {
             <ListBox
               list={this.props.list}
               onDelete={(item: string) => this.props.deleteItem(item)}
+              conflictingItems={this.props.conflictingItems}
             />
           </Col>
         </Row>

@@ -2,8 +2,8 @@ package org.mskcc.cbio.oncokb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Lob;
 import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
@@ -39,7 +39,7 @@ public class CompanyDTO implements Serializable {
 
     private String legalContact;
 
-    private Set<String> companyDomains;
+    private Set<String> companyDomains = new HashSet<>();
     
     public Long getId() {
         return id;
@@ -112,7 +112,7 @@ public class CompanyDTO implements Serializable {
     public void setLegalContact(String legalContact) {
         this.legalContact = legalContact;
     }
-    
+
     public Set<String> getCompanyDomains() {
         return this.companyDomains;
     }
@@ -151,6 +151,7 @@ public class CompanyDTO implements Serializable {
             ", licenseStatus='" + getLicenseStatus() + "'" +
             ", businessContact='" + getBusinessContact() + "'" +
             ", legalContact='" + getLegalContact() + "'" +
+            ", companyDomains='" + getCompanyDomains() + "'" +
             "}";
     }
 }

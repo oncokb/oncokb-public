@@ -145,9 +145,6 @@ application:
   api-proxy-url: 'http://localhost:8888'
   sitemap-enabled: false
   google-webmaster-verification:
-  licensed-domains:
-  trialed-domains:
-  account-approval-whitelist:
   token-usage-check:
   token-usage-check-whitelist:
   slack: # Add the following if you wish to integrate user registration to Slack and send the weekly unapproved users email

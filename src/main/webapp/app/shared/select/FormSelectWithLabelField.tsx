@@ -15,12 +15,9 @@ export type IFormSelectWithLabelProps = {
 export const FormSelectWithLabelField: React.FunctionComponent<IFormSelectWithLabelProps> = props => {
   return (
     <div className="form-group">
-      <label
-        className={props.boldLabel ? 'font-weight-bold' : ''}
-        htmlFor={props.name}
-      >
+      <div className={`mb-2 ${props.boldLabel ? 'font-weight-bold' : ''}`}>
         {props.labelText}
-      </label>
+      </div>
       <Select
         name={props.name}
         defaultValue={props.defaultValue}

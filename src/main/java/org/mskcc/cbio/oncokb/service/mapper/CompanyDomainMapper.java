@@ -9,13 +9,12 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link CompanyDomain} and its DTO {@link CompanyDomainDTO}.
  */
-@Mapper(componentModel = "spring", uses = {CompanyMapper.class})
+@Mapper(componentModel = "spring", uses = {})
 public interface CompanyDomainMapper extends EntityMapper<CompanyDomainDTO, CompanyDomain> {
 
-    @Mapping(source = "company.id", target = "companyId")
-    CompanyDomainDTO toDto(CompanyDomain companyDomain);
 
-    @Mapping(source = "companyId", target = "company")
+    @Mapping(target = "companies", ignore = true)
+    @Mapping(target = "removeCompany", ignore = true)
     CompanyDomain toEntity(CompanyDomainDTO companyDomainDTO);
 
     default CompanyDomain fromId(Long id) {

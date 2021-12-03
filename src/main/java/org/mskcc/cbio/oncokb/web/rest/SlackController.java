@@ -7,6 +7,7 @@ import com.slack.api.app_backend.views.payload.ViewSubmissionPayload;
 import com.slack.api.util.json.GsonFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
+import org.mskcc.cbio.oncokb.domain.CompanyCandidate;
 import org.mskcc.cbio.oncokb.domain.UnknownPayload;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
@@ -86,6 +87,15 @@ public class SlackController {
                 switch (actionId) {
                     case APPROVE_USER:
                         if (!userDTO.isActivated()) {
+                            // If admin approves user for a micro company, then we need to associate the user with company
+                            CompanyCandidate companyCandidate = userService.findCompanyCandidate(userDTO);
+                            if(companyCandidate.getCompanyCandidate().isPresent() && !companyCandidate.getCanAssociate()){
+                                Optional<UserDTO> updatedUserDTO = userService.updateUserWithCompanyLicense(userDTO, companyCandidate.getCompanyCandidate().get(), false);
+                                if(updatedUserDTO.isPresent()){
+                                    userDTO = updatedUserDTO.get();
+                                }
+                                break;
+                            }
                             Optional<UserDTO> updatedUser = userService.approveUser(userDTO, false);
                             if (updatedUser.isPresent() && updatedUser.get().isActivated()) {
                                 mailService.sendApprovalEmail(userDTO);

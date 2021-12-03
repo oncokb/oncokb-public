@@ -4,6 +4,7 @@ import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import {
   COMPANY_TYPE_TITLES,
+  LicenseModel,
   LicenseStatus,
   LICENSE_MODEL_TITLES,
   LICENSE_STATUS_TITLES,
@@ -33,6 +34,7 @@ import { UserTable } from 'app/shared/table/UserTable';
 import Select from 'react-select';
 import DocumentTitle from 'react-document-title';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
 
 interface MatchParams {
   id: string;
@@ -71,6 +73,7 @@ export default class CompanyPage extends React.Component<
   @observable company: CompanyDTO;
   @observable getCompanyStatus: PromiseStatus;
   @observable selectedLicenseStatus: LicenseStatus;
+  @observable conflictingDomains: string[] = [];
 
   @observable showModal = false;
   @observable confirmModalText = '';
@@ -97,6 +100,7 @@ export default class CompanyPage extends React.Component<
       await this.getCompanyUsers();
       await this.getDropdownUsers();
       await this.getAllUsersTokens();
+      this.verifyCompanyDomains();
       this.getCompanyStatus = PromiseStatus.complete;
     } catch (error) {
       this.getCompanyStatus = PromiseStatus.error;
@@ -183,6 +187,8 @@ export default class CompanyPage extends React.Component<
       this.selectedUsersOptions = [];
       await this.getDropdownUsers();
       await this.getAllUsersTokens();
+      this.conflictingDomains = [];
+      this.verifyCompanyDomains();
       this.getCompanyStatus = PromiseStatus.complete;
       notifySuccess('Company successfully updated');
     } catch (error) {
@@ -216,6 +222,26 @@ export default class CompanyPage extends React.Component<
     this.companyUsers[
       this.companyUsers.findIndex(u => u.id === updatedUser.id)
     ] = updatedUser;
+  }
+
+  @action
+  verifyCompanyDomains() {
+    if (this.company.licenseModel !== LicenseModel.REGULAR) {
+      this.conflictingDomains = [];
+      return;
+    }
+    client
+      .verifyCompanyDomainUsingPOST({
+        names: Array.from(this.company.companyDomains),
+        companyId: this.company.id,
+      })
+      .then(
+        conflictingDomains =>
+          (this.conflictingDomains = conflictingDomains.map(
+            domainDTO => domainDTO.name
+          ))
+      )
+      .catch((error: Error) => notifyError(error));
   }
 
   @computed
@@ -375,27 +401,38 @@ export default class CompanyPage extends React.Component<
                               onUpdateUser={this.updateCompanyUser}
                             />
                           </div>
-                          <FormSelectWithLabelField
-                            labelText={'License Model'}
-                            name={'licenseModel'}
-                            defaultValue={{
-                              value: this.company.licenseModel,
-                              label:
-                                LICENSE_MODEL_TITLES[this.company.licenseModel],
-                            }}
-                            options={COMPANY_FORM_OPTIONS.licenseModel}
-                            onSelection={(selectedOption: any) =>
-                              (this.company.licenseModel = selectedOption.value)
-                            }
-                            boldLabel
-                          />
+                          <div className="form-group">
+                            <div className={'mb-2 font-weight-bold'}>
+                              License Model
+                            </div>
+                            <AdditionalInfoSelect
+                              name={'licenseModel'}
+                              defaultValue={{
+                                value: this.company.licenseModel,
+                                label:
+                                  LICENSE_MODEL_TITLES[
+                                    this.company.licenseModel
+                                  ],
+                              }}
+                              options={COMPANY_FORM_OPTIONS.licenseModel}
+                              onSelection={(selectedOption: any) => {
+                                this.company.licenseModel =
+                                  selectedOption.value;
+                                this.verifyCompanyDomains();
+                              }}
+                            />
+                          </div>
                           <FormListField
                             list={this.company.companyDomains}
-                            addItem={(domain: string) =>
-                              this.company.companyDomains.push(domain)
-                            }
+                            addItem={(domain: string) => {
+                              this.company.companyDomains.push(domain);
+                              this.verifyCompanyDomains();
+                            }}
                             deleteItem={(domain: string) => {
                               this.company.companyDomains = this.company.companyDomains.filter(
+                                domainName => domainName !== domain
+                              );
+                              this.conflictingDomains = this.conflictingDomains.filter(
                                 domainName => domainName !== domain
                               );
                             }}
@@ -403,8 +440,20 @@ export default class CompanyPage extends React.Component<
                             placeholder={
                               'Include at least one domain. ie) oncokb.org'
                             }
-                            boldLabeL
+                            conflictingItems={this.conflictingDomains}
+                            boldLabel
                           />
+                          {this.conflictingDomains.length > 0 ? (
+                            <Alert variant="warning">
+                              <i
+                                className={'mr-2 fa fa-exclamation-triangle'}
+                              />
+                              <span>
+                                The domains highlighted in yellow are associated
+                                with another regular tiered company.
+                              </span>
+                            </Alert>
+                          ) : null}
                           <div className="form-group">
                             <div className={'font-weight-bold'}>
                               Add Users to Company

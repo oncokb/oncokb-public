@@ -348,16 +348,18 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   @action
   getAllCompanies() {
-    client
-      .getAllCompaniesUsingGET({})
-      .then(
-        companies =>
-          (this.companyOptions = companies.map(company => ({
-            label: `${company.name} (${company.companyType})`,
-            value: company,
-          })))
-      )
-      .catch(error => notifyError(error));
+    if (this.props.byAdmin) {
+      client
+        .getAllCompaniesUsingGET({})
+        .then(
+          companies =>
+            (this.companyOptions = companies.map(company => ({
+              label: `${company.name} (${company.companyType})`,
+              value: company,
+            })))
+        )
+        .catch(error => notifyError(error));
+    }
   }
 
   @action.bound
@@ -573,18 +575,22 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                   </h5>
                 </Col>
                 <Col md="9">
-                  <FormSelectWithLabelField
-                    onSelection={(selectedOption: CompanySelectOptionType) => {
-                      this.onSelectCompany(selectedOption);
-                    }}
-                    labelText={'Select a company to register a user under'}
-                    name={'companyDropdown'}
-                    options={this.companyOptions}
-                    isClearable={true}
-                    value={this.selectedCompanyOption}
-                  />
+                  {this.props.byAdmin ? (
+                    <FormSelectWithLabelField
+                      onSelection={(
+                        selectedOption: CompanySelectOptionType
+                      ) => {
+                        this.onSelectCompany(selectedOption);
+                      }}
+                      labelText={'Select a company to register a user under'}
+                      name={'companyDropdown'}
+                      options={this.companyOptions}
+                      isClearable={true}
+                      value={this.selectedCompanyOption}
+                    />
+                  ) : null}
                   {this.selectedCompanyOption ? null : (
-                    <div className="border-top py-3">
+                    <div>
                       {this.selectedLicense !== LicenseType.ACADEMIC && (
                         <p>
                           Please feel free to skip this section if your{' '}

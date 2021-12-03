@@ -5,6 +5,7 @@ import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.CompanyDomain;
+import org.mskcc.cbio.oncokb.repository.CompanyDomainRepository;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDomainDTO;
@@ -16,6 +17,7 @@ import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +57,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CacheNameResolver cacheNameResolver;
 
+    @Autowired
+    private CompanyDomainRepository companyDomainRepository;
+
     public CompanyServiceImpl(
         CompanyRepository companyRepository, 
         CompanyMapper companyMapper, 
@@ -81,8 +86,6 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyMapper.toEntity(companyDTO);
         company = companyRepository.save(company);
 
-        updateCompanyDomains(companyDTO.getCompanyDomains(), company);
-
         this.clearCompanyCaches(company);
         return companyMapper.toDto(company);
     }
@@ -99,56 +102,23 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         Company company = companyRepository.save(companyMapper.toEntity(companyVm));
-        updateCompanyDomains(companyVm.getCompanyDomains(), company);
 
         // Update the licenses for current users of the company
         List<UserDTO> companyUsers = userService.getUsersOfCompany(company.getId());
         if(isLicenseUpdateRequired){
-            companyUsers.forEach(userDTO -> userService.updateUserWithCompanyLicense(userMapper.userDTOToUser(userDTO), company));
+            companyUsers.forEach(userDTO -> userService.updateUserWithCompanyLicense(userDTO, company, false));
         }else{
             companyUsers.forEach(userDTO -> userService.updateUser(userDTO));
         }
 
         // Update the licenses for new users being added to this company
         companyVm.getCompanyUserDTOs()
-            .forEach(userDTO -> userService.updateUserWithCompanyLicense(userMapper.userDTOToUser(userDTO), company));
+            .forEach(userDTO -> userService.updateUserWithCompanyLicense(userDTO, company, true));
 
         this.clearCompanyCaches(company);
         return companyMapper.toDto(company);
     }
 
-    /**
-     * This method will map new domains to the company and also remove domains
-     * that should no longer be associated with the company.
-     * @param domains new set of domain names
-     * @param company company to associate the domains with
-     */
-    private void updateCompanyDomains(Set<String> newDomains, Company company){
-        // Get existing company domains
-        Set<CompanyDomainDTO> existingDomains = 
-            companyDomainService
-                .findAllCompanyDomainsByCompanyId(company.getId())
-                .stream()
-                .collect(Collectors.toSet());
-
-        // Delete exisiting domains not part of the new list.
-        // Also remove from new domain set if the domain alreadt exists in db.
-        for(CompanyDomainDTO domainDTO: existingDomains){
-            if(newDomains.contains(domainDTO.getName())){
-                newDomains.remove(domainDTO.getName());
-            }else{
-                companyDomainService.delete(domainDTO.getId());
-            }
-        }
-
-        // The domains left in the set need to be mapped
-        newDomains.forEach(domainToAdd -> {
-            CompanyDomain domain = new CompanyDomain();
-            domain.setName(domainToAdd);
-            domain.setCompany(company);
-            companyDomainService.save(companyDomainMapper.toDto(domain));
-        });
-    }
 
     @Override
     @Transactional(readOnly = true)

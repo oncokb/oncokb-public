@@ -35,16 +35,17 @@ public interface CompanyDomainService {
     Optional<CompanyDomainDTO> findOne(Long id);
 
     /**
+     * Check if the domain belongs another regular tiered company.
+     * @param names the domain names
+     * @param companyId the company we are verifying the domains or null if verifying for new company
+     * @return list of domains that are in conflict
+     */
+    List<CompanyDomainDTO> verifyCompanyDomains(List<String> names, Long companyId);
+
+    /**
      * Delete the "id" companyDomain.
      *
      * @param id the id of the entity.
      */
     void delete(Long id);
-
-    /**
-     * Get the list of company domains associated with a company
-     * @param companyId the id of the company
-     * @return the list of company domains
-     */
-    List<CompanyDomainDTO> findAllCompanyDomainsByCompanyId(Long companyId);
 }
