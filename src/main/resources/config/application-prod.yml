@@ -170,6 +170,7 @@ application:
     slack-base-url:
     user-registration-channel-id:
   redis:
+    enabled: true
     type: 'sentinel'
     password: 'oncokb-public-redis-password'
     sentinel-master-name: 'oncokb-master'

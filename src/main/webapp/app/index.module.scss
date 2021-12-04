@@ -1,10 +1,6 @@
 @import '~bootstrap/scss/bootstrap';
 @import 'variables';
 
-.orange {
-  color: $oncokb-orange;
-}
-
 .btnLinkText {
   @extend .btn-link;
 

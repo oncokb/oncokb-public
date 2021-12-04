@@ -19,10 +19,8 @@ import java.util.Set;
 @Configuration
 public class ThymeleafConfig {
     public static final String STRING_ENCODING = "UTF-8";
-    @Autowired
     private ApplicationProperties applicationProperties;
 
-    @Autowired
     private SpringTemplateEngine templateEngine;
 
     /* ******************************************************************** */
@@ -30,7 +28,9 @@ public class ThymeleafConfig {
     /*  TemplateResolver(3) <- TemplateEngine                               */
     /* ******************************************************************** */
 
-    public ThymeleafConfig() {
+    public ThymeleafConfig(ApplicationProperties applicationProperties, SpringTemplateEngine templateEngine) {
+        this.applicationProperties=applicationProperties;
+        this.templateEngine=templateEngine;
     }
 
     @PostConstruct
@@ -101,6 +101,6 @@ public class ThymeleafConfig {
     }
 
     private boolean getCacheable() {
-        return applicationProperties.getProfile().equals(ProjectProfile.PROD) ? true : false;
+        return applicationProperties.getProfile() != null && applicationProperties.getProfile().equals(ProjectProfile.PROD) ? true : false;
     }
 }

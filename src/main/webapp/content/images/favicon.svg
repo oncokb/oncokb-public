@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  width="32px" height="32px" >
-<g transform="translate(16, 16)">
-	<circle fill="none" stroke="#1c75cd" stroke-width="4" cx="0" cy="0" r="14"/>
-	<circle fill="none" stroke="#1c75cd" stroke-width="4" cx="0" cy="0" r="8"/>
-	<circle fill="#1c75cd" cx="0" cy="0" r="4"/>
-</g>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16">
+  <g transform="translate(8, 8)">
+    <circle r="7" fill="none" stroke-width="2" stroke="#0968C3"></circle>
+    <circle r="4" fill="none" stroke-width="2" stroke="#0968C3"></circle>
+    <circle r="2" fill="#0968C3" stroke="none"></circle>
+  </g>
 </svg>

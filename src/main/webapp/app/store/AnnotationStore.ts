@@ -10,7 +10,12 @@ import {
 import apiClient from 'app/shared/api/oncokbClientInstance';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import { computed, IReactionDisposer, observable } from 'mobx';
-import { Citations, Evidence, Gene } from 'app/shared/api/generated/OncoKbAPI';
+import {
+  Alteration,
+  Citations,
+  Evidence,
+  Gene,
+} from 'app/shared/api/generated/OncoKbAPI';
 import {
   DEFAULT_ANNOTATION,
   DEFAULT_GENE,
@@ -56,8 +61,10 @@ interface IAnnotationStore {
 export type TherapeuticImplication = {
   level: string;
   alterations: string;
+  alterationsView: JSX.Element;
   drugs: string;
-  cancerTypes: string[];
+  cancerTypes: string;
+  cancerTypesView: JSX.Element;
   citations: Citations;
 };
 
@@ -588,6 +595,41 @@ export class AnnotationStore {
       });
     } else {
       return this.biologicalAlterations.result;
+    }
+  }
+
+  @computed
+  get matedAlteration(): Alteration | undefined {
+    const altLowerCaseQuery = this.alterationQuery.toLowerCase();
+    const matched = this.biologicalAlterations.result.filter(
+      alt =>
+        alt.variant.alteration.toLowerCase().includes(altLowerCaseQuery) ||
+        alt.variant.name.toLowerCase().includes(altLowerCaseQuery)
+    );
+    return matched.length > 0 ? matched[0].variant : undefined;
+  }
+
+  @computed
+  get filteredFdaAlterations() {
+    const alterations = _.uniq(
+      this.filteredBiologicalAlterations.map(alt => alt.variant.name)
+    );
+    if (this.isFiltered) {
+      return this.fdaAlterations.result.filter(alteration => {
+        let isMatch = true;
+        if (
+          this.selectedCancerTypes.length > 0 &&
+          !this.selectedCancerTypes.includes(alteration.cancerType)
+        ) {
+          isMatch = false;
+        }
+        if (isMatch && !alterations.includes(alteration.alteration.name)) {
+          isMatch = false;
+        }
+        return isMatch;
+      });
+    } else {
+      return this.fdaAlterations.result;
     }
   }
 

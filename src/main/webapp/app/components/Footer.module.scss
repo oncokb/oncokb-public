@@ -4,11 +4,17 @@
   width: 100%;
   padding: 10px 0;
   color: #fff;
-  background-color: #737373;
+  background-color: $oncokb-dark-blue;
   position: absolute;
   bottom: 0;
-  font-weight: 400;
-  font-size: 0.9rem;
+
+  a {
+    color: white;
+  }
+
+  a:hover {
+    color: white;
+  }
 }
 
 .footerAList > a {
@@ -18,8 +24,5 @@
 
   &:last-child {
     border: 0;
-  }
-  &:hover {
-    color: white;
   }
 }

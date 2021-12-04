@@ -63,7 +63,11 @@ export default class NewsList extends React.Component<NewsListProps> {
       if (newsData.newlyAddedGenesTypes) {
         componentProps.geneTypes = newsData.newlyAddedGenesTypes;
       }
-      return <NewlyAddedGenesListItem {...componentProps} />;
+      return (
+        <li>
+          <NewlyAddedGenesListItem {...componentProps} />
+        </li>
+      );
     } else {
       return undefined;
     }
@@ -104,6 +108,7 @@ export default class NewsList extends React.Component<NewsListProps> {
               })}
               {newsData.updatedImplication ? (
                 <UpdatedTxImplListItem
+                  title={newsData.updatedImplicationTitle}
                   data={newsData.updatedImplication.map((item, index) => {
                     return {
                       key: `updatedImplication-${date}-${index}`,
@@ -129,6 +134,7 @@ export default class NewsList extends React.Component<NewsListProps> {
               {newsData.changedAnnotation ? (
                 <ChangedAnnotationListItem
                   title={newsData.changedAnnotationTitle}
+                  columnHeaderType={newsData.changedAnnotationColumnHeaderType}
                   data={newsData.changedAnnotation.map((item, index) => {
                     return {
                       key: `changedAnnotation-${date}-${index}`,

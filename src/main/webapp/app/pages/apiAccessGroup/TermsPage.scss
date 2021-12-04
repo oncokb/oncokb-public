@@ -18,7 +18,7 @@
       counter-increment: list;
       content: '(' counter(list, lower-roman) ') ';
       position: absolute;
-      left: -1.5em;
+      left: -2em;
     }
   }
 }

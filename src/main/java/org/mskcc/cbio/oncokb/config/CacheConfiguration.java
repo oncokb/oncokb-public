@@ -1,9 +1,10 @@
 package org.mskcc.cbio.oncokb.config;
 
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.config.application.RedisType;
+import org.mskcc.oncokb.meta.enumeration.RedisType;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver;
+import org.mskcc.cbio.oncokb.config.cache.CustomCacheManager;
 import org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver;
 import org.mskcc.cbio.oncokb.config.cache.UserCacheResolver;
 import org.redisson.api.RedissonClient;
@@ -13,6 +14,7 @@ import org.redisson.Redisson;
 import org.redisson.config.Config;
 import org.redisson.jcache.configuration.RedissonConfiguration;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.interceptor.CacheResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +32,18 @@ import io.github.jhipster.config.JHipsterProperties;
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
+
+    private final String PROP_PREFIX = "application.redis";
+    private final String PROP_NAME = "enabled";
+
     @Bean
+    @ConditionalOnProperty(prefix = PROP_PREFIX, name = PROP_NAME, havingValue = "false", matchIfMissing = true)
+    public org.springframework.cache.CacheManager cacheManager(){
+        return new CustomCacheManager();
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = PROP_PREFIX, name = PROP_NAME, havingValue = "true")
     public RedissonClient redissonClient(ApplicationProperties applicationProperties) throws Exception {
         Config config = new Config();
         if (applicationProperties.getRedis().getType().equals(RedisType.SINGLE.getType())) {
@@ -54,6 +67,7 @@ public class CacheConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = PROP_PREFIX, name = PROP_NAME, havingValue = "true")
     public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties, RedissonClient redissonClient) {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
         jcacheConfig.setStatisticsEnabled(true);
@@ -62,11 +76,13 @@ public class CacheConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = PROP_PREFIX, name = PROP_NAME, havingValue = "true")
     public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cm) {
         return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cm);
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = PROP_PREFIX, name = PROP_NAME, havingValue = "true")
     public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration, CacheNameResolver cacheNameResolver, ApplicationProperties applicationProperties) {
         return cm -> {
             createCache(cm, org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE, jcacheConfiguration, cacheNameResolver);

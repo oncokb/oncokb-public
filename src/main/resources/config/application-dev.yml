@@ -155,6 +155,8 @@ application:
     slack-base-url:
     user-registration-channel-id:
   redis:
+    # Add the following if you want to opt in to using Redis
+    # enabled: true
     type: 'single'
     password: 'oncokb-public-redis-password'
     address: 'redis://localhost:6379'

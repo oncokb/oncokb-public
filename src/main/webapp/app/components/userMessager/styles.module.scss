@@ -1,8 +1,11 @@
+@import '~oncokb-styles/scss/vars';
+@import '../../variables';
+
 .message {
   padding: 10px 0;
-  background: green;
+  background: $oncokb-dark-blue;
   color: #fff;
-  font-size: 14px;
+  font-size: $oncokb-font-font-size;
   position: relative;
 
   .messageContainer {

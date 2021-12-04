@@ -48,6 +48,16 @@ class WindowStore {
   }
 
   @computed
+  get isMDScreen() {
+    return this.size.width >= GRID_BREAKPOINTS.MD;
+  }
+
+  @computed
+  get isSMScreen() {
+    return this.size.width >= GRID_BREAKPOINTS.SM;
+  }
+
+  @computed
   get baseUrl() {
     return (
       window.location.hostname +

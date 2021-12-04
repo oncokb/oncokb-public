@@ -742,7 +742,7 @@
         }
       }
     },
-    "/utils/numbers/fda/": {
+    "/utils/numbers/fda": {
       "get": {
         "tags": [
           "Utils"

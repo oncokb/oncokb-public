@@ -235,8 +235,8 @@
         "parameters": [
           {
             "in": "body",
-            "name": "mail",
-            "description": "mail",
+            "name": "login",
+            "description": "login",
             "required": true,
             "schema": {
               "type": "string"
@@ -326,8 +326,8 @@
         "parameters": [
           {
             "in": "body",
-            "name": "mail",
-            "description": "mail",
+            "name": "login",
+            "description": "login",
             "required": true,
             "schema": {
               "type": "string"
@@ -1622,21 +1622,6 @@
         "produces": [
           "*/*"
         ],
-        "parameters": [
-          {
-            "name": "licenseType",
-            "in": "query",
-            "description": "licenseType",
-            "required": true,
-            "type": "string",
-            "enum": [
-              "ACADEMIC",
-              "COMMERCIAL",
-              "RESEARCH_IN_COMMERCIAL",
-              "HOSPITAL"
-            ]
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1724,6 +1709,7 @@
               "TOKEN_HAS_BEEN_EXPOSED_USER",
               "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
               "LIST_OF_UNAPPROVED_USERS",
+              "DATA_USAGE_EXCEEDS_THRESHOLD",
               "TEST"
             ]
           },
@@ -2976,6 +2962,9 @@
           "type": "string",
           "format": "date-time"
         },
+        "initiatedBy": {
+          "type": "string"
+        },
         "initiationDate": {
           "type": "string",
           "format": "date-time"
@@ -3271,6 +3260,7 @@
             "TOKEN_HAS_BEEN_EXPOSED_USER",
             "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
             "LIST_OF_UNAPPROVED_USERS",
+            "DATA_USAGE_EXCEEDS_THRESHOLD",
             "TEST"
           ]
         }
@@ -3717,7 +3707,33 @@
           "format": "int64"
         },
         "mailType": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "ACTIVATION",
+            "APPROVAL",
+            "REJECTION",
+            "CREATION",
+            "PASSWORD_RESET",
+            "LICENSE_REVIEW_COMMERCIAL",
+            "LICENSE_REVIEW_RESEARCH_COMMERCIAL",
+            "LICENSE_REVIEW_HOSPITAL",
+            "CLARIFY_ACADEMIC_FOR_PROFIT",
+            "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
+            "CLARIFY_USE_CASE",
+            "CLARIFY_DUPLICATE_USER",
+            "REJECT_ALUMNI_ADDRESS",
+            "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
+            "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
+            "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE",
+            "TRIAL_ACCOUNT_IS_ACTIVATED",
+            "ACTIVATE_FREE_TRIAL",
+            "TOKEN_HAS_BEEN_EXPOSED",
+            "TOKEN_HAS_BEEN_EXPOSED_USER",
+            "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED",
+            "LIST_OF_UNAPPROVED_USERS",
+            "DATA_USAGE_EXCEEDS_THRESHOLD",
+            "TEST"
+          ]
         },
         "sentBy": {
           "type": "string"
@@ -3732,6 +3748,9 @@
         "userId": {
           "type": "integer",
           "format": "int64"
+        },
+        "userLogin": {
+          "type": "string"
         }
       },
       "title": "UserMailsDTO"

@@ -51,9 +51,12 @@ export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
 export const ONCOKB_CONTACT_EMAIL = 'contact@oncokb.org';
 export const ONCOKB_LICENSE_EMAIL = 'licenses@oncokb.org';
 export const GRID_BREAKPOINTS = {
+  SM: 576,
+  MD: 768,
   LG: 1050,
-  XL: 1200,
+  XL: 1370,
 };
+export const MSK_LOGO_ICON_CUTOFF = 1260;
 export const SOP_LINK = 'https://sop.oncokb.org';
 export const FAQ_LINK = 'https://faq.oncokb.org';
 export const FAQ_URL_PATTERNS_LINK = `${FAQ_LINK}/technical#what-are-the-url-patterns-of-oncokb-website`;
@@ -76,7 +79,7 @@ export const YOUTUBE_VIDEO_IDS: { [key in VIDEO_TYPES]: string } = {
   [VIDEO_TYPES.WEBINAR_INTRO]: 'XqoKrrm2Boc',
   [VIDEO_TYPES.WEBINAR_API]: 'mTTe7CTdw-g',
   [VIDEO_TYPES.INTRO]: 'IoH7JdJ0fsA',
-  [VIDEO_TYPES.INTRO_LONG]: 'aA8j3EMxgy8',
+  [VIDEO_TYPES.INTRO_LONG]: '1Ohq19p8ldo',
 };
 export const BILIBILI_VIDEO_IDS: { [key in VIDEO_TYPES]: string } = {
   [VIDEO_TYPES.WEBINAR_INTRO]: '370552044',
@@ -151,14 +154,14 @@ export enum ANNOTATION_PAGE_TAB_KEYS {
   FDA = 'FDA',
 }
 
-export const LEVEL_TYPE_NAMES: { [key: LEVEL_TYPES]: string } = {
+export const LEVEL_TYPE_NAMES: { [key in LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.TX]: 'Therapeutic',
   [LEVEL_TYPES.DX]: 'Diagnostic',
   [LEVEL_TYPES.PX]: 'Prognostic',
   [LEVEL_TYPES.FDA]: 'FDA',
 };
 
-export const ACTIONABLE_GENES_LEVEL_TITLE: { [key: LEVEL_TYPES]: string } = {
+export const ACTIONABLE_GENES_LEVEL_TITLE: { [key in LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.TX]: LEVEL_TYPE_NAMES[LEVEL_TYPES.TX],
   [LEVEL_TYPES.DX]: `${
     LEVEL_TYPE_NAMES[LEVEL_TYPES.DX]
@@ -166,17 +169,17 @@ export const ACTIONABLE_GENES_LEVEL_TITLE: { [key: LEVEL_TYPES]: string } = {
   [LEVEL_TYPES.PX]: `${
     LEVEL_TYPE_NAMES[LEVEL_TYPES.PX]
   } (for hematologic malignancies only)`,
-  [LEVEL_TYPES.FDA]: `${LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA]} (under FDA review)`,
+  [LEVEL_TYPES.FDA]: `${LEVEL_TYPE_NAMES[LEVEL_TYPES.FDA]}-Recognized Content`,
 };
 
 export const ANNOTATION_PAGE_TAB_NAMES: {
-  [key: ANNOTATION_PAGE_TAB_KEYS]: string;
+  [key in ANNOTATION_PAGE_TAB_KEYS]: string;
 } = {
   [ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL]: 'Annotated Alterations',
   [ANNOTATION_PAGE_TAB_KEYS.TX]: 'Therapeutic',
   [ANNOTATION_PAGE_TAB_KEYS.DX]: 'Diagnostic',
   [ANNOTATION_PAGE_TAB_KEYS.PX]: 'Prognostic',
-  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content (under FDA review)',
+  [ANNOTATION_PAGE_TAB_KEYS.FDA]: 'FDA-Recognized Content',
 };
 
 export enum LEVELS {
@@ -332,8 +335,7 @@ export const SM_TABLE_FIXED_HEIGHT = 400;
 export const IMG_MAX_WIDTH = 800;
 export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
 export const H5_FONT_SIZE = '1.25rem';
-export const FONT_FAMILY =
-  "'Helvetica Neue', Helvetica, Verdana, Arial, sans-serif";
+export const FONT_FAMILY = "'Gotham Book', sans-serif";
 
 // we do not have the table component to support api pagination, have to set the threshold to pull the list of all users
 export const THRESHOLD_NUM_OF_USER = 5000;
@@ -447,7 +449,8 @@ export enum PAGE_TITLE {
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
   REGISTER = 'Register',
-  TERMS = 'Terms of Use - Academic Research',
+  TERMS = 'Terms of Use',
+  SOP = 'SOP',
 }
 
 export enum PAGE_ROUTE {
@@ -466,8 +469,10 @@ export enum PAGE_ROUTE {
   HOME = '/',
   ABOUT = '/about',
   TERMS = '/terms',
+  SOP = '/sop',
   TEAM = '/team',
   NEWS = '/news',
+  FDA_RECOGNITION = '/fda-recognition',
   LEVELS = '/levels',
   SWAGGER_UI = '/swagger-ui/index.html',
   ADMIN = '/admin',
@@ -497,7 +502,6 @@ export enum TABLE_COLUMN_KEY {
   HUGO_SYMBOL = 'HUGO_SYMBOL',
   ALTERATION = 'ALTERATION',
   ALTERATIONS = 'ALTERATIONS',
-  CANCER_TYPES = 'CANCER_TYPES',
   EVIDENCE_CANCER_TYPE = 'EVIDENCE_CANCER_TYPE',
   DRUGS = 'DRUGS',
   LEVEL = 'LEVEL',
@@ -505,6 +509,9 @@ export enum TABLE_COLUMN_KEY {
   ONCOGENICITY = 'ONCOGENICITY',
   MUTATION_EFFECT = 'MUTATION_EFFECT',
 }
+
+export const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';
+export const OTHER_BIOMARKERS = 'Other Biomarkers';
 
 export enum SEARCH_QUERY_KEY {
   REFERENCE_GENOME = 'refGenome',
@@ -621,16 +628,39 @@ export enum TERM_DEFINITION {
 }
 
 export enum DOCUMENT_TITLES {
-  HOME = 'OncoKB',
-  LEVELS = 'OncoKB Levels of Evidence',
-  TEAM = 'OncoKB Team',
-  ABOUT = 'About OncoKB',
-  ACTIONABLE_GENES = 'OncoKB Actionable Genes',
-  TERMS = 'OncoKB Terms of Use - Academic Research',
-  NEWS = 'OncoKB Latest News',
-  API_ACCESS = 'OncoKB Data Access',
-  CANCER_GENES = 'OncoKB Cancer Gene List',
+  HOME = "OncoKB - MSK's Precision Oncology Knowledge Base",
+  LEVELS = 'Levels of Evidence',
+  TEAM = 'Team',
+  ABOUT = 'About',
+  ACTIONABLE_GENES = 'Actionable Genes',
+  TERMS = 'Terms of Use',
+  NEWS = 'Latest News',
+  API_ACCESS = 'API Access',
+  CANCER_GENES = 'Cancer Gene List',
+  FDA_RECOGNITION = 'OncoKB is now an FDA-recognized Public Human Genetic Variant Database*',
 }
+
+export const FDA_RECOGNITION_DISCLAIMER: React.FunctionComponent<{
+  enableLink: boolean;
+}> = props => (
+  <span>
+    {props.enableLink ? (
+      <Link to={PAGE_ROUTE.FDA_RECOGNITION}>FDA recognition</Link>
+    ) : (
+      'FDA recognition'
+    )}{' '}
+    of OncoKB is for the content that is clearly marked
+  </span>
+);
+export const AsteriskMark = () => <span>&#42;</span>;
+export const FdaRecognitionDisclaimer: React.FunctionComponent<{
+  enableLink: boolean;
+}> = props => (
+  <span>
+    <AsteriskMark />
+    <FDA_RECOGNITION_DISCLAIMER enableLink={props.enableLink} />
+  </span>
+);
 
 export const ACADEMIC_TERMS = [
   {
@@ -665,6 +695,9 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '11292021', version: 'v3.9' },
+  { date: '10262021', version: 'v3.8' },
+  { date: '09292021', version: 'v3.7' },
   { date: '08312021', version: 'v3.6' },
   { date: '07162021', version: 'v3.5' },
   { date: '06172021', version: 'v3.4' },

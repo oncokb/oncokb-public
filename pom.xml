@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>public-website</artifactId>
-    <version>3.4.3</version>
+    <version>3.5.6</version>
     <packaging>jar</packaging>
     <name>OncoKB Public Website</name>
 
@@ -361,23 +361,28 @@
             <artifactId>sentry-spring-boot-starter</artifactId>
             <version>${sentry.version}</version>
         </dependency>
-      <dependency>
-        <groupId>com.slack.api</groupId>
-        <artifactId>bolt</artifactId>
-        <version>${slack.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.slack.api</groupId>
-        <artifactId>bolt-servlet</artifactId>
-        <version>${slack.version}</version>
-      </dependency>
-      <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
-      <dependency>
-        <groupId>com.squareup.okhttp3</groupId>
-        <artifactId>okhttp</artifactId>
-        <version>4.9.1</version>
-      </dependency>
-      <!-- jhipster-needle-maven-add-dependency -->
+        <dependency>
+            <groupId>com.slack.api</groupId>
+            <artifactId>bolt</artifactId>
+            <version>${slack.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.slack.api</groupId>
+            <artifactId>bolt-servlet</artifactId>
+            <version>${slack.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.9.1</version>
+        </dependency>
+        <!-- jhipster-needle-maven-add-dependency -->
+        <dependency>
+	        <groupId>com.github.oncokb</groupId>
+	        <artifactId>oncokb-meta</artifactId>
+	        <version>4f57f6d0fa</version>
+	    </dependency>
     </dependencies>
 
     <build>

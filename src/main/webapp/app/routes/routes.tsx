@@ -4,13 +4,9 @@ import Login from 'app/components/login/LoginPage';
 import { Logout } from 'app/components/login/logout';
 import { RegisterPage } from 'app/pages/RegisterPage';
 import { PrivateRoute } from 'app/shared/auth/private-route';
-import { AboutPage } from 'app/pages/AboutPage';
-import Loadable from 'react-loadable';
 import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import { TermsPage } from 'app/pages/TermsPage';
-import { TeamPage } from 'app/pages/teamPage/TeamPage';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
 import ActionableGenesPage from 'app/pages/actionableGenesPage/ActionableGenesPage';
 import { RouterStore } from 'mobx-react-router';
@@ -21,20 +17,21 @@ import ActivateAccount from 'app/components/account/ActivateAccount';
 import { PasswordResetInit } from 'app/components/account/PasswordResetInit';
 import PasswordResetFinish from 'app/components/account/PasswordResetFinish';
 import PageNotFound from 'app/shared/error/page-not-found';
-import APIAccessPage from 'app/pages/APIAccessPage';
 import AccountPassword from 'app/components/account/AccountPassword';
 import AdminRouts from 'app/routes/AdminRoutes';
 import PageContainer from 'app/components/PageContainer';
 import React from 'react';
 import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
-import { FAQPage } from 'app/pages/FAQPage';
 import { RecaptchaBoundaryRoute } from '../shared/auth/RecaptchaBoundaryRoute';
 import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
 import UserPage from 'app/pages/userPage/UserPage';
 import AppStore from 'app/store/AppStore';
 import ActivateTrialFinish from 'app/components/account/ActivateTrialFinish';
 import CompanyPage from 'app/pages/companyPage/CompanyPage';
+import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
+import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTab';
+import FAQPage from 'app/pages/FAQPage';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -81,12 +78,12 @@ const AppRouts = (props: {
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.REGISTER}
-            component={RegisterPage}
+            component={ApiAccessPageNavTab}
           />
           <ErrorBoundaryRoute
             exact
             path={PAGE_ROUTE.API_ACCESS}
-            component={APIAccessPage}
+            component={ApiAccessPageNavTab}
           />
           <ErrorBoundaryRoute
             exact
@@ -135,10 +132,20 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.ALTERATION_TUMOR_TYPE}
             component={AlterationPage}
           />
-          <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPage} />
-          <Route exact path={PAGE_ROUTE.TERMS} component={TermsPage} />
-          <Route exact path={PAGE_ROUTE.TEAM} component={TeamPage} />
+          <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPageNavTab} />
+          <Route exact path={PAGE_ROUTE.TEAM} component={AboutPageNavTab} />
+          <Route exact path={PAGE_ROUTE.SOP} component={AboutPageNavTab} />
           <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
+          <Route
+            exact
+            path={PAGE_ROUTE.FDA_RECOGNITION}
+            component={AboutPageNavTab}
+          />
+          <Route
+            exact
+            path={PAGE_ROUTE.TERMS}
+            component={ApiAccessPageNavTab}
+          />
           <Route
             exact
             path={PAGE_ROUTE.LEVELS}
