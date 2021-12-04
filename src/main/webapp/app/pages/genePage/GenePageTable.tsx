@@ -37,7 +37,7 @@ export const GenePageTable: React.FunctionComponent<{
           desc: false,
         },
         {
-          id: TABLE_COLUMN_KEY.CANCER_TYPES,
+          id: TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,
           desc: false,
         },
         {

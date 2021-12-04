@@ -1,9 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import org.apache.http.protocol.HTTP;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
@@ -138,13 +136,12 @@ public class UserResource {
             }
             User newUser = userService.createUser(managedUserVM, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
             if (managedUserVM.getNotifyUserOnTrialCreation()) {
-                userService.initiateTrialAccountActivation(newUser.getEmail());
+                userService.initiateTrialAccountActivation(newUser.getLogin());
                 mailService.sendActiveTrialMail(userMapper.userToUserDTO(newUser), true);
             } else {
                 mailService.sendCreationEmail(userMapper.userToUserDTO(newUser));
             }
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert(applicationName, "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
                 .body(newUser);
         }
     }
@@ -184,8 +181,7 @@ public class UserResource {
         if(updatedUser.isPresent() && sendEmail && updatedUser.get().isActivated()) {
             mailService.sendApprovalEmail(updatedUser.get());
         }
-        return ResponseUtil.wrapOrNotFound(updatedUser,
-            HeaderUtil.createAlert(applicationName, "A user is updated with identifier " + userDTO.getLogin(), userDTO.getLogin()));
+        return ResponseUtil.wrapOrNotFound(updatedUser);
     }
 
     /**
@@ -262,7 +258,7 @@ public class UserResource {
         log.debug("REST request to delete User: {}", login);
         // TODO: token, token_stats, user_details need to be deleted in order to delete the user
         userService.deleteUser(login);
-        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, "A user is deleted with identifier " + login, login)).build();
+        return ResponseEntity.ok().build();
     }
 
     /**

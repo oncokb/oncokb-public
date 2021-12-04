@@ -26,6 +26,7 @@ public enum MailType {
     , TOKEN_HAS_BEEN_EXPOSED_USER("tokenHasBeenExposedToUser", "Token has been exposed", null)
     , SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED("searchingResponseStructureHasChanged", "Searching Response Structure Has Changed", null)
     , LIST_OF_UNAPPROVED_USERS("listOfUnapprovedUsers", "List of unapproved users", null)
+    , DATA_USAGE_EXCEEDS_THRESHOLD("dataUsageExceedsThreshold", "Unusual OncoKB account activities (data usage)", null)
     , TEST("testEmail", "Test", null)
     ;
 

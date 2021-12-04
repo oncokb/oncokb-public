@@ -1,21 +1,27 @@
 import * as React from 'react';
-import { Container, Dropdown, Nav, Navbar, NavItem } from 'react-bootstrap';
-import oncokbImg from 'content/images/oncokb-lg.png';
+import { Container, Nav, Navbar } from 'react-bootstrap';
+import oncokbImg from 'content/images/oncokb-white.svg';
 import { observer } from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';
 import { RouterStore } from 'mobx-react-router';
 import { withRouter } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import AccountMenu from 'app/pages/menus/account';
-import mskIcon from 'content/images/msk-icon-fff-sm.png';
 import { action, observable } from 'mobx';
-import { PAGE_TITLE } from 'app/config/constants';
+import {
+  MSK_LOGO_ICON_CUTOFF,
+  PAGE_ROUTE,
+  PAGE_TITLE,
+} from 'app/config/constants';
 import UserMessage from 'app/components/userMessager/UserMessage';
 import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 import classnames from 'classnames';
 import autobind from 'autobind-decorator';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import AccountMessage from 'app/components/accountMessage/AccountMessage';
+import MskccLogo from 'app/components/MskccLogo';
+import AppStore from 'app/store/AppStore';
+import OptimizedImage from 'app/shared/image/OptimizedImage';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -26,6 +32,7 @@ export interface IHeaderProps {
   windowStore: WindowStore;
   authStore: AuthenticationStore;
   routing: RouterStore;
+  appStore: AppStore;
 }
 
 type SubpageLink = {
@@ -38,15 +45,13 @@ type SubpageLink = {
 @observer
 class Header extends React.Component<IHeaderProps> {
   private subPages: SubpageLink[] = [
-    { title: 'Levels of Evidence', link: 'levels' },
-    { title: 'Actionable Genes', link: 'actionableGenes' },
-    { title: 'Cancer Genes', link: 'cancerGenes' },
-    { title: 'API / License', link: 'apiAccess' },
-    { title: 'About', link: 'about' },
-    { title: 'Team', link: 'team' },
-    { title: 'News', link: 'news' },
-    { title: 'Terms', link: 'terms' },
-    { title: 'FAQ', link: 'faq' },
+    { title: 'Levels of Evidence', link: PAGE_ROUTE.LEVELS },
+    { title: 'Actionable Genes', link: PAGE_ROUTE.ACTIONABLE_GENE },
+    { title: 'Cancer Genes', link: PAGE_ROUTE.CANCER_GENES },
+    { title: 'API / License', link: PAGE_ROUTE.API_ACCESS },
+    { title: 'About', link: PAGE_ROUTE.ABOUT },
+    { title: 'News', link: PAGE_ROUTE.NEWS },
+    { title: 'FAQ', link: PAGE_ROUTE.FAQ_ACCESS },
   ];
 
   @observable isNavExpanded = false;
@@ -67,11 +72,7 @@ class Header extends React.Component<IHeaderProps> {
 
   getLink(page: SubpageLink) {
     return (
-      <NavLink
-        to={`/${page.link}`}
-        key={page.title}
-        className={'mr-auto nav-item'}
-      >
+      <NavLink to={page.link} key={page.title} className={'mr-auto nav-item'}>
         {page.title}
       </NavLink>
     );
@@ -104,22 +105,26 @@ class Header extends React.Component<IHeaderProps> {
   public render() {
     return (
       <>
-        <UserMessage windowStore={this.props.windowStore} show={true} />
+        <UserMessage
+          windowStore={this.props.windowStore}
+          show={true}
+          appStore={this.props.appStore}
+        />
         <AccountMessage
           windowStore={this.props.windowStore}
           authStore={this.props.authStore}
         />
         <header className="sticky-top header">
           <Navbar
-            bg="primary"
+            bg="oncokb"
             expand="lg"
             className="navbar-dark main-navbar"
             expanded={this.isNavExpanded}
           >
             <Container fluid={!this.props.windowStore.isLargeScreen}>
               <Navbar.Brand>
-                <NavLink to="/">
-                  <img height={38} src={oncokbImg} alt={'OncoKB'} />
+                <NavLink to={PAGE_ROUTE.HOME}>
+                  <OptimizedImage height={30} src={oncokbImg} alt={'OncoKB'} />
                 </NavLink>
               </Navbar.Brand>
               <Navbar.Toggle onClick={this.toggleNav} />
@@ -164,12 +169,18 @@ class Header extends React.Component<IHeaderProps> {
                     isAuthenticated={this.props.isUserAuthenticated}
                     isAdmin={this.props.isAdmin}
                   />
-                  {(this.props.windowStore.isLargeScreen ||
-                    this.isNavExpanded) && (
-                    <Nav.Item style={{ paddingRight: 0 }}>
-                      <img alt="mskcc-logo" src={mskIcon} height={'37px'} />
-                    </Nav.Item>
-                  )}
+                  <Nav.Item style={{ paddingRight: 0 }}>
+                    <MskccLogo
+                      imageHeight={35}
+                      size={
+                        this.props.windowStore.isLargeScreen &&
+                        this.props.windowStore.size.width <=
+                          MSK_LOGO_ICON_CUTOFF
+                          ? 'sm'
+                          : 'lg'
+                      }
+                    />
+                  </Nav.Item>
                 </Nav>
               </Navbar.Collapse>
             </Container>

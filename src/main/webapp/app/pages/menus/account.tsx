@@ -60,7 +60,7 @@ export default class AccountMenu extends React.Component<{
     return (
       <Dropdown as={NavItem}>
         <Dropdown.Toggle id={'account-menu'} as={NavLink}>
-          <i className={'fa fa-user mr-1'} />
+          <i className={'fa fa-user-o mr-1'} />
           {PAGE_TITLE.ACCOUNT}
         </Dropdown.Toggle>
         <Dropdown.Menu alignRight={true}>

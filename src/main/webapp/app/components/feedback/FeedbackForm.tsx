@@ -86,6 +86,10 @@ export const FeedbackForm: React.FunctionComponent<FeedbackFormProps> = props =>
               },
             }}
           />
+          <div>
+            Please try to provide your information so we can get back to you
+            when the suggestion is incorporated.
+          </div>
         </Col>
       </Row>
       <Row>

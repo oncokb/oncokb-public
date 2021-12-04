@@ -20,7 +20,11 @@ import { RouterStore } from 'mobx-react-router';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import _ from 'lodash';
-import { COMPONENT_PADDING, THRESHOLD_NUM_OF_USER } from 'app/config/constants';
+import {
+  ANNOTATION_PAGE_TAB_KEYS,
+  COMPONENT_PADDING,
+  THRESHOLD_NUM_OF_USER,
+} from 'app/config/constants';
 import Select from 'react-select';
 import classnames from 'classnames';
 import LoadingIndicator, {
@@ -32,6 +36,8 @@ import { LoadingButton } from 'app/shared/button/LoadingButton';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 import { Else, If, Then } from 'react-if';
 import { EmailTable } from 'app/shared/table/EmailTable';
+import * as QueryString from 'query-string';
+import { AdminSendEmailPageSearchQueries } from 'app/shared/route/types';
 
 @inject('routing', 'authenticationStore')
 @observer
@@ -68,6 +74,18 @@ export default class UserManagementPage extends React.Component<{
           this.selectedMailFrom = undefined;
           this.selectedMailCc = undefined;
         }
+      ),
+      reaction(
+        () => [this.props.routing.location.search],
+        ([hash]) => {
+          const queryStrings = QueryString.parse(
+            hash
+          ) as AdminSendEmailPageSearchQueries;
+          if (queryStrings.to) {
+            this.selectedUserLogin = queryStrings.to;
+          }
+        },
+        true
       )
     );
   }
@@ -126,14 +144,8 @@ export default class UserManagementPage extends React.Component<{
   });
 
   readonly mailTypes = remoteData<MailTypeInfo[]>({
-    invoke: async () => {
-      if (this.selectedUser === undefined) {
-        return [];
-      } else {
-        return await client.getMailsTypesUsingGET({
-          licenseType: this.selectedUser.licenseType,
-        });
-      }
+    invoke() {
+      return client.getMailsTypesUsingGET({});
     },
     default: [],
   });

@@ -129,9 +129,8 @@ export default class LevelSelectionRow extends React.Component<
                       process to recognize human variant databases.
                     </p>
                     <p>
-                      Below is the FDA-recognized content in OncoKB (currently
-                      under FDA review), including tumor type-specific
-                      alterations and their corresponding{' '}
+                      Below is the FDA-recognized content in OncoKB, including
+                      tumor type-specific alterations and their corresponding{' '}
                       <Link
                         to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
                       >

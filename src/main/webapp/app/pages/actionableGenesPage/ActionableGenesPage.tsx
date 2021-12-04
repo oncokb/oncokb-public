@@ -62,6 +62,8 @@ import {
   GenePageHashQueries,
 } from 'app/shared/route/types';
 import AppStore from 'app/store/AppStore';
+import { If, Else, Then } from 'react-if';
+import ShortenTextWithTooltip from 'app/shared/texts/ShortenTextWithTooltip';
 
 type Treatment = {
   level: string;
@@ -91,7 +93,7 @@ export default class ActionableGenesPage extends React.Component<
   @observable geneSearchKeyword = '';
   @observable refGenome = DEFAULT_REFERENCE_GENOME;
   @observable levelSelected: {
-    [level: LEVELS]: boolean;
+    [level in keyof LEVELS]: boolean;
   } = this.initLevelSelected();
   @observable collapseStatus: { [key in LEVEL_TYPES]: boolean } = {
     [LEVEL_TYPES.TX]: true,
@@ -324,7 +326,7 @@ export default class ActionableGenesPage extends React.Component<
     return treatments;
   }
 
-  initLevelSelected(): { [level: LEVELS]: boolean } {
+  initLevelSelected(): { [level in keyof LEVELS]: boolean } {
     return _.reduce(
       LEVELS,
       (acc, level) => {
@@ -638,13 +640,16 @@ export default class ActionableGenesPage extends React.Component<
     if (this.fdaSectionIsOpen) {
       alterationPageHashQueries.tab = ANNOTATION_PAGE_TAB_KEYS.FDA;
     }
-    const linkedAlts = alterations.map<React.ReactNode>(
+    const linkedAlts = alterations.map<JSX.Element>(
       (alteration, index: number) => (
         <>
           <AlterationPageLink
             key={index}
             hugoSymbol={hugoSymbol}
-            alteration={alteration.name}
+            alteration={{
+              alteration: alteration.alteration,
+              name: alteration.name,
+            }}
             alterationRefGenomes={
               alteration.referenceGenomes as REFERENCE_GENOME[]
             }
@@ -658,36 +663,7 @@ export default class ActionableGenesPage extends React.Component<
         </>
       )
     );
-    if (linkedAlts.length > 5) {
-      return (
-        <span>
-          {linkedAlts[0]} and{' '}
-          <DefaultTooltip
-            overlay={
-              <div style={{ maxWidth: '400px' }}>
-                <WithSeparator separator={', '}>{linkedAlts}</WithSeparator>
-              </div>
-            }
-            overlayStyle={{
-              opacity: 1,
-            }}
-            placement="right"
-            destroyTooltipOnHide={true}
-          >
-            <span
-              style={{
-                textDecoration: 'underscore',
-                color: COLOR_BLUE,
-              }}
-            >
-              {linkedAlts.length - 1} other alterations
-            </span>
-          </DefaultTooltip>
-        </span>
-      );
-    } else {
-      return <WithSeparator separator={', '}>{linkedAlts}</WithSeparator>;
-    }
+    return <ShortenTextWithTooltip threshold={5} data={linkedAlts} />;
   }
 
   @computed
@@ -778,7 +754,8 @@ export default class ActionableGenesPage extends React.Component<
         },
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CANCER_TYPES),
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
+        Header: <span>Cancer Types</span>,
         minWidth: 300,
         accessor: 'cancerTypes',
         sortMethod(a: string[], b: string[]) {
@@ -804,25 +781,71 @@ export default class ActionableGenesPage extends React.Component<
 
   @computed
   get oncokbTableProps() {
-    if (this.fdaSectionIsOpen) {
+    const tableProps = {
+      disableSearch: true,
+      data: this.filteredTreatments,
+      loading:
+        this.relevantTumorTypes.isPending &&
+        (this.fdaSectionIsOpen
+          ? this.allFdaAlterations.isPending
+          : this.evidencesByLevel.isPending),
+      columns: this.columns,
+      defaultPageSize: 10,
+      defaultSorted: [
+        {
+          id: TABLE_COLUMN_KEY.LEVEL,
+          desc: true,
+        },
+        {
+          id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
+          desc: false,
+        },
+        {
+          id: TABLE_COLUMN_KEY.ALTERATIONS,
+          desc: false,
+        },
+        {
+          id: TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,
+          desc: false,
+        },
+        {
+          id: TABLE_COLUMN_KEY.DRUGS,
+          desc: false,
+        },
+      ],
+      showPagination: this.fdaSectionIsOpen,
+      fixedHeight: !this.fdaSectionIsOpen,
+    };
+    if (!this.fdaSectionIsOpen) {
       return {
-        showPagination: true,
-        fixedHeight: false,
-      };
-    } else {
-      return {
+        ...tableProps,
         minRows: Math.round(LG_TABLE_FIXED_HEIGHT / 36) - 1,
         pageSize:
           this.filteredTreatments.length === 0
             ? 1
             : this.filteredTreatments.length,
-        showPagination: this.fdaSectionIsOpen,
-        fixedHeight: true,
         style: {
           height: LG_TABLE_FIXED_HEIGHT,
         },
       };
+    } else {
+      return tableProps;
     }
+  }
+
+  getTable() {
+    // We need to render two tables, one with fixed header, one with pagination.
+    // Once page size is specified in the fixed header table, it cannot be overwritten by the defaultPageSize
+    return (
+      <If condition={this.fdaSectionIsOpen}>
+        <Then>
+          <OncoKBTable {...this.oncokbTableProps} />
+        </Then>
+        <Else>
+          <OncoKBTable {...this.oncokbTableProps} />
+        </Else>
+      </If>
+    );
   }
 
   @computed
@@ -965,43 +988,7 @@ export default class ActionableGenesPage extends React.Component<
             </Col>
           </Row>
           <Row className="mt-2">
-            <Col>
-              <OncoKBTable
-                {...this.oncokbTableProps}
-                disableSearch={true}
-                data={this.filteredTreatments}
-                loading={
-                  this.relevantTumorTypes.isPending &&
-                  (this.fdaSectionIsOpen
-                    ? this.allFdaAlterations.isPending
-                    : this.evidencesByLevel.isPending)
-                }
-                columns={this.columns}
-                defaultPageSize={10}
-                defaultSorted={[
-                  {
-                    id: TABLE_COLUMN_KEY.LEVEL,
-                    desc: true,
-                  },
-                  {
-                    id: TABLE_COLUMN_KEY.HUGO_SYMBOL,
-                    desc: false,
-                  },
-                  {
-                    id: TABLE_COLUMN_KEY.ALTERATIONS,
-                    desc: false,
-                  },
-                  {
-                    id: TABLE_COLUMN_KEY.CANCER_TYPES,
-                    desc: false,
-                  },
-                  {
-                    id: TABLE_COLUMN_KEY.DRUGS,
-                    desc: false,
-                  },
-                ]}
-              />
-            </Col>
+            <Col>{this.getTable()}</Col>
           </Row>
         </>
       </DocumentTitle>

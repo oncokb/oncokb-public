@@ -3,18 +3,26 @@ import React from 'react';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_REFERENCE_GENOME,
+  LEVEL_CLASSIFICATION,
+  LEVELS,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   REGEXP,
   REGEXP_LINK,
   SEARCH_QUERY_KEY,
+  SOP_LINK,
   YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
 import _ from 'lodash';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import reactStringReplace from 'react-string-replace';
 import { ReactNodeArray } from 'prop-types';
-import { encodeSlash, getYouTubeLink } from 'app/shared/utils/Utils';
+import {
+  encodeSlash,
+  getAlterationName,
+  getYouTubeLink,
+  IAlteration,
+} from 'app/shared/utils/Utils';
 import { Linkout } from 'app/shared/links/Linkout';
 import ExternalLinkIcon from 'app/shared/icons/ExternalLinkIcon';
 import {
@@ -24,6 +32,7 @@ import {
   GenePageSearchQueries,
 } from 'app/shared/route/types';
 import * as QueryString from 'querystring';
+import { LEVEL_TYPE_TO_VERSION, Version } from 'app/pages/LevelOfEvidencePage';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -56,15 +65,22 @@ export const GenePageLink: React.FunctionComponent<{
 
 export const AlterationPageLink: React.FunctionComponent<{
   hugoSymbol: string;
-  alteration: string;
+  alteration: IAlteration | string;
   alterationRefGenomes?: REFERENCE_GENOME[];
+  cancerType?: string;
   searchQueries?: AlterationPageSearchQueries;
   hashQueries?: AlterationPageHashQueries;
   showGene?: boolean;
-  content?: string;
   onClick?: () => void;
 }> = props => {
-  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${props.alteration}`;
+  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${
+    typeof props.alteration === 'string'
+      ? props.alteration
+      : props.alteration.name
+  }`;
+  if (props.cancerType) {
+    pageLink = `${pageLink}/${encodeSlash(props.cancerType)}`;
+  }
   const searchQueries = props.searchQueries || {};
 
   // Prop alterationRefGenomes is just a convinient way to process reference genomes when it's a list.
@@ -79,13 +95,14 @@ export const AlterationPageLink: React.FunctionComponent<{
   if (props.hashQueries) {
     pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
   }
+  const alterationName = getAlterationName(props.alteration);
   return (
     <Link to={pageLink} onClick={props.onClick}>
-      {props.content
-        ? props.content
+      {props.children
+        ? props.children
         : props.showGene
-        ? `${props.hugoSymbol} ${props.alteration}`
-        : props.alteration}
+        ? `${props.hugoSymbol} ${alterationName}`
+        : alterationName}
     </Link>
   );
 };
@@ -109,11 +126,9 @@ export const TumorTypePageLink: React.FunctionComponent<{
 
 export const MSILink: React.FunctionComponent<{}> = () => {
   return (
-    <AlterationPageLink
-      hugoSymbol={'Other Biomarkers'}
-      alteration={'MSI-H'}
-      content={'microsatellite instability high (MSI-H)'}
-    />
+    <AlterationPageLink hugoSymbol={'Other Biomarkers'} alteration={'MSI-H'}>
+      microsatellite instability high (MSI-H)
+    </AlterationPageLink>
   );
 };
 
@@ -175,4 +190,37 @@ export const WebinarLink: React.FunctionComponent<{}> = props => {
       </Linkout>
     </span>
   );
+};
+
+export const getLoEPageLink = (version: Version) => {
+  return `${PAGE_ROUTE.LEVELS}#version=${version}`;
+};
+
+export const getActionableGenesPageLink = (
+  levels?: string,
+  sections?: string
+) => {
+  const hashes = [];
+  if (levels) {
+    hashes.push(`levels=${levels}`);
+  }
+  if (sections) {
+    hashes.push(`sections=${sections}`);
+  }
+  return `${PAGE_ROUTE.ACTIONABLE_GENE}${
+    hashes.length > 0 ? '#' : ''
+  }${hashes.join('&')}`;
+};
+
+export const SopPageLink: React.FunctionComponent<{
+  version?: number;
+  content?: string;
+}> = props => {
+  let link = SOP_LINK;
+  let defaultContent = 'OncoKB SOP';
+  if (props.version) {
+    link += `/?version=v${props.version}`;
+    defaultContent += ` v${props.version}`;
+  }
+  return <Linkout link={link}>{props.content || defaultContent}</Linkout>;
 };

@@ -11,7 +11,7 @@ export const Linkout: React.FunctionComponent<{
       rel="noopener noreferrer"
       className={props.className}
     >
-      {props.children}
+      {props.children ? props.children : props.link}
     </a>
   );
 };

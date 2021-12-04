@@ -13,6 +13,7 @@ import client from 'app/shared/api/clientInstance';
 import { ManagedUserVM } from 'app/shared/api/generated/API';
 import {
   LicenseType,
+  PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
 } from 'app/config/constants';
 import { Alert } from 'react-bootstrap';
@@ -47,7 +48,6 @@ enum RegisterStatus {
 export type IRegisterProps = {
   routing: RouterStore;
   windowStore: WindowStore;
-  handleRegister: (newUser: NewUserRequiredFields) => void;
 };
 
 export const LICENSE_HASH_KEY = 'license';
@@ -201,12 +201,12 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   render() {
     if (this.registerStatus === RegisterStatus.READY_REDIRECT) {
-      return <Redirect to={'/'} />;
+      return <Redirect to={PAGE_ROUTE.HOME} />;
     }
 
     if (this.registerStatus === RegisterStatus.REGISTERED) {
       return (
-        <SmallPageContainer className={'registerPage'}>
+        <SmallPageContainer>
           <div>
             <Alert variant="info">
               {this.getRegisteredMessage(this.selectedLicense)}
@@ -217,7 +217,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     }
 
     return (
-      <div className={'registerPage'}>
+      <div>
         {this.registerError ? <ErrorAlert error={this.registerError} /> : null}
         <NewAccountForm
           isLargeScreen={this.props.windowStore.isLargeScreen}
