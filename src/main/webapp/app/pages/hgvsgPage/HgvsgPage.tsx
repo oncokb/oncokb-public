@@ -133,6 +133,14 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
     return content.join(', ');
   }
 
+  @computed
+  get pageShouldBeRendered() {
+    return (
+      this.store.annotationResultByHgvsg.isComplete &&
+      this.store.fdaAlterations.isComplete
+    );
+  }
+
   @autobind
   onChangeTab(
     selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
@@ -156,7 +164,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
   render() {
     return (
       <DocumentTitle title={this.documentTitle}>
-        <If condition={this.store.annotationResultByHgvsg.isComplete}>
+        <If condition={this.pageShouldBeRendered}>
           <Then>
             <If
               condition={
@@ -172,7 +180,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
                   alteration={
                     this.store.annotationResultByHgvsg.result.query.alteration
                   }
-                  matchedAlteration={this.store.matedAlteration}
+                  matchedAlteration={this.store.matchedAlteration}
                   tumorType={this.store.tumorTypeQuery}
                   refGenome={this.store.referenceGenomeQuery}
                   annotation={this.store.annotationResultByHgvsg.result}

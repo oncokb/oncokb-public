@@ -45,6 +45,7 @@ const usageUsersOverview = fs.readFileSync(`${DATA_DIR}api-usage-summary-users.j
 const usageResourcesOverview = fs.readFileSync(`${DATA_DIR}api-usage-summary-resources.json`).toString();
 const usageUserDetail = fs.readFileSync(`${DATA_DIR}api-usage-users-2021.json`).toString();
 const usageResourceDetail = fs.readFileSync(`${DATA_DIR}api-usage-resources-example.json`).toString();
+const brafV600eVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-BRAF-V600E.json`).toString();
 
 // # Fix the time to expiration date.
 function updateTokenExpirationDate(current){
@@ -150,6 +151,13 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: geneQuery
+      };
+      break;
+    case `${SERVER_URL}api/v1/genes/lookup`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: '[]'
       };
       break;
     case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=ABL1`:
@@ -262,6 +270,27 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: usageResourceDetail
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/variantAnnotation?referenceGenome=GRCh37&hgvsg=7%3Ag.140453136A%3ET`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafV600eVariantAnnotation
+      };
+      break;
+    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: '[]'
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/fdaAlterations?hugoSymbol=`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: '[]'
       };
       break;
     default:
@@ -421,6 +450,14 @@ describe('Tests with login', () => {
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Login' });
+  })
+
+  it('HGVSg Page', async() => {
+    await page.goto(`${CLIENT_URL}hgvsg/7:g.140453136A>T?refGenome=GRCh37`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('HGVSg Page with Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'HGVSg Page with Login' });
   })
 
   it('Account Settings Page', async() =>{
@@ -649,6 +686,14 @@ describe('Tests without login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page without Login' });
   })
 
+  it('HGVSg Page', async() => {
+    await page.goto(`${CLIENT_URL}hgvsg/7:g.140453136A>T?refGenome=GRCh37`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('HGVSg Page without Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'HGVSg Page without Login' });
+  })
+
   it('Login Page', async() => {
     await page.goto(`${CLIENT_URL}login`);
     await page.setViewport(VIEW_PORT_1080);
@@ -661,3 +706,4 @@ describe('Tests without login', () => {
     await browser.close();
   })
 })
+
