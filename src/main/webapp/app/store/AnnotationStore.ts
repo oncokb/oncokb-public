@@ -599,8 +599,8 @@ export class AnnotationStore {
   }
 
   @computed
-  get matedAlteration(): Alteration | undefined {
-    const altLowerCaseQuery = this.alterationQuery.toLowerCase();
+  get matchedAlteration(): Alteration | undefined {
+    const altLowerCaseQuery = this.alterationQuery?.toLowerCase();
     const matched = this.biologicalAlterations.result.filter(
       alt =>
         alt.variant.alteration.toLowerCase().includes(altLowerCaseQuery) ||
