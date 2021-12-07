@@ -6,7 +6,10 @@ import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
+import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,20 +19,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -43,7 +46,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 @SpringBootTest(classes = OncokbPublicApp.class)
 @ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 public class CompanyResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -70,6 +73,14 @@ public class CompanyResourceIT {
     private static final String DEFAULT_LEGAL_CONTACT = "AAAAAAAAAA";
     private static final String UPDATED_LEGAL_CONTACT = "BBBBBBBBBB";
 
+    private static final String[] DEFAULT_COMPANY_DOMAIN_NAMES = new String[] {"oncokb.org"};
+
+    private static final Set<String> DEFAULT_COMPANY_DOMAINS = new HashSet<>(Arrays.asList(DEFAULT_COMPANY_DOMAIN_NAMES));
+
+    private static final String[] UPDATED_COMPANY_DOMAIN_NAMES = new String[] {"oncokb.org, mskcc.org"};
+
+    private static final Set<String> UPDATED_COMPANY_DOMAINS = new HashSet<>(Arrays.asList(UPDATED_COMPANY_DOMAIN_NAMES));
+
     @Autowired
     private CompanyRepository companyRepository;
 
@@ -81,9 +92,6 @@ public class CompanyResourceIT {
 
     @Mock
     private CompanyService companyServiceMock;
-
-    @Autowired
-    private CompanyService companyService;
 
     @Autowired
     private EntityManager em;
@@ -139,8 +147,11 @@ public class CompanyResourceIT {
     @Transactional
     public void createCompany() throws Exception {
         int databaseSizeBeforeCreate = companyRepository.findAll().size();
-        // Create the Company
+
+        // Create the companyDTO
         CompanyDTO companyDTO = companyMapper.toDto(company);
+        companyDTO.setCompanyDomains(DEFAULT_COMPANY_DOMAINS);
+
         restCompanyMockMvc.perform(post("/api/companies")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(companyDTO)))
@@ -158,6 +169,10 @@ public class CompanyResourceIT {
         assertThat(testCompany.getLicenseStatus()).isEqualTo(DEFAULT_LICENSE_STATUS);
         assertThat(testCompany.getBusinessContact()).isEqualTo(DEFAULT_BUSINESS_CONTACT);
         assertThat(testCompany.getLegalContact()).isEqualTo(DEFAULT_LEGAL_CONTACT);
+        assertThat(testCompany.getCompanyDomains())
+            .extracting(companyDomain -> companyDomain.getName())
+            .containsExactlyInAnyOrderElementsOf(DEFAULT_COMPANY_DOMAINS);
+        
     }
 
     @Test
@@ -180,6 +195,38 @@ public class CompanyResourceIT {
         assertThat(companyList).hasSize(databaseSizeBeforeCreate);
     }
 
+    @Test
+    @Transactional
+    public void createCompanyWithExistingName() throws Exception {
+        // Initialize database
+        CompanyDTO existingCompanyDTO = companyMapper.toDto(company);
+        existingCompanyDTO.setCompanyDomains(DEFAULT_COMPANY_DOMAINS);
+        Company existingCompany = companyMapper.toEntity(existingCompanyDTO);
+        companyRepository.saveAndFlush(existingCompany);
+        int databaseSizeBeforeCreate = companyRepository.findAll().size();
+
+        // Create the Company with an existing name
+        CompanyDTO companyDTO = new CompanyDTO();
+        companyDTO.setName(DEFAULT_NAME); // this name is already used
+        companyDTO.setDescription(DEFAULT_DESCRIPTION);
+        companyDTO.setCompanyType(DEFAULT_COMPANY_TYPE);
+        companyDTO.setLicenseType(DEFAULT_LICENSE_TYPE);
+        companyDTO.setLicenseModel(DEFAULT_LICENSE_MODEL);
+        companyDTO.setLicenseStatus(DEFAULT_LICENSE_STATUS);
+        companyDTO.setBusinessContact(DEFAULT_BUSINESS_CONTACT);
+        companyDTO.setLegalContact(DEFAULT_LEGAL_CONTACT);
+        companyDTO.setCompanyDomains(DEFAULT_COMPANY_DOMAINS);
+
+        // An entity with an existing name cannot be created, so this API call must fail
+        restCompanyMockMvc.perform(post("/api/companies")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(companyDTO)))
+            .andExpect(status().isBadRequest());
+
+        // Validate the Company in the database
+        List<Company> companyList = companyRepository.findAll();
+        assertThat(companyList).hasSize(databaseSizeBeforeCreate);
+    }
 
     @Test
     @Transactional
@@ -283,6 +330,24 @@ public class CompanyResourceIT {
 
     @Test
     @Transactional
+    public void checkCompanyDomainIsNotEmpty() throws Exception {
+        int databaseSizeBeforeTest = companyRepository.findAll().size();
+        
+        // Create the companyDTO with empty domain list
+        CompanyDTO companyDTO = companyMapper.toDto(company);
+        companyDTO.setCompanyDomains(new HashSet<String>());
+
+        restCompanyMockMvc.perform(post("/api/companies")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(companyDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Company> companyList = companyRepository.findAll();
+        assertThat(companyList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllCompanies() throws Exception {
         // Initialize the database
         companyRepository.saveAndFlush(company);
@@ -322,6 +387,7 @@ public class CompanyResourceIT {
             .andExpect(jsonPath("$.businessContact").value(DEFAULT_BUSINESS_CONTACT))
             .andExpect(jsonPath("$.legalContact").value(DEFAULT_LEGAL_CONTACT));
     }
+
     @Test
     @Transactional
     public void getNonExistingCompany() throws Exception {
@@ -339,23 +405,22 @@ public class CompanyResourceIT {
         int databaseSizeBeforeUpdate = companyRepository.findAll().size();
 
         // Update the company
-        Company updatedCompany = companyRepository.findById(company.getId()).get();
-        // Disconnect from session so that the updates on updatedCompany are not directly saved in db
-        em.detach(updatedCompany);
-        updatedCompany
-            .name(UPDATED_NAME)
-            .description(UPDATED_DESCRIPTION)
-            .companyType(UPDATED_COMPANY_TYPE)
-            .licenseType(UPDATED_LICENSE_TYPE)
-            .licenseModel(UPDATED_LICENSE_MODEL)
-            .licenseStatus(UPDATED_LICENSE_STATUS)
-            .businessContact(UPDATED_BUSINESS_CONTACT)
-            .legalContact(UPDATED_LEGAL_CONTACT);
-        CompanyDTO companyDTO = companyMapper.toDto(updatedCompany);
+        CompanyVM companyVM = new CompanyVM();
+        companyVM.setId(company.getId());
+        companyVM.setName(UPDATED_NAME);
+        companyVM.setDescription(UPDATED_DESCRIPTION);
+        companyVM.setCompanyType(UPDATED_COMPANY_TYPE);
+        companyVM.setLicenseType(UPDATED_LICENSE_TYPE);
+        companyVM.setLicenseModel(UPDATED_LICENSE_MODEL);
+        companyVM.setLicenseStatus(UPDATED_LICENSE_STATUS);
+        companyVM.setBusinessContact(UPDATED_BUSINESS_CONTACT);
+        companyVM.setLegalContact(UPDATED_LEGAL_CONTACT);
+        companyVM.setCompanyDomains(UPDATED_COMPANY_DOMAINS);
+        companyVM.setCompanyUserDTOs(new ArrayList<UserDTO>());
 
         restCompanyMockMvc.perform(put("/api/companies")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(companyDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(companyVM)))
             .andExpect(status().isOk());
 
         // Validate the Company in the database
@@ -370,6 +435,44 @@ public class CompanyResourceIT {
         assertThat(testCompany.getLicenseStatus()).isEqualTo(UPDATED_LICENSE_STATUS);
         assertThat(testCompany.getBusinessContact()).isEqualTo(UPDATED_BUSINESS_CONTACT);
         assertThat(testCompany.getLegalContact()).isEqualTo(UPDATED_LEGAL_CONTACT);
+        assertThat(testCompany.getCompanyDomains())
+            .extracting(companyDomain -> companyDomain.getName())
+            .containsExactlyInAnyOrderElementsOf(UPDATED_COMPANY_DOMAINS);
+    }
+
+    @Test
+    @Transactional
+    public void updateCompanyWithExistingName() throws Exception {
+        // Initialize the database
+        companyRepository.saveAndFlush(company);
+        Company otherCompany = createEntity(em);    // Create another company using the same name
+        otherCompany.setName(UPDATED_NAME);
+        companyRepository.saveAndFlush(otherCompany);
+        int databaseSizeBeforeUpdate = companyRepository.findAll().size();
+
+        // Update the company
+        CompanyVM companyVM = new CompanyVM();
+        companyVM.setId(company.getId());
+        companyVM.setName(UPDATED_NAME);    // Name already exists for otherCompany
+        companyVM.setDescription(UPDATED_DESCRIPTION);
+        companyVM.setCompanyType(UPDATED_COMPANY_TYPE);
+        companyVM.setLicenseType(UPDATED_LICENSE_TYPE);
+        companyVM.setLicenseModel(UPDATED_LICENSE_MODEL);
+        companyVM.setLicenseStatus(UPDATED_LICENSE_STATUS);
+        companyVM.setBusinessContact(UPDATED_BUSINESS_CONTACT);
+        companyVM.setLegalContact(UPDATED_LEGAL_CONTACT);
+        companyVM.setCompanyDomains(UPDATED_COMPANY_DOMAINS);
+        companyVM.setCompanyUserDTOs(new ArrayList<UserDTO>());
+
+        // Company name should be unqiue, so this API call should fail
+        restCompanyMockMvc.perform(put("/api/companies")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(companyVM)))
+            .andExpect(status().isBadRequest());
+    
+        // Validate the Company in the database
+        List<Company> companyList = companyRepository.findAll();
+        assertThat(companyList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

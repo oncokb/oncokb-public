@@ -3,9 +3,12 @@ package org.mskcc.cbio.oncokb.service;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.Constants;
+import org.mskcc.cbio.oncokb.domain.Token;
+import org.mskcc.cbio.oncokb.domain.Token_;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 
 import io.github.jhipster.security.RandomUtil;
 
@@ -56,6 +59,12 @@ public class UserServiceIT {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private TokenService tokenService;
 
     @Autowired
     private AuditingHandler auditingHandler;
@@ -166,6 +175,21 @@ public class UserServiceIT {
         final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
         assertThat(allManagedUsers.getContent().stream()
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
+            .isTrue();
+    }
+
+    @Test
+    @Transactional
+    public void assertThatUserTokensUpdateAfterTrialApproval() {
+        User savedUser = userRepository.saveAndFlush(user);
+
+        Optional<UserDTO> approvedUser = userService.approveUser(userMapper.userToUserDTO(savedUser), true);
+        
+        assertThat(approvedUser).isPresent();
+        assertThat(approvedUser.get().isActivated()).isTrue();
+        List<Token> tokens = tokenService.findByUser(savedUser);
+        assertThat(tokens.stream()
+            .allMatch(token -> token.isRenewable().equals(false)))
             .isTrue();
     }
 

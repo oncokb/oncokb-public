@@ -4,11 +4,9 @@ import org.mskcc.cbio.oncokb.service.CompanyDomainService;
 import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Company;
-import org.mskcc.cbio.oncokb.domain.CompanyDomain;
-import org.mskcc.cbio.oncokb.repository.CompanyDomainRepository;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
-import org.mskcc.cbio.oncokb.service.dto.CompanyDomainDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyDomainMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
@@ -17,7 +15,6 @@ import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver.COMPANIES_BY_ID_CACHE;
@@ -45,20 +41,11 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyMapper companyMapper;
 
-    private final CompanyDomainService companyDomainService;
-
-    private final CompanyDomainMapper companyDomainMapper;
-
     private final UserService userService;
-
-    private final UserMapper userMapper;
     
     private final CacheManager cacheManager;
 
     private final CacheNameResolver cacheNameResolver;
-
-    @Autowired
-    private CompanyDomainRepository companyDomainRepository;
 
     public CompanyServiceImpl(
         CompanyRepository companyRepository, 
@@ -72,10 +59,7 @@ public class CompanyServiceImpl implements CompanyService {
     ) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
-        this.companyDomainService = companyDomainService;
-        this.companyDomainMapper = companyDomainMapper;
         this.userService = userService;
-        this.userMapper = userMapper;
         this.cacheManager = cacheManager;
         this.cacheNameResolver = cacheNameResolver;
     }
@@ -112,11 +96,38 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         // Update the licenses for new users being added to this company
-        companyVm.getCompanyUserDTOs()
-            .forEach(userDTO -> userService.updateUserWithCompanyLicense(userDTO, company, true));
+        if(companyVm.getCompanyUserDTOs() != null){
+            companyVm.getCompanyUserDTOs()
+                .forEach(userDTO -> userService.updateUserWithCompanyLicense(userDTO, company, true));
+        }
 
         this.clearCompanyCaches(company);
         return companyMapper.toDto(company);
+    }
+
+    /**
+     * Check whether the license status change is supported.
+     * @param oldLicenseStatus
+     * @param newLicenseStatus
+     * @return true if the license status change is valid
+     */
+    @Override
+    public boolean verifyLicenseStatusChange(LicenseStatus oldLicenseStatus, LicenseStatus newLicenseStatus) {
+        switch(oldLicenseStatus) {
+            case REGULAR:
+                return !newLicenseStatus.equals(LicenseStatus.TRIAL_EXPIRED);
+            case TRIAL:
+                break;
+            case TRIAL_EXPIRED:
+                return !newLicenseStatus.equals(LicenseStatus.EXPIRED);
+            case EXPIRED:
+                return !newLicenseStatus.equals(LicenseStatus.TRIAL_EXPIRED);
+            case UNKNOWN:
+                break;
+            default:
+                return false;
+        }
+        return true;
     }
 
 

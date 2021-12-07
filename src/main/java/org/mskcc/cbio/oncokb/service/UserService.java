@@ -403,11 +403,13 @@ public class UserService {
 
     private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String companyName, CompanyDTO companyDTO, String city, String country) {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
+        LicenseType alignedLicenseType = companyDTO != null ? companyDTO.getLicenseType() : licenseType;
+        Company company = companyMapper.toEntity(companyDTO);
         if (userDetails.isPresent()) {
             //If a user has an associated company, align their licenseStatus with the company's
-            userDetails.get().setLicenseType(companyDTO != null ? companyDTO.getLicenseType() : licenseType);
+            userDetails.get().setLicenseType(alignedLicenseType);
             userDetails.get().setJobTitle(jobTitle);
-            userDetails.get().setCompany(companyMapper.toEntity(companyDTO));
+            userDetails.get().setCompany(company);
             userDetails.get().setCompanyName(companyName);
             userDetails.get().setCity(city);
             userDetails.get().setCountry(country);
@@ -415,9 +417,10 @@ public class UserService {
             return userDetails.get();
         } else {
             UserDetails newUserDetails = new UserDetails();
-            newUserDetails.setLicenseType(licenseType);
+            newUserDetails.setLicenseType(alignedLicenseType);
             newUserDetails.setJobTitle(jobTitle);
             newUserDetails.setCompanyName(companyName);
+            newUserDetails.setCompany(company);
             newUserDetails.setCity(city);
             newUserDetails.setCountry(country);
             newUserDetails.setUser(user);
