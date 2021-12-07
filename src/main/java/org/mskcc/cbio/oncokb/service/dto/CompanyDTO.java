@@ -39,6 +39,7 @@ public class CompanyDTO implements Serializable {
 
     private String legalContact;
 
+    @NotEmpty
     private Set<String> companyDomains = new HashSet<>();
     
     public Long getId() {

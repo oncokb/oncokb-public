@@ -869,6 +869,53 @@
         "deprecated": false
       }
     },
+    "/api/companies/verify-name": {
+      "post": {
+        "tags": [
+          "company-resource"
+        ],
+        "summary": "verifyCompanyName",
+        "operationId": "verifyCompanyNameUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "verificationInfo",
+            "description": "verificationInfo",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyCompanyNameVM"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/companies/{id}": {
       "get": {
         "tags": [
@@ -3811,6 +3858,22 @@
         }
       },
       "title": "UserUsage"
+    },
+    "VerifyCompanyNameVM": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "companyId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "VerifyCompanyNameVM"
     }
   }
 }

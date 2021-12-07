@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import { observable, action, computed } from 'mobx';
-import { CompanyVM } from 'app/shared/api/generated/API';
+import { CompanyVM, VerifyCompanyNameVM } from 'app/shared/api/generated/API';
 import { FormListField } from 'app/shared/list/FormListField';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { FormTextAreaField } from '../../shared/textarea/FormTextAreaField';
@@ -56,6 +56,36 @@ export const COMPANY_FORM_OPTIONS = {
   }),
 };
 
+export const debouncedLookup = _.debounce(
+  (
+    value: string,
+    ctx: any,
+    input: any,
+    cb: (isValid: boolean | string) => void,
+    companyId?: number
+  ) => {
+    if (value.trim() === '') {
+      cb(false);
+      return;
+    }
+    const info = { name: value.trim(), companyId } as Partial<
+      VerifyCompanyNameVM
+    >;
+    client
+      .verifyCompanyNameUsingPOST({
+        verificationInfo: info as VerifyCompanyNameVM,
+      })
+      .then(isValid => {
+        isValid ? cb(true) : cb('Company name in use!');
+      })
+      .catch((error: any) => {
+        cb(false);
+        notifyError(error, 'Error finding company with name');
+      });
+  },
+  500
+);
+
 @observer
 export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   @observable companyDescription = '';
@@ -78,30 +108,6 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
       optionSubset.includes(option.value)
     );
   }
-
-  private debouncedLookup = _.debounce(
-    (value: string, ctx, input, cb: (isValid: boolean | string) => void) => {
-      if (value.trim() === '') {
-        cb(false);
-        return;
-      }
-      client
-        .getCompanyByNameUsingGET({ name: value.trim() })
-        .then(company => cb('Company name in use!'))
-        .catch((error: any) => {
-          if (error.response.status === 404) {
-            // If the company is not found with the entered name, then
-            // it is available to use. The api will return 404 NOT FOUND.
-            cb(true);
-          } else {
-            // If the api fails, then we show an error messageP
-            cb(false);
-            notifyError(error, 'Error finding company with name');
-          }
-        });
-    },
-    500
-  );
 
   @action
   verifyCompanyDomains() {
@@ -159,7 +165,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
                   value: true,
                   errorMessage: 'The company name is required.',
                 },
-                async: this.debouncedLookup,
+                async: debouncedLookup,
               }}
             />
             <FormTextAreaField

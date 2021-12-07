@@ -1,9 +1,12 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import org.mskcc.cbio.oncokb.domain.Company;
+import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
+import org.mskcc.cbio.oncokb.web.rest.vm.VerifyCompanyNameVM;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 
@@ -12,6 +15,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,9 +43,12 @@ public class CompanyResource {
 
     private final UserService userService;
 
-    public CompanyResource(CompanyService companyService, UserService userService) {
+    private final CompanyRepository companyRepository;
+
+    public CompanyResource(CompanyService companyService, UserService userService, CompanyRepository companyRepository) {
         this.companyService = companyService;
         this.userService = userService;
+        this.companyRepository = companyRepository;
     }
 
     /**
@@ -80,6 +87,22 @@ public class CompanyResource {
         if (companyVM.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        Optional<CompanyDTO> company = companyService.findOneByNameIgnoreCase(companyVM.getName());
+        if(company.isPresent() && !company.get().getId().equals(companyVM.getId())){
+            throw new BadRequestAlertException("Company name already in use.", ENTITY_NAME, "nameexists");
+        }
+
+        Optional<Company> existingCompany = companyRepository.findById(companyVM.getId());
+        if(existingCompany.isPresent()) {
+            if(!companyService.verifyLicenseStatusChange(existingCompany.get().getLicenseStatus(), companyVM.getLicenseStatus())){
+                String errorMessage = String.format(
+                    "Updating license status from %s to %s is not invalid.",
+                    existingCompany.get().getLicenseStatus(), 
+                    companyVM.getLicenseStatus());
+                throw new BadRequestAlertException(errorMessage, ENTITY_NAME, "licensestatuschangeinvalid");
+            }
+        }
+        
         CompanyDTO result = companyService.updateCompany(companyVM);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, companyVM.getId().toString()))
@@ -126,6 +149,18 @@ public class CompanyResource {
     public ResponseEntity<CompanyDTO> getCompanyByName(@RequestParam String name) {
         log.debug("REST request to get Company with name : {}", name);
         return ResponseUtil.wrapOrNotFound(companyService.findOneByNameIgnoreCase(name));
+    }
+
+    @PostMapping("/companies/verify-name")
+    public ResponseEntity<Boolean> verifyCompanyName(@Valid @RequestBody VerifyCompanyNameVM verificationInfo) {
+        Optional<CompanyDTO> company = companyService.findOneByNameIgnoreCase(verificationInfo.getName());
+        boolean isValid = true;
+        if(company.isPresent()) {
+            if(!company.get().getId().equals(verificationInfo.getCompanyId())) {
+                isValid = false;
+            }
+        }
+        return new ResponseEntity<Boolean>(isValid, HttpStatus.OK);
     }
 
     /**

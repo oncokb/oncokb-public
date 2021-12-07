@@ -28,7 +28,10 @@ import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { FormTextAreaField } from 'app/shared/textarea/FormTextAreaField';
 import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
-import { COMPANY_FORM_OPTIONS } from 'app/components/newCompanyForm/NewCompanyForm';
+import {
+  COMPANY_FORM_OPTIONS,
+  debouncedLookup,
+} from 'app/components/newCompanyForm/NewCompanyForm';
 import { FormListField } from 'app/shared/list/FormListField';
 import { UserTable } from 'app/shared/table/UserTable';
 import Select from 'react-select';
@@ -147,8 +150,11 @@ export default class CompanyPage extends React.Component<
   showConfirmModal(event: any, value: any) {
     this.formValues = value;
 
-    if (this.company.licenseStatus !== this.selectedLicenseStatus) {
-      // Show warnings when license status is being changed
+    // Show warnings when license status is being changed and there are company users
+    if (
+      this.company.licenseStatus !== this.selectedLicenseStatus &&
+      this.companyUsers.length > 0
+    ) {
       this.showModal = true;
       this.confirmModalText =
         LICENSE_STATUS_UPDATE_MESSAGES[this.company.licenseStatus][
@@ -189,11 +195,11 @@ export default class CompanyPage extends React.Component<
       await this.getAllUsersTokens();
       this.conflictingDomains = [];
       this.verifyCompanyDomains();
-      this.getCompanyStatus = PromiseStatus.complete;
       notifySuccess('Company successfully updated');
     } catch (error) {
-      this.getCompanyStatus = PromiseStatus.error;
       notifyError(error);
+    } finally {
+      this.getCompanyStatus = PromiseStatus.complete;
     }
   }
 
@@ -310,6 +316,25 @@ export default class CompanyPage extends React.Component<
                                 Company Name
                               </span>
                             }
+                            validate={{
+                              required: {
+                                value: true,
+                                errorMessage: 'The company name is required.',
+                              },
+                              async: (
+                                value: string,
+                                ctx: any,
+                                input: any,
+                                cb: (isValid: boolean | string) => void
+                              ) =>
+                                debouncedLookup(
+                                  value,
+                                  ctx,
+                                  input,
+                                  cb,
+                                  this.company.id
+                                ),
+                            }}
                           />
                           <FormTextAreaField
                             label="Company Description"
