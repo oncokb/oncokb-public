@@ -371,6 +371,7 @@ export default class CompanyPage extends React.Component<
                                 Business Contact
                               </span>
                             }
+                            validate={{ ...textValidation(0, 255) }}
                           />
                           <AvField
                             name="legalContact"
@@ -380,6 +381,7 @@ export default class CompanyPage extends React.Component<
                                 Legal Contact
                               </span>
                             }
+                            validate={{ ...textValidation(0, 255) }}
                           />
 
                           <FormSelectWithLabelField
@@ -481,7 +483,7 @@ export default class CompanyPage extends React.Component<
                             </Alert>
                           ) : null}
                           <div className="form-group">
-                            <div className={'font-weight-bold'}>
+                            <div className={'font-weight-bold mb-2'}>
                               Add Users to Company
                             </div>
                             <div style={{ display: 'flex' }}>

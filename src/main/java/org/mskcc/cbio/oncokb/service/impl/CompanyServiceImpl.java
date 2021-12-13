@@ -90,7 +90,7 @@ public class CompanyServiceImpl implements CompanyService {
         // Update the licenses for current users of the company
         List<UserDTO> companyUsers = userService.getUsersOfCompany(company.getId());
         if(isLicenseUpdateRequired){
-            companyUsers.forEach(userDTO -> userService.updateUserWithCompanyLicense(userDTO, company, false));
+            companyUsers.forEach(userDTO -> userService.updateUserWithCompanyLicense(userDTO, company, false, false));
         }else{
             companyUsers.forEach(userDTO -> userService.updateUser(userDTO));
         }
@@ -98,7 +98,7 @@ public class CompanyServiceImpl implements CompanyService {
         // Update the licenses for new users being added to this company
         if(companyVm.getCompanyUserDTOs() != null){
             companyVm.getCompanyUserDTOs()
-                .forEach(userDTO -> userService.updateUserWithCompanyLicense(userDTO, company, true));
+                .forEach(userDTO -> userService.updateUserWithCompanyLicense(userDTO, company, true, false));
         }
 
         this.clearCompanyCaches(company);

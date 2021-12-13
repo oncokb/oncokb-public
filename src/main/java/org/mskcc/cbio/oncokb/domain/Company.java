@@ -58,10 +58,12 @@ public class Company implements Serializable {
     @Column(name = "license_status", nullable = false)
     private LicenseStatus licenseStatus;
 
-    @Column(name = "business_contact")
+    @Size(max = 255)
+    @Column(name = "business_contact", length = 255)
     private String businessContact;
 
-    @Column(name = "legal_contact")
+    @Size(max = 255)
+    @Column(name = "legal_contact", length = 255)
     private String legalContact;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
