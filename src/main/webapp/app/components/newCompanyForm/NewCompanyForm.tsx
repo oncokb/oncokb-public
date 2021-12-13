@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import { observable, action, computed } from 'mobx';
-import { CompanyVM, VerifyCompanyNameVM } from 'app/shared/api/generated/API';
+import { CompanyVM } from 'app/shared/api/generated/API';
 import { FormListField } from 'app/shared/list/FormListField';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { FormTextAreaField } from '../../shared/textarea/FormTextAreaField';
@@ -23,6 +23,11 @@ import client from 'app/shared/api/clientInstance';
 import _ from 'lodash';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
+import {
+  debouncedCompanyNameValidator,
+  fieldRequiredValidation,
+  textValidation,
+} from 'app/shared/utils/FormValidationUtils';
 
 type INewCompanyFormProps = {
   onValidSubmit: (newCompany: Partial<CompanyVM>) => void;
@@ -55,36 +60,6 @@ export const COMPANY_FORM_OPTIONS = {
     };
   }),
 };
-
-export const debouncedLookup = _.debounce(
-  (
-    value: string,
-    ctx: any,
-    input: any,
-    cb: (isValid: boolean | string) => void,
-    companyId?: number
-  ) => {
-    if (value.trim() === '') {
-      cb(false);
-      return;
-    }
-    const info = { name: value.trim(), companyId } as Partial<
-      VerifyCompanyNameVM
-    >;
-    client
-      .verifyCompanyNameUsingPOST({
-        verificationInfo: info as VerifyCompanyNameVM,
-      })
-      .then(isValid => {
-        isValid ? cb(true) : cb('Company name in use!');
-      })
-      .catch((error: any) => {
-        cb(false);
-        notifyError(error, 'Error finding company with name');
-      });
-  },
-  500
-);
 
 @observer
 export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
@@ -161,11 +136,9 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
               name="companyName"
               label="Name"
               validate={{
-                required: {
-                  value: true,
-                  errorMessage: 'The company name is required.',
-                },
-                async: debouncedLookup,
+                ...fieldRequiredValidation('company name'),
+                ...textValidation(1, 100),
+                async: debouncedCompanyNameValidator,
               }}
             />
             <FormTextAreaField

@@ -28,16 +28,18 @@ import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { FormTextAreaField } from 'app/shared/textarea/FormTextAreaField';
 import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
-import {
-  COMPANY_FORM_OPTIONS,
-  debouncedLookup,
-} from 'app/components/newCompanyForm/NewCompanyForm';
+import { COMPANY_FORM_OPTIONS } from 'app/components/newCompanyForm/NewCompanyForm';
 import { FormListField } from 'app/shared/list/FormListField';
 import { UserTable } from 'app/shared/table/UserTable';
 import Select from 'react-select';
 import DocumentTitle from 'react-document-title';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
+import {
+  debouncedCompanyNameValidator,
+  fieldRequiredValidation,
+  textValidation,
+} from 'app/shared/utils/FormValidationUtils';
 
 interface MatchParams {
   id: string;
@@ -130,6 +132,7 @@ export default class CompanyPage extends React.Component<
     this.availableUsers = allUsers
       .filter(
         user =>
+          !user.company &&
           !this.companyUsers.some(companyUser => companyUser.id === user.id)
       )
       .map(user => ({
@@ -317,17 +320,15 @@ export default class CompanyPage extends React.Component<
                               </span>
                             }
                             validate={{
-                              required: {
-                                value: true,
-                                errorMessage: 'The company name is required.',
-                              },
+                              ...fieldRequiredValidation('company name'),
+                              ...textValidation(1, 100),
                               async: (
                                 value: string,
                                 ctx: any,
                                 input: any,
                                 cb: (isValid: boolean | string) => void
                               ) =>
-                                debouncedLookup(
+                                debouncedCompanyNameValidator(
                                   value,
                                   ctx,
                                   input,
