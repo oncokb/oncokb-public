@@ -157,8 +157,16 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
                 (this.selectedCompanyType = selectedOption.value)
               }
             />
-            <AvField name="businessContact" label="Business Contact" />
-            <AvField name="legalContact" label="Legal Contact" />
+            <AvField
+              name="businessContact"
+              label="Business Contact"
+              validate={{ ...textValidation(0, 255) }}
+            />
+            <AvField
+              name="legalContact"
+              label="Legal Contact"
+              validate={{ ...textValidation(0, 255) }}
+            />
             <FormListField
               list={this.companyDomains}
               addItem={(domain: string) => {

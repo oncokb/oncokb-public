@@ -348,13 +348,14 @@ public class UserService {
         if(userDetails.getCompany() != null){
             companyRepository.findById(userDetails.getCompany().getId())
                 .ifPresent(c -> {
-                    updateUserWithCompanyLicense(userMapper.userToUserDTO(updatedUser), c, false);
+                    updateUserWithCompanyLicense(userMapper.userToUserDTO(updatedUser), c, false, true);
                 });
         }
 
         this.clearUserCaches(user);
-
-        generateTokenForUserIfNotExist(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable);
+        if(!tokenIsRenewable.isPresent() || tokenIsRenewable.get().equals(true)) {
+            generateTokenForUserIfNotExist(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable); 
+        }
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -391,8 +392,10 @@ public class UserService {
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
 
-                return new UserDTO(user, getUpdatedUserDetails(
+                UserDTO newUserDTO =  new UserDTO(user, getUpdatedUserDetails(
                     user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
+                newUserDTO.setCompany(userDTO.getCompany());
+                return newUserDTO;
             });
 
         if (updatedUserDTO.isPresent()) {
@@ -571,8 +574,9 @@ public class UserService {
      * @param userDTO the userDTO
      * @param company the company to update the user with
      * @param keepOriginalLicense allow a user to keep their regular license when added to trial company
+     * @param isAccountCreation if the admin is creating the account
      */
-    public Optional<UserDTO> updateUserWithCompanyLicense(UserDTO userDTO, Company company, boolean keepOriginalLicense){
+    public Optional<UserDTO> updateUserWithCompanyLicense(UserDTO userDTO, Company company, boolean keepOriginalLicense, boolean isAccountCreation){
 
         LicenseType registeredLicense = userDTO.getLicenseType();
 
@@ -586,12 +590,11 @@ public class UserService {
             // Update the user with the company's license
             LicenseStatus companyLicenseStatus = company.getLicenseStatus();
             if(companyLicenseStatus.equals(LicenseStatus.REGULAR)) {
-                if(userHasValidTrialActivation(userDTO)){ 
-                    // Convert user if they're on trial
+                if(userOnTrial(userDTO)){ 
                     convertTrialUserToRegular(userDTO);
                 } else { 
                     // Approve the user for regular use
-                    approveUser(userDTO, false);
+                    updatedUserDTO = approveUser(userDTO, false);
                 }
                 // When the license the user registers with doesn't match their company's license,
                 // we send an email explaining this.
@@ -603,23 +606,26 @@ public class UserService {
             }else if(companyLicenseStatus.equals(LicenseStatus.TRIAL)){
                 // If the user is activated and allowed to keep their regular license
                 // then we don't need to update their license, just add them to the company.
-                if(keepOriginalLicense && userDTO.isActivated()){
+                if(keepOriginalLicense && userDTO.isActivated() && !userOnTrial(userDTO)){
                     return updatedUserDTO;
                 }
-                if(userHasValidTrialActivation(userDTO)){
+                if(userHasValidTrialActivation(userDTO) 
+                    && userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate() != null){
                     // When a user has an active or expired trial, we just need to approve and update their tokens.
-                    approveUser(userDTO, true);
+                    updatedUserDTO = approveUser(userDTO, true);
                 }else{
-                    List<Token> userTokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
-                    userTokens.forEach(token -> {
-                        token.setRenewable(false);
-                        token.setExpiration(Instant.now().plusSeconds(DAY_IN_SECONDS * TRIAL_PERIOD_IN_DAYS));
-                        tokenService.save(token);
+                    // User needs to activate their trial to reactivate their token
+                    List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+                    tokens.forEach(token -> {
+                        tokenProvider.expireToken(token);
                     });
                     Optional<User> updatedUser = initiateTrialAccountActivation(userDTO.getLogin());
                     if(updatedUser.isPresent()){
-                        mailService.sendActiveTrialMail(userMapper.userToUserDTO(updatedUser.get()), false);
-                        updatedUserDTO = Optional.of(userMapper.userToUserDTO(updatedUser.get()));
+                        updatedUser.get().setActivated(true);
+                        if(!isAccountCreation){
+                            mailService.sendActiveTrialMail(userMapper.userToUserDTO(updatedUser.get()), false);
+                        }
+                        updatedUserDTO = updateUser(userMapper.userToUserDTO(updatedUser.get()));
                     }
                 } 
             }else if(companyLicenseStatus.equals(LicenseStatus.TRIAL_EXPIRED) || companyLicenseStatus.equals(LicenseStatus.EXPIRED)){
@@ -686,6 +692,16 @@ public class UserService {
             .map(AdditionalInfoDTO::getTrialAccount)
             .map(TrialAccount::getActivation)
             .isPresent();
+    }
+
+    private boolean userOnTrial(UserDTO userDTO) {
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        return tokens.stream()
+            .filter(token -> token.isRenewable().equals(false))
+            .map(token -> true)
+            .findAny()
+            .orElse(false);
+
     }
 
     public List<UserDTO> getUsersOfCompany(Long companyId){

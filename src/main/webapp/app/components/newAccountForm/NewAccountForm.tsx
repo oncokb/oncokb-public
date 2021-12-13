@@ -154,7 +154,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       company: this.selectedCompanyOption?.value,
       companyName: this.selectedCompanyOption
         ? this.selectedCompanyOption.value.name
-        : values.companyName,
+        : values.company,
       city: values.city,
       country: values.country,
     };
@@ -365,11 +365,11 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   @action.bound
   onSelectCompany(selectedOption: CompanySelectOptionType) {
     this.selectedCompanyOption = selectedOption;
-    this.selectedAccountType =
-      this.selectedCompanyOption.value.licenseStatus === LicenseStatus.TRIAL
-        ? AccountType.TRIAL
-        : AccountType.REGULAR;
     if (selectedOption) {
+      this.selectedAccountType =
+        this.selectedCompanyOption.value.licenseStatus === LicenseStatus.TRIAL
+          ? AccountType.TRIAL
+          : AccountType.REGULAR;
       this.onSelectLicense(selectedOption.value.licenseType as LicenseType);
     }
   }
@@ -415,8 +415,8 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                 />
                 {!this.selectedCompanyOption ? null : (
                   <span>
-                    User should have same license status as company. Unselect
-                    company to enable license selection.
+                    User should have same license type as their company.
+                    Unselect company to enable license selection.
                   </span>
                 )}
               </Col>
