@@ -3,14 +3,18 @@ import React from 'react';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_REFERENCE_GENOME,
+  DELETION,
+  FUSIONS,
   LEVEL_CLASSIFICATION,
   LEVELS,
+  ONCOGENIC_MUTATIONS,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   REGEXP,
   REGEXP_LINK,
   SEARCH_QUERY_KEY,
   SOP_LINK,
+  TRUNCATING_MUTATIONS,
   YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
 import _ from 'lodash';
@@ -20,6 +24,7 @@ import { ReactNodeArray } from 'prop-types';
 import {
   encodeSlash,
   getAlterationName,
+  getCategoricalAlterationDescription,
   getYouTubeLink,
   IAlteration,
 } from 'app/shared/utils/Utils';
@@ -33,6 +38,8 @@ import {
 } from 'app/shared/route/types';
 import * as QueryString from 'querystring';
 import { LEVEL_TYPE_TO_VERSION, Version } from 'app/pages/LevelOfEvidencePage';
+import { EnsemblGene } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -72,6 +79,7 @@ export const AlterationPageLink: React.FunctionComponent<{
   hashQueries?: AlterationPageHashQueries;
   showGene?: boolean;
   onClick?: () => void;
+  ensemblGenes?: EnsemblGene[];
 }> = props => {
   let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${
     typeof props.alteration === 'string'
@@ -96,14 +104,27 @@ export const AlterationPageLink: React.FunctionComponent<{
     pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
   }
   const alterationName = getAlterationName(props.alteration);
+  const altDescription = getCategoricalAlterationDescription(
+    props.hugoSymbol,
+    alterationName,
+    props.ensemblGenes
+  );
   return (
-    <Link to={pageLink} onClick={props.onClick}>
-      {props.children
-        ? props.children
-        : props.showGene
-        ? `${props.hugoSymbol} ${alterationName}`
-        : alterationName}
-    </Link>
+    <>
+      <Link to={pageLink} onClick={props.onClick}>
+        {props.children
+          ? props.children
+          : props.showGene
+          ? `${props.hugoSymbol} ${alterationName}`
+          : alterationName}
+      </Link>
+      {altDescription && (
+        <span>
+          {' '}
+          <InfoIcon overlay={altDescription} />
+        </span>
+      )}
+    </>
   );
 };
 
