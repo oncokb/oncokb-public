@@ -20,10 +20,14 @@ import {
   LEVEL_PRIORITY,
   FDA_LEVELS,
   ONCOGENIC_MUTATIONS,
+  DELETION,
+  FUSIONS,
+  TRUNCATING_MUTATIONS,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
   Alteration,
+  EnsemblGene,
   Evidence,
   FdaAlteration,
   TumorType,
@@ -331,6 +335,7 @@ export function getDefaultColumnDefinition<T>(
             <AlterationPageLink
               hugoSymbol={props.original.hugoSymbol}
               alteration={props.original.alteration}
+              ensemblGenes={props.original.ensemblGenes}
             />
           );
         },
@@ -669,3 +674,46 @@ export function getAlterationName(
     return `${name} (${alt})`;
   }
 }
+
+export const getGeneCoordinates = (ensemblGenes: EnsemblGene[]) => {
+  return _.sortBy(ensemblGenes, ensemblGene => ensemblGene.referenceGenome)
+    .map(
+      ensemblGene =>
+        `${ensemblGene.referenceGenome}, Chr${ensemblGene.chromosome}:${ensemblGene.start}-${ensemblGene.end}`
+    )
+    .join('; ');
+};
+
+export const getCategoricalAlterationDescription = (
+  hugoSymbol: string,
+  alteration: string,
+  ensemblGenes?: EnsemblGene[]
+) => {
+  // For places the ensembl genes info is not available, we simply do not show any description for categorical alts
+  if (ensemblGenes === undefined || ensemblGenes.length === 0) {
+    return '';
+  }
+  const geneCoordinatesStr =
+    ensemblGenes &&
+    `the ${hugoSymbol} gene (${getGeneCoordinates(ensemblGenes)})`;
+  let content = '';
+  switch (alteration) {
+    case ONCOGENIC_MUTATIONS:
+      content =
+        'Defined as a variant considered "oncogenic" or "likely oncogenic" by OncoKB Curation Standard Operating Protocol.';
+      break;
+    case DELETION:
+      content = `Defined as copy number loss resulting in partial or whole deletion of ${geneCoordinatesStr}.`;
+      break;
+    case FUSIONS:
+      content = `Defined as deletion or chromosomal translocation events arising within ${geneCoordinatesStr} that results in a functional fusion event which preserves an intact ${hugoSymbol} kinase domain.`;
+      break;
+    case TRUNCATING_MUTATIONS:
+      content = `Defined as nonsense, frameshift, or splice-site mutations within ${geneCoordinatesStr} that are predicted to shorten the coding sequence of gene.`;
+      break;
+    default:
+      break;
+  }
+
+  return content;
+};

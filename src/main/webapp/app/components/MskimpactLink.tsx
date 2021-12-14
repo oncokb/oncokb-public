@@ -16,7 +16,7 @@ export const MskimpactLink: React.FunctionComponent<{}> = () => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        Zehir et al., Nature Medicine, 2017
+        Zehir et al., Nat Med 2017
       </a>
       )
     </>
