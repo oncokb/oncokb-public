@@ -489,6 +489,22 @@ export type VariantConsequence = {
         'term': string
 
 };
+export type EnsemblGene = {
+    'canonical': boolean
+
+        'chromosome': string
+
+        'end': number
+
+        'ensemblGeneId': string
+
+        'referenceGenome': string
+
+        'start': number
+
+        'strand': number
+
+};
 export type GeneNumber = {
     'alteration': number
 
@@ -1356,6 +1372,86 @@ export default class OncoKbPrivateAPI {
         }): Promise < Array < string >
         > {
             return this.utilDataSqlDumpGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilsEnsemblGenesGetUsingGETURL(parameters: {
+        'entrezGeneId': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/ensembleGenes';
+        if (parameters['entrezGeneId'] !== undefined) {
+            queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the list of Ensembl genes.
+     * @method
+     * @name OncoKbPrivateAPI#utilsEnsemblGenesGetUsingGET
+     * @param {integer} entrezGeneId - Gene entrez id
+     */
+    utilsEnsemblGenesGetUsingGETWithHttpInfo(parameters: {
+        'entrezGeneId': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/ensembleGenes';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['entrezGeneId'] !== undefined) {
+                queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+            }
+
+            if (parameters['entrezGeneId'] === undefined) {
+                reject(new Error('Missing required  parameter: entrezGeneId'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the list of Ensembl genes.
+     * @method
+     * @name OncoKbPrivateAPI#utilsEnsemblGenesGetUsingGET
+     * @param {integer} entrezGeneId - Gene entrez id
+     */
+    utilsEnsemblGenesGetUsingGET(parameters: {
+            'entrezGeneId': number,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < EnsemblGene >
+        > {
+            return this.utilsEnsemblGenesGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };
