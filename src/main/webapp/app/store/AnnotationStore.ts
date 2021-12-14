@@ -26,10 +26,10 @@ import {
   BiologicalVariant,
   CancerTypeCount,
   ClinicalVariant,
+  EnsemblGene,
   FdaAlteration,
   GeneNumber,
   PortalAlteration,
-  TumorType,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
@@ -182,6 +182,16 @@ export class AnnotationStore {
       return genes && genes.length > 0 ? genes[0] : DEFAULT_GENE;
     },
     default: DEFAULT_GENE,
+  });
+
+  readonly ensemblGenes = remoteData<EnsemblGene[]>({
+    await: () => [this.gene],
+    invoke: async () => {
+      return privateClient.utilsEnsemblGenesGetUsingGET({
+        entrezGeneId: this.gene.result.entrezGeneId,
+      });
+    },
+    default: [],
   });
 
   // this is for easier access of the hugoSymbol from the gene call
@@ -457,9 +467,13 @@ export class AnnotationStore {
 
   @computed
   get uniqOncogenicity() {
+    return this.calculateOncogenicities(this.biologicalAlterations.result);
+  }
+
+  calculateOncogenicities(biologicalAlterations: BiologicalVariant[]) {
     const oncogenicities = _.groupBy(
       _.reduce(
-        this.biologicalAlterations.result,
+        biologicalAlterations,
         (acc, item) => {
           acc.push({
             ...item,

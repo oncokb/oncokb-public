@@ -131,6 +131,7 @@ export default class AlterationPage extends React.Component<
     return (
       this.store.gene.isComplete &&
       this.store.geneNumber.isComplete &&
+      this.store.ensemblGenes.isComplete &&
       this.store.clinicalAlterations.isComplete &&
       this.store.biologicalAlterations.isComplete &&
       this.store.annotationResult.isComplete &&
@@ -186,6 +187,7 @@ export default class AlterationPage extends React.Component<
                 <AnnotationPage
                   appStore={this.props.appStore}
                   hugoSymbol={this.store.hugoSymbol}
+                  ensemblGenes={this.store.ensemblGenes.result}
                   alteration={this.store.alterationQuery}
                   matchedAlteration={this.store.matchedAlteration}
                   tumorType={this.store.tumorTypeQuery}

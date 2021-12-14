@@ -1,5 +1,5 @@
 import React from 'react';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 import {
   AlterationPageLink,
@@ -20,9 +20,10 @@ import InfoIcon from 'app/shared/icons/InfoIcon';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
 import { Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
-import { action, computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
+  EnsemblGene,
   Evidence,
   FdaAlteration,
   VariantAnnotation,
@@ -33,6 +34,7 @@ import {
   articles2Citations,
   getAlterationName,
   getCancerTypeNameFromOncoTreeType,
+  getCategoricalAlterationDescription,
   getHighestFdaLevel,
   getTreatmentNameFromEvidence,
   IAlteration,
@@ -47,6 +49,8 @@ import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
+import { COLOR_GREY } from 'app/config/theme';
+import ShowHideToggleIcon from 'app/shared/icons/ShowHideToggleIcon';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -67,6 +71,7 @@ const SUMMARY_TITLE = {
 export type IAnnotationPage = {
   appStore?: AppStore;
   hugoSymbol: string;
+  ensemblGenes: EnsemblGene[];
   alteration: string;
   matchedAlteration: Alteration | undefined;
   tumorType: string;
@@ -82,11 +87,12 @@ export type IAnnotationPage = {
 };
 
 @inject('appStore')
+@observer
 export default class AnnotationPage extends React.Component<
   IAnnotationPage,
   {}
 > {
-  getTherapeuticImplications(evidences: Evidence[]) {
+  getImplications(evidences: Evidence[]) {
     return evidences.map(evidence => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
       const alterations = _.chain(evidence.alterations)
@@ -106,6 +112,7 @@ export default class AnnotationPage extends React.Component<
               <AlterationPageLink
                 key={alteration.name}
                 hugoSymbol={this.props.hugoSymbol}
+                ensemblGenes={this.props.ensemblGenes}
                 alteration={{
                   alteration: alteration.alteration,
                   name: alteration.name,
@@ -157,7 +164,7 @@ export default class AnnotationPage extends React.Component<
 
   @computed
   get therapeuticImplications(): TherapeuticImplication[] {
-    return this.getTherapeuticImplications(
+    return this.getImplications(
       this.getEvidenceByEvidenceTypes(
         this.props.annotation.tumorTypes,
         TREATMENT_EVIDENCE_TYPES
@@ -167,7 +174,7 @@ export default class AnnotationPage extends React.Component<
 
   @computed
   get diagnosticImplications(): TherapeuticImplication[] {
-    return this.getTherapeuticImplications(
+    return this.getImplications(
       this.getEvidenceByEvidenceTypes(this.props.annotation.tumorTypes, [
         EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION,
       ])
@@ -176,7 +183,7 @@ export default class AnnotationPage extends React.Component<
 
   @computed
   get prognosticImplications(): TherapeuticImplication[] {
-    return this.getTherapeuticImplications(
+    return this.getImplications(
       this.getEvidenceByEvidenceTypes(this.props.annotation.tumorTypes, [
         EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION,
       ])
@@ -191,10 +198,10 @@ export default class AnnotationPage extends React.Component<
 
   @computed
   get alterationSummaries() {
-    const orderedSummaries = [
-      SummaryKey.GENE_SUMMARY,
-      SummaryKey.ALTERATION_SUMMARY,
-    ];
+    const orderedSummaries = [SummaryKey.GENE_SUMMARY];
+    if (!this.isOncogenicMutations) {
+      orderedSummaries.push(SummaryKey.ALTERATION_SUMMARY);
+    }
     return this.getSummaries(orderedSummaries);
   }
 
@@ -251,9 +258,17 @@ export default class AnnotationPage extends React.Component<
   }
 
   render() {
+    const categoricalAlterationDescription = getCategoricalAlterationDescription(
+      this.props.hugoSymbol,
+      this.props.alteration,
+      this.props.ensemblGenes
+    );
     return (
       <>
-        <h2 className={'d-flex align-items-baseline'}>
+        <h2
+          className={'d-flex align-items-baseline'}
+          style={{ marginBottom: 0 }}
+        >
           {this.showGeneNameLink && (
             <span className={'mr-2'}>
               <GenePageLink
@@ -272,6 +287,12 @@ export default class AnnotationPage extends React.Component<
             true
           )}`}</span>
           <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
+            {categoricalAlterationDescription && (
+              <InfoIcon
+                className={'mr-1'}
+                overlay={categoricalAlterationDescription}
+              />
+            )}
             <FeedbackIcon
               feedback={{
                 type: FeedbackType.ANNOTATION,
