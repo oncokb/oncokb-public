@@ -37,13 +37,15 @@ import {
   PAGE_ROUTE,
   REFERENCE_GENOME,
 } from 'app/config/constants';
-import { ClinicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import {
+  ClinicalVariant,
+  EnsemblGene,
+} from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { AlterationPageLink, CitationLink } from 'app/shared/utils/UrlUtils';
 import AppStore from 'app/store/AppStore';
 import _ from 'lodash';
 import { MskimpactLink } from 'app/components/MskimpactLink';
 import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
-import { CitationTooltip } from 'app/components/CitationTooltip';
 import WindowStore, { IWindowSize } from 'app/store/WindowStore';
 import { DataFilterType, onFilterOptionSelect } from 'react-mutation-mapper';
 import { CANCER_TYPE_FILTER_ID } from 'app/components/oncokbMutationMapper/FilterUtils';
@@ -62,6 +64,7 @@ import {
 } from 'app/shared/route/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import GeneAliasesDescription from 'app/shared/texts/GeneAliasesDescription';
+import { EnsemblGeneInfo } from 'app/pages/genePage/EnsemblGeneInfo';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -169,6 +172,7 @@ export const getHighestLevelStrings = (
 
 type GeneInfoProps = {
   gene: Gene;
+  ensemblGenes: EnsemblGene[];
   highestSensitiveLevel: string | undefined;
   highestResistanceLevel: string | undefined;
   highestDiagnosticImplicationLevel?: string | undefined;
@@ -254,6 +258,34 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
       </div>
     );
   }
+
+  const grch37CanonicalEnsembl = props.ensemblGenes.filter(
+    ensemblGene =>
+      ensemblGene.canonical &&
+      ensemblGene.referenceGenome === REFERENCE_GENOME.GRCh37
+  );
+  const grch38CanonicalEnsembl = props.ensemblGenes.filter(
+    ensemblGene =>
+      ensemblGene.canonical &&
+      ensemblGene.referenceGenome === REFERENCE_GENOME.GRCh38
+  );
+  if (grch37CanonicalEnsembl.length > 0) {
+    additionalInfo.push(
+      <EnsemblGeneInfo
+        referenceGenomeName={REFERENCE_GENOME.GRCh37}
+        ensemblGene={grch37CanonicalEnsembl[0]}
+      />
+    );
+  }
+  if (grch38CanonicalEnsembl.length > 0) {
+    additionalInfo.push(
+      <EnsemblGeneInfo
+        referenceGenomeName={REFERENCE_GENOME.GRCh38}
+        ensemblGene={grch38CanonicalEnsembl[0]}
+      />
+    );
+  }
+
   if (gene.grch37Isoform || gene.grch37RefSeq) {
     additionalInfo.push(
       <ReferenceGenomeInfo
@@ -611,6 +643,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                             </h2>
                             <GeneInfo
                               gene={this.store.gene.result}
+                              ensemblGenes={this.store.ensemblGenes.result}
                               highestSensitiveLevel={
                                 this.store.geneNumber.result
                                   .highestSensitiveLevel

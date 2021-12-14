@@ -26,6 +26,7 @@ import {
   BiologicalVariant,
   CancerTypeCount,
   ClinicalVariant,
+  EnsemblGene,
   FdaAlteration,
   GeneNumber,
   PortalAlteration,
@@ -182,6 +183,16 @@ export class AnnotationStore {
       return genes && genes.length > 0 ? genes[0] : DEFAULT_GENE;
     },
     default: DEFAULT_GENE,
+  });
+
+  readonly ensemblGenes = remoteData<EnsemblGene[]>({
+    await: () => [this.gene],
+    invoke: async () => {
+      return privateClient.utilsEnsemblGenesGetUsingGET({
+        entrezGeneId: this.gene.result.entrezGeneId,
+      });
+    },
+    default: [],
   });
 
   // this is for easier access of the hugoSymbol from the gene call
