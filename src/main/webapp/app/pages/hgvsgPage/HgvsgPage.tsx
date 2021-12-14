@@ -177,6 +177,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
                   hugoSymbol={
                     this.store.annotationResultByHgvsg.result.query.hugoSymbol
                   }
+                  ensemblGenes={this.store.ensemblGenes.result}
                   alteration={
                     this.store.annotationResultByHgvsg.result.query.alteration
                   }

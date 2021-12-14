@@ -506,6 +506,8 @@ export enum TABLE_COLUMN_KEY {
 }
 
 export const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';
+export const DELETION = 'Deletion';
+export const FUSIONS = 'Fusions';
 export const OTHER_BIOMARKERS = 'Other Biomarkers';
 
 export enum SEARCH_QUERY_KEY {

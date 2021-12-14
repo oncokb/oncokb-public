@@ -14,8 +14,7 @@ import {
 import { Else, If, Then } from 'react-if';
 import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import { Redirect, RouteComponentProps } from 'react-router';
-import { Col, Row } from 'react-bootstrap';
-import styles from './GenePage.module.scss';
+import { Col, Row, Table } from 'react-bootstrap';
 import {
   FdaLevelIcon,
   getCancerTypeNameFromOncoTreeType,
@@ -31,6 +30,7 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_GENE,
+  GRID_BREAKPOINTS,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
   LEVELS,
@@ -63,265 +63,8 @@ import {
   GenePageSearchQueries,
 } from 'app/shared/route/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
-import GeneAliasesDescription from 'app/shared/texts/GeneAliasesDescription';
-import { EnsemblGeneInfo } from 'app/pages/genePage/EnsemblGeneInfo';
-
-enum GENE_TYPE_DESC {
-  ONCOGENE = 'Oncogene',
-  TUMOR_SUPPRESSOR = 'Tumor Suppressor',
-}
-
-const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
-  const geneTypes = [];
-  if (oncogene) {
-    geneTypes.push(GENE_TYPE_DESC.ONCOGENE);
-  }
-  if (tsg) {
-    geneTypes.push(GENE_TYPE_DESC.TUMOR_SUPPRESSOR);
-  }
-  return geneTypes.join(', ');
-};
-
-const HighestLevelItem: React.FunctionComponent<{
-  level: LEVELS;
-  key?: string;
-}> = props => {
-  let isFdaLevel = false;
-  let levelText = '';
-  switch (props.level) {
-    case LEVELS.FDAx1:
-    case LEVELS.FDAx2:
-    case LEVELS.FDAx3:
-      levelText = `FDA Level ${props.level.replace('FDAx', '')}`;
-      isFdaLevel = true;
-      break;
-    default:
-      levelText = `Level ${props.level}`;
-      break;
-  }
-  return (
-    <span className={'d-flex align-items-center'}>
-      <span className={`oncokb level-${props.level}`}>{levelText}</span>
-      {isFdaLevel ? (
-        <FdaLevelIcon level={props.level} />
-      ) : (
-        <OncoKBLevelIcon level={props.level} withDescription />
-      )}
-    </span>
-  );
-};
-
-export const getHighestLevelStrings = (
-  highestSensitiveLevel: string | undefined,
-  highestResistanceLevel: string | undefined,
-  highestDiagnosticImplicationLevel?: string | undefined,
-  highestPrognosticImplicationLevel?: string | undefined,
-  highestFdaLevel?: string | undefined,
-  separator: string | JSX.Element = ', '
-) => {
-  const levels: React.ReactNode[] = [];
-  if (highestSensitiveLevel) {
-    const level = levelOfEvidence2Level(highestSensitiveLevel, false);
-    levels.push(
-      <HighestLevelItem level={level} key={'highestSensitiveLevel'} />
-    );
-  }
-  if (highestResistanceLevel) {
-    const level = levelOfEvidence2Level(highestResistanceLevel, false);
-    levels.push(
-      <HighestLevelItem level={level} key={'highestResistanceLevel'} />
-    );
-  }
-  if (highestDiagnosticImplicationLevel) {
-    const level = levelOfEvidence2Level(
-      highestDiagnosticImplicationLevel,
-      false
-    );
-    levels.push(
-      <HighestLevelItem
-        level={level}
-        key={'highestDiagnosticImplicationLevel'}
-      />
-    );
-  }
-  if (highestPrognosticImplicationLevel) {
-    const level = levelOfEvidence2Level(
-      highestPrognosticImplicationLevel,
-      false
-    );
-    levels.push(
-      <HighestLevelItem
-        level={level}
-        key={'highestPrognosticImplicationLevel'}
-      />
-    );
-  }
-  if (highestFdaLevel) {
-    const level = levelOfEvidence2Level(highestFdaLevel, false);
-    levels.push(<HighestLevelItem level={level} key={'highestFdaLevel'} />);
-  }
-  return (
-    <WithSeparator
-      separator={<span className="mx-1">·</span>}
-      key={'highest-levels'}
-    >
-      {levels}
-    </WithSeparator>
-  );
-};
-
-type GeneInfoProps = {
-  gene: Gene;
-  ensemblGenes: EnsemblGene[];
-  highestSensitiveLevel: string | undefined;
-  highestResistanceLevel: string | undefined;
-  highestDiagnosticImplicationLevel?: string | undefined;
-  highestPrognosticImplicationLevel?: string | undefined;
-  highestFdaLevel?: string | undefined;
-};
-
-type GeneInfoItem = {
-  key: string;
-  element: JSX.Element | string;
-};
-
-const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
-  const gene = props.gene;
-  const info: GeneInfoItem[] = [];
-
-  // gene type
-  if (gene.oncogene || gene.tsg) {
-    info.push({
-      key: 'geneType',
-      element: (
-        <div>
-          <h5>{getGeneTypeSentence(gene.oncogene, gene.tsg)}</h5>
-        </div>
-      ),
-    });
-  }
-
-  // highest LoE
-  if (
-    props.highestResistanceLevel ||
-    props.highestSensitiveLevel ||
-    props.highestDiagnosticImplicationLevel ||
-    props.highestPrognosticImplicationLevel ||
-    props.highestFdaLevel
-  ) {
-    info.push({
-      key: 'loe',
-      element: (
-        <div>
-          <h5 className={'d-flex align-items-center flex-wrap'}>
-            <span className={'mr-2'}>Highest level of evidence:</span>
-            {getHighestLevelStrings(
-              props.highestSensitiveLevel,
-              props.highestResistanceLevel,
-              props.highestDiagnosticImplicationLevel,
-              props.highestPrognosticImplicationLevel,
-              props.highestFdaLevel
-            )}
-          </h5>
-        </div>
-      ),
-    });
-  }
-
-  if (gene.geneAliases.length > 0) {
-    info.push({
-      key: 'aliases',
-      element: (
-        <div>
-          <GeneAliasesDescription geneAliases={gene.geneAliases} />
-        </div>
-      ),
-    });
-  }
-
-  const additionalInfo: React.ReactNode[] = [];
-
-  if (gene.entrezGeneId > 0) {
-    additionalInfo.push(
-      <div key="geneId">
-        Gene ID:{' '}
-        {gene.entrezGeneId > 0 ? (
-          <Linkout
-            className={styles.lowKeyLinkout}
-            link={`https://www.ncbi.nlm.nih.gov/gene/${gene.entrezGeneId}`}
-          >
-            {gene.entrezGeneId}
-          </Linkout>
-        ) : (
-          <span className={'ml-1'}>{gene.entrezGeneId}</span>
-        )}
-      </div>
-    );
-  }
-
-  const grch37CanonicalEnsembl = props.ensemblGenes.filter(
-    ensemblGene =>
-      ensemblGene.canonical &&
-      ensemblGene.referenceGenome === REFERENCE_GENOME.GRCh37
-  );
-  const grch38CanonicalEnsembl = props.ensemblGenes.filter(
-    ensemblGene =>
-      ensemblGene.canonical &&
-      ensemblGene.referenceGenome === REFERENCE_GENOME.GRCh38
-  );
-  if (grch37CanonicalEnsembl.length > 0) {
-    additionalInfo.push(
-      <EnsemblGeneInfo
-        referenceGenomeName={REFERENCE_GENOME.GRCh37}
-        ensemblGene={grch37CanonicalEnsembl[0]}
-      />
-    );
-  }
-  if (grch38CanonicalEnsembl.length > 0) {
-    additionalInfo.push(
-      <EnsemblGeneInfo
-        referenceGenomeName={REFERENCE_GENOME.GRCh38}
-        ensemblGene={grch38CanonicalEnsembl[0]}
-      />
-    );
-  }
-
-  if (gene.grch37Isoform || gene.grch37RefSeq) {
-    additionalInfo.push(
-      <ReferenceGenomeInfo
-        key={REFERENCE_GENOME.GRCh37}
-        referenceGenomeName={REFERENCE_GENOME.GRCh37}
-        isoform={gene.grch37Isoform}
-        refseq={gene.grch37RefSeq}
-      />
-    );
-  }
-  if (gene.grch38Isoform || gene.grch38RefSeq) {
-    additionalInfo.push(
-      <ReferenceGenomeInfo
-        key={REFERENCE_GENOME.GRCh38}
-        referenceGenomeName={REFERENCE_GENOME.GRCh38}
-        isoform={gene.grch38Isoform}
-        refseq={gene.grch38RefSeq}
-      />
-    );
-  }
-
-  info.push({
-    key: 'additionalInfo',
-    element: <div className={styles.geneAdditionalInfo}>{additionalInfo}</div>,
-  });
-
-  return (
-    <>
-      {info.map(record => (
-        <Row key={record.key}>
-          <Col>{record.element}</Col>
-        </Row>
-      ))}
-    </>
-  );
-};
+import GeneInfo from './GeneInfo';
+import ShowHideToggleIcon from 'app/shared/icons/ShowHideToggleIcon';
 
 const GeneBackground: React.FunctionComponent<{
   show: boolean;
@@ -335,12 +78,8 @@ const GeneBackground: React.FunctionComponent<{
       <div onClick={() => props.onClick()}>
         <i>{`${props.show ? 'Hide' : 'Show'} ${
           props.hugoSymbol
-        } background`}</i>
-        <i
-          className={`fa ${
-            props.show ? 'fa-arrow-circle-o-up' : 'fa-arrow-circle-o-down'
-          } ml-2`}
-        />
+        } background`}</i>{' '}
+        <ShowHideToggleIcon show={props.show} onToggle={() => {}} />
       </div>
       {props.show ? <CitationLink content={props.geneBackground} /> : undefined}
     </div>
@@ -402,6 +141,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
           <AlterationPageLink
             key={variant.variant.name}
             hugoSymbol={this.store.hugoSymbol}
+            ensemblGenes={this.store.ensemblGenes.result}
             alteration={{
               alteration: variant.variant.alteration,
               name: variant.variant.name,
@@ -568,12 +308,14 @@ export default class GenePage extends React.Component<GenePageProps, any> {
   get genePanelClass() {
     if (this.store.barChartData.length > 0) {
       return {
-        xl: 7,
+        xl: 8,
         lg: 6,
         xs: 12,
       };
     } else {
       return {
+        xl: 12,
+        lg: 12,
         xs: 12,
       };
     }
@@ -597,15 +339,18 @@ export default class GenePage extends React.Component<GenePageProps, any> {
 
   @computed
   get windowWrapper() {
-    const MAX_WIDTH = 1442;
-    if (this.props.windowStore.size.width > MAX_WIDTH) {
-      const windowSize: IWindowSize = {
-        width: MAX_WIDTH,
-        height: this.props.windowStore.size.height,
-      };
-      return { size: windowSize };
-    }
-    return this.props.windowStore;
+    const mapperMaxWidth =
+      this.props.windowStore.size.width > GRID_BREAKPOINTS.XL
+        ? GRID_BREAKPOINTS.XL
+        : this.props.windowStore.size.width;
+
+    const windowSize: IWindowSize = {
+      width: this.props.windowStore.isMDScreen
+        ? mapperMaxWidth - 500
+        : this.props.windowStore.size.width,
+      height: this.props.windowStore.size.height,
+    };
+    return { size: windowSize };
   }
 
   render() {
@@ -621,26 +366,23 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                 ) : (
                   <If condition={this.pageShouldBeRendered}>
                     <Then>
+                      <h2>
+                        {this.store.hugoSymbol}
+                        <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
+                          <FeedbackIcon
+                            feedback={{
+                              type: FeedbackType.ANNOTATION,
+                              annotation: {
+                                gene: this.store.hugoSymbol,
+                              },
+                            }}
+                            appStore={this.props.appStore}
+                          />
+                        </span>
+                      </h2>
                       <Row>
-                        <Col {...this.genePanelClass}>
+                        <Col md={8}>
                           <div className="">
-                            <h2>
-                              {this.store.hugoSymbol}
-                              <span
-                                style={{ fontSize: '0.5em' }}
-                                className={'ml-2'}
-                              >
-                                <FeedbackIcon
-                                  feedback={{
-                                    type: FeedbackType.ANNOTATION,
-                                    annotation: {
-                                      gene: this.store.hugoSymbol,
-                                    },
-                                  }}
-                                  appStore={this.props.appStore}
-                                />
-                              </span>
-                            </h2>
                             <GeneInfo
                               gene={this.store.gene.result}
                               ensemblGenes={this.store.ensemblGenes.result}
@@ -662,28 +404,91 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                               }
                               highestFdaLevel={this.store.highestFdaLevel}
                             />
-                            {this.store.geneSummary.result ? (
+                            {this.store.geneSummary.result && (
                               <div className="mt-2">
                                 {this.store.geneSummary.result}
                               </div>
-                            ) : undefined}
-                            {this.store.geneBackground.result ? (
-                              <GeneBackground
-                                className="mt-2"
-                                show={this.showGeneBackground}
-                                hugoSymbol={this.store.hugoSymbol}
-                                geneBackground={
-                                  this.store.geneBackground.result
-                                }
-                                onClick={this.toggleGeneBackground}
-                              />
-                            ) : undefined}
+                            )}
                           </div>
                         </Col>
-                        {this.store.barChartData.length > 0 ? (
+                        <Col md={4} style={{ fontSize: '0.8rem' }}>
+                          <Table size={'sm'}>
+                            <tbody>
+                              <tr>
+                                <td style={{ borderTop: 0 }}>NCBI Gene</td>
+                                <td style={{ borderTop: 0 }}>
+                                  {this.store.gene.result.entrezGeneId}
+                                </td>
+                              </tr>
+                              {this.store.ensemblGenes.isComplete && (
+                                <>
+                                  <tr>
+                                    <td>Ensembl Gene</td>
+                                    <td>
+                                      {
+                                        this.store.ensemblGenes.result[0]
+                                          .ensemblGeneId
+                                      }{' '}
+                                      (GRCh37/38)
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>Location</td>
+                                    <td>
+                                      <div>{`Chr${this.store.ensemblGenes.result[0].chromosome}:${this.store.ensemblGenes.result[0].start}-${this.store.ensemblGenes.result[0].end} (GRch37)`}</div>
+                                      <div>{`Chr${this.store.ensemblGenes.result[1].chromosome}:${this.store.ensemblGenes.result[1].start}-${this.store.ensemblGenes.result[1].end} (GRch38)`}</div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>Ensembl Transcript</td>
+                                    <td>
+                                      {this.store.gene.result.grch37Isoform}{' '}
+                                      (GRCh37/38)
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>RefSeq</td>
+                                    <td>
+                                      {this.store.gene.result.grch38RefSeq}{' '}
+                                      (GRCh37/38)
+                                    </td>
+                                  </tr>
+                                </>
+                              )}
+                            </tbody>
+                          </Table>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          {this.store.geneBackground.result && (
+                            <GeneBackground
+                              className="mt-2"
+                              show={this.showGeneBackground}
+                              hugoSymbol={this.store.hugoSymbol}
+                              geneBackground={this.store.geneBackground.result}
+                              onClick={this.toggleGeneBackground}
+                            />
+                          )}
+                        </Col>
+                      </Row>
+                      <If condition={this.store.gene.result.entrezGeneId > 0}>
+                        <Row className={'mt-5'}>
+                          <Col md={8} xs={12}>
+                            <h6>
+                              Annotated Mutation Distribution in{' '}
+                              <MskimpactLink />
+                            </h6>
+                            <OncokbMutationMapper
+                              {...this.store.mutationMapperProps.result}
+                              store={this.store.mutationMapperStore.result}
+                              oncogenicities={this.store.uniqOncogenicity}
+                              showTrackSelector={false}
+                              windowWrapper={this.windowWrapper}
+                            />
+                          </Col>
                           <Col
-                            xl={5}
-                            lg={6}
+                            md={4}
                             xs={12}
                             className={'d-flex flex-column align-items-center'}
                           >
@@ -726,25 +531,6 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                               }
                             />
                           </Col>
-                        ) : null}
-                      </Row>
-                      <If condition={this.store.gene.result.entrezGeneId > 0}>
-                        <Row className={'mt-5'}>
-                          <Col xs={12}>
-                            <h6>
-                              Annotated Mutation Distribution in{' '}
-                              <MskimpactLink />
-                            </h6>
-                          </Col>
-                          <Col xs={12}>
-                            <OncokbMutationMapper
-                              {...this.store.mutationMapperProps.result}
-                              store={this.store.mutationMapperStore.result}
-                              oncogenicities={this.store.uniqOncogenicity}
-                              showTrackSelector={false}
-                              windowWrapper={this.windowWrapper}
-                            />
-                          </Col>
                         </Row>
                       </If>
                       <Row className={'mt-2'}>
@@ -757,6 +543,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                               <AlterationTableTabs
                                 selectedTab={this.defaultSelectedTab}
                                 hugoSymbol={this.store.hugoSymbol}
+                                ensemblGenes={this.store.ensemblGenes.result}
                                 biological={
                                   this.store.filteredBiologicalAlterations
                                 }

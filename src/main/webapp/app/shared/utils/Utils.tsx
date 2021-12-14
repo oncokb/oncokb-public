@@ -331,6 +331,7 @@ export function getDefaultColumnDefinition<T>(
             <AlterationPageLink
               hugoSymbol={props.original.hugoSymbol}
               alteration={props.original.alteration}
+              ensemblGenes={props.original.ensemblGenes}
             />
           );
         },

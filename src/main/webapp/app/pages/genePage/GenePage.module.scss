@@ -1,10 +1,15 @@
-.geneAdditionalInfo,
+.geneEnsemblInfo {
+  font-size: 0.8rem;
+}
+
+.geneEnsemblInfo,
 .lowKeyLinkout {
   color: $grey;
 }
 
 .sameLineSpans {
   display: flex;
+  flex-wrap: wrap;
   > span {
     margin: 0 0.3rem;
   }

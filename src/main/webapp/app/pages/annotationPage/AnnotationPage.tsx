@@ -23,6 +23,7 @@ import classnames from 'classnames';
 import { action, computed } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
+  EnsemblGene,
   Evidence,
   FdaAlteration,
   VariantAnnotation,
@@ -67,6 +68,7 @@ const SUMMARY_TITLE = {
 export type IAnnotationPage = {
   appStore?: AppStore;
   hugoSymbol: string;
+  ensemblGenes: EnsemblGene[];
   alteration: string;
   matchedAlteration: Alteration | undefined;
   tumorType: string;
@@ -86,7 +88,7 @@ export default class AnnotationPage extends React.Component<
   IAnnotationPage,
   {}
 > {
-  getTherapeuticImplications(evidences: Evidence[]) {
+  getImplications(evidences: Evidence[]) {
     return evidences.map(evidence => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
       const alterations = _.chain(evidence.alterations)
@@ -106,6 +108,7 @@ export default class AnnotationPage extends React.Component<
               <AlterationPageLink
                 key={alteration.name}
                 hugoSymbol={this.props.hugoSymbol}
+                ensemblGenes={this.props.ensemblGenes}
                 alteration={{
                   alteration: alteration.alteration,
                   name: alteration.name,
@@ -157,7 +160,7 @@ export default class AnnotationPage extends React.Component<
 
   @computed
   get therapeuticImplications(): TherapeuticImplication[] {
-    return this.getTherapeuticImplications(
+    return this.getImplications(
       this.getEvidenceByEvidenceTypes(
         this.props.annotation.tumorTypes,
         TREATMENT_EVIDENCE_TYPES
@@ -167,7 +170,7 @@ export default class AnnotationPage extends React.Component<
 
   @computed
   get diagnosticImplications(): TherapeuticImplication[] {
-    return this.getTherapeuticImplications(
+    return this.getImplications(
       this.getEvidenceByEvidenceTypes(this.props.annotation.tumorTypes, [
         EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION,
       ])
@@ -176,7 +179,7 @@ export default class AnnotationPage extends React.Component<
 
   @computed
   get prognosticImplications(): TherapeuticImplication[] {
-    return this.getTherapeuticImplications(
+    return this.getImplications(
       this.getEvidenceByEvidenceTypes(this.props.annotation.tumorTypes, [
         EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION,
       ])

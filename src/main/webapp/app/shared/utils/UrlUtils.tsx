@@ -3,8 +3,11 @@ import React from 'react';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_REFERENCE_GENOME,
+  DELETION,
+  FUSIONS,
   LEVEL_CLASSIFICATION,
   LEVELS,
+  ONCOGENIC_MUTATIONS,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   REGEXP,
@@ -33,6 +36,8 @@ import {
 } from 'app/shared/route/types';
 import * as QueryString from 'querystring';
 import { LEVEL_TYPE_TO_VERSION, Version } from 'app/pages/LevelOfEvidencePage';
+import { EnsemblGene } from 'app/shared/api/generated/OncoKbPrivateAPI';
+import InfoIcon from 'app/shared/icons/InfoIcon';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -63,6 +68,46 @@ export const GenePageLink: React.FunctionComponent<{
   );
 };
 
+const getGeneCoordinates = (ensemblGenes: EnsemblGene[]) => {
+  return _.sortBy(ensemblGenes, ensemblGene => ensemblGene.referenceGenome)
+    .map(
+      ensemblGene =>
+        `${ensemblGene.referenceGenome}, Chr${ensemblGene.chromosome}:${ensemblGene.start}-${ensemblGene.end}`
+    )
+    .join('; ');
+};
+
+const getCategoricalAlterationDescription = (
+  hugoSymbol: string,
+  alteration: string,
+  ensemblGenes?: EnsemblGene[]
+) => {
+  // For places the ensembl genes info is not available, we simply do not show any description for categorical alts
+  if (ensemblGenes === undefined || ensemblGenes.length === 0) {
+    return '';
+  }
+  const geneCoordinatesStr =
+    ensemblGenes &&
+    `the ${hugoSymbol} gene (${getGeneCoordinates(ensemblGenes)})`;
+  let content = '';
+  switch (alteration) {
+    case ONCOGENIC_MUTATIONS:
+      content =
+        'Defined as a variant considered "oncogenic" or "likely oncogenic" by OncoKB Curation Standard Operating Protocol';
+      break;
+    case DELETION:
+      content = `Defined as copy number loss resulting in partial or whole deletion of ${geneCoordinatesStr}`;
+      break;
+    case FUSIONS:
+      content = `Defined as deletion or chromosomal translocation events arising within ${geneCoordinatesStr} that results in a functional fusion event which preserves an intact ${hugoSymbol} kinase domain.`;
+      break;
+    default:
+      break;
+  }
+
+  return content;
+};
+
 export const AlterationPageLink: React.FunctionComponent<{
   hugoSymbol: string;
   alteration: IAlteration | string;
@@ -72,6 +117,7 @@ export const AlterationPageLink: React.FunctionComponent<{
   hashQueries?: AlterationPageHashQueries;
   showGene?: boolean;
   onClick?: () => void;
+  ensemblGenes?: EnsemblGene[];
 }> = props => {
   let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${
     typeof props.alteration === 'string'
@@ -96,14 +142,27 @@ export const AlterationPageLink: React.FunctionComponent<{
     pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
   }
   const alterationName = getAlterationName(props.alteration);
+  const altDescription = getCategoricalAlterationDescription(
+    props.hugoSymbol,
+    alterationName,
+    props.ensemblGenes
+  );
   return (
-    <Link to={pageLink} onClick={props.onClick}>
-      {props.children
-        ? props.children
-        : props.showGene
-        ? `${props.hugoSymbol} ${alterationName}`
-        : alterationName}
-    </Link>
+    <>
+      <Link to={pageLink} onClick={props.onClick}>
+        {props.children
+          ? props.children
+          : props.showGene
+          ? `${props.hugoSymbol} ${alterationName}`
+          : alterationName}
+      </Link>
+      {altDescription && (
+        <span>
+          {' '}
+          <InfoIcon overlay={altDescription} />
+        </span>
+      )}
+    </>
   );
 };
 
