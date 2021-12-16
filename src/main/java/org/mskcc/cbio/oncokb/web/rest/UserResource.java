@@ -44,6 +44,7 @@ import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing users.
@@ -106,24 +107,8 @@ public class UserResource {
         this.tokenService = tokenService;
     }
 
-    /**
-     * {@code POST  /users}  : Creates a new user.
-     * <p>
-     * Creates a new user if the login and email are not already used, and sends an
-     * mail with an activation link.
-     * The user needs to be activated on creation.
-     *
-     * @param managedUserVM the user to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new user, or with status {@code 400 (Bad Request)} if the login or email is already in use.
-     * @throws URISyntaxException       if the Location URI syntax is incorrect.
-     * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
-     */
-    @APIConditionallyEnabled
-    @PostMapping("/users")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<User> createUser(@Valid @RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
-        log.debug("REST request to save User : {}", managedUserVM);
-
+    private User createNewUser(ManagedUserVM managedUserVM){
+        User newUser = null;
         if (managedUserVM.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
@@ -137,16 +122,54 @@ public class UserResource {
             if (managedUserVM.getAuthorities() == null || managedUserVM.getAuthorities().isEmpty()) {
                 managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
             }
-            User newUser = userService.createUser(managedUserVM, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
+            newUser = userService.createUser(managedUserVM, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
             if (managedUserVM.getNotifyUserOnTrialCreation()) {
                 userService.initiateTrialAccountActivation(newUser.getLogin());
                 mailService.sendActiveTrialMail(userMapper.userToUserDTO(newUser), true);
             } else {
                 mailService.sendCreationEmail(userMapper.userToUserDTO(newUser));
             }
-            return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .body(newUser);
         }
+        return newUser;
+    }
+
+    /**
+     * {@code POST  /users}  : Creates a new user.
+     * <p>
+     * Creates a new user if the login and email are not already used, and sends an
+     * mail with an activation link.
+     * The user needs to be activated on creation.
+     *
+     * @param managedUserVM the user to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new user, or with status {@code 400 (Bad Request)} if the login or email is already in use.
+     * @throws URISyntaxException       if the Location URI syntax is incorrect.
+     * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
+     */
+    @PostMapping("/users")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<User> createUser(@Valid @RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
+        log.debug("REST request to save User : {}", managedUserVM);
+
+        User newUser = createNewUser(managedUserVM);
+        return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
+            .body(newUser);
+    }
+
+    /**
+     * {@code POST  /users/batch}  : Create new users.
+     * Creates new users
+     *
+     * @param managedUserVMs the users to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)}
+     * @throws URISyntaxException       if the Location URI syntax is incorrect.
+     * @throws BadRequestAlertException {@code 400 (Bad Request)} if a login or email is already in use.
+     */
+    @PostMapping("/users/batch")
+    public ResponseEntity<List<User>> createUsers(@Valid @RequestBody List<ManagedUserVM> managedUserVMs){
+        List<User> createdUsers = managedUserVMs.stream()
+            .map(userVM -> createNewUser(userVM))
+            .collect(Collectors.toList());
+        return new ResponseEntity<List<User>>(createdUsers, HttpStatus.CREATED);
     }
 
     /**
@@ -247,6 +270,13 @@ public class UserResource {
         return ResponseUtil.wrapOrNotFound(
             userService.getUserWithAuthoritiesByLogin(login)
                 .map(user -> userMapper.userToUserDTO(user)));
+    }
+
+    @PostMapping("/users/verify")
+    public ResponseEntity<Boolean> verifyUserLogin(@RequestParam String login) {
+        log.debug("REST request to verify user login");
+        boolean isLoginUsed = userRepository.findOneByLogin(login.toLowerCase()).isPresent();
+        return new ResponseEntity<>(!isLoginUsed, HttpStatus.OK);
     }
 
     /**

@@ -3,7 +3,7 @@ import React from 'react';
 
 export const SimpleConfirmModal: React.FunctionComponent<{
   title?: string;
-  body?: string;
+  body?: string | JSX.Element;
   show: boolean;
   onCancel?: () => void;
   onConfirm?: () => void;

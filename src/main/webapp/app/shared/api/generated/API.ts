@@ -5375,6 +5375,83 @@ export default class API {
                 return response.body;
             });
         };
+    createUsersUsingPOSTURL(parameters: {
+        'managedUserVMs': Array < ManagedUserVM > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/users/batch';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * createUsers
+     * @method
+     * @name API#createUsersUsingPOST
+     * @param {} managedUserVMs - managedUserVMs
+     */
+    createUsersUsingPOSTWithHttpInfo(parameters: {
+        'managedUserVMs': Array < ManagedUserVM > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/users/batch';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['managedUserVMs'] !== undefined) {
+                body = parameters['managedUserVMs'];
+            }
+
+            if (parameters['managedUserVMs'] === undefined) {
+                reject(new Error('Missing required  parameter: managedUserVMs'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * createUsers
+     * @method
+     * @name API#createUsersUsingPOST
+     * @param {} managedUserVMs - managedUserVMs
+     */
+    createUsersUsingPOST(parameters: {
+            'managedUserVMs': Array < ManagedUserVM > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < User >
+        > {
+            return this.createUsersUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     getAllRegisteredUsersUsingGETURL(parameters: {
         'offset' ? : number,
         'page' ? : number,
@@ -5643,6 +5720,85 @@ export default class API {
                 return response.body;
             });
         };
+    verifyUserLoginUsingPOSTURL(parameters: {
+        'login': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/users/verify';
+        if (parameters['login'] !== undefined) {
+            queryParameters['login'] = parameters['login'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * verifyUserLogin
+     * @method
+     * @name API#verifyUserLoginUsingPOST
+     * @param {string} login - login
+     */
+    verifyUserLoginUsingPOSTWithHttpInfo(parameters: {
+        'login': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/users/verify';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['login'] !== undefined) {
+                queryParameters['login'] = parameters['login'];
+            }
+
+            if (parameters['login'] === undefined) {
+                reject(new Error('Missing required  parameter: login'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * verifyUserLogin
+     * @method
+     * @name API#verifyUserLoginUsingPOST
+     * @param {string} login - login
+     */
+    verifyUserLoginUsingPOST(parameters: {
+        'login': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < boolean > {
+        return this.verifyUserLoginUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     getUserUsingGETURL(parameters: {
         'login': string,
         $queryParameters ? : any

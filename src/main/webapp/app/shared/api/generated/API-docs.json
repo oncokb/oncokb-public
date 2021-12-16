@@ -2725,6 +2725,59 @@
         "deprecated": false
       }
     },
+    "/api/users/batch": {
+      "post": {
+        "tags": [
+          "user-resource"
+        ],
+        "summary": "createUsers",
+        "operationId": "createUsersUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "managedUserVMs",
+            "description": "managedUserVMs",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ManagedUserVM"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/users/registered": {
       "get": {
         "tags": [
@@ -2867,6 +2920,51 @@
               "items": {
                 "$ref": "#/definitions/Token"
               }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/users/verify": {
+      "post": {
+        "tags": [
+          "user-resource"
+        ],
+        "summary": "verifyUserLogin",
+        "operationId": "verifyUserLoginUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "query",
+            "description": "login",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
             }
           },
           "201": {
