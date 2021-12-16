@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { action, observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
-import { ManagedUserVM, UserDTO } from 'app/shared/api/generated/API';
+import { ManagedUserVM } from 'app/shared/api/generated/API';
 import { LicenseType } from 'app/config/constants';
 import { Alert } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
@@ -11,7 +11,6 @@ import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import { NewAccountForm } from 'app/components/newAccountForm/NewAccountForm';
 import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { ReadonlyContent } from 'app/components/ReadonlyContent';
-
 enum RegisterStatus {
   REGISTERED,
   NOT_SUCCESS,
