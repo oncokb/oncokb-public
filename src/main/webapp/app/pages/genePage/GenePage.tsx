@@ -343,7 +343,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
 
     const windowSize: IWindowSize = {
       width: this.props.windowStore.isMDScreen
-        ? mapperMaxWidth - 300
+        ? mapperMaxWidth - (this.store.barChartData.length > 0 ? 300 : 0)
         : this.props.windowStore.size.width,
       height: this.props.windowStore.size.height,
     };
@@ -437,7 +437,11 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                       </Row>
                       <If condition={this.store.gene.result.entrezGeneId > 0}>
                         <Row className={'mt-5'}>
-                          <Col md={8} xs={12}>
+                          <Col
+                            xl={this.genePanelClass.xl}
+                            lg={this.genePanelClass.lg}
+                            xs={this.genePanelClass.xs}
+                          >
                             <h6>
                               Annotated Mutation Distribution in{' '}
                               <MskimpactLink />
@@ -479,8 +483,9 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                             />
                           </Col>
                           <Col
-                            md={4}
-                            xs={12}
+                            xl={12 - this.genePanelClass.xl}
+                            lg={12 - this.genePanelClass.lg}
+                            xs={12 - this.genePanelClass.xs}
                             className={'d-flex flex-column align-items-center'}
                           >
                             <div>
