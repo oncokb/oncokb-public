@@ -12,15 +12,9 @@ import {
   reaction,
 } from 'mobx';
 import { Else, If, Then } from 'react-if';
-import { Gene } from 'app/shared/api/generated/OncoKbAPI';
 import { Redirect, RouteComponentProps } from 'react-router';
 import { Col, Row, Table } from 'react-bootstrap';
-import {
-  FdaLevelIcon,
-  getCancerTypeNameFromOncoTreeType,
-  levelOfEvidence2Level,
-  OncoKBLevelIcon,
-} from 'app/shared/utils/Utils';
+import { getCancerTypeNameFromOncoTreeType } from 'app/shared/utils/Utils';
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
@@ -33,7 +27,6 @@ import {
   GRID_BREAKPOINTS,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
-  LEVELS,
   PAGE_ROUTE,
   REFERENCE_GENOME,
 } from 'app/config/constants';
@@ -48,11 +41,13 @@ import { MskimpactLink } from 'app/components/MskimpactLink';
 import { OncokbMutationMapper } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import WindowStore, { IWindowSize } from 'app/store/WindowStore';
 import { DataFilterType, onFilterOptionSelect } from 'react-mutation-mapper';
-import { CANCER_TYPE_FILTER_ID } from 'app/components/oncokbMutationMapper/FilterUtils';
+import {
+  CANCER_TYPE_FILTER_ID,
+  ONCOGENICITY_FILTER_ID,
+  ONCOGENICITY_FILTER_TYPE,
+} from 'app/components/oncokbMutationMapper/FilterUtils';
 import DocumentTitle from 'react-document-title';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
-import { Linkout } from 'app/shared/links/Linkout';
-import { ReferenceGenomeInfo } from './ReferenceGenomeInfo';
 import WithSeparator from 'react-with-separator';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
@@ -65,6 +60,8 @@ import {
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import GeneInfo from './GeneInfo';
 import ShowHideToggleIcon from 'app/shared/icons/ShowHideToggleIcon';
+import GeneAdditionalInfoTable from 'app/pages/genePage/GeneAdditionalInfoTable';
+import OncogenicityCheckboxes from 'app/components/oncokbMutationMapper/OncogenicityCheckboxes';
 
 const GeneBackground: React.FunctionComponent<{
   show: boolean;
@@ -346,7 +343,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
 
     const windowSize: IWindowSize = {
       width: this.props.windowStore.isMDScreen
-        ? mapperMaxWidth - 500
+        ? mapperMaxWidth - 300
         : this.props.windowStore.size.width,
       height: this.props.windowStore.size.height,
     };
@@ -409,67 +406,33 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                                 {this.store.geneSummary.result}
                               </div>
                             )}
+                            {this.store.geneBackground.result && (
+                              <GeneBackground
+                                className="mt-2"
+                                show={this.showGeneBackground}
+                                hugoSymbol={this.store.hugoSymbol}
+                                geneBackground={
+                                  this.store.geneBackground.result
+                                }
+                                onClick={this.toggleGeneBackground}
+                              />
+                            )}
                           </div>
                         </Col>
                         <Col md={4} style={{ fontSize: '0.8rem' }}>
-                          <Table size={'sm'}>
-                            <tbody>
-                              <tr>
-                                <td style={{ borderTop: 0 }}>NCBI Gene</td>
-                                <td style={{ borderTop: 0 }}>
-                                  {this.store.gene.result.entrezGeneId}
-                                </td>
-                              </tr>
-                              {this.store.ensemblGenes.isComplete && (
-                                <>
-                                  <tr>
-                                    <td>Ensembl Gene</td>
-                                    <td>
-                                      {
-                                        this.store.ensemblGenes.result[0]
-                                          .ensemblGeneId
-                                      }{' '}
-                                      (GRCh37/38)
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td>Location</td>
-                                    <td>
-                                      <div>{`Chr${this.store.ensemblGenes.result[0].chromosome}:${this.store.ensemblGenes.result[0].start}-${this.store.ensemblGenes.result[0].end} (GRch37)`}</div>
-                                      <div>{`Chr${this.store.ensemblGenes.result[1].chromosome}:${this.store.ensemblGenes.result[1].start}-${this.store.ensemblGenes.result[1].end} (GRch38)`}</div>
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td>Ensembl Transcript</td>
-                                    <td>
-                                      {this.store.gene.result.grch37Isoform}{' '}
-                                      (GRCh37/38)
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td>RefSeq</td>
-                                    <td>
-                                      {this.store.gene.result.grch38RefSeq}{' '}
-                                      (GRCh37/38)
-                                    </td>
-                                  </tr>
-                                </>
-                              )}
-                            </tbody>
-                          </Table>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          {this.store.geneBackground.result && (
-                            <GeneBackground
-                              className="mt-2"
-                              show={this.showGeneBackground}
-                              hugoSymbol={this.store.hugoSymbol}
-                              geneBackground={this.store.geneBackground.result}
-                              onClick={this.toggleGeneBackground}
-                            />
-                          )}
+                          <GeneAdditionalInfoTable
+                            gene={this.store.gene.result}
+                            grch37ensemblGene={_.findLast(
+                              this.store.ensemblGenes.result,
+                              item =>
+                                item.referenceGenome === REFERENCE_GENOME.GRCh37
+                            )}
+                            grch38ensemblGene={_.findLast(
+                              this.store.ensemblGenes.result,
+                              item =>
+                                item.referenceGenome === REFERENCE_GENOME.GRCh38
+                            )}
+                          />
                         </Col>
                       </Row>
                       <If condition={this.store.gene.result.entrezGeneId > 0}>
@@ -479,6 +442,34 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                               Annotated Mutation Distribution in{' '}
                               <MskimpactLink />
                             </h6>
+                            <OncogenicityCheckboxes
+                              oncogenicities={this.store.calculateOncogenicities(
+                                this.store.filteredBiologicalAlterations
+                              )}
+                              selectedOncogenicities={
+                                this.store.mutationMapperStore.result?.dataStore.dataFilters.find(
+                                  f => f.id === ONCOGENICITY_FILTER_ID
+                                )?.values as string[]
+                              }
+                              onToggle={oncogenicity => {
+                                this.store.mutationMapperStore &&
+                                this.store.mutationMapperStore.result
+                                  ? onFilterOptionSelect(
+                                      _.xor(
+                                        this.store.mutationMapperStore.result?.dataStore.dataFilters.find(
+                                          f => f.id === ONCOGENICITY_FILTER_ID
+                                        )?.values,
+                                        [oncogenicity]
+                                      ),
+                                      false,
+                                      this.store.mutationMapperStore.result
+                                        .dataStore,
+                                      ONCOGENICITY_FILTER_TYPE,
+                                      ONCOGENICITY_FILTER_ID
+                                    )
+                                  : undefined;
+                              }}
+                            />
                             <OncokbMutationMapper
                               {...this.store.mutationMapperProps.result}
                               store={this.store.mutationMapperStore.result}

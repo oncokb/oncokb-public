@@ -14,6 +14,7 @@ import {
   REGEXP_LINK,
   SEARCH_QUERY_KEY,
   SOP_LINK,
+  TRUNCATING_MUTATIONS,
   YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
 import _ from 'lodash';
@@ -23,6 +24,7 @@ import { ReactNodeArray } from 'prop-types';
 import {
   encodeSlash,
   getAlterationName,
+  getCategoricalAlterationDescription,
   getYouTubeLink,
   IAlteration,
 } from 'app/shared/utils/Utils';
@@ -66,46 +68,6 @@ export const GenePageLink: React.FunctionComponent<{
       {props.content ? props.content : props.hugoSymbol}
     </Link>
   );
-};
-
-const getGeneCoordinates = (ensemblGenes: EnsemblGene[]) => {
-  return _.sortBy(ensemblGenes, ensemblGene => ensemblGene.referenceGenome)
-    .map(
-      ensemblGene =>
-        `${ensemblGene.referenceGenome}, Chr${ensemblGene.chromosome}:${ensemblGene.start}-${ensemblGene.end}`
-    )
-    .join('; ');
-};
-
-const getCategoricalAlterationDescription = (
-  hugoSymbol: string,
-  alteration: string,
-  ensemblGenes?: EnsemblGene[]
-) => {
-  // For places the ensembl genes info is not available, we simply do not show any description for categorical alts
-  if (ensemblGenes === undefined || ensemblGenes.length === 0) {
-    return '';
-  }
-  const geneCoordinatesStr =
-    ensemblGenes &&
-    `the ${hugoSymbol} gene (${getGeneCoordinates(ensemblGenes)})`;
-  let content = '';
-  switch (alteration) {
-    case ONCOGENIC_MUTATIONS:
-      content =
-        'Defined as a variant considered "oncogenic" or "likely oncogenic" by OncoKB Curation Standard Operating Protocol';
-      break;
-    case DELETION:
-      content = `Defined as copy number loss resulting in partial or whole deletion of ${geneCoordinatesStr}`;
-      break;
-    case FUSIONS:
-      content = `Defined as deletion or chromosomal translocation events arising within ${geneCoordinatesStr} that results in a functional fusion event which preserves an intact ${hugoSymbol} kinase domain.`;
-      break;
-    default:
-      break;
-  }
-
-  return content;
 };
 
 export const AlterationPageLink: React.FunctionComponent<{

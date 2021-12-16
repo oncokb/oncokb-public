@@ -30,7 +30,6 @@ import {
   FdaAlteration,
   GeneNumber,
   PortalAlteration,
-  TumorType,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
@@ -468,9 +467,13 @@ export class AnnotationStore {
 
   @computed
   get uniqOncogenicity() {
+    return this.calculateOncogenicities(this.biologicalAlterations.result);
+  }
+
+  calculateOncogenicities(biologicalAlterations: BiologicalVariant[]) {
     const oncogenicities = _.groupBy(
       _.reduce(
-        this.biologicalAlterations.result,
+        biologicalAlterations,
         (acc, item) => {
           acc.push({
             ...item,

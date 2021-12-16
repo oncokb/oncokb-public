@@ -34,6 +34,7 @@ import {
   articles2Citations,
   getAlterationName,
   getCancerTypeNameFromOncoTreeType,
+  getCategoricalAlterationDescription,
   getHighestFdaLevel,
   getTreatmentNameFromEvidence,
   IAlteration,
@@ -48,6 +49,7 @@ import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
+import { COLOR_GREY } from 'app/config/theme';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -254,9 +256,17 @@ export default class AnnotationPage extends React.Component<
   }
 
   render() {
+    const categoricalAlterationDescription = getCategoricalAlterationDescription(
+      this.props.hugoSymbol,
+      this.props.alteration,
+      this.props.ensemblGenes
+    );
     return (
       <>
-        <h2 className={'d-flex align-items-baseline'}>
+        <h2
+          className={'d-flex align-items-baseline'}
+          style={{ marginBottom: 0 }}
+        >
           {this.showGeneNameLink && (
             <span className={'mr-2'}>
               <GenePageLink
@@ -288,6 +298,15 @@ export default class AnnotationPage extends React.Component<
             />
           </span>
         </h2>
+        {categoricalAlterationDescription && (
+          <Row>
+            <Col>
+              <span style={{ fontSize: '0.8rem', color: COLOR_GREY }}>
+                {categoricalAlterationDescription}
+              </span>
+            </Col>
+          </Row>
+        )}
         <AlterationInfo
           isPositionalAlteration={isPositionalAlteration(
             this.props.annotation.query.proteinStart,

@@ -10,9 +10,6 @@ import {
 } from 'app/shared/utils/Utils';
 import WithSeparator from 'react-with-separator';
 import { LEVELS } from 'app/config/constants';
-import EnsemblInfo from 'app/pages/genePage/EnsemblInfo';
-import styles from './GenePage.module.scss';
-import ShowHideToggleIcon from 'app/shared/icons/ShowHideToggleIcon';
 
 enum GENE_TYPE_DESC {
   ONCOGENE = 'Oncogene',
@@ -134,7 +131,6 @@ const getGeneTypeSentence = (oncogene: boolean, tsg: boolean) => {
 };
 
 const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
-  const [showEnsemblInfo, setShowEnsemblInfo] = useState(false);
   const gene = props.gene;
   const info: GeneInfoItem[] = [];
 
@@ -183,27 +179,6 @@ const GeneInfo: React.FunctionComponent<GeneInfoProps> = props => {
       element: (
         <div>
           <GeneAliasesDescription geneAliases={gene.geneAliases} />
-        </div>
-      ),
-    });
-  }
-
-  info.push({
-    key: 'showEnsemblInfo',
-    element: (
-      <div onClick={() => setShowEnsemblInfo(!showEnsemblInfo)}>
-        {showEnsemblInfo ? 'Hide' : 'Show'} ensembl gene and transcripts.{' '}
-        <ShowHideToggleIcon show={showEnsemblInfo} />
-      </div>
-    ),
-  });
-
-  if (showEnsemblInfo) {
-    info.push({
-      key: 'ensemblInfo',
-      element: (
-        <div className={styles.geneEnsemblInfo}>
-          <EnsemblInfo gene={gene} ensemblGenes={props.ensemblGenes} />
         </div>
       ),
     });
