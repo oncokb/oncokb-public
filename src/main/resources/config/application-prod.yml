@@ -191,3 +191,4 @@ application:
     s3-access-key:
     s3-secret-key:
     s3-region:
+  db-read-only: false # Certain endpoints will be disabled when readonly is set to true

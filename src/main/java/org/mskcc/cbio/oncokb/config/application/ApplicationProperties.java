@@ -36,6 +36,7 @@ public class ApplicationProperties {
     private FrontendProperties frontend;
     private AWSProperties aws;
     private String githubToken;
+    private Boolean dbReadOnly;
 
     public String getName() {
         return name;
@@ -194,4 +195,13 @@ public class ApplicationProperties {
     public void setGithubToken(String githubToken) {
         this.githubToken = githubToken;
     }
+
+    public Boolean getDbReadOnly() {
+        return this.dbReadOnly;
+    }
+
+    public void setDbReadOnly(Boolean dbReadOnly) {
+        this.dbReadOnly = dbReadOnly;
+    }
+
 }
