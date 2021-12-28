@@ -30,6 +30,7 @@ import {
 import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 import _ from 'lodash';
+import { ReadonlyContent } from 'app/components/ReadonlyContent';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -219,14 +220,18 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     return (
       <div>
         {this.registerError ? <ErrorAlert error={this.registerError} /> : null}
-        <NewAccountForm
-          isLargeScreen={this.props.windowStore.isLargeScreen}
-          defaultLicense={this.selectedLicense}
-          onSubmit={this.handleValidSubmit}
-          visibleSections={this.visibleSections}
-          byAdmin={false}
-          onSelectLicense={this.onSelectLicense}
-        />
+        <ReadonlyContent
+          messageTitle={'User registration is temporarily disabled.'}
+        >
+          <NewAccountForm
+            isLargeScreen={this.props.windowStore.isLargeScreen}
+            defaultLicense={this.selectedLicense}
+            onSubmit={this.handleValidSubmit}
+            visibleSections={this.visibleSections}
+            byAdmin={false}
+            onSelectLicense={this.onSelectLicense}
+          />
+        </ReadonlyContent>
       </div>
     );
   }
