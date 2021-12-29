@@ -53,7 +53,7 @@ export default class CompanyDetailsPage extends React.Component {
     {
       id: 'companyDomains',
       Header: <span className={styles.tableHeader}>Company Domains</span>,
-      minWidth: 140,
+      minWidth: 120,
       sortable: false,
       accessor: 'companyDomains',
       Cell(props: { original: CompanyDTO }): any {
@@ -61,20 +61,9 @@ export default class CompanyDetailsPage extends React.Component {
       },
     },
     {
-      id: 'companyType',
-      Header: <span className={styles.tableHeader}>Company Type</span>,
-      maxWidth: 140,
-      onFilter: (data: CompanyDTO, keyword) =>
-        data.companyType ? filterByKeyword(data.companyType, keyword) : false,
-      accessor: 'companyType',
-      Cell(props: { original: CompanyDTO }): any {
-        return <div>{props.original.companyType}</div>;
-      },
-    },
-    {
       id: 'licenseModel',
       Header: <span className={styles.tableHeader}>License Model</span>,
-      maxWidth: 140,
+      minWidth: 100,
       onFilter: (data: CompanyDTO, keyword) =>
         data.licenseModel ? filterByKeyword(data.licenseModel, keyword) : false,
       accessor: 'licenseModel',
@@ -85,7 +74,7 @@ export default class CompanyDetailsPage extends React.Component {
     {
       id: 'licenseType',
       Header: <span className={styles.tableHeader}>License Type</span>,
-      maxWidth: 140,
+      minWidth: 140,
       onFilter: (data: CompanyDTO, keyword) =>
         data.licenseType ? filterByKeyword(data.licenseType, keyword) : false,
       accessor: 'licenseType',
@@ -96,7 +85,7 @@ export default class CompanyDetailsPage extends React.Component {
     {
       id: 'licenseStatus',
       Header: <span className={styles.tableHeader}>License Status</span>,
-      maxWidth: 140,
+      minWidth: 100,
       onFilter: (data: CompanyDTO, keyword) =>
         data.licenseStatus
           ? filterByKeyword(data.licenseStatus, keyword)
@@ -107,33 +96,9 @@ export default class CompanyDetailsPage extends React.Component {
       },
     },
     {
-      id: 'businessContact',
-      Header: <span className={styles.tableHeader}>Business Contact</span>,
-      maxWidth: 100,
-      onFilter: (data: CompanyDTO, keyword) =>
-        data.businessContact
-          ? filterByKeyword(data.businessContact, keyword)
-          : false,
-      accessor: 'businessContact',
-      Cell(props: { original: CompanyDTO }): any {
-        return <div>{props.original.businessContact}</div>;
-      },
-    },
-    {
-      id: 'legalContact',
-      Header: <span className={styles.tableHeader}>Legal Contact</span>,
-      maxWidth: 100,
-      onFilter: (data: CompanyDTO, keyword) =>
-        data.legalContact ? filterByKeyword(data.legalContact, keyword) : false,
-      accessor: 'legalContact',
-      Cell(props: { original: CompanyDTO }): any {
-        return <div>{props.original.legalContact}</div>;
-      },
-    },
-    {
       id: 'edit',
       Header: <span className={styles.tableHeader}>Edit</span>,
-      minWidth: 60,
+      maxWidth: 60,
       sortable: false,
       className: 'justify-content-center',
       Cell(props: { original: CompanyDTO }) {

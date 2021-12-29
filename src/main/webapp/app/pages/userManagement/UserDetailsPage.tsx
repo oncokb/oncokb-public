@@ -27,6 +27,7 @@ import LoadingIndicator, {
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { Link } from 'react-router-dom';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
+import { UserStatusModal } from 'app/shared/modal/UserStatusModal';
 
 enum USER_BUTTON_TYPE {
   COMMERCIAL = 'Commercial Users',
@@ -375,51 +376,12 @@ export default class UserDetailsPage extends React.Component<{
             isLoading={!this.loadedUsers}
           />
         )}
-        <Modal
+        <UserStatusModal
           show={this.showUpdateStatusModal}
-          onHide={() => this.cancelUpdateActiveStatus()}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Update User Status</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            Are you sure to{' '}
-            {this.currentSelectedUserIsActivated ? 'deactivate' : 'active'} the
-            user?
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => this.cancelUpdateActiveStatus()}
-            >
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              onClick={(event: any) => {
-                event.preventDefault();
-                this.updateActiveStatus(true);
-              }}
-            >
-              Update
-            </Button>
-            {!this.currentSelectedUserIsActivated ? (
-              <DefaultTooltip
-                placement={'top'}
-                overlay={
-                  'Update user status without sending an email to the user'
-                }
-              >
-                <Button
-                  variant="primary"
-                  onClick={() => this.updateActiveStatus(false)}
-                >
-                  Silent Update
-                </Button>
-              </DefaultTooltip>
-            ) : null}
-          </Modal.Footer>
-        </Modal>
+          user={this.currentSelected.user}
+          onCancel={() => this.cancelUpdateActiveStatus()}
+          onConfirm={(sendEmail: boolean) => this.updateActiveStatus(sendEmail)}
+        />
       </>
     );
   }
