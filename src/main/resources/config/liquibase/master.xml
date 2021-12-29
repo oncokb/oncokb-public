@@ -18,11 +18,15 @@
     <include file="config/liquibase/changelog/20190826144658_added_entity_TokenStats.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190826161330_added_entity_UserDetails.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191230201137_added_entity_UserMails.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210927165433_added_entity_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210927165533_added_entity_CompanyDomain.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20190823204705_added_entity_constraints_Token.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190826144658_added_entity_constraints_TokenStats.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190826161330_added_entity_constraints_UserDetails.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191230201137_added_entity_constraints_UserMails.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210927165533_added_entity_constraints_CompanyDomain.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210927165433_added_entity_constraints_Company.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

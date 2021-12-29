@@ -60,10 +60,6 @@ export class AccountPage extends React.Component<IRegisterProps> {
     super(props);
   }
 
-  @autobind
-  @action
-  handleValidSubmit(event: any, values: any) {}
-
   @computed
   get account() {
     return this.props.authenticationStore.account;
@@ -187,7 +183,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
                 ACCOUNT_TITLES.COMPANY,
                 this.account.licenseType as LicenseType
               )}
-              content={this.account.company}
+              content={this.account.companyName}
             />
             <InfoRow
               title={getAccountInfoTitle(

@@ -1,4 +1,4 @@
-id;license_type;job_title;company;city;country;address;additional_info;user_id
+id;license_type;job_title;company_name;city;country;address;additional_info;user_id
 1;COMMERCIAL;Forward Communications Planner;Dam;North Jadonhaven;Greece;Metal deposit;null;1
 2;HOSPITAL;Internal Factors Manager;Chips;New Elliottstad;Madagascar;web-readiness;null;2
 3;RESEARCH_IN_COMMERCIAL;Regional Marketing Associate;Coordinator;South Aubreemouth;Nauru;syndicate;null;3

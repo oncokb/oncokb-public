@@ -2,10 +2,12 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.aop.api.APIConditionallyEnabled;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.domain.Company;
+import org.mskcc.cbio.oncokb.domain.CompanyCandidate;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
-import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
@@ -27,17 +29,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.context.Context;
 
 import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.*;
-
-import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
-import static org.mskcc.cbio.oncokb.util.MainUtil.isMSKUser;
-import static org.mskcc.cbio.oncokb.util.StringUtil.getEmailDomain;
 
 /**
  * REST controller for managing the current user's account.
@@ -130,25 +127,17 @@ public class AccountResource {
         } else {
             boolean newUserActivation = !userOptional.get().getActivated();
             userOptional = userService.activateRegistration(key);
-            User user = userOptional.get();
+
+            User user;
+            if(userOptional.isPresent()){
+                user = userOptional.get();
+            }else{
+                throw new AccountResourceException("User could not be found");
+            }
+
             if (newUserActivation) {
-                if (emailService.getAccountApprovalWhitelistEmailsDomains().contains(getEmailDomain(user.getEmail()))) {
-                    Optional<User> existingUser = userRepository.findOneByLogin(user.getLogin());
-                    if (existingUser.isPresent()) {
-                        UserDTO userDTO = userMapper.userToUserDTO(existingUser.get());
-                        if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
-                            userService.approveUser(userDTO);
-                            slackService.sendApprovedConfirmation(userMapper.userToUserDTO(userOptional.get()));
-                            return true;
-                        } else {
-                            return activateUser(userDTO);
-                        }
-                    } else {
-                        throw new AccountResourceException("User could not be found");
-                    }
-                } else {
-                    return activateUser(userMapper.userToUserDTO(user));
-                }
+                UserDTO userDTO = userMapper.userToUserDTO(user);
+                return activateUser(userDTO, userService.findCompanyCandidate(userDTO));
             } else {
                 // This user exists before, we are looking for to extend the expiration date of all tokens associated
                 List<Token> userTokens = tokenService.findByUser(user);
@@ -169,19 +158,26 @@ public class AccountResource {
         }
     }
 
-    private boolean activateUser(UserDTO userDTO) {
-        if (isMSKUser(userDTO)) {
-            LicenseType registeredLicenseType = userDTO.getLicenseType();
-            userDTO.setLicenseType(LicenseType.ACADEMIC);
-            userService.approveUser(userDTO);
-
-            // In this case, we also want to send an email to user to explain
-            Context context = new Context();
-            context.setVariable(MAIL_LICENSE, registeredLicenseType.getName());
-            mailService.sendEmailFromTemplate(userDTO, MailType.APPROVAL_MSK_IN_COMMERCIAL, context);
+    private boolean activateUser(UserDTO userDTO, CompanyCandidate companyCandidate) {
+        // When the possible company is on MICRO tier, we proceed with the manual approval process
+        if(!companyCandidate.getCanAssociate()){
+            Company microCompany = null;
+            if(companyCandidate.getCompanyCandidate().isPresent()){
+                microCompany = companyCandidate.getCompanyCandidate().get();
+            }
+            slackService.sendUserRegistrationToChannel(userDTO, userService.trialAccountActivated(userDTO), microCompany);
+            return false;
         }
-        slackService.sendUserRegistrationToChannel(userDTO, userService.trialAccountActivated(userDTO));
-        return false;
+
+        // Automatic approval process
+        Company company = companyCandidate.getCompanyCandidate().get();
+        userService.updateUserWithCompanyLicense(userDTO, company, false, false);
+        // Don't send the automated approval message to slack if the company is on trial
+        // We only want a message when the user accepts the trial license agreement.
+        if(company.getLicenseStatus().equals(LicenseStatus.REGULAR)){
+            slackService.sendApprovedConfirmation(userDTO, company);
+        }
+        return true;
     }
 
     /**

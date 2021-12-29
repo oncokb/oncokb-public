@@ -54,6 +54,7 @@ import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { QuickToolButton } from 'app/pages/userPage/QuickToolButton';
 import { TrialAccountModal } from './TrialAccountModal';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
+import DocumentTitle from 'react-document-title';
 import { Link } from 'react-router-dom';
 import { RouterStore } from 'mobx-react-router';
 
@@ -191,7 +192,9 @@ export default class UserPage extends React.Component<IUserPage> {
         authorities: values.authorities,
         activated: values.accountStatus === AccountStatus.ACTIVATED,
         jobTitle: values.jobTitle,
-        company: values.company,
+        companyName: this.user.company
+          ? this.user.company.name
+          : values.company,
         city: values.city,
         country: values.country,
       };
@@ -200,6 +203,7 @@ export default class UserPage extends React.Component<IUserPage> {
         .updateUserUsingPUT({
           userDto: updatedUser,
           sendEmail: false,
+          unlinkUser: false,
         })
         .then(
           (updatedUserDTO: UserDTO) => {
@@ -357,360 +361,396 @@ export default class UserPage extends React.Component<IUserPage> {
             </Then>
             <Else>
               {this.user !== undefined && (
-                <AvForm onValidSubmit={this.updateUser}>
-                  <div>
-                    <Row className={getSectionClassName()}>
-                      <Col>
-                        <div>Quick Tools</div>
-                        <div>
-                          <QuickToolButton onClick={this.generateResetKey}>
-                            Generate Reset Key
-                          </QuickToolButton>
-                          <QuickToolButton
-                            onClick={this.onClickTrialAccountButton}
-                          >
-                            {this.trialAccountButtonText}
-                          </QuickToolButton>
-                          <QuickToolButton
-                            onClick={() =>
-                              this.props.routing.history.push(
-                                `${PAGE_ROUTE.ADMIN_SEND_EMAILS}?to=${this.user.email}`
-                              )
-                            }
-                          >
-                            Send Email
-                          </QuickToolButton>
-                          <SimpleConfirmModal
-                            show={this.showTrialAccountConfirmModal}
-                            onCancel={() =>
-                              (this.showTrialAccountConfirmModal = false)
-                            }
-                            onConfirm={this.onConfirmInitiateTrialAccountButton}
-                          />
-                          {this.user.additionalInfo?.trialAccount ? (
-                            <TrialAccountModal
-                              baseUrl={this.props.windowStore.baseUrl}
-                              trialAccount={
-                                this.user.additionalInfo?.trialAccount
+                <DocumentTitle
+                  title={`${this.user.firstName} ${this.user.lastName}`}
+                >
+                  <AvForm onValidSubmit={this.updateUser}>
+                    <div>
+                      <Row className={getSectionClassName()}>
+                        <Col>
+                          <div>Quick Tools</div>
+                          <div>
+                            <QuickToolButton onClick={this.generateResetKey}>
+                              Generate Reset Key
+                            </QuickToolButton>
+                            <QuickToolButton
+                              onClick={this.onClickTrialAccountButton}
+                            >
+                              {this.trialAccountButtonText}
+                            </QuickToolButton>
+                            <QuickToolButton
+                              onClick={() =>
+                                this.props.routing.history.push(
+                                  `${PAGE_ROUTE.ADMIN_SEND_EMAILS}?to=${this.user.email}`
+                                )
                               }
-                              show={this.showTrialAccountModal}
-                              onClose={() =>
-                                (this.showTrialAccountModal = false)
+                            >
+                              Send Email
+                            </QuickToolButton>
+                            <SimpleConfirmModal
+                              show={this.showTrialAccountConfirmModal}
+                              onCancel={() =>
+                                (this.showTrialAccountConfirmModal = false)
                               }
-                              onRegenerate={this.generateTrialActivationKey}
+                              onConfirm={
+                                this.onConfirmInitiateTrialAccountButton
+                              }
                             />
+                            {this.user.additionalInfo?.trialAccount ? (
+                              <TrialAccountModal
+                                baseUrl={this.props.windowStore.baseUrl}
+                                trialAccount={
+                                  this.user.additionalInfo?.trialAccount
+                                }
+                                show={this.showTrialAccountModal}
+                                onClose={() =>
+                                  (this.showTrialAccountModal = false)
+                                }
+                                onRegenerate={this.generateTrialActivationKey}
+                              />
+                            ) : null}
+                          </div>
+                        </Col>
+                      </Row>
+                      <Row className={getSectionClassName()}>
+                        <Col>
+                          <AvField
+                            name="email"
+                            value={this.user.email}
+                            label={
+                              <BoldAccountTitle
+                                title={ACCOUNT_TITLES.EMAIL}
+                                licenseType={this.selectedLicense}
+                              />
+                            }
+                            disabled
+                          />
+                          <AvField
+                            name="firstName"
+                            label={
+                              <BoldAccountTitle
+                                title={ACCOUNT_TITLES.FIRST_NAME}
+                                licenseType={this.selectedLicense}
+                              />
+                            }
+                            value={this.user.firstName}
+                            disabled
+                          />
+                          <AvField
+                            name="lastName"
+                            label={
+                              <BoldAccountTitle
+                                title={ACCOUNT_TITLES.LAST_NAME}
+                                licenseType={this.selectedLicense}
+                              />
+                            }
+                            value={this.user.lastName}
+                            disabled
+                          />
+                          <AvField
+                            name="createdDate"
+                            label={<b>Created Date</b>}
+                            value={this.user.createdDate}
+                            disabled
+                          />
+                          <AvField
+                            name="lastModifiedBy"
+                            label={<b>Last Modified By</b>}
+                            value={this.user.lastModifiedBy}
+                            disabled
+                          />
+                          <AvField
+                            name="lastModifiedDate"
+                            label={<b>Last Modified Date</b>}
+                            value={this.user.lastModifiedDate}
+                            disabled
+                          />
+                          <AvField
+                            name="activationKey"
+                            label={<b>Activation Key</b>}
+                            value={this.user.activationKey}
+                            disabled
+                          />
+                          <AvField
+                            name="resetKey"
+                            label={<b>Reset Key</b>}
+                            value={this.user.resetKey}
+                            disabled
+                          />
+                          <AvField
+                            name="resetDate"
+                            label={<b>Reset Date</b>}
+                            value={this.user.resetDate}
+                            disabled
+                          />
+                        </Col>
+                      </Row>
+                      <Row className={getSectionClassName(false)}>
+                        <Col>
+                          <TokenInputGroups
+                            changeTokenExpirationDate={true}
+                            tokens={this.userTokens}
+                            onDeleteToken={this.deleteToken}
+                            extendExpirationDate={this.extendExpirationDate}
+                          />
+                        </Col>
+                      </Row>
+                      <Row className={getSectionClassName(false)}>
+                        <Col>
+                          <div className={'mb-2 mt-1 font-weight-bold'}>
+                            <span>License Type</span>
+                            {!this.user.company ? null : (
+                              <InfoIcon
+                                className={'ml-2'}
+                                overlay={`User is associated with a company. The license type should match with the company's license.`}
+                              />
+                            )}
+                          </div>
+                          <ButtonSelections
+                            isLargeScreen={this.props.windowStore.isLargeScreen}
+                            selectedButton={this.selectedLicense as LicenseType}
+                            onSelectLicense={selectedLicense =>
+                              (this.selectedLicense = selectedLicense)
+                            }
+                            disabled={!!this.user.company}
+                          />
+                          <AvField
+                            name="jobTitle"
+                            label={
+                              <BoldAccountTitle
+                                title={ACCOUNT_TITLES.POSITION}
+                                licenseType={this.selectedLicense}
+                              />
+                            }
+                            validate={{
+                              minLength: {
+                                value: 1,
+                                errorMessage:
+                                  'Required to be at least 1 character',
+                              },
+                              pattern: {
+                                value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
+                                errorMessage:
+                                  'Sorry, we only support Latin letters for now.',
+                              },
+                              maxLength: {
+                                value: 50,
+                                errorMessage:
+                                  'Cannot be longer than 50 characters',
+                              },
+                            }}
+                            value={this.user.jobTitle}
+                          />
+                          <AvField
+                            name="company"
+                            label={
+                              <>
+                                <BoldAccountTitle
+                                  title={ACCOUNT_TITLES.COMPANY}
+                                  licenseType={this.selectedLicense}
+                                />
+                                {this.user.company ? (
+                                  <Link
+                                    to={`/companies/${this.user.company.id}`}
+                                  >
+                                    <i className="ml-2 fa fa-pencil-square-o" />
+                                  </Link>
+                                ) : null}
+                              </>
+                            }
+                            validate={{
+                              minLength: {
+                                value: 1,
+                                errorMessage:
+                                  'Required to be at least 1 character',
+                              },
+                              pattern: {
+                                value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
+                                errorMessage:
+                                  'Sorry, we only support Latin letters for now.',
+                              },
+                              maxLength: {
+                                value: 50,
+                                errorMessage:
+                                  'Cannot be longer than 50 characters',
+                              },
+                            }}
+                            value={
+                              this.user.company
+                                ? this.user.company.name
+                                : this.user.companyName
+                            }
+                            disabled={this.user.company != null}
+                          />
+                          <AvField
+                            name="city"
+                            label={
+                              <BoldAccountTitle
+                                title={ACCOUNT_TITLES.CITY}
+                                licenseType={this.selectedLicense}
+                              />
+                            }
+                            value={this.user.city}
+                            validate={{
+                              minLength: {
+                                value: 1,
+                                errorMessage:
+                                  'Required to be at least 1 character',
+                              },
+                              pattern: {
+                                value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
+                                errorMessage:
+                                  'Sorry, we only support Latin letters for now.',
+                              },
+                              maxLength: {
+                                value: 50,
+                                errorMessage:
+                                  'Cannot be longer than 50 characters',
+                              },
+                            }}
+                          />
+                          <AvField
+                            name="country"
+                            label={
+                              <BoldAccountTitle
+                                title={ACCOUNT_TITLES.COUNTRY}
+                                licenseType={this.selectedLicense}
+                              />
+                            }
+                            value={this.user.country}
+                            validate={{
+                              pattern: {
+                                value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
+                                errorMessage:
+                                  'Sorry, we only support Latin letters for now.',
+                              },
+                              minLength: {
+                                value: 1,
+                                errorMessage:
+                                  'Required to be at least 1 character',
+                              },
+                              maxLength: {
+                                value: 50,
+                                errorMessage:
+                                  'Cannot be longer than 50 characters',
+                              },
+                            }}
+                          />
+                          <div className={'mb-2 font-weight-bold'}>
+                            Account Type
+                          </div>
+                          <AvRadioGroup
+                            inline
+                            name="accountType"
+                            label=""
+                            required
+                            value={this.defaultSelectedAccountType}
+                            onChange={(event: any, values: any) => {
+                              if (values) {
+                                this.selectedAccountType = values;
+                              } else {
+                                this.selectedAccountType = ACCOUNT_TYPE_DEFAULT;
+                              }
+                            }}
+                          >
+                            <AvRadio
+                              label={AccountType.REGULAR}
+                              value={AccountType.REGULAR}
+                            />
+                            <AvRadio
+                              label={AccountType.TRIAL}
+                              value={AccountType.TRIAL}
+                            />
+                          </AvRadioGroup>
+                          {this.selectedAccountType === AccountType.TRIAL ? (
+                            <div className={'mt-2'}>
+                              <AvField
+                                name="tokenValidDays"
+                                label={<b>Account Expires in Days</b>}
+                                required
+                                value={
+                                  this.shortestToken
+                                    ? daysDiff(this.shortestToken.expiration)
+                                    : THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT
+                                }
+                                validate={{ number: true }}
+                              />
+                            </div>
                           ) : null}
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row className={getSectionClassName()}>
-                      <Col>
-                        <AvField
-                          name="email"
-                          value={this.user.email}
-                          label={
-                            <BoldAccountTitle
-                              title={ACCOUNT_TITLES.EMAIL}
-                              licenseType={this.selectedLicense}
-                            />
-                          }
-                          disabled
-                        />
-                        <AvField
-                          name="firstName"
-                          label={
-                            <BoldAccountTitle
-                              title={ACCOUNT_TITLES.FIRST_NAME}
-                              licenseType={this.selectedLicense}
-                            />
-                          }
-                          value={this.user.firstName}
-                          disabled
-                        />
-                        <AvField
-                          name="lastName"
-                          label={
-                            <BoldAccountTitle
-                              title={ACCOUNT_TITLES.LAST_NAME}
-                              licenseType={this.selectedLicense}
-                            />
-                          }
-                          value={this.user.lastName}
-                          disabled
-                        />
-                        <AvField
-                          name="createdDate"
-                          label={<b>Created Date</b>}
-                          value={this.user.createdDate}
-                          disabled
-                        />
-                        <AvField
-                          name="lastModifiedBy"
-                          label={<b>Last Modified By</b>}
-                          value={this.user.lastModifiedBy}
-                          disabled
-                        />
-                        <AvField
-                          name="lastModifiedDate"
-                          label={<b>Last Modified Date</b>}
-                          value={this.user.lastModifiedDate}
-                          disabled
-                        />
-                        <AvField
-                          name="activationKey"
-                          label={<b>Activation Key</b>}
-                          value={this.user.activationKey}
-                          disabled
-                        />
-                        <AvField
-                          name="resetKey"
-                          label={<b>Reset Key</b>}
-                          value={this.user.resetKey}
-                          disabled
-                        />
-                        <AvField
-                          name="resetDate"
-                          label={<b>Reset Date</b>}
-                          value={this.user.resetDate}
-                          disabled
-                        />
-                      </Col>
-                    </Row>
-                    <Row className={getSectionClassName(false)}>
-                      <Col>
-                        <TokenInputGroups
-                          changeTokenExpirationDate={true}
-                          tokens={this.userTokens}
-                          onDeleteToken={this.deleteToken}
-                          extendExpirationDate={this.extendExpirationDate}
-                        />
-                      </Col>
-                    </Row>
-                    <Row className={getSectionClassName(false)}>
-                      <Col>
-                        <ButtonSelections
-                          isLargeScreen={this.props.windowStore.isLargeScreen}
-                          selectedButton={this.selectedLicense as LicenseType}
-                          onSelectLicense={selectedLicense =>
-                            (this.selectedLicense = selectedLicense)
-                          }
-                        />
-                        <AvField
-                          name="jobTitle"
-                          label={
-                            <BoldAccountTitle
-                              title={ACCOUNT_TITLES.POSITION}
-                              licenseType={this.selectedLicense}
-                            />
-                          }
-                          validate={{
-                            minLength: {
-                              value: 1,
-                              errorMessage:
-                                'Required to be at least 1 character',
-                            },
-                            pattern: {
-                              value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                              errorMessage:
-                                'Sorry, we only support Latin letters for now.',
-                            },
-                            maxLength: {
-                              value: 50,
-                              errorMessage:
-                                'Cannot be longer than 50 characters',
-                            },
-                          }}
-                          value={this.user.jobTitle}
-                        />
-                        <AvField
-                          name="company"
-                          label={
-                            <BoldAccountTitle
-                              title={ACCOUNT_TITLES.COMPANY}
-                              licenseType={this.selectedLicense}
-                            />
-                          }
-                          validate={{
-                            minLength: {
-                              value: 1,
-                              errorMessage:
-                                'Required to be at least 1 character',
-                            },
-                            pattern: {
-                              value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                              errorMessage:
-                                'Sorry, we only support Latin letters for now.',
-                            },
-                            maxLength: {
-                              value: 50,
-                              errorMessage:
-                                'Cannot be longer than 50 characters',
-                            },
-                          }}
-                          value={this.user.company}
-                        />
-                        <AvField
-                          name="city"
-                          label={
-                            <BoldAccountTitle
-                              title={ACCOUNT_TITLES.CITY}
-                              licenseType={this.selectedLicense}
-                            />
-                          }
-                          value={this.user.city}
-                          validate={{
-                            minLength: {
-                              value: 1,
-                              errorMessage:
-                                'Required to be at least 1 character',
-                            },
-                            pattern: {
-                              value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                              errorMessage:
-                                'Sorry, we only support Latin letters for now.',
-                            },
-                            maxLength: {
-                              value: 50,
-                              errorMessage:
-                                'Cannot be longer than 50 characters',
-                            },
-                          }}
-                        />
-                        <AvField
-                          name="country"
-                          label={
-                            <BoldAccountTitle
-                              title={ACCOUNT_TITLES.COUNTRY}
-                              licenseType={this.selectedLicense}
-                            />
-                          }
-                          value={this.user.country}
-                          validate={{
-                            pattern: {
-                              value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                              errorMessage:
-                                'Sorry, we only support Latin letters for now.',
-                            },
-                            minLength: {
-                              value: 1,
-                              errorMessage:
-                                'Required to be at least 1 character',
-                            },
-                            maxLength: {
-                              value: 50,
-                              errorMessage:
-                                'Cannot be longer than 50 characters',
-                            },
-                          }}
-                        />
-                        <div className={'mb-2 font-bold'}>Account Type</div>
-                        <AvRadioGroup
-                          inline
-                          name="accountType"
-                          label=""
-                          required
-                          value={this.defaultSelectedAccountType}
-                          onChange={(event: any, values: any) => {
-                            if (values) {
-                              this.selectedAccountType = values;
-                            } else {
-                              this.selectedAccountType = ACCOUNT_TYPE_DEFAULT;
-                            }
-                          }}
-                        >
-                          <AvRadio
-                            label={AccountType.REGULAR}
-                            value={AccountType.REGULAR}
-                          />
-                          <AvRadio
-                            label={AccountType.TRIAL}
-                            value={AccountType.TRIAL}
-                          />
-                        </AvRadioGroup>
-                        {this.selectedAccountType === AccountType.TRIAL ? (
-                          <div className={'mt-2'}>
-                            <AvField
-                              name="tokenValidDays"
-                              label={<b>Account Expires in Days</b>}
-                              required
-                              value={
-                                this.shortestToken
-                                  ? daysDiff(this.shortestToken.expiration)
-                                  : THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT
+                          <div className={'mb-2 mt-1 font-weight-bold'}>
+                            <span>Account Status</span>
+                            <InfoIcon
+                              className={'ml-2'}
+                              overlay={
+                                'Update here will not notify user. If you want to notify user, please update user status in the users table'
                               }
-                              validate={{ number: true }}
                             />
                           </div>
-                        ) : null}
-                        <div className={'mb-2 mt-1 font-bold'}>
-                          <span>Account Status</span>
-                          <InfoIcon
-                            className={'ml-2'}
-                            overlay={
-                              'Update here will not notify user. If you want to notify user, please update user status in the users table'
+                          <AvRadioGroup
+                            inline
+                            name="accountStatus"
+                            label=""
+                            required
+                            value={
+                              this.user.activated
+                                ? AccountStatus.ACTIVATED
+                                : AccountStatus.INACTIVATED
                             }
-                          />
-                        </div>
-                        <AvRadioGroup
-                          inline
-                          name="accountStatus"
-                          label=""
-                          required
-                          value={
-                            this.user.activated
-                              ? AccountStatus.ACTIVATED
-                              : AccountStatus.INACTIVATED
-                          }
-                        >
-                          <AvRadio
-                            label={AccountStatus.ACTIVATED}
-                            value={AccountStatus.ACTIVATED}
-                          />
-                          <AvRadio
-                            label={AccountStatus.INACTIVATED}
-                            value={AccountStatus.INACTIVATED}
-                          />
-                        </AvRadioGroup>
-                        <div className={'my-2 font-bold'}>User Authorities</div>
-                        <AvCheckboxGroup
-                          inline
-                          name="authorities"
-                          label=""
-                          value={toJS(this.user.authorities)}
-                          required
-                        >
-                          {USER_AUTHORITIES.map(authority => (
-                            <AvCheckbox
-                              key={authority}
-                              label={authority}
-                              value={authority}
-                              disabled={NOT_CHANGEABLE_AUTHORITIES.includes(
-                                authority
-                              )}
+                          >
+                            <AvRadio
+                              label={AccountStatus.ACTIVATED}
+                              value={AccountStatus.ACTIVATED}
                             />
-                          ))}
-                        </AvCheckboxGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className={getSectionClassName()}>
-                        <Button
-                          id="update-user"
-                          variant="primary"
-                          type="submit"
-                        >
-                          Update
-                        </Button>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className={getSectionClassName()}>
-                        <div className={'my-2 font-bold'}>Email history</div>
-                        <EmailTable data={this.usersUserMails.result} />
-                      </Col>
-                    </Row>
-                  </div>
-                </AvForm>
+                            <AvRadio
+                              label={AccountStatus.INACTIVATED}
+                              value={AccountStatus.INACTIVATED}
+                            />
+                          </AvRadioGroup>
+                          <div className={'my-2 font-weight-bold'}>
+                            User Authorities
+                          </div>
+                          <AvCheckboxGroup
+                            inline
+                            name="authorities"
+                            label=""
+                            value={toJS(this.user.authorities)}
+                            required
+                          >
+                            {USER_AUTHORITIES.map(authority => (
+                              <AvCheckbox
+                                key={authority}
+                                label={authority}
+                                value={authority}
+                                disabled={NOT_CHANGEABLE_AUTHORITIES.includes(
+                                  authority
+                                )}
+                              />
+                            ))}
+                          </AvCheckboxGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col className={getSectionClassName()}>
+                          <Button
+                            id="update-user"
+                            variant="primary"
+                            type="submit"
+                          >
+                            Update
+                          </Button>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col className={getSectionClassName()}>
+                          <div className={'my-2 font-weight-bold'}>
+                            Email history
+                          </div>
+                          <EmailTable data={this.usersUserMails.result} />
+                        </Col>
+                      </Row>
+                    </div>
+                  </AvForm>
+                </DocumentTitle>
               )}
             </Else>
           </If>
