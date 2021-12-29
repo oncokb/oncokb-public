@@ -54,7 +54,7 @@ public class CompanyResource {
     /**
      * {@code POST  /companies} : Create a new company.
      *
-     * @param companyVM the companyVM to create.
+     * @param companyDTO the companyDTO to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new companyDTO, or with status {@code 400 (Bad Request)} if the company has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
@@ -68,14 +68,13 @@ public class CompanyResource {
         }
         CompanyDTO result = companyService.createCompany(companyDTO);
         return ResponseEntity.created(new URI("/api/companies/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PUT  /companies} : Updates an existing company.
      *
-     * @param companyVm the companyVm to update.
+     * @param companyVM the companyVm to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated companyDTO,
      * or with status {@code 400 (Bad Request)} if the companyDTO is not valid,
      * or with status {@code 500 (Internal Server Error)} if the companyDTO couldn't be updated.
@@ -97,15 +96,14 @@ public class CompanyResource {
             if(!companyService.verifyLicenseStatusChange(existingCompany.get().getLicenseStatus(), companyVM.getLicenseStatus())){
                 String errorMessage = String.format(
                     "Updating license status from %s to %s is not invalid.",
-                    existingCompany.get().getLicenseStatus(), 
+                    existingCompany.get().getLicenseStatus(),
                     companyVM.getLicenseStatus());
                 throw new BadRequestAlertException(errorMessage, ENTITY_NAME, "licensestatuschangeinvalid");
             }
         }
-        
+
         CompanyDTO result = companyService.updateCompany(companyVM);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, companyVM.getId().toString()))
             .body(result);
     }
 
@@ -160,19 +158,6 @@ public class CompanyResource {
                 isValid = false;
             }
         }
-        return new ResponseEntity<Boolean>(isValid, HttpStatus.OK);
-    }
-
-    /**
-     * {@code DELETE  /companies/:id} : delete the "id" company.
-     *
-     * @param id the id of the companyDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DeleteMapping("/companies/{id}")
-    public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
-        log.debug("REST request to delete Company : {}", id);
-        companyService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
+        return new ResponseEntity<>(isValid, HttpStatus.OK);
     }
 }
