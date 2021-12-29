@@ -954,41 +954,6 @@
           }
         },
         "deprecated": false
-      },
-      "delete": {
-        "tags": [
-          "company-resource"
-        ],
-        "summary": "deleteCompany",
-        "operationId": "deleteCompanyUsingDELETE",
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "id",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        },
-        "deprecated": false
       }
     },
     "/api/companies/{id}/users": {
@@ -2725,6 +2690,39 @@
         "deprecated": false
       }
     },
+    "/api/users/emails": {
+      "get": {
+        "tags": [
+          "user-resource"
+        ],
+        "summary": "getNonCompanyUserEmails",
+        "operationId": "getNonCompanyUserEmailsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/users/registered": {
       "get": {
         "tags": [
@@ -3150,10 +3148,10 @@
             "UNKNOWN"
           ]
         },
-        "companyUserDTOs": {
+        "companyUserEmails": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/UserDTO"
+            "type": "string"
           }
         },
         "description": {

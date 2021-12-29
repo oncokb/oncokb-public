@@ -15,6 +15,7 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   pageSize?: number;
   minRows?: number;
   columns: SearchColumn<T>[];
+  loading?: boolean;
 }
 
 @observer

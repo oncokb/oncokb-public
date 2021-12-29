@@ -6,6 +6,7 @@ import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
+import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyDomainMapper;
@@ -41,7 +42,11 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyMapper companyMapper;
 
+    private final UserMapper userMapper;
+
     private final UserService userService;
+
+    private final UserRepository userRepository;
     
     private final CacheManager cacheManager;
 
@@ -53,13 +58,16 @@ public class CompanyServiceImpl implements CompanyService {
         CompanyDomainService companyDomainService,
         CompanyDomainMapper companyDomainMapper,
         UserService userService,
+        UserRepository userRepository,
         UserMapper userMapper,
         CacheManager cacheManager,
         CacheNameResolver cacheNameResolver
     ) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
+        this.userMapper = userMapper;
         this.userService = userService;
+        this.userRepository = userRepository;
         this.cacheManager = cacheManager;
         this.cacheNameResolver = cacheNameResolver;
     }
@@ -88,7 +96,7 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.save(companyMapper.toEntity(companyVm));
 
         // Update the licenses for current users of the company
-        List<UserDTO> companyUsers = userService.getUsersOfCompany(company.getId());
+        List<UserDTO> companyUsers = userService.getCompanyUsers(company.getId());
         if(isLicenseUpdateRequired){
             companyUsers.forEach(userDTO -> userService.updateUserWithCompanyLicense(userDTO, company, false, false));
         }else{
@@ -96,8 +104,13 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         // Update the licenses for new users being added to this company
-        if(companyVm.getCompanyUserDTOs() != null){
-            companyVm.getCompanyUserDTOs()
+        if(companyVm.getCompanyUserEmails() != null){
+            companyVm.getCompanyUserEmails()
+                .stream()
+                .map(email -> userRepository.findOneByEmailIgnoreCase(email))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(user -> userMapper.userToUserDTO(user))
                 .forEach(userDTO -> userService.updateUserWithCompanyLicense(userDTO, company, true, false));
         }
 
@@ -138,7 +151,7 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.findAll().stream()
             .map(companyMapper::toDto)
             .map(companyDTO -> {
-                companyDTO.setNumberOfUsers(userService.getUsersOfCompany(companyDTO.getId()).size());
+                companyDTO.setNumberOfUsers(userService.getCompanyUsers(companyDTO.getId()).size());
                 return companyDTO;
             })
             .collect(Collectors.toCollection(LinkedList::new));

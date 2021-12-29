@@ -6,7 +6,6 @@ import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
 import org.mskcc.cbio.oncokb.service.CompanyService;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
-import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
@@ -416,7 +415,7 @@ public class CompanyResourceIT {
         companyVM.setBusinessContact(UPDATED_BUSINESS_CONTACT);
         companyVM.setLegalContact(UPDATED_LEGAL_CONTACT);
         companyVM.setCompanyDomains(UPDATED_COMPANY_DOMAINS);
-        companyVM.setCompanyUserDTOs(new ArrayList<UserDTO>());
+        companyVM.setCompanyUserEmails(new ArrayList<String>());
 
         restCompanyMockMvc.perform(put("/api/companies")
             .contentType(MediaType.APPLICATION_JSON)
@@ -462,7 +461,7 @@ public class CompanyResourceIT {
         companyVM.setBusinessContact(UPDATED_BUSINESS_CONTACT);
         companyVM.setLegalContact(UPDATED_LEGAL_CONTACT);
         companyVM.setCompanyDomains(UPDATED_COMPANY_DOMAINS);
-        companyVM.setCompanyUserDTOs(new ArrayList<UserDTO>());
+        companyVM.setCompanyUserEmails(new ArrayList<String>());
 
         // Company name should be unqiue, so this API call should fail
         restCompanyMockMvc.perform(put("/api/companies")

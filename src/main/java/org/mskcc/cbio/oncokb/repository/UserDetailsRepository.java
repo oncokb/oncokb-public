@@ -23,4 +23,6 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> 
     Optional<UserDetails> findOneByTrialActivationKey(String key);
 
     List<UserDetails> findByCompanyId(Long companyId);
+
+    List<UserDetails> findByCompanyIdIsNull();
 }
