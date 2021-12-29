@@ -38,6 +38,8 @@ export type CompanyDTO = {
 
         'name': string
 
+        'numberOfUsers': number
+
 };
 export type CompanyDomainDTO = {
     'id': number
@@ -67,6 +69,8 @@ export type CompanyVM = {
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
 
         'name': string
+
+        'numberOfUsers': number
 
 };
 export type Contact = {

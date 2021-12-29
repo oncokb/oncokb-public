@@ -3099,6 +3099,10 @@
         },
         "name": {
           "type": "string"
+        },
+        "numberOfUsers": {
+          "type": "integer",
+          "format": "int32"
         }
       },
       "title": "CompanyDTO"
@@ -3190,6 +3194,10 @@
         },
         "name": {
           "type": "string"
+        },
+        "numberOfUsers": {
+          "type": "integer",
+          "format": "int32"
         }
       },
       "title": "CompanyVM"
