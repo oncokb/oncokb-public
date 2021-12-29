@@ -90,7 +90,7 @@ public class SlackController {
                             // If admin approves user for a micro company, then we need to associate the user with company
                             CompanyCandidate companyCandidate = userService.findCompanyCandidate(userDTO);
                             if(companyCandidate.getCompanyCandidate().isPresent() && !companyCandidate.getCanAssociate()){
-                                Optional<UserDTO> updatedUserDTO = userService.updateUserWithCompanyLicense(userDTO, companyCandidate.getCompanyCandidate().get(), false);
+                                Optional<UserDTO> updatedUserDTO = userService.updateUserWithCompanyLicense(userDTO, companyCandidate.getCompanyCandidate().get(), false, false);
                                 if(updatedUserDTO.isPresent()){
                                     userDTO = updatedUserDTO.get();
                                 }

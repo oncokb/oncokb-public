@@ -192,7 +192,9 @@ export default class UserPage extends React.Component<IUserPage> {
         authorities: values.authorities,
         activated: values.accountStatus === AccountStatus.ACTIVATED,
         jobTitle: values.jobTitle,
-        companyName: values.companyName,
+        companyName: this.user.company
+          ? this.user.company.name
+          : values.company,
         city: values.city,
         country: values.country,
       };
@@ -542,10 +544,19 @@ export default class UserPage extends React.Component<IUserPage> {
                           <AvField
                             name="company"
                             label={
-                              <BoldAccountTitle
-                                title={ACCOUNT_TITLES.COMPANY}
-                                licenseType={this.selectedLicense}
-                              />
+                              <>
+                                <BoldAccountTitle
+                                  title={ACCOUNT_TITLES.COMPANY}
+                                  licenseType={this.selectedLicense}
+                                />
+                                {this.user.company ? (
+                                  <Link
+                                    to={`/companies/${this.user.company.id}`}
+                                  >
+                                    <i className="ml-2 fa fa-pencil-square-o" />
+                                  </Link>
+                                ) : null}
+                              </>
                             }
                             validate={{
                               minLength: {
@@ -564,7 +575,12 @@ export default class UserPage extends React.Component<IUserPage> {
                                   'Cannot be longer than 50 characters',
                               },
                             }}
-                            value={this.user.companyName}
+                            value={
+                              this.user.company
+                                ? this.user.company.name
+                                : this.user.companyName
+                            }
+                            disabled={this.user.company != null}
                           />
                           <AvField
                             name="city"

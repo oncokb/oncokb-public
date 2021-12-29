@@ -79,7 +79,7 @@ public class CompanyDomainServiceImpl implements CompanyDomainService {
                 .getCompanies()
                 .stream()
                 .filter(company -> {
-                    boolean isRegular = company.getLicenseModel().equals(LicenseModel.REGULAR);
+                    boolean isRegular = company.getLicenseModel().equals(LicenseModel.FULL);
                     boolean dontSkipCompany = true;
                     if(companyId != null){
                         dontSkipCompany = !company.getId().equals(companyId);

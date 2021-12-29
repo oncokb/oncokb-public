@@ -39,7 +39,10 @@ public class CompanyDTO implements Serializable {
 
     private String legalContact;
 
+    @NotEmpty
     private Set<String> companyDomains = new HashSet<>();
+
+    private Integer numberOfUsers;
     
     public Long getId() {
         return id;
@@ -121,6 +124,14 @@ public class CompanyDTO implements Serializable {
         this.companyDomains = companyDomains;
     }
 
+    public Integer getNumberOfUsers() {
+        return this.numberOfUsers;
+    }
+
+    public void setNumberOfUsers(Integer numberOfUsers) {
+        this.numberOfUsers = numberOfUsers;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -152,6 +163,7 @@ public class CompanyDTO implements Serializable {
             ", businessContact='" + getBusinessContact() + "'" +
             ", legalContact='" + getLegalContact() + "'" +
             ", companyDomains='" + getCompanyDomains() + "'" +
+            ", numberOfUsers='" + getNumberOfUsers() + "'" +
             "}";
     }
 }

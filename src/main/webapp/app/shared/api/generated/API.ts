@@ -30,13 +30,15 @@ export type CompanyDTO = {
 
         'legalContact': string
 
-        'licenseModel': "REGULAR" | "MICRO"
+        'licenseModel': "FULL" | "LIMITED"
 
         'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
 
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
 
         'name': string
+
+        'numberOfUsers': number
 
 };
 export type CompanyDomainDTO = {
@@ -60,13 +62,15 @@ export type CompanyVM = {
 
         'legalContact': string
 
-        'licenseModel': "REGULAR" | "MICRO"
+        'licenseModel': "FULL" | "LIMITED"
 
         'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
 
         'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
 
         'name': string
+
+        'numberOfUsers': number
 
 };
 export type Contact = {
@@ -354,6 +358,12 @@ export type UserUsage = {
         'userFirstName': string
 
         'userLastName': string
+
+};
+export type VerifyCompanyNameVM = {
+    'companyId': number
+
+        'name': string
 
 };
 
@@ -1861,6 +1871,82 @@ export default class API {
         $domain ? : string
     }): Promise < CompanyDTO > {
         return this.getCompanyByNameUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    verifyCompanyNameUsingPOSTURL(parameters: {
+        'verificationInfo': VerifyCompanyNameVM,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/verify-name';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * verifyCompanyName
+     * @method
+     * @name API#verifyCompanyNameUsingPOST
+     * @param {} verificationInfo - verificationInfo
+     */
+    verifyCompanyNameUsingPOSTWithHttpInfo(parameters: {
+        'verificationInfo': VerifyCompanyNameVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/verify-name';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['verificationInfo'] !== undefined) {
+                body = parameters['verificationInfo'];
+            }
+
+            if (parameters['verificationInfo'] === undefined) {
+                reject(new Error('Missing required  parameter: verificationInfo'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * verifyCompanyName
+     * @method
+     * @name API#verifyCompanyNameUsingPOST
+     * @param {} verificationInfo - verificationInfo
+     */
+    verifyCompanyNameUsingPOST(parameters: {
+        'verificationInfo': VerifyCompanyNameVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < boolean > {
+        return this.verifyCompanyNameUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };

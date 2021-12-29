@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
 
@@ -24,6 +25,8 @@ public interface CompanyService {
      * @return the persisted entity
      */
     CompanyDTO updateCompany(CompanyVM companyVm);
+
+    boolean verifyLicenseStatusChange(LicenseStatus oldStatus, LicenseStatus newStatus);
 
     /**
      * Get all the companies.

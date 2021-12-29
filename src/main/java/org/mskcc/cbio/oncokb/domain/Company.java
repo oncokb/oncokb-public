@@ -30,7 +30,8 @@ public class Company implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "name", unique = true, nullable = false)
+    @Size(min = 1, max = 100)
+    @Column(name = "name", length = 100, unique = true, nullable = false)
     private String name;
 
     @Lob
@@ -57,10 +58,12 @@ public class Company implements Serializable {
     @Column(name = "license_status", nullable = false)
     private LicenseStatus licenseStatus;
 
-    @Column(name = "business_contact")
+    @Size(max = 255)
+    @Column(name = "business_contact", length = 255)
     private String businessContact;
 
-    @Column(name = "legal_contact")
+    @Size(max = 255)
+    @Column(name = "legal_contact", length = 255)
     private String legalContact;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

@@ -170,7 +170,7 @@ public class AccountResource {
 
         // Automatic approval process
         Company company = companyCandidate.getCompanyCandidate().get();
-        userService.updateUserWithCompanyLicense(userDTO, company, false);
+        userService.updateUserWithCompanyLicense(userDTO, company, false, false);
         // Don't send the automated approval message to slack if the company is on trial
         // We only want a message when the user accepts the trial license agreement.
         if(company.getLicenseStatus().equals(LicenseStatus.REGULAR)){
