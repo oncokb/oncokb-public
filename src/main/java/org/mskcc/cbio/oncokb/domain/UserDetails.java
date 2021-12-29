@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
@@ -27,8 +28,8 @@ public class UserDetails implements Serializable {
     @Column(name = "job_title")
     private String jobTitle;
 
-    @Column(name = "company")
-    private String company;
+    @Column(name = "company_name")
+    private String companyName;
 
     @Column(name = "city")
     private String city;
@@ -46,6 +47,10 @@ public class UserDetails implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private User user;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "userDetails", allowSetters = true)
+    private Company company;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -82,17 +87,17 @@ public class UserDetails implements Serializable {
         this.jobTitle = jobTitle;
     }
 
-    public String getCompany() {
-        return company;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public UserDetails company(String company) {
-        this.company = company;
+    public UserDetails companyName(String companyName) {
+        this.companyName = companyName;
         return this;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getCity() {
@@ -159,6 +164,19 @@ public class UserDetails implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public UserDetails company(Company company) {
+        this.company = company;
+        return this;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -184,7 +202,7 @@ public class UserDetails implements Serializable {
             "id=" + getId() +
             ", licenseType='" + getLicenseType() + "'" +
             ", jobTitle='" + getJobTitle() + "'" +
-            ", company='" + getCompany() + "'" +
+            ", companyName='" + getCompanyName() + "'" +
             ", city='" + getCity() + "'" +
             ", country='" + getCountry() + "'" +
             ", address='" + getAddress() + "'" +

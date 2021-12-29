@@ -1,10 +1,6 @@
 import React from 'react';
 import { RouterStore } from 'mobx-react-router';
-import {
-  PAGE_ROUTE,
-  REDIRECT_TIMEOUT_MILLISECONDS,
-  XREGEXP_VALID_LATIN_TEXT,
-} from 'app/config/constants';
+import { PAGE_ROUTE, XREGEXP_VALID_LATIN_TEXT } from 'app/config/constants';
 import { inject, observer } from 'mobx-react';
 import { Button, ResponsiveEmbed, Row, Col, Tabs, Tab } from 'react-bootstrap';
 import SmallPageContainer from '../SmallPageContainer';
@@ -71,7 +67,7 @@ export default class ActivateTrialFinish extends React.Component<{
             } else {
               this.infoMessage = <Redirect to={PAGE_ROUTE.LOGIN} />;
             }
-          }, REDIRECT_TIMEOUT_MILLISECONDS);
+          }, 3000);
         },
         (error: Error) => {
           notifyError(error);

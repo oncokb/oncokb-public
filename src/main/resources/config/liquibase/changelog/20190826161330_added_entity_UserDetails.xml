@@ -22,7 +22,7 @@
             <column name="job_title" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="company" type="varchar(255)">
+            <column name="company_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="city" type="varchar(255)">
@@ -39,6 +39,9 @@
             </column>
             <column name="user_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_details_user_id" />
+            </column>
+            <column name="company_id" type="bigint">
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -65,7 +68,7 @@
             <column name="id" type="numeric"/>
             <column name="license_type" type="string"/>
             <column name="job_title" type="string"/>
-            <column name="company" type="string"/>
+            <column name="company_name" type="string"/>
             <column name="city" type="string"/>
             <column name="country" type="string"/>
             <column name="address" type="string"/>

@@ -24,10 +24,7 @@ public class ApplicationProperties {
     private ProjectProfile profile;
     private Boolean sitemapEnabled;
     private RedisProperties redis;
-    private String accountApprovalWhitelist;
     private String academicEmailClarifyDomain;
-    private String licensedDomains;
-    private String trialedDomains;
     private String googleWebmasterVerification;
     private EmailAddresses emailAddresses;
     private String tokenUsageCheck;
@@ -58,36 +55,12 @@ public class ApplicationProperties {
 
     public void setSlack( SlackProperties slack ) { this.slack = slack; }
 
-    public String getAccountApprovalWhitelist() {
-        return accountApprovalWhitelist;
-    }
-
-    public void setAccountApprovalWhitelist(String accountApprovalWhitelist) {
-        this.accountApprovalWhitelist = accountApprovalWhitelist;
-    }
-
     public String getAcademicEmailClarifyDomain() {
         return academicEmailClarifyDomain;
     }
 
     public void setAcademicEmailClarifyDomain(String academicEmailClarifyDomain) {
         this.academicEmailClarifyDomain = academicEmailClarifyDomain;
-    }
-
-    public String getLicensedDomains() {
-        return licensedDomains;
-    }
-
-    public void setLicensedDomains(String licensedDomains) {
-        this.licensedDomains = licensedDomains;
-    }
-
-    public String getTrialedDomains() {
-        return trialedDomains;
-    }
-
-    public void setTrialedDomains(String trialedDomains) {
-        this.trialedDomains = trialedDomains;
     }
 
     public ProjectProfile getProfile() {
@@ -164,13 +137,6 @@ public class ApplicationProperties {
 
     public List<String> getAcademicEmailClarifyDomains() {
         return getList(this.getAcademicEmailClarifyDomain());
-    }
-
-    public List<String> getLicensedDomainsList() {
-        return getList(this.getLicensedDomains());
-    }
-    public List<String> getTrialedDomainsList() {
-        return getList(this.getTrialedDomains());
     }
 
     private List<String> getList(String listStr) {

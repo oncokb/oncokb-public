@@ -26,6 +26,9 @@ const AccountMenuItemsAuthenticated: React.FunctionComponent<{
         <MenuItem icon="user-plus" to={PAGE_ROUTE.ADMIN_CREATE_ACCOUNT}>
           {PAGE_TITLE.ADMIN_CREATE_ACCOUNT}
         </MenuItem>
+        <MenuItem icon="building" to={PAGE_ROUTE.ADMIN_COMPANY_DETAILS}>
+          {PAGE_TITLE.ADMIN_COMPANY_DETAILS}
+        </MenuItem>
         <MenuItem icon="bar-chart" to={PAGE_ROUTE.ADMIN_USAGE_ANALYSIS}>
           {PAGE_TITLE.ADMIN_USAGE_ANALYSIS}
         </MenuItem>

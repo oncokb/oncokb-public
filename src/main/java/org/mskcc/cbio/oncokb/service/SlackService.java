@@ -21,6 +21,7 @@ import com.slack.api.webhook.Payload;
 import com.slack.api.webhook.WebhookResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.UserIdMessagePair;
 import org.mskcc.cbio.oncokb.domain.enumeration.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
@@ -35,12 +36,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
@@ -49,8 +47,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mskcc.cbio.oncokb.config.Constants.*;
-import static org.mskcc.cbio.oncokb.util.MainUtil.isMSKUser;
-import static org.mskcc.cbio.oncokb.util.StringUtil.getEmailDomain;
 import static org.mskcc.cbio.oncokb.util.TimeUtil.toNYZoneTime;
 import static org.mskcc.cbio.oncokb.web.rest.slack.ActionId.*;
 import static org.mskcc.cbio.oncokb.web.rest.slack.BlockId.*;
@@ -83,14 +79,14 @@ public class SlackService {
     }
 
     @Async
-    public void sendUserRegistrationToChannel(UserDTO user, boolean trialAccountActivated) {
+    public void sendUserRegistrationToChannel(UserDTO user, boolean trialAccountActivated, Company company) {
         withAcademicClarificationNote(user, null,  true);
 
         log.debug("Sending notification to admin group that a user has registered a new account");
         if (StringUtils.isEmpty(this.applicationProperties.getSlack().getUserRegistrationWebhook())) {
             log.debug("\tSkipped, the webhook is not configured");
         } else {
-            List<LayoutBlock> layoutBlocks = this.buildBlocks(user, trialAccountActivated, null);
+            List<LayoutBlock> layoutBlocks = this.buildBlocks(user, trialAccountActivated, null, company);
             this.sendBlocks(this.applicationProperties.getSlack().getUserRegistrationWebhook(), layoutBlocks);
         }
     }
@@ -100,14 +96,21 @@ public class SlackService {
         if (ActionId.isEmailAction(actionId)) {
             this.sendModal(triggerId, this.buildModalView(userDTO, actionId, url));
         } else {
-            this.sendBlocks(url, this.buildBlocks(userDTO, trialAccountActivated, actionId));
+            this.sendBlocks(url, this.buildBlocks(userDTO, trialAccountActivated, actionId, null));
         }
     }
 
     @Async
-    public void sendApprovedConfirmation(UserDTO userDTO) {
+    public void sendApprovedConfirmation(UserDTO userDTO, Company company) {
+        String text = 
+            String.format(
+                "%s has been approved to use %s's %s license and notified automatically.",
+                userDTO.getEmail(),
+                company.getName(),
+                company.getLicenseType().getShortName()
+            );
         Payload payload = Payload.builder()
-            .text(userDTO.getEmail() + " has been approved and notified automatically")
+            .text(text)
             .build();
 
         Slack slack = Slack.getInstance();
@@ -228,7 +231,7 @@ public class SlackService {
         }
     }
 
-    public List<LayoutBlock> buildBlocks(UserDTO userDTO, boolean trialAccountActivated, ActionId actionId) {
+    public List<LayoutBlock> buildBlocks(UserDTO userDTO, boolean trialAccountActivated, ActionId actionId, Company company) {
         List<LayoutBlock> blocks = new ArrayList<>();
         boolean buildCollapsed;
         if (actionId != null) {
@@ -243,7 +246,7 @@ public class SlackService {
             blocks.add(buildCollapsedBlock(userDTO, actionId));
         } else {
             // Add expanded blocks
-            blocks.addAll(buildExpandedBlocks(userDTO, trialAccountActivated, actionId));
+            blocks.addAll(buildExpandedBlocks(userDTO, trialAccountActivated, actionId, company));
         }
 
         // Add message divider
@@ -254,7 +257,7 @@ public class SlackService {
 
     private LayoutBlock buildCollapsedBlock(UserDTO userDTO, ActionId actionId) {
         StringBuilder sb = new StringBuilder();
-        sb.append(userDTO.getEmail() + "\n" + userDTO.getCompany() + " (" + userDTO.getLicenseType().getShortName() + (withTrialAccountNote(userDTO, actionId) ? ", *TRIAL*)" : userDTO.isActivated() ? ")" : ")\n*NOT ACTIVATED*: "));
+        sb.append(userDTO.getEmail() + "\n" + userDTO.getCompanyName() + " (" + userDTO.getLicenseType().getShortName() + (withTrialAccountNote(userDTO, actionId) ? ", *TRIAL*)" : userDTO.isActivated() ? ")" : ")\n*NOT ACTIVATED*: "));
         if (!userDTO.isActivated()) {
             if (withRejectionNote(userDTO, actionId)) {
                 sb.append("Sent rejection email");
@@ -277,7 +280,7 @@ public class SlackService {
             .accessory(buildExpandButton(userDTO)).blockId(COLLAPSED.getId()).build();
     }
 
-    private List<LayoutBlock> buildExpandedBlocks(UserDTO userDTO, boolean trialAccountActivated, ActionId actionId) {
+    private List<LayoutBlock> buildExpandedBlocks(UserDTO userDTO, boolean trialAccountActivated, ActionId actionId, Company company) {
         List<LayoutBlock> blocks = new ArrayList<>();
 
         // Add mention
@@ -287,7 +290,7 @@ public class SlackService {
         blocks.add(buildUserIdBlock(userDTO));
 
         // Add warning
-        blocks.addAll(buildWarningBlocks(userDTO));
+        blocks.addAll(buildWarningBlocks(userDTO, company));
 
         // Add current license
         blocks.add(buildCurrentLicense(userDTO));
@@ -329,26 +332,18 @@ public class SlackService {
         return ContextBlock.builder().elements(elements).blockId(USER_ID.getId()).build();
     }
 
-    private List<LayoutBlock> buildWarningBlocks(UserDTO userDTO) {
+    private List<LayoutBlock> buildWarningBlocks(UserDTO userDTO, Company company) {
         List<LayoutBlock> blocks = new ArrayList<>();
-        final String LICENSED_DOMAIN_APPROVE_NOTE = ":star: *This email domain belongs to a licensed company. Please review and approve accordingly.*";
-        final String TRIALED_DOMAIN_APPROVE_NOTE = ":bangbang: *This email domain belongs to a company that has trial license.*";
-
-        boolean domainIsLicensed = false;
-        boolean domainIsTrialed = false;
-        List<String> licensedDomains = applicationProperties.getLicensedDomainsList();
-        if (!licensedDomains.isEmpty() && licensedDomains.stream().anyMatch(domain -> getEmailDomain(userDTO.getEmail().toLowerCase()).equals(domain.toLowerCase()))) {
-            domainIsLicensed = true;
+        if(company != null){
+            String text = 
+                String.format(
+                    ":star: *This email domain belongs to %s which has an OncoKB %s%s license. Please review and approve accordingly.*",
+                    company.getName(),
+                    company.getLicenseType().getShortName(),
+                    company.getLicenseStatus().equals(LicenseStatus.TRIAL) ? " trial" : ""
+                );
+            blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(text).build()).build());
         }
-        List<String> trialedDomains = applicationProperties.getTrialedDomainsList();
-        if (!trialedDomains.isEmpty() && trialedDomains.stream().anyMatch(domain -> getEmailDomain(userDTO.getEmail().toLowerCase()).equals(domain.toLowerCase()))) {
-            domainIsTrialed = true;
-        }
-
-        if (domainIsLicensed)
-            blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(LICENSED_DOMAIN_APPROVE_NOTE).build()).build());
-        if (domainIsTrialed)
-            blocks.add(SectionBlock.builder().text(MarkdownTextObject.builder().text(TRIALED_DOMAIN_APPROVE_NOTE).build()).build());
 
         return blocks;
     }
@@ -356,8 +351,8 @@ public class SlackService {
     private LayoutBlock buildCurrentLicense(UserDTO userDTO) {
         StringBuilder sb = new StringBuilder();
         sb.append("*" + userDTO.getLicenseType().getName() + "*" + (userDTO.getLicenseType().equals(LicenseType.ACADEMIC) ? "" : " :clap:") +"\n");
-        if (StringUtils.isNotEmpty(userDTO.getCompany())) {
-            sb.append("*" + userDTO.getCompany() + "*");
+        if (StringUtils.isNotEmpty(userDTO.getCompanyName())) {
+            sb.append("*" + userDTO.getCompanyName() + "*");
         }
 
         return SectionBlock.builder().text(MarkdownTextObject.builder().text(sb.toString()).build()).accessory(getLicenseTypeElement(userDTO)).blockId(LICENSE_TYPE.getId()).build();
@@ -494,7 +489,7 @@ public class SlackService {
         userInfo.add(MarkdownTextObject.builder().text("Email:\n" + user.getEmail()).build());
         userInfo.add(getTextObject("Name", user.getFirstName() + " " + user.getLastName()));
         userInfo.add(getTextObject("Job Title", user.getJobTitle()));
-        userInfo.add(getTextObject(companyName, user.getCompany()));
+        userInfo.add(getTextObject(companyName, user.getCompanyName()));
         blocks.add(SectionBlock.builder().fields(userInfo).blockId(ACCOUNT_INFO.getId()).build());
 
         // Add company information
@@ -543,9 +538,6 @@ public class SlackService {
         }
         if (withDuplicateUserClarificationNote(userDTO, actionId)) {
             layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking why they registered multiple accounts.", DUPLICATE_USER_CLARIFICATION_NOTE));
-        }
-        if (isMSKUser(userDTO)) {
-            layoutBlocks.add(buildPlainTextBlock("The user has been approved and notified automatically. We also changed their license to Academic and clarified with the user.", MSK_USER_NOTE));
         }
         if (userDTO.isActivated() && !trialAccountActivated) {
             if (!withTrialAccountNote(userDTO, actionId)) {

@@ -17,6 +17,62 @@ export type AdditionalInfoDTO = {
         'userCompany': UserCompany
 
 };
+export type CompanyDTO = {
+    'businessContact': string
+
+        'companyDomains': Array < string >
+
+        'companyType': "PARENT" | "BRANCH" | "UNKNOWN"
+
+        'description': string
+
+        'id': number
+
+        'legalContact': string
+
+        'licenseModel': "FULL" | "LIMITED"
+
+        'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
+
+        'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
+
+        'name': string
+
+        'numberOfUsers': number
+
+};
+export type CompanyDomainDTO = {
+    'id': number
+
+        'name': string
+
+};
+export type CompanyVM = {
+    'businessContact': string
+
+        'companyDomains': Array < string >
+
+        'companyType': "PARENT" | "BRANCH" | "UNKNOWN"
+
+        'companyUserDTOs': Array < UserDTO >
+
+        'description': string
+
+        'id': number
+
+        'legalContact': string
+
+        'licenseModel': "FULL" | "LIMITED"
+
+        'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
+
+        'licenseType': "ACADEMIC" | "COMMERCIAL" | "RESEARCH_IN_COMMERCIAL" | "HOSPITAL"
+
+        'name': string
+
+        'numberOfUsers': number
+
+};
 export type Contact = {
     'email': string
 
@@ -55,7 +111,7 @@ export type LoginVM = {
 export type MailTypeInfo = {
     'description': string
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
 
 };
 export type ManagedUserVM = {
@@ -69,7 +125,9 @@ export type ManagedUserVM = {
 
         'city': string
 
-        'company': string
+        'company': CompanyDTO
+
+        'companyName': string
 
         'country': string
 
@@ -193,7 +251,9 @@ export type UserDTO = {
 
         'city': string
 
-        'company': string
+        'company': CompanyDTO
+
+        'companyName': string
 
         'country': string
 
@@ -237,7 +297,9 @@ export type UserDetailsDTO = {
 
         'city': string
 
-        'company': string
+        'companyId': number
+
+        'companyName': string
 
         'country': string
 
@@ -253,7 +315,7 @@ export type UserDetailsDTO = {
 export type UserMailsDTO = {
     'id': number
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
 
         'sentBy': string
 
@@ -296,6 +358,12 @@ export type UserUsage = {
         'userFirstName': string
 
         'userLastName': string
+
+};
+export type VerifyCompanyNameVM = {
+    'companyId': number
+
+        'name': string
 
 };
 
@@ -1514,6 +1582,1053 @@ export default class API {
             return response.body;
         });
     };
+    getAllCompaniesUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getAllCompanies
+     * @method
+     * @name API#getAllCompaniesUsingGET
+     */
+    getAllCompaniesUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getAllCompanies
+     * @method
+     * @name API#getAllCompaniesUsingGET
+     */
+    getAllCompaniesUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < CompanyDTO >
+        > {
+            return this.getAllCompaniesUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    createCompanyUsingPOSTURL(parameters: {
+        'companyDto': CompanyDTO,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * createCompany
+     * @method
+     * @name API#createCompanyUsingPOST
+     * @param {} companyDto - companyDTO
+     */
+    createCompanyUsingPOSTWithHttpInfo(parameters: {
+        'companyDto': CompanyDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['companyDto'] !== undefined) {
+                body = parameters['companyDto'];
+            }
+
+            if (parameters['companyDto'] === undefined) {
+                reject(new Error('Missing required  parameter: companyDto'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * createCompany
+     * @method
+     * @name API#createCompanyUsingPOST
+     * @param {} companyDto - companyDTO
+     */
+    createCompanyUsingPOST(parameters: {
+        'companyDto': CompanyDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < CompanyDTO > {
+        return this.createCompanyUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    updateCompanyUsingPUTURL(parameters: {
+        'companyVm': CompanyVM,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * updateCompany
+     * @method
+     * @name API#updateCompanyUsingPUT
+     * @param {} companyVm - companyVM
+     */
+    updateCompanyUsingPUTWithHttpInfo(parameters: {
+        'companyVm': CompanyVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['companyVm'] !== undefined) {
+                body = parameters['companyVm'];
+            }
+
+            if (parameters['companyVm'] === undefined) {
+                reject(new Error('Missing required  parameter: companyVm'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('PUT', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * updateCompany
+     * @method
+     * @name API#updateCompanyUsingPUT
+     * @param {} companyVm - companyVM
+     */
+    updateCompanyUsingPUT(parameters: {
+        'companyVm': CompanyVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < CompanyDTO > {
+        return this.updateCompanyUsingPUTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getCompanyByNameUsingGETURL(parameters: {
+        'name': string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/lookup';
+        if (parameters['name'] !== undefined) {
+            queryParameters['name'] = parameters['name'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getCompanyByName
+     * @method
+     * @name API#getCompanyByNameUsingGET
+     * @param {string} name - name
+     */
+    getCompanyByNameUsingGETWithHttpInfo(parameters: {
+        'name': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/lookup';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters['name'] !== undefined) {
+                queryParameters['name'] = parameters['name'];
+            }
+
+            if (parameters['name'] === undefined) {
+                reject(new Error('Missing required  parameter: name'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getCompanyByName
+     * @method
+     * @name API#getCompanyByNameUsingGET
+     * @param {string} name - name
+     */
+    getCompanyByNameUsingGET(parameters: {
+        'name': string,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < CompanyDTO > {
+        return this.getCompanyByNameUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    verifyCompanyNameUsingPOSTURL(parameters: {
+        'verificationInfo': VerifyCompanyNameVM,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/verify-name';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * verifyCompanyName
+     * @method
+     * @name API#verifyCompanyNameUsingPOST
+     * @param {} verificationInfo - verificationInfo
+     */
+    verifyCompanyNameUsingPOSTWithHttpInfo(parameters: {
+        'verificationInfo': VerifyCompanyNameVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/verify-name';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['verificationInfo'] !== undefined) {
+                body = parameters['verificationInfo'];
+            }
+
+            if (parameters['verificationInfo'] === undefined) {
+                reject(new Error('Missing required  parameter: verificationInfo'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * verifyCompanyName
+     * @method
+     * @name API#verifyCompanyNameUsingPOST
+     * @param {} verificationInfo - verificationInfo
+     */
+    verifyCompanyNameUsingPOST(parameters: {
+        'verificationInfo': VerifyCompanyNameVM,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < boolean > {
+        return this.verifyCompanyNameUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getCompanyUsingGETURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getCompany
+     * @method
+     * @name API#getCompanyUsingGET
+     * @param {integer} id - id
+     */
+    getCompanyUsingGETWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getCompany
+     * @method
+     * @name API#getCompanyUsingGET
+     * @param {integer} id - id
+     */
+    getCompanyUsingGET(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < CompanyDTO > {
+        return this.getCompanyUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    deleteCompanyUsingDELETEURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * deleteCompany
+     * @method
+     * @name API#deleteCompanyUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteCompanyUsingDELETEWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('DELETE', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * deleteCompany
+     * @method
+     * @name API#deleteCompanyUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteCompanyUsingDELETE(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.deleteCompanyUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    getCompanyUsersUsingGETURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/companies/{id}/users';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getCompanyUsers
+     * @method
+     * @name API#getCompanyUsersUsingGET
+     * @param {integer} id - id
+     */
+    getCompanyUsersUsingGETWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/companies/{id}/users';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getCompanyUsers
+     * @method
+     * @name API#getCompanyUsersUsingGET
+     * @param {integer} id - id
+     */
+    getCompanyUsersUsingGET(parameters: {
+            'id': number,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < UserDTO >
+        > {
+            return this.getCompanyUsersUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getAllCompanyDomainsUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/company-domains';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getAllCompanyDomains
+     * @method
+     * @name API#getAllCompanyDomainsUsingGET
+     */
+    getAllCompanyDomainsUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/company-domains';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getAllCompanyDomains
+     * @method
+     * @name API#getAllCompanyDomainsUsingGET
+     */
+    getAllCompanyDomainsUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < CompanyDomainDTO >
+        > {
+            return this.getAllCompanyDomainsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    createCompanyDomainUsingPOSTURL(parameters: {
+        'companyDomainDto': CompanyDomainDTO,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/company-domains';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * createCompanyDomain
+     * @method
+     * @name API#createCompanyDomainUsingPOST
+     * @param {} companyDomainDto - companyDomainDTO
+     */
+    createCompanyDomainUsingPOSTWithHttpInfo(parameters: {
+        'companyDomainDto': CompanyDomainDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/company-domains';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['companyDomainDto'] !== undefined) {
+                body = parameters['companyDomainDto'];
+            }
+
+            if (parameters['companyDomainDto'] === undefined) {
+                reject(new Error('Missing required  parameter: companyDomainDto'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * createCompanyDomain
+     * @method
+     * @name API#createCompanyDomainUsingPOST
+     * @param {} companyDomainDto - companyDomainDTO
+     */
+    createCompanyDomainUsingPOST(parameters: {
+        'companyDomainDto': CompanyDomainDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < CompanyDomainDTO > {
+        return this.createCompanyDomainUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    updateCompanyDomainUsingPUTURL(parameters: {
+        'companyDomainDto': CompanyDomainDTO,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/company-domains';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * updateCompanyDomain
+     * @method
+     * @name API#updateCompanyDomainUsingPUT
+     * @param {} companyDomainDto - companyDomainDTO
+     */
+    updateCompanyDomainUsingPUTWithHttpInfo(parameters: {
+        'companyDomainDto': CompanyDomainDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/company-domains';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['companyDomainDto'] !== undefined) {
+                body = parameters['companyDomainDto'];
+            }
+
+            if (parameters['companyDomainDto'] === undefined) {
+                reject(new Error('Missing required  parameter: companyDomainDto'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('PUT', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * updateCompanyDomain
+     * @method
+     * @name API#updateCompanyDomainUsingPUT
+     * @param {} companyDomainDto - companyDomainDTO
+     */
+    updateCompanyDomainUsingPUT(parameters: {
+        'companyDomainDto': CompanyDomainDTO,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < CompanyDomainDTO > {
+        return this.updateCompanyDomainUsingPUTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    verifyCompanyDomainUsingPOSTURL(parameters: {
+        'companyId' ? : number,
+        'names': Array < string > ,
+            $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/company-domains/verify';
+        if (parameters['companyId'] !== undefined) {
+            queryParameters['companyId'] = parameters['companyId'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * verifyCompanyDomain
+     * @method
+     * @name API#verifyCompanyDomainUsingPOST
+     * @param {integer} companyId - companyId
+     * @param {} names - names
+     */
+    verifyCompanyDomainUsingPOSTWithHttpInfo(parameters: {
+        'companyId' ? : number,
+        'names': Array < string > ,
+            $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/company-domains/verify';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['companyId'] !== undefined) {
+                queryParameters['companyId'] = parameters['companyId'];
+            }
+
+            if (parameters['names'] !== undefined) {
+                body = parameters['names'];
+            }
+
+            if (parameters['names'] === undefined) {
+                reject(new Error('Missing required  parameter: names'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * verifyCompanyDomain
+     * @method
+     * @name API#verifyCompanyDomainUsingPOST
+     * @param {integer} companyId - companyId
+     * @param {} names - names
+     */
+    verifyCompanyDomainUsingPOST(parameters: {
+            'companyId' ? : number,
+            'names': Array < string > ,
+                $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < CompanyDomainDTO >
+        > {
+            return this.verifyCompanyDomainUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getCompanyDomainUsingGETURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/company-domains/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getCompanyDomain
+     * @method
+     * @name API#getCompanyDomainUsingGET
+     * @param {integer} id - id
+     */
+    getCompanyDomainUsingGETWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/company-domains/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getCompanyDomain
+     * @method
+     * @name API#getCompanyDomainUsingGET
+     * @param {integer} id - id
+     */
+    getCompanyDomainUsingGET(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < CompanyDomainDTO > {
+        return this.getCompanyDomainUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
+    deleteCompanyDomainUsingDELETEURL(parameters: {
+        'id': number,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/company-domains/{id}';
+
+        path = path.replace('{id}', parameters['id'] + '');
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * deleteCompanyDomain
+     * @method
+     * @name API#deleteCompanyDomainUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteCompanyDomainUsingDELETEWithHttpInfo(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/company-domains/{id}';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            path = path.replace('{id}', parameters['id'] + '');
+
+            if (parameters['id'] === undefined) {
+                reject(new Error('Missing required  parameter: id'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('DELETE', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * deleteCompanyDomain
+     * @method
+     * @name API#deleteCompanyDomainUsingDELETE
+     * @param {integer} id - id
+     */
+    deleteCompanyDomainUsingDELETE(parameters: {
+        'id': number,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.deleteCompanyDomainUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     checkExposedTokensUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
@@ -2385,7 +3500,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
         'to': string,
         $queryParameters ? : any
     }): string {
@@ -2435,7 +3550,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -2518,7 +3633,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_MSK_IN_COMMERCIAL" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -4089,6 +5204,7 @@ export default class API {
     };
     updateUserUsingPUTURL(parameters: {
         'sendEmail': boolean,
+        'unlinkUser': boolean,
         'userDto': UserDTO,
         $queryParameters ? : any
     }): string {
@@ -4096,6 +5212,10 @@ export default class API {
         let path = '/api/users';
         if (parameters['sendEmail'] !== undefined) {
             queryParameters['sendEmail'] = parameters['sendEmail'];
+        }
+
+        if (parameters['unlinkUser'] !== undefined) {
+            queryParameters['unlinkUser'] = parameters['unlinkUser'];
         }
 
         if (parameters.$queryParameters) {
@@ -4113,10 +5233,12 @@ export default class API {
      * @method
      * @name API#updateUserUsingPUT
      * @param {boolean} sendEmail - sendEmail
+     * @param {boolean} unlinkUser - unlinkUser
      * @param {} userDto - userDTO
      */
     updateUserUsingPUTWithHttpInfo(parameters: {
         'sendEmail': boolean,
+        'unlinkUser': boolean,
         'userDto': UserDTO,
         $queryParameters ? : any,
         $domain ? : string
@@ -4139,6 +5261,15 @@ export default class API {
 
             if (parameters['sendEmail'] === undefined) {
                 reject(new Error('Missing required  parameter: sendEmail'));
+                return;
+            }
+
+            if (parameters['unlinkUser'] !== undefined) {
+                queryParameters['unlinkUser'] = parameters['unlinkUser'];
+            }
+
+            if (parameters['unlinkUser'] === undefined) {
+                reject(new Error('Missing required  parameter: unlinkUser'));
                 return;
             }
 
@@ -4168,10 +5299,12 @@ export default class API {
      * @method
      * @name API#updateUserUsingPUT
      * @param {boolean} sendEmail - sendEmail
+     * @param {boolean} unlinkUser - unlinkUser
      * @param {} userDto - userDTO
      */
     updateUserUsingPUT(parameters: {
         'sendEmail': boolean,
+        'unlinkUser': boolean,
         'userDto': UserDTO,
         $queryParameters ? : any,
         $domain ? : string
@@ -4430,6 +5563,83 @@ export default class API {
         }): Promise < Array < UserDTO >
         > {
             return this.getAllRegisteredUsersUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getUsersTokensUsingPOSTURL(parameters: {
+        'logins': Array < string > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/users/tokens';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getUsersTokens
+     * @method
+     * @name API#getUsersTokensUsingPOST
+     * @param {} logins - logins
+     */
+    getUsersTokensUsingPOSTWithHttpInfo(parameters: {
+        'logins': Array < string > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/users/tokens';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['logins'] !== undefined) {
+                body = parameters['logins'];
+            }
+
+            if (parameters['logins'] === undefined) {
+                reject(new Error('Missing required  parameter: logins'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getUsersTokens
+     * @method
+     * @name API#getUsersTokensUsingPOST
+     * @param {} logins - logins
+     */
+    getUsersTokensUsingPOST(parameters: {
+            'logins': Array < string > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < Token >
+        > {
+            return this.getUsersTokensUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };

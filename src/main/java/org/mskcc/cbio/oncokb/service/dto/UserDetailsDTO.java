@@ -16,7 +16,7 @@ public class UserDetailsDTO implements Serializable {
 
     private String jobTitle;
 
-    private String company;
+    private String companyName;
 
     private String city;
 
@@ -28,6 +28,8 @@ public class UserDetailsDTO implements Serializable {
     private AdditionalInfoDTO additionalInfo;
 
     private Long userId;
+
+    private Long companyId;
 
     public Long getId() {
         return id;
@@ -53,12 +55,12 @@ public class UserDetailsDTO implements Serializable {
         this.jobTitle = jobTitle;
     }
 
-    public String getCompany() {
-        return company;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getCity() {
@@ -101,6 +103,14 @@ public class UserDetailsDTO implements Serializable {
         this.userId = userId;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -125,12 +135,13 @@ public class UserDetailsDTO implements Serializable {
             "id=" + getId() +
             ", licenseType='" + getLicenseType() + "'" +
             ", jobTitle='" + getJobTitle() + "'" +
-            ", company='" + getCompany() + "'" +
+            ", companyName='" + getCompanyName() + "'" +
             ", city='" + getCity() + "'" +
             ", country='" + getCountry() + "'" +
             ", address='" + getAddress() + "'" +
             ", additionalInfo='" + getAdditionalInfo() + "'" +
             ", userId=" + getUserId() +
+            ", companyId=" + getCompanyId() +
             "}";
     }
 }

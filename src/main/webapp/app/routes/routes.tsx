@@ -28,6 +28,7 @@ import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
 import UserPage from 'app/pages/userPage/UserPage';
 import AppStore from 'app/store/AppStore';
 import ActivateTrialFinish from 'app/components/account/ActivateTrialFinish';
+import CompanyPage from 'app/pages/companyPage/CompanyPage';
 import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
 import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTab';
 import FAQPage from 'app/pages/FAQPage';
@@ -207,6 +208,14 @@ const AppRouts = (props: {
             authenticationStore={props.authenticationStore}
             routing={props.routing}
             component={UserPage}
+            hasAnyAuthorities={[AUTHORITIES.ADMIN]}
+          />
+          <PrivateRoute
+            exact
+            path={PAGE_ROUTE.COMPANY}
+            authenticationStore={props.authenticationStore}
+            routing={props.routing}
+            component={CompanyPage}
             hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <ErrorBoundaryRoute component={PageNotFound} />
