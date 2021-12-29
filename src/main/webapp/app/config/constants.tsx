@@ -585,18 +585,18 @@ export const LICENSE_STATUS_TITLES: { [key in LicenseStatus]: string } = {
 };
 
 export enum LicenseModel {
-  REGULAR = 'REGULAR',
-  MICRO = 'MICRO',
+  FULL = 'FULL',
+  LIMITED = 'LIMITED',
 }
 
 export const LICENSE_MODEL_TITLES: { [key in LicenseModel]: string } = {
-  [LicenseModel.REGULAR]: 'Regular Tier',
-  [LicenseModel.MICRO]: 'Micro Tier',
+  [LicenseModel.FULL]: 'Full License',
+  [LicenseModel.LIMITED]: 'Limited License',
 };
 
 export const LICENSE_MODEL_DESCRIPTIONS: { [key in LicenseModel]: string } = {
-  [LicenseModel.REGULAR]: `This tier will allow any user with a matching email address domain to be automatically approved.`,
-  [LicenseModel.MICRO]:
+  [LicenseModel.FULL]: `This tier will allow any user with a matching email address domain to be automatically approved.`,
+  [LicenseModel.LIMITED]:
     'This tier is appropriate when we want to restrict the license to a group of users. ',
 };
 

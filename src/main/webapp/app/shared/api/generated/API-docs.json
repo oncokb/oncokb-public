@@ -3074,8 +3074,8 @@
         "licenseModel": {
           "type": "string",
           "enum": [
-            "REGULAR",
-            "MICRO"
+            "FULL",
+            "LIMITED"
           ]
         },
         "licenseStatus": {
@@ -3165,8 +3165,8 @@
         "licenseModel": {
           "type": "string",
           "enum": [
-            "REGULAR",
-            "MICRO"
+            "FULL",
+            "LIMITED"
           ]
         },
         "licenseStatus": {

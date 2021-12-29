@@ -664,10 +664,10 @@ public class UserService {
             Set<Company> companies = optionalCompanyDomain.get().getCompanies();
             if(companies.size() == 1){
                 Company company = companies.iterator().next();
-                if(company.getLicenseModel().equals(LicenseModel.MICRO)){
+                if(company.getLicenseModel().equals(LicenseModel.LIMITED)){
                     return new CompanyCandidate(Optional.of(company), false);
                 }
-                if(company.getLicenseModel().equals(LicenseModel.REGULAR)){
+                if(company.getLicenseModel().equals(LicenseModel.FULL)){
                     // If only a regular license model exists for domain, then auto approve user with company.
                     return new CompanyCandidate(Optional.of(company), true);
                 }
@@ -676,7 +676,7 @@ public class UserService {
                 Optional<Company> foundCompany = companies
                     .stream()
                     .filter(c -> {
-                        return c.getLicenseModel().equals(LicenseModel.REGULAR);
+                        return c.getLicenseModel().equals(LicenseModel.FULL);
                     })
                     .findAny();
                 return new CompanyCandidate(foundCompany, true);
