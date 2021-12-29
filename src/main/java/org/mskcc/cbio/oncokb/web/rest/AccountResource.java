@@ -159,22 +159,22 @@ public class AccountResource {
     }
 
     private boolean activateUser(UserDTO userDTO, CompanyCandidate companyCandidate) {
-        // When the possible company is on MICRO tier, we proceed with the manual approval process
+        // When the possible company is on LIMITED tier, we proceed with the manual approval process
         if(!companyCandidate.getCanAssociate()){
-            Company microCompany = null;
+            Company limitedCompany = null;
             if(companyCandidate.getCompanyCandidate().isPresent()){
-                microCompany = companyCandidate.getCompanyCandidate().get();
+                limitedCompany = companyCandidate.getCompanyCandidate().get();
             }
-            slackService.sendUserRegistrationToChannel(userDTO, userService.trialAccountActivated(userDTO), microCompany);
+            slackService.sendUserRegistrationToChannel(userDTO, userService.trialAccountActivated(userDTO), limitedCompany);
             return false;
         }
 
-        // Automatic approval process
         Company company = companyCandidate.getCompanyCandidate().get();
         userService.updateUserWithCompanyLicense(userDTO, company, false, false);
         // Don't send the automated approval message to slack if the company is on trial
         // We only want a message when the user accepts the trial license agreement.
-        if(company.getLicenseStatus().equals(LicenseStatus.REGULAR)){
+        if (company.getLicenseStatus().equals(LicenseStatus.REGULAR)) {
+            userService.approveUser(userDTO, false);
             slackService.sendApprovedConfirmation(userDTO, company);
         }
         return true;
