@@ -30,7 +30,7 @@ export type CompanyDTO = {
 
         'legalContact': string
 
-        'licenseModel': "REGULAR" | "MICRO"
+        'licenseModel': "FULL" | "LIMITED"
 
         'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
 
@@ -60,7 +60,7 @@ export type CompanyVM = {
 
         'legalContact': string
 
-        'licenseModel': "REGULAR" | "MICRO"
+        'licenseModel': "FULL" | "LIMITED"
 
         'licenseStatus': "TRIAL" | "REGULAR" | "TRIAL_EXPIRED" | "EXPIRED" | "UNKNOWN"
 

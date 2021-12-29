@@ -61,8 +61,8 @@ public class CompanyResourceIT {
     private static final LicenseType DEFAULT_LICENSE_TYPE = LicenseType.ACADEMIC;
     private static final LicenseType UPDATED_LICENSE_TYPE = LicenseType.COMMERCIAL;
 
-    private static final LicenseModel DEFAULT_LICENSE_MODEL = LicenseModel.REGULAR;
-    private static final LicenseModel UPDATED_LICENSE_MODEL = LicenseModel.MICRO;
+    private static final LicenseModel DEFAULT_LICENSE_MODEL = LicenseModel.FULL;
+    private static final LicenseModel UPDATED_LICENSE_MODEL = LicenseModel.LIMITED;
 
     private static final LicenseStatus DEFAULT_LICENSE_STATUS = LicenseStatus.TRIAL;
     private static final LicenseStatus UPDATED_LICENSE_STATUS = LicenseStatus.REGULAR;

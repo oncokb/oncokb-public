@@ -235,7 +235,7 @@ export default class CompanyPage extends React.Component<
 
   @action
   verifyCompanyDomains() {
-    if (this.company.licenseModel !== LicenseModel.REGULAR) {
+    if (this.company.licenseModel !== LicenseModel.FULL) {
       this.conflictingDomains = [];
       return;
     }

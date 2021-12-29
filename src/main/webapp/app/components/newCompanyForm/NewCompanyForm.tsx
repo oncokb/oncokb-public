@@ -66,7 +66,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   @observable companyDescription = '';
   @observable companyDomains: string[] = [];
   @observable selectedCompanyType: CompanyType = CompanyType.PARENT;
-  @observable selectedLicenseModel: LicenseModel = LicenseModel.REGULAR;
+  @observable selectedLicenseModel: LicenseModel = LicenseModel.FULL;
   @observable selectedLicenseType: LicenseType = LicenseType.COMMERCIAL;
   @observable selectedLicenseStatus: LicenseStatus = LicenseStatus.REGULAR;
   @observable conflictingDomains: string[] = [];
@@ -86,7 +86,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
 
   @action
   verifyCompanyDomains() {
-    if (this.selectedLicenseModel !== LicenseModel.REGULAR) {
+    if (this.selectedLicenseModel !== LicenseModel.FULL) {
       this.conflictingDomains = [];
       return;
     }
@@ -206,8 +206,8 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
               <AdditionalInfoSelect
                 name={'licenseModel'}
                 defaultValue={{
-                  value: LicenseModel.REGULAR,
-                  label: LICENSE_MODEL_TITLES[LicenseModel.REGULAR],
+                  value: LicenseModel.FULL,
+                  label: LICENSE_MODEL_TITLES[LicenseModel.FULL],
                 }}
                 options={COMPANY_FORM_OPTIONS.licenseModel}
                 onSelection={(selectedOption: any) => {

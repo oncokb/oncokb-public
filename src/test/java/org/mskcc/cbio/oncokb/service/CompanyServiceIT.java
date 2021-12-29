@@ -62,7 +62,7 @@ public class CompanyServiceIT {
 
     private static final LicenseType DEFAULT_LICENSE_TYPE = LicenseType.ACADEMIC;
 
-    private static final LicenseModel DEFAULT_LICENSE_MODEL = LicenseModel.REGULAR;
+    private static final LicenseModel DEFAULT_LICENSE_MODEL = LicenseModel.FULL;
 
     private static final LicenseStatus DEFAULT_LICENSE_STATUS = LicenseStatus.REGULAR;
 
@@ -267,7 +267,7 @@ public class CompanyServiceIT {
     @Transactional
     public void assertThatRegularCompanyFoundIfEmailMatch() {
         // Initialize database
-        companyDTO.setLicenseModel(LicenseModel.REGULAR);
+        companyDTO.setLicenseModel(LicenseModel.FULL);
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
         userDTO.setEmail("user@oncokb.org");  // This email matches company
 
@@ -281,7 +281,7 @@ public class CompanyServiceIT {
     @Transactional
     public void assertThatMicroCompanyFoundIfEmailMatch() {
         // Initialize database
-        companyDTO.setLicenseModel(LicenseModel.MICRO);
+        companyDTO.setLicenseModel(LicenseModel.LIMITED);
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
         userDTO.setEmail("user@oncokb.org");  // This email matches company
 

@@ -55,7 +55,7 @@ public class CompanyMapperTest {
         company.setDescription("Description");
         company.setCompanyType(CompanyType.PARENT);
         company.setLicenseType(LicenseType.ACADEMIC);
-        company.setLicenseModel(LicenseModel.REGULAR);
+        company.setLicenseModel(LicenseModel.FULL);
         company.setLicenseStatus(LicenseStatus.REGULAR);
         company.setBusinessContact("business contact");
         company.setLegalContact("legal contact");
@@ -66,7 +66,7 @@ public class CompanyMapperTest {
         companyDTO.setDescription("Description");
         companyDTO.setCompanyType(CompanyType.PARENT);
         companyDTO.setLicenseType(LicenseType.ACADEMIC);
-        companyDTO.setLicenseModel(LicenseModel.REGULAR);
+        companyDTO.setLicenseModel(LicenseModel.FULL);
         companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
         companyDTO.setBusinessContact("business contact");
         companyDTO.setLegalContact("legal contact");
