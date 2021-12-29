@@ -31,6 +31,15 @@ export default class CompanyDetailsPage extends React.Component {
 
   private columns: SearchColumn<CompanyDTO>[] = [
     {
+      id: 'companyUserCount',
+      Header: <span className={styles.tableHeader}>Users</span>,
+      minWidth: 60,
+      accessor: 'companyUserCount',
+      Cell(props: { original: CompanyDTO }): any {
+        return <div>{props.original.numberOfUsers}</div>;
+      },
+    },
+    {
       id: 'companyName',
       Header: <span className={styles.tableHeader}>Company Name</span>,
       minWidth: 120,

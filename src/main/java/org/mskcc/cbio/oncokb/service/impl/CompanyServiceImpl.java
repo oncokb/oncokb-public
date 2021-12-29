@@ -137,6 +137,10 @@ public class CompanyServiceImpl implements CompanyService {
         log.debug("Request to get all Companies");
         return companyRepository.findAll().stream()
             .map(companyMapper::toDto)
+            .map(companyDTO -> {
+                companyDTO.setNumberOfUsers(userService.getUsersOfCompany(companyDTO.getId()).size());
+                return companyDTO;
+            })
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
