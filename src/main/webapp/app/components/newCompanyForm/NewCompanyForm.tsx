@@ -23,6 +23,11 @@ import client from 'app/shared/api/clientInstance';
 import _ from 'lodash';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
+import {
+  debouncedCompanyNameValidator,
+  fieldRequiredValidation,
+  textValidation,
+} from 'app/shared/utils/FormValidationUtils';
 
 type INewCompanyFormProps = {
   onValidSubmit: (newCompany: Partial<CompanyVM>) => void;
@@ -61,7 +66,7 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
   @observable companyDescription = '';
   @observable companyDomains: string[] = [];
   @observable selectedCompanyType: CompanyType = CompanyType.PARENT;
-  @observable selectedLicenseModel: LicenseModel = LicenseModel.REGULAR;
+  @observable selectedLicenseModel: LicenseModel = LicenseModel.FULL;
   @observable selectedLicenseType: LicenseType = LicenseType.COMMERCIAL;
   @observable selectedLicenseStatus: LicenseStatus = LicenseStatus.REGULAR;
   @observable conflictingDomains: string[] = [];
@@ -79,33 +84,9 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
     );
   }
 
-  private debouncedLookup = _.debounce(
-    (value: string, ctx, input, cb: (isValid: boolean | string) => void) => {
-      if (value.trim() === '') {
-        cb(false);
-        return;
-      }
-      client
-        .getCompanyByNameUsingGET({ name: value.trim() })
-        .then(company => cb('Company name in use!'))
-        .catch((error: any) => {
-          if (error.response.status === 404) {
-            // If the company is not found with the entered name, then
-            // it is available to use. The api will return 404 NOT FOUND.
-            cb(true);
-          } else {
-            // If the api fails, then we show an error messageP
-            cb(false);
-            notifyError(error, 'Error finding company with name');
-          }
-        });
-    },
-    500
-  );
-
   @action
   verifyCompanyDomains() {
-    if (this.selectedLicenseModel !== LicenseModel.REGULAR) {
+    if (this.selectedLicenseModel !== LicenseModel.FULL) {
       this.conflictingDomains = [];
       return;
     }
@@ -155,11 +136,9 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
               name="companyName"
               label="Name"
               validate={{
-                required: {
-                  value: true,
-                  errorMessage: 'The company name is required.',
-                },
-                async: this.debouncedLookup,
+                ...fieldRequiredValidation('company name'),
+                ...textValidation(1, 100),
+                async: debouncedCompanyNameValidator,
               }}
             />
             <FormTextAreaField
@@ -178,8 +157,16 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
                 (this.selectedCompanyType = selectedOption.value)
               }
             />
-            <AvField name="businessContact" label="Business Contact" />
-            <AvField name="legalContact" label="Legal Contact" />
+            <AvField
+              name="businessContact"
+              label="Business Contact"
+              validate={{ ...textValidation(0, 255) }}
+            />
+            <AvField
+              name="legalContact"
+              label="Legal Contact"
+              validate={{ ...textValidation(0, 255) }}
+            />
             <FormListField
               list={this.companyDomains}
               addItem={(domain: string) => {
@@ -219,8 +206,8 @@ export class NewCompanyForm extends React.Component<INewCompanyFormProps> {
               <AdditionalInfoSelect
                 name={'licenseModel'}
                 defaultValue={{
-                  value: LicenseModel.REGULAR,
-                  label: LICENSE_MODEL_TITLES[LicenseModel.REGULAR],
+                  value: LicenseModel.FULL,
+                  label: LICENSE_MODEL_TITLES[LicenseModel.FULL],
                 }}
                 options={COMPANY_FORM_OPTIONS.licenseModel}
                 onSelection={(selectedOption: any) => {

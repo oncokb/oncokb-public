@@ -62,8 +62,7 @@ enum LicenseStatus {
 }
 
 enum LicenseModel {
-	REGULAR,
-    MICRO
+	FULL, LIMITED
 }
 
 relationship OneToOne {

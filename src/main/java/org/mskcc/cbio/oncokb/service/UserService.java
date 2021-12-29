@@ -348,13 +348,14 @@ public class UserService {
         if(userDetails.getCompany() != null){
             companyRepository.findById(userDetails.getCompany().getId())
                 .ifPresent(c -> {
-                    updateUserWithCompanyLicense(userMapper.userToUserDTO(updatedUser), c, false);
+                    updateUserWithCompanyLicense(userMapper.userToUserDTO(updatedUser), c, false, true);
                 });
         }
 
         this.clearUserCaches(user);
-
-        generateTokenForUserIfNotExist(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable);
+        if(!tokenIsRenewable.isPresent() || tokenIsRenewable.get().equals(true)) {
+            generateTokenForUserIfNotExist(userMapper.userToUserDTO(updatedUser), tokenValidDays, tokenIsRenewable); 
+        }
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -391,8 +392,10 @@ public class UserService {
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
 
-                return new UserDTO(user, getUpdatedUserDetails(
+                UserDTO newUserDTO =  new UserDTO(user, getUpdatedUserDetails(
                     user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
+                newUserDTO.setCompany(userDTO.getCompany());
+                return newUserDTO;
             });
 
         if (updatedUserDTO.isPresent()) {
@@ -403,11 +406,13 @@ public class UserService {
 
     private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String companyName, CompanyDTO companyDTO, String city, String country) {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
+        LicenseType alignedLicenseType = companyDTO != null ? companyDTO.getLicenseType() : licenseType;
+        Company company = companyMapper.toEntity(companyDTO);
         if (userDetails.isPresent()) {
             //If a user has an associated company, align their licenseStatus with the company's
-            userDetails.get().setLicenseType(companyDTO != null ? companyDTO.getLicenseType() : licenseType);
+            userDetails.get().setLicenseType(alignedLicenseType);
             userDetails.get().setJobTitle(jobTitle);
-            userDetails.get().setCompany(companyMapper.toEntity(companyDTO));
+            userDetails.get().setCompany(company);
             userDetails.get().setCompanyName(companyName);
             userDetails.get().setCity(city);
             userDetails.get().setCountry(country);
@@ -415,9 +420,10 @@ public class UserService {
             return userDetails.get();
         } else {
             UserDetails newUserDetails = new UserDetails();
-            newUserDetails.setLicenseType(licenseType);
+            newUserDetails.setLicenseType(alignedLicenseType);
             newUserDetails.setJobTitle(jobTitle);
             newUserDetails.setCompanyName(companyName);
+            newUserDetails.setCompany(company);
             newUserDetails.setCity(city);
             newUserDetails.setCountry(country);
             newUserDetails.setUser(user);
@@ -568,8 +574,9 @@ public class UserService {
      * @param userDTO the userDTO
      * @param company the company to update the user with
      * @param keepOriginalLicense allow a user to keep their regular license when added to trial company
+     * @param isAccountCreation if the admin is creating the account
      */
-    public Optional<UserDTO> updateUserWithCompanyLicense(UserDTO userDTO, Company company, boolean keepOriginalLicense){
+    public Optional<UserDTO> updateUserWithCompanyLicense(UserDTO userDTO, Company company, boolean keepOriginalLicense, boolean isAccountCreation){
 
         LicenseType registeredLicense = userDTO.getLicenseType();
 
@@ -583,12 +590,11 @@ public class UserService {
             // Update the user with the company's license
             LicenseStatus companyLicenseStatus = company.getLicenseStatus();
             if(companyLicenseStatus.equals(LicenseStatus.REGULAR)) {
-                if(userHasValidTrialActivation(userDTO)){ 
-                    // Convert user if they're on trial
+                if(userOnTrial(userDTO)){ 
                     convertTrialUserToRegular(userDTO);
                 } else { 
                     // Approve the user for regular use
-                    approveUser(userDTO, false);
+                    updatedUserDTO = approveUser(userDTO, false);
                 }
                 // When the license the user registers with doesn't match their company's license,
                 // we send an email explaining this.
@@ -600,23 +606,26 @@ public class UserService {
             }else if(companyLicenseStatus.equals(LicenseStatus.TRIAL)){
                 // If the user is activated and allowed to keep their regular license
                 // then we don't need to update their license, just add them to the company.
-                if(keepOriginalLicense && userDTO.isActivated()){
+                if(keepOriginalLicense && userDTO.isActivated() && !userOnTrial(userDTO)){
                     return updatedUserDTO;
                 }
-                if(userHasValidTrialActivation(userDTO)){
+                if(userHasValidTrialActivation(userDTO) 
+                    && userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate() != null){
                     // When a user has an active or expired trial, we just need to approve and update their tokens.
-                    approveUser(userDTO, true);
+                    updatedUserDTO = approveUser(userDTO, true);
                 }else{
-                    List<Token> userTokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
-                    userTokens.forEach(token -> {
-                        token.setRenewable(false);
-                        token.setExpiration(Instant.now().plusSeconds(DAY_IN_SECONDS * TRIAL_PERIOD_IN_DAYS));
-                        tokenService.save(token);
+                    // User needs to activate their trial to reactivate their token
+                    List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+                    tokens.forEach(token -> {
+                        tokenProvider.expireToken(token);
                     });
                     Optional<User> updatedUser = initiateTrialAccountActivation(userDTO.getLogin());
                     if(updatedUser.isPresent()){
-                        mailService.sendActiveTrialMail(userMapper.userToUserDTO(updatedUser.get()), false);
-                        updatedUserDTO = Optional.of(userMapper.userToUserDTO(updatedUser.get()));
+                        updatedUser.get().setActivated(true);
+                        if(!isAccountCreation){
+                            mailService.sendActiveTrialMail(userMapper.userToUserDTO(updatedUser.get()), false);
+                        }
+                        updatedUserDTO = updateUser(userMapper.userToUserDTO(updatedUser.get()));
                     }
                 } 
             }else if(companyLicenseStatus.equals(LicenseStatus.TRIAL_EXPIRED) || companyLicenseStatus.equals(LicenseStatus.EXPIRED)){
@@ -655,10 +664,10 @@ public class UserService {
             Set<Company> companies = optionalCompanyDomain.get().getCompanies();
             if(companies.size() == 1){
                 Company company = companies.iterator().next();
-                if(company.getLicenseModel().equals(LicenseModel.MICRO)){
+                if(company.getLicenseModel().equals(LicenseModel.LIMITED)){
                     return new CompanyCandidate(Optional.of(company), false);
                 }
-                if(company.getLicenseModel().equals(LicenseModel.REGULAR)){
+                if(company.getLicenseModel().equals(LicenseModel.FULL)){
                     // If only a regular license model exists for domain, then auto approve user with company.
                     return new CompanyCandidate(Optional.of(company), true);
                 }
@@ -667,7 +676,7 @@ public class UserService {
                 Optional<Company> foundCompany = companies
                     .stream()
                     .filter(c -> {
-                        return c.getLicenseModel().equals(LicenseModel.REGULAR);
+                        return c.getLicenseModel().equals(LicenseModel.FULL);
                     })
                     .findAny();
                 return new CompanyCandidate(foundCompany, true);
@@ -683,6 +692,16 @@ public class UserService {
             .map(AdditionalInfoDTO::getTrialAccount)
             .map(TrialAccount::getActivation)
             .isPresent();
+    }
+
+    private boolean userOnTrial(UserDTO userDTO) {
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
+        return tokens.stream()
+            .filter(token -> token.isRenewable().equals(false))
+            .map(token -> true)
+            .findAny()
+            .orElse(false);
+
     }
 
     public List<UserDTO> getUsersOfCompany(Long companyId){

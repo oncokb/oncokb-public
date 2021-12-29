@@ -35,6 +35,11 @@ import Select from 'react-select';
 import DocumentTitle from 'react-document-title';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { AdditionalInfoSelect } from 'app/shared/dropdown/AdditionalInfoSelect';
+import {
+  debouncedCompanyNameValidator,
+  fieldRequiredValidation,
+  textValidation,
+} from 'app/shared/utils/FormValidationUtils';
 
 interface MatchParams {
   id: string;
@@ -127,6 +132,7 @@ export default class CompanyPage extends React.Component<
     this.availableUsers = allUsers
       .filter(
         user =>
+          !user.company &&
           !this.companyUsers.some(companyUser => companyUser.id === user.id)
       )
       .map(user => ({
@@ -147,8 +153,11 @@ export default class CompanyPage extends React.Component<
   showConfirmModal(event: any, value: any) {
     this.formValues = value;
 
-    if (this.company.licenseStatus !== this.selectedLicenseStatus) {
-      // Show warnings when license status is being changed
+    // Show warnings when license status is being changed and there are company users
+    if (
+      this.company.licenseStatus !== this.selectedLicenseStatus &&
+      this.companyUsers.length > 0
+    ) {
       this.showModal = true;
       this.confirmModalText =
         LICENSE_STATUS_UPDATE_MESSAGES[this.company.licenseStatus][
@@ -189,11 +198,11 @@ export default class CompanyPage extends React.Component<
       await this.getAllUsersTokens();
       this.conflictingDomains = [];
       this.verifyCompanyDomains();
-      this.getCompanyStatus = PromiseStatus.complete;
       notifySuccess('Company successfully updated');
     } catch (error) {
-      this.getCompanyStatus = PromiseStatus.error;
       notifyError(error);
+    } finally {
+      this.getCompanyStatus = PromiseStatus.complete;
     }
   }
 
@@ -226,7 +235,7 @@ export default class CompanyPage extends React.Component<
 
   @action
   verifyCompanyDomains() {
-    if (this.company.licenseModel !== LicenseModel.REGULAR) {
+    if (this.company.licenseModel !== LicenseModel.FULL) {
       this.conflictingDomains = [];
       return;
     }
@@ -310,6 +319,23 @@ export default class CompanyPage extends React.Component<
                                 Company Name
                               </span>
                             }
+                            validate={{
+                              ...fieldRequiredValidation('company name'),
+                              ...textValidation(1, 100),
+                              async: (
+                                value: string,
+                                ctx: any,
+                                input: any,
+                                cb: (isValid: boolean | string) => void
+                              ) =>
+                                debouncedCompanyNameValidator(
+                                  value,
+                                  ctx,
+                                  input,
+                                  cb,
+                                  this.company.id
+                                ),
+                            }}
                           />
                           <FormTextAreaField
                             label="Company Description"
@@ -345,6 +371,7 @@ export default class CompanyPage extends React.Component<
                                 Business Contact
                               </span>
                             }
+                            validate={{ ...textValidation(0, 255) }}
                           />
                           <AvField
                             name="legalContact"
@@ -354,6 +381,7 @@ export default class CompanyPage extends React.Component<
                                 Legal Contact
                               </span>
                             }
+                            validate={{ ...textValidation(0, 255) }}
                           />
 
                           <FormSelectWithLabelField
@@ -455,7 +483,7 @@ export default class CompanyPage extends React.Component<
                             </Alert>
                           ) : null}
                           <div className="form-group">
-                            <div className={'font-weight-bold'}>
+                            <div className={'font-weight-bold mb-2'}>
                               Add Users to Company
                             </div>
                             <div style={{ display: 'flex' }}>

@@ -12,6 +12,8 @@ import client from '../api/clientInstance';
 import { notifyError, notifySuccess } from '../utils/NotificationUtils';
 import { Button } from 'react-bootstrap';
 import { action } from 'mobx';
+import { LicenseStatus } from 'app/config/constants';
+import InfoIcon from '../icons/InfoIcon';
 
 type IUserTableProps = {
   data: UserDTO[];
@@ -61,9 +63,22 @@ export class UserTable extends React.Component<IUserTableProps> {
   }
 
   isUserOnTrial(user: UserDTO) {
-    return this.props.usersTokens.some(
-      token => token.user.id === user.id && !token.renewable
-    );
+    if (user.company.licenseStatus === LicenseStatus.TRIAL) {
+      if (
+        this.props.usersTokens.some(
+          token => token.user.id === user.id && !token.renewable
+        )
+      ) {
+        return ' (Trial)';
+      } else if (
+        !user.additionalInfo?.trialAccount?.activation?.activationDate &&
+        user.additionalInfo?.trialAccount?.activation?.key
+      ) {
+        return ' (Pending)';
+      } else {
+        return ' (Regular)';
+      }
+    }
   }
 
   private columns: SearchColumn<UserDTO>[] = [
@@ -115,7 +130,29 @@ export class UserTable extends React.Component<IUserTableProps> {
     },
     {
       id: 'activated',
-      Header: <span>Status</span>,
+      Header: (
+        <>
+          <span>Status</span>
+          <InfoIcon
+            placement={'top'}
+            overlay={
+              <>
+                <div>
+                  <strong>Trial:</strong> User has activated their trial
+                  license.
+                </div>
+                <div>
+                  <strong>Pending:</strong> Waiting for user to activate trial.
+                </div>
+                <div>
+                  <strong>Regular:</strong> User is on a regular license.
+                </div>
+              </>
+            }
+            className={'ml-2'}
+          />
+        </>
+      ),
       accessor: 'activated',
       defaultSortDesc: false,
       className: 'justify-content-center',
@@ -124,7 +161,7 @@ export class UserTable extends React.Component<IUserTableProps> {
         return (
           <span>
             {props.original.activated ? 'Activated' : 'Inactivated'}
-            {this.isUserOnTrial(props.original) ? ' (Trial)' : ''}
+            {this.isUserOnTrial(props.original)}
           </span>
         );
       },
