@@ -316,8 +316,10 @@ public class AccountResource {
     public void requestPasswordReset(@RequestBody String mail) {
         Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
         if (user.isPresent()) {
-            userService.requestPasswordReset(user.get().getLogin());
-            mailService.sendPasswordResetMail(userMapper.userToUserDTO(user.get()));
+            Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
+            if (updatedUser.isPresent()) {
+                mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
+            }
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made
