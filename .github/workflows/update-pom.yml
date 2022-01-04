@@ -12,7 +12,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: 'Get Previous tag'
         id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@master"
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 1.0.0
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
