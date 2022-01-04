@@ -48,7 +48,6 @@ export type Column = {
 };
 export interface IEvidenceTableTabProps {
   hugoSymbol: string;
-  ensemblGenes?: EnsemblGene[];
   alteration?: IAlteration;
   cancerType?: string;
   biological: BiologicalVariant[];
@@ -306,7 +305,6 @@ export default class AlterationTableTabs extends React.Component<
             <>
               <AlterationPageLink
                 hugoSymbol={this.props.hugoSymbol}
-                ensemblGenes={this.props.ensemblGenes}
                 alteration={{
                   alteration: props.original.variant.alteration,
                   name: props.original.variant.name,
@@ -422,7 +420,6 @@ export default class AlterationTableTabs extends React.Component<
           return (
             <AlterationPageLink
               hugoSymbol={props.original.alteration.gene.hugoSymbol}
-              ensemblGenes={this.props.ensemblGenes}
               alteration={{
                 alteration: props.original.alteration.alteration,
                 name: props.original.alteration.name,
