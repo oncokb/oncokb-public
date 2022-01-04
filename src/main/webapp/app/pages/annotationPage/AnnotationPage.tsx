@@ -37,7 +37,6 @@ import {
   getCategoricalAlterationDescription,
   getHighestFdaLevel,
   getTreatmentNameFromEvidence,
-  IAlteration,
   isPositionalAlteration,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
@@ -49,8 +48,6 @@ import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
-import { COLOR_GREY } from 'app/config/theme';
-import ShowHideToggleIcon from 'app/shared/icons/ShowHideToggleIcon';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -71,6 +68,8 @@ const SUMMARY_TITLE = {
 export type IAnnotationPage = {
   appStore?: AppStore;
   hugoSymbol: string;
+  oncogene?: boolean;
+  tsg?: boolean;
   ensemblGenes: EnsemblGene[];
   alteration: string;
   matchedAlteration: Alteration | undefined;
@@ -112,7 +111,6 @@ export default class AnnotationPage extends React.Component<
               <AlterationPageLink
                 key={alteration.name}
                 hugoSymbol={this.props.hugoSymbol}
-                ensemblGenes={this.props.ensemblGenes}
                 alteration={{
                   alteration: alteration.alteration,
                   name: alteration.name,
@@ -261,7 +259,8 @@ export default class AnnotationPage extends React.Component<
     const categoricalAlterationDescription = getCategoricalAlterationDescription(
       this.props.hugoSymbol,
       this.props.alteration,
-      this.props.ensemblGenes
+      this.props.oncogene,
+      this.props.tsg
     );
     return (
       <>
@@ -287,12 +286,6 @@ export default class AnnotationPage extends React.Component<
             true
           )}`}</span>
           <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
-            {categoricalAlterationDescription && (
-              <InfoIcon
-                className={'mr-1'}
-                overlay={categoricalAlterationDescription}
-              />
-            )}
             <FeedbackIcon
               feedback={{
                 type: FeedbackType.ANNOTATION,
@@ -331,6 +324,16 @@ export default class AnnotationPage extends React.Component<
         />
         <Row>
           <Col>
+            {categoricalAlterationDescription && (
+              <div
+                className={classnames(
+                  styles.categoricalAltDescription,
+                  DEFAULT_MARGIN_BOTTOM_LG
+                )}
+              >
+                {categoricalAlterationDescription}
+              </div>
+            )}
             {this.alterationSummaries.map(summary => {
               return (
                 <div key={summary.content} className={DEFAULT_MARGIN_BOTTOM_LG}>

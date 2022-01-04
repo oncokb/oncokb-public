@@ -129,7 +129,6 @@ export default class GenePage extends React.Component<GenePageProps, any> {
           <AlterationPageLink
             key={variant.variant.name}
             hugoSymbol={this.store.hugoSymbol}
-            ensemblGenes={this.store.ensemblGenes.result}
             alteration={{
               alteration: variant.variant.alteration,
               name: variant.variant.name,
@@ -297,7 +296,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
     if (this.store.barChartData.length > 0) {
       return {
         xl: 8,
-        lg: 6,
+        lg: 8,
         xs: 12,
       };
     } else {
@@ -485,7 +484,6 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                               <AlterationTableTabs
                                 selectedTab={this.defaultSelectedTab}
                                 hugoSymbol={this.store.hugoSymbol}
-                                ensemblGenes={this.store.ensemblGenes.result}
                                 biological={
                                   this.store.filteredBiologicalAlterations
                                 }
