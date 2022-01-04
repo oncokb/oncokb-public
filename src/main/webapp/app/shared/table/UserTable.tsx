@@ -11,18 +11,26 @@ import _ from 'lodash';
 import client from '../api/clientInstance';
 import { notifyError, notifySuccess } from '../utils/NotificationUtils';
 import { Button } from 'react-bootstrap';
-import { action } from 'mobx';
+import { action, observable } from 'mobx';
 import { LicenseStatus } from 'app/config/constants';
 import InfoIcon from '../icons/InfoIcon';
+import { UserStatusModal } from '../modal/UserStatusModal';
+import { observer } from 'mobx-react';
 
 type IUserTableProps = {
   data: UserDTO[];
   usersTokens: Token[];
   onRemoveUser: (userToRemove: UserDTO) => void;
   onUpdateUser: (updatedUser: UserDTO) => void;
+  loading?: boolean;
+  licenseStatus?: LicenseStatus;
 };
 
+@observer
 export class UserTable extends React.Component<IUserTableProps> {
+  @observable showUserStatusModal = false;
+  @observable currentSelectedUser: UserDTO | undefined = undefined;
+
   @action.bound
   async updateUser(
     userToUpdate: UserDTO,
@@ -62,23 +70,47 @@ export class UserTable extends React.Component<IUserTableProps> {
     }
   }
 
-  isUserOnTrial(user: UserDTO) {
-    if (user.company.licenseStatus === LicenseStatus.TRIAL) {
+  @action
+  updateActiveStatus(sendEmail = true) {
+    if (this.currentSelectedUser) {
+      this.currentSelectedUser.activated = !this.currentSelectedUser.activated;
+      this.updateUser(
+        this.currentSelectedUser,
+        sendEmail,
+        false,
+        this.props.onUpdateUser
+      );
+    } else {
+      notifyError(new Error('No user specified'));
+    }
+    this.showUserStatusModal = false;
+  }
+
+  @action.bound
+  cancelUpdateActiveStatus() {
+    this.showUserStatusModal = false;
+    this.currentSelectedUser = undefined;
+  }
+
+  private getAccountStatus(user: UserDTO) {
+    let status = '';
+    if (this.props.licenseStatus === LicenseStatus.TRIAL) {
       if (
         this.props.usersTokens.some(
           token => token.user.id === user.id && !token.renewable
         )
       ) {
-        return ' (Trial)';
+        status += ' (Trial)';
       } else if (
         !user.additionalInfo?.trialAccount?.activation?.activationDate &&
         user.additionalInfo?.trialAccount?.activation?.key
       ) {
-        return ' (Pending)';
+        status += ' (Pending)';
       } else {
-        return ' (Regular)';
+        status += ' (Regular)';
       }
     }
+    return status;
   }
 
   private columns: SearchColumn<UserDTO>[] = [
@@ -133,24 +165,27 @@ export class UserTable extends React.Component<IUserTableProps> {
       Header: (
         <>
           <span>Status</span>
-          <InfoIcon
-            placement={'top'}
-            overlay={
-              <>
-                <div>
-                  <strong>Trial:</strong> User has activated their trial
-                  license.
-                </div>
-                <div>
-                  <strong>Pending:</strong> Waiting for user to activate trial.
-                </div>
-                <div>
-                  <strong>Regular:</strong> User is on a regular license.
-                </div>
-              </>
-            }
-            className={'ml-2'}
-          />
+          {this.props.licenseStatus === LicenseStatus.TRIAL && (
+            <InfoIcon
+              placement={'top'}
+              overlay={
+                <>
+                  <div>
+                    <strong>Trial:</strong> User has activated their trial
+                    license.
+                  </div>
+                  <div>
+                    <strong>Pending:</strong> Waiting for user to activate
+                    trial.
+                  </div>
+                  <div>
+                    <strong>Regular:</strong> User is on a regular license.
+                  </div>
+                </>
+              }
+              className={'ml-2'}
+            />
+          )}
         </>
       ),
       accessor: 'activated',
@@ -158,12 +193,24 @@ export class UserTable extends React.Component<IUserTableProps> {
       className: 'justify-content-center',
       sortMethod: defaultSortMethod,
       Cell: (props: { original: UserDTO }) => {
-        return (
-          <span>
-            {props.original.activated ? 'Activated' : 'Inactivated'}
-            {this.isUserOnTrial(props.original)}
-          </span>
-        );
+        if (props.original.emailVerified) {
+          return (
+            <>
+              <Button
+                variant={props.original.activated ? 'success' : 'danger'}
+                onClick={() => {
+                  this.currentSelectedUser = props.original;
+                  this.showUserStatusModal = true;
+                }}
+              >
+                {props.original.activated ? 'Activated' : 'Inactivated'}
+              </Button>
+              <span>{this.getAccountStatus(props.original)}</span>
+            </>
+          );
+        } else {
+          return <div>Email hasn&apos;t been verified yet</div>;
+        }
       },
     },
     {
@@ -243,18 +290,27 @@ export class UserTable extends React.Component<IUserTableProps> {
 
   render() {
     return (
-      <OncoKBTable
-        defaultSorted={[
-          {
-            id: 'createdDate',
-            desc: true,
-          },
-        ]}
-        data={this.props.data}
-        columns={this.columns}
-        showPagination={true}
-        minRows={1}
-      />
+      <>
+        <OncoKBTable
+          defaultSorted={[
+            {
+              id: 'createdDate',
+              desc: true,
+            },
+          ]}
+          data={this.props.data}
+          columns={this.columns}
+          showPagination={true}
+          minRows={1}
+          loading={this.props.loading}
+        />
+        <UserStatusModal
+          show={this.showUserStatusModal}
+          user={this.currentSelectedUser}
+          onCancel={this.cancelUpdateActiveStatus}
+          onConfirm={(sendEmail: boolean) => this.updateActiveStatus(sendEmail)}
+        />
+      </>
     );
   }
 }

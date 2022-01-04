@@ -54,7 +54,7 @@ export type CompanyVM = {
 
         'companyType': "PARENT" | "BRANCH" | "UNKNOWN"
 
-        'companyUserDTOs': Array < UserDTO >
+        'companyUserEmails': Array < string >
 
         'description': string
 
@@ -2022,81 +2022,6 @@ export default class API {
         $domain ? : string
     }): Promise < CompanyDTO > {
         return this.getCompanyUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-            return response.body;
-        });
-    };
-    deleteCompanyUsingDELETEURL(parameters: {
-        'id': number,
-        $queryParameters ? : any
-    }): string {
-        let queryParameters: any = {};
-        let path = '/api/companies/{id}';
-
-        path = path.replace('{id}', parameters['id'] + '');
-
-        if (parameters.$queryParameters) {
-            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                var parameter = parameters.$queryParameters[parameterName];
-                queryParameters[parameterName] = parameter;
-            });
-        }
-        let keys = Object.keys(queryParameters);
-        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
-    };
-
-    /**
-     * deleteCompany
-     * @method
-     * @name API#deleteCompanyUsingDELETE
-     * @param {integer} id - id
-     */
-    deleteCompanyUsingDELETEWithHttpInfo(parameters: {
-        'id': number,
-        $queryParameters ? : any,
-        $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/api/companies/{id}';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
-
-            path = path.replace('{id}', parameters['id'] + '');
-
-            if (parameters['id'] === undefined) {
-                reject(new Error('Missing required  parameter: id'));
-                return;
-            }
-
-            if (parameters.$queryParameters) {
-                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                    var parameter = parameters.$queryParameters[parameterName];
-                    queryParameters[parameterName] = parameter;
-                });
-            }
-
-            request('DELETE', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-
-        });
-    };
-
-    /**
-     * deleteCompany
-     * @method
-     * @name API#deleteCompanyUsingDELETE
-     * @param {integer} id - id
-     */
-    deleteCompanyUsingDELETE(parameters: {
-        'id': number,
-        $queryParameters ? : any,
-        $domain ? : string
-    }): Promise < any > {
-        return this.deleteCompanyUsingDELETEWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };
@@ -5372,6 +5297,68 @@ export default class API {
         }): Promise < Array < string >
         > {
             return this.getAuthoritiesUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    getNonCompanyUserEmailsUsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/users/emails';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * getNonCompanyUserEmails
+     * @method
+     * @name API#getNonCompanyUserEmailsUsingGET
+     */
+    getNonCompanyUserEmailsUsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/users/emails';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * getNonCompanyUserEmails
+     * @method
+     * @name API#getNonCompanyUserEmailsUsingGET
+     */
+    getNonCompanyUserEmailsUsingGET(parameters: {
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < string >
+        > {
+            return this.getNonCompanyUserEmailsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };

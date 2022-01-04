@@ -5,16 +5,17 @@ import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 
 public class CompanyVM extends CompanyDTO {
-    private List<UserDTO> companyUserDTOs;
+    private List<String> companyUserEmails;
     
     public CompanyVM() {
     }
-    
-    public List<UserDTO> getCompanyUserDTOs() {
-        return this.companyUserDTOs;
+
+    public List<String> getCompanyUserEmails() {
+        return this.companyUserEmails;
+    }
+
+    public void setCompanyUserEmails(List<String> companyUserEmails) {
+        this.companyUserEmails = companyUserEmails;
     }
     
-    public void setCompanyUserDTOs(List<UserDTO> companyUserDTOs) {
-        this.companyUserDTOs = companyUserDTOs;
-    }
 }

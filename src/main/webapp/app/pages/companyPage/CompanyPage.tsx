@@ -6,6 +6,7 @@ import {
   COMPANY_TYPE_TITLES,
   LicenseModel,
   LicenseStatus,
+  LicenseType,
   LICENSE_MODEL_TITLES,
   LICENSE_STATUS_TITLES,
   LICENSE_TITLES,
@@ -24,7 +25,11 @@ import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouteComponentProps } from 'react-router';
 import _, { parseInt } from 'lodash';
-import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
+import {
+  notifyError,
+  notifyInfo,
+  notifySuccess,
+} from 'app/shared/utils/NotificationUtils';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { FormTextAreaField } from 'app/shared/textarea/FormTextAreaField';
 import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
@@ -47,8 +52,7 @@ interface MatchParams {
 
 type SelectOptionType = {
   label: string;
-  value: number;
-  user: UserDTO;
+  value: string;
 };
 
 const LICENSE_STATUS_UPDATE_MESSAGES = {
@@ -84,8 +88,11 @@ export default class CompanyPage extends React.Component<
   @observable confirmModalText = '';
   @observable formValues: any;
 
+  @observable companyTableLoading = true;
   @observable companyUsers: UserDTO[] = [];
   @observable companyUsersTokens: Token[] = [];
+
+  @observable userDropdownLoading = true;
   @observable availableUsers: SelectOptionType[] = [];
   @observable selectedUsersOptions: SelectOptionType[] = [];
 
@@ -98,13 +105,13 @@ export default class CompanyPage extends React.Component<
   async getCompanyInfos() {
     try {
       this.getCompanyStatus = PromiseStatus.pending;
+      this.companyTableLoading = true;
+      this.userDropdownLoading = true;
       this.company = await client.getCompanyUsingGET({
         id: parseInt(this.props.match.params.id),
       });
       this.selectedLicenseStatus = this.company.licenseStatus as LicenseStatus;
-      await this.getCompanyUsers();
-      await this.getDropdownUsers();
-      await this.getAllUsersTokens();
+      this.getCompanyUsers();
       this.verifyCompanyDomains();
       this.getCompanyStatus = PromiseStatus.complete;
     } catch (error) {
@@ -114,39 +121,39 @@ export default class CompanyPage extends React.Component<
   }
 
   @action
-  async getCompanyUsers() {
-    try {
-      this.companyUsers = await client.getCompanyUsersUsingGET({
+  getCompanyUsers() {
+    client
+      .getCompanyUsersUsingGET({
         id: this.company.id,
-      });
-    } catch (error) {
-      notifyError(error);
-    }
+      })
+      .then(async companyUsers => {
+        this.companyUsers = companyUsers;
+        this.getDropdownUsers();
+        await this.getCompanyUsersTokens();
+        this.companyTableLoading = false;
+      })
+      .catch(error => notifyError(error));
+  }
+
+  @action
+  async getCompanyUsersTokens() {
+    this.companyUsersTokens = await client.getUsersTokensUsingPOST({
+      logins: this.companyUsers.map(user => user.login),
+    });
   }
 
   @action
   async getDropdownUsers() {
-    const allUsers = await client.getAllUsersUsingGET({
-      size: THRESHOLD_NUM_OF_USER,
-    });
-    this.availableUsers = allUsers
-      .filter(
-        user =>
-          !user.company &&
-          !this.companyUsers.some(companyUser => companyUser.id === user.id)
-      )
-      .map(user => ({
-        label: user.email,
-        value: user.id,
-        user,
+    try {
+      const allUsers = await client.getNonCompanyUserEmailsUsingGET({});
+      this.availableUsers = allUsers.map(email => ({
+        label: email,
+        value: email,
       }));
-  }
-
-  @action
-  async getAllUsersTokens() {
-    this.companyUsersTokens = await client.getUsersTokensUsingPOST({
-      logins: this.companyUsers.map(user => user.login),
-    });
+      this.userDropdownLoading = false;
+    } catch (error) {
+      notifyError(error);
+    }
   }
 
   @action.bound
@@ -172,8 +179,10 @@ export default class CompanyPage extends React.Component<
   async updateCompany() {
     this.showModal = false;
     this.getCompanyStatus = PromiseStatus.pending;
+    this.companyTableLoading = true;
+    this.userDropdownLoading = true;
     const newCompanyUsers = this.selectedUsersOptions.map(
-      selection => selection.user
+      selection => selection.value
     );
     const updatedCompany: CompanyVM = {
       ...this.company,
@@ -182,7 +191,7 @@ export default class CompanyPage extends React.Component<
       companyDomains: this.company.companyDomains,
       businessContact: this.formValues.businessContact,
       legalContact: this.formValues.legalContact,
-      companyUserDTOs: newCompanyUsers,
+      companyUserEmails: newCompanyUsers,
     };
 
     try {
@@ -192,11 +201,9 @@ export default class CompanyPage extends React.Component<
       // Update state with new information from company edit.
       this.company = updatedCompanyDTO;
       this.selectedLicenseStatus = this.company.licenseStatus as LicenseStatus;
-      await this.getCompanyUsers();
       this.selectedUsersOptions = [];
-      await this.getDropdownUsers();
-      await this.getAllUsersTokens();
       this.conflictingDomains = [];
+      this.getCompanyUsers();
       this.verifyCompanyDomains();
       notifySuccess('Company successfully updated');
     } catch (error) {
@@ -221,8 +228,7 @@ export default class CompanyPage extends React.Component<
     );
     this.availableUsers.push({
       label: userToRemove.email,
-      value: userToRemove.id,
-      user: userToRemove,
+      value: userToRemove.email,
     });
   }
 
@@ -427,6 +433,10 @@ export default class CompanyPage extends React.Component<
                               usersTokens={this.companyUsersTokens}
                               onRemoveUser={this.removeUserFromCompany}
                               onUpdateUser={this.updateCompanyUser}
+                              licenseStatus={
+                                this.company.licenseStatus as LicenseStatus
+                              }
+                              loading={this.companyTableLoading}
                             />
                           </div>
                           <div className="form-group">
@@ -500,6 +510,7 @@ export default class CompanyPage extends React.Component<
                                       : [];
                                   }}
                                   maxMenuHeight={200}
+                                  isLoading={this.userDropdownLoading}
                                 />
                               </div>
                               <div

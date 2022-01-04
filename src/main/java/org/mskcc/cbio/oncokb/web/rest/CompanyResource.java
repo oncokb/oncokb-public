@@ -134,7 +134,7 @@ public class CompanyResource {
     @GetMapping("/companies/{id}/users")
     public List<UserDTO> getCompanyUsers(@PathVariable Long id) {
         log.debug("REST request to all users associated to Company : {}", id);
-        return userService.getUsersOfCompany(id);
+        return userService.getCompanyUsers(id);
     }
 
     /**

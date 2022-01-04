@@ -7,7 +7,6 @@ import org.mskcc.cbio.oncokb.aop.api.APIConditionallyEnabled;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
@@ -35,10 +34,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.mail.MessagingException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
@@ -86,8 +83,6 @@ public class UserResource {
 
     private final UserRepository userRepository;
 
-    private final UserDetailsRepository userDetailsRepository;
-
     private final MailService mailService;
 
     private final TokenService tokenService;
@@ -101,7 +96,6 @@ public class UserResource {
     ) {
         this.userService = userService;
         this.userRepository = userRepository;
-        this.userDetailsRepository = userDetailsRepository;
         this.mailService = mailService;
         this.tokenService = tokenService;
     }
@@ -233,6 +227,16 @@ public class UserResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<String> getAuthorities() {
         return userService.getAuthorities();
+    }
+
+    /**
+     * Get emails of users that are not part of a company
+     * 
+     * @return user emails
+     */
+    @GetMapping("/users/emails")
+    public List<String> getNonCompanyUserEmails() {
+        return userService.getNonCompanyUserEmails();
     }
 
     /**
