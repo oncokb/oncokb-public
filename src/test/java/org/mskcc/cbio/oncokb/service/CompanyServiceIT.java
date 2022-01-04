@@ -154,7 +154,7 @@ public class CompanyServiceIT {
 
         // Add user to the company
         CompanyVM updatedCompany = createCompanyVM(existingCompany.getId());
-        updatedCompany.setCompanyUserDTOs(Collections.singletonList(userMapper.userToUserDTO(newUser)));
+        updatedCompany.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
 
         // Check if user is updated with the company information
         companyService.updateCompany(updatedCompany);
@@ -179,7 +179,7 @@ public class CompanyServiceIT {
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
         User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
         CompanyVM companyVM = createCompanyVM(existingCompany.getId());
-        companyVM.setCompanyUserDTOs(Collections.singletonList(userMapper.userToUserDTO(newUser)));
+        companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
 
         // Change license to regular
@@ -204,7 +204,7 @@ public class CompanyServiceIT {
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
         User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
         CompanyVM companyVM = createCompanyVM(existingCompany.getId());
-        companyVM.setCompanyUserDTOs(Collections.singletonList(userMapper.userToUserDTO(newUser)));
+        companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
 
         // Change license to trial
@@ -230,7 +230,7 @@ public class CompanyServiceIT {
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
         User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
         CompanyVM companyVM = createCompanyVM(existingCompany.getId());
-        companyVM.setCompanyUserDTOs(Collections.singletonList(userMapper.userToUserDTO(newUser)));
+        companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
 
         // Expire the company's license
@@ -299,12 +299,12 @@ public class CompanyServiceIT {
     public void assertThatCompanyUsersFound(){
         Company company = companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
         CompanyVM companyVM = createCompanyVM(company.getId());
-        User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
-        companyVM.setCompanyUserDTOs(Collections.singletonList(userMapper.userToUserDTO(newUser)));
+        userService.createUser(userDTO, Optional.empty(), Optional.empty());
+        companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
 
-        List<UserDTO> companyUsers = userService.getUsersOfCompany(company.getId());
-        assertThat(companyUsers).hasSameSizeAs(companyVM.getCompanyUserDTOs());
+        List<UserDTO> companyUsers = userService.getCompanyUsers(company.getId());
+        assertThat(companyUsers).hasSameSizeAs(companyVM.getCompanyUserEmails());
         assertThat(companyUsers.get(0).getCompany()).isNotNull();
         assertThat(companyUsers.get(0).getCompany().getId()).isEqualTo(company.getId());
     }

@@ -49,7 +49,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
-
-    @Query("select user from User user where substring(user.email, locate('@', user.email)+1) in ?1")
-    List<User> findAllWithEmailDomainMatchingCompanyDomain(Set<String> domains);
 }

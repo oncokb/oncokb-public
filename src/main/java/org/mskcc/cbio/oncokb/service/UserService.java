@@ -691,13 +691,22 @@ public class UserService {
 
     }
 
-    public List<UserDTO> getUsersOfCompany(Long companyId){
+    public List<UserDTO> getCompanyUsers(Long companyId){
         List<UserDetails> userDetails = userDetailsRepository.findByCompanyId(companyId);
         List<User> users = userDetails
             .stream()
             .map(UserDetails::getUser)
             .collect(Collectors.toList());
         return userMapper.usersToUserDTOs(users);
+    }
+
+    public List<String> getNonCompanyUserEmails() {
+        List<UserDetails> userDetails = userDetailsRepository.findByCompanyIdIsNull();
+        return userDetails
+            .stream()
+            .map(UserDetails::getUser)
+            .map(User::getEmail)
+            .collect(Collectors.toList());
     }
 
     private void clearUserCaches(User user) {
