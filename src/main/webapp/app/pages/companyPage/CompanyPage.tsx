@@ -154,10 +154,6 @@ export default class CompanyPage extends React.Component<
       notifyError(new Error('Cannot update when company is loading'));
       return;
     }
-
-    /*eslint-disable no-console*/
-    console.log('got here');
-
     const newCompanyUserEmails = this.selectedUsersOptions.map(
       selection => selection.value
     );
