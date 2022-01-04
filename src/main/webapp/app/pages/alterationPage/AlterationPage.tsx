@@ -187,6 +187,8 @@ export default class AlterationPage extends React.Component<
                 <AnnotationPage
                   appStore={this.props.appStore}
                   hugoSymbol={this.store.hugoSymbol}
+                  oncogene={this.store.gene.result.oncogene}
+                  tsg={this.store.gene.result.tsg}
                   ensemblGenes={this.store.ensemblGenes.result}
                   alteration={this.store.alterationQuery}
                   matchedAlteration={this.store.matchedAlteration}

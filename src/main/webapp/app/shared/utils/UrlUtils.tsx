@@ -24,7 +24,6 @@ import { ReactNodeArray } from 'prop-types';
 import {
   encodeSlash,
   getAlterationName,
-  getCategoricalAlterationDescription,
   getYouTubeLink,
   IAlteration,
 } from 'app/shared/utils/Utils';
@@ -43,7 +42,6 @@ import InfoIcon from 'app/shared/icons/InfoIcon';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
-  content?: string;
   highlightContent?: boolean;
   searchQueries?: GenePageSearchQueries;
   hashQueries?: GenePageHashQueries;
@@ -65,7 +63,7 @@ export const GenePageLink: React.FunctionComponent<{
       to={pageLink}
       onClick={props.onClick}
     >
-      {props.content ? props.content : props.hugoSymbol}
+      {props.children ? props.children : props.hugoSymbol}
     </Link>
   );
 };
@@ -79,7 +77,6 @@ export const AlterationPageLink: React.FunctionComponent<{
   hashQueries?: AlterationPageHashQueries;
   showGene?: boolean;
   onClick?: () => void;
-  ensemblGenes?: EnsemblGene[];
 }> = props => {
   let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${
     typeof props.alteration === 'string'
@@ -104,11 +101,6 @@ export const AlterationPageLink: React.FunctionComponent<{
     pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
   }
   const alterationName = getAlterationName(props.alteration);
-  const altDescription = getCategoricalAlterationDescription(
-    props.hugoSymbol,
-    alterationName,
-    props.ensemblGenes
-  );
   return (
     <>
       <Link to={pageLink} onClick={props.onClick}>
@@ -118,12 +110,6 @@ export const AlterationPageLink: React.FunctionComponent<{
           ? `${props.hugoSymbol} ${alterationName}`
           : alterationName}
       </Link>
-      {altDescription && (
-        <span>
-          {' '}
-          <InfoIcon overlay={altDescription} />
-        </span>
-      )}
     </>
   );
 };
@@ -235,7 +221,6 @@ export const getActionableGenesPageLink = (
 
 export const SopPageLink: React.FunctionComponent<{
   version?: number;
-  content?: string;
 }> = props => {
   let link = SOP_LINK;
   let defaultContent = 'OncoKB SOP';
@@ -243,5 +228,5 @@ export const SopPageLink: React.FunctionComponent<{
     link += `/?version=v${props.version}`;
     defaultContent += ` v${props.version}`;
   }
-  return <Linkout link={link}>{props.content || defaultContent}</Linkout>;
+  return <Linkout link={link}>{props.children || defaultContent}</Linkout>;
 };

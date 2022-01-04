@@ -48,6 +48,7 @@ import {
   AlterationPageLink,
   GenePageLink,
   OncoTreeLink,
+  SopPageLink,
   TumorTypePageLink,
 } from 'app/shared/utils/UrlUtils';
 import moment from 'moment';
@@ -335,7 +336,6 @@ export function getDefaultColumnDefinition<T>(
             <AlterationPageLink
               hugoSymbol={props.original.hugoSymbol}
               alteration={props.original.alteration}
-              ensemblGenes={props.original.ensemblGenes}
             />
           );
         },
@@ -687,32 +687,62 @@ export const getGeneCoordinates = (ensemblGenes: EnsemblGene[]) => {
 export const getCategoricalAlterationDescription = (
   hugoSymbol: string,
   alteration: string,
-  ensemblGenes?: EnsemblGene[]
+  oncogene?: boolean,
+  tsg?: boolean
 ) => {
-  // For places the ensembl genes info is not available, we simply do not show any description for categorical alts
-  if (ensemblGenes === undefined || ensemblGenes.length === 0) {
-    return '';
-  }
-  const geneCoordinatesStr =
-    ensemblGenes &&
-    `the ${hugoSymbol} gene (${getGeneCoordinates(ensemblGenes)})`;
-  let content = '';
+  const geneLink = (
+    <GenePageLink hugoSymbol={hugoSymbol}>the {hugoSymbol} gene</GenePageLink>
+  );
+  let content;
   switch (alteration) {
-    case ONCOGENIC_MUTATIONS:
-      content =
-        'Defined as a variant considered "oncogenic" or "likely oncogenic" by OncoKB Curation Standard Operating Protocol.';
-      break;
     case DELETION:
-      content = `Defined as copy number loss resulting in partial or whole deletion of ${geneCoordinatesStr}.`;
+      content = (
+        <span>
+          Defined as copy number loss resulting in partial or whole deletion of{' '}
+          {geneLink}.
+        </span>
+      );
       break;
     case FUSIONS:
-      content = `Defined as deletion or chromosomal translocation events arising within ${geneCoordinatesStr} that results in a functional fusion event which preserves an intact ${hugoSymbol} kinase domain.`;
+      content = (
+        <span>
+          Defined as deletion or chromosomal translocation events arising within{' '}
+          {geneLink} that results in a functional fusion event which preserves
+          an intact {hugoSymbol} kinase domain.
+        </span>
+      );
       break;
     case TRUNCATING_MUTATIONS:
-      content = `Defined as nonsense, frameshift, or splice-site mutations within ${geneCoordinatesStr} that are predicted to shorten the coding sequence of gene.`;
+      content = (
+        <span>
+          Defined as nonsense, frameshift, or splice-site mutations within{' '}
+          {geneLink} that are predicted to shorten the coding sequence of gene.
+        </span>
+      );
       break;
     default:
       break;
+  }
+  if (alteration.startsWith(ONCOGENIC_MUTATIONS)) {
+    let prefix =
+      'Defined as point mutations, rearrangements/fusions or copy number alterations within';
+    if (oncogene && !tsg) {
+      prefix = 'Defined as point mutations or rearrangements/fusions within';
+    } else if (!oncogene && tsg) {
+      prefix =
+        'Defined as point mutations, rearrangements/fusions or gene deletions within';
+    }
+    content = (
+      <span>
+        {prefix} {geneLink} considered "oncogenic" or "likely oncogenic" as
+        defined by{' '}
+        <SopPageLink version={2.2}>
+          OncoKB Curation Standard Operating Protocol v2.2, Chapter 2,
+          Sub-Protocol 2.5
+        </SopPageLink>
+        .
+      </span>
+    );
   }
 
   return content;
