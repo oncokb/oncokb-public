@@ -305,21 +305,27 @@ export default class LevelOfEvidencePage extends React.Component<
 
     return (
       <DocumentTitle title={DOCUMENT_TITLES.LEVELS}>
-        <div className="levels-of-evidence">
-          <>
-            <Tabs
-              defaultActiveKey={
-                [Version.DX, Version.PX, Version.FDA_NGS].includes(this.version)
-                  ? Version[this.version]
-                  : Version.V2
-              }
-              id="level-type-tabs"
-              onSelect={k => this.toggleVersion(Version[k || Version.V2])}
-            >
-              {tabs}
-            </Tabs>
-          </>
-        </div>
+        <Row className="justify-content-center">
+          <Col lg={10}>
+            <div className="levels-of-evidence">
+              <>
+                <Tabs
+                  defaultActiveKey={
+                    [Version.DX, Version.PX, Version.FDA_NGS].includes(
+                      this.version
+                    )
+                      ? Version[this.version]
+                      : Version.V2
+                  }
+                  id="level-type-tabs"
+                  onSelect={k => this.toggleVersion(Version[k || Version.V2])}
+                >
+                  {tabs}
+                </Tabs>
+              </>
+            </div>
+          </Col>
+        </Row>
       </DocumentTitle>
     );
   }

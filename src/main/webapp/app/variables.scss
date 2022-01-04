@@ -22,14 +22,12 @@ $grid-breakpoints: (
   sm: 576px,
   md: 768px,
   lg: 1050px,
-  xl: 1370px,
+  xl: 1500px,
 ) !default;
 
+// we only need to define the max width for xl, smaller size will use the fluid width.
 $container-max-widths: (
-  sm: 576px,
-  md: 1050px,
-  lg: 1370px,
-  xl: 1450px,
+  xl: 1500px,
 ) !default;
 
 $view-wrapper-default-p-y: 2rem;

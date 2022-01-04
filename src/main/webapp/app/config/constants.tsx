@@ -54,7 +54,7 @@ export const GRID_BREAKPOINTS = {
   SM: 576,
   MD: 768,
   LG: 1050,
-  XL: 1370,
+  XL: 1500,
 };
 export const MSK_LOGO_ICON_CUTOFF = 1260;
 export const SOP_LINK = 'https://sop.oncokb.org';
