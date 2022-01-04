@@ -34,7 +34,7 @@ export default class CompanyDetailsPage extends React.Component {
       id: 'companyUserCount',
       Header: <span className={styles.tableHeader}>Users</span>,
       minWidth: 60,
-      accessor: 'companyUserCount',
+      accessor: (data: CompanyDTO) => data.numberOfUsers,
       Cell(props: { original: CompanyDTO }): any {
         return <div>{props.original.numberOfUsers}</div>;
       },
@@ -45,7 +45,7 @@ export default class CompanyDetailsPage extends React.Component {
       minWidth: 120,
       onFilter: (data: CompanyDTO, keyword) =>
         data.name ? filterByKeyword(data.name, keyword) : false,
-      accessor: 'companyName',
+      accessor: (data: CompanyDTO) => data.name,
       Cell(props: { original: CompanyDTO }): any {
         return <div>{props.original.name}</div>;
       },

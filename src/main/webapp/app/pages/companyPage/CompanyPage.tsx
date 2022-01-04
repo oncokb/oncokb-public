@@ -25,6 +25,7 @@ import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouteComponentProps } from 'react-router';
 import _, { parseInt } from 'lodash';
+import { remoteData } from 'cbioportal-frontend-commons';
 import {
   notifyError,
   notifyInfo,
@@ -45,6 +46,7 @@ import {
   fieldRequiredValidation,
   textValidation,
 } from 'app/shared/utils/FormValidationUtils';
+import { MobxPromiseUnionType } from 'mobxpromise';
 
 interface MatchParams {
   id: string;
@@ -79,95 +81,127 @@ const LICENSE_STATUS_UPDATE_MESSAGES = {
 export default class CompanyPage extends React.Component<
   RouteComponentProps<MatchParams>
 > {
-  @observable company: CompanyDTO;
-  @observable getCompanyStatus: PromiseStatus;
   @observable selectedLicenseStatus: LicenseStatus;
+
   @observable conflictingDomains: string[] = [];
 
   @observable showModal = false;
+
   @observable confirmModalText = '';
+
   @observable formValues: any;
 
-  @observable companyTableLoading = true;
-  @observable companyUsers: UserDTO[] = [];
-  @observable companyUsersTokens: Token[] = [];
-
-  @observable userDropdownLoading = true;
-  @observable availableUsers: SelectOptionType[] = [];
   @observable selectedUsersOptions: SelectOptionType[] = [];
 
-  constructor(props: RouteComponentProps<MatchParams>) {
-    super(props);
-    this.getCompanyInfos();
-  }
+  @observable companyUserTokens: MobxPromiseUnionType<Token[]>;
 
-  @action
-  async getCompanyInfos() {
-    try {
-      this.getCompanyStatus = PromiseStatus.pending;
-      this.companyTableLoading = true;
-      this.userDropdownLoading = true;
-      this.company = await client.getCompanyUsingGET({
+  @observable companyUsers: MobxPromiseUnionType<UserDTO[]>;
+
+  @observable company = remoteData<CompanyDTO>({
+    invoke: async () => {
+      const company = await client.getCompanyUsingGET({
         id: parseInt(this.props.match.params.id),
       });
-      this.selectedLicenseStatus = this.company.licenseStatus as LicenseStatus;
-      this.getCompanyUsers();
+      this.selectedLicenseStatus = company.licenseStatus as LicenseStatus;
       this.verifyCompanyDomains();
-      this.getCompanyStatus = PromiseStatus.complete;
-    } catch (error) {
-      this.getCompanyStatus = PromiseStatus.error;
-      notifyError(error);
-    }
-  }
+      this.getCompanyInfo(company.id);
+      return company;
+    },
+  });
 
-  @action
-  getCompanyUsers() {
-    client
-      .getCompanyUsersUsingGET({
-        id: this.company.id,
-      })
-      .then(async companyUsers => {
-        this.companyUsers = companyUsers;
-        this.getDropdownUsers();
-        await this.getCompanyUsersTokens();
-        this.companyTableLoading = false;
-      })
-      .catch(error => notifyError(error));
-  }
-
-  @action
-  async getCompanyUsersTokens() {
-    this.companyUsersTokens = await client.getUsersTokensUsingPOST({
-      logins: this.companyUsers.map(user => user.login),
-    });
-  }
-
-  @action
-  async getDropdownUsers() {
-    try {
+  readonly nonCompanyUsers = remoteData<SelectOptionType[]>({
+    async invoke() {
       const allUsers = await client.getNonCompanyUserEmailsUsingGET({});
-      this.availableUsers = allUsers.map(email => ({
+      return allUsers.map(email => ({
         label: email,
         value: email,
       }));
-      this.userDropdownLoading = false;
-    } catch (error) {
-      notifyError(error);
+    },
+    default: [],
+  });
+
+  /* After the company is fetched, we will fetch the company users and the tokens */
+  @action.bound
+  getCompanyInfo(id: number) {
+    this.companyUsers = remoteData<UserDTO[]>({
+      async invoke() {
+        const companyUsers: UserDTO[] = await client.getCompanyUsersUsingGET({
+          id,
+        });
+        this.companyUserTokens = remoteData<Token[]>({
+          invoke() {
+            return client.getUsersTokensUsingPOST({
+              logins: companyUsers.map(user => user.login),
+            });
+          },
+          onError(error) {
+            notifyError(error);
+          },
+          default: [],
+        });
+        return companyUsers;
+      },
+      onError(error) {
+        notifyError(error);
+      },
+      default: [],
+    });
+  }
+
+  @action.bound
+  updateCompany() {
+    if (!this.company.isComplete) {
+      notifyError(new Error('Cannot update when company is loading'));
+      return;
     }
+
+    /*eslint-disable no-console*/
+    console.log('got here');
+
+    const newCompanyUserEmails = this.selectedUsersOptions.map(
+      selection => selection.value
+    );
+    const updatedCompany: CompanyVM = {
+      ...this.company.result,
+      licenseStatus: this.selectedLicenseStatus,
+      name: this.formValues.companyName,
+      companyDomains: this.company.result.companyDomains,
+      businessContact: this.formValues.businessContact,
+      legalContact: this.formValues.legalContact,
+      companyUserEmails: newCompanyUserEmails,
+    };
+
+    this.company = remoteData<CompanyDTO>({
+      invoke: async () => {
+        const updatedCompanyDTO = await client.updateCompanyUsingPUT({
+          companyVm: updatedCompany,
+        });
+        this.selectedLicenseStatus = updatedCompanyDTO.licenseStatus as LicenseStatus;
+        this.selectedUsersOptions = [];
+        this.conflictingDomains = [];
+        this.verifyCompanyDomains();
+        this.getCompanyInfo(updatedCompanyDTO.id);
+        notifySuccess('Company successfully updated');
+        return updatedCompanyDTO;
+      },
+      onError(error: Error) {
+        notifyError(error);
+      },
+    });
   }
 
   @action.bound
   showConfirmModal(event: any, value: any) {
+    if (!this.company.isComplete) return;
     this.formValues = value;
-
     // Show warnings when license status is being changed and there are company users
     if (
-      this.company.licenseStatus !== this.selectedLicenseStatus &&
-      this.companyUsers.length > 0
+      this.company.result.licenseStatus !== this.selectedLicenseStatus &&
+      this.companyUsers.result!.length > 0
     ) {
       this.showModal = true;
       this.confirmModalText =
-        LICENSE_STATUS_UPDATE_MESSAGES[this.company.licenseStatus][
+        LICENSE_STATUS_UPDATE_MESSAGES[this.company.result.licenseStatus][
           this.selectedLicenseStatus
         ];
     } else {
@@ -176,79 +210,45 @@ export default class CompanyPage extends React.Component<
   }
 
   @action.bound
-  async updateCompany() {
-    this.showModal = false;
-    this.getCompanyStatus = PromiseStatus.pending;
-    this.companyTableLoading = true;
-    this.userDropdownLoading = true;
-    const newCompanyUsers = this.selectedUsersOptions.map(
-      selection => selection.value
-    );
-    const updatedCompany: CompanyVM = {
-      ...this.company,
-      licenseStatus: this.selectedLicenseStatus,
-      name: this.formValues.companyName,
-      companyDomains: this.company.companyDomains,
-      businessContact: this.formValues.businessContact,
-      legalContact: this.formValues.legalContact,
-      companyUserEmails: newCompanyUsers,
-    };
-
-    try {
-      const updatedCompanyDTO = await client.updateCompanyUsingPUT({
-        companyVm: updatedCompany,
-      });
-      // Update state with new information from company edit.
-      this.company = updatedCompanyDTO;
-      this.selectedLicenseStatus = this.company.licenseStatus as LicenseStatus;
-      this.selectedUsersOptions = [];
-      this.conflictingDomains = [];
-      this.getCompanyUsers();
-      this.verifyCompanyDomains();
-      notifySuccess('Company successfully updated');
-    } catch (error) {
-      notifyError(error);
-    } finally {
-      this.getCompanyStatus = PromiseStatus.complete;
-    }
-  }
-
-  @action.bound
   selectRelatedUsers() {
     this.selectedUsersOptions = [];
-    this.selectedUsersOptions = this.availableUsers.filter(user =>
-      this.company.companyDomains.includes(user.label.split('@').pop() || '')
+    this.selectedUsersOptions = this.nonCompanyUsers.result.filter(user =>
+      this.company.result?.companyDomains.includes(
+        user.label.split('@').pop() || ''
+      )
     );
   }
 
   @action.bound
   removeUserFromCompany(userToRemove: UserDTO) {
-    this.companyUsers = this.companyUsers.filter(
-      user => user.id !== userToRemove.id
-    );
-    this.availableUsers.push({
-      label: userToRemove.email,
-      value: userToRemove.email,
-    });
+    if (this.company.isComplete) {
+      this.getCompanyInfo(this.company.result.id);
+      this.nonCompanyUsers.result.push({
+        label: userToRemove.email,
+        value: userToRemove.email,
+      });
+    } else {
+      notifyError(new Error('Cannot remove user when company is loading'));
+    }
   }
 
   @action.bound
   updateCompanyUser(updatedUser: UserDTO) {
     this.companyUsers[
-      this.companyUsers.findIndex(u => u.id === updatedUser.id)
+      this.companyUsers.result!.findIndex(u => u.id === updatedUser.id)
     ] = updatedUser;
   }
 
   @action
   verifyCompanyDomains() {
-    if (this.company.licenseModel !== LicenseModel.FULL) {
+    if (this.company.result?.licenseModel !== LicenseModel.FULL) {
       this.conflictingDomains = [];
       return;
     }
     client
       .verifyCompanyDomainUsingPOST({
-        names: Array.from(this.company.companyDomains),
-        companyId: this.company.id,
+        names: Array.from(this.company.result.companyDomains),
+        companyId: this.company.result.id,
       })
       .then(
         conflictingDomains =>
@@ -263,7 +263,7 @@ export default class CompanyPage extends React.Component<
   // Certain license status changes are not valid, so we hide those options
   get licenseStatusOptions() {
     const hideOptions = [LicenseStatus.UNKNOWN]; // For now, we are hiding the UNKNOWN status
-    switch (this.company.licenseStatus) {
+    switch (this.company.result?.licenseStatus) {
       case LicenseStatus.REGULAR:
         hideOptions.push(LicenseStatus.TRIAL_EXPIRED);
         break;
@@ -282,20 +282,20 @@ export default class CompanyPage extends React.Component<
 
   render() {
     return (
-      <If condition={this.getCompanyStatus === PromiseStatus.pending}>
+      <If condition={this.company.isPending}>
         <Then>
           <LoadingIndicator isLoading={true} />
         </Then>
         <Else>
-          <If condition={this.getCompanyStatus === PromiseStatus.error}>
+          <If condition={this.company.isError}>
             <Then>
               <Alert variant={'danger'}>
                 Error loading company information.
               </Alert>
             </Then>
             <Else>
-              {this.company !== undefined && (
-                <DocumentTitle title={this.company.name}>
+              {this.company.isComplete && (
+                <DocumentTitle title={this.company.result.name}>
                   <>
                     <AvForm
                       onValidSubmit={this.showConfirmModal}
@@ -309,7 +309,7 @@ export default class CompanyPage extends React.Component<
                         <Col>
                           <AvField
                             name="companyId"
-                            value={this.company.id}
+                            value={this.company.result.id}
                             label={
                               <span className="font-weight-bold">
                                 Company ID
@@ -319,7 +319,7 @@ export default class CompanyPage extends React.Component<
                           />
                           <AvField
                             name="companyName"
-                            value={this.company.name}
+                            value={this.company.result.name}
                             label={
                               <span className="font-weight-bold">
                                 Company Name
@@ -339,15 +339,16 @@ export default class CompanyPage extends React.Component<
                                   ctx,
                                   input,
                                   cb,
-                                  this.company.id
+                                  this.company.result!.id
                                 ),
                             }}
                           />
                           <FormTextAreaField
                             label="Company Description"
-                            value={this.company.description}
+                            value={this.company.result.description}
                             onTextAreaChange={(event: any) =>
-                              (this.company.description = event.target.value)
+                              (this.company.result!.description =
+                                event.target.value)
                             }
                             boldLabel
                           />
@@ -355,13 +356,16 @@ export default class CompanyPage extends React.Component<
                             labelText={'Company Type'}
                             name={'companyType'}
                             defaultValue={{
-                              value: this.company.companyType,
+                              value: this.company.result.companyType,
                               label:
-                                COMPANY_TYPE_TITLES[this.company.companyType],
+                                COMPANY_TYPE_TITLES[
+                                  this.company.result.companyType
+                                ],
                             }}
                             options={COMPANY_FORM_OPTIONS.companyType}
                             onSelection={(selectedOption: any) =>
-                              (this.company.companyType = selectedOption.value)
+                              (this.company.result!.companyType =
+                                selectedOption.value)
                             }
                             boldLabel
                           />
@@ -371,7 +375,7 @@ export default class CompanyPage extends React.Component<
                         <Col>
                           <AvField
                             name="businessContact"
-                            value={this.company.businessContact}
+                            value={this.company.result.businessContact}
                             label={
                               <span className="font-weight-bold">
                                 Business Contact
@@ -381,7 +385,7 @@ export default class CompanyPage extends React.Component<
                           />
                           <AvField
                             name="legalContact"
-                            value={this.company.legalContact}
+                            value={this.company.result.legalContact}
                             label={
                               <span className="font-weight-bold">
                                 Legal Contact
@@ -394,12 +398,14 @@ export default class CompanyPage extends React.Component<
                             labelText={'License Type'}
                             name={'licenseType'}
                             defaultValue={{
-                              value: this.company.licenseType,
-                              label: LICENSE_TITLES[this.company.licenseType],
+                              value: this.company.result.licenseType,
+                              label:
+                                LICENSE_TITLES[this.company.result.licenseType],
                             }}
                             options={COMPANY_FORM_OPTIONS.licenseType}
                             onSelection={(selectedOption: any) =>
-                              (this.company.licenseType = selectedOption.value)
+                              (this.company.result!.licenseType =
+                                selectedOption.value)
                             }
                             boldLabel
                           />
@@ -429,14 +435,18 @@ export default class CompanyPage extends React.Component<
                               Company Users
                             </div>
                             <UserTable
-                              data={this.companyUsers}
-                              usersTokens={this.companyUsersTokens}
+                              data={this.companyUsers.result || []}
+                              usersTokens={this.companyUserTokens?.result || []}
                               onRemoveUser={this.removeUserFromCompany}
                               onUpdateUser={this.updateCompanyUser}
                               licenseStatus={
-                                this.company.licenseStatus as LicenseStatus
+                                this.company.result
+                                  .licenseStatus as LicenseStatus
                               }
-                              loading={this.companyTableLoading}
+                              loading={
+                                this.companyUsers.isPending ||
+                                this.companyUserTokens?.isPending
+                              }
                             />
                           </div>
                           <div className="form-group">
@@ -446,28 +456,28 @@ export default class CompanyPage extends React.Component<
                             <AdditionalInfoSelect
                               name={'licenseModel'}
                               defaultValue={{
-                                value: this.company.licenseModel,
+                                value: this.company.result.licenseModel,
                                 label:
                                   LICENSE_MODEL_TITLES[
-                                    this.company.licenseModel
+                                    this.company.result.licenseModel
                                   ],
                               }}
                               options={COMPANY_FORM_OPTIONS.licenseModel}
                               onSelection={(selectedOption: any) => {
-                                this.company.licenseModel =
+                                this.company.result!.licenseModel =
                                   selectedOption.value;
                                 this.verifyCompanyDomains();
                               }}
                             />
                           </div>
                           <FormListField
-                            list={this.company.companyDomains}
+                            list={this.company.result.companyDomains}
                             addItem={(domain: string) => {
-                              this.company.companyDomains.push(domain);
+                              this.company.result!.companyDomains.push(domain);
                               this.verifyCompanyDomains();
                             }}
                             deleteItem={(domain: string) => {
-                              this.company.companyDomains = this.company.companyDomains.filter(
+                              this.company.result!.companyDomains = this.company.result!.companyDomains.filter(
                                 domainName => domainName !== domain
                               );
                               this.conflictingDomains = this.conflictingDomains.filter(
@@ -503,14 +513,16 @@ export default class CompanyPage extends React.Component<
                                   closeMenuOnSelect={false}
                                   hideSelectedOptions
                                   value={this.selectedUsersOptions.map(u => u)}
-                                  options={this.availableUsers}
+                                  options={this.nonCompanyUsers.result.map(
+                                    u => u
+                                  )}
                                   onChange={(selectedOptions: any) => {
                                     this.selectedUsersOptions = selectedOptions
                                       ? selectedOptions
                                       : [];
                                   }}
                                   maxMenuHeight={200}
-                                  isLoading={this.userDropdownLoading}
+                                  isLoading={this.nonCompanyUsers.isPending}
                                 />
                               </div>
                               <div
@@ -562,7 +574,7 @@ export default class CompanyPage extends React.Component<
                           Are you sure you want to change the company's license
                           status from{' '}
                           <span className="font-weight-bold">
-                            {this.company.licenseStatus}
+                            {this.company.result.licenseStatus}
                           </span>{' '}
                           to{' '}
                           <span className="font-weight-bold">

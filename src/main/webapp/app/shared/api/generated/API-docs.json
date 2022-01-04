@@ -2690,7 +2690,7 @@
         "deprecated": false
       }
     },
-    "/api/users/emails": {
+    "/api/users/non-company-emails": {
       "get": {
         "tags": [
           "user-resource"

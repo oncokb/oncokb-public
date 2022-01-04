@@ -45,8 +45,6 @@ public class CompanyServiceImpl implements CompanyService {
     private final UserMapper userMapper;
 
     private final UserService userService;
-
-    private final UserRepository userRepository;
     
     private final CacheManager cacheManager;
 
@@ -58,7 +56,6 @@ public class CompanyServiceImpl implements CompanyService {
         CompanyDomainService companyDomainService,
         CompanyDomainMapper companyDomainMapper,
         UserService userService,
-        UserRepository userRepository,
         UserMapper userMapper,
         CacheManager cacheManager,
         CacheNameResolver cacheNameResolver
@@ -67,7 +64,6 @@ public class CompanyServiceImpl implements CompanyService {
         this.companyMapper = companyMapper;
         this.userMapper = userMapper;
         this.userService = userService;
-        this.userRepository = userRepository;
         this.cacheManager = cacheManager;
         this.cacheNameResolver = cacheNameResolver;
     }
@@ -107,7 +103,7 @@ public class CompanyServiceImpl implements CompanyService {
         if(companyVm.getCompanyUserEmails() != null){
             companyVm.getCompanyUserEmails()
                 .stream()
-                .map(email -> userRepository.findOneByEmailIgnoreCase(email))
+                .map(email -> userService.getUserByEmailIgnoreCase(email))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(user -> userMapper.userToUserDTO(user))
