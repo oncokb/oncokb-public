@@ -76,7 +76,7 @@ public class UserUUIDController {
             if (validTokens.size() > 0) {
                 uuid = validTokens.iterator().next().getToken();
             } else {
-                if (tokenList.stream().filter(token -> !token.isRenewable()).findAny().isPresent()) {
+                if (!tokenList.stream().filter(token -> token.isRenewable()).findAny().isPresent()) {
                     throw new TrialAccountExpiredException();
                 } else {
                     throw new TokenExpiredException();

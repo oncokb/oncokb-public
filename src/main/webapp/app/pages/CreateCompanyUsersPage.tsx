@@ -120,6 +120,8 @@ export class CreateCompanyUsersPage extends React.Component<
           this.company.result?.licenseStatus !== LicenseStatus.TRIAL,
         company: this.company.result,
         companyName: this.company.result?.name,
+        notifyUserOnTrialCreation:
+          this.company.result?.licenseStatus === LicenseStatus.TRIAL,
       } as ManagedUserVM;
     });
 

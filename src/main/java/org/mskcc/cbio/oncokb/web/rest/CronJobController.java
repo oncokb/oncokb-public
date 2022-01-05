@@ -297,7 +297,10 @@ public class CronJobController {
         List<Token> tokens = tokenService
             .findAllExpiresBeforeDate(Instant.now().plusSeconds(DAY_IN_SECONDS * DAYS_TO_CHECK))
             .stream()
-            .filter(token -> !token.isRenewable() && token.getExpiration().isAfter(Instant.now()))
+            .filter(token -> 
+                // Do not include users that have atleast one renewable token because they are regular users
+                token.getExpiration().isAfter(Instant.now()) && !tokenService.findByUser(token.getUser()).stream().filter(t -> t.isRenewable()).findAny().isPresent()
+            )
             .filter(token -> {
                 // Do not include users that have been notified in the
                 return this.userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(token.getUser(), TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE, token.getExpiration().minusSeconds(DAY_IN_SECONDS * DAYS_TO_CHECK)).isEmpty();
