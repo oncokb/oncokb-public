@@ -700,7 +700,7 @@ export const getCategoricalAlterationDescription = (
       content = (
         <span>
           Defined as focal copy number amplification that result in an increase
-          in the gene copy number and subsequent elevation of expression of{' '}
+          in the gene copy number of{' '}
           {geneLink}.
         </span>
       );
