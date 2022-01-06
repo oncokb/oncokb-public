@@ -717,7 +717,7 @@ export const getCategoricalAlterationDescription = (
       content = (
         <span>
           Defined as deletion or chromosomal translocation events arising within{' '}
-          {geneLink} that results in a functional fusion event which preserves
+          {geneLink} that result in a functional fusion event which preserves
           an intact {hugoSymbol} kinase domain.
         </span>
       );
