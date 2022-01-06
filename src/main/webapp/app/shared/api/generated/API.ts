@@ -5304,7 +5304,7 @@ export default class API {
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
-        let path = '/api/users/emails';
+        let path = '/api/users/non-company-emails';
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -5328,7 +5328,7 @@ export default class API {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
         const request = this.request;
-        let path = '/api/users/emails';
+        let path = '/api/users/non-company-emails';
         let body: any;
         let queryParameters: any = {};
         let headers: any = {};

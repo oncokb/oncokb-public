@@ -234,7 +234,7 @@ public class UserResource {
      * 
      * @return user emails
      */
-    @GetMapping("/users/emails")
+    @GetMapping("/users/non-company-emails")
     public List<String> getNonCompanyUserEmails() {
         return userService.getNonCompanyUserEmails();
     }

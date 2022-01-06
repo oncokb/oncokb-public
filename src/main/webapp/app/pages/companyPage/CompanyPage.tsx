@@ -6,11 +6,9 @@ import {
   COMPANY_TYPE_TITLES,
   LicenseModel,
   LicenseStatus,
-  LicenseType,
   LICENSE_MODEL_TITLES,
   LICENSE_STATUS_TITLES,
   LICENSE_TITLES,
-  THRESHOLD_NUM_OF_USER,
 } from 'app/config/constants';
 import { Alert, Button, Col, Modal, Row } from 'react-bootstrap';
 import {
@@ -25,11 +23,8 @@ import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouteComponentProps } from 'react-router';
 import _, { parseInt } from 'lodash';
-import {
-  notifyError,
-  notifyInfo,
-  notifySuccess,
-} from 'app/shared/utils/NotificationUtils';
+import { remoteData } from 'cbioportal-frontend-commons';
+import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { FormTextAreaField } from 'app/shared/textarea/FormTextAreaField';
 import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
@@ -79,8 +74,10 @@ const LICENSE_STATUS_UPDATE_MESSAGES = {
 export default class CompanyPage extends React.Component<
   RouteComponentProps<MatchParams>
 > {
-  @observable company: CompanyDTO;
-  @observable getCompanyStatus: PromiseStatus;
+  @observable getCompanyStatus = PromiseStatus.pending;
+  @observable getCompanyUsersStatus = PromiseStatus.pending;
+  @observable getDropdownUsersStatus = PromiseStatus.pending;
+
   @observable selectedLicenseStatus: LicenseStatus;
   @observable conflictingDomains: string[] = [];
 
@@ -88,78 +85,106 @@ export default class CompanyPage extends React.Component<
   @observable confirmModalText = '';
   @observable formValues: any;
 
-  @observable companyTableLoading = true;
+  @observable company: CompanyDTO;
   @observable companyUsers: UserDTO[] = [];
-  @observable companyUsersTokens: Token[] = [];
-
-  @observable userDropdownLoading = true;
-  @observable availableUsers: SelectOptionType[] = [];
+  @observable companyUserTokens: Token[] = [];
+  @observable dropDownUsers: SelectOptionType[] = [];
   @observable selectedUsersOptions: SelectOptionType[] = [];
 
   constructor(props: RouteComponentProps<MatchParams>) {
     super(props);
-    this.getCompanyInfos();
+    this.getCompany();
+    this.getDropdownUsers();
   }
 
   @action
-  async getCompanyInfos() {
-    try {
-      this.getCompanyStatus = PromiseStatus.pending;
-      this.companyTableLoading = true;
-      this.userDropdownLoading = true;
-      this.company = await client.getCompanyUsingGET({
+  getCompany() {
+    client
+      .getCompanyUsingGET({
         id: parseInt(this.props.match.params.id),
-      });
-      this.selectedLicenseStatus = this.company.licenseStatus as LicenseStatus;
-      this.getCompanyUsers();
-      this.verifyCompanyDomains();
-      this.getCompanyStatus = PromiseStatus.complete;
-    } catch (error) {
-      this.getCompanyStatus = PromiseStatus.error;
-      notifyError(error);
-    }
+      })
+      .then(company => {
+        this.company = company;
+        this.selectedLicenseStatus = company.licenseStatus as LicenseStatus;
+        this.verifyCompanyDomains();
+        this.getCompanyUserInfo();
+        this.getCompanyStatus = PromiseStatus.complete;
+      })
+      .catch(() => (this.getCompanyStatus = PromiseStatus.error));
   }
 
   @action
-  getCompanyUsers() {
+  getCompanyUserInfo() {
     client
       .getCompanyUsersUsingGET({
         id: this.company.id,
       })
-      .then(async companyUsers => {
-        this.companyUsers = companyUsers;
-        this.getDropdownUsers();
-        await this.getCompanyUsersTokens();
-        this.companyTableLoading = false;
+      .then((users: UserDTO[]) => {
+        this.companyUsers = users;
+        client
+          .getUsersTokensUsingPOST({
+            logins: users.map(user => user.login),
+          })
+          .then((tokens: Token[]) => {
+            this.companyUserTokens = tokens;
+            this.getCompanyUsersStatus = PromiseStatus.complete;
+          })
+          .catch(() => (this.getCompanyUsersStatus = PromiseStatus.error));
       })
-      .catch(error => notifyError(error));
+      .catch(() => (this.getCompanyUsersStatus = PromiseStatus.error));
   }
 
   @action
-  async getCompanyUsersTokens() {
-    this.companyUsersTokens = await client.getUsersTokensUsingPOST({
-      logins: this.companyUsers.map(user => user.login),
-    });
+  getDropdownUsers() {
+    client
+      .getNonCompanyUserEmailsUsingGET({})
+      .then(users => {
+        this.dropDownUsers = users.map(email => ({
+          label: email,
+          value: email,
+        }));
+        this.getDropdownUsersStatus = PromiseStatus.complete;
+      })
+      .catch(() => (this.getDropdownUsersStatus = PromiseStatus.error));
   }
 
-  @action
-  async getDropdownUsers() {
-    try {
-      const allUsers = await client.getNonCompanyUserEmailsUsingGET({});
-      this.availableUsers = allUsers.map(email => ({
-        label: email,
-        value: email,
-      }));
-      this.userDropdownLoading = false;
-    } catch (error) {
-      notifyError(error);
-    }
+  @action.bound
+  updateCompany() {
+    this.getCompanyStatus = PromiseStatus.pending;
+    this.getCompanyUsersStatus = PromiseStatus.pending;
+    const newCompanyUserEmails = this.selectedUsersOptions.map(
+      selection => selection.value
+    );
+    const updatedCompany: CompanyVM = {
+      ...this.company,
+      licenseStatus: this.selectedLicenseStatus,
+      name: this.formValues.companyName,
+      companyDomains: this.company.companyDomains,
+      businessContact: this.formValues.businessContact,
+      legalContact: this.formValues.legalContact,
+      companyUserEmails: newCompanyUserEmails,
+    };
+    client
+      .updateCompanyUsingPUT({ companyVm: updatedCompany })
+      .then((updatedCompanyDTO: CompanyDTO) => {
+        this.company = updatedCompanyDTO;
+        this.selectedLicenseStatus = updatedCompanyDTO.licenseStatus as LicenseStatus;
+        this.selectedUsersOptions = [];
+        this.conflictingDomains = [];
+        this.verifyCompanyDomains();
+        this.getCompanyUserInfo();
+        this.getCompanyStatus = PromiseStatus.complete;
+        notifySuccess('Company successfully updated');
+      })
+      .catch((error: Error) => {
+        this.getCompanyStatus = PromiseStatus.error;
+        notifyError(error);
+      });
   }
 
   @action.bound
   showConfirmModal(event: any, value: any) {
     this.formValues = value;
-
     // Show warnings when license status is being changed and there are company users
     if (
       this.company.licenseStatus !== this.selectedLicenseStatus &&
@@ -176,47 +201,9 @@ export default class CompanyPage extends React.Component<
   }
 
   @action.bound
-  async updateCompany() {
-    this.showModal = false;
-    this.getCompanyStatus = PromiseStatus.pending;
-    this.companyTableLoading = true;
-    this.userDropdownLoading = true;
-    const newCompanyUsers = this.selectedUsersOptions.map(
-      selection => selection.value
-    );
-    const updatedCompany: CompanyVM = {
-      ...this.company,
-      licenseStatus: this.selectedLicenseStatus,
-      name: this.formValues.companyName,
-      companyDomains: this.company.companyDomains,
-      businessContact: this.formValues.businessContact,
-      legalContact: this.formValues.legalContact,
-      companyUserEmails: newCompanyUsers,
-    };
-
-    try {
-      const updatedCompanyDTO = await client.updateCompanyUsingPUT({
-        companyVm: updatedCompany,
-      });
-      // Update state with new information from company edit.
-      this.company = updatedCompanyDTO;
-      this.selectedLicenseStatus = this.company.licenseStatus as LicenseStatus;
-      this.selectedUsersOptions = [];
-      this.conflictingDomains = [];
-      this.getCompanyUsers();
-      this.verifyCompanyDomains();
-      notifySuccess('Company successfully updated');
-    } catch (error) {
-      notifyError(error);
-    } finally {
-      this.getCompanyStatus = PromiseStatus.complete;
-    }
-  }
-
-  @action.bound
   selectRelatedUsers() {
     this.selectedUsersOptions = [];
-    this.selectedUsersOptions = this.availableUsers.filter(user =>
+    this.selectedUsersOptions = this.dropDownUsers.filter(user =>
       this.company.companyDomains.includes(user.label.split('@').pop() || '')
     );
   }
@@ -224,9 +211,9 @@ export default class CompanyPage extends React.Component<
   @action.bound
   removeUserFromCompany(userToRemove: UserDTO) {
     this.companyUsers = this.companyUsers.filter(
-      user => user.id !== userToRemove.id
+      user => user.email !== userToRemove.email
     );
-    this.availableUsers.push({
+    this.dropDownUsers.push({
       label: userToRemove.email,
       value: userToRemove.email,
     });
@@ -294,7 +281,7 @@ export default class CompanyPage extends React.Component<
               </Alert>
             </Then>
             <Else>
-              {this.company !== undefined && (
+              {this.getCompanyStatus === PromiseStatus.complete && (
                 <DocumentTitle title={this.company.name}>
                   <>
                     <AvForm
@@ -430,13 +417,16 @@ export default class CompanyPage extends React.Component<
                             </div>
                             <UserTable
                               data={this.companyUsers}
-                              usersTokens={this.companyUsersTokens}
+                              usersTokens={this.companyUserTokens}
                               onRemoveUser={this.removeUserFromCompany}
                               onUpdateUser={this.updateCompanyUser}
                               licenseStatus={
                                 this.company.licenseStatus as LicenseStatus
                               }
-                              loading={this.companyTableLoading}
+                              loading={
+                                this.getCompanyUsersStatus !==
+                                PromiseStatus.complete
+                              }
                             />
                           </div>
                           <div className="form-group">
@@ -503,14 +493,17 @@ export default class CompanyPage extends React.Component<
                                   closeMenuOnSelect={false}
                                   hideSelectedOptions
                                   value={this.selectedUsersOptions.map(u => u)}
-                                  options={this.availableUsers}
+                                  options={this.dropDownUsers.map(u => u)}
                                   onChange={(selectedOptions: any) => {
                                     this.selectedUsersOptions = selectedOptions
                                       ? selectedOptions
                                       : [];
                                   }}
                                   maxMenuHeight={200}
-                                  isLoading={this.userDropdownLoading}
+                                  isLoading={
+                                    this.getDropdownUsersStatus !==
+                                    PromiseStatus.complete
+                                  }
                                 />
                               </div>
                               <div

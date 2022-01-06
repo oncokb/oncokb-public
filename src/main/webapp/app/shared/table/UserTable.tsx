@@ -302,6 +302,7 @@ export class UserTable extends React.Component<IUserTableProps> {
           columns={this.columns}
           showPagination={true}
           minRows={1}
+          pageSize={5}
           loading={this.props.loading}
         />
         <UserStatusModal
