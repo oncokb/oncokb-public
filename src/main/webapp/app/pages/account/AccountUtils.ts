@@ -11,7 +11,7 @@ export function getSectionClassName(theFirst = false) {
 
 export function getAccountInfoTitle(
   key: ACCOUNT_TITLES,
-  license: LicenseType | undefined
+  license?: LicenseType
 ) {
   if (key === ACCOUNT_TITLES.EMAIL) {
     switch (license) {
@@ -41,7 +41,7 @@ export function getAccountInfoTitle(
         title = 'Hospital';
         break;
       default:
-        title = '';
+        title = 'Company';
         break;
     }
 

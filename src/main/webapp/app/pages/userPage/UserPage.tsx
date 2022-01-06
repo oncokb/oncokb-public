@@ -74,7 +74,7 @@ interface IUserPage extends RouteComponentProps<MatchParams> {
 
 const BoldAccountTitle: React.FunctionComponent<{
   title: ACCOUNT_TITLES;
-  licenseType: LicenseType | undefined;
+  licenseType?: LicenseType;
 }> = props => {
   return (
     <span className={'font-bold'}>
@@ -415,6 +415,14 @@ export default class UserPage extends React.Component<IUserPage> {
                       <Row className={getSectionClassName()}>
                         <Col>
                           <AvField
+                            name="id"
+                            value={this.user.id}
+                            label={
+                              <BoldAccountTitle title={ACCOUNT_TITLES.ID} />
+                            }
+                            disabled
+                          />
+                          <AvField
                             name="email"
                             value={this.user.email}
                             label={
@@ -497,23 +505,39 @@ export default class UserPage extends React.Component<IUserPage> {
                       </Row>
                       <Row className={getSectionClassName(false)}>
                         <Col>
-                          <div className={'mb-2 mt-1 font-weight-bold'}>
-                            <span>License Type</span>
-                            {!this.user.company ? null : (
-                              <InfoIcon
-                                className={'ml-2'}
-                                overlay={`User is associated with a company. The license type should match with the company's license.`}
-                              />
-                            )}
+                          <div>
+                            <div className={'mb-2 mt-1 font-weight-bold'}>
+                              <span className={'font-bold'}>License Type</span>
+                              {!this.user.company ? null : (
+                                <InfoIcon
+                                  className={'ml-2'}
+                                  overlay={`User is associated with a company. The license type should match with the company's license.`}
+                                />
+                              )}
+                            </div>
+                            <If condition={!!this.user.company}>
+                              <Then>
+                                <AvField
+                                  name="selectedLicense"
+                                  value={this.selectedLicense}
+                                  disabled
+                                />
+                              </Then>
+                              <Else>
+                                <ButtonSelections
+                                  isLargeScreen={
+                                    this.props.windowStore.isLargeScreen
+                                  }
+                                  selectedButton={
+                                    this.selectedLicense as LicenseType
+                                  }
+                                  onSelectLicense={selectedLicense =>
+                                    (this.selectedLicense = selectedLicense)
+                                  }
+                                />
+                              </Else>
+                            </If>
                           </div>
-                          <ButtonSelections
-                            isLargeScreen={this.props.windowStore.isLargeScreen}
-                            selectedButton={this.selectedLicense as LicenseType}
-                            onSelectLicense={selectedLicense =>
-                              (this.selectedLicense = selectedLicense)
-                            }
-                            disabled={!!this.user.company}
-                          />
                           <AvField
                             name="jobTitle"
                             label={
