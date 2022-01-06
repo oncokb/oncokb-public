@@ -699,7 +699,7 @@ export const getCategoricalAlterationDescription = (
     case AMPLIFICATION:
       content = (
         <span>
-          Defined as focal copy number amplification that result in an increase
+          Defined as focal copy number amplification that results in an increase
           in the gene copy number of{' '}
           {geneLink}.
         </span>
