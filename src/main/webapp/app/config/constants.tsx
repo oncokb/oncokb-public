@@ -601,6 +601,7 @@ export const LICENSE_MODEL_DESCRIPTIONS: { [key in LicenseModel]: string } = {
 };
 
 export enum ACCOUNT_TITLES {
+  ID = 'User ID',
   USER_NAME = 'Username',
   FIRST_NAME = 'First Name',
   LAST_NAME = 'Last Name',
