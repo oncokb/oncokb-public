@@ -148,6 +148,28 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '01072022': {
+    priorityNews: [
+      <span>
+        In addition to the previously provided reference genome, gene pages will
+        now include gene chromosomal locations. See{' '}
+        <GenePageLink hugoSymbol={'BRAF'} /> as an example.
+      </span>,
+    ],
+    updatedImplication: [
+      [
+        '4',
+        'STK11',
+        'Oncogenic Mutations',
+        'Non-Small Cell Lung Cancer',
+        'Bemcentinib + Pembrolizumab',
+        <AbstractLink
+          link={'https://jitc.bmj.com/content/9/Suppl_2/A632'}
+          abstract={'Li et al. Abstract # 602, JITC 2021'}
+        />,
+      ],
+    ],
+  },
   '11292021': {
     priorityNews: [
       <span>
