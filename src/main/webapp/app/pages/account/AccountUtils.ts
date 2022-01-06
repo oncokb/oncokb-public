@@ -41,7 +41,7 @@ export function getAccountInfoTitle(
         title = 'Hospital';
         break;
       default:
-        title = '';
+        title = 'Company';
         break;
     }
 
