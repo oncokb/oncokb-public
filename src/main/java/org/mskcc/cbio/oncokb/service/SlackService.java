@@ -358,14 +358,19 @@ public class SlackService {
         return SectionBlock.builder().text(MarkdownTextObject.builder().text(sb.toString()).build()).accessory(getLicenseTypeElement(userDTO)).blockId(LICENSE_TYPE.getId()).build();
     }
 
-    private LayoutBlock buildAccountStatusBlock(UserDTO userDTO, boolean isTrialAccountActivated) {
+    private LayoutBlock buildAccountStatusBlock(UserDTO userDTO, boolean isTrialAccountInitiated) {
         List<TextObject> userInfo = new ArrayList<>();
 
         // Add account information
         userInfo.add(getTextObject("Account Status", userDTO.isActivated() ? "Activated" : (StringUtils.isNotEmpty(userDTO.getActivationKey()) ? "Email not validated" : "Not Activated")));
-        userInfo.add(getTextObject("Account Type", isTrialAccountActivated ? "TRIAL" : "REGULAR"));
-        if (isTrialAccountActivated) {
-            userInfo.add(getTextObject("Trial Expires On", toNYZoneTime(userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate().plusSeconds(DAY_IN_SECONDS * 90))));
+        userInfo.add(getTextObject("Account Type", isTrialAccountInitiated ? "TRIAL" : "REGULAR"));
+        if (isTrialAccountInitiated) {
+            // There is a period of time when the user has been approved but did not activate their trial yet.
+            // In this case, the activationDate is null, so we need to omit this text.
+            Instant activationDate = userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate();
+            if (activationDate != null) {
+                userInfo.add(getTextObject("Trial Expires On", toNYZoneTime(activationDate.plusSeconds(DAY_IN_SECONDS * 90))));
+            }
         }
         return SectionBlock.builder().fields(userInfo).blockId(ACCOUNT_STATUS.getId()).build();
     }
