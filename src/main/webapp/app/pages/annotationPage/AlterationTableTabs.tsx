@@ -25,6 +25,7 @@ import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLin
 import { Version } from 'app/pages/LevelOfEvidencePage';
 import {
   BiologicalVariant,
+  EnsemblGene,
   FdaAlteration,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { GenePageTable } from 'app/pages/genePage/GenePageTable';

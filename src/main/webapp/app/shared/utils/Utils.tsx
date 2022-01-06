@@ -20,10 +20,15 @@ import {
   LEVEL_PRIORITY,
   FDA_LEVELS,
   ONCOGENIC_MUTATIONS,
+  DELETION,
+  FUSIONS,
+  TRUNCATING_MUTATIONS,
+  AMPLIFICATION,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
   Alteration,
+  EnsemblGene,
   Evidence,
   FdaAlteration,
   TumorType,
@@ -44,6 +49,7 @@ import {
   AlterationPageLink,
   GenePageLink,
   OncoTreeLink,
+  SopPageLink,
   TumorTypePageLink,
 } from 'app/shared/utils/UrlUtils';
 import moment from 'moment';
@@ -669,3 +675,85 @@ export function getAlterationName(
     return `${name} (${alt})`;
   }
 }
+
+export const getGeneCoordinates = (ensemblGenes: EnsemblGene[]) => {
+  return _.sortBy(ensemblGenes, ensemblGene => ensemblGene.referenceGenome)
+    .map(
+      ensemblGene =>
+        `${ensemblGene.referenceGenome}, Chr${ensemblGene.chromosome}:${ensemblGene.start}-${ensemblGene.end}`
+    )
+    .join('; ');
+};
+
+export const getCategoricalAlterationDescription = (
+  hugoSymbol: string,
+  alteration: string,
+  oncogene?: boolean,
+  tsg?: boolean
+) => {
+  const geneLink = (
+    <GenePageLink hugoSymbol={hugoSymbol}>the {hugoSymbol} gene</GenePageLink>
+  );
+  let content;
+  switch (alteration) {
+    case AMPLIFICATION:
+      content = (
+        <span>
+          Defined as focal copy number amplification that result in an increase
+          in the gene copy number and subsequent elevation of expression of{' '}
+          {geneLink}.
+        </span>
+      );
+      break;
+    case DELETION:
+      content = (
+        <span>
+          Defined as copy number loss resulting in partial or whole deletion of{' '}
+          {geneLink}.
+        </span>
+      );
+      break;
+    case FUSIONS:
+      content = (
+        <span>
+          Defined as deletion or chromosomal translocation events arising within{' '}
+          {geneLink} that results in a functional fusion event which preserves
+          an intact {hugoSymbol} kinase domain.
+        </span>
+      );
+      break;
+    case TRUNCATING_MUTATIONS:
+      content = (
+        <span>
+          Defined as nonsense, frameshift, or splice-site mutations within{' '}
+          {geneLink} that are predicted to shorten the coding sequence of gene.
+        </span>
+      );
+      break;
+    default:
+      break;
+  }
+  if (alteration.startsWith(ONCOGENIC_MUTATIONS)) {
+    let prefix =
+      'Defined as point mutations, rearrangements/fusions or copy number alterations within';
+    if (oncogene && !tsg) {
+      prefix = 'Defined as point mutations or rearrangements/fusions within';
+    } else if (!oncogene && tsg) {
+      prefix =
+        'Defined as point mutations, rearrangements/fusions or gene deletions within';
+    }
+    content = (
+      <span>
+        {prefix} {geneLink} considered "oncogenic" or "likely oncogenic" as
+        defined by{' '}
+        <SopPageLink version={2.2}>
+          OncoKB Curation Standard Operating Protocol v2.2, Chapter 2,
+          Sub-Protocol 2.5
+        </SopPageLink>
+        .
+      </span>
+    );
+  }
+
+  return content;
+};

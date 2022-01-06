@@ -922,7 +922,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         An updated version of the OncoKB Curation Standard Operating Procedure,
         v2.0, has been released. See the OncoKB{' '}
         <Link to={PAGE_ROUTE.ABOUT}>About</Link> page or{' '}
-        <SopPageLink content={'https://sop.oncokb.org'} />
+        <SopPageLink>https://sop.oncokb.org</SopPageLink>
       </span>,
       <span>
         &quot;Resistance&quot; is now included as an oncogenic effect for
@@ -3231,7 +3231,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           the FDA approved enasidenib
         </a>{' '}
         for treatment of patients with relapsed or refractory
-        <GenePageLink hugoSymbol={'IDH2'} content={'IDH2-mutant'} /> Acute
+        <GenePageLink hugoSymbol={'IDH2'}>IDH2-mutant</GenePageLink> Acute
         Myeloid Leukemia (AML).
       </span>,
       <span>
