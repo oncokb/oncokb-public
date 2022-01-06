@@ -511,6 +511,7 @@ export enum TABLE_COLUMN_KEY {
 }
 
 export const ONCOGENIC_MUTATIONS = 'Oncogenic Mutations';
+export const AMPLIFICATION = 'Amplification';
 export const DELETION = 'Deletion';
 export const FUSIONS = 'Fusions';
 export const TRUNCATING_MUTATIONS = 'Truncating Mutations';

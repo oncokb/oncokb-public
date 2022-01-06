@@ -23,6 +23,7 @@ import {
   DELETION,
   FUSIONS,
   TRUNCATING_MUTATIONS,
+  AMPLIFICATION,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
@@ -695,6 +696,15 @@ export const getCategoricalAlterationDescription = (
   );
   let content;
   switch (alteration) {
+    case AMPLIFICATION:
+      content = (
+        <span>
+          Defined as focal copy number amplification that result in an increase
+          in the gene copy number and subsequent elevation of expression of{' '}
+          {geneLink}.
+        </span>
+      );
+      break;
     case DELETION:
       content = (
         <span>
