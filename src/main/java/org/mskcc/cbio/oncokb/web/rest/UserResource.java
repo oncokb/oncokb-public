@@ -253,7 +253,7 @@ public class UserResource {
                 .map(user -> userMapper.userToUserDTO(user)));
     }
 
-    @PostMapping("/users/verify")
+    @PostMapping("/users/verify-login")
     public ResponseEntity<Boolean> verifyUserLogin(@RequestParam String login) {
         log.debug("REST request to verify user login");
         boolean isLoginUsed = userRepository.findOneByLogin(login.toLowerCase()).isPresent();

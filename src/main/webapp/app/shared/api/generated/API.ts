@@ -5635,7 +5635,7 @@ export default class API {
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
-        let path = '/api/users/verify';
+        let path = '/api/users/verify-login';
         if (parameters['login'] !== undefined) {
             queryParameters['login'] = parameters['login'];
         }
@@ -5664,7 +5664,7 @@ export default class API {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
         const request = this.request;
-        let path = '/api/users/verify';
+        let path = '/api/users/verify-login';
         let body: any;
         let queryParameters: any = {};
         let headers: any = {};

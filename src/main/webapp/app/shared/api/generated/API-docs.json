@@ -2883,7 +2883,7 @@
         "deprecated": false
       }
     },
-    "/api/users/verify": {
+    "/api/users/verify-login": {
       "post": {
         "tags": [
           "user-resource"
