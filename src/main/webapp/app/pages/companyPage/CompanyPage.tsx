@@ -152,6 +152,7 @@ export default class CompanyPage extends React.Component<
 
   @action.bound
   updateCompany() {
+    this.showLicenseChangeModal = false;
     this.getCompanyStatus = PromiseStatus.pending;
     this.getCompanyUsersStatus = PromiseStatus.pending;
     this.getDropdownUsersStatus = PromiseStatus.pending;

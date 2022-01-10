@@ -3,15 +3,17 @@ import { observer } from 'mobx-react';
 import { RouteComponentProps } from 'react-router';
 import { Row, Col, Button, Alert, Tab, Tabs } from 'react-bootstrap';
 import { getSectionClassName } from './account/AccountUtils';
-import { action, computed, observable } from 'mobx';
+import { action, observable } from 'mobx';
 import { CompanyDTO, ManagedUserVM } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
-import { notifyError } from 'app/shared/utils/NotificationUtils';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import { Else, If, Then } from 'react-if';
-import { fieldRequiredValidation } from 'app/shared/utils/FormValidationUtils';
+import {
+  fieldRequiredValidation,
+  SHORT_TEXT_VAL,
+} from 'app/shared/utils/FormValidationUtils';
 import _ from 'lodash';
-import { remoteData } from 'cbioportal-frontend-commons';
+import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { LicenseStatus } from 'app/config/constants';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
@@ -160,19 +162,6 @@ export class CreateCompanyUsersPage extends React.Component<
     });
   }
 
-  @action
-  loginValidation(
-    value: any,
-    context: any,
-    input: any,
-    cb: (isValid: boolean | string) => void
-  ) {
-    client
-      .verifyUserLoginUsingPOST({ login: value.trim() })
-      .then(isValid => (isValid ? cb(true) : cb('Login is already is use')))
-      .catch(error => notifyError(error));
-  }
-
   @action.bound
   duplicateEmailValidation(
     value: any,
@@ -193,28 +182,23 @@ export class CreateCompanyUsersPage extends React.Component<
     if (this.usersInputText.length === 0) {
       return;
     }
-    let processedList: string[] = [];
     const status = CreationStatus.EDIT;
-    if (this.usersInputText.includes(',')) {
-      // comma delimited
-      processedList = this.usersInputText.split(/\s*[,\r\n]\s*/g);
-    } else {
-      // tab delimited
-      processedList = this.usersInputText.split(/[\r\n\t]+/g);
-    }
-    processedList = processedList.map(info => info.trim());
-    for (
-      let i = 0;
-      i < processedList.length && this.userInfos.length < 10;
-      i += 3
-    ) {
-      this.userInfos.push({
-        email: processedList[i] || '',
-        firstName: processedList[i + 1] || '',
-        lastName: processedList[i + 2] || '',
-        creationStatus: { status },
-      });
-    }
+    const users: string[] = this.usersInputText.split(/[\r\n]/g);
+    users.every(user => {
+      if (this.userInfos.length < userLimit) {
+        const userInfoFields = user.includes(',')
+          ? user.split(/\s*[,]\s*/g)
+          : user.split(/[\t]+/g);
+        this.userInfos.push({
+          email: userInfoFields[0] || '',
+          firstName: userInfoFields[1] || '',
+          lastName: userInfoFields[2] || '',
+          creationStatus: { status },
+        });
+        return true;
+      }
+      return false;
+    });
   }
 
   getErrorMessages() {
@@ -280,7 +264,6 @@ export class CreateCompanyUsersPage extends React.Component<
                   validate={{
                     ...fieldRequiredValidation('email'),
                     email: true,
-                    asyncLoginValidation: _.debounce(this.loginValidation, 500),
                     duplicateEmailValidation: this.duplicateEmailValidation,
                   }}
                   disabled={CreateUserMode[mode] === CreateUserMode.BATCH}
@@ -296,6 +279,7 @@ export class CreateCompanyUsersPage extends React.Component<
                   }}
                   validate={{
                     ...fieldRequiredValidation('first name'),
+                    ...SHORT_TEXT_VAL,
                   }}
                   disabled={CreateUserMode[mode] === CreateUserMode.BATCH}
                 />
@@ -310,6 +294,7 @@ export class CreateCompanyUsersPage extends React.Component<
                   }}
                   validate={{
                     ...fieldRequiredValidation('last name'),
+                    ...SHORT_TEXT_VAL,
                   }}
                   disabled={CreateUserMode[mode] === CreateUserMode.BATCH}
                 />
@@ -329,15 +314,17 @@ export class CreateCompanyUsersPage extends React.Component<
           ))}
           {this.createUserMode === CreateUserMode.SINGLE && (
             <div>
-              <i
-                className="fa fa-plus-circle fa-lg mb-3"
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  if (this.userInfos.length < userLimit) {
-                    this.userInfos.push(emptyUserInfo);
-                  }
-                }}
-              />
+              <DefaultTooltip placement={'right'} overlay={'Add new user'}>
+                <i
+                  className="fa fa-plus-circle fa-lg mb-3"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    if (this.userInfos.length < userLimit) {
+                      this.userInfos.push(emptyUserInfo);
+                    }
+                  }}
+                />
+              </DefaultTooltip>
             </div>
           )}
           <Button variant="primary" type="submit">
