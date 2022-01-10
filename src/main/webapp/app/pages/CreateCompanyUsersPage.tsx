@@ -327,19 +327,19 @@ export class CreateCompanyUsersPage extends React.Component<
               )}
             </Row>
           ))}
-          <div
-            className="mb-3"
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              if (this.userInfos.length < userLimit) {
-                this.userInfos.push(emptyUserInfo);
-              }
-            }}
-          >
-            {this.createUserMode === CreateUserMode.SINGLE && (
-              <i className="fa fa-plus-circle fa-lg" />
-            )}
-          </div>
+          {this.createUserMode === CreateUserMode.SINGLE && (
+            <div>
+              <i
+                className="fa fa-plus-circle fa-lg mb-3"
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  if (this.userInfos.length < userLimit) {
+                    this.userInfos.push(emptyUserInfo);
+                  }
+                }}
+              />
+            </div>
+          )}
           <Button variant="primary" type="submit">
             Create Users
           </Button>
