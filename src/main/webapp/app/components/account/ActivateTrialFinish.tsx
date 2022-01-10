@@ -1,21 +1,18 @@
 import React from 'react';
 import { RouterStore } from 'mobx-react-router';
-import { PAGE_ROUTE, XREGEXP_VALID_LATIN_TEXT } from 'app/config/constants';
+import { PAGE_ROUTE } from 'app/config/constants';
 import { inject, observer } from 'mobx-react';
-import { Button, ResponsiveEmbed, Row, Col, Tabs, Tab } from 'react-bootstrap';
+import { Button, Row, Col } from 'react-bootstrap';
 import SmallPageContainer from '../SmallPageContainer';
 import {
   AvForm,
   AvCheckboxGroup,
   AvCheckbox,
-  AvInput,
 } from 'availity-reactstrap-validation';
-import XRegExp from 'xregexp';
-import agreement from '../licenseAgreement/trialAccount/v1/license_agreement.pdf';
 import { LicenseAgreement } from 'app/components/licenseAgreement/trialAccount/v1/LicenseAgreement';
 import client from 'app/shared/api/clientInstance';
 import * as QueryString from 'query-string';
-import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
+import { notifyError } from 'app/shared/utils/NotificationUtils';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { observable } from 'mobx';
 import { Else, Then, If } from 'react-if';

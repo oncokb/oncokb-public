@@ -1,9 +1,16 @@
-import { XREGEXP_VALID_LATIN_TEXT } from 'app/config/constants';
 import * as XRegExp from 'xregexp';
 import _ from 'lodash';
 import client from '../api/clientInstance';
 import { VerifyCompanyNameVM } from '../api/generated/API';
 import { notifyError } from './NotificationUtils';
+import pluralize from 'pluralize';
+
+export const XREGEXP_VALID_LATIN_TEXT = '^[\\p{Latin}\\p{Common}\\s]+$';
+
+const LATIN_TEXT_PATTER = {
+  value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
+  errorMessage: 'Sorry, we only support Latin letters for now.',
+};
 
 /**
  * Check whether the company name is already in use every 500ms.
@@ -39,23 +46,50 @@ export const debouncedCompanyNameValidator = _.debounce(
   500
 );
 
-export const textValidation = (minLength: number, maxLength: number) => {
-  return {
-    pattern: {
-      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-      errorMessage: 'Sorry, we only support Latin letters for now.',
-    },
-    minLength: {
+export const textValidation = (minLength?: number, maxLength?: number) => {
+  const validation = {
+    pattern: LATIN_TEXT_PATTER,
+  } as any;
+  if (minLength) {
+    validation.minLength = {
       value: minLength,
-      errorMessage: `Required to be at least ${minLength} character${
-        minLength > 1 ? 's' : ''
-      }`,
-    },
-    maxLength: {
+      errorMessage: `Required to be at least ${pluralize(
+        'character',
+        minLength,
+        true
+      )}`,
+    };
+  }
+  if (maxLength) {
+    validation.maxLength = {
       value: maxLength,
-      errorMessage: `Cannot be longer than ${maxLength} characters`,
-    },
-  };
+      errorMessage: `Cannot be longer than ${pluralize(
+        'character',
+        maxLength,
+        true
+      )}`,
+    };
+  }
+  return validation;
+};
+
+export const TEXT_VAL = textValidation(1, 255);
+
+export const SHORT_TEXT_VAL = textValidation(1, 50);
+
+export const EMAIL_VAL = {
+  required: {
+    value: true,
+    errorMessage: 'Your email is required.',
+  },
+  minLength: {
+    value: 5,
+    errorMessage: 'Your email is required to be at least 5 characters.',
+  },
+  maxLength: {
+    value: 254,
+    errorMessage: 'Your email cannot be longer than 50 characters.',
+  },
 };
 
 export const fieldRequiredValidation = (fieldName: string) => {
