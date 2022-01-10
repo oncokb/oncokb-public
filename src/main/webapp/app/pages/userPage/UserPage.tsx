@@ -186,6 +186,8 @@ export default class UserPage extends React.Component<IUserPage> {
     if (this.user) {
       const updatedUser: UserDTO = {
         ...this.user,
+        firstName: values.firstName,
+        lastName: values.lastName,
         licenseType: this.selectedLicense
           ? this.selectedLicense
           : this.user.licenseType,
@@ -442,7 +444,6 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.firstName}
-                            disabled
                           />
                           <AvField
                             name="lastName"
@@ -453,7 +454,6 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.lastName}
-                            disabled
                           />
                           <AvField
                             name="createdDate"
