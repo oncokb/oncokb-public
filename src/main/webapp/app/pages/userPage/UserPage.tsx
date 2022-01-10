@@ -20,9 +20,7 @@ import {
   PAGE_ROUTE,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   USER_AUTHORITIES,
-  XREGEXP_VALID_LATIN_TEXT,
 } from 'app/config/constants';
-import XRegExp from 'xregexp';
 import {
   ACCOUNT_TYPE_DEFAULT,
   AccountType,
@@ -31,7 +29,7 @@ import { Alert, Button, Col, Row } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
 import { Token, UserDTO, UserMailsDTO } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
-import { remoteData, getBrowserWindow } from 'cbioportal-frontend-commons';
+import { remoteData } from 'cbioportal-frontend-commons';
 import {
   action,
   computed,
@@ -57,6 +55,7 @@ import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 import DocumentTitle from 'react-document-title';
 import { Link } from 'react-router-dom';
 import { RouterStore } from 'mobx-react-router';
+import { SHORT_TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -444,6 +443,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.firstName}
+                            validate={SHORT_TEXT_VAL}
                           />
                           <AvField
                             name="lastName"
@@ -454,6 +454,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.lastName}
+                            validate={SHORT_TEXT_VAL}
                           />
                           <AvField
                             name="createdDate"
@@ -546,23 +547,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 licenseType={this.selectedLicense}
                               />
                             }
-                            validate={{
-                              minLength: {
-                                value: 1,
-                                errorMessage:
-                                  'Required to be at least 1 character',
-                              },
-                              pattern: {
-                                value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                                errorMessage:
-                                  'Sorry, we only support Latin letters for now.',
-                              },
-                              maxLength: {
-                                value: 50,
-                                errorMessage:
-                                  'Cannot be longer than 50 characters',
-                              },
-                            }}
+                            validate={SHORT_TEXT_VAL}
                             value={this.user.jobTitle}
                           />
                           <AvField
@@ -582,23 +567,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 ) : null}
                               </>
                             }
-                            validate={{
-                              minLength: {
-                                value: 1,
-                                errorMessage:
-                                  'Required to be at least 1 character',
-                              },
-                              pattern: {
-                                value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                                errorMessage:
-                                  'Sorry, we only support Latin letters for now.',
-                              },
-                              maxLength: {
-                                value: 50,
-                                errorMessage:
-                                  'Cannot be longer than 50 characters',
-                              },
-                            }}
+                            validate={SHORT_TEXT_VAL}
                             value={
                               this.user.company
                                 ? this.user.company.name
@@ -615,23 +584,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.city}
-                            validate={{
-                              minLength: {
-                                value: 1,
-                                errorMessage:
-                                  'Required to be at least 1 character',
-                              },
-                              pattern: {
-                                value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                                errorMessage:
-                                  'Sorry, we only support Latin letters for now.',
-                              },
-                              maxLength: {
-                                value: 50,
-                                errorMessage:
-                                  'Cannot be longer than 50 characters',
-                              },
-                            }}
+                            validate={SHORT_TEXT_VAL}
                           />
                           <AvField
                             name="country"
@@ -642,23 +595,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.country}
-                            validate={{
-                              pattern: {
-                                value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                                errorMessage:
-                                  'Sorry, we only support Latin letters for now.',
-                              },
-                              minLength: {
-                                value: 1,
-                                errorMessage:
-                                  'Required to be at least 1 character',
-                              },
-                              maxLength: {
-                                value: 50,
-                                errorMessage:
-                                  'Cannot be longer than 50 characters',
-                              },
-                            }}
+                            validate={SHORT_TEXT_VAL}
                           />
                           <div className={'mb-2 font-weight-bold'}>
                             Account Type

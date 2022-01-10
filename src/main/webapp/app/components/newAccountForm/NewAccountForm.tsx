@@ -23,13 +23,11 @@ import {
   LicenseStatus,
   LicenseType,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
-  XREGEXP_VALID_LATIN_TEXT,
 } from 'app/config/constants';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import LicenseExplanation from 'app/shared/texts/LicenseExplanation';
 import { ButtonSelections } from 'app/components/LicenseSelection';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
-import * as XRegExp from 'xregexp';
 import {
   getAccountInfoTitle,
   getSectionClassName,
@@ -39,7 +37,11 @@ import _ from 'lodash';
 import { FormSelectWithLabelField } from 'app/shared/select/FormSelectWithLabelField';
 import client from 'app/shared/api/clientInstance';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
-import InfoIcon from 'app/shared/icons/InfoIcon';
+import {
+  EMAIL_VAL,
+  SHORT_TEXT_VAL,
+  TEXT_VAL,
+} from 'app/shared/utils/FormValidationUtils';
 
 export enum FormSection {
   LICENSE = 'LICENSE',
@@ -87,44 +89,6 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
   private defaultFormValue = {
     accountType: ACCOUNT_TYPE_DEFAULT,
     tokenValidDays: THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
-  };
-
-  private textValidation = {
-    pattern: {
-      value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-      errorMessage: 'Sorry, we only support Latin letters for now.',
-    },
-    minLength: {
-      value: 1,
-      errorMessage: 'Required to be at least 1 character',
-    },
-    maxLength: {
-      value: 50,
-      errorMessage: 'Cannot be longer than 50 characters',
-    },
-  };
-
-  private shortTextValidation = {
-    ...this.textValidation,
-    maxLength: {
-      value: 50,
-      errorMessage: 'Cannot be longer than 50 characters',
-    },
-  };
-
-  private emailValidation = {
-    required: {
-      value: true,
-      errorMessage: 'Your email is required.',
-    },
-    minLength: {
-      value: 5,
-      errorMessage: 'Your email is required to be at least 5 characters.',
-    },
-    maxLength: {
-      value: 254,
-      errorMessage: 'Your email cannot be longer than 50 characters.',
-    },
   };
 
   public static defaultProps = {
@@ -456,7 +420,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         value: true,
                         errorMessage: 'Your first name is required.',
                       },
-                      ...this.textValidation,
+                      ...SHORT_TEXT_VAL,
                     }}
                   />
                   <AvField
@@ -471,7 +435,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         value: true,
                         errorMessage: 'Your last name is required.',
                       },
-                      ...this.textValidation,
+                      ...SHORT_TEXT_VAL,
                     }}
                   />
                   <AvField
@@ -492,7 +456,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                     onChange={(event: any) => {
                       this.email = event.target.value;
                     }}
-                    validate={this.emailValidation}
+                    validate={EMAIL_VAL}
                   />
                   {this.showEmailMismatchConfirmation ? (
                     <Alert variant={'warning'}>
@@ -612,7 +576,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                             value: true,
                             errorMessage: 'Your organization name is required.',
                           },
-                          ...this.textValidation,
+                          ...TEXT_VAL,
                         }}
                       />
                       <AvField
@@ -646,7 +610,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                             label={'Business Contact Email'}
                             type="email"
                             validate={{
-                              ...this.emailValidation,
+                              ...EMAIL_VAL,
                               required: {
                                 value: false,
                               },
@@ -666,18 +630,10 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                         placeholder={this.useCasePlaceholder}
                         rows={6}
                         validate={{
+                          ...TEXT_VAL,
                           required: {
                             value: true,
                             errorMessage: 'Your use case is required.',
-                          },
-                          pattern: {
-                            value: XRegExp(XREGEXP_VALID_LATIN_TEXT),
-                            errorMessage:
-                              'Sorry, we only support Latin letters for now.',
-                          },
-                          minLength: {
-                            value: 1,
-                            errorMessage: 'Required to be at least 1 character',
                           },
                         }}
                       />
