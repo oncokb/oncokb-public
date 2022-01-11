@@ -71,4 +71,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userDetailsRepository.findOneByTrialActivationKey(key)
             .map(userDetailsMapper::toDto);
     }
+
+    @Override
+    public Optional<UserDetailsDTO> findByUserIsCurrentUser() {
+        return userDetailsRepository.findByUserIsCurrentUser()
+            .map(userDetailsMapper::toDto);
+    }
 }

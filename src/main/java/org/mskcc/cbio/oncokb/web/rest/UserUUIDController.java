@@ -5,6 +5,9 @@ import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.security.uuid.UUIDFilter;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.TokenService;
+import org.mskcc.cbio.oncokb.service.UserDetailsService;
+import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
+import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.TokenExpiredException;
 import org.mskcc.cbio.oncokb.web.rest.errors.TrialAccountExpiredException;
 import org.mskcc.cbio.oncokb.web.rest.vm.LoginVM;
@@ -23,7 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -39,6 +44,9 @@ public class UserUUIDController {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired 
+    private UserDetailsService userDetailsService;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -58,6 +66,7 @@ public class UserUUIDController {
 
         List<Token> tokenList = tokenService.findByUserIsCurrentUser();
         UUID uuid;
+
         if (tokenList.size() > 0) {
             List<Token> validTokens = tokenList.stream().filter(token -> token.getExpiration().isAfter(Instant.now())).collect(Collectors.toList());
             if (validTokens.size() > 0) {
@@ -73,6 +82,26 @@ public class UserUUIDController {
             Token token = tokenProvider.createTokenForCurrentUserLogin(Optional.empty(), Optional.empty());
             uuid = token.getToken();
         }
+
+        Optional<UserDetailsDTO> userDetails = userDetailsService.findByUserIsCurrentUser();
+        if (userDetails.isPresent()) {
+            UserDetailsDTO ud = userDetails.get();
+            boolean userHasTrialKey = 
+                ud.getAdditionalInfo() != null && 
+                ud.getAdditionalInfo().getTrialAccount() !=null && 
+                ud.getAdditionalInfo().getTrialAccount().getActivation() != null &&
+                ud.getAdditionalInfo().getTrialAccount().getActivation().getKey() != null;
+            boolean trialLicenseNOTAccepted = 
+                userHasTrialKey &&
+                ud.getAdditionalInfo().getTrialAccount().getLicenseAgreement() != null &&
+                ud.getAdditionalInfo().getTrialAccount().getLicenseAgreement().getAcceptanceDate() == null;
+            if (trialLicenseNOTAccepted) {
+                Map<String, Object> parameters = new HashMap<>();
+                parameters.put("trialActivationKey", ud.getAdditionalInfo().getTrialAccount().getActivation().getKey());
+                throw new LicenseAgreementNotAcceptedException(parameters);
+            }
+        }
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(UUIDFilter.AUTHORIZATION_HEADER, "Bearer " + uuid);
         return new ResponseEntity<>(uuid, httpHeaders, HttpStatus.OK);
