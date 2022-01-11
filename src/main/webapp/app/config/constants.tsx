@@ -487,6 +487,7 @@ export enum PAGE_ROUTE {
   ADMIN_ADD_COMPANY = '/admin/create-company',
   ADMIN_COMPANY_DETAILS = '/admin/company-details',
   COMPANY = '/companies/:id',
+  CREATE_COMPANY_USERS = '/companies/:id/create-users',
   USER = '/users/:login',
   ACCOUNT = '/account',
   REGISTER = '/account/register',

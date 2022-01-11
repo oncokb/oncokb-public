@@ -10,7 +10,7 @@ import {
   LICENSE_STATUS_TITLES,
   LICENSE_TITLES,
 } from 'app/config/constants';
-import { Alert, Button, Col, Modal, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Row } from 'react-bootstrap';
 import {
   CompanyDTO,
   CompanyVM,
@@ -23,7 +23,6 @@ import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouteComponentProps } from 'react-router';
 import _, { parseInt } from 'lodash';
-import { remoteData } from 'cbioportal-frontend-commons';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { FormTextAreaField } from 'app/shared/textarea/FormTextAreaField';
@@ -40,6 +39,9 @@ import {
   fieldRequiredValidation,
   textValidation,
 } from 'app/shared/utils/FormValidationUtils';
+import { Link } from 'react-router-dom';
+import { QuickToolButton } from '../userPage/QuickToolButton';
+import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 
 interface MatchParams {
   id: string;
@@ -81,8 +83,8 @@ export default class CompanyPage extends React.Component<
   @observable selectedLicenseStatus: LicenseStatus;
   @observable conflictingDomains: string[] = [];
 
-  @observable showModal = false;
-  @observable confirmModalText = '';
+  @observable showLicenseChangeModal = false;
+  @observable confirmLicenseChangeModalText = '';
   @observable formValues: any;
 
   @observable company: CompanyDTO;
@@ -101,7 +103,7 @@ export default class CompanyPage extends React.Component<
   getCompany() {
     client
       .getCompanyUsingGET({
-        id: parseInt(this.props.match.params.id),
+        id: parseInt(this.props.match.params.id, 10),
       })
       .then(company => {
         this.company = company;
@@ -150,8 +152,10 @@ export default class CompanyPage extends React.Component<
 
   @action.bound
   updateCompany() {
+    this.showLicenseChangeModal = false;
     this.getCompanyStatus = PromiseStatus.pending;
     this.getCompanyUsersStatus = PromiseStatus.pending;
+    this.getDropdownUsersStatus = PromiseStatus.pending;
     const newCompanyUserEmails = this.selectedUsersOptions.map(
       selection => selection.value
     );
@@ -173,6 +177,7 @@ export default class CompanyPage extends React.Component<
         this.conflictingDomains = [];
         this.verifyCompanyDomains();
         this.getCompanyUserInfo();
+        this.getDropdownUsers();
         this.getCompanyStatus = PromiseStatus.complete;
         notifySuccess('Company successfully updated');
       })
@@ -190,8 +195,8 @@ export default class CompanyPage extends React.Component<
       this.company.licenseStatus !== this.selectedLicenseStatus &&
       this.companyUsers.length > 0
     ) {
-      this.showModal = true;
-      this.confirmModalText =
+      this.showLicenseChangeModal = true;
+      this.confirmLicenseChangeModalText =
         LICENSE_STATUS_UPDATE_MESSAGES[this.company.licenseStatus][
           this.selectedLicenseStatus
         ];
@@ -267,6 +272,24 @@ export default class CompanyPage extends React.Component<
     );
   }
 
+  @computed
+  get licenseChangeModalBody() {
+    return (
+      <>
+        <div>
+          Are you sure you want to change the company's license status from{' '}
+          <span className="font-weight-bold">{this.company.licenseStatus}</span>{' '}
+          to{' '}
+          <span className="font-weight-bold">{this.selectedLicenseStatus}</span>
+          ?
+        </div>
+        <Alert variant={'warning'} style={{ marginTop: '20px' }}>
+          Warning: {this.confirmLicenseChangeModalText}
+        </Alert>
+      </>
+    );
+  }
+
   render() {
     return (
       <If condition={this.getCompanyStatus === PromiseStatus.pending}>
@@ -284,6 +307,20 @@ export default class CompanyPage extends React.Component<
               {this.getCompanyStatus === PromiseStatus.complete && (
                 <DocumentTitle title={this.company.name}>
                   <>
+                    <Row className={getSectionClassName()}>
+                      <Col>
+                        <div>Quick Tools</div>
+                        <div>
+                          <Link
+                            to={`/companies/${this.company.id}/create-users`}
+                          >
+                            <QuickToolButton>
+                              Create Company Users
+                            </QuickToolButton>
+                          </Link>
+                        </div>
+                      </Col>
+                    </Row>
                     <AvForm
                       onValidSubmit={this.showConfirmModal}
                       onKeyPress={(event: any) => {
@@ -543,45 +580,13 @@ export default class CompanyPage extends React.Component<
                         </Col>
                       </Row>
                     </AvForm>
-                    <Modal
-                      show={this.showModal}
-                      onHide={() => (this.showModal = false)}
-                    >
-                      <Modal.Header closeButton>
-                        <Modal.Title>Review Company Changes</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                        <div>
-                          Are you sure you want to change the company's license
-                          status from{' '}
-                          <span className="font-weight-bold">
-                            {this.company.licenseStatus}
-                          </span>{' '}
-                          to{' '}
-                          <span className="font-weight-bold">
-                            {this.selectedLicenseStatus}
-                          </span>
-                          ?
-                        </div>
-                        <Alert
-                          variant={'warning'}
-                          style={{ marginTop: '20px' }}
-                        >
-                          Warning: {this.confirmModalText}
-                        </Alert>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button
-                          variant="secondary"
-                          onClick={() => (this.showModal = false)}
-                        >
-                          Close
-                        </Button>
-                        <Button variant="primary" onClick={this.updateCompany}>
-                          Update
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
+                    <SimpleConfirmModal
+                      show={this.showLicenseChangeModal}
+                      title={'Review Company Changes'}
+                      body={this.licenseChangeModalBody}
+                      onCancel={() => (this.showLicenseChangeModal = false)}
+                      onConfirm={this.updateCompany}
+                    />
                   </>
                 </DocumentTitle>
               )}
