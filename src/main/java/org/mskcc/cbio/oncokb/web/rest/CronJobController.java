@@ -330,13 +330,6 @@ public class CronJobController {
         List<ExposedToken> results = new ArrayList<>();
         List<ExposedToken> unverifiedResults = new ArrayList<>();
 
-        // Check if current google searching process can be used
-        boolean googleSearching = true;
-        googleSearching = googleSearchingTest();
-        // Check if current baidu searching process can be used
-        boolean baiduSearching = true;
-        baiduSearching = baiduSearchingTest();
-
         // Check each token
         for (Token token : tokens) {
             String q = token.getToken().toString();
@@ -351,41 +344,6 @@ public class CronJobController {
                 e.printStackTrace();
             }
 
-            // If can be found on Google
-            int googleCount = 0;
-            if (googleSearching) {
-                try {
-                    // Get the number of google searching results.
-                    HttpEntity entity = getGoogleResponse(q).getEntity();
-                    Document googleDoc = Jsoup.parse(EntityUtils.toString(entity));
-                    // Result items will be wrapped within h3 tags.
-                    Elements resultEle = googleDoc.select("h3");
-                    googleCount = resultEle.size();
-                    if (googleCount > 0) {
-                        // Get description of results.
-                        String description = googleDoc.select(".kCrYT > div > div > div > div > div").text();
-                        // Check if token can be found.
-                        if (description.indexOf(q) == -1)
-                            googleCount = 0;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // If can be found on Baidu
-            int baiduCount = 0;
-            if (baiduSearching) {
-                try {
-                    // Get the number of Baidu searching results.
-                    Document document = Jsoup.connect(String.format("https://www.baidu.com/s?wd=\"%s\"", q)).get();
-                    Elements elements = document.select("div.result.c-container");
-                    baiduCount = elements.size();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
             UserDTO user = userMapper.userToUserDTO(token.getUser());
             // If token was found on GitHub, update it with a new token and send email to user.
             if (githubCount > 0) {
@@ -393,17 +351,6 @@ public class CronJobController {
                 results.add(t);
                 updateExposedToken(token);
                 mailService.sendMailToUserWhenTokenExposed(user, t);
-            }
-            // If token was found on Google/Baidu, send notification to dev team to check.
-            if (googleCount > 0 || baiduCount > 0) {
-                List<String> source = new ArrayList<>();
-                if (googleCount > 0) {
-                    source.add("Google");
-                }
-                if (baiduCount > 0) {
-                    source.add("Baidu");
-                }
-                unverifiedResults.add(generateExposedToken(token, user, source.stream().collect(Collectors.joining(", "))));
             }
             sleep(1000);
         }
@@ -434,25 +381,6 @@ public class CronJobController {
     }
 
     /**
-     * Request google search
-     *
-     * @param query
-     * @return
-     */
-    private HttpResponse getGoogleResponse(String query) {
-        String uri = String.format("https://www.google.com/search?q=%s", query);
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpGet request = new HttpGet(uri);
-        HttpResponse result = null;
-        try {
-            result = client.execute(request);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    /**
      * Create a new token for exposed one
      *
      * @param token
@@ -461,61 +389,6 @@ public class CronJobController {
         tokenProvider.createToken(token);
         token.setExpiration(Instant.now());
         tokenService.save(token);
-    }
-
-    /**
-     * Google searching test process. Check if google search response structure has changed.
-     *
-     * @return
-     */
-    private boolean googleSearchingTest() {
-        try {
-            HttpEntity entity = getGoogleResponse("test").getEntity();
-            Document googleDoc = Jsoup.parse(EntityUtils.toString(entity));
-            // Result items will be wrapped under h3 tags.
-            Elements resultEle = googleDoc.select("h3");
-            if (!resultEle.isEmpty()) {
-                // Description of results can be located at this xpath.
-                Elements descriptionEle = googleDoc.select(".kCrYT > div > div > div > div > div");
-                if (descriptionEle.isEmpty()) {
-                    mailService.sendMailWhenSearchingStructrueChange("Google");
-                    return false;
-                }
-                // Analysis description to see if keyword could be found.
-                String description = descriptionEle.text();
-                if (description.indexOf("test") == -1) {
-                    mailService.sendMailWhenSearchingStructrueChange("Google");
-                    return false;
-                }
-            } else {
-                mailService.sendMailWhenSearchingStructrueChange("Google");
-                return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    /**
-     * Baidu searching test process. Check if baidu search response structure has changed.
-     *
-     * @return
-     */
-    private boolean baiduSearchingTest() {
-        try {
-            // Get Baidu searching result items.
-            Document document = Jsoup.connect(String.format("https://www.baidu.com/s?wd=\"%s\"", "test")).get();
-            Elements elements = document.select("div.result.c-container");
-            // If nothing found, structure may has been changed.
-            if (elements.isEmpty()) {
-                mailService.sendMailWhenSearchingStructrueChange("Baidu");
-                return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
     }
 
     private void tokenCheckByTime(int daysToExpire, Set<String> notifiedUserIds) {
