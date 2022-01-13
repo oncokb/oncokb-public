@@ -1,0 +1,13 @@
+{
+  "id": 1,
+  "name": "OncoKB",
+  "description": null,
+  "companyType": "BRANCH",
+  "licenseType": "RESEARCH_IN_COMMERCIAL",
+  "licenseModel": "LIMITED",
+  "licenseStatus": "REGULAR",
+  "businessContact": "Representative",
+  "legalContact": "override orchid reboot",
+  "companyDomains": ["oncokb.org"],
+  "numberOfUsers": 0
+}

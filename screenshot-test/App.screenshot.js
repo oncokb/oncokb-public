@@ -42,6 +42,10 @@ const genomenexusTranscript = fs.readFileSync(`${DATA_DIR}genomenexus-transcript
 const genomenexusCanonicalTranscript = fs.readFileSync(`${DATA_DIR}genomenexus-canonical-transcript.json`).toString();
 const userSize = fs.readFileSync(`${DATA_DIR}api-users-size.json`).toString();
 const userDetails = fs.readFileSync(`${DATA_DIR}api-users-details.json`).toString();
+const companyUserDetails = fs.readFileSync(`${DATA_DIR}api-company-user-details.json`).toString();
+const companyUserToken = fs.readFileSync(`${DATA_DIR}api-company-user-tokens.json`).toString();
+const companies = fs.readFileSync(`${DATA_DIR}api-companies.json`).toString();
+const companyDetails = fs.readFileSync(`${DATA_DIR}api-company-details.json`).toString();
 const usageUsersOverview = fs.readFileSync(`${DATA_DIR}api-usage-summary-users.json`).toString();
 const usageResourcesOverview = fs.readFileSync(`${DATA_DIR}api-usage-summary-resources.json`).toString();
 const usageUserDetail = fs.readFileSync(`${DATA_DIR}api-usage-users-2021.json`).toString();
@@ -245,11 +249,60 @@ function getMockResponse(url){
         body: userDetails
       };
       break;
+    case `${SERVER_URL}api/users/user`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: companyUserDetails
+      };
+      break;
+    case `${SERVER_URL}api/users/tokens`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: '[]'
+      };
+      break;
+    case `${SERVER_URL}api/companies`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: companies
+      }
+      break;
+    case `${SERVER_URL}api/companies/1`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: companyDetails
+      }
+      break;
+    case `${SERVER_URL}api/users/non-company-emails`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: '[]'
+      }
+      break;
+    case `${SERVER_URL}api/companies/1/users`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: '[]'
+      }
+      break;
     case `${SERVER_URL}api/users/admin/tokens`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: userToken
+      };
+      break;
+    case `${SERVER_URL}api/users/user/tokens`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: companyUserToken
       };
       break;
     case `${SERVER_URL}api/usage/summary/users`:
@@ -490,6 +543,30 @@ describe('Tests with login', () => {
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('User Details Page'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'User Details Page' });
+  })
+
+  it('Company User Details Page', async() =>{
+    await page.goto(`${CLIENT_URL}users/user`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Company User Details Page'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Company User Details Page' });
+  })
+
+  it('Companies Information Page', async() =>{
+    await page.goto(`${CLIENT_URL}admin/company-details`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Companies Information Page'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Companies Information Page' });
+  })
+
+  it('Company Details Page', async() =>{
+    await page.goto(`${CLIENT_URL}companies/1`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Company Details Page'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Company Details Page' });
   })
 
   it('Usage Analysis Page#User Overview', async()=>{
