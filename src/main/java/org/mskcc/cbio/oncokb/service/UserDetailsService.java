@@ -42,4 +42,6 @@ public interface UserDetailsService {
     void delete(Long id);
 
     Optional<UserDetailsDTO> findOneByTrialActivationKey(String key);
+
+    Optional<UserDetailsDTO> findByUserIsCurrentUser();
 }

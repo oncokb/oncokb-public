@@ -230,3 +230,17 @@ export const SopPageLink: React.FunctionComponent<{
   }
   return <Linkout link={link}>{props.children || defaultContent}</Linkout>;
 };
+
+export const TrialActivationPageLink: React.FunctionComponent<{
+  trialActivationKey: string;
+  onRedirect?: () => void;
+}> = props => {
+  return (
+    <Link
+      to={`${PAGE_ROUTE.ACCOUNT_ACTIVE_TRIAL_FINISH}?key=${props.trialActivationKey}`}
+      onClick={props.onRedirect}
+    >
+      Go to trial license agreement
+    </Link>
+  );
+};

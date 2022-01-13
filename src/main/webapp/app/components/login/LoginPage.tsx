@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import AuthenticationStore, {
-  ACCOUNT_STATUS,
-} from 'app/store/AuthenticationStore';
+import AuthenticationStore from 'app/store/AuthenticationStore';
 import { RouterStore } from 'mobx-react-router';
 import { inject, observer } from 'mobx-react';
 import { action, computed, observable } from 'mobx';
@@ -10,16 +8,16 @@ import SmallPageContainer from 'app/components/SmallPageContainer';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import { Alert, Col, Row } from 'react-bootstrap';
 import { LoadingButton } from 'app/shared/button/LoadingButton';
-import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 import {
   UNAUTHORIZED_EXPIRED,
+  UNAUTHORIZED_LICENSE_AGREEMENT_NOT_ACCEPTED,
   UNAUTHORIZED_NOT_ACTIVATED_ENDS_WITH,
 } from 'app/shared/api/errorMessages';
 import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import client from 'app/shared/api/clientInstance';
 import { LoginVM } from 'app/shared/api/generated/API';
 import { PAGE_ROUTE } from 'app/config/constants';
-
+import { TrialActivationPageLink } from 'app/shared/utils/UrlUtils';
 export interface ILoginProps {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
@@ -66,6 +64,30 @@ export default class LoginPage extends React.Component<ILoginProps> {
     }
   }
 
+  @computed
+  get trialActivationLink() {
+    if (this.props.authenticationStore.loginError) {
+      const errorMessage = getErrorMessage(
+        this.props.authenticationStore.loginError
+      );
+      if (errorMessage.endsWith(UNAUTHORIZED_LICENSE_AGREEMENT_NOT_ACCEPTED)) {
+        const trialActivationKey = this.props.authenticationStore.loginError
+          .response?.body.trialActivationKey;
+        if (trialActivationKey) {
+          return (
+            <TrialActivationPageLink
+              trialActivationKey={trialActivationKey}
+              onRedirect={() =>
+                (this.props.authenticationStore.loginError = undefined)
+              }
+            />
+          );
+        }
+      }
+    }
+    return null;
+  }
+
   @action
   handleLogin = (
     event: any,
@@ -94,9 +116,14 @@ export default class LoginPage extends React.Component<ILoginProps> {
             <Col md="12">
               {this.props.authenticationStore.loginError ? (
                 <>
-                  <ErrorAlert
-                    error={this.props.authenticationStore.loginError}
-                  />
+                  <Alert variant={'danger'}>
+                    <div>
+                      {getErrorMessage(
+                        this.props.authenticationStore.loginError
+                      )}
+                      <div>{this.trialActivationLink}</div>
+                    </div>
+                  </Alert>
                   {this.showResendInfo && (
                     <>
                       <Alert variant={'info'}>

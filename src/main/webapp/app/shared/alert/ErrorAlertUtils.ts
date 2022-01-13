@@ -5,6 +5,7 @@ type OncoKBErrorResponseBody = {
   detail: string;
   path: string;
   message: string;
+  trialActivationKey?: string;
 };
 type OncoKBResponse = Response & {
   body?: OncoKBErrorResponseBody;

@@ -606,11 +606,6 @@ public class UserService {
                     // When a user has an active or expired trial, we just need to approve and update their tokens.
                     updatedUserDTO = approveUser(userDTO, true);
                 }else{
-                    // User needs to activate their trial to reactivate their token
-                    List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
-                    tokens.forEach(token -> {
-                        tokenProvider.expireToken(token);
-                    });
                     Optional<User> updatedUser = initiateTrialAccountActivation(userDTO.getLogin());
                     if(updatedUser.isPresent()){
                         updatedUser.get().setActivated(true);
