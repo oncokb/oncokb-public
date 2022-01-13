@@ -17,6 +17,7 @@ import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import client from 'app/shared/api/clientInstance';
 import { LoginVM } from 'app/shared/api/generated/API';
 import { PAGE_ROUTE } from 'app/config/constants';
+import { TrialActivationPageLink } from 'app/shared/utils/UrlUtils';
 export interface ILoginProps {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
@@ -73,16 +74,13 @@ export default class LoginPage extends React.Component<ILoginProps> {
         const trialActivationKey = this.props.authenticationStore.loginError
           .response?.body.trialActivationKey;
         if (trialActivationKey) {
-          const to = `/account/active-trial/finish?key=${trialActivationKey}`;
           return (
-            <Link
-              to={to}
-              onClick={() =>
+            <TrialActivationPageLink
+              trialActivationKey={trialActivationKey}
+              onRedirect={() =>
                 (this.props.authenticationStore.loginError = undefined)
               }
-            >
-              Go to trial license agreement
-            </Link>
+            />
           );
         }
       }

@@ -7,6 +7,10 @@ import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.TokenService;
 import org.mskcc.cbio.oncokb.service.UserDetailsService;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.Activation;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.LicenseAgreement;
+import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.TrialAccount;
 import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.TokenExpiredException;
 import org.mskcc.cbio.oncokb.web.rest.errors.TrialAccountExpiredException;
@@ -86,15 +90,18 @@ public class UserUUIDController {
         Optional<UserDetailsDTO> userDetails = userDetailsService.findByUserIsCurrentUser();
         if (userDetails.isPresent()) {
             UserDetailsDTO ud = userDetails.get();
-            boolean userHasTrialKey = 
-                ud.getAdditionalInfo() != null && 
-                ud.getAdditionalInfo().getTrialAccount() !=null && 
-                ud.getAdditionalInfo().getTrialAccount().getActivation() != null &&
-                ud.getAdditionalInfo().getTrialAccount().getActivation().getKey() != null;
-            boolean trialLicenseNOTAccepted = 
-                userHasTrialKey &&
-                ud.getAdditionalInfo().getTrialAccount().getLicenseAgreement() != null &&
-                ud.getAdditionalInfo().getTrialAccount().getLicenseAgreement().getAcceptanceDate() == null;
+            boolean userHasTrialKey = Optional.ofNullable(ud)
+                .map(UserDetailsDTO::getAdditionalInfo)
+                .map(AdditionalInfoDTO::getTrialAccount)
+                .map(TrialAccount::getActivation)
+                .map(Activation::getKey)
+                .isPresent();
+            boolean trialLicenseNOTAccepted = userHasTrialKey && !Optional.ofNullable(ud)
+                .map(UserDetailsDTO::getAdditionalInfo)
+                .map(AdditionalInfoDTO::getTrialAccount)
+                .map(TrialAccount::getLicenseAgreement)
+                .map(LicenseAgreement::getAcceptanceDate)
+                .isPresent();
             if (trialLicenseNOTAccepted) {
                 Map<String, Object> parameters = new HashMap<>();
                 parameters.put("trialActivationKey", ud.getAdditionalInfo().getTrialAccount().getActivation().getKey());
