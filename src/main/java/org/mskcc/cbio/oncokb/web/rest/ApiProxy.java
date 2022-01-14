@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import springfox.documentation.annotations.ApiIgnore;
@@ -97,6 +98,11 @@ public class ApiProxy {
             } else {
                 throw new ResponseStatusException(httpClientErrorException.getStatusCode(), httpClientErrorException.getMessage());
             }
+        } catch (HttpServerErrorException e) {
+            HttpServerErrorException ne = new HttpServerErrorException("Request URL: " + uri + "Request body: " + body, e.getStatusCode(), e.getStatusText(), e.getResponseHeaders(), null, null);
+            throw ne;
+        } catch (Exception e) {
+            throw e;
         }
     }
 
