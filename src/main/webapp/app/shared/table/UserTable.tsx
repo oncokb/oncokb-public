@@ -96,16 +96,16 @@ export class UserTable extends React.Component<IUserTableProps> {
     let status = '';
     if (this.props.licenseStatus === LicenseStatus.TRIAL) {
       if (
+        !user.additionalInfo?.trialAccount?.activation?.activationDate &&
+        user.additionalInfo?.trialAccount?.activation?.key
+      ) {
+        status += ' (Pending)';
+      } else if (
         this.props.usersTokens.some(
           token => token.user.id === user.id && token.renewable
         )
       ) {
         status += ' (Regular)';
-      } else if (
-        !user.additionalInfo?.trialAccount?.activation?.activationDate &&
-        user.additionalInfo?.trialAccount?.activation?.key
-      ) {
-        status += ' (Pending)';
       } else {
         status += ' (Trial)';
       }
