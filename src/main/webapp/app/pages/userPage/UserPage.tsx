@@ -100,9 +100,7 @@ export default class UserPage extends React.Component<IUserPage> {
       reaction(
         () => this.defaultSelectedAccountType,
         newDefault => {
-          if (this.selectedAccountType === undefined) {
-            this.selectedAccountType = newDefault;
-          }
+          this.selectedAccountType = newDefault;
         },
         true
       )
@@ -134,7 +132,7 @@ export default class UserPage extends React.Component<IUserPage> {
   @computed
   get defaultSelectedAccountType() {
     const currentlyIsTrialAccount =
-      this.userTokens.filter(token => !token.renewable).length > 0;
+      this.userTokens.filter(token => token.renewable).length < 1;
     return currentlyIsTrialAccount ? AccountType.TRIAL : AccountType.REGULAR;
   }
 

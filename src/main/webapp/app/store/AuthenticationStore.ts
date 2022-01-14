@@ -177,7 +177,7 @@ class AuthenticationStore {
       token => new Date(token.expiration).getDate() <= Date.now()
     );
     const isTrialAccount =
-      this.tokens.filter(token => !token.renewable).length > 0;
+      this.tokens.filter(token => token.renewable).length < 1;
     if (tokenValid.length > 0) {
       const tokenAbout2Expire = this.tokens.filter(
         token =>

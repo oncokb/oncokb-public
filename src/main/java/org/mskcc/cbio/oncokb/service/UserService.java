@@ -291,8 +291,9 @@ public class UserService {
 
     public boolean trialAccountActivated(UserDTO userDTO) {
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
-        return tokens.stream().filter(token -> !token.isRenewable()).findAny().isPresent();
+        return !tokens.stream().filter(token -> token.isRenewable()).findAny().isPresent();
     }
+
     public boolean trialAccountInitiated(UserDTO userDTO) {
         if (
             userDTO.getAdditionalInfo() == null
@@ -682,12 +683,11 @@ public class UserService {
     }
 
     private boolean userOnTrial(UserDTO userDTO) {
-        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
-        return tokens.stream()
-            .filter(token -> token.isRenewable().equals(false))
-            .map(token -> true)
+        return !tokenService.findByUser(userMapper.userDTOToUser(userDTO))
+            .stream()
+            .filter(token -> token.isRenewable())
             .findAny()
-            .orElse(false);
+            .isPresent();
 
     }
 
