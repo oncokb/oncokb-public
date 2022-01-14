@@ -357,14 +357,16 @@ export default class CompanyPage extends React.Component<
                                 ctx: any,
                                 input: any,
                                 cb: (isValid: boolean | string) => void
-                              ) =>
-                                debouncedCompanyNameValidator(
-                                  value,
-                                  ctx,
-                                  input,
-                                  cb,
-                                  this.company.id
-                                ),
+                              ) => {
+                                if (this.company.name !== value)
+                                  debouncedCompanyNameValidator(
+                                    value,
+                                    ctx,
+                                    input,
+                                    cb,
+                                    this.company.id
+                                  );
+                              },
                             }}
                           />
                           <FormTextAreaField

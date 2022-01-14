@@ -1,0 +1,22 @@
+[
+  {
+    "id": 3,
+    "token": "oncokb-public-demo-user-token",
+    "creation": "2019-11-14T17:30:54Z",
+    "expiration": "2022-06-25T00:00:00Z",
+    "usageLimit": null,
+    "currentUsage": 0,
+    "renewable": true,
+    "user": {
+      "id": 4,
+      "login": "user",
+      "firstName": "User",
+      "lastName": "User",
+      "email": "user@localhost",
+      "activated": true,
+      "langKey": "en",
+      "imageUrl": "",
+      "resetDate": null
+    }
+  }
+]
