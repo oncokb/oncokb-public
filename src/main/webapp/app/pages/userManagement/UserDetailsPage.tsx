@@ -129,8 +129,11 @@ export default class UserDetailsPage extends React.Component<{
       notifyError(new Error('No user specified'));
       return;
     }
-    this.currentSelected.user.activated = !this.currentSelected.user.activated;
-    this.updateUser(this.currentSelected.user, sendEmail);
+    const userToUpdate: UserDTO = {
+      ...this.currentSelected.user,
+      activated: !this.currentSelected.user.activated,
+    };
+    this.updateUser(userToUpdate, sendEmail);
   }
 
   @action
@@ -146,7 +149,7 @@ export default class UserDetailsPage extends React.Component<{
         this.getUsers();
       })
       .catch((error: Error) => {
-        notifyError(error, 'Error updating user');
+        notifyError(error, 'Error updating user.');
       });
   }
 
