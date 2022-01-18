@@ -80,11 +80,6 @@ public class OncokbPublicApp {
             Sentry.init(options -> {
                 options.setDsn(env.getProperty("sentry.dsn"));
                 options.setEnableUncaughtExceptionHandler(true);
-                // Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
-                // We recommend adjusting this value in production.
-                options.setTracesSampleRate(.2);
-                // When first trying Sentry it's good to see what the SDK is doing:
-                options.setDebug(false);
 
                 // Ignore the following exceptions
                 options.addIgnoredExceptionForType(BadCredentialsException.class);
