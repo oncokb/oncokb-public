@@ -176,24 +176,6 @@ public class CronJobController {
     }
 
     /**
-     * {@code GET  /update-token-stats} : Update token stats.
-     */
-    @GetMapping(path = "/update-token-stats")
-    public void updateTokenStats() {
-        log.info("Started the cronjob to update token stats");
-        List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(Instant.now());
-
-        // Update tokens with token usage
-        tokenUsages.stream().forEach(tokenUsage -> {
-                Optional<Token> tokenOptional = tokenService.findByToken(tokenUsage.getToken().getToken());
-                if (tokenOptional.isPresent()) {
-                    tokenOptional.get().setCurrentUsage(tokenOptional.get().getCurrentUsage() + tokenUsage.getCount());
-                    tokenService.save(tokenOptional.get());
-                }
-        });
-    }
-
-    /**
      * {@code GET /user-usage-analysis}: Analyze user usage
      *
      * @throws IOException
@@ -438,6 +420,20 @@ public class CronJobController {
     private void renewToken(Token token) {
         token.setExpiration(token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS));
         tokenService.save(token);
+    }
+
+    private void updateTokenStats() {
+        log.info("Started the cronjob to update token stats");
+        List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(Instant.now());
+
+        // Update tokens with token usage
+        tokenUsages.stream().forEach(tokenUsage -> {
+            Optional<Token> tokenOptional = tokenService.findByToken(tokenUsage.getToken().getToken());
+            if (tokenOptional.isPresent()) {
+                tokenOptional.get().setCurrentUsage(tokenOptional.get().getCurrentUsage() + tokenUsage.getCount());
+                tokenService.save(tokenOptional.get());
+            }
+        });
     }
 
     private File createWrappedFile() throws IOException {
