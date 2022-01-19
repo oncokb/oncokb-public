@@ -62,6 +62,10 @@ public class TokenStatsServiceImpl implements TokenStatsService {
         tokenStatsRepository.deleteById(id);
     }
 
+    public void clearTokenStats() {
+        tokenStatsRepository.deleteAll();
+    }
+
     /**
      * Old audit events should be automatically deleted after 30 days.
      *

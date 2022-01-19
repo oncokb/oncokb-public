@@ -1528,6 +1528,33 @@
         "deprecated": false
       }
     },
+    "/api/cronjob/wrap-token-stats": {
+      "delete": {
+        "tags": [
+          "cron-job-controller"
+        ],
+        "summary": "wrapTokenStats",
+        "operationId": "wrapTokenStatsUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/mails/feedback": {
       "post": {
         "tags": [

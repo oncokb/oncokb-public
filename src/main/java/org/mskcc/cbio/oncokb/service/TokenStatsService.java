@@ -44,6 +44,8 @@ public interface TokenStatsService {
      */
     void delete(Long id);
 
+    void clearTokenStats();
+
     void removeOldTokenStats();
 
     List<UserTokenUsage> getUserTokenUsage(Instant before);

@@ -26,4 +26,6 @@ public interface TokenStatsRepository extends JpaRepository<TokenStats, Long> {
     " where tokenStats.accessTime > ?1 " +
     " group by tokenStats.token, DATE_FORMAT(tokenStats.accessTime,'%Y-%m'), tokenStats.resource", nativeQuery = true)
     List<UserTokenUsageWithInfo> countTokenUsageByTokenTimeResource(Instant after);
+
+    void deleteAll();
 }

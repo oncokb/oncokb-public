@@ -2,10 +2,7 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.domain.Token;
-import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.domain.UserDetails;
-import org.mskcc.cbio.oncokb.domain.UserMessagePair;
+import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
@@ -87,6 +84,7 @@ public class CronJobController {
     final String USERS_USAGE_SUMMARY_FILE = "usage-analysis/userSummary.json";
     final String RESOURCES_USAGE_SUMMARY_FILE = "usage-analysis/resourceSummary.json";
     final String RESOURCES_USAGE_DETAIL_FILE = "usage-analysis/resourceDetail.json";
+    final String TOKEN_STATS_STORAGE_FILE_PREFIX = "token-usage/token-stats-";
 
     public CronJobController(UserService userService,
                              MailService mailService, TokenProvider tokenProvider,
@@ -187,23 +185,11 @@ public class CronJobController {
 
         // Update tokens with token usage
         tokenUsages.stream().forEach(tokenUsage -> {
-            if (!tokenUsage.getToken().getCurrentUsage().equals(tokenUsage.getCount())) {
                 Optional<Token> tokenOptional = tokenService.findByToken(tokenUsage.getToken().getToken());
                 if (tokenOptional.isPresent()) {
-                    tokenOptional.get().setCurrentUsage(tokenUsage.getCount());
+                    tokenOptional.get().setCurrentUsage(tokenOptional.get().getCurrentUsage() + tokenUsage.getCount());
                     tokenService.save(tokenOptional.get());
                 }
-            }
-        });
-
-        // Update tokens without token usage
-        List<Long> tokenWithStats = tokenUsages.stream().map(tokenUsage -> tokenUsage.getToken().getId()).collect(Collectors.toList());
-        List<Token> tokens = tokenService.findAll().stream().filter(token -> !tokenWithStats.contains(token.getId())).collect(Collectors.toList());
-        tokens.stream().forEach(token -> {
-            if (!token.getCurrentUsage().equals(0)) {
-                token.setCurrentUsage(0);
-                tokenService.save(token);
-            }
         });
     }
 
@@ -272,6 +258,18 @@ public class CronJobController {
         userResult.delete();
         resourceDetailResult.delete();
         log.info("User usage analysis completed!");
+    }
+
+    /**
+     * {@code GET /wrap-token-stats}: Wrap token stats
+     *
+     * @throws IOException
+     */
+    @DeleteMapping(path = "/wrap-token-stats")
+    public void wrapTokenStats() throws IOException {
+        updateTokenStats();
+        s3Service.saveObject("oncokb", TOKEN_STATS_STORAGE_FILE_PREFIX + Instant.now().toString() + ".txt", createWrappedFile());
+        tokenStatsService.clearTokenStats();
     }
 
     private void calculateUsageSummary(UsageSummary usageSummary, String key, int count, String time) {
@@ -440,5 +438,19 @@ public class CronJobController {
     private void renewToken(Token token) {
         token.setExpiration(token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS));
         tokenService.save(token);
+    }
+
+    private File createWrappedFile() throws IOException {
+        File file = File.createTempFile("test-token-stats-", ".txt");
+        file.deleteOnExit();
+
+        Writer writer = new OutputStreamWriter(new FileOutputStream(file));
+        writer.write(TokenStats.csvColumns() + "\n");
+        for (TokenStats tokenStats : tokenStatsService.findAll()) {
+            writer.write(tokenStats.toCSV() + "\n");
+        }
+        writer.close();
+
+        return file;
     }
 }
