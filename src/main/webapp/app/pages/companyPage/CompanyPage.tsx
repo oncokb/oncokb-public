@@ -358,7 +358,7 @@ export default class CompanyPage extends React.Component<
                                 input: any,
                                 cb: (isValid: boolean | string) => void
                               ) => {
-                                if (this.company.name !== value)
+                                if (this.company.name !== value) {
                                   debouncedCompanyNameValidator(
                                     value,
                                     ctx,
@@ -366,6 +366,9 @@ export default class CompanyPage extends React.Component<
                                     cb,
                                     this.company.id
                                   );
+                                } else {
+                                  cb(true);
+                                }
                               },
                             }}
                           />
