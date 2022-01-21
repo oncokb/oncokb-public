@@ -176,7 +176,6 @@ public class AccountResource {
         if (company.getLicenseStatus().equals(LicenseStatus.REGULAR)) {
             userService.approveUser(userDTO, false);
             slackService.sendApprovedConfirmation(userDTO, company);
-            mailService.sendApprovalEmail(userDTO);
         }
         return true;
     }
