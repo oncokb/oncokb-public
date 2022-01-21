@@ -6,6 +6,7 @@ import {
   Feedback,
   FeedbackType,
 } from 'app/components/feedback/types';
+import { EMAIL_VAL, TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 
 export type FeedbackFormProps = Feedback & {
   onSubmit: (value: Feedback) => void;
@@ -75,15 +76,22 @@ export const FeedbackForm: React.FunctionComponent<FeedbackFormProps> = props =>
               },
             }}
           />
-          <AvField name="email" label={'Email (optional)'} type="email" />
+          <AvField
+            name="email"
+            label={'Email'}
+            type="email"
+            validate={EMAIL_VAL}
+          />
           <AvField
             name="name"
-            label={'Name (optional)'}
+            label={'Name'}
             type="input"
             validate={{
               required: {
-                value: false,
+                value: true,
+                errorMessage: 'Your name is required.',
               },
+              ...TEXT_VAL,
             }}
           />
           <div>
