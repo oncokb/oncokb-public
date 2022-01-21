@@ -4,7 +4,6 @@ import org.mskcc.cbio.oncokb.service.CompanyDomainService;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDomainDTO;
 
-import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,9 +52,7 @@ public class CompanyDomainResource {
             throw new BadRequestAlertException("A new companyDomain cannot already have an ID", ENTITY_NAME, "idexists");
         }
         CompanyDomainDTO result = companyDomainService.save(companyDomainDTO);
-        return ResponseEntity.created(new URI("/api/company-domains/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        return ResponseEntity.created(new URI("/api/company-domains/" + result.getId())).body(result);
     }
 
     /**
@@ -74,9 +71,7 @@ public class CompanyDomainResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         CompanyDomainDTO result = companyDomainService.save(companyDomainDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, companyDomainDTO.getId().toString()))
-            .body(result);
+        return ResponseEntity.ok().body(result);
     }
 
     /**
@@ -120,6 +115,6 @@ public class CompanyDomainResource {
     public ResponseEntity<Void> deleteCompanyDomain(@PathVariable Long id) {
         log.debug("REST request to delete CompanyDomain : {}", id);
         companyDomainService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.ok().build();
     }
 }

@@ -6,7 +6,6 @@ import org.mskcc.cbio.oncokb.service.UserMailsService;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 
-import io.github.jhipster.web.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -79,6 +78,6 @@ public class UserMailsResource {
     public ResponseEntity<Void> deleteUserMails(@PathVariable Long id) {
         log.debug("REST request to delete UserMails : {}", id);
         userMailsService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().build();
     }
 }

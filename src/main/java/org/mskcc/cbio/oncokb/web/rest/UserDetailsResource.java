@@ -5,7 +5,6 @@ import org.mskcc.cbio.oncokb.service.UserDetailsService;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 
-import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,9 +52,7 @@ public class UserDetailsResource {
             throw new BadRequestAlertException("A new userDetails cannot already have an ID", ENTITY_NAME, "idexists");
         }
         UserDetailsDTO result = userDetailsService.save(userDetailsDTO);
-        return ResponseEntity.created(new URI("/api/user-details/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        return ResponseEntity.created(new URI("/api/user-details/" + result.getId())).body(result);
     }
 
     /**
@@ -74,9 +71,7 @@ public class UserDetailsResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         UserDetailsDTO result = userDetailsService.save(userDetailsDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, userDetailsDTO.getId().toString()))
-            .body(result);
+        return ResponseEntity.ok().body(result);
     }
 
     /**
@@ -114,6 +109,6 @@ public class UserDetailsResource {
     public ResponseEntity<Void> deleteUserDetails(@PathVariable Long id) {
         log.debug("REST request to delete UserDetails : {}", id);
         userDetailsService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.ok().build();
     }
 }
