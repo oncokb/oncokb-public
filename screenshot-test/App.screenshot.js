@@ -43,7 +43,6 @@ const genomenexusCanonicalTranscript = fs.readFileSync(`${DATA_DIR}genomenexus-c
 const userSize = fs.readFileSync(`${DATA_DIR}api-users-size.json`).toString();
 const userDetails = fs.readFileSync(`${DATA_DIR}api-users-details.json`).toString();
 const companyUserDetails = fs.readFileSync(`${DATA_DIR}api-company-user-details.json`).toString();
-const companyUserToken = fs.readFileSync(`${DATA_DIR}api-company-user-tokens.json`).toString();
 const companies = fs.readFileSync(`${DATA_DIR}api-companies.json`).toString();
 const companyDetails = fs.readFileSync(`${DATA_DIR}api-company-details.json`).toString();
 const usageUsersOverview = fs.readFileSync(`${DATA_DIR}api-usage-summary-users.json`).toString();
@@ -65,6 +64,8 @@ let apiAccountToken = fs.readFileSync(`${DATA_DIR}api-account-token.json`).toStr
 apiAccountToken = JSON.stringify(updateTokenExpirationDate(JSON.parse(apiAccountToken)));
 let userToken = fs.readFileSync(`${DATA_DIR}api-users-tokens.json`).toString();
 userToken = JSON.stringify(updateTokenExpirationDate(JSON.parse(userToken)));
+let companyUserToken = fs.readFileSync(`${DATA_DIR}api-company-user-tokens.json`).toString();
+companyUserToken = JSON.stringify(updateTokenExpirationDate(JSON.parse(companyUserToken)));
 
 
 function getScreenshotConfig(name){
