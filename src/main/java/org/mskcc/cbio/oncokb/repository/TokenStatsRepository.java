@@ -4,6 +4,8 @@ import org.mskcc.cbio.oncokb.domain.TokenStats;
 
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +20,10 @@ import java.util.List;
 public interface TokenStatsRepository extends JpaRepository<TokenStats, Long> {
     List<TokenStats> findByAccessTimeBefore(Instant before);
 
+    Page<TokenStats> findAllByAccessTimeBefore(Instant before, Pageable pageable);
+
+    void deleteAllByAccessTimeBefore(Instant before);
+
     @Query("select sum(tokenStats.usageCount) as count, tokenStats.token as token from TokenStats tokenStats where tokenStats.accessTime < ?1 group by tokenStats.token")
     List<UserTokenUsage> countTokenUsageByToken(Instant before);
 
@@ -26,6 +32,4 @@ public interface TokenStatsRepository extends JpaRepository<TokenStats, Long> {
     " where tokenStats.accessTime > ?1 " +
     " group by tokenStats.token, DATE_FORMAT(tokenStats.accessTime,'%Y-%m'), tokenStats.resource", nativeQuery = true)
     List<UserTokenUsageWithInfo> countTokenUsageByTokenTimeResource(Instant after);
-
-    void deleteAll();
 }

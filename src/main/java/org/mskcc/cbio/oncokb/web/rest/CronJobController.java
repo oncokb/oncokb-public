@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -249,9 +251,23 @@ public class CronJobController {
      */
     @DeleteMapping(path = "/wrap-token-stats")
     public void wrapTokenStats() throws IOException {
-        updateTokenStats();
-        s3Service.saveObject("oncokb", TOKEN_STATS_STORAGE_FILE_PREFIX + Instant.now().toString() + ".txt", createWrappedFile());
-        tokenStatsService.clearTokenStats();
+        Instant current = Instant.now();
+        // Update tokenStats in database
+        updateTokenStats(current);
+        // Send tokenStats to s3
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateFormat.format(dateFormat.parse(current.toString())) + ".txt";
+            if (s3Service.getObject("myawsbucket-ben-xu", datedFile).isPresent()) {
+                log.warn("Tokenstats has already been wrapped today.");
+                datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + current + ".txt";
+            }
+            s3Service.saveObject("myawsbucket-ben-xu", datedFile, createWrappedFile());
+        } catch (ParseException e) {
+            log.error("Unable to parse instant. Java.time.Instant formatting may have changed.");
+        }
+        // Delete old tokenStats
+        tokenStatsService.clearTokenStats(current);
     }
 
     private void calculateUsageSummary(UsageSummary usageSummary, String key, int count, String time) {
@@ -422,9 +438,9 @@ public class CronJobController {
         tokenService.save(token);
     }
 
-    private void updateTokenStats() {
+    private void updateTokenStats(Instant current) {
         log.info("Started the cronjob to update token stats");
-        List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(Instant.now());
+        List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(current);
 
         // Update tokens with token usage
         tokenUsages.stream().forEach(tokenUsage -> {

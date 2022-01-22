@@ -62,8 +62,8 @@ public class TokenStatsServiceImpl implements TokenStatsService {
         tokenStatsRepository.deleteById(id);
     }
 
-    public void clearTokenStats() {
-        tokenStatsRepository.deleteAll();
+    public void clearTokenStats(Instant before) {
+        tokenStatsRepository.deleteAllByAccessTimeBefore(before);
     }
 
     /**
@@ -83,7 +83,7 @@ public class TokenStatsServiceImpl implements TokenStatsService {
         return tokenStatsRepository.countTokenUsageByToken(before);
     }
 
-    public List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after){
+    public List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after) {
         return tokenStatsRepository.countTokenUsageByTokenTimeResource(after);
     }
 }
