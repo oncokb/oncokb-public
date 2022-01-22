@@ -143,7 +143,7 @@ public class TokenStats implements Serializable {
     }
 
     public String toCSV() {
-        return getId() +
+        return getToken().getUser().getEmail() +
             ";" + getAccessIp() +
             ";" + getResource() +
             ";" + getAccessTime() +
@@ -152,6 +152,7 @@ public class TokenStats implements Serializable {
     }
 
     public static String csvColumns() {
-        return "id;accessIp;resource;accessTime;tokenId;usageCount";
+        return "email;accessIp;resource;accessTime;tokenId;usageCount";
+
     }
 }
