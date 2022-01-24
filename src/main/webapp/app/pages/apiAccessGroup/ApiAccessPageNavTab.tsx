@@ -47,6 +47,7 @@ export class ApiAccessPageNavTab extends React.Component<
       newSelectedTab => {
         this.props.routing.history.push({
           pathname: newSelectedTab as any,
+          hash: this.props.routing.location.hash,
         });
       }
     ),
