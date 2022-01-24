@@ -84,15 +84,6 @@ public class ExceptionTranslatorIT {
     }
 
     @Test
-    public void testMethodNotSupported() throws Exception {
-        mockMvc.perform(post("/api/exception-translator-test/access-denied"))
-            .andExpect(status().isMethodNotAllowed())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.405"))
-            .andExpect(jsonPath("$.detail").value("Request method 'POST' not supported"));
-    }
-
-    @Test
     public void testExceptionWithResponseStatus() throws Exception {
         mockMvc.perform(get("/api/exception-translator-test/response-status"))
             .andExpect(status().isBadRequest())

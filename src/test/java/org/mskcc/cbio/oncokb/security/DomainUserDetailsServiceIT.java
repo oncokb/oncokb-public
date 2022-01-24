@@ -111,7 +111,7 @@ public class DomainUserDetailsServiceIT {
 
     @Test
     public void assertThatUserNotActivatedExceptionIsThrownForNotActivatedUsers() {
-        assertThatExceptionOfType(UserNotActivatedException.class).isThrownBy(
+        assertThatExceptionOfType(UserNotApprovedException.class).isThrownBy(
             () -> domainUserDetailsService.loadUserByUsername(USER_THREE_LOGIN));
     }
 

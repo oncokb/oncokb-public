@@ -492,22 +492,4 @@ public class CompanyResourceIT {
         List<Company> companyList = companyRepository.findAll();
         assertThat(companyList).hasSize(databaseSizeBeforeUpdate);
     }
-
-    @Test
-    @Transactional
-    public void deleteCompany() throws Exception {
-        // Initialize the database
-        companyRepository.saveAndFlush(company);
-
-        int databaseSizeBeforeDelete = companyRepository.findAll().size();
-
-        // Delete the company
-        restCompanyMockMvc.perform(delete("/api/companies/{id}", company.getId())
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNoContent());
-
-        // Validate the database contains one less item
-        List<Company> companyList = companyRepository.findAll();
-        assertThat(companyList).hasSize(databaseSizeBeforeDelete - 1);
-    }
 }

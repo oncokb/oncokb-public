@@ -7,6 +7,7 @@ import org.mskcc.cbio.oncokb.repository.CompanyDomainRepository;
 import org.mskcc.cbio.oncokb.service.CompanyDomainService;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDomainDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyDomainMapper;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = OncokbPublicApp.class)
 @ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 public class CompanyDomainResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -237,7 +238,7 @@ public class CompanyDomainResourceIT {
         // Delete the companyDomain
         restCompanyDomainMockMvc.perform(delete("/api/company-domains/{id}", companyDomain.getId())
             .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNoContent());
+            .andExpect(status().isOk());
 
         // Validate the database contains one less item
         List<CompanyDomain> companyDomainList = companyDomainRepository.findAll();

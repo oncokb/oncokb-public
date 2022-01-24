@@ -5,38 +5,53 @@ import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Unit tests for {@link UserMapper}.
  */
-@ExtendWith(RedisTestContainerExtension.class)
+@ExtendWith({RedisTestContainerExtension.class, MockitoExtension.class})
 public class UserMapperTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final Long DEFAULT_ID = 1L;
 
+    @Mock
+    private UserDetailsRepository userDetailsRepository;
+
+    @InjectMocks
     private UserMapper userMapper;
+    
     private User user;
     private UserDetails userDetails;
     private UserDTO userDto;
 
     @BeforeEach
-    public void init() {
+    public void init() { 
         userMapper = new UserMapper();
+        MockitoAnnotations.initMocks(this);
+
         user = new User();
         user.setLogin(DEFAULT_LOGIN);
         user.setPassword(RandomStringUtils.random(60));
@@ -59,6 +74,9 @@ public class UserMapperTest {
 
     @Test
     public void usersToUserDTOsShouldMapOnlyNonNullUsers() {
+        Mockito.when(userDetailsRepository.findOneByUser(any(User.class)))
+            .thenReturn(Optional.empty());
+            
         List<User> users = new ArrayList<>();
         users.add(user);
         users.add(null);

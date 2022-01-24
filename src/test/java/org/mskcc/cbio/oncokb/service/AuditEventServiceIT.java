@@ -66,6 +66,8 @@ public class AuditEventServiceIT {
 
         persistenceAuditEventRepository.flush();
 
+        auditEventService.removeOldAuditEvents();   // We are using cron job to delete old audit events
+
         assertThat(persistenceAuditEventRepository.findAll().size()).isEqualTo(2);
         assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-old")).isEmpty();
         assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-retention")).isNotEmpty();

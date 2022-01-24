@@ -2,19 +2,17 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserMails;
 import org.mskcc.cbio.oncokb.repository.UserMailsRepository;
-import org.mskcc.cbio.oncokb.service.MailService;
+import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.UserMailsService;
 import org.mskcc.cbio.oncokb.service.UserService;
-import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMailsMapper;
-import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
-import org.mskcc.cbio.oncokb.web.rest.errors.ExceptionTranslator;
-
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +23,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -41,7 +40,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 @SpringBootTest(classes = OncokbPublicApp.class)
 @ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 public class UserMailsResourceIT {
 
     private static final Instant DEFAULT_SENT_DATE = Instant.ofEpochMilli(0L);
@@ -56,8 +55,13 @@ public class UserMailsResourceIT {
     private static final MailType DEFAULT_MAIL_TYPE = MailType.ACTIVATION;
     private static final MailType UPDATED_MAIL_TYPE = MailType.APPROVAL;
 
+    private static final String DEFAULT_USER_LOGIN = "johndoe@localhost";
+
     @Autowired
     private UserMailsRepository userMailsRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private UserMailsMapper userMailsMapper;
@@ -75,6 +79,8 @@ public class UserMailsResourceIT {
     private MockMvc restUserMailsMockMvc;
 
     private UserMails userMails;
+
+    private User user;
 
     /**
      * Create an entity for this test.
@@ -105,111 +111,23 @@ public class UserMailsResourceIT {
         return userMails;
     }
 
+    public static User createUserEntity(EntityManager em) {
+        User user = new User();
+        user.setLogin(DEFAULT_USER_LOGIN);
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+        user.setEmail(DEFAULT_USER_LOGIN);
+        user.setFirstName("john");
+        user.setLastName("doe");
+        user.setImageUrl("http://placehold.it/50x50");
+        user.setLangKey("en");
+        return user;
+    }
+
     @BeforeEach
     public void initTest() {
         userMails = createEntity(em);
-    }
-
-    @Test
-    @Transactional
-    public void createUserMails() throws Exception {
-        int databaseSizeBeforeCreate = userMailsRepository.findAll().size();
-        // Create the UserMails
-        UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
-        restUserMailsMockMvc.perform(post("/api/user-mails")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
-            .andExpect(status().isCreated());
-
-        // Validate the UserMails in the database
-        List<UserMails> userMailsList = userMailsRepository.findAll();
-        assertThat(userMailsList).hasSize(databaseSizeBeforeCreate + 1);
-        UserMails testUserMails = userMailsList.get(userMailsList.size() - 1);
-        assertThat(testUserMails.getSentDate()).isEqualTo(DEFAULT_SENT_DATE);
-        assertThat(testUserMails.getSentBy()).isEqualTo(DEFAULT_SENT_BY);
-        assertThat(testUserMails.getSentFrom()).isEqualTo(DEFAULT_SENT_FROM);
-        assertThat(testUserMails.getMailType()).isEqualTo(DEFAULT_MAIL_TYPE);
-    }
-
-    @Test
-    @Transactional
-    public void createUserMailsWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = userMailsRepository.findAll().size();
-
-        // Create the UserMails with an existing ID
-        userMails.setId(1L);
-        UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restUserMailsMockMvc.perform(post("/api/user-mails")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the UserMails in the database
-        List<UserMails> userMailsList = userMailsRepository.findAll();
-        assertThat(userMailsList).hasSize(databaseSizeBeforeCreate);
-    }
-
-
-    @Test
-    @Transactional
-    public void checkSentDateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = userMailsRepository.findAll().size();
-        // set the field null
-        userMails.setSentDate(null);
-
-        // Create the UserMails, which fails.
-        UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
-
-
-        restUserMailsMockMvc.perform(post("/api/user-mails")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<UserMails> userMailsList = userMailsRepository.findAll();
-        assertThat(userMailsList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkSentByIsRequired() throws Exception {
-        int databaseSizeBeforeTest = userMailsRepository.findAll().size();
-        // set the field null
-        userMails.setSentBy(null);
-
-        // Create the UserMails, which fails.
-        UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
-
-
-        restUserMailsMockMvc.perform(post("/api/user-mails")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<UserMails> userMailsList = userMailsRepository.findAll();
-        assertThat(userMailsList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkSentFromIsRequired() throws Exception {
-        int databaseSizeBeforeTest = userMailsRepository.findAll().size();
-        // set the field null
-        userMails.setSentFrom(null);
-
-        // Create the UserMails, which fails.
-        UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
-
-
-        restUserMailsMockMvc.perform(post("/api/user-mails")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<UserMails> userMailsList = userMailsRepository.findAll();
-        assertThat(userMailsList).hasSize(databaseSizeBeforeTest);
+        user = createUserEntity(em);
     }
 
     @Test
@@ -219,7 +137,7 @@ public class UserMailsResourceIT {
         userMailsRepository.saveAndFlush(userMails);
 
         // Get all the userMailsList
-        restUserMailsMockMvc.perform(get("/api/user-mails?sort=id,desc"))
+        restUserMailsMockMvc.perform(get("/api/user-mails"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userMails.getId().intValue())))
@@ -233,77 +151,27 @@ public class UserMailsResourceIT {
     @Transactional
     public void getUserMails() throws Exception {
         // Initialize the database
+        userRepository.saveAndFlush(user);
+        userMails.setUser(user);
         userMailsRepository.saveAndFlush(userMails);
 
         // Get the userMails
-        restUserMailsMockMvc.perform(get("/api/user-mails/{id}", userMails.getId()))
+        restUserMailsMockMvc.perform(get("/api/user-mails/users/{login}", user.getLogin()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.id").value(userMails.getId().intValue()))
-            .andExpect(jsonPath("$.sentDate").value(DEFAULT_SENT_DATE.toString()))
-            .andExpect(jsonPath("$.sentBy").value(DEFAULT_SENT_BY))
-            .andExpect(jsonPath("$.sentFrom").value(DEFAULT_SENT_FROM))
-            .andExpect(jsonPath("$.mailType").value(DEFAULT_MAIL_TYPE.toString()));
+            .andExpect(jsonPath("$.[*].id").value(userMails.getId().intValue()))
+            .andExpect(jsonPath("$.[*].sentDate").value(DEFAULT_SENT_DATE.toString()))
+            .andExpect(jsonPath("$.[*].sentBy").value(DEFAULT_SENT_BY))
+            .andExpect(jsonPath("$.[*].sentFrom").value(DEFAULT_SENT_FROM))
+            .andExpect(jsonPath("$.[*].mailType").value(DEFAULT_MAIL_TYPE.toString()))
+            .andExpect(jsonPath("$.[*].userLogin").value(DEFAULT_USER_LOGIN));
     }
     @Test
     @Transactional
     public void getNonExistingUserMails() throws Exception {
         // Get the userMails
-        restUserMailsMockMvc.perform(get("/api/user-mails/{id}", Long.MAX_VALUE))
+        restUserMailsMockMvc.perform(get("/api/user-mails/users/{login}", "non-existing-login@localhost"))
             .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Transactional
-    public void updateUserMails() throws Exception {
-        // Initialize the database
-        userMailsRepository.saveAndFlush(userMails);
-
-        int databaseSizeBeforeUpdate = userMailsRepository.findAll().size();
-
-        // Update the userMails
-        UserMails updatedUserMails = userMailsRepository.findById(userMails.getId()).get();
-        // Disconnect from session so that the updates on updatedUserMails are not directly saved in db
-        em.detach(updatedUserMails);
-        updatedUserMails
-            .sentDate(UPDATED_SENT_DATE)
-            .sentBy(UPDATED_SENT_BY)
-            .sentFrom(UPDATED_SENT_FROM)
-            .mailType(UPDATED_MAIL_TYPE);
-        UserMailsDTO userMailsDTO = userMailsMapper.toDto(updatedUserMails);
-
-        restUserMailsMockMvc.perform(put("/api/user-mails")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
-            .andExpect(status().isOk());
-
-        // Validate the UserMails in the database
-        List<UserMails> userMailsList = userMailsRepository.findAll();
-        assertThat(userMailsList).hasSize(databaseSizeBeforeUpdate);
-        UserMails testUserMails = userMailsList.get(userMailsList.size() - 1);
-        assertThat(testUserMails.getSentDate()).isEqualTo(UPDATED_SENT_DATE);
-        assertThat(testUserMails.getSentBy()).isEqualTo(UPDATED_SENT_BY);
-        assertThat(testUserMails.getSentFrom()).isEqualTo(UPDATED_SENT_FROM);
-        assertThat(testUserMails.getMailType()).isEqualTo(UPDATED_MAIL_TYPE);
-    }
-
-    @Test
-    @Transactional
-    public void updateNonExistingUserMails() throws Exception {
-        int databaseSizeBeforeUpdate = userMailsRepository.findAll().size();
-
-        // Create the UserMails
-        UserMailsDTO userMailsDTO = userMailsMapper.toDto(userMails);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restUserMailsMockMvc.perform(put("/api/user-mails")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(userMailsDTO)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the UserMails in the database
-        List<UserMails> userMailsList = userMailsRepository.findAll();
-        assertThat(userMailsList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

@@ -129,6 +129,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             .antMatchers("/api/mails/feedback").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
             .antMatchers("/api/mails/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/user-mails/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER)
 

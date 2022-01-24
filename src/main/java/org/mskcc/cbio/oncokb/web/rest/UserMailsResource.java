@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.config.Constants;
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.UserMailsService;
 import org.mskcc.cbio.oncokb.service.UserService;
@@ -9,15 +10,13 @@ import org.mskcc.cbio.oncokb.service.dto.UserMailsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing {@link org.mskcc.cbio.oncokb.domain.UserMails}.
@@ -62,10 +61,13 @@ public class UserMailsResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the userMailsDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/user-mails/users/{login:" + Constants.LOGIN_REGEX + "}")
-    public List<UserMailsDTO> getUsersUserMails(@PathVariable String login) throws AccountNotFoundException {
+    public ResponseEntity<List<UserMailsDTO>> getUsersUserMails(@PathVariable String login) {
         log.debug("REST request to get all user mails realated to login : {}", login);
-        userService.getUserWithAuthoritiesByLogin(login).orElseThrow(()->new AccountNotFoundException());
-        return userMailsService.findUserAll(login);
+        Optional<User> user = userService.getUserWithAuthoritiesByLogin(login);
+        if (!user.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok().body(userMailsService.findUserAll(login));
     }
 
     /**
