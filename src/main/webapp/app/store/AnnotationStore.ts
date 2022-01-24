@@ -617,8 +617,8 @@ export class AnnotationStore {
     const altLowerCaseQuery = this.alterationQuery?.toLowerCase();
     const matched = this.biologicalAlterations.result.filter(
       alt =>
-        alt.variant.alteration.toLowerCase().includes(altLowerCaseQuery) ||
-        alt.variant.name.toLowerCase().includes(altLowerCaseQuery)
+        alt.variant.alteration.toLowerCase() === altLowerCaseQuery ||
+        alt.variant.name.toLowerCase() === altLowerCaseQuery
     );
     return matched.length > 0 ? matched[0].variant : undefined;
   }
