@@ -499,10 +499,17 @@ public class UserService {
                     isTrial ? Optional.of(TRIAL_PERIOD_IN_DAYS) : Optional.empty(),
                     isTrial ? Optional.of(false) : Optional.empty()
                 );
-            if(isTrial){
+            if (isTrial) {
                 tokens.forEach(token -> {
+                    boolean wasRenewable = token.isRenewable();
+                    Instant expirationDate = Instant.now().plusSeconds(DAY_IN_SECONDS * TRIAL_PERIOD_IN_DAYS);
+                    if (!wasRenewable && token.getExpiration().isAfter(expirationDate)) {
+                        // We have some users that have a longer trial period
+                        // Use the default trial period (90 days) or the non-renewable token's period, whichever is longer
+                        expirationDate = token.getExpiration();
+                    }
                     token.setRenewable(false);
-                    token.setExpiration(Instant.now().plusSeconds(DAY_IN_SECONDS * TRIAL_PERIOD_IN_DAYS));
+                    token.setExpiration(expirationDate);
                     tokenService.save(token);
                 });
             }
