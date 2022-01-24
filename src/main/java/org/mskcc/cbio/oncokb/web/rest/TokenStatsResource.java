@@ -8,12 +8,16 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,7 +87,13 @@ public class TokenStatsResource {
     @GetMapping("/token-stats")
     public List<TokenStats> getAllTokenStats() {
         log.debug("REST request to get all TokenStats");
-        return tokenStatsService.findAll();
+        int PAGE_SIZE = 1000;
+        Instant current = Instant.now();
+        List<TokenStats> tokenStatsList = new ArrayList<>();
+        for (int page = 0; page < tokenStatsService.findAll(current, PageRequest.of(0, PAGE_SIZE)).getTotalPages(); page++) {
+            tokenStatsList.addAll(tokenStatsService.findAll(current, PageRequest.of(page, PAGE_SIZE)).getContent());
+        }
+        return tokenStatsList;
     }
 
     /**

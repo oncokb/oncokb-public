@@ -3,6 +3,8 @@ package org.mskcc.cbio.oncokb.service;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.util.List;
@@ -25,8 +27,9 @@ public interface TokenStatsService {
      * Get all the tokenStats.
      *
      * @return the list of entities.
+     * @param before
      */
-    List<TokenStats> findAll();
+    Page<TokenStats> findAll(Instant before, Pageable pageable);
 
 
     /**
@@ -45,8 +48,6 @@ public interface TokenStatsService {
     void delete(Long id);
 
     void clearTokenStats(Instant before);
-
-    void removeOldTokenStats();
 
     List<UserTokenUsage> getUserTokenUsage(Instant before);
 

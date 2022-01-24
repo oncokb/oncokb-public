@@ -18,6 +18,7 @@ import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserUsage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -31,16 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.json.simple.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 import org.kohsuke.github.*;
 
@@ -115,15 +107,6 @@ public class CronJobController {
     @GetMapping(path = "/remove-old-audit-events")
     public void removeOldAuditEvents() {
         auditEventService.removeOldAuditEvents();
-    }
-
-    /**
-     * Old token stats should be automatically deleted after * days.
-     * Days depends on JHipster property audit audit-events: retention-period
-     */
-    @GetMapping(path = "/remove-old-token-stats")
-    public void removeOldTokenStats() {
-        tokenStatsService.removeOldTokenStats();
     }
 
     /**
@@ -258,16 +241,19 @@ public class CronJobController {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateFormat.format(dateFormat.parse(current.toString())) + ".txt";
-            if (s3Service.getObject("myawsbucket-ben-xu", datedFile).isPresent()) {
+            if (s3Service.getObject("oncokb", datedFile).isPresent()) {
                 log.warn("Tokenstats has already been wrapped today.");
                 datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + current + ".txt";
             }
-            s3Service.saveObject("myawsbucket-ben-xu", datedFile, createWrappedFile());
+            s3Service.saveObject("oncokb", datedFile, createWrappedFile(current));
         } catch (ParseException e) {
             log.error("Unable to parse instant. Java.time.Instant formatting may have changed.");
         }
+
         // Delete old tokenStats
         tokenStatsService.clearTokenStats(current);
+
+        log.info("Finished wrapping tokenstats.");
     }
 
     private void calculateUsageSummary(UsageSummary usageSummary, String key, int count, String time) {
@@ -450,16 +436,21 @@ public class CronJobController {
                 tokenService.save(tokenOptional.get());
             }
         });
+        log.info("Finished the cronjob to update token stats");
     }
 
-    private File createWrappedFile() throws IOException {
+    private File createWrappedFile(Instant current) throws IOException {
         File file = File.createTempFile("test-token-stats-", ".txt");
         file.deleteOnExit();
 
         Writer writer = new OutputStreamWriter(new FileOutputStream(file));
         writer.write(TokenStats.csvColumns() + "\n");
-        for (TokenStats tokenStats : tokenStatsService.findAll()) {
-            writer.write(tokenStats.toCSV() + "\n");
+
+        int PAGE_SIZE = 1000;
+        for (int page = 0; page < tokenStatsService.findAll(current, PageRequest.of(0, PAGE_SIZE)).getTotalPages(); page++) {
+            for (TokenStats tokenStats : tokenStatsService.findAll(current, PageRequest.of(page, PAGE_SIZE))) {
+                writer.write(tokenStats.toCSV() + "\n");
+            }
         }
         writer.close();
 

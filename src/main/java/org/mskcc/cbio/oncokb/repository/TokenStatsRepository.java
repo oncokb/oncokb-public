@@ -18,8 +18,6 @@ import java.util.List;
 @SuppressWarnings("unused")
 @Repository
 public interface TokenStatsRepository extends JpaRepository<TokenStats, Long> {
-    List<TokenStats> findByAccessTimeBefore(Instant before);
-
     Page<TokenStats> findAllByAccessTimeBefore(Instant before, Pageable pageable);
 
     void deleteAllByAccessTimeBefore(Instant before);
