@@ -258,7 +258,7 @@ public class SlackService {
     private LayoutBlock buildCollapsedBlock(UserDTO userDTO, ActionId actionId) {
         StringBuilder sb = new StringBuilder();
         sb.append(userDTO.getEmail() + "\n" + userDTO.getCompanyName() + " (" + userDTO.getLicenseType().getShortName() + (withTrialAccountNote(userDTO, actionId) ? ", *TRIAL*)" : userDTO.isActivated() ? ")" : ")\n*NOT ACTIVATED*: "));
-        if (!userDTO.isActivated()) {
+        if (!userDTO.isActivated() && !withTrialAccountNote(userDTO, actionId)) {
             if (withRejectionNote(userDTO, actionId)) {
                 sb.append("Sent rejection email");
             } else if (withRejectAlumniAddressNote(userDTO, actionId)) {
