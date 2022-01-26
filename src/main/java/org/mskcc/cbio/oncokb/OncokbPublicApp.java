@@ -78,7 +78,7 @@ public class OncokbPublicApp {
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             Sentry.init(options -> {
-                options.setDsn(env.getProperty("sentry.dsn"));
+                options.setEnableExternalConfiguration(true);
                 options.setEnableUncaughtExceptionHandler(true);
 
                 // Ignore the following exceptions
