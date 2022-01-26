@@ -34,23 +34,43 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
 
   @autobind
   @action
-  async getOptions(keyword: string) {
+  async getOptions(
+    keyword: string
+  ): Promise<Partial<ExtendedTypeaheadSearchResp>[]> {
     this.keyword = keyword;
-    return _.reduce(
-      await oncokbPrivateClient.searchTypeAheadGetUsingGET({
-        query: keyword,
-        limit: 20,
-      }),
-      (acc, result) => {
-        acc.push({
-          tumorTypesName: getAllTumorTypesName(result.tumorTypes),
-          alterationsName: getAllAlterationsName(result.variants),
-          ...result,
+    try {
+      return _.reduce(
+        await oncokbPrivateClient.searchTypeAheadGetUsingGET({
+          query: keyword,
+          limit: 20,
+        }),
+        (acc, result) => {
+          acc.push({
+            tumorTypesName: getAllTumorTypesName(result.tumorTypes),
+            alterationsName: getAllAlterationsName(result.variants),
+            ...result,
+          });
+          return acc;
+        },
+        [] as ExtendedTypeaheadSearchResp[]
+      );
+    } catch (error) {
+      const errorOptions: Partial<ExtendedTypeaheadSearchResp>[] = [];
+      if (error) {
+        const errorContent = [];
+        if (error.name) {
+          errorContent.push(error.name);
+        }
+        if (error.message) {
+          errorContent.push(error.message);
+        }
+        errorOptions.push({
+          queryType: 'TEXT',
+          annotation: `Error on fetching result ${errorContent.join(' ')}`,
         });
-        return acc;
-      },
-      [] as ExtendedTypeaheadSearchResp[]
-    );
+      }
+      return errorOptions;
+    }
   }
 
   // https://github.com/JedWatson/react-select/issues/614#issuecomment-244006496
