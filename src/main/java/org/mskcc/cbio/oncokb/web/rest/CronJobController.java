@@ -40,8 +40,7 @@ import org.json.simple.JSONObject;
 
 import org.kohsuke.github.*;
 
-import static org.mskcc.cbio.oncokb.config.Constants.DAY_IN_SECONDS;
-import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
+import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES;
 
@@ -78,11 +77,6 @@ public class CronJobController {
     private final AuditEventService auditEventService;
 
     private final ApplicationProperties applicationProperties;
-
-    final String USERS_USAGE_SUMMARY_FILE = "public-website/usage-analysis/userSummary.json";
-    final String RESOURCES_USAGE_SUMMARY_FILE = "public-website/usage-analysis/resourceSummary.json";
-    final String RESOURCES_USAGE_DETAIL_FILE = "public-website/usage-analysis/resourceDetail.json";
-    final String TOKEN_STATS_STORAGE_FILE_PREFIX = "public-website/token-usage/token-stats-";
 
     public CronJobController(UserService userService,
                              MailService mailService, TokenProvider tokenProvider,
