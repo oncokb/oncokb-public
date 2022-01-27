@@ -148,11 +148,11 @@ public class TokenStats implements Serializable {
             ";" + getResource() +
             ";" + getAccessTime() +
             ";" + getUsageCount() +
-            ";" + getToken().getId();
+            ";" + getToken().getToken();
     }
 
-    public static String csvColumns() {
-        return "email;accessIp;resource;accessTime;tokenId;usageCount";
+    public static String csvHeaders() {
+        return "email;accessIp;resource;accessTime;usageCount;UUID";
 
     }
 }

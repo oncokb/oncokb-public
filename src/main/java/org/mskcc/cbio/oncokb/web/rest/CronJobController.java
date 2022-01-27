@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,6 +33,8 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.json.simple.JSONObject;
 
@@ -75,10 +79,10 @@ public class CronJobController {
 
     private final ApplicationProperties applicationProperties;
 
-    final String USERS_USAGE_SUMMARY_FILE = "usage-analysis/userSummary.json";
-    final String RESOURCES_USAGE_SUMMARY_FILE = "usage-analysis/resourceSummary.json";
-    final String RESOURCES_USAGE_DETAIL_FILE = "usage-analysis/resourceDetail.json";
-    final String TOKEN_STATS_STORAGE_FILE_PREFIX = "token-usage/token-stats-";
+    final String USERS_USAGE_SUMMARY_FILE = "public-website/usage-analysis/userSummary.json";
+    final String RESOURCES_USAGE_SUMMARY_FILE = "public-website/usage-analysis/resourceSummary.json";
+    final String RESOURCES_USAGE_DETAIL_FILE = "public-website/usage-analysis/resourceDetail.json";
+    final String TOKEN_STATS_STORAGE_FILE_PREFIX = "public-website/token-usage/token-stats-";
 
     public CronJobController(UserService userService,
                              MailService mailService, TokenProvider tokenProvider,
@@ -232,28 +236,30 @@ public class CronJobController {
      *
      * @throws IOException
      */
-    @DeleteMapping(path = "/wrap-token-stats")
-    public void wrapTokenStats() throws IOException {
-        Instant current = Instant.now();
-        // Update tokenStats in database
-        updateTokenStats(current);
-        // Send tokenStats to s3
+    @GetMapping(path="move-token-stats-to-s3")
+    public void moveTokenStatsToS3() throws IOException {
+        log.info("Started the cronjob to move token stats to s3.");
+
+        Instant tokenUsageDateBefore = Instant.now().truncatedTo(ChronoUnit.DAYS);
+
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateFormat.format(dateFormat.parse(current.toString())) + ".txt";
+            String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateFormat.format(dateFormat.parse(tokenUsageDateBefore.toString())) + ".zip";
             if (s3Service.getObject("oncokb", datedFile).isPresent()) {
-                log.warn("Tokenstats has already been wrapped today.");
-                datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + current + ".txt";
+                log.info("Token stats have already been wrapped today. Skipping this request.");
+            } else {
+                // Update tokenStats in database
+                updateTokenStats(tokenUsageDateBefore);
+                // Send tokenStats to s3
+                s3Service.saveObject("oncokb", datedFile, createWrappedFile(tokenUsageDateBefore, dateFormat.format(dateFormat.parse(tokenUsageDateBefore.toString())) + ".txt"));
+                // Delete old tokenStats
+                tokenStatsService.clearTokenStats(tokenUsageDateBefore);
             }
-            s3Service.saveObject("oncokb", datedFile, createWrappedFile(current));
         } catch (ParseException e) {
             log.error("Unable to parse instant. Java.time.Instant formatting may have changed.");
         }
 
-        // Delete old tokenStats
-        tokenStatsService.clearTokenStats(current);
-
-        log.info("Finished wrapping tokenstats.");
+        log.info("Finished the cronjob to move token stats to s3.");
     }
 
     private void calculateUsageSummary(UsageSummary usageSummary, String key, int count, String time) {
@@ -424,9 +430,9 @@ public class CronJobController {
         tokenService.save(token);
     }
 
-    private void updateTokenStats(Instant current) {
+    private void updateTokenStats(Instant tokenUsageDateBefore) {
         log.info("Started the cronjob to update token stats");
-        List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(current);
+        List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(tokenUsageDateBefore);
 
         // Update tokens with token usage
         tokenUsages.stream().forEach(tokenUsage -> {
@@ -439,20 +445,27 @@ public class CronJobController {
         log.info("Finished the cronjob to update token stats");
     }
 
-    private File createWrappedFile(Instant current) throws IOException {
-        File file = File.createTempFile("test-token-stats-", ".txt");
+    private File createWrappedFile(Instant tokenUsageDateBefore, String fileName) throws IOException {
+        File file = File.createTempFile("token-stats-", ".zip");
         file.deleteOnExit();
+        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(file));
+        ZipEntry entry = new ZipEntry(fileName);
+        out.putNextEntry(entry);
 
-        Writer writer = new OutputStreamWriter(new FileOutputStream(file));
-        writer.write(TokenStats.csvColumns() + "\n");
-
-        int PAGE_SIZE = 1000;
-        for (int page = 0; page < tokenStatsService.findAll(current, PageRequest.of(0, PAGE_SIZE)).getTotalPages(); page++) {
-            for (TokenStats tokenStats : tokenStatsService.findAll(current, PageRequest.of(page, PAGE_SIZE))) {
-                writer.write(tokenStats.toCSV() + "\n");
+        int PAGE_SIZE = 2;
+        int totalPages = tokenStatsService.findAll(tokenUsageDateBefore, PageRequest.of(0, PAGE_SIZE)).getTotalPages();
+        String headers = TokenStats.csvHeaders() + "\n";
+        byte[] headersInBytes = headers.getBytes();
+        out.write(headersInBytes, 0, headersInBytes.length);
+        for (int page = 0; page < totalPages; page++) {
+            for (TokenStats tokenStats : tokenStatsService.findAll(tokenUsageDateBefore, PageRequest.of(page, PAGE_SIZE))) {
+                String row = tokenStats.toCSV() + "\n";
+                byte[] rowInBytes = row.getBytes();
+                out.write(rowInBytes, 0, rowInBytes.length);
             }
         }
-        writer.close();
+        out.closeEntry();
+        out.close();
 
         return file;
     }

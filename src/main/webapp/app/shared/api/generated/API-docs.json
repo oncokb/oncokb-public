@@ -1474,13 +1474,14 @@
         "deprecated": false
       }
     },
-    "/api/cronjob/wrap-token-stats": {
-      "delete": {
+    "/api/cronjob/move-token-stats-to-s3": {
+      "get": {
         "tags": [
           "cron-job-controller"
         ],
-        "summary": "wrapTokenStats",
-        "operationId": "wrapTokenStatsUsingDELETE",
+        "summary": "moveTokenStatsToS3",
+        "operationId": "moveTokenStatsToS3UsingGET",
+        
         "produces": [
           "*/*"
         ],

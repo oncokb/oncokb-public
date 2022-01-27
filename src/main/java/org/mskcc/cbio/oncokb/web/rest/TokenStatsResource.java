@@ -80,23 +80,6 @@ public class TokenStatsResource {
     }
 
     /**
-     * {@code GET  /token-stats} : get all the tokenStats.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tokenStats in body.
-     */
-    @GetMapping("/token-stats")
-    public List<TokenStats> getAllTokenStats() {
-        log.debug("REST request to get all TokenStats");
-        int PAGE_SIZE = 1000;
-        Instant current = Instant.now();
-        List<TokenStats> tokenStatsList = new ArrayList<>();
-        for (int page = 0; page < tokenStatsService.findAll(current, PageRequest.of(0, PAGE_SIZE)).getTotalPages(); page++) {
-            tokenStatsList.addAll(tokenStatsService.findAll(current, PageRequest.of(page, PAGE_SIZE)).getContent());
-        }
-        return tokenStatsList;
-    }
-
-    /**
      * {@code GET  /token-stats/:id} : get the "id" tokenStats.
      *
      * @param id the id of the tokenStats to retrieve.
