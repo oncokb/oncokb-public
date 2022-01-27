@@ -1,4 +1,4 @@
-name: Build/Push docker image
+name: Build/Push docker image and tag the release in sentry
 on:
   release:
     types: [published]
@@ -35,3 +35,24 @@ jobs:
           -Djib.to.image="${REPOSITORY}:${TAG_NAME}" \
           -Djib.to.auth.username=$DOCKER_USERNAME \
           -Djib.to.auth.password=$DOCKER_PASSWORD
+      - name: Create a Sentry.io release in oncokb-public-website
+        uses: tclindner/sentry-releases-action@v1.2.0
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: memorial-sloan-kettering
+          SENTRY_PROJECT: oncokb-public-website
+        with:
+          tagName: ${{ github.ref }}
+          environment: production
+          releaseNamePrefix: oncokb-public-
+          sourceMapOptions: '{"include": ["target/classes/static/app"]}'
+      - name: Create a Sentry.io release in oncokb-public-website-backend
+        uses: tclindner/sentry-releases-action@v1.2.0
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: memorial-sloan-kettering
+          SENTRY_PROJECT: oncokb-public-website-backend
+        with:
+          tagName: ${{ github.ref }}
+          environment: production
+          releaseNamePrefix: oncokb-public-backend-
