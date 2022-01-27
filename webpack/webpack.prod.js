@@ -15,7 +15,7 @@ module.exports = webpackMerge(commonConfig({
   env: ENV,
   app: 'app'
 }), {
-  // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
+  devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
   mode: ENV,
   entry: {
     main: './src/main/webapp/app/index'
@@ -77,7 +77,7 @@ module.exports = webpackMerge(commonConfig({
         cache: true,
         parallel: true,
         // exclude: './src/main/webapp/index.html',
-        // sourceMap: true, // Enable source maps. Please note that this will slow down the build
+        sourceMap: true, // Enable source maps. Please note that this will slow down the build
         terserOptions: {
           ecma: 5,
           toplevel: true,
@@ -126,6 +126,7 @@ module.exports = webpackMerge(commonConfig({
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
+      maximumFileSizeToCacheInBytes: 15000000,
       exclude: [/swagger-ui/]
     })
   ]
