@@ -28,15 +28,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import static org.mskcc.cbio.oncokb.config.Constants.*;
+
 @Controller
 @RequestMapping("/api")
 public class UsageAnalysisController {
     @Autowired
     private S3Service s3Service;
-
-    final String USERS_USAGE_SUMMARY_FILE = "usage-analysis/userSummary.json";
-    final String RESOURCES_USAGE_SUMMARY_FILE = "usage-analysis/resourceSummary.json";
-    final String RESOURCES_DETAIL_SUMMARY_FILE = "usage-analysis/resourceDetail.json";
 
     private JSONObject requestData(String file)
             throws UnsupportedEncodingException, IOException, ParseException {
@@ -161,7 +159,7 @@ public class UsageAnalysisController {
             throws UnsupportedEncodingException, IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
 
-        JSONObject jsonObject = requestData(RESOURCES_DETAIL_SUMMARY_FILE);
+        JSONObject jsonObject = requestData(RESOURCES_USAGE_DETAIL_FILE);
         if (jsonObject.containsKey(endpoint)){
             JSONObject usageObject = (JSONObject)jsonObject.get(endpoint);
             Gson gson = new Gson();
