@@ -46,7 +46,6 @@ import static org.mockito.Mockito.*;
  * Integration tests for {@link MailService}.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
 public class MailServiceIT {
 
     private static final String[] languages = {

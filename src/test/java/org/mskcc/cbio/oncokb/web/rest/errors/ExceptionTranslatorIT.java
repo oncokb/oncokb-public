@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 @AutoConfigureMockMvc
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
 public class ExceptionTranslatorIT {
 
     @Autowired

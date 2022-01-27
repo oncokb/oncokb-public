@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
  * Integrations tests for {@link DomainUserDetailsService}.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class DomainUserDetailsServiceIT {
 

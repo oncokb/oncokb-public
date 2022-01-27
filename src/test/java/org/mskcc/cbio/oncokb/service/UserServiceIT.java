@@ -38,7 +38,6 @@ import static org.mockito.Mockito.when;
  * Integration tests for {@link UserService}.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class UserServiceIT {
 

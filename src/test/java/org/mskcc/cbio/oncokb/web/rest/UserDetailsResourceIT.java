@@ -35,7 +35,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
  * Integration tests for the {@link UserDetailsResource} REST controller.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 public class UserDetailsResourceIT {

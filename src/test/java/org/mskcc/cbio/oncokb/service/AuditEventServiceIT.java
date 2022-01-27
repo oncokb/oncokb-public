@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for {@link AuditEventService}.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class AuditEventServiceIT {
     @Autowired

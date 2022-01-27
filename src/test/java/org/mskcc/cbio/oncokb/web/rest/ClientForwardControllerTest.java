@@ -20,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Unit tests for the {@link ClientForwardController} REST controller.
  */
-@ExtendWith(RedisTestContainerExtension.class)
 public class ClientForwardControllerTest {
     private final String GOOGLE_WEBMASTER_VERIFICATION="google";
     private MockMvc restMockMvc;
