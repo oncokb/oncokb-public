@@ -24,6 +24,7 @@ import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
 import org.mskcc.cbio.oncokb.util.StringUtil;
+import org.mskcc.cbio.oncokb.web.rest.errors.LoginAlreadyUsedException;
 
 import io.github.jhipster.security.RandomUtil;
 
@@ -246,6 +247,9 @@ public class UserService {
     public User registerUser(UserDTO userDTO, String password) {
         userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
             throw new EmailAlreadyUsedException();
+        });
+        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+            throw new LoginAlreadyUsedException();
         });
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);

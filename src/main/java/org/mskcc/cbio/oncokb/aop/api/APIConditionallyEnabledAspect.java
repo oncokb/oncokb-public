@@ -1,8 +1,10 @@
 package org.mskcc.cbio.oncokb.aop.api;
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
+import java.util.Optional;
+
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -19,14 +21,12 @@ public class APIConditionallyEnabledAspect {
         this.applicationProperties = applicationProperties;
     }
 
-    @Around("@annotation(APIConditionallyEnabled)")
-    public void apiConditionallyEnabled(ProceedingJoinPoint jp, APIConditionallyEnabled APIConditionallyEnabled) throws Throwable {
+    @Before("@annotation(APIConditionallyEnabled)")
+    public void apiConditionallyEnabled(JoinPoint jp, APIConditionallyEnabled APIConditionallyEnabled) throws Throwable {
         // The logic for the disabled endpoint will not run when a method has the disableEndpoint annotation
         // and in readonly mode.
-        if(this.applicationProperties.getDbReadOnly() == true){
+        if(Optional.ofNullable(this.applicationProperties.getDbReadOnly()).orElse(false)){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This endpoint is disabled");
-        }else{
-            jp.proceed();
         }
     }
 }

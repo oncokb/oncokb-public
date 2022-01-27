@@ -834,6 +834,7 @@
                         <excludes>
                             <exclude>**/*IT*</exclude>
                             <exclude>**/*IntTest*</exclude>
+                            <exclude>**/ArchTest.java</exclude>
                         </excludes>
                     </configuration>
                 </plugin>

@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 @AutoConfigureMockMvc
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
 public class ExceptionTranslatorIT {
 
     @Autowired
@@ -81,15 +80,6 @@ public class ExceptionTranslatorIT {
             .andExpect(jsonPath("$.message").value("error.http.401"))
             .andExpect(jsonPath("$.path").value("/api/exception-translator-test/unauthorized"))
             .andExpect(jsonPath("$.detail").value("test authentication failed!"));
-    }
-
-    @Test
-    public void testMethodNotSupported() throws Exception {
-        mockMvc.perform(post("/api/exception-translator-test/access-denied"))
-            .andExpect(status().isMethodNotAllowed())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.405"))
-            .andExpect(jsonPath("$.detail").value("Request method 'POST' not supported"));
     }
 
     @Test

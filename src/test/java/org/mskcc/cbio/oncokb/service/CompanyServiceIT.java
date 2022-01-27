@@ -42,7 +42,6 @@ import static org.assertj.core.api.Assertions.within;
  * Integration tests for {@link CompanyService}.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class CompanyServiceIT {
 

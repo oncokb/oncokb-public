@@ -3,9 +3,12 @@ package org.mskcc.cbio.oncokb.web.rest;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.Token;
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.TokenRepository;
+import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.TokenService;
-
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -33,9 +36,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link TokenResource} REST controller.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 public class TokenResourceIT {
 
     private static final UUID DEFAULT_TOKEN = UUID.randomUUID();
@@ -63,12 +66,17 @@ public class TokenResourceIT {
     private TokenService tokenService;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
     private MockMvc restTokenMockMvc;
 
     private Token token;
+
+    private User user;
 
     /**
      * Create an entity for this test.
@@ -85,6 +93,19 @@ public class TokenResourceIT {
             .currentUsage(DEFAULT_CURRENT_USAGE)
             .renewable(DEFAULT_RENEWABLE);
         return token;
+    }
+
+    public static User createUserEntity(EntityManager em) {
+        User user = new User();
+        user.setLogin("johndoe" + RandomStringUtils.randomAlphabetic(5));
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+        user.setEmail(RandomStringUtils.randomAlphabetic(5) + "johndoe@localhost");
+        user.setFirstName("john");
+        user.setLastName("doe");
+        user.setImageUrl("http://placehold.it/50x50");
+        user.setLangKey("en");
+        return user;
     }
     /**
      * Create an updated entity for this test.
@@ -106,11 +127,14 @@ public class TokenResourceIT {
     @BeforeEach
     public void initTest() {
         token = createEntity(em);
+        user = createUserEntity(em);
     }
 
     @Test
     @Transactional
     public void createToken() throws Exception {
+        userRepository.saveAndFlush(user);
+        token.setUser(user);
         int databaseSizeBeforeCreate = tokenRepository.findAll().size();
         // Create the Token
         restTokenMockMvc.perform(post("/api/tokens")
@@ -152,7 +176,9 @@ public class TokenResourceIT {
 
     @Test
     @Transactional
-    public void checkCurrentUsageIsRequired() throws Exception {
+    public void checkCurrentUsageAssignedDefaultValue() throws Exception {
+        userRepository.saveAndFlush(user);
+        token.setUser(user);
         int databaseSizeBeforeTest = tokenRepository.findAll().size();
         // set the field null
         token.setCurrentUsage(null);
@@ -163,15 +189,19 @@ public class TokenResourceIT {
         restTokenMockMvc.perform(post("/api/tokens")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(token)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isCreated());
+
 
         List<Token> tokenList = tokenRepository.findAll();
-        assertThat(tokenList).hasSize(databaseSizeBeforeTest);
+        assertThat(tokenList).hasSize(databaseSizeBeforeTest + 1);
+        assertThat(tokenList.get(0).getCurrentUsage()).isEqualTo(0); // We assign a default value of 0
     }
 
     @Test
     @Transactional
-    public void checkRenewableIsRequired() throws Exception {
+    public void checkRenewableAssignedDefaultValue() throws Exception {
+        userRepository.saveAndFlush(user);
+        token.setUser(user);
         int databaseSizeBeforeTest = tokenRepository.findAll().size();
         // set the field null
         token.setRenewable(null);
@@ -182,10 +212,11 @@ public class TokenResourceIT {
         restTokenMockMvc.perform(post("/api/tokens")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(token)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isCreated());
 
         List<Token> tokenList = tokenRepository.findAll();
-        assertThat(tokenList).hasSize(databaseSizeBeforeTest);
+        assertThat(tokenList).hasSize(databaseSizeBeforeTest + 1);
+        assertThat(tokenList.get(0).isRenewable()).isEqualTo(true); // Tokens are renewable by default
     }
 
     @Test
@@ -237,6 +268,8 @@ public class TokenResourceIT {
     @Transactional
     public void updateToken() throws Exception {
         // Initialize the database
+        userRepository.saveAndFlush(user);
+        token.setUser(user);
         tokenService.save(token);
 
         int databaseSizeBeforeUpdate = tokenRepository.findAll().size();
@@ -290,6 +323,8 @@ public class TokenResourceIT {
     @Transactional
     public void deleteToken() throws Exception {
         // Initialize the database
+        userRepository.saveAndFlush(user);
+        token.setUser(user);
         tokenService.save(token);
 
         int databaseSizeBeforeDelete = tokenRepository.findAll().size();
@@ -297,7 +332,7 @@ public class TokenResourceIT {
         // Delete the token
         restTokenMockMvc.perform(delete("/api/tokens/{id}", token.getId())
             .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNoContent());
+            .andExpect(status().isOk());
 
         // Validate the database contains one less item
         List<Token> tokenList = tokenRepository.findAll();

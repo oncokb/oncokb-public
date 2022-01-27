@@ -46,7 +46,6 @@ import static org.mockito.Mockito.*;
  * Integration tests for {@link MailService}.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
 public class MailServiceIT {
 
     private static final String[] languages = {
@@ -154,7 +153,7 @@ public class MailServiceIT {
         mailService.sendEmailFromTemplate(user, MailType.TEST);
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
-        assertThat(message.getSubject()).isEqualTo("test title");
+        assertThat(message.getSubject()).isEqualTo("OncoKB Info"); // default title set in messages.properties
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
         assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
         assertThat(message.getContent().toString()).isEqualToNormalizingNewlines("<html>test title, http://127.0.0.1:9095, john</html>\n");
@@ -209,11 +208,9 @@ public class MailServiceIT {
     @Test
     public void testSendEmailWithException() {
         doThrow(MailSendException.class).when(javaMailSender).send(any(MimeMessage.class));
-        try {
-            mailService.sendEmail("john.doe@example.com", jHipsterProperties.getMail().getFrom(), null, "testSubject", "testContent", null, false, false);
-        } catch (Exception e) {
-            fail("Exception shouldn't have been thrown");
-        }
+        assertThatThrownBy(
+            () -> mailService.sendEmail("john.doe@example.com", jHipsterProperties.getMail().getFrom(), null, "testSubject", "testContent", null, false, false)
+        ).isInstanceOf(MailSendException.class);
     }
 
     @Test

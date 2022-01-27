@@ -7,6 +7,7 @@ import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.service.UserDetailsService;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
+import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,9 +35,9 @@ import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
  * Integration tests for the {@link UserDetailsResource} REST controller.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 public class UserDetailsResourceIT {
 
     private static final LicenseType DEFAULT_LICENSE_TYPE = LicenseType.ACADEMIC;
@@ -57,8 +58,8 @@ public class UserDetailsResourceIT {
     private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
     private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
 
-    private static final String DEFAULT_ADDITIONAL_INFO = "AAAAAAAAAA";
-    private static final String UPDATED_ADDITIONAL_INFO = "BBBBBBBBBB";
+    private static final String DEFAULT_ADDITIONAL_INFO = "{userCompany:{useCase:AAAAAAAAAA}}";
+    private static final String UPDATED_ADDITIONAL_INFO = "{userCompany:{useCase:BBBBBBBBBB}}";
 
     @Autowired
     private UserDetailsRepository userDetailsRepository;
@@ -138,7 +139,7 @@ public class UserDetailsResourceIT {
         assertThat(testUserDetails.getCity()).isEqualTo(DEFAULT_CITY);
         assertThat(testUserDetails.getCountry()).isEqualTo(DEFAULT_COUNTRY);
         assertThat(testUserDetails.getAddress()).isEqualTo(DEFAULT_ADDRESS);
-        assertThat(testUserDetails.getAdditionalInfo()).isEqualTo(DEFAULT_ADDITIONAL_INFO);
+        assertThat(testUserDetails.getAdditionalInfo()).isEqualTo("{\"userCompany\":{\"useCase\":\"AAAAAAAAAA\"}}");
     }
 
     @Test
@@ -179,7 +180,7 @@ public class UserDetailsResourceIT {
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
             .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
-            .andExpect(jsonPath("$.[*].additionalInfo").value(hasItem(DEFAULT_ADDITIONAL_INFO.toString())));
+            .andExpect(jsonPath("$.[*].additionalInfo.userCompany.useCase").value(hasItem("AAAAAAAAAA")));
     }
     
     @Test
@@ -199,7 +200,7 @@ public class UserDetailsResourceIT {
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY))
             .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
-            .andExpect(jsonPath("$.additionalInfo").value(DEFAULT_ADDITIONAL_INFO.toString()));
+            .andExpect(jsonPath("$.additionalInfo.userCompany.useCase").value("AAAAAAAAAA"));
     }
     @Test
     @Transactional
@@ -246,7 +247,7 @@ public class UserDetailsResourceIT {
         assertThat(testUserDetails.getCity()).isEqualTo(UPDATED_CITY);
         assertThat(testUserDetails.getCountry()).isEqualTo(UPDATED_COUNTRY);
         assertThat(testUserDetails.getAddress()).isEqualTo(UPDATED_ADDRESS);
-        assertThat(testUserDetails.getAdditionalInfo()).isEqualTo(UPDATED_ADDITIONAL_INFO);
+        assertThat(testUserDetails.getAdditionalInfo()).isEqualTo("{\"userCompany\":{\"useCase\":\"BBBBBBBBBB\"}}");
     }
 
     @Test
@@ -279,7 +280,7 @@ public class UserDetailsResourceIT {
         // Delete the userDetails
         restUserDetailsMockMvc.perform(delete("/api/user-details/{id}", userDetails.getId())
             .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNoContent());
+            .andExpect(status().isOk());
 
         // Validate the database contains one less item
         List<UserDetails> userDetailsList = userDetailsRepository.findAll();

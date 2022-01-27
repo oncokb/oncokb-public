@@ -31,7 +31,6 @@ import static org.mskcc.cbio.oncokb.repository.CustomAuditEventRepository.EVENT_
  * Integration tests for {@link CustomAuditEventRepository}.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class CustomAuditEventRepositoryIT {
 

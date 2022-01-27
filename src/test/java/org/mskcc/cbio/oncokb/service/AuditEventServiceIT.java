@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for {@link AuditEventService}.
  */
 @SpringBootTest(classes = OncokbPublicApp.class)
-@ExtendWith(RedisTestContainerExtension.class)
 @Transactional
 public class AuditEventServiceIT {
     @Autowired
@@ -65,6 +64,8 @@ public class AuditEventServiceIT {
         persistenceAuditEventRepository.save(auditEventNew);
 
         persistenceAuditEventRepository.flush();
+
+        auditEventService.removeOldAuditEvents();   // We are using cron job to delete old audit events
 
         assertThat(persistenceAuditEventRepository.findAll().size()).isEqualTo(2);
         assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-old")).isEmpty();

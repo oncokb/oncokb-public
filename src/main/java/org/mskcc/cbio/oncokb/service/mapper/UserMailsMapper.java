@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface UserMailsMapper extends EntityMapper<UserMailsDTO, UserMails> {
 
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.login", target = "userLogin")
     UserMailsDTO toDto(UserMails userMails);
 
     @Mapping(source = "userId", target = "user")
