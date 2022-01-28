@@ -238,14 +238,15 @@ public class CronJobController {
 
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateFormat.format(dateFormat.parse(tokenUsageDateBefore.toString())) + ".zip";
+            String dateWrapped = dateFormat.format(dateFormat.parse(tokenUsageDateBefore.minus(1, ChronoUnit.DAYS).toString()));
+            String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateWrapped + ".zip";
             if (s3Service.getObject("oncokb", datedFile).isPresent()) {
                 log.info("Token stats have already been wrapped today. Skipping this request.");
             } else {
                 // Update tokenStats in database
                 updateTokenStats(tokenUsageDateBefore);
                 // Send tokenStats to s3
-                s3Service.saveObject("oncokb", datedFile, createWrappedFile(tokenUsageDateBefore, dateFormat.format(dateFormat.parse(tokenUsageDateBefore.toString())) + ".txt"));
+                s3Service.saveObject("oncokb", datedFile, createWrappedFile(tokenUsageDateBefore, dateWrapped + ".txt"));
                 // Delete old tokenStats
                 tokenStatsService.clearTokenStats(tokenUsageDateBefore);
             }
@@ -446,14 +447,14 @@ public class CronJobController {
         ZipEntry entry = new ZipEntry(fileName);
         out.putNextEntry(entry);
 
-        int PAGE_SIZE = 2;
+        int PAGE_SIZE = 1000;
         int totalPages = tokenStatsService.findAll(tokenUsageDateBefore, PageRequest.of(0, PAGE_SIZE)).getTotalPages();
-        String headers = TokenStats.csvHeaders() + "\n";
+        String headers = TokenStats.tabDelimitedHeaders() + "\n\n";
         byte[] headersInBytes = headers.getBytes();
         out.write(headersInBytes, 0, headersInBytes.length);
         for (int page = 0; page < totalPages; page++) {
             for (TokenStats tokenStats : tokenStatsService.findAll(tokenUsageDateBefore, PageRequest.of(page, PAGE_SIZE))) {
-                String row = tokenStats.toCSV() + "\n";
+                String row = tokenStats.toTabDelimited() + "\n";
                 byte[] rowInBytes = row.getBytes();
                 out.write(rowInBytes, 0, rowInBytes.length);
             }
