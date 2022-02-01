@@ -156,7 +156,7 @@ public class UserService {
                 user.setResetKey(null);
                 user.setResetDate(null);
                 this.clearUserCaches(user);
-                return userRepository.save(user);;
+                return userRepository.save(user);
             });
     }
 

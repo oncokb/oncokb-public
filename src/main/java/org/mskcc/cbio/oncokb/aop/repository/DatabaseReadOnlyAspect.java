@@ -2,9 +2,11 @@ package org.mskcc.cbio.oncokb.aop.repository;
 
 import java.util.Optional;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.web.rest.errors.DatabaseReadOnlyException;
@@ -28,22 +30,22 @@ public class DatabaseReadOnlyAspect {
     @Pointcut("execution(* org.mskcc.cbio.oncokb.repository.*.save(..))")
     private void anyRepositorySaveOperation() {}
 
-    @Around(value = "anyRepositorySaveOperation() && excludedRepositorySaveOperation()")
-    public void databaseReadOnlyWithError(ProceedingJoinPoint jp) throws Throwable {
+    @Before(value = "anyRepositorySaveOperation() && excludedRepositorySaveOperation()")
+    public void databaseReadOnlyWithError(JoinPoint jp) throws Throwable {
         if(Optional.ofNullable(this.applicationProperties.getDbReadOnly()).orElse(false)){
             // When the save method is called, we throw an exception that will be 
             // handled by DatabaseReadOnlyAdvisor (ControllerAdvice).
             throw new DatabaseReadOnlyException();
-        }else{
-            jp.proceed();
         }
     }
 
     @Around(value = "anyRepositorySaveOperation() && !excludedRepositorySaveOperation()")
-    public void databaseReadOnly(ProceedingJoinPoint jp) throws Throwable {
-        if(Optional.ofNullable(this.applicationProperties.getDbReadOnly()).orElse(true)){
-            jp.proceed();
+    public Object databaseReadOnly(ProceedingJoinPoint jp) throws Throwable {
+        if(!Optional.ofNullable(this.applicationProperties.getDbReadOnly()).orElse(false)){
+            // Execute the method if the db-read-only is false
+            return jp.proceed();
         }
         // Skip the save method call when db-read-only is true
+        return null;
     }
 }
