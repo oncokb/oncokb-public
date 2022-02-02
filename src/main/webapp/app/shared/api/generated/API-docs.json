@@ -1420,33 +1420,6 @@
         "deprecated": false
       }
     },
-    "/api/cronjob/remove-old-token-stats": {
-      "get": {
-        "tags": [
-          "cron-job-controller"
-        ],
-        "summary": "removeOldTokenStats",
-        "operationId": "removeOldTokenStatsUsingGET",
-        "produces": [
-          "*/*"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "deprecated": false
-      }
-    },
     "/api/cronjob/renew-tokens": {
       "get": {
         "tags": [
@@ -1474,13 +1447,13 @@
         "deprecated": false
       }
     },
-    "/api/cronjob/update-token-stats": {
+    "/api/cronjob/user-usage-analysis": {
       "get": {
         "tags": [
           "cron-job-controller"
         ],
-        "summary": "updateTokenStats",
-        "operationId": "updateTokenStatsUsingGET",
+        "summary": "analyzeUserUsage",
+        "operationId": "analyzeUserUsageUsingGET",
         "produces": [
           "*/*"
         ],
@@ -1501,13 +1474,14 @@
         "deprecated": false
       }
     },
-    "/api/cronjob/user-usage-analysis": {
+    "/api/cronjob/move-token-stats-to-s3": {
       "get": {
         "tags": [
           "cron-job-controller"
         ],
-        "summary": "analyzeUserUsage",
-        "operationId": "analyzeUserUsageUsingGET",
+        "summary": "moveTokenStatsToS3",
+        "operationId": "moveTokenStatsToS3UsingGET",
+        
         "produces": [
           "*/*"
         ],

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.time.Instant;
 
 /**
@@ -140,5 +142,25 @@ public class TokenStats implements Serializable {
             ", accessTime='" + getAccessTime() + "'" +
             ", usageCount=" + getUsageCount() +
             "}";
+    }
+
+    public String toTabDelimited() {
+        return String.format("%1$-50s\t%2$-15s\t%3$-20s\t%4$-10s\t%5$-36s\t%6$s",
+            getToken().getUser().getEmail(), // 50 char cutoff
+            getAccessIp(),
+            getAccessTime(),
+            getUsageCount(),
+            getToken().getToken(),
+            getResource());
+    }
+
+    public static String tabDelimitedHeaders() {
+        return String.format("%1$-50s\t%2$-12s\t%3$-20s\t%4$-10s\t%5$-36s\t%6$s",
+            "email",
+            "accessIp",
+            "accessTime",
+            "usageCount",
+            "UUID",
+            "resource");
     }
 }

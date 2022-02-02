@@ -2,10 +2,7 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.domain.Token;
-import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.domain.UserDetails;
-import org.mskcc.cbio.oncokb.domain.UserMessagePair;
+import org.mskcc.cbio.oncokb.domain.*;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
@@ -21,9 +18,14 @@ import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserUsage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,22 +33,14 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.json.simple.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 import org.kohsuke.github.*;
 
-import static org.mskcc.cbio.oncokb.config.Constants.DAY_IN_SECONDS;
-import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
+import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES;
 
@@ -84,10 +78,6 @@ public class CronJobController {
 
     private final ApplicationProperties applicationProperties;
 
-    final String USERS_USAGE_SUMMARY_FILE = "usage-analysis/userSummary.json";
-    final String RESOURCES_USAGE_SUMMARY_FILE = "usage-analysis/resourceSummary.json";
-    final String RESOURCES_USAGE_DETAIL_FILE = "usage-analysis/resourceDetail.json";
-
     public CronJobController(UserService userService,
                              MailService mailService, TokenProvider tokenProvider,
                              TokenService tokenService, AuditEventService auditEventService,
@@ -115,15 +105,6 @@ public class CronJobController {
     @GetMapping(path = "/remove-old-audit-events")
     public void removeOldAuditEvents() {
         auditEventService.removeOldAuditEvents();
-    }
-
-    /**
-     * Old token stats should be automatically deleted after * days.
-     * Days depends on JHipster property audit audit-events: retention-period
-     */
-    @GetMapping(path = "/remove-old-token-stats")
-    public void removeOldTokenStats() {
-        tokenStatsService.removeOldTokenStats();
     }
 
     /**
@@ -174,36 +155,6 @@ public class CronJobController {
         userDTOs.stream().forEach(userDTO -> {
             Instant expirationDate = userDTO.getCreatedDate() == null ? newTokenDefaultExpirationDate : userDTO.getCreatedDate().plusSeconds(HALF_YEAR_IN_SECONDS);
             tokenProvider.createToken(userMapper.userDTOToUser(userDTO), Optional.of(expirationDate.isBefore(newTokenDefaultExpirationDate) ? newTokenDefaultExpirationDate : expirationDate), Optional.empty());
-        });
-    }
-
-    /**
-     * {@code GET  /update-token-stats} : Update token stats.
-     */
-    @GetMapping(path = "/update-token-stats")
-    public void updateTokenStats() {
-        log.info("Started the cronjob to update token stats");
-        List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(Instant.now());
-
-        // Update tokens with token usage
-        tokenUsages.stream().forEach(tokenUsage -> {
-            if (!tokenUsage.getToken().getCurrentUsage().equals(tokenUsage.getCount())) {
-                Optional<Token> tokenOptional = tokenService.findByToken(tokenUsage.getToken().getToken());
-                if (tokenOptional.isPresent()) {
-                    tokenOptional.get().setCurrentUsage(tokenUsage.getCount());
-                    tokenService.save(tokenOptional.get());
-                }
-            }
-        });
-
-        // Update tokens without token usage
-        List<Long> tokenWithStats = tokenUsages.stream().map(tokenUsage -> tokenUsage.getToken().getId()).collect(Collectors.toList());
-        List<Token> tokens = tokenService.findAll().stream().filter(token -> !tokenWithStats.contains(token.getId())).collect(Collectors.toList());
-        tokens.stream().forEach(token -> {
-            if (!token.getCurrentUsage().equals(0)) {
-                token.setCurrentUsage(0);
-                tokenService.save(token);
-            }
         });
     }
 
@@ -272,6 +223,38 @@ public class CronJobController {
         userResult.delete();
         resourceDetailResult.delete();
         log.info("User usage analysis completed!");
+    }
+
+    /**
+     * {@code GET /wrap-token-stats}: Wrap token stats
+     *
+     * @throws IOException
+     */
+    @GetMapping(path="move-token-stats-to-s3")
+    public void moveTokenStatsToS3() throws IOException {
+        log.info("Started the cronjob to move token stats to s3.");
+
+        Instant tokenUsageDateBefore = Instant.now().truncatedTo(ChronoUnit.DAYS);
+
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String dateWrapped = dateFormat.format(dateFormat.parse(tokenUsageDateBefore.minus(1, ChronoUnit.DAYS).toString()));
+            String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateWrapped + ".zip";
+            if (s3Service.getObject("oncokb", datedFile).isPresent()) {
+                log.info("Token stats have already been wrapped today. Skipping this request.");
+            } else {
+                // Update tokenStats in database
+                updateTokenStats(tokenUsageDateBefore);
+                // Send tokenStats to s3
+                s3Service.saveObject("oncokb", datedFile, createWrappedFile(tokenUsageDateBefore, dateWrapped + ".txt"));
+                // Delete old tokenStats
+                tokenStatsService.clearTokenStats(tokenUsageDateBefore);
+            }
+        } catch (ParseException e) {
+            log.error("Unable to parse instant. Java.time.Instant formatting may have changed.");
+        }
+
+        log.info("Finished the cronjob to move token stats to s3.");
     }
 
     private void calculateUsageSummary(UsageSummary usageSummary, String key, int count, String time) {
@@ -443,5 +426,45 @@ public class CronJobController {
     private void renewToken(Token token) {
         token.setExpiration(token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS));
         tokenService.save(token);
+    }
+
+    private void updateTokenStats(Instant tokenUsageDateBefore) {
+        log.info("Started the cronjob to update token stats");
+        List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(tokenUsageDateBefore);
+
+        // Update tokens with token usage
+        tokenUsages.stream().forEach(tokenUsage -> {
+            Optional<Token> tokenOptional = tokenService.findByToken(tokenUsage.getToken().getToken());
+            if (tokenOptional.isPresent()) {
+                tokenOptional.get().setCurrentUsage(tokenOptional.get().getCurrentUsage() + tokenUsage.getCount());
+                tokenService.save(tokenOptional.get());
+            }
+        });
+        log.info("Finished the cronjob to update token stats");
+    }
+
+    private File createWrappedFile(Instant tokenUsageDateBefore, String fileName) throws IOException {
+        File file = File.createTempFile("token-stats-", ".zip");
+        file.deleteOnExit();
+        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(file));
+        ZipEntry entry = new ZipEntry(fileName);
+        out.putNextEntry(entry);
+
+        int PAGE_SIZE = 1000;
+        int totalPages = tokenStatsService.findAll(tokenUsageDateBefore, PageRequest.of(0, PAGE_SIZE)).getTotalPages();
+        String headers = TokenStats.tabDelimitedHeaders() + "\n\n";
+        byte[] headersInBytes = headers.getBytes();
+        out.write(headersInBytes, 0, headersInBytes.length);
+        for (int page = 0; page < totalPages; page++) {
+            for (TokenStats tokenStats : tokenStatsService.findAll(tokenUsageDateBefore, PageRequest.of(page, PAGE_SIZE))) {
+                String row = tokenStats.toTabDelimited() + "\n";
+                byte[] rowInBytes = row.getBytes();
+                out.write(rowInBytes, 0, rowInBytes.length);
+            }
+        }
+        out.closeEntry();
+        out.close();
+
+        return file;
     }
 }

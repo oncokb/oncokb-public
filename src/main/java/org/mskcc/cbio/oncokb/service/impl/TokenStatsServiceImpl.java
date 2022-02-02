@@ -9,11 +9,12 @@ import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,11 +42,10 @@ public class TokenStatsServiceImpl implements TokenStatsService {
         return tokenStatsRepository.save(tokenStats);
     }
 
-    @Override
     @Transactional(readOnly = true)
-    public List<TokenStats> findAll() {
+    public Page<TokenStats> findAll(Instant before, Pageable pageable) {
         log.debug("Request to get all TokenStats");
-        return tokenStatsRepository.findAll();
+        return tokenStatsRepository.findAllByAccessTimeBefore(before, pageable);
     }
 
 
@@ -62,24 +62,16 @@ public class TokenStatsServiceImpl implements TokenStatsService {
         tokenStatsRepository.deleteById(id);
     }
 
-    /**
-     * Old audit events should be automatically deleted after 30 days.
-     *
-     */
-    public void removeOldTokenStats() {
-        tokenStatsRepository
-            .findByAccessTimeBefore(Instant.now().minus(jHipsterProperties.getAuditEvents().getRetentionPeriod(), ChronoUnit.DAYS))
-            .forEach(tokenStat -> {
-                log.debug("Deleting token stats", tokenStat);
-                tokenStatsRepository.delete(tokenStat);
-            });
+    public void clearTokenStats(Instant before) {
+        log.info("Deleting old TokenStats");
+        tokenStatsRepository.deleteAllByAccessTimeBefore(before);
     }
 
     public List<UserTokenUsage> getUserTokenUsage(Instant before) {
         return tokenStatsRepository.countTokenUsageByToken(before);
     }
 
-    public List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after){
+    public List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after) {
         return tokenStatsRepository.countTokenUsageByTokenTimeResource(after);
     }
 }
