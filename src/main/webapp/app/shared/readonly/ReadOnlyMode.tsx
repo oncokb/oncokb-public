@@ -9,14 +9,14 @@ import ReadOnlyPage from './ReadOnlyPage';
 
 /**
  * Components wrapped in the HOC will display a warning page or have a warning message added to the page
- * when application is is read only mode.
+ * when application is in read only mode.
  * @param Component the original component
  * @param showWarningOnly if true and app is in read only mode, then the original component
  * will be displayed and a warning message will be added to the top of the page.
  */
 
 export default function ReadOnlyMode(
-  Component: any,
+  Component: React.ComponentType,
   showWarningOnly?: boolean
 ) {
   return (props: any) => {
@@ -27,8 +27,8 @@ export default function ReadOnlyMode(
             <Alert variant="danger">
               <h4>This page is read-only</h4>
               <div>
-                Any changes you make won't be saved at this time. The page will
-                be back shortly.
+                Any changes you make will NOT be saved at this time. The page
+                will be back shortly.
               </div>
             </Alert>
             <Component {...props} />
