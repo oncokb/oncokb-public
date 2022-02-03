@@ -91,7 +91,7 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
               search={this.keyword}
               type={props.data.queryType as SearchOptionType}
               data={props.data}
-              appStore={props.appStore}
+              appStore={this.props.appStore!}
             >
               <components.Option {...props} />
             </SearchOption>

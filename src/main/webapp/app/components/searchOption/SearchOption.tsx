@@ -122,6 +122,9 @@ const AlterationSearchOption: React.FunctionComponent<{
             <FeedbackIcon
               feedback={{
                 type: FeedbackType.ANNOTATION,
+                annotation: {
+                  gene: props.search,
+                },
               }}
               appStore={props.appStore}
             />
