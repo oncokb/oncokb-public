@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.service.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.service.InvalidPasswordException;
 import org.mskcc.cbio.oncokb.service.UsernameAlreadyUsedException;
+import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.TokenExpiredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +91,7 @@ public class OncokbPublicApp {
                 options.addIgnoredExceptionForType(UsernameAlreadyUsedException.class);
                 options.addIgnoredExceptionForType(HttpRequestMethodNotSupportedException.class);
                 options.addIgnoredExceptionForType(TokenExpiredException.class);
+                options.addIgnoredExceptionForType(LicenseAgreementNotAcceptedException.class);
             });
         }
     }
