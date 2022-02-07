@@ -14,6 +14,7 @@ public final class ErrorConstants {
     public static final URI LOGIN_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/login-already-used");
     public static final URI TOKEN_EXPIRED_TYPE = URI.create(PROBLEM_BASE_URL + "/token-expired");
     public static final URI LICENSE_AGREEMENT_NOT_ACCEPTED = URI.create(PROBLEM_BASE_URL + "/license-agreement-not-accepted");
+    public static final URI DATABASE_READ_ONLY = URI.create(PROBLEM_BASE_URL + "/database-read-only");
 
     private ErrorConstants() {
     }

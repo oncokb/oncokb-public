@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.core.env.Environment;
 import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.Problem;
@@ -135,6 +137,11 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
             .with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE)
             .build();
         return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleDatabaseReadOnlyException(DatabaseReadOnlyException ex, NativeWebRequest request) {
+        return create(ex, request);
     }
 
     @Override

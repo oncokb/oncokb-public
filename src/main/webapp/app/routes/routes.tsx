@@ -18,7 +18,7 @@ import { PasswordResetInit } from 'app/components/account/PasswordResetInit';
 import PasswordResetFinish from 'app/components/account/PasswordResetFinish';
 import PageNotFound from 'app/shared/error/page-not-found';
 import AccountPassword from 'app/components/account/AccountPassword';
-import AdminRouts from 'app/routes/AdminRoutes';
+import AdminRoutes from 'app/routes/AdminRoutes';
 import PageContainer from 'app/components/PageContainer';
 import React from 'react';
 import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
@@ -33,6 +33,7 @@ import { CreateCompanyUsersPage } from 'app/pages/CreateCompanyUsersPage';
 import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
 import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTab';
 import FAQPage from 'app/pages/FAQPage';
+import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -157,34 +158,34 @@ const AppRouts = (props: {
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_VERIFY}
-            component={ActivateAccount}
+            component={ReadOnlyMode(ActivateAccount)}
           />
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
-            component={PasswordResetInit}
+            component={ReadOnlyMode(PasswordResetInit)}
           />
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}
-            component={PasswordResetFinish}
+            component={ReadOnlyMode(PasswordResetFinish)}
           />
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={false}
             appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_ACTIVE_TRIAL_FINISH}
-            component={ActivateTrialFinish}
+            component={ReadOnlyMode(ActivateTrialFinish)}
           />
           <PrivateRoute
             authenticationStore={props.authenticationStore}
             routing={props.routing}
             path={PAGE_ROUTE.ADMIN}
-            component={AdminRouts}
+            component={AdminRoutes}
             hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <PrivateRoute
@@ -192,7 +193,7 @@ const AppRouts = (props: {
             authenticationStore={props.authenticationStore}
             routing={props.routing}
             path={PAGE_ROUTE.ACCOUNT_PASSWORD}
-            component={AccountPassword}
+            component={ReadOnlyMode(AccountPassword)}
             hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}
           />
           <PrivateRoute
@@ -208,7 +209,7 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.USER}
             authenticationStore={props.authenticationStore}
             routing={props.routing}
-            component={UserPage}
+            component={ReadOnlyMode(UserPage, true)}
             hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <PrivateRoute
@@ -216,7 +217,7 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.COMPANY}
             authenticationStore={props.authenticationStore}
             routing={props.routing}
-            component={CompanyPage}
+            component={ReadOnlyMode(CompanyPage, true)}
             hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <PrivateRoute
@@ -224,7 +225,7 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.CREATE_COMPANY_USERS}
             authenticationStore={props.authenticationStore}
             routing={props.routing}
-            component={CreateCompanyUsersPage}
+            component={ReadOnlyMode(CreateCompanyUsersPage)}
             hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <ErrorBoundaryRoute component={PageNotFound} />

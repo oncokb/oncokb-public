@@ -134,7 +134,7 @@ public class UserService {
                 user.setActivationKey(null);
                 this.clearUserCaches(user);
                 log.debug("Activated user: {}", user);
-                return user;
+                return userRepository.save(user);
             });
     }
 
@@ -156,7 +156,7 @@ public class UserService {
                 user.setResetKey(null);
                 user.setResetDate(null);
                 this.clearUserCaches(user);
-                return user;
+                return userRepository.save(user);
             });
     }
 
@@ -167,7 +167,7 @@ public class UserService {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
                 this.clearUserCaches(user);
-                return user;
+                return userRepository.save(user);
             });
     }
 
@@ -458,6 +458,7 @@ public class UserService {
                 user.setPassword(encryptedPassword);
                 this.clearUserCaches(user);
                 log.debug("Changed password for User: {}", user);
+                userRepository.save(user);
             });
     }
 

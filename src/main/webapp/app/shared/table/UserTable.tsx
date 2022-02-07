@@ -73,13 +73,11 @@ export class UserTable extends React.Component<IUserTableProps> {
   @action
   updateActiveStatus(sendEmail = true) {
     if (this.currentSelectedUser) {
-      this.currentSelectedUser.activated = !this.currentSelectedUser.activated;
-      this.updateUser(
-        this.currentSelectedUser,
-        sendEmail,
-        false,
-        this.props.onUpdateUser
-      );
+      const userToUpdate: UserDTO = {
+        ...this.currentSelectedUser,
+        activated: !this.currentSelectedUser.activated,
+      };
+      this.updateUser(userToUpdate, sendEmail, false, this.props.onUpdateUser);
     } else {
       notifyError(new Error('No user specified'));
     }

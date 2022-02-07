@@ -11,8 +11,9 @@ import UserUsageDetailsPage from 'app/pages/usageAnalysisPage/UserUsageDetailsPa
 import ResourceUsageDetailsPage from 'app/pages/usageAnalysisPage/ResourceUsageDetailsPage';
 import { CreateCompanyPage } from 'app/pages/CreateCompanyPage';
 import CompanyDetailsPage from 'app/pages/companyManagement/CompanyDetailsPage';
+import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 
-const AdminRouts = () => {
+const AdminRoutes = () => {
   return (
     <Switch>
       <ErrorBoundaryRoute
@@ -38,17 +39,17 @@ const AdminRouts = () => {
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_SEND_EMAILS}
-        component={SendEmailsPage}
+        component={ReadOnlyMode(SendEmailsPage)}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_CREATE_ACCOUNT}
-        component={CreateAccountPage}
+        component={ReadOnlyMode(CreateAccountPage)}
       />
       <ErrorBoundaryRoute
         exact
         path={PAGE_ROUTE.ADMIN_ADD_COMPANY}
-        component={CreateCompanyPage}
+        component={ReadOnlyMode(CreateCompanyPage)}
       />
       <ErrorBoundaryRoute
         exact
@@ -59,4 +60,4 @@ const AdminRouts = () => {
     </Switch>
   );
 };
-export default AdminRouts;
+export default AdminRoutes;

@@ -10,6 +10,7 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import { TermsPage } from 'app/pages/apiAccessGroup/TermsPage';
 import WindowStore from 'app/store/WindowStore';
 import { RegisterPage } from 'app/pages/RegisterPage';
+import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
 
 type ApiAccessPageNavTabProps = {
   appStore: AppStore;
@@ -29,6 +30,10 @@ const TAB_TITLES: { [key in TabKey]: string } = {
   [TabKey.REGISTER]: 'Apply for a license',
   [TabKey.API_ACCESS]: 'API Access',
 };
+
+// Wrap the register page with the ReadOnlyMode HOC, so it is disabled
+// when application is in read only mode.
+const ReadOnlyRegisterPage = ReadOnlyMode(RegisterPage);
 
 @inject('appStore', 'routing', 'authenticationStore', 'windowStore')
 @observer
@@ -80,7 +85,7 @@ export class ApiAccessPageNavTab extends React.Component<
         return <TermsPage />;
       case TabKey.REGISTER:
         return (
-          <RegisterPage
+          <ReadOnlyRegisterPage
             routing={this.props.routing}
             windowStore={this.props.windowStore}
           />

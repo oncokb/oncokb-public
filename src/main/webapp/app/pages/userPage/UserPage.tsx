@@ -245,6 +245,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             notifySuccess('Updated Token');
                           },
                           (error: Error) => {
+                            this.getUserStatus = PromiseStatus.error;
                             notifyError(error);
                           }
                         );
@@ -252,11 +253,13 @@ export default class UserPage extends React.Component<IUserPage> {
                   });
                 },
                 (error: Error) => {
+                  this.getUserStatus = PromiseStatus.error;
                   notifyError(error);
                 }
               );
           },
           (error: Error) => {
+            this.getUserStatus = PromiseStatus.error;
             notifyError(error);
           }
         );
@@ -349,9 +352,7 @@ export default class UserPage extends React.Component<IUserPage> {
     return (
       <If condition={this.getUserStatus === PromiseStatus.pending}>
         <Then>
-          <LoadingIndicator isLoading={true}>
-            Loading user information
-          </LoadingIndicator>
+          <LoadingIndicator isLoading={true} />
         </Then>
         <Else>
           <If condition={this.getUserStatus === PromiseStatus.error}>
