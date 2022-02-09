@@ -6,7 +6,6 @@ import org.mskcc.cbio.oncokb.domain.CompanyCandidate;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
-import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
@@ -41,13 +40,6 @@ import java.util.*;
 @RestController
 @RequestMapping("/api")
 public class AccountResource {
-
-    private static class AccountResourceException extends RuntimeException {
-        private AccountResourceException(String message) {
-            super(message);
-        }
-    }
-
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     private final UserRepository userRepository;
@@ -121,7 +113,7 @@ public class AccountResource {
     public boolean activateAccount(@RequestParam(value = "key") String key) {
         Optional<User> userOptional = userService.getUserByActivationKey(key);
         if (!userOptional.isPresent()) {
-            throw new AccountResourceException("Your user account could not be activated as no user was found associated with this activation key.");
+            throw new CustomMessageRuntimeException("Your user account could not be activated as no user was found associated with this activation key.");
         } else {
             boolean newUserActivation = !userOptional.get().getActivated();
             userOptional = userService.activateRegistration(key);
@@ -130,7 +122,7 @@ public class AccountResource {
             if(userOptional.isPresent()){
                 user = userOptional.get();
             }else{
-                throw new AccountResourceException("User could not be found");
+                throw new CustomMessageRuntimeException("User could not be found");
             }
 
             if (newUserActivation) {
@@ -141,7 +133,7 @@ public class AccountResource {
                 List<Token> userTokens = tokenService.findByUser(user);
                 boolean userAccountCanNOTBeExtended = !userTokens.stream().filter(token -> token.isRenewable()).findAny().isPresent();
                 if (userAccountCanNOTBeExtended) {
-                    throw new AccountResourceException("Your account token is expired and cannot be extended.");
+                    throw new CustomMessageRuntimeException("Your account token is expired and cannot be extended.");
                 } else {
                     Instant defaultExpiration = Instant.now().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
                     tokenService.findByUser(user).forEach(token -> {
@@ -200,7 +192,7 @@ public class AccountResource {
     public UserDTO getAccount() {
         return userService.getUserWithAuthorities()
             .map(user -> userMapper.userToUserDTO(user))
-            .orElseThrow(() -> new AccountResourceException("User could not be found"));
+            .orElseThrow(() -> new CustomMessageRuntimeException("User could not be found"));
     }
 
     /**
@@ -212,14 +204,14 @@ public class AccountResource {
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
-        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new CustomMessageRuntimeException("Current user login not found"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
         Optional<User> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
-            throw new AccountResourceException("User could not be found");
+            throw new CustomMessageRuntimeException("User could not be found");
         }
         userService.updateUser(userDTO);
     }
@@ -251,10 +243,10 @@ public class AccountResource {
             if (user.isPresent()) {
                 return tokenProvider.getUserTokens(user.get());
             } else {
-                throw new AccountResourceException("Cannot find the user");
+                throw new CustomMessageRuntimeException("Cannot find the user");
             }
         } else {
-            throw new AccountResourceException("User is not logged in");
+            throw new CustomMessageRuntimeException("User is not logged in");
         }
     }
 
@@ -270,7 +262,7 @@ public class AccountResource {
             Optional<User> user = userService.getUserWithAuthoritiesByLogin(userLogin.get());
             List<Token> tokens = tokenProvider.getUserTokens(user.get());
             if (tokens.size() >= 1) {
-                throw new AccountResourceException("No more than one token can be created");
+                throw new CustomMessageRuntimeException("No more than one token can be created");
             } else {
                 // if there is a token already available, we should use the same expiration date
                 // we only renew the token after validating the account is valid on half year basis
@@ -281,7 +273,7 @@ public class AccountResource {
                 }
             }
         } else {
-            throw new AccountResourceException("User is not logged in");
+            throw new CustomMessageRuntimeException("User is not logged in");
         }
     }
 
@@ -300,7 +292,7 @@ public class AccountResource {
                 throw new AuthenticationException("User does not have the permission to update the token requested");
             }
         } else {
-            throw new AccountResourceException("User is not logged in");
+            throw new CustomMessageRuntimeException("User is not logged in");
         }
     }
 
@@ -340,7 +332,7 @@ public class AccountResource {
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
-            throw new AccountResourceException("No user was found for this reset key");
+            throw new CustomMessageRuntimeException("No user was found for this reset key");
         }
     }
 
@@ -350,7 +342,7 @@ public class AccountResource {
         if (user.isPresent()) {
             return userMapper.userToUserDTO(user.get());
         } else {
-            throw new AccountResourceException("No user was found");
+            throw new CustomMessageRuntimeException("No user was found");
         }
     }
 
@@ -360,14 +352,14 @@ public class AccountResource {
         if (user.isPresent()) {
             return userMapper.userToUserDTO(user.get());
         } else {
-            throw new AccountResourceException("No user was found");
+            throw new CustomMessageRuntimeException("No user was found");
         }
     }
 
     @PostMapping(path = "/account/active-trial/finish")
     public UserDTO finishTrialAccountActivation(@RequestBody KeyAndTermsVM keyAndTermsVM) {
         if (keyAndTermsVM.getReadAndAgreeWithTheTerms() != Boolean.TRUE) {
-            throw new AccountResourceException("You have to read and agree with the terms.");
+            throw new CustomMessageRuntimeException("You have to read and agree with the terms.");
         }
         Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByTrialActivationKey(keyAndTermsVM.getKey());
         if (userDetailsDTO.isPresent()) {
@@ -376,7 +368,7 @@ public class AccountResource {
                 return userDTOOptional.get();
             }
         }
-        throw new AccountResourceException("No user was found for this activation key");
+        throw new CustomMessageRuntimeException("No user was found for this activation key");
     }
 
     @GetMapping(path = "/account/active-trial/info")
@@ -388,7 +380,7 @@ public class AccountResource {
                 return userMapper.userToUserDTO(userOptional.get());
             }
         }
-        throw new AccountResourceException("No key found");
+        throw new CustomMessageRuntimeException("No key found");
     }
 
 
