@@ -11,6 +11,7 @@ import org.mskcc.cbio.oncokb.service.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.service.InvalidPasswordException;
 import org.mskcc.cbio.oncokb.service.UsernameAlreadyUsedException;
 import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
+import org.mskcc.cbio.oncokb.web.rest.errors.CustomMessageRuntimeException;
 import org.mskcc.cbio.oncokb.web.rest.errors.DatabaseReadOnlyException;
 import org.mskcc.cbio.oncokb.web.rest.errors.TokenExpiredException;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -94,6 +96,8 @@ public class OncokbPublicApp {
                 options.addIgnoredExceptionForType(TokenExpiredException.class);
                 options.addIgnoredExceptionForType(LicenseAgreementNotAcceptedException.class);
                 options.addIgnoredExceptionForType(DatabaseReadOnlyException.class);
+                options.addIgnoredExceptionForType(InternalAuthenticationServiceException.class);
+                options.addIgnoredExceptionForType(CustomMessageRuntimeException.class);
             });
         }
     }

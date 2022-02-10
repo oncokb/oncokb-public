@@ -2,9 +2,7 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sun.xml.bind.v2.TODO;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.domain.Authority;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.domain.User;
@@ -13,8 +11,6 @@ import org.mskcc.cbio.oncokb.security.SecurityUtils;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.service.*;
 import org.mskcc.cbio.oncokb.web.rest.errors.BadRequestAlertException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
@@ -22,21 +18,17 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.mail.MessagingException;
-import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.security.Security;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -98,11 +90,6 @@ public class ApiProxy {
             } else {
                 throw new ResponseStatusException(httpClientErrorException.getStatusCode(), httpClientErrorException.getMessage());
             }
-        } catch (HttpServerErrorException e) {
-            HttpServerErrorException ne = new HttpServerErrorException("Request URL: " + uri + "Request body: " + body, e.getStatusCode(), e.getStatusText(), e.getResponseHeaders(), null, null);
-            throw ne;
-        } catch (Exception e) {
-            throw e;
         }
     }
 
