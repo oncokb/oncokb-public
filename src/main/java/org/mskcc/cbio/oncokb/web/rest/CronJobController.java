@@ -280,7 +280,7 @@ public class CronJobController {
         List<Token> tokens = tokenService
             .findAllExpiresBeforeDate(Instant.now().plusSeconds(DAY_IN_SECONDS * DAYS_TO_CHECK))
             .stream()
-            .filter(token -> 
+            .filter(token ->
                 // Do not include users that have atleast one renewable token because they are regular users
                 token.getExpiration().isAfter(Instant.now()) && !tokenService.findByUser(token.getUser()).stream().filter(t -> t.isRenewable()).findAny().isPresent()
             )
@@ -338,7 +338,10 @@ public class CronJobController {
                 updateExposedToken(token);
                 mailService.sendMailToUserWhenTokenExposed(user, t);
             }
-            sleep(1000);
+            // Wait for 2s for each call. The search endpoint has 30 calls per minute limit.
+            // We assume one call takes some time, the timeout needs to set to 2s to make sure we will not get the 403 rate limitation error.
+            // For more info about rate limit, please see https://docs.github.com/en/rest/reference/rate-limit
+            sleep(2000);
         }
         log.info("Searching exposed tokens pipeline finished!");
         // If any potential exposed tokens were be found, send notification to dev team.
