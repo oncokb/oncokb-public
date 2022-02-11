@@ -84,12 +84,24 @@ export default class AlterationTableTabs extends React.Component<
 
   getTabDescription(key: ANNOTATION_PAGE_TAB_KEYS) {
     if (key === ANNOTATION_PAGE_TAB_KEYS.BIOLOGICAL) {
-      return (
-        <span>
-          A list of the oncogenic and mutation effects of{' '}
-          <b>all OncoKB curated</b> {this.props.hugoSymbol} alterations.
-        </span>
-      );
+      let content: JSX.Element;
+      if (this.props.alteration) {
+        content = (
+          <span>
+            A list of the oncogenic and mutation effects of OncoKB curated
+            alterations that related to {this.props.hugoSymbol}{' '}
+            {this.props.alteration.name}.
+          </span>
+        );
+      } else {
+        content = (
+          <span>
+            A list of the oncogenic and mutation effects of{' '}
+            <b>all OncoKB curated</b> {this.props.hugoSymbol} alterations.
+          </span>
+        );
+      }
+      return content;
     } else if (key === ANNOTATION_PAGE_TAB_KEYS.TX) {
       return (
         <span>

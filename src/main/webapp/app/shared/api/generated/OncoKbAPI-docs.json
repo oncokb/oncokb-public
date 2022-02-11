@@ -464,7 +464,8 @@
               "missense_variant",
               "splice_region_variant",
               "stop_gained",
-              "synonymous_variant"
+              "synonymous_variant",
+              "intron_variant"
             ]
           },
           {
@@ -3550,6 +3551,9 @@
         "apiVersion": {
           "type": "string"
         },
+        "appVersion": {
+          "$ref": "#/definitions/Semver"
+        },
         "dataVersion": {
           "$ref": "#/definitions/Version"
         },
@@ -3580,6 +3584,51 @@
           "type": "boolean"
         },
         "term": {
+          "type": "string"
+        }
+      }
+    },
+    "Semver": {
+      "type": "object",
+      "properties": {
+        "build": {
+          "type": "string"
+        },
+        "major": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minor": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "originalValue": {
+          "type": "string"
+        },
+        "patch": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "stable": {
+          "type": "boolean"
+        },
+        "suffixTokens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "STRICT",
+            "LOOSE",
+            "NPM",
+            "COCOAPODS",
+            "IVY"
+          ]
+        },
+        "value": {
           "type": "string"
         }
       }

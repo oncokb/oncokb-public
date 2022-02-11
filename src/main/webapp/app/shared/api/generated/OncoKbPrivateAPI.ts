@@ -2330,6 +2330,107 @@ export default class OncoKbPrivateAPI {
                 return response.body;
             });
         };
+    utilRelevantAlterationsGetUsingGETURL(parameters: {
+        'referenceGenome' ? : string,
+        'entrezGeneId' ? : number,
+        'alteration' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/relevantAlterations';
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
+        }
+
+        if (parameters['entrezGeneId'] !== undefined) {
+            queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+        }
+
+        if (parameters['alteration'] !== undefined) {
+            queryParameters['alteration'] = parameters['alteration'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the list of relevant alterations
+     * @method
+     * @name OncoKbPrivateAPI#utilRelevantAlterationsGetUsingGET
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {integer} entrezGeneId - alteration
+     * @param {string} alteration - alteration
+     */
+    utilRelevantAlterationsGetUsingGETWithHttpInfo(parameters: {
+        'referenceGenome' ? : string,
+        'entrezGeneId' ? : number,
+        'alteration' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/relevantAlterations';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
+            }
+
+            if (parameters['entrezGeneId'] !== undefined) {
+                queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+            }
+
+            if (parameters['alteration'] !== undefined) {
+                queryParameters['alteration'] = parameters['alteration'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the list of relevant alterations
+     * @method
+     * @name OncoKbPrivateAPI#utilRelevantAlterationsGetUsingGET
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {integer} entrezGeneId - alteration
+     * @param {string} alteration - alteration
+     */
+    utilRelevantAlterationsGetUsingGET(parameters: {
+            'referenceGenome' ? : string,
+            'entrezGeneId' ? : number,
+            'alteration' ? : string,
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < Alteration >
+        > {
+            return this.utilRelevantAlterationsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     utilRelevantCancerTypesPostUsingPOSTURL(parameters: {
         'levelOfEvidence' ? : "LEVEL_0" | "LEVEL_1" | "LEVEL_2" | "LEVEL_2A" | "LEVEL_2B" | "LEVEL_3A" | "LEVEL_3B" | "LEVEL_4" | "LEVEL_R1" | "LEVEL_R2" | "LEVEL_R3" | "LEVEL_Px1" | "LEVEL_Px2" | "LEVEL_Px3" | "LEVEL_Dx1" | "LEVEL_Dx2" | "LEVEL_Dx3" | "NO",
         'body': Array < RelevantCancerTypeQuery > ,

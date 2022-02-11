@@ -492,6 +492,8 @@ export type MainType = {
 export type OncoKBInfo = {
     'apiVersion': string
 
+        'appVersion': Semver
+
         'dataVersion': Version
 
         'levels': Array < InfoLevel >
@@ -509,6 +511,26 @@ export type VariantConsequence = {
         'isGenerallyTruncating': boolean
 
         'term': string
+
+};
+export type Semver = {
+    'build': string
+
+        'major': number
+
+        'minor': number
+
+        'originalValue': string
+
+        'patch': number
+
+        'stable': boolean
+
+        'suffixTokens': Array < string >
+
+        'type': "STRICT" | "LOOSE" | "NPM" | "COCOAPODS" | "IVY"
+
+        'value': string
 
 };
 export type AnnotateMutationByProteinChangeQuery = {
@@ -1314,7 +1336,7 @@ export default class OncoKbAPI {
         'entrezGeneId' ? : number,
         'alteration' ? : string,
         'referenceGenome' ? : string,
-        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant",
+        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
         'tumorType' ? : string,
@@ -1388,7 +1410,7 @@ export default class OncoKbAPI {
         'entrezGeneId' ? : number,
         'alteration' ? : string,
         'referenceGenome' ? : string,
-        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant",
+        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
         'tumorType' ? : string,
@@ -1475,7 +1497,7 @@ export default class OncoKbAPI {
         'entrezGeneId' ? : number,
         'alteration' ? : string,
         'referenceGenome' ? : string,
-        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant",
+        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
         'tumorType' ? : string,

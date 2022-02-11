@@ -24,6 +24,9 @@ import {
   FUSIONS,
   TRUNCATING_MUTATIONS,
   AMPLIFICATION,
+  GAIN_OF_FUNCTION_MUTATIONS,
+  LOSS_OF_FUNCTION_MUTATIONS,
+  SWITCH_OF_FUNCTION_MUTATIONS,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
@@ -700,8 +703,7 @@ export const getCategoricalAlterationDescription = (
       content = (
         <span>
           Defined as focal copy number amplification that results in an increase
-          in the gene copy number of{' '}
-          {geneLink}.
+          in the gene copy number of {geneLink}.
         </span>
       );
       break;
@@ -717,8 +719,8 @@ export const getCategoricalAlterationDescription = (
       content = (
         <span>
           Defined as deletion or chromosomal translocation events arising within{' '}
-          {geneLink} that result in a functional fusion event which preserves
-          an intact {hugoSymbol} kinase domain.
+          {geneLink} that result in a functional fusion event which preserves an
+          intact {hugoSymbol} kinase domain.
         </span>
       );
       break;
@@ -756,4 +758,32 @@ export const getCategoricalAlterationDescription = (
   }
 
   return content;
+};
+
+export const isOncogenic = (oncogenicity: string) => {
+  switch (oncogenicity) {
+    case ONCOGENICITY.ONCOGENIC:
+    case ONCOGENICITY.LIKELY_ONCOGENIC:
+    case ONCOGENICITY.PREDICTED_ONCOGENIC:
+      return true;
+    default:
+      return false;
+  }
+};
+
+export const isCategoricalAlteration = (alteration: string) => {
+  const categoricalAlterations = [
+    ONCOGENIC_MUTATIONS,
+    FUSIONS,
+    TRUNCATING_MUTATIONS,
+    GAIN_OF_FUNCTION_MUTATIONS,
+    LOSS_OF_FUNCTION_MUTATIONS,
+    SWITCH_OF_FUNCTION_MUTATIONS,
+  ];
+  return (
+    alteration &&
+    categoricalAlterations.filter(alt =>
+      alteration.toLowerCase().startsWith(alt.toLowerCase())
+    ).length > 0
+  );
 };

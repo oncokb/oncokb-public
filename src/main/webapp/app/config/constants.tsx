@@ -517,6 +517,9 @@ export const DELETION = 'Deletion';
 export const FUSIONS = 'Fusions';
 export const TRUNCATING_MUTATIONS = 'Truncating Mutations';
 export const OTHER_BIOMARKERS = 'Other Biomarkers';
+export const GAIN_OF_FUNCTION_MUTATIONS = 'Gain-of-function Mutations';
+export const LOSS_OF_FUNCTION_MUTATIONS = 'Loss-of-function Mutations';
+export const SWITCH_OF_FUNCTION_MUTATIONS = 'Switch-of-function Mutations';
 
 export enum SEARCH_QUERY_KEY {
   REFERENCE_GENOME = 'refGenome',
