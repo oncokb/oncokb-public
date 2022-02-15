@@ -29,6 +29,7 @@
         <java.version>1.8</java.version>
         <node.version>v12.16.1</node.version>
         <yarn.version>v1.22.4</yarn.version>
+        <bucket4j.version>7.2.0</bucket4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
@@ -382,7 +383,12 @@
 	        <groupId>com.github.oncokb</groupId>
 	        <artifactId>oncokb-meta</artifactId>
 	        <version>4f57f6d0fa</version>
-	    </dependency>
+        </dependency>
+        <dependency>
+          <groupId>com.github.vladimir-bukhtoyarov</groupId>
+          <artifactId>bucket4j-core</artifactId>
+          <version>${bucket4j.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
