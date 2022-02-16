@@ -132,6 +132,7 @@ export default class UserPage extends React.Component<IUserPage> {
   @computed
   get defaultSelectedAccountType() {
     const currentlyIsTrialAccount =
+      this.userTokens.length > 0 &&
       this.userTokens.filter(token => token.renewable).length < 1;
     return currentlyIsTrialAccount ? AccountType.TRIAL : AccountType.REGULAR;
   }
@@ -221,6 +222,7 @@ export default class UserPage extends React.Component<IUserPage> {
               })
               .then(
                 tokens => {
+                  this.userTokens = tokens;
                   tokens.forEach(token => {
                     if (
                       token.renewable !== tokenIsRenewable ||

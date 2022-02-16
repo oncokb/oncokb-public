@@ -403,7 +403,7 @@ public class UserService {
                 return newUserDTO;
             });
 
-        if (updatedUserDTO.isPresent()) {
+        if (updatedUserDTO.isPresent() && updatedUserDTO.get().isActivated()) {
             generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
         }
         return updatedUserDTO;
