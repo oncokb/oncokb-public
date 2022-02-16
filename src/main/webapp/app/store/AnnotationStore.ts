@@ -184,6 +184,19 @@ export class AnnotationStore {
     default: DEFAULT_GENE,
   });
 
+  readonly alteration = remoteData<Alteration | undefined>({
+    await: () => [this.gene],
+    invoke: async () => {
+      const variants = await apiClient.variantsLookupGetUsingGET({
+        hugoSymbol: this.gene.result.hugoSymbol
+          ? this.gene.result.hugoSymbol
+          : this.hugoSymbolQuery,
+        variant: this.alterationQuery,
+      });
+      return variants.length > 0 ? variants[0] : undefined;
+    },
+  });
+
   readonly ensemblGenes = remoteData<EnsemblGene[]>({
     await: () => [this.gene],
     invoke: async () => {
@@ -328,8 +341,8 @@ export class AnnotationStore {
     invoke: async () => {
       return privateClient.utilRelevantAlterationsGetUsingGET({
         entrezGeneId: this.gene.result.entrezGeneId,
-        alteration: this.matchedAlteration
-          ? this.matchedAlteration.alteration
+        alteration: this.alteration.result
+          ? this.alteration.result.alteration
           : this.alterationQuery,
         referenceGenome: this.referenceGenomeQuery,
       });
@@ -624,17 +637,6 @@ export class AnnotationStore {
     } else {
       return this.biologicalAlterations.result;
     }
-  }
-
-  @computed
-  get matchedAlteration(): Alteration | undefined {
-    const altLowerCaseQuery = this.alterationQuery?.toLowerCase();
-    const matched = this.biologicalAlterations.result.filter(
-      alt =>
-        alt.variant.alteration.toLowerCase() === altLowerCaseQuery ||
-        alt.variant.name.toLowerCase() === altLowerCaseQuery
-    );
-    return matched.length > 0 ? matched[0].variant : undefined;
   }
 
   @computed

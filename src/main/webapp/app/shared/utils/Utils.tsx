@@ -655,6 +655,23 @@ export interface IAlteration {
   name: string;
 }
 
+export const isCategoricalAlteration = (alteration: string) => {
+  const categoricalAlterations = [
+    ONCOGENIC_MUTATIONS,
+    FUSIONS,
+    TRUNCATING_MUTATIONS,
+    GAIN_OF_FUNCTION_MUTATIONS,
+    LOSS_OF_FUNCTION_MUTATIONS,
+    SWITCH_OF_FUNCTION_MUTATIONS,
+  ];
+  return (
+    alteration &&
+    categoricalAlterations.filter(alt =>
+      alteration.toLowerCase().startsWith(alt.toLowerCase())
+    ).length > 0
+  );
+};
+
 /**
  *
  * @param alteration Alteration, either in string or in IAlteration
@@ -668,11 +685,8 @@ export function getAlterationName(
     typeof alteration === 'string' ? alteration : alteration.alteration;
   const name: string =
     typeof alteration === 'string' ? alteration : alteration.name;
-  if (
-    !showNameDiff ||
-    alt === name ||
-    name.toLowerCase().startsWith(ONCOGENIC_MUTATIONS.toLowerCase())
-  ) {
+  const isCategoricalAlt = isCategoricalAlteration(alt);
+  if (!showNameDiff || alt === name || isCategoricalAlt) {
     return name;
   } else {
     return `${name} (${alt})`;
@@ -769,21 +783,4 @@ export const isOncogenic = (oncogenicity: string) => {
     default:
       return false;
   }
-};
-
-export const isCategoricalAlteration = (alteration: string) => {
-  const categoricalAlterations = [
-    ONCOGENIC_MUTATIONS,
-    FUSIONS,
-    TRUNCATING_MUTATIONS,
-    GAIN_OF_FUNCTION_MUTATIONS,
-    LOSS_OF_FUNCTION_MUTATIONS,
-    SWITCH_OF_FUNCTION_MUTATIONS,
-  ];
-  return (
-    alteration &&
-    categoricalAlterations.filter(alt =>
-      alteration.toLowerCase().startsWith(alt.toLowerCase())
-    ).length > 0
-  );
 };
