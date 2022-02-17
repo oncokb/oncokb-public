@@ -10,20 +10,16 @@ import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
-  FUSIONS,
-  ONCOGENIC_MUTATIONS,
-  ONCOGENICITY,
   OTHER_BIOMARKERS,
   REFERENCE_GENOME,
   TREATMENT_EVIDENCE_TYPES,
-  TRUNCATING_MUTATIONS,
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
 import { Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
-import { action, computed, observable } from 'mobx';
+import { action, computed } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
   BiologicalVariant,
@@ -42,7 +38,6 @@ import {
   getHighestFdaLevel,
   getTreatmentNameFromEvidence,
   isCategoricalAlteration,
-  isOncogenic,
   isPositionalAlteration,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
