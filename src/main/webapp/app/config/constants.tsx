@@ -1,4 +1,4 @@
-import { Gene, OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
+import { Gene, OncoKBInfo, Semver } from 'app/shared/api/generated/OncoKbAPI';
 import {
   MainNumber,
   VariantAnnotation,
@@ -348,6 +348,17 @@ export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
   dataVersion: {
     date: '',
     version: '',
+  },
+  appVersion: {
+    build: '',
+    major: 0,
+    minor: 0,
+    originalValue: '0.0.1',
+    patch: 1,
+    stable: true,
+    suffixTokens: [],
+    type: 'STRICT',
+    value: '0.0.1',
   },
   levels: [],
   ncitVersion: '',
