@@ -16,6 +16,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * REST controller for managing {@link org.mskcc.cbio.oncokb.domain.Token}.
@@ -87,28 +88,33 @@ public class TokenResource {
     }
 
     /**
-     * {@code GET  /tokens/:id} : get the "id" token.
+     * {@code GET  /tokens/:uuid} : get the "uuid" token.
      *
-     * @param id the id of the token to retrieve.
+     * @param uuid the uuid of the token to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the token, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/tokens/{id}")
-    public ResponseEntity<Token> getToken(@PathVariable Long id) {
-        log.debug("REST request to get Token : {}", id);
-        Optional<Token> token = tokenService.findOne(id);
+    @GetMapping("/tokens/{uuid}")
+    public ResponseEntity<Token> getToken(@PathVariable String uuid) {
+        log.debug("REST request to get Token : {}", uuid);
+        Optional<Token> token = tokenService.findByToken(UUID.fromString(uuid));
         return ResponseUtil.wrapOrNotFound(token);
     }
 
     /**
-     * {@code DELETE  /tokens/:id} : delete the "id" token.
+     * {@code DELETE  /tokens/:uuid} : delete the "uuid" token.
      *
-     * @param id the id of the token to delete.
+     * @param uuid uuid of the token to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/tokens/{id}")
-    public ResponseEntity<Void> deleteToken(@PathVariable Long id) {
-        log.debug("REST request to delete Token : {}", id);
-        tokenService.delete(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/tokens/{uuid}")
+    public ResponseEntity<Void> deleteToken(@PathVariable String uuid) {
+        log.debug("REST request to delete Token : {}", uuid);
+        Optional<Token> token = tokenService.findByToken(UUID.fromString(uuid));
+        if (token.isPresent()) {
+            tokenService.delete(token.get().getId());
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

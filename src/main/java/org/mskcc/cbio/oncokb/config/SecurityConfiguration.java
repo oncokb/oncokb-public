@@ -119,6 +119,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             .antMatchers("/api/users/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/user-details/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers(HttpMethod.GET, "/api/tokens/{\\d+}").permitAll()
             .antMatchers("/api/tokens/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/token-stats/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
