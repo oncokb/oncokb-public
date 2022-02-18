@@ -1012,6 +1012,67 @@
         }
       }
     },
+    "/utils/relevantAlterations": {
+      "get": {
+        "tags": [
+          "Utils"
+        ],
+        "summary": "utilRelevantAlterationsGet",
+        "description": "Get the list of relevant alterations",
+        "operationId": "utilRelevantAlterationsGetUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "referenceGenome",
+            "in": "query",
+            "description": "Reference genome, either GRCh37 or GRCh38. The default is GRCh37",
+            "required": false,
+            "type": "string",
+            "default": "GRCh37"
+          },
+          {
+            "name": "entrezGeneId",
+            "in": "query",
+            "description": "alteration",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "alteration",
+            "in": "query",
+            "description": "alteration",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Alteration"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/utils/relevantCancerTypes": {
       "post": {
         "tags": [
@@ -1568,9 +1629,6 @@
           ]
         },
         "tumorType": {
-          "type": "string"
-        },
-        "type": {
           "type": "string"
         }
       }

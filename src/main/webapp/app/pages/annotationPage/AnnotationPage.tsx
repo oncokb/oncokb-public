@@ -10,7 +10,6 @@ import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
-  ONCOGENIC_MUTATIONS,
   OTHER_BIOMARKERS,
   REFERENCE_GENOME,
   TREATMENT_EVIDENCE_TYPES,
@@ -20,9 +19,10 @@ import InfoIcon from 'app/shared/icons/InfoIcon';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
 import { Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
-import { action, computed, observable } from 'mobx';
+import { action, computed } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
+  BiologicalVariant,
   EnsemblGene,
   Evidence,
   FdaAlteration,
@@ -37,6 +37,7 @@ import {
   getCategoricalAlterationDescription,
   getHighestFdaLevel,
   getTreatmentNameFromEvidence,
+  isCategoricalAlteration,
   isPositionalAlteration,
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
@@ -78,6 +79,8 @@ export type IAnnotationPage = {
   onChangeTumorType: (newTumorType: string) => void;
   annotation: VariantAnnotation;
   fdaAlterations?: FdaAlteration[];
+  biologicalAlterations?: BiologicalVariant[];
+  relevantAlterations?: Alteration[];
   defaultSelectedTab?: ANNOTATION_PAGE_TAB_KEYS;
   onChangeTab?: (
     selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
@@ -197,7 +200,7 @@ export default class AnnotationPage extends React.Component<
   @computed
   get alterationSummaries() {
     const orderedSummaries = [SummaryKey.GENE_SUMMARY];
-    if (!this.isOncogenicMutations) {
+    if (!this.isCategoricalAlteration) {
       orderedSummaries.push(SummaryKey.ALTERATION_SUMMARY);
     }
     return this.getSummaries(orderedSummaries);
@@ -236,13 +239,8 @@ export default class AnnotationPage extends React.Component<
     return <span>{data.label}</span>;
   }
 
-  @computed get isOncogenicMutations() {
-    return (
-      this.props.alteration &&
-      this.props.alteration
-        .toLowerCase()
-        .startsWith(ONCOGENIC_MUTATIONS.toLowerCase())
-    );
+  @computed get isCategoricalAlteration() {
+    return isCategoricalAlteration(this.props.alteration);
   }
 
   @computed
@@ -253,6 +251,24 @@ export default class AnnotationPage extends React.Component<
       .includes(lHugo);
     const isOtherBiomarkers = lHugo === OTHER_BIOMARKERS.toLowerCase();
     return !altNameIncludesGene && !isOtherBiomarkers;
+  }
+
+  @computed
+  get relevantBiologicalVariants(): BiologicalVariant[] {
+    if (
+      this.isCategoricalAlteration &&
+      this.props.biologicalAlterations &&
+      this.props.relevantAlterations
+    ) {
+      const relevantAltNames = this.props.relevantAlterations.map(
+        alt => alt.alteration
+      );
+      return this.props.biologicalAlterations.filter(variant =>
+        relevantAltNames.includes(variant.variant.alteration)
+      );
+    } else {
+      return [];
+    }
   }
 
   render() {
@@ -307,7 +323,7 @@ export default class AnnotationPage extends React.Component<
           )}
           oncogenicity={this.props.annotation.oncogenic}
           mutationEffect={
-            this.isOncogenicMutations
+            this.isCategoricalAlteration
               ? undefined
               : this.props.annotation.mutationEffect
           }
@@ -395,7 +411,7 @@ export default class AnnotationPage extends React.Component<
             </div>
           </Col>
         </Row>
-        {this.props.tumorType && !this.isOncogenicMutations ? (
+        {this.props.tumorType && !this.isCategoricalAlteration ? (
           <Row>
             <Col>
               {this.tumorTypeSummaries.map((summary, index) => {
@@ -430,7 +446,7 @@ export default class AnnotationPage extends React.Component<
                     }
               }
               cancerType={this.props.tumorType}
-              biological={[]}
+              biological={this.relevantBiologicalVariants}
               tx={this.therapeuticImplications}
               dx={this.diagnosticImplications}
               px={this.prognosticImplications}

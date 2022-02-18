@@ -191,11 +191,15 @@ export default class AlterationPage extends React.Component<
                   tsg={this.store.gene.result.tsg}
                   ensemblGenes={this.store.ensemblGenes.result}
                   alteration={this.store.alterationQuery}
-                  matchedAlteration={this.store.matchedAlteration}
+                  matchedAlteration={this.store.alteration.result}
                   tumorType={this.store.tumorTypeQuery}
                   refGenome={this.store.referenceGenomeQuery}
                   annotation={this.store.annotationResult.result}
                   fdaAlterations={this.store.fdaAlterations.result}
+                  biologicalAlterations={
+                    this.store.biologicalAlterations.result
+                  }
+                  relevantAlterations={this.store.relevantAlterations.result}
                   onChangeTumorType={newTumorType =>
                     (this.store.tumorTypeQuery = newTumorType)
                   }

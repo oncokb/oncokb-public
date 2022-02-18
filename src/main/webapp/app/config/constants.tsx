@@ -1,4 +1,4 @@
-import { Gene, OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
+import { Gene, OncoKBInfo, Semver } from 'app/shared/api/generated/OncoKbAPI';
 import {
   MainNumber,
   VariantAnnotation,
@@ -349,6 +349,17 @@ export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
     date: '',
     version: '',
   },
+  appVersion: {
+    build: '',
+    major: 0,
+    minor: 0,
+    originalValue: '0.0.1',
+    patch: 1,
+    stable: true,
+    suffixTokens: [],
+    type: 'STRICT',
+    value: '0.0.1',
+  },
   levels: [],
   ncitVersion: '',
   apiVersion: 'v1.0.0',
@@ -517,6 +528,9 @@ export const DELETION = 'Deletion';
 export const FUSIONS = 'Fusions';
 export const TRUNCATING_MUTATIONS = 'Truncating Mutations';
 export const OTHER_BIOMARKERS = 'Other Biomarkers';
+export const GAIN_OF_FUNCTION_MUTATIONS = 'Gain-of-function Mutations';
+export const LOSS_OF_FUNCTION_MUTATIONS = 'Loss-of-function Mutations';
+export const SWITCH_OF_FUNCTION_MUTATIONS = 'Switch-of-function Mutations';
 
 export enum SEARCH_QUERY_KEY {
   REFERENCE_GENOME = 'refGenome',
