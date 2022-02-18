@@ -29,7 +29,8 @@ const allCuratedGenes = fs.readFileSync(`${DATA_DIR}utils-allCuratedGenes.json`)
 const evidenceLevels = fs.readFileSync(`${DATA_DIR}private-utils-evidences-levels.json`).toString();
 const tumorTypes = fs.readFileSync(`${DATA_DIR}private-utils-tumorTypes.json`).toString();
 const geneNumbers = fs.readFileSync(`${DATA_DIR}private-utils-numbers-gene-ABL1.json`).toString();
-const geneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-ABL1.json`).toString();
+const abl1GeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-ABL1.json`).toString();
+const brafGeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-BRAF.json`).toString();
 const abl1BcrQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-ABL1-BCR.json`).toString();
 const brafV600eQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-BRAF-V600E.json`).toString();
 const biologicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-bio-ABL1.json`).toString();
@@ -160,7 +161,14 @@ function getMockResponse(url){
       res = {
         status: 200,
         contentType: 'application/json',
-        body: geneQuery
+        body: abl1GeneQuery
+      };
+      break;
+    case `${SERVER_URL}api/v1/genes/lookup?query=BRAF`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafGeneQuery
       };
       break;
     case `${SERVER_URL}api/v1/genes/lookup`:
