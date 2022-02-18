@@ -30,6 +30,8 @@ const evidenceLevels = fs.readFileSync(`${DATA_DIR}private-utils-evidences-level
 const tumorTypes = fs.readFileSync(`${DATA_DIR}private-utils-tumorTypes.json`).toString();
 const geneNumbers = fs.readFileSync(`${DATA_DIR}private-utils-numbers-gene-ABL1.json`).toString();
 const geneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-ABL1.json`).toString();
+const abl1BcrQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-ABL1-BCR.json`).toString();
+const brafV600eQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-BRAF-V600E.json`).toString();
 const biologicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-bio-ABL1.json`).toString();
 const clinicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-cli-ABL1.json`).toString();
 const fdaVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-fda-ABL1.json`).toString();
@@ -164,6 +166,20 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: '[]'
+      };
+      break;
+    case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=BRAF&variant=V600E`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafV600eQuery
+      };
+      break;
+    case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=ABL1&variant=BCR-ABL1%20Fusion`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: abl1BcrQuery
       };
       break;
     case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=ABL1`:
