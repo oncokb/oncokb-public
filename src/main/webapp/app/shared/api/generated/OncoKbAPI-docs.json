@@ -1570,14 +1570,6 @@
             "default": false
           },
           {
-            "name": "queryType",
-            "in": "query",
-            "description": "Query type. There maybe slight differences between different query types. Currently support web or regular.",
-            "required": false,
-            "type": "string",
-            "default": "regular"
-          },
-          {
             "name": "evidenceType",
             "in": "query",
             "description": "Evidence type.",
@@ -2099,49 +2091,13 @@
         }
       }
     },
-    "/variants": {
-      "get": {
-        "tags": [
-          "Variants"
-        ],
-        "summary": "variantsGet",
-        "description": "Get all annotated variants.",
-        "operationId": "variantsGetUsingGET",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "fields",
-            "in": "query",
-            "description": "The fields to be returned.",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Alteration"
-              }
-            }
-          }
-        }
-      }
-    },
     "/variants/lookup": {
       "get": {
         "tags": [
           "Variants"
         ],
         "summary": "variantsLookupGet",
-        "description": "Search for variants.",
+        "description": "Search for matched variants.",
         "operationId": "variantsLookupGetUsingGET",
         "consumes": [
           "application/json"
@@ -2169,43 +2125,6 @@
             "name": "variant",
             "in": "query",
             "description": "variant name.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "variantType",
-            "in": "query",
-            "description": "variantType",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "consequence",
-            "in": "query",
-            "description": "consequence",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "proteinStart",
-            "in": "query",
-            "description": "proteinStart",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "proteinEnd",
-            "in": "query",
-            "description": "proteinEnd",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "hgvs",
-            "in": "query",
-            "description": "HGVS varaint. Its priority is higher than entrezGeneId/hugoSymbol + variant combination",
             "required": false,
             "type": "string"
           },
@@ -2399,9 +2318,6 @@
           ]
         },
         "tumorType": {
-          "type": "string"
-        },
-        "type": {
           "type": "string"
         }
       }

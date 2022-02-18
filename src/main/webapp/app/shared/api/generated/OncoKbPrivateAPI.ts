@@ -42,8 +42,6 @@ export type Query = {
 
         'tumorType': string
 
-        'type': string
-
 };
 export type MatchVariant = {
     'alteration': string
