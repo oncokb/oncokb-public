@@ -35,7 +35,8 @@ const abl1BcrQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-ABL1-BCR.json`)
 const brafV600eQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-BRAF-V600E.json`).toString();
 const biologicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-bio-ABL1.json`).toString();
 const clinicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-cli-ABL1.json`).toString();
-const fdaVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-fda-ABL1.json`).toString();
+const abl1FdaVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-fda-ABL1.json`).toString();
+const brafFdaVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-fda-BRAF.json`).toString();
 const sampleCount = fs.readFileSync(`${DATA_DIR}api-private-utils-portalAlterationSampleCount.json`).toString();
 const evidenceSummary = fs.readFileSync(`${DATA_DIR}api-v1-evidences-ABL1-summary.json`).toString();
 const evidenceBackground = fs.readFileSync(`${DATA_DIR}api-v1-evidences-ABL1-background.json`).toString();
@@ -231,7 +232,14 @@ function getMockResponse(url){
       res = {
         status: 200,
         contentType: 'application/json',
-        body: fdaVariants
+        body: abl1FdaVariants
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/fdaAlterations?hugoSymbol=BRAF`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafFdaVariants
       };
       break;
     case `https://www.genomenexus.org//ensembl/transcript`:
