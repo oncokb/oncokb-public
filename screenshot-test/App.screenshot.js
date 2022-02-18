@@ -39,6 +39,8 @@ const sampleCount = fs.readFileSync(`${DATA_DIR}api-private-utils-portalAlterati
 const evidenceSummary = fs.readFileSync(`${DATA_DIR}api-v1-evidences-ABL1-summary.json`).toString();
 const evidenceBackground = fs.readFileSync(`${DATA_DIR}api-v1-evidences-ABL1-background.json`).toString();
 const variantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-ABL1-BCR.json`).toString();
+const brafV600eRelevantAlterations = fs.readFileSync(`${DATA_DIR}api-private-utils-relevantAlterations-BRAF-V600E.json`).toString();
+const abl1BcrRelevantAlterations = fs.readFileSync(`${DATA_DIR}api-private-utils-relevantAlterations-ABL1-BCR.json`).toString();
 const ensemblGenes = fs.readFileSync(`${DATA_DIR}api-private-utils-ensembleGenes-ABL1.json`).toString();
 const genomenexusTranscript = fs.readFileSync(`${DATA_DIR}genomenexus-transcript.json`).toString();
 const genomenexusCanonicalTranscript = fs.readFileSync(`${DATA_DIR}genomenexus-canonical-transcript.json`).toString();
@@ -341,6 +343,20 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: usageUserDetail
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/relevantAlterations?referenceGenome=GRCh37&entrezGeneId=673&alteration=V600E`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafV600eRelevantAlterations
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/relevantAlterations?referenceGenome=GRCh38&entrezGeneId=25&alteration=BCR-ABL1%20Fusion`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: abl1BcrRelevantAlterations
       };
       break;
     case `${SERVER_URL}api/usage/resources?endpoint=%2Fapi%2Fv1%2Fexample`:

@@ -176,10 +176,15 @@ export class AnnotationStore {
   }
 
   readonly gene = remoteData<Gene>({
+    await: () => {
+      return this.hgvsgQuery ? [this.annotationResultByHgvsg] : [];
+    },
     invoke: async () => {
       try {
         const genes = await apiClient.genesLookupGetUsingGET({
-          query: this.hugoSymbolQuery,
+          query: this.hgvsgQuery
+            ? this.annotationResultByHgvsg.result.query.hugoSymbol
+            : this.hugoSymbolQuery,
         });
         return genes && genes.length > 0 ? genes[0] : DEFAULT_GENE;
       } catch (e) {
@@ -198,7 +203,9 @@ export class AnnotationStore {
           hugoSymbol: this.gene.result.hugoSymbol
             ? this.gene.result.hugoSymbol
             : this.hugoSymbolQuery,
-          variant: this.alterationQuery,
+          variant: this.hgvsgQuery
+            ? this.annotationResultByHgvsg.result.query.alteration
+            : this.alterationQuery,
         });
         return variants[0];
       } catch (e) {
@@ -368,7 +375,7 @@ export class AnnotationStore {
   });
 
   readonly relevantAlterations = remoteData<Alteration[]>({
-    await: () => [this.gene],
+    await: () => [this.gene, this.alteration],
     invoke: async () => {
       return privateClient.utilRelevantAlterationsGetUsingGET({
         entrezGeneId: this.gene.result.entrezGeneId,
