@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -244,7 +242,7 @@ public class CronJobController {
                 log.info("Token stats have already been wrapped today. Skipping this request.");
             } else {
                 // Update tokenStats in database
-                updateTokenStats(tokenUsageDateBefore);
+                updateTokenUsage(tokenUsageDateBefore);
                 // Send tokenStats to s3
                 s3Service.saveObject("oncokb", datedFile, createWrappedFile(tokenUsageDateBefore, dateWrapped + ".txt"));
                 // Delete old tokenStats
@@ -431,7 +429,7 @@ public class CronJobController {
         tokenService.save(token);
     }
 
-    private void updateTokenStats(Instant tokenUsageDateBefore) {
+    private void updateTokenUsage(Instant tokenUsageDateBefore) {
         log.info("Started the cronjob to update token stats");
         List<UserTokenUsage> tokenUsages = tokenStatsService.getUserTokenUsage(tokenUsageDateBefore);
 
@@ -453,9 +451,10 @@ public class CronJobController {
         ZipEntry entry = new ZipEntry(fileName);
         out.putNextEntry(entry);
 
-        int PAGE_SIZE = 1000;
+        // the stat we generated indicating 200 bytes per record. Handling 1M records in one run should be ok.
+        int PAGE_SIZE = 1_000_000;
         int totalPages = tokenStatsService.findAll(tokenUsageDateBefore, PageRequest.of(0, PAGE_SIZE)).getTotalPages();
-        String headers = TokenStats.tabDelimitedHeaders() + "\n\n";
+        String headers = TokenStats.tabDelimitedHeaders() + "\n";
         byte[] headersInBytes = headers.getBytes();
         out.write(headersInBytes, 0, headersInBytes.length);
         for (int page = 0; page < totalPages; page++) {
