@@ -162,7 +162,6 @@ public class UserService {
 
     public Optional<User> requestPasswordReset(String login) {
         return userRepository.findOneByLogin(login)
-            .filter(User::getActivated)
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
