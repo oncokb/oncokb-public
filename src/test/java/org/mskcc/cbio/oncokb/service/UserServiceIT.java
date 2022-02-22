@@ -105,12 +105,12 @@ public class UserServiceIT {
 
     @Test
     @Transactional
-    public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
+    public void assertThatInactivateUserCanRequestPasswordReset() {
         user.setActivated(false);
         userRepository.saveAndFlush(user);
 
         Optional<User> maybeUser = userService.requestPasswordReset(user.getLogin());
-        assertThat(maybeUser).isNotPresent();
+        assertThat(maybeUser).isPresent();
         userRepository.delete(user);
     }
 
@@ -168,7 +168,7 @@ public class UserServiceIT {
         User savedUser = userRepository.saveAndFlush(user);
 
         Optional<UserDTO> approvedUser = userService.approveUser(userMapper.userToUserDTO(savedUser), true);
-        
+
         assertThat(approvedUser).isPresent();
         assertThat(approvedUser.get().isActivated()).isTrue();
         List<Token> tokens = tokenService.findByUser(savedUser);
