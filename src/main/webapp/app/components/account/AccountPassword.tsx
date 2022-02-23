@@ -14,7 +14,7 @@ import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 
 @observer
-export default class PasswordResetFinish extends React.Component<{}> {
+export default class AccountPassword extends React.Component<{}> {
   @observable currentPassword = '';
   @observable newPassword = '';
   @observable resetStatus: API_CALL_STATUS;
