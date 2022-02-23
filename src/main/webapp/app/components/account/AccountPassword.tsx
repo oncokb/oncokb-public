@@ -11,13 +11,14 @@ import SmallPageContainer from '../SmallPageContainer';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
 import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
+import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 
 @observer
-export default class PasswordResetFinish extends React.Component<{}> {
+export default class AccountPassword extends React.Component<{}> {
   @observable currentPassword = '';
   @observable newPassword = '';
   @observable resetStatus: API_CALL_STATUS;
-  @observable errorMessage: string;
+  @observable error: Error;
 
   handleSavePassword = (event: any, values: any) => {
     client
@@ -31,8 +32,8 @@ export default class PasswordResetFinish extends React.Component<{}> {
         this.resetStatus = API_CALL_STATUS.SUCCESSFUL;
       })
       .catch((error: OncoKBError) => {
+        this.error = error;
         this.resetStatus = API_CALL_STATUS.FAILURE;
-        this.errorMessage = getErrorMessage(error);
       });
   };
 
@@ -45,18 +46,7 @@ export default class PasswordResetFinish extends React.Component<{}> {
   };
 
   getFailureMessage = () => {
-    return (
-      <Alert variant="danger">
-        <div>
-          <strong>
-            An error has occurred. The password could not be changed.
-          </strong>
-        </div>
-        <div>
-          <strong>{this.errorMessage}.</strong>
-        </div>
-      </Alert>
-    );
+    return <ErrorAlert error={this.error}></ErrorAlert>;
   };
 
   getResetForm = () => {

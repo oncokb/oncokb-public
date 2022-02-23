@@ -40,7 +40,7 @@ export class PasswordResetInit extends React.Component<{}> {
         </Alert>
         {this.resetStatus === API_CALL_STATUS.SUCCESSFUL ? (
           <Alert variant="success">
-            Check your emails for details on how to reset your password.
+            Check your email for details on how to reset your password.
           </Alert>
         ) : null}
         {this.resetStatus === API_CALL_STATUS.FAILURE ? (
