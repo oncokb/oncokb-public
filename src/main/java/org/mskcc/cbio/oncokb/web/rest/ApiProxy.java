@@ -174,7 +174,7 @@ public class ApiProxy {
 
                         String ipAddress = request.getHeader(IP_HEADER);
                         if (ipAddress == null) {
-                            tokenStats.setAccessIp(request.getRemoteAddr());
+                            tokenStats.setAccessIp(Optional.ofNullable(request.getRemoteAddr()).orElse(""));
                         }else{
                             tokenStats.setAccessIp(ipAddress);
                         }

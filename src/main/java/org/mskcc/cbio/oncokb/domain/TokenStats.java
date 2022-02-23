@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.time.Instant;
+import java.util.Optional;
 
 /**
  * A TokenStats.
@@ -145,22 +146,24 @@ public class TokenStats implements Serializable {
     }
 
     public String toTabDelimited() {
-        return String.format("%1$-50s\t%2$-15s\t%3$-20s\t%4$-10s\t%5$-36s\t%6$s",
-            getToken().getUser().getEmail(), // 50 char cutoff
+        return String.join("\t", new String[]{
+            getToken().getUser().getEmail(),
             getAccessIp(),
-            getAccessTime(),
-            getUsageCount(),
-            getToken().getToken(),
-            getResource());
+            getAccessTime().toString(),
+            getUsageCount().toString(),
+            getToken().getToken().toString(),
+            getResource()
+        });
     }
 
     public static String tabDelimitedHeaders() {
-        return String.format("%1$-50s\t%2$-12s\t%3$-20s\t%4$-10s\t%5$-36s\t%6$s",
+        return String.join("\t", new String[]{
             "email",
             "accessIp",
             "accessTime",
             "usageCount",
             "UUID",
-            "resource");
+            "resource"
+        });
     }
 }
