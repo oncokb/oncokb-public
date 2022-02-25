@@ -118,6 +118,7 @@ public class AccountResource {
             if(userOptional.get().getActivationKey() == null) {
                 return userOptional.get().getActivated();
             }
+
             boolean newUserActivation = !userOptional.get().getActivated();
             userOptional = userService.activateRegistration(key);
 
