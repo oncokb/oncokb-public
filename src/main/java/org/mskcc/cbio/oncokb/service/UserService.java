@@ -148,6 +148,10 @@ public class UserService {
         return userRepository.findOneByActivationKey(key);
     }
 
+    public Optional<User> getUserByLogin(String login) {
+        return userRepository.findOneByLogin(login.toLowerCase());
+    }
+
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         return userRepository.findOneByResetKey(key)

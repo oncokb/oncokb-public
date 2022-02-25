@@ -609,6 +609,13 @@
             "description": "key",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "login",
+            "in": "query",
+            "description": "login",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
@@ -1366,6 +1373,33 @@
         "deprecated": false
       }
     },
+    "/api/cronjob/move-token-stats-to-s3": {
+      "get": {
+        "tags": [
+          "cron-job-controller"
+        ],
+        "summary": "moveTokenStatsToS3",
+        "operationId": "moveTokenStatsToS3UsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/api/cronjob/remove-not-activate-users": {
       "get": {
         "tags": [
@@ -1454,34 +1488,6 @@
         ],
         "summary": "analyzeUserUsage",
         "operationId": "analyzeUserUsageUsingGET",
-        "produces": [
-          "*/*"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "deprecated": false
-      }
-    },
-    "/api/cronjob/move-token-stats-to-s3": {
-      "get": {
-        "tags": [
-          "cron-job-controller"
-        ],
-        "summary": "moveTokenStatsToS3",
-        "operationId": "moveTokenStatsToS3UsingGET",
-        
         "produces": [
           "*/*"
         ],
