@@ -110,11 +110,15 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
      */
     @GetMapping("/activate")
-    public boolean activateAccount(@RequestParam(value = "key") String key) {
-        Optional<User> userOptional = userService.getUserByActivationKey(key);
-        if (!userOptional.isPresent()) {
+    public boolean activateAccount(@RequestParam(value = "key") String key, @RequestParam(value = "login") String login) {
+        Optional<User> userOptional = userService.getUserByLogin(login);
+        if (!userOptional.isPresent() || (userOptional.get().getActivationKey() != null && !userOptional.get().getActivationKey().equals(key))) {
             throw new CustomMessageRuntimeException("Your user account could not be activated as no user was found associated with this activation key.");
         } else {
+            if(userOptional.get().getActivationKey() == null) {
+                return userOptional.get().getActivated();
+            }
+
             boolean newUserActivation = !userOptional.get().getActivated();
             userOptional = userService.activateRegistration(key);
 

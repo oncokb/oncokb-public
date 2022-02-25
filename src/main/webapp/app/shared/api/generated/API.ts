@@ -1369,12 +1369,17 @@ export default class API {
     };
     activateAccountUsingGETURL(parameters: {
         'key': string,
+        'login': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/activate';
         if (parameters['key'] !== undefined) {
             queryParameters['key'] = parameters['key'];
+        }
+
+        if (parameters['login'] !== undefined) {
+            queryParameters['login'] = parameters['login'];
         }
 
         if (parameters.$queryParameters) {
@@ -1392,9 +1397,11 @@ export default class API {
      * @method
      * @name API#activateAccountUsingGET
      * @param {string} key - key
+     * @param {string} login - login
      */
     activateAccountUsingGETWithHttpInfo(parameters: {
         'key': string,
+        'login': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1418,6 +1425,15 @@ export default class API {
                 return;
             }
 
+            if (parameters['login'] !== undefined) {
+                queryParameters['login'] = parameters['login'];
+            }
+
+            if (parameters['login'] === undefined) {
+                reject(new Error('Missing required  parameter: login'));
+                return;
+            }
+
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -1435,9 +1451,11 @@ export default class API {
      * @method
      * @name API#activateAccountUsingGET
      * @param {string} key - key
+     * @param {string} login - login
      */
     activateAccountUsingGET(parameters: {
         'key': string,
+        'login': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < boolean > {
@@ -2798,6 +2816,67 @@ export default class API {
             return response.body;
         });
     };
+    moveTokenStatsToS3UsingGETURL(parameters: {
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/api/cronjob/move-token-stats-to-s3';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * moveTokenStatsToS3
+     * @method
+     * @name API#moveTokenStatsToS3UsingGET
+     */
+    moveTokenStatsToS3UsingGETWithHttpInfo(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/api/cronjob/move-token-stats-to-s3';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = '*/*';
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * moveTokenStatsToS3
+     * @method
+     * @name API#moveTokenStatsToS3UsingGET
+     */
+    moveTokenStatsToS3UsingGET(parameters: {
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < any > {
+        return this.moveTokenStatsToS3UsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     removeNotActivatedUsersUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
@@ -2920,67 +2999,6 @@ export default class API {
             return response.body;
         });
     };
-    removeOldTokenStatsUsingGETURL(parameters: {
-        $queryParameters ? : any
-    }): string {
-        let queryParameters: any = {};
-        let path = '/api/cronjob/remove-old-token-stats';
-
-        if (parameters.$queryParameters) {
-            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                var parameter = parameters.$queryParameters[parameterName];
-                queryParameters[parameterName] = parameter;
-            });
-        }
-        let keys = Object.keys(queryParameters);
-        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
-    };
-
-    /**
-     * removeOldTokenStats
-     * @method
-     * @name API#removeOldTokenStatsUsingGET
-     */
-    removeOldTokenStatsUsingGETWithHttpInfo(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/api/cronjob/remove-old-token-stats';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
-
-            if (parameters.$queryParameters) {
-                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                    var parameter = parameters.$queryParameters[parameterName];
-                    queryParameters[parameterName] = parameter;
-                });
-            }
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-
-        });
-    };
-
-    /**
-     * removeOldTokenStats
-     * @method
-     * @name API#removeOldTokenStatsUsingGET
-     */
-    removeOldTokenStatsUsingGET(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < any > {
-        return this.removeOldTokenStatsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-            return response.body;
-        });
-    };
     tokensRenewCheckUsingGETURL(parameters: {
         $queryParameters ? : any
     }): string {
@@ -3039,67 +3057,6 @@ export default class API {
             $domain ? : string
     }): Promise < any > {
         return this.tokensRenewCheckUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-            return response.body;
-        });
-    };
-    updateTokenStatsUsingGETURL(parameters: {
-        $queryParameters ? : any
-    }): string {
-        let queryParameters: any = {};
-        let path = '/api/cronjob/update-token-stats';
-
-        if (parameters.$queryParameters) {
-            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                var parameter = parameters.$queryParameters[parameterName];
-                queryParameters[parameterName] = parameter;
-            });
-        }
-        let keys = Object.keys(queryParameters);
-        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
-    };
-
-    /**
-     * updateTokenStats
-     * @method
-     * @name API#updateTokenStatsUsingGET
-     */
-    updateTokenStatsUsingGETWithHttpInfo(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/api/cronjob/update-token-stats';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
-
-            if (parameters.$queryParameters) {
-                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                    var parameter = parameters.$queryParameters[parameterName];
-                    queryParameters[parameterName] = parameter;
-                });
-            }
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-
-        });
-    };
-
-    /**
-     * updateTokenStats
-     * @method
-     * @name API#updateTokenStatsUsingGET
-     */
-    updateTokenStatsUsingGET(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < any > {
-        return this.updateTokenStatsUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
             return response.body;
         });
     };

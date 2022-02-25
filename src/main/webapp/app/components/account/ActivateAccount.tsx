@@ -19,6 +19,7 @@ export default class ActivateAccount extends React.Component<{
   routing: RouterStore;
 }> {
   @observable activateKey: string;
+  @observable login: string;
 
   constructor(props: Readonly<{ routing: RouterStore }>) {
     super(props);
@@ -27,16 +28,20 @@ export default class ActivateAccount extends React.Component<{
     if (queryStrings.key) {
       this.activateKey = queryStrings.key as string;
     }
+    if (queryStrings.login) {
+      this.login = queryStrings.login as string;
+    }
   }
 
   readonly activateAccount = remoteData<boolean>({
     invoke: () => {
-      if (this.activateKey) {
+      if (this.activateKey && this.login) {
         return client.activateAccountUsingGET({
           key: this.activateKey,
+          login: this.login,
         });
       } else {
-        return Promise.reject('The key is empty');
+        return Promise.reject('The key or login is empty');
       }
     },
   });
