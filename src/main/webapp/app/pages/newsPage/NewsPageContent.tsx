@@ -148,6 +148,57 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '02282022': {
+    priorityNews: [<NewlyAddedGenesListItem genes={['LTK', 'EXT1']} />],
+    updatedImplication: [
+      [
+        '3A',
+        'EGFR',
+        'Exon 19 deletion, Exon 19 insertion, G719, L858R, L861Q, S768I',
+        'Non-Small Cell Lung Cancer',
+        'Patritumab Deruxtecan',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>FDA Breakthrough Therapy designation</span>
+          <PMIDLink pmids={'34548309'} />
+        </WithSeparator>,
+      ],
+      [
+        '3A',
+        'EGFR',
+        'Exon 20 insertion',
+        'Non-Small Cell Lung Cancer',
+        'CLN-081',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>FDA Breakthrough Therapy designation</span>
+          <AbstractLink
+            link={'https://ascopubs.org/doi/10.1200/JCO.2021.39.15_suppl.9077'}
+            abstract={'Piotrowska et al. Abstract# 9077, ASCO 2021.'}
+          />
+        </WithSeparator>,
+      ],
+      [
+        '3A',
+        'ERBB2',
+        'Oncogenic Mutations',
+        'Non-Small Cell Lung Cancer',
+        'Trastuzumab + Pertuzumab + Docetaxel',
+        <PMIDLink pmids={'35073148'} />,
+      ],
+      [
+        '3A',
+        'KRAS',
+        'G12C',
+        'Gastrointestinal Cancers (excluding Colorectal and Appendiceal Cancer), Pancreatic Adenocarcinoma',
+        'Adagrasib',
+        <AbstractLink
+          link={'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.4_suppl.519'}
+          abstract={
+            'Bekaii-Saab et al. Abstract# 519, ASCO GI Symposium, 2022.'
+          }
+        />,
+      ],
+    ],
+  },
   '01072022': {
     priorityNews: [
       <span>
