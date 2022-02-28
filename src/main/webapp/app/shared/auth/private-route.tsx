@@ -1,5 +1,10 @@
 import React from 'react';
-import { Route, Redirect, RouteProps } from 'react-router-dom';
+import {
+  Route,
+  Redirect,
+  RouteProps,
+  RouteComponentProps,
+} from 'react-router-dom';
 import { observer } from 'mobx-react';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -17,6 +22,7 @@ export interface IPrivateRouteProps extends RouteProps {
 export const PrivateRoute = observer(
   ({
     component,
+    render,
     authenticationStore,
     hasAnyAuthorities,
     routing,
@@ -28,9 +34,15 @@ export const PrivateRoute = observer(
     const userIsAuthorized = hasAnyAuthorities
       ? isAuthorized(userAuthorities, hasAnyAuthorities)
       : true;
-    const checkAuthorities = (props: RouteProps) =>
-      userIsAuthorized ? (
-        <ErrorBoundary>{React.createElement(component!, props)}</ErrorBoundary>
+    const checkAuthorities = (props: RouteComponentProps) => {
+      return userIsAuthorized ? (
+        <ErrorBoundary>
+          {render ? (
+            <>{render(props)}</>
+          ) : (
+            React.createElement(component!, props)
+          )}
+        </ErrorBoundary>
       ) : (
         <div className="insufficient-authority">
           <div className="alert alert-danger">
@@ -38,8 +50,9 @@ export const PrivateRoute = observer(
           </div>
         </div>
       );
+    };
 
-    const renderRedirect = (props: RouteProps) => {
+    const renderRedirect = (props: RouteComponentProps) => {
       if (authenticationStore.isUserAuthenticated) {
         return checkAuthorities(props);
       } else {
@@ -58,7 +71,7 @@ export const PrivateRoute = observer(
       }
     };
 
-    if (!component)
+    if (!component && !render)
       throw new Error(
         `A component needs to be specified for private route for path ${
           (rest as any).path
