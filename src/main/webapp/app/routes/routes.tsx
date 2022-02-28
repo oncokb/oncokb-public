@@ -158,28 +158,28 @@ const AppRouts = (props: {
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_VERIFY}
-            component={ReadOnlyMode(ActivateAccount)}
+            render={ReadOnlyMode(ActivateAccount)}
           />
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_REQUEST}
-            component={ReadOnlyMode(PasswordResetInit)}
+            render={ReadOnlyMode(PasswordResetInit)}
           />
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}
-            component={ReadOnlyMode(PasswordResetFinish)}
+            render={ReadOnlyMode(PasswordResetFinish)}
           />
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={false}
             appStore={props.appStore}
             path={PAGE_ROUTE.ACCOUNT_ACTIVE_TRIAL_FINISH}
-            component={ReadOnlyMode(ActivateTrialFinish)}
+            render={ReadOnlyMode(ActivateTrialFinish)}
           />
           <PrivateRoute
             authenticationStore={props.authenticationStore}
@@ -193,7 +193,7 @@ const AppRouts = (props: {
             authenticationStore={props.authenticationStore}
             routing={props.routing}
             path={PAGE_ROUTE.ACCOUNT_PASSWORD}
-            component={ReadOnlyMode(AccountPassword)}
+            render={ReadOnlyMode(AccountPassword)}
             hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}
           />
           <PrivateRoute
@@ -209,7 +209,7 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.USER}
             authenticationStore={props.authenticationStore}
             routing={props.routing}
-            component={ReadOnlyMode(UserPage, true)}
+            render={ReadOnlyMode(UserPage, true)}
             hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <PrivateRoute
@@ -217,7 +217,7 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.COMPANY}
             authenticationStore={props.authenticationStore}
             routing={props.routing}
-            component={ReadOnlyMode(CompanyPage, true)}
+            render={ReadOnlyMode(CompanyPage, true)}
             hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <PrivateRoute
@@ -225,7 +225,7 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.CREATE_COMPANY_USERS}
             authenticationStore={props.authenticationStore}
             routing={props.routing}
-            component={ReadOnlyMode(CreateCompanyUsersPage)}
+            render={ReadOnlyMode(CreateCompanyUsersPage)}
             hasAnyAuthorities={[AUTHORITIES.ADMIN]}
           />
           <ErrorBoundaryRoute component={PageNotFound} />
