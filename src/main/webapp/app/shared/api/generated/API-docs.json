@@ -609,6 +609,13 @@
             "description": "key",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "login",
+            "in": "query",
+            "description": "login",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {

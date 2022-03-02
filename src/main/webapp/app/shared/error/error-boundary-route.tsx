@@ -1,13 +1,19 @@
 import React from 'react';
-import { Route, RouteProps } from 'react-router-dom';
+import { Route, RouteProps, RouteComponentProps } from 'react-router-dom';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 
-export const ErrorBoundaryRoute = ({ component, ...rest }: RouteProps) => {
-  const encloseInErrorBoundary = (props: any) => (
-    <ErrorBoundary>{React.createElement(component!, props)}</ErrorBoundary>
+export const ErrorBoundaryRoute = ({
+  component,
+  render,
+  ...rest
+}: RouteProps) => {
+  const encloseInErrorBoundary = (props: RouteComponentProps) => (
+    <ErrorBoundary>
+      {render ? <>{render(props)}</> : React.createElement(component!, props)}
+    </ErrorBoundary>
   );
 
-  if (!component)
+  if (!component && !render)
     throw new Error(
       `A component needs to be specified for path ${(rest as any).path}`
     );

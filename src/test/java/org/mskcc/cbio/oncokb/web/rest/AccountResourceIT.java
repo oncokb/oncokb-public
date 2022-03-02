@@ -384,8 +384,9 @@ public class AccountResourceIT {
     @Transactional
     public void testActivateAccount() throws Exception {
         final String activationKey = "some activation key";
+        final String userLogin = "activate-account";
         User user = new User();
-        user.setLogin("activate-account");
+        user.setLogin(userLogin);
         user.setEmail("activate-account@example.com");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(false);
@@ -393,7 +394,7 @@ public class AccountResourceIT {
 
         userRepository.saveAndFlush(user);
 
-        restAccountMockMvc.perform(get("/api/activate?key={activationKey}", activationKey))
+        restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login={userLogin}", activationKey, userLogin))
             .andExpect(status().isOk());
 
         user = userRepository.findOneByLogin(user.getLogin()).orElse(null);
@@ -405,7 +406,36 @@ public class AccountResourceIT {
     @Test
     @Transactional
     public void testActivateAccountWithWrongKey() throws Exception {
-        restAccountMockMvc.perform(get("/api/activate?key=wrongActivationKey"))
+        final String activationKey = "some activation key";
+        final String userLogin = "activate-account";
+        User user = new User();
+        user.setLogin(userLogin);
+        user.setEmail("activate-account@example.com");
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        user.setActivationKey(activationKey);
+
+        userRepository.saveAndFlush(user);
+
+        restAccountMockMvc.perform(get("/api/activate?key=wrongActivationKey&login={userLogin}", userLogin))
+            .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    @Transactional
+    public void testActivateAccountWithNonExistingLogin() throws Exception {
+        final String activationKey = "some activation key";
+        final String userLogin = "activate-account";
+        User user = new User();
+        user.setLogin(userLogin);
+        user.setEmail("activate-account@example.com");
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(false);
+        user.setActivationKey(activationKey);
+
+        userRepository.saveAndFlush(user);
+
+        restAccountMockMvc.perform(get("/api/activate?key={activationKey}&login=non-existing-account", activationKey))
             .andExpect(status().isInternalServerError());
     }
 

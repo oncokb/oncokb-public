@@ -10,6 +10,7 @@ import { Alert, Button } from 'react-bootstrap';
 import SmallPageContainer from '../SmallPageContainer';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import PasswordStrengthBar from 'app/shared/password/password-strength-bar';
+import { ErrorAlert } from 'app/shared/alert/ErrorAlert';
 
 @inject('routing')
 @observer
@@ -19,7 +20,7 @@ export default class PasswordResetFinish extends React.Component<{
   @observable activateKey: string;
   @observable password = '';
   @observable resetStatus: API_CALL_STATUS;
-  @observable errorMessage: string;
+  @observable error: Error;
 
   constructor(props: Readonly<{ routing: RouterStore }>) {
     super(props);
@@ -42,8 +43,8 @@ export default class PasswordResetFinish extends React.Component<{
         this.resetStatus = API_CALL_STATUS.SUCCESSFUL;
       })
       .catch(error => {
+        this.error = error;
         this.resetStatus = API_CALL_STATUS.FAILURE;
-        this.errorMessage = error.message;
       });
   };
 
@@ -57,11 +58,7 @@ export default class PasswordResetFinish extends React.Component<{
   };
 
   getFailureMessage = () => {
-    return (
-      <Alert variant="warning">
-        <strong>{this.errorMessage}.</strong> Please try again later.
-      </Alert>
-    );
+    return <ErrorAlert error={this.error} />;
   };
 
   getResetForm = () => {

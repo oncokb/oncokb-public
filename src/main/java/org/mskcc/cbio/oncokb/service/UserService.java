@@ -148,6 +148,10 @@ public class UserService {
         return userRepository.findOneByActivationKey(key);
     }
 
+    public Optional<User> getUserByLogin(String login) {
+        return userRepository.findOneByLogin(login.toLowerCase());
+    }
+
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         return userRepository.findOneByResetKey(key)
@@ -162,7 +166,6 @@ public class UserService {
 
     public Optional<User> requestPasswordReset(String login) {
         return userRepository.findOneByLogin(login)
-            .filter(User::getActivated)
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
@@ -403,7 +406,7 @@ public class UserService {
                 return newUserDTO;
             });
 
-        if (updatedUserDTO.isPresent()) {
+        if (updatedUserDTO.isPresent() && updatedUserDTO.get().isActivated()) {
             generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
         }
         return updatedUserDTO;
