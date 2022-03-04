@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "These endpoints are for private use only.",
-    "version": "v1.2.2",
+    "version": "v1.3.0",
     "title": "OncoKB Private APIs",
     "contact": {
       "name": "OncoKB",
@@ -2449,6 +2449,32 @@
         }
       }
     },
+    "SemVer": {
+      "type": "object",
+      "properties": {
+        "major": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minor": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "patch": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "suffixTokens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
     "Implication": {
       "type": "object",
       "properties": {
@@ -3465,10 +3491,10 @@
       "type": "object",
       "properties": {
         "apiVersion": {
-          "type": "string"
+          "$ref": "#/definitions/SemVer"
         },
         "appVersion": {
-          "$ref": "#/definitions/Semver"
+          "$ref": "#/definitions/SemVer"
         },
         "dataVersion": {
           "$ref": "#/definitions/Version"
@@ -3500,51 +3526,6 @@
           "type": "boolean"
         },
         "term": {
-          "type": "string"
-        }
-      }
-    },
-    "Semver": {
-      "type": "object",
-      "properties": {
-        "build": {
-          "type": "string"
-        },
-        "major": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "minor": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "originalValue": {
-          "type": "string"
-        },
-        "patch": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "stable": {
-          "type": "boolean"
-        },
-        "suffixTokens": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "type": {
-          "type": "string",
-          "enum": [
-            "STRICT",
-            "LOOSE",
-            "NPM",
-            "COCOAPODS",
-            "IVY"
-          ]
-        },
-        "value": {
           "type": "string"
         }
       }

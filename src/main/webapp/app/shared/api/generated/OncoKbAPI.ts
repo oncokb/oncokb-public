@@ -119,6 +119,18 @@ export type AnnotatedVariant = {
         'variant': string
 
 };
+export type SemVer = {
+    'major': number
+
+        'minor': number
+
+        'patch': number
+
+        'suffixTokens': Array < string >
+
+        'version': string
+
+};
 export type Implication = {
     'abstracts': Array < ArticleAbstract >
 
@@ -488,9 +500,9 @@ export type MainType = {
 
 };
 export type OncoKBInfo = {
-    'apiVersion': string
+    'apiVersion': SemVer
 
-        'appVersion': Semver
+        'appVersion': SemVer
 
         'dataVersion': Version
 
@@ -509,26 +521,6 @@ export type VariantConsequence = {
         'isGenerallyTruncating': boolean
 
         'term': string
-
-};
-export type Semver = {
-    'build': string
-
-        'major': number
-
-        'minor': number
-
-        'originalValue': string
-
-        'patch': number
-
-        'stable': boolean
-
-        'suffixTokens': Array < string >
-
-        'type': "STRICT" | "LOOSE" | "NPM" | "COCOAPODS" | "IVY"
-
-        'value': string
 
 };
 export type AnnotateMutationByProteinChangeQuery = {
