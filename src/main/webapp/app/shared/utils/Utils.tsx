@@ -686,7 +686,8 @@ export function getAlterationName(
   const name: string =
     typeof alteration === 'string' ? alteration : alteration.name;
   const isCategoricalAlt = isCategoricalAlteration(alt);
-  if (!showNameDiff || alt === name || isCategoricalAlt) {
+  const hasExclusionArm = alt.includes('{');
+  if (!showNameDiff || alt === name || isCategoricalAlt || hasExclusionArm) {
     return name;
   } else {
     return `${name} (${alt})`;
