@@ -126,6 +126,8 @@ export type SemVer = {
 
         'patch': number
 
+        'stable': boolean
+
         'suffixTokens': Array < string >
 
         'version': string
