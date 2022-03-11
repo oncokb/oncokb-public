@@ -585,6 +585,14 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                           ACCOUNT_TITLES.CITY,
                           this.selectedLicense
                         )}
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage:
+                              'Please let us know where you located.',
+                          },
+                          ...SHORT_TEXT_VAL,
+                        }}
                       />
                       <AvField
                         name="country"
@@ -592,6 +600,14 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                           ACCOUNT_TITLES.COUNTRY,
                           this.selectedLicense
                         )}
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage:
+                              'Please let us know where you located.',
+                          },
+                          ...SHORT_TEXT_VAL,
+                        }}
                       />
                       <AvField
                         name={FormKey.COMPANY_DESCRIPTION}
