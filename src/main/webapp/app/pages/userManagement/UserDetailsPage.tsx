@@ -136,6 +136,27 @@ export default class UserDetailsPage extends React.Component<{
     this.updateUser(userToUpdate, sendEmail);
   }
 
+  @action.bound
+  async verifyUserEmail(user: UserDTO) {
+    try {
+      const activated = await client.activateAccountUsingGET({
+        key: user.activationKey,
+        login: user.login,
+      });
+      const updatedUser = {
+        ...user,
+        activated,
+        activationKey: '',
+        emailVerified: true,
+      };
+      const oldUserIndex = this.users.findIndex(u => u.id === user.id);
+      this.users.splice(oldUserIndex, 1, updatedUser);
+      notifySuccess('User email verified');
+    } catch (error) {
+      return notifyError(error);
+    }
+  }
+
   @action
   updateUser(updatedUser: UserDTO, sendEmail = false) {
     client
@@ -285,7 +306,14 @@ export default class UserDetailsPage extends React.Component<{
             </Button>
           );
         } else {
-          return <div>Email hasn&apos;t been verified yet</div>;
+          return (
+            <>
+              <div>Email hasn&apos;t been verified yet</div>
+              <Button onClick={() => this.verifyUserEmail(props.original)}>
+                Verify
+              </Button>
+            </>
+          );
         }
       },
     },
