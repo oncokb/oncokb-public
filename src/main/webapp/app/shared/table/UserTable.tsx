@@ -22,6 +22,7 @@ type IUserTableProps = {
   usersTokens: Token[];
   onRemoveUser: (userToRemove: UserDTO) => void;
   onUpdateUser: (updatedUser: UserDTO) => void;
+  onVerifyUserEmail: (user: UserDTO) => void;
   loading?: boolean;
   licenseStatus?: LicenseStatus;
 };
@@ -207,7 +208,16 @@ export class UserTable extends React.Component<IUserTableProps> {
             </>
           );
         } else {
-          return <div>Email hasn&apos;t been verified yet</div>;
+          return (
+            <>
+              <div>Email hasn&apos;t been verified yet</div>
+              <Button
+                onClick={() => this.props.onVerifyUserEmail(props.original)}
+              >
+                Verify
+              </Button>
+            </>
+          );
         }
       },
     },

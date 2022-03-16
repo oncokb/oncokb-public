@@ -11,6 +11,7 @@ import {
   AvField,
   AvForm,
   AvRadio,
+  AvGroup,
   AvRadioGroup,
 } from 'availity-reactstrap-validation';
 import {
@@ -62,6 +63,11 @@ export enum AccountStatus {
   INACTIVATED = 'Inactivated',
 }
 
+export enum EmailVerifiedStatus {
+  VERIFIED = 'Verified',
+  UNVERIFIED = 'Unverified',
+}
+
 interface MatchParams {
   login: string;
 }
@@ -86,6 +92,7 @@ const BoldAccountTitle: React.FunctionComponent<{
 export default class UserPage extends React.Component<IUserPage> {
   @observable selectedLicense: LicenseType | undefined;
   @observable selectedAccountType: AccountType | undefined;
+  @observable selectedEmailVerifiedStatus: EmailVerifiedStatus | undefined;
   @observable userTokens: Token[] = [];
   @observable user: UserDTO;
   @observable getUserStatus: PromiseStatus;
@@ -138,6 +145,13 @@ export default class UserPage extends React.Component<IUserPage> {
   }
 
   @computed
+  get defaultSelectedEmailVerifiedStatus() {
+    return this.user.emailVerified
+      ? EmailVerifiedStatus.VERIFIED
+      : EmailVerifiedStatus.UNVERIFIED;
+  }
+
+  @computed
   get shortestToken() {
     const tokens = _.sortBy(this.userTokens, token =>
       daysDiff(token.expiration)
@@ -178,9 +192,21 @@ export default class UserPage extends React.Component<IUserPage> {
       );
   }
 
+  @action.bound
+  async verifyUserEmail() {
+    try {
+      await client.activateAccountUsingGET({
+        key: this.user.activationKey,
+        login: this.user.login,
+      });
+    } catch (error) {
+      return notifyError(error);
+    }
+  }
+
   @autobind
   @action
-  updateUser(event: any, values: any) {
+  async updateUser(event: any, values: any) {
     if (this.user) {
       const updatedUser: UserDTO = {
         ...this.user,
@@ -199,6 +225,7 @@ export default class UserPage extends React.Component<IUserPage> {
         country: values.country,
       };
       this.getUserStatus = PromiseStatus.pending;
+      await this.verifyUserEmail();
       client
         .updateUserUsingPUT({
           userDto: updatedUser,
@@ -435,6 +462,35 @@ export default class UserPage extends React.Component<IUserPage> {
                             }
                             disabled
                           />
+                          <AvGroup>
+                            <div className={'mb-2 font-bold'}>
+                              Email Verified
+                            </div>
+                            <AvRadioGroup
+                              inline
+                              name="emailVerified"
+                              label=""
+                              value={this.defaultSelectedEmailVerifiedStatus}
+                              onChange={(event: any, value: any) => {
+                                if (value) {
+                                  this.selectedEmailVerifiedStatus = value;
+                                } else {
+                                  this.selectedEmailVerifiedStatus = this.defaultSelectedEmailVerifiedStatus;
+                                }
+                              }}
+                              required
+                            >
+                              <AvRadio
+                                label={EmailVerifiedStatus.VERIFIED}
+                                value={EmailVerifiedStatus.VERIFIED}
+                              />
+                              <AvRadio
+                                label={EmailVerifiedStatus.UNVERIFIED}
+                                value={EmailVerifiedStatus.UNVERIFIED}
+                                disabled={this.user.emailVerified}
+                              />
+                            </AvRadioGroup>
+                          </AvGroup>
                           <AvField
                             name="firstName"
                             label={
@@ -607,9 +663,9 @@ export default class UserPage extends React.Component<IUserPage> {
                             label=""
                             required
                             value={this.defaultSelectedAccountType}
-                            onChange={(event: any, values: any) => {
-                              if (values) {
-                                this.selectedAccountType = values;
+                            onChange={(event: any, value: any) => {
+                              if (value) {
+                                this.selectedAccountType = value;
                               } else {
                                 this.selectedAccountType = ACCOUNT_TYPE_DEFAULT;
                               }
