@@ -115,7 +115,7 @@ class AuthenticationStore {
         .then((token: Token) => {
           this.getAccountTokens()
             .then(() => {
-              resolve(this.idToken);
+              resolve(token);
             })
             .catch(error => {
               reject(error);

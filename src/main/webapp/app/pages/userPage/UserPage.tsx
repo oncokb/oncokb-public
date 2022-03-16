@@ -29,7 +29,7 @@ import { Alert, Button, Col, Row } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
 import { Token, UserDTO, UserMailsDTO } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
-import { remoteData } from 'cbioportal-frontend-commons';
+import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
 import {
   action,
   computed,
@@ -56,6 +56,8 @@ import DocumentTitle from 'react-document-title';
 import { Link } from 'react-router-dom';
 import { RouterStore } from 'mobx-react-router';
 import { SHORT_TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
+import classnames from 'classnames';
+import AuthenticationStore from 'app/store/AuthenticationStore';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -69,6 +71,7 @@ interface MatchParams {
 interface IUserPage extends RouteComponentProps<MatchParams> {
   windowStore: WindowStore;
   routing: RouterStore;
+  authenticationStore: AuthenticationStore;
 }
 
 const BoldAccountTitle: React.FunctionComponent<{
@@ -81,7 +84,7 @@ const BoldAccountTitle: React.FunctionComponent<{
     </span>
   );
 };
-@inject('windowStore', 'routing')
+@inject('windowStore', 'routing', 'authenticationStore')
 @observer
 export default class UserPage extends React.Component<IUserPage> {
   @observable selectedLicense: LicenseType | undefined;
@@ -145,11 +148,27 @@ export default class UserPage extends React.Component<IUserPage> {
     return tokens.length > 0 ? tokens[0] : undefined;
   }
 
-  @action
+  @action.bound
+  addNewToken() {
+    this.props.authenticationStore
+      .generateIdToken()
+      .then((token: Token) => {
+        this.userTokens.push(token);
+        notifySuccess('New token created.');
+      })
+      .catch(error => {
+        notifyError(error, 'Error generating token.');
+      });
+  }
+
+  @action.bound
   deleteToken(token: Token) {
     client
       .deleteTokenUsingDELETE({ token })
       .then(() => {
+        this.userTokens = this.userTokens.filter(
+          userToken => userToken.id !== token.id
+        );
         notifySuccess('Token is deleted');
       })
       .catch((error: Error) => {
@@ -503,6 +522,32 @@ export default class UserPage extends React.Component<IUserPage> {
                             onDeleteToken={this.deleteToken}
                             extendExpirationDate={this.extendExpirationDate}
                           />
+                          <div className="mt-2 d-flex flex-row-reverse">
+                            <DefaultTooltip
+                              placement={'top'}
+                              overlay={
+                                this.userTokens.length > 1
+                                  ? 'Cannot generate token when there is more than one token associated with user.'
+                                  : "Create new token. User's old token will expire in 7 days if expiration is longer than 7 days."
+                              }
+                            >
+                              <div>
+                                <Button
+                                  variant={'primary'}
+                                  size="sm"
+                                  onClick={this.addNewToken}
+                                  disabled={this.userTokens.length > 1}
+                                  style={
+                                    this.userTokens.length > 1
+                                      ? { pointerEvents: 'none' }
+                                      : {}
+                                  }
+                                >
+                                  New Token
+                                </Button>
+                              </div>
+                            </DefaultTooltip>
+                          </div>
                         </Col>
                       </Row>
                       <Row className={getSectionClassName(false)}>

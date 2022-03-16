@@ -65,7 +65,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
     return this.props.authenticationStore.account;
   }
 
-  @action
+  @action.bound
   deleteToken(token: Token) {
     this.props.authenticationStore
       .deleteToken(token)
@@ -96,7 +96,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
       );
   }
 
-  @autobind
+  @action.bound
   addNewToken() {
     this.props.authenticationStore
       .generateIdToken()
@@ -110,7 +110,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
 
   @computed
   get generateTokenEnabled() {
-    return this.enableRegenerateToken && this.tokens.length < 1;
+    return this.enableRegenerateToken && this.tokens.length < 2;
   }
 
   @computed
@@ -227,7 +227,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
                       placement={'top'}
                       overlay={
                         this.enableRegenerateToken
-                          ? 'Get a new token'
+                          ? 'Get a new token. Your old token will expire in 7 days.'
                           : 'You cannot add a token at the moment, please try again later.'
                       }
                     >

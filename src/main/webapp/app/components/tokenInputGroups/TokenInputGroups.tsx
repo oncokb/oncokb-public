@@ -4,11 +4,9 @@ import { Token } from 'app/shared/api/generated/API';
 import { daysDiff, secDiff } from 'app/shared/utils/Utils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import pluralize from 'pluralize';
-import CopyToClipboard from 'react-copy-to-clipboard';
 import classnames from 'classnames';
-import { observable, action } from 'mobx';
+import { computed } from 'mobx';
 import { observer } from 'mobx-react';
-import autobind from 'autobind-decorator';
 import { CalendarButton } from 'app/components/calendarButton/CalendarButton';
 import { CopyButton } from 'app/shared/button/CopyButton';
 
@@ -27,6 +25,19 @@ export default class TokenInputGroups extends React.Component<
     super(props);
   }
 
+  @computed
+  get sortedTokens() {
+    return this.props.tokens.sort((a, b) => {
+      return (
+        new Date(a.expiration).getTime() - new Date(b.expiration).getTime()
+      );
+    });
+  }
+
+  isTokenDeletionDisabled(index: number) {
+    return index === this.props.tokens.length - 1;
+  }
+
   getDuration(expireInDays: number, expireInHours: number) {
     return expireInDays > 0
       ? `${expireInDays} ${pluralize('day', expireInDays)}`
@@ -36,7 +47,7 @@ export default class TokenInputGroups extends React.Component<
   render() {
     return (
       <>
-        {this.props.tokens.map(token => {
+        {this.sortedTokens.map((token: Token, index: number) => {
           const expirationDay = daysDiff(token.expiration);
           const expirationHour = secDiff(token.expiration);
           return (
@@ -64,23 +75,30 @@ export default class TokenInputGroups extends React.Component<
                 )}
                 <InputGroup.Append>
                   <CopyButton text={token.token} />
-                  <DefaultTooltip
-                    placement={'top'}
-                    overlay={
-                      this.props.tokens.length < 2
-                        ? 'You need to have one valid token'
-                        : 'Delete the token'
-                    }
-                  >
+                </InputGroup.Append>
+                <DefaultTooltip
+                  placement={'top'}
+                  overlay={
+                    this.props.tokens.length < 2
+                      ? 'You need to have one valid token'
+                      : 'Delete the token'
+                  }
+                >
+                  <InputGroup.Append>
                     <Button
                       variant={'primary'}
-                      disabled={this.props.tokens.length < 2}
+                      disabled={this.isTokenDeletionDisabled(index)}
                       onClick={() => this.props.onDeleteToken(token)}
+                      style={
+                        this.isTokenDeletionDisabled(index)
+                          ? { pointerEvents: 'none' }
+                          : {}
+                      }
                     >
                       <i className={classnames('fa fa-trash')}></i>
                     </Button>
-                  </DefaultTooltip>
-                </InputGroup.Append>
+                  </InputGroup.Append>
+                </DefaultTooltip>
               </InputGroup>
             </div>
           );
