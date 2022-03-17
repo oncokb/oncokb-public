@@ -7,6 +7,7 @@ import AuthenticationStore, {
   ACCOUNT_STATUS,
 } from 'app/store/AuthenticationStore';
 import { ContactLink } from 'app/shared/links/ContactLink';
+import { computed } from 'mobx';
 
 @observer
 export default class AccountMessage extends React.Component<
@@ -16,9 +17,17 @@ export default class AccountMessage extends React.Component<
   },
   {}
 > {
+  @computed
+  get showAccountMessage() {
+    return (
+      this.props.authStore.accountStatus ===
+        ACCOUNT_STATUS.TRIAL_ABOUT_2_EXPIRED &&
+      this.props.authStore.isAuthenticated
+    );
+  }
+
   render() {
-    return this.props.authStore.accountStatus ===
-      ACCOUNT_STATUS.TRIAL_ABOUT_2_EXPIRED ? (
+    return this.showAccountMessage ? (
       <div className={styles.message}>
         <Container
           fluid={!this.props.windowStore.isXLscreen}
