@@ -58,6 +58,7 @@ import { RouterStore } from 'mobx-react-router';
 import { SHORT_TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 import classnames from 'classnames';
 import AuthenticationStore from 'app/store/AuthenticationStore';
+import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -523,30 +524,22 @@ export default class UserPage extends React.Component<IUserPage> {
                             extendExpirationDate={this.extendExpirationDate}
                           />
                           <div className="mt-2 d-flex flex-row-reverse">
-                            <DefaultTooltip
-                              placement={'top'}
-                              overlay={
-                                this.userTokens.length > 1
-                                  ? 'Cannot generate token when there is more than one token associated with user.'
-                                  : "Create new token. User's old token will expire in 7 days if expiration is longer than 7 days."
-                              }
-                            >
-                              <div>
-                                <Button
-                                  variant={'primary'}
-                                  size="sm"
-                                  onClick={this.addNewToken}
-                                  disabled={this.userTokens.length > 1}
-                                  style={
-                                    this.userTokens.length > 1
-                                      ? { pointerEvents: 'none' }
-                                      : {}
-                                  }
-                                >
-                                  New Token
-                                </Button>
-                              </div>
-                            </DefaultTooltip>
+                            <ButtonWithTooltip
+                              tooltipProps={{
+                                placement: 'top',
+                                overlay:
+                                  this.userTokens.length > 1
+                                    ? 'Cannot generate token when there is more than one token associated with user.'
+                                    : "Create new token. User's old token will expire in 7 days if expiration is longer than 7 days.",
+                              }}
+                              buttonProps={{
+                                variant: 'primary',
+                                size: 'sm',
+                                onClick: () => this.addNewToken(),
+                                disabled: this.userTokens.length > 1,
+                              }}
+                              buttonContent={'New Token'}
+                            />
                           </div>
                         </Col>
                       </Row>

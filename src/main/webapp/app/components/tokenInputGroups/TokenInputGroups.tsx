@@ -79,8 +79,8 @@ export default class TokenInputGroups extends React.Component<
                 <DefaultTooltip
                   placement={'top'}
                   overlay={
-                    this.props.tokens.length < 2
-                      ? 'You need to have one valid token'
+                    this.isTokenDeletionDisabled(index)
+                      ? 'Cannot delete token that lasts the longest or is newly generated. Try deleting an old token first.'
                       : 'Delete the token'
                   }
                 >

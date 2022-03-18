@@ -266,19 +266,24 @@ public class AccountResource {
         if (userLogin.isPresent()) {
             Optional<User> user = userService.getUserWithAuthoritiesByLogin(userLogin.get());
             List<Token> tokens = tokenProvider.getUserTokens(user.get());
-            // if there is a token already available, we should use the longest expiration time
-            // also set the old token's expiration to the min(current expiration, 7 days)
-            // we only renew the token after validating the account is valid on half year basis
-            if (tokens.size() > 0) {
-                Instant expiration = tokens.stream().max(Comparator.comparing(Token::getExpiration)).get().getExpiration();
-                Instant sevenDaysFromNow = Instant.now().plus(7, ChronoUnit.DAYS);
-                for (Token token: tokens) {
-                    token.setExpiration(token.getExpiration().compareTo(sevenDaysFromNow) < 0 ? token.getExpiration() : sevenDaysFromNow);
-                    tokenService.save(token);
-                }
-                return tokenProvider.createTokenForCurrentUserLogin(Optional.of(expiration), Optional.of(tokens.iterator().next().isRenewable()));
+            if (tokens.size() > 1) {
+                // We allow users to regenerate their tokens, so they can have 2 tokens.
+                throw new CustomMessageRuntimeException("No more than two tokens can be created");
             } else {
-                return tokenProvider.createTokenForCurrentUserLogin(Optional.empty(), Optional.empty());
+                // if there is a token already available, we should use the longest expiration time
+                // also set the old token's expiration to the min(current expiration, 7 days)
+                // we only renew the token after validating the account is valid on half year basis
+                if (tokens.size() > 0) {
+                    Instant expiration = tokens.stream().max(Comparator.comparing(Token::getExpiration)).get().getExpiration();
+                    Instant sevenDaysFromNow = Instant.now().plus(7, ChronoUnit.DAYS);
+                    for (Token token: tokens) {
+                        token.setExpiration(token.getExpiration().compareTo(sevenDaysFromNow) < 0 ? token.getExpiration() : sevenDaysFromNow);
+                        tokenService.save(token);
+                    }
+                    return tokenProvider.createTokenForCurrentUserLogin(Optional.of(expiration), Optional.of(tokens.iterator().next().isRenewable()));
+                } else {
+                    return tokenProvider.createTokenForCurrentUserLogin(Optional.empty(), Optional.empty());
+                }
             }
         } else {
             throw new CustomMessageRuntimeException("User is not logged in");

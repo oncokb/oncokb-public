@@ -227,7 +227,7 @@ export class AccountPage extends React.Component<IRegisterProps> {
                       placement={'top'}
                       overlay={
                         this.enableRegenerateToken
-                          ? 'Get a new token. Your old token will expire in 7 days.'
+                          ? 'Get a new token. Your old token will expire in 7 days or less.'
                           : 'You cannot add a token at the moment, please try again later.'
                       }
                     >
