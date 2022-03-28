@@ -188,6 +188,27 @@ export default class CompanyPage extends React.Component<
   }
 
   @action.bound
+  async verifyUserEmail(user: UserDTO) {
+    try {
+      const activated = await client.activateAccountUsingGET({
+        key: user.activationKey,
+        login: user.login,
+      });
+      const updatedUser = {
+        ...user,
+        activated,
+        activationKey: '',
+        emailVerified: true,
+      };
+      const oldUserIndex = this.companyUsers.findIndex(u => u.id === user.id);
+      this.companyUsers.splice(oldUserIndex, 1, updatedUser);
+      notifySuccess('User email verified');
+    } catch (error) {
+      return notifyError(error);
+    }
+  }
+
+  @action.bound
   showConfirmModal(event: any, value: any) {
     this.formValues = value;
     // Show warnings when license status is being changed and there are company users
@@ -462,6 +483,7 @@ export default class CompanyPage extends React.Component<
                               usersTokens={this.companyUserTokens}
                               onRemoveUser={this.removeUserFromCompany}
                               onUpdateUser={this.updateCompanyUser}
+                              onVerifyUserEmail={this.verifyUserEmail}
                               licenseStatus={
                                 this.company.licenseStatus as LicenseStatus
                               }

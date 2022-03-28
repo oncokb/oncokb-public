@@ -409,7 +409,7 @@ function getMockResponse(url){
   return res;
 }
 
-describe('Tests with login', () => {
+describe.skip('Tests with login', () => {
   let browser;
   let page;
 
