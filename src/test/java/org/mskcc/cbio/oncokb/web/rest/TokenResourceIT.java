@@ -237,7 +237,7 @@ public class TokenResourceIT {
             .andExpect(jsonPath("$.[*].currentUsage").value(hasItem(DEFAULT_CURRENT_USAGE)))
             .andExpect(jsonPath("$.[*].renewable").value(hasItem(DEFAULT_RENEWABLE.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getToken() throws Exception {
@@ -245,7 +245,7 @@ public class TokenResourceIT {
         tokenRepository.saveAndFlush(token);
 
         // Get the token
-        restTokenMockMvc.perform(get("/api/tokens/{id}", token.getId()))
+        restTokenMockMvc.perform(get("/api/tokens/{uuid}", token.getToken()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(token.getId().intValue()))
@@ -260,7 +260,7 @@ public class TokenResourceIT {
     @Transactional
     public void getNonExistingToken() throws Exception {
         // Get the token
-        restTokenMockMvc.perform(get("/api/tokens/{id}", Long.MAX_VALUE))
+        restTokenMockMvc.perform(get("/api/tokens/{uuid}", UUID.randomUUID()))
             .andExpect(status().isNotFound());
     }
 
@@ -330,7 +330,7 @@ public class TokenResourceIT {
         int databaseSizeBeforeDelete = tokenRepository.findAll().size();
 
         // Delete the token
-        restTokenMockMvc.perform(delete("/api/tokens/{id}", token.getId())
+        restTokenMockMvc.perform(delete("/api/tokens/{uuid}", token.getToken())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
 

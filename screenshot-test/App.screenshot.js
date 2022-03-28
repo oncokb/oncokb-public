@@ -29,14 +29,20 @@ const allCuratedGenes = fs.readFileSync(`${DATA_DIR}utils-allCuratedGenes.json`)
 const evidenceLevels = fs.readFileSync(`${DATA_DIR}private-utils-evidences-levels.json`).toString();
 const tumorTypes = fs.readFileSync(`${DATA_DIR}private-utils-tumorTypes.json`).toString();
 const geneNumbers = fs.readFileSync(`${DATA_DIR}private-utils-numbers-gene-ABL1.json`).toString();
-const geneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-ABL1.json`).toString();
+const abl1GeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-ABL1.json`).toString();
+const brafGeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-BRAF.json`).toString();
+const abl1BcrQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-ABL1-BCR.json`).toString();
+const brafV600eQuery = fs.readFileSync(`${DATA_DIR}api-v1-variants-BRAF-V600E.json`).toString();
 const biologicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-bio-ABL1.json`).toString();
 const clinicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-cli-ABL1.json`).toString();
-const fdaVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-fda-ABL1.json`).toString();
+const abl1FdaVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-fda-ABL1.json`).toString();
+const brafFdaVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-fda-BRAF.json`).toString();
 const sampleCount = fs.readFileSync(`${DATA_DIR}api-private-utils-portalAlterationSampleCount.json`).toString();
 const evidenceSummary = fs.readFileSync(`${DATA_DIR}api-v1-evidences-ABL1-summary.json`).toString();
 const evidenceBackground = fs.readFileSync(`${DATA_DIR}api-v1-evidences-ABL1-background.json`).toString();
 const variantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-ABL1-BCR.json`).toString();
+const brafV600eRelevantAlterations = fs.readFileSync(`${DATA_DIR}api-private-utils-relevantAlterations-BRAF-V600E.json`).toString();
+const abl1BcrRelevantAlterations = fs.readFileSync(`${DATA_DIR}api-private-utils-relevantAlterations-ABL1-BCR.json`).toString();
 const ensemblGenes = fs.readFileSync(`${DATA_DIR}api-private-utils-ensembleGenes-ABL1.json`).toString();
 const genomenexusTranscript = fs.readFileSync(`${DATA_DIR}genomenexus-transcript.json`).toString();
 const genomenexusCanonicalTranscript = fs.readFileSync(`${DATA_DIR}genomenexus-canonical-transcript.json`).toString();
@@ -156,7 +162,14 @@ function getMockResponse(url){
       res = {
         status: 200,
         contentType: 'application/json',
-        body: geneQuery
+        body: abl1GeneQuery
+      };
+      break;
+    case `${SERVER_URL}api/v1/genes/lookup?query=BRAF`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafGeneQuery
       };
       break;
     case `${SERVER_URL}api/v1/genes/lookup`:
@@ -164,6 +177,20 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: '[]'
+      };
+      break;
+    case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=BRAF&variant=V600E`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafV600eQuery
+      };
+      break;
+    case `${SERVER_URL}api/v1/variants/lookup?hugoSymbol=ABL1&variant=BCR-ABL1%20Fusion`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: abl1BcrQuery
       };
       break;
     case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=ABL1`:
@@ -205,7 +232,14 @@ function getMockResponse(url){
       res = {
         status: 200,
         contentType: 'application/json',
-        body: fdaVariants
+        body: abl1FdaVariants
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/fdaAlterations?hugoSymbol=BRAF`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafFdaVariants
       };
       break;
     case `https://www.genomenexus.org//ensembl/transcript`:
@@ -325,6 +359,20 @@ function getMockResponse(url){
         status: 200,
         contentType: 'application/json',
         body: usageUserDetail
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/relevantAlterations?referenceGenome=GRCh37&entrezGeneId=673&alteration=V600E`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: brafV600eRelevantAlterations
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/relevantAlterations?referenceGenome=GRCh38&entrezGeneId=25&alteration=BCR-ABL1%20Fusion`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: abl1BcrRelevantAlterations
       };
       break;
     case `${SERVER_URL}api/usage/resources?endpoint=%2Fapi%2Fv1%2Fexample`:

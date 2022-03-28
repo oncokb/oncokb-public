@@ -1900,7 +1900,7 @@
         "deprecated": false
       }
     },
-    "/api/tokens/{id}": {
+    "/api/tokens/{uuid}": {
       "get": {
         "tags": [
           "token-resource"
@@ -1912,12 +1912,11 @@
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "uuid",
             "in": "path",
-            "description": "id",
+            "description": "uuid",
             "required": true,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           }
         ],
         "responses": {
@@ -1950,12 +1949,11 @@
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "uuid",
             "in": "path",
-            "description": "id",
+            "description": "uuid",
             "required": true,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           }
         ],
         "responses": {

@@ -3815,13 +3815,13 @@ export default class API {
         });
     };
     getTokenUsingGETURL(parameters: {
-        'id': number,
+        'uuid': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
-        let path = '/api/tokens/{id}';
+        let path = '/api/tokens/{uuid}';
 
-        path = path.replace('{id}', parameters['id'] + '');
+        path = path.replace('{uuid}', parameters['uuid'] + '');
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3837,17 +3837,17 @@ export default class API {
      * getToken
      * @method
      * @name API#getTokenUsingGET
-     * @param {integer} id - id
+     * @param {string} uuid - uuid
      */
     getTokenUsingGETWithHttpInfo(parameters: {
-        'id': number,
+        'uuid': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
         const request = this.request;
-        let path = '/api/tokens/{id}';
+        let path = '/api/tokens/{uuid}';
         let body: any;
         let queryParameters: any = {};
         let headers: any = {};
@@ -3855,10 +3855,10 @@ export default class API {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
 
-            path = path.replace('{id}', parameters['id'] + '');
+            path = path.replace('{uuid}', parameters['uuid'] + '');
 
-            if (parameters['id'] === undefined) {
-                reject(new Error('Missing required  parameter: id'));
+            if (parameters['uuid'] === undefined) {
+                reject(new Error('Missing required  parameter: uuid'));
                 return;
             }
 
@@ -3878,10 +3878,10 @@ export default class API {
      * getToken
      * @method
      * @name API#getTokenUsingGET
-     * @param {integer} id - id
+     * @param {string} uuid - uuid
      */
     getTokenUsingGET(parameters: {
-        'id': number,
+        'uuid': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < Token > {
@@ -3890,13 +3890,13 @@ export default class API {
         });
     };
     deleteTokenUsingDELETE_1URL(parameters: {
-        'id': number,
+        'uuid': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
-        let path = '/api/tokens/{id}';
+        let path = '/api/tokens/{uuid}';
 
-        path = path.replace('{id}', parameters['id'] + '');
+        path = path.replace('{uuid}', parameters['uuid'] + '');
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3912,17 +3912,17 @@ export default class API {
      * deleteToken
      * @method
      * @name API#deleteTokenUsingDELETE_1
-     * @param {integer} id - id
+     * @param {string} uuid - uuid
      */
     deleteTokenUsingDELETE_1WithHttpInfo(parameters: {
-        'id': number,
+        'uuid': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
         const errorHandlers = this.errorHandlers;
         const request = this.request;
-        let path = '/api/tokens/{id}';
+        let path = '/api/tokens/{uuid}';
         let body: any;
         let queryParameters: any = {};
         let headers: any = {};
@@ -3930,10 +3930,10 @@ export default class API {
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
 
-            path = path.replace('{id}', parameters['id'] + '');
+            path = path.replace('{uuid}', parameters['uuid'] + '');
 
-            if (parameters['id'] === undefined) {
-                reject(new Error('Missing required  parameter: id'));
+            if (parameters['uuid'] === undefined) {
+                reject(new Error('Missing required  parameter: uuid'));
                 return;
             }
 
@@ -3953,10 +3953,10 @@ export default class API {
      * deleteToken
      * @method
      * @name API#deleteTokenUsingDELETE_1
-     * @param {integer} id - id
+     * @param {string} uuid - uuid
      */
     deleteTokenUsingDELETE_1(parameters: {
-        'id': number,
+        'uuid': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < any > {

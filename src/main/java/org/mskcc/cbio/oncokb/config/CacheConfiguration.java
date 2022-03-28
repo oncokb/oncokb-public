@@ -38,13 +38,13 @@ public class CacheConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = PROP_PREFIX, name = PROP_NAME, havingValue = "false", matchIfMissing = true)
-    public org.springframework.cache.CacheManager cacheManager(){
+    public org.springframework.cache.CacheManager cacheManager() {
         return new CustomCacheManager();
     }
 
     @Bean
     @ConditionalOnProperty(prefix = PROP_PREFIX, name = PROP_NAME, havingValue = "true")
-    public RedissonClient redissonClient(ApplicationProperties applicationProperties) throws Exception {
+    public Config redissonConfig(ApplicationProperties applicationProperties) throws Exception {
         Config config = new Config();
         if (applicationProperties.getRedis().getType().equals(RedisType.SINGLE.getType())) {
             config.useSingleServer()
@@ -63,7 +63,13 @@ public class CacheConfiguration {
         } else {
             throw new Exception("The redis type " + applicationProperties.getRedis().getType() + " is not supported. Only single and master-slave are supported.");
         }
-        return Redisson.create(config);
+        return config;
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = PROP_PREFIX, name = PROP_NAME, havingValue = "true")
+    public RedissonClient redissonClient(Config redissonConfig) throws Exception {
+        return Redisson.create(redissonConfig);
     }
 
     @Bean

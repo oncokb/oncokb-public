@@ -49,6 +49,7 @@ import {
   findPositionFilter,
   ONCOGENICITY_FILTER_TYPE,
 } from 'app/components/oncokbMutationMapper/FilterUtils';
+import { notifyError } from 'app/shared/utils/NotificationUtils';
 
 interface IAnnotationStore {
   hugoSymbolQuery?: string;
@@ -175,13 +176,43 @@ export class AnnotationStore {
   }
 
   readonly gene = remoteData<Gene>({
+    await: () => {
+      return this.hgvsgQuery ? [this.annotationResultByHgvsg] : [];
+    },
     invoke: async () => {
-      const genes = await apiClient.genesLookupGetUsingGET({
-        query: this.hugoSymbolQuery,
-      });
-      return genes && genes.length > 0 ? genes[0] : DEFAULT_GENE;
+      try {
+        const genes = await apiClient.genesLookupGetUsingGET({
+          query: this.hgvsgQuery
+            ? this.annotationResultByHgvsg.result.query.hugoSymbol
+            : this.hugoSymbolQuery,
+        });
+        return genes && genes.length > 0 ? genes[0] : DEFAULT_GENE;
+      } catch (e) {
+        notifyError(e, 'Error finding gene');
+        return DEFAULT_GENE;
+      }
     },
     default: DEFAULT_GENE,
+  });
+
+  readonly alteration = remoteData<Alteration | undefined>({
+    await: () => [this.gene],
+    invoke: async () => {
+      try {
+        const variants = await apiClient.variantsLookupGetUsingGET({
+          hugoSymbol: this.gene.result.hugoSymbol
+            ? this.gene.result.hugoSymbol
+            : this.hugoSymbolQuery,
+          variant: this.hgvsgQuery
+            ? this.annotationResultByHgvsg.result.query.alteration
+            : this.alterationQuery,
+        });
+        return variants[0];
+      } catch (e) {
+        notifyError(e, 'Error finding alteration');
+        return undefined;
+      }
+    },
   });
 
   readonly ensemblGenes = remoteData<EnsemblGene[]>({
@@ -203,13 +234,18 @@ export class AnnotationStore {
   readonly geneSummary = remoteData<string | undefined>({
     await: () => [this.gene],
     invoke: async () => {
-      const evidences = await apiClient.evidencesLookupGetUsingGET({
-        hugoSymbol: this.gene.result.hugoSymbol,
-        evidenceTypes: EVIDENCE_TYPES.GENE_SUMMARY,
-      });
-      if (evidences.length > 0) {
-        return evidences[0].description;
-      } else {
+      try {
+        const evidences = await apiClient.evidencesLookupGetUsingGET({
+          hugoSymbol: this.gene.result.hugoSymbol,
+          evidenceTypes: EVIDENCE_TYPES.GENE_SUMMARY,
+        });
+        if (evidences.length > 0) {
+          return evidences[0].description;
+        } else {
+          return undefined;
+        }
+      } catch (e) {
+        notifyError(e, 'Error loading gene summary');
         return undefined;
       }
     },
@@ -218,13 +254,18 @@ export class AnnotationStore {
   readonly geneBackground = remoteData<string | undefined>({
     await: () => [this.gene],
     invoke: async () => {
-      const evidences = await apiClient.evidencesLookupGetUsingGET({
-        hugoSymbol: this.gene.result.hugoSymbol,
-        evidenceTypes: EVIDENCE_TYPES.GENE_BACKGROUND,
-      });
-      if (evidences.length > 0) {
-        return evidences[0].description;
-      } else {
+      try {
+        const evidences = await apiClient.evidencesLookupGetUsingGET({
+          hugoSymbol: this.gene.result.hugoSymbol,
+          evidenceTypes: EVIDENCE_TYPES.GENE_BACKGROUND,
+        });
+        if (evidences.length > 0) {
+          return evidences[0].description;
+        } else {
+          return undefined;
+        }
+      } catch (e) {
+        notifyError(e, 'Error loading gene background');
         return undefined;
       }
     },
@@ -263,16 +304,21 @@ export class AnnotationStore {
   readonly clinicalAlterations = remoteData<ClinicalVariant[]>({
     await: () => [this.gene],
     invoke: async () => {
-      const clinicalVariants = await privateClient.searchVariantsClinicalGetUsingGET(
-        {
-          hugoSymbol: this.gene.result.hugoSymbol,
-        }
-      );
-      return clinicalVariants.filter(clinicalVariant =>
-        clinicalVariant.variant.referenceGenomes.includes(
-          this.referenceGenomeQuery
-        )
-      );
+      try {
+        const clinicalVariants = await privateClient.searchVariantsClinicalGetUsingGET(
+          {
+            hugoSymbol: this.gene.result.hugoSymbol,
+          }
+        );
+        return clinicalVariants.filter(clinicalVariant =>
+          clinicalVariant.variant.referenceGenomes.includes(
+            this.referenceGenomeQuery
+          )
+        );
+      } catch (e) {
+        notifyError(e, 'Error loading clinical alterations');
+        return [];
+      }
     },
     default: [],
   });
@@ -285,30 +331,35 @@ export class AnnotationStore {
   readonly fdaAlterations = remoteData<FdaAlteration[]>({
     await: () => [this.gene],
     invoke: async () => {
-      const geneFdaAlterations = await privateClient.utilsFdaAlterationsGetUsingGET(
-        {
-          hugoSymbol: this.gene.result.hugoSymbol,
+      try {
+        const geneFdaAlterations = await privateClient.utilsFdaAlterationsGetUsingGET(
+          {
+            hugoSymbol: this.gene.result.hugoSymbol,
+          }
+        );
+        if (this.alterationQuery) {
+          const lowerCaseAltQuery = this.alterationQuery.toLowerCase();
+          return geneFdaAlterations.filter(alt => {
+            if (
+              alt.alteration.alteration &&
+              alt.alteration.alteration.toLowerCase() === lowerCaseAltQuery
+            ) {
+              return true;
+            }
+            if (
+              alt.alteration.name &&
+              alt.alteration.name.toLowerCase() === lowerCaseAltQuery
+            ) {
+              return true;
+            }
+            return false;
+          });
         }
-      );
-      if (this.alterationQuery) {
-        const lowerCaseAltQuery = this.alterationQuery.toLowerCase();
-        return geneFdaAlterations.filter(alt => {
-          if (
-            alt.alteration.alteration &&
-            alt.alteration.alteration.toLowerCase() === lowerCaseAltQuery
-          ) {
-            return true;
-          }
-          if (
-            alt.alteration.name &&
-            alt.alteration.name.toLowerCase() === lowerCaseAltQuery
-          ) {
-            return true;
-          }
-          return false;
-        });
+        return geneFdaAlterations;
+      } catch (e) {
+        notifyError(e, 'Error loading FDA alterations');
+        return [];
       }
-      return geneFdaAlterations;
     },
     default: [],
   });
@@ -318,6 +369,20 @@ export class AnnotationStore {
     invoke: async () => {
       return privateClient.searchVariantsBiologicalGetUsingGET({
         hugoSymbol: this.gene.result.hugoSymbol,
+      });
+    },
+    default: [],
+  });
+
+  readonly relevantAlterations = remoteData<Alteration[]>({
+    await: () => [this.gene, this.alteration],
+    invoke: async () => {
+      return privateClient.utilRelevantAlterationsGetUsingGET({
+        entrezGeneId: this.gene.result.entrezGeneId,
+        alteration: this.alteration.result
+          ? this.alteration.result.alteration
+          : this.alterationQuery,
+        referenceGenome: this.referenceGenomeQuery,
       });
     },
     default: [],
@@ -610,17 +675,6 @@ export class AnnotationStore {
     } else {
       return this.biologicalAlterations.result;
     }
-  }
-
-  @computed
-  get matchedAlteration(): Alteration | undefined {
-    const altLowerCaseQuery = this.alterationQuery?.toLowerCase();
-    const matched = this.biologicalAlterations.result.filter(
-      alt =>
-        alt.variant.alteration.toLowerCase() === altLowerCaseQuery ||
-        alt.variant.name.toLowerCase() === altLowerCaseQuery
-    );
-    return matched.length > 0 ? matched[0].variant : undefined;
   }
 
   @computed

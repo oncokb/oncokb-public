@@ -98,6 +98,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/annotate/**").hasAnyAuthority(AuthoritiesConstants.USER)
 
             .antMatchers("/api/v1/genes/lookup").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/v1/variants/lookup").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/evidences/**").hasAnyAuthority(AuthoritiesConstants.PUBLIC_WEBSITE, AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/v1/utils/allCuratedGenes").permitAll()
@@ -119,6 +120,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             .antMatchers("/api/users/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/user-details/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers(HttpMethod.GET, "/api/tokens/{\\d+}").permitAll()
             .antMatchers("/api/tokens/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/token-stats/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 

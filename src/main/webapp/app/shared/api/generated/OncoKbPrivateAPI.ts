@@ -42,8 +42,6 @@ export type Query = {
 
         'tumorType': string
 
-        'type': string
-
 };
 export type MatchVariant = {
     'alteration': string
@@ -2327,6 +2325,107 @@ export default class OncoKbPrivateAPI {
         }): Promise < Array < CancerTypeCount >
         > {
             return this.utilPortalAlterationSampleCountGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilRelevantAlterationsGetUsingGETURL(parameters: {
+        'referenceGenome' ? : string,
+        'entrezGeneId' ? : number,
+        'alteration' ? : string,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/relevantAlterations';
+        if (parameters['referenceGenome'] !== undefined) {
+            queryParameters['referenceGenome'] = parameters['referenceGenome'];
+        }
+
+        if (parameters['entrezGeneId'] !== undefined) {
+            queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+        }
+
+        if (parameters['alteration'] !== undefined) {
+            queryParameters['alteration'] = parameters['alteration'];
+        }
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Get the list of relevant alterations
+     * @method
+     * @name OncoKbPrivateAPI#utilRelevantAlterationsGetUsingGET
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {integer} entrezGeneId - alteration
+     * @param {string} alteration - alteration
+     */
+    utilRelevantAlterationsGetUsingGETWithHttpInfo(parameters: {
+        'referenceGenome' ? : string,
+        'entrezGeneId' ? : number,
+        'alteration' ? : string,
+        $queryParameters ? : any,
+            $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/relevantAlterations';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['referenceGenome'] !== undefined) {
+                queryParameters['referenceGenome'] = parameters['referenceGenome'];
+            }
+
+            if (parameters['entrezGeneId'] !== undefined) {
+                queryParameters['entrezGeneId'] = parameters['entrezGeneId'];
+            }
+
+            if (parameters['alteration'] !== undefined) {
+                queryParameters['alteration'] = parameters['alteration'];
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Get the list of relevant alterations
+     * @method
+     * @name OncoKbPrivateAPI#utilRelevantAlterationsGetUsingGET
+     * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
+     * @param {integer} entrezGeneId - alteration
+     * @param {string} alteration - alteration
+     */
+    utilRelevantAlterationsGetUsingGET(parameters: {
+            'referenceGenome' ? : string,
+            'entrezGeneId' ? : number,
+            'alteration' ? : string,
+            $queryParameters ? : any,
+                $domain ? : string
+        }): Promise < Array < Alteration >
+        > {
+            return this.utilRelevantAlterationsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
                 return response.body;
             });
         };

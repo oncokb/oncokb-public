@@ -349,9 +349,24 @@ export const DEFAULT_ONCOKB_INFO: OncoKBInfo = {
     date: '',
     version: '',
   },
+  appVersion: {
+    major: 0,
+    minor: 0,
+    patch: 1,
+    stable: true,
+    suffixTokens: [],
+    version: 'v0.0.1',
+  },
   levels: [],
   ncitVersion: '',
-  apiVersion: 'v1.0.0',
+  apiVersion: {
+    major: 1,
+    minor: 0,
+    patch: 0,
+    stable: true,
+    suffixTokens: [],
+    version: 'v1.0.0',
+  },
   publicInstance: false,
   oncoTreeVersion: '',
 };
@@ -517,6 +532,9 @@ export const DELETION = 'Deletion';
 export const FUSIONS = 'Fusions';
 export const TRUNCATING_MUTATIONS = 'Truncating Mutations';
 export const OTHER_BIOMARKERS = 'Other Biomarkers';
+export const GAIN_OF_FUNCTION_MUTATIONS = 'Gain-of-function Mutations';
+export const LOSS_OF_FUNCTION_MUTATIONS = 'Loss-of-function Mutations';
+export const SWITCH_OF_FUNCTION_MUTATIONS = 'Switch-of-function Mutations';
 
 export enum SEARCH_QUERY_KEY {
   REFERENCE_GENOME = 'refGenome',
@@ -701,6 +719,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '03292022', version: 'v3.12' },
   { date: '02282022', version: 'v3.11' },
   { date: '01072022', version: 'v3.10' },
   { date: '12302021', version: 'v3.9_patch_1' },

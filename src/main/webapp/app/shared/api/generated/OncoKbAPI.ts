@@ -44,8 +44,6 @@ export type Query = {
 
         'tumorType': string
 
-        'type': string
-
 };
 export type Article = {
     'abstract': string
@@ -119,6 +117,20 @@ export type AnnotatedVariant = {
         'referenceGenome': string
 
         'variant': string
+
+};
+export type SemVer = {
+    'major': number
+
+        'minor': number
+
+        'patch': number
+
+        'stable': boolean
+
+        'suffixTokens': Array < string >
+
+        'version': string
 
 };
 export type Implication = {
@@ -490,7 +502,9 @@ export type MainType = {
 
 };
 export type OncoKBInfo = {
-    'apiVersion': string
+    'apiVersion': SemVer
+
+        'appVersion': SemVer
 
         'dataVersion': Version
 
@@ -1314,7 +1328,7 @@ export default class OncoKbAPI {
         'entrezGeneId' ? : number,
         'alteration' ? : string,
         'referenceGenome' ? : string,
-        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant",
+        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
         'tumorType' ? : string,
@@ -1388,7 +1402,7 @@ export default class OncoKbAPI {
         'entrezGeneId' ? : number,
         'alteration' ? : string,
         'referenceGenome' ? : string,
-        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant",
+        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
         'tumorType' ? : string,
@@ -1475,7 +1489,7 @@ export default class OncoKbAPI {
         'entrezGeneId' ? : number,
         'alteration' ? : string,
         'referenceGenome' ? : string,
-        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant",
+        'consequence' ? : "feature_truncation" | "frameshift_variant" | "inframe_deletion" | "inframe_insertion" | "start_lost" | "missense_variant" | "splice_region_variant" | "stop_gained" | "synonymous_variant" | "intron_variant",
         'proteinStart' ? : number,
         'proteinEnd' ? : number,
         'tumorType' ? : string,
@@ -3402,7 +3416,6 @@ export default class OncoKbAPI {
         'tumorType' ? : string,
         'levels' ? : string,
         'highestLevelOnly' ? : boolean,
-        'queryType' ? : string,
         'evidenceType' ? : string,
         'hgvs' ? : string,
         'fields' ? : string,
@@ -3462,10 +3475,6 @@ export default class OncoKbAPI {
             queryParameters['highestLevelOnly'] = parameters['highestLevelOnly'];
         }
 
-        if (parameters['queryType'] !== undefined) {
-            queryParameters['queryType'] = parameters['queryType'];
-        }
-
         if (parameters['evidenceType'] !== undefined) {
             queryParameters['evidenceType'] = parameters['evidenceType'];
         }
@@ -3505,7 +3514,6 @@ export default class OncoKbAPI {
      * @param {string} tumorType - Tumor type name. OncoTree code is supported.
      * @param {string} levels - Level of evidences.
      * @param {boolean} highestLevelOnly - Only show treatments of highest level
-     * @param {string} queryType - Query type. There maybe slight differences between different query types. Currently support web or regular.
      * @param {string} evidenceType - Evidence type.
      * @param {string} hgvs - HGVS varaint. Its priority is higher than entrezGeneId/hugoSymbol + variant combination
      * @param {string} fields - The fields to be returned.
@@ -3524,7 +3532,6 @@ export default class OncoKbAPI {
         'tumorType' ? : string,
         'levels' ? : string,
         'highestLevelOnly' ? : boolean,
-        'queryType' ? : string,
         'evidenceType' ? : string,
         'hgvs' ? : string,
         'fields' ? : string,
@@ -3595,10 +3602,6 @@ export default class OncoKbAPI {
                 queryParameters['highestLevelOnly'] = parameters['highestLevelOnly'];
             }
 
-            if (parameters['queryType'] !== undefined) {
-                queryParameters['queryType'] = parameters['queryType'];
-            }
-
             if (parameters['evidenceType'] !== undefined) {
                 queryParameters['evidenceType'] = parameters['evidenceType'];
             }
@@ -3640,7 +3643,6 @@ export default class OncoKbAPI {
      * @param {string} tumorType - Tumor type name. OncoTree code is supported.
      * @param {string} levels - Level of evidences.
      * @param {boolean} highestLevelOnly - Only show treatments of highest level
-     * @param {string} queryType - Query type. There maybe slight differences between different query types. Currently support web or regular.
      * @param {string} evidenceType - Evidence type.
      * @param {string} hgvs - HGVS varaint. Its priority is higher than entrezGeneId/hugoSymbol + variant combination
      * @param {string} fields - The fields to be returned.
@@ -3659,7 +3661,6 @@ export default class OncoKbAPI {
         'tumorType' ? : string,
         'levels' ? : string,
         'highestLevelOnly' ? : boolean,
-        'queryType' ? : string,
         'evidenceType' ? : string,
         'hgvs' ? : string,
         'fields' ? : string,
@@ -4551,90 +4552,10 @@ export default class OncoKbAPI {
             return response.body;
         });
     };
-    variantsGetUsingGETURL(parameters: {
-        'fields' ? : string,
-        $queryParameters ? : any
-    }): string {
-        let queryParameters: any = {};
-        let path = '/variants';
-        if (parameters['fields'] !== undefined) {
-            queryParameters['fields'] = parameters['fields'];
-        }
-
-        if (parameters.$queryParameters) {
-            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                var parameter = parameters.$queryParameters[parameterName];
-                queryParameters[parameterName] = parameter;
-            });
-        }
-        let keys = Object.keys(queryParameters);
-        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
-    };
-
-    /**
-     * Get all annotated variants.
-     * @method
-     * @name OncoKbAPI#variantsGetUsingGET
-     * @param {string} fields - The fields to be returned.
-     */
-    variantsGetUsingGETWithHttpInfo(parameters: {
-        'fields' ? : string,
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/variants';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = 'application/json';
-            headers['Content-Type'] = 'application/json';
-
-            if (parameters['fields'] !== undefined) {
-                queryParameters['fields'] = parameters['fields'];
-            }
-
-            if (parameters.$queryParameters) {
-                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                    var parameter = parameters.$queryParameters[parameterName];
-                    queryParameters[parameterName] = parameter;
-                });
-            }
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-
-        });
-    };
-
-    /**
-     * Get all annotated variants.
-     * @method
-     * @name OncoKbAPI#variantsGetUsingGET
-     * @param {string} fields - The fields to be returned.
-     */
-    variantsGetUsingGET(parameters: {
-            'fields' ? : string,
-            $queryParameters ? : any,
-                $domain ? : string
-        }): Promise < Array < Alteration >
-        > {
-            return this.variantsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-                return response.body;
-            });
-        };
     variantsLookupGetUsingGETURL(parameters: {
         'entrezGeneId' ? : number,
         'hugoSymbol' ? : string,
         'variant' ? : string,
-        'variantType' ? : string,
-        'consequence' ? : string,
-        'proteinStart' ? : number,
-        'proteinEnd' ? : number,
-        'hgvs' ? : string,
         'referenceGenome' ? : string,
         'fields' ? : string,
         $queryParameters ? : any
@@ -4651,26 +4572,6 @@ export default class OncoKbAPI {
 
         if (parameters['variant'] !== undefined) {
             queryParameters['variant'] = parameters['variant'];
-        }
-
-        if (parameters['variantType'] !== undefined) {
-            queryParameters['variantType'] = parameters['variantType'];
-        }
-
-        if (parameters['consequence'] !== undefined) {
-            queryParameters['consequence'] = parameters['consequence'];
-        }
-
-        if (parameters['proteinStart'] !== undefined) {
-            queryParameters['proteinStart'] = parameters['proteinStart'];
-        }
-
-        if (parameters['proteinEnd'] !== undefined) {
-            queryParameters['proteinEnd'] = parameters['proteinEnd'];
-        }
-
-        if (parameters['hgvs'] !== undefined) {
-            queryParameters['hgvs'] = parameters['hgvs'];
         }
 
         if (parameters['referenceGenome'] !== undefined) {
@@ -4692,17 +4593,12 @@ export default class OncoKbAPI {
     };
 
     /**
-     * Search for variants.
+     * Search for matched variants.
      * @method
      * @name OncoKbAPI#variantsLookupGetUsingGET
      * @param {integer} entrezGeneId - The entrez gene ID. entrezGeneId is prioritize than hugoSymbol if both parameters have been defined
      * @param {string} hugoSymbol - The gene symbol used in Human Genome Organisation.
      * @param {string} variant - variant name.
-     * @param {string} variantType - variantType
-     * @param {string} consequence - consequence
-     * @param {integer} proteinStart - proteinStart
-     * @param {integer} proteinEnd - proteinEnd
-     * @param {string} hgvs - HGVS varaint. Its priority is higher than entrezGeneId/hugoSymbol + variant combination
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} fields - The fields to be returned.
      */
@@ -4710,11 +4606,6 @@ export default class OncoKbAPI {
         'entrezGeneId' ? : number,
         'hugoSymbol' ? : string,
         'variant' ? : string,
-        'variantType' ? : string,
-        'consequence' ? : string,
-        'proteinStart' ? : number,
-        'proteinEnd' ? : number,
-        'hgvs' ? : string,
         'referenceGenome' ? : string,
         'fields' ? : string,
         $queryParameters ? : any,
@@ -4744,26 +4635,6 @@ export default class OncoKbAPI {
                 queryParameters['variant'] = parameters['variant'];
             }
 
-            if (parameters['variantType'] !== undefined) {
-                queryParameters['variantType'] = parameters['variantType'];
-            }
-
-            if (parameters['consequence'] !== undefined) {
-                queryParameters['consequence'] = parameters['consequence'];
-            }
-
-            if (parameters['proteinStart'] !== undefined) {
-                queryParameters['proteinStart'] = parameters['proteinStart'];
-            }
-
-            if (parameters['proteinEnd'] !== undefined) {
-                queryParameters['proteinEnd'] = parameters['proteinEnd'];
-            }
-
-            if (parameters['hgvs'] !== undefined) {
-                queryParameters['hgvs'] = parameters['hgvs'];
-            }
-
             if (parameters['referenceGenome'] !== undefined) {
                 queryParameters['referenceGenome'] = parameters['referenceGenome'];
             }
@@ -4785,17 +4656,12 @@ export default class OncoKbAPI {
     };
 
     /**
-     * Search for variants.
+     * Search for matched variants.
      * @method
      * @name OncoKbAPI#variantsLookupGetUsingGET
      * @param {integer} entrezGeneId - The entrez gene ID. entrezGeneId is prioritize than hugoSymbol if both parameters have been defined
      * @param {string} hugoSymbol - The gene symbol used in Human Genome Organisation.
      * @param {string} variant - variant name.
-     * @param {string} variantType - variantType
-     * @param {string} consequence - consequence
-     * @param {integer} proteinStart - proteinStart
-     * @param {integer} proteinEnd - proteinEnd
-     * @param {string} hgvs - HGVS varaint. Its priority is higher than entrezGeneId/hugoSymbol + variant combination
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} fields - The fields to be returned.
      */
@@ -4803,11 +4669,6 @@ export default class OncoKbAPI {
             'entrezGeneId' ? : number,
             'hugoSymbol' ? : string,
             'variant' ? : string,
-            'variantType' ? : string,
-            'consequence' ? : string,
-            'proteinStart' ? : number,
-            'proteinEnd' ? : number,
-            'hgvs' ? : string,
             'referenceGenome' ? : string,
             'fields' ? : string,
             $queryParameters ? : any,
