@@ -148,6 +148,46 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '03292022': {
+    updatedImplication: [
+      [
+        '2',
+        'BRCA2',
+        'Oncogenic Mutations',
+        'Uterine Sarcoma',
+        'Olaparib, Rucaparib, Niraparib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>Listing in Uterine cancer NCCN v1.2022</span>
+          <PMIDLink pmids={'33970096'} />
+        </WithSeparator>,
+      ],
+      [
+        '2',
+        'PALB2',
+        'Oncogenic Mutations',
+        'Pancreatic Cancer',
+        'Rucaparib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>Listing in Pancreatic cancer NCCN v1.2022</span>
+          <PMIDLink pmids={'33970687, 34351646, 30051098'} />
+        </WithSeparator>,
+      ],
+    ],
+    changedAnnotation: [
+      [
+        'BRCA1/2',
+        'Oncogenic Mutations',
+        'Pancreatic Cancer',
+        'PARPi',
+        '3A',
+        '2',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <span>Listing of Rucaparib in Pancreatic cancer NCCN v1.2022</span>
+          <PMIDLink pmids={'33970687, 34351646, 30051098'} />
+        </WithSeparator>,
+      ],
+    ],
+  },
   '02282022': {
     priorityNews: [<NewlyAddedGenesListItem genes={['LTK', 'EXT1']} />],
     updatedImplication: [
