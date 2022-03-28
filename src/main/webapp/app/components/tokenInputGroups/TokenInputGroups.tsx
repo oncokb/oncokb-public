@@ -34,8 +34,9 @@ export default class TokenInputGroups extends React.Component<
     });
   }
 
-  isTokenDeletionDisabled(index: number) {
-    return index === this.props.tokens.length - 1;
+  @computed
+  get deleteTokenAllowed() {
+    return this.props.tokens.length >= 2;
   }
 
   getDuration(expireInDays: number, expireInHours: number) {
@@ -79,18 +80,18 @@ export default class TokenInputGroups extends React.Component<
                 <DefaultTooltip
                   placement={'top'}
                   overlay={
-                    this.isTokenDeletionDisabled(index)
-                      ? 'Cannot delete token that lasts the longest or is newly generated. Try deleting an old token first.'
-                      : 'Delete the token'
+                    this.deleteTokenAllowed
+                      ? 'Delete the token'
+                      : 'You need to have one valid token'
                   }
                 >
                   <InputGroup.Append>
                     <Button
                       variant={'primary'}
-                      disabled={this.isTokenDeletionDisabled(index)}
                       onClick={() => this.props.onDeleteToken(token)}
+                      disabled={!this.deleteTokenAllowed}
                       style={
-                        this.isTokenDeletionDisabled(index)
+                        !this.deleteTokenAllowed
                           ? { pointerEvents: 'none' }
                           : {}
                       }

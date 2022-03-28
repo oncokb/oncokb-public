@@ -53,7 +53,6 @@ export const InfoRow: React.FunctionComponent<{
 @inject('authenticationStore')
 @observer
 export class AccountPage extends React.Component<IRegisterProps> {
-  @observable enableRegenerateToken = true;
   @observable copiedIdToken = false;
 
   constructor(props: Readonly<IRegisterProps>) {
@@ -103,14 +102,14 @@ export class AccountPage extends React.Component<IRegisterProps> {
       .then(() => {
         notifySuccess('Token is added');
       })
-      .catch(() => {
-        this.enableRegenerateToken = false;
+      .catch(error => {
+        notifyError(error);
       });
   }
 
   @computed
   get generateTokenEnabled() {
-    return this.enableRegenerateToken && this.tokens.length < 2;
+    return this.tokens.length < 2;
   }
 
   @computed
@@ -225,24 +224,12 @@ export class AccountPage extends React.Component<IRegisterProps> {
                   {this.generateTokenEnabled ? (
                     <DefaultTooltip
                       placement={'top'}
-                      overlay={
-                        this.enableRegenerateToken
-                          ? 'Get a new token. Your old token will expire in 7 days or less.'
-                          : 'You cannot add a token at the moment, please try again later.'
-                      }
+                      overlay={'Get a new token.'}
                     >
-                      {this.enableRegenerateToken ? (
-                        <i
-                          className={classnames('ml-2 fa fa-plus')}
-                          onClick={this.addNewToken}
-                        ></i>
-                      ) : (
-                        <i
-                          className={classnames(
-                            'ml-2 fa fa-exclamation-triangle text-warning'
-                          )}
-                        ></i>
-                      )}
+                      <i
+                        className={classnames('ml-2 fa fa-plus')}
+                        onClick={this.addNewToken}
+                      />
                     </DefaultTooltip>
                   ) : null}
                 </div>

@@ -154,7 +154,7 @@ export default class UserPage extends React.Component<IUserPage> {
     this.props.authenticationStore
       .generateIdToken()
       .then((token: Token) => {
-        this.userTokens.push(token);
+        this.getUserTokens();
         notifySuccess('New token created.');
       })
       .catch(error => {
@@ -167,9 +167,7 @@ export default class UserPage extends React.Component<IUserPage> {
     client
       .deleteTokenUsingDELETE({ token })
       .then(() => {
-        this.userTokens = this.userTokens.filter(
-          userToken => userToken.id !== token.id
-        );
+        this.getUserTokens();
         notifySuccess('Token is deleted');
       })
       .catch((error: Error) => {
