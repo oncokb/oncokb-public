@@ -28,11 +28,11 @@ export const CopyButton: React.FunctionComponent<
         format: 'text/plain',
       }}
     >
-      <Button variant={'primary'} onClick={onCopy} {...rest}>
-        <DefaultTooltip placement={'top'} overlay={copied ? 'Copied' : 'Copy'}>
+      <DefaultTooltip placement={'top'} overlay={copied ? 'Copied' : 'Copy'}>
+        <Button variant={'primary'} onClick={onCopy} {...rest}>
           <i className={classnames('fa fa-copy')}></i>
-        </DefaultTooltip>
-      </Button>
+        </Button>
+      </DefaultTooltip>
     </CopyToClipboard>
   );
 };

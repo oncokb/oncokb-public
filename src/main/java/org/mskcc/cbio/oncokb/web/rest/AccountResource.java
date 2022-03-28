@@ -32,6 +32,7 @@ import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -265,13 +266,21 @@ public class AccountResource {
         if (userLogin.isPresent()) {
             Optional<User> user = userService.getUserWithAuthoritiesByLogin(userLogin.get());
             List<Token> tokens = tokenProvider.getUserTokens(user.get());
-            if (tokens.size() >= 1) {
-                throw new CustomMessageRuntimeException("No more than one token can be created");
+            if (tokens.size() >= 2) {
+                // We allow users to regenerate their tokens, so they can have 2 tokens.
+                throw new CustomMessageRuntimeException("No more than two tokens can be created");
             } else {
-                // if there is a token already available, we should use the same expiration date
+                // if there is a token already available, we should use the longest expiration time
+                // also set the old token's expiration to the min(current expiration, 7 days)
                 // we only renew the token after validating the account is valid on half year basis
                 if (tokens.size() > 0) {
-                    return tokenProvider.createTokenForCurrentUserLogin(Optional.of(tokens.iterator().next().getExpiration()), Optional.empty());
+                    Instant expiration = tokens.stream().max(Comparator.comparing(Token::getExpiration)).get().getExpiration();
+                    Instant sevenDaysFromNow = Instant.now().plus(7, ChronoUnit.DAYS);
+                    for (Token token: tokens) {
+                        token.setExpiration(token.getExpiration().compareTo(sevenDaysFromNow) < 0 ? token.getExpiration() : sevenDaysFromNow);
+                        tokenService.save(token);
+                    }
+                    return tokenProvider.createTokenForCurrentUserLogin(Optional.of(expiration), Optional.of(tokens.iterator().next().isRenewable()));
                 } else {
                     return tokenProvider.createTokenForCurrentUserLogin(Optional.empty(), Optional.empty());
                 }
@@ -282,16 +291,30 @@ public class AccountResource {
     }
 
     /**
-     * {@code DELETE  /account/tokens} : create a new token for the current user's token.
-     *
-     * @return the new token
+     * {@code DELETE  /account/tokens} : delete token for the current user's token.
      */
     @DeleteMapping(path = "/account/tokens")
     public void deleteToken(@RequestBody Token token) throws AuthenticationException {
         Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
         if (userLogin.isPresent() && token.getUser() != null) {
             if (token.getUser().getLogin().equalsIgnoreCase(userLogin.get())) {
-                tokenProvider.expireToken(token);
+                List<Token> tokens = tokenService.findByUser(token.getUser());
+                if (tokens.size() < 2) {
+                    tokenProvider.expireToken(token);
+                } else {
+                    // Ideally, users should have at most two tokens, so deleting one will just mean that
+                    // we assign the token's expiration to the other token.
+                    // In case where user has more than two tokens, we apply the expiration of the longest token
+                    // to the second longest token.
+                    Instant timestamp = token.getExpiration();
+                    tokenService.delete(token.getId());
+                    tokens = tokenService.findByUser(token.getUser());
+                    Token longestToken = tokens.stream().max(Comparator.comparing(Token::getExpiration)).get();
+                    if (timestamp.isAfter(longestToken.getExpiration())) {
+                        longestToken.setExpiration(timestamp);
+                        tokenService.save(longestToken);
+                    }
+                }
             } else {
                 throw new AuthenticationException("User does not have the permission to update the token requested");
             }
