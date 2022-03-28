@@ -175,7 +175,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'BRCA1/2',
+        'BRCA1, BRCA2',
         'Oncogenic Mutations',
         'Pancreatic Cancer',
         'PARPi',
@@ -186,6 +186,18 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           <PMIDLink pmids={'33970687, 34351646, 30051098'} />
         </WithSeparator>,
       ],
+    ],
+    news: [
+      <span>
+        Statistically recurrent hotspots per cancerhotspots.org that have not
+        been curated by OncoKB are now considered "Likely Oncogenic" (the
+        concept “Predicted Oncogenic” has been removed).
+      </span>,
+      <span>
+        API information (<Linkout link={'https://www.oncokb.org/api/v1/info'} />
+        ) now includes the software version which, together with the data
+        version, can be used to update instances of local annotation.
+      </span>,
     ],
   },
   '02282022': {
