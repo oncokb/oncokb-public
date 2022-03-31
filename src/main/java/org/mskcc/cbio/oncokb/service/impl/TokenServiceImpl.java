@@ -109,7 +109,11 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Token : {}", id);
+        Optional<Token> tokenOptional = tokenRepository.findById(id);
         tokenRepository.deleteById(id);
+        if (tokenOptional.isPresent()) {
+            this.clearTokenCaches(tokenOptional.get());
+        }
     }
 
     private void clearTokenCaches(Token token) {
