@@ -4,7 +4,10 @@ import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.TokenRepository;
+import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
 import org.mskcc.cbio.oncokb.service.TokenService;
+import org.mskcc.cbio.oncokb.service.TokenStatsService;
+import org.mskcc.cbio.oncokb.web.rest.errors.CustomMessageRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -32,13 +35,21 @@ public class TokenServiceImpl implements TokenService {
 
     private final TokenRepository tokenRepository;
 
+    private final TokenStatsRepository tokenStatsRepository;
+
     private final CacheManager cacheManager;
 
     private final CacheNameResolver cacheNameResolver;
 
 
-    public TokenServiceImpl(TokenRepository tokenRepository, CacheManager cacheManager, CacheNameResolver cacheNameResolver) {
+    public TokenServiceImpl(
+        TokenRepository tokenRepository, 
+        CacheManager cacheManager, 
+        CacheNameResolver cacheNameResolver,
+        TokenStatsRepository tokenStatsRepository
+    ) {
         this.tokenRepository = tokenRepository;
+        this.tokenStatsRepository = tokenStatsRepository;
         this.cacheManager = cacheManager;
         this.cacheNameResolver = cacheNameResolver;
     }
@@ -107,13 +118,21 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public void delete(Long id) {
-        log.debug("Request to delete Token : {}", id);
-        Optional<Token> tokenOptional = tokenRepository.findById(id);
-        tokenRepository.deleteById(id);
-        if (tokenOptional.isPresent()) {
-            this.clearTokenCaches(tokenOptional.get());
+    public void delete(Token oldToken, Token newToken) {
+        log.debug("Request to delete Token : {}", oldToken.getId());
+
+        Optional<Token> oldTokenOptional = tokenRepository.findById(oldToken.getId());
+        if (oldTokenOptional.isPresent()) {
+            Optional<Token> newTokenOptional = tokenRepository.findById(newToken.getId());
+            if (newTokenOptional.isPresent()) {
+                // Assign the token's token stats to a new token before deleting
+                tokenStatsRepository.setTokenId(oldTokenOptional.get(), newToken);
+                tokenRepository.delete(oldTokenOptional.get());
+                this.clearTokenCaches(oldTokenOptional.get());
+                return;
+            }
         }
+        throw new CustomMessageRuntimeException("Token could not be found");
     }
 
     private void clearTokenCaches(Token token) {

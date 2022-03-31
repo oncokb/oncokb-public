@@ -56,7 +56,6 @@ public class AccountResource {
 
     private final TokenService tokenService;
 
-    private final TokenStatsService tokenStatsService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -74,8 +73,7 @@ public class AccountResource {
                            SlackService slackService, EmailService emailService,
                            AuthenticationManagerBuilder authenticationManagerBuilder,
                            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
-                           TokenService tokenService, ApplicationProperties applicationProperties,
-                           TokenStatsService tokenStatsService
+                           TokenService tokenService, ApplicationProperties applicationProperties
                            ) {
 
         this.userRepository = userRepository;
@@ -88,7 +86,6 @@ public class AccountResource {
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
         this.applicationProperties = applicationProperties;
-        this.tokenStatsService = tokenStatsService;
     }
 
     /**
@@ -319,17 +316,7 @@ public class AccountResource {
                         longestToken.setExpiration(timestamp);
                         tokenService.save(longestToken);
                     }
-
-                    // Find the token stats for the token to be deleted and associate those stats with the longest token.
-                    tokenStatsService
-                        .getAllTokenStatsByTokenId(deleteTokenId)
-                        .stream()
-                        .forEach(ts -> {
-                            ts.setToken(longestToken);
-                            tokenStatsService.save(ts);
-                        });
-
-                    tokenService.delete(deleteTokenId);
+                    tokenService.delete(token, longestToken);
                 }
             } else {
                 throw new AuthenticationException("User does not have the permission to update the token requested");

@@ -55,10 +55,11 @@ public interface TokenService {
     void increaseTokenUsage(Long id, int increment);
 
     List<Token> findAllExpiresBeforeDate(Instant date);
+
     /**
-     * Delete the "id" token.
-     *
-     * @param id the id of the entity.
+     * Deletes the oldToken and associates its token stats with a new token.
+     * @param oldToken token to be deleted
+     * @param newToken token to associate the old token's token stats
      */
-    void delete(Long id);
+    void delete(Token oldToken, Token newToken);
 }

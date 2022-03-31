@@ -53,5 +53,4 @@ public interface TokenStatsService {
 
     List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after);
 
-    List<TokenStats> getAllTokenStatsByTokenId(Long tokenId);
 }
