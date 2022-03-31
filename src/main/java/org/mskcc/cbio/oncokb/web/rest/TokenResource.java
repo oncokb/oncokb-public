@@ -99,22 +99,4 @@ public class TokenResource {
         Optional<Token> token = tokenService.findByToken(UUID.fromString(uuid));
         return ResponseUtil.wrapOrNotFound(token);
     }
-
-    /**
-     * {@code DELETE  /tokens/:uuid} : delete the "uuid" token.
-     *
-     * @param uuid uuid of the token to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DeleteMapping("/tokens/{uuid}")
-    public ResponseEntity<Void> deleteToken(@PathVariable String uuid) {
-        log.debug("REST request to delete Token : {}", uuid);
-        Optional<Token> token = tokenService.findByToken(UUID.fromString(uuid));
-        if (token.isPresent()) {
-            tokenService.delete(token.get().getId());
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
-    }
 }

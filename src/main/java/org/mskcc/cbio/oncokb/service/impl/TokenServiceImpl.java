@@ -4,7 +4,9 @@ import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.TokenRepository;
+import org.mskcc.cbio.oncokb.repository.TokenStatsRepository;
 import org.mskcc.cbio.oncokb.service.TokenService;
+import org.mskcc.cbio.oncokb.web.rest.errors.CustomMessageRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -32,13 +36,21 @@ public class TokenServiceImpl implements TokenService {
 
     private final TokenRepository tokenRepository;
 
+    private final TokenStatsRepository tokenStatsRepository;
+
     private final CacheManager cacheManager;
 
     private final CacheNameResolver cacheNameResolver;
 
 
-    public TokenServiceImpl(TokenRepository tokenRepository, CacheManager cacheManager, CacheNameResolver cacheNameResolver) {
+    public TokenServiceImpl(
+        TokenRepository tokenRepository, 
+        CacheManager cacheManager, 
+        CacheNameResolver cacheNameResolver,
+        TokenStatsRepository tokenStatsRepository
+    ) {
         this.tokenRepository = tokenRepository;
+        this.tokenStatsRepository = tokenStatsRepository;
         this.cacheManager = cacheManager;
         this.cacheNameResolver = cacheNameResolver;
     }
@@ -107,9 +119,43 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
+    public void expireToken(Token token) {
+        token.setExpiration(Instant.now());
+        save(token);
+    }
+
+    @Override
     public void delete(Long id) {
         log.debug("Request to delete Token : {}", id);
-        tokenRepository.deleteById(id);
+
+        Optional<Token> tokenOptional = tokenRepository.findById(id);
+        if (!tokenOptional.isPresent()) {
+            throw new CustomMessageRuntimeException("Token could not be found");
+        }
+        Token token = tokenOptional.get();
+
+        List<Token> tokens = findByUser(token.getUser());
+        if (tokens.size() < 2) {
+            expireToken(token);
+        } else {
+            // Ideally, users should have at most two tokens, so deleting one will just mean that
+            // we assign the token's expiration to the other token.
+            // In case where user has more than two tokens, we apply the expiration of the longest token
+            // to the second longest token.
+            Instant timestamp = token.getExpiration();
+            tokens = tokens.stream().filter(t -> !t.getId().equals(token.getId())).collect(Collectors.toCollection(ArrayList::new));
+            Token longestToken = tokens.stream().max(Comparator.comparing(Token::getExpiration)).get();
+            if (timestamp.isAfter(longestToken.getExpiration())) {
+                longestToken.setExpiration(timestamp);
+                save(longestToken);
+            }
+
+            // Assign the token's token stats to a new token before deleting
+            tokenStatsRepository.updateAssociatedToken(token, longestToken);
+            tokenRepository.delete(token);
+            this.clearTokenCaches(token);
+        }
+
     }
 
     private void clearTokenCaches(Token token) {

@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.repository;
 
+import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
@@ -30,4 +31,8 @@ public interface TokenStatsRepository extends JpaRepository<TokenStats, Long> {
     " where tokenStats.accessTime > ?1 " +
     " group by tokenStats.token, DATE_FORMAT(tokenStats.accessTime,'%Y-%m'), tokenStats.resource", nativeQuery = true)
     List<UserTokenUsageWithInfo> countTokenUsageByTokenTimeResource(Instant after);
+
+    @Modifying
+    @Query(value= "update TokenStats tokenStats set tokenStats.token = ?2 where tokenStats.token = ?1")
+    void updateAssociatedToken(Token token, Token newToken);
 }

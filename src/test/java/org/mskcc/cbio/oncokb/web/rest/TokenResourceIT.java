@@ -318,24 +318,5 @@ public class TokenResourceIT {
         List<Token> tokenList = tokenRepository.findAll();
         assertThat(tokenList).hasSize(databaseSizeBeforeUpdate);
     }
-
-    @Test
-    @Transactional
-    public void deleteToken() throws Exception {
-        // Initialize the database
-        userRepository.saveAndFlush(user);
-        token.setUser(user);
-        tokenService.save(token);
-
-        int databaseSizeBeforeDelete = tokenRepository.findAll().size();
-
-        // Delete the token
-        restTokenMockMvc.perform(delete("/api/tokens/{uuid}", token.getToken())
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
-
-        // Validate the database contains one less item
-        List<Token> tokenList = tokenRepository.findAll();
-        assertThat(tokenList).hasSize(databaseSizeBeforeDelete - 1);
-    }
+    
 }

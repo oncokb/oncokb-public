@@ -52,4 +52,5 @@ public interface TokenStatsService {
     List<UserTokenUsage> getUserTokenUsage(Instant before);
 
     List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after);
+
 }

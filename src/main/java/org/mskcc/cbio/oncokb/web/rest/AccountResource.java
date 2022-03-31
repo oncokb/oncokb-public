@@ -298,23 +298,7 @@ public class AccountResource {
         Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
         if (userLogin.isPresent() && token.getUser() != null) {
             if (token.getUser().getLogin().equalsIgnoreCase(userLogin.get())) {
-                List<Token> tokens = tokenService.findByUser(token.getUser());
-                if (tokens.size() < 2) {
-                    tokenProvider.expireToken(token);
-                } else {
-                    // Ideally, users should have at most two tokens, so deleting one will just mean that
-                    // we assign the token's expiration to the other token.
-                    // In case where user has more than two tokens, we apply the expiration of the longest token
-                    // to the second longest token.
-                    Instant timestamp = token.getExpiration();
-                    tokenService.delete(token.getId());
-                    tokens = tokenService.findByUser(token.getUser());
-                    Token longestToken = tokens.stream().max(Comparator.comparing(Token::getExpiration)).get();
-                    if (timestamp.isAfter(longestToken.getExpiration())) {
-                        longestToken.setExpiration(timestamp);
-                        tokenService.save(longestToken);
-                    }
-                }
+                tokenService.delete(token.getId());
             } else {
                 throw new AuthenticationException("User does not have the permission to update the token requested");
             }

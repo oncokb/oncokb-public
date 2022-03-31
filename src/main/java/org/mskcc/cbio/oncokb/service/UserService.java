@@ -649,7 +649,7 @@ public class UserService {
         if(updatedUserDTO.isPresent()){
             List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
             tokens.forEach(token -> {
-                tokenProvider.expireToken(token);
+                tokenService.expireToken(token);
             });
         }
     }
