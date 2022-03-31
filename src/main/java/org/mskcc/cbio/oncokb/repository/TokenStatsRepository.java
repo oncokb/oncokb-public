@@ -34,5 +34,5 @@ public interface TokenStatsRepository extends JpaRepository<TokenStats, Long> {
 
     @Modifying
     @Query(value= "update TokenStats tokenStats set tokenStats.token = ?2 where tokenStats.token = ?1")
-    void setTokenId(Token token, Token newToken);
+    void updateAssociatedToken(Token token, Token newToken);
 }

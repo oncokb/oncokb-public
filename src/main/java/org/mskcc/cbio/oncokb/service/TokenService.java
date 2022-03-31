@@ -56,10 +56,11 @@ public interface TokenService {
 
     List<Token> findAllExpiresBeforeDate(Instant date);
 
+    void expireToken(Token token);
+
     /**
-     * Deletes the oldToken and associates its token stats with a new token.
-     * @param oldToken token to be deleted
-     * @param newToken token to associate the old token's token stats
+     * Deletes the token and associates its token stats with a new token.
+     * @param id id of token
      */
-    void delete(Token oldToken, Token newToken);
+    void delete(Long id);
 }

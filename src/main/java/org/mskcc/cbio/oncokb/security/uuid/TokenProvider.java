@@ -103,11 +103,6 @@ public class TokenProvider implements InitializingBean {
         tokenService.save(newToken);
     }
 
-    public void expireToken(Token token) {
-        token.setExpiration(Instant.now());
-        tokenService.save(token);
-    }
-
     // This method is used in the frontend thymeleaf parsing
     public UUID getPubWebToken() {
         Optional<User> user = userRepository.findOneByLogin(PUBLIC_WEBSITE_LOGIN);
