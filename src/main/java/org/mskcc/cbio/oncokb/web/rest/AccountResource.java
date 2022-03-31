@@ -34,6 +34,7 @@ import javax.validation.Valid;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing the current user's account.
@@ -55,6 +56,8 @@ public class AccountResource {
 
     private final TokenService tokenService;
 
+    private final TokenStatsService tokenStatsService;
+
     private final PasswordEncoder passwordEncoder;
 
     private final ApplicationProperties applicationProperties;
@@ -71,7 +74,8 @@ public class AccountResource {
                            SlackService slackService, EmailService emailService,
                            AuthenticationManagerBuilder authenticationManagerBuilder,
                            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
-                           TokenService tokenService, ApplicationProperties applicationProperties
+                           TokenService tokenService, ApplicationProperties applicationProperties,
+                           TokenStatsService tokenStatsService
                            ) {
 
         this.userRepository = userRepository;
@@ -84,6 +88,7 @@ public class AccountResource {
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
         this.applicationProperties = applicationProperties;
+        this.tokenStatsService = tokenStatsService;
     }
 
     /**
@@ -307,13 +312,24 @@ public class AccountResource {
                     // In case where user has more than two tokens, we apply the expiration of the longest token
                     // to the second longest token.
                     Instant timestamp = token.getExpiration();
-                    tokenService.delete(token.getId());
-                    tokens = tokenService.findByUser(token.getUser());
+                    Long deleteTokenId = token.getId();
+                    tokens = tokens.stream().filter(t -> !t.getId().equals(deleteTokenId)).collect(Collectors.toCollection(ArrayList::new));
                     Token longestToken = tokens.stream().max(Comparator.comparing(Token::getExpiration)).get();
                     if (timestamp.isAfter(longestToken.getExpiration())) {
                         longestToken.setExpiration(timestamp);
                         tokenService.save(longestToken);
                     }
+
+                    // Find the token stats for the token to be deleted and associate those stats with the longest token.
+                    tokenStatsService
+                        .getAllTokenStatsByTokenId(deleteTokenId)
+                        .stream()
+                        .forEach(ts -> {
+                            ts.setToken(longestToken);
+                            tokenStatsService.save(ts);
+                        });
+
+                    tokenService.delete(deleteTokenId);
                 }
             } else {
                 throw new AuthenticationException("User does not have the permission to update the token requested");

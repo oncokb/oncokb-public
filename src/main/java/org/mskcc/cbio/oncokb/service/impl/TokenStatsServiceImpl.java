@@ -74,4 +74,8 @@ public class TokenStatsServiceImpl implements TokenStatsService {
     public List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after) {
         return tokenStatsRepository.countTokenUsageByTokenTimeResource(after);
     }
+
+    public List<TokenStats> getAllTokenStatsByTokenId(Long tokenId) {
+        return tokenStatsRepository.findAllByToken_Id(tokenId);
+    }
 }
