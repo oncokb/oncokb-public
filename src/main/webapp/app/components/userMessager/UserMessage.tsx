@@ -7,6 +7,7 @@ import {
   computed,
   reaction,
   IReactionDisposer,
+  toJS,
 } from 'mobx';
 import autobind from 'autobind-decorator';
 import * as _ from 'lodash';
@@ -33,7 +34,7 @@ function makeMessageKey(id: string) {
 // ADD MESSAGE IN FOLLOWING FORMAT
 // UNIQUE ID IS IMPORTANT B/C WE REMEMBER A MESSAGE HAS BEEN SHOWN
 // BASED ON USERS LOCALSTORAGE
-let MESSAGE_DATA: IUserMessage[];
+let MESSAGE_DATA: IUserMessage[] = [];
 
 if (
   ['beta.oncokb.org', 'www.oncokb.org', 'localhost'].includes(
@@ -66,23 +67,40 @@ if (
     {
       dateEnd: 100000000000000,
       content: (
-        <TextScroller
-          text={
-            <span>
-              Part of OncoKB’s content is now FDA-recognized. For more details,
-              please see our{' '}
-              <Link
-                to={PAGE_ROUTE.FDA_RECOGNITION}
-                style={{ color: 'white', textDecoration: 'underline' }}
-              >
-                FDA Recognition
-              </Link>{' '}
-              page.
-            </span>
-          }
-        />
+        <span>
+          Part of OncoKB’s content is now FDA-recognized. For more details,
+          please see our{' '}
+          <Link
+            to={PAGE_ROUTE.FDA_RECOGNITION}
+            style={{ color: 'white', textDecoration: 'underline' }}
+          >
+            FDA Recognition
+          </Link>{' '}
+          page.
+        </span>
       ),
       id: '2021-fda-recognition',
+    },
+    {
+      dateEnd: 1649696400000,
+      content: (
+        <div>
+          <span>
+            OncoKB is going to present at AACR Poster Session(04/11, 9am,
+            Section 28), come and join us! Click
+          </span>
+          <a
+            className="btn btn-primary btn-sm mx-2 user-messager-container-button"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://www.abstractsonline.com/pp8/#!/10517/presentation/15708"
+          >
+            HERE
+          </a>
+          for more details.
+        </div>
+      ),
+      id: '2022_aacr_poster_session',
     },
   ];
 }
@@ -106,6 +124,7 @@ export default class UserMessage extends React.Component<UserMessageProps> {
         false
       )
     );
+    this.messages = this.getMessages();
   }
 
   componentWillUnmount(): void {
@@ -116,62 +135,46 @@ export default class UserMessage extends React.Component<UserMessageProps> {
 
   readonly reactions: IReactionDisposer[] = [];
 
-  messageData = remoteData<IUserMessage[]>(async () => {
-    return Promise.resolve(MESSAGE_DATA);
-  });
+  @observable messages: IUserMessage[] = [];
 
-  @observable dismissed = false;
-
-  get shownMessage() {
+  getMessages() {
     if (localStorage.getItem(DISABLE_BANNER_OPT) === 'true') {
-      return undefined;
+      return [];
     }
-    const messageToShow = _.find(this.messageData.result, message => {
+    return _.filter(MESSAGE_DATA, message => {
       const notYetShown = !localStorage.getItem(makeMessageKey(message.id));
       const expired = Date.now() > message.dateEnd;
       return notYetShown && !expired;
-    });
-
-    return messageToShow;
-  }
-
-  @autobind
-  close() {
-    this.markMessageDismissed(this.shownMessage!);
+    }).sort((a, b) => a.dateEnd - b.dateEnd);
   }
 
   @action
-  markMessageDismissed(message: IUserMessage) {
-    localStorage.setItem(makeMessageKey(message.id), 'shown');
-    this.dismissed = true;
+  markMessageDismissed(messageId: string) {
+    localStorage.setItem(makeMessageKey(messageId), 'shown');
+    this.messages = this.getMessages();
   }
 
   @computed
   get showBeVisible() {
-    return (
-      this.props.show &&
-      !this.dismissed &&
-      this.messageData.isComplete &&
-      !!this.shownMessage
-    );
+    return this.props.show && this.messages.length > 0;
   }
 
   render() {
     if (this.showBeVisible) {
-      return (
-        <div className={styles.message}>
+      return toJS(this.messages).map(message => (
+        <div className={styles.message} key={message.id}>
           <Container
             fluid={!this.props.windowStore.isXLscreen}
             className={styles.messageContainer}
           >
-            <div>{this.shownMessage!.content}</div>
+            <div>{message.content}</div>
             <i
               className={classNames(styles.close, 'fa', 'fa-close')}
-              onClick={this.close}
+              onClick={() => this.markMessageDismissed(message.id)}
             />
           </Container>
         </div>
-      );
+      ));
     } else {
       return null;
     }
