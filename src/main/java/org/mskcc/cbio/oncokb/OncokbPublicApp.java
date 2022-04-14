@@ -10,10 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.service.EmailAlreadyUsedException;
 import org.mskcc.cbio.oncokb.service.InvalidPasswordException;
 import org.mskcc.cbio.oncokb.service.UsernameAlreadyUsedException;
-import org.mskcc.cbio.oncokb.web.rest.errors.LicenseAgreementNotAcceptedException;
-import org.mskcc.cbio.oncokb.web.rest.errors.CustomMessageRuntimeException;
-import org.mskcc.cbio.oncokb.web.rest.errors.DatabaseReadOnlyException;
-import org.mskcc.cbio.oncokb.web.rest.errors.TokenExpiredException;
+import org.mskcc.cbio.oncokb.web.rest.errors.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -25,6 +22,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -89,6 +89,8 @@ public class OncokbPublicApp {
                 options.addIgnoredExceptionForType(BadCredentialsException.class);
                 options.addIgnoredExceptionForType(IOException.class);
                 options.addIgnoredExceptionForType(HttpClientErrorException.class);
+                options.addIgnoredExceptionForType(HttpServerErrorException.class);
+                options.addIgnoredExceptionForType(ResponseStatusException.class);
                 options.addIgnoredExceptionForType(EmailAlreadyUsedException.class);
                 options.addIgnoredExceptionForType(InvalidPasswordException.class);
                 options.addIgnoredExceptionForType(UsernameAlreadyUsedException.class);
@@ -98,6 +100,8 @@ public class OncokbPublicApp {
                 options.addIgnoredExceptionForType(DatabaseReadOnlyException.class);
                 options.addIgnoredExceptionForType(InternalAuthenticationServiceException.class);
                 options.addIgnoredExceptionForType(CustomMessageRuntimeException.class);
+                options.addIgnoredExceptionForType(BadRequestAlertException.class);
+                options.addIgnoredExceptionForType(ResourceAccessException.class);
             });
         }
     }
