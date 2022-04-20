@@ -36,7 +36,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -102,7 +104,7 @@ public class SlackService {
 
     @Async
     public void sendApprovedConfirmation(UserDTO userDTO, Company company) {
-        String text = 
+        String text =
             String.format(
                 "%s has been approved to use %s's %s license and notified automatically.",
                 userDTO.getEmail(),
@@ -335,7 +337,7 @@ public class SlackService {
     private List<LayoutBlock> buildWarningBlocks(UserDTO userDTO, Company company) {
         List<LayoutBlock> blocks = new ArrayList<>();
         if(company != null){
-            String text = 
+            String text =
                 String.format(
                     ":star: *This email domain belongs to %s which has an OncoKB %s%s license. Please review and approve accordingly.*",
                     company.getName(),
@@ -758,32 +760,32 @@ public class SlackService {
                 case SEND_ACADEMIC_FOR_PROFIT_EMAIL:
                     title.setText("For Profit Clarification");
                     callbackId = CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL.getId();
-                    sb.append(getStringFromTextFile("src/main/resources/templates/mail/clarifyLicenseInForProfileCompanyString.txt"));
+                    sb.append(getStringFromResourceTemplateMailTextFile("clarifyLicenseInForProfileCompanyString.txt"));
                     break;
                 case SEND_ACADEMIC_CLARIFICATION_EMAIL:
                     title.setText("Domain Clarification");
                     callbackId = CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL.getId();
-                    sb.append(getStringFromTextFile("src/main/resources/templates/mail/clarifyAcademicUseWithoutInstituteEmailString.txt"));
+                    sb.append(getStringFromResourceTemplateMailTextFile("clarifyAcademicUseWithoutInstituteEmailString.txt"));
                     break;
                 case SEND_USE_CASE_CLARIFICATION_EMAIL:
                     title.setText("Use Case Clarification");
                     callbackId = CONFIRM_SEND_USE_CASE_CLARIFICATION_EMAIL.getId();
-                    sb.append(getStringFromTextFile("src/main/resources/templates/mail/clarifyUseCaseString.txt"));
+                    sb.append(getStringFromResourceTemplateMailTextFile("clarifyUseCaseString.txt"));
                     break;
                 case SEND_DUPLICATE_USER_CLARIFICATION_EMAIL:
                     title.setText("Clarify duplicate user");
                     callbackId = CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL.getId();
-                    sb.append(getStringFromTextFile("src/main/resources/templates/mail/clarifyDuplicateUserString.txt"));
+                    sb.append(getStringFromResourceTemplateMailTextFile("clarifyDuplicateUserString.txt"));
                     break;
                 case SEND_REJECTION_EMAIL:
                     title.setText("Rejection Email");
                     callbackId = CONFIRM_SEND_REJECTION_EMAIL.getId();
-                    sb.append(getStringFromTextFile("src/main/resources/templates/mail/rejectionEmailString.txt"));
+                    sb.append(getStringFromResourceTemplateMailTextFile("rejectionEmailString.txt"));
                     break;
                 case SEND_REJECT_ALUMNI_ADDRESS_EMAIL:
                     title.setText("Reject Alumni Address");
                     callbackId = CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL.getId();
-                    sb.append(getStringFromTextFile("src/main/resources/templates/mail/alumniEmailAddressString.txt"));
+                    sb.append(getStringFromResourceTemplateMailTextFile("alumniEmailAddressString.txt"));
                     break;
             }
         } catch (Exception e) {
@@ -815,14 +817,16 @@ public class SlackService {
         return SectionBlock.builder().text(PlainTextObject.builder().text(text).build()).blockId(blockId.getId()).build();
     }
 
-    private String getStringFromTextFile(String filePath) {
+    private String getStringFromResourceTemplateMailTextFile(String fileName) {
         StringBuilder sb = new StringBuilder();
 
-        try (Stream<String> stream = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)) {
-            stream.forEach(s -> sb.append(s).append("\n"));
-        }
-        catch (Exception e) {
-            log.warn("Failed to get string from text file");
+        URL targetFileUrl = getClass().getClassLoader().getResource("templates/mail/" + fileName);
+        if (targetFileUrl != null) {
+            try (Stream<String> stream = Files.lines(Paths.get(targetFileUrl.getPath()), StandardCharsets.UTF_8)) {
+                stream.forEach(s -> sb.append(s).append("\n"));
+            } catch (Exception e) {
+                log.warn("Failed to get string from text file");
+            }
         }
 
         return sb.toString();
