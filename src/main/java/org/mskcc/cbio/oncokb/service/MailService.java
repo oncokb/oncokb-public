@@ -119,6 +119,11 @@ public class MailService {
         javaMailSender.send(mimeMessage);
     }
 
+    @Async
+    public void sendEmailToDevTeam(String subject, String content, List<String> attachmentFilesNames, boolean isMultipart, boolean isHtml) throws MessagingException {
+        this.sendEmail(this.applicationProperties.getEmailAddresses().getTechDevAddress(), this.applicationProperties.getEmailAddresses().getTechDevAddress(), null, subject, content, attachmentFilesNames, isMultipart, isHtml);
+    }
+
     public void sendFeedback(String from, String subject, String content) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, StandardCharsets.UTF_8.name());

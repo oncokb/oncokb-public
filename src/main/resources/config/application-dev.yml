@@ -176,3 +176,8 @@ application:
     s3-region:
   github-token:
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
+  smartsheet:
+    access-token:
+    sheet-id:
+    editor: OncoKB
+    column-ids:

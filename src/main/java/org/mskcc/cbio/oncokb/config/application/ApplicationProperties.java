@@ -34,6 +34,7 @@ public class ApplicationProperties {
     private AWSProperties aws;
     private String githubToken;
     private Boolean dbReadOnly;
+    private SmartsheetProperties smartsheet;
 
     public String getName() {
         return name;
@@ -170,4 +171,11 @@ public class ApplicationProperties {
         this.dbReadOnly = dbReadOnly;
     }
 
+    public SmartsheetProperties getSmartsheet() {
+        return smartsheet;
+    }
+
+    public void setSmartsheet(SmartsheetProperties smartsheet) {
+        this.smartsheet = smartsheet;
+    }
 }
