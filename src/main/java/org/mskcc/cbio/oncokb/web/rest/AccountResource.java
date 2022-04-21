@@ -28,6 +28,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -51,6 +52,8 @@ public class AccountResource {
 
     private final SlackService slackService;
 
+    private final SmartsheetService smartsheetService;
+
     private final EmailService emailService;
 
     private final TokenService tokenService;
@@ -69,6 +72,7 @@ public class AccountResource {
     public AccountResource(UserRepository userRepository, UserService userService,
                            MailService mailService, TokenProvider tokenProvider,
                            SlackService slackService, EmailService emailService,
+                           SmartsheetService smartsheetService,
                            AuthenticationManagerBuilder authenticationManagerBuilder,
                            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
                            TokenService tokenService, ApplicationProperties applicationProperties
@@ -80,6 +84,7 @@ public class AccountResource {
         this.mailService = mailService;
         this.tokenProvider = tokenProvider;
         this.slackService = slackService;
+        this.smartsheetService = smartsheetService;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
@@ -154,6 +159,13 @@ public class AccountResource {
     }
 
     private boolean activateUser(UserDTO userDTO, CompanyCandidate companyCandidate) {
+        // Add the new user to the ROC smartsheet
+        try {
+            this.smartsheetService.addUserToSheet(userDTO.getFirstName()+ " " + userDTO.getLastName(), userDTO.getEmail(), userDTO.getCompanyName());
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
         // When the possible company is on LIMITED tier, we proceed with the manual approval process
         if(!companyCandidate.getCanAssociate()){
             Company limitedCompany = null;

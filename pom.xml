@@ -92,6 +92,7 @@
         <junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
         <slack.version>1.7.1</slack.version>
         <sentry.version>5.6.1</sentry.version>
+        <smartsheet.version>2.146.0</smartsheet.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -371,6 +372,11 @@
             <groupId>com.slack.api</groupId>
             <artifactId>bolt-servlet</artifactId>
             <version>${slack.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.smartsheet</groupId>
+            <artifactId>smartsheet-sdk-java</artifactId>
+            <version>${smartsheet.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
         <dependency>
