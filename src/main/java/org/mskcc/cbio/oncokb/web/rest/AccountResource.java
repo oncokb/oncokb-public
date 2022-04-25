@@ -161,7 +161,7 @@ public class AccountResource {
     private boolean activateUser(UserDTO userDTO, CompanyCandidate companyCandidate) {
         // Add the new user to the ROC smartsheet
         try {
-            this.smartsheetService.addUserToSheet(userDTO.getFirstName()+ " " + userDTO.getLastName(), userDTO.getEmail(), userDTO.getCompanyName());
+            this.smartsheetService.addUserToSheet(userDTO.getFirstName()+ " " + userDTO.getLastName(), userDTO.getEmail(), Optional.ofNullable(userDTO.getCompanyName()).orElse(""), Optional.ofNullable(userDTO.getCountry()).orElse(""));
         } catch (MessagingException e) {
             e.printStackTrace();
         }

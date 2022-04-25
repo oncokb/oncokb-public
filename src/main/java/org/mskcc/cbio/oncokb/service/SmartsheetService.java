@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -42,7 +43,8 @@ public class SmartsheetService {
     public void addUserToSheet(
         @NotEmpty String userName,
         @NotEmpty String userEmail,
-        @NotEmpty String userCompany
+        @NotNull String userCompany,
+        @NotNull String userCountry
     ) throws MessagingException {
         if (this.smartsheet != null
             && this.smartsheetProperties.getSheetId() != null
@@ -77,12 +79,19 @@ public class SmartsheetService {
                         return;
                     }
 
+                    StringBuilder companyInfoSb = new StringBuilder();
+                    companyInfoSb.append(userCompany);
+                    if (StringUtils.isNotEmpty(userCountry)) {
+                        companyInfoSb.append(" - ");
+                        companyInfoSb.append(userCountry);
+                    }
+
                     // Specify cell values for first row
                     List<Cell> rowACells = Arrays.asList(
                         new Cell(this.smartsheetProperties.getColumnIds().get(0)).setValue(this.smartsheetProperties.getEditor()),
                         new Cell(this.smartsheetProperties.getColumnIds().get(1)).setValue(userName),
                         new Cell(this.smartsheetProperties.getColumnIds().get(2)).setValue(userEmail),
-                        new Cell(this.smartsheetProperties.getColumnIds().get(3)).setValue(userCompany)
+                        new Cell(this.smartsheetProperties.getColumnIds().get(3)).setValue(companyInfoSb.toString())
                     );
 
                     // Specify contents of first row
