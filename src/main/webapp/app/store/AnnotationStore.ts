@@ -199,13 +199,17 @@ export class AnnotationStore {
     await: () => [this.gene],
     invoke: async () => {
       try {
+        const variant = this.hgvsgQuery
+          ? this.annotationResultByHgvsg.result.query.alteration
+          : this.alterationQuery;
+        if (!variant) {
+          return undefined;
+        }
         const variants = await apiClient.variantsLookupGetUsingGET({
           hugoSymbol: this.gene.result.hugoSymbol
             ? this.gene.result.hugoSymbol
             : this.hugoSymbolQuery,
-          variant: this.hgvsgQuery
-            ? this.annotationResultByHgvsg.result.query.alteration
-            : this.alterationQuery,
+          variant,
         });
         return variants[0];
       } catch (e) {
@@ -377,6 +381,9 @@ export class AnnotationStore {
   readonly relevantAlterations = remoteData<Alteration[]>({
     await: () => [this.gene, this.alteration],
     invoke: async () => {
+      if (!this.gene.result.entrezGeneId || !this.alteration.result) {
+        return [];
+      }
       return privateClient.utilRelevantAlterationsGetUsingGET({
         entrezGeneId: this.gene.result.entrezGeneId,
         alteration: this.alteration.result
