@@ -5,11 +5,7 @@ import SearchTwoImg from 'content/images/search_advanced_2.png';
 import ClinicalImg from 'content/images/cbioportal-clinical.png';
 import BiologicalImg from 'content/images/cbioportal-biological.png';
 import ERBBImg from 'content/images/ERBB.png';
-import {
-  ElementType,
-  SimpleTable,
-  SimpleTableCell,
-} from 'app/components/SimpleTable';
+import { ElementType, SimpleTable } from 'app/components/SimpleTable';
 import {
   NewlyAddedGenesListItem,
   NewlyAddedGeneType,
@@ -152,13 +148,16 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     priorityNews: [
       <span>
         We loved connecting with so many of you at the 2022 AACR annual meeting.
-        If you missed our poster, you can download a copy here
+        If you missed our poster, you can download a copy{' '}
+        <a href="content/files/poster/AACR_poster_2022v2.pdf" download>
+          here
+        </a>
       </span>,
     ],
     newlyAddedGenes: ['AFF4'],
     news: [
       <span>
-        Updated therapeutic implications: - Additional therapies to variants
+        Updated therapeutic implications: - Additional therapies for variants
         already assigned a level of evidence
         <Row className={'overflow-auto'}>
           <table className="table">
