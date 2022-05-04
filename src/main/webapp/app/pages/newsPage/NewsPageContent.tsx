@@ -5,11 +5,7 @@ import SearchTwoImg from 'content/images/search_advanced_2.png';
 import ClinicalImg from 'content/images/cbioportal-clinical.png';
 import BiologicalImg from 'content/images/cbioportal-biological.png';
 import ERBBImg from 'content/images/ERBB.png';
-import {
-  ElementType,
-  SimpleTable,
-  SimpleTableCell,
-} from 'app/components/SimpleTable';
+import { ElementType, SimpleTable } from 'app/components/SimpleTable';
 import {
   NewlyAddedGenesListItem,
   NewlyAddedGeneType,
@@ -148,6 +144,140 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '05052022': {
+    priorityNews: [
+      <span>
+        We loved connecting with so many of you at the 2022 AACR annual meeting.
+        If you missed our poster, you can download a copy{' '}
+        <a href="content/files/poster/AACR_poster_2022v2.pdf" download>
+          here
+        </a>
+      </span>,
+    ],
+    newlyAddedGenes: ['AFF4'],
+    news: [
+      <span>
+        Updated therapeutic implications: - Additional therapies for variants
+        already assigned a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Highest Level of Evidence</th>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Drug</th>
+                <th>Drug-specific Level of Evidence</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>EGFR</td>
+                <td>S768I, L861Q, G719</td>
+                <td rowSpan={5}>Non-Small Cell Lung Cancer</td>
+                <td>Osimertinib</td>
+                <td rowSpan={5}>2</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in NSCLC NCCN v1.2022</span>
+                    <PMIDLink pmids={'31825714'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={2}>1</td>
+                <td rowSpan={2}>ROS1</td>
+                <td rowSpan={2}>Fusions</td>
+                <td>Ceritinib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in NSCLC NCCN v1.2022</span>
+                    <PMIDLink pmids={'28520527'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Lorlatinib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in NSCLC NCCN v1.2022</span>
+                    <PMIDLink pmids={'31669155'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={2}>2</td>
+                <td rowSpan={2}>MET</td>
+                <td rowSpan={2}>Amplifications</td>
+                <td>Capmatinib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in NSCLC NCCN v1.2022</span>
+                    <PMIDLink pmids={'32877583'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Tepotinib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Listing in NSCLC NCCN v1.2022</span>
+                    <AbstractLink
+                      abstract={'Le et al. Abstract# 9021, ASCO 2021'}
+                      link={
+                        'https://ascopubs.org/doi/abs/10.1200/JCO.2021.39.15_suppl.9021'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>3A</td>
+                <td>KRAS</td>
+                <td>G12C</td>
+                <td>Pancreatic Cancer</td>
+                <td>Sotorasib</td>
+                <td>3A</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <AbstractLink
+                      abstract={
+                        'Strickler et al. Abstract# 360490, ASCO GI 2022'
+                      }
+                      link={
+                        'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.36_suppl.360490'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>FGFR2</td>
+                <td>Fusions</td>
+                <td>Cholangiocarcinoma</td>
+                <td>Futibatinib</td>
+                <td>3A</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <AbstractLink
+                      abstract={'Goyal et al. Abstract# CT010, AACR 2021'}
+                      link={
+                        'https://aacrjournals.org/cancerres/article/81/13_Supplement/CT010/669687/Abstract-CT010-Primary-results-of-phase-2-FOENIX'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+  },
   '03292022': {
     updatedImplication: [
       [
