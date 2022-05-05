@@ -159,38 +159,13 @@ application:
   profile: prod
   api-proxy-url: 'http://oncokb-core:8888'
   sitemap-enabled: true
-  google-webmaster-verification:
-  token-usage-check:
-  token-usage-check-whitelist:
-  slack: # Add the following if you wish to integrate user registration to Slack and send the weekly unapproved users email
-    # specific to the app you install to your Slack workspace
-    user-registration-webhook: # for sending user requests to Slack
-    slack-bot-oauth-token: # for permission to read conversation history (generation of unapproved users list)
-    # for Slack link in weekly unapproved users email
-    slack-base-url:
-    user-registration-channel-id:
   redis:
     enabled: true
     type: 'sentinel'
     password: 'oncokb-public-redis-password'
     sentinel-master-name: 'oncokb-master'
     address: 'redis://oncokb-public-sentinel-redis:6379'
-  email-addresses:
-    license-address:
-    registration-address:
-    contact-address:
-    tech-dev-address:
   public-website-api-threshold: 2000
-  frontend:
-    sentry-project-id:
-    google-analytics-project-id:
-  aws:
-    s3-access-key:
-    s3-secret-key:
-    s3-region:
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
   smartsheet:
-    access-token:
-    sheet-id:
     editor: OncoKB
-    column-ids:
