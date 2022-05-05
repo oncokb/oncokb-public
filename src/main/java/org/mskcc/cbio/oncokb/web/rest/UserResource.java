@@ -6,10 +6,10 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
-import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.MailService;
+import org.mskcc.cbio.oncokb.service.SmartsheetService;
 import org.mskcc.cbio.oncokb.service.TokenService;
 import org.springframework.data.domain.Sort;
 
@@ -86,17 +86,20 @@ public class UserResource {
 
     private final TokenService tokenService;
 
+    private final SmartsheetService smartsheetService;
+
     public UserResource(
-        UserService userService, 
+        UserService userService,
         UserRepository userRepository,
-        UserDetailsRepository userDetailsRepository,
-        MailService mailService, 
-        TokenService tokenService
+        MailService mailService,
+        TokenService tokenService,
+        SmartsheetService smartsheetService
     ) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
         this.tokenService = tokenService;
+        this.smartsheetService = smartsheetService;
     }
 
     /**
@@ -130,11 +133,15 @@ public class UserResource {
                 managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
             }
             User newUser = userService.createUser(managedUserVM, Optional.ofNullable(managedUserVM.getTokenValidDays()), Optional.ofNullable(managedUserVM.getTokenIsRenewable()));
+            UserDTO newUserDTO = userMapper.userToUserDTO(newUser);
+            if (managedUserVM.getNeedsMskRocReview()) {
+                this.smartsheetService.addUserToSheetIfShould(newUserDTO);
+            }
             if (managedUserVM.getNotifyUserOnTrialCreation()) {
                 userService.initiateTrialAccountActivation(newUser.getLogin());
-                mailService.sendActiveTrialMail(userMapper.userToUserDTO(newUser), true);
+                mailService.sendActiveTrialMail(newUserDTO, true);
             } else {
-                mailService.sendCreationEmail(userMapper.userToUserDTO(newUser));
+                mailService.sendCreationEmail(newUserDTO);
             }
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .body(newUser);
@@ -229,7 +236,7 @@ public class UserResource {
 
     /**
      * Get emails of users that are not part of a company
-     * 
+     *
      * @return user emails
      */
     @GetMapping("/users/non-company-emails")

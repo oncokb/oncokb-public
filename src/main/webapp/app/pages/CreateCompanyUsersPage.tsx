@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { RouteComponentProps } from 'react-router';
-import { Row, Col, Button, Alert, Tab, Tabs } from 'react-bootstrap';
+import { Row, Col, Button, Alert, Tab, Tabs, Form } from 'react-bootstrap';
 import { getSectionClassName } from './account/AccountUtils';
 import { action, observable } from 'mobx';
 import { CompanyDTO, ManagedUserVM } from 'app/shared/api/generated/API';
@@ -19,6 +19,7 @@ import { LicenseStatus } from 'app/config/constants';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { Link } from 'react-router-dom';
 import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
+import { COLOR_LIGHT_GREY } from 'app/config/theme';
 
 interface MatchParams {
   id: string;
@@ -43,6 +44,7 @@ type UserInfoType = {
   email: string;
   firstName: string;
   lastName: string;
+  needsMskRocReview: boolean;
 };
 
 const emptyUserInfo: UserInfoType = {
@@ -52,6 +54,7 @@ const emptyUserInfo: UserInfoType = {
   email: '',
   firstName: '',
   lastName: '',
+  needsMskRocReview: true,
 };
 
 const batchUserInputFormatText = `Enter the user informations (one user per line) using the format: email, first name, last name \nie) user@email.com,Sample,User
@@ -122,6 +125,7 @@ export class CreateCompanyUsersPage extends React.Component<
         companyName: this.company.result?.name,
         notifyUserOnTrialCreation:
           this.company.result?.licenseStatus === LicenseStatus.TRIAL,
+        needsMskRocReview: userInfo.needsMskRocReview,
       } as ManagedUserVM;
     });
 
@@ -196,6 +200,7 @@ export class CreateCompanyUsersPage extends React.Component<
           firstName: userInfoFields[1] || '',
           lastName: userInfoFields[2] || '',
           creationStatus: { status },
+          needsMskRocReview: true,
         });
         return true;
       }
@@ -254,7 +259,10 @@ export class CreateCompanyUsersPage extends React.Component<
           )}
 
           {this.userInfos.map((info, idx) => (
-            <Row key={`${idx}`}>
+            <Row
+              key={`${idx}`}
+              className={'d-flex justify-content-center align-items-center'}
+            >
               <Col>
                 <AvField
                   name={`email${idx}`}
@@ -301,9 +309,28 @@ export class CreateCompanyUsersPage extends React.Component<
                   disabled={CreateUserMode[mode] === CreateUserMode.BATCH}
                 />
               </Col>
+              <Col>
+                <Form.Check
+                  inline
+                  onClick={() =>
+                    (this.userInfos[idx].needsMskRocReview = !this.userInfos[
+                      idx
+                    ].needsMskRocReview)
+                  }
+                  checked={this.userInfos[idx].needsMskRocReview}
+                  label={'Send to MSK ROC review'}
+                  type={'checkbox'}
+                  key={`needsMskRocReview${idx}`}
+                  id={`needsMskRocReview${idx}`}
+                />
+              </Col>
               {CreateUserMode[mode] === CreateUserMode.SINGLE && (
                 <i
-                  style={{ marginTop: '40px', cursor: 'pointer' }}
+                  style={
+                    this.userInfos.length <= 1
+                      ? { color: COLOR_LIGHT_GREY }
+                      : { cursor: 'pointer' }
+                  }
                   className="fa fa-times-circle ml-2 fa-lg"
                   onClick={() => {
                     if (this.userInfos.length > 1) {

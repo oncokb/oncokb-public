@@ -32,6 +32,7 @@ import javax.mail.MessagingException;
 import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -158,33 +159,35 @@ public class AccountResource {
         }
     }
 
-    private boolean activateUser(UserDTO userDTO, CompanyCandidate companyCandidate) {
-        // Add the new user to the ROC smartsheet
-        try {
-            this.smartsheetService.addUserToSheet(userDTO.getFirstName()+ " " + userDTO.getLastName(), userDTO.getEmail(), Optional.ofNullable(userDTO.getCompanyName()).orElse(""), Optional.ofNullable(userDTO.getCountry()).orElse(""));
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+    private boolean activateUser(
+        @NotNull UserDTO userDTO,
+        @NotNull CompanyCandidate companyCandidate
+    ) {
+        boolean userIsActivated = false;
 
         // When the possible company is on LIMITED tier, we proceed with the manual approval process
-        if(!companyCandidate.getCanAssociate()){
+        if (!companyCandidate.getCanAssociate()) {
             Company limitedCompany = null;
-            if(companyCandidate.getCompanyCandidate().isPresent()){
+            if (companyCandidate.getCompanyCandidate().isPresent()) {
                 limitedCompany = companyCandidate.getCompanyCandidate().get();
             }
             slackService.sendUserRegistrationToChannel(userDTO, userService.trialAccountActivated(userDTO), limitedCompany);
-            return false;
+        } else {
+            Company company = companyCandidate.getCompanyCandidate().get();
+            userService.updateUserWithCompanyLicense(userDTO, company, false, false);
+            // Don't send the automated approval message to slack if the company is on trial
+            // We only want a message when the user accepts the trial license agreement.
+            if (company.getLicenseStatus().equals(LicenseStatus.REGULAR)) {
+                userService.approveUser(userDTO, false);
+                slackService.sendApprovedConfirmation(userDTO, company);
+                userIsActivated = true;
+            }
         }
 
-        Company company = companyCandidate.getCompanyCandidate().get();
-        userService.updateUserWithCompanyLicense(userDTO, company, false, false);
-        // Don't send the automated approval message to slack if the company is on trial
-        // We only want a message when the user accepts the trial license agreement.
-        if (company.getLicenseStatus().equals(LicenseStatus.REGULAR)) {
-            userService.approveUser(userDTO, false);
-            slackService.sendApprovedConfirmation(userDTO, company);
-        }
-        return true;
+        // Add the new user to the ROC smartsheet
+        this.smartsheetService.addUserToSheetIfShould(userDTO);
+
+        return userIsActivated;
     }
 
     /**
