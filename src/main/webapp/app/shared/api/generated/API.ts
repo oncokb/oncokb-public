@@ -159,6 +159,8 @@ export type ManagedUserVM = {
 
         'login': string
 
+        'needsMskRocReview': boolean
+
         'notifyUserOnTrialCreation': boolean
 
         'password': string

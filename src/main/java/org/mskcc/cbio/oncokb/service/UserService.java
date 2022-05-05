@@ -38,6 +38,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -658,6 +659,7 @@ public class UserService {
      * Find a company based on the user's email address domain.
      * @param userDTO the user
      */
+    @NotNull
     public CompanyCandidate findCompanyCandidate(UserDTO userDTO) {
 
         // Using the email domain, find a company, if possible.

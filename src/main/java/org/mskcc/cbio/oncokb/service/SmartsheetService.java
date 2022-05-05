@@ -10,6 +10,7 @@ import com.smartsheet.api.models.Sheet;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.SmartsheetProperties;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,18 +21,23 @@ import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
+import static org.mskcc.cbio.oncokb.config.Constants.MSK_EMAIL_DOMAIN;
 
 @Service
 public class SmartsheetService {
     private final Logger log = LoggerFactory.getLogger(SmartsheetService.class);
 
     private final MailService mailService;
+    private final SlackService slackService;
     private final SmartsheetProperties smartsheetProperties;
     private Smartsheet smartsheet;
 
-    public SmartsheetService(MailService mailService, ApplicationProperties applicationProperties) {
+    public SmartsheetService(MailService mailService, SlackService slackService, ApplicationProperties applicationProperties) {
         this.smartsheetProperties = applicationProperties.getSmartsheet();
         this.mailService = mailService;
+        this.slackService = slackService;
         if (this.smartsheetProperties != null && StringUtils.isNotEmpty(this.smartsheetProperties.getAccessToken())) {
             this.smartsheet = SmartsheetFactory.createDefaultClient(this.smartsheetProperties.getAccessToken());
         } else {
@@ -117,5 +123,27 @@ public class SmartsheetService {
         } else {
             log.warn("No user record is added since smartsheet is not initiated properly");
         }
+    }
+
+    public void addUserToSheetIfShould(UserDTO userDTO) {
+        if (shouldAddUser(userDTO)) {
+            try {
+                addUserToSheet(userDTO.getFirstName() + " " + userDTO.getLastName(), userDTO.getEmail(), Optional.ofNullable(userDTO.getCompanyName()).orElse(""), Optional.ofNullable(userDTO.getCountry()).orElse(""));
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean shouldAddUser(UserDTO userDTO) {
+        boolean withNote = this.slackService.withAcademicClarificationNote(userDTO, null);
+        if (withNote) {
+            return false;
+        }
+
+        if (userDTO.getEmail().endsWith(MSK_EMAIL_DOMAIN)) {
+            return false;
+        }
+        return true;
     }
 }

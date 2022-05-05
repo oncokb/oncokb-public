@@ -82,7 +82,10 @@ public class SlackService {
 
     @Async
     public void sendUserRegistrationToChannel(UserDTO user, boolean trialAccountActivated, Company company) {
-        withAcademicClarificationNote(user, null,  true);
+        boolean withNote = withAcademicClarificationNote(user, null);
+        if (withNote) {
+            mailService.sendAcademicClarificationEmail(user);
+        }
 
         log.debug("Sending notification to admin group that a user has registered a new account");
         if (StringUtils.isEmpty(this.applicationProperties.getSlack().getUserRegistrationWebhook())) {
@@ -269,7 +272,7 @@ public class SlackService {
                 sb.append("Sent use case clarification");
             } else if (withForProfitClarificationNote(userDTO, actionId)) {
                 sb.append("Clarified with user on for-profit affiliation");
-            } else if (withAcademicClarificationNote(userDTO, actionId, false)) {
+            } else if (withAcademicClarificationNote(userDTO, actionId)) {
                 sb.append("Clarified with user on noninstitutional email");
             } else if (withDuplicateUserClarificationNote(userDTO, actionId)) {
                 sb.append("Clarified with user on multiple account request");
@@ -408,9 +411,9 @@ public class SlackService {
             || actionId == CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL;
     }
 
-    private boolean withAcademicClarificationNote(UserDTO userDTO, ActionId actionId, boolean newUserActivation) {
+    public boolean withAcademicClarificationNote(UserDTO userDTO, ActionId actionId) {
         boolean withAcademicClarificationNote = false;
-        if (userDTO.getLicenseType().equals(LicenseType.ACADEMIC)) {
+        if (LicenseType.ACADEMIC.equals(userDTO.getLicenseType())) {
             if (!this.applicationProperties.getAcademicEmailClarifyDomains().isEmpty()) {
                 List<String> matchedExclusionDomains = this.applicationProperties.getAcademicEmailClarifyDomains().stream().filter(domain -> domain.startsWith("!") && userDTO.getEmail().endsWith(domain.substring(1))).map(domain -> domain.substring(1)).collect(Collectors.toList());
                 if (matchedExclusionDomains.size() > 0) {
@@ -421,15 +424,12 @@ public class SlackService {
                         withAcademicClarificationNote = true;
                     }
                 }
-                if (withAcademicClarificationNote && newUserActivation) {
-                    mailService.sendAcademicClarificationEmail(userDTO);
-                }
-            } else if (!newUserActivation && !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, null).isEmpty()) {
+            } else if (!userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, null).isEmpty()) {
                 withAcademicClarificationNote = true;
             }
         }
         return withAcademicClarificationNote
-            || actionId == CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL;
+            || CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL.equals(actionId);
     }
 
     private boolean withUseCaseClarificationNote(UserDTO userDTO, ActionId actionId) {
@@ -456,7 +456,7 @@ public class SlackService {
         return userDTO.isActivated()
             || withTrialAccountNote(userDTO, actionId)
             || withForProfitClarificationNote(userDTO, actionId)
-            || withAcademicClarificationNote(userDTO, actionId, false)
+            || withAcademicClarificationNote(userDTO, actionId)
             || withUseCaseClarificationNote(userDTO, actionId)
             || withRejectionNote(userDTO, actionId);
     }
@@ -537,7 +537,7 @@ public class SlackService {
         if (withForProfitClarificationNote(userDTO, actionId)) {
             layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking why they are applying for the academic license while affiliated with a for-profit company.", FOR_PROFIT_CLARIFICATION_NOTE));
         }
-        if (withAcademicClarificationNote(userDTO, actionId, false)) {
+        if (withAcademicClarificationNote(userDTO, actionId)) {
             layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking why they could not use an institution email to register.", ACADEMIC_CLARIFICATION_NOTE));
         }
         if (withUseCaseClarificationNote(userDTO, actionId)) {
