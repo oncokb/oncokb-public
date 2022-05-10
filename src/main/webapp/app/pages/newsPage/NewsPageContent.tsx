@@ -158,28 +158,27 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         Updated therapeutic implications: - Additional therapies for variants
-        already assigned a level of evidence
         <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
               <tr>
-                <th>Highest Level of Evidence</th>
                 <th>Gene</th>
                 <th>Mutation</th>
                 <th>Cancer Type</th>
-                <th>Drug</th>
-                <th>Drug-specific Level of Evidence</th>
+                <th>Current Level of Evidence</th>
+                <th>Drug(s) Currently in OncoKB</th>
+                <th>Newly Added Drug</th>
                 <th>Evidence</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>1</td>
                 <td>EGFR</td>
                 <td>S768I, L861Q, G719</td>
                 <td rowSpan={5}>Non-Small Cell Lung Cancer</td>
-                <td>Osimertinib</td>
-                <td rowSpan={5}>2</td>
+                <td rowSpan={3}>1</td>
+                <td>Afatinib</td>
+                <td>Osimertinib (Level 2)</td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <span>Listing in NSCLC NCCN v1.2022</span>
@@ -188,10 +187,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td rowSpan={2}>1</td>
                 <td rowSpan={2}>ROS1</td>
                 <td rowSpan={2}>Fusions</td>
-                <td>Ceritinib</td>
+                <td rowSpan={2}>Crizotinib, Entrectinib</td>
+                <td>Ceritinib (Level 2)</td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <span>Listing in NSCLC NCCN v1.2022</span>
@@ -200,7 +199,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>Lorlatinib</td>
+                <td>Lorlatinib (Level 2)</td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <span>Listing in NSCLC NCCN v1.2022</span>
@@ -209,10 +208,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td rowSpan={2}>2</td>
                 <td rowSpan={2}>MET</td>
                 <td rowSpan={2}>Amplifications</td>
-                <td>Capmatinib</td>
+                <td rowSpan={2}>2</td>
+                <td rowSpan={2}>Crizotinib</td>
+                <td>Capmatinib (Level 2)</td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <span>Listing in NSCLC NCCN v1.2022</span>
@@ -221,7 +221,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>Tepotinib</td>
+                <td>Tepotinib (Level 2)</td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <span>Listing in NSCLC NCCN v1.2022</span>
@@ -235,12 +235,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>3A</td>
                 <td>KRAS</td>
                 <td>G12C</td>
                 <td>Pancreatic Cancer</td>
-                <td>Sotorasib</td>
                 <td>3A</td>
+                <td>Adagrasib</td>
+                <td>Sotorasib (Level 3A)</td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <AbstractLink
@@ -255,12 +255,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>1</td>
                 <td>FGFR2</td>
                 <td>Fusions</td>
                 <td>Cholangiocarcinoma</td>
-                <td>Futibatinib</td>
-                <td>3A</td>
+                <td>1</td>
+                <td>Infigratinib, Pemigatinib</td>
+                <td>Futibatinib (Level 3A)</td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <AbstractLink
