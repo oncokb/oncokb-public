@@ -27,10 +27,12 @@ public class UserDTO {
     @Size(min = 1, max = 50)
     private String login;
 
-    @Size(max = 50)
+    @NotBlank
+    @Size(min = 2, max = 50)
     private String firstName;
 
-    @Size(max = 50)
+    @NotBlank
+    @Size(min = 2, max = 50)
     private String lastName;
 
     private LicenseType licenseType;
@@ -39,10 +41,13 @@ public class UserDTO {
 
     private CompanyDTO company;
 
+    @Size(min = 2)
     private String companyName;
 
+    @Size(min = 2)
     private String city;
 
+    @Size(min = 2)
     private String country;
 
     private AdditionalInfoDTO additionalInfo;
