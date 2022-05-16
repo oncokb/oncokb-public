@@ -29,6 +29,8 @@ import static org.mskcc.cbio.oncokb.config.Constants.MSK_EMAIL_DOMAIN;
 public class SmartsheetService {
     private final Logger log = LoggerFactory.getLogger(SmartsheetService.class);
 
+    private final int MIN_NUM_COLUMN = 6;
+
     private final MailService mailService;
     private final SlackService slackService;
     private final SmartsheetProperties smartsheetProperties;
@@ -50,11 +52,12 @@ public class SmartsheetService {
         @NotEmpty String userName,
         @NotEmpty String userEmail,
         @NotNull String userCompany,
+        @NotNull String userCity,
         @NotNull String userCountry
     ) throws MessagingException {
         if (this.smartsheet != null
             && this.smartsheetProperties.getSheetId() != null
-            && this.smartsheetProperties.getColumnIds().size() == 4
+            && this.smartsheetProperties.getColumnIds().size() == MIN_NUM_COLUMN
         ) {
             try {
                 Sheet sheet = smartsheet.sheetResources().getSheet(
@@ -67,10 +70,9 @@ public class SmartsheetService {
                     null,
                     null
                 );
-
-                if (sheet.getColumns().size() < 6) {
+                if (sheet.getColumns().size() < MIN_NUM_COLUMN) {
                     mailService.sendEmailToDevTeam(
-                        "ROC Smartsheet number of columns is not expected, expect no less than 6 columns",
+                        "ROC Smartsheet number of columns is not expected, expect no less than " + MIN_NUM_COLUMN + " columns",
                         "Please take a look at the sheet, it's supposed to have at least six columns",
                         null,
                         false,
@@ -85,19 +87,14 @@ public class SmartsheetService {
                         return;
                     }
 
-                    StringBuilder companyInfoSb = new StringBuilder();
-                    companyInfoSb.append(userCompany);
-                    if (StringUtils.isNotEmpty(userCountry)) {
-                        companyInfoSb.append(" - ");
-                        companyInfoSb.append(userCountry);
-                    }
-
                     // Specify cell values for first row
                     List<Cell> rowACells = Arrays.asList(
                         new Cell(this.smartsheetProperties.getColumnIds().get(0)).setValue(this.smartsheetProperties.getEditor()),
                         new Cell(this.smartsheetProperties.getColumnIds().get(1)).setValue(userName),
                         new Cell(this.smartsheetProperties.getColumnIds().get(2)).setValue(userEmail),
-                        new Cell(this.smartsheetProperties.getColumnIds().get(3)).setValue(companyInfoSb.toString())
+                        new Cell(this.smartsheetProperties.getColumnIds().get(3)).setValue(userCompany),
+                        new Cell(this.smartsheetProperties.getColumnIds().get(4)).setValue(userCity),
+                        new Cell(this.smartsheetProperties.getColumnIds().get(5)).setValue(userCountry)
                     );
 
                     // Specify contents of first row
@@ -128,7 +125,7 @@ public class SmartsheetService {
     public void addUserToSheetIfShould(UserDTO userDTO) {
         if (shouldAddUser(userDTO)) {
             try {
-                addUserToSheet(userDTO.getFirstName() + " " + userDTO.getLastName(), userDTO.getEmail(), Optional.ofNullable(userDTO.getCompanyName()).orElse(""), Optional.ofNullable(userDTO.getCountry()).orElse(""));
+                addUserToSheet(userDTO.getFirstName() + " " + userDTO.getLastName(), userDTO.getEmail(), Optional.ofNullable(userDTO.getCompanyName()).orElse(""), Optional.ofNullable(userDTO.getCity()).orElse(""), Optional.ofNullable(userDTO.getCountry()).orElse(""));
             } catch (MessagingException e) {
                 e.printStackTrace();
             }
