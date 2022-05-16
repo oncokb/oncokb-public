@@ -73,9 +73,9 @@ export const textValidation = (minLength?: number, maxLength?: number) => {
   return validation;
 };
 
-export const TEXT_VAL = textValidation(1, 255);
+export const TEXT_VAL = textValidation(2, 255);
 
-export const SHORT_TEXT_VAL = textValidation(1, 50);
+export const SHORT_TEXT_VAL = textValidation(2, 50);
 
 export const EMAIL_VAL = {
   required: {
