@@ -16,7 +16,6 @@ import org.mskcc.cbio.oncokb.web.rest.vm.ExposedToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -35,7 +34,6 @@ import java.util.stream.Collectors;
 import static org.mskcc.cbio.oncokb.config.Constants.MAIL_LICENSE;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_EXPOSED;
-import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.TOKEN_HAS_BEEN_EXPOSED_USER;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED;
 import static org.mskcc.cbio.oncokb.domain.enumeration.MailType.LIST_OF_UNAPPROVED_USERS;
 
@@ -294,6 +292,10 @@ public class MailService {
     public void sendUseCaseClarificationEmail(UserDTO user) {
         sendEmailWithLicenseContext(user, MailType.CLARIFY_USE_CASE, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
     }
+    @Async
+    public void sendRegistrationInfoClarificationEmail(UserDTO user) {
+        sendEmailWithLicenseContext(user, MailType.CLARIFY_REGISTRATION_INFO, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
+    }
 
     @Async
     public void sendDuplicateUserClarificationEmail(UserDTO user) {
@@ -421,31 +423,25 @@ public class MailService {
             case CREATION:
                 return Optional.of("email.creation.title");
             case APPROVAL:
+            case APPROVAL_ALIGN_LICENSE_WITH_COMPANY:
                 return Optional.of("email.approval.title");
             case REJECTION:
+            case REJECT_ALUMNI_ADDRESS:
                 return Optional.of("email.reject.title");
             case PASSWORD_RESET:
                 return Optional.of("email.reset.title");
             case LICENSE_REVIEW_COMMERCIAL:
-                return Optional.of("email.license.review.title");
             case LICENSE_REVIEW_HOSPITAL:
-                return Optional.of("email.license.review.title");
             case LICENSE_REVIEW_RESEARCH_COMMERCIAL:
                 return Optional.of("email.license.review.title");
             case CLARIFY_ACADEMIC_FOR_PROFIT:
-                return Optional.of("email.license.clarify.title");
             case CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL:
-                return Optional.of("email.license.clarify.title");
             case CLARIFY_USE_CASE:
-                return Optional.of("email.license.clarify.title");
             case CLARIFY_DUPLICATE_USER:
+            case CLARIFY_REGISTRATION_INFO:
                 return Optional.of("email.license.clarify.title");
-            case REJECT_ALUMNI_ADDRESS:
-                return Optional.of("email.reject.title");
             case VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES:
                 return Optional.of("email.account.expires.by.days.title");
-            case APPROVAL_ALIGN_LICENSE_WITH_COMPANY:
-                return Optional.of("email.approval.title");
             case ACTIVATE_FREE_TRIAL:
                 return Optional.of("email.active.free.trial.title");
             case DATA_USAGE_EXCEEDS_THRESHOLD:

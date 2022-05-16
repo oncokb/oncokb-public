@@ -276,6 +276,8 @@ public class SlackService {
                 sb.append("Clarified with user on noninstitutional email");
             } else if (withDuplicateUserClarificationNote(userDTO, actionId)) {
                 sb.append("Clarified with user on multiple account request");
+            } else if (withRegistrationInfoClarificationNote(userDTO, actionId)) {
+                sb.append("Clarified with user on registration info");
             } else {
                 sb.append("Collapsed");
             }
@@ -442,6 +444,11 @@ public class SlackService {
             || actionId == CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL;
     }
 
+    private boolean withRegistrationInfoClarificationNote(UserDTO userDTO, ActionId actionId) {
+        return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.CLARIFY_REGISTRATION_INFO, null).isEmpty()
+            || actionId == CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL;
+    }
+
     private boolean withRejectionNote(UserDTO userDTO, ActionId actionId) {
         return !userMailsService.findUserMailsByUserAndMailTypeAndSentDateAfter(userMapper.userDTOToUser(userDTO), MailType.REJECTION, null).isEmpty()
             || actionId == CONFIRM_SEND_REJECTION_EMAIL;
@@ -546,6 +553,9 @@ public class SlackService {
         if (withDuplicateUserClarificationNote(userDTO, actionId)) {
             layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking why they registered multiple accounts.", DUPLICATE_USER_CLARIFICATION_NOTE));
         }
+        if (withRegistrationInfoClarificationNote(userDTO, actionId)) {
+            layoutBlocks.add(buildPlainTextBlock("We have sent a clarification email to the user asking to provide detailed registration info.", REGISTRATION_INFO_CLARIFICATION_NOTE));
+        }
         if (userDTO.isActivated() && !trialAccountActivated) {
             if (!withTrialAccountNote(userDTO, actionId)) {
                 layoutBlocks.add(buildPlainTextBlock("The user has been approved and notified.", APPROVED_NOTE));
@@ -623,6 +633,8 @@ public class SlackService {
             clarifyGroup.add(buildAcademicClarificationOption(user));
             // Add option - Send Use Case Clarification Email
             clarifyGroup.add(buildUseCaseClarificationOption(user));
+            // Add option - Send Registration Info Clarification Email
+            clarifyGroup.add(buildRegistrationInfoClarificationOption(user));
             // Add option - Send Duplicate User Clarification Email
             clarifyGroup.add(buildDuplicateUserClarificationOption(user));
             optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("Clarify").build()).options(clarifyGroup).build());
@@ -671,6 +683,10 @@ public class SlackService {
 
     private OptionObject buildDuplicateUserClarificationOption(UserDTO user) {
         return OptionObject.builder().value(getOptionValue(SEND_DUPLICATE_USER_CLARIFICATION_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Duplicate User Email").build()).build();
+    }
+
+    private OptionObject buildRegistrationInfoClarificationOption(UserDTO user) {
+        return OptionObject.builder().value(getOptionValue(SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL.toString(), user.getLogin())).text(PlainTextObject.builder().text("Send Registration Info Clarification Email").build()).build();
     }
 
     private OptionObject buildRejectionOption(UserDTO user) {
@@ -736,9 +752,9 @@ public class SlackService {
         try {
             ViewsOpenResponse response = slack.methods().viewsOpen(request);
             if (!response.isOk()) {
-                log.info("Send the modal to slack with error " + response.getError());
+                log.info("Send the modal to slack with error " + response.getError() + ". Response meta data message: " + response.getResponseMetadata().getMessages());
             } else {
-                log.info("Send the modal to slack");
+                log.info("Sent the modal to slack");
             }
         } catch (Exception e) {
             log.warn("Failed to send modal to slack");
@@ -776,6 +792,11 @@ public class SlackService {
                     title.setText("Clarify duplicate user");
                     callbackId = CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL.getId();
                     sb.append(getStringFromResourceTemplateMailTextFile("clarifyDuplicateUserString.txt"));
+                    break;
+                case SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL:
+                    title.setText("Clarify registry test info");
+                    callbackId = CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL.getId();
+                    sb.append(getStringFromResourceTemplateMailTextFile("clarifyRegistrationInfoString.txt"));
                     break;
                 case SEND_REJECTION_EMAIL:
                     title.setText("Rejection Email");
