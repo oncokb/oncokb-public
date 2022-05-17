@@ -794,7 +794,7 @@ public class SlackService {
                     sb.append(getStringFromResourceTemplateMailTextFile("clarifyDuplicateUserString.txt"));
                     break;
                 case SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL:
-                    title.setText("Clarify registry test info");
+                    title.setText("Clarify registry info");
                     callbackId = CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL.getId();
                     sb.append(getStringFromResourceTemplateMailTextFile("clarifyRegistrationInfoString.txt"));
                     break;
