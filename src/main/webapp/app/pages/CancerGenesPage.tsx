@@ -13,7 +13,12 @@ import {
   filterByKeyword,
   getDefaultColumnDefinition,
 } from 'app/shared/utils/Utils';
-import { DOCUMENT_TITLES, TABLE_COLUMN_KEY } from 'app/config/constants';
+import {
+  DOCUMENT_TITLES,
+  MSK_IMPACT_TM,
+  ONCOKB_TM,
+  TABLE_COLUMN_KEY,
+} from 'app/config/constants';
 import AppStore from 'app/store/AppStore';
 import oncokbClient from 'app/shared/api/oncokbClientInstance';
 import DocumentTitle from 'react-document-title';
@@ -102,7 +107,7 @@ export default class CancerGenesPage extends React.Component<{
       id: 'oncokbAnnotated',
       Header: (
         <span>
-          OncoKB
+          {ONCOKB_TM}
           <br />
           Annotated
         </span>
@@ -132,7 +137,7 @@ export default class CancerGenesPage extends React.Component<{
       Header: (
         <>
           <span>Oncogene/TSG</span>
-          <InfoIcon overlay={'As categorised by OncoKB'} />
+          <InfoIcon overlay={`As categorised by ${ONCOKB_TM}`} />
         </>
       ),
       minWidth: 140,
@@ -148,7 +153,7 @@ export default class CancerGenesPage extends React.Component<{
         data: ExtendCancerGene[];
       }) => (
         <>
-          <span>MSK-IMPACT</span>
+          <span>{MSK_IMPACT_TM}</span>
           <InfoIcon
             overlay={
               <span>
@@ -158,7 +163,7 @@ export default class CancerGenesPage extends React.Component<{
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  MSK-IMPACT panel
+                  {MSK_IMPACT_TM} panel
                 </a>{' '}
                 ({getPanelGeneCount(props.data, 'mSKImpact')} genes,{' '}
                 {this.fetchedDate})
@@ -183,7 +188,7 @@ export default class CancerGenesPage extends React.Component<{
       }) => (
         <>
           <span>
-            MSK-IMPACT
+            {MSK_IMPACT_TM}
             <br />
             Heme
           </span>
@@ -196,7 +201,7 @@ export default class CancerGenesPage extends React.Component<{
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  MSK-IMPACT Heme and HemePACT panels
+                  {MSK_IMPACT_TM} Heme and HemePACT panels
                 </a>{' '}
                 ({getPanelGeneCount(props.data, 'mSKHeme')} genes,{' '}
                 {this.fetchedDate})
@@ -447,7 +452,7 @@ export default class CancerGenesPage extends React.Component<{
         <div className="cancerGenes">
           <Row>
             <Col className="col-auto mr-auto">
-              <h2>OncoKB Cancer Gene List</h2>
+              <h2>{ONCOKB_TM} Cancer Gene List</h2>
             </Col>
             <Col className="col-auto">
               <DownloadButtonWithPromise
@@ -466,9 +471,9 @@ export default class CancerGenesPage extends React.Component<{
                 {this.props.appStore.appInfo.result.dataVersion.date}
               </div>
               <div>
-                The following genes are considered to be cancer genes by OncoKB,
-                based on their inclusion in various different sequencing panels,
-                the Sanger Cancer Gene Census, or{' '}
+                The following genes are considered to be cancer genes by{' '}
+                {ONCOKB_TM}, based on their inclusion in various different
+                sequencing panels, the Sanger Cancer Gene Census, or{' '}
                 <a href="http://science.sciencemag.org/content/339/6127/1546.full">
                   Vogelstein et al. (2013)
                 </a>

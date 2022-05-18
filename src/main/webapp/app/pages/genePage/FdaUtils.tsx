@@ -5,6 +5,7 @@ import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { concatElements, concatElementsByComma } from 'app/shared/utils/Utils';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import * as styles from 'app/index.module.scss';
+import { ONCOKB_TM } from 'app/config/constants';
 
 const DrugLabel: React.FunctionComponent<{ drug: any }> = props => {
   const drugLabelText = `drug label ${
@@ -128,5 +129,4 @@ export function getReferenceCell(data: any) {
   );
 }
 
-export const FDA_L1_DISABLED_BTN_TOOLTIP =
-  'Since OncoKB does not include any CDx claims prescriptive for a specific therapeutic product, by definition, no variants in OncoKB are considered FDA Level 1.';
+export const FDA_L1_DISABLED_BTN_TOOLTIP = `Since ${ONCOKB_TM} does not include any CDx claims prescriptive for a specific therapeutic product, by definition, no variants in ${ONCOKB_TM} are considered FDA Level 1.`;

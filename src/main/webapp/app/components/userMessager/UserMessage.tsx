@@ -15,7 +15,11 @@ import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { Container } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
-import { DISABLE_BANNER_OPT, PAGE_ROUTE } from 'app/config/constants';
+import {
+  DISABLE_BANNER_OPT,
+  ONCOKB_TM,
+  PAGE_ROUTE,
+} from 'app/config/constants';
 import TextScroller from 'app/shared/texts/TextScroller';
 import { Link } from 'react-router-dom';
 import AppStore from 'app/store/AppStore';
@@ -68,7 +72,7 @@ if (
       dateEnd: 100000000000000,
       content: (
         <span>
-          Part of OncoKB’s content is now FDA-recognized. For more details,
+          Part of {ONCOKB_TM}’s content is now FDA-recognized. For more details,
           please see our{' '}
           <Link
             to={PAGE_ROUTE.FDA_RECOGNITION}
@@ -86,7 +90,7 @@ if (
       content: (
         <div>
           <span>
-            OncoKB is going to present at AACR Poster Session(04/11, 9am,
+            {ONCOKB_TM} is going to present at AACR Poster Session(04/11, 9am,
             Section 28), come and join us! Click
           </span>
           <a

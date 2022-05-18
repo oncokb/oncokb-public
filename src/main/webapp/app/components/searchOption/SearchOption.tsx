@@ -11,6 +11,7 @@ import classnames from 'classnames';
 import AppStore from 'app/store/AppStore';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
+import { ONCOKB_TM } from 'app/config/constants';
 
 export enum SearchOptionType {
   GENE = 'GENE',
@@ -118,7 +119,7 @@ const AlterationSearchOption: React.FunctionComponent<{
         />
         <If condition={!props.data.variantExist}>
           <span className={'ml-auto'}>
-            <span>Not annotated by OncoKB</span>
+            <span>Not annotated by {ONCOKB_TM}</span>
             <FeedbackIcon
               feedback={{
                 type: FeedbackType.ANNOTATION,

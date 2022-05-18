@@ -7,6 +7,7 @@ import {
   LEVEL_TYPE_NAMES,
   LEVEL_TYPES,
   LEVELS,
+  ONCOKB_TM,
   PAGE_ROUTE,
 } from 'app/config/constants';
 import React from 'react';
@@ -118,19 +119,20 @@ export default class LevelSelectionRow extends React.Component<
                 <Col>
                   <>
                     <p>
-                      While the intended audience for OncoKB is primarily
+                      While the intended audience for {ONCOKB_TM} is primarily
                       clinical oncologists, molecular pathologists and cancer
                       researchers, tumor profiling next generation sequencing
                       (NGS) test developers may also rely on human variant
-                      databases, such as OncoKB, for variant information to
+                      databases, such as {ONCOKB_TM}, for variant information to
                       support the clinical validity of their tests. Therefore,
                       to credential the robustness and transparency of databases
                       involved in variant evaluation, the FDA introduced a
                       process to recognize human variant databases.
                     </p>
                     <p>
-                      Below is the FDA-recognized content in OncoKB, including
-                      tumor type-specific alterations and their corresponding{' '}
+                      Below is the FDA-recognized content in {ONCOKB_TM},
+                      including tumor type-specific alterations and their
+                      corresponding{' '}
                       <Link
                         to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
                       >

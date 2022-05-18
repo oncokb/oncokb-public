@@ -27,6 +27,7 @@ import {
   GAIN_OF_FUNCTION_MUTATIONS,
   LOSS_OF_FUNCTION_MUTATIONS,
   SWITCH_OF_FUNCTION_MUTATIONS,
+  ONCOKB_TM,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
@@ -770,7 +771,7 @@ export const getCategoricalAlterationDescription = (
         {prefix} {geneLink} considered "oncogenic" or "likely oncogenic" as
         defined by{' '}
         <SopPageLink version={2.2}>
-          OncoKB Curation Standard Operating Protocol v2.2, Chapter 2,
+          {ONCOKB_TM} Curation Standard Operating Protocol v2.2, Chapter 2,
           Sub-Protocol 2.5
         </SopPageLink>
         .

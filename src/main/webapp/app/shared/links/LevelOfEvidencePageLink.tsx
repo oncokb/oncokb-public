@@ -1,4 +1,4 @@
-import { LEVEL_TYPES, PAGE_ROUTE } from 'app/config/constants';
+import { LEVEL_TYPES, ONCOKB_TM, PAGE_ROUTE } from 'app/config/constants';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { LEVEL_TYPE_TO_VERSION } from 'app/pages/LevelOfEvidencePage';
@@ -12,7 +12,9 @@ export const LevelOfEvidencePageLink: React.FunctionComponent<{
       {props.children ? (
         props.children
       ) : (
-        <span>OncoKB ${props.levelType} level of evidence</span>
+        <span>
+          {ONCOKB_TM} ${props.levelType} level of evidence
+        </span>
       )}
     </Link>
   );

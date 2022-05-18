@@ -22,6 +22,7 @@ import {
   ACCOUNT_TITLES,
   LicenseStatus,
   LicenseType,
+  ONCOKB_TM,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
 } from 'app/config/constants';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
@@ -174,23 +175,27 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
     if (licenseType === LicenseType.ACADEMIC) {
       return (
         <p>
-          OncoKB is accessible for no fee for research use in academic setting.
-          This license type requires that you register your account using your
-          institution/university email address.{' '}
-          <b>Please complete the form below to create your OncoKB account.</b>
+          {ONCOKB_TM} is accessible for no fee for research use in academic
+          setting. This license type requires that you register your account
+          using your institution/university email address.{' '}
+          <b>
+            Please complete the form below to create your {ONCOKB_TM} account.
+          </b>
         </p>
       );
     } else if (licenseType === LicenseType.COMMERCIAL) {
       return (
         <>
           <p>
-            To use OncoKB in a commercial product, your company will need a
+            To use {ONCOKB_TM} in a commercial product, your company will need a
             license. A typical example of this is if you are part of a company
-            that would like to incorporate OncoKB content into sequencing
+            that would like to incorporate {ONCOKB_TM} content into sequencing
             reports.
           </p>
           <p>
-            <b>Please complete the form below to create your OncoKB account.</b>{' '}
+            <b>
+              Please complete the form below to create your {ONCOKB_TM} account.
+            </b>{' '}
             {this.props.visibleSections?.includes(FormSection.COMPANY) ? (
               <span>
                 If your company already has a license, you can skip certain
@@ -207,11 +212,13 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       return (
         <>
           <p>
-            To incorporate OncoKB content into patient sequencing reports, your
-            hospital will need a license.
+            To incorporate {ONCOKB_TM} content into patient sequencing reports,
+            your hospital will need a license.
           </p>
           <p>
-            <b>Please complete the form below to create your OncoKB account.</b>{' '}
+            <b>
+              Please complete the form below to create your {ONCOKB_TM} account.
+            </b>{' '}
             {this.props.visibleSections?.includes(FormSection.COMPANY) ? (
               <span>
                 If your hospital already has a license, we will grant you API
@@ -228,11 +235,13 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       return (
         <>
           <p>
-            To use OncoKB for research purposes in a commercial setting, your
-            company will need a license.
+            To use {ONCOKB_TM} for research purposes in a commercial setting,
+            your company will need a license.
           </p>
           <p>
-            <b>Please complete the form below to create your OncoKB account.</b>{' '}
+            <b>
+              Please complete the form below to create your {ONCOKB_TM} account.
+            </b>{' '}
             {this.props.visibleSections?.includes(FormSection.COMPANY) ? (
               <span>
                 If your company already has a license, we will grant you API
@@ -266,7 +275,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
       return (
         commonDescription +
         ':\n' +
-        ' - Key products and services that relate to OncoKB\n' +
+        ` - Key products and services that relate to ${ONCOKB_TM}\n` +
         ` - Approximate size of the ${getAccountInfoTitle(
           ACCOUNT_TITLES.COMPANY,
           this.selectedLicense
@@ -278,14 +287,13 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
 
   @computed
   get useCasePlaceholder() {
-    const commonDescription =
-      'Provide a description of how you plan to use OncoKB';
+    const commonDescription = `Provide a description of how you plan to use ${ONCOKB_TM}`;
 
     if (this.isCommercialLicense) {
       return (
         commonDescription +
         '\n' +
-        '  - What product or service do you plan to incorporate OncoKB content into?\n' +
+        `  - What product or service do you plan to incorporate ${ONCOKB_TM} content into?\n` +
         `  - How will the product be delivered to the end user (e.g., patient report${
           this.selectedLicense === LicenseType.COMMERCIAL
             ? ', SaaS offering'
@@ -641,7 +649,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                       )}
                       <AvField
                         name={FormKey.USE_CASE}
-                        label={'Describe how you plan to use OncoKB'}
+                        label={`Describe how you plan to use ${ONCOKB_TM}`}
                         type={'textarea'}
                         placeholder={this.useCasePlaceholder}
                         rows={6}
@@ -662,9 +670,7 @@ export class NewAccountForm extends React.Component<INewAccountForm> {
                             'Anticipated # of reports annually for years 1, 2 and 3'
                           }
                           type={'textarea'}
-                          placeholder={
-                            'If you plan to incorporate OncoKB contents in sequencing reports, please provide an estimate of your anticipated volume over the next several years'
-                          }
+                          placeholder={`If you plan to incorporate ${ONCOKB_TM} contents in sequencing reports, please provide an estimate of your anticipated volume over the next several years`}
                         />
                       )}
                       {[LicenseType.RESEARCH_IN_COMMERCIAL].includes(

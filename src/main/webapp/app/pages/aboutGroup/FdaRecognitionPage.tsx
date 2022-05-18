@@ -3,6 +3,7 @@ import {
   DOCUMENT_TITLES,
   FdaRecognitionDisclaimer,
   LEVEL_TYPES,
+  ONCOKB_TM,
   PAGE_ROUTE,
 } from 'app/config/constants';
 import React from 'react';
@@ -31,14 +32,15 @@ const FdaRecognitionPage = () => {
               </i>
             </p>
             <p>
-              In October 2021, OncoKB became the first somatic human variant
-              database to be recognized by the FDA. FDA recognition of OncoKB is
-              "partial" and is limited to the information provided in the
-              "FDA-Recognized Content" tab which can be found on the{' '}
+              In October 2021, {ONCOKB_TM} became the first somatic human
+              variant database to be recognized by the FDA. FDA recognition of{' '}
+              {ONCOKB_TM} is "partial" and is limited to the information
+              provided in the "FDA-Recognized Content" tab which can be found on
+              the{' '}
               <Link to={getActionableGenesPageLink(undefined, LEVEL_TYPES.FDA)}>
                 Actionable Genes
               </Link>{' '}
-              page and on each individual gene page within OncoKB.
+              page and on each individual gene page within {ONCOKB_TM}.
             </p>
             <p>
               As background, in April 2018, the FDA announced their regulatory
@@ -84,8 +86,8 @@ const FdaRecognitionPage = () => {
                 </Link>
               </li>
               <li>
-                For a full list of FDA recognized variants in OncoKB please see
-                the{' '}
+                For a full list of FDA recognized variants in {ONCOKB_TM} please
+                see the{' '}
                 <Link
                   to={getActionableGenesPageLink(undefined, LEVEL_TYPES.FDA)}
                 >
@@ -94,7 +96,7 @@ const FdaRecognitionPage = () => {
                 page
               </li>
             </ul>
-            <h5>OncoKB Application Links</h5>
+            <h5>{ONCOKB_TM} Application Links</h5>
             <ul>
               <li>
                 <Linkout
@@ -105,7 +107,7 @@ const FdaRecognitionPage = () => {
               </li>
               <li>
                 <Linkout link={`https://www.fda.gov/media/152847/download`}>
-                  FDA Decision Summary for OncoKB
+                  FDA Decision Summary for {ONCOKB_TM}
                 </Linkout>
               </li>
             </ul>
@@ -141,37 +143,38 @@ const FdaRecognitionPage = () => {
             </ul>
           </Col>
           <Col md={7}>
-            <h5>Scope of OncoKB Recognition</h5>
+            <h5>Scope of {ONCOKB_TM} Recognition</h5>
             <p>
-              The FDA has reviewed all OncoKB processes documented in the{' '}
+              The FDA has reviewed all {ONCOKB_TM} processes documented in the{' '}
               <SopPageLink version={2.0} />, which include the following:
             </p>
             <ol>
               <li>
-                Part of the OncoKB annotation content: Annotation of variants
-                curated in OncoKB with an FDA level of evidence. FDA-recognized
-                content is clearly marked on the website and a pop-up message
-                will appear when the user exits an FDA-recognized portion of the
-                OncoKB website.
+                Part of the {ONCOKB_TM} annotation content: Annotation of
+                variants curated in {ONCOKB_TM} with an FDA level of evidence.
+                FDA-recognized content is clearly marked on the website and a
+                pop-up message will appear when the user exits an FDA-recognized
+                portion of the
+                {ONCOKB_TM} website.
               </li>
               <li>
-                Mapping of OncoKB levels of evidence to the FDA levels of
+                Mapping of {ONCOKB_TM} levels of evidence to the FDA levels of
                 evidence.
               </li>
               <li>
-                OncoKB's processes and validation studies for variant evaluation
-                and assertion, data integrity and security, and transparency of
-                all evidence.
+                {ONCOKB_TM}'s processes and validation studies for variant
+                evaluation and assertion, data integrity and security, and
+                transparency of all evidence.
               </li>
               <li>
-                OncoKB's administration policies for hiring, training and
+                {ONCOKB_TM}'s administration policies for hiring, training and
                 continuing the education of its curators and Scientific Content
                 Management Team who evaluate and approve inclusion of variants
                 into the database.
               </li>
-              <li>OncoKB's policies of oversight and governance.</li>
+              <li>{ONCOKB_TM}'s policies of oversight and governance.</li>
               <li>
-                OncoKB's processes for ensuring its members' conflicts of
+                {ONCOKB_TM}'s processes for ensuring its members' conflicts of
                 interest are minimized and transparent.
               </li>
             </ol>

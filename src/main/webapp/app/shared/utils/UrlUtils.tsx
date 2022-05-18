@@ -8,6 +8,7 @@ import {
   LEVEL_CLASSIFICATION,
   LEVELS,
   ONCOGENIC_MUTATIONS,
+  ONCOKB_TM,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   REGEXP,
@@ -223,7 +224,7 @@ export const SopPageLink: React.FunctionComponent<{
   version?: number;
 }> = props => {
   let link = SOP_LINK;
-  let defaultContent = 'OncoKB SOP';
+  let defaultContent = `${ONCOKB_TM} SOP`;
   if (props.version) {
     link += `/?version=v${props.version}`;
     defaultContent += ` v${props.version}`;

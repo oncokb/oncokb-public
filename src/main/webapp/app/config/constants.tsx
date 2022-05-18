@@ -34,6 +34,9 @@ export const messages = {
   DATA_ERROR_ALERT: 'Internal Error',
 };
 
+export const ONCOKB_TM = 'OncoKB™';
+export const MSK_IMPACT_TM = 'MSK-IMPACT™';
+
 export const APP_DATE_FORMAT = 'MM/DD/YY HH:mm';
 export const APP_TIMESTAMP_FORMAT = 'MM/DD/YY HH:mm:ss';
 export const APP_LOCAL_DATE_FORMAT = 'MM/DD/YYYY';
@@ -652,7 +655,7 @@ export enum TERM_DEFINITION {
 }
 
 export enum DOCUMENT_TITLES {
-  HOME = "OncoKB - MSK's Precision Oncology Knowledge Base",
+  HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base",
   LEVELS = 'Levels of Evidence',
   TEAM = 'Team',
   ABOUT = 'About',
@@ -661,7 +664,7 @@ export enum DOCUMENT_TITLES {
   NEWS = 'Latest News',
   API_ACCESS = 'API Access',
   CANCER_GENES = 'Cancer Gene List',
-  FDA_RECOGNITION = 'OncoKB is now an FDA-recognized Public Human Genetic Variant Database*',
+  FDA_RECOGNITION = 'OncoKB™ is now an FDA-recognized Public Human Genetic Variant Database*',
 }
 
 export const FDA_RECOGNITION_DISCLAIMER: React.FunctionComponent<{
@@ -673,7 +676,7 @@ export const FDA_RECOGNITION_DISCLAIMER: React.FunctionComponent<{
     ) : (
       'FDA recognition'
     )}{' '}
-    of OncoKB is for the content that is clearly marked
+    of {ONCOKB_TM} is for the content that is clearly marked
   </span>
 );
 export const AsteriskMark = () => <span>&#42;</span>;
@@ -694,19 +697,17 @@ export const ACADEMIC_TERMS = [
   },
   {
     key: TERM_DEFINITION.ONLY_ACADEMIC_USAGE,
-    description:
-      'I agree that my use of OncoKB is solely for research or educational purposes.',
+    description: `I agree that my use of ${ONCOKB_TM} is solely for research or educational purposes.`,
   },
   {
     key: TERM_DEFINITION.NO_COMPANY_USAGE,
-    description:
-      'I confirm that I will NOT use OncoKB data for use in medical reports or in an electronic health care system.',
+    description: `I confirm that I will NOT use ${ONCOKB_TM} data for use in medical reports or in an electronic health care system.`,
   },
   {
     key: TERM_DEFINITION.OK_WITH_TERMS_OF_USE,
     description: (
       <span>
-        I have read and agree with the OncoKB{' '}
+        I have read and agree with the {ONCOKB_TM}{' '}
         <Link to={PAGE_ROUTE.TERMS}>Terms of Use</Link>.
       </span>
     ),
