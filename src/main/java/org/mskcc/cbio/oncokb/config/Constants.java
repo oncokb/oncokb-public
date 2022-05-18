@@ -32,7 +32,7 @@ public final class Constants {
     public static final String USERS_USAGE_SUMMARY_FILE = "public-website/usage-analysis/userSummary.json";
     public static final String RESOURCES_USAGE_SUMMARY_FILE = "public-website/usage-analysis/resourceSummary.json";
     public static final String RESOURCES_USAGE_DETAIL_FILE = "public-website/usage-analysis/resourceDetail.json";
-    public static final String TOKEN_STATS_STORAGE_FILE_PREFIX = "public-website/token-usage/token-stats-";
+    public static final String TOKEN_STATS_STORAGE_FILE_PREFIX = "public-website/token-usage/token-stats_";
 
     private Constants() {
     }
