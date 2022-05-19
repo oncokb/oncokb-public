@@ -10,6 +10,7 @@ import {
   DEMO_WEBSITE_LINK,
   DOCUMENT_TITLES,
   LicenseType,
+  ONCOKB_TM,
   PAGE_ROUTE,
   PAGE_TITLE,
   USER_AUTHORITY,
@@ -174,7 +175,7 @@ export default class APIAccessPage extends React.Component<{
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        OncoKB Annotator
+                        {ONCOKB_TM} Annotator
                       </a>
                       .
                     </div>
@@ -182,8 +183,8 @@ export default class APIAccessPage extends React.Component<{
                   <div className={'mb-3'}>
                     <h5 className="title">Web API</h5>
                     <div>
-                      You can programmatically access the OncoKB data via its{' '}
-                      <SwaggerApiLink>web API</SwaggerApiLink>.
+                      You can programmatically access the {ONCOKB_TM} data via
+                      its <SwaggerApiLink>web API</SwaggerApiLink>.
                       <div>
                         Please specify your API token in the request header with{' '}
                         <code>Authorization: Bearer [your token]</code>.
@@ -284,7 +285,7 @@ export default class APIAccessPage extends React.Component<{
               <Row>
                 <Col>
                   <p>
-                    Programmatic access to OncoKB via its API requires a
+                    Programmatic access to {ONCOKB_TM} via its API requires a
                     license. Research licenses in an academic setting are free,
                     all other uses require a fee. Please review the{' '}
                     <Link to={PAGE_ROUTE.TERMS}>terms of use</Link> before
@@ -313,7 +314,7 @@ export default class APIAccessPage extends React.Component<{
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        OncoKB Annotator
+                        {ONCOKB_TM} Annotator
                       </a>
                       .
                     </p>
@@ -321,9 +322,9 @@ export default class APIAccessPage extends React.Component<{
                   <div>
                     <h5 className="title">Web API</h5>
                     <p>
-                      You can programmatically access the OncoKB data via its{' '}
-                      <SwaggerApiLink>web API</SwaggerApiLink>, using a token
-                      available in your{' '}
+                      You can programmatically access the {ONCOKB_TM} data via
+                      its <SwaggerApiLink>web API</SwaggerApiLink>, using a
+                      token available in your{' '}
                       <Link to={PAGE_ROUTE.ACCOUNT_SETTINGS}>
                         Account Settings
                       </Link>

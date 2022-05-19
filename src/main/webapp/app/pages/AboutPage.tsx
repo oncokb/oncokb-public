@@ -9,6 +9,7 @@ import {
   ANNOTATION_PAGE_TAB_KEYS,
   BILIBILI_VIDEO_IDS,
   DOCUMENT_TITLES,
+  ONCOKB_TM,
   PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   SOP_LINK,
@@ -93,7 +94,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
       getContent: () => {
         return (
           <div>
-            <h5>Webinar #1: Introduction to OncoKB</h5>
+            <h5>Webinar #1: Introduction to {ONCOKB_TM}</h5>
             <Tabs
               items={this.getTutorialTabs({
                 youTube: getYouTubeLink(
@@ -106,7 +107,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
             />
 
             <h5 className={'mt-3'}>
-              Webinar #2: Introduction to OncoKB Web API
+              Webinar #2: Introduction to {ONCOKB_TM} Web API
             </h5>
             <Tabs
               items={this.getTutorialTabs({
@@ -128,24 +129,26 @@ export class AboutPage extends React.Component<AboutPageProps> {
         <>
           <Row>
             <Col md={6} xs={12}>
-              <h2 className={'mt-1'}>About OncoKB</h2>
+              <h2 className={'mt-1'}>About {ONCOKB_TM}</h2>
               <p className={'mt-3'}>
-                OncoKB is a precision oncology knowledge base developed at
+                {ONCOKB_TM} is a precision oncology knowledge base developed at
                 Memorial Sloan Kettering Cancer Center that contains biological
                 and clinical information about genomic alterations in cancer.
               </p>
               <p>
                 Alteration- and tumor type-specific therapeutic implications are
                 classified using the{' '}
-                <Link to={PAGE_ROUTE.LEVELS}>OncoKB Levels of Evidence</Link>{' '}
+                <Link to={PAGE_ROUTE.LEVELS}>
+                  {ONCOKB_TM} Levels of Evidence
+                </Link>{' '}
                 system, which assigns clinical actionability to individual
                 mutational events.
               </p>
               <p>
-                For additional details about the OncoKB curation process, please
-                refer to the version-controlled{' '}
+                For additional details about the {ONCOKB_TM} curation process,
+                please refer to the version-controlled{' '}
                 <Link to={PAGE_ROUTE.SOP}>
-                  OncoKB Curation Standard Operating Procedure
+                  {ONCOKB_TM} Curation Standard Operating Procedure
                 </Link>
                 . <CitationText />
               </p>
@@ -166,7 +169,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
               <div className={'mt-2'}>
                 <OptimizedImage src={processImg} style={{ width: '100%' }} />
                 <div className={'text-center'}>
-                  <h5>Overview of OncoKB Process</h5>
+                  <h5>Overview of {ONCOKB_TM} Process</h5>
                 </div>
               </div>
             </Col>

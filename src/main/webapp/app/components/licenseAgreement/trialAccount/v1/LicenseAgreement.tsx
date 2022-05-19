@@ -1,18 +1,19 @@
 import React from 'react';
 import styles from '../../licenseAgreement.module.scss';
+import { ONCOKB_TM } from 'app/config/constants';
 
 export const LicenseAgreement = () => {
   return (
     <div>
-      <h3>OncoKB KnowledgeBase Free Trial Access Terms and Conditions</h3>
+      <h3>{ONCOKB_TM} KnowledgeBase Free Trial Access Terms and Conditions</h3>
       <h5 className={'text-center'}>("Terms and Conditions")</h5>
       <p>
         These Terms and Conditions describe the rights granted by Memorial Sloan
         Kettering Cancer Center, a New York not-for-profit corporation with its
         principal place of business at 1275 York Avenue, New York, New York
         10065 ("<b>MSKCC</b>" or "<b>Licensor</b>") to you ("<b>Licensee</b>" or
-        "<b>you</b>") to access the OncoKB KnowledgeBase provided by MSKCC as
-        part of its free trial program.
+        "<b>you</b>") to access the {ONCOKB_TM} KnowledgeBase provided by MSKCC
+        as part of its free trial program.
       </p>
       <p>
         BY ACCESSING OR USING ONCOKB KNOWLEDGEBASE OR CREATING AN ACCOUNT,
@@ -24,22 +25,24 @@ export const LicenseAgreement = () => {
           <u>Conditional License Grant</u>. Subject to these Terms and
           Conditions, MSKCC hereby grants Licensee a temporary, limited,
           non-exclusive, non-sublicensable, and non-transferable license for a
-          term of three (3) months (the "<b>Term</b>") to access OncoKB
-          KnowledgeBase through the OncoKB API, commencing on the date LICENSEE
-          is first granted access to the OncoKB KnowledgeBase.
+          term of three (3) months (the "<b>Term</b>") to access {ONCOKB_TM}
+          KnowledgeBase through the {ONCOKB_TM} API, commencing on the date
+          LICENSEE is first granted access to the {ONCOKB_TM} KnowledgeBase.
         </li>
         <li>
           <u>Use Restrictions</u>. Licensee shall not disclose, release,
-          distribute, or deliver the content of OncoKB KnowledgeBase, or any
-          portion thereof, to any third party without MSKCC's prior written
-          consent. Licensee shall not upload or otherwise transmit to OncoKB
-          KnowledgeBase or the OncoKB API any material containing software
+          distribute, or deliver the content of {ONCOKB_TM} KnowledgeBase, or
+          any portion thereof, to any third party without MSKCC's prior written
+          consent. Licensee shall not upload or otherwise transmit to{' '}
+          {ONCOKB_TM}
+          KnowledgeBase or the {ONCOKB_TM} API any material containing software
           viruses or other computer code, files or programs designed to
           interrupt, destroy or limit the functionality of any software or
-          hardware or to affect the integrity or availability of OncoKB.
+          hardware or to affect the integrity or availability of {ONCOKB_TM}.
           Notwithstanding any other provision of these Terms and Conditions, if
-          the Licensee causes undue technical stress to OncoKB KnowledgeBase or
-          the OncoKB API, MSKCC reserves the right to block access by Licensee.
+          the Licensee causes undue technical stress to {ONCOKB_TM}{' '}
+          KnowledgeBase or the {ONCOKB_TM} API, MSKCC reserves the right to
+          block access by Licensee.
         </li>
         <li>
           <u>Attribution</u>. Licensee shall not use the MSKCC name, nor any
@@ -64,27 +67,28 @@ export const LicenseAgreement = () => {
               made a reasonable effort to obtain a protective order
             </li>
             <li>
-              <u>OncoKB KnowledgeBase Security</u>. Licensee shall use all
+              <u>{ONCOKB_TM} KnowledgeBase Security</u>. Licensee shall use all
               procedures required under applicable laws or as otherwise
               consistent with industry standards to safeguard and ensure the
-              security of OncoKB KnowledgeBase and MSKCC’s other Confidential
-              Information and to protect them from unauthorized access or
-              disclosure, and such measures and procedures shall in no event be
-              any less protective than the measures and procedures used by
-              Licensee to protect its own Confidential Information.
+              security of {ONCOKB_TM} KnowledgeBase and MSKCC’s other
+              Confidential Information and to protect them from unauthorized
+              access or disclosure, and such measures and procedures shall in no
+              event be any less protective than the measures and procedures used
+              by Licensee to protect its own Confidential Information.
             </li>
           </ol>
         </li>
         <li>
           <u>Intellectual Property Ownership</u>. Licensee acknowledges that, as
           between Licensee and MSKCC, MSKCC owns all right, title, and interest,
-          including all intellectual property rights, in and to OncoKB
-          KnowledgeBase and the OncoKB API. Licensee further acknowledges that:
-          (i) OncoKB KnowledgeBase is an original compilation protected by
-          United States copyright laws; (ii) MSKCC has dedicated substantial
-          resources to collect, manage, and compile OncoKB KnowledgeBase; and
-          (iii) the content of OncoKB KnowledgeBase includes works of authorship
-          protected by United States copyright laws and trade secrets of MSKCC.{' '}
+          including all intellectual property rights, in and to {ONCOKB_TM}
+          KnowledgeBase and the {ONCOKB_TM} API. Licensee further acknowledges
+          that: (i) {ONCOKB_TM} KnowledgeBase is an original compilation
+          protected by United States copyright laws; (ii) MSKCC has dedicated
+          substantial resources to collect, manage, and compile {ONCOKB_TM}{' '}
+          KnowledgeBase; and (iii) the content of {ONCOKB_TM} KnowledgeBase
+          includes works of authorship protected by United States copyright laws
+          and trade secrets of MSKCC.{' '}
         </li>
         <li>
           <u>Limitations of Liability</u>. IN NO EVENT WILL MSKCC BE LIABLE
@@ -131,18 +135,19 @@ export const LicenseAgreement = () => {
               known to the receiving Party at the time of disclosure; (C)
               rightfully obtained by the receiving Party on a non-confidential
               basis from a third party; or (D) independently developed by the
-              receiving Party. Notwithstanding anything to the contrary, OncoKB
-              KnowledgeBase and the OncoKB API will be deemed Confidential
+              receiving Party. Notwithstanding anything to the contrary,{' '}
+              {ONCOKB_TM}
+              KnowledgeBase and the {ONCOKB_TM} API will be deemed Confidential
               Information of MSKCC.
             </li>
             <li>
-              <b>OncoKB KnowledgeBase</b> means MSKCC’s precision oncology
+              <b>{ONCOKB_TM} KnowledgeBase</b> means MSKCC’s precision oncology
               knowledgebase, including the content therein.
             </li>
             <li>
-              <b>OncoKB API</b> means MSKCC’s web services-based application
-              programming interface, as modified from time to time in MSKCC’s
-              sole discretion.
+              <b>{ONCOKB_TM} API</b> means MSKCC’s web services-based
+              application programming interface, as modified from time to time
+              in MSKCC’s sole discretion.
             </li>
           </ol>
         </li>

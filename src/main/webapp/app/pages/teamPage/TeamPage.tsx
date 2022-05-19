@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
 import _ from 'lodash';
-import { DOCUMENT_TITLES } from 'app/config/constants';
+import { DOCUMENT_TITLES, ONCOKB_TM } from 'app/config/constants';
 import {
   INSTITUTION,
   ITeamMember,
@@ -669,10 +669,10 @@ export const TeamPage = () => {
       <div className="team">
         <Row>
           <Col>
-            <h2>OncoKB Team</h2>
+            <h2>{ONCOKB_TM} Team</h2>
             <p>
-              OncoKB is developed and maintained by the Knowledge Systems group
-              in the{' '}
+              {ONCOKB_TM} is developed and maintained by the Knowledge Systems
+              group in the{' '}
               <a href="https://www.mskcc.org/research-areas/programs-centers/molecular-oncology">
                 Marie Josée and Henry R. Kravis Center for Molecular Oncology
               </a>{' '}

@@ -6,6 +6,7 @@ import {
   DOCUMENT_TITLES,
   IMG_MAX_WIDTH,
   ONCOKB_CONTACT_EMAIL,
+  ONCOKB_TM,
   PAGE_ROUTE,
   PAGE_TITLE,
 } from 'app/config/constants';
@@ -25,8 +26,8 @@ export const TermsPage = () => {
             <Tab eventKey={TabKey.ACADEMIC} title={'Academic Research'}>
               <div className={'mt-2'}>
                 <p>
-                  OncoKB is a precision oncology knowledge base maintained by
-                  Memorial Sloan Kettering Cancer Center (MSK). MSK may, from
+                  {ONCOKB_TM} is a precision oncology knowledge base maintained
+                  by Memorial Sloan Kettering Cancer Center (MSK). MSK may, from
                   time to time, update the content on <OncoKBLink />{' '}
                   ("Content"). MSK makes no warranties or representations,
                   express or implied, with respect to any of the Content,
@@ -48,9 +49,9 @@ export const TermsPage = () => {
                 <p>
                   You may view the Content solely for your own personal
                   reference or use for research in an academic setting, provided
-                  that all academic research use of the Content must credit
-                  OncoKB as the source of the Content and reference these Terms
-                  of Use; outside of scientific publication, you may not
+                  that all academic research use of the Content must credit{' '}
+                  {ONCOKB_TM} as the source of the Content and reference these
+                  Terms of Use; outside of scientific publication, you may not
                   otherwise redistribute or share the Content with any third
                   party, in part or in whole, for any purpose, without the
                   express permission of MSK.
@@ -74,12 +75,12 @@ export const TermsPage = () => {
                 </ol>
                 <p>
                   You may not copy, transfer, reproduce, modify or create
-                  derivative works of OncoKB for any commercial purpose without
-                  the express permission of MSK. If you seek to use OncoKB for
-                  such purposes, please visit the{' '}
+                  derivative works of {ONCOKB_TM} for any commercial purpose
+                  without the express permission of MSK. If you seek to use{' '}
+                  {ONCOKB_TM} for such purposes, please visit the{' '}
                   <Link to={PAGE_ROUTE.REGISTER}>registration page</Link> and
                   request the license which best describes your anticipated use
-                  of OncoKB.
+                  of {ONCOKB_TM}.
                 </p>
               </div>
             </Tab>
@@ -87,10 +88,10 @@ export const TermsPage = () => {
               <p className={'m-2'}>
                 Please visit the{' '}
                 <Link to={PAGE_ROUTE.REGISTER}>registration page</Link> and
-                request the license which best describes your anticipated use of
-                OncoKB. You can also send us an email with your use case at{' '}
+                request the license which best describes your anticipated use of{' '}
+                {ONCOKB_TM}. You can also send us an email with your use case at{' '}
                 <ContactLink
-                  emailSubject={'Request for OncoKB Commercial License'}
+                  emailSubject={`Request for ${ONCOKB_TM} Commercial License`}
                 />
                 . We will help you to find the most suitable license.
               </p>

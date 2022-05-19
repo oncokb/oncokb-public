@@ -3,6 +3,7 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import AppStore from 'app/store/AppStore';
 import { getAnnotationString } from 'app/components/feedback/FeedbackForm';
 import { Feedback, FeedbackType } from 'app/components/feedback/types';
+import { ONCOKB_TM } from 'app/config/constants';
 
 export const FeedbackIcon = (props: {
   feedback: Feedback;
@@ -13,10 +14,10 @@ export const FeedbackIcon = (props: {
     case FeedbackType.ANNOTATION:
       tooltipOverlay = `Send annotation suggestion for ${getAnnotationString(
         props.feedback.annotation
-      )} to OncoKB`;
+      )} to ${ONCOKB_TM}`;
       break;
     case FeedbackType.GENERAL:
-      tooltipOverlay = 'Send feedback to OncoKB';
+      tooltipOverlay = `Send feedback to ${ONCOKB_TM}`;
       break;
     default:
       break;

@@ -20,6 +20,7 @@ import {
   LEVEL_TYPE_NAMES,
   LEVEL_TYPES,
   LEVELS,
+  ONCOKB_TM,
   PAGE_ROUTE,
 } from 'app/config/constants';
 import { LevelButton } from 'app/components/levelButton/LevelButton';
@@ -214,7 +215,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
               className="text-center font-bold"
               style={{ fontSize: '3.5em', color: COLOR_DARK_BLUE }}
             >
-              Welcome to OncoKB
+              Welcome to {ONCOKB_TM}
             </div>
             <div className="text-center" style={{ fontSize: '2em' }}>
               MSK's Precision Oncology Knowledge Base

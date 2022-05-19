@@ -13,6 +13,7 @@ import client from 'app/shared/api/clientInstance';
 import { ManagedUserVM } from 'app/shared/api/generated/API';
 import {
   LicenseType,
+  ONCOKB_TM,
   PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
 } from 'app/config/constants';
@@ -177,9 +178,9 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     return (
       <>
         <p>
-          Thank you for creating an OncoKB account. We have sent you an email to
-          verify your email address. Please follow the instructions in the email
-          to complete registration.
+          Thank you for creating an {ONCOKB_TM} account. We have sent you an
+          email to verify your email address. Please follow the instructions in
+          the email to complete registration.
         </p>
         <p>
           After validating your email address, please allow 1-2 business days

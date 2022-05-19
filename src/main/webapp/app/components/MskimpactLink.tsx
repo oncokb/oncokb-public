@@ -1,4 +1,5 @@
 import React from 'react';
+import { MSK_IMPACT_TM } from 'app/config/constants';
 
 export const MskimpactLink: React.FunctionComponent<{}> = () => {
   return (
@@ -8,7 +9,7 @@ export const MskimpactLink: React.FunctionComponent<{}> = () => {
         rel="noopener noreferrer"
         href="http://www.cbioportal.org/study?id=msk_impact_2017#summary"
       >
-        MSK-IMPACT Clinical Sequencing Cohort
+        {MSK_IMPACT_TM} Clinical Sequencing Cohort
       </a>{' '}
       (
       <a

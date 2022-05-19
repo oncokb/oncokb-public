@@ -6,7 +6,7 @@ import { observable } from 'mobx';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { remoteData } from 'cbioportal-frontend-commons';
 import { Link } from 'react-router-dom';
-import { PAGE_ROUTE } from 'app/config/constants';
+import { ONCOKB_TM, PAGE_ROUTE } from 'app/config/constants';
 import { inject, observer } from 'mobx-react';
 import { Col, Row, Alert } from 'react-bootstrap';
 import SmallPageContainer from '../SmallPageContainer';
@@ -54,8 +54,8 @@ export default class ActivateAccount extends React.Component<{
             Thank you for verifying your email address.{' '}
             {this.activateAccount.result && (
               <span>
-                You can now <Link to={PAGE_ROUTE.LOGIN}>login</Link> to your
-                OncoKB account.
+                You can now <Link to={PAGE_ROUTE.LOGIN}>login</Link> to your{' '}
+                {ONCOKB_TM} account.
               </span>
             )}
           </p>
@@ -73,7 +73,7 @@ export default class ActivateAccount extends React.Component<{
           />
           <p>
             <div>Sincerely,</div>
-            <div>The OncoKB Team</div>
+            <div>The {ONCOKB_TM} Team</div>
           </p>
         </Alert>
       </div>

@@ -6,6 +6,7 @@ import {
   DOCUMENT_TITLES,
   IMG_MAX_WIDTH,
   LEVEL_TYPES,
+  ONCOKB_TM,
   PAGE_ROUTE,
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
@@ -67,13 +68,13 @@ const ALLOWED_VERSIONS: string[] = [
 const V2_RELATED_LEVELS = [Version.V2, Version.FDA, Version.AAC];
 
 const LEVEL_NAME: { [key in Version]: ElementType } = {
-  [Version.V1]: 'OncoKB Therapeutic Level of Evidence V1',
-  [Version.V2]: 'OncoKB Therapeutic Level of Evidence V2',
+  [Version.V1]: `${ONCOKB_TM} Therapeutic Level of Evidence V1`,
+  [Version.V2]: `${ONCOKB_TM} Therapeutic Level of Evidence V2`,
   [Version.FDA]: 'FDA Levels of Evidence',
   [Version.FDA_NGS]: 'FDA Levels of Evidence',
   [Version.AAC]: 'AMP/ASCO/CAP Consensus Recommendation',
-  [Version.DX]: 'OncoKB Diagnostic Levels of Evidence',
-  [Version.PX]: 'OncoKB Prognostic Levels of Evidence',
+  [Version.DX]: `${ONCOKB_TM} Diagnostic Levels of Evidence`,
+  [Version.PX]: `${ONCOKB_TM} Prognostic Levels of Evidence`,
 };
 
 const LEVEL_TITLE: { [key in Version]: ElementType } = {
@@ -81,14 +82,14 @@ const LEVEL_TITLE: { [key in Version]: ElementType } = {
   [Version.V2]: <>{LEVEL_NAME[Version.V2]}</>,
   [Version.FDA]: (
     <>
-      Mapping between the OncoKB Levels of Evidence and the{' '}
+      Mapping between the {ONCOKB_TM} Levels of Evidence and the{' '}
       {LEVEL_NAME[Version.FDA]}
     </>
   ),
   [Version.FDA_NGS]: <></>,
   [Version.AAC]: (
     <>
-      Mapping between the OncoKB Levels of Evidence and the{' '}
+      Mapping between the {ONCOKB_TM} Levels of Evidence and the{' '}
       {LEVEL_NAME[Version.AAC]}
     </>
   ),

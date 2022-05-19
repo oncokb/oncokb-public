@@ -8,6 +8,7 @@ import {
   IMG_MAX_WIDTH,
   ONCOKB_CONTACT_EMAIL,
   ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK,
+  ONCOKB_TM,
   PAGE_ROUTE,
   SOP_LINK,
 } from 'app/config/constants';
@@ -49,7 +50,7 @@ export default class NewsPage extends React.Component<{
               will inevitably be gaps or mistakes. Please help us to identify
               any issues by <b>sending an email to</b>{' '}
               <a
-                href={`mailto:${ONCOKB_CONTACT_EMAIL}?subject=OncoKB Feedback`}
+                href={`mailto:${ONCOKB_CONTACT_EMAIL}?subject=${ONCOKB_TM} Feedback`}
               >
                 {ONCOKB_CONTACT_EMAIL}
               </a>
@@ -114,14 +115,14 @@ export default class NewsPage extends React.Component<{
             <NewsList date={'04162020'}>
               <ul>
                 <li>
-                  An updated version of the OncoKB Curation Standard Operating
-                  Procedure, v1.1, has been released. See the OncoKB{' '}
-                  <Link to={PAGE_ROUTE.ABOUT}>About</Link> page or{' '}
+                  An updated version of the {ONCOKB_TM} Curation Standard
+                  Operating Procedure, v1.1, has been released. See the{' '}
+                  {ONCOKB_TM} <Link to={PAGE_ROUTE.ABOUT}>About</Link> page or{' '}
                   <Linkout link={SOP_LINK}>{SOP_LINK}</Linkout>.
                 </li>
                 <li>
-                  We now show a comparison between the OncoKB and AMP/ASCO/CAP
-                  Levels of Evidence on the{' '}
+                  We now show a comparison between the {ONCOKB_TM} and
+                  AMP/ASCO/CAP Levels of Evidence on the{' '}
                   <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.AAC}`}>
                     Levels of Evidence
                   </Link>{' '}
@@ -136,7 +137,7 @@ export default class NewsPage extends React.Component<{
             </NewsList>
             <NewsList date={'02122020'} />
             <NewsList date={'12202019'}>
-              <div>Introducing Simplified OncoKB Levels of Evidence:</div>
+              <div>Introducing Simplified {ONCOKB_TM} Levels of Evidence:</div>
               <ul>
                 <li>
                   <b>New Level 2</b>, defined as "Standard care biomarker
@@ -182,11 +183,11 @@ export default class NewsPage extends React.Component<{
             <NewsList date={'12092019'}>
               <span>
                 We now require user logins for access to downloadable data files
-                and API. OncoKB will continue to be accessible for no fee for
-                research use in an academic setting, but a license will be
-                required to use OncoKB for commercial and/or clinical purposes.
-                Fees will be used to support future development and maintenance
-                of OncoKB. Please visit the{' '}
+                and API. {ONCOKB_TM} will continue to be accessible for no fee
+                for research use in an academic setting, but a license will be
+                required to use {ONCOKB_TM} for commercial and/or clinical
+                purposes. Fees will be used to support future development and
+                maintenance of {ONCOKB_TM}. Please visit the{' '}
                 <Link to={PAGE_ROUTE.REGISTER}>registration page</Link>.
               </span>
             </NewsList>
@@ -243,8 +244,8 @@ export default class NewsPage extends React.Component<{
           <h3>Jun 6, 2016</h3>
           <div>
             <p>
-              We are happy to announce the <b>first release of OncoKB</b>, a
-              knowledge base for precision medicine. Our goal is to
+              We are happy to announce the <b>first release of {ONCOKB_TM}</b>,
+              a knowledge base for precision medicine. Our goal is to
               comprehensively annotate the oncogenic effect of mutations
               observed in cancer, as well as their therapeutic implications.
               This release contains information about almost 3,000 alterations
@@ -261,7 +262,7 @@ export default class NewsPage extends React.Component<{
             <p>
               We have also{' '}
               <b>
-                integrated information from OncoKB into the cBioPortal for
+                integrated information from {ONCOKB_TM} into the cBioPortal for
                 Cancer Genomics
               </b>
               . When exploring alterations in{' '}
@@ -272,7 +273,7 @@ export default class NewsPage extends React.Component<{
               >
                 cbioportal.org
               </a>
-              , you will see annotations from OncoKB when available.{' '}
+              , you will see annotations from {ONCOKB_TM} when available.{' '}
               <a
                 href="http://www.cbioportal.org/case.do?cancer_study_id=luad_tcga_pub&sample_id=TCGA-49-4494-01"
                 target="_blank"

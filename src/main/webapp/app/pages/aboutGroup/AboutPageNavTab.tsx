@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Row, Col, Tab, Nav } from 'react-bootstrap';
 import AppStore from 'app/store/AppStore';
 import { inject, observer } from 'mobx-react';
-import { PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
+import { ONCOKB_TM, PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
 import { observable, IReactionDisposer, reaction } from 'mobx';
 import { RouterStore } from 'mobx-react-router';
 import { AboutPage } from 'app/pages/AboutPage';
@@ -109,7 +109,7 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                       />
                     </div>
                     <h2 style={{ position: 'absolute', top: 0 }}>
-                      OncoKB Standard Operating Procedure
+                      {ONCOKB_TM} Standard Operating Procedure
                     </h2>
                   </div>
                 </Tab.Pane>

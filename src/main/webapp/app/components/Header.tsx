@@ -10,6 +10,7 @@ import AccountMenu from 'app/pages/menus/account';
 import { action, observable } from 'mobx';
 import {
   MSK_LOGO_ICON_CUTOFF,
+  ONCOKB_TM,
   PAGE_ROUTE,
   PAGE_TITLE,
 } from 'app/config/constants';
@@ -124,7 +125,7 @@ class Header extends React.Component<IHeaderProps> {
             <Container fluid={!this.props.windowStore.isLargeScreen}>
               <Navbar.Brand>
                 <NavLink to={PAGE_ROUTE.HOME}>
-                  <OptimizedImage height={30} src={oncokbImg} alt={'OncoKB'} />
+                  <OptimizedImage height={30} src={oncokbImg} alt={ONCOKB_TM} />
                 </NavLink>
               </Navbar.Brand>
               <Navbar.Toggle onClick={this.toggleNav} />

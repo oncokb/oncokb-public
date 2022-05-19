@@ -16,6 +16,8 @@ import {
   LEVEL_TYPES,
   PAGE_ROUTE,
   ONCOKB_DATAHUB_LINK,
+  ONCOKB_TM,
+  MSK_IMPACT_TM,
 } from 'app/config/constants';
 import {
   AlterationPageLink,
@@ -166,7 +168,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th>Mutation</th>
                 <th>Cancer Type</th>
                 <th>Current Level of Evidence</th>
-                <th>Drug(s) Currently in OncoKB</th>
+                <th>Drug(s) Already in {ONCOKB_TM}</th>
                 <th>Newly Added Drug</th>
                 <th>Evidence</th>
               </tr>
@@ -320,7 +322,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         Statistically recurrent hotspots per cancerhotspots.org that have not
-        been curated by OncoKB are now considered "Likely Oncogenic" (the
+        been curated by {ONCOKB_TM} are now considered "Likely Oncogenic" (the
         concept “Predicted Oncogenic” has been removed).
       </span>,
       <span>
@@ -873,7 +875,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '10072021': {
     priorityNews: [
       <span>
-        OncoKB is the first somatic human genetic variant database to achieve{' '}
+        {ONCOKB_TM} is the first somatic human genetic variant database to
+        achieve{' '}
         <Linkout link={'https://www.fda.gov/media/99200/download'}>
           FDA partial recognition
         </Linkout>
@@ -886,8 +889,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '09292021': {
     priorityNews: [
       <span>
-        New to OncoKB? Watch our introductory videos to get you started. See the
-        OncoKB <Link to={PAGE_ROUTE.ABOUT}>About page</Link>.
+        New to {ONCOKB_TM} Watch our introductory videos to get you started. See
+        the {ONCOKB_TM} <Link to={PAGE_ROUTE.ABOUT}>About page</Link>.
       </span>,
     ],
     updatedImplication: [
@@ -1019,7 +1022,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '06172021': {
     priorityNews: [
       <span>
-        The official OncoKB hugo symbols and gene aliases now come from the{' '}
+        The official {ONCOKB_TM} hugo symbols and gene aliases now come from the{' '}
         <Linkout link={'https://www.genenames.org'}>HGNC</Linkout> gene list
       </span>,
     ],
@@ -1174,8 +1177,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '04142021': {
     priorityNews: [
       <span>
-        An updated version of the OncoKB Curation Standard Operating Procedure,
-        v2.0, has been released. See the OncoKB{' '}
+        An updated version of the {ONCOKB_TM} Curation Standard Operating
+        Procedure, v2.0, has been released. See the {ONCOKB_TM}{' '}
         <Link to={PAGE_ROUTE.ABOUT}>About</Link> page or{' '}
         <SopPageLink>https://sop.oncokb.org</SopPageLink>
       </span>,
@@ -1184,7 +1187,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         variants that are only found in the context of drug resistance
       </span>,
       <span>
-        Documentation of all data changes in each OncoKB release are now
+        Documentation of all data changes in each {ONCOKB_TM} release are now
         publicly accessible on{' '}
         <Linkout link={ONCOKB_DATAHUB_LINK}>GitHub</Linkout>
       </span>,
@@ -1444,8 +1447,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '02102021': {
     priorityNews: [
       <span>
-        Members of the OncoKB External Advisory Board and their relevant COIs
-        are now listed on the <Link to={PAGE_ROUTE.TEAM}>OncoKB team page</Link>
+        Members of the {ONCOKB_TM} External Advisory Board and their relevant
+        COIs are now listed on the{' '}
+        <Link to={PAGE_ROUTE.TEAM}>{ONCOKB_TM} team page</Link>
       </span>,
     ],
     updatedImplication: [
@@ -1504,8 +1508,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </WithSeparator>,
       ],
     ],
-    changedAnnotationTitle:
-      'Changed annotation to adhere to our upcoming OncoKB SOP v2.0',
+    changedAnnotationTitle: `Changed annotation to adhere to our upcoming ${ONCOKB_TM} SOP v2.0`,
     changedAnnotation: [
       ['RET', 'Fusions', 'Non-Small Cell Lung Cancer', 'Vandetanib', '2', '3A'],
       [
@@ -1548,7 +1551,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       <span>
         We are excited to introduce the{' '}
         <LevelOfEvidencePageLink levelType={LEVEL_TYPES.DX}>
-          OncoKB Diagnostic (Dx)
+          {ONCOKB_TM} Diagnostic (Dx)
         </LevelOfEvidencePageLink>{' '}
         and{' '}
         <LevelOfEvidencePageLink levelType={LEVEL_TYPES.PX}>
@@ -2040,8 +2043,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '05112020': {
     priorityNews: [
       <span>
-        We are excited to announce that our first OncoKB webinar was a success!
-        You can find a video recording{' '}
+        We are excited to announce that our first {ONCOKB_TM} webinar was a
+        success! You can find a video recording{' '}
         <Link
           to={{
             pathname: PAGE_ROUTE.ABOUT,
@@ -2328,9 +2331,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '02122020': {
     priorityNews: [
       <span>
-        The version controlled OncoKB Curation Standard Operating Procedure v1.0
-        has been released in the <Link to={PAGE_ROUTE.ABOUT}>OncoKB About</Link>{' '}
-        page.
+        The version controlled {ONCOKB_TM} Curation Standard Operating Procedure
+        v1.0 has been released in the{' '}
+        <Link to={PAGE_ROUTE.ABOUT}>{ONCOKB_TM} About</Link> page.
       </span>,
     ],
     updatedImplication: [
@@ -2418,7 +2421,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '12122019': {
     priorityNews: [
       <span>User accounts and commercial licenses now available</span>,
-      <span>OncoKB now contains annotation of over 5,000 variants</span>,
+      <span>{ONCOKB_TM} now contains annotation of over 5,000 variants</span>,
     ],
     updatedImplication: [
       [
@@ -3062,7 +3065,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </a>
       </span>,
       <span>
-        OncoKB is monitoring the following drugs that were granted{' '}
+        {ONCOKB_TM} is monitoring the following drugs that were granted{' '}
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -3120,7 +3123,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '10012018': {
     news: [
       <span>
-        OncoKB is monitoring the following drugs that were granted{' '}
+        {ONCOKB_TM} is monitoring the following drugs that were granted{' '}
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -3191,7 +3194,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       </span>,
       <span>Updated layout of Actionable Genes table.</span>,
       <span>
-        OncoKB is monitoring the following drugs that were granted{' '}
+        {ONCOKB_TM} is monitoring the following drugs that were granted{' '}
         <a
           target="_blank"
           rel="noopener noreferrer"
@@ -3237,7 +3240,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     priorityNews: [
       <span>
-        OncoKB now contains over 4000 curated alterations in over 500 genes.
+        {ONCOKB_TM} now contains over 4000 curated alterations in over 500
+        genes.
       </span>,
     ],
     newlyAddedGenes: [
@@ -3447,7 +3451,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           rel="noopener noreferrer"
           href="https://www.cbioportal.org/study?id=msk_impact_2017#summary"
         >
-          MSK-IMPACT Clinical Sequencing Cohort
+          {MSK_IMPACT_TM} Clinical Sequencing Cohort
         </a>{' '}
         (
         <a
@@ -3747,7 +3751,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '11222016': {
     news: [
       <span>
-        All OncoKB alterations and their annotations can now be{' '}
+        All {ONCOKB_TM} alterations and their annotations can now be{' '}
         <Link to={PAGE_ROUTE.API_ACCESS}>
           {' '}
           batch downloaded or accessed programmatically via our API.
@@ -3782,7 +3786,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <>
         <span style={{ marginLeft: '-0.25rem' }}>
-          Improved visualization of OncoKB in cBioPortal:
+          Improved visualization of {ONCOKB_TM} in cBioPortal:
         </span>
         <br />
         <Row>

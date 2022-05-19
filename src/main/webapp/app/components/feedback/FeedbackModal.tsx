@@ -13,6 +13,7 @@ import { Modal } from 'react-bootstrap';
 import client from 'app/shared/api/clientInstance';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
+import { ONCOKB_TM } from 'app/config/constants';
 
 export const FeedbackModal: React.FunctionComponent<{
   showModal: boolean;
@@ -92,7 +93,7 @@ export const FeedbackModal: React.FunctionComponent<{
           <Else>
             <If condition={sentFeedback}>
               <Then>
-                Thank you. We have sent your feedback to the OncoKB team.
+                Thank you. We have sent your feedback to the {ONCOKB_TM} team.
               </Then>
               <Else>
                 Thank you for using the feedback feature. Please provide the
