@@ -132,13 +132,29 @@ public class SmartsheetService {
         }
     }
 
+    public boolean isUsa(String country) {
+        if (StringUtils.isEmpty(country)) {
+            return false;
+        }
+        // to deal with name with abbreviation such as "U.S.A", with space
+        String ct = country.trim().replace(".", "");
+        String[] usaCountryNames = {"United States", "USA", "United States of America", "US"};
+        return Arrays.asList(usaCountryNames).stream().filter(str -> str.equalsIgnoreCase(ct)).findAny().isPresent();
+    }
+
     public boolean shouldAddUser(UserDTO userDTO) {
         boolean withNote = this.slackService.withAcademicClarificationNote(userDTO, null);
         if (withNote) {
+            log.debug("User is not added to smartsheet since academic clarification note is present");
             return false;
         }
 
         if (userDTO.getEmail().endsWith(MSK_EMAIL_DOMAIN)) {
+            log.debug("User is not added to smartsheet since email is from MSK");
+            return false;
+        }
+        if (isUsa(userDTO.getCountry())) {
+            log.debug("User is not added to smartsheet since country is USA");
             return false;
         }
         return true;
