@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import oncokbImg from 'content/images/oncokb-white.svg';
+import oncokbImg from 'oncokb-styles/dist/images/logo/oncokb-white.svg';
 import { observer } from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';
 import { RouterStore } from 'mobx-react-router';
