@@ -215,7 +215,10 @@ class HomePage extends React.Component<IHomeProps, {}> {
               className="text-center font-bold"
               style={{ fontSize: '3.5em', color: COLOR_DARK_BLUE }}
             >
-              Welcome to {ONCOKB_TM}
+              Welcome to OncoKB
+              <sup style={{ fontSize: 'x-small', verticalAlign: 'super' }}>
+                TM
+              </sup>
             </div>
             <div className="text-center" style={{ fontSize: '2em' }}>
               MSK's Precision Oncology Knowledge Base
