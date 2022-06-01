@@ -50,7 +50,7 @@ if (
     // UNIQUE ID IS IMPORTANT B/C WE REMEMBER A MESSAGE HAS BEEN SHOWN
     // BASED ON USERS LOCALSTORAGE
     {
-      dateEnd: 1,
+      dateEnd: 100000000000000,
       content: (
         <div>
           <span>
@@ -60,16 +60,16 @@ if (
             className="btn btn-primary btn-sm ml-2 user-messager-container-button"
             target="_blank"
             rel="noopener noreferrer"
-            href="https://careers.mskcc.org/jobs/job-details/2021-48797-software-engineer-oncokb"
+            href="https://careers.mskcc.org/vacancies/2022-61916-bioinfo-software-eng-i/"
           >
             Apply Here
           </a>
         </div>
       ),
-      id: '2021_se_job_hiring',
+      id: '2022_se_job_hiring',
     },
     {
-      dateEnd: 100000000000000,
+      dateEnd: 1,
       content: (
         <span>
           Part of {ONCOKB_TM}’s content is now FDA-recognized. For more details,
