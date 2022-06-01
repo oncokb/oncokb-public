@@ -28,7 +28,12 @@ import {
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
-import { AbstractLink, FdaApprovalLink } from 'app/pages/newsPage/Links';
+import {
+  AbstractLink,
+  FdaApprovalLink,
+  FdaBreakthroughLink,
+  NccnLink,
+} from 'app/pages/newsPage/Links';
 import WithSeparator from 'react-with-separator';
 import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
@@ -74,7 +79,7 @@ export const CHANGED_ANNOTATION_LEVEL_COLUMNS = [
   { name: 'Gene' },
   { name: 'Mutation' },
   { name: 'Cancer Type' },
-  { name: 'Drug' },
+  { name: 'Drug(s)' },
   { name: 'Previous Level' },
   { name: 'Current Level' },
   { name: 'Reason' },
@@ -146,6 +151,97 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '06032022': {
+    changedAnnotation: [
+      [
+        'BRAF',
+        'V600E',
+        'Biliary Tract Cancer',
+        'Dabrafenib + Trametinib',
+        '3A',
+        '2',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <NccnLink version={'v1.2022'} cancerType={'Hepatobiliary'} />
+          <PMIDLink pmids={'32818466, 32758030'} />
+        </WithSeparator>,
+      ],
+    ],
+    news: [
+      <span>
+        Updated therapeutic implications: - Additional therapies for variants
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Current Level of Evidence</th>
+                <th>Drug(s) Already in {ONCOKB_TM}</th>
+                <th>Newly Added Drug</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ALK</td>
+                <td>Fusions</td>
+                <td>Inflammatory Myofibroblastic Tumor</td>
+                <td>2</td>
+                <td>Crizotinib, Ceritinib, Brigatinib</td>
+                <td>
+                  Lorlatinib
+                  <br />
+                  (Level 2)
+                </td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <NccnLink
+                      cancerType={'Soft Tissue Sarcoma'}
+                      version={'v1.2022'}
+                    />
+                    <PMIDLink pmids={'28713152, 32868646, 33007314'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>ROS1</td>
+                <td rowSpan={2}>Fusions</td>
+                <td>Non-Small Cell Lung Cancer</td>
+                <td rowSpan={2}>1</td>
+                <td>Crizotinib, Entrectinib</td>
+                <td rowSpan={2}>
+                  Repotrectinib
+                  <br />
+                  (Level 3A)
+                </td>
+                <td rowSpan={2}>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaBreakthroughLink
+                      link={
+                        'https://www.onclive.com/view/fda-grants-breakthrough-designation-to-repotrectinib-for-pretreated-ros1-metastatic-nsclc'
+                      }
+                    />
+                    <AbstractLink
+                      abstract={'Cho et al. Abstract# MA11.07, IASLC 2021'}
+                      link={
+                        'https://www.jto.org/article/S1556-0864(21)00293-8/fulltext'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>NTRK1, NTRK2, NTRK3</td>
+                <td>All Solid Tumors</td>
+                <td>Larotrectinib, Entrectinib</td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+  },
   '05052022': {
     priorityNews: [
       <span>
@@ -180,7 +276,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td rowSpan={5}>Non-Small Cell Lung Cancer</td>
                 <td rowSpan={3}>1</td>
                 <td>Afatinib</td>
-                <td>Osimertinib (Level 2)</td>
+                <td>
+                  Osimertinib
+                  <br />
+                  (Level 2)
+                </td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <span>Listing in NSCLC NCCN v1.2022</span>
@@ -192,7 +292,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td rowSpan={2}>ROS1</td>
                 <td rowSpan={2}>Fusions</td>
                 <td rowSpan={2}>Crizotinib, Entrectinib</td>
-                <td>Ceritinib (Level 2)</td>
+                <td>
+                  Ceritinib
+                  <br />
+                  (Level 2)
+                </td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <span>Listing in NSCLC NCCN v1.2022</span>
@@ -214,7 +318,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td rowSpan={2}>Amplifications</td>
                 <td rowSpan={2}>2</td>
                 <td rowSpan={2}>Crizotinib</td>
-                <td>Capmatinib (Level 2)</td>
+                <td>
+                  Capmatinib
+                  <br />
+                  (Level 2)
+                </td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <span>Listing in NSCLC NCCN v1.2022</span>
@@ -223,7 +331,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>Tepotinib (Level 2)</td>
+                <td>
+                  Tepotinib
+                  <br />
+                  (Level 2)
+                </td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <span>Listing in NSCLC NCCN v1.2022</span>
@@ -242,7 +354,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>Pancreatic Cancer</td>
                 <td>3A</td>
                 <td>Adagrasib</td>
-                <td>Sotorasib (Level 3A)</td>
+                <td>
+                  Sotorasib
+                  <br />
+                  (Level 3A)
+                </td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <AbstractLink
@@ -262,7 +378,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>Cholangiocarcinoma</td>
                 <td>1</td>
                 <td>Infigratinib, Pemigatinib</td>
-                <td>Futibatinib (Level 3A)</td>
+                <td>
+                  Futibatinib
+                  <br />
+                  (Level 3A)
+                </td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <AbstractLink
