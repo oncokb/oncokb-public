@@ -206,16 +206,16 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>ROS1</td>
-                <td rowSpan={2}>Fusions</td>
+                <td>Fusions</td>
                 <td>Non-Small Cell Lung Cancer</td>
-                <td rowSpan={2}>1</td>
+                <td>1</td>
                 <td>Crizotinib, Entrectinib</td>
-                <td rowSpan={2}>
+                <td>
                   Repotrectinib
                   <br />
                   (Level 3A)
                 </td>
-                <td rowSpan={2}>
+                <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <FdaBreakthroughLink
                       link={
@@ -233,8 +233,30 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>NTRK1, NTRK2, NTRK3</td>
+                <td>Fusions</td>
                 <td>All Solid Tumors</td>
+                <td>1</td>
                 <td>Larotrectinib, Entrectinib</td>
+                <td>
+                  Repotrectinib
+                  <br />
+                  (Level 3A)
+                </td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaBreakthroughLink
+                      link={
+                        'https://www.onclive.com/view/fda-grants-breakthrough-designation-to-repotrectinib-for-pretreated-ros1-metastatic-nsclc'
+                      }
+                    />
+                    <AbstractLink
+                      abstract={'Cho et al. Abstract# MA11.07, IASLC 2021'}
+                      link={
+                        'https://www.jto.org/article/S1556-0864(21)00293-8/fulltext'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -273,8 +295,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               <tr>
                 <td>EGFR</td>
                 <td>S768I, L861Q, G719</td>
-                <td rowSpan={5}>Non-Small Cell Lung Cancer</td>
-                <td rowSpan={3}>1</td>
+                <td>Non-Small Cell Lung Cancer</td>
+                <td>1</td>
                 <td>Afatinib</td>
                 <td>
                   Osimertinib
@@ -289,9 +311,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td rowSpan={2}>ROS1</td>
-                <td rowSpan={2}>Fusions</td>
-                <td rowSpan={2}>Crizotinib, Entrectinib</td>
+                <td>ROS1</td>
+                <td>Fusions</td>
+                <td>Non-Small Cell Lung Cancer</td>
+                <td>1</td>
+                <td>Crizotinib, Entrectinib</td>
                 <td>
                   Ceritinib
                   <br />
@@ -305,6 +329,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
+                <td>ROS1</td>
+                <td>Fusions</td>
+                <td>Non-Small Cell Lung Cancer</td>
+                <td>1</td>
+                <td>Crizotinib, Entrectinib</td>
                 <td>Lorlatinib (Level 2)</td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -314,10 +343,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td rowSpan={2}>MET</td>
-                <td rowSpan={2}>Amplifications</td>
-                <td rowSpan={2}>2</td>
-                <td rowSpan={2}>Crizotinib</td>
+                <td>MET</td>
+                <td>Amplifications</td>
+                <td>Non-Small Cell Lung Cancer</td>
+                <td>2</td>
+                <td>Crizotinib</td>
                 <td>
                   Capmatinib
                   <br />
@@ -331,6 +361,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
+                <td>MET</td>
+                <td>Amplifications</td>
+                <td>Non-Small Cell Lung Cancer</td>
+                <td>2</td>
+                <td>Crizotinib</td>
                 <td>
                   Tepotinib
                   <br />

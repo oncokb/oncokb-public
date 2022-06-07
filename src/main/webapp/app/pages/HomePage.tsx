@@ -216,7 +216,13 @@ class HomePage extends React.Component<IHomeProps, {}> {
               style={{ fontSize: '3.5em', color: COLOR_DARK_BLUE }}
             >
               Welcome to OncoKB
-              <sup style={{ fontSize: 'x-small', verticalAlign: 'super' }}>
+              <sup
+                style={{
+                  fontSize: '0.5rem',
+                  verticalAlign: 'text-top',
+                  top: '0.7rem',
+                }}
+              >
                 TM
               </sup>
             </div>
