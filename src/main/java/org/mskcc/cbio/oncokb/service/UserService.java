@@ -194,7 +194,9 @@ public class UserService {
             if (additionalInfoDTO == null) {
                 additionalInfoDTO = new AdditionalInfoDTO();
             }
-            additionalInfoDTO.setTrialAccount(initiateTrialAccountInfo());
+            if (additionalInfoDTO.getTrialAccount() == null) {
+                additionalInfoDTO.setTrialAccount(initiateTrialAccountInfo());
+            }
             ud.setAdditionalInfo(new Gson().toJson(additionalInfoDTO));
 
             userDetailsRepository.save(ud);
