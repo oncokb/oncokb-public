@@ -29,9 +29,9 @@ public final class Constants {
 
     public static final int TRIAL_PERIOD_IN_DAYS = 90;
 
-    public static final String USERS_USAGE_SUMMARY_FILE = "public-website/usage-analysis/userSummary.json";
-    public static final String RESOURCES_USAGE_SUMMARY_FILE = "public-website/usage-analysis/resourceSummary.json";
-    public static final String RESOURCES_USAGE_DETAIL_FILE = "public-website/usage-analysis/resourceDetail.json";
+    public static final String USERS_USAGE_SUMMARY_FILE_PREFIX = "public-website/usage-analysis/year-user-summary_";
+    public static final String RESOURCES_USAGE_SUMMARY_FILE_PREFIX = "public-website/usage-analysis/year-resource-summary_";
+    public static final String RESOURCES_USAGE_DETAIL_FILE_PREFIX = "public-website/usage-analysis/year-resource-detail_";
     public static final String TOKEN_STATS_STORAGE_FILE_PREFIX = "public-website/token-usage/token-stats_";
 
     public static final String ONCOKB_TM = "OncoKB™";

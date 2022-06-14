@@ -3,18 +3,20 @@ package org.mskcc.cbio.oncokb.web.rest;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.google.gson.Gson;
 
+import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.mskcc.cbio.oncokb.service.S3Service;
+import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UsageSummary;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserOverviewUsage;
 import org.mskcc.cbio.oncokb.web.rest.vm.usageAnalysis.UserUsage;
@@ -35,6 +37,12 @@ import static org.mskcc.cbio.oncokb.config.Constants.*;
 public class UsageAnalysisController {
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     private JSONObject requestData(String file)
             throws UnsupportedEncodingException, IOException, ParseException {
@@ -57,19 +65,32 @@ public class UsageAnalysisController {
     @GetMapping("/usage/users/{userId}")
     public ResponseEntity<UserUsage> userUsageGet(@PathVariable String userId)
         throws IOException, ParseException {
-    
+
         HttpStatus status = HttpStatus.OK;
 
-        JSONObject jsonObject = requestData(USERS_USAGE_SUMMARY_FILE);
+        int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
+        JSONObject jsonObject = requestData(USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
 
-        if (jsonObject.containsKey(userId)){
-            JSONObject usageObject = (JSONObject)jsonObject.get(userId);
+        Long id = Long.parseLong(userId);
+        Optional<User> user = userService.getUserById(id);
+        String email = user.map(User::getEmail).orElse(null);
+
+        if (jsonObject != null && jsonObject.containsKey(email)){
+            JSONObject usageObject = (JSONObject)jsonObject.get(email);
             Gson gson = new Gson();
-            UserUsage userUsage = gson.fromJson(usageObject.toString(), UserUsage.class);
+            UsageSummary usageSummary = gson.fromJson(usageObject.toString(), UsageSummary.class);
+            UserUsage userUsage = new UserUsage();
+            userUsage.setUserFirstName(user.get().getFirstName());
+            userUsage.setUserLastName(user.get().getLastName());
+            userUsage.setUserEmail(email);
+            userUsage.setLicenseType(Objects.nonNull(userMapper.userToUserDTO(user.get()).getLicenseType()) ? userMapper.userToUserDTO(user.get()).getLicenseType().getName() : null);
+            userUsage.setJobTitle(userMapper.userToUserDTO(user.get()).getJobTitle());
+            userUsage.setCompany(userMapper.userToUserDTO(user.get()).getCompanyName());
+            userUsage.setSummary(usageSummary);
             return new ResponseEntity<UserUsage>(userUsage, status);
         }
 
-        return new ResponseEntity<UserUsage>(new UserUsage(), status);        
+        return new ResponseEntity<UserUsage>(new UserUsage(), status);
     }
 
     /**
@@ -83,48 +104,52 @@ public class UsageAnalysisController {
         throws IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
 
-        JSONObject jsonObject = requestData(USERS_USAGE_SUMMARY_FILE);
-        
+        int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
+        JSONObject jsonObject = requestData(USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+
         List<UserOverviewUsage> result = new ArrayList<>();
-        for (Object item: jsonObject.keySet()){
-            String id = (String) item;
-            JSONObject usageObject = (JSONObject)jsonObject.get(id);
-            Gson gson = new Gson();
-            UserUsage userUsage = gson.fromJson(usageObject.toString(), UserUsage.class); 
-            UserOverviewUsage cur = new UserOverviewUsage();
-            cur.setUserId(id);
-            cur.setUserEmail(userUsage.getUserEmail());
-            
-            String endpoint = "";
-            int maxUsage = 0;
-            String noPrivateEndpoint = "";
-            int noPrivateMaxUsage = 0;
-            int totalUsage = 0;
-            Map<String,Integer> summary = userUsage.getSummary().getYear();
-            for (String resource: summary.keySet()){
-                totalUsage += summary.get(resource);
-                if (summary.get(resource) > maxUsage){
-                    endpoint = resource;
-                    maxUsage = summary.get(resource);
-                }
-                if (resource.indexOf("/private/") == -1){
-                    if (summary.get(resource) > noPrivateMaxUsage){
-                        noPrivateEndpoint = resource;
-                        noPrivateMaxUsage = summary.get(resource);
+        if (jsonObject != null) {
+            for (Object item : jsonObject.keySet()) {
+                String email = (String) item;
+                JSONObject usageObject = (JSONObject) jsonObject.get(email);
+                Gson gson = new Gson();
+                UsageSummary usageSummary = gson.fromJson(usageObject.toString(), UsageSummary.class);
+                UserOverviewUsage cur = new UserOverviewUsage();
+                cur.setUserEmail(email);
+                Optional<User> user = userService.getUserByEmailIgnoreCase(email);
+                cur.setUserId(user.map(value -> value.getId().toString()).orElse(null));
+
+                String endpoint = "";
+                int maxUsage = 0;
+                String noPrivateEndpoint = "";
+                int noPrivateMaxUsage = 0;
+                int totalUsage = 0;
+                Map<String, Integer> summary = usageSummary.getYear();
+                for (String resource : summary.keySet()) {
+                    totalUsage += summary.get(resource);
+                    if (summary.get(resource) > maxUsage) {
+                        endpoint = resource;
+                        maxUsage = summary.get(resource);
+                    }
+                    if (resource.indexOf("/private/") == -1) {
+                        if (summary.get(resource) > noPrivateMaxUsage) {
+                            noPrivateEndpoint = resource;
+                            noPrivateMaxUsage = summary.get(resource);
+                        }
                     }
                 }
-            }
-            cur.setTotalUsage(totalUsage);
-            cur.setEndpoint(endpoint);
-            cur.setMaxUsage(maxUsage);
-            cur.setNoPrivateEndpoint(noPrivateEndpoint);
-            cur.setNoPrivateMaxUsage(noPrivateMaxUsage);
+                cur.setTotalUsage(totalUsage);
+                cur.setEndpoint(endpoint);
+                cur.setMaxUsage(maxUsage);
+                cur.setNoPrivateEndpoint(noPrivateEndpoint);
+                cur.setNoPrivateMaxUsage(noPrivateMaxUsage);
 
-            result.add(cur);
+                result.add(cur);
+            }
         }
 
         return new ResponseEntity<List<UserOverviewUsage>>(result, status);
-        
+
     }
 
     /**
@@ -138,11 +163,14 @@ public class UsageAnalysisController {
         throws IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
 
-        JSONObject jsonObject = requestData(RESOURCES_USAGE_SUMMARY_FILE);
+        int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
+        JSONObject jsonObject = requestData(RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
 
         Gson gson = new Gson();
-        UsageSummary summary = gson.fromJson(jsonObject.toString(), UsageSummary.class);
-
+        UsageSummary summary = new UsageSummary();
+        if (jsonObject != null) {
+            summary = gson.fromJson(jsonObject.toString(), UsageSummary.class);
+        }
         return new ResponseEntity<UsageSummary>(summary, status);
     }
 
@@ -159,8 +187,9 @@ public class UsageAnalysisController {
             throws UnsupportedEncodingException, IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
 
-        JSONObject jsonObject = requestData(RESOURCES_USAGE_DETAIL_FILE);
-        if (jsonObject.containsKey(endpoint)){
+        int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
+        JSONObject jsonObject = requestData(RESOURCES_USAGE_DETAIL_FILE_PREFIX + year + ".json");
+        if (jsonObject != null && jsonObject.containsKey(endpoint)){
             JSONObject usageObject = (JSONObject)jsonObject.get(endpoint);
             Gson gson = new Gson();
             UsageSummary resourceDetail = gson.fromJson(usageObject.toString(), UsageSummary.class);
