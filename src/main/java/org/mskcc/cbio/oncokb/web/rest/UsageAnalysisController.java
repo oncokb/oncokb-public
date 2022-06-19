@@ -188,12 +188,32 @@ public class UsageAnalysisController {
         HttpStatus status = HttpStatus.OK;
 
         int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
-        JSONObject jsonObject = requestData(RESOURCES_USAGE_DETAIL_FILE_PREFIX + year + ".json");
-        if (jsonObject != null && jsonObject.containsKey(endpoint)){
-            JSONObject usageObject = (JSONObject)jsonObject.get(endpoint);
+        JSONObject resourceSummary = requestData(RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        JSONObject userSummary = requestData(USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        if (resourceSummary != null && userSummary != null ){
             Gson gson = new Gson();
-            UsageSummary resourceDetail = gson.fromJson(usageObject.toString(), UsageSummary.class);
-            return new ResponseEntity<UsageSummary>(resourceDetail, status);
+            UsageSummary resourceUsageSummary = gson.fromJson(resourceSummary.toString(), UsageSummary.class);
+            if (resourceUsageSummary.getYear().containsKey(endpoint)) {
+                UsageSummary resourceDetail = new UsageSummary();
+                Map<String, JSONObject> monthResourceDetail = new HashMap<>();
+                userSummary.keySet().forEach(user ->
+                {
+                    UsageSummary userUsageSummary = gson.fromJson(userSummary.get(user.toString()).toString(), UsageSummary.class);
+                    int yearUsage = 0;
+                    for (String month : userUsageSummary.getMonth().keySet()){
+                        if (userUsageSummary.getMonth().get(month).containsKey(endpoint)) {
+                            int monthUsage = (int) Double.parseDouble(userUsageSummary.getMonth().get(month).get(endpoint).toString());
+                            if (!monthResourceDetail.containsKey(month))
+                                monthResourceDetail.put(month, new JSONObject());
+                            monthResourceDetail.get(month).put(user, monthUsage);
+                            yearUsage += monthUsage;
+                        }
+                    }
+                    resourceDetail.getYear().put(user.toString(), yearUsage);
+                });
+                resourceDetail.setMonth(monthResourceDetail);
+                return new ResponseEntity<UsageSummary>(resourceDetail, status);
+            }
         }
         return new ResponseEntity<>(new UsageSummary(), status);
     }
