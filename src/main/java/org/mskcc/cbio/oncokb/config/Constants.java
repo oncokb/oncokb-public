@@ -34,6 +34,8 @@ public final class Constants {
     public static final String RESOURCES_USAGE_DETAIL_FILE = "public-website/usage-analysis/resourceDetail.json";
     public static final String TOKEN_STATS_STORAGE_FILE_PREFIX = "public-website/token-usage/token-stats_";
 
+    public static final String ONCOKB_TM = "OncoKB™";
+
     private Constants() {
     }
 }
