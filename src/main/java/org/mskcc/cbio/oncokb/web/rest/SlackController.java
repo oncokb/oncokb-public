@@ -113,12 +113,12 @@ public class SlackController {
                         this.userService.updateUser(userDTO);
                         break;
                     case CONVERT_TO_REGULAR_ACCOUNT:
-                        userService.convertTrialUserToRegular(userDTO);
+                        userService.convertUserToRegular(userDTO);
                         break;
                     default:
                         break;
                 }
-                this.slackService.sendLatestBlocks(blockActionPayload.getResponseUrl(), userDTO, userService.trialAccountActivated(userDTO), actionId, blockActionPayload.getTriggerId());
+                this.slackService.sendLatestBlocks(blockActionPayload.getResponseUrl(), userDTO, userService.isUserOnTrial(userDTO), actionId, blockActionPayload.getTriggerId());
             }
         } else if (pl.getType().equals(ViewSubmissionPayload.TYPE)) {
             ViewSubmissionPayload viewSubmissionPayload = snakeCase.fromJson(actionJSON, ViewSubmissionPayload.class);
@@ -166,7 +166,7 @@ public class SlackController {
                 this.slackService.sendLatestBlocks(
                     viewSubmissionPayload.getResponseUrls().get(0).getResponseUrl(),
                     userDTO,
-                    userService.trialAccountActivated(userDTO),
+                    userService.isUserOnTrial(userDTO),
                     ActionId.getById(viewSubmissionPayload.getView().getCallbackId()),
                     null);
             }

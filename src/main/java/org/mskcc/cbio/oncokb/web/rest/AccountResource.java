@@ -28,7 +28,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
 import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -171,7 +170,7 @@ public class AccountResource {
             if (companyCandidate.getCompanyCandidate().isPresent()) {
                 limitedCompany = companyCandidate.getCompanyCandidate().get();
             }
-            slackService.sendUserRegistrationToChannel(userDTO, userService.trialAccountActivated(userDTO), limitedCompany);
+            slackService.sendUserRegistrationToChannel(userDTO, userService.isUserOnTrial(userDTO), limitedCompany);
         } else {
             Company company = companyCandidate.getCompanyCandidate().get();
             userService.updateUserWithCompanyLicense(userDTO, company, false, false);

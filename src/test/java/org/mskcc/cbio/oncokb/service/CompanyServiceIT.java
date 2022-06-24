@@ -1,27 +1,26 @@
 package org.mskcc.cbio.oncokb.service;
 
-import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.CompanyCandidate;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.CompanyType;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseModel;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseStatus;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.CompanyDomainRepository;
 import org.mskcc.cbio.oncokb.repository.CompanyRepository;
+import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,6 +85,9 @@ public class CompanyServiceIT {
     UserRepository userRepository;
 
     @Autowired
+    UserDetailsRepository userDetailsRepository;
+
+    @Autowired
     CompanyService companyService;
 
     @Autowired 
@@ -128,18 +130,18 @@ public class CompanyServiceIT {
     }
 
     // Use this to create a default CompanyVM
-    public static CompanyVM createCompanyVM(Long id) {
+    public static CompanyVM createCompanyVM(CompanyDTO companyDTO) {
         CompanyVM companyVM = new CompanyVM();
-        companyVM.setId(id);
-        companyVM.setName(DEFAULT_NAME);
-        companyVM.setDescription(DEFAULT_DESCRIPTION);
-        companyVM.setCompanyType(DEFAULT_COMPANY_TYPE);
-        companyVM.setLicenseType(DEFAULT_LICENSE_TYPE);
-        companyVM.setLicenseModel(DEFAULT_LICENSE_MODEL);
-        companyVM.setLicenseStatus(DEFAULT_LICENSE_STATUS);
-        companyVM.setBusinessContact(DEFAULT_BUSINESS_CONTACT);
-        companyVM.setLegalContact(DEFAULT_LEGAL_CONTACT);
-        companyVM.setCompanyDomains(DEFAULT_COMPANY_DOMAINS);
+        companyVM.setId(companyDTO.getId());
+        companyVM.setName(companyDTO.getName());
+        companyVM.setDescription(companyDTO.getDescription());
+        companyVM.setCompanyType(companyDTO.getCompanyType());
+        companyVM.setLicenseType(companyDTO.getLicenseType());
+        companyVM.setLicenseModel(companyDTO.getLicenseModel());
+        companyVM.setLicenseStatus(companyDTO.getLicenseStatus());
+        companyVM.setBusinessContact(companyDTO.getBusinessContact());
+        companyVM.setLegalContact(companyDTO.getLegalContact());
+        companyVM.setCompanyDomains(companyDTO.getCompanyDomains());
         return companyVM;
     }
 
@@ -152,7 +154,7 @@ public class CompanyServiceIT {
         User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
 
         // Add user to the company
-        CompanyVM updatedCompany = createCompanyVM(existingCompany.getId());
+        CompanyVM updatedCompany = createCompanyVM(existingCompany);
         updatedCompany.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
 
         // Check if user is updated with the company information
@@ -177,12 +179,12 @@ public class CompanyServiceIT {
         companyDTO.setLicenseStatus(LicenseStatus.TRIAL);
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
         User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
-        CompanyVM companyVM = createCompanyVM(existingCompany.getId());
+        CompanyVM companyVM = createCompanyVM(existingCompany);
         companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
 
         // Change license to regular
-        CompanyVM updatedCompanyVM = createCompanyVM(existingCompany.getId());
+        CompanyVM updatedCompanyVM = createCompanyVM(existingCompany);
         updatedCompanyVM.setLicenseStatus(LicenseStatus.REGULAR);
         companyService.updateCompany(updatedCompanyVM);
 
@@ -191,9 +193,43 @@ public class CompanyServiceIT {
         assertThat(optionalUser).isPresent();
         UserDTO userDTO = userMapper.userToUserDTO(optionalUser.get());
         assertThat(userDTO.isActivated()).isTrue();
+        assertThat(userDTO.getAdditionalInfo()).isNull();
+        // Check tokens are renewable
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
         assertThat(tokens).extracting(Token::isRenewable).allMatch(renewable -> renewable.equals(true));
     }
+
+    @Test
+    @Transactional
+    public void assertThatActivatedTrialUserIsConvertedWhenCompanyOnRegularLicense() {
+        // Initialize database
+        companyDTO.setLicenseStatus(LicenseStatus.TRIAL);
+        CompanyDTO existingCompany = companyService.createCompany(companyDTO);
+        User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
+        userService.initiateTrialAccountActivation(newUser.getLogin());
+        CompanyVM companyVM = createCompanyVM(existingCompany);
+        companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
+        companyService.updateCompany(companyVM);
+
+        // Activate trial
+        Optional<User> optionalUserPre = userRepository.findOneById(newUser.getId());
+        UserDTO userDTOPre = userMapper.userToUserDTO(optionalUserPre.get());
+        userService.finishTrialAccountActivation(userDTOPre.getAdditionalInfo().getTrialAccount().getActivation().getKey());
+
+        // Change license to regular
+        CompanyVM updatedCompanyVM = createCompanyVM(existingCompany);
+        updatedCompanyVM.setLicenseStatus(LicenseStatus.REGULAR);
+        companyService.updateCompany(updatedCompanyVM);
+
+        // Check assumptions
+        Optional<User> optionalUserPost = userRepository.findOneById(newUser.getId());
+        UserDTO userDTOPost = userMapper.userToUserDTO(optionalUserPost.get());
+        assertThat(userDTOPost.getAdditionalInfo()).isNotNull();
+        assertThat(userDTOPost.getAdditionalInfo().getTrialAccount()).isNotNull();
+        List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTOPost));
+        assertThat(tokens).extracting(Token::isRenewable).allMatch(renewable -> renewable.equals(true));
+    }
+
 
     @Test
     @Transactional
@@ -202,12 +238,12 @@ public class CompanyServiceIT {
         companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
         User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
-        CompanyVM companyVM = createCompanyVM(existingCompany.getId());
+        CompanyVM companyVM = createCompanyVM(existingCompany);
         companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
 
         // Change license to trial
-        CompanyVM updatedCompanyVM = createCompanyVM(existingCompany.getId());
+        CompanyVM updatedCompanyVM = createCompanyVM(existingCompany);
         updatedCompanyVM.setLicenseStatus(LicenseStatus.TRIAL);
         companyService.updateCompany(updatedCompanyVM);
 
@@ -228,12 +264,12 @@ public class CompanyServiceIT {
         companyDTO.setLicenseStatus(LicenseStatus.REGULAR);
         CompanyDTO existingCompany = companyService.createCompany(companyDTO);
         User newUser = userService.createUser(userDTO, Optional.empty(), Optional.empty());
-        CompanyVM companyVM = createCompanyVM(existingCompany.getId());
+        CompanyVM companyVM = createCompanyVM(existingCompany);
         companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
 
         // Expire the company's license
-        CompanyVM updatedCompanyVM = createCompanyVM(existingCompany.getId());
+        CompanyVM updatedCompanyVM = createCompanyVM(existingCompany);
         updatedCompanyVM.setLicenseStatus(LicenseStatus.EXPIRED);
         companyService.updateCompany(updatedCompanyVM);
 
@@ -297,7 +333,7 @@ public class CompanyServiceIT {
     @Transactional
     public void assertThatCompanyUsersFound(){
         Company company = companyRepository.saveAndFlush(companyMapper.toEntity(companyDTO));
-        CompanyVM companyVM = createCompanyVM(company.getId());
+        CompanyVM companyVM = createCompanyVM(companyMapper.toDto(company));
         userService.createUser(userDTO, Optional.empty(), Optional.empty());
         companyVM.setCompanyUserEmails(Collections.singletonList(DEFAULT_EMAIL));
         companyService.updateCompany(companyVM);
