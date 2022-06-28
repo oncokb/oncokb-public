@@ -13,8 +13,9 @@ import {
   UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import {
+  USAGE_ALL_TIME_KEY,
   USAGE_DETAIL_TIME_KEY,
-  USGAE_ALL_TIME_KEY,
+  USAGE_DAY_DETAIL_TIME_KEY,
 } from 'app/config/constants';
 import { UsageToggleGroup } from './UsageToggleGroup';
 
@@ -49,8 +50,10 @@ export default class UserUsageDetailsTable extends React.Component<
   @computed get calculateData(): UsageRecord[] {
     const data = this.props.data.get(
       this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
-        ? USGAE_ALL_TIME_KEY
-        : USAGE_DETAIL_TIME_KEY
+        ? USAGE_ALL_TIME_KEY
+        : this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH
+        ? USAGE_DETAIL_TIME_KEY
+        : USAGE_DAY_DETAIL_TIME_KEY
     );
     if (this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES) {
       return data || [];
@@ -80,6 +83,7 @@ export default class UserUsageDetailsTable extends React.Component<
             toggleValues={[
               ToggleValue.RESULTS_IN_TOTAL,
               ToggleValue.RESULTS_BY_MONTH,
+              ToggleValue.RESULTS_BY_DAY,
             ]}
             handleToggle={this.handleTimeTypeToggleChange}
           />

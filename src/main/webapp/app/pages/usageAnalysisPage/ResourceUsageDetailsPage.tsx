@@ -9,8 +9,8 @@ import { ToggleValue, UsageRecord } from './UsageAnalysisPage';
 import Client from 'app/shared/api/clientInstance';
 import {
   USAGE_DETAIL_TIME_KEY,
-  USGAE_ALL_TIME_KEY,
-  USGAE_ALL_TIME_VALUE,
+  USAGE_ALL_TIME_KEY,
+  USAGE_ALL_TIME_VALUE,
 } from 'app/config/constants';
 import ResourceUsageDetailsTable from './ResourceUsageDetailsTable';
 import { decodeResourceUsageDetailPageURL } from 'app/shared/utils/Utils';
@@ -40,10 +40,10 @@ export default class ResourceUsageDetailsPage extends React.Component<{
         yearUsage.push({
           resource: key,
           usage: yearSummary[key],
-          time: USGAE_ALL_TIME_VALUE,
+          time: USAGE_ALL_TIME_VALUE,
         });
       });
-      result.set(USGAE_ALL_TIME_KEY, yearUsage);
+      result.set(USAGE_ALL_TIME_KEY, yearUsage);
 
       const monthSummary = this.resource.month;
       const detailUsage: UsageRecord[] = [];

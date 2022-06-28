@@ -25,7 +25,7 @@ import { Row, Dropdown, DropdownButton } from 'react-bootstrap';
 import {
   PAGE_ROUTE,
   USAGE_TOP_USERS_LIMIT,
-  USGAE_ALL_TIME_KEY,
+  USAGE_ALL_TIME_KEY,
 } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
 import * as QueryString from 'query-string';
@@ -50,6 +50,7 @@ export enum ToggleValue {
   PUBLIC_RESOURCES = 'Only Public Resources',
   RESULTS_IN_TOTAL = 'Total',
   RESULTS_BY_MONTH = 'By Month',
+  RESULTS_BY_DAY = 'By Day',
 }
 
 const ALLOWED_USAGETYPE: string[] = [UsageType.USER, UsageType.RESOURCE];
@@ -98,7 +99,7 @@ export function getUsageTableColumnDefinition(
       return {
         id: UsageTableColumnKey.OPERATION,
         Header: <span>Details</span>,
-        maxWidth: 60,
+        maxWidth: 61,
         accessor: UsageTableColumnKey.OPERATION,
       };
     default:
@@ -167,8 +168,8 @@ export default class UsageAnalysisPage extends React.Component<{
       Object.keys(yearSummary).forEach(key => {
         yearUsage.push({ resource: key, usage: yearSummary[key], time: '' });
       });
-      result.set(USGAE_ALL_TIME_KEY, yearUsage);
-      this.dropdownList.push(USGAE_ALL_TIME_KEY);
+      result.set(USAGE_ALL_TIME_KEY, yearUsage);
+      this.dropdownList.push(USAGE_ALL_TIME_KEY);
 
       const monthSummary = resource.month;
       Object.keys(monthSummary).forEach(key => {

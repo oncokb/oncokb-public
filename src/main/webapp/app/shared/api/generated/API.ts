@@ -209,6 +209,7 @@ export type UsageSummary = {
 
     'year': {}
 
+    'day': {}
 };
 export type User = {
     'activated': boolean

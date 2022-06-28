@@ -12,8 +12,9 @@ import { InfoRow } from '../AccountPage';
 import {
   PAGE_ROUTE,
   USAGE_DETAIL_TIME_KEY,
-  USGAE_ALL_TIME_KEY,
-  USGAE_ALL_TIME_VALUE,
+  USAGE_ALL_TIME_KEY,
+  USAGE_ALL_TIME_VALUE,
+  USAGE_DAY_DETAIL_TIME_KEY,
 } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
 import {
@@ -47,10 +48,10 @@ export default class UserUsageDetailsPage extends React.Component<{
         yearUsage.push({
           resource: key,
           usage: yearSummary[key],
-          time: USGAE_ALL_TIME_VALUE,
+          time: USAGE_ALL_TIME_VALUE,
         });
       });
-      result.set(USGAE_ALL_TIME_KEY, yearUsage);
+      result.set(USAGE_ALL_TIME_KEY, yearUsage);
 
       const monthSummary = this.user.summary.month;
       const detailSummary: UsageRecord[] = [];
@@ -61,6 +62,20 @@ export default class UserUsageDetailsPage extends React.Component<{
         });
       });
       result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
+
+      const daySummary = this.user.summary.day;
+      const dayDetailSummary: UsageRecord[] = [];
+      Object.keys(daySummary).forEach(key => {
+        const day = daySummary[key];
+        Object.keys(day).forEach(key2 => {
+          dayDetailSummary.push({
+            resource: key2,
+            usage: day[key2],
+            time: key,
+          });
+        });
+      });
+      result.set(USAGE_DAY_DETAIL_TIME_KEY, dayDetailSummary);
       return Promise.resolve(result);
     },
     default: new Map(),

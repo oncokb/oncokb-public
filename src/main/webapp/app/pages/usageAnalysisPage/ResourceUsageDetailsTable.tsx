@@ -14,7 +14,7 @@ import {
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import {
   USAGE_DETAIL_TIME_KEY,
-  USGAE_ALL_TIME_KEY,
+  USAGE_ALL_TIME_KEY,
 } from 'app/config/constants';
 import { UsageToggleGroup } from './UsageToggleGroup';
 
@@ -53,7 +53,7 @@ export default class ResourceUsageDetailsTable extends React.Component<
         <OncoKBTable
           data={
             this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
-              ? this.props.data.get(USGAE_ALL_TIME_KEY) || []
+              ? this.props.data.get(USAGE_ALL_TIME_KEY) || []
               : this.props.data.get(USAGE_DETAIL_TIME_KEY) || []
           }
           columns={[

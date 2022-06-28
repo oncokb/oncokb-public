@@ -96,9 +96,10 @@ export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;
 export const SHORTEN_TEXT_FROM_LIST_THRESHOLD = 5;
 export const TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS = 14;
 export const USAGE_TOP_USERS_LIMIT = 10000;
-export const USGAE_ALL_TIME_KEY = 'All';
-export const USGAE_ALL_TIME_VALUE = 'One year';
+export const USAGE_ALL_TIME_KEY = 'All';
+export const USAGE_ALL_TIME_VALUE = 'One year';
 export const USAGE_DETAIL_TIME_KEY = 'Detail';
+export const USAGE_DAY_DETAIL_TIME_KEY = 'Day Detail';
 
 export enum ONCOGENICITY {
   ONCOGENIC = 'Oncogenic',

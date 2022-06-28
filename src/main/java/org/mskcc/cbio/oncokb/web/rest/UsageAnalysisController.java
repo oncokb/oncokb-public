@@ -5,12 +5,14 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.google.gson.Gson;
 
+import com.google.gson.reflect.TypeToken;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,16 +71,22 @@ public class UsageAnalysisController {
         HttpStatus status = HttpStatus.OK;
 
         int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
-        JSONObject jsonObject = requestData(USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        String month = ZonedDateTime.now(ZoneId.of("America/New_York")).format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        JSONObject monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + ".json");
 
         Long id = Long.parseLong(userId);
         Optional<User> user = userService.getUserById(id);
         String email = user.map(User::getEmail).orElse(null);
 
-        if (jsonObject != null && jsonObject.containsKey(email)){
-            JSONObject usageObject = (JSONObject)jsonObject.get(email);
+        if (yearSummary != null && yearSummary.containsKey(email)){
+            JSONObject yearUsageObject = (JSONObject) yearSummary.get(email);
             Gson gson = new Gson();
-            UsageSummary usageSummary = gson.fromJson(usageObject.toString(), UsageSummary.class);
+            UsageSummary usageSummary = gson.fromJson(yearUsageObject.toString(), UsageSummary.class);
+            if (monthSummary != null && monthSummary.containsKey(email)) {
+                JSONObject monthUsageObject = (JSONObject) monthSummary.get(email);
+                usageSummary.setDay(gson.fromJson(monthUsageObject.get("day").toString(), new TypeToken<HashMap<String, JSONObject>>(){}.getType()));
+            }
             UserUsage userUsage = new UserUsage();
             userUsage.setUserFirstName(user.get().getFirstName());
             userUsage.setUserLastName(user.get().getLastName());
@@ -105,7 +113,7 @@ public class UsageAnalysisController {
         HttpStatus status = HttpStatus.OK;
 
         int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
-        JSONObject jsonObject = requestData(USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        JSONObject jsonObject = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
 
         List<UserOverviewUsage> result = new ArrayList<>();
         if (jsonObject != null) {
@@ -164,7 +172,7 @@ public class UsageAnalysisController {
         HttpStatus status = HttpStatus.OK;
 
         int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
-        JSONObject jsonObject = requestData(RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        JSONObject jsonObject = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
 
         Gson gson = new Gson();
         UsageSummary summary = new UsageSummary();
@@ -188,8 +196,8 @@ public class UsageAnalysisController {
         HttpStatus status = HttpStatus.OK;
 
         int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
-        JSONObject resourceSummary = requestData(RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
-        JSONObject userSummary = requestData(USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        JSONObject resourceSummary = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        JSONObject userSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
         if (resourceSummary != null && userSummary != null ){
             Gson gson = new Gson();
             UsageSummary resourceUsageSummary = gson.fromJson(resourceSummary.toString(), UsageSummary.class);

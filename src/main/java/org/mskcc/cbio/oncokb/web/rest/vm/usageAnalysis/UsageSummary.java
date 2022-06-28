@@ -10,8 +10,17 @@ import java.util.HashMap;
  */
 
 public class UsageSummary {
-    private Map<String, JSONObject> month = new HashMap<String, JSONObject>();
-    private Map<String, Integer> year = new HashMap<String, Integer>();
+    private Map<String, JSONObject> day = new HashMap<>();
+    private Map<String, JSONObject> month = new HashMap<>();
+    private Map<String, Integer> year = new HashMap<>();
+
+    public Map<String, JSONObject> getDay() {
+        return day;
+    }
+
+    public void setDay(Map<String, JSONObject> day) {
+        this.day = day;
+    }
 
     public Map<String, JSONObject> getMonth() {
         return month;
