@@ -399,7 +399,7 @@ public class SlackService {
 
     public boolean withTrialAccountNote(UserDTO userDTO, ActionId actionId) {
         if (
-            ObjectUtil.isUserAdditionalInfoEmpty(userDTO.getAdditionalInfo())
+            ObjectUtil.isObjectEmpty(userDTO.getAdditionalInfo())
                 || userDTO.getAdditionalInfo().getTrialAccount() == null
                 || userDTO.getAdditionalInfo().getTrialAccount().getActivation() == null
         ) {

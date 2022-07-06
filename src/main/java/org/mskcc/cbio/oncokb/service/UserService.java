@@ -302,7 +302,7 @@ public class UserService {
 
     public boolean trialAccountInitiated(UserDTO userDTO) {
         if (
-            ObjectUtil.isUserAdditionalInfoEmpty(userDTO.getAdditionalInfo())
+            ObjectUtil.isObjectEmpty(userDTO.getAdditionalInfo())
                 || userDTO.getAdditionalInfo().getTrialAccount() == null
                 || userDTO.getAdditionalInfo().getTrialAccount().getActivation() == null
         ) {

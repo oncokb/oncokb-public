@@ -1,19 +1,21 @@
 package org.mskcc.cbio.oncokb.util;
 
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
+import com.google.gson.Gson;
 
 public class ObjectUtil {
-    
+
     /**
-     * Checks if a AdditionalInfoDTO is empty or null. AdditionalInfoDTO is empty if its fields are all empty as well.
-     * 
-     * @param additionalInfoDTO the user's additionalInfoDTO
-     * @return true if null or empty, otherwise false
+     * Check if the object is empty or null. Object is empty if all fields are null.
+     * @param <T> Type of the object
+     * @param object object
+     * @return true if object is empty
      */
-    public static boolean isUserAdditionalInfoEmpty(AdditionalInfoDTO additionalInfoDTO) {
-        if (additionalInfoDTO == null) {
+    public static <T> boolean isObjectEmpty(T object) {
+        if (object == null) {
             return true;
         }
-        return additionalInfoDTO.getTrialAccount() == null && additionalInfoDTO.getUserCompany() == null;
+        // Gson doesn't serialize null fields by default. If all fields are null, then a string representation of empty object is returned.
+        String json = new Gson().toJson(object);
+        return json.equals("{}");
     }
 }
