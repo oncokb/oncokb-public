@@ -226,6 +226,8 @@ public class CompanyServiceIT {
         UserDTO userDTOPost = userMapper.userToUserDTO(optionalUserPost.get());
         assertThat(userDTOPost.getAdditionalInfo()).isNotNull();
         assertThat(userDTOPost.getAdditionalInfo().getTrialAccount()).isNotNull();
+        assertThat(userDTOPost.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate())
+            .isCloseTo(Instant.now(), within(timeDiffToleranceInMilliseconds, ChronoUnit.MILLIS));
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTOPost));
         assertThat(tokens).extracting(Token::isRenewable).allMatch(renewable -> renewable.equals(true));
     }

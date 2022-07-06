@@ -23,6 +23,7 @@ import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
+import org.mskcc.cbio.oncokb.util.ObjectUtil;
 import org.mskcc.cbio.oncokb.util.StringUtil;
 import org.mskcc.cbio.oncokb.web.rest.errors.LoginAlreadyUsedException;
 
@@ -301,7 +302,7 @@ public class UserService {
 
     public boolean trialAccountInitiated(UserDTO userDTO) {
         if (
-            userDTO.getAdditionalInfo() == null
+            ObjectUtil.isUserAdditionalInfoEmpty(userDTO.getAdditionalInfo())
                 || userDTO.getAdditionalInfo().getTrialAccount() == null
                 || userDTO.getAdditionalInfo().getTrialAccount().getActivation() == null
         ) {
@@ -675,8 +676,7 @@ public class UserService {
     }
 
     /**
-     * Clears the trial account information. If clearing the trial account information makes the additional
-     * information empty, then additional info is set to null.
+     * Clears the trial account information.
      * @param userDTO
      */
     private void clearTrialAccountInformation(UserDTO userDTO) {
@@ -684,12 +684,8 @@ public class UserService {
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(userMapper.userDTOToUser(userDTO));
             if (userDetails.isPresent()) {
                 UserDetails ud = userDetails.get();
-                String newAdditionalInfoString = null;
-                // Preserve userCompany information if present
-                if (userDTO.getAdditionalInfo().getUserCompany() != null) {
-                    newAdditionalInfoString = new Gson().toJson(userDTO.getAdditionalInfo());
-                }
-                ud.setAdditionalInfo(newAdditionalInfoString);
+                userDTO.getAdditionalInfo().setTrialAccount(null);
+                ud.setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
                 userDetailsRepository.save(ud);
             }
     }
@@ -745,9 +741,9 @@ public class UserService {
 
     /**
      * Checks whether the user is currently on trial. A user is considered
-     * to be on trial if they have at least one renewable token.
+     * to be on trial if they have no renewable token.
      * @param userDTO
-     * @return true if user has a renewable token, otherwise false
+     * @return true if user has no renewable token, otherwise false
      */
     public boolean isUserOnTrial(UserDTO userDTO) {
         return !tokenService.findByUser(userMapper.userDTOToUser(userDTO))

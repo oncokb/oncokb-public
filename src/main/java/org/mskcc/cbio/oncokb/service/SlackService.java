@@ -27,6 +27,7 @@ import org.mskcc.cbio.oncokb.domain.enumeration.*;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.util.ObjectUtil;
 import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
 import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
 import org.slf4j.Logger;
@@ -398,7 +399,7 @@ public class SlackService {
 
     public boolean withTrialAccountNote(UserDTO userDTO, ActionId actionId) {
         if (
-            userDTO.getAdditionalInfo() == null
+            ObjectUtil.isUserAdditionalInfoEmpty(userDTO.getAdditionalInfo())
                 || userDTO.getAdditionalInfo().getTrialAccount() == null
                 || userDTO.getAdditionalInfo().getTrialAccount().getActivation() == null
         ) {
