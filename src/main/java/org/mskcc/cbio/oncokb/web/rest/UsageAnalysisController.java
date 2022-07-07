@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import com.amazonaws.services.s3.model.S3Object;
@@ -72,8 +73,18 @@ public class UsageAnalysisController {
 
         int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
         JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
-        String month = ZonedDateTime.now(ZoneId.of("America/New_York")).format(DateTimeFormatter.ofPattern("yyyy-MM"));
-        JSONObject monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + ".json");
+        List<JSONObject> monthSummaries = new LinkedList<>();
+        int monthsBack = 0;
+        JSONObject monthSummary;
+        do {
+            String month = ZonedDateTime.now(ZoneId.of("America/New_York")).minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
+            monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + ".json");
+            if (monthSummary != null) {
+                monthSummaries.add(monthSummary);
+            }
+            monthsBack++;
+        } while (monthSummary != null);
+
 
         Long id = Long.parseLong(userId);
         Optional<User> user = userService.getUserById(id);
@@ -83,9 +94,16 @@ public class UsageAnalysisController {
             JSONObject yearUsageObject = (JSONObject) yearSummary.get(email);
             Gson gson = new Gson();
             UsageSummary usageSummary = gson.fromJson(yearUsageObject.toString(), UsageSummary.class);
-            if (monthSummary != null && monthSummary.containsKey(email)) {
-                JSONObject monthUsageObject = (JSONObject) monthSummary.get(email);
-                usageSummary.setDay(gson.fromJson(monthUsageObject.get("day").toString(), new TypeToken<HashMap<String, JSONObject>>(){}.getType()));
+            Map<String, JSONObject> dayUsage = new HashMap<>();
+            if (!monthSummaries.isEmpty()) {
+                for (JSONObject month : monthSummaries) {
+                    if (month.containsKey(email)) {
+                        JSONObject monthUsageObject = (JSONObject) month.get(email);
+                        JSONObject dayUsageObject = (JSONObject) monthUsageObject.get("day");
+                        dayUsageObject.forEach((key, value) -> dayUsage.put((String) key, (JSONObject) value));
+                    }
+                }
+                usageSummary.setDay(dayUsage);
             }
             UserUsage userUsage = new UserUsage();
             userUsage.setUserFirstName(user.get().getFirstName());
