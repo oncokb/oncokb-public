@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest.errors;
 
 import java.util.Map;
+import org.mskcc.cbio.oncokb.config.Constants;
 
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;
@@ -12,7 +13,7 @@ public class LicenseAgreementNotAcceptedException extends AbstractThrowableProbl
     public LicenseAgreementNotAcceptedException(Map<String, Object> parameters) {
         super(
             ErrorConstants.LICENSE_AGREEMENT_NOT_ACCEPTED, 
-            "You have not accepted the OncoKB trial license agreement", 
+            String.format("You have not accepted the %s trial license agreement", Constants.ONCOKB_TM), 
             Status.UNAUTHORIZED,
             null,
             null,
