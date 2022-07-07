@@ -57,12 +57,31 @@ export default class UserUsageDetailsTable extends React.Component<
     );
     if (this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES) {
       return data || [];
-    } else {
+    } else if (this.resourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES) {
       return (
         _.filter(data, function (usage) {
           return !usage.resource.includes('/private/');
         }) || []
       );
+    } else {
+      if (data) {
+        const cumulativeData: UsageRecord[] = [];
+        data.forEach(value => {
+          if (!cumulativeData.find(value1 => value1.time === value.time)) {
+            cumulativeData.push({
+              resource: 'ALL',
+              usage: 0,
+              time: value.time,
+            });
+          }
+          // @ts-ignore
+          cumulativeData.find(value1 => value1.time === value.time).usage +=
+            value.usage;
+        });
+        return cumulativeData;
+      } else {
+        return [];
+      }
     }
   }
 
@@ -75,6 +94,7 @@ export default class UserUsageDetailsTable extends React.Component<
             toggleValues={[
               ToggleValue.ALL_RESOURCES,
               ToggleValue.PUBLIC_RESOURCES,
+              ToggleValue.CUMULATIVE_USAGE,
             ]}
             handleToggle={this.handleResourcesTypeToggleChange}
           />
@@ -96,9 +116,10 @@ export default class UserUsageDetailsTable extends React.Component<
               Header: (
                 <span>
                   Resource{' '}
-                  {this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES
-                    ? null
-                    : '(only public)'}
+                  {this.resourcesTypeToggleValue ===
+                  ToggleValue.PUBLIC_RESOURCES
+                    ? '(only public)'
+                    : null}
                 </span>
               ),
               onFilter: (data: UsageRecord, keyword) =>

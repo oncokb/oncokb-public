@@ -48,7 +48,8 @@ export enum ToggleValue {
   TOP_USERS = 'Top Users',
   ALL_RESOURCES = 'All Resources',
   PUBLIC_RESOURCES = 'Only Public Resources',
-  RESULTS_IN_TOTAL = 'Total',
+  CUMULATIVE_USAGE = 'Cumulative Usage',
+  RESULTS_IN_TOTAL = 'By Year',
   RESULTS_BY_MONTH = 'By Month',
   RESULTS_BY_DAY = 'By Day',
 }
