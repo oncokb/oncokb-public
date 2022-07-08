@@ -3,8 +3,6 @@ package org.mskcc.cbio.oncokb.web.rest;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -13,9 +11,10 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.google.gson.Gson;
 
-import com.google.gson.reflect.TypeToken;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
+import org.mskcc.cbio.oncokb.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.mskcc.cbio.oncokb.service.S3Service;
@@ -71,14 +70,14 @@ public class UsageAnalysisController {
 
         HttpStatus status = HttpStatus.OK;
 
-        int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
-        JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        int year = TimeUtil.getCurrentNYTime().getYear();
+        JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
         List<JSONObject> monthSummaries = new LinkedList<>();
         int monthsBack = 0;
         JSONObject monthSummary;
         do {
-            String month = ZonedDateTime.now(ZoneId.of("America/New_York")).minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
-            monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + ".json");
+            String month = TimeUtil.getCurrentNYTime().minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
+            monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
             if (monthSummary != null) {
                 monthSummaries.add(monthSummary);
             }
@@ -130,8 +129,8 @@ public class UsageAnalysisController {
         throws IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
 
-        int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
-        JSONObject jsonObject = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        int year = TimeUtil.getCurrentNYTime().getYear();
+        JSONObject jsonObject = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
 
         List<UserOverviewUsage> result = new ArrayList<>();
         if (jsonObject != null) {
@@ -189,8 +188,8 @@ public class UsageAnalysisController {
         throws IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
 
-        int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
-        JSONObject jsonObject = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        int year = TimeUtil.getCurrentNYTime().getYear();
+        JSONObject jsonObject = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
 
         Gson gson = new Gson();
         UsageSummary summary = new UsageSummary();
@@ -213,9 +212,9 @@ public class UsageAnalysisController {
             throws UnsupportedEncodingException, IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
 
-        int year = ZonedDateTime.now(ZoneId.of("America/New_York")).getYear();
-        JSONObject resourceSummary = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
-        JSONObject userSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + ".json");
+        int year = TimeUtil.getCurrentNYTime().getYear();
+        JSONObject resourceSummary = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
+        JSONObject userSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
         if (resourceSummary != null && userSummary != null ){
             Gson gson = new Gson();
             UsageSummary resourceUsageSummary = gson.fromJson(resourceSummary.toString(), UsageSummary.class);

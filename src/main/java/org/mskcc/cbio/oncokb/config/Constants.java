@@ -22,6 +22,8 @@ public final class Constants {
 
     public static final String EXPIRATION = "expiration";
 
+    public static final String NY_ZONE_ID = "US/Eastern";
+
     public static final int DAY_IN_SECONDS = 60 * 60 * 24;
     public static final int HALF_YEAR_IN_SECONDS = DAY_IN_SECONDS * 180;
 
