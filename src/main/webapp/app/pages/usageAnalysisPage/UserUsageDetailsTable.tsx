@@ -13,11 +13,16 @@ import {
   UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import {
+  APP_LOCAL_DATETIME_FORMAT_Z_FORCE,
+  TABLE_DAY_FORMAT,
+  TABLE_MONTH_FORMAT,
   USAGE_ALL_TIME_KEY,
-  USAGE_DETAIL_TIME_KEY,
   USAGE_DAY_DETAIL_TIME_KEY,
+  USAGE_DETAIL_TIME_KEY,
 } from 'app/config/constants';
 import { UsageToggleGroup } from './UsageToggleGroup';
+import { UsageAnalysisCalendarButton } from 'app/components/calendarButton/UsageAnalysisCalendarButton';
+import moment from 'moment';
 
 type IUserUsageDetailsTable = {
   data: Map<string, UsageRecord[]>;
@@ -34,6 +39,9 @@ export default class UserUsageDetailsTable extends React.Component<
   @observable resourcesTypeToggleValue: ToggleValue = this.props
     .defaultResourcesType;
   @observable timeTypeToggleValue: ToggleValue = this.props.defaultTimeType;
+  @observable fromDate: string;
+  @observable toDate: string;
+  @observable filterToggled: boolean;
 
   @autobind
   @action
@@ -48,13 +56,28 @@ export default class UserUsageDetailsTable extends React.Component<
   }
 
   @computed get calculateData(): UsageRecord[] {
-    const data = this.props.data.get(
+    let data = this.props.data.get(
       this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
         ? USAGE_ALL_TIME_KEY
         : this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH
         ? USAGE_DETAIL_TIME_KEY
         : USAGE_DAY_DETAIL_TIME_KEY
     );
+    if (this.filterToggled) {
+      if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH) {
+        data = data?.filter(value => {
+          const fromTime = moment(this.fromDate).format(TABLE_MONTH_FORMAT);
+          const toTime = moment(this.toDate).format(TABLE_MONTH_FORMAT);
+          return value.time >= fromTime && value.time <= toTime;
+        });
+      } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY) {
+        data = data?.filter(value => {
+          const fromTime = moment(this.fromDate).format(TABLE_DAY_FORMAT);
+          const toTime = moment(this.toDate).format(TABLE_DAY_FORMAT);
+          return value.time >= fromTime && value.time <= toTime;
+        });
+      }
+    }
     if (this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES) {
       return data || [];
     } else if (this.resourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES) {
@@ -106,6 +129,20 @@ export default class UserUsageDetailsTable extends React.Component<
               ToggleValue.RESULTS_BY_DAY,
             ]}
             handleToggle={this.handleTimeTypeToggleChange}
+          />
+          <UsageAnalysisCalendarButton
+            currentDate={moment().format(APP_LOCAL_DATETIME_FORMAT_Z_FORCE)}
+            currentFromDate={this.fromDate}
+            currentToDate={this.toDate}
+            fromDate={(newDate: string) => {
+              this.fromDate = newDate;
+            }}
+            toDate={(newDate: string) => {
+              this.toDate = newDate;
+            }}
+            filterToggled={(filterActive: boolean) => {
+              this.filterToggled = filterActive;
+            }}
           />
         </Row>
         <OncoKBTable

@@ -47,6 +47,8 @@ export const APP_WHOLE_NUMBER_FORMAT = '0,0';
 export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
 export const NEWS_DATE_FORMAT = 'MMDDYYYY';
 export const NEWS_TITLE_DATE_FORMAT = 'MMMM D, YYYY';
+export const TABLE_MONTH_FORMAT = 'YYYY-MM';
+export const TABLE_DAY_FORMAT = 'YYYY-MM-DD';
 
 export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
   'http://groups.google.com/group/oncokb-news/boxsubscribe';
