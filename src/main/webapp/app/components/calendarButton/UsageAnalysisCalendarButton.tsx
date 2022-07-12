@@ -32,24 +32,22 @@ type CalendarButtonProps = {
 };
 
 export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButtonProps> = props => {
-  let selectedFromDay: string = props.currentFromDate;
-  let selectedToDay: string = props.currentToDate;
-
   function handleFromDayChange(day: any) {
-    selectedFromDay = day;
+    props.fromDate(day);
+    props.filterToggled(true);
+    if (props.currentToDate == null || props.currentToDate === 'Invalid Date') {
+      props.toDate(day);
+    }
   }
 
   function handleToDayChange(day: any) {
-    selectedToDay = day;
-  }
-
-  function handleSelectedDay() {
-    props.fromDate(selectedFromDay);
-    props.toDate(selectedToDay);
+    props.toDate(day);
     props.filterToggled(true);
   }
 
   function handleResetDays() {
+    props.fromDate('Invalid Date');
+    props.toDate('Invalid Date');
     props.filterToggled(false);
   }
 
@@ -59,6 +57,7 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
         as={InputGroup.Append}
         title={<i className={classnames('fa fa-calendar')}></i>}
         id="time-select-dropdown"
+        className={'ml-3'}
       >
         <Container>
           <div>
@@ -67,6 +66,9 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
             </Row>
           </div>
           <DayPickerInput
+            value={getMomentInstance(props.currentFromDate).format(
+              APP_LOCAL_DATE_FORMAT
+            )}
             onDayChange={handleFromDayChange}
             inputProps={{
               style: {
@@ -77,9 +79,6 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
             style={{ margin: '0 auto' }}
             formatDate={MomentLocaleUtils.formatDate}
             parseDate={MomentLocaleUtils.parseDate}
-            placeholder={`${getMomentInstance(props.currentDate).format(
-              APP_LOCAL_DATE_FORMAT
-            )}`}
           />
           <div>
             <Row>
@@ -87,6 +86,9 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
             </Row>
           </div>
           <DayPickerInput
+            value={getMomentInstance(props.currentToDate).format(
+              APP_LOCAL_DATE_FORMAT
+            )}
             onDayChange={handleToDayChange}
             inputProps={{
               style: {
@@ -94,21 +96,14 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
                 border: 'none',
               },
             }}
+            dayPickerProps={{
+              initialMonth: getMomentInstance(props.currentToDate).toDate(),
+            }}
             style={{ margin: '0 auto' }}
             formatDate={MomentLocaleUtils.formatDate}
             parseDate={MomentLocaleUtils.parseDate}
-            placeholder={`${getMomentInstance(props.currentDate).format(
-              APP_LOCAL_DATE_FORMAT
-            )}`}
           />
           <Row className={'mt-1'}>
-            <Button
-              size={'sm'}
-              style={{ margin: '0 auto', zIndex: 0 }}
-              onClick={handleSelectedDay}
-            >
-              Set
-            </Button>
             <Button
               size={'sm'}
               style={{ margin: '0 auto', zIndex: 0 }}
