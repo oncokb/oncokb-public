@@ -154,7 +154,7 @@ public class TokenProvider implements InitializingBean {
             return false;
         } catch (Exception e) {
             log.info("The token is invalid.");
-            log.trace("JWT token compact of handler are invalid trace: {}", e);
+            log.trace("UUID token compact of handler are invalid trace: {}", e);
         }
         return false;
     }
