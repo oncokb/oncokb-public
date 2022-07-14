@@ -1,8 +1,5 @@
 package org.mskcc.cbio.oncokb.config;
 
-import org.mskcc.cbio.oncokb.security.*;
-import org.mskcc.cbio.oncokb.security.jwt.*;
-
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.security.uuid.TokenProvider;
 import org.mskcc.cbio.oncokb.security.uuid.UUIDConfigurer;
@@ -143,10 +140,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .apply(securityConfigurerAdapter());
         // @formatter:on
     }
-
-//    private JWTConfigurer securityConfigurerAdapter() {
-//        return new JWTConfigurer(tokenProvider);
-//    }
 
     private UUIDConfigurer securityConfigurerAdapter() {
         return new UUIDConfigurer(tokenProvider);

@@ -49,7 +49,7 @@ public class UserUUIDController {
     @Autowired
     private TokenService tokenService;
 
-    @Autowired 
+    @Autowired
     private UserDetailsService userDetailsService;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -112,26 +112,5 @@ public class UserUUIDController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(UUIDFilter.AUTHORIZATION_HEADER, "Bearer " + uuid);
         return new ResponseEntity<>(uuid, httpHeaders, HttpStatus.OK);
-    }
-
-    /**
-     * Object to return as body in JWT Authentication.
-     */
-    static class UUIDToken {
-
-        private String idToken;
-
-        UUIDToken(String idToken) {
-            this.idToken = idToken;
-        }
-
-        @JsonProperty("id_token")
-        String getIdToken() {
-            return idToken;
-        }
-
-        void setIdToken(String idToken) {
-            this.idToken = idToken;
-        }
     }
 }

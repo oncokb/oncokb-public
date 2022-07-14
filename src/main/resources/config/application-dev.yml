@@ -37,7 +37,7 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/oncokb-public?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/oncokb_public?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password: root
     hikari:
@@ -94,14 +94,6 @@ jhipster:
     exposed-headers: 'Authorization,Link,X-Total-Count'
     allow-credentials: true
     max-age: 1800
-  security:
-    authentication:
-      jwt:
-        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: ZmRlMDk2NDM3ZDQ1NzIzZmExODhlYTZkNmZkNTVkY2ViZjM0MjI5NjM2ZDUyYjMwZTFkMzY3YTUzZmRiZGRiOWNlNjZhMjIxNzY2OTVhMGU5NmZlMWZlMTQ4ODQwNGU1OTI3ODVjNGFkY2FlMWQ0ZmVhMzhkMjEzN2FkYWJkZmU=
-        # Token is valid 24 hours
-        token-validity-in-seconds: 86400
-        token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://localhost:9095
     from: registration@oncokb.org
@@ -142,7 +134,7 @@ sentry:
 application:
   name: local
   profile: dev
-  api-proxy-url: 'http://localhost:8888'
+  api-proxy-url: 'http://localhost:8080/web_war'
   sitemap-enabled: false
   google-webmaster-verification:
   token-usage-check:
@@ -176,8 +168,3 @@ application:
     s3-region:
   github-token:
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
-  smartsheet:
-    access-token:
-    sheet-id:
-    editor: OncoKB
-    column-ids:
