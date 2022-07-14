@@ -228,7 +228,27 @@ export default class UsageAnalysisPage extends React.Component<{
     }
   }
 
-  render() {
+  UserFilters = () => {
+    return (
+      <Row>
+        <UsageToggleGroup
+          defaultValue={this.topUsersToggleValue}
+          toggleValues={[ToggleValue.ALL_USERS, ToggleValue.TOP_USERS]}
+          handleToggle={this.handleTopUsersToggleChange}
+        />
+        <UsageToggleGroup
+          defaultValue={this.userTabResourcesTypeToggleValue}
+          toggleValues={[
+            ToggleValue.ALL_RESOURCES,
+            ToggleValue.PUBLIC_RESOURCES,
+          ]}
+          handleToggle={this.handleUserTabResourcesTypeToggleChange}
+        />
+      </Row>
+    );
+  };
+
+  ResourceFilters = () => {
     const monthDropdown: any = [];
     if (this.usageDetail.isComplete) {
       this.dropdownList
@@ -240,7 +260,36 @@ export default class UsageAnalysisPage extends React.Component<{
           );
         });
     }
+    return this.usageDetail.isComplete ? (
+      <Row>
+        <DropdownButton
+          className="ml-3"
+          id="dropdown-basic-button"
+          title={this.dropdownValue}
+          onSelect={(evt: any) => (this.dropdownValue = evt)}
+        >
+          {monthDropdown}
+        </DropdownButton>
+        <UsageToggleGroup
+          defaultValue={this.resourceTabResourcesTypeToggleValue}
+          toggleValues={[
+            ToggleValue.ALL_RESOURCES,
+            ToggleValue.PUBLIC_RESOURCES,
+          ]}
+          handleToggle={this.handleResourceTabResourcesTypeToggleChange}
+        />
+      </Row>
+    ) : (
+      <DropdownButton
+        className="mt-2"
+        id="dropdown-basic-button"
+        title={this.dropdownValue}
+        disabled
+      ></DropdownButton>
+    );
+  };
 
+  render() {
     return (
       <>
         <Tabs
@@ -249,21 +298,6 @@ export default class UsageAnalysisPage extends React.Component<{
           onSelect={k => this.toggleType(UsageType[k!])}
         >
           <Tab eventKey={UsageType.USER} title="Users">
-            <Row className="mt-2">
-              <UsageToggleGroup
-                defaultValue={this.topUsersToggleValue}
-                toggleValues={[ToggleValue.ALL_USERS, ToggleValue.TOP_USERS]}
-                handleToggle={this.handleTopUsersToggleChange}
-              />
-              <UsageToggleGroup
-                defaultValue={this.userTabResourcesTypeToggleValue}
-                toggleValues={[
-                  ToggleValue.ALL_RESOURCES,
-                  ToggleValue.PUBLIC_RESOURCES,
-                ]}
-                handleToggle={this.handleUserTabResourcesTypeToggleChange}
-              />
-            </Row>
             <OncoKBTable
               data={
                 this.topUsersToggleValue === ToggleValue.ALL_USERS
@@ -333,36 +367,10 @@ export default class UsageAnalysisPage extends React.Component<{
               ]}
               showPagination={true}
               minRows={1}
+              filters={this.UserFilters}
             />
           </Tab>
           <Tab eventKey={UsageType.RESOURCE} title="Resources">
-            {this.usageDetail.isComplete ? (
-              <Row className="mt-2">
-                <DropdownButton
-                  className="ml-3"
-                  id="dropdown-basic-button"
-                  title={this.dropdownValue}
-                  onSelect={(evt: any) => (this.dropdownValue = evt)}
-                >
-                  {monthDropdown}
-                </DropdownButton>
-                <UsageToggleGroup
-                  defaultValue={this.resourceTabResourcesTypeToggleValue}
-                  toggleValues={[
-                    ToggleValue.ALL_RESOURCES,
-                    ToggleValue.PUBLIC_RESOURCES,
-                  ]}
-                  handleToggle={this.handleResourceTabResourcesTypeToggleChange}
-                />
-              </Row>
-            ) : (
-              <DropdownButton
-                className="mt-2"
-                id="dropdown-basic-button"
-                title={this.dropdownValue}
-                disabled
-              ></DropdownButton>
-            )}
             <OncoKBTable
               data={this.calculateResourcesTabData}
               columns={[
@@ -413,6 +421,7 @@ export default class UsageAnalysisPage extends React.Component<{
               ]}
               showPagination={true}
               minRows={1}
+              filters={this.ResourceFilters}
             />
           </Tab>
         </Tabs>

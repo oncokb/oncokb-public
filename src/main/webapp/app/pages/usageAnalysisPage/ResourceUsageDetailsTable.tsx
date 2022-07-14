@@ -37,19 +37,24 @@ export default class ResourceUsageDetailsTable extends React.Component<
     this.timeTypeToggleValue = value;
   }
 
+  Filters = () => {
+    return (
+      <Row>
+        <UsageToggleGroup
+          defaultValue={this.timeTypeToggleValue}
+          toggleValues={[
+            ToggleValue.RESULTS_IN_TOTAL,
+            ToggleValue.RESULTS_BY_MONTH,
+          ]}
+          handleToggle={this.handleTimeTypeToggleChange}
+        />
+      </Row>
+    );
+  };
+
   render() {
     return (
       <>
-        <Row className="mt-2">
-          <UsageToggleGroup
-            defaultValue={this.timeTypeToggleValue}
-            toggleValues={[
-              ToggleValue.RESULTS_IN_TOTAL,
-              ToggleValue.RESULTS_BY_MONTH,
-            ]}
-            handleToggle={this.handleTimeTypeToggleChange}
-          />
-        </Row>
         <OncoKBTable
           data={
             this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
@@ -90,6 +95,7 @@ export default class ResourceUsageDetailsTable extends React.Component<
           ]}
           showPagination={true}
           minRows={1}
+          filters={this.Filters}
         />
       </>
     );

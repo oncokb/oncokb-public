@@ -35,7 +35,7 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
   function handleFromDayChange(day: any) {
     props.fromDate(day);
     props.filterToggled(true);
-    if (props.currentToDate == null || props.currentToDate === 'Invalid Date') {
+    if (props.currentToDate == null || props.currentToDate === 'Select Date') {
       props.toDate(day);
     }
   }
@@ -46,8 +46,8 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
   }
 
   function handleResetDays() {
-    props.fromDate('Invalid Date');
-    props.toDate('Invalid Date');
+    props.fromDate('Select Date');
+    props.toDate('Select Date');
     props.filterToggled(false);
   }
 
@@ -57,7 +57,7 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
         as={InputGroup.Append}
         title={<i className={classnames('fa fa-calendar')}></i>}
         id="time-select-dropdown"
-        className={'ml-3'}
+        className="ml-3"
       >
         <Container>
           <div>
@@ -66,9 +66,14 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
             </Row>
           </div>
           <DayPickerInput
-            value={getMomentInstance(props.currentFromDate).format(
-              APP_LOCAL_DATE_FORMAT
-            )}
+            value={
+              props.currentFromDate === undefined ||
+              props.currentFromDate === 'Select Date'
+                ? 'Select Date'
+                : getMomentInstance(props.currentFromDate).format(
+                    APP_LOCAL_DATE_FORMAT
+                  )
+            }
             onDayChange={handleFromDayChange}
             inputProps={{
               style: {
@@ -86,9 +91,14 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
             </Row>
           </div>
           <DayPickerInput
-            value={getMomentInstance(props.currentToDate).format(
-              APP_LOCAL_DATE_FORMAT
-            )}
+            value={
+              props.currentToDate === undefined ||
+              props.currentFromDate === 'Select Date'
+                ? 'Select Date'
+                : getMomentInstance(props.currentToDate).format(
+                    APP_LOCAL_DATE_FORMAT
+                  )
+            }
             onDayChange={handleToDayChange}
             inputProps={{
               style: {
@@ -97,7 +107,10 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
               },
             }}
             dayPickerProps={{
-              initialMonth: getMomentInstance(props.currentToDate).toDate(),
+              initialMonth:
+                props.currentToDate === undefined
+                  ? moment().toDate()
+                  : getMomentInstance(props.currentToDate).toDate(),
             }}
             style={{ margin: '0 auto' }}
             formatDate={MomentLocaleUtils.formatDate}

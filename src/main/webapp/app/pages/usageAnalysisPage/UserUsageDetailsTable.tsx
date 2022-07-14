@@ -108,43 +108,48 @@ export default class UserUsageDetailsTable extends React.Component<
     }
   }
 
+  Filters = () => {
+    return (
+      <div className="row">
+        <UsageToggleGroup
+          defaultValue={this.resourcesTypeToggleValue}
+          toggleValues={[
+            ToggleValue.ALL_RESOURCES,
+            ToggleValue.PUBLIC_RESOURCES,
+            ToggleValue.CUMULATIVE_USAGE,
+          ]}
+          handleToggle={this.handleResourcesTypeToggleChange}
+        />
+        <UsageToggleGroup
+          defaultValue={this.timeTypeToggleValue}
+          toggleValues={[
+            ToggleValue.RESULTS_IN_TOTAL,
+            ToggleValue.RESULTS_BY_MONTH,
+            ToggleValue.RESULTS_BY_DAY,
+          ]}
+          handleToggle={this.handleTimeTypeToggleChange}
+        />
+        <UsageAnalysisCalendarButton
+          currentDate={moment().format(APP_LOCAL_DATETIME_FORMAT_Z_FORCE)}
+          currentFromDate={this.fromDate}
+          currentToDate={this.toDate}
+          fromDate={(newDate: string) => {
+            this.fromDate = newDate;
+          }}
+          toDate={(newDate: string) => {
+            this.toDate = newDate;
+          }}
+          filterToggled={(filterActive: boolean) => {
+            this.filterToggled = filterActive;
+          }}
+        />
+      </div>
+    );
+  };
+
   render() {
     return (
       <>
-        <Row className="mt-2">
-          <UsageToggleGroup
-            defaultValue={this.resourcesTypeToggleValue}
-            toggleValues={[
-              ToggleValue.ALL_RESOURCES,
-              ToggleValue.PUBLIC_RESOURCES,
-              ToggleValue.CUMULATIVE_USAGE,
-            ]}
-            handleToggle={this.handleResourcesTypeToggleChange}
-          />
-          <UsageToggleGroup
-            defaultValue={this.timeTypeToggleValue}
-            toggleValues={[
-              ToggleValue.RESULTS_IN_TOTAL,
-              ToggleValue.RESULTS_BY_MONTH,
-              ToggleValue.RESULTS_BY_DAY,
-            ]}
-            handleToggle={this.handleTimeTypeToggleChange}
-          />
-          <UsageAnalysisCalendarButton
-            currentDate={moment().format(APP_LOCAL_DATETIME_FORMAT_Z_FORCE)}
-            currentFromDate={this.fromDate}
-            currentToDate={this.toDate}
-            fromDate={(newDate: string) => {
-              this.fromDate = newDate;
-            }}
-            toDate={(newDate: string) => {
-              this.toDate = newDate;
-            }}
-            filterToggled={(filterActive: boolean) => {
-              this.filterToggled = filterActive;
-            }}
-          />
-        </Row>
         <OncoKBTable
           data={this.calculateData}
           columns={[
@@ -189,6 +194,7 @@ export default class UserUsageDetailsTable extends React.Component<
           ]}
           showPagination={true}
           minRows={1}
+          filters={this.Filters}
         />
       </>
     );
