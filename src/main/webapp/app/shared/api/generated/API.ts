@@ -4032,6 +4032,7 @@ export default class API {
         });
     };
     userOverviewUsageGetUsingGETURL(parameters: {
+      'companyId' ? : number,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -4053,6 +4054,7 @@ export default class API {
      * @name API#userOverviewUsageGetUsingGET
      */
     userOverviewUsageGetUsingGETWithHttpInfo(parameters: {
+        'companyId' ? : number,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -4066,6 +4068,10 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
+
+            if (parameters["companyId"] !== undefined) {
+              queryParameters["companyId"] = parameters["companyId"];
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -4085,6 +4091,7 @@ export default class API {
      * @name API#userOverviewUsageGetUsingGET
      */
     userOverviewUsageGetUsingGET(parameters: {
+            'companyId' ? : number,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < UserOverviewUsage >

@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
@@ -13,6 +14,7 @@ import com.google.gson.Gson;
 
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
+import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,12 +121,13 @@ public class UsageAnalysisController {
 
     /**
      * API to get the usage summary of all users
+     * @param companyId
      * @return a list of all users usage summary
      * @throws IOException
      * @throws ParseException
      */
     @GetMapping("/usage/summary/users")
-    public ResponseEntity<List<UserOverviewUsage>> userOverviewUsageGet()
+    public ResponseEntity<List<UserOverviewUsage>> userOverviewUsageGet(@RequestParam(required = false) Long companyId)
         throws IOException, ParseException {
         HttpStatus status = HttpStatus.OK;
 
@@ -133,7 +136,20 @@ public class UsageAnalysisController {
 
         List<UserOverviewUsage> result = new ArrayList<>();
         if (jsonObject != null) {
-            for (Object item : jsonObject.keySet()) {
+            Set<Object> emailSet = jsonObject.keySet();
+            if (companyId != null) {
+                emailSet = emailSet.stream().filter(item -> {
+                    Optional<User> user = userService.getUserByEmailIgnoreCase((String) item);
+                    if (user.isPresent()) {
+                        UserDTO userDTO = userMapper.userToUserDTO(user.get());
+                        if (userDTO.getCompany() != null) {
+                            return Objects.equals(userDTO.getCompany().getId(), companyId);
+                        }
+                    }
+                    return false;
+                }).collect(Collectors.toSet());
+            }
+            for (Object item : emailSet) {
                 String email = (String) item;
                 JSONObject usageObject = (JSONObject) jsonObject.get(email);
                 Gson gson = new Gson();

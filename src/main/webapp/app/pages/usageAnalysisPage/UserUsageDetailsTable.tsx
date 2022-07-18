@@ -29,6 +29,7 @@ type IUserUsageDetailsTable = {
   loadedData: boolean;
   defaultResourcesType: ToggleValue;
   defaultTimeType: ToggleValue;
+  pageSize?: number;
 };
 
 @observer
@@ -160,6 +161,9 @@ export default class UserUsageDetailsTable extends React.Component<
           ]}
           showPagination={true}
           minRows={1}
+          pageSize={
+            this.props.pageSize === undefined ? undefined : this.props.pageSize
+          }
           filters={() => {
             return (
               <Row>
