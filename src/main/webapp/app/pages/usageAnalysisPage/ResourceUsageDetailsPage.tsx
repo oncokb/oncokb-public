@@ -36,10 +36,10 @@ export default class ResourceUsageDetailsPage extends React.Component<{
       const result = new Map<string, UsageRecord[]>();
       const yearSummary = this.resource.year;
       const yearUsage: UsageRecord[] = [];
-      Object.keys(yearSummary).forEach(key => {
+      Object.keys(yearSummary).forEach(resourceEntry => {
         yearUsage.push({
-          resource: key,
-          usage: yearSummary[key],
+          resource: resourceEntry,
+          usage: yearSummary[resourceEntry],
           time: USAGE_ALL_TIME_VALUE,
         });
       });
@@ -47,10 +47,14 @@ export default class ResourceUsageDetailsPage extends React.Component<{
 
       const monthSummary = this.resource.month;
       const detailUsage: UsageRecord[] = [];
-      Object.keys(monthSummary).forEach(key => {
-        const month = monthSummary[key];
-        Object.keys(month).forEach(key2 => {
-          detailUsage.push({ resource: key2, usage: month[key2], time: key });
+      Object.keys(monthSummary).forEach(month => {
+        const monthUsage = monthSummary[month];
+        Object.keys(monthUsage).forEach(resourceEntry => {
+          detailUsage.push({
+            resource: resourceEntry,
+            usage: monthUsage[resourceEntry],
+            time: month,
+          });
         });
       });
       result.set(USAGE_DETAIL_TIME_KEY, detailUsage);

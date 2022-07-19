@@ -65,16 +65,16 @@ export default class UserUsageDetailsTable extends React.Component<
     );
     if (this.filterToggled) {
       if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH) {
-        data = data?.filter(value => {
+        data = data?.filter(resource => {
           const fromTime = moment(this.fromDate).format(TABLE_MONTH_FORMAT);
           const toTime = moment(this.toDate).format(TABLE_MONTH_FORMAT);
-          return value.time >= fromTime && value.time <= toTime;
+          return resource.time >= fromTime && resource.time <= toTime;
         });
       } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY) {
-        data = data?.filter(value => {
+        data = data?.filter(resource => {
           const fromTime = moment(this.fromDate).format(TABLE_DAY_FORMAT);
           const toTime = moment(this.toDate).format(TABLE_DAY_FORMAT);
-          return value.time >= fromTime && value.time <= toTime;
+          return resource.time >= fromTime && resource.time <= toTime;
         });
       }
     }
@@ -89,17 +89,20 @@ export default class UserUsageDetailsTable extends React.Component<
     } else {
       if (data) {
         const cumulativeData: UsageRecord[] = [];
-        data.forEach(value => {
-          if (!cumulativeData.find(value1 => value1.time === value.time)) {
+        data.forEach(resource => {
+          if (
+            !cumulativeData.find(timeRange => timeRange.time === resource.time)
+          ) {
             cumulativeData.push({
               resource: 'ALL',
               usage: 0,
-              time: value.time,
+              time: resource.time,
             });
           }
           // @ts-ignore
-          cumulativeData.find(value1 => value1.time === value.time).usage +=
-            value.usage;
+          cumulativeData.find(
+            timeRange => timeRange.time === resource.time
+          ).usage += resource.usage;
         });
         return cumulativeData;
       } else {

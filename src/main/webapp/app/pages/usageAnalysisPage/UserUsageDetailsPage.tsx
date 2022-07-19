@@ -44,10 +44,10 @@ export default class UserUsageDetailsPage extends React.Component<{
       const result = new Map<string, UsageRecord[]>();
       const yearSummary = this.user.summary.year;
       const yearUsage: UsageRecord[] = [];
-      Object.keys(yearSummary).forEach(key => {
+      Object.keys(yearSummary).forEach(resourceEntry => {
         yearUsage.push({
-          resource: key,
-          usage: yearSummary[key],
+          resource: resourceEntry,
+          usage: yearSummary[resourceEntry],
           time: USAGE_ALL_TIME_VALUE,
         });
       });
@@ -55,23 +55,27 @@ export default class UserUsageDetailsPage extends React.Component<{
 
       const monthSummary = this.user.summary.month;
       const detailSummary: UsageRecord[] = [];
-      Object.keys(monthSummary).forEach(key => {
-        const month = monthSummary[key];
-        Object.keys(month).forEach(key2 => {
-          detailSummary.push({ resource: key2, usage: month[key2], time: key });
+      Object.keys(monthSummary).forEach(month => {
+        const monthUsage = monthSummary[month];
+        Object.keys(monthUsage).forEach(resourceEntry => {
+          detailSummary.push({
+            resource: resourceEntry,
+            usage: monthUsage[resourceEntry],
+            time: month,
+          });
         });
       });
       result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
 
       const daySummary = this.user.summary.day;
       const dayDetailSummary: UsageRecord[] = [];
-      Object.keys(daySummary).forEach(key => {
-        const day = daySummary[key];
-        Object.keys(day).forEach(key2 => {
+      Object.keys(daySummary).forEach(day => {
+        const dayUsage = daySummary[day];
+        Object.keys(dayUsage).forEach(resourceEntry => {
           dayDetailSummary.push({
-            resource: key2,
-            usage: day[key2],
-            time: key,
+            resource: resourceEntry,
+            usage: dayUsage[resourceEntry],
+            time: day,
           });
         });
       });

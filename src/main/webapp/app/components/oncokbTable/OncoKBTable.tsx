@@ -48,37 +48,37 @@ export default class OncoKBTable<T> extends React.Component<
     });
   }
 
-  SearchBar = () => {
-    return this.props.disableSearch ? (
-      <></>
-    ) : (
-      <div className="d-flex">
-        <div className="ml-auto">
-          <input
-            onChange={(event: any) => {
-              this.searchKeyword = event.target.value.toLowerCase();
-            }}
-            className="form-control input-sm"
-            type="text"
-            placeholder="Search ..."
-          />
-        </div>
-      </div>
-    );
-  };
-
   render() {
     return (
       <div>
-        {this.props.filters === undefined ? (
-          <this.SearchBar />
+        {this.props.filters === undefined && this.props.disableSearch ? (
+          <></>
         ) : (
           <div className="mt-2 row">
             <div className="col-auto">
-              <this.props.filters />
+              {this.props.filters === undefined ? (
+                <></>
+              ) : (
+                <this.props.filters />
+              )}
             </div>
             <div className="col-sm">
-              <this.SearchBar />
+              {this.props.disableSearch ? (
+                <></>
+              ) : (
+                <div className="d-flex">
+                  <div className="ml-auto">
+                    <input
+                      onChange={(event: any) => {
+                        this.searchKeyword = event.target.value.toLowerCase();
+                      }}
+                      className="form-control input-sm"
+                      type="text"
+                      placeholder="Search ..."
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}

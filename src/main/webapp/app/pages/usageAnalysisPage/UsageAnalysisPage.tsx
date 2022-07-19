@@ -166,21 +166,29 @@ export default class UsageAnalysisPage extends React.Component<{
       const result = new Map<string, UsageRecord[]>();
       const yearSummary = resource.year;
       const yearUsage: UsageRecord[] = [];
-      Object.keys(yearSummary).forEach(key => {
-        yearUsage.push({ resource: key, usage: yearSummary[key], time: '' });
+      Object.keys(yearSummary).forEach(resourceEntry => {
+        yearUsage.push({
+          resource: resourceEntry,
+          usage: yearSummary[resourceEntry],
+          time: '',
+        });
       });
       result.set(USAGE_ALL_TIME_KEY, yearUsage);
       this.dropdownList.push(USAGE_ALL_TIME_KEY);
 
       const monthSummary = resource.month;
-      Object.keys(monthSummary).forEach(key => {
-        const month = monthSummary[key];
-        const usage: UsageRecord[] = [];
-        Object.keys(month).forEach(key2 => {
-          usage.push({ resource: key2, usage: month[key2], time: key });
+      Object.keys(monthSummary).forEach(month => {
+        const monthUsage = monthSummary[month];
+        const usageArray: UsageRecord[] = [];
+        Object.keys(monthUsage).forEach(resourceEntry => {
+          usageArray.push({
+            resource: resourceEntry,
+            usage: monthUsage[resourceEntry],
+            time: month,
+          });
         });
-        result.set(key, usage);
-        this.dropdownList.push(key);
+        result.set(month, usageArray);
+        this.dropdownList.push(month);
       });
 
       return Promise.resolve(result);
