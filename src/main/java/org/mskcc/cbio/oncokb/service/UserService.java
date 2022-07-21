@@ -536,7 +536,7 @@ public class UserService {
         }
 
         Optional<UserDTO> updatedUserDTO = updateUser(userDTO);
-        if (updatedUserDTO.isEmpty()) {
+        if (!updatedUserDTO.isPresent()) {
             return;
         }
         userDTO = updatedUserDTO.get();

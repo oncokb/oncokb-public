@@ -151,6 +151,137 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '07252022': {
+    updatedImplicationTitle:
+      'Updated therapeutic implications - new alterations with a level of evidence',
+    updatedImplication: [
+      [
+        '3A',
+        'KMT2A',
+        'Fusions',
+        'B-Lymphoblastic Leukemia/Lymphoma, Acute Myeloid Leukemia',
+        'SNDX-5613 (Menin inhibitor)',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <PMIDLink pmids={'31855575'} />
+          <AbstractLink
+            abstract={'Stein et al. Abstract# 699, ASH 2021 '}
+            link={
+              'https://ashpublications.org/blood/article/138/Supplement%201/699/479484/Safety-and-Efficacy-of-Menin-Inhibition-in'
+            }
+          />
+        </WithSeparator>,
+      ],
+      [
+        '3A',
+        'NPM1',
+        'Oncogenic Mutations',
+        'Acute Myeloid Leukemia',
+        'SNDX-5613 (Menin inhibitor)',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <PMIDLink pmids={'31855575'} />
+          <AbstractLink
+            abstract={'Stein et al. Abstract# 699, ASH 2021 '}
+            link={
+              'https://ashpublications.org/blood/article/138/Supplement%201/699/479484/Safety-and-Efficacy-of-Menin-Inhibition-in'
+            }
+          />
+        </WithSeparator>,
+      ],
+    ],
+    changedAnnotation: [
+      [
+        'ALK',
+        'Fusions',
+        'Inflammatory Myofibroblastic Tumor',
+        'Crizotinib',
+        '2',
+        '1',
+        <FdaApprovalLink
+          approval={
+            'FDA approval of crizotinib in inflammatory myofibroblastic tumor'
+          }
+          link={
+            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-crizotinib-alk-positive-inflammatory-myofibroblastic-tumor'
+          }
+        />,
+      ],
+    ],
+    news: [
+      <span>
+        Updated therapeutic implications: - Addition of therapies for variants
+        with a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Current Level of Evidence</th>
+                <th>Drug(s) Already in {ONCOKB_TM}</th>
+                <th>Newly Added Drug</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>NRG1</td>
+                <td>Fusions</td>
+                <td>Non-Small Cell Lung Cancer</td>
+                <td>3A</td>
+                <td>Zenocutuzumab</td>
+                <td>
+                  Seribantumab
+                  <br />
+                  (Level 3A)
+                </td>
+                <td>
+                  <AbstractLink
+                    abstract={'Carrizosa et al. Abstract# 3006, ASCO 2022'}
+                    link={
+                      'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.3006'
+                    }
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+      <span>
+        Updated therapeutic implications: - Removal of therapies for variants
+        with a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Current Level of Evidence</th>
+                <th>Drug(s) removed from OncoKB</th>
+                <th>Drug remaining in OncoKB</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ESR1</td>
+                <td>Oncogenic Mutations</td>
+                <td>Breast Cancer</td>
+                <td>3A</td>
+                <td>AZD9496</td>
+                <td>Fulvestrant</td>
+                <td>
+                  <PMIDLink pmids={'32234755'} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+  },
   '06062022': {
     changedAnnotation: [
       [
@@ -642,7 +773,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         'BRCA1/BRCA2',
-        'Oncogenic mutations',
+        'Oncogenic Mutations',
         'Breast Cancer',
         'Olaparib, Talazoparib',
         '2',
@@ -764,7 +895,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 The NCCN B-cell lymphoma v5.2021 lists “EZH2 mutation” and is
                 not limited to the mutations listed in the FDA-approved CDx.
                 Therefore, according to the <SopPageLink version={2.2} /> EZH2
-                Oncogenic mutations are considered Level 2, with the exception
+                Oncogenic Mutations are considered Level 2, with the exception
                 of those mutations listed in the CDx, which are Level 1.
               </span>,
             ],
@@ -778,7 +909,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               <span>
                 The NCCN Breast Cancer V8.2021 lists “PIK3CA activating
                 mutation” and is not limited to the mutations listed in the
-                FDA-approved CDx. Therefore, PIK3CA Oncogenic mutations by{' '}
+                FDA-approved CDx. Therefore, PIK3CA Oncogenic Mutations by{' '}
                 <SopPageLink version={2.2} /> are considered Level 2, with the
                 exception of those mutations listed in the CDx, which are Level
                 1.
@@ -2796,7 +2927,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         '3A',
         'ARAF, BRAF, RAF1, NRAS, KRAS, MAP2K2',
-        'Oncogenic mutations',
+        'Oncogenic Mutations',
         'Histiocytic and Dendritic Cell Neoplasms',
         'Cobimetinib',
         <PMIDLink pmids={'30867592'} />,
@@ -3590,7 +3721,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       '3': [
         <span>
-          HRAS - Oncogenic mutations - Head and Neck Squamous Cell Carcinoma -
+          HRAS - Oncogenic Mutations - Head and Neck Squamous Cell Carcinoma -
           Tipifarnib (<b>moved from 4 to 3A only for HNSCC</b>)
         </span>,
       ],
@@ -3785,7 +3916,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           Debio1347
         </span>,
         <span>
-          PIK3CA - Oncogenic mutations - Breast cancer - Updated treatments and
+          PIK3CA - Oncogenic Mutations - Breast cancer - Updated treatments and
           evidence
         </span>,
       ],
@@ -3797,14 +3928,14 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <span>Updated alterations for FGFR3 - Breast cancer - Debio1347</span>,
         <span>KRAS - Wildtype - Updated treatments and evidence</span>,
         <span>
-          KRAS - Oncogenic mtuations - Updated treatments and evidence
+          KRAS - Oncogenic Mutations - Updated treatments and evidence
         </span>,
         <span>
-          PIK3CA - Oncogenic mutations - Breast cancer - Updated treatments and
+          PIK3CA - Oncogenic Mutations - Breast cancer - Updated treatments and
           evidence
         </span>,
         <span>
-          PTEN - Oncogenic mutations - Breast cancer - Updated treatments and
+          PTEN - Oncogenic Mutations - Breast cancer - Updated treatments and
           evidence
         </span>,
       ],
