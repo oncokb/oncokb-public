@@ -25,17 +25,18 @@ import {
   BiologicalVariant,
   EnsemblGene,
   Evidence,
-  FdaAlteration,
   VariantAnnotation,
   VariantAnnotationTumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { TherapeuticImplication } from 'app/store/AnnotationStore';
+import {
+  FdaImplication,
+  TherapeuticImplication,
+} from 'app/store/AnnotationStore';
 import {
   articles2Citations,
   getAlterationName,
   getCancerTypeNameFromOncoTreeType,
   getCategoricalAlterationDescription,
-  getHighestFdaLevel,
   getTreatmentNameFromEvidence,
   isCategoricalAlteration,
   isPositionalAlteration,
@@ -49,6 +50,7 @@ import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
+import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -78,7 +80,6 @@ export type IAnnotationPage = {
   refGenome: REFERENCE_GENOME;
   onChangeTumorType: (newTumorType: string) => void;
   annotation: VariantAnnotation;
-  fdaAlterations?: FdaAlteration[];
   biologicalAlterations?: BiologicalVariant[];
   relevantAlterations?: Alteration[];
   defaultSelectedTab?: ANNOTATION_PAGE_TAB_KEYS;
@@ -97,6 +98,7 @@ export default class AnnotationPage extends React.Component<
   getImplications(evidences: Evidence[]) {
     return evidences.map(evidence => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
+      const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
       const alterations = _.chain(evidence.alterations)
         .filter(alteration =>
           alteration.referenceGenomes.includes(this.props.refGenome)
@@ -107,6 +109,7 @@ export default class AnnotationPage extends React.Component<
       );
       return {
         level,
+        fdaLevel,
         alterations: alterations.map(alteration => alteration.name).join(', '),
         alterationsView: (
           <WithSeparator separator={', '}>
@@ -171,6 +174,65 @@ export default class AnnotationPage extends React.Component<
         TREATMENT_EVIDENCE_TYPES
       )
     );
+  }
+
+  @computed
+  get fdaImplication(): FdaImplication[] {
+    const evidences = this.getEvidenceByEvidenceTypes(
+      this.props.annotation.tumorTypes,
+      TREATMENT_EVIDENCE_TYPES
+    );
+    const fdaImplications: FdaImplication[] = [];
+    evidences.forEach(evidence => {
+      const level = levelOfEvidence2Level(evidence.levelOfEvidence);
+      const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
+      const alterations = _.chain(evidence.alterations)
+        .filter(alteration =>
+          alteration.referenceGenomes.includes(this.props.refGenome)
+        )
+        .value();
+      alterations.forEach(alt => {
+        evidence.cancerTypes.forEach(cancerType => {
+          const ctName = getCancerTypeNameFromOncoTreeType(cancerType);
+          fdaImplications.push({
+            level: fdaLevel,
+            alteration: alt,
+            alterationView: (
+              <AlterationPageLink
+                key={alt.name}
+                hugoSymbol={this.props.hugoSymbol}
+                alteration={{
+                  alteration: alt.alteration,
+                  name: alt.name,
+                }}
+                alterationRefGenomes={
+                  alt.referenceGenomes as REFERENCE_GENOME[]
+                }
+                hashQueries={{
+                  tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+                }}
+              />
+            ),
+            cancerType: ctName,
+            cancerTypeView: (
+              <AlterationPageLink
+                key={`${this.props.alteration}-${cancerType}`}
+                hugoSymbol={this.props.hugoSymbol}
+                alteration={this.props.alteration}
+                alterationRefGenomes={[this.props.refGenome]}
+                cancerType={ctName}
+                hashQueries={{
+                  tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+                }}
+              >
+                {ctName}
+              </AlterationPageLink>
+            ),
+          });
+        });
+      });
+    });
+    return getUniqueFdaImplications(fdaImplications);
   }
 
   @computed
@@ -336,7 +398,7 @@ export default class AnnotationPage extends React.Component<
           highestPrognosticImplicationLevel={
             this.props.annotation.highestPrognosticImplicationLevel
           }
-          highestFdaLevel={getHighestFdaLevel(this.props.fdaAlterations || [])}
+          highestFdaLevel={this.props.annotation.highestFdaLevel}
         />
         <Row>
           <Col>
@@ -450,7 +512,7 @@ export default class AnnotationPage extends React.Component<
               tx={this.therapeuticImplications}
               dx={this.diagnosticImplications}
               px={this.prognosticImplications}
-              fda={this.props.fdaAlterations || []}
+              fda={this.fdaImplication}
               onChangeTab={this.props.onChangeTab}
             />
           </Col>

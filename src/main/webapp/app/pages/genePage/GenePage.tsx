@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import {
   AnnotationStore,
+  FdaImplication,
   TherapeuticImplication,
 } from 'app/store/AnnotationStore';
 import {
@@ -45,6 +46,7 @@ import { FeedbackType } from 'app/components/feedback/types';
 import * as QueryString from 'query-string';
 import { RouterStore } from 'mobx-react-router';
 import {
+  AlterationPageHashQueries,
   GenePageHashQueries,
   GenePageSearchQueries,
 } from 'app/shared/route/types';
@@ -53,6 +55,7 @@ import GeneInfo from './GeneInfo';
 import ShowHideToggleIcon from 'app/shared/icons/ShowHideToggleIcon';
 import GeneAdditionalInfoTable from 'app/pages/genePage/GeneAdditionalInfoTable';
 import OncokbLollipopPlot from './OncokbLollipopPlot';
+import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
 
 const GeneBackground: React.FunctionComponent<{
   show: boolean;
@@ -166,6 +169,52 @@ export default class GenePage extends React.Component<GenePageProps, any> {
         },
       };
     });
+  }
+
+  getFdaImplication(clinicalVariants: ClinicalVariant[]): FdaImplication[] {
+    const fdaImplications: FdaImplication[] = [];
+    clinicalVariants.forEach(variant => {
+      variant.cancerTypes.forEach(ct => {
+        const ctName = getCancerTypeNameFromOncoTreeType(ct);
+        fdaImplications.push({
+          level: variant.fdaLevel,
+          alteration: variant.variant,
+          alterationView: (
+            <AlterationPageLink
+              key={`${variant.variant.name}`}
+              hugoSymbol={this.store.hugoSymbol}
+              alteration={{
+                alteration: variant.variant.alteration,
+                name: variant.variant.name,
+              }}
+              hashQueries={{
+                tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+              }}
+            >
+              {variant.variant.name}
+            </AlterationPageLink>
+          ),
+          cancerType: ctName,
+          cancerTypeView: (
+            <AlterationPageLink
+              key={`${variant.variant.name}-${ctName}`}
+              hugoSymbol={this.store.hugoSymbol}
+              alteration={{
+                alteration: variant.variant.alteration,
+                name: variant.variant.name,
+              }}
+              cancerType={ctName}
+              hashQueries={{
+                tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+              }}
+            >
+              {ctName}
+            </AlterationPageLink>
+          ),
+        });
+      });
+    });
+    return getUniqueFdaImplications(fdaImplications);
   }
 
   @computed
@@ -329,7 +378,11 @@ export default class GenePage extends React.Component<GenePageProps, any> {
       <DocumentTitle title={this.store.hugoSymbol}>
         <If condition={!!this.hugoSymbolQuery}>
           <Then>
-            <If condition={this.store.gene.isComplete}>
+            <If
+              condition={
+                this.store.gene.isComplete && this.store.geneNumber.isComplete
+              }
+            >
               <Then>
                 {this.store.gene.isError ||
                 this.store.gene.result === DEFAULT_GENE ? (
@@ -373,7 +426,9 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                                 this.store.geneNumber.result
                                   .highestPrognosticImplicationLevel
                               }
-                              highestFdaLevel={this.store.highestFdaLevel}
+                              highestFdaLevel={
+                                this.store.geneNumber.result.highestFdaLevel
+                              }
                             />
                             {this.store.geneSummary.result && (
                               <div className="mt-2">
@@ -476,31 +531,26 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                       </If>
                       <Row className={'mt-2'}>
                         <Col>
-                          <If condition={this.store.fdaAlterations.isPending}>
-                            <Then>
-                              <LoadingIndicator isLoading={true} />
-                            </Then>
-                            <Else>
-                              <AlterationTableTabs
-                                selectedTab={this.defaultSelectedTab}
-                                hugoSymbol={this.store.hugoSymbol}
-                                biological={
-                                  this.store.filteredBiologicalAlterations
-                                }
-                                tx={this.getClinicalImplications(
-                                  this.filteredTxAlterations
-                                )}
-                                dx={this.getClinicalImplications(
-                                  this.filteredDxAlterations
-                                )}
-                                px={this.getClinicalImplications(
-                                  this.filteredPxAlterations
-                                )}
-                                fda={this.store.filteredFdaAlterations}
-                                onChangeTab={this.onChangeTab}
-                              />
-                            </Else>
-                          </If>
+                          <AlterationTableTabs
+                            selectedTab={this.defaultSelectedTab}
+                            hugoSymbol={this.store.hugoSymbol}
+                            biological={
+                              this.store.filteredBiologicalAlterations
+                            }
+                            tx={this.getClinicalImplications(
+                              this.filteredTxAlterations
+                            )}
+                            dx={this.getClinicalImplications(
+                              this.filteredDxAlterations
+                            )}
+                            px={this.getClinicalImplications(
+                              this.filteredPxAlterations
+                            )}
+                            fda={this.getFdaImplication(
+                              this.filteredTxAlterations
+                            )}
+                            onChangeTab={this.onChangeTab}
+                          />
                         </Col>
                       </Row>
                     </Then>

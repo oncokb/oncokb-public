@@ -27,17 +27,13 @@ import {
   CancerTypeCount,
   ClinicalVariant,
   EnsemblGene,
-  FdaAlteration,
   GeneNumber,
   PortalAlteration,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
-import {
-  getHighestFdaLevel,
-  shortenOncogenicity,
-} from 'app/shared/utils/Utils';
+import { shortenOncogenicity } from 'app/shared/utils/Utils';
 import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 import { Oncogenicity } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import { OncokbMutation } from 'app/components/oncokbMutationMapper/OncokbMutation';
@@ -61,12 +57,21 @@ interface IAnnotationStore {
 
 export type TherapeuticImplication = {
   level: string;
+  fdaLevel?: string;
   alterations: string;
   alterationsView: JSX.Element;
   drugs: string;
   cancerTypes: string;
   cancerTypesView: JSX.Element;
   citations: Citations;
+};
+
+export type FdaImplication = {
+  level: string;
+  alteration: Alteration;
+  alterationView: JSX.Element;
+  cancerType: string;
+  cancerTypeView: JSX.Element;
 };
 
 export function getCustomFilterAppliers() {
@@ -289,6 +294,7 @@ export class AnnotationStore {
       highestResistanceLevel: '',
       highestDiagnosticImplicationLevel: '',
       highestPrognosticImplicationLevel: '',
+      highestFdaLevel: '',
       tumorType: 0,
     },
   });
@@ -321,47 +327,6 @@ export class AnnotationStore {
         );
       } catch (e) {
         notifyError(e, 'Error loading clinical alterations');
-        return [];
-      }
-    },
-    default: [],
-  });
-
-  @computed
-  get highestFdaLevel() {
-    return getHighestFdaLevel(this.fdaAlterations.result);
-  }
-
-  readonly fdaAlterations = remoteData<FdaAlteration[]>({
-    await: () => [this.gene],
-    invoke: async () => {
-      try {
-        const geneFdaAlterations = await privateClient.utilsFdaAlterationsGetUsingGET(
-          {
-            hugoSymbol: this.gene.result.hugoSymbol,
-          }
-        );
-        if (this.alterationQuery) {
-          const lowerCaseAltQuery = this.alterationQuery.toLowerCase();
-          return geneFdaAlterations.filter(alt => {
-            if (
-              alt.alteration.alteration &&
-              alt.alteration.alteration.toLowerCase() === lowerCaseAltQuery
-            ) {
-              return true;
-            }
-            if (
-              alt.alteration.name &&
-              alt.alteration.name.toLowerCase() === lowerCaseAltQuery
-            ) {
-              return true;
-            }
-            return false;
-          });
-        }
-        return geneFdaAlterations;
-      } catch (e) {
-        notifyError(e, 'Error loading FDA alterations');
         return [];
       }
     },
@@ -681,30 +646,6 @@ export class AnnotationStore {
       });
     } else {
       return this.biologicalAlterations.result;
-    }
-  }
-
-  @computed
-  get filteredFdaAlterations() {
-    const alterations = _.uniq(
-      this.filteredBiologicalAlterations.map(alt => alt.variant.name)
-    );
-    if (this.isFiltered) {
-      return this.fdaAlterations.result.filter(alteration => {
-        let isMatch = true;
-        if (
-          this.selectedCancerTypes.length > 0 &&
-          !this.selectedCancerTypes.includes(alteration.cancerType)
-        ) {
-          isMatch = false;
-        }
-        if (isMatch && !alterations.includes(alteration.alteration.name)) {
-          isMatch = false;
-        }
-        return isMatch;
-      });
-    } else {
-      return this.fdaAlterations.result;
     }
   }
 

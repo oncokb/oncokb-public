@@ -51,7 +51,7 @@ export default class LevelSelectionRow extends React.Component<
             <LevelButton
               title={
                 this.props.levelType === LEVEL_TYPES.FDA
-                  ? `FDA Level ${level.replace('FDAx', '')}`
+                  ? `FDA Level ${level.replace('Fda', '')}`
                   : ''
               }
               level={LEVELS[level]}
@@ -61,9 +61,7 @@ export default class LevelSelectionRow extends React.Component<
               className="mb-2"
               disabled={this.props.levelNumbers[LEVELS[level]] === 0}
               disabledTooltip={
-                LEVELS[level] === LEVELS.FDAx1
-                  ? FDA_L1_DISABLED_BTN_TOOLTIP
-                  : ''
+                LEVELS[level] === LEVELS.Fda1 ? FDA_L1_DISABLED_BTN_TOOLTIP : ''
               }
               isLoading={this.props.isLoading}
               onClick={() => this.props.updateLevelSelection(LEVELS[level])}
