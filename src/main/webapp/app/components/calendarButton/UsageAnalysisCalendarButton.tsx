@@ -23,31 +23,36 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import pluralize from 'pluralize';
 
 type CalendarButtonProps = {
-  currentDate: string;
-  currentFromDate: string;
-  currentToDate: string;
+  currentDate: string | undefined;
+  currentFromDate: string | undefined;
+  currentToDate: string | undefined;
   fromDate: (newDate: string) => void;
   toDate: (newDate: string) => void;
   filterToggled: (filterActive: boolean) => void;
 };
 
+const DATE_PLACEHOLDER = 'Select Date';
+
 export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButtonProps> = props => {
-  function handleFromDayChange(day: any) {
-    props.fromDate(day);
+  function handleFromDayChange(day: Date) {
+    props.fromDate(day.toISOString());
     props.filterToggled(true);
-    if (props.currentToDate == null || props.currentToDate === 'Select Date') {
-      props.toDate(day);
+    if (
+      props.currentToDate === undefined ||
+      props.currentToDate === DATE_PLACEHOLDER
+    ) {
+      props.toDate(day.toISOString());
     }
   }
 
-  function handleToDayChange(day: any) {
-    props.toDate(day);
+  function handleToDayChange(day: Date) {
+    props.toDate(day.toISOString());
     props.filterToggled(true);
   }
 
   function handleResetDays() {
-    props.fromDate('Select Date');
-    props.toDate('Select Date');
+    props.fromDate(DATE_PLACEHOLDER);
+    props.toDate(DATE_PLACEHOLDER);
     props.filterToggled(false);
   }
 
@@ -60,16 +65,12 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
         className="ml-3"
       >
         <Container>
-          <div>
-            <Row>
-              <Col>From:</Col>
-            </Row>
-          </div>
+          <div>From:</div>
           <DayPickerInput
             value={
               props.currentFromDate === undefined ||
-              props.currentFromDate === 'Select Date'
-                ? 'Select Date'
+              props.currentFromDate === DATE_PLACEHOLDER
+                ? DATE_PLACEHOLDER
                 : getMomentInstance(props.currentFromDate).format(
                     APP_LOCAL_DATE_FORMAT
                   )
@@ -81,20 +82,15 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
                 border: 'none',
               },
             }}
-            style={{ margin: '0 auto' }}
             formatDate={MomentLocaleUtils.formatDate}
             parseDate={MomentLocaleUtils.parseDate}
           />
-          <div>
-            <Row>
-              <Col>To:</Col>
-            </Row>
-          </div>
+          <div>To:</div>
           <DayPickerInput
             value={
               props.currentToDate === undefined ||
-              props.currentFromDate === 'Select Date'
-                ? 'Select Date'
+              props.currentFromDate === DATE_PLACEHOLDER
+                ? DATE_PLACEHOLDER
                 : getMomentInstance(props.currentToDate).format(
                     APP_LOCAL_DATE_FORMAT
                   )
@@ -112,19 +108,14 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
                   ? moment().toDate()
                   : getMomentInstance(props.currentToDate).toDate(),
             }}
-            style={{ margin: '0 auto' }}
             formatDate={MomentLocaleUtils.formatDate}
             parseDate={MomentLocaleUtils.parseDate}
           />
-          <Row className={'mt-1'}>
-            <Button
-              size={'sm'}
-              style={{ margin: '0 auto', zIndex: 0 }}
-              onClick={handleResetDays}
-            >
+          <div className={'mt-2 row'} style={{ justifyContent: 'center' }}>
+            <Button size={'sm'} onClick={handleResetDays} style={{ zIndex: 0 }}>
               Reset
             </Button>
-          </Row>
+          </div>
         </Container>
       </DropdownButton>
     </DefaultTooltip>

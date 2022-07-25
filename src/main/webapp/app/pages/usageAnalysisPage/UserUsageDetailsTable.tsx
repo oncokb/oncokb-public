@@ -39,8 +39,8 @@ export default class UserUsageDetailsTable extends React.Component<
   @observable resourcesTypeToggleValue: ToggleValue = this.props
     .defaultResourcesType;
   @observable timeTypeToggleValue: ToggleValue = this.props.defaultTimeType;
-  @observable fromDate: string;
-  @observable toDate: string;
+  @observable fromDate: string | undefined;
+  @observable toDate: string | undefined;
   @observable filterToggled: boolean;
 
   @autobind
@@ -63,15 +63,15 @@ export default class UserUsageDetailsTable extends React.Component<
         ? USAGE_DETAIL_TIME_KEY
         : USAGE_DAY_DETAIL_TIME_KEY
     );
-    if (this.filterToggled) {
+    if (this.filterToggled && data) {
       if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH) {
-        data = data?.filter(resource => {
+        data = data.filter(resource => {
           const fromTime = moment(this.fromDate).format(TABLE_MONTH_FORMAT);
           const toTime = moment(this.toDate).format(TABLE_MONTH_FORMAT);
           return resource.time >= fromTime && resource.time <= toTime;
         });
       } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY) {
-        data = data?.filter(resource => {
+        data = data.filter(resource => {
           const fromTime = moment(this.fromDate).format(TABLE_DAY_FORMAT);
           const toTime = moment(this.toDate).format(TABLE_DAY_FORMAT);
           return resource.time >= fromTime && resource.time <= toTime;
@@ -99,10 +99,12 @@ export default class UserUsageDetailsTable extends React.Component<
               time: resource.time,
             });
           }
-          // @ts-ignore
-          cumulativeData.find(
+          const resourceTimeRange = cumulativeData.find(
             timeRange => timeRange.time === resource.time
-          ).usage += resource.usage;
+          );
+          if (resourceTimeRange) {
+            resourceTimeRange.usage += resource.usage;
+          }
         });
         return cumulativeData;
       } else {
@@ -113,7 +115,7 @@ export default class UserUsageDetailsTable extends React.Component<
 
   Filters = () => {
     return (
-      <div className="row">
+      <Row>
         <UsageToggleGroup
           defaultValue={this.resourcesTypeToggleValue}
           toggleValues={[
@@ -146,7 +148,7 @@ export default class UserUsageDetailsTable extends React.Component<
             this.filterToggled = filterActive;
           }}
         />
-      </div>
+      </Row>
     );
   };
 

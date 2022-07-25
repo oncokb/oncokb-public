@@ -16,7 +16,7 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   minRows?: number;
   columns: SearchColumn<T>[];
   loading?: boolean;
-  filters?: any;
+  filters?: React.FunctionComponent;
 }
 
 @observer
