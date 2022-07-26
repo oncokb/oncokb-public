@@ -50,23 +50,24 @@ if (
     // UNIQUE ID IS IMPORTANT B/C WE REMEMBER A MESSAGE HAS BEEN SHOWN
     // BASED ON USERS LOCALSTORAGE
     {
-      dateEnd: 1,
+      dateEnd: 100000000000000,
       content: (
         <div>
           <span>
-            We have a new Software Engineer position open. Come and join us!{' '}
+            We have a new Scientist/Scientific Writer-Editor position open. Come
+            and join us!{' '}
           </span>
           <a
             className="btn btn-primary btn-sm ml-2 user-messager-container-button"
             target="_blank"
             rel="noopener noreferrer"
-            href="https://careers.mskcc.org/vacancies/2022-61916-bioinfo-software-eng-i/"
+            href="https://careers.mskcc.org/vacancies/2022-63146-scientific-writer-editor/"
           >
             Apply Here
           </a>
         </div>
       ),
-      id: '2022_se_job_hiring',
+      id: '2022_sswe_job_hiring',
     },
     {
       dateEnd: 1,
