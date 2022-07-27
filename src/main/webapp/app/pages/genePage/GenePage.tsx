@@ -27,6 +27,7 @@ import {
   DEFAULT_GENE,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
+  ONCOGENIC_MUTATIONS,
   PAGE_ROUTE,
   REFERENCE_GENOME,
 } from 'app/config/constants';
@@ -56,6 +57,7 @@ import ShowHideToggleIcon from 'app/shared/icons/ShowHideToggleIcon';
 import GeneAdditionalInfoTable from 'app/pages/genePage/GeneAdditionalInfoTable';
 import OncokbLollipopPlot from './OncokbLollipopPlot';
 import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
+import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 
 const GeneBackground: React.FunctionComponent<{
   show: boolean;
@@ -173,44 +175,56 @@ export default class GenePage extends React.Component<GenePageProps, any> {
 
   getFdaImplication(clinicalVariants: ClinicalVariant[]): FdaImplication[] {
     const fdaImplications: FdaImplication[] = [];
-    clinicalVariants.forEach(variant => {
-      variant.cancerTypes.forEach(ct => {
-        const ctName = getCancerTypeNameFromOncoTreeType(ct);
-        fdaImplications.push({
-          level: variant.fdaLevel,
-          alteration: variant.variant,
-          alterationView: (
-            <AlterationPageLink
-              key={`${variant.variant.name}`}
-              hugoSymbol={this.store.hugoSymbol}
-              alteration={{
-                alteration: variant.variant.alteration,
-                name: variant.variant.name,
-              }}
-              hashQueries={{
-                tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
-              }}
-            >
-              {variant.variant.name}
-            </AlterationPageLink>
-          ),
-          cancerType: ctName,
-          cancerTypeView: (
-            <AlterationPageLink
-              key={`${variant.variant.name}-${ctName}`}
-              hugoSymbol={this.store.hugoSymbol}
-              alteration={{
-                alteration: variant.variant.alteration,
-                name: variant.variant.name,
-              }}
-              cancerType={ctName}
-              hashQueries={{
-                tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
-              }}
-            >
-              {ctName}
-            </AlterationPageLink>
-          ),
+    clinicalVariants.forEach(clinicalVariant => {
+      let variants: ClinicalVariant[] = [clinicalVariant];
+      // we want to link all oncogenic mutations with Oncogenic Mutations clinical variant
+      if (clinicalVariant.variant.name === ONCOGENIC_MUTATIONS) {
+        variants = this.store.oncogenicBiologicalVariants.map(
+          biologicalVariant => ({
+            ...clinicalVariant,
+            variant: biologicalVariant.variant,
+          })
+        );
+      }
+      variants.forEach(variant => {
+        variant.cancerTypes.forEach(ct => {
+          const ctName = getCancerTypeNameFromOncoTreeType(ct);
+          fdaImplications.push({
+            level: variant.fdaLevel,
+            alteration: variant.variant,
+            alterationView: (
+              <AlterationPageLink
+                key={`${variant.variant.name}`}
+                hugoSymbol={this.store.hugoSymbol}
+                alteration={{
+                  alteration: variant.variant.alteration,
+                  name: variant.variant.name,
+                }}
+                hashQueries={{
+                  tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+                }}
+              >
+                {variant.variant.name}
+              </AlterationPageLink>
+            ),
+            cancerType: ctName,
+            cancerTypeView: (
+              <AlterationPageLink
+                key={`${variant.variant.name}-${ctName}`}
+                hugoSymbol={this.store.hugoSymbol}
+                alteration={{
+                  alteration: variant.variant.alteration,
+                  name: variant.variant.name,
+                }}
+                cancerType={ctName}
+                hashQueries={{
+                  tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+                }}
+              >
+                {ctName}
+              </AlterationPageLink>
+            ),
+          });
         });
       });
     });

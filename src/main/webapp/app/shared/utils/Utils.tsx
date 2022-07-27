@@ -397,7 +397,7 @@ export function getDefaultColumnDefinition<T>(
         },
         Cell(props: any) {
           return (
-            <div className={'my-1 d-flex justify-content-center'}>
+            <div className={'d-flex justify-content-center'}>
               <OncoKBLevelIcon
                 level={props.original.level}
                 withDescription={true}
@@ -442,7 +442,7 @@ export function getDefaultColumnDefinition<T>(
         },
         Cell(props: any) {
           return (
-            <div className={'my-1 d-flex justify-content-center'}>
+            <div className={'d-flex justify-content-center'}>
               <FdaLevelIcon
                 level={props.original.level}
                 withDescription={true}
@@ -829,7 +829,7 @@ export const isOncogenic = (oncogenicity: string) => {
   switch (oncogenicity) {
     case ONCOGENICITY.ONCOGENIC:
     case ONCOGENICITY.LIKELY_ONCOGENIC:
-    case ONCOGENICITY.PREDICTED_ONCOGENIC:
+    case ONCOGENICITY.RESISTANCE:
       return true;
     default:
       return false;

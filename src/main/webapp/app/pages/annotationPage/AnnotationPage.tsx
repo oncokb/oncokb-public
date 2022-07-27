@@ -10,6 +10,7 @@ import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
+  ONCOGENIC_MUTATIONS,
   OTHER_BIOMARKERS,
   REFERENCE_GENOME,
   TREATMENT_EVIDENCE_TYPES,
@@ -186,12 +187,19 @@ export default class AnnotationPage extends React.Component<
     evidences.forEach(evidence => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
       const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
-      const alterations = _.chain(evidence.alterations)
-        .filter(alteration =>
-          alteration.referenceGenomes.includes(this.props.refGenome)
-        )
-        .value();
+      const alterations = evidence.alterations.filter(alteration =>
+        alteration.referenceGenomes.includes(this.props.refGenome)
+      );
       alterations.forEach(alt => {
+        // if the evidence is for Oncogenic Mutations and it's returned for the current variant,
+        // that indicates the variant is oncogenic. We could convert the alteration name to the current one
+        if (alt.name === ONCOGENIC_MUTATIONS) {
+          if (this.props.matchedAlteration) {
+            alt = this.props.matchedAlteration;
+          } else {
+            alt.name = alt.alteration = this.props.alteration;
+          }
+        }
         evidence.cancerTypes.forEach(cancerType => {
           const ctName = getCancerTypeNameFromOncoTreeType(cancerType);
           fdaImplications.push({
