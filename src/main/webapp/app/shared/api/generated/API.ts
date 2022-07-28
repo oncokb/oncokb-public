@@ -111,7 +111,7 @@ export type LoginVM = {
 export type MailTypeInfo = {
     'description': string
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
 
 };
 export type ManagedUserVM = {
@@ -317,7 +317,7 @@ export type UserDetailsDTO = {
 export type UserMailsDTO = {
     'id': number
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
 
         'sentBy': string
 
@@ -370,7 +370,7 @@ export type VerifyCompanyNameVM = {
 };
 
 /**
- * OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+ * OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
  * @class API
  * @param {(string)} [domainOrOptions] - The project domain.
  */
@@ -3384,7 +3384,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
         'to': string,
         $queryParameters ? : any
     }): string {
@@ -3434,7 +3434,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -3517,7 +3517,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -4813,16 +4813,16 @@ export default class API {
      * getAllUsers
      * @method
      * @name API#getAllUsersUsingGET
-     * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} page - Page number of the requested page
-     * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {integer} pageSize - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} paged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} size - Size of a page
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
     getAllUsersUsingGETWithHttpInfo(parameters: {
         'offset' ? : number,
@@ -4905,16 +4905,16 @@ export default class API {
      * getAllUsers
      * @method
      * @name API#getAllUsersUsingGET
-     * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} page - Page number of the requested page
-     * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {integer} pageSize - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} paged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} size - Size of a page
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
     getAllUsersUsingGET(parameters: {
             'offset' ? : number,
@@ -5315,16 +5315,16 @@ export default class API {
      * getAllRegisteredUsers
      * @method
      * @name API#getAllRegisteredUsersUsingGET
-     * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} page - Page number of the requested page
-     * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {integer} pageSize - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} paged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} size - Size of a page
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
     getAllRegisteredUsersUsingGETWithHttpInfo(parameters: {
         'offset' ? : number,
@@ -5407,16 +5407,16 @@ export default class API {
      * getAllRegisteredUsers
      * @method
      * @name API#getAllRegisteredUsersUsingGET
-     * @param {integer} offset - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} page - Page number of the requested page
-     * @param {integer} pageNumber - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {integer} pageSize - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} paged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      * @param {integer} size - Size of a page
      * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param {boolean} sortSorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} sortUnsorted - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
-     * @param {boolean} unpaged - OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.
+     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
+     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
     getAllRegisteredUsersUsingGET(parameters: {
             'offset' ? : number,

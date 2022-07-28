@@ -166,17 +166,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
   }
 
   getLevelNumber(levels: LEVELS[]) {
-    const level = levels.length > 0 ? levels[0] : null;
-    switch (level) {
-      case LEVELS.FDAx1:
-      case LEVELS.FDAx2:
-      case LEVELS.FDAx3:
-        return this.props.appStore.fdaNumbers.result[level]
-          ? this.props.appStore.fdaNumbers.result[level]
-          : 0;
-      default:
-        return this.getLevelGenes(levels).length;
-    }
+    return this.getLevelGenes(levels).length;
   }
 
   @autobind
@@ -330,7 +320,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
                     key={`${levelGadget.level}-button`}
                     level={levelGadget.level}
                     disabledTooltip={
-                      levelGadget.level === LEVELS.FDAx1
+                      levelGadget.level === LEVELS.Fda1
                         ? FDA_L1_DISABLED_BTN_TOOLTIP
                         : ''
                     }
@@ -341,7 +331,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
                       LEVEL_TYPES.FDA
                         ? `FDA Level ${levelGadget.level
                             .toString()
-                            .replace('FDAx', '')}`
+                            .replace('Fda', '')}`
                         : levelGadget.title
                     }
                     className="mb-2"
@@ -352,12 +342,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
                     href={`${PAGE_ROUTE.ACTIONABLE_GENE}#levels=${
                       levelGadget.linkoutLevel
                     }&sections=${LEVEL_CLASSIFICATION[levelGadget.level]}`}
-                    isLoading={
-                      LEVEL_CLASSIFICATION[levelGadget.level] ===
-                      LEVEL_TYPES.FDA
-                        ? this.props.appStore.fdaNumbers.isPending
-                        : this.levelNumbers.isPending
-                    }
+                    isLoading={this.levelNumbers.isPending}
                   />
                 </Col>
               )

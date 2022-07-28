@@ -7,11 +7,13 @@ import {
   THRESHOLD_TABLE_FIXED_HEIGHT,
 } from 'app/config/constants';
 import React from 'react';
+import { SortingRule } from 'react-table';
 
 export const GenePageTable: React.FunctionComponent<{
   data: any[];
   columns: SearchColumn<any>[];
   isPending: boolean;
+  defaultSorted?: SortingRule[];
 }> = props => {
   return (
     <OncoKBTable
@@ -27,24 +29,30 @@ export const GenePageTable: React.FunctionComponent<{
           : undefined
       }
       fixedHeight={props.data.length > THRESHOLD_TABLE_FIXED_HEIGHT}
-      defaultSorted={[
-        {
-          id: TABLE_COLUMN_KEY.LEVEL,
-          desc: true,
-        },
-        {
-          id: TABLE_COLUMN_KEY.ALTERATION,
-          desc: false,
-        },
-        {
-          id: TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,
-          desc: false,
-        },
-        {
-          id: TABLE_COLUMN_KEY.DRUGS,
-          desc: false,
-        },
-      ]}
+      defaultSorted={
+        props.defaultSorted || [
+          {
+            id: TABLE_COLUMN_KEY.LEVEL,
+            desc: true,
+          },
+          {
+            id: TABLE_COLUMN_KEY.FDA_LEVEL,
+            desc: true,
+          },
+          {
+            id: TABLE_COLUMN_KEY.ALTERATION,
+            desc: false,
+          },
+          {
+            id: TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE,
+            desc: false,
+          },
+          {
+            id: TABLE_COLUMN_KEY.DRUGS,
+            desc: false,
+          },
+        ]
+      }
     />
   );
 };

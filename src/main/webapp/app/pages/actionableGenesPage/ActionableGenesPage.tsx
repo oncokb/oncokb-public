@@ -14,7 +14,6 @@ import {
 import {
   Alteration,
   Evidence,
-  FdaAlteration,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
@@ -24,6 +23,7 @@ import {
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
   getTreatmentNameFromEvidence,
+  isFdaLevel,
   levelOfEvidence2Level,
   OncoKBLevelIcon,
 } from 'app/shared/utils/Utils';
@@ -67,6 +67,7 @@ import ShortenTextWithTooltip from 'app/shared/texts/ShortenTextWithTooltip';
 
 type Treatment = {
   level: string;
+  fdaLevel: string;
   hugoSymbol: string;
   alterations: Alteration[];
   cancerTypes: string[];
@@ -141,14 +142,6 @@ export default class ActionableGenesPage extends React.Component<
       return await privateClient.utilsEvidencesByLevelsGetUsingGET({});
     },
     default: {},
-  });
-
-  readonly allFdaAlterations = remoteData<FdaAlteration[]>({
-    await: () => [],
-    async invoke() {
-      return await privateClient.utilsFdaAlterationsGetUsingGET({});
-    },
-    default: [],
   });
 
   readonly relevantTumorTypes = remoteData<string[]>({
@@ -301,6 +294,7 @@ export default class ActionableGenesPage extends React.Component<
       if (matchedAlterations.length > 0) {
         treatments.push({
           level: levelOfEvidence2Level(item.levelOfEvidence, true),
+          fdaLevel: levelOfEvidence2Level(item.fdaLevel, true),
           hugoSymbol: item.gene.hugoSymbol || 'NA',
           alterations: _.sortBy(matchedAlterations, 'name'),
           cancerTypes: item.cancerTypes.map(cancerType =>
@@ -389,15 +383,11 @@ export default class ActionableGenesPage extends React.Component<
   @computed
   get allFdaTreatments() {
     const treatments: Treatment[] = [];
-    this.allFdaAlterations.result.forEach(fdaAlt => {
-      if (!fdaAlt.cancerType.endsWith('NOS')) {
-        treatments.push({
-          level: fdaAlt.level,
-          hugoSymbol: fdaAlt.alteration.gene.hugoSymbol,
-          alterations: [fdaAlt.alteration],
-          cancerTypes: [fdaAlt.cancerType],
-        } as Treatment);
-      }
+    this.allOncokbTreatments.map(treatment => {
+      treatments.push({
+        ...treatment,
+        level: treatment.fdaLevel,
+      } as Treatment);
     });
     return treatments;
   }
@@ -692,7 +682,7 @@ export default class ActionableGenesPage extends React.Component<
         Cell(props: any) {
           return (
             <div className={'my-1 d-flex justify-content-center'}>
-              {_.startsWith(props.original.level, 'FDA') ? (
+              {isFdaLevel(props.original.level) ? (
                 <FdaLevelIcon
                   level={props.original.level}
                   withDescription={true}
@@ -785,10 +775,7 @@ export default class ActionableGenesPage extends React.Component<
       disableSearch: true,
       data: this.filteredTreatments,
       loading:
-        this.relevantTumorTypes.isPending &&
-        (this.fdaSectionIsOpen
-          ? this.allFdaAlterations.isPending
-          : this.evidencesByLevel.isPending),
+        this.relevantTumorTypes.isPending && this.evidencesByLevel.isPending,
       columns: this.columns,
       defaultPageSize: 10,
       defaultSorted: [
@@ -815,6 +802,13 @@ export default class ActionableGenesPage extends React.Component<
       ],
       showPagination: this.fdaSectionIsOpen,
       fixedHeight: !this.fdaSectionIsOpen,
+      getTdProps: () => ({
+        style: {
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        },
+      }),
     };
     if (!this.fdaSectionIsOpen) {
       return {
@@ -884,11 +878,7 @@ export default class ActionableGenesPage extends React.Component<
             levelSelected={this.levelSelected}
             updateCollapseStatus={this.updateCollapseStatus}
             updateLevelSelection={this.updateLevelSelection}
-            isLoading={
-              this.fdaSectionIsOpen
-                ? this.allFdaAlterations.isPending
-                : this.evidencesByLevel.isPending
-            }
+            isLoading={this.evidencesByLevel.isPending}
           />
         );
       }
