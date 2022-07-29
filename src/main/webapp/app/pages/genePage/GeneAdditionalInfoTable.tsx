@@ -182,7 +182,7 @@ const GeneAdditionalInfoTable: React.FunctionComponent<{
     <Table size={'sm'}>
       <tbody>
         {content.map((item, index) => (
-          <tr>
+          <tr key={`key-${item[0]}`}>
             <td style={index === 0 ? firstRowTdStyle : undefined}>{item[0]}</td>
             <td style={index === 0 ? firstRowTdStyle : undefined}>{item[1]}</td>
           </tr>
