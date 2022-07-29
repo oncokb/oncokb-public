@@ -37,21 +37,6 @@ export default class ResourceUsageDetailsTable extends React.Component<
     this.timeTypeToggleValue = value;
   }
 
-  Filters = () => {
-    return (
-      <Row>
-        <UsageToggleGroup
-          defaultValue={this.timeTypeToggleValue}
-          toggleValues={[
-            ToggleValue.RESULTS_IN_TOTAL,
-            ToggleValue.RESULTS_BY_MONTH,
-          ]}
-          handleToggle={this.handleTimeTypeToggleChange}
-        />
-      </Row>
-    );
-  };
-
   render() {
     return (
       <>
@@ -95,7 +80,20 @@ export default class ResourceUsageDetailsTable extends React.Component<
           ]}
           showPagination={true}
           minRows={1}
-          filters={this.Filters}
+          filters={() => {
+            return (
+              <Row>
+                <UsageToggleGroup
+                  defaultValue={this.timeTypeToggleValue}
+                  toggleValues={[
+                    ToggleValue.RESULTS_IN_TOTAL,
+                    ToggleValue.RESULTS_BY_MONTH,
+                  ]}
+                  handleToggle={this.handleTimeTypeToggleChange}
+                />
+              </Row>
+            );
+          }}
         />
       </>
     );

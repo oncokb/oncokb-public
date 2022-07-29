@@ -236,67 +236,6 @@ export default class UsageAnalysisPage extends React.Component<{
     }
   }
 
-  UserFilters = () => {
-    return (
-      <Row>
-        <UsageToggleGroup
-          defaultValue={this.topUsersToggleValue}
-          toggleValues={[ToggleValue.ALL_USERS, ToggleValue.TOP_USERS]}
-          handleToggle={this.handleTopUsersToggleChange}
-        />
-        <UsageToggleGroup
-          defaultValue={this.userTabResourcesTypeToggleValue}
-          toggleValues={[
-            ToggleValue.ALL_RESOURCES,
-            ToggleValue.PUBLIC_RESOURCES,
-          ]}
-          handleToggle={this.handleUserTabResourcesTypeToggleChange}
-        />
-      </Row>
-    );
-  };
-
-  ResourceFilters = () => {
-    const monthDropdown: any = [];
-    if (this.usageDetail.isComplete) {
-      this.dropdownList
-        .sort()
-        .reverse()
-        .forEach(key => {
-          monthDropdown.push(
-            <Dropdown.Item eventKey={key}>{key}</Dropdown.Item>
-          );
-        });
-    }
-    return this.usageDetail.isComplete ? (
-      <Row>
-        <DropdownButton
-          className="ml-3"
-          id="dropdown-basic-button"
-          title={this.dropdownValue}
-          onSelect={(evt: any) => (this.dropdownValue = evt)}
-        >
-          {monthDropdown}
-        </DropdownButton>
-        <UsageToggleGroup
-          defaultValue={this.resourceTabResourcesTypeToggleValue}
-          toggleValues={[
-            ToggleValue.ALL_RESOURCES,
-            ToggleValue.PUBLIC_RESOURCES,
-          ]}
-          handleToggle={this.handleResourceTabResourcesTypeToggleChange}
-        />
-      </Row>
-    ) : (
-      <DropdownButton
-        className="mt-2"
-        id="dropdown-basic-button"
-        title={this.dropdownValue}
-        disabled
-      ></DropdownButton>
-    );
-  };
-
   render() {
     return (
       <>
@@ -375,7 +314,28 @@ export default class UsageAnalysisPage extends React.Component<{
               ]}
               showPagination={true}
               minRows={1}
-              filters={this.UserFilters}
+              filters={() => {
+                return (
+                  <Row>
+                    <UsageToggleGroup
+                      defaultValue={this.topUsersToggleValue}
+                      toggleValues={[
+                        ToggleValue.ALL_USERS,
+                        ToggleValue.TOP_USERS,
+                      ]}
+                      handleToggle={this.handleTopUsersToggleChange}
+                    />
+                    <UsageToggleGroup
+                      defaultValue={this.userTabResourcesTypeToggleValue}
+                      toggleValues={[
+                        ToggleValue.ALL_RESOURCES,
+                        ToggleValue.PUBLIC_RESOURCES,
+                      ]}
+                      handleToggle={this.handleUserTabResourcesTypeToggleChange}
+                    />
+                  </Row>
+                );
+              }}
             />
           </Tab>
           <Tab eventKey={UsageType.RESOURCE} title="Resources">
@@ -429,7 +389,48 @@ export default class UsageAnalysisPage extends React.Component<{
               ]}
               showPagination={true}
               minRows={1}
-              filters={this.ResourceFilters}
+              filters={() => {
+                const monthDropdown: any = [];
+                if (this.usageDetail.isComplete) {
+                  this.dropdownList
+                    .sort()
+                    .reverse()
+                    .forEach(key => {
+                      monthDropdown.push(
+                        <Dropdown.Item eventKey={key}>{key}</Dropdown.Item>
+                      );
+                    });
+                }
+                return this.usageDetail.isComplete ? (
+                  <Row>
+                    <DropdownButton
+                      className="ml-3"
+                      id="dropdown-basic-button"
+                      title={this.dropdownValue}
+                      onSelect={(evt: any) => (this.dropdownValue = evt)}
+                    >
+                      {monthDropdown}
+                    </DropdownButton>
+                    <UsageToggleGroup
+                      defaultValue={this.resourceTabResourcesTypeToggleValue}
+                      toggleValues={[
+                        ToggleValue.ALL_RESOURCES,
+                        ToggleValue.PUBLIC_RESOURCES,
+                      ]}
+                      handleToggle={
+                        this.handleResourceTabResourcesTypeToggleChange
+                      }
+                    />
+                  </Row>
+                ) : (
+                  <DropdownButton
+                    className="mt-2"
+                    id="dropdown-basic-button"
+                    title={this.dropdownValue}
+                    disabled
+                  ></DropdownButton>
+                );
+              }}
             />
           </Tab>
         </Tabs>
