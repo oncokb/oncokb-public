@@ -82,8 +82,7 @@ public class UsageAnalysisController {
                 monthSummaries.add(monthSummary);
             }
             monthsBack++;
-        } while (monthSummary != null && monthsBack < 12);
-
+        } while (monthsBack < 12);
 
         Long id = Long.parseLong(userId);
         Optional<User> user = userService.getUserById(id);
