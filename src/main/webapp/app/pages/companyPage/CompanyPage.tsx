@@ -630,7 +630,7 @@ export default class CompanyPage extends React.Component<
                       <Row className={getSectionClassName()}>
                         <Col>
                           <div className={'font-weight-bold'}>
-                            Company Usage
+                            Company Data Usage
                           </div>
                           <OncoKBTable
                             data={this.users.result}

@@ -245,193 +245,203 @@ export default class UsageAnalysisPage extends React.Component<{
           onSelect={k => this.toggleType(UsageType[k!])}
         >
           <Tab eventKey={UsageType.USER} title="Users">
-            <OncoKBTable
-              data={
-                this.topUsersToggleValue === ToggleValue.ALL_USERS
-                  ? this.users.result
-                  : _.filter(this.users.result, function (user) {
-                      return user.totalUsage >= USAGE_TOP_USERS_LIMIT;
-                    })
-              }
-              columns={[
-                {
-                  id: 'userEmail',
-                  Header: <span>Email</span>,
-                  accessor: 'userEmail',
-                  minWidth: 200,
-                  onFilter: (data: UserOverviewUsage, keyword) =>
-                    filterByKeyword(data.userEmail, keyword),
-                },
-                {
-                  id: 'totalUsage',
-                  Header: <span>Total Usage</span>,
-                  minWidth: 100,
-                  accessor: 'totalUsage',
-                },
-                this.userTabResourcesTypeToggleValue ===
-                ToggleValue.ALL_RESOURCES
-                  ? {
-                      id: 'endpoint',
-                      Header: <span>Most frequently used endpoint</span>,
-                      minWidth: 200,
-                      accessor: 'endpoint',
-                      onFilter: (data: UserOverviewUsage, keyword) =>
-                        filterByKeyword(data.endpoint, keyword),
-                    }
-                  : {
-                      id: 'noPrivateEndpoint',
-                      Header: (
-                        <span>Most frequently used endpoint(only public)</span>
-                      ),
-                      minWidth: 200,
-                      accessor: 'noPrivateEndpoint',
-                      onFilter: (data: UserOverviewUsage, keyword) =>
-                        filterByKeyword(data.noPrivateEndpoint, keyword),
-                    },
-                {
-                  ...getUsageTableColumnDefinition(
-                    UsageTableColumnKey.OPERATION
-                  ),
-                  sortable: false,
-                  className: 'd-flex justify-content-center',
-                  Cell(props: { original: UserOverviewUsage }) {
-                    return (
-                      <Link
-                        to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
-                      >
-                        <i className="fa fa-info-circle"></i>
-                      </Link>
-                    );
+            <div className="mt-2">
+              <OncoKBTable
+                data={
+                  this.topUsersToggleValue === ToggleValue.ALL_USERS
+                    ? this.users.result
+                    : _.filter(this.users.result, function (user) {
+                        return user.totalUsage >= USAGE_TOP_USERS_LIMIT;
+                      })
+                }
+                columns={[
+                  {
+                    id: 'userEmail',
+                    Header: <span>Email</span>,
+                    accessor: 'userEmail',
+                    minWidth: 200,
+                    onFilter: (data: UserOverviewUsage, keyword) =>
+                      filterByKeyword(data.userEmail, keyword),
                   },
-                },
-              ]}
-              loading={this.users.isComplete ? false : true}
-              defaultSorted={[
-                {
-                  id: 'totalUsage',
-                  desc: true,
-                },
-              ]}
-              showPagination={true}
-              minRows={1}
-              filters={() => {
-                return (
-                  <Row>
-                    <UsageToggleGroup
-                      defaultValue={this.topUsersToggleValue}
-                      toggleValues={[
-                        ToggleValue.ALL_USERS,
-                        ToggleValue.TOP_USERS,
-                      ]}
-                      handleToggle={this.handleTopUsersToggleChange}
-                    />
-                    <UsageToggleGroup
-                      defaultValue={this.userTabResourcesTypeToggleValue}
-                      toggleValues={[
-                        ToggleValue.ALL_RESOURCES,
-                        ToggleValue.PUBLIC_RESOURCES,
-                      ]}
-                      handleToggle={this.handleUserTabResourcesTypeToggleChange}
-                    />
-                  </Row>
-                );
-              }}
-            />
+                  {
+                    id: 'totalUsage',
+                    Header: <span>Total Usage</span>,
+                    minWidth: 100,
+                    accessor: 'totalUsage',
+                  },
+                  this.userTabResourcesTypeToggleValue ===
+                  ToggleValue.ALL_RESOURCES
+                    ? {
+                        id: 'endpoint',
+                        Header: <span>Most frequently used endpoint</span>,
+                        minWidth: 200,
+                        accessor: 'endpoint',
+                        onFilter: (data: UserOverviewUsage, keyword) =>
+                          filterByKeyword(data.endpoint, keyword),
+                      }
+                    : {
+                        id: 'noPrivateEndpoint',
+                        Header: (
+                          <span>
+                            Most frequently used endpoint(only public)
+                          </span>
+                        ),
+                        minWidth: 200,
+                        accessor: 'noPrivateEndpoint',
+                        onFilter: (data: UserOverviewUsage, keyword) =>
+                          filterByKeyword(data.noPrivateEndpoint, keyword),
+                      },
+                  {
+                    ...getUsageTableColumnDefinition(
+                      UsageTableColumnKey.OPERATION
+                    ),
+                    sortable: false,
+                    className: 'd-flex justify-content-center',
+                    Cell(props: { original: UserOverviewUsage }) {
+                      return (
+                        <Link
+                          to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
+                        >
+                          <i className="fa fa-info-circle"></i>
+                        </Link>
+                      );
+                    },
+                  },
+                ]}
+                loading={this.users.isComplete ? false : true}
+                defaultSorted={[
+                  {
+                    id: 'totalUsage',
+                    desc: true,
+                  },
+                ]}
+                showPagination={true}
+                minRows={1}
+                filters={() => {
+                  return (
+                    <Row>
+                      <UsageToggleGroup
+                        defaultValue={this.topUsersToggleValue}
+                        toggleValues={[
+                          ToggleValue.ALL_USERS,
+                          ToggleValue.TOP_USERS,
+                        ]}
+                        handleToggle={this.handleTopUsersToggleChange}
+                      />
+                      <UsageToggleGroup
+                        defaultValue={this.userTabResourcesTypeToggleValue}
+                        toggleValues={[
+                          ToggleValue.ALL_RESOURCES,
+                          ToggleValue.PUBLIC_RESOURCES,
+                        ]}
+                        handleToggle={
+                          this.handleUserTabResourcesTypeToggleChange
+                        }
+                      />
+                    </Row>
+                  );
+                }}
+              />
+            </div>
           </Tab>
           <Tab eventKey={UsageType.RESOURCE} title="Resources">
-            <OncoKBTable
-              data={this.calculateResourcesTabData}
-              columns={[
-                {
-                  ...getUsageTableColumnDefinition(
-                    UsageTableColumnKey.RESOURCES
-                  ),
-                  Header: (
-                    <span>
-                      Resource{' '}
-                      {this.resourceTabResourcesTypeToggleValue ===
-                      ToggleValue.ALL_RESOURCES
-                        ? null
-                        : '(only public)'}
-                    </span>
-                  ),
-                  onFilter: (data: UsageRecord, keyword) =>
-                    filterByKeyword(data.resource, keyword),
-                },
-                { ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE) },
-                {
-                  ...getUsageTableColumnDefinition(
-                    UsageTableColumnKey.OPERATION
-                  ),
-                  sortable: false,
-                  className: 'd-flex justify-content-center',
-                  Cell(props: { original: UsageRecord }) {
-                    return (
-                      <Link
-                        to={`${
-                          PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
-                        }${encodeResourceUsageDetailPageURL(
-                          props.original.resource
-                        )}`}
-                      >
-                        <i className="fa fa-info-circle"></i>
-                      </Link>
-                    );
+            <div className="mt-2">
+              <OncoKBTable
+                data={this.calculateResourcesTabData}
+                columns={[
+                  {
+                    ...getUsageTableColumnDefinition(
+                      UsageTableColumnKey.RESOURCES
+                    ),
+                    Header: (
+                      <span>
+                        Resource{' '}
+                        {this.resourceTabResourcesTypeToggleValue ===
+                        ToggleValue.ALL_RESOURCES
+                          ? null
+                          : '(only public)'}
+                      </span>
+                    ),
+                    onFilter: (data: UsageRecord, keyword) =>
+                      filterByKeyword(data.resource, keyword),
                   },
-                },
-              ]}
-              loading={this.usageDetail.isComplete ? false : true}
-              defaultSorted={[
-                {
-                  id: UsageTableColumnKey.USAGE,
-                  desc: true,
-                },
-              ]}
-              showPagination={true}
-              minRows={1}
-              filters={() => {
-                const monthDropdown: any = [];
-                if (this.usageDetail.isComplete) {
-                  this.dropdownList
-                    .sort()
-                    .reverse()
-                    .forEach(key => {
-                      monthDropdown.push(
-                        <Dropdown.Item eventKey={key}>{key}</Dropdown.Item>
+                  {
+                    ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
+                  },
+                  {
+                    ...getUsageTableColumnDefinition(
+                      UsageTableColumnKey.OPERATION
+                    ),
+                    sortable: false,
+                    className: 'd-flex justify-content-center',
+                    Cell(props: { original: UsageRecord }) {
+                      return (
+                        <Link
+                          to={`${
+                            PAGE_ROUTE.ADMIN_RESOURCE_DETAILS_LINK
+                          }${encodeResourceUsageDetailPageURL(
+                            props.original.resource
+                          )}`}
+                        >
+                          <i className="fa fa-info-circle"></i>
+                        </Link>
                       );
-                    });
-                }
-                return this.usageDetail.isComplete ? (
-                  <Row>
+                    },
+                  },
+                ]}
+                loading={this.usageDetail.isComplete ? false : true}
+                defaultSorted={[
+                  {
+                    id: UsageTableColumnKey.USAGE,
+                    desc: true,
+                  },
+                ]}
+                showPagination={true}
+                minRows={1}
+                filters={() => {
+                  const monthDropdown: any = [];
+                  if (this.usageDetail.isComplete) {
+                    this.dropdownList
+                      .sort()
+                      .reverse()
+                      .forEach(key => {
+                        monthDropdown.push(
+                          <Dropdown.Item eventKey={key}>{key}</Dropdown.Item>
+                        );
+                      });
+                  }
+                  return this.usageDetail.isComplete ? (
+                    <Row>
+                      <DropdownButton
+                        className="ml-3"
+                        id="dropdown-basic-button"
+                        title={this.dropdownValue}
+                        onSelect={(evt: any) => (this.dropdownValue = evt)}
+                      >
+                        {monthDropdown}
+                      </DropdownButton>
+                      <UsageToggleGroup
+                        defaultValue={this.resourceTabResourcesTypeToggleValue}
+                        toggleValues={[
+                          ToggleValue.ALL_RESOURCES,
+                          ToggleValue.PUBLIC_RESOURCES,
+                        ]}
+                        handleToggle={
+                          this.handleResourceTabResourcesTypeToggleChange
+                        }
+                      />
+                    </Row>
+                  ) : (
                     <DropdownButton
-                      className="ml-3"
+                      className="mt-2"
                       id="dropdown-basic-button"
                       title={this.dropdownValue}
-                      onSelect={(evt: any) => (this.dropdownValue = evt)}
-                    >
-                      {monthDropdown}
-                    </DropdownButton>
-                    <UsageToggleGroup
-                      defaultValue={this.resourceTabResourcesTypeToggleValue}
-                      toggleValues={[
-                        ToggleValue.ALL_RESOURCES,
-                        ToggleValue.PUBLIC_RESOURCES,
-                      ]}
-                      handleToggle={
-                        this.handleResourceTabResourcesTypeToggleChange
-                      }
-                    />
-                  </Row>
-                ) : (
-                  <DropdownButton
-                    className="mt-2"
-                    id="dropdown-basic-button"
-                    title={this.dropdownValue}
-                    disabled
-                  ></DropdownButton>
-                );
-              }}
-            />
+                      disabled
+                    ></DropdownButton>
+                  );
+                }}
+              />
+            </div>
           </Tab>
         </Tabs>
       </>
