@@ -54,7 +54,7 @@ export default class OncoKBTable<T> extends React.Component<
         {this.props.filters === undefined && this.props.disableSearch ? (
           <></>
         ) : (
-          <div className="mt-2 row">
+          <div className="row">
             <div className="col-auto">
               {this.props.filters === undefined ? (
                 <></>
