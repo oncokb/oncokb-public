@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.TokenStats;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
@@ -47,10 +48,16 @@ public interface TokenStatsService {
      */
     void delete(Long id);
 
+    /**
+     * Delete all tokens stats of tokens
+     *
+     * @param tokens User tokens
+     */
+    void deleteAllByTokenIn(List<Token> tokens);
+
     void clearTokenStats(Instant before);
 
     List<UserTokenUsage> getUserTokenUsage(Instant before);
 
     List<UserTokenUsageWithInfo> getTokenUsageAnalysis(Instant after);
-
 }

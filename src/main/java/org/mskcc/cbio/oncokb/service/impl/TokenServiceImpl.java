@@ -44,8 +44,8 @@ public class TokenServiceImpl implements TokenService {
 
 
     public TokenServiceImpl(
-        TokenRepository tokenRepository, 
-        CacheManager cacheManager, 
+        TokenRepository tokenRepository,
+        CacheManager cacheManager,
         CacheNameResolver cacheNameResolver,
         TokenStatsRepository tokenStatsRepository
     ) {
@@ -156,6 +156,11 @@ public class TokenServiceImpl implements TokenService {
             this.clearTokenCaches(token);
         }
 
+    }
+
+    @Override
+    public void deleteAllByUser(User user) {
+        tokenRepository.deleteAllByUser(user);
     }
 
     private void clearTokenCaches(Token token) {

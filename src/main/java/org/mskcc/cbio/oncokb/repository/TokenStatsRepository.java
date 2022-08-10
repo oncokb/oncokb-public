@@ -23,6 +23,8 @@ public interface TokenStatsRepository extends JpaRepository<TokenStats, Long> {
 
     void deleteAllByAccessTimeBefore(Instant before);
 
+    void deleteAllByTokenIn(List<Token> tokens);
+
     @Query("select sum(tokenStats.usageCount) as count, tokenStats.token as token from TokenStats tokenStats where tokenStats.accessTime < ?1 group by tokenStats.token")
     List<UserTokenUsage> countTokenUsageByToken(Instant before);
 

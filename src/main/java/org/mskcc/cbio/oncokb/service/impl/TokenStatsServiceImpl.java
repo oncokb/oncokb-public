@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
 import io.github.jhipster.config.JHipsterProperties;
+import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
 import org.mskcc.cbio.oncokb.service.TokenStatsService;
@@ -60,6 +61,10 @@ public class TokenStatsServiceImpl implements TokenStatsService {
     public void delete(Long id) {
         log.debug("Request to delete TokenStats : {}", id);
         tokenStatsRepository.deleteById(id);
+    }
+
+    public void deleteAllByTokenIn(List<Token> tokens) {
+        tokenStatsRepository.deleteAllByTokenIn(tokens);
     }
 
     public void clearTokenStats(Instant before) {

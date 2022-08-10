@@ -74,6 +74,8 @@ public class UserService {
 
     private final TokenService tokenService;
 
+    private final TokenStatsService tokenStatsService;
+
     private final TokenProvider tokenProvider;
 
     private final SlackService slackService;
@@ -81,6 +83,8 @@ public class UserService {
     private final UserDetailsService userDetailsService;
 
     private final MailService mailService;
+
+    private final UserMailsService userMailsService;
 
     private final CompanyDomainRepository companyDomainRepository;
 
@@ -102,12 +106,14 @@ public class UserService {
         AuthorityRepository authorityRepository,
         JHipsterProperties jHipsterProperties,
         TokenService tokenService,
+        TokenStatsService tokenStatsService,
         TokenProvider tokenProvider,
         CacheNameResolver cacheNameResolver,
         SlackService slackService,
         CacheManager cacheManager,
         UserDetailsService userDetailsService,
         MailService mailService,
+        UserMailsService userMailsService,
         CompanyDomainRepository companyDomainRepository,
         CompanyRepository companyRepository
     ) {
@@ -117,12 +123,14 @@ public class UserService {
         this.authorityRepository = authorityRepository;
         this.jHipsterProperties = jHipsterProperties;
         this.tokenService = tokenService;
+        this.tokenStatsService = tokenStatsService;
         this.tokenProvider = tokenProvider;
         this.cacheNameResolver = cacheNameResolver;
         this.cacheManager = cacheManager;
         this.slackService = slackService;
         this.userDetailsService = userDetailsService;
         this.mailService = mailService;
+        this.userMailsService = userMailsService;
         this.companyDomainRepository = companyDomainRepository;
         this.companyRepository = companyRepository;
     }
@@ -441,6 +449,19 @@ public class UserService {
 
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
+            // Delete all token stats
+            List<Token> tokens = tokenService.findByUser(user);
+            tokenStatsService.deleteAllByTokenIn(tokens);
+
+            // Delete all tokens
+            tokenService.deleteAllByUser(user);
+
+            // Delete user details
+            userDetailsService.deleteByUser(user);
+
+            // Delete user mails
+            userMailsService.deleteAllByUser(user);
+
             userRepository.delete(user);
             this.clearUserCaches(user);
             log.debug("Deleted User: {}", user);
