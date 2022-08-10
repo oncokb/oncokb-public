@@ -32,6 +32,7 @@ import io.github.jhipster.security.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -90,6 +91,8 @@ public class UserService {
 
     private final CompanyRepository companyRepository;
 
+    private final AuditEventService auditEventService;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -114,6 +117,7 @@ public class UserService {
         UserDetailsService userDetailsService,
         MailService mailService,
         UserMailsService userMailsService,
+        AuditEventService auditEventService,
         CompanyDomainRepository companyDomainRepository,
         CompanyRepository companyRepository
     ) {
@@ -131,6 +135,7 @@ public class UserService {
         this.userDetailsService = userDetailsService;
         this.mailService = mailService;
         this.userMailsService = userMailsService;
+        this.auditEventService = auditEventService;
         this.companyDomainRepository = companyDomainRepository;
         this.companyRepository = companyRepository;
     }
@@ -464,6 +469,14 @@ public class UserService {
 
             userRepository.delete(user);
             this.clearUserCaches(user);
+
+            String deletedBy = SecurityUtils.getCurrentUserLogin().orElse("");
+            Map<String, Object> eventData = new HashMap<>();
+            eventData.put("userLogin", user.getLogin());
+            eventData.put("deletedBy", deletedBy);
+            AuditEvent event = new AuditEvent(Instant.now(), deletedBy, "USER_DELETION_SUCCESS", eventData);
+            auditEventService.save(event);
+
             log.debug("Deleted User: {}", user);
         });
     }
