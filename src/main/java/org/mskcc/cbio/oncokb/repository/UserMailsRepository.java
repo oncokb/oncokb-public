@@ -23,4 +23,6 @@ public interface UserMailsRepository extends JpaRepository<UserMails, Long> {
     List<UserMails> findByUser(String login);
 
     List<UserMails> findUserMailsByUserAndMailTypeAndSentDateAfter(User user, MailType mailType, Instant sentAfter);
+
+    void deleteAllByUser(User user);
 }

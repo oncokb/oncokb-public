@@ -110,4 +110,14 @@ public class UserMailsService {
         log.debug("Request to delete UserMails : {}", id);
         userMailsRepository.deleteById(id);
     }
+
+    /**
+     * Delete all mails related to the user
+     *
+     * @param user
+     */
+    public void deleteAllByUser(User user) {
+        log.debug("Request to delete all UserMails related to user: {}", user);
+        userMailsRepository.deleteAllByUser(user);
+    }
 }

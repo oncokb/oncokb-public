@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service.impl;
 
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.service.UserDetailsService;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
@@ -64,6 +65,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public void delete(Long id) {
         log.debug("Request to delete UserDetails : {}", id);
         userDetailsRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteByUser(User user) {
+        log.debug("Request to delete UserDetails by user : {}", user);
+        userDetailsRepository.deleteByUser(user);
     }
 
     @Override

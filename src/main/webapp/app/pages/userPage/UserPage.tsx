@@ -19,6 +19,7 @@ import {
   LicenseType,
   NOT_CHANGEABLE_AUTHORITIES,
   PAGE_ROUTE,
+  REDIRECT_TIMEOUT_MILLISECONDS,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
   USER_AUTHORITIES,
 } from 'app/config/constants';
@@ -102,6 +103,7 @@ export default class UserPage extends React.Component<IUserPage> {
   @observable getUserStatus: PromiseStatus;
   @observable showTrialAccountModal = false;
   @observable showTrialAccountConfirmModal = false;
+  @observable showDeleteAccountConfirmModal = false;
 
   readonly reactions: IReactionDisposer[] = [];
 
@@ -381,6 +383,22 @@ export default class UserPage extends React.Component<IUserPage> {
   onConfirmInitiateTrialAccountButton() {
     this.showTrialAccountConfirmModal = false;
     this.generateTrialActivationKey();
+  }
+
+  @autobind
+  onConfirmDeleteAccountButton() {
+    this.showDeleteAccountConfirmModal = false;
+    client.deleteUserUsingDELETE({ login: this.user.login }).then(
+      deletedUser => {
+        notifySuccess(
+          'Deleted account, we will redirect you to the users page.'
+        );
+        setTimeout(() => {
+          this.props.routing.history.push(PAGE_ROUTE.ADMIN_USER_DETAILS);
+        }, REDIRECT_TIMEOUT_MILLISECONDS);
+      },
+      (error: Error) => notifyError(error)
+    );
   }
 
   @computed
@@ -800,6 +818,28 @@ export default class UserPage extends React.Component<IUserPage> {
                             Email history
                           </div>
                           <EmailTable data={this.usersUserMails.result} />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col className={getSectionClassName()}>
+                          <div className={'my-2 text-danger'}>Danger Zone</div>
+                          <div>
+                            <Button
+                              variant="danger"
+                              onClick={() =>
+                                (this.showDeleteAccountConfirmModal = true)
+                              }
+                            >
+                              Delete Account
+                            </Button>
+                            <SimpleConfirmModal
+                              show={this.showDeleteAccountConfirmModal}
+                              onCancel={() =>
+                                (this.showDeleteAccountConfirmModal = false)
+                              }
+                              onConfirm={this.onConfirmDeleteAccountButton}
+                            />
+                          </div>
                         </Col>
                       </Row>
                     </div>

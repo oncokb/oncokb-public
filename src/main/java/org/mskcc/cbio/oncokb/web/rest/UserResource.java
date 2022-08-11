@@ -268,7 +268,6 @@ public class UserResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
-        // TODO: token, token_stats, user_details need to be deleted in order to delete the user
         userService.deleteUser(login);
         return ResponseEntity.ok().build();
     }

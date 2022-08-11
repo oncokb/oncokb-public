@@ -32,6 +32,7 @@ import io.github.jhipster.security.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -74,6 +75,8 @@ public class UserService {
 
     private final TokenService tokenService;
 
+    private final TokenStatsService tokenStatsService;
+
     private final TokenProvider tokenProvider;
 
     private final SlackService slackService;
@@ -82,9 +85,13 @@ public class UserService {
 
     private final MailService mailService;
 
+    private final UserMailsService userMailsService;
+
     private final CompanyDomainRepository companyDomainRepository;
 
     private final CompanyRepository companyRepository;
+
+    private final AuditEventService auditEventService;
 
     @Autowired
     private UserMapper userMapper;
@@ -102,12 +109,15 @@ public class UserService {
         AuthorityRepository authorityRepository,
         JHipsterProperties jHipsterProperties,
         TokenService tokenService,
+        TokenStatsService tokenStatsService,
         TokenProvider tokenProvider,
         CacheNameResolver cacheNameResolver,
         SlackService slackService,
         CacheManager cacheManager,
         UserDetailsService userDetailsService,
         MailService mailService,
+        UserMailsService userMailsService,
+        AuditEventService auditEventService,
         CompanyDomainRepository companyDomainRepository,
         CompanyRepository companyRepository
     ) {
@@ -117,12 +127,15 @@ public class UserService {
         this.authorityRepository = authorityRepository;
         this.jHipsterProperties = jHipsterProperties;
         this.tokenService = tokenService;
+        this.tokenStatsService = tokenStatsService;
         this.tokenProvider = tokenProvider;
         this.cacheNameResolver = cacheNameResolver;
         this.cacheManager = cacheManager;
         this.slackService = slackService;
         this.userDetailsService = userDetailsService;
         this.mailService = mailService;
+        this.userMailsService = userMailsService;
+        this.auditEventService = auditEventService;
         this.companyDomainRepository = companyDomainRepository;
         this.companyRepository = companyRepository;
     }
@@ -441,8 +454,29 @@ public class UserService {
 
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
+            // Delete all token stats
+            List<Token> tokens = tokenService.findByUser(user);
+            tokenStatsService.deleteAllByTokenIn(tokens);
+
+            // Delete all tokens
+            tokenService.deleteAllByUser(user);
+
+            // Delete user details
+            userDetailsService.deleteByUser(user);
+
+            // Delete user mails
+            userMailsService.deleteAllByUser(user);
+
             userRepository.delete(user);
             this.clearUserCaches(user);
+
+            String deletedBy = SecurityUtils.getCurrentUserLogin().orElse("");
+            Map<String, Object> eventData = new HashMap<>();
+            eventData.put("userLogin", user.getLogin());
+            eventData.put("deletedBy", deletedBy);
+            AuditEvent event = new AuditEvent(Instant.now(), deletedBy, "USER_DELETION_SUCCESS", eventData);
+            auditEventService.save(event);
+
             log.debug("Deleted User: {}", user);
         });
     }

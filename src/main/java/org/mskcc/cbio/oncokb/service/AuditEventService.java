@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.service;
 
 import io.github.jhipster.config.JHipsterProperties;
 import org.mskcc.cbio.oncokb.config.audit.AuditEventConverter;
+import org.mskcc.cbio.oncokb.repository.CustomAuditEventRepository;
 import org.mskcc.cbio.oncokb.repository.PersistenceAuditEventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +31,17 @@ public class AuditEventService {
     private final JHipsterProperties jHipsterProperties;
 
     private final PersistenceAuditEventRepository persistenceAuditEventRepository;
+    private final CustomAuditEventRepository customAuditEventRepository;
 
     private final AuditEventConverter auditEventConverter;
 
     public AuditEventService(
         PersistenceAuditEventRepository persistenceAuditEventRepository,
+        CustomAuditEventRepository customAuditEventRepository,
         AuditEventConverter auditEventConverter, JHipsterProperties jhipsterProperties) {
 
         this.persistenceAuditEventRepository = persistenceAuditEventRepository;
+        this.customAuditEventRepository = customAuditEventRepository;
         this.auditEventConverter = auditEventConverter;
         this.jHipsterProperties = jhipsterProperties;
     }
@@ -71,5 +75,9 @@ public class AuditEventService {
     public Optional<AuditEvent> find(Long id) {
         return persistenceAuditEventRepository.findById(id)
             .map(auditEventConverter::convertToAuditEvent);
+    }
+
+    public void save(AuditEvent event) {
+        customAuditEventRepository.add(event);
     }
 }
