@@ -53,8 +53,13 @@ import {
   ToggleValue,
   UsageTableColumnKey,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
-import Client from 'app/shared/api/clientInstance';
 import autobind from 'autobind-decorator';
+import {
+  emailHeader,
+  endpointHeader,
+  noPrivateEndpointHeader,
+  usageHeader,
+} from 'app/components/oncokbTable/HeaderConstants';
 
 interface MatchParams {
   id: string;
@@ -330,7 +335,7 @@ export default class CompanyPage extends React.Component<
   readonly users = remoteData<UserOverviewUsage[]>({
     await: () => [],
     invoke: async () => {
-      return await Client.userOverviewUsageGetUsingGET({
+      return await client.userOverviewUsageGetUsingGET({
         companyId: this.company.id,
       });
     },
@@ -632,101 +637,100 @@ export default class CompanyPage extends React.Component<
                           <div className={'font-weight-bold'}>
                             Company Data Usage
                           </div>
-                          <OncoKBTable
-                            data={this.users.result}
-                            columns={[
-                              {
-                                id: 'userEmail',
-                                Header: <span>Email</span>,
-                                accessor: 'userEmail',
-                                minWidth: 200,
-                                onFilter: (data: UserOverviewUsage, keyword) =>
-                                  filterByKeyword(data.userEmail, keyword),
-                              },
-                              {
-                                id: 'totalUsage',
-                                Header: <span>Total Usage</span>,
-                                minWidth: 100,
-                                accessor: 'totalUsage',
-                              },
-                              this.resourcesTypeToggleValue ===
-                              ToggleValue.ALL_RESOURCES
-                                ? {
-                                    id: 'endpoint',
-                                    Header: (
-                                      <span>Most frequently used endpoint</span>
-                                    ),
-                                    minWidth: 200,
-                                    accessor: 'endpoint',
-                                    onFilter: (
-                                      data: UserOverviewUsage,
-                                      keyword
-                                    ) =>
-                                      filterByKeyword(data.endpoint, keyword),
-                                  }
-                                : {
-                                    id: 'noPrivateEndpoint',
-                                    Header: (
-                                      <span>
-                                        Most frequently used endpoint(only
-                                        public)
-                                      </span>
-                                    ),
-                                    minWidth: 200,
-                                    accessor: 'noPrivateEndpoint',
-                                    onFilter: (
-                                      data: UserOverviewUsage,
-                                      keyword
-                                    ) =>
-                                      filterByKeyword(
-                                        data.noPrivateEndpoint,
-                                        keyword
-                                      ),
-                                  },
-                              {
-                                ...getUsageTableColumnDefinition(
-                                  UsageTableColumnKey.OPERATION
-                                ),
-                                sortable: false,
-                                className: 'd-flex justify-content-center',
-                                Cell(props: { original: UserOverviewUsage }) {
-                                  return (
-                                    <Link
-                                      to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
-                                    >
-                                      <i className="fa fa-info-circle"></i>
-                                    </Link>
-                                  );
+                          <div className="mt-2">
+                            <OncoKBTable
+                              data={this.users.result}
+                              columns={[
+                                {
+                                  id: 'userEmail',
+                                  Header: emailHeader,
+                                  accessor: 'userEmail',
+                                  minWidth: 200,
+                                  onFilter: (
+                                    data: UserOverviewUsage,
+                                    keyword
+                                  ) => filterByKeyword(data.userEmail, keyword),
                                 },
-                              },
-                            ]}
-                            loading={this.users.isComplete ? false : true}
-                            defaultSorted={[
-                              {
-                                id: 'totalUsage',
-                                desc: true,
-                              },
-                            ]}
-                            showPagination={true}
-                            minRows={1}
-                            pageSize={5}
-                            filters={() => {
-                              return (
-                                <Row>
-                                  <UsageToggleGroup
-                                    defaultValue={this.resourcesTypeToggleValue}
-                                    toggleValues={[
-                                      ToggleValue.ALL_RESOURCES,
-                                      ToggleValue.PUBLIC_RESOURCES,
-                                    ]}
-                                    handleToggle={
-                                      this.handleResourcesTypeToggleChange
+                                {
+                                  id: 'totalUsage',
+                                  Header: usageHeader,
+                                  minWidth: 100,
+                                  accessor: 'totalUsage',
+                                },
+                                this.resourcesTypeToggleValue ===
+                                ToggleValue.ALL_RESOURCES
+                                  ? {
+                                      id: 'endpoint',
+                                      Header: endpointHeader,
+                                      minWidth: 200,
+                                      accessor: 'endpoint',
+                                      onFilter: (
+                                        data: UserOverviewUsage,
+                                        keyword
+                                      ) =>
+                                        filterByKeyword(data.endpoint, keyword),
                                     }
-                                  />
-                                </Row>
-                              );
-                            }}
-                          />
+                                  : {
+                                      id: 'noPrivateEndpoint',
+                                      Header: noPrivateEndpointHeader,
+                                      minWidth: 200,
+                                      accessor: 'noPrivateEndpoint',
+                                      onFilter: (
+                                        data: UserOverviewUsage,
+                                        keyword
+                                      ) =>
+                                        filterByKeyword(
+                                          data.noPrivateEndpoint,
+                                          keyword
+                                        ),
+                                    },
+                                {
+                                  ...getUsageTableColumnDefinition(
+                                    UsageTableColumnKey.OPERATION
+                                  ),
+                                  sortable: false,
+                                  className: 'd-flex justify-content-center',
+                                  Cell(props: { original: UserOverviewUsage }) {
+                                    return (
+                                      <Link
+                                        to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
+                                      >
+                                        <i className="fa fa-info-circle"></i>
+                                      </Link>
+                                    );
+                                  },
+                                },
+                              ]}
+                              loading={this.users.isPending}
+                              defaultSorted={[
+                                {
+                                  id: 'totalUsage',
+                                  desc: true,
+                                },
+                              ]}
+                              showPagination={true}
+                              minRows={1}
+                              pageSize={5}
+                              filters={() => {
+                                return (
+                                  <Row>
+                                    <UsageToggleGroup
+                                      defaultValue={
+                                        this.resourcesTypeToggleValue
+                                      }
+                                      toggleValues={[
+                                        ToggleValue.ALL_RESOURCES,
+                                        ToggleValue.PUBLIC_RESOURCES,
+                                      ]}
+                                      handleToggle={
+                                        this.handleResourcesTypeToggleChange
+                                      }
+                                    />
+                                  </Row>
+                                );
+                              }}
+                            />
+                          </div>
                         </Col>
                       </Row>
                       <Row className={getSectionClassName()}>

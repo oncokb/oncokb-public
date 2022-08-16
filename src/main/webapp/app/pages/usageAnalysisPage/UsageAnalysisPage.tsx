@@ -8,7 +8,7 @@ import {
 import { inject, observer } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
 import React from 'react';
-import Client from 'app/shared/api/clientInstance';
+import client from 'app/shared/api/clientInstance';
 import { match } from 'react-router';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
@@ -31,6 +31,16 @@ import { remoteData } from 'cbioportal-frontend-commons';
 import * as QueryString from 'query-string';
 import { UsageToggleGroup } from './UsageToggleGroup';
 import { TableCellRenderer } from 'react-table';
+import {
+  emailHeader,
+  endpointHeader,
+  noPrivateEndpointHeader,
+  operationHeader,
+  resourceHeader,
+  timeHeader,
+  usageHeader,
+  filterDependentResourceHeader,
+} from 'app/components/oncokbTable/HeaderConstants';
 
 export type UsageRecord = {
   resource: string;
@@ -78,28 +88,28 @@ export function getUsageTableColumnDefinition(
     case UsageTableColumnKey.RESOURCES:
       return {
         id: UsageTableColumnKey.RESOURCES,
-        Header: <span> Resource </span>,
+        Header: resourceHeader,
         accessor: UsageTableColumnKey.RESOURCES,
         minWidth: 200,
       };
     case UsageTableColumnKey.USAGE:
       return {
         id: UsageTableColumnKey.USAGE,
-        Header: <span>Usage</span>,
+        Header: usageHeader,
         minWidth: 100,
         accessor: UsageTableColumnKey.USAGE,
       };
     case UsageTableColumnKey.TIME:
       return {
         id: UsageTableColumnKey.TIME,
-        Header: <span> Time </span>,
+        Header: timeHeader,
         minWidth: 100,
         accessor: UsageTableColumnKey.TIME,
       };
     case UsageTableColumnKey.OPERATION:
       return {
         id: UsageTableColumnKey.OPERATION,
-        Header: <span>Details</span>,
+        Header: operationHeader,
         maxWidth: 61,
         accessor: UsageTableColumnKey.OPERATION,
       };
@@ -154,7 +164,7 @@ export default class UsageAnalysisPage extends React.Component<{
   readonly users = remoteData<UserOverviewUsage[]>({
     await: () => [],
     async invoke() {
-      return await Client.userOverviewUsageGetUsingGET({});
+      return await client.userOverviewUsageGetUsingGET({});
     },
     default: [],
   });
@@ -162,7 +172,7 @@ export default class UsageAnalysisPage extends React.Component<{
   readonly usageDetail = remoteData<Map<string, UsageRecord[]>>({
     await: () => [],
     invoke: async () => {
-      const resource = await Client.resourceUsageGetUsingGET({});
+      const resource = await client.resourceUsageGetUsingGET({});
       const result = new Map<string, UsageRecord[]>();
       const yearSummary = resource.year;
       const yearUsage: UsageRecord[] = [];
@@ -257,7 +267,7 @@ export default class UsageAnalysisPage extends React.Component<{
                 columns={[
                   {
                     id: 'userEmail',
-                    Header: <span>Email</span>,
+                    Header: emailHeader,
                     accessor: 'userEmail',
                     minWidth: 200,
                     onFilter: (data: UserOverviewUsage, keyword) =>
@@ -265,7 +275,7 @@ export default class UsageAnalysisPage extends React.Component<{
                   },
                   {
                     id: 'totalUsage',
-                    Header: <span>Total Usage</span>,
+                    Header: usageHeader,
                     minWidth: 100,
                     accessor: 'totalUsage',
                   },
@@ -273,7 +283,7 @@ export default class UsageAnalysisPage extends React.Component<{
                   ToggleValue.ALL_RESOURCES
                     ? {
                         id: 'endpoint',
-                        Header: <span>Most frequently used endpoint</span>,
+                        Header: endpointHeader,
                         minWidth: 200,
                         accessor: 'endpoint',
                         onFilter: (data: UserOverviewUsage, keyword) =>
@@ -281,11 +291,7 @@ export default class UsageAnalysisPage extends React.Component<{
                       }
                     : {
                         id: 'noPrivateEndpoint',
-                        Header: (
-                          <span>
-                            Most frequently used endpoint(only public)
-                          </span>
-                        ),
+                        Header: noPrivateEndpointHeader,
                         minWidth: 200,
                         accessor: 'noPrivateEndpoint',
                         onFilter: (data: UserOverviewUsage, keyword) =>
@@ -308,7 +314,7 @@ export default class UsageAnalysisPage extends React.Component<{
                     },
                   },
                 ]}
-                loading={this.users.isComplete ? false : true}
+                loading={this.users.isPending}
                 defaultSorted={[
                   {
                     id: 'totalUsage',
@@ -353,14 +359,8 @@ export default class UsageAnalysisPage extends React.Component<{
                     ...getUsageTableColumnDefinition(
                       UsageTableColumnKey.RESOURCES
                     ),
-                    Header: (
-                      <span>
-                        Resource{' '}
-                        {this.resourceTabResourcesTypeToggleValue ===
-                        ToggleValue.ALL_RESOURCES
-                          ? null
-                          : '(only public)'}
-                      </span>
+                    Header: filterDependentResourceHeader(
+                      this.resourceTabResourcesTypeToggleValue
                     ),
                     onFilter: (data: UsageRecord, keyword) =>
                       filterByKeyword(data.resource, keyword),

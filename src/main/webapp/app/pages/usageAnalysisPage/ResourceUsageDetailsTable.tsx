@@ -17,6 +17,10 @@ import {
   USAGE_ALL_TIME_KEY,
 } from 'app/config/constants';
 import { UsageToggleGroup } from './UsageToggleGroup';
+import {
+  emailHeader,
+  filterDependentTimeHeader,
+} from 'app/components/oncokbTable/HeaderConstants';
 
 type IResourceUsageDetailsTable = {
   data: Map<string, UsageRecord[]>;
@@ -49,20 +53,14 @@ export default class ResourceUsageDetailsTable extends React.Component<
           columns={[
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
-              Header: <span>User</span>,
+              Header: emailHeader,
               onFilter: (data: UsageRecord, keyword) =>
                 filterByKeyword(data.resource, keyword),
             },
             { ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE) },
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
-              Header: (
-                <span>
-                  {this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
-                    ? 'Duration'
-                    : 'Time'}
-                </span>
-              ),
+              Header: filterDependentTimeHeader(this.timeTypeToggleValue),
               onFilter: (data: UsageRecord, keyword) =>
                 filterByKeyword(data.time, keyword),
             },

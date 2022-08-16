@@ -61,9 +61,7 @@ export const EmailTable: React.FunctionComponent<EmailTableProps> = tableProps =
       columns={columns}
       showPagination={true}
       minRows={1}
-      pageSize={
-        tableProps.pageSize === undefined ? undefined : tableProps.pageSize
-      }
+      pageSize={tableProps.pageSize}
     />
   );
 };

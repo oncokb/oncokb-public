@@ -74,7 +74,6 @@ import {
   ToggleValue,
   UsageRecord,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
-import Client from 'app/shared/api/clientInstance';
 import UserUsageDetailsTable from 'app/pages/usageAnalysisPage/UserUsageDetailsTable';
 
 export enum AccountStatus {
@@ -146,16 +145,16 @@ export default class UserPage extends React.Component<IUserPage> {
   readonly usageDetail = remoteData<Map<string, UsageRecord[]>>({
     await: () => [],
     invoke: async () => {
-      this.userUsage = await Client.userUsageGetUsingGET({
+      this.userUsage = await client.userUsageGetUsingGET({
         userId: this.user.id.toString(),
       });
       const result = new Map<string, UsageRecord[]>();
       const yearSummary = this.userUsage.summary.year;
       const yearUsage: UsageRecord[] = [];
-      Object.keys(yearSummary).forEach(key => {
+      Object.keys(yearSummary).forEach(resourceEntry => {
         yearUsage.push({
-          resource: key,
-          usage: yearSummary[key],
+          resource: resourceEntry,
+          usage: yearSummary[resourceEntry],
           time: USAGE_ALL_TIME_VALUE,
         });
       });
@@ -163,23 +162,27 @@ export default class UserPage extends React.Component<IUserPage> {
 
       const monthSummary = this.userUsage.summary.month;
       const detailSummary: UsageRecord[] = [];
-      Object.keys(monthSummary).forEach(key => {
-        const month = monthSummary[key];
-        Object.keys(month).forEach(key2 => {
-          detailSummary.push({ resource: key2, usage: month[key2], time: key });
+      Object.keys(monthSummary).forEach(month => {
+        const monthUsage = monthSummary[month];
+        Object.keys(monthUsage).forEach(resourceEntry => {
+          detailSummary.push({
+            resource: resourceEntry,
+            usage: monthUsage[resourceEntry],
+            time: month,
+          });
         });
       });
       result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
 
       const daySummary = this.userUsage.summary.day;
       const dayDetailSummary: UsageRecord[] = [];
-      Object.keys(daySummary).forEach(key => {
-        const day = daySummary[key];
-        Object.keys(day).forEach(key2 => {
+      Object.keys(daySummary).forEach(day => {
+        const dayUsage = daySummary[day];
+        Object.keys(dayUsage).forEach(resourceEntry => {
           dayDetailSummary.push({
-            resource: key2,
-            usage: day[key2],
-            time: key,
+            resource: resourceEntry,
+            usage: dayUsage[resourceEntry],
+            time: day,
           });
         });
       });

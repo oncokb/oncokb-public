@@ -23,6 +23,10 @@ import {
 import { UsageToggleGroup } from './UsageToggleGroup';
 import { UsageAnalysisCalendarButton } from 'app/components/calendarButton/UsageAnalysisCalendarButton';
 import moment from 'moment';
+import {
+  filterDependentResourceHeader,
+  filterDependentTimeHeader,
+} from 'app/components/oncokbTable/HeaderConstants';
 
 type IUserUsageDetailsTable = {
   data: Map<string, UsageRecord[]>;
@@ -64,20 +68,22 @@ export default class UserUsageDetailsTable extends React.Component<
         ? USAGE_DETAIL_TIME_KEY
         : USAGE_DAY_DETAIL_TIME_KEY
     );
-    if (this.filterToggled && data) {
+    if (
+      this.filterToggled &&
+      data &&
+      this.timeTypeToggleValue !== ToggleValue.RESULTS_IN_TOTAL
+    ) {
+      let tableFormat: string;
       if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH) {
-        data = data.filter(resource => {
-          const fromTime = moment(this.fromDate).format(TABLE_MONTH_FORMAT);
-          const toTime = moment(this.toDate).format(TABLE_MONTH_FORMAT);
-          return resource.time >= fromTime && resource.time <= toTime;
-        });
+        tableFormat = TABLE_MONTH_FORMAT;
       } else if (this.timeTypeToggleValue === ToggleValue.RESULTS_BY_DAY) {
-        data = data.filter(resource => {
-          const fromTime = moment(this.fromDate).format(TABLE_DAY_FORMAT);
-          const toTime = moment(this.toDate).format(TABLE_DAY_FORMAT);
-          return resource.time >= fromTime && resource.time <= toTime;
-        });
+        tableFormat = TABLE_DAY_FORMAT;
       }
+      data = data.filter(resource => {
+        const fromTime = moment(this.fromDate).format(tableFormat);
+        const toTime = moment(this.toDate).format(tableFormat);
+        return resource.time >= fromTime && resource.time <= toTime;
+      });
     }
     if (this.resourcesTypeToggleValue === ToggleValue.ALL_RESOURCES) {
       return data || [];
@@ -87,31 +93,31 @@ export default class UserUsageDetailsTable extends React.Component<
           return !usage.resource.includes('/private/');
         }) || []
       );
-    } else {
+    } else if (this.resourcesTypeToggleValue === ToggleValue.CUMULATIVE_USAGE) {
       if (data) {
-        const cumulativeData: UsageRecord[] = [];
+        const cumulativeData: Map<string, UsageRecord> = new Map<
+          string,
+          UsageRecord
+        >();
         data.forEach(resource => {
-          if (
-            !cumulativeData.find(timeRange => timeRange.time === resource.time)
-          ) {
-            cumulativeData.push({
+          if (!cumulativeData.has(resource.time)) {
+            cumulativeData.set(resource.time, {
               resource: 'ALL',
               usage: 0,
               time: resource.time,
             });
           }
-          const resourceTimeRange = cumulativeData.find(
-            timeRange => timeRange.time === resource.time
-          );
+          const resourceTimeRange = cumulativeData.get(resource.time);
           if (resourceTimeRange) {
             resourceTimeRange.usage += resource.usage;
           }
         });
-        return cumulativeData;
+        return Array.from(cumulativeData.values()) || [];
       } else {
         return [];
       }
     }
+    return [];
   }
 
   render() {
@@ -122,28 +128,14 @@ export default class UserUsageDetailsTable extends React.Component<
           columns={[
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
-              Header: (
-                <span>
-                  Resource{' '}
-                  {this.resourcesTypeToggleValue ===
-                  ToggleValue.PUBLIC_RESOURCES
-                    ? '(only public)'
-                    : null}
-                </span>
-              ),
+              Header: filterDependentResourceHeader(this.timeTypeToggleValue),
               onFilter: (data: UsageRecord, keyword) =>
                 filterByKeyword(data.resource, keyword),
             },
             { ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE) },
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
-              Header: (
-                <span>
-                  {this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
-                    ? 'Duration'
-                    : 'Time'}
-                </span>
-              ),
+              Header: filterDependentTimeHeader(this.timeTypeToggleValue),
               onFilter: (data: UsageRecord, keyword) =>
                 filterByKeyword(data.time, keyword),
             },
@@ -161,9 +153,7 @@ export default class UserUsageDetailsTable extends React.Component<
           ]}
           showPagination={true}
           minRows={1}
-          pageSize={
-            this.props.pageSize === undefined ? undefined : this.props.pageSize
-          }
+          pageSize={this.props.pageSize}
           filters={() => {
             return (
               <Row>
