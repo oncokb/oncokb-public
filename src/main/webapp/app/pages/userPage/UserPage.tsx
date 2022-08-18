@@ -149,44 +149,46 @@ export default class UserPage extends React.Component<IUserPage> {
         userId: this.user.id.toString(),
       });
       const result = new Map<string, UsageRecord[]>();
-      const yearSummary = this.userUsage.summary.year;
-      const yearUsage: UsageRecord[] = [];
-      Object.keys(yearSummary).forEach(resourceEntry => {
-        yearUsage.push({
-          resource: resourceEntry,
-          usage: yearSummary[resourceEntry],
-          time: USAGE_ALL_TIME_VALUE,
-        });
-      });
-      result.set(USAGE_ALL_TIME_KEY, yearUsage);
-
-      const monthSummary = this.userUsage.summary.month;
-      const detailSummary: UsageRecord[] = [];
-      Object.keys(monthSummary).forEach(month => {
-        const monthUsage = monthSummary[month];
-        Object.keys(monthUsage).forEach(resourceEntry => {
-          detailSummary.push({
+      if (this.userUsage.summary !== null) {
+        const yearSummary = this.userUsage.summary.year;
+        const yearUsage: UsageRecord[] = [];
+        Object.keys(yearSummary).forEach(resourceEntry => {
+          yearUsage.push({
             resource: resourceEntry,
-            usage: monthUsage[resourceEntry],
-            time: month,
+            usage: yearSummary[resourceEntry],
+            time: USAGE_ALL_TIME_VALUE,
           });
         });
-      });
-      result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
+        result.set(USAGE_ALL_TIME_KEY, yearUsage);
 
-      const daySummary = this.userUsage.summary.day;
-      const dayDetailSummary: UsageRecord[] = [];
-      Object.keys(daySummary).forEach(day => {
-        const dayUsage = daySummary[day];
-        Object.keys(dayUsage).forEach(resourceEntry => {
-          dayDetailSummary.push({
-            resource: resourceEntry,
-            usage: dayUsage[resourceEntry],
-            time: day,
+        const monthSummary = this.userUsage.summary.month;
+        const detailSummary: UsageRecord[] = [];
+        Object.keys(monthSummary).forEach(month => {
+          const monthUsage = monthSummary[month];
+          Object.keys(monthUsage).forEach(resourceEntry => {
+            detailSummary.push({
+              resource: resourceEntry,
+              usage: monthUsage[resourceEntry],
+              time: month,
+            });
           });
         });
-      });
-      result.set(USAGE_DAY_DETAIL_TIME_KEY, dayDetailSummary);
+        result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
+
+        const daySummary = this.userUsage.summary.day;
+        const dayDetailSummary: UsageRecord[] = [];
+        Object.keys(daySummary).forEach(day => {
+          const dayUsage = daySummary[day];
+          Object.keys(dayUsage).forEach(resourceEntry => {
+            dayDetailSummary.push({
+              resource: resourceEntry,
+              usage: dayUsage[resourceEntry],
+              time: day,
+            });
+          });
+        });
+        result.set(USAGE_DAY_DETAIL_TIME_KEY, dayDetailSummary);
+      }
       return Promise.resolve(result);
     },
     default: new Map(),

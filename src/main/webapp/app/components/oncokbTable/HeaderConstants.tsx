@@ -1,34 +1,27 @@
 import React from 'react';
 import { ToggleValue } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 
-export const emailHeader = <span>Email</span>;
-export const usageHeader = <span>Usage</span>;
-export const resourceHeader = <span>Resource</span>;
-export const endpointHeader = <span>Most frequently used endpoint</span>;
-export const noPrivateEndpointHeader = (
-  <span>Most frequently used endpoint(only public)</span>
-);
-export const timeHeader = <span>Time</span>;
-export const operationHeader = <span>Details</span>;
+export const emailHeader = 'Email';
+export const usageHeader = 'Usage';
+export const resourceHeader = 'Resource';
+export const endpointHeader = 'Most frequently used endpoint';
+export const noPrivateEndpointHeader =
+  'Most frequently used endpoint (only public)';
+export const timeHeader = 'Time';
+export const operationHeader = 'Details';
 
 export const filterDependentTimeHeader = (timeTypeToggleValue: ToggleValue) => {
-  return (
-    <span>
-      {timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
-        ? 'Duration'
-        : 'Time'}
-    </span>
-  );
+  return timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
+    ? 'Duration'
+    : 'Time';
 };
 export const filterDependentResourceHeader = (
   resourcesTypeToggleValue: ToggleValue
 ) => {
   return (
-    <span>
-      Resource{' '}
-      {resourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES
-        ? '(only public)'
-        : null}
-    </span>
+    'Resource' +
+    (resourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES
+      ? ' (only public)'
+      : '')
   );
 };

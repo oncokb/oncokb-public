@@ -47,6 +47,7 @@ export default class UserUsageDetailsTable extends React.Component<
   @observable fromDate: string | undefined;
   @observable toDate: string | undefined;
   @observable filterToggled: boolean;
+  @observable dropdownMenuOpen: boolean;
 
   @autobind
   @action
@@ -140,7 +141,7 @@ export default class UserUsageDetailsTable extends React.Component<
                 filterByKeyword(data.time, keyword),
             },
           ]}
-          loading={this.props.loadedData ? false : true}
+          loading={!this.props.loadedData}
           defaultSorted={[
             {
               id: UsageTableColumnKey.TIME,
@@ -181,6 +182,11 @@ export default class UserUsageDetailsTable extends React.Component<
                   )}
                   currentFromDate={this.fromDate}
                   currentToDate={this.toDate}
+                  currentToggleState={this.filterToggled}
+                  currentMenuState={this.dropdownMenuOpen}
+                  menuState={(isOpen: boolean) => {
+                    this.dropdownMenuOpen = isOpen;
+                  }}
                   fromDate={(newDate: string) => {
                     this.fromDate = newDate;
                   }}

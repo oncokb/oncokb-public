@@ -72,48 +72,54 @@ public class UsageAnalysisController {
 
         HttpStatus status = HttpStatus.OK;
 
-        int year = TimeUtil.getCurrentNYTime().getYear();
-        JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
-        List<JSONObject> monthSummaries = new LinkedList<>();
-        int monthsBack = 0;
-        JSONObject monthSummary;
-        do {
-            String month = TimeUtil.getCurrentNYTime().minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
-            monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
-            if (monthSummary != null) {
-                monthSummaries.add(monthSummary);
-            }
-            monthsBack++;
-        } while (monthsBack < 12);
+        if (userId != null) {
+            int year = TimeUtil.getCurrentNYTime().getYear();
+            JSONObject yearSummary = requestData(YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
+            List<JSONObject> monthSummaries = new LinkedList<>();
+            int monthsBack = 0;
+            JSONObject monthSummary;
+            do {
+                String month = TimeUtil.getCurrentNYTime().minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
+                monthSummary = requestData(MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
+                if (monthSummary != null) {
+                    monthSummaries.add(monthSummary);
+                }
+                monthsBack++;
+            } while (monthsBack < 12);
 
-        Long id = Long.parseLong(userId);
-        Optional<User> user = userService.getUserById(id);
-        String email = user.map(User::getEmail).orElse(null);
+            Long id = Long.parseLong(userId);
+            Optional<User> user = userService.getUserById(id);
+            String email = user.map(User::getEmail).orElse(null);
 
-        if (yearSummary != null && yearSummary.containsKey(email)){
-            JSONObject yearUsageObject = (JSONObject) yearSummary.get(email);
-            Gson gson = new Gson();
-            UsageSummary usageSummary = gson.fromJson(yearUsageObject.toString(), UsageSummary.class);
-            Map<String, JSONObject> dayUsage = new HashMap<>();
-            if (!monthSummaries.isEmpty()) {
-                for (JSONObject month : monthSummaries) {
-                    if (month.containsKey(email)) {
-                        JSONObject monthUsageObject = (JSONObject) month.get(email);
-                        JSONObject dayUsageObject = (JSONObject) monthUsageObject.get("day");
-                        dayUsageObject.forEach((key, value) -> dayUsage.put((String) key, (JSONObject) value));
+            if (yearSummary != null){
+                UsageSummary usageSummary = new UsageSummary();
+                if (yearSummary.containsKey(email)) {
+                    JSONObject yearUsageObject = (JSONObject) yearSummary.get(email);
+                    Gson gson = new Gson();
+                    usageSummary = gson.fromJson(yearUsageObject.toString(), UsageSummary.class);
+                    Map<String, JSONObject> dayUsage = new HashMap<>();
+                    if (!monthSummaries.isEmpty()) {
+                        for (JSONObject month : monthSummaries) {
+                            if (month.containsKey(email)) {
+                                JSONObject monthUsageObject = (JSONObject) month.get(email);
+                                JSONObject dayUsageObject = (JSONObject) monthUsageObject.get("day");
+                                dayUsageObject.forEach((key, value) -> dayUsage.put((String) key, (JSONObject) value));
+                            }
+                        }
+                        usageSummary.setDay(dayUsage);
                     }
                 }
-                usageSummary.setDay(dayUsage);
+
+                UserUsage userUsage = new UserUsage();
+                userUsage.setUserFirstName(user.get().getFirstName());
+                userUsage.setUserLastName(user.get().getLastName());
+                userUsage.setUserEmail(email);
+                userUsage.setLicenseType(Objects.nonNull(userMapper.userToUserDTO(user.get()).getLicenseType()) ? userMapper.userToUserDTO(user.get()).getLicenseType().getName() : null);
+                userUsage.setJobTitle(userMapper.userToUserDTO(user.get()).getJobTitle());
+                userUsage.setCompany(userMapper.userToUserDTO(user.get()).getCompanyName());
+                userUsage.setSummary(usageSummary);
+                return new ResponseEntity<UserUsage>(userUsage, status);
             }
-            UserUsage userUsage = new UserUsage();
-            userUsage.setUserFirstName(user.get().getFirstName());
-            userUsage.setUserLastName(user.get().getLastName());
-            userUsage.setUserEmail(email);
-            userUsage.setLicenseType(Objects.nonNull(userMapper.userToUserDTO(user.get()).getLicenseType()) ? userMapper.userToUserDTO(user.get()).getLicenseType().getName() : null);
-            userUsage.setJobTitle(userMapper.userToUserDTO(user.get()).getJobTitle());
-            userUsage.setCompany(userMapper.userToUserDTO(user.get()).getCompanyName());
-            userUsage.setSummary(usageSummary);
-            return new ResponseEntity<UserUsage>(userUsage, status);
         }
 
         return new ResponseEntity<UserUsage>(new UserUsage(), status);
