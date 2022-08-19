@@ -8,13 +8,10 @@ import moment from 'moment';
 import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
-import pluralize from 'pluralize';
 
 type CalendarButtonProps = {
-  currentDate: string | undefined;
   currentFromDate: string | undefined;
   currentToDate: string | undefined;
-  currentToggleState: boolean;
   currentMenuState: boolean;
   menuState: (isOpen: boolean) => void;
   fromDate: (newDate: string) => void;
@@ -26,6 +23,11 @@ const DATE_PLACEHOLDER = 'Select Date';
 
 export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButtonProps> = props => {
   const [open, isOpen] = useState(props.currentMenuState);
+  const currentToggleState: boolean =
+    props.currentFromDate !== undefined &&
+    props.currentFromDate !== DATE_PLACEHOLDER &&
+    props.currentToDate !== undefined &&
+    props.currentToDate !== DATE_PLACEHOLDER;
 
   function handleFromDayChange(day: Date) {
     props.fromDate(day.toISOString());
@@ -41,6 +43,12 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
   function handleToDayChange(day: Date) {
     props.toDate(day.toISOString());
     props.filterToggled(true);
+    if (
+      props.currentFromDate === undefined ||
+      props.currentFromDate === DATE_PLACEHOLDER
+    ) {
+      props.fromDate(day.toISOString());
+    }
   }
 
   function handleResetDays() {
@@ -63,7 +71,7 @@ export const UsageAnalysisCalendarButton: React.FunctionComponent<CalendarButton
         show={open}
       >
         <Dropdown.Toggle
-          className={props.currentToggleState ? 'active' : ''}
+          className={currentToggleState ? 'active' : ''}
           onClick={handleOnClick}
         >
           <i className={classnames('fa fa-calendar')} />

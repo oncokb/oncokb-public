@@ -177,12 +177,8 @@ export default class UserUsageDetailsTable extends React.Component<
                   handleToggle={this.handleTimeTypeToggleChange}
                 />
                 <UsageAnalysisCalendarButton
-                  currentDate={moment().format(
-                    APP_LOCAL_DATETIME_FORMAT_Z_FORCE
-                  )}
                   currentFromDate={this.fromDate}
                   currentToDate={this.toDate}
-                  currentToggleState={this.filterToggled}
                   currentMenuState={this.dropdownMenuOpen}
                   menuState={(isOpen: boolean) => {
                     this.dropdownMenuOpen = isOpen;
