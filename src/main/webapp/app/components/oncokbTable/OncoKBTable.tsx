@@ -16,6 +16,7 @@ interface ITableWithSearchBox<T> extends Partial<TableProps<T>> {
   minRows?: number;
   columns: SearchColumn<T>[];
   loading?: boolean;
+  filters?: React.FunctionComponent;
 }
 
 @observer
@@ -50,17 +51,34 @@ export default class OncoKBTable<T> extends React.Component<
   render() {
     return (
       <div>
-        {this.props.disableSearch ? undefined : (
-          <div className="d-flex">
-            <div className="ml-auto">
-              <input
-                onChange={(event: any) => {
-                  this.searchKeyword = event.target.value.toLowerCase();
-                }}
-                className="form-control input-sm"
-                type="text"
-                placeholder="Search ..."
-              />
+        {this.props.filters === undefined && this.props.disableSearch ? (
+          <></>
+        ) : (
+          <div className="row">
+            <div className="col-auto">
+              {this.props.filters === undefined ? (
+                <></>
+              ) : (
+                <this.props.filters />
+              )}
+            </div>
+            <div className="col-sm">
+              {this.props.disableSearch ? (
+                <></>
+              ) : (
+                <div className="d-flex">
+                  <div className="ml-auto">
+                    <input
+                      onChange={(event: any) => {
+                        this.searchKeyword = event.target.value.toLowerCase();
+                      }}
+                      className="form-control input-sm"
+                      type="text"
+                      placeholder="Search ..."
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}

@@ -14,9 +14,13 @@ import {
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import {
   USAGE_DETAIL_TIME_KEY,
-  USGAE_ALL_TIME_KEY,
+  USAGE_ALL_TIME_KEY,
 } from 'app/config/constants';
 import { UsageToggleGroup } from './UsageToggleGroup';
+import {
+  emailHeader,
+  filterDependentTimeHeader,
+} from 'app/components/oncokbTable/HeaderConstants';
 
 type IResourceUsageDetailsTable = {
   data: Map<string, UsageRecord[]>;
@@ -40,39 +44,23 @@ export default class ResourceUsageDetailsTable extends React.Component<
   render() {
     return (
       <>
-        <Row className="mt-2">
-          <UsageToggleGroup
-            defaultValue={this.timeTypeToggleValue}
-            toggleValues={[
-              ToggleValue.RESULTS_IN_TOTAL,
-              ToggleValue.RESULTS_BY_MONTH,
-            ]}
-            handleToggle={this.handleTimeTypeToggleChange}
-          />
-        </Row>
         <OncoKBTable
           data={
             this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
-              ? this.props.data.get(USGAE_ALL_TIME_KEY) || []
+              ? this.props.data.get(USAGE_ALL_TIME_KEY) || []
               : this.props.data.get(USAGE_DETAIL_TIME_KEY) || []
           }
           columns={[
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.RESOURCES),
-              Header: <span>User</span>,
+              Header: emailHeader,
               onFilter: (data: UsageRecord, keyword) =>
                 filterByKeyword(data.resource, keyword),
             },
             { ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE) },
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
-              Header: (
-                <span>
-                  {this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
-                    ? 'Duration'
-                    : 'Time'}
-                </span>
-              ),
+              Header: filterDependentTimeHeader(this.timeTypeToggleValue),
               onFilter: (data: UsageRecord, keyword) =>
                 filterByKeyword(data.time, keyword),
             },
@@ -90,6 +78,20 @@ export default class ResourceUsageDetailsTable extends React.Component<
           ]}
           showPagination={true}
           minRows={1}
+          filters={() => {
+            return (
+              <Row>
+                <UsageToggleGroup
+                  defaultValue={this.timeTypeToggleValue}
+                  toggleValues={[
+                    ToggleValue.RESULTS_IN_TOTAL,
+                    ToggleValue.RESULTS_BY_MONTH,
+                  ]}
+                  handleToggle={this.handleTimeTypeToggleChange}
+                />
+              </Row>
+            );
+          }}
         />
       </>
     );

@@ -528,6 +528,11 @@ public class UserService {
         return userRepository.findAllByActivatedIsTrueOrderByCreatedBy(pageable).map(user -> userMapper.userToUserDTO(user));
     }
 
+    @Transactional(readOnly = true)
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findOneById(id);
+    }
+
     public Optional<UserDTO> approveUser(UserDTO userDTO, Boolean isTrial) {
         if (!userDTO.isActivated()) {
             userDTO.setActivated(true);

@@ -9,8 +9,8 @@ import { ToggleValue, UsageRecord } from './UsageAnalysisPage';
 import Client from 'app/shared/api/clientInstance';
 import {
   USAGE_DETAIL_TIME_KEY,
-  USGAE_ALL_TIME_KEY,
-  USGAE_ALL_TIME_VALUE,
+  USAGE_ALL_TIME_KEY,
+  USAGE_ALL_TIME_VALUE,
 } from 'app/config/constants';
 import ResourceUsageDetailsTable from './ResourceUsageDetailsTable';
 import { decodeResourceUsageDetailPageURL } from 'app/shared/utils/Utils';
@@ -36,21 +36,25 @@ export default class ResourceUsageDetailsPage extends React.Component<{
       const result = new Map<string, UsageRecord[]>();
       const yearSummary = this.resource.year;
       const yearUsage: UsageRecord[] = [];
-      Object.keys(yearSummary).forEach(key => {
+      Object.keys(yearSummary).forEach(resourceEntry => {
         yearUsage.push({
-          resource: key,
-          usage: yearSummary[key],
-          time: USGAE_ALL_TIME_VALUE,
+          resource: resourceEntry,
+          usage: yearSummary[resourceEntry],
+          time: USAGE_ALL_TIME_VALUE,
         });
       });
-      result.set(USGAE_ALL_TIME_KEY, yearUsage);
+      result.set(USAGE_ALL_TIME_KEY, yearUsage);
 
       const monthSummary = this.resource.month;
       const detailUsage: UsageRecord[] = [];
-      Object.keys(monthSummary).forEach(key => {
-        const month = monthSummary[key];
-        Object.keys(month).forEach(key2 => {
-          detailUsage.push({ resource: key2, usage: month[key2], time: key });
+      Object.keys(monthSummary).forEach(month => {
+        const monthUsage = monthSummary[month];
+        Object.keys(monthUsage).forEach(resourceEntry => {
+          detailUsage.push({
+            resource: resourceEntry,
+            usage: monthUsage[resourceEntry],
+            time: month,
+          });
         });
       });
       result.set(USAGE_DETAIL_TIME_KEY, detailUsage);

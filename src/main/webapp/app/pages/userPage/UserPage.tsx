@@ -21,6 +21,10 @@ import {
   PAGE_ROUTE,
   REDIRECT_TIMEOUT_MILLISECONDS,
   THRESHOLD_TRIAL_TOKEN_VALID_DEFAULT,
+  USAGE_ALL_TIME_KEY,
+  USAGE_ALL_TIME_VALUE,
+  USAGE_DAY_DETAIL_TIME_KEY,
+  USAGE_DETAIL_TIME_KEY,
   USER_AUTHORITIES,
 } from 'app/config/constants';
 import {
@@ -29,7 +33,12 @@ import {
 } from 'app/components/newAccountForm/NewAccountForm';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
-import { Token, UserDTO, UserMailsDTO } from 'app/shared/api/generated/API';
+import {
+  Token,
+  UserDTO,
+  UserMailsDTO,
+  UserUsage,
+} from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
 import {
@@ -61,6 +70,11 @@ import { SHORT_TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 import classnames from 'classnames';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
+import {
+  ToggleValue,
+  UsageRecord,
+} from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
+import UserUsageDetailsTable from 'app/pages/usageAnalysisPage/UserUsageDetailsTable';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -100,10 +114,12 @@ export default class UserPage extends React.Component<IUserPage> {
   @observable selectedEmailVerifiedStatus: EmailVerifiedStatus | undefined;
   @observable userTokens: Token[] = [];
   @observable user: UserDTO;
+  @observable userUsage: UserUsage;
   @observable getUserStatus: PromiseStatus;
   @observable showTrialAccountModal = false;
   @observable showTrialAccountConfirmModal = false;
   @observable showDeleteAccountConfirmModal = false;
+  @observable tablePageSize = 5;
 
   readonly reactions: IReactionDisposer[] = [];
 
@@ -125,6 +141,58 @@ export default class UserPage extends React.Component<IUserPage> {
   componentWillUnmount() {
     this.reactions.forEach(disposer => disposer());
   }
+
+  readonly usageDetail = remoteData<Map<string, UsageRecord[]>>({
+    await: () => [],
+    invoke: async () => {
+      this.userUsage = await client.userUsageGetUsingGET({
+        userId: this.user.id.toString(),
+      });
+      const result = new Map<string, UsageRecord[]>();
+      if (this.userUsage.summary !== null) {
+        const yearSummary = this.userUsage.summary.year;
+        const yearUsage: UsageRecord[] = [];
+        Object.keys(yearSummary).forEach(resourceEntry => {
+          yearUsage.push({
+            resource: resourceEntry,
+            usage: yearSummary[resourceEntry],
+            time: USAGE_ALL_TIME_VALUE,
+          });
+        });
+        result.set(USAGE_ALL_TIME_KEY, yearUsage);
+
+        const monthSummary = this.userUsage.summary.month;
+        const detailSummary: UsageRecord[] = [];
+        Object.keys(monthSummary).forEach(month => {
+          const monthUsage = monthSummary[month];
+          Object.keys(monthUsage).forEach(resourceEntry => {
+            detailSummary.push({
+              resource: resourceEntry,
+              usage: monthUsage[resourceEntry],
+              time: month,
+            });
+          });
+        });
+        result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
+
+        const daySummary = this.userUsage.summary.day;
+        const dayDetailSummary: UsageRecord[] = [];
+        Object.keys(daySummary).forEach(day => {
+          const dayUsage = daySummary[day];
+          Object.keys(dayUsage).forEach(resourceEntry => {
+            dayDetailSummary.push({
+              resource: resourceEntry,
+              usage: dayUsage[resourceEntry],
+              time: day,
+            });
+          });
+        });
+        result.set(USAGE_DAY_DETAIL_TIME_KEY, dayDetailSummary);
+      }
+      return Promise.resolve(result);
+    },
+    default: new Map(),
+  });
 
   readonly usersUserMails = remoteData<UserMailsDTO[]>({
     invoke: () => {
@@ -815,9 +883,26 @@ export default class UserPage extends React.Component<IUserPage> {
                       <Row>
                         <Col className={getSectionClassName()}>
                           <div className={'my-2 font-weight-bold'}>
+                            Data usage
+                          </div>
+                          <UserUsageDetailsTable
+                            data={this.usageDetail.result}
+                            loadedData={this.usageDetail.isComplete}
+                            defaultResourcesType={ToggleValue.CUMULATIVE_USAGE}
+                            defaultTimeType={ToggleValue.RESULTS_BY_MONTH}
+                            pageSize={this.tablePageSize}
+                          />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col className={getSectionClassName()}>
+                          <div className={'my-2 font-weight-bold'}>
                             Email history
                           </div>
-                          <EmailTable data={this.usersUserMails.result} />
+                          <EmailTable
+                            data={this.usersUserMails.result}
+                            pageSize={this.tablePageSize}
+                          />
                         </Col>
                       </Row>
                       <Row>

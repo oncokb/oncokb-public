@@ -47,6 +47,8 @@ export const APP_WHOLE_NUMBER_FORMAT = '0,0';
 export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
 export const NEWS_DATE_FORMAT = 'MMDDYYYY';
 export const NEWS_TITLE_DATE_FORMAT = 'MMMM D, YYYY';
+export const TABLE_MONTH_FORMAT = 'YYYY-MM';
+export const TABLE_DAY_FORMAT = 'YYYY-MM-DD';
 
 export const ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK =
   'http://groups.google.com/group/oncokb-news/boxsubscribe';
@@ -96,9 +98,10 @@ export const NOTIFICATION_TIMEOUT_MILLISECONDS = 5000;
 export const SHORTEN_TEXT_FROM_LIST_THRESHOLD = 5;
 export const TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS = 14;
 export const USAGE_TOP_USERS_LIMIT = 10000;
-export const USGAE_ALL_TIME_KEY = 'All';
-export const USGAE_ALL_TIME_VALUE = 'One year';
+export const USAGE_ALL_TIME_KEY = 'All';
+export const USAGE_ALL_TIME_VALUE = 'This year';
 export const USAGE_DETAIL_TIME_KEY = 'Detail';
+export const USAGE_DAY_DETAIL_TIME_KEY = 'Day Detail';
 
 export enum ONCOGENICITY {
   ONCOGENIC = 'Oncogenic',

@@ -3,6 +3,7 @@ package org.mskcc.cbio.oncokb.web.rest;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.domain.*;
+import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsage;
 import org.mskcc.cbio.oncokb.querydomain.UserTokenUsageWithInfo;
 import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
@@ -157,73 +158,6 @@ public class CronJobController {
     }
 
     /**
-     * {@code GET /user-usage-analysis}: Analyze user usage
-     *
-     * @throws IOException
-     */
-    @GetMapping(path = "/user-usage-analysis")
-    public void analyzeUserUsage() throws IOException {
-        log.info("User usage analysis started...");
-        List<UserTokenUsageWithInfo> tokenStats = tokenStatsService.getTokenUsageAnalysis(Instant.now().minus(365, ChronoUnit.DAYS));
-        UsageSummary resourceSummary = new UsageSummary();
-        Map<Long, UserUsage> userSummary = new HashMap<>();
-        Map<String, UsageSummary> resourceDetail = new HashMap<>();
-
-        for (UserTokenUsageWithInfo state : tokenStats) {
-            ResourceModel resource = new ResourceModel(state.getResource());
-            String endpoint = resource.getEndpoint();
-            int count = state.getCount();
-            String time = state.getTime();
-
-            // Deal with resource summary
-            calculateUsageSummary(resourceSummary, endpoint, count, time);
-
-            // Deal with user usage
-            long userId = state.getToken().getUser().getId();
-            User user = state.getToken().getUser();
-            if (!userSummary.containsKey(userId)) {
-                userSummary.put(userId, new UserUsage());
-                UserUsage currentUsage = userSummary.get(userId);
-                currentUsage.setUserFirstName(user.getFirstName());
-                currentUsage.setUserLastName(user.getLastName());
-                currentUsage.setUserEmail(user.getEmail());
-                currentUsage.setSummary(new UsageSummary());
-                Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
-                if (userDetails.isPresent()) {
-                    currentUsage.setJobTitle(userDetails.get().getJobTitle());
-                    currentUsage.setCompany(userDetails.get().getCompanyName());
-                    currentUsage.setLicenseType(userDetails.get().getLicenseType().getName());
-                }
-            }
-            UsageSummary currentUsageSummary = userSummary.get(userId).getSummary();
-            calculateUsageSummary(currentUsageSummary, endpoint, count, time);
-
-            // Deal with resource detail
-            if (!resourceDetail.containsKey(endpoint)) {
-                resourceDetail.put(endpoint, new UsageSummary());
-            }
-            String userEmail = user.getEmail();
-            calculateUsageSummary(resourceDetail.get(endpoint), userEmail, count, time);
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        File resourceResult = new File("./resourceSummary.json");
-        File userResult = new File("./userSummary.json");
-        File resourceDetailResult = new File("./resourceDetail.json");
-        mapper.writeValue(resourceResult, resourceSummary);
-        mapper.writeValue(userResult, userSummary);
-        mapper.writeValue(resourceDetailResult, resourceDetail);
-
-        s3Service.saveObject("oncokb", RESOURCES_USAGE_SUMMARY_FILE, resourceResult);
-        s3Service.saveObject("oncokb", USERS_USAGE_SUMMARY_FILE, userResult);
-        s3Service.saveObject("oncokb", RESOURCES_USAGE_DETAIL_FILE, resourceDetailResult);
-        resourceResult.delete();
-        userResult.delete();
-        resourceDetailResult.delete();
-        log.info("User usage analysis completed!");
-    }
-
-    /**
      * {@code GET /wrap-token-stats}: Wrap token stats
      *
      * @throws IOException
@@ -237,14 +171,14 @@ public class CronJobController {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String dateWrapped = dateFormat.format(dateFormat.parse(tokenUsageDateBefore.minus(1, ChronoUnit.DAYS).toString()));
-            String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateWrapped + ".zip";
+            String datedFile = TOKEN_STATS_STORAGE_FILE_PREFIX + dateWrapped + FileExtension.ZIPPED_FILE.getExtension();
             if (s3Service.getObject("oncokb", datedFile).isPresent()) {
                 log.info("Token stats have already been wrapped today. Skipping this request.");
             } else {
                 // Update tokenStats in database
                 updateTokenUsage(tokenUsageDateBefore);
                 // Send tokenStats to s3
-                s3Service.saveObject("oncokb", datedFile, createWrappedFile(tokenUsageDateBefore, dateWrapped + ".txt"));
+                s3Service.saveObject("oncokb", datedFile, createWrappedFile(tokenUsageDateBefore, dateWrapped + FileExtension.TEXT_FILE.getExtension()));
                 // Delete old tokenStats
                 tokenStatsService.clearTokenStats(tokenUsageDateBefore);
             }

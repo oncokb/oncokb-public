@@ -12,8 +12,9 @@ import { InfoRow } from '../AccountPage';
 import {
   PAGE_ROUTE,
   USAGE_DETAIL_TIME_KEY,
-  USGAE_ALL_TIME_KEY,
-  USGAE_ALL_TIME_VALUE,
+  USAGE_ALL_TIME_KEY,
+  USAGE_ALL_TIME_VALUE,
+  USAGE_DAY_DETAIL_TIME_KEY,
 } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
 import {
@@ -41,26 +42,46 @@ export default class UserUsageDetailsPage extends React.Component<{
     invoke: async () => {
       this.user = await Client.userUsageGetUsingGET({ userId: this.userId });
       const result = new Map<string, UsageRecord[]>();
-      const yearSummary = this.user.summary.year;
-      const yearUsage: UsageRecord[] = [];
-      Object.keys(yearSummary).forEach(key => {
-        yearUsage.push({
-          resource: key,
-          usage: yearSummary[key],
-          time: USGAE_ALL_TIME_VALUE,
+      if (this.user.summary !== null) {
+        const yearSummary = this.user.summary.year;
+        const yearUsage: UsageRecord[] = [];
+        Object.keys(yearSummary).forEach(resourceEntry => {
+          yearUsage.push({
+            resource: resourceEntry,
+            usage: yearSummary[resourceEntry],
+            time: USAGE_ALL_TIME_VALUE,
+          });
         });
-      });
-      result.set(USGAE_ALL_TIME_KEY, yearUsage);
+        result.set(USAGE_ALL_TIME_KEY, yearUsage);
 
-      const monthSummary = this.user.summary.month;
-      const detailSummary: UsageRecord[] = [];
-      Object.keys(monthSummary).forEach(key => {
-        const month = monthSummary[key];
-        Object.keys(month).forEach(key2 => {
-          detailSummary.push({ resource: key2, usage: month[key2], time: key });
+        const monthSummary = this.user.summary.month;
+        const detailSummary: UsageRecord[] = [];
+        Object.keys(monthSummary).forEach(month => {
+          const monthUsage = monthSummary[month];
+          Object.keys(monthUsage).forEach(resourceEntry => {
+            detailSummary.push({
+              resource: resourceEntry,
+              usage: monthUsage[resourceEntry],
+              time: month,
+            });
+          });
         });
-      });
-      result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
+        result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
+
+        const daySummary = this.user.summary.day;
+        const dayDetailSummary: UsageRecord[] = [];
+        Object.keys(daySummary).forEach(day => {
+          const dayUsage = daySummary[day];
+          Object.keys(dayUsage).forEach(resourceEntry => {
+            dayDetailSummary.push({
+              resource: resourceEntry,
+              usage: dayUsage[resourceEntry],
+              time: day,
+            });
+          });
+        });
+        result.set(USAGE_DAY_DETAIL_TIME_KEY, dayDetailSummary);
+      }
       return Promise.resolve(result);
     },
     default: new Map(),
@@ -84,7 +105,7 @@ export default class UserUsageDetailsPage extends React.Component<{
                   content={this.user.userLastName}
                 ></InfoRow>
                 <InfoRow title="Email">
-                  <Link to={`${PAGE_ROUTE.USER}/${this.user.userEmail}`}>
+                  <Link to={`/users/${this.user.userEmail}`}>
                     {this.user.userEmail}
                   </Link>
                 </InfoRow>
