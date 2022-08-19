@@ -152,6 +152,9 @@ public class SlackController {
                     case CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL:
                         mailType = MailType.CLARIFY_REGISTRATION_INFO;
                         break;
+                    case CONFIRM_SEND_LICENSE_OPTIONS_EMAIL:
+                        mailType = MailType.LICENSE_OPTIONS;
+                        break;
                     case CONFIRM_SEND_REJECTION_EMAIL:
                         mailType = MailType.REJECTION;
                         break;

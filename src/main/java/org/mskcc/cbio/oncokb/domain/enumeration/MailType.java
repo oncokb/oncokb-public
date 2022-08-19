@@ -17,6 +17,7 @@ public enum MailType {
     , CLARIFY_USE_CASE("clarifyUseCase", "Clarify - Use case unclear", null)
     , CLARIFY_DUPLICATE_USER("clarifyDuplicateUser", "Clarify - User registered multiple accounts", null)
     , CLARIFY_REGISTRATION_INFO("clarifyRegistrationInfo", "Clarify - Detailed registration info required", null)
+    , LICENSE_OPTIONS("licenseOptions", "Send license options", null)
     , REJECT_ALUMNI_ADDRESS("alumniEmailAddress", "Reject - Registered under alumni email address", null)
     , VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES("verifyEmailBeforeAccountExpires", "Verify user still owns the email address", null)
     , APPROVAL_ALIGN_LICENSE_WITH_COMPANY("approvalAlignLicenseWithCompanyEmail", "Autocorrect user license to company license", null)

@@ -21,6 +21,8 @@ public enum ActionId {
     , CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL("confirm-send-duplicate-user-clarification-email")
     , SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL("send-registration-info-clarification-email")
     , CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL("confirm-send-registration-info-clarification-email")
+    , SEND_LICENSE_OPTIONS_EMAIL("send-license-options-email")
+    , CONFIRM_SEND_LICENSE_OPTIONS_EMAIL("confirm-send-license-options-email")
     , SEND_REJECTION_EMAIL("send-rejection-email")
     , CONFIRM_SEND_REJECTION_EMAIL("confirm-send-rejection-email")
     , SEND_REJECT_ALUMNI_ADDRESS_EMAIL("send-reject-alumni-address-email")
@@ -59,6 +61,7 @@ public enum ActionId {
             || actionId == SEND_USE_CASE_CLARIFICATION_EMAIL
             || actionId == SEND_DUPLICATE_USER_CLARIFICATION_EMAIL
             || actionId == SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL
+            || actionId == SEND_LICENSE_OPTIONS_EMAIL
             || actionId == SEND_REJECTION_EMAIL
             || actionId == SEND_REJECT_ALUMNI_ADDRESS_EMAIL;
     }
@@ -72,6 +75,7 @@ public enum ActionId {
             || actionId == CONFIRM_SEND_USE_CASE_CLARIFICATION_EMAIL
             || actionId == CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL
             || actionId == CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL
+            || actionId == CONFIRM_SEND_LICENSE_OPTIONS_EMAIL
             || actionId == CONFIRM_SEND_REJECTION_EMAIL
             || actionId == CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL;
     }
@@ -85,6 +89,7 @@ public enum ActionId {
             || actionId == SEND_USE_CASE_CLARIFICATION_EMAIL
             || actionId == SEND_DUPLICATE_USER_CLARIFICATION_EMAIL
             || actionId == SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL
+            || actionId == SEND_LICENSE_OPTIONS_EMAIL
             || actionId == SEND_REJECTION_EMAIL
             || actionId == SEND_REJECT_ALUMNI_ADDRESS_EMAIL
             || actionId == GIVE_TRIAL_ACCESS
