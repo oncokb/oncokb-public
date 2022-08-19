@@ -140,6 +140,7 @@ application:
   token-usage-check:
   token-usage-check-whitelist:
   slack: # Add the following if you wish to integrate user registration to Slack and send the weekly unapproved users email
+    # You will need to expose your app using a public-facing URL to achieve interactivity with components (use ngrok)
     # specific to the app you install to your Slack workspace
     user-registration-webhook: # for sending user requests to Slack
     slack-bot-oauth-token: # for permission to read conversation history (generation of unapproved users list)
