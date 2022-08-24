@@ -76,6 +76,31 @@ export function getCancerTypeNameFromOncoTreeType(
   return oncoTreeType.subtype || oncoTreeType.mainType || 'NA';
 }
 
+export function getCancerTypesName(
+  cancerTypes: string[],
+  excludedCancerTypes?: string[]
+): string {
+  let name = cancerTypes.join(', ');
+  if (excludedCancerTypes && excludedCancerTypes.length > 0) {
+    name += ' (excluding ' + excludedCancerTypes.join(', ') + ')';
+  }
+  return name;
+}
+
+export function getCancerTypesNameFromOncoTreeType(
+  cancerTypes: TumorType[],
+  excludedCancerTypes?: TumorType[]
+): string {
+  return getCancerTypesName(
+    cancerTypes.map(cancerType =>
+      getCancerTypeNameFromOncoTreeType(cancerType)
+    ),
+    (excludedCancerTypes || []).map(cancerType =>
+      getCancerTypeNameFromOncoTreeType(cancerType)
+    )
+  );
+}
+
 export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
   return _.replace(levelOfEvidence, new RegExp('[AB]'), '');
 }

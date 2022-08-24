@@ -2791,6 +2791,12 @@
             "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
           ]
         },
+        "excludedCancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
+        },
         "fdaLevel": {
           "type": "string",
           "enum": [

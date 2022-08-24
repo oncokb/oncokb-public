@@ -2238,6 +2238,12 @@
             "type": "string"
           }
         },
+        "excludedCancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
+        },
         "fdaLevel": {
           "type": "string"
         },
@@ -2415,6 +2421,12 @@
             "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY",
             "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
           ]
+        },
+        "excludedCancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
         },
         "fdaLevel": {
           "type": "string",

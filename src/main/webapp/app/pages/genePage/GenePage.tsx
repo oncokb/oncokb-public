@@ -15,7 +15,11 @@ import {
 import { Else, If, Then } from 'react-if';
 import { Redirect, RouteComponentProps } from 'react-router';
 import { Col, Row } from 'react-bootstrap';
-import { getCancerTypeNameFromOncoTreeType } from 'app/shared/utils/Utils';
+import {
+  getCancerTypeNameFromOncoTreeType,
+  getCancerTypesName,
+  getCancerTypesNameFromOncoTreeType,
+} from 'app/shared/utils/Utils';
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
@@ -127,6 +131,9 @@ export default class GenePage extends React.Component<GenePageProps, any> {
       const cancerTypeNames = variant.cancerTypes.map(cancerType =>
         getCancerTypeNameFromOncoTreeType(cancerType)
       );
+      const excludedCancerTypeNames = variant.excludedCancerTypes.map(
+        cancerType => getCancerTypeNameFromOncoTreeType(cancerType)
+      );
       return {
         level: variant.level,
         alterations: variant.variant.name,
@@ -144,26 +151,36 @@ export default class GenePage extends React.Component<GenePageProps, any> {
           />
         ),
         drugs: variant.drug.join(', '),
-        cancerTypes: cancerTypeNames.join(', '),
+        cancerTypes: getCancerTypesName(
+          cancerTypeNames,
+          excludedCancerTypeNames
+        ),
         cancerTypesView: (
-          <WithSeparator separator={', '}>
-            {cancerTypeNames.map(cancerType => (
-              <AlterationPageLink
-                key={`${variant.variant.name}-${cancerType}`}
-                hugoSymbol={this.store.hugoSymbol}
-                alteration={{
-                  alteration: variant.variant.alteration,
-                  name: variant.variant.name,
-                }}
-                alterationRefGenomes={
-                  variant.variant.referenceGenomes as REFERENCE_GENOME[]
-                }
-                cancerType={cancerType}
-              >
-                {cancerType}
-              </AlterationPageLink>
-            ))}
-          </WithSeparator>
+          <>
+            <WithSeparator separator={', '}>
+              {cancerTypeNames.map(cancerType => (
+                <AlterationPageLink
+                  key={`${variant.variant.name}-${cancerType}`}
+                  hugoSymbol={this.store.hugoSymbol}
+                  alteration={{
+                    alteration: variant.variant.alteration,
+                    name: variant.variant.name,
+                  }}
+                  alterationRefGenomes={
+                    variant.variant.referenceGenomes as REFERENCE_GENOME[]
+                  }
+                  cancerType={cancerType}
+                >
+                  {cancerType}
+                </AlterationPageLink>
+              ))}
+            </WithSeparator>
+            {excludedCancerTypeNames.length > 0 ? (
+              <span> (excluding {excludedCancerTypeNames.join(', ')})</span>
+            ) : (
+              <></>
+            )}
+          </>
         ),
         citations: {
           abstracts: variant.drugAbstracts,
@@ -187,44 +204,58 @@ export default class GenePage extends React.Component<GenePageProps, any> {
         );
       }
       variants.forEach(variant => {
-        variant.cancerTypes.forEach(ct => {
-          const ctName = getCancerTypeNameFromOncoTreeType(ct);
-          fdaImplications.push({
-            level: variant.fdaLevel,
-            alteration: variant.variant,
-            alterationView: (
-              <AlterationPageLink
-                key={`${variant.variant.name}`}
-                hugoSymbol={this.store.hugoSymbol}
-                alteration={{
-                  alteration: variant.variant.alteration,
-                  name: variant.variant.name,
-                }}
-                hashQueries={{
-                  tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
-                }}
-              >
-                {variant.variant.name}
-              </AlterationPageLink>
-            ),
-            cancerType: ctName,
-            cancerTypeView: (
-              <AlterationPageLink
-                key={`${variant.variant.name}-${ctName}`}
-                hugoSymbol={this.store.hugoSymbol}
-                alteration={{
-                  alteration: variant.variant.alteration,
-                  name: variant.variant.name,
-                }}
-                cancerType={ctName}
-                hashQueries={{
-                  tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
-                }}
-              >
-                {ctName}
-              </AlterationPageLink>
-            ),
-          });
+        const ctNames = variant.cancerTypes.map(ct =>
+          getCancerTypeNameFromOncoTreeType(ct)
+        );
+        const excludedCtNames = variant.excludedCancerTypes.map(ct =>
+          getCancerTypeNameFromOncoTreeType(ct)
+        );
+        fdaImplications.push({
+          level: variant.fdaLevel,
+          alteration: variant.variant,
+          alterationView: (
+            <AlterationPageLink
+              key={`${variant.variant.name}`}
+              hugoSymbol={this.store.hugoSymbol}
+              alteration={{
+                alteration: variant.variant.alteration,
+                name: variant.variant.name,
+              }}
+              hashQueries={{
+                tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+              }}
+            >
+              {variant.variant.name}
+            </AlterationPageLink>
+          ),
+          cancerType: getCancerTypesName(ctNames, excludedCtNames),
+          cancerTypeView: (
+            <>
+              <WithSeparator separator={', '}>
+                {ctNames.map(cancerType => (
+                  <AlterationPageLink
+                    key={`${variant.variant.name}-${cancerType}`}
+                    hugoSymbol={this.store.hugoSymbol}
+                    alteration={{
+                      alteration: variant.variant.alteration,
+                      name: variant.variant.name,
+                    }}
+                    alterationRefGenomes={
+                      variant.variant.referenceGenomes as REFERENCE_GENOME[]
+                    }
+                    cancerType={cancerType}
+                  >
+                    {cancerType}
+                  </AlterationPageLink>
+                ))}
+              </WithSeparator>
+              {excludedCtNames.length > 0 ? (
+                <span> (excluding {excludedCtNames.join(', ')})</span>
+              ) : (
+                <></>
+              )}
+            </>
+          ),
         });
       });
     });

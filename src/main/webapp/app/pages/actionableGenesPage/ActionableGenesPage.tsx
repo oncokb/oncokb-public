@@ -20,6 +20,7 @@ import _ from 'lodash';
 import {
   FdaLevelIcon,
   getCancerTypeNameFromOncoTreeType,
+  getCancerTypesName,
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
   getTreatmentNameFromEvidence,
@@ -71,6 +72,8 @@ type Treatment = {
   hugoSymbol: string;
   alterations: Alteration[];
   cancerTypes: string[];
+  excludedCancerTypes: string[];
+  relevantCancerTypes: string[];
   treatments: {}[];
   uniqueDrugs: string[];
   drugs: string;
@@ -154,9 +157,9 @@ export default class ActionableGenesPage extends React.Component<
             tumorType: this.relevantTumorTypeSearchKeyword,
           }
         );
-        result = allRelevantTumorTypes.map(tumorType => {
-          return tumorType.code ? tumorType.subtype : tumorType.mainType;
-        });
+        result = allRelevantTumorTypes.map(tumorType =>
+          getCancerTypeNameFromOncoTreeType(tumorType)
+        );
       } else {
         result = this.allTumorTypes.result;
       }
@@ -300,6 +303,12 @@ export default class ActionableGenesPage extends React.Component<
           cancerTypes: item.cancerTypes.map(cancerType =>
             getCancerTypeNameFromOncoTreeType(cancerType)
           ),
+          excludedCancerTypes: item.excludedCancerTypes.map(cancerType =>
+            getCancerTypeNameFromOncoTreeType(cancerType)
+          ),
+          relevantCancerTypes: item.relevantCancerTypes.map(cancerType =>
+            getCancerTypeNameFromOncoTreeType(cancerType)
+          ),
           treatments: item.treatments,
           uniqueDrugs: _.uniq(
             _.reduce(
@@ -404,9 +413,9 @@ export default class ActionableGenesPage extends React.Component<
       }
       if (
         this.relevantTumorTypeSearchKeyword &&
-        this.relevantTumorTypes.result.filter(tumorType =>
-          treatment.cancerTypes.includes(tumorType)
-        ).length === 0
+        !treatment.relevantCancerTypes.includes(
+          this.relevantTumorTypeSearchKeyword
+        )
       ) {
         match = false;
       }
@@ -591,7 +600,10 @@ export default class ActionableGenesPage extends React.Component<
           .map(alteration => alteration.name)
           .sort()
           .join(', '),
-        tumorType: treatment.cancerTypes.join(', '),
+        tumorType: getCancerTypesName(
+          treatment.cancerTypes,
+          treatment.excludedCancerTypes
+        ),
         drugs: treatment.drugs,
       }))
       .sort((treatmentA, treatmentB) => {
@@ -752,7 +764,14 @@ export default class ActionableGenesPage extends React.Component<
           return a.join(', ').localeCompare(b.join(', '));
         },
         Cell(props: { original: Treatment }) {
-          return <span>{props.original.cancerTypes.join(', ')}</span>;
+          return (
+            <span>
+              {getCancerTypesName(
+                props.original.cancerTypes,
+                props.original.excludedCancerTypes
+              )}
+            </span>
+          );
         },
       },
     ];
@@ -830,16 +849,7 @@ export default class ActionableGenesPage extends React.Component<
   getTable() {
     // We need to render two tables, one with fixed header, one with pagination.
     // Once page size is specified in the fixed header table, it cannot be overwritten by the defaultPageSize
-    return (
-      <If condition={this.fdaSectionIsOpen}>
-        <Then>
-          <OncoKBTable {...this.oncokbTableProps} />
-        </Then>
-        <Else>
-          <OncoKBTable {...this.oncokbTableProps} />
-        </Else>
-      </If>
-    );
+    return <OncoKBTable {...this.oncokbTableProps} />;
   }
 
   @computed

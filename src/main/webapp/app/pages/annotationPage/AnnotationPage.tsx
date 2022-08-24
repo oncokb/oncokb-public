@@ -37,6 +37,8 @@ import {
   articles2Citations,
   getAlterationName,
   getCancerTypeNameFromOncoTreeType,
+  getCancerTypesName,
+  getCancerTypesNameFromOncoTreeType,
   getCategoricalAlterationDescription,
   getTreatmentNameFromEvidence,
   isCategoricalAlteration,
@@ -108,6 +110,9 @@ export default class AnnotationPage extends React.Component<
       const cancerTypes = evidence.cancerTypes.map(cancerType =>
         getCancerTypeNameFromOncoTreeType(cancerType)
       );
+      const excludedCancerTypes = evidence.excludedCancerTypes.map(ct =>
+        getCancerTypeNameFromOncoTreeType(ct)
+      );
       return {
         level,
         fdaLevel,
@@ -130,21 +135,28 @@ export default class AnnotationPage extends React.Component<
           </WithSeparator>
         ),
         drugs: getTreatmentNameFromEvidence(evidence),
-        cancerTypes: cancerTypes.join(', '),
+        cancerTypes: getCancerTypesName(cancerTypes, excludedCancerTypes),
         cancerTypesView: (
-          <WithSeparator separator={', '}>
-            {cancerTypes.map(cancerType => (
-              <AlterationPageLink
-                key={`${this.props.alteration}-${cancerType}`}
-                hugoSymbol={this.props.hugoSymbol}
-                alteration={this.props.alteration}
-                alterationRefGenomes={[this.props.refGenome]}
-                cancerType={cancerType}
-              >
-                {cancerType}
-              </AlterationPageLink>
-            ))}
-          </WithSeparator>
+          <>
+            <WithSeparator separator={', '}>
+              {cancerTypes.map(cancerType => (
+                <AlterationPageLink
+                  key={`${this.props.alteration}-${cancerType}`}
+                  hugoSymbol={this.props.hugoSymbol}
+                  alteration={this.props.alteration}
+                  alterationRefGenomes={[this.props.refGenome]}
+                  cancerType={cancerType}
+                >
+                  {cancerType}
+                </AlterationPageLink>
+              ))}
+            </WithSeparator>
+            {excludedCancerTypes.length > 0 ? (
+              <span> (excluding {excludedCancerTypes.join(', ')})</span>
+            ) : (
+              <></>
+            )}
+          </>
         ),
         citations: articles2Citations(evidence.articles),
       } as TherapeuticImplication;
@@ -200,43 +212,55 @@ export default class AnnotationPage extends React.Component<
             alt.name = alt.alteration = this.props.alteration;
           }
         }
-        evidence.cancerTypes.forEach(cancerType => {
-          const ctName = getCancerTypeNameFromOncoTreeType(cancerType);
-          fdaImplications.push({
-            level: fdaLevel,
-            alteration: alt,
-            alterationView: (
-              <AlterationPageLink
-                key={alt.name}
-                hugoSymbol={this.props.hugoSymbol}
-                alteration={{
-                  alteration: alt.alteration,
-                  name: alt.name,
-                }}
-                alterationRefGenomes={
-                  alt.referenceGenomes as REFERENCE_GENOME[]
-                }
-                hashQueries={{
-                  tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
-                }}
-              />
-            ),
-            cancerType: ctName,
-            cancerTypeView: (
-              <AlterationPageLink
-                key={`${this.props.alteration}-${cancerType}`}
-                hugoSymbol={this.props.hugoSymbol}
-                alteration={this.props.alteration}
-                alterationRefGenomes={[this.props.refGenome]}
-                cancerType={ctName}
-                hashQueries={{
-                  tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
-                }}
-              >
-                {ctName}
-              </AlterationPageLink>
-            ),
-          });
+        const ctNames = evidence.cancerTypes.map(ct =>
+          getCancerTypeNameFromOncoTreeType(ct)
+        );
+        const excludedCtNames = evidence.excludedCancerTypes.map(ct =>
+          getCancerTypeNameFromOncoTreeType(ct)
+        );
+        fdaImplications.push({
+          level: fdaLevel,
+          alteration: alt,
+          alterationView: (
+            <AlterationPageLink
+              key={alt.name}
+              hugoSymbol={this.props.hugoSymbol}
+              alteration={{
+                alteration: alt.alteration,
+                name: alt.name,
+              }}
+              alterationRefGenomes={alt.referenceGenomes as REFERENCE_GENOME[]}
+              hashQueries={{
+                tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+              }}
+            />
+          ),
+          cancerType: getCancerTypesName(ctNames, excludedCtNames),
+          cancerTypeView: (
+            <>
+              <WithSeparator separator={', '}>
+                {ctNames.map(cancerType => (
+                  <AlterationPageLink
+                    key={`${this.props.alteration}-${cancerType}`}
+                    hugoSymbol={this.props.hugoSymbol}
+                    alteration={this.props.alteration}
+                    alterationRefGenomes={[this.props.refGenome]}
+                    cancerType={cancerType}
+                    hashQueries={{
+                      tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
+                    }}
+                  >
+                    {cancerType}
+                  </AlterationPageLink>
+                ))}
+              </WithSeparator>
+              {excludedCtNames.length > 0 ? (
+                <span> (excluding {excludedCtNames.join(', ')})</span>
+              ) : (
+                <></>
+              )}
+            </>
+          ),
         });
       });
     });
