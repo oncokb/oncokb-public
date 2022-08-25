@@ -643,6 +643,7 @@ export enum ACCOUNT_TITLES {
   COUNTRY = 'Country',
   API_TOKEN = 'API Token',
   LICENSE_TYPE = 'License',
+  ADDITIONAL_INFO = 'Use Case',
 }
 
 export enum API_CALL_STATUS {

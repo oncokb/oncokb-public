@@ -755,6 +755,21 @@ export default class UserPage extends React.Component<IUserPage> {
                             disabled={this.user.company != null}
                           />
                           <AvField
+                            name="additionalInfo"
+                            label={
+                              <BoldAccountTitle
+                                title={ACCOUNT_TITLES.ADDITIONAL_INFO}
+                                licenseType={this.selectedLicense}
+                              />
+                            }
+                            value={
+                              this.user.additionalInfo
+                                ? this.user.additionalInfo.userCompany.useCase
+                                : ''
+                            }
+                            validate={SHORT_TEXT_VAL}
+                          />
+                          <AvField
                             name="city"
                             label={
                               <BoldAccountTitle
