@@ -758,7 +758,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             name="additionalInfo"
                             label={
                               <BoldAccountTitle
-                                title={ACCOUNT_TITLES.ADDITIONAL_INFO}
+                                title={ACCOUNT_TITLES. ADDITIONAL_INFO_USER_CASE}
                                 licenseType={this.selectedLicense}
                               />
                             }
