@@ -157,7 +157,7 @@ public class UserServiceIT {
     @Transactional
     public void assertThatAnonymousUserIsNotGet() {
         user.setLogin(Constants.ANONYMOUS_USER);
-        if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
+        if (!userRepository.findOneWithAuthoritiesByLogin(Constants.ANONYMOUS_USER).isPresent()) {
             userRepository.saveAndFlush(user);
         }
         final PageRequest pageable = PageRequest.of(0, (int) userRepository.count());
@@ -283,7 +283,7 @@ public class UserServiceIT {
         userService.approveUser(userDTO, true);
 
         // If a user is approved and they have a trial token that is less than 90 days in length, then
-        // the token should be updated to expire in 90 days. 
+        // the token should be updated to expire in 90 days.
         List<Token> tokens = tokenService.findByUser(optionalUser.get());
         assertThat(tokens).extracting(Token::isRenewable).allMatch(renewable -> renewable.equals(false));
         assertThat(tokens.get(0).getExpiration())

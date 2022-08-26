@@ -145,7 +145,7 @@ public class UsageAnalysisController {
             Set<Object> emailSet = jsonObject.keySet();
             if (companyId != null) {
                 emailSet = emailSet.stream().filter(item -> {
-                    Optional<User> user = userService.getUserByEmailIgnoreCase((String) item);
+                    Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase((String) item);
                     if (user.isPresent()) {
                         UserDTO userDTO = userMapper.userToUserDTO(user.get());
                         if (userDTO.getCompany() != null) {
@@ -162,7 +162,7 @@ public class UsageAnalysisController {
                 UsageSummary usageSummary = gson.fromJson(usageObject.toString(), UsageSummary.class);
                 UserOverviewUsage cur = new UserOverviewUsage();
                 cur.setUserEmail(email);
-                Optional<User> user = userService.getUserByEmailIgnoreCase(email);
+                Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(email);
                 cur.setUserId(user.map(value -> value.getId().toString()).orElse(null));
 
                 String endpoint = "";
