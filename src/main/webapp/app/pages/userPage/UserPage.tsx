@@ -763,9 +763,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={
-                              this.user.additionalInfo
-                                ? this.user.additionalInfo.userCompany.useCase
-                                : ''
+                              this.user.additionalInfo?.userCompany?.useCase || ''
                             }
                             validate={SHORT_TEXT_VAL}
                           />
