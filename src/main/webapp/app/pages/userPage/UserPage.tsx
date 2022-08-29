@@ -66,7 +66,7 @@ import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 import DocumentTitle from 'react-document-title';
 import { Link } from 'react-router-dom';
 import { RouterStore } from 'mobx-react-router';
-import { SHORT_TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
+import { SHORT_TEXT_VAL, TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 import classnames from 'classnames';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
@@ -309,6 +309,9 @@ export default class UserPage extends React.Component<IUserPage> {
         companyName: this.user.company
           ? this.user.company.name
           : values.company,
+        additionalInfo: this.user.additionalInfo
+          ? this.user.additionalInfo
+          : values.additionalInfo,
         city: values.city,
         country: values.country,
       };
@@ -758,14 +761,15 @@ export default class UserPage extends React.Component<IUserPage> {
                             name="additionalInfo"
                             label={
                               <BoldAccountTitle
-                                title={ACCOUNT_TITLES. ADDITIONAL_INFO_USER_CASE}
+                                title={ACCOUNT_TITLES.ADDITIONAL_INFO_USER_CASE}
                                 licenseType={this.selectedLicense}
                               />
                             }
                             value={
-                              this.user.additionalInfo?.userCompany?.useCase || ''
+                              this.user.additionalInfo?.userCompany?.useCase ||
+                              ''
                             }
-                            validate={SHORT_TEXT_VAL}
+                            validate={TEXT_VAL}
                           />
                           <AvField
                             name="city"
