@@ -34,10 +34,12 @@ import {
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
 import {
+  AdditionalInfoDTO,
   Token,
   UserDTO,
   UserMailsDTO,
   UserUsage,
+  UserCompany,
 } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
@@ -296,6 +298,14 @@ export default class UserPage extends React.Component<IUserPage> {
   @action
   async updateUser(event: any, values: any) {
     if (this.user) {
+      const updatedUserCompany: UserCompany = {
+        ...this.user.additionalInfo?.userCompany,
+        useCase: values.additionalInfoUserCase,
+      };
+      const updatedAdditionalInfo: AdditionalInfoDTO = {
+        ...this.user.additionalInfo,
+        userCompany: updatedUserCompany,
+      };
       const updatedUser: UserDTO = {
         ...this.user,
         firstName: values.firstName,
@@ -309,9 +319,7 @@ export default class UserPage extends React.Component<IUserPage> {
         companyName: this.user.company
           ? this.user.company.name
           : values.company,
-        additionalInfo: this.user.additionalInfo
-          ? this.user.additionalInfo
-          : values.additionalInfo,
+        additionalInfo: updatedAdditionalInfo,
         city: values.city,
         country: values.country,
       };
@@ -758,7 +766,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             disabled={this.user.company != null}
                           />
                           <AvField
-                            name="additionalInfo"
+                            name="additionalInfoUserCase"
                             label={
                               <BoldAccountTitle
                                 title={ACCOUNT_TITLES.ADDITIONAL_INFO_USER_CASE}
@@ -766,8 +774,7 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={
-                              this.user.additionalInfo?.userCompany?.useCase ||
-                              ''
+                              this.user.additionalInfo?.userCompany?.useCase
                             }
                             validate={TEXT_VAL}
                           />
