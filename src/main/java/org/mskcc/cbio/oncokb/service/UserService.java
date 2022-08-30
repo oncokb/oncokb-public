@@ -164,7 +164,7 @@ public class UserService {
     }
 
     public Optional<User> getUserByLogin(String login) {
-        return userRepository.findOneByLogin(login.toLowerCase());
+        return userRepository.findOneWithAuthoritiesByLogin(login.toLowerCase());
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
@@ -180,7 +180,7 @@ public class UserService {
     }
 
     public Optional<User> requestPasswordReset(String login) {
-        return userRepository.findOneByLogin(login)
+        return userRepository.findOneWithAuthoritiesByLogin(login)
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
@@ -190,7 +190,7 @@ public class UserService {
     }
 
     public Optional<User> initiateTrialAccountActivation(String login) {
-        Optional<User> userOptional = userRepository.findOneByLogin(login);
+        Optional<User> userOptional = userRepository.findOneWithAuthoritiesByLogin(login);
         if (userOptional.isPresent()) {
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(userOptional.get());
             UserDetails ud = null;
@@ -265,10 +265,10 @@ public class UserService {
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+        userRepository.findOneWithAuthoritiesByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
             throw new EmailAlreadyUsedException();
         });
-        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+        userRepository.findOneWithAuthoritiesByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             throw new LoginAlreadyUsedException();
         });
         User newUser = new User();
@@ -453,7 +453,7 @@ public class UserService {
     }
 
     public void deleteUser(String login) {
-        userRepository.findOneByLogin(login).ifPresent(user -> {
+        userRepository.findOneWithAuthoritiesByLogin(login).ifPresent(user -> {
             // Delete all token stats
             List<Token> tokens = tokenService.findByUser(user);
             tokenStatsService.deleteAllByTokenIn(tokens);
@@ -484,7 +484,7 @@ public class UserService {
     @Transactional
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
+            .flatMap(userRepository::findOneWithAuthoritiesByLogin)
             .ifPresent(user -> {
                 String currentEncryptedPassword = user.getPassword();
                 if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
@@ -511,11 +511,6 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<User> getUserByEmailIgnoreCase(String email) {
-        return userRepository.findOneByEmailIgnoreCase(email);
     }
 
     @Transactional(readOnly = true)

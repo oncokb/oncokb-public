@@ -81,7 +81,7 @@ public class SlackController {
                 login = action.getValue().toLowerCase();
             }
 
-            Optional<User> user = userRepository.findOneByLogin(login);
+            Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(login);
             if (user.isPresent()) {
                 UserDTO userDTO = userMapper.userToUserDTO(user.get());
                 switch (actionId) {
@@ -131,7 +131,7 @@ public class SlackController {
                 return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
             }
 
-            Optional<User> user = userRepository.findOneByLogin(slackService.getOptionValueLogin(viewSubmissionPayload.getView().getPrivateMetadata()));
+            Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(slackService.getOptionValueLogin(viewSubmissionPayload.getView().getPrivateMetadata()));
             if (user.isPresent()) {
                 UserDTO userDTO = userMapper.userToUserDTO(user.get());
                 ActionId actionId = this.slackService.getActionId(viewSubmissionPayload);
