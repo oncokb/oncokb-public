@@ -422,9 +422,8 @@ public class UserService {
 
         if (updatedUserDTO.isPresent() && updatedUserDTO.get().isActivated()) {
             generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
-        } else if (updatedUserDTO.isPresent() && !updatedUserDTO.get().isActivated()) {
-            expireUserAccount(userDTO);
-        }
+        } 
+        
         return updatedUserDTO;
     }
 
@@ -707,18 +706,14 @@ public class UserService {
      */
     private void expireUserAccount(UserDTO userDTO) {
         userDTO.setActivated(false);
-        Optional<UserDTO> optionalUpdatedUserDTO = updateUser(userDTO);
-        if (optionalUpdatedUserDTO.isPresent()) {
-            UserDTO updatedUserDTO = optionalUpdatedUserDTO.get();
-            if (userHasUnactivatedTrial(updatedUserDTO)) {
-                clearTrialAccountInformation(updatedUserDTO);
+            if (userHasUnactivatedTrial(userDTO)) {
+                clearTrialAccountInformation(userDTO);
             List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
             tokens.forEach(token -> {
                 tokenService.expireToken(token);
                 });
             }
         }
-    }
 
     /**
      * Clears the trial account information.
