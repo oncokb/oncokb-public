@@ -711,11 +711,11 @@ public class UserService {
             UserDTO updatedUserDTO = optionalUpdatedUserDTO.get();
             if (userHasUnactivatedTrial(updatedUserDTO)) {
                 clearTrialAccountInformation(updatedUserDTO);
+            }
             List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
             tokens.forEach(token -> {
                 tokenService.expireToken(token);
-                });
-            }
+            });
         }
     }
 
