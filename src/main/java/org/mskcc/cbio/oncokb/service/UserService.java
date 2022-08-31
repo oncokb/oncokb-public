@@ -706,14 +706,18 @@ public class UserService {
      */
     private void expireUserAccount(UserDTO userDTO) {
         userDTO.setActivated(false);
-            if (userHasUnactivatedTrial(userDTO)) {
-                clearTrialAccountInformation(userDTO);
+        Optional<UserDTO> optionalUpdatedUserDTO = updateUser(userDTO);
+        if (optionalUpdatedUserDTO.isPresent()) {
+            UserDTO updatedUserDTO = optionalUpdatedUserDTO.get();
+            if (userHasUnactivatedTrial(updatedUserDTO)) {
+                clearTrialAccountInformation(updatedUserDTO);
             List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
             tokens.forEach(token -> {
                 tokenService.expireToken(token);
                 });
             }
         }
+    }
 
     /**
      * Clears the trial account information.
