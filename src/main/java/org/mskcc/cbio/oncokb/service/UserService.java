@@ -420,7 +420,10 @@ public class UserService {
 
         if (updatedUserDTO.isPresent() && updatedUserDTO.get().isActivated()) {
             generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+<<<<<<< HEAD
 
+=======
+>>>>>>> b382141e (Fixed typo)
         } else if (updatedUserDTO.isPresent() && !updatedUserDTO.get().isActivated()) {
             expireUserAccount(userDTO);
         }
