@@ -85,6 +85,10 @@ public class OncokbPublicApp {
                 options.setEnableExternalConfiguration(true);
                 options.setEnableUncaughtExceptionHandler(true);
 
+                // Completed disable the traces sampling
+                options.setTracesSampler(null);
+                options.setTracesSampleRate(null);
+
                 // Ignore the following exceptions
                 options.addIgnoredExceptionForType(BadCredentialsException.class);
                 options.addIgnoredExceptionForType(IOException.class);
