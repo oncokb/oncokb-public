@@ -305,11 +305,13 @@ export default class UsageAnalysisPage extends React.Component<{
                     className: 'd-flex justify-content-center',
                     Cell(props: { original: UserOverviewUsage }) {
                       return (
-                        <Link
-                          to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
-                        >
-                          <i className="fa fa-info-circle"></i>
-                        </Link>
+                        props.original.userId && (
+                          <Link
+                            to={`${PAGE_ROUTE.ADMIN_USER_USAGE_DETAILS_LINK}${props.original.userId}`}
+                          >
+                            <i className="fa fa-info-circle"></i>
+                          </Link>
+                        )
                       );
                     },
                   },
