@@ -418,10 +418,12 @@ public class UserService {
                 return newUserDTO;
             });
 
-        if (updatedUserDTO.isPresent() && updatedUserDTO.get().isActivated()) {
-            generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
-        } else if (updatedUserDTO.isPresent() && !updatedUserDTO.get().isActivated()) {
-            expireUserAccount(userDTO);
+        if(updatedUserDTO.isPresent()) {
+            if(updatedUserDTO.get().isActivated()) {
+                generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+            } else {
+                expireUserAccount(userDTO);
+            }
         }
 
         return updatedUserDTO;
