@@ -360,9 +360,7 @@ public class UserService {
         userDetails.setCompanyName(userDTO.getCompanyName());
         userDetails.setCity(userDTO.getCity());
         userDetails.setCountry(userDTO.getCountry());
-        if (userDTO.getAdditionalInfo() != null) {
-            userDetails.setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
-        }
+        userDetails.setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
         userDetails.setCompany(companyMapper.toEntity(userDTO.getCompany()));
         userDetailsRepository.save(userDetails);
 

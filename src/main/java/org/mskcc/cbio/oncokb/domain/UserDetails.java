@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
-import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
 
 /**
  * A UserDetails.

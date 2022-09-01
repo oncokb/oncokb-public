@@ -10,7 +10,6 @@ public class AdditionalInfoDTO {
 
     UserCompany userCompany;
 
-    @JsonCreator
     public AdditionalInfoDTO() {
 
     }
