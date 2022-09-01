@@ -4,13 +4,12 @@ import { inject, observer } from 'mobx-react';
 import { RouterStore } from 'mobx-react-router';
 import React from 'react';
 import { Link, match } from 'react-router-dom';
-import Client from 'app/shared/api/clientInstance';
+import client from 'app/shared/api/clientInstance';
 import { getSectionClassName } from '../account/AccountUtils';
 import { Col, Row } from 'react-bootstrap';
 import UserUsageDetailsTable from './UserUsageDetailsTable';
 import { InfoRow } from '../AccountPage';
 import {
-  PAGE_ROUTE,
   USAGE_DETAIL_TIME_KEY,
   USAGE_ALL_TIME_KEY,
   USAGE_ALL_TIME_VALUE,
@@ -21,7 +20,7 @@ import {
   ToggleValue,
   UsageRecord,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
-import { Linkout } from 'app/shared/links/Linkout';
+import { notifyError } from 'app/shared/utils/NotificationUtils';
 
 @inject('routing')
 @observer
@@ -40,47 +39,51 @@ export default class UserUsageDetailsPage extends React.Component<{
   readonly usageDetail = remoteData<Map<string, UsageRecord[]>>({
     await: () => [],
     invoke: async () => {
-      this.user = await Client.userUsageGetUsingGET({ userId: this.userId });
       const result = new Map<string, UsageRecord[]>();
-      if (this.user.summary !== null) {
-        const yearSummary = this.user.summary.year;
-        const yearUsage: UsageRecord[] = [];
-        Object.keys(yearSummary).forEach(resourceEntry => {
-          yearUsage.push({
-            resource: resourceEntry,
-            usage: yearSummary[resourceEntry],
-            time: USAGE_ALL_TIME_VALUE,
-          });
-        });
-        result.set(USAGE_ALL_TIME_KEY, yearUsage);
-
-        const monthSummary = this.user.summary.month;
-        const detailSummary: UsageRecord[] = [];
-        Object.keys(monthSummary).forEach(month => {
-          const monthUsage = monthSummary[month];
-          Object.keys(monthUsage).forEach(resourceEntry => {
-            detailSummary.push({
+      try {
+        this.user = await client.userUsageGetUsingGET({ userId: this.userId });
+        if (this.user.summary !== null) {
+          const yearSummary = this.user.summary.year;
+          const yearUsage: UsageRecord[] = [];
+          Object.keys(yearSummary).forEach(resourceEntry => {
+            yearUsage.push({
               resource: resourceEntry,
-              usage: monthUsage[resourceEntry],
-              time: month,
+              usage: yearSummary[resourceEntry],
+              time: USAGE_ALL_TIME_VALUE,
             });
           });
-        });
-        result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
+          result.set(USAGE_ALL_TIME_KEY, yearUsage);
 
-        const daySummary = this.user.summary.day;
-        const dayDetailSummary: UsageRecord[] = [];
-        Object.keys(daySummary).forEach(day => {
-          const dayUsage = daySummary[day];
-          Object.keys(dayUsage).forEach(resourceEntry => {
-            dayDetailSummary.push({
-              resource: resourceEntry,
-              usage: dayUsage[resourceEntry],
-              time: day,
+          const monthSummary = this.user.summary.month;
+          const detailSummary: UsageRecord[] = [];
+          Object.keys(monthSummary).forEach(month => {
+            const monthUsage = monthSummary[month];
+            Object.keys(monthUsage).forEach(resourceEntry => {
+              detailSummary.push({
+                resource: resourceEntry,
+                usage: monthUsage[resourceEntry],
+                time: month,
+              });
             });
           });
-        });
-        result.set(USAGE_DAY_DETAIL_TIME_KEY, dayDetailSummary);
+          result.set(USAGE_DETAIL_TIME_KEY, detailSummary);
+
+          const daySummary = this.user.summary.day;
+          const dayDetailSummary: UsageRecord[] = [];
+          Object.keys(daySummary).forEach(day => {
+            const dayUsage = daySummary[day];
+            Object.keys(dayUsage).forEach(resourceEntry => {
+              dayDetailSummary.push({
+                resource: resourceEntry,
+                usage: dayUsage[resourceEntry],
+                time: day,
+              });
+            });
+          });
+          result.set(USAGE_DAY_DETAIL_TIME_KEY, dayDetailSummary);
+        }
+      } catch (error) {
+        notifyError(error, 'Failed to load user data usage with error: ');
       }
       return Promise.resolve(result);
     },
@@ -94,7 +97,7 @@ export default class UserUsageDetailsPage extends React.Component<{
           <Col>
             <h5>User Usage Information</h5>
             <hr />
-            {this.user && (
+            {this.user ? (
               <>
                 <InfoRow
                   title="First Name"
@@ -119,6 +122,8 @@ export default class UserUsageDetailsPage extends React.Component<{
                   content={this.user.licenseType}
                 ></InfoRow>
               </>
+            ) : (
+              <span>Not available</span>
             )}
           </Col>
         </Row>
