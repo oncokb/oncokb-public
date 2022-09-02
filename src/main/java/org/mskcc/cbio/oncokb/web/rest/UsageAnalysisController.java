@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.NotNull;
+
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 
 @Controller
@@ -67,7 +69,7 @@ public class UsageAnalysisController {
      * @throws ParseException
      */
     @GetMapping("/usage/users/{userId}")
-    public ResponseEntity<UserUsage> userUsageGet(@PathVariable String userId)
+    public ResponseEntity<UserUsage> userUsageGet(@PathVariable @NotNull Long userId)
         throws IOException, ParseException {
 
         HttpStatus status = HttpStatus.OK;
@@ -87,8 +89,7 @@ public class UsageAnalysisController {
                 monthsBack++;
             } while (monthsBack < 12);
 
-            Long id = Long.parseLong(userId);
-            Optional<User> user = userService.getUserById(id);
+            Optional<User> user = userService.getUserById(userId);
             String email = user.map(User::getEmail).orElse(null);
 
             if (yearSummary != null){
