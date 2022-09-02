@@ -418,9 +418,14 @@ public class UserService {
                 return newUserDTO;
             });
 
-        if (updatedUserDTO.isPresent() && updatedUserDTO.get().isActivated()) {
-            generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+        if(updatedUserDTO.isPresent()) {
+            if(updatedUserDTO.get().isActivated()) {
+                generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+            } else {
+                expireUserAccount(userDTO);
+            }
         }
+
         return updatedUserDTO;
     }
 
@@ -695,12 +700,12 @@ public class UserService {
      * @param userDTO the userDTO
      */
     private void expireUserAccount(UserDTO userDTO) {
-        userDTO.setActivated(false);
-        Optional<UserDTO> optionalUpdatedUserDTO = updateUser(userDTO);
-        if (optionalUpdatedUserDTO.isPresent()) {
-            UserDTO updatedUserDTO = optionalUpdatedUserDTO.get();
-            if (userHasUnactivatedTrial(updatedUserDTO)) {
-                clearTrialAccountInformation(updatedUserDTO);
+        if(userDTO.isActivated()) {
+            userDTO.setActivated(false);
+            updateUser(userDTO);
+        } else {
+            if (userHasUnactivatedTrial(userDTO)) {
+                clearTrialAccountInformation(userDTO);
             }
             List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
             tokens.forEach(token -> {
