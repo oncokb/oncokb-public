@@ -162,7 +162,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'All Solid Tumors (except Colorectal Cancer)',
         'Dabrafenib + Trametinib',
         <FdaApprovalLink
-          approval={'FDA-approval of dabrafenib + trametinib in solid tumors'}
+          approval={'dabrafenib + trametinib in solid tumors'}
           link={
             'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-dabrafenib-combination-trametinib-unresectable-or-metastatic-solid'
           }
@@ -178,7 +178,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         '2',
         '1',
         <FdaApprovalLink
-          approval={'FDA-approval of dabrafenib + trametinib in solid tumors'}
+          approval={'dabrafenib + trametinib in solid tumors'}
           link={
             'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-dabrafenib-combination-trametinib-unresectable-or-metastatic-solid'
           }
@@ -187,13 +187,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         'ERBB2',
         'Oncogenic Mutations',
-        'Non-Small Cell Lung Cancer' + 'Trastuzumab Deruxtican',
+        'Non-Small Cell Lung Cancer',
+        'Trastuzumab Deruxtican',
         '2',
         '1',
         <FdaApprovalLink
-          approval={
-            'FDA-approval of trastuzumab deruxtican in non-small cell lung cancer'
-          }
+          approval={'trastuzumab deruxtican in non-small cell lung cancer'}
           link={
             'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-fam-trastuzumab-deruxtecan-nxki-her2-mutant-non-small-cell-lung'
           }
@@ -202,11 +201,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         'FGFR1',
         'Fusions',
-        'Myeloid/Lymphoid Neoplasms with FGFR1 Rearrangement' + 'Pemigatinib',
+        'Myeloid/Lymphoid Neoplasms with FGFR1 Rearrangement',
+        'Pemigatinib',
         '2',
         '1',
         <FdaApprovalLink
-          approval={'FDA-approval of pemigatinib in myeloid/lymphoid neoplasms'}
+          approval={'pemigatinib in myeloid/lymphoid neoplasms'}
           link={
             'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-pemigatinib-relapsed-or-refractory-myeloidlymphoid-neoplasms-fgfr1-rearrangement'
           }
@@ -261,9 +261,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         '2',
         '1',
         <FdaApprovalLink
-          approval={
-            'FDA approval of crizotinib in inflammatory myofibroblastic tumor'
-          }
+          approval={'crizotinib in inflammatory myofibroblastic tumor'}
           link={
             'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-crizotinib-alk-positive-inflammatory-myofibroblastic-tumor'
           }
