@@ -122,9 +122,9 @@ public class UserResource {
         if (managedUserVM.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
-        } else if (userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).isPresent()) {
+        } else if (userRepository.findOneWithAuthoritiesByLogin(managedUserVM.getLogin().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();
-        } else if (userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).isPresent()) {
+        } else if (userRepository.findOneWithAuthoritiesByEmailIgnoreCase(managedUserVM.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
             // Assign ROLE_USER to all new accounts
@@ -164,11 +164,11 @@ public class UserResource {
         @NotNull @RequestParam Boolean unlinkUser
     ) {
         log.debug("REST request to update User : {}", userDTO);
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<User> existingUser = userRepository.findOneWithAuthoritiesByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }
-        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
+        existingUser = userRepository.findOneWithAuthoritiesByLogin(userDTO.getLogin().toLowerCase());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
@@ -268,7 +268,6 @@ public class UserResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
-        // TODO: token, token_stats, user_details need to be deleted in order to delete the user
         userService.deleteUser(login);
         return ResponseEntity.ok().build();
     }

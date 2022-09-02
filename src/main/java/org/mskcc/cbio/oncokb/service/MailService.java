@@ -297,6 +297,10 @@ public class MailService {
         sendEmailWithLicenseContext(user, MailType.CLARIFY_REGISTRATION_INFO, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
     }
 
+    public void sendLicenseOptionsEmail(UserDTO user) {
+        sendEmailWithLicenseContext(user, MailType.LICENSE_OPTIONS, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
+    }
+
     @Async
     public void sendDuplicateUserClarificationEmail(UserDTO user) {
         sendEmailWithLicenseContext(user, MailType.CLARIFY_DUPLICATE_USER, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
@@ -440,6 +444,8 @@ public class MailService {
             case CLARIFY_DUPLICATE_USER:
             case CLARIFY_REGISTRATION_INFO:
                 return Optional.of("email.license.clarify.title");
+            case LICENSE_OPTIONS:
+                return Optional.of("email.license.options.title");
             case VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES:
                 return Optional.of("email.account.expires.by.days.title");
             case ACTIVATE_FREE_TRIAL:

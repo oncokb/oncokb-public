@@ -81,7 +81,7 @@ public class SlackController {
                 login = action.getValue().toLowerCase();
             }
 
-            Optional<User> user = userRepository.findOneByLogin(login);
+            Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(login);
             if (user.isPresent()) {
                 UserDTO userDTO = userMapper.userToUserDTO(user.get());
                 switch (actionId) {
@@ -131,7 +131,7 @@ public class SlackController {
                 return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
             }
 
-            Optional<User> user = userRepository.findOneByLogin(slackService.getOptionValueLogin(viewSubmissionPayload.getView().getPrivateMetadata()));
+            Optional<User> user = userRepository.findOneWithAuthoritiesByLogin(slackService.getOptionValueLogin(viewSubmissionPayload.getView().getPrivateMetadata()));
             if (user.isPresent()) {
                 UserDTO userDTO = userMapper.userToUserDTO(user.get());
                 ActionId actionId = this.slackService.getActionId(viewSubmissionPayload);
@@ -151,6 +151,9 @@ public class SlackController {
                         break;
                     case CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL:
                         mailType = MailType.CLARIFY_REGISTRATION_INFO;
+                        break;
+                    case CONFIRM_SEND_LICENSE_OPTIONS_EMAIL:
+                        mailType = MailType.LICENSE_OPTIONS;
                         break;
                     case CONFIRM_SEND_REJECTION_EMAIL:
                         mailType = MailType.REJECTION;

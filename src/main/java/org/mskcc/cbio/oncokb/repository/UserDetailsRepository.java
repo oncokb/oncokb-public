@@ -28,4 +28,6 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> 
 
     @Query("select ud from UserDetails ud where ud.user.login = ?#{principal.username}")
     Optional<UserDetails> findByUserIsCurrentUser();
+
+    void deleteByUser(User user);
 }

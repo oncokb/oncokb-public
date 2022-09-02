@@ -22,6 +22,8 @@ public final class Constants {
 
     public static final String EXPIRATION = "expiration";
 
+    public static final String NY_ZONE_ID = "US/Eastern";
+
     public static final int DAY_IN_SECONDS = 60 * 60 * 24;
     public static final int HALF_YEAR_IN_SECONDS = DAY_IN_SECONDS * 180;
 
@@ -29,9 +31,9 @@ public final class Constants {
 
     public static final int TRIAL_PERIOD_IN_DAYS = 90;
 
-    public static final String USERS_USAGE_SUMMARY_FILE = "public-website/usage-analysis/userSummary.json";
-    public static final String RESOURCES_USAGE_SUMMARY_FILE = "public-website/usage-analysis/resourceSummary.json";
-    public static final String RESOURCES_USAGE_DETAIL_FILE = "public-website/usage-analysis/resourceDetail.json";
+    public static final String MONTH_USERS_USAGE_SUMMARY_FILE_PREFIX = "public-website/usage-analysis/month-user-summary_";
+    public static final String YEAR_USERS_USAGE_SUMMARY_FILE_PREFIX = "public-website/usage-analysis/year-user-summary_";
+    public static final String YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX = "public-website/usage-analysis/year-resource-summary_";
     public static final String TOKEN_STATS_STORAGE_FILE_PREFIX = "public-website/token-usage/token-stats_";
 
     public static final String ONCOKB_TM = "OncoKB™";

@@ -1481,33 +1481,6 @@
         "deprecated": false
       }
     },
-    "/api/cronjob/user-usage-analysis": {
-      "get": {
-        "tags": [
-          "cron-job-controller"
-        ],
-        "summary": "analyzeUserUsage",
-        "operationId": "analyzeUserUsageUsingGET",
-        "produces": [
-          "*/*"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "deprecated": false
-      }
-    },
     "/api/mails/feedback": {
       "post": {
         "tags": [
@@ -1692,6 +1665,7 @@
               "CLARIFY_USE_CASE",
               "CLARIFY_DUPLICATE_USER",
               "CLARIFY_REGISTRATION_INFO",
+              "LICENSE_OPTIONS",
               "REJECT_ALUMNI_ADDRESS",
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
@@ -2019,6 +1993,16 @@
         "produces": [
           "*/*"
         ],
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "query",
+            "description": "companyId",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -2058,7 +2042,8 @@
             "in": "path",
             "description": "userId",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "responses": {
@@ -3249,6 +3234,7 @@
             "CLARIFY_USE_CASE",
             "CLARIFY_DUPLICATE_USER",
             "CLARIFY_REGISTRATION_INFO",
+            "LICENSE_OPTIONS",
             "REJECT_ALUMNI_ADDRESS",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
@@ -3461,6 +3447,15 @@
     "UsageSummary": {
       "type": "object",
       "properties": {
+        "day": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        },
         "month": {
           "type": "object",
           "additionalProperties": {
@@ -3736,6 +3731,7 @@
             "CLARIFY_USE_CASE",
             "CLARIFY_DUPLICATE_USER",
             "CLARIFY_REGISTRATION_INFO",
+            "LICENSE_OPTIONS",
             "REJECT_ALUMNI_ADDRESS",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",

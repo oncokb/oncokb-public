@@ -2,6 +2,7 @@ package org.mskcc.cbio.oncokb.repository;
 
 import org.mskcc.cbio.oncokb.domain.Token;
 
+import org.mskcc.cbio.oncokb.domain.User;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -37,4 +38,6 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     @Cacheable(cacheResolver = "tokenCacheResolver")
     @Query("select token from Token token where token.user.login = ?1")
     List<Token> findByUserLogin(String login);
+
+    void deleteAllByUser(User user);
 }

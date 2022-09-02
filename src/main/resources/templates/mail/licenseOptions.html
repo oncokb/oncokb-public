@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{email.license.options.title(${user.companyName})}"></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body>
+<p th:text="'Dear ' + ${user.firstName} + ' ' + ${user.lastName} + ','"></p>
+
+<p th:text="'Thank you for your interest in the ' + ${license} + ' license for OncoKB.'"></p>
+
+<p>
+  To move forward, could you share a little more information – in particular, we would like to understand the specific context of your OncoKB use-case, and how you envision implementing it into your workflow.
+</p>
+<p>
+  As far as licensing terms, MSK offers the following options
+  - a flat fee for research in commercial companies
+  - charge per report on a tiered fee schedule depending on the volume of reports generated, with a set minimum annual royalty
+  - hybrid of both
+</p>
+<p>
+  Toward that, does <span th:text="${user.companyName}"></span> have a budget in mind for an OncoKB License? If applicable, perhaps a conference call can be arranged as a next step.
+</p>
+<p>
+  Thank you for your interest, and we look forward to hearing from you.
+</p>
+<p>
+<div th:text="#{email.closing}">Sincerely,</div>
+<div th:text="#{email.signature}">The OncoKB Team</div>
+</p>
+</body>
+</html>

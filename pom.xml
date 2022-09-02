@@ -338,11 +338,6 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
         </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.14.2</version>
-        </dependency>
         <!-- Sentry -->
         <dependency>
             <groupId>io.sentry</groupId>

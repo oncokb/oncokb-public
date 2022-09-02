@@ -111,7 +111,7 @@ export type LoginVM = {
 export type MailTypeInfo = {
     'description': string
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
 
 };
 export type ManagedUserVM = {
@@ -205,6 +205,8 @@ export type TrialAccount = {
 
 };
 export type UsageSummary = {
+    'day': {}
+
     'month': {}
 
     'year': {}
@@ -317,7 +319,7 @@ export type UserDetailsDTO = {
 export type UserMailsDTO = {
     'id': number
 
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST"
 
         'sentBy': string
 
@@ -3062,67 +3064,6 @@ export default class API {
             return response.body;
         });
     };
-    analyzeUserUsageUsingGETURL(parameters: {
-        $queryParameters ? : any
-    }): string {
-        let queryParameters: any = {};
-        let path = '/api/cronjob/user-usage-analysis';
-
-        if (parameters.$queryParameters) {
-            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                var parameter = parameters.$queryParameters[parameterName];
-                queryParameters[parameterName] = parameter;
-            });
-        }
-        let keys = Object.keys(queryParameters);
-        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
-    };
-
-    /**
-     * analyzeUserUsage
-     * @method
-     * @name API#analyzeUserUsageUsingGET
-     */
-    analyzeUserUsageUsingGETWithHttpInfo(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < request.Response > {
-        const domain = parameters.$domain ? parameters.$domain : this.domain;
-        const errorHandlers = this.errorHandlers;
-        const request = this.request;
-        let path = '/api/cronjob/user-usage-analysis';
-        let body: any;
-        let queryParameters: any = {};
-        let headers: any = {};
-        let form: any = {};
-        return new Promise(function(resolve, reject) {
-            headers['Accept'] = '*/*';
-
-            if (parameters.$queryParameters) {
-                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
-                    var parameter = parameters.$queryParameters[parameterName];
-                    queryParameters[parameterName] = parameter;
-                });
-            }
-
-            request('GET', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
-
-        });
-    };
-
-    /**
-     * analyzeUserUsage
-     * @method
-     * @name API#analyzeUserUsageUsingGET
-     */
-    analyzeUserUsageUsingGET(parameters: {
-        $queryParameters ? : any,
-            $domain ? : string
-    }): Promise < any > {
-        return this.analyzeUserUsageUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
-            return response.body;
-        });
-    };
     sendFeedbackMailsUsingPOSTURL(parameters: {
         'description': string,
         'from': string,
@@ -3384,7 +3325,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
         'to': string,
         $queryParameters ? : any
     }): string {
@@ -3434,7 +3375,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -3517,7 +3458,7 @@ export default class API {
         'by': string,
         'cc' ? : string,
         'from': string,
-        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
+        'mailType': "ACTIVATION" | "APPROVAL" | "REJECTION" | "CREATION" | "PASSWORD_RESET" | "LICENSE_REVIEW_COMMERCIAL" | "LICENSE_REVIEW_RESEARCH_COMMERCIAL" | "LICENSE_REVIEW_HOSPITAL" | "CLARIFY_ACADEMIC_FOR_PROFIT" | "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL" | "CLARIFY_USE_CASE" | "CLARIFY_DUPLICATE_USER" | "CLARIFY_REGISTRATION_INFO" | "LICENSE_OPTIONS" | "REJECT_ALUMNI_ADDRESS" | "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES" | "APPROVAL_ALIGN_LICENSE_WITH_COMPANY" | "TRIAL_ACCOUNT_IS_ABOUT_TO_EXPIRE" | "TRIAL_ACCOUNT_IS_ACTIVATED" | "ACTIVATE_FREE_TRIAL" | "TOKEN_HAS_BEEN_EXPOSED" | "TOKEN_HAS_BEEN_EXPOSED_USER" | "SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED" | "LIST_OF_UNAPPROVED_USERS" | "DATA_USAGE_EXCEEDS_THRESHOLD" | "TEST",
         'to': string,
         $queryParameters ? : any,
         $domain ? : string
@@ -4031,10 +3972,14 @@ export default class API {
         });
     };
     userOverviewUsageGetUsingGETURL(parameters: {
+        'companyId' ? : number,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/usage/summary/users';
+        if (parameters['companyId'] !== undefined) {
+            queryParameters['companyId'] = parameters['companyId'];
+        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -4050,8 +3995,10 @@ export default class API {
      * userOverviewUsageGet
      * @method
      * @name API#userOverviewUsageGetUsingGET
+     * @param {integer} companyId - companyId
      */
     userOverviewUsageGetUsingGETWithHttpInfo(parameters: {
+        'companyId' ? : number,
         $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
@@ -4065,6 +4012,10 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
+
+            if (parameters['companyId'] !== undefined) {
+                queryParameters['companyId'] = parameters['companyId'];
+            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -4082,8 +4033,10 @@ export default class API {
      * userOverviewUsageGet
      * @method
      * @name API#userOverviewUsageGetUsingGET
+     * @param {integer} companyId - companyId
      */
     userOverviewUsageGetUsingGET(parameters: {
+            'companyId' ? : number,
             $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < UserOverviewUsage >
@@ -4093,7 +4046,7 @@ export default class API {
             });
         };
     userUsageGetUsingGETURL(parameters: {
-        'userId': string,
+        'userId': number,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -4115,10 +4068,10 @@ export default class API {
      * userUsageGet
      * @method
      * @name API#userUsageGetUsingGET
-     * @param {string} userId - userId
+     * @param {integer} userId - userId
      */
     userUsageGetUsingGETWithHttpInfo(parameters: {
-        'userId': string,
+        'userId': number,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -4156,10 +4109,10 @@ export default class API {
      * userUsageGet
      * @method
      * @name API#userUsageGetUsingGET
-     * @param {string} userId - userId
+     * @param {integer} userId - userId
      */
     userUsageGetUsingGET(parameters: {
-        'userId': string,
+        'userId': number,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < UserUsage > {

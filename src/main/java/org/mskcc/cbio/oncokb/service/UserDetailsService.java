@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.service;
 
+import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 
 import java.util.List;
@@ -40,6 +41,13 @@ public interface UserDetailsService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Delete user details by user
+     *
+     * @param user
+     */
+    void deleteByUser(User user);
 
     Optional<UserDetailsDTO> findOneByTrialActivationKey(String key);
 

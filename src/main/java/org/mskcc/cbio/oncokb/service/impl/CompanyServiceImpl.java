@@ -44,14 +44,14 @@ public class CompanyServiceImpl implements CompanyService {
     private final UserMapper userMapper;
 
     private final UserService userService;
-    
+
     private final CacheManager cacheManager;
 
     private final CacheNameResolver cacheNameResolver;
 
     public CompanyServiceImpl(
-        CompanyRepository companyRepository, 
-        CompanyMapper companyMapper, 
+        CompanyRepository companyRepository,
+        CompanyMapper companyMapper,
         CompanyDomainService companyDomainService,
         CompanyDomainMapper companyDomainMapper,
         UserService userService,
@@ -102,7 +102,7 @@ public class CompanyServiceImpl implements CompanyService {
         if(companyVm.getCompanyUserEmails() != null){
             companyVm.getCompanyUserEmails()
                 .stream()
-                .map(email -> userService.getUserByEmailIgnoreCase(email))
+                .map(email -> userService.getUserWithAuthoritiesByEmailIgnoreCase(email))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(user -> userMapper.userToUserDTO(user))
