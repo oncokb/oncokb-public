@@ -1,0 +1,39 @@
+[
+  {
+    "gene":
+    {
+      "entrezGeneId": 7157,
+      "hugoSymbol": "TP53",
+      "oncogene": false,
+      "grch37Isoform": "ENST00000269305",
+      "grch37RefSeq": "NM_000546.5",
+      "grch38Isoform": "ENST00000269305",
+      "grch38RefSeq": "NM_000546.5",
+      "geneAliases":
+      [
+        "LFS1",
+        "p53"
+      ],
+      "genesets":
+      [],
+      "tsg": true
+    },
+    "consequence":
+    {
+      "term": "NA",
+      "isGenerallyTruncating": false,
+      "description": "NA"
+    },
+    "alteration": "Deletion",
+    "name": "Deletion",
+    "refResidues": null,
+    "proteinStart": -1,
+    "proteinEnd": 100000,
+    "variantResidues": null,
+    "referenceGenomes":
+    [
+      "GRCh38",
+      "GRCh37"
+    ]
+  }
+]

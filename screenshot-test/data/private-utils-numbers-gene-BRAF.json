@@ -1,4 +1,9 @@
-[
+{
+  "highestSensitiveLevel": "LEVEL_1",
+  "highestResistanceLevel": null,
+  "highestDiagnosticImplicationLevel": "LEVEL_Dx2",
+  "highestPrognosticImplicationLevel": null,
+  "gene":
   {
     "entrezGeneId": 673,
     "hugoSymbol": "BRAF",
@@ -14,5 +19,7 @@
     "genesets":
     [],
     "tsg": false
-  }
-]
+  },
+  "alteration": 142,
+  "tumorType": null
+}

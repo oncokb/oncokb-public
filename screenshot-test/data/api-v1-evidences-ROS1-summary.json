@@ -1,0 +1,47 @@
+[
+  {
+    "id": 21411,
+    "uuid": "865dbc19-355b-4142-b48c-6baa4018aae2",
+    "evidenceType": "GENE_SUMMARY",
+    "cancerTypes":
+    [],
+    "excludedCancerTypes":
+    [],
+    "relevantCancerTypes":
+    [],
+    "gene":
+    {
+      "entrezGeneId": 6098,
+      "hugoSymbol": "ROS1",
+      "oncogene": true,
+      "grch37Isoform": "ENST00000368508",
+      "grch37RefSeq": "NM_002944.2",
+      "grch38Isoform": "ENST00000368508",
+      "grch38RefSeq": "NM_002944.2",
+      "geneAliases":
+      [
+        "MCF3",
+        "ROS",
+        "c-ros-1"
+      ],
+      "genesets":
+      [],
+      "tsg": false
+    },
+    "alterations":
+    [],
+    "description": "ROS1, a receptor tyrosine kinase, is altered by mutation or chromosomal rearrangement in a diverse range of cancers, including lung cancer.",
+    "additionalInfo": null,
+    "treatments":
+    [],
+    "knownEffect": null,
+    "lastEdit": 1491850504000,
+    "lastReview": null,
+    "levelOfEvidence": null,
+    "fdaLevel": null,
+    "solidPropagationLevel": null,
+    "liquidPropagationLevel": null,
+    "articles":
+    []
+  }
+]

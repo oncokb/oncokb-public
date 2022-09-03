@@ -1,0 +1,1628 @@
+[
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "CD74-ROS1 Fusion",
+      "name": "CD74-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22919003",
+      "22215748",
+      "18083107",
+      "22327623"
+    ],
+    "mutationEffectAbstracts":
+    [
+      {
+        "link": "https://ascopubs.org/doi/full/10.1200/PO.18.00267",
+        "abstract": "Hegde et al. JCO PO, 2018"
+      }
+    ],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "MSN-ROS1 Fusion",
+      "name": "MSN-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25264305"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "S1986F",
+      "name": "S1986F",
+      "refResidues": "S",
+      "proteinStart": 1986,
+      "proteinEnd": 1986,
+      "variantResidues": "F",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "27401242"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "F2004C",
+      "name": "F2004C",
+      "refResidues": "F",
+      "proteinStart": 2004,
+      "proteinEnd": 2004,
+      "variantResidues": "C",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids":
+    [
+      "27401242",
+      "26372962"
+    ],
+    "mutationEffectAbstracts":
+    [
+      {
+        "link": "https://www.sciencedirect.com/science/article/pii/S0923753419603777",
+        "abstract": "Doebele et al. Abstract# LBA-28, ESMO 2019"
+      }
+    ],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "LIMA1-ROS1 Fusion",
+      "name": "LIMA1-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25264305"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "L1947R",
+      "name": "L1947R",
+      "refResidues": "L",
+      "proteinStart": 1947,
+      "proteinEnd": 1947,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "24218589"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V2098I",
+      "name": "V2098I",
+      "refResidues": "V",
+      "proteinStart": 2098,
+      "proteinEnd": 2098,
+      "variantResidues": "I",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "24218589"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D2033N",
+      "name": "D2033N",
+      "refResidues": "D",
+      "proteinStart": 2033,
+      "proteinEnd": 2033,
+      "variantResidues": "N",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26673800"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "CEP85L-ROS1 Fusion",
+      "name": "CEP85L-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25204415",
+      "30171048",
+      "23637631"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Amplification",
+      "name": "Amplification",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25978031"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "E1935G",
+      "name": "E1935G",
+      "refResidues": "E",
+      "proteinStart": 1935,
+      "proteinEnd": 1935,
+      "variantResidues": "G",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "24218589"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "F2004V",
+      "name": "F2004V",
+      "refResidues": "F",
+      "proteinStart": 2004,
+      "proteinEnd": 2004,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids":
+    [
+      "27401242"
+    ],
+    "mutationEffectAbstracts":
+    [
+      {
+        "link": "https://ascopubs.org/doi/full/10.1200/PO.19.00013",
+        "abstract": "Dimou et al. JCO PO, 2019"
+      }
+    ],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G1971E",
+      "name": "G1971E",
+      "refResidues": "G",
+      "proteinStart": 1971,
+      "proteinEnd": 1971,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "24218589"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "31669155",
+      "22919003",
+      "22215748",
+      "23719267",
+      "28465216"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "GOPC-ROS1 Fusion",
+      "name": "GOPC-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "30171048"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "EZR-ROS1 Fusion",
+      "name": "EZR-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22327623"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G2032R",
+      "name": "G2032R",
+      "refResidues": "G",
+      "proteinStart": 2032,
+      "proteinEnd": 2032,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25351743",
+      "24047073",
+      "24047072",
+      "23724914",
+      "27401242",
+      "25688157"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "CCDC6-ROS1 Fusion",
+      "name": "CCDC6-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22975805",
+      "25870798"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "SLC34A2-ROS1 Fusion",
+      "name": "SLC34A2-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22919003",
+      "22215748",
+      "22327623"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "C2060G",
+      "name": "C2060G",
+      "refResidues": "C",
+      "proteinStart": 2060,
+      "proteinEnd": 2060,
+      "variantResidues": "G",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "24218589"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "S1986Y",
+      "name": "S1986Y",
+      "refResidues": "S",
+      "proteinStart": 1986,
+      "proteinEnd": 1986,
+      "variantResidues": "Y",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "27401242"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "SDC4-ROS1 Fusion",
+      "name": "SDC4-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22327623"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "LRIG3-ROS1 Fusion",
+      "name": "LRIG3-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22327623"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "TPM3-ROS1 Fusion",
+      "name": "TPM3-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22327623"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "TFG-ROS1 Fusion",
+      "name": "TFG-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "24875859"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "L1951R",
+      "name": "L1951R",
+      "refResidues": "L",
+      "proteinStart": 1951,
+      "proteinEnd": 1951,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids":
+    [
+      "25351743"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "FIG-ROS1 Fusion",
+      "name": "FIG-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "12661006",
+      "2827175"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "YWHAE-ROS1 Fusion",
+      "name": "YWHAE-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "24875859"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G2101A",
+      "name": "G2101A",
+      "refResidues": "G",
+      "proteinStart": 2101,
+      "proteinEnd": 2101,
+      "variantResidues": "A",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22235099",
+      "25688157",
+      "24675041"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "KDELR2-ROS1 Fusion",
+      "name": "KDELR2-ROS1 Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22980976"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  }
+]

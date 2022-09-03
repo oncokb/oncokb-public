@@ -1,1 +1,110 @@
-[{"gene":{"entrezGeneId":673,"hugoSymbol":"BRAF","oncogene":true,"grch37Isoform":"ENST00000288602","grch37RefSeq":"NM_004333.4","grch38Isoform":"ENST00000646891","grch38RefSeq":"NM_004333.4","geneAliases":["BRAF1"],"genesets":[],"tsg":false},"consequence":{"term":"missense_variant","isGenerallyTruncating":false,"description":"A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"},"alteration":"V600E","name":"V600E","refResidues":"V","proteinStart":600,"proteinEnd":600,"variantResidues":"E","referenceGenomes":["GRCh38","GRCh37"]},{"gene":{"entrezGeneId":673,"hugoSymbol":"BRAF","oncogene":true,"grch37Isoform":"ENST00000288602","grch37RefSeq":"NM_004333.4","grch38Isoform":"ENST00000646891","grch38RefSeq":"NM_004333.4","geneAliases":["BRAF1"],"genesets":[],"tsg":false},"consequence":{"term":"NA","isGenerallyTruncating":false,"description":"NA"},"alteration":"V600","name":"V600","refResidues":"V","proteinStart":600,"proteinEnd":600,"variantResidues":null,"referenceGenomes":["GRCh38","GRCh37"]},{"gene":{"entrezGeneId":673,"hugoSymbol":"BRAF","oncogene":true,"grch37Isoform":"ENST00000288602","grch37RefSeq":"NM_004333.4","grch38Isoform":"ENST00000646891","grch38RefSeq":"NM_004333.4","geneAliases":["BRAF1"],"genesets":[],"tsg":false},"consequence":{"term":"NA","isGenerallyTruncating":false,"description":"NA"},"alteration":"Oncogenic Mutations","name":"Oncogenic Mutations","refResidues":null,"proteinStart":-1,"proteinEnd":100000,"variantResidues":null,"referenceGenomes":["GRCh38","GRCh37"]}]
+[
+  {
+    "gene":
+    {
+      "entrezGeneId": 673,
+      "hugoSymbol": "BRAF",
+      "oncogene": true,
+      "grch37Isoform": "ENST00000288602",
+      "grch37RefSeq": "NM_004333.4",
+      "grch38Isoform": "ENST00000646891",
+      "grch38RefSeq": "NM_004333.4",
+      "geneAliases":
+      [
+        "BRAF1"
+      ],
+      "genesets":
+      [],
+      "tsg": false
+    },
+    "consequence":
+    {
+      "term": "missense_variant",
+      "isGenerallyTruncating": false,
+      "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+    },
+    "alteration": "V600E",
+    "name": "V600E",
+    "refResidues": "V",
+    "proteinStart": 600,
+    "proteinEnd": 600,
+    "variantResidues": "E",
+    "referenceGenomes":
+    [
+      "GRCh38",
+      "GRCh37"
+    ]
+  },
+  {
+    "gene":
+    {
+      "entrezGeneId": 673,
+      "hugoSymbol": "BRAF",
+      "oncogene": true,
+      "grch37Isoform": "ENST00000288602",
+      "grch37RefSeq": "NM_004333.4",
+      "grch38Isoform": "ENST00000646891",
+      "grch38RefSeq": "NM_004333.4",
+      "geneAliases":
+      [
+        "BRAF1"
+      ],
+      "genesets":
+      [],
+      "tsg": false
+    },
+    "consequence":
+    {
+      "term": "NA",
+      "isGenerallyTruncating": false,
+      "description": "NA"
+    },
+    "alteration": "V600",
+    "name": "V600",
+    "refResidues": "V",
+    "proteinStart": 600,
+    "proteinEnd": 600,
+    "variantResidues": null,
+    "referenceGenomes":
+    [
+      "GRCh38",
+      "GRCh37"
+    ]
+  },
+  {
+    "gene":
+    {
+      "entrezGeneId": 673,
+      "hugoSymbol": "BRAF",
+      "oncogene": true,
+      "grch37Isoform": "ENST00000288602",
+      "grch37RefSeq": "NM_004333.4",
+      "grch38Isoform": "ENST00000646891",
+      "grch38RefSeq": "NM_004333.4",
+      "geneAliases":
+      [
+        "BRAF1"
+      ],
+      "genesets":
+      [],
+      "tsg": false
+    },
+    "consequence":
+    {
+      "term": "NA",
+      "isGenerallyTruncating": false,
+      "description": "NA"
+    },
+    "alteration": "Oncogenic Mutations",
+    "name": "Oncogenic Mutations",
+    "refResidues": null,
+    "proteinStart": -1,
+    "proteinEnd": 100000,
+    "variantResidues": null,
+    "referenceGenomes":
+    [
+      "GRCh38",
+      "GRCh37"
+    ]
+  }
+]
