@@ -1,0 +1,27 @@
+{
+  "highestSensitiveLevel": null,
+  "highestResistanceLevel": null,
+  "highestDiagnosticImplicationLevel": null,
+  "highestPrognosticImplicationLevel": "LEVEL_Px1",
+  "highestFdaLevel": null,
+  "gene":
+  {
+    "entrezGeneId": 7157,
+    "hugoSymbol": "TP53",
+    "oncogene": false,
+    "grch37Isoform": "ENST00000269305",
+    "grch37RefSeq": "NM_000546.5",
+    "grch38Isoform": "ENST00000269305",
+    "grch38RefSeq": "NM_000546.5",
+    "geneAliases":
+    [
+      "LFS1",
+      "p53"
+    ],
+    "genesets":
+    [],
+    "tsg": true
+  },
+  "alteration": 200,
+  "tumorType": null
+}

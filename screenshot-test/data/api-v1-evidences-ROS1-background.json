@@ -1,0 +1,216 @@
+[
+  {
+    "id": 21412,
+    "uuid": "6ab05933-cfea-46bb-a467-998f93a46f77",
+    "evidenceType": "GENE_BACKGROUND",
+    "cancerTypes":
+    [],
+    "excludedCancerTypes":
+    [],
+    "relevantCancerTypes":
+    [],
+    "gene":
+    {
+      "entrezGeneId": 6098,
+      "hugoSymbol": "ROS1",
+      "oncogene": true,
+      "grch37Isoform": "ENST00000368508",
+      "grch37RefSeq": "NM_002944.2",
+      "grch38Isoform": "ENST00000368508",
+      "grch38RefSeq": "NM_002944.2",
+      "geneAliases":
+      [
+        "MCF3",
+        "ROS",
+        "c-ros-1"
+      ],
+      "genesets":
+      [],
+      "tsg": false
+    },
+    "alterations":
+    [],
+    "description": "The ROS1 gene encodes a transmembrane protein with intracellular tyrosine kinase activity (PMID: 18778756). ROS1 is a member of the sevenless subfamily of tyrosine kinase insulin receptor genes (PMID: 27256160). The normal physiological role and ligand of this protein in humans is currently unknown (PMID: 23814043). ROS1 rearrangements where the kinase domain is retained (PMID: 22327623) are implicated in a range of human epithelial cancers including cholangiocarcinoma (PMID: 21253578), ovarian carcinoma (PMID: 22163003), gastric carcinoma (PMID: 23400546), angiosarcoma (PMID: 23637631) and most commonly non-small cell lung cancer (PMID: 22215748). Although ROS1 rearrangements were first discovered in a human glioblastoma cell line (PMID: 2827175), there is a paucity of ROS1 rearrangements in human gliomas (PMID: 24999209). The mechanism by which ROS1 rearrangements leads to dysregulated kinase activity is not clear, as its ligand has not yet been deciphered; however, it is hypothesized to occur through constitutive kinase activation (PMID: 18083107).",
+    "additionalInfo": null,
+    "treatments":
+    [],
+    "knownEffect": null,
+    "lastEdit": 1491850504000,
+    "lastReview": null,
+    "levelOfEvidence": null,
+    "fdaLevel": null,
+    "solidPropagationLevel": null,
+    "liquidPropagationLevel": null,
+    "articles":
+    [
+      {
+        "pmid": "27256160",
+        "title": "ROS1 fusions in cancer: a review.",
+        "journal": "Future oncology (London, England)",
+        "pubDate": "2016 Aug",
+        "volume": "12",
+        "issue": "16",
+        "pages": "1911-28",
+        "authors": "Uguen A et al",
+        "elocationId": "doi: 10.2217/fon-2016-0050",
+        "link": null,
+        "reference": "Uguen A et al. Future oncology (London, England). 2016 Aug;12(16)1911-28.",
+        "abstract": null
+      },
+      {
+        "pmid": "23637631",
+        "title": "Breakpoint analysis of transcriptional and genomic profiles uncovers novel gene fusions spanning multiple human cancer types.",
+        "journal": "PLoS genetics",
+        "pubDate": "2013 Apr",
+        "volume": "9",
+        "issue": "4",
+        "pages": "e1003464",
+        "authors": "Giacomini CP et al",
+        "elocationId": "doi: 10.1371/journal.pgen.1003464",
+        "link": null,
+        "reference": "Giacomini CP et al. PLoS genetics. 2013 Apr;9(4)e1003464.",
+        "abstract": null
+      },
+      {
+        "pmid": "23400546",
+        "title": "Identification of ROS1 rearrangement in gastric adenocarcinoma.",
+        "journal": "Cancer",
+        "pubDate": "2013 May 1",
+        "volume": "119",
+        "issue": "9",
+        "pages": "1627-35",
+        "authors": "Lee J et al",
+        "elocationId": "doi: 10.1002/cncr.27967",
+        "link": null,
+        "reference": "Lee J et al. Cancer. 2013 May 1;119(9)1627-35.",
+        "abstract": null
+      },
+      {
+        "pmid": "2827175",
+        "title": "Expression and rearrangement of the ROS1 gene in human glioblastoma cells.",
+        "journal": "Proceedings of the National Academy of Sciences of the United States of America",
+        "pubDate": "1987 Dec",
+        "volume": "84",
+        "issue": "24",
+        "pages": "9270-4",
+        "authors": "Birchmeier C et al",
+        "elocationId": "",
+        "link": null,
+        "reference": "Birchmeier C et al. Proceedings of the National Academy of Sciences of the United States of America. 1987 Dec;84(24)9270-4.",
+        "abstract": null
+      },
+      {
+        "pmid": "23814043",
+        "title": "Novel targets in non-small cell lung cancer: ROS1 and RET fusions.",
+        "journal": "The oncologist",
+        "pubDate": "2013",
+        "volume": "18",
+        "issue": "7",
+        "pages": "865-75",
+        "authors": "Gainor JF et al",
+        "elocationId": "doi: 10.1634/theoncologist.2013-0095",
+        "link": null,
+        "reference": "Gainor JF et al. The oncologist. 2013;18(7)865-75.",
+        "abstract": null
+      },
+      {
+        "pmid": "24999209",
+        "title": "Lack of GOPC-ROS1 (FIG-ROS1) rearrangement in adult human gliomas.",
+        "journal": "European journal of cancer (Oxford, England : 1990)",
+        "pubDate": "2014 Sep",
+        "volume": "50",
+        "issue": "13",
+        "pages": "2364-6",
+        "authors": "Karayan-Tapon L et al",
+        "elocationId": "doi: 10.1016/j.ejca.2014.06.001",
+        "link": null,
+        "reference": "Karayan-Tapon L et al. European journal of cancer (Oxford, England : 1990). 2014 Sep;50(13)2364-6.",
+        "abstract": null
+      },
+      {
+        "pmid": "22163003",
+        "title": "Chromosome 3 anomalies investigated by genome wide SNP analysis of benign, low malignant potential and low grade ovarian serous tumours.",
+        "journal": "PloS one",
+        "pubDate": "2011",
+        "volume": "6",
+        "issue": "12",
+        "pages": "e28250",
+        "authors": "Birch AH et al",
+        "elocationId": "doi: 10.1371/journal.pone.0028250",
+        "link": null,
+        "reference": "Birch AH et al. PloS one. 2011;6(12)e28250.",
+        "abstract": null
+      },
+      {
+        "pmid": "21253578",
+        "title": "Survey of tyrosine kinase signaling reveals ROS kinase fusions in human cholangiocarcinoma.",
+        "journal": "PloS one",
+        "pubDate": "2011 Jan 6",
+        "volume": "6",
+        "issue": "1",
+        "pages": "e15640",
+        "authors": "Gu TL et al",
+        "elocationId": "doi: 10.1371/journal.pone.0015640",
+        "link": null,
+        "reference": "Gu TL et al. PloS one. 2011 Jan 6;6(1)e15640.",
+        "abstract": null
+      },
+      {
+        "pmid": "18083107",
+        "title": "Global survey of phosphotyrosine signaling identifies oncogenic kinases in lung cancer.",
+        "journal": "Cell",
+        "pubDate": "2007 Dec 14",
+        "volume": "131",
+        "issue": "6",
+        "pages": "1190-203",
+        "authors": "Rikova K et al",
+        "elocationId": "",
+        "link": null,
+        "reference": "Rikova K et al. Cell. 2007 Dec 14;131(6)1190-203.",
+        "abstract": null
+      },
+      {
+        "pmid": "22327623",
+        "title": "RET, ROS1 and ALK fusions in lung cancer.",
+        "journal": "Nature medicine",
+        "pubDate": "2012 Feb 12",
+        "volume": "18",
+        "issue": "3",
+        "pages": "378-81",
+        "authors": "Takeuchi K et al",
+        "elocationId": "doi: 10.1038/nm.2658",
+        "link": null,
+        "reference": "Takeuchi K et al. Nature medicine. 2012 Feb 12;18(3)378-81.",
+        "abstract": null
+      },
+      {
+        "pmid": "22215748",
+        "title": "ROS1 rearrangements define a unique molecular class of lung cancers.",
+        "journal": "Journal of clinical oncology : official journal of the American Society of Clinical Oncology",
+        "pubDate": "2012 Mar 10",
+        "volume": "30",
+        "issue": "8",
+        "pages": "863-70",
+        "authors": "Bergethon K et al",
+        "elocationId": "doi: 10.1200/JCO.2011.35.6345",
+        "link": null,
+        "reference": "Bergethon K et al. Journal of clinical oncology : official journal of the American Society of Clinical Oncology. 2012 Mar 10;30(8)863-70.",
+        "abstract": null
+      },
+      {
+        "pmid": "18778756",
+        "title": "The multifaceted roles of the receptor tyrosine kinase ROS in development and cancer.",
+        "journal": "Biochimica et biophysica acta",
+        "pubDate": "2009 Jan",
+        "volume": "1795",
+        "issue": "1",
+        "pages": "37-52",
+        "authors": "Acquaviva J et al",
+        "elocationId": "doi: 10.1016/j.bbcan.2008.07.006",
+        "link": null,
+        "reference": "Acquaviva J et al. Biochimica et biophysica acta. 2009 Jan;1795(1)37-52.",
+        "abstract": null
+      }
+    ]
+  }
+]

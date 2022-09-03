@@ -1,0 +1,7179 @@
+[
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "N486_T491del",
+      "name": "N486_T491del",
+      "refResidues": null,
+      "proteinStart": 486,
+      "proteinEnd": 491,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_insertion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that inserts bases into in the coding sequence"
+      },
+      "alteration": "T599dup",
+      "name": "T599dup",
+      "refResidues": "T",
+      "proteinStart": 599,
+      "proteinEnd": 599,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "23833300",
+      "29456854",
+      "21190184",
+      "19363522"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "Q201H",
+      "name": "Q201H",
+      "refResidues": "Q",
+      "proteinStart": 201,
+      "proteinEnd": 201,
+      "variantResidues": "H",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids":
+    [
+      "18060073"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "W531C",
+      "name": "W531C",
+      "refResidues": "W",
+      "proteinStart": 531,
+      "proteinEnd": 531,
+      "variantResidues": "C",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids":
+    [
+      "19206169"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R671Q",
+      "name": "R671Q",
+      "refResidues": "R",
+      "proteinStart": 671,
+      "proteinEnd": 671,
+      "variantResidues": "Q",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "28174173",
+      "27048246"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "T529M",
+      "name": "T529M",
+      "refResidues": "T",
+      "proteinStart": 529,
+      "proteinEnd": 529,
+      "variantResidues": "M",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids":
+    [
+      "15573099",
+      "20538618"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "L485_Q494del",
+      "name": "L485_Q494del",
+      "refResidues": null,
+      "proteinStart": 485,
+      "proteinEnd": 494,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26732095"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600G",
+      "name": "V600G",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "G",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "20735442",
+      "16273091",
+      "12068308",
+      "28783719",
+      "26287849",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R462E",
+      "name": "R462E",
+      "refResidues": "R",
+      "proteinStart": 462,
+      "proteinEnd": 462,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25155755"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V459L",
+      "name": "V459L",
+      "refResidues": "V",
+      "proteinStart": 459,
+      "proteinEnd": 459,
+      "variantResidues": "L",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "28783719",
+      "12460918"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G469E",
+      "name": "G469E",
+      "refResidues": "G",
+      "proteinStart": 469,
+      "proteinEnd": 469,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15150094",
+      "26498038",
+      "28783719",
+      "18794803",
+      "22510884",
+      "15035987",
+      "16439621"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G469A",
+      "name": "G469A",
+      "refResidues": "G",
+      "proteinStart": 469,
+      "proteinEnd": 469,
+      "variantResidues": "A",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "20179705",
+      "23833300",
+      "26343582",
+      "12068308",
+      "28783719",
+      "18794803",
+      "22510884",
+      "22773810",
+      "16439621"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G464E",
+      "name": "G464E",
+      "refResidues": "G",
+      "proteinStart": 464,
+      "proteinEnd": 464,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15150094",
+      "20179705",
+      "26343582",
+      "16364920",
+      "28783719",
+      "18794803",
+      "15035987",
+      "23680146"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G596R",
+      "name": "G596R",
+      "refResidues": "G",
+      "proteinStart": 596,
+      "proteinEnd": 596,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "14678966",
+      "26498038",
+      "16364920",
+      "28783719",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "S467A",
+      "name": "S467A",
+      "refResidues": "S",
+      "proteinStart": 467,
+      "proteinEnd": 467,
+      "variantResidues": "A",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "19376813",
+      "16439621"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "F247L",
+      "name": "F247L",
+      "refResidues": "F",
+      "proteinStart": 247,
+      "proteinEnd": 247,
+      "variantResidues": "L",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "28512244",
+      "29533785",
+      "31515458"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "K601_W604del",
+      "name": "K601_W604del",
+      "refResidues": null,
+      "proteinStart": 601,
+      "proteinEnd": 604,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids":
+    [],
+    "mutationEffectAbstracts":
+    [
+      {
+        "link": "https://www.sciencedirect.com/science/article/pii/S1556086419330126?via%3Dihub",
+        "abstract": "Shimizu, J et al. JTO. Abstract# EP1.14-44"
+      }
+    ],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "T488_P490del",
+      "name": "T488_P490del",
+      "refResidues": null,
+      "proteinStart": 488,
+      "proteinEnd": 490,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids":
+    [
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "E275K",
+      "name": "E275K",
+      "refResidues": "E",
+      "proteinStart": 275,
+      "proteinEnd": 275,
+      "variantResidues": "K",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "19206169"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "N486_T491delinsK",
+      "name": "N486_T491delinsK",
+      "refResidues": null,
+      "proteinStart": 486,
+      "proteinEnd": 491,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "30867592"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V471F",
+      "name": "V471F",
+      "refResidues": "V",
+      "proteinStart": 471,
+      "proteinEnd": 471,
+      "variantResidues": "F",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25348715"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600M",
+      "name": "V600M",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "M",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids":
+    [
+      "23579220",
+      "26343582",
+      "28783719",
+      "22536370",
+      "25382067"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "V600_K601delinsE",
+      "name": "V600_K601delinsE",
+      "refResidues": null,
+      "proteinStart": 600,
+      "proteinEnd": 601,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26045855",
+      "23833300",
+      "28800030"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "E501K",
+      "name": "E501K",
+      "refResidues": "E",
+      "proteinStart": 501,
+      "proteinEnd": 501,
+      "variantResidues": "K",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids":
+    [
+      "17603482",
+      "16474404"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R462I",
+      "name": "R462I",
+      "refResidues": "R",
+      "proteinStart": 462,
+      "proteinEnd": 462,
+      "variantResidues": "I",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids":
+    [
+      "15150094",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "N581Y",
+      "name": "N581Y",
+      "refResidues": "N",
+      "proteinStart": 581,
+      "proteinEnd": 581,
+      "variantResidues": "Y",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "19474002",
+      "26084293",
+      "19276360",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "I326V",
+      "name": "I326V",
+      "refResidues": "I",
+      "proteinStart": 326,
+      "proteinEnd": 326,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids":
+    [
+      "17603482"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G469L",
+      "name": "G469L",
+      "refResidues": "G",
+      "proteinStart": 469,
+      "proteinEnd": 469,
+      "variantResidues": "L",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "24920063",
+      "24035431"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D594H",
+      "name": "D594H",
+      "refResidues": "D",
+      "proteinStart": 594,
+      "proteinEnd": 594,
+      "variantResidues": "H",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "28783719",
+      "28481359"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D594Y",
+      "name": "D594Y",
+      "refResidues": "D",
+      "proteinStart": 594,
+      "proteinEnd": 594,
+      "variantResidues": "Y",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "23833300",
+      "20141835",
+      "16439621"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D594N",
+      "name": "D594N",
+      "refResidues": "D",
+      "proteinStart": 594,
+      "proteinEnd": 594,
+      "variantResidues": "N",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "23833300",
+      "26498038",
+      "22798288",
+      "28783719"
+    ],
+    "mutationEffectAbstracts":
+    [
+      {
+        "link": "http://meeting.ascopubs.org/cgi/content/abstract/33/15_suppl/11091",
+        "abstract": "Noeparast et al. Abstract# 11091, ASCO 2015"
+      }
+    ],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "S151A",
+      "name": "S151A",
+      "refResidues": "S",
+      "proteinStart": 151,
+      "proteinEnd": 151,
+      "variantResidues": "A",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "21478863"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "L485F",
+      "name": "L485F",
+      "refResidues": "L",
+      "proteinStart": 485,
+      "proteinEnd": 485,
+      "variantResidues": "F",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "16474404",
+      "16439621"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D287H",
+      "name": "D287H",
+      "refResidues": "D",
+      "proteinStart": 287,
+      "proteinEnd": 287,
+      "variantResidues": "H",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26343582",
+      "28783719"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D594A",
+      "name": "D594A",
+      "refResidues": "D",
+      "proteinStart": 594,
+      "proteinEnd": 594,
+      "variantResidues": "A",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "28783719",
+      "20141835",
+      "28481359"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K601N",
+      "name": "K601N",
+      "refResidues": "K",
+      "proteinStart": 601,
+      "proteinEnd": 601,
+      "variantResidues": "N",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "20179705",
+      "24270325",
+      "26343582",
+      "12068308",
+      "22798288",
+      "23273605",
+      "25178945",
+      "28783719",
+      "18794803",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "T529N",
+      "name": "T529N",
+      "refResidues": "T",
+      "proteinStart": 529,
+      "proteinEnd": 529,
+      "variantResidues": "N",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids":
+    [
+      "15573099",
+      "20538618"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_insertion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that inserts bases into in the coding sequence"
+      },
+      "alteration": "T599_V600insV",
+      "name": "T599_V600insV",
+      "refResidues": null,
+      "proteinStart": 599,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "16501605"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K499E",
+      "name": "K499E",
+      "refResidues": "K",
+      "proteinStart": 499,
+      "proteinEnd": 499,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "16474404",
+      "16439621"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_insertion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that inserts bases into in the coding sequence"
+      },
+      "alteration": "R506_K507insVLR",
+      "name": "R506_K507insVLR",
+      "refResidues": null,
+      "proteinStart": 506,
+      "proteinEnd": 507,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "23817572"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "AKAP9-BRAF Fusion",
+      "name": "AKAP9-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15630448"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G478C",
+      "name": "G478C",
+      "refResidues": "G",
+      "proteinStart": 478,
+      "proteinEnd": 478,
+      "variantResidues": "C",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Loss-of-function",
+    "mutationEffectPmids":
+    [
+      "22926515"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "L597Q",
+      "name": "L597Q",
+      "refResidues": "L",
+      "proteinStart": 597,
+      "proteinEnd": 597,
+      "variantResidues": "Q",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "20179705",
+      "26343582",
+      "12068308",
+      "22798288",
+      "24933606",
+      "28783719",
+      "18794803",
+      "26643848",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "AGAP3-BRAF Fusion",
+      "name": "AGAP3-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26314551",
+      "30279230",
+      "34568720",
+      "28539463"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "ARMC10-BRAF Fusion",
+      "name": "ARMC10-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "30279230"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "F595L",
+      "name": "F595L",
+      "refResidues": "F",
+      "proteinStart": 595,
+      "proteinEnd": 595,
+      "variantResidues": "L",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15150094",
+      "26150740",
+      "26582644",
+      "28783719",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "N581S",
+      "name": "N581S",
+      "refResidues": "N",
+      "proteinStart": 581,
+      "proteinEnd": 581,
+      "variantResidues": "S",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26498038",
+      "28783719",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "E501G",
+      "name": "E501G",
+      "refResidues": "E",
+      "proteinStart": 501,
+      "proteinEnd": 501,
+      "variantResidues": "G",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Loss-of-function",
+    "mutationEffectPmids":
+    [
+      "16474404",
+      "26065894",
+      "16439621"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K601_S602delinsNT",
+      "name": "K601_S602delinsNT",
+      "refResidues": null,
+      "proteinStart": 601,
+      "proteinEnd": 602,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "23833300",
+      "28481359"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D594E",
+      "name": "D594E",
+      "refResidues": "D",
+      "proteinStart": 594,
+      "proteinEnd": 594,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "20978199"
+    ],
+    "mutationEffectAbstracts":
+    [
+      {
+        "link": "http://meetinglibrary.asco.org/content/152688-156",
+        "abstract": "Noeparast, A. et al. Abstract# 11091, ASCO 2015"
+      },
+      {
+        "link": "http://meeting.ascopubs.org/cgi/content/abstract/33/15_suppl/11091",
+        "abstract": "Noeparast et al. Abstract# 11091, ASCO 2015"
+      }
+    ],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "T529I",
+      "name": "T529I",
+      "refResidues": "T",
+      "proteinStart": 529,
+      "proteinEnd": 529,
+      "variantResidues": "I",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids":
+    [
+      "15573099",
+      "20538618"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "A598T",
+      "name": "A598T",
+      "refResidues": "A",
+      "proteinStart": 598,
+      "proteinEnd": 598,
+      "variantResidues": "T",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Loss-of-function",
+    "mutationEffectPmids":
+    [
+      "32059434",
+      "26619011",
+      "22926515"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "V487_P490del",
+      "name": "V487_P490del",
+      "refResidues": null,
+      "proteinStart": 487,
+      "proteinEnd": 490,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "I463S",
+      "name": "I463S",
+      "refResidues": "I",
+      "proteinStart": 463,
+      "proteinEnd": 463,
+      "variantResidues": "S",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids":
+    [
+      "15150094",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "PAPSS1-BRAF Fusion",
+      "name": "PAPSS1-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15630448",
+      "24345920"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "A598V",
+      "name": "A598V",
+      "refResidues": "A",
+      "proteinStart": 598,
+      "proteinEnd": 598,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "19200582"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "L485_P490delinsY",
+      "name": "L485_P490delinsY",
+      "refResidues": null,
+      "proteinStart": 485,
+      "proteinEnd": 490,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26732095"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "L514V",
+      "name": "L514V",
+      "refResidues": "L",
+      "proteinStart": 514,
+      "proteinEnd": 514,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "29880583"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "N581I",
+      "name": "N581I",
+      "refResidues": "N",
+      "proteinStart": 581,
+      "proteinEnd": 581,
+      "variantResidues": "I",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15917418",
+      "22969966",
+      "26202550",
+      "28783719"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G469V",
+      "name": "G469V",
+      "refResidues": "G",
+      "proteinStart": 469,
+      "proteinEnd": 469,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "27388325",
+      "20179705",
+      "25870796",
+      "23401075",
+      "26343582",
+      "28783719",
+      "18794803"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "FAM131B-BRAF Fusion",
+      "name": "FAM131B-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25040262",
+      "15630448",
+      "21424530"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "T241P",
+      "name": "T241P",
+      "refResidues": "T",
+      "proteinStart": 241,
+      "proteinEnd": 241,
+      "variantResidues": "P",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "19206169"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "TRIM24-BRAF Fusion",
+      "name": "TRIM24-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15630448",
+      "24345920"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K483E",
+      "name": "K483E",
+      "refResidues": "K",
+      "proteinStart": 483,
+      "proteinEnd": 483,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "27799065",
+      "23533272",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "PPFIBP2-BRAF Fusion",
+      "name": "PPFIBP2-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26072686"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G466E",
+      "name": "G466E",
+      "refResidues": "G",
+      "proteinStart": 466,
+      "proteinEnd": 466,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "27790118",
+      "15046639",
+      "28783719",
+      "15035987",
+      "24446311",
+      "28481359"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K483M",
+      "name": "K483M",
+      "refResidues": "K",
+      "proteinStart": 483,
+      "proteinEnd": 483,
+      "variantResidues": "M",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "23533272",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_insertion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that inserts bases into in the coding sequence"
+      },
+      "alteration": "T599_V600insEAT",
+      "name": "T599_V600insEAT",
+      "refResidues": null,
+      "proteinStart": 599,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "16501605"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "G469del",
+      "name": "G469del",
+      "refResidues": "G",
+      "proteinStart": 469,
+      "proteinEnd": 469,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "23833300"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "T599I",
+      "name": "T599I",
+      "refResidues": "T",
+      "proteinStart": 599,
+      "proteinEnd": 599,
+      "variantResidues": "I",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "A489_P490del",
+      "name": "A489_P490del",
+      "refResidues": null,
+      "proteinStart": 489,
+      "proteinEnd": 490,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "P490del",
+      "name": "P490del",
+      "refResidues": "P",
+      "proteinStart": 490,
+      "proteinEnd": 490,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids":
+    [
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "P367R",
+      "name": "P367R",
+      "refResidues": "P",
+      "proteinStart": 367,
+      "proteinEnd": 367,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "27478040"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "L584F",
+      "name": "L584F",
+      "refResidues": "L",
+      "proteinStart": 584,
+      "proteinEnd": 584,
+      "variantResidues": "F",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids":
+    [
+      "23658559",
+      "26386083"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26314551",
+      "26343582",
+      "22745804",
+      "15630448",
+      "28783719",
+      "20526349",
+      "30073261",
+      "18974108",
+      "25985019",
+      "26324360",
+      "21424530",
+      "30257958",
+      "24345920"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "ZKSCAN1-BRAF Fusion",
+      "name": "ZKSCAN1-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26314551"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "Y472C",
+      "name": "Y472C",
+      "refResidues": "Y",
+      "proteinStart": 472,
+      "proteinEnd": 472,
+      "variantResidues": "C",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22649091"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "GTF2I-BRAF Fusion",
+      "name": "GTF2I-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26314551",
+      "28448514"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "N581D",
+      "name": "N581D",
+      "refResidues": "N",
+      "proteinStart": 581,
+      "proteinEnd": 581,
+      "variantResidues": "D",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "16474404"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "L597S",
+      "name": "L597S",
+      "refResidues": "L",
+      "proteinStart": 597,
+      "proteinEnd": 597,
+      "variantResidues": "S",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22798288",
+      "24933606",
+      "26643848",
+      "29903896"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "N486del",
+      "name": "N486del",
+      "refResidues": "N",
+      "proteinStart": 486,
+      "proteinEnd": 486,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids":
+    [
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "L597V",
+      "name": "L597V",
+      "refResidues": "L",
+      "proteinStart": 597,
+      "proteinEnd": 597,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "20179705",
+      "26343582",
+      "12068308",
+      "22798288",
+      "28783719",
+      "18794803",
+      "26643848",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "A246P",
+      "name": "A246P",
+      "refResidues": "A",
+      "proteinStart": 246,
+      "proteinEnd": 246,
+      "variantResidues": "P",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "16474404"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "N486_P490del",
+      "name": "N486_P490del",
+      "refResidues": null,
+      "proteinStart": 486,
+      "proteinEnd": 490,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26996308",
+      "18060073",
+      "31519698"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "AGK-BRAF Fusion",
+      "name": "AGK-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26314551",
+      "30831205",
+      "23890088",
+      "24135138",
+      "34568720"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_insertion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that inserts bases into in the coding sequence"
+      },
+      "alteration": "T599insTT",
+      "name": "T599insTT",
+      "refResidues": "T",
+      "proteinStart": 599,
+      "proteinEnd": 599,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "21190184"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "S467L",
+      "name": "S467L",
+      "refResidues": "S",
+      "proteinStart": 467,
+      "proteinEnd": 467,
+      "variantResidues": "L",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26498038",
+      "25651238",
+      "24710085",
+      "26559571",
+      "28783719"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G466A",
+      "name": "G466A",
+      "refResidues": "G",
+      "proteinStart": 466,
+      "proteinEnd": 466,
+      "variantResidues": "A",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "28783719",
+      "15035987",
+      "28481359"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "N486_A489del",
+      "name": "N486_A489del",
+      "refResidues": null,
+      "proteinStart": 486,
+      "proteinEnd": 489,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "CUL1-BRAF Fusion",
+      "name": "CUL1-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25985019",
+      "22745804",
+      "15630448",
+      "26324360"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "L485_P490del",
+      "name": "L485_P490del",
+      "refResidues": null,
+      "proteinStart": 485,
+      "proteinEnd": 490,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26732095",
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25417114",
+      "20179705",
+      "23833300",
+      "26091043",
+      "26343582",
+      "12068308",
+      "30351999",
+      "25079552",
+      "28783719",
+      "19251651",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Kinase Domain Duplication",
+      "name": "Kinase Domain Duplication",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "32913992",
+      "26562024",
+      "27320919"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "L597R",
+      "name": "L597R",
+      "refResidues": "L",
+      "proteinStart": 597,
+      "proteinEnd": 597,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22798288",
+      "24933606",
+      "26643848"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G466R",
+      "name": "G466R",
+      "refResidues": "G",
+      "proteinStart": 466,
+      "proteinEnd": 466,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "16364920",
+      "15046639",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G596C",
+      "name": "G596C",
+      "refResidues": "G",
+      "proteinStart": 596,
+      "proteinEnd": 596,
+      "variantResidues": "C",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "28947956"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G596V",
+      "name": "G596V",
+      "refResidues": "G",
+      "proteinStart": 596,
+      "proteinEnd": 596,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "19376813",
+      "16439621"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "SND1-BRAF Fusion",
+      "name": "SND1-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25266736",
+      "25985019",
+      "22745804",
+      "24345920"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_insertion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that inserts bases into in the coding sequence"
+      },
+      "alteration": "V600delinsYM",
+      "name": "V600delinsYM",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22752848"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "Q257R",
+      "name": "Q257R",
+      "refResidues": "Q",
+      "proteinStart": 257,
+      "proteinEnd": 257,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "19376813",
+      "16474404",
+      "16439621"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600K",
+      "name": "V600K",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "K",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25417114",
+      "20179705",
+      "23833300",
+      "22535154",
+      "26091043",
+      "26343582",
+      "30630828",
+      "23922205",
+      "25079552",
+      "28783719",
+      "19251651",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K601E",
+      "name": "K601E",
+      "refResidues": "K",
+      "proteinStart": 601,
+      "proteinEnd": 601,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "20179705",
+      "26343582",
+      "22798288",
+      "28344857",
+      "28783719",
+      "18794803",
+      "26643848"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "L485_P490delinsF",
+      "name": "L485_P490delinsF",
+      "refResidues": null,
+      "proteinStart": 485,
+      "proteinEnd": 490,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26732095"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_insertion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that inserts bases into in the coding sequence"
+      },
+      "alteration": "T599_V600insETT",
+      "name": "T599_V600insETT",
+      "refResidues": null,
+      "proteinStart": 599,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "16501605"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "MKRN1-BRAF Fusion",
+      "name": "MKRN1-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "18974108",
+      "26314551",
+      "15630448",
+      "26324360",
+      "23817572",
+      "34568720"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "W450L",
+      "name": "W450L",
+      "refResidues": "W",
+      "proteinStart": 450,
+      "proteinEnd": 450,
+      "variantResidues": "L",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Neutral",
+    "mutationEffectPmids":
+    [
+      "27478040"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600D",
+      "name": "V600D",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "D",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25417114",
+      "23579220",
+      "22614978",
+      "20179705",
+      "23833300",
+      "26091043",
+      "26343582",
+      "12068308",
+      "25079552",
+      "28783719",
+      "19251651",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G464V",
+      "name": "G464V",
+      "refResidues": "G",
+      "proteinStart": 464,
+      "proteinEnd": 464,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15150094",
+      "20179705",
+      "17314276",
+      "26343582",
+      "12068308",
+      "28783719",
+      "18794803",
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "F468C",
+      "name": "F468C",
+      "refResidues": "F",
+      "proteinStart": 468,
+      "proteinEnd": 468,
+      "variantResidues": "C",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15150094"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "H574Q",
+      "name": "H574Q",
+      "refResidues": "H",
+      "proteinStart": 574,
+      "proteinEnd": 574,
+      "variantResidues": "Q",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "27478040"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_insertion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that inserts bases into in the coding sequence"
+      },
+      "alteration": "V600_K601insDFGLAT",
+      "name": "V600_K601insDFGLAT",
+      "refResidues": null,
+      "proteinStart": 600,
+      "proteinEnd": 601,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "17297294"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G464R",
+      "name": "G464R",
+      "refResidues": "G",
+      "proteinStart": 464,
+      "proteinEnd": 464,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15046639"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "E586K",
+      "name": "E586K",
+      "refResidues": "E",
+      "proteinStart": 586,
+      "proteinEnd": 586,
+      "variantResidues": "K",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "KIAA1549-BRAF Fusion",
+      "name": "KIAA1549-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "18974108",
+      "31151904",
+      "23533272",
+      "24345920",
+      "26072686"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "N486_T488del",
+      "name": "N486_T488del",
+      "refResidues": null,
+      "proteinStart": 486,
+      "proteinEnd": 488,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "L505H",
+      "name": "L505H",
+      "refResidues": "L",
+      "proteinStart": 505,
+      "proteinEnd": 505,
+      "variantResidues": "H",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25515853",
+      "24112705",
+      "24283590"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "V487_P492delinsA",
+      "name": "V487_P492delinsA",
+      "refResidues": null,
+      "proteinStart": 487,
+      "proteinEnd": 492,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26732095"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "T488_P492del",
+      "name": "T488_P492del",
+      "refResidues": null,
+      "proteinStart": 488,
+      "proteinEnd": 492,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_insertion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that inserts bases into in the coding sequence"
+      },
+      "alteration": "A598_T599insV",
+      "name": "A598_T599insV",
+      "refResidues": null,
+      "proteinStart": 598,
+      "proteinEnd": 599,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Inconclusive",
+    "mutationEffectPmids":
+    [
+      "28800030"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Inconclusive",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D594G",
+      "name": "D594G",
+      "refResidues": "D",
+      "proteinStart": 594,
+      "proteinEnd": 594,
+      "variantResidues": "G",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26498038",
+      "28783719",
+      "20141835",
+      "28481359"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K601Q",
+      "name": "K601Q",
+      "refResidues": "K",
+      "proteinStart": 601,
+      "proteinEnd": 601,
+      "variantResidues": "Q",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "19206169"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "V169_D380del",
+      "name": "p61BRAF-V600E",
+      "refResidues": null,
+      "proteinStart": 169,
+      "proteinEnd": 380,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "27320919",
+      "22113612"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "N486_V487del",
+      "name": "N486_V487del",
+      "refResidues": null,
+      "proteinStart": 486,
+      "proteinEnd": 487,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600R",
+      "name": "V600R",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25417114",
+      "22614978",
+      "20179705",
+      "23833300",
+      "26343582",
+      "23473613",
+      "25079552",
+      "28783719",
+      "23237741",
+      "15035987",
+      "22536370",
+      "23490649"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "R509H",
+      "name": "R509H",
+      "refResidues": "R",
+      "proteinStart": 509,
+      "proteinEnd": 509,
+      "variantResidues": "H",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Loss-of-function",
+    "mutationEffectPmids":
+    [
+      "20179705"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Neutral",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G596D",
+      "name": "G596D",
+      "refResidues": "G",
+      "proteinStart": 596,
+      "proteinEnd": 596,
+      "variantResidues": "D",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "17360030",
+      "23481512",
+      "28783719"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "K601T",
+      "name": "K601T",
+      "refResidues": "K",
+      "proteinStart": 601,
+      "proteinEnd": 601,
+      "variantResidues": "T",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26090869",
+      "26343582",
+      "22798288",
+      "25938346",
+      "28783719"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "D594V",
+      "name": "D594V",
+      "refResidues": "D",
+      "proteinStart": 594,
+      "proteinEnd": 594,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "14678966",
+      "19376813",
+      "15035987",
+      "16439621"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "inframe_deletion",
+        "isGenerallyTruncating": false,
+        "description": "An inframe non synonymous variant that deletes bases from the coding sequence"
+      },
+      "alteration": "P490_Q494del",
+      "name": "P490_Q494del",
+      "refResidues": null,
+      "proteinStart": 490,
+      "proteinEnd": 494,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26996308"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "A728V",
+      "name": "A728V",
+      "refResidues": "A",
+      "proteinStart": 728,
+      "proteinEnd": 728,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15035987"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "PCBP2-BRAF Fusion",
+      "name": "PCBP2-BRAF Fusion",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Likely Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "18974108",
+      "26343582",
+      "22745804",
+      "21424530",
+      "30257958",
+      "24345920"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Likely Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Amplification",
+      "name": "Amplification",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "15467732",
+      "24055054",
+      "25618114",
+      "22395615",
+      "21098728"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "T599R",
+      "name": "T599R",
+      "refResidues": "T",
+      "proteinStart": 599,
+      "proteinEnd": 599,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "25120313",
+      "19206169"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G466V",
+      "name": "G466V",
+      "refResidues": "G",
+      "proteinStart": 466,
+      "proteinEnd": 466,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "22649091",
+      "26498038",
+      "24202393",
+      "16364920",
+      "15046639",
+      "28783719",
+      "15035987",
+      "28481359",
+      "16439621"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  },
+  {
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G469R",
+      "name": "G469R",
+      "refResidues": "G",
+      "proteinStart": 469,
+      "proteinEnd": 469,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "mutationEffect": "Gain-of-function",
+    "mutationEffectPmids":
+    [
+      "26150740",
+      "24920063",
+      "20179705",
+      "26498038",
+      "16096377",
+      "26343582",
+      "26619011",
+      "28783719",
+      "18794803"
+    ],
+    "mutationEffectAbstracts":
+    [],
+    "oncogenic": "Oncogenic",
+    "oncogenicPmids":
+    [],
+    "oncogenicAbstracts":
+    []
+  }
+]

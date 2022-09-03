@@ -1,0 +1,20 @@
+[
+  {
+    "ensemblGeneId": "ENSG00000047936",
+    "canonical": true,
+    "chromosome": "6",
+    "referenceGenome": "GRCh37",
+    "strand": -1,
+    "start": 117609463,
+    "end": 117747018
+  },
+  {
+    "ensemblGeneId": "ENSG00000047936",
+    "canonical": true,
+    "chromosome": "6",
+    "referenceGenome": "GRCh38",
+    "strand": -1,
+    "start": 117287353,
+    "end": 117425942
+  }
+]
