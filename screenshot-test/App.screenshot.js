@@ -258,7 +258,7 @@ function getMockResponse(url){
   return res;
 }
 
-describe.skip('Tests with login', () => {
+describe('Tests with login', () => {
   let browser;
   let page;
 
@@ -283,7 +283,7 @@ describe.skip('Tests with login', () => {
     });
   })
 
-  it('Home Page', async() => {
+  it.skip('Home Page', async() => {
     await page.goto(`${CLIENT_URL}`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -291,7 +291,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page with Login' });
   })
 
-  it('Home Page #levelType=Dx', async() => {
+  it.skip('Home Page #levelType=Dx', async() => {
     await page.goto(`${CLIENT_URL}#levelType=Dx`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -299,7 +299,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page DX with Login' });
   })
 
-  it('Home Page #levelType=Px', async() => {
+  it.skip('Home Page #levelType=Px', async() => {
     await page.goto(`${CLIENT_URL}#levelType=Px`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -307,7 +307,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Home Page PX with Login' });
   })
 
-  it ('Levels of Evidence Page', async() => {
+  it.skip('Levels of Evidence Page', async() => {
     await page.goto(`${CLIENT_URL}levels`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -315,7 +315,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page with Login' });
   })
 
-  it ('Levels of Evidence Page #version=DX', async() => {
+  it.skip ('Levels of Evidence Page #version=DX', async() => {
     await page.goto(`${CLIENT_URL}levels#version=DX`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -323,7 +323,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page DX with Login' });
   })
 
-  it ('Levels of Evidence Page #version=PX', async() => {
+  it.skip ('Levels of Evidence Page #version=PX', async() => {
     await page.goto(`${CLIENT_URL}levels#version=PX`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -331,7 +331,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page PX with Login' });
   })
 
-  it ('Levels of Evidence Page #version=AAC', async() => {
+  it.skip ('Levels of Evidence Page #version=AAC', async() => {
     await page.goto(`${CLIENT_URL}levels#version=AAC`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -339,7 +339,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page AAC with Login' });
   })
 
-  it ('Levels of Evidence Page #version=V1', async() => {
+  it.skip ('Levels of Evidence Page #version=V1', async() => {
     await page.goto(`${CLIENT_URL}levels#version=V1`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -347,7 +347,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'LoE Page V1 with Login' });
   })
 
-  it('Actionable Genes Page', async() => {
+  it.skip('Actionable Genes Page', async() => {
     await page.goto(`${CLIENT_URL}actionableGenes`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -355,7 +355,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Actionable Genes Page with Login' });
   })
 
-  it('Actionable Genes Page #levels=1,Dx1,Px1', async() => {
+  it.skip('Actionable Genes Page #levels=1,Dx1,Px1', async() => {
     await page.goto(`${CLIENT_URL}actionableGenes#levels=1,Dx1,Px1`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -363,7 +363,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Actionable Genes Page Levels Selected with Login' });
   })
 
-  it('Cancer Genes Page', async() => {
+  it.skip('Cancer Genes Page', async() => {
     await page.goto(`${CLIENT_URL}cancerGenes`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -371,7 +371,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Cancer Genes Page with Login' });
   })
 
-  it('About Page', async() => {
+  it.skip('About Page', async() => {
     await page.goto(`${CLIENT_URL}about`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(LONG_WAITING_TIME);
@@ -379,7 +379,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'About Page with Login' });
   })
 
-  it('Team Page', async() => {
+  it.skip('Team Page', async() => {
     await page.goto(`${CLIENT_URL}team`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
@@ -387,7 +387,7 @@ describe.skip('Tests with login', () => {
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Team Page with Login' });
   })
 
-  it('Terms Page', async() => {
+  it.skip('Terms Page', async() => {
     await page.goto(`${CLIENT_URL}terms`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
