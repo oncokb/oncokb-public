@@ -531,51 +531,6 @@
         }
       }
     },
-    "/utils/fdaAlterations": {
-      "get": {
-        "tags": [
-          "Utils"
-        ],
-        "summary": "utilsFdaAlterationsGet",
-        "description": "Get the full list of FDA alterations.",
-        "operationId": "utilsFdaAlterationsGetUsingGET",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "hugoSymbol",
-            "in": "query",
-            "description": "Gene hugo symbol",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/FdaAlteration"
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/utils/isHotspot": {
       "get": {
         "tags": [
@@ -774,39 +729,6 @@
               "items": {
                 "$ref": "#/definitions/PortalAlteration"
               }
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/utils/numbers/fda": {
-      "get": {
-        "tags": [
-          "Utils"
-        ],
-        "summary": "utilsNumbersFdaGet",
-        "description": "Get gene related numbers of all fda alterations. This is for main page word cloud.",
-        "operationId": "utilsNumbersFdaGetUsingGET",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
             }
           },
           "401": {
@@ -1095,23 +1017,22 @@
             "required": false,
             "type": "string",
             "enum": [
-              "LEVEL_0",
               "LEVEL_1",
               "LEVEL_2",
-              "LEVEL_2A",
-              "LEVEL_2B",
               "LEVEL_3A",
               "LEVEL_3B",
               "LEVEL_4",
               "LEVEL_R1",
               "LEVEL_R2",
-              "LEVEL_R3",
               "LEVEL_Px1",
               "LEVEL_Px2",
               "LEVEL_Px3",
               "LEVEL_Dx1",
               "LEVEL_Dx2",
               "LEVEL_Dx3",
+              "LEVEL_Fda1",
+              "LEVEL_Fda2",
+              "LEVEL_Fda3",
               "NO"
             ]
           },
@@ -1821,92 +1742,110 @@
         "highestDiagnosticImplicationLevel": {
           "type": "string",
           "enum": [
-            "LEVEL_0",
             "LEVEL_1",
             "LEVEL_2",
-            "LEVEL_2A",
-            "LEVEL_2B",
             "LEVEL_3A",
             "LEVEL_3B",
             "LEVEL_4",
             "LEVEL_R1",
             "LEVEL_R2",
-            "LEVEL_R3",
             "LEVEL_Px1",
             "LEVEL_Px2",
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
             "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "highestFdaLevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
             "NO"
           ]
         },
         "highestPrognosticImplicationLevel": {
           "type": "string",
           "enum": [
-            "LEVEL_0",
             "LEVEL_1",
             "LEVEL_2",
-            "LEVEL_2A",
-            "LEVEL_2B",
             "LEVEL_3A",
             "LEVEL_3B",
             "LEVEL_4",
             "LEVEL_R1",
             "LEVEL_R2",
-            "LEVEL_R3",
             "LEVEL_Px1",
             "LEVEL_Px2",
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
             "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
             "NO"
           ]
         },
         "highestResistanceLevel": {
           "type": "string",
           "enum": [
-            "LEVEL_0",
             "LEVEL_1",
             "LEVEL_2",
-            "LEVEL_2A",
-            "LEVEL_2B",
             "LEVEL_3A",
             "LEVEL_3B",
             "LEVEL_4",
             "LEVEL_R1",
             "LEVEL_R2",
-            "LEVEL_R3",
             "LEVEL_Px1",
             "LEVEL_Px2",
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
             "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
             "NO"
           ]
         },
         "highestSensitiveLevel": {
           "type": "string",
           "enum": [
-            "LEVEL_0",
             "LEVEL_1",
             "LEVEL_2",
-            "LEVEL_2A",
-            "LEVEL_2B",
             "LEVEL_3A",
             "LEVEL_3B",
             "LEVEL_4",
             "LEVEL_R1",
             "LEVEL_R2",
-            "LEVEL_R3",
             "LEVEL_Px1",
             "LEVEL_Px2",
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
             "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
             "NO"
           ]
         },
@@ -1927,23 +1866,22 @@
           "items": {
             "type": "string",
             "enum": [
-              "LEVEL_0",
               "LEVEL_1",
               "LEVEL_2",
-              "LEVEL_2A",
-              "LEVEL_2B",
               "LEVEL_3A",
               "LEVEL_3B",
               "LEVEL_4",
               "LEVEL_R1",
               "LEVEL_R2",
-              "LEVEL_R3",
               "LEVEL_Px1",
               "LEVEL_Px2",
               "LEVEL_Px3",
               "LEVEL_Dx1",
               "LEVEL_Dx2",
               "LEVEL_Dx3",
+              "LEVEL_Fda1",
+              "LEVEL_Fda2",
+              "LEVEL_Fda3",
               "NO"
             ]
           }
@@ -1953,23 +1891,22 @@
           "items": {
             "type": "string",
             "enum": [
-              "LEVEL_0",
               "LEVEL_1",
               "LEVEL_2",
-              "LEVEL_2A",
-              "LEVEL_2B",
               "LEVEL_3A",
               "LEVEL_3B",
               "LEVEL_4",
               "LEVEL_R1",
               "LEVEL_R2",
-              "LEVEL_R3",
               "LEVEL_Px1",
               "LEVEL_Px2",
               "LEVEL_Px3",
               "LEVEL_Dx1",
               "LEVEL_Dx2",
               "LEVEL_Dx3",
+              "LEVEL_Fda1",
+              "LEVEL_Fda2",
+              "LEVEL_Fda3",
               "NO"
             ]
           }
@@ -2078,23 +2015,22 @@
         "levelOfEvidence": {
           "type": "string",
           "enum": [
-            "LEVEL_0",
             "LEVEL_1",
             "LEVEL_2",
-            "LEVEL_2A",
-            "LEVEL_2B",
             "LEVEL_3A",
             "LEVEL_3B",
             "LEVEL_4",
             "LEVEL_R1",
             "LEVEL_R2",
-            "LEVEL_R3",
             "LEVEL_Px1",
             "LEVEL_Px2",
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
             "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
             "NO"
           ]
         },
@@ -2133,23 +2069,22 @@
         "level": {
           "type": "string",
           "enum": [
-            "LEVEL_0",
             "LEVEL_1",
             "LEVEL_2",
-            "LEVEL_2A",
-            "LEVEL_2B",
             "LEVEL_3A",
             "LEVEL_3B",
             "LEVEL_4",
             "LEVEL_R1",
             "LEVEL_R2",
-            "LEVEL_R3",
             "LEVEL_Px1",
             "LEVEL_Px2",
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
             "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
             "NO"
           ]
         }
@@ -2302,6 +2237,15 @@
           "items": {
             "type": "string"
           }
+        },
+        "excludedCancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
+        },
+        "fdaLevel": {
+          "type": "string"
         },
         "level": {
           "type": "string"
@@ -2478,6 +2422,34 @@
             "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE"
           ]
         },
+        "excludedCancerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TumorType"
+          }
+        },
+        "fdaLevel": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
         "gene": {
           "$ref": "#/definitions/Gene"
         },
@@ -2499,46 +2471,44 @@
         "levelOfEvidence": {
           "type": "string",
           "enum": [
-            "LEVEL_0",
             "LEVEL_1",
             "LEVEL_2",
-            "LEVEL_2A",
-            "LEVEL_2B",
             "LEVEL_3A",
             "LEVEL_3B",
             "LEVEL_4",
             "LEVEL_R1",
             "LEVEL_R2",
-            "LEVEL_R3",
             "LEVEL_Px1",
             "LEVEL_Px2",
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
             "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
             "NO"
           ]
         },
         "liquidPropagationLevel": {
           "type": "string",
           "enum": [
-            "LEVEL_0",
             "LEVEL_1",
             "LEVEL_2",
-            "LEVEL_2A",
-            "LEVEL_2B",
             "LEVEL_3A",
             "LEVEL_3B",
             "LEVEL_4",
             "LEVEL_R1",
             "LEVEL_R2",
-            "LEVEL_R3",
             "LEVEL_Px1",
             "LEVEL_Px2",
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
             "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
             "NO"
           ]
         },
@@ -2551,23 +2521,22 @@
         "solidPropagationLevel": {
           "type": "string",
           "enum": [
-            "LEVEL_0",
             "LEVEL_1",
             "LEVEL_2",
-            "LEVEL_2A",
-            "LEVEL_2B",
             "LEVEL_3A",
             "LEVEL_3B",
             "LEVEL_4",
             "LEVEL_R1",
             "LEVEL_R2",
-            "LEVEL_R3",
             "LEVEL_Px1",
             "LEVEL_Px2",
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
             "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
             "NO"
           ]
         },
@@ -2632,20 +2601,6 @@
         },
         "vus": {
           "type": "boolean"
-        }
-      }
-    },
-    "FdaAlteration": {
-      "type": "object",
-      "properties": {
-        "alteration": {
-          "$ref": "#/definitions/Alteration"
-        },
-        "cancerType": {
-          "type": "string"
-        },
-        "level": {
-          "type": "string"
         }
       }
     },
@@ -2816,6 +2771,9 @@
         "highestDiagnosticImplicationLevel": {
           "type": "string"
         },
+        "highestFdaLevel": {
+          "type": "string"
+        },
         "highestPrognosticImplicationLevel": {
           "type": "string"
         },
@@ -2900,26 +2858,47 @@
             "$ref": "#/definitions/Drug"
           }
         },
-        "level": {
+        "fdaLevel": {
           "type": "string",
           "enum": [
-            "LEVEL_0",
             "LEVEL_1",
             "LEVEL_2",
-            "LEVEL_2A",
-            "LEVEL_2B",
             "LEVEL_3A",
             "LEVEL_3B",
             "LEVEL_4",
             "LEVEL_R1",
             "LEVEL_R2",
-            "LEVEL_R3",
             "LEVEL_Px1",
             "LEVEL_Px2",
             "LEVEL_Px3",
             "LEVEL_Dx1",
             "LEVEL_Dx2",
             "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
+            "NO"
+          ]
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1",
+            "LEVEL_2",
+            "LEVEL_3A",
+            "LEVEL_3B",
+            "LEVEL_4",
+            "LEVEL_R1",
+            "LEVEL_R2",
+            "LEVEL_Px1",
+            "LEVEL_Px2",
+            "LEVEL_Px3",
+            "LEVEL_Dx1",
+            "LEVEL_Dx2",
+            "LEVEL_Dx3",
+            "LEVEL_Fda1",
+            "LEVEL_Fda2",
+            "LEVEL_Fda3",
             "NO"
           ]
         },

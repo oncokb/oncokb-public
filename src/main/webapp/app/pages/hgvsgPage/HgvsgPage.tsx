@@ -135,10 +135,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
 
   @computed
   get pageShouldBeRendered() {
-    return (
-      this.store.annotationResultByHgvsg.isComplete &&
-      this.store.fdaAlterations.isComplete
-    );
+    return this.store.annotationResultByHgvsg.isComplete;
   }
 
   @autobind
@@ -168,8 +165,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
           <Then>
             <If
               condition={
-                !!this.store.annotationResultByHgvsg.result.query.hugoSymbol &&
-                this.store.fdaAlterations.isComplete
+                !!this.store.annotationResultByHgvsg.result.query.hugoSymbol
               }
             >
               <Then>
@@ -187,7 +183,6 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
                   tumorType={this.store.tumorTypeQuery}
                   refGenome={this.store.referenceGenomeQuery}
                   annotation={this.store.annotationResultByHgvsg.result}
-                  fdaAlterations={this.store.fdaAlterations.result}
                   biologicalAlterations={
                     this.store.biologicalAlterations.result
                   }

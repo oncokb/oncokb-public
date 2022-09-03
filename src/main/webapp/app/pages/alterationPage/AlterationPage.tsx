@@ -134,8 +134,7 @@ export default class AlterationPage extends React.Component<
       this.store.ensemblGenes.isComplete &&
       this.store.clinicalAlterations.isComplete &&
       this.store.biologicalAlterations.isComplete &&
-      this.store.annotationResult.isComplete &&
-      this.store.fdaAlterations.isComplete
+      this.store.annotationResult.isComplete
     );
   }
 
@@ -195,7 +194,6 @@ export default class AlterationPage extends React.Component<
                   tumorType={this.store.tumorTypeQuery}
                   refGenome={this.store.referenceGenomeQuery}
                   annotation={this.store.annotationResult.result}
-                  fdaAlterations={this.store.fdaAlterations.result}
                   biologicalAlterations={
                     this.store.biologicalAlterations.result
                   }

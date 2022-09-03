@@ -21,14 +21,9 @@ import {
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
 } from 'app/config/constants';
-import { TherapeuticImplication } from 'app/store/AnnotationStore';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 import { Version } from 'app/pages/LevelOfEvidencePage';
-import {
-  BiologicalVariant,
-  EnsemblGene,
-  FdaAlteration,
-} from 'app/shared/api/generated/OncoKbPrivateAPI';
+import { BiologicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { GenePageTable } from 'app/pages/genePage/GenePageTable';
 import AppStore from 'app/store/AppStore';
 import { SearchColumn } from 'app/components/oncokbTable/OncoKBTable';
@@ -37,12 +32,16 @@ import {
   getDefaultColumnDefinition,
   IAlteration,
 } from 'app/shared/utils/Utils';
-import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
+import { AlterationPageLink, OncoTreeLink } from 'app/shared/utils/UrlUtils';
 import { Citations } from 'app/shared/api/generated/OncoKbAPI';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import { getTabDefaultActiveKey } from 'app/shared/utils/TempAnnotationUtils';
 import WindowStore from 'app/store/WindowStore';
-import InfoIcon from 'app/shared/icons/InfoIcon';
+import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
+import {
+  FdaImplication,
+  TherapeuticImplication,
+} from 'app/store/AnnotationStore';
 
 export type Column = {
   key: ANNOTATION_PAGE_TAB_KEYS;
@@ -55,7 +54,7 @@ export interface IEvidenceTableTabProps {
   tx: TherapeuticImplication[];
   dx: TherapeuticImplication[];
   px: TherapeuticImplication[];
-  fda: FdaAlteration[];
+  fda: FdaImplication[];
   selectedTab?: ANNOTATION_PAGE_TAB_KEYS;
   onChangeTab?: (
     selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
@@ -425,95 +424,28 @@ export default class AlterationTableTabs extends React.Component<
     return [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
-        accessor: 'alteration',
-        width: 400,
-        onFilter: (data: FdaAlteration, keyword: string) =>
-          filterByKeyword(data.alteration.name, keyword),
-        Cell: (props: { original: FdaAlteration }) => {
-          return (
-            <AlterationPageLink
-              hugoSymbol={props.original.alteration.gene.hugoSymbol}
-              alteration={{
-                alteration: props.original.alteration.alteration,
-                name: props.original.alteration.name,
-              }}
-              hashQueries={{ tab: ANNOTATION_PAGE_TAB_KEYS.FDA }}
-              onClick={() => {
-                this.props.appStore!.toFdaRecognizedContent = true;
-              }}
-            />
-          );
+        Cell(props: { original: FdaImplication }) {
+          return props.original.alterationView;
         },
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.EVIDENCE_CANCER_TYPE),
-        accessor: 'cancerType',
-        width: 400,
+        id: TABLE_COLUMN_KEY.CANCER_TYPE,
         Header: <span>Cancer Type</span>,
-        onFilter: (data: FdaAlteration, keyword: string) =>
-          filterByKeyword(data.cancerType, keyword),
-        Cell: (props: { original: FdaAlteration }) => {
-          return (
-            <AlterationPageLink
-              hugoSymbol={this.props.hugoSymbol}
-              alteration={{
-                alteration: props.original.alteration.alteration,
-                name: props.original.alteration.name,
-              }}
-              alterationRefGenomes={
-                props.original.alteration.referenceGenomes as REFERENCE_GENOME[]
-              }
-              hashQueries={{ tab: ANNOTATION_PAGE_TAB_KEYS.FDA }}
-              cancerType={props.original.cancerType}
-              onClick={() => {
-                this.props.appStore!.toFdaRecognizedContent = true;
-              }}
-            >
-              {props.original.cancerType}
-            </AlterationPageLink>
-          );
+        accessor: 'cancerType',
+        style: { whiteSpace: 'normal' },
+        minWidth: 110,
+        defaultSortDesc: false,
+        sortMethod: defaultSortMethod,
+        Cell(props: { original: FdaImplication }) {
+          return props.original.cancerTypeView;
         },
+        onFilter: (data: FdaImplication, keyword: string) =>
+          filterByKeyword(data.cancerType, keyword),
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
-        Header: (
-          <div>
-            <span>FDA Level of Evidence</span>
-            <InfoIcon
-              className={'ml-1'}
-              overlay={
-                <span>
-                  For more information about the FDA Level of Evidence, please
-                  see{' '}
-                  <Link
-                    to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
-                    className={'font-bold'}
-                  >
-                    HERE
-                  </Link>
-                  .
-                </span>
-              }
-            />
-          </div>
-        ),
-        width: undefined,
-        accessor: 'level',
-        onFilter: (data: FdaAlteration, keyword: string) =>
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.FDA_LEVEL),
+        onFilter: (data: FdaImplication, keyword: string) =>
           filterByKeyword(data.level, keyword),
-        sortMethod(a: string, b: string) {
-          return (
-            LEVEL_PRIORITY.indexOf(a.replace('Level ', '') as LEVELS) -
-            LEVEL_PRIORITY.indexOf(b.replace('Level ', '') as LEVELS)
-          );
-        },
-        Cell(props: { original: FdaAlteration }) {
-          return (
-            <span>
-              FDA Level {props.original.level.toString().replace('FDAx', '')}
-            </span>
-          );
-        },
       },
     ];
   }
@@ -559,6 +491,20 @@ export default class AlterationTableTabs extends React.Component<
             data={this.props.fda}
             columns={this.fdaTableColumns}
             isPending={false}
+            defaultSorted={[
+              {
+                id: TABLE_COLUMN_KEY.FDA_LEVEL,
+                desc: true,
+              },
+              {
+                id: TABLE_COLUMN_KEY.ALTERATION,
+                desc: false,
+              },
+              {
+                id: TABLE_COLUMN_KEY.CANCER_TYPE,
+                desc: false,
+              },
+            ]}
           />
         );
       default:
