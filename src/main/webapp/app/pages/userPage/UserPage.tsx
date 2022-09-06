@@ -34,10 +34,12 @@ import {
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import WindowStore from 'app/store/WindowStore';
 import {
+  AdditionalInfoDTO,
   Token,
   UserDTO,
   UserMailsDTO,
   UserUsage,
+  UserCompany,
 } from 'app/shared/api/generated/API';
 import client from 'app/shared/api/clientInstance';
 import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
@@ -66,7 +68,7 @@ import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
 import DocumentTitle from 'react-document-title';
 import { Link } from 'react-router-dom';
 import { RouterStore } from 'mobx-react-router';
-import { SHORT_TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
+import { SHORT_TEXT_VAL, TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
 import classnames from 'classnames';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
@@ -296,6 +298,14 @@ export default class UserPage extends React.Component<IUserPage> {
   @action
   async updateUser(event: any, values: any) {
     if (this.user) {
+      const updatedUserCompany: UserCompany = {
+        ...this.user.additionalInfo?.userCompany,
+        useCase: values.additionalInfoUserCase,
+      };
+      const updatedAdditionalInfo: AdditionalInfoDTO = {
+        ...this.user.additionalInfo,
+        userCompany: updatedUserCompany,
+      };
       const updatedUser: UserDTO = {
         ...this.user,
         firstName: values.firstName,
@@ -309,6 +319,7 @@ export default class UserPage extends React.Component<IUserPage> {
         companyName: this.user.company
           ? this.user.company.name
           : values.company,
+        additionalInfo: updatedAdditionalInfo,
         city: values.city,
         country: values.country,
       };
@@ -753,6 +764,19 @@ export default class UserPage extends React.Component<IUserPage> {
                                 : this.user.companyName
                             }
                             disabled={this.user.company != null}
+                          />
+                          <AvField
+                            name="additionalInfoUserCase"
+                            label={
+                              <BoldAccountTitle
+                                title={ACCOUNT_TITLES.ADDITIONAL_INFO_USER_CASE}
+                                licenseType={this.selectedLicense}
+                              />
+                            }
+                            value={
+                              this.user.additionalInfo?.userCompany?.useCase
+                            }
+                            validate={TEXT_VAL}
                           />
                           <AvField
                             name="city"

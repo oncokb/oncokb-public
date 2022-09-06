@@ -360,6 +360,9 @@ public class UserService {
         userDetails.setCompanyName(userDTO.getCompanyName());
         userDetails.setCity(userDTO.getCity());
         userDetails.setCountry(userDTO.getCountry());
+        if(userDTO.getAdditionalInfo() != null) {
+            userDetails.setAdditionalInfo(new Gson().toJson(userDTO.getAdditionalInfo()));
+        }
         userDetails.setCompany(companyMapper.toEntity(userDTO.getCompany()));
         userDetailsRepository.save(userDetails);
 
@@ -411,12 +414,12 @@ public class UserService {
                     .forEach(managedAuthorities::add);
                 this.clearUserCaches(user);
                 log.debug("Changed Information for User: {}", user);
-
                 UserDTO newUserDTO =  new UserDTO(user, getUpdatedUserDetails(
-                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), userDTO.getCity(), userDTO.getCountry()));
+                    user, userDTO.getLicenseType(), userDTO.getJobTitle(), userDTO.getCompanyName(), userDTO.getCompany(), new Gson().toJson(userDTO.getAdditionalInfo()), userDTO.getCity(), userDTO.getCountry()));
                 newUserDTO.setCompany(userDTO.getCompany());
                 return newUserDTO;
             });
+
 
         if(updatedUserDTO.isPresent()) {
             if(updatedUserDTO.get().isActivated()) {
@@ -425,11 +428,10 @@ public class UserService {
                 expireUserAccount(userDTO);
             }
         }
-
         return updatedUserDTO;
     }
 
-    private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String companyName, CompanyDTO companyDTO, String city, String country) {
+    private UserDetails getUpdatedUserDetails(User user, LicenseType licenseType, String jobTitle, String companyName, CompanyDTO companyDTO, String additionalInfo, String city, String country) {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
         LicenseType alignedLicenseType = companyDTO != null ? companyDTO.getLicenseType() : licenseType;
         Company company = companyMapper.toEntity(companyDTO);
@@ -439,6 +441,7 @@ public class UserService {
             userDetails.get().setJobTitle(jobTitle);
             userDetails.get().setCompany(company);
             userDetails.get().setCompanyName(companyName);
+            userDetails.get().setAdditionalInfo(additionalInfo);
             userDetails.get().setCity(city);
             userDetails.get().setCountry(country);
             userDetailsRepository.save(userDetails.get());
@@ -449,6 +452,7 @@ public class UserService {
             newUserDetails.setJobTitle(jobTitle);
             newUserDetails.setCompanyName(companyName);
             newUserDetails.setCompany(company);
+            newUserDetails.setAdditionalInfo(additionalInfo);
             newUserDetails.setCity(city);
             newUserDetails.setCountry(country);
             newUserDetails.setUser(user);
