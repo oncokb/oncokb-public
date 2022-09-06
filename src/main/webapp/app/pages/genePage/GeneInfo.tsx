@@ -23,10 +23,10 @@ const HighestLevelItem: React.FunctionComponent<{
   let isFdaLevel = false;
   let levelText = '';
   switch (props.level) {
-    case LEVELS.FDAx1:
-    case LEVELS.FDAx2:
-    case LEVELS.FDAx3:
-      levelText = `FDA Level ${props.level.replace('FDAx', '')}`;
+    case LEVELS.Fda1:
+    case LEVELS.Fda2:
+    case LEVELS.Fda3:
+      levelText = `FDA Level ${props.level.replace('Fda', '')}`;
       isFdaLevel = true;
       break;
     default:

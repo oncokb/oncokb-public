@@ -1,0 +1,361 @@
+[
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 876,
+        "subtype": "",
+        "code": "",
+        "color": "Gainsboro",
+        "mainType": "Non-Small Cell Lung Cancer",
+        "level": 0,
+        "tissue": "Lung",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Ceritinib"
+    ],
+    "drugPmids":
+    [
+      "28520527"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 876,
+        "subtype": "",
+        "code": "",
+        "color": "Gainsboro",
+        "mainType": "Non-Small Cell Lung Cancer",
+        "level": 0,
+        "tissue": "Lung",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "3A",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Repotrectinib"
+    ],
+    "drugPmids":
+    [],
+    "drugAbstracts":
+    [
+      {
+        "link": "https://www.jto.org/article/S1556-0864(21",
+        "abstract": "Cho et al. Abstract# MA11.07, IASLC 2021"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 876,
+        "subtype": "",
+        "code": "",
+        "color": "Gainsboro",
+        "mainType": "Non-Small Cell Lung Cancer",
+        "level": 0,
+        "tissue": "Lung",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Entrectinib"
+    ],
+    "drugPmids":
+    [
+      "28183697"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "https://academic.oup.com/annonc/article/30/Supplement_9/mdz420.003/5638397",
+        "abstract": "Braud et al. Abstract# 64P, ESMO 2019"
+      },
+      {
+        "link": "https://cancerres.aacrjournals.org/content/77/13_Supplement/CT060",
+        "abstract": "Drilon et al. Abstract# CT060, AACR 2017"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 876,
+        "subtype": "",
+        "code": "",
+        "color": "Gainsboro",
+        "mainType": "Non-Small Cell Lung Cancer",
+        "level": 0,
+        "tissue": "Lung",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Crizotinib"
+    ],
+    "drugPmids":
+    [
+      "30980071",
+      "25264305",
+      "29596029"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 876,
+        "subtype": "",
+        "code": "",
+        "color": "Gainsboro",
+        "mainType": "Non-Small Cell Lung Cancer",
+        "level": 0,
+        "tissue": "Lung",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Lorlatinib"
+    ],
+    "drugPmids":
+    [
+      "31669155"
+    ],
+    "drugAbstracts":
+    []
+  }
+]

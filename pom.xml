@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>public-website</artifactId>
-    <version>3.7.23</version>
+    <version>3.8.1</version>
     <packaging>jar</packaging>
     <name>OncoKB Public Website</name>
 
@@ -337,11 +337,6 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.14.2</version>
         </dependency>
         <!-- Sentry -->
         <dependency>

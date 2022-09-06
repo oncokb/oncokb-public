@@ -1,1 +1,8 @@
-{"gene":682,"alteration":5723,"tumorType":122,"drug":95,"level":[]}
+{
+  "gene": 3,
+  "alteration": 369,
+  "tumorType": 28,
+  "drug": 16,
+  "level":
+  []
+}

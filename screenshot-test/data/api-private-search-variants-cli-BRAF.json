@@ -1,0 +1,3108 @@
+[
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 984,
+        "subtype": "",
+        "code": "",
+        "color": "",
+        "mainType": "All Solid Tumors",
+        "level": -1,
+        "tissue": "",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "L597",
+      "name": "L597",
+      "refResidues": "L",
+      "proteinStart": 597,
+      "proteinEnd": 597,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "4",
+    "drug":
+    [
+      "PLX8394"
+    ],
+    "drugPmids":
+    [
+      "26466569",
+      "28659148",
+      "28783719",
+      "30559419"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
+        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 876,
+        "subtype": "",
+        "code": "",
+        "color": "Gainsboro",
+        "mainType": "Non-Small Cell Lung Cancer",
+        "level": 0,
+        "tissue": "Lung",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "27283860",
+      "28919011"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 409,
+        "subtype": "Anaplastic Thyroid Cancer",
+        "code": "THAP",
+        "color": "Teal",
+        "mainType": "Thyroid Cancer",
+        "level": 2,
+        "tissue": "Thyroid",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "29072975"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 862,
+        "subtype": "Langerhans Cell Histiocytosis",
+        "code": "LCH",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600",
+      "name": "V600",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Vemurafenib",
+      "Dabrafenib"
+    ],
+    "drugPmids":
+    [
+      "30867592"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600 {excluding V600E ; V600K}",
+      "name": "V600 (excluding V600E and V600K)",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Encorafenib + Binimetinib"
+    ],
+    "drugPmids":
+    [
+      "29573941"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "3A",
+    "drug":
+    [
+      "Cobimetinib",
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "26314551",
+      "24345920",
+      "26072686"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "K601",
+      "name": "K601",
+      "refResidues": "K",
+      "proteinStart": 601,
+      "proteinEnd": 601,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "3A",
+    "drug":
+    [
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "22798288",
+      "28344857",
+      "24933606",
+      "23248257",
+      "29903896"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 611,
+        "subtype": "Erdheim-Chester Disease",
+        "code": "ECD",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "Dx3",
+    "drug":
+    [],
+    "drugPmids":
+    [
+      "25422482",
+      "26637772"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Dabrafenib"
+    ],
+    "drugPmids":
+    [
+      "22735384",
+      "22608338",
+      "23051966"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 934,
+        "subtype": "",
+        "code": "",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 0,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations {excluding V600}",
+      "name": "Oncogenic Mutations (excluding V600)",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "3A",
+    "drug":
+    [
+      "Cobimetinib",
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "30361829"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Vemurafenib"
+    ],
+    "drugPmids":
+    [
+      "28961848",
+      "24508103",
+      "25399551"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600",
+      "name": "V600",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib + Atezolizumab"
+    ],
+    "drugPmids":
+    [
+      "32534646"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600K",
+      "name": "V600K",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "K",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib"
+    ],
+    "drugPmids":
+    [
+      "31732523",
+      "27480103",
+      "25265494"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 367,
+        "subtype": "Rosai-Dorfman Disease",
+        "code": "RDD",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations {excluding V600}",
+      "name": "Oncogenic Mutations (excluding V600)",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Cobimetinib",
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "29236635"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 984,
+        "subtype": "",
+        "code": "",
+        "color": "",
+        "mainType": "All Solid Tumors",
+        "level": -1,
+        "tissue": "",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "K601",
+      "name": "K601",
+      "refResidues": "K",
+      "proteinStart": 601,
+      "proteinEnd": 601,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "4",
+    "drug":
+    [
+      "PLX8394"
+    ],
+    "drugPmids":
+    [
+      "26466569",
+      "28659148",
+      "28783719",
+      "30559419"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
+        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600 {excluding V600E ; V600K}",
+      "name": "V600 (excluding V600E and V600K)",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib"
+    ],
+    "drugPmids":
+    [
+      "27480103",
+      "25265494"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 669,
+        "subtype": "Ganglioglioma",
+        "code": "GNG",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 3,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      },
+      {
+        "id": 32,
+        "subtype": "Pleomorphic Xanthoastrocytoma",
+        "code": "PXA",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 3,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      },
+      {
+        "id": 407,
+        "subtype": "Pilocytic Astrocytoma",
+        "code": "PAST",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 3,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib",
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "29380516",
+      "28984141",
+      "30120137"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "22663011",
+      "25265492",
+      "29361468",
+      "25399551"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600K",
+      "name": "V600K",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "K",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Encorafenib + Binimetinib"
+    ],
+    "drugPmids":
+    [
+      "29573941"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 934,
+        "subtype": "",
+        "code": "",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 0,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600",
+      "name": "V600",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "3A",
+    "drug":
+    [
+      "Vemurafenib",
+      "Dabrafenib"
+    ],
+    "drugPmids":
+    [
+      "31213430",
+      "25209580",
+      "31376203"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 407,
+        "subtype": "Pilocytic Astrocytoma",
+        "code": "PAST",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 3,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Selumetinib"
+    ],
+    "drugPmids":
+    [
+      "31151904"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 611,
+        "subtype": "Erdheim-Chester Disease",
+        "code": "ECD",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations {excluding V600}",
+      "name": "Oncogenic Mutations (excluding V600)",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Cobimetinib",
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "30867592"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 857,
+        "subtype": "Early T-Cell Precursor Lymphoblastic Leukemia",
+        "code": "ETPLL",
+        "color": "LimeGreen",
+        "mainType": "T-Lymphoblastic Leukemia/Lymphoma",
+        "level": 4,
+        "tissue": "Lymphoid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations",
+      "name": "Oncogenic Mutations",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "Dx3",
+    "drug":
+    [],
+    "drugPmids":
+    [
+      "22237106"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600K",
+      "name": "V600K",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "K",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "31171876",
+      "28891408",
+      "31171878",
+      "31171879",
+      "25265492",
+      "25287827",
+      "29361468",
+      "28991513",
+      "23020132",
+      "25399551"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 984,
+        "subtype": "",
+        "code": "",
+        "color": "",
+        "mainType": "All Solid Tumors",
+        "level": -1,
+        "tissue": "",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G469A",
+      "name": "G469A",
+      "refResidues": "G",
+      "proteinStart": 469,
+      "proteinEnd": 469,
+      "variantResidues": "A",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "4",
+    "drug":
+    [
+      "PLX8394"
+    ],
+    "drugPmids":
+    [
+      "26466569",
+      "28659148",
+      "28783719",
+      "30559419"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
+        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 276,
+        "subtype": "Hairy Cell Leukemia",
+        "code": "HCL",
+        "color": "LimeGreen",
+        "mainType": "Mature B-Cell Neoplasms",
+        "level": 5,
+        "tissue": "Lymphoid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Vemurafenib"
+    ],
+    "drugPmids":
+    [
+      "26352686"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 619,
+        "subtype": "Diffuse Glioma",
+        "code": "DIFG",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 2,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Dabrafenib + Trametinib",
+      "Vemurafenib + Cobimetinib"
+    ],
+    "drugPmids":
+    [
+      "24725538",
+      "29039591",
+      "30462564",
+      "34232949",
+      "29621181",
+      "30351999",
+      "26287849",
+      "33117675"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 862,
+        "subtype": "Langerhans Cell Histiocytosis",
+        "code": "LCH",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "Dx2",
+    "drug":
+    [],
+    "drugPmids":
+    [
+      "30157397",
+      "26637772",
+      "20519626",
+      "24938183"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Encorafenib + Binimetinib"
+    ],
+    "drugPmids":
+    [
+      "29573941"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 935,
+        "subtype": "",
+        "code": "",
+        "color": "SaddleBrown",
+        "mainType": "Colorectal Cancer",
+        "level": 0,
+        "tissue": "Bowel",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Encorafenib + Cetuximab"
+    ],
+    "drugPmids":
+    [
+      "31566309"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 611,
+        "subtype": "Erdheim-Chester Disease",
+        "code": "ECD",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600",
+      "name": "V600",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Vemurafenib"
+    ],
+    "drugPmids":
+    [
+      "26287849",
+      "29188284"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 984,
+        "subtype": "",
+        "code": "",
+        "color": "",
+        "mainType": "All Solid Tumors",
+        "level": -1,
+        "tissue": "",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "G464",
+      "name": "G464",
+      "refResidues": "G",
+      "proteinStart": 464,
+      "proteinEnd": 464,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "4",
+    "drug":
+    [
+      "PLX8394"
+    ],
+    "drugPmids":
+    [
+      "26466569",
+      "28659148",
+      "28783719",
+      "30559419"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
+        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600 {excluding V600E ; V600K}",
+      "name": "V600 (excluding V600E and V600K)",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "31171876",
+      "28891408",
+      "31171878",
+      "31171879",
+      "25265492",
+      "25287827",
+      "29361468",
+      "28991513",
+      "23020132",
+      "25399551"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib"
+    ],
+    "drugPmids":
+    [
+      "31732523",
+      "27480103",
+      "25265494"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 935,
+        "subtype": "",
+        "code": "",
+        "color": "SaddleBrown",
+        "mainType": "Colorectal Cancer",
+        "level": 0,
+        "tissue": "Bowel",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Encorafenib + Panitumumab"
+    ],
+    "drugPmids":
+    [
+      "29431699",
+      "31566309"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 880,
+        "subtype": "",
+        "code": "",
+        "color": "LightBlue",
+        "mainType": "Ovarian Cancer",
+        "level": 0,
+        "tissue": "Ovary/Fallopian Tube",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "3A",
+    "drug":
+    [
+      "Cobimetinib",
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "26324360",
+      "24345920"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 276,
+        "subtype": "Hairy Cell Leukemia",
+        "code": "HCL",
+        "color": "LimeGreen",
+        "mainType": "Mature B-Cell Neoplasms",
+        "level": 5,
+        "tissue": "Lymphoid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "Dx2",
+    "drug":
+    [],
+    "drugPmids":
+    [
+      "23347903",
+      "25480661",
+      "22072557",
+      "21910720",
+      "22210875",
+      "25120816",
+      "22028477",
+      "21663470",
+      "26071465",
+      "22531170"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 984,
+        "subtype": "",
+        "code": "",
+        "color": "",
+        "mainType": "All Solid Tumors",
+        "level": -1,
+        "tissue": "",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G469R",
+      "name": "G469R",
+      "refResidues": "G",
+      "proteinStart": 469,
+      "proteinEnd": 469,
+      "variantResidues": "R",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "4",
+    "drug":
+    [
+      "PLX8394"
+    ],
+    "drugPmids":
+    [
+      "26466569",
+      "28659148",
+      "28783719",
+      "30559419"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
+        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 54,
+        "subtype": "Encapsulated Glioma",
+        "code": "ENCG",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 2,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib",
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "25524464",
+      "29039591",
+      "31985841",
+      "25092772",
+      "31502039",
+      "27398937",
+      "29380516",
+      "28984141",
+      "24821190",
+      "30351999",
+      "26579623",
+      "26287849"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 862,
+        "subtype": "Langerhans Cell Histiocytosis",
+        "code": "LCH",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations {excluding V600}",
+      "name": "Oncogenic Mutations (excluding V600)",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Cobimetinib",
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "32991018",
+      "30867592"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 946,
+        "subtype": "",
+        "code": "",
+        "color": "Green",
+        "mainType": "Biliary Tract Cancer, NOS",
+        "level": 0,
+        "tissue": "Biliary Tract",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "32758030",
+      "32818466"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "L597",
+      "name": "L597",
+      "refResidues": "L",
+      "proteinStart": 597,
+      "proteinEnd": 597,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "3A",
+    "drug":
+    [
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "22798288",
+      "24933606",
+      "29903896"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600K",
+      "name": "V600K",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "K",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "22663011",
+      "25265492",
+      "29361468",
+      "25399551"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 984,
+        "subtype": "",
+        "code": "",
+        "color": "",
+        "mainType": "All Solid Tumors",
+        "level": -1,
+        "tissue": "",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "G469V",
+      "name": "G469V",
+      "refResidues": "G",
+      "proteinStart": 469,
+      "proteinEnd": 469,
+      "variantResidues": "V",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "4",
+    "drug":
+    [
+      "PLX8394"
+    ],
+    "drugPmids":
+    [
+      "26466569",
+      "28659148",
+      "28783719",
+      "30559419"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
+        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 407,
+        "subtype": "Pilocytic Astrocytoma",
+        "code": "PAST",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 3,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "2",
+    "drug":
+    [
+      "Selumetinib"
+    ],
+    "drugPmids":
+    [
+      "31151904"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh37",
+        "GRCh38"
+      ]
+    },
+    "level": "1",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "31171876",
+      "28891408",
+      "31171878",
+      "31171879",
+      "25265492",
+      "25287827",
+      "29361468",
+      "28991513",
+      "23020132",
+      "25399551"
+    ],
+    "drugAbstracts":
+    []
+  }
+]

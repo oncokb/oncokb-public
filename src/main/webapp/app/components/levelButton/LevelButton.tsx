@@ -67,7 +67,7 @@ export const LevelButton = inject('routing')((props: LevelButtonProps) => {
               styles.levelName
             )}
           >
-            {props.level.startsWith('FDAx') ? (
+            {props.level.startsWith('Fda') ? (
               <FdaLevelIcon level={props.level} withDescription={true} />
             ) : (
               <OncoKBLevelIcon level={props.level} withDescription={true} />

@@ -203,12 +203,12 @@ export enum LEVELS {
   Tx4 = '4',
   R1 = 'R1',
   R2 = 'R2',
-  FDAx1 = 'FDAx1',
-  FDAx2 = 'FDAx2',
-  FDAx3 = 'FDAx3',
+  Fda1 = 'Fda1',
+  Fda2 = 'Fda2',
+  Fda3 = 'Fda3',
 }
 
-export const FDA_LEVELS = [LEVELS.FDAx1, LEVELS.FDAx2, LEVELS.FDAx3];
+export const FDA_LEVELS = [LEVELS.Fda1, LEVELS.Fda2, LEVELS.Fda3];
 export const TX_LEVELS = [
   LEVELS.Tx1,
   LEVELS.Tx2,
@@ -225,9 +225,9 @@ export const ONCOKB_LEVELS = TX_LEVELS.concat(DX_LEVELS).concat(PX_LEVELS);
 
 // the bigger of the index, the higher the priority
 export const LEVEL_PRIORITY: LEVELS[] = [
-  LEVELS.FDAx3,
-  LEVELS.FDAx2,
-  LEVELS.FDAx1,
+  LEVELS.Fda3,
+  LEVELS.Fda2,
+  LEVELS.Fda1,
   LEVELS.Px2,
   LEVELS.Px1,
   LEVELS.Dx3,
@@ -258,9 +258,9 @@ export const LEVEL_BUTTON_DESCRIPTION: { [key in LEVELS]: string } = {
   [LEVELS.Px1]: 'Guideline-recognized with well-powered data',
   [LEVELS.Px2]: 'Guideline-recognized with limited data',
   [LEVELS.Px3]: 'Investigational',
-  [LEVELS.FDAx1]: 'With CDx',
-  [LEVELS.FDAx2]: 'Clinical Significance',
-  [LEVELS.FDAx3]: 'Potential Clinical Significance',
+  [LEVELS.Fda1]: 'With CDx',
+  [LEVELS.Fda2]: 'Clinical Significance',
+  [LEVELS.Fda3]: 'Potential Clinical Significance',
 };
 
 export const LEVEL_CLASSIFICATION: { [key in LEVELS]: LEVEL_TYPES } = {
@@ -279,9 +279,9 @@ export const LEVEL_CLASSIFICATION: { [key in LEVELS]: LEVEL_TYPES } = {
   [LEVELS.Tx4]: LEVEL_TYPES.TX,
   [LEVELS.R1]: LEVEL_TYPES.TX,
   [LEVELS.R2]: LEVEL_TYPES.TX,
-  [LEVELS.FDAx1]: LEVEL_TYPES.FDA,
-  [LEVELS.FDAx2]: LEVEL_TYPES.FDA,
-  [LEVELS.FDAx3]: LEVEL_TYPES.FDA,
+  [LEVELS.Fda1]: LEVEL_TYPES.FDA,
+  [LEVELS.Fda2]: LEVEL_TYPES.FDA,
+  [LEVELS.Fda3]: LEVEL_TYPES.FDA,
 };
 
 export const ONCOGENICITY_CLASS_NAMES: { [key in ONCOGENICITY]: string } = {
@@ -437,6 +437,7 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
   highestPrognosticImplicationLevel: 'NO',
   highestResistanceLevel: 'NO',
   highestSensitiveLevel: 'NO',
+  highestFdaLevel: 'NO',
   hotspot: false,
   lastUpdate: '',
   mutationEffect: DEFAULT_MUTATION_EFFECT,
@@ -525,8 +526,10 @@ export enum TABLE_COLUMN_KEY {
   ALTERATION = 'ALTERATION',
   ALTERATIONS = 'ALTERATIONS',
   EVIDENCE_CANCER_TYPE = 'EVIDENCE_CANCER_TYPE',
+  CANCER_TYPE = 'CANCER_TYPE',
   DRUGS = 'DRUGS',
   LEVEL = 'LEVEL',
+  FDA_LEVEL = 'FDA_LEVEL',
   CITATIONS = 'CITATIONS',
   ONCOGENICITY = 'ONCOGENICITY',
   MUTATION_EFFECT = 'MUTATION_EFFECT',
@@ -724,6 +727,7 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '09062022', version: 'v3.16' },
   { date: '07252022', version: 'v3.15' },
   { date: '06062022', version: 'v3.14' },
   { date: '05052022', version: 'v3.13' },

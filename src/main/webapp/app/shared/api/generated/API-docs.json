@@ -1,11 +1,11 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.",
+    "description": "OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.",
     "version": "v1.0.0",
-    "title": "OncoKB APIs",
+    "title": "OncoKB™ APIs",
     "contact": {
-      "name": "OncoKB",
+      "name": "OncoKB™",
       "url": "https://www.oncokb.org",
       "email": "contact@oncokb.org"
     },
@@ -1481,33 +1481,6 @@
         "deprecated": false
       }
     },
-    "/api/cronjob/user-usage-analysis": {
-      "get": {
-        "tags": [
-          "cron-job-controller"
-        ],
-        "summary": "analyzeUserUsage",
-        "operationId": "analyzeUserUsageUsingGET",
-        "produces": [
-          "*/*"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "deprecated": false
-      }
-    },
     "/api/mails/feedback": {
       "post": {
         "tags": [
@@ -1691,6 +1664,8 @@
               "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
               "CLARIFY_USE_CASE",
               "CLARIFY_DUPLICATE_USER",
+              "CLARIFY_REGISTRATION_INFO",
+              "LICENSE_OPTIONS",
               "REJECT_ALUMNI_ADDRESS",
               "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
               "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
@@ -2018,6 +1993,16 @@
         "produces": [
           "*/*"
         ],
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "query",
+            "description": "companyId",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -2057,7 +2042,8 @@
             "in": "path",
             "description": "userId",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "responses": {
@@ -3247,6 +3233,8 @@
             "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
             "CLARIFY_USE_CASE",
             "CLARIFY_DUPLICATE_USER",
+            "CLARIFY_REGISTRATION_INFO",
+            "LICENSE_OPTIONS",
             "REJECT_ALUMNI_ADDRESS",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",
@@ -3283,16 +3271,22 @@
           }
         },
         "city": {
-          "type": "string"
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2147483647
         },
         "company": {
           "$ref": "#/definitions/CompanyDTO"
         },
         "companyName": {
-          "type": "string"
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2147483647
         },
         "country": {
-          "type": "string"
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2147483647
         },
         "createdBy": {
           "type": "string"
@@ -3311,7 +3305,7 @@
         },
         "firstName": {
           "type": "string",
-          "minLength": 0,
+          "minLength": 2,
           "maxLength": 50
         },
         "id": {
@@ -3340,7 +3334,7 @@
         },
         "lastName": {
           "type": "string",
-          "minLength": 0,
+          "minLength": 2,
           "maxLength": 50
         },
         "licenseType": {
@@ -3453,6 +3447,15 @@
     "UsageSummary": {
       "type": "object",
       "properties": {
+        "day": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        },
         "month": {
           "type": "object",
           "additionalProperties": {
@@ -3564,16 +3567,22 @@
           }
         },
         "city": {
-          "type": "string"
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2147483647
         },
         "company": {
           "$ref": "#/definitions/CompanyDTO"
         },
         "companyName": {
-          "type": "string"
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2147483647
         },
         "country": {
-          "type": "string"
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2147483647
         },
         "createdBy": {
           "type": "string"
@@ -3592,7 +3601,7 @@
         },
         "firstName": {
           "type": "string",
-          "minLength": 0,
+          "minLength": 2,
           "maxLength": 50
         },
         "id": {
@@ -3621,7 +3630,7 @@
         },
         "lastName": {
           "type": "string",
-          "minLength": 0,
+          "minLength": 2,
           "maxLength": 50
         },
         "licenseType": {
@@ -3721,6 +3730,8 @@
             "CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL",
             "CLARIFY_USE_CASE",
             "CLARIFY_DUPLICATE_USER",
+            "CLARIFY_REGISTRATION_INFO",
+            "LICENSE_OPTIONS",
             "REJECT_ALUMNI_ADDRESS",
             "VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES",
             "APPROVAL_ALIGN_LICENSE_WITH_COMPANY",

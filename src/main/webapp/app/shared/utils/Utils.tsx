@@ -34,7 +34,6 @@ import {
   Alteration,
   EnsemblGene,
   Evidence,
-  FdaAlteration,
   TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
@@ -62,6 +61,8 @@ import WithSeparator from 'react-with-separator';
 import { COLOR_BLUE } from 'app/config/theme';
 import { Linkout } from 'app/shared/links/Linkout';
 import * as styles from 'app/index.module.scss';
+import { Version } from 'app/pages/LevelOfEvidencePage';
+import { Link } from 'react-router-dom';
 
 // Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
 // Likely Neutral will be converted to Neutral
@@ -75,33 +76,44 @@ export function getCancerTypeNameFromOncoTreeType(
   return oncoTreeType.subtype || oncoTreeType.mainType || 'NA';
 }
 
+export function getCancerTypesName(
+  cancerTypes: string[],
+  excludedCancerTypes?: string[]
+): string {
+  let name = cancerTypes.join(', ');
+  if (excludedCancerTypes && excludedCancerTypes.length > 0) {
+    name += ' (excluding ' + excludedCancerTypes.join(', ') + ')';
+  }
+  return name;
+}
+
+export function getCancerTypesNameFromOncoTreeType(
+  cancerTypes: TumorType[],
+  excludedCancerTypes?: TumorType[]
+): string {
+  return getCancerTypesName(
+    cancerTypes.map(cancerType =>
+      getCancerTypeNameFromOncoTreeType(cancerType)
+    ),
+    (excludedCancerTypes || []).map(cancerType =>
+      getCancerTypeNameFromOncoTreeType(cancerType)
+    )
+  );
+}
+
 export function trimLevelOfEvidenceSubversion(levelOfEvidence: string) {
   return _.replace(levelOfEvidence, new RegExp('[AB]'), '');
 }
 
 export function levelOfEvidence2Level(
-  levelOfEvidence: string,
+  levelOfEvidence: string | null,
   trimSubversion = false
 ): LEVELS {
-  let level = levelOfEvidence.replace('LEVEL_', '');
-  if (trimSubversion) {
+  let level = levelOfEvidence?.replace('LEVEL_', '');
+  if (trimSubversion && level) {
     level = trimLevelOfEvidenceSubversion(level);
   }
   return level as LEVELS;
-}
-
-export function getHighestFdaLevel(fdaAlterations: FdaAlteration[]) {
-  let highestFdaLevelIndex = -1;
-  fdaAlterations.forEach(alteration => {
-    const levelIndex = FDA_LEVELS.indexOf(alteration.level as LEVELS);
-    if (
-      highestFdaLevelIndex === -1 ||
-      (levelIndex !== -1 && levelIndex < highestFdaLevelIndex)
-    ) {
-      highestFdaLevelIndex = levelIndex;
-    }
-  });
-  return FDA_LEVELS[highestFdaLevelIndex];
 }
 
 export function level2LevelOfEvidence(level: LEVELS) {
@@ -112,6 +124,17 @@ export function level2LevelOfEvidence(level: LEVELS) {
       break;
     default:
       return `LEVEL_${level}`;
+  }
+}
+
+export function isFdaLevel(level: LEVELS) {
+  switch (level) {
+    case LEVELS.Fda1:
+    case LEVELS.Fda2:
+    case LEVELS.Fda3:
+      return true;
+    default:
+      return false;
   }
 }
 
@@ -270,21 +293,21 @@ export const FdaLevelIcon: React.FunctionComponent<{
     >
       <span className="fa fa-circle-thin fa-stack-2x"></span>
       <strong className="fa-stack-1x" style={{ fontSize: '1.2em' }}>
-        {level.toString().replace('FDAx', '')}
+        {level.toString().replace('Fda', '')}
       </strong>
     </span>
   );
 
   let levelDescription = '';
   switch (level) {
-    case LEVELS.FDAx1:
+    case LEVELS.Fda1:
       levelDescription = 'Companion Diagnostics';
       break;
-    case LEVELS.FDAx2:
+    case LEVELS.Fda2:
       levelDescription =
         'Cancer Mutations with Evidence of Clinical Significance';
       break;
-    case LEVELS.FDAx3:
+    case LEVELS.Fda3:
       levelDescription =
         'Cancer Mutations with Evidence of Potential Clinical Significance';
       break;
@@ -399,8 +422,53 @@ export function getDefaultColumnDefinition<T>(
         },
         Cell(props: any) {
           return (
-            <div className={'my-1 d-flex justify-content-center'}>
+            <div className={'d-flex justify-content-center'}>
               <OncoKBLevelIcon
+                level={props.original.level}
+                withDescription={true}
+              />
+            </div>
+          );
+        },
+      };
+    case TABLE_COLUMN_KEY.FDA_LEVEL:
+      return {
+        id: TABLE_COLUMN_KEY.FDA_LEVEL,
+        Header: (
+          <div className={'d-flex justify-content-center'}>
+            <span>FDA Level of Evidence</span>
+            <InfoIcon
+              className={'ml-1'}
+              overlay={
+                <span>
+                  For more information about the FDA Level of Evidence, please
+                  see{' '}
+                  <Link
+                    to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
+                    className={'font-bold'}
+                  >
+                    HERE
+                  </Link>
+                  .
+                </span>
+              }
+            />
+          </div>
+        ),
+        accessor: 'level',
+        width: 250,
+        minWidth: 60,
+        defaultSortDesc: true,
+        sortMethod(a: string, b: string) {
+          return (
+            LEVEL_PRIORITY.indexOf(a.replace('Level ', '') as LEVELS) -
+            LEVEL_PRIORITY.indexOf(b.replace('Level ', '') as LEVELS)
+          );
+        },
+        Cell(props: any) {
+          return (
+            <div className={'d-flex justify-content-center'}>
+              <FdaLevelIcon
                 level={props.original.level}
                 withDescription={true}
               />
@@ -465,7 +533,7 @@ export function filterByKeyword(
   value: string | undefined | null,
   keyword: string
 ): boolean {
-  return value ? value.toLowerCase().includes(keyword) : false;
+  return value ? value.toLowerCase().includes(keyword.trim()) : false;
 }
 
 export function getRouteFromPath(pathName: string) {
@@ -786,7 +854,7 @@ export const isOncogenic = (oncogenicity: string) => {
   switch (oncogenicity) {
     case ONCOGENICITY.ONCOGENIC:
     case ONCOGENICITY.LIKELY_ONCOGENIC:
-    case ONCOGENICITY.PREDICTED_ONCOGENIC:
+    case ONCOGENICITY.RESISTANCE:
       return true;
     default:
       return false;

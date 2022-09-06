@@ -151,6 +151,70 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '09062022': {
+    updatedImplicationTitle:
+      'Updated therapeutic implications - new alterations with a level of evidence',
+    updatedImplication: [
+      [
+        '1',
+        'BRAF',
+        'V600E',
+        'All Solid Tumors (excluding Colorectal Cancer)',
+        'Dabrafenib + Trametinib',
+        <FdaApprovalLink
+          approval={'dabrafenib + trametinib in solid tumors'}
+          link={
+            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-dabrafenib-combination-trametinib-unresectable-or-metastatic-solid'
+          }
+        />,
+      ],
+    ],
+    changedAnnotation: [
+      [
+        'BRAF',
+        'V600E',
+        'Biliary Tract Cancer, Diffuse Glioma, Encapsulated Glioma, Ganglioglioma, Pleomorphic Xanthoastrocytoma, Pilocytic Astrocytoma',
+        'Dabrafenib + Trametinib',
+        '2',
+        '1',
+        <FdaApprovalLink
+          approval={'dabrafenib + trametinib in solid tumors'}
+          link={
+            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-dabrafenib-combination-trametinib-unresectable-or-metastatic-solid'
+          }
+        />,
+      ],
+      [
+        'ERBB2',
+        'Oncogenic Mutations',
+        'Non-Small Cell Lung Cancer',
+        'Trastuzumab Deruxtican',
+        '2',
+        '1',
+        <FdaApprovalLink
+          approval={'trastuzumab deruxtican in non-small cell lung cancer'}
+          link={
+            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-fam-trastuzumab-deruxtecan-nxki-her2-mutant-non-small-cell-lung'
+          }
+        />,
+      ],
+      [
+        'FGFR1',
+        'Fusions',
+        'Myeloid/Lymphoid Neoplasms with FGFR1 Rearrangement',
+        'Pemigatinib',
+        '2',
+        '1',
+        <FdaApprovalLink
+          approval={'pemigatinib in myeloid/lymphoid neoplasms'}
+          link={
+            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-pemigatinib-relapsed-or-refractory-myeloidlymphoid-neoplasms-fgfr1-rearrangement'
+          }
+        />,
+      ],
+    ],
+    newlyAddedGenes: ['MKI67', 'BRD3', 'BRSK1', 'BCL3'],
+  },
   '07252022': {
     updatedImplicationTitle:
       'Updated therapeutic implications - new alterations with a level of evidence',
@@ -197,9 +261,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         '2',
         '1',
         <FdaApprovalLink
-          approval={
-            'FDA approval of crizotinib in inflammatory myofibroblastic tumor'
-          }
+          approval={'crizotinib in inflammatory myofibroblastic tumor'}
           link={
             'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-crizotinib-alk-positive-inflammatory-myofibroblastic-tumor'
           }

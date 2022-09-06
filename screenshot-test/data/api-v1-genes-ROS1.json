@@ -1,0 +1,20 @@
+[
+  {
+    "entrezGeneId": 6098,
+    "hugoSymbol": "ROS1",
+    "oncogene": true,
+    "grch37Isoform": "ENST00000368508",
+    "grch37RefSeq": "NM_002944.2",
+    "grch38Isoform": "ENST00000368508",
+    "grch38RefSeq": "NM_002944.2",
+    "geneAliases":
+    [
+      "MCF3",
+      "ROS",
+      "c-ros-1"
+    ],
+    "genesets":
+    [],
+    "tsg": false
+  }
+]

@@ -148,7 +148,7 @@ export default class UserPage extends React.Component<IUserPage> {
     await: () => [],
     invoke: async () => {
       this.userUsage = await client.userUsageGetUsingGET({
-        userId: this.user.id.toString(),
+        userId: this.user.id,
       });
       const result = new Map<string, UsageRecord[]>();
       if (this.userUsage.summary !== null) {

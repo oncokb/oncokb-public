@@ -1,1 +1,18 @@
-[{"entrezGeneId":673,"hugoSymbol":"BRAF","oncogene":true,"grch37Isoform":"ENST00000288602","grch37RefSeq":"NM_004333.4","grch38Isoform":"ENST00000646891","grch38RefSeq":"NM_004333.4","geneAliases":["BRAF1"],"genesets":[],"tsg":false}]
+[
+  {
+    "entrezGeneId": 673,
+    "hugoSymbol": "BRAF",
+    "oncogene": true,
+    "grch37Isoform": "ENST00000288602",
+    "grch37RefSeq": "NM_004333.4",
+    "grch38Isoform": "ENST00000646891",
+    "grch38RefSeq": "NM_004333.4",
+    "geneAliases":
+    [
+      "BRAF1"
+    ],
+    "genesets":
+    [],
+    "tsg": false
+  }
+]

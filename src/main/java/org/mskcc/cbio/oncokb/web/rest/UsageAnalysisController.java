@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.NotNull;
+
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 
 @Controller
@@ -67,7 +69,7 @@ public class UsageAnalysisController {
      * @throws ParseException
      */
     @GetMapping("/usage/users/{userId}")
-    public ResponseEntity<UserUsage> userUsageGet(@PathVariable String userId)
+    public ResponseEntity<UserUsage> userUsageGet(@PathVariable @NotNull Long userId)
         throws IOException, ParseException {
 
         HttpStatus status = HttpStatus.OK;
@@ -87,8 +89,7 @@ public class UsageAnalysisController {
                 monthsBack++;
             } while (monthsBack < 12);
 
-            Long id = Long.parseLong(userId);
-            Optional<User> user = userService.getUserById(id);
+            Optional<User> user = userService.getUserById(userId);
             String email = user.map(User::getEmail).orElse(null);
 
             if (yearSummary != null){
@@ -145,7 +146,7 @@ public class UsageAnalysisController {
             Set<Object> emailSet = jsonObject.keySet();
             if (companyId != null) {
                 emailSet = emailSet.stream().filter(item -> {
-                    Optional<User> user = userService.getUserByEmailIgnoreCase((String) item);
+                    Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase((String) item);
                     if (user.isPresent()) {
                         UserDTO userDTO = userMapper.userToUserDTO(user.get());
                         if (userDTO.getCompany() != null) {
@@ -162,7 +163,7 @@ public class UsageAnalysisController {
                 UsageSummary usageSummary = gson.fromJson(usageObject.toString(), UsageSummary.class);
                 UserOverviewUsage cur = new UserOverviewUsage();
                 cur.setUserEmail(email);
-                Optional<User> user = userService.getUserByEmailIgnoreCase(email);
+                Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(email);
                 cur.setUserId(user.map(value -> value.getId().toString()).orElse(null));
 
                 String endpoint = "";

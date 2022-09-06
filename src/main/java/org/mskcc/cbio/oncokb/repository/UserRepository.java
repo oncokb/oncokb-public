@@ -34,11 +34,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findOneByResetKey(String resetKey);
 
-    @Cacheable(cacheResolver = "userCacheResolver")
-    Optional<User> findOneByEmailIgnoreCase(String email);
-
-    Optional<User> findOneByLogin(String login);
-
     Optional<User> findOneById(Long id);
 
     @EntityGraph(attributePaths = "authorities")
