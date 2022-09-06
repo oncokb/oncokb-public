@@ -159,7 +159,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         '1',
         'BRAF',
         'V600E',
-        'All Solid Tumors (except Colorectal Cancer)',
+        'All Solid Tumors (excluding Colorectal Cancer)',
         'Dabrafenib + Trametinib',
         <FdaApprovalLink
           approval={'dabrafenib + trametinib in solid tumors'}
