@@ -65,12 +65,18 @@ export default class CancerTypeSelect extends React.Component<
 
   @computed
   get allTumorTypesOptions() {
+    let cancerTypesGroup = this.allMainTypes.filter(
+      mainType => !mainType.endsWith('NOS')
+    );
+    cancerTypesGroup = cancerTypesGroup.concat(
+      this.allCancerTypes.result
+        .filter(ct => ct.level === -1 && ct.mainType.startsWith('All '))
+        .map(ct => ct.mainType)
+    );
     return [
       {
         label: 'Cancer Type',
-        options: _.uniq(
-          this.allMainTypes.filter(mainType => !mainType.endsWith('NOS'))
-        )
+        options: _.uniq(cancerTypesGroup)
           .sort()
           .map(tumorType => {
             return {
