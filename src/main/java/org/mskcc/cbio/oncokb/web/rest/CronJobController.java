@@ -191,7 +191,7 @@ public class CronJobController {
 
     private void calculateUsageSummary(UsageSummary usageSummary, String key, int count, String time) {
         // Deal with year summary
-        usageSummary.getYear().put(key, usageSummary.getYear().getOrDefault(key, 0) + count);
+        usageSummary.getYear().put(key, usageSummary.getYear().getOrDefault(key, Long.valueOf(0)) + count);
         // Deal with month summary
         if (!usageSummary.getMonth().containsKey(time)) {
             usageSummary.getMonth().put(time, new JSONObject());

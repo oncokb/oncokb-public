@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class UsageSummary {
     private Map<String, JSONObject> day = new HashMap<>();
     private Map<String, JSONObject> month = new HashMap<>();
-    private Map<String, Integer> year = new HashMap<>();
+    private Map<String, Long> year = new HashMap<>();
 
     public Map<String, JSONObject> getDay() {
         return day;
@@ -30,11 +30,11 @@ public class UsageSummary {
         this.month = month;
     }
 
-    public Map<String, Integer> getYear() {
+    public Map<String, Long> getYear() {
         return year;
     }
 
-    public void setYear(Map<String, Integer> year) {
+    public void setYear(Map<String, Long> year) {
         this.year = year;
     }
 
