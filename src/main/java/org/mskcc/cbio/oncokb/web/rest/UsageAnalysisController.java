@@ -167,11 +167,11 @@ public class UsageAnalysisController {
                 cur.setUserId(user.map(value -> value.getId().toString()).orElse(null));
 
                 String endpoint = "";
-                int maxUsage = 0;
+                long maxUsage = 0;
                 String noPrivateEndpoint = "";
-                int noPrivateMaxUsage = 0;
-                int totalUsage = 0;
-                Map<String, Integer> summary = usageSummary.getYear();
+                long noPrivateMaxUsage = 0;
+                long totalUsage = 0;
+                Map<String, Long> summary = usageSummary.getYear();
                 for (String resource : summary.keySet()) {
                     totalUsage += summary.get(resource);
                     if (summary.get(resource) > maxUsage) {
@@ -246,7 +246,7 @@ public class UsageAnalysisController {
                 userSummary.keySet().forEach(user ->
                 {
                     UsageSummary userUsageSummary = gson.fromJson(userSummary.get(user.toString()).toString(), UsageSummary.class);
-                    int yearUsage = 0;
+                    long yearUsage = 0;
                     for (String month : userUsageSummary.getMonth().keySet()){
                         if (userUsageSummary.getMonth().get(month).containsKey(endpoint)) {
                             int monthUsage = (int) Double.parseDouble(userUsageSummary.getMonth().get(month).get(endpoint).toString());

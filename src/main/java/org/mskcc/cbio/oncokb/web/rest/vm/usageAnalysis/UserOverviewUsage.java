@@ -9,9 +9,9 @@ public class UserOverviewUsage {
     private String userEmail;
     private String endpoint;
     private String noPrivateEndpoint;
-    private int maxUsage;
-    private int noPrivateMaxUsage;
-    private int totalUsage;
+    private long maxUsage;
+    private long noPrivateMaxUsage;
+    private long totalUsage;
 
     public String getEndpoint() {
         return endpoint;
@@ -29,19 +29,19 @@ public class UserOverviewUsage {
         this.userEmail = userEmail;
     }
 
-    public int getMaxUsage() {
+    public long getMaxUsage() {
         return maxUsage;
     }
 
-    public void setMaxUsage(int maxUsage) {
+    public void setMaxUsage(long maxUsage) {
         this.maxUsage = maxUsage;
     }
 
-    public int getTotalUsage() {
+    public long getTotalUsage() {
         return totalUsage;
     }
 
-    public void setTotalUsage(int totalUsage) {
+    public void setTotalUsage(long totalUsage) {
         this.totalUsage = totalUsage;
     }
 
@@ -61,11 +61,11 @@ public class UserOverviewUsage {
         this.noPrivateEndpoint = noPrivateEndpoint;
     }
 
-    public int getNoPrivateMaxUsage() {
+    public long getNoPrivateMaxUsage() {
         return noPrivateMaxUsage;
     }
 
-    public void setNoPrivateMaxUsage(int noPrivateMaxUsage) {
+    public void setNoPrivateMaxUsage(long noPrivateMaxUsage) {
         this.noPrivateMaxUsage = noPrivateMaxUsage;
     }
 }
