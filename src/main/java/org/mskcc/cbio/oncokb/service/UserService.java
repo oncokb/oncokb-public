@@ -22,7 +22,6 @@ import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
-import org.mskcc.cbio.oncokb.service.mapper.UserDetailsMapper;
 import org.mskcc.cbio.oncokb.util.ObjectUtil;
 import org.mskcc.cbio.oncokb.util.StringUtil;
 import org.mskcc.cbio.oncokb.web.rest.errors.LoginAlreadyUsedException;
@@ -35,10 +34,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.Cacheable;
 
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
@@ -49,6 +50,7 @@ import java.util.stream.Collectors;
 import static org.mskcc.cbio.oncokb.config.Constants.*;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_EMAIL_CACHE;
 import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.USERS_BY_LOGIN_CACHE;
+import static org.mskcc.cbio.oncokb.config.cache.UserCacheResolver.ALL_USERS_CACHE;
 
 /**
  * Service class for managing users.
@@ -95,9 +97,6 @@ public class UserService {
 
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private UserDetailsMapper userDetailsMapper;
 
     @Autowired
     private CompanyMapper companyMapper;
@@ -508,8 +507,24 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public List<UserDTO> findAllUsersWithUserDetailsByUsersIn(List<User> users) {
+        List<Object[]> usersWithDetails = userRepository.findAllUsersWithUserDetailsByUsersIn(users);
+        return usersWithDetails
+            .stream()
+            .map(u -> {
+                User user = (User) u[0];
+                UserDetails userDetails = (UserDetails) u[1];
+                return userMapper.userToUserDTO(user, userDetails);
+            })
+            .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Cacheable(cacheResolver = "userCacheResolver", key = "#root.methodName")
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(user -> userMapper.userToUserDTO(user));
+        List<User> users = userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).getContent();
+        List<UserDTO> userDTOs = findAllUsersWithUserDetailsByUsersIn(users);
+        return new PageImpl<>(userDTOs, pageable, users.size());
     }
 
     @Transactional(readOnly = true)
@@ -821,12 +836,7 @@ public class UserService {
     }
 
     public List<String> getNonCompanyUserEmails() {
-        List<UserDetails> userDetails = userDetailsRepository.findByCompanyIdIsNull();
-        return userDetails
-            .stream()
-            .map(UserDetails::getUser)
-            .map(User::getEmail)
-            .collect(Collectors.toList());
+        return userDetailsRepository.findUserEmailsByCompanyIdIsNull();
     }
 
     private void clearUserCaches(User user) {
@@ -834,5 +844,6 @@ public class UserService {
         if (user.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE))).evict(user.getEmail());
         }
+        Objects.requireNonNull(cacheManager.getCache(this.cacheNameResolver.getCacheName(ALL_USERS_CACHE))).evict("getAllManagedUsers");;
     }
 }

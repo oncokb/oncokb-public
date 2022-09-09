@@ -35,12 +35,15 @@ public class UserMapper {
 
     public UserDTO userToUserDTO(User user) {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByUser(user);
-        if(userDetails.isPresent()) {
-            UserDTO userDTO = new UserDTO(user, userDetails.get());
-            userDTO.setCompany(companyMapper.toDto(userDetails.get().getCompany()));
-            return userDTO;
+        return userToUserDTO(user, userDetails.orElse(null));
+    }
+
+    public UserDTO userToUserDTO(User user, UserDetails userDetails) {
+        UserDTO userDTO = new UserDTO(user, userDetails);
+        if (userDetails != null) {
+            userDTO.setCompany(companyMapper.toDto(userDetails.getCompany()));
         }
-        return new UserDTO(user, null);
+        return userDTO;
     }
 
     public List<User> userDTOsToUsers(List<UserDTO> userDTOs) {

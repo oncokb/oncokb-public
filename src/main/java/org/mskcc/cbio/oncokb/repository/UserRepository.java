@@ -2,7 +2,6 @@ package org.mskcc.cbio.oncokb.repository;
 
 import org.mskcc.cbio.oncokb.domain.User;
 
-import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 import java.util.Optional;
 import java.time.Instant;
 
@@ -45,4 +43,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
+
+    @Query("select user, userDetails from User as user left join UserDetails as userDetails on user.id = userDetails.user WHERE user in ?1")
+    List<Object[]> findAllUsersWithUserDetailsByUsersIn(List<User> users);
 }

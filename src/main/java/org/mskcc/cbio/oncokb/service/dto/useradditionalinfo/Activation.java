@@ -1,11 +1,12 @@
 package org.mskcc.cbio.oncokb.service.dto.useradditionalinfo;
 
 import java.time.Instant;
+import java.io.Serializable;
 
 /**
  * Created by Hongxin Zhang on 3/31/21.
  */
-public class Activation {
+public class Activation implements Serializable{
     Instant initiationDate;
     String initiatedBy;
     Instant activationDate;

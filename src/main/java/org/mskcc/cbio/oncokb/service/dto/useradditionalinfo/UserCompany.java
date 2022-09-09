@@ -1,9 +1,11 @@
 package org.mskcc.cbio.oncokb.service.dto.useradditionalinfo;
 
+import java.io.Serializable;
+
 /**
  * Created by Hongxin Zhang on 4/27/21.
  */
-public class UserCompany {
+public class UserCompany implements Serializable {
     String description;
     Contact businessContact;
     String size;

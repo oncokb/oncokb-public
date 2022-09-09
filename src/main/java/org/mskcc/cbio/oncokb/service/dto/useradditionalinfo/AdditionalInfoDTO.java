@@ -1,11 +1,13 @@
 package org.mskcc.cbio.oncokb.service.dto.useradditionalinfo;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
  * Created by Hongxin Zhang on 3/31/21.
  */
-public class AdditionalInfoDTO {
+public class AdditionalInfoDTO implements Serializable{
     TrialAccount trialAccount;
 
     UserCompany userCompany;
