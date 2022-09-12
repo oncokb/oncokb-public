@@ -165,7 +165,7 @@ public class SlackController {
                 mailService.sendEmailFromSlack(userDTO,
                     viewSubmissionPayload.getView().getState().getValues().get(BlockId.SUBJECT_INPUT.getId()).get(ActionId.INPUT_SUBJECT.getId()).getValue(),
                     viewSubmissionPayload.getView().getState().getValues().get(BlockId.BODY_INPUT.getId()).get(ActionId.INPUT_BODY.getId()).getValue(),
-                    mailType);
+                    mailType, viewSubmissionPayload.getUser().getName());
                 this.slackService.sendLatestBlocks(
                     viewSubmissionPayload.getResponseUrls().get(0).getResponseUrl(),
                     userDTO,

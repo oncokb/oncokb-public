@@ -183,10 +183,16 @@ public class MailService {
     }
 
     @Async
-    public void sendEmailFromSlack(UserDTO user, String subject, String body, MailType mailType) {
+    public void sendEmailFromSlack(UserDTO user, String subject, String body, MailType mailType, String sendBy) {
         try {
-            sendEmail(user.getEmail(), applicationProperties.getEmailAddresses().getRegistrationAddress(), null, subject, body, null, false, false);
-            addUserMailsRecord(user, mailType, applicationProperties.getEmailAddresses().getRegistrationAddress(), "registrationAddress");
+            String defaultEmailSendFrom = applicationProperties.getEmailAddresses().getRegistrationAddress();
+            String ccAddress = null;
+            if (MailType.LICENSE_OPTIONS.equals(mailType)) {
+                defaultEmailSendFrom = applicationProperties.getEmailAddresses().getLicenseAddress();
+                ccAddress = defaultEmailSendFrom;
+            }
+            sendEmail(user.getEmail(), defaultEmailSendFrom, ccAddress, subject, body, null, false, false);
+            addUserMailsRecord(user, mailType, defaultEmailSendFrom, sendBy != null ? sendBy : "Through slack, unknown sender");
             log.info("Sent email to User '{}'", user.getEmail());
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", user.getEmail(), e);

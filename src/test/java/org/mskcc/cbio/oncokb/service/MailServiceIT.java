@@ -5,6 +5,7 @@ import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.RedisTestContainerExtension;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.EmailAddresses;
 import org.mskcc.cbio.oncokb.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,14 +24,13 @@ import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -53,6 +53,12 @@ public class MailServiceIT {
     };
     private static final Pattern PATTERN_LOCALE_3 = Pattern.compile("([a-z]{2})-([a-zA-Z]{4})-([a-z]{2})");
     private static final Pattern PATTERN_LOCALE_2 = Pattern.compile("([a-z]{2})-([a-z]{2})");
+
+    // Testing email address for applicationProperties
+    private static final String LICENSE_ADDR = "license@example.com";
+    private static final String REGISTRATION_ADDR = "registration@example.com";
+    private static final String CONTACT_ADDR = "contact@example.com";
+    private static final String TECH_DEV_ADDR = "dev@example.com";
 
     @Autowired
     private JHipsterProperties jHipsterProperties;
@@ -81,6 +87,14 @@ public class MailServiceIT {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         doNothing().when(javaMailSender).send(any(MimeMessage.class));
+
+        // specify application emails for testing
+        applicationProperties.setEmailAddresses(new EmailAddresses());
+        applicationProperties.getEmailAddresses().setLicenseAddress(LICENSE_ADDR);
+        applicationProperties.getEmailAddresses().setContactAddress(CONTACT_ADDR);
+        applicationProperties.getEmailAddresses().setRegistrationAddress(REGISTRATION_ADDR);
+        applicationProperties.getEmailAddresses().setTechDevAddress(TECH_DEV_ADDR);
+
         mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine, userMailsService, applicationProperties);
     }
 
@@ -234,6 +248,51 @@ public class MailServiceIT {
             assertThat(message.getSubject()).isEqualTo(emailTitle);
             assertThat(message.getContent().toString()).isEqualToNormalizingNewlines("<html>" + emailTitle + ", http://127.0.0.1:9095, john</html>\n");
         }
+    }
+
+    @Test
+    public void testSendEmailFromSlack() throws MessagingException, IOException {
+        String TEST_SUB = "testSubject";
+        String TEST_USER_EMAIL = "john.doe@example.com";
+
+        UserDTO user = new UserDTO();
+        user.setLogin("john");
+        user.setEmail(TEST_USER_EMAIL);
+        user.setLangKey("en");
+
+        MailType mailType = MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL;
+
+        mailService.sendEmailFromSlack(user, TEST_SUB, "testBody", mailType, "test");
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
+
+        assertThat(message.getSubject()).isEqualTo(TEST_SUB);
+        assertThat(message.getAllRecipients()[0].toString()).isEqualTo(TEST_USER_EMAIL);
+        assertThat(message.getFrom()[0].toString()).isEqualTo(REGISTRATION_ADDR);
+        assertThat(message.getRecipients(Message.RecipientType.CC) == null).isTrue();
+    }
+
+    @Test
+    public void testSendEmailFromSlackLicenseOptions() throws MessagingException, IOException {
+        // Mainly test the email send from
+        String TEST_SUB = "testSubject";
+        String TEST_USER_EMAIL = "john.doe@example.com";
+
+        UserDTO user = new UserDTO();
+        user.setLogin("john");
+        user.setEmail(TEST_USER_EMAIL);
+        user.setLangKey("en");
+
+        MailType mailType = MailType.LICENSE_OPTIONS;
+
+        mailService.sendEmailFromSlack(user, TEST_SUB, "testBody", mailType, "test");
+        verify(javaMailSender).send(messageCaptor.capture());
+        MimeMessage message = messageCaptor.getValue();
+        assertThat(message.getSubject()).isEqualTo(TEST_SUB);
+        assertThat(message.getAllRecipients()[0].toString()).isEqualTo(TEST_USER_EMAIL);
+        assertThat(message.getFrom()[0].toString()).isEqualTo(LICENSE_ADDR);
+        assertThat(message.getRecipients(Message.RecipientType.CC) != null && message.getRecipients(Message.RecipientType.CC).length == 1).isTrue();
+        assertThat(message.getRecipients(Message.RecipientType.CC)[0].toString()).isEqualTo(LICENSE_ADDR);
     }
 
     /**
