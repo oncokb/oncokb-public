@@ -241,6 +241,7 @@ class HomePage extends React.Component<IHomeProps, {}> {
               <Col xs={12} md={6} lg={3}>
                 <HomePageNumber
                   isLoading={this.props.appStore.mainNumbers.isPending}
+                  href={PAGE_ROUTE.ACTIONABLE_GENE}
                   number={this.props.appStore.mainNumbers.result.alteration}
                   title={`${pluralize(
                     'Alteration',
