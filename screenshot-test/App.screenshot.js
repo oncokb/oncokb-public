@@ -140,7 +140,7 @@ function getMockResponse(url){
         body: '[]'
       };
       break;
-    case `${SERVER_URL}api/users?size=5000`:
+    case `${SERVER_URL}api/users?size=10000`:
       res = {
         status: 200,
         contentType: 'application/json',

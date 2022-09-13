@@ -30,4 +30,7 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> 
     Optional<UserDetails> findByUserIsCurrentUser();
 
     void deleteByUser(User user);
+
+    @Query("select ud.user.email from UserDetails ud where ud.company.id is null")
+    List<String> findUserEmailsByCompanyIdIsNull();
 }

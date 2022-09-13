@@ -12,6 +12,7 @@ import java.util.Collection;
 public class UserCacheResolver implements CacheResolver {
     public static String USERS_BY_LOGIN_CACHE = "usersByLogin";
     public static String USERS_BY_EMAIL_CACHE = "usersByEmail";
+    public static String ALL_USERS_CACHE = "allUsers";
 
 
     private final ApplicationProperties applicationProperties;
@@ -32,6 +33,8 @@ public class UserCacheResolver implements CacheResolver {
             caches.add(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_LOGIN_CACHE)));
         } else if (context.getMethod().getName() == "findOneWithAuthoritiesByEmailIgnoreCase") {
             caches.add(cacheManager.getCache(this.cacheNameResolver.getCacheName(USERS_BY_EMAIL_CACHE)));
+        } else if (context.getMethod().getName() == "getAllManagedUsers") {
+            caches.add(cacheManager.getCache(this.cacheNameResolver.getCacheName(ALL_USERS_CACHE)));
         } else {
             caches.add(cacheManager.getCache(this.cacheNameResolver.getCacheName(context.getMethod().getName())));
         }

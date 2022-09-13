@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Authority;
-import org.mskcc.cbio.oncokb.domain.Company;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.UserDetails;
 import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
@@ -14,11 +13,12 @@ import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.io.Serializable;
 
 /**
  * A DTO representing a user, with his authorities.
  */
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     private Long id;
 
