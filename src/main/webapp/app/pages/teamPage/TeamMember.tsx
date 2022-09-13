@@ -9,6 +9,7 @@ export enum TITLE {
   FACP = 'FACP',
   FRCPC = 'FRCPC',
   BSC = 'BSc',
+  BA = 'BA',
   MPH = 'MPH',
 }
 
