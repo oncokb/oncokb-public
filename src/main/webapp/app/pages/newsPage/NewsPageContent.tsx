@@ -188,11 +188,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'ERBB2',
         'Oncogenic Mutations',
         'Non-Small Cell Lung Cancer',
-        'Trastuzumab Deruxtican',
+        'Trastuzumab Deruxtecan',
         '2',
         '1',
         <FdaApprovalLink
-          approval={'trastuzumab deruxtican in non-small cell lung cancer'}
+          approval={'trastuzumab deruxtecan in non-small cell lung cancer'}
           link={
             'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-fam-trastuzumab-deruxtecan-nxki-her2-mutant-non-small-cell-lung'
           }
