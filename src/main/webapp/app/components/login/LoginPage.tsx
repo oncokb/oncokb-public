@@ -46,6 +46,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
     client
       .resendVerificationUsingPOST({
         loginVm: this.savedCredential,
+        recaptchaToken: recaptchaValue,
       })
       .then(
         () => {

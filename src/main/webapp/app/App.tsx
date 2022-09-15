@@ -33,6 +33,7 @@ class App extends React.Component {
     routing: new RouterStore(),
   };
   public recaptchaRef: any = React.createRef();
+  public recaptchaValue: any;
   public recaptchaRendered = false;
   public recaptchaToken: string;
 
@@ -52,6 +53,7 @@ class App extends React.Component {
       this.recaptchaRendered
     ) {
       this.recaptchaRef.current.execute();
+      this.recaptchaValue = this.recaptchaRef.current.getValue();
     }
   }
 
@@ -97,6 +99,13 @@ class App extends React.Component {
     return (
       <DocumentTitle title={getPageTitle(PAGE_TITLE.HOME, false)}>
         <>
+          <Reaptcha
+            ref={this.recaptchaRef}
+            sitekey={RECAPTCHA_SITE_KEY}
+            onVerify={this.onRecaptchaVerify}
+            onRender={this.onRecaptchaRender}
+            size="invisible"
+          />
           {
             <Provider {...this.stores}>
               <Router history={history}>

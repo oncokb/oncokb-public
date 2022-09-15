@@ -135,6 +135,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     client
       .registerAccountUsingPOST({
         managedUserVm: newAccount as ManagedUserVM,
+        recaptchaToken: recaptchaValue,
       })
       .then(this.successToRegistered, this.failedToRegistered);
   }
