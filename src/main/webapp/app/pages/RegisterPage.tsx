@@ -31,6 +31,7 @@ import {
 import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 import _ from 'lodash';
+import recaptchaValue from 'app/App';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -129,6 +130,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     client
       .registerAccountUsingPOST({
         managedUserVm: newAccount as ManagedUserVM,
+        recaptchaToken: recaptchaValue,
       })
       .then(this.successToRegistered, this.failedToRegistered);
   }
