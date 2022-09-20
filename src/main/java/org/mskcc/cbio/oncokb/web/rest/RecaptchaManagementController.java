@@ -26,13 +26,14 @@ public class RecaptchaManagementController {
         super();
     }
 
-    public @ResponseBody ResponseObject validateCaptcha(HttpServletRequest request, String recaptchaToken)
+    public @ResponseBody ResponseObject validateCaptcha(HttpServletRequest request, String storedRecaptchaToken)
             throws ValidationException {
 
         String url = "https://www.google.com/recaptcha/api/siteverify";
         String secret = "6LcxRsMZAAAAAIQtqDL3D4PgDdP2b-GG8TO7R8Yq";
 
-        // String captchaToken =  request.getParameter("g-captcha-response");
+        String recaptchaToken =  request.getParameter("g-recaptcha-response");
+        String token = request.getHeader("g-recaptcha-response");
 
         ResponseObject responseObject = new ResponseObject();
         try {

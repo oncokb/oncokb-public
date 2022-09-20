@@ -33,7 +33,6 @@ class App extends React.Component {
     routing: new RouterStore(),
   };
   public recaptchaRef: any = React.createRef();
-  public recaptchaValue: any;
   public recaptchaRendered = false;
   public recaptchaToken: string;
 
@@ -53,7 +52,6 @@ class App extends React.Component {
       this.recaptchaRendered
     ) {
       this.recaptchaRef.current.execute();
-      this.recaptchaValue = this.recaptchaRef.current.getValue();
     }
   }
 
