@@ -946,7 +946,7 @@ export default class API {
     };
     resendVerificationUsingPOSTURL(parameters: {
         'loginVm': LoginVM,
-        'recaptchaToken': any,
+        'recaptchaToken': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -970,7 +970,7 @@ export default class API {
      */
     resendVerificationUsingPOSTWithHttpInfo(parameters: {
         'loginVm': LoginVM,
-        'recaptchaToken': any,
+        'recaptchaToken': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1015,7 +1015,7 @@ export default class API {
      */
     resendVerificationUsingPOST(parameters: {
         'loginVm': LoginVM,
-        'recaptchaToken': any,
+        'recaptchaToken': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < any > {
@@ -1101,7 +1101,7 @@ export default class API {
     };
     requestPasswordResetUsingPOSTURL(parameters: {
         'mail': string,
-        'recaptchaToken': any,
+        'recaptchaToken': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -1125,7 +1125,7 @@ export default class API {
      */
     requestPasswordResetUsingPOSTWithHttpInfo(parameters: {
         'mail': string,
-        'recaptchaToken': any,
+        'recaptchaToken': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1170,7 +1170,7 @@ export default class API {
      */
     requestPasswordResetUsingPOST(parameters: {
         'mail': string,
-        'recaptchaToken': any,
+        'recaptchaToken': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < any > {
@@ -3475,7 +3475,7 @@ export default class API {
     };
     registerAccountUsingPOSTURL(parameters: {
         'managedUserVm': ManagedUserVM,
-        'recaptchaToken': any,
+        'recaptchaToken': string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
@@ -3499,7 +3499,7 @@ export default class API {
      */
     registerAccountUsingPOSTWithHttpInfo(parameters: {
         'managedUserVm': ManagedUserVM,
-        'recaptchaToken': any,
+        'recaptchaToken': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -3544,7 +3544,7 @@ export default class API {
      */
     registerAccountUsingPOST(parameters: {
         'managedUserVm': ManagedUserVM,
-        'recaptchaToken': any,
+        'recaptchaToken': string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < any > {

@@ -17,6 +17,8 @@ import {
 import { observable, action } from 'mobx';
 import autobind from 'autobind-decorator';
 import Reaptcha from 'reaptcha';
+import { setRecaptchaToken } from './indexUtils';
+import { COILinkout } from './pages/teamPage/COILinkout';
 
 export type Stores = {
   appStore: AppStore;
@@ -34,8 +36,8 @@ class App extends React.Component {
     routing: new RouterStore(),
   };
   public recaptchaRef: any = React.createRef();
-  public recaptchaValue: any;
   public recaptchaRendered = false;
+  public recaptchaToken: string;
 
   constructor(props: IAppConfig) {
     super(props);
@@ -53,13 +55,19 @@ class App extends React.Component {
       this.recaptchaRendered
     ) {
       this.recaptchaRef.current.execute();
-      this.recaptchaValue = this.recaptchaRef.current.getValue();
     }
   }
 
   @autobind
   @action
   onRecaptchaVerify(value: string) {
+    const response = this.recaptchaRef.current.getResponse();
+    response.then((token: string) => {
+      setRecaptchaToken(token);
+      this.recaptchaToken = token;
+    });
+    // console.log("token value")
+    // console.log(token)
     this.stores.appStore.recaptchaVerified = true;
   }
 

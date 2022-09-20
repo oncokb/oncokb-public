@@ -107,8 +107,7 @@ public class AccountResource {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, String recaptchaToken, HttpServletRequest request) {
-        String token = request.getParameter("g-recaptcha-response");
-        try (ResponseObject respObj = recaptchaController.validateCaptcha(request, token)) {
+        try (ResponseObject respObj = recaptchaController.validateCaptcha(request, recaptchaToken)) {
             if (!checkPasswordLength(managedUserVM.getPassword())) {
                 throw new InvalidPasswordException();
             }
@@ -363,7 +362,7 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail, String recaptchaToken, HttpServletRequest request) {
-        try (ResponseObject respObj = recaptchaController.validateCaptcha(request, recaptchaToken)) {
+        try (ResponseObject respObj = recaptchaController.validateCaptcha(request,recaptchaToken)) {
             Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
             if (user.isPresent()) {
                 Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
@@ -454,7 +453,7 @@ public class AccountResource {
 
     @PostMapping(path = "/account/resend-verification")
     public void resendVerification(@RequestBody LoginVM loginVM, String recaptchaToken, HttpServletRequest request) {
-        try (ResponseObject respObj = recaptchaController.validateCaptcha(request, recaptchaToken)) {
+        try (ResponseObject respObj = recaptchaController.validateCaptcha(request,recaptchaToken)) {
             Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
 
             if (userOptional.isPresent()

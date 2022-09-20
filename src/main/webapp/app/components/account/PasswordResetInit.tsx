@@ -7,7 +7,7 @@ import client from 'app/shared/api/clientInstance';
 import { observer } from 'mobx-react';
 import { API_CALL_STATUS } from 'app/config/constants';
 import autobind from 'autobind-decorator';
-import recaptchaValue from 'app/App';
+import { getStoredRecaptchaToken } from 'app/indexUtils';
 
 @observer
 export class PasswordResetInit extends React.Component<{}> {
@@ -20,7 +20,7 @@ export class PasswordResetInit extends React.Component<{}> {
       client
         .requestPasswordResetUsingPOST({
           mail: values.email,
-          recaptchaToken: recaptchaValue,
+          recaptchaToken: getStoredRecaptchaToken(),
         })
         .then(() => {
           this.resetStatus = API_CALL_STATUS.SUCCESSFUL;

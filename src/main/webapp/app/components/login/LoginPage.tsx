@@ -18,7 +18,7 @@ import client from 'app/shared/api/clientInstance';
 import { LoginVM } from 'app/shared/api/generated/API';
 import { PAGE_ROUTE } from 'app/config/constants';
 import { TrialActivationPageLink } from 'app/shared/utils/UrlUtils';
-import recaptchaValue from 'app/App';
+import { getStoredRecaptchaToken } from 'app/indexUtils';
 export interface ILoginProps {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
@@ -37,7 +37,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
     client
       .resendVerificationUsingPOST({
         loginVm: this.savedCredential,
-        recaptchaToken: recaptchaValue,
+        recaptchaToken: getStoredRecaptchaToken(),
       })
       .then(
         () => {
