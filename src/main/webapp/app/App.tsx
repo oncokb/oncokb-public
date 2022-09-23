@@ -102,13 +102,13 @@ class App extends React.Component {
     return (
       <DocumentTitle title={DOCUMENT_TITLES.HOME}>
         <>
-          <Reaptcha
+          {/* <Reaptcha
             ref={this.recaptchaRef}
             sitekey={RECAPTCHA_SITE_KEY}
             onVerify={this.onRecaptchaVerify}
             onRender={this.onRecaptchaRender}
             size="invisible"
-          />
+          /> */}
           {
             <Provider {...this.stores}>
               <Router history={history}>
