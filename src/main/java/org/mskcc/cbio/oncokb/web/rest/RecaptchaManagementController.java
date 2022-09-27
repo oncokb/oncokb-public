@@ -32,8 +32,8 @@ public class RecaptchaManagementController {
         String url = "https://www.google.com/recaptcha/api/siteverify";
         String secret = "6LcxRsMZAAAAAIQtqDL3D4PgDdP2b-GG8TO7R8Yq";
 
-        String recaptchaToken =  request.getParameter("g-recaptcha-response");
-        String token = request.getHeader("g-recaptcha-response");
+        // String recaptchaToken =  request.getParameter("g-recaptcha-response");
+        // String token = request.getHeader("g-recaptcha-response");
 
         ResponseObject responseObject = new ResponseObject();
         try {
@@ -43,7 +43,7 @@ public class RecaptchaManagementController {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("secret", secret)
-                    .queryParam("response", recaptchaToken);
+                    .queryParam("response", storedRecaptchaToken);
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<RecaptchaResponse> response = restTemplate.exchange(builder.build().encode().toUri(),
@@ -51,7 +51,7 @@ public class RecaptchaManagementController {
 
             RecaptchaResponse rs = response.getBody();
 
-            if (response.getStatusCode().value() == 200 && rs.isSuccess()) {
+            if (response.getStatusCode().value() == 200 && rs.isSuccess() && (rs.getScore() >= 0.1)) {
                 responseObject.setToken("Valid");
                 LOGGER.info("RECAPTCHA TOKEN VERIFIED SUCCESSFULLY");
             } else {
