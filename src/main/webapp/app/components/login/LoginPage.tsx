@@ -16,9 +16,13 @@ import {
 import { getErrorMessage } from 'app/shared/alert/ErrorAlertUtils';
 import client from 'app/shared/api/clientInstance';
 import { LoginVM } from 'app/shared/api/generated/API';
-import { PAGE_ROUTE } from 'app/config/constants';
+import {
+  PAGE_ROUTE,
+  TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS,
+} from 'app/config/constants';
 import { TrialActivationPageLink } from 'app/shared/utils/UrlUtils';
 import { getStoredRecaptchaToken } from 'app/indexUtils';
+import ReCAPTCHA from 'app/shared/recaptcha/recaptcha';
 export interface ILoginProps {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
@@ -32,12 +36,15 @@ export default class LoginPage extends React.Component<ILoginProps> {
   @observable resendingVerification = false;
   @observable resendVerificationMessage: string;
 
-  resentEmail = () => {
+  recaptcha = new ReCAPTCHA('login');
+
+  resentEmail = async () => {
     this.resendingVerification = true;
+    const token: string = await this.recaptcha.getToken();
     client
       .resendVerificationUsingPOST({
         loginVm: this.savedCredential,
-        recaptchaToken: getStoredRecaptchaToken(),
+        recaptchaToken: token,
       })
       .then(
         () => {

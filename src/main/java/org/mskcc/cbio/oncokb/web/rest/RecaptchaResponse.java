@@ -7,6 +7,7 @@ public class RecaptchaResponse {
     private boolean success;
     private String challenge_ts;
     private String hostName;
+    private double score;
 
     @JsonProperty("success")
     public boolean isSuccess() {
@@ -24,6 +25,14 @@ public class RecaptchaResponse {
 
     public void setChallenge_ts(String challenge_ts) {
         this.challenge_ts = challenge_ts;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
     }
 
     @JsonProperty("hostname")
