@@ -409,6 +409,7 @@ public class AccountResource {
         // }
     }
 
+
     /**
      * {@code POST   /account/reset-password/finish} : Finish to reset the password
      * of the user.

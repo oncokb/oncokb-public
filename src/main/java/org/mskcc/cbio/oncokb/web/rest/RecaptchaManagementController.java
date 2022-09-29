@@ -8,12 +8,15 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import javax.xml.bind.ValidationException;
 
@@ -26,14 +29,11 @@ public class RecaptchaManagementController {
         super();
     }
 
-    public @ResponseBody ResponseObject validateCaptcha(HttpServletRequest request, String storedRecaptchaToken)
+    public @ResponseBody ResponseEntity<String> validateCaptcha(HttpServletRequest request, @RequestParam String storedRecaptchaToken)
             throws ValidationException {
 
         String url = "https://www.google.com/recaptcha/api/siteverify";
         String secret = "6LcxRsMZAAAAAIQtqDL3D4PgDdP2b-GG8TO7R8Yq";
-
-        // String recaptchaToken =  request.getParameter("g-recaptcha-response");
-        // String token = request.getHeader("g-recaptcha-response");
 
         ResponseObject responseObject = new ResponseObject();
         try {
@@ -51,20 +51,21 @@ public class RecaptchaManagementController {
 
             RecaptchaResponse rs = response.getBody();
 
-            if (response.getStatusCode().value() == 200 && rs.isSuccess() && (rs.getScore() >= 0.1)) {
+            if (response.getStatusCode().value() == 200 && rs.isSuccess()) {
                 responseObject.setToken("Valid");
                 LOGGER.info("RECAPTCHA TOKEN VERIFIED SUCCESSFULLY");
+                return new ResponseEntity<>("Recaptcha successfully validated",HttpStatus.OK); 
             } else {
-                LOGGER.error("CAPTCHA_VALIDATION_FAILED");
-                throw new ValidationException("CAPTCHA_VALIDATION_FAILED");
+                LOGGER.error("HTTP STATUS 400: CAPTCHA_VALIDATION_FAILED");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"HTTP STATUS 400: CAPTCHA_VALIDATION_FAILED");
+                // return new ResponseEntity<>("Recaptcha could not be validated",HttpStatus.BAD_REQUEST);
             }
-
-            return responseObject;
+        
 
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("CAPTCHA_VALIDATION_FAILED", e);
-            throw new ValidationException("CAPTCHA_VALIDATION_FAILED", e);
+            throw new ValidationException("HTTP STATUS 400: CAPTCHA_VALIDATION_FAILED", "400", e);
         }
 
     }
