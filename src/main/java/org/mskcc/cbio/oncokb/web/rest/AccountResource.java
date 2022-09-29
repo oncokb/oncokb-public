@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -106,15 +107,19 @@ public class AccountResource {
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, String recaptchaToken, HttpServletRequest request) {
-        try (ResponseObject respObj = recaptchaController.validateCaptcha(request, recaptchaToken)) {
-            if (!checkPasswordLength(managedUserVM.getPassword())) {
-                throw new InvalidPasswordException();
+    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, String recaptchaToken,
+            HttpServletRequest request) {
+        try {
+            ResponseEntity<String> rs = recaptchaController.validateCaptcha(request, recaptchaToken);
+            if (rs.getStatusCode() == HttpStatus.OK) {
+                if (!checkPasswordLength(managedUserVM.getPassword())) {
+                    throw new InvalidPasswordException();
+                }
+                User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+                mailService.sendActivationEmail(userMapper.userToUserDTO(user));
             }
-            User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-            mailService.sendActivationEmail(userMapper.userToUserDTO(user));
-
         } catch (Exception e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -362,23 +367,28 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail, String recaptchaToken, HttpServletRequest request) {
-        try (ResponseObject respObj = recaptchaController.validateCaptcha(request,recaptchaToken)) {
-            Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
-            if (user.isPresent()) {
-                Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
-                if (updatedUser.isPresent()) {
-                    mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
+        try {
+            ResponseEntity<String> rs = recaptchaController.validateCaptcha(request, recaptchaToken);
+            if (rs.getStatusCode() == HttpStatus.OK) {
+                Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
+                if (user.isPresent()) {
+                    Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
+                    if (updatedUser.isPresent()) {
+                        mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
+                    }
+
+                } else {
+                    // Pretend the request has been successful to prevent checking which emails
+                    // really exist
+                    // but log that an invalid attempt has been made
+                    log.warn("Password reset requested for non existing mail");
                 }
-            } else {
-                // Pretend the request has been successful to prevent checking which emails
-                // really exist
-                // but log that an invalid attempt has been made
-                log.warn("Password reset requested for non existing mail");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     /**
      * {@code POST   /account/reset-password/finish} : Finish to reset the password
@@ -453,12 +463,15 @@ public class AccountResource {
 
     @PostMapping(path = "/account/resend-verification")
     public void resendVerification(@RequestBody LoginVM loginVM, String recaptchaToken, HttpServletRequest request) {
-        try (ResponseObject respObj = recaptchaController.validateCaptcha(request,recaptchaToken)) {
-            Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
+        try {
+            ResponseEntity<String> rs = recaptchaController.validateCaptcha(request, recaptchaToken);
+            if (rs.getStatusCode() == HttpStatus.OK) {
+                Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
 
-            if (userOptional.isPresent()
-                    && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
-                mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
+                if (userOptional.isPresent()
+                        && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
+                    mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
