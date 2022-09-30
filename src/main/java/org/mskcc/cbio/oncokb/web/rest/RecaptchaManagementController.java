@@ -33,7 +33,6 @@ public class RecaptchaManagementController {
             throws ValidationException {
 
         String url = "https://www.google.com/recaptcha/api/siteverify";
-        String secret = "6LcxRsMZAAAAAIQtqDL3D4PgDdP2b-GG8TO7R8Yq";
 
         ResponseObject responseObject = new ResponseObject();
         try {
@@ -42,8 +41,7 @@ public class RecaptchaManagementController {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("secret", secret)
-                    .queryParam("response", storedRecaptchaToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("response", storedRecaptchaToken);
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<RecaptchaResponse> response = restTemplate.exchange(builder.build().encode().toUri(),
