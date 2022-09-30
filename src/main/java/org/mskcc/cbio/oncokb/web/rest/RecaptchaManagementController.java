@@ -49,7 +49,7 @@ public class RecaptchaManagementController {
 
             RecaptchaResponse rs = response.getBody();
 
-            if (response.getStatusCode().value() == 200 && rs.isSuccess()) {
+            if (response.getStatusCode().value() == 200 && rs.getScore() >= 0.1) {
                 responseObject.setToken("Valid");
                 LOGGER.info("RECAPTCHA TOKEN VERIFIED SUCCESSFULLY");
                 return new ResponseEntity<>("Recaptcha successfully validated",HttpStatus.OK); 
