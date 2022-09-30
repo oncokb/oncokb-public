@@ -98,6 +98,7 @@ public class AccountResource {
      * {@code POST  /register} : register the user.
      *
      * @param managedUserVM the managed user View Model.
+     * @throws Exception
      * @throws InvalidPasswordException  {@code 400 (Bad Request)} if the password
      *                                   is incorrect.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is
@@ -108,7 +109,7 @@ public class AccountResource {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, String recaptchaToken,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws Exception {
         try {
             ResponseEntity<String> rs = recaptchaController.validateCaptcha(request, recaptchaToken);
             if (rs.getStatusCode() == HttpStatus.OK) {
@@ -121,6 +122,8 @@ public class AccountResource {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            String errorMessage = e.getMessage();
+            throw new Exception(errorMessage);
         }
     }
 
@@ -364,9 +367,10 @@ public class AccountResource {
      * password of the user.
      *
      * @param mail the mail of the user.
+     * @throws Exception
      */
     @PostMapping(path = "/account/reset-password/init")
-    public void requestPasswordReset(@RequestBody String mail, String recaptchaToken, HttpServletRequest request) {
+    public void requestPasswordReset(@RequestBody String mail, String recaptchaToken, HttpServletRequest request) throws Exception {
         try {
             ResponseEntity<String> rs = recaptchaController.validateCaptcha(request, recaptchaToken);
             if (rs.getStatusCode() == HttpStatus.OK) {
@@ -386,6 +390,8 @@ public class AccountResource {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            String errorMessage = e.getMessage();
+            throw new Exception(errorMessage);
         }
     }
 
@@ -462,7 +468,7 @@ public class AccountResource {
     }
 
     @PostMapping(path = "/account/resend-verification")
-    public void resendVerification(@RequestBody LoginVM loginVM, String recaptchaToken, HttpServletRequest request) {
+    public void resendVerification(@RequestBody LoginVM loginVM, String recaptchaToken, HttpServletRequest request) throws Exception {
         try {
             ResponseEntity<String> rs = recaptchaController.validateCaptcha(request, recaptchaToken);
             if (rs.getStatusCode() == HttpStatus.OK) {
@@ -475,6 +481,8 @@ public class AccountResource {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            String errorMessage = e.getMessage();
+            throw new Exception(errorMessage);
         }
     }
 
