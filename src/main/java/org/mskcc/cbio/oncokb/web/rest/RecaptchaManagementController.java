@@ -54,8 +54,9 @@ public class RecaptchaManagementController {
                 LOGGER.info("RECAPTCHA TOKEN VERIFIED SUCCESSFULLY");
                 return new ResponseEntity<>("Recaptcha successfully validated",HttpStatus.OK); 
             } else {
-                LOGGER.error("HTTP STATUS 400: CAPTCHA_VALIDATION_FAILED");
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"HTTP STATUS 400: CAPTCHA_VALIDATION_FAILED");
+                LOGGER.error("HTTP STATUS 400: CAPTCHA VALIDATION FAILED");
+                // throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"HTTP STATUS 400: CAPTCHA_VALIDATION_FAILED");
+                throw new ValidationException("HTTP STATUS 400: CAPTCHA VALIDATION FAILED", "400");
                 // return new ResponseEntity<>("Recaptcha could not be validated",HttpStatus.BAD_REQUEST);
             }
         
@@ -63,7 +64,7 @@ public class RecaptchaManagementController {
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("CAPTCHA_VALIDATION_FAILED", e);
-            throw new ValidationException("HTTP STATUS 400: CAPTCHA_VALIDATION_FAILED", "400", e);
+            throw new ValidationException("HTTP STATUS 400: CAPTCHA VALIDATION FAILED", "400", e);
         }
 
     }
