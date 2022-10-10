@@ -21,7 +21,6 @@ import {
   TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS,
 } from 'app/config/constants';
 import { TrialActivationPageLink } from 'app/shared/utils/UrlUtils';
-import { getStoredRecaptchaToken } from 'app/indexUtils';
 import ReCAPTCHA from 'app/shared/recaptcha/recaptcha';
 export interface ILoginProps {
   authenticationStore: AuthenticationStore;
@@ -36,7 +35,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
   @observable resendingVerification = false;
   @observable resendVerificationMessage: string;
 
-  recaptcha = new ReCAPTCHA('login');
+  recaptcha = new ReCAPTCHA();
 
   resentEmail = async () => {
     this.resendingVerification = true;
@@ -57,6 +56,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
       .finally(() => {
         this.resendingVerification = false;
       });
+    window.grecaptcha.enterprise.reset();
   };
 
   @computed get showResendInfo() {

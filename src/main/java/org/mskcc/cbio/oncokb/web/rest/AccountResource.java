@@ -70,9 +70,6 @@ public class AccountResource {
 
     private final TokenProvider tokenProvider;
 
-    @Autowired
-    RecaptchaManagementController recaptchaController;
-
     public AccountResource(UserRepository userRepository, UserService userService,
             MailService mailService, TokenProvider tokenProvider,
             SlackService slackService, EmailService emailService,
@@ -111,7 +108,7 @@ public class AccountResource {
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, String recaptchaToken,
             HttpServletRequest request) throws Exception {
         try {
-            ResponseEntity<String> rs = recaptchaController.validateCaptcha(request, recaptchaToken);
+            ResponseEntity<String> rs = CreateAssessment.createAssessment(request, recaptchaToken, "register");
             if (rs.getStatusCode() == HttpStatus.OK) {
                 if (!checkPasswordLength(managedUserVM.getPassword())) {
                     throw new InvalidPasswordException();
@@ -372,7 +369,7 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail, String recaptchaToken, HttpServletRequest request) throws Exception {
         try {
-            ResponseEntity<String> rs = recaptchaController.validateCaptcha(request, recaptchaToken);
+            ResponseEntity<String> rs = CreateAssessment.createAssessment(request, recaptchaToken, "reset password");
             if (rs.getStatusCode() == HttpStatus.OK) {
                 Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
                 if (user.isPresent()) {
@@ -470,7 +467,7 @@ public class AccountResource {
     @PostMapping(path = "/account/resend-verification")
     public void resendVerification(@RequestBody LoginVM loginVM, String recaptchaToken, HttpServletRequest request) throws Exception {
         try {
-            ResponseEntity<String> rs = recaptchaController.validateCaptcha(request, recaptchaToken);
+            ResponseEntity<String> rs = CreateAssessment.createAssessment(request, recaptchaToken, "resend verification");
             if (rs.getStatusCode() == HttpStatus.OK) {
                 Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
 

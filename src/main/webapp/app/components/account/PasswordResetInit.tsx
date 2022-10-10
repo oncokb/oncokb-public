@@ -7,13 +7,12 @@ import client from 'app/shared/api/clientInstance';
 import { observer } from 'mobx-react';
 import { API_CALL_STATUS } from 'app/config/constants';
 import autobind from 'autobind-decorator';
-import { getStoredRecaptchaToken } from 'app/indexUtils';
 import ReCAPTCHA from 'app/shared/recaptcha/recaptcha';
 
 @observer
 export class PasswordResetInit extends React.Component<{}> {
   @observable resetStatus: API_CALL_STATUS;
-  recaptcha = new ReCAPTCHA('reset password');
+  recaptcha = new ReCAPTCHA();
 
   @autobind
   @action
@@ -23,7 +22,7 @@ export class PasswordResetInit extends React.Component<{}> {
       client
         .requestPasswordResetUsingPOST({
           mail: values.email,
-          recaptchaToken: getStoredRecaptchaToken(),
+          recaptchaToken: token,
         })
         .then(() => {
           this.resetStatus = API_CALL_STATUS.SUCCESSFUL;
@@ -34,6 +33,7 @@ export class PasswordResetInit extends React.Component<{}> {
     } else {
       this.resetStatus = API_CALL_STATUS.FAILURE;
     }
+    window.grecaptcha.enterprise.reset();
   }
 
   render() {

@@ -1,5 +1,4 @@
-import { RECAPTCHA_SITE_KEY_V3 } from 'app/config/constants';
-import { setRecaptchaToken } from 'app/indexUtils';
+import { RECAPTCHA_ENTERPRISE_SITE_KEY } from 'app/config/constants';
 
 declare global {
   interface Window {
@@ -10,7 +9,7 @@ declare global {
 const loadReCaptcha = (siteKey: string) => {
   const script = document.createElement('script');
   // script.src = `strict-dynamic https://www.recaptcha.net/recaptcha/api.js?render=${siteKey} 'sha256-ThhI8UaSFEbbl6cISiZpnJ4Z44uNSq2tPKgyRTD3LyU=' unsafe-inline unsafe-eval`
-  script.src = `https://www.recaptcha.net/recaptcha/api.js?render=${siteKey}`;
+  script.src = `https://www.google.com/recaptcha/enterprise.js?render=${siteKey}`;
   // script.nonce = goog.getScriptNonce();
   // script.setAttribute('src-elem')
   document.body.appendChild(script);
@@ -18,21 +17,18 @@ const loadReCaptcha = (siteKey: string) => {
 
 export default class ReCAPTCHA {
   siteKey: string;
-  action: string;
 
-  constructor(action: string) {
-    loadReCaptcha(RECAPTCHA_SITE_KEY_V3);
-    this.siteKey = RECAPTCHA_SITE_KEY_V3;
-    this.action = action;
+  constructor() {
+    loadReCaptcha(RECAPTCHA_ENTERPRISE_SITE_KEY);
+    this.siteKey = RECAPTCHA_ENTERPRISE_SITE_KEY;
   }
 
   async getToken(): Promise<string> {
     let token = '';
-    await window.grecaptcha
-      .execute(this.siteKey, { action: this.action })
+    await window.grecaptcha.enterprise
+      .execute(this.siteKey)
       .then((res: string) => {
         token = res;
-        setRecaptchaToken(token);
       });
     return token;
   }
