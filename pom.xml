@@ -113,6 +113,13 @@
                 <scope>import</scope>
             </dependency>
             <!-- jhipster-needle-maven-add-dependency-management -->
+            <dependency>
+                 <groupId>com.google.cloud</groupId>
+                 <artifactId>libraries-bom</artifactId>
+                <version>26.1.2</version>
+                 <type>pom</type>
+                 <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

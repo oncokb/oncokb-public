@@ -138,6 +138,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         recaptchaToken: token,
       })
       .then(this.successToRegistered, this.failedToRegistered);
+    window.grecaptcha.enterprise.reset();
   }
 
   @action.bound

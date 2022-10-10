@@ -76,9 +76,6 @@ public class AccountResource {
 
     private final TokenProvider tokenProvider;
 
-    @Autowired
-    RecaptchaManagementController recaptchaController;
-
     public AccountResource(UserRepository userRepository, UserService userService,
             MailService mailService, TokenProvider tokenProvider,
             SlackService slackService, EmailService emailService,

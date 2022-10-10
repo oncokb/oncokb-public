@@ -24,7 +24,7 @@ export class PasswordResetInit extends React.Component<{}> {
       client
         .requestPasswordResetUsingPOST({
           mail: values.email,
-          recaptchaToken: getStoredRecaptchaToken(),
+          recaptchaToken: token,
         })
         .then(() => {
           this.resetStatus = API_CALL_STATUS.SUCCESSFUL;
@@ -35,6 +35,7 @@ export class PasswordResetInit extends React.Component<{}> {
     } else {
       this.resetStatus = API_CALL_STATUS.FAILURE;
     }
+    window.grecaptcha.enterprise.reset();
   }
 
   render() {
