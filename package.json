@@ -80,7 +80,7 @@
     "tslib": "1.11.1",
     "typeface-open-sans": "^0.0.54",
     "uuid": "7.0.3",
-    "victory": "^31.0.22",
+    "victory": "^36.6.8",
     "xregexp": "^4.2.4"
   },
   "devDependencies": {
