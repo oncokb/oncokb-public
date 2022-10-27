@@ -66,7 +66,7 @@ export const UPDATED_IMPLICATION_COLUMNS = [
   { name: 'Gene' },
   { name: 'Mutation' },
   { name: 'Cancer Type' },
-  { name: 'Drug' },
+  { name: 'Drug(s)' },
   { name: 'Evidence' },
 ];
 
@@ -151,6 +151,255 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '10282022': {
+    updatedImplicationTitle:
+      'Updated therapeutic implications - new alterations with a level of evidence',
+    updatedImplication: [
+      [
+        '1',
+        'RET',
+        'Fusions',
+        'All Solid Tumors',
+        'Selpercatinib',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            approval={'selpercatinib in solid tumors'}
+            link={
+              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-selpercatinib-locally-advanced-or-metastatic-ret-fusion-positive-solid-tumors'
+            }
+          />
+          <AbstractLink
+            abstract={'Subbiah et al. Abstract# 3094, ASCO 2022'}
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.3094'
+            }
+          />
+        </WithSeparator>,
+      ],
+      [
+        '3A',
+        'TP53',
+        'Y220C',
+        'All Solid Tumors',
+        'PC14586',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <AbstractLink
+            abstract={'Dumbrava et al. Abstract# 3003, ASCO 2022'}
+            link={
+              'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.3003'
+            }
+          />
+          <AbstractLink
+            abstract={'Dumble et al. Abstract# LB006, AACR 2021'}
+            link={
+              'https://aacrjournals.org/cancerres/article/81/13_Supplement/LB006/669897/Abstract-LB006-PC14586-The-first-orally'
+            }
+          />
+        </WithSeparator>,
+      ],
+      [
+        '4',
+        'PIK3CA',
+        'Oncogenic Mutations',
+        'All Solid Tumors',
+        'RLY-2608',
+        <AbstractLink
+          abstract={'Perez et al. Abstract# TPS1124, ASCO 2022'}
+          link={
+            'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.TPS1124'
+          }
+        />,
+      ],
+      [
+        '4',
+        'PIK3CA',
+        'H1047R',
+        'All Solid Tumors (excluding Colorectal Cancer)',
+        'LOXO-783',
+        <AbstractLink
+          abstract={'Klippel et al. Abstract# P142, AACR-NCI-EORTC 2021'}
+          link={
+            'https://aacrjournals.org/mct/article/20/12_Supplement/P142/675896/Abstract-P142-Preclinical-characterization-of-LOX'
+          }
+        />,
+      ],
+      [
+        '4',
+        'CCNE1',
+        'Amplification',
+        'All Solid Tumors',
+        'RP-6306, BLU-222',
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <AbstractLink
+            abstract={'Brown et al. Abstract# 2306, AACR 2022'}
+            link={
+              'https://aacrjournals.org/cancerres/article/82/12_Supplement/2306/703534'
+            }
+          />
+          <PMIDLink pmids={'35444283'} />
+        </WithSeparator>,
+      ],
+      [
+        '4',
+        'KRAS',
+        'G12D',
+        'All Solid Tumors',
+        'RMC-6236',
+        <AbstractLink
+          abstract={'Koltun et al. Abstract# 3597, AACR 2022'}
+          link={
+            'https://aacrjournals.org/cancerres/article/82/12_Supplement/3597/702320'
+          }
+        />,
+      ],
+    ],
+    news: [
+      <span>
+        Updated therapeutic implications: - addition of therapies for variants
+        with a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Current Level of Evidence</th>
+                <th>Drug(s) Already in {ONCOKB_TM}</th>
+                <th>Newly Added Drug(s)</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>FGFR2</td>
+                <td>Fusions</td>
+                <td>Cholangiocarcinoma</td>
+                <td>1</td>
+                <td>Infigratinib, Pemigatinib</td>
+                <td>
+                  Futibatinib
+                  <br />
+                  (Level 1)
+                </td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaApprovalLink
+                      link={
+                        'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-futibatinib-cholangiocarcinoma'
+                      }
+                      approval={'futibatinib in cholangiocarcinoma'}
+                    />
+                    <AbstractLink
+                      abstract={'Goyal et al. Abstract# 4009, ASCO 2022'}
+                      link={
+                        'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.4009'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>MET</td>
+                <td>Amplification</td>
+                <td>Non-Small Cell Lung Cancer</td>
+                <td>2</td>
+                <td>Crizotinib, Capmatinib, Tepotinib</td>
+                <td>
+                  Telisotuzumab Vedotin
+                  <br />
+                  (Level 3A)
+                </td>
+                <td>
+                  <AbstractLink
+                    abstract={'Camidge et al. Abstract# 9016, ASCO 2022'}
+                    link={
+                      'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.9016'
+                    }
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>PIK3CA</td>
+                <td>
+                  C420R, E542K, E545A, E545D, E545G, E545K, Q546E, Q546R,
+                  H1047L, H1047R and H1047Y
+                </td>
+                <td>Breast Cancer</td>
+                <td>1</td>
+                <td>Alpelisib + Fulvestrant</td>
+                <td>
+                  RLY-2608 + Fulvestrant
+                  <br />
+                  (Level 4)
+                </td>
+                <td>
+                  <AbstractLink
+                    abstract={'Perez et al. Abstract# TPS1124, ASCO 2022'}
+                    link={
+                      'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.TPS1124'
+                    }
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>PIK3CA</td>
+                <td>
+                  Oncogenic Mutations (excluding C420R, E542K, E545A, E545D,
+                  E545G, E545K, Q546E, Q546R, H1047L, H1047R, and H1047Y)
+                </td>
+                <td>Breast Cancer</td>
+                <td>2</td>
+                <td>Alpelisib + Fulvestrant</td>
+                <td>
+                  RLY-2608 + Fulvestrant
+                  <br />
+                  (Level 4)
+                </td>
+                <td>
+                  <AbstractLink
+                    abstract={'Perez et al. Abstract# TPS1124, ASCO 2022'}
+                    link={
+                      'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.TPS1124'
+                    }
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>PIK3CA</td>
+                <td>H1047R</td>
+                <td>Breast Cancer</td>
+                <td>1</td>
+                <td>Alpelisib + Fulvestrant</td>
+                <td>
+                  LOXO-783 + Fulvestrant +/- Abemaciclib,
+                  <br />
+                  LOXO-783 + LY3484356 +/- Abemaciclib,
+                  <br />
+                  LOXO-783 + Aromitase Inhibitors + Abemaciclib,
+                  <br />
+                  LOXO-783 + Nab-Paclitaxel
+                  <br />
+                  (Level 4)
+                </td>
+                <td>
+                  <AbstractLink
+                    abstract={
+                      'Klippel et al. Abstract# P142, AACR-NCI-EORTC 2021'
+                    }
+                    link={
+                      'https://aacrjournals.org/mct/article/20/12_Supplement/P142/675896/Abstract-P142-Preclinical-characterization-of-LOX'
+                    }
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    newlyAddedGenes: ['MYH11', 'PUM1', 'FBXW2', 'NUP214'],
+  },
   '09062022': {
     updatedImplicationTitle:
       'Updated therapeutic implications - new alterations with a level of evidence',
@@ -270,8 +519,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     news: [
       <span>
-        Updated therapeutic implications: - Addition of therapies for variants
-        with a level of evidence
+        Updated therapeutic implications: - addition of therapies for variants
+        with a level of evidence with a level of evidence
         <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
@@ -361,7 +610,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     news: [
       <span>
-        Updated therapeutic implications: - Additional therapies for variants
+        Updated therapeutic implications: - addition of therapies for variants
+        with a level of evidence
         <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
@@ -470,7 +720,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     newlyAddedGenes: ['AFF4'],
     news: [
       <span>
-        Updated therapeutic implications: - Additional therapies for variants
+        Updated therapeutic implications: - addition of therapies for variants
+        with a level of evidence
         <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
