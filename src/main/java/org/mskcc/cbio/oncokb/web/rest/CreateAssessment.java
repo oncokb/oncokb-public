@@ -25,7 +25,7 @@ public class CreateAssessment {
    * is the same for
    * both 'score' and 'checkbox' type recaptcha site keys.
    *
-   * @param token           : The token obtained from the client on passing the
+   * @param recaptchaToken           : The token obtained from the client on passing the
    *                        recaptchaSiteKey.
    * @param recaptchaAction : Action name corresponding to the token.
    * @return
@@ -33,7 +33,7 @@ public class CreateAssessment {
    */
   public static ResponseEntity<String> createAssessment(HttpServletRequest request, @RequestParam String recaptchaToken, String recaptchaAction)
       throws IOException, ValidationException {
- 
+
     String projectID = "symbolic-nation-320615";
     String recaptchaSiteKey = "6LdTXvMhAAAAAN7kj4MRKX0fl_gXUv_IQbxARe6W";
 
