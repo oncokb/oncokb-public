@@ -7,6 +7,7 @@ import { GenePageLink } from 'app/shared/utils/UrlUtils';
 export type NewlyAddedGeneType = 'solid' | 'fusion' | 'heme';
 export type NewlyAddedGenesListItemProps = {
   title?: string;
+  sort?: boolean;
   geneTypes?: NewlyAddedGeneType[];
   genes: string[];
 };
@@ -16,19 +17,18 @@ export const NewlyAddedGenesListItem = (
   return (
     <span>
       {props.title ? (
-        props.title
+        `${props.title}${/[.,?!]+/.test(props.title.slice(-1)) ? '' : ':'}`
       ) : (
         <span>
           Addition of {props.genes.length} new{' '}
           {props.geneTypes
             ? `${props.geneTypes.map(type => `${type}-`).join(', ')}associated `
             : undefined}
-          {pluralize('gene', props.genes.length)}
+          {pluralize('gene', props.genes.length)}:
         </span>
       )}
-      :
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {props.genes.map((hugo: string) => (
+        {(props.sort ? props.genes.sort() : props.genes).map((hugo: string) => (
           <span className="m-2" key={hugo}>
             <GenePageLink hugoSymbol={hugo} />
           </span>
