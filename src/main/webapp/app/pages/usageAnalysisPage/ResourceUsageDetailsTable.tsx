@@ -21,6 +21,7 @@ import {
   emailHeader,
   filterDependentTimeHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
+import UsageText from 'app/shared/texts/UsageText';
 
 type IResourceUsageDetailsTable = {
   data: Map<string, UsageRecord[]>;
@@ -57,7 +58,12 @@ export default class ResourceUsageDetailsTable extends React.Component<
               onFilter: (data: UsageRecord, keyword) =>
                 filterByKeyword(data.resource, keyword),
             },
-            { ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE) },
+            {
+              ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
+              Cell(props: { original: UsageRecord }) {
+                return <UsageText usage={props.original.usage} />;
+              },
+            },
             {
               ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
               Header: filterDependentTimeHeader(this.timeTypeToggleValue),

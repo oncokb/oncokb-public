@@ -60,6 +60,7 @@ import {
   noPrivateEndpointHeader,
   usageHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
+import UsageText from 'app/shared/texts/UsageText';
 
 interface MatchParams {
   id: string;
@@ -656,6 +657,13 @@ export default class CompanyPage extends React.Component<
                                   Header: usageHeader,
                                   minWidth: 100,
                                   accessor: 'totalUsage',
+                                  Cell(props: { original: UserOverviewUsage }) {
+                                    return (
+                                      <UsageText
+                                        usage={props.original.totalUsage}
+                                      />
+                                    );
+                                  },
                                 },
                                 this.resourcesTypeToggleValue ===
                                 ToggleValue.ALL_RESOURCES
