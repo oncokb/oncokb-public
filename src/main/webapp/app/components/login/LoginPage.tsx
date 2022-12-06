@@ -59,7 +59,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
       .finally(() => {
         this.resendingVerification = false;
       });
-    window.grecaptcha.enterprise.reset();
+    // window.grecaptcha.enterprise.reset();
   };
 
   @computed get showResendInfo() {
