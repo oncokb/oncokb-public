@@ -121,7 +121,8 @@ export default class UserPage extends React.Component<IUserPage> {
   @observable showTrialAccountModal = false;
   @observable showTrialAccountConfirmModal = false;
   @observable showDeleteAccountConfirmModal = false;
-  @observable tablePageSize = 5;
+
+  private defaultPageSize = 5;
 
   readonly reactions: IReactionDisposer[] = [];
 
@@ -914,7 +915,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             loadedData={this.usageDetail.isComplete}
                             defaultResourcesType={ToggleValue.CUMULATIVE_USAGE}
                             defaultTimeType={ToggleValue.RESULTS_BY_MONTH}
-                            pageSize={this.tablePageSize}
+                            defaultPageSize={this.defaultPageSize}
                           />
                         </Col>
                       </Row>
@@ -925,7 +926,7 @@ export default class UserPage extends React.Component<IUserPage> {
                           </div>
                           <EmailTable
                             data={this.usersUserMails.result}
-                            pageSize={this.tablePageSize}
+                            defaultPageSize={this.defaultPageSize}
                           />
                         </Col>
                       </Row>
