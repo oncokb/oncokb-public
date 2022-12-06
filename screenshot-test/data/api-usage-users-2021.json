@@ -23,7 +23,7 @@
         },
         "2020-11-01" : {
           "/api/example/endpoint10" : 1.0,
-          "/api/example/endpoint11" : 1.0,
+          "/api/example/endpoint11" : 1234567890.0,
           "/api/example/endpoint12" : 8324461.0
         }
       },
@@ -44,7 +44,7 @@
         },
         "2020-11" : {
           "/api/example/endpoint10" : 1.0,
-          "/api/example/endpoint11" : 1.0,
+          "/api/example/endpoint11" : 1234567890.0,
           "/api/example/endpoint12" : 8324461.0
         }
       },
@@ -60,7 +60,7 @@
         "/api/example/endpoint5" : 3,
         "/api/example/endpoint8" : 2,
         "/api/example/endpoint10" : 12,
-        "/api/example/endpoint11" : 13,
+        "/api/example/endpoint11" : 1234567902,
         "/api/example/endpoint13" : 1
       }
     }

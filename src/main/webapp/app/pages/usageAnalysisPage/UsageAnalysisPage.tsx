@@ -41,6 +41,7 @@ import {
   usageHeader,
   filterDependentResourceHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
+import UsageText from 'app/shared/texts/UsageText';
 
 export type UsageRecord = {
   resource: string;
@@ -278,6 +279,9 @@ export default class UsageAnalysisPage extends React.Component<{
                     Header: usageHeader,
                     minWidth: 100,
                     accessor: 'totalUsage',
+                    Cell(props: { original: UserOverviewUsage }) {
+                      return <UsageText usage={props.original.totalUsage} />;
+                    },
                   },
                   this.userTabResourcesTypeToggleValue ===
                   ToggleValue.ALL_RESOURCES
@@ -369,6 +373,9 @@ export default class UsageAnalysisPage extends React.Component<{
                   },
                   {
                     ...getUsageTableColumnDefinition(UsageTableColumnKey.USAGE),
+                    Cell(props: { original: UsageRecord }) {
+                      return <UsageText usage={props.original.usage} />;
+                    },
                   },
                   {
                     ...getUsageTableColumnDefinition(
