@@ -53,7 +53,7 @@ public class CreateAssessment {
       client.close();
 
       // Check if the token is valid.
-      if (response.getTokenProperties().getValid() && response.getRiskAnalysis().getScore() >= 0.1) {
+      if (response.getTokenProperties().getValid() && response.getRiskAnalysis().getScore() >= 0.5) {
         LOGGER.info("RECAPTCHA TOKEN VERIFIED SUCCESSFULLY. SCORE: " + response.getRiskAnalysis().getScore());
         return new ResponseEntity<>("Recaptcha successfully validated", HttpStatus.OK);
       } else {

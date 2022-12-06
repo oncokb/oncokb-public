@@ -9,11 +9,7 @@ import { Router, withRouter } from 'react-router';
 import { syncHistoryWithStore } from 'mobx-react-router';
 import { createBrowserHistory } from 'history';
 import DocumentTitle from 'react-document-title';
-import {
-  DOCUMENT_TITLES,
-  PAGE_ROUTE,
-  RECAPTCHA_SITE_KEY,
-} from 'app/config/constants';
+import { DOCUMENT_TITLES, PAGE_ROUTE } from 'app/config/constants';
 import { observable, action } from 'mobx';
 import autobind from 'autobind-decorator';
 import Reaptcha from 'reaptcha';

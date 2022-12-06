@@ -32,7 +32,6 @@ import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 import _ from 'lodash';
 import ReCAPTCHA from 'app/shared/recaptcha/recaptcha';
-import { RECAPTCHA_ENTERPRISE_SITE_KEY } from 'app/config/constants';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -137,7 +136,6 @@ export class RegisterPage extends React.Component<IRegisterProps> {
         recaptchaToken: token,
       })
       .then(this.successToRegistered, this.failedToRegistered);
-    // window.grecaptcha.enterprise.reset();
   }
 
   @action.bound
