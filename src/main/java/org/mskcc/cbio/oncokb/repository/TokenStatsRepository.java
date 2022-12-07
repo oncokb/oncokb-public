@@ -21,6 +21,8 @@ import java.util.List;
 public interface TokenStatsRepository extends JpaRepository<TokenStats, Long> {
     Page<TokenStats> findAllByAccessTimeBefore(Instant before, Pageable pageable);
 
+    @Modifying
+    @Query("delete from TokenStats ts where ts.accessTime < ?1")
     void deleteAllByAccessTimeBefore(Instant before);
 
     void deleteAllByTokenIn(List<Token> tokens);
