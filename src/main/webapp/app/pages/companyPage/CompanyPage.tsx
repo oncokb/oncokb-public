@@ -718,7 +718,7 @@ export default class CompanyPage extends React.Component<
                               ]}
                               showPagination={true}
                               minRows={1}
-                              pageSize={5}
+                              defaultPageSize={5}
                               filters={() => {
                                 return (
                                   <Row>

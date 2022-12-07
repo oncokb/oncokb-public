@@ -8,7 +8,7 @@ import { filterByKeyword, toAppTimestampFormat } from 'app/shared/utils/Utils';
 
 type EmailTableProps = {
   data: UserMailsDTO[];
-  pageSize?: number;
+  defaultPageSize?: number;
 };
 export const EmailTable: React.FunctionComponent<EmailTableProps> = tableProps => {
   const columns: SearchColumn<UserMailsDTO>[] = [
@@ -61,7 +61,7 @@ export const EmailTable: React.FunctionComponent<EmailTableProps> = tableProps =
       columns={columns}
       showPagination={true}
       minRows={1}
-      pageSize={tableProps.pageSize}
+      defaultPageSize={tableProps.defaultPageSize}
     />
   );
 };
