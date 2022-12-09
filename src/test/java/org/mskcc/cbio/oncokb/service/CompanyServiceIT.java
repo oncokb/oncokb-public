@@ -16,6 +16,7 @@ import org.mskcc.cbio.oncokb.repository.UserDetailsRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.service.dto.UserDetailsDTO;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.web.rest.vm.CompanyVM;
@@ -36,6 +37,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
+import static org.mskcc.cbio.oncokb.config.Constants.DEFAULT_TOKEN_EXPIRATION_IN_DAYS;
 
 /**
  * Integration tests for {@link CompanyService}.
@@ -69,7 +71,7 @@ public class CompanyServiceIT {
     private static final String DEFAULT_LEGAL_CONTACT = "AAAAAAAAAA";
 
     private static final String[] DEFAULT_COMPANY_DOMAIN_NAMES = new String[] {"oncokb.org"};
-    
+
     private static final Set<String> DEFAULT_COMPANY_DOMAINS = new HashSet<>(Arrays.asList(DEFAULT_COMPANY_DOMAIN_NAMES));
 
     private static final Long timeDiffToleranceInMilliseconds = 1000L;
@@ -85,12 +87,12 @@ public class CompanyServiceIT {
     UserRepository userRepository;
 
     @Autowired
-    UserDetailsRepository userDetailsRepository;
+    UserDetailsService userDetailsService;
 
     @Autowired
     CompanyService companyService;
 
-    @Autowired 
+    @Autowired
     CompanyRepository companyRepository;
 
     @Autowired
@@ -344,6 +346,123 @@ public class CompanyServiceIT {
         assertThat(companyUsers).hasSameSizeAs(companyVM.getCompanyUserEmails());
         assertThat(companyUsers.get(0).getCompany()).isNotNull();
         assertThat(companyUsers.get(0).getCompany().getId()).isEqualTo(company.getId());
+    }
+
+    @Test
+    @Transactional
+    public void assertThatTrialUserExpirationWillBeExtendedAfterLinkedWithTrialCompany() {
+        userService.createUser(userDTO, Optional.empty(), Optional.empty());
+
+        Optional<User> userOptional = userService.initiateTrialAccountActivation(userDTO.getLogin());
+        assertThat(userOptional.isPresent()).isTrue();
+
+        User user = userOptional.get();
+        Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByUser(user);
+        userService.finishTrialAccountActivation(userDetailsDTO.get().getAdditionalInfo().getTrialAccount().getActivation().getKey());
+
+        Instant userTokenExpirationDate = Instant.now().plusSeconds(1000);
+        tokenService.findByUser(user).forEach(token -> {
+            token.setExpiration(userTokenExpirationDate);
+            tokenService.save(token);
+        });
+
+        // Create a trial company
+        companyDTO.setLicenseStatus(LicenseStatus.TRIAL);
+        companyDTO = companyService.createCompany(companyDTO);
+
+        // Associate user with company
+        CompanyVM companyVM = createCompanyVM(companyDTO);
+        companyVM.setCompanyUserEmails(Collections.singletonList(user.getEmail()));
+        companyService.updateCompany(companyVM);
+
+        // user's token expiration should be extended
+        assertThat(tokenService.findByUser(user).stream().filter(token -> token.getExpiration().isAfter(userTokenExpirationDate)).count()).isEqualTo(1);
+    }
+
+    @Test
+    @Transactional
+    public void assertThatTrialUserExpirationWillRemainIfLongerThanDefaultAfterLinkedWithTrialCompany() {
+        userService.createUser(userDTO, Optional.empty(), Optional.empty());
+
+        Optional<User> userOptional = userService.initiateTrialAccountActivation(userDTO.getLogin());
+        assertThat(userOptional.isPresent()).isTrue();
+
+        User user = userOptional.get();
+        Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByUser(user);
+        userService.finishTrialAccountActivation(userDetailsDTO.get().getAdditionalInfo().getTrialAccount().getActivation().getKey());
+
+        Instant userTokenExpirationDate = Instant.now().plusSeconds(60 * 60 * 24 * 100);
+        tokenService.findByUser(user).forEach(token -> {
+            token.setExpiration(userTokenExpirationDate);
+            tokenService.save(token);
+        });
+
+        // Create ta trial company
+        companyDTO.setLicenseStatus(LicenseStatus.TRIAL);
+        companyDTO = companyService.createCompany(companyDTO);
+
+        // Associate user with company
+        CompanyVM companyVM = createCompanyVM(companyDTO);
+        companyVM.setCompanyUserEmails(Collections.singletonList(user.getEmail()));
+        companyService.updateCompany(companyVM);
+
+        // user's token expiration should remain the same
+        assertThat(tokenService.findByUser(user).stream().filter(token -> token.getExpiration().equals(userTokenExpirationDate)).count()).isEqualTo(1);
+    }
+
+    @Test
+    @Transactional
+    public void assertThatExpiredUserStatusWillChangeToTrialAfterLinkedWithTrialCompany() {
+        User user = userService.createUser(userDTO, Optional.of(DEFAULT_TOKEN_EXPIRATION_IN_DAYS), Optional.of(Boolean.TRUE));
+        userDTO = userMapper.userToUserDTO(user);
+        userDTO.setActivated(false);
+        userService.updateUser(userDTO);
+        // The user expired at this moment
+
+        // Create ta trial company
+        companyDTO.setLicenseStatus(LicenseStatus.TRIAL);
+        companyDTO = companyService.createCompany(companyDTO);
+
+        // Associate user with company
+        CompanyVM companyVM = createCompanyVM(companyDTO);
+        companyVM.setCompanyUserEmails(Collections.singletonList(userDTO.getEmail()));
+        companyService.updateCompany(companyVM);
+
+        user = userService.getUserByLogin(userDTO.getLogin()).get();
+
+        // user should have the trial agreement initiated, but user needs to agree with the terms before activating
+        UserDTO latestUserDTO = userMapper.userToUserDTO(user);
+        assertThat(userService.userHasUnactivatedTrial(latestUserDTO)).isTrue();
+        assertThat(userService.isUserOnTrial(latestUserDTO)).isFalse();
+        userService.finishTrialAccountActivation(latestUserDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey());
+        assertThat(userService.userHasUnactivatedTrial(latestUserDTO)).isTrue();
+        assertThat(userService.isUserOnTrial(latestUserDTO)).isTrue();
+
+        // user token should not be renewable
+        assertThat(tokenService.findByUser(user).stream().filter(token->token.isRenewable()).count()).isEqualTo(0);
+    }
+
+    @Test
+    @Transactional
+    public void assertThatRegularUserStatusRemainTheSameAfterLinkedWithTrialCompany() {
+        User user = userService.createUser(userDTO, Optional.of(DEFAULT_TOKEN_EXPIRATION_IN_DAYS), Optional.of(Boolean.TRUE));
+
+        // Create ta trial company
+        companyDTO.setLicenseStatus(LicenseStatus.TRIAL);
+        companyDTO = companyService.createCompany(companyDTO);
+
+        // Associate user with company
+        CompanyVM companyVM = createCompanyVM(companyDTO);
+        companyVM.setCompanyUserEmails(Collections.singletonList(user.getEmail()));
+        companyService.updateCompany(companyVM);
+
+        // user should not be on trial
+        UserDTO latestUserDTO = userMapper.userToUserDTO(userService.getUserByLogin(userDTO.getLogin()).get());
+        if (latestUserDTO.getAdditionalInfo() != null) {
+            assertThat(latestUserDTO.getAdditionalInfo().getTrialAccount()).isNull();
+        }
+        assertThat(userService.isUserOnTrial(latestUserDTO)).isFalse();
+        assertThat(latestUserDTO.isActivated()).isTrue();
     }
 
 }

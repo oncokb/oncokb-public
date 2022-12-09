@@ -21,7 +21,7 @@ public interface CompanyService {
 
     /**
      * Update an existing company's information
-     * @param companyDTO the entity to save
+     * @param companyVm the entity to save
      * @return the persisted entity
      */
     CompanyDTO updateCompany(CompanyVM companyVm);

@@ -312,17 +312,6 @@ public class UserService {
         return newUser;
     }
 
-    public boolean trialAccountInitiated(UserDTO userDTO) {
-        if (
-            ObjectUtil.isObjectEmpty(userDTO.getAdditionalInfo())
-                || userDTO.getAdditionalInfo().getTrialAccount() == null
-                || userDTO.getAdditionalInfo().getTrialAccount().getActivation() == null
-        ) {
-            return false;
-        }
-        return StringUtils.isNotEmpty(userDTO.getAdditionalInfo().getTrialAccount().getActivation().getKey()) || userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate() != null;
-    }
-
     public User createUser(UserDTO userDTO, Optional<Integer> tokenValidDays, Optional<Boolean> tokenIsRenewable) {
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
@@ -420,9 +409,15 @@ public class UserService {
             });
 
 
-        if(updatedUserDTO.isPresent()) {
-            if(updatedUserDTO.get().isActivated()) {
-                generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+        if (updatedUserDTO.isPresent()) {
+            if (updatedUserDTO.get().isActivated()) {
+                List<Token> tokens = generateTokenForUserIfNotExist(updatedUserDTO.get(), Optional.empty(), Optional.empty());
+                tokens.forEach(token -> {
+                    if (token.getExpiration().isBefore(Instant.now())) {
+                        token.setExpiration(Instant.now().plusSeconds(DEFAULT_TOKEN_EXPIRATION_IN_SECONDS));
+                    }
+                    tokenService.save(token);
+                });
             } else {
                 expireUserAccount(userDTO);
             }
@@ -610,7 +605,7 @@ public class UserService {
         List<Token> tokens = tokenService.findByUser(user);
         tokens.forEach(token -> {
             token.setRenewable(true);
-            token.setExpiration(Instant.now().plusSeconds(HALF_YEAR_IN_SECONDS));
+            token.setExpiration(Instant.now().plusSeconds(DEFAULT_TOKEN_EXPIRATION_IN_SECONDS));
             tokenService.save(token);
         });
 
@@ -620,11 +615,12 @@ public class UserService {
         // automatically generate a token for user if not exists
         List<Token> tokens = tokenService.findByUser(userMapper.userDTOToUser(userDTO));
         if (tokens.isEmpty()) {
-            tokenProvider.createToken(
+            Token token = tokenProvider.createToken(
                 userMapper.userDTOToUser(userDTO),
                 tokenValidDays.isPresent() ? Optional.of(Instant.now().plusSeconds(DAY_IN_SECONDS * (long) tokenValidDays.get())) : Optional.empty(),
                 tokenIsRenewable
             );
+            tokens.add(token);
         }
         return tokens;
     }

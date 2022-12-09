@@ -51,5 +51,7 @@ public interface UserDetailsService {
 
     Optional<UserDetailsDTO> findOneByTrialActivationKey(String key);
 
+    Optional<UserDetailsDTO> findOneByUser(User user);
+
     Optional<UserDetailsDTO> findByUserIsCurrentUser();
 }

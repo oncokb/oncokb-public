@@ -4,6 +4,7 @@ import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.domain.Token;
 import org.mskcc.cbio.oncokb.domain.User;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.dto.useradditionalinfo.AdditionalInfoDTO;
@@ -214,7 +215,7 @@ public class UserServiceIT {
     }
 
     @Test
-    public void assertThatUserWithAtleastOneRenewableTokenIsRegular() {
+    public void assertThatUserWithAtLeastOneRenewableTokenIsRegular() {
         User savedUser = userRepository.saveAndFlush(user);
 
         Token renewableToken = new Token();
@@ -312,6 +313,31 @@ public class UserServiceIT {
         assertThat(tokens).extracting(Token::isRenewable).allMatch(renewable -> renewable.equals(false));
         assertThat(tokens.get(0).getExpiration())
             .isCloseTo(longerUserTokenLength, within(timeDiffToleranceInMilliseconds, ChronoUnit.MILLIS));
+    }
+
+    @Test
+    public void assertThatUserTokenStatusIsExpected() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setLogin(DEFAULT_LOGIN);
+        userDTO.setEmail(DEFAULT_EMAIL);
+        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        userDTO.setLastName(DEFAULT_LASTNAME);
+        userDTO.setActivated(true);
+        userDTO.setLicenseType(LicenseType.COMMERCIAL);
+
+        User savedUser = userService.createUser(userDTO, Optional.empty(), Optional.of(Boolean.TRUE));
+        userDTO = userMapper.userToUserDTO(savedUser);
+        userDTO.setActivated(false);
+        userDTO = userService.updateUser(userDTO).get();
+
+        assertThat(tokenService.findByUser(savedUser).get(0).getExpiration()).isBefore(Instant.now());
+        assertThat(tokenService.findByUser(savedUser).get(0).isRenewable()).isTrue();
+
+        userDTO.setActivated(true);
+        userService.updateUser(userDTO);
+
+        assertThat(tokenService.findByUser(savedUser).get(0).getExpiration()).isAfter(Instant.now());
+        assertThat(tokenService.findByUser(savedUser).get(0).isRenewable()).isTrue();
     }
 
 }
