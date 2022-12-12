@@ -151,6 +151,70 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '12132022': {
+    newlyAddedGenes: [
+      'ATP1A1',
+      'FUS',
+      'HMGA1',
+      'HMGA2',
+      'HTATIP2',
+      'INTS6',
+      'TRIM27',
+      'ZFP36L2',
+    ],
+    news: [
+      <span>
+        Updated therapeutic implications - addition of therapies for variants
+        with a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Current Level of Evidence</th>
+                <th>Drug(s) Already in {ONCOKB_TM}</th>
+                <th>Newly Added Drug</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>IDH1</td>
+                <td>R132C/H/L/G/S</td>
+                <td>Acute Myeloid Leukemia</td>
+                <td>1</td>
+                <td>Ivosidenib</td>
+                <td>
+                  Olutasidenib
+                  <br />
+                  (Level 1)
+                </td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaApprovalLink
+                      approval={'Olutasidenib in AML'}
+                      link={
+                        'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olutasidenib-relapsed-or-refractory-acute-myeloid-leukemia-susceptible-idh1-mutation'
+                      }
+                    />
+                    <AbstractLink
+                      abstract={'Cortes et al. Abstract #6193, ASH 2022'}
+                      link={
+                        'https://ashpublications.org/blood/article/140/Supplement%201/6193/487212'
+                      }
+                    />
+                  </WithSeparator>
+                  ,
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+  },
   '10282022': {
     updatedImplicationTitle:
       'Updated therapeutic implications - new alterations with a level of evidence',
