@@ -77,6 +77,7 @@ import {
   UsageRecord,
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import UserUsageDetailsTable from 'app/pages/usageAnalysisPage/UserUsageDetailsTable';
+import { DateSelector } from 'app/components/dateSelector/DateSelector';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -215,10 +216,7 @@ export default class UserPage extends React.Component<IUserPage> {
 
   @computed
   get defaultSelectedAccountType() {
-    const currentlyIsTrialAccount =
-      this.userTokens.length > 0 &&
-      this.userTokens.filter(token => token.renewable).length < 1;
-    return currentlyIsTrialAccount ? AccountType.TRIAL : AccountType.REGULAR;
+    return this.isTrialAccount ? AccountType.TRIAL : AccountType.REGULAR;
   }
 
   @computed
@@ -264,7 +262,11 @@ export default class UserPage extends React.Component<IUserPage> {
 
   @autobind
   @action
-  extendExpirationDate(token: Token, newDate: string) {
+  changeTokenExpirationDate(
+    token: Token,
+    newDate: string,
+    notifyOnSuccess = true
+  ) {
     client
       .updateTokenUsingPUT({
         token: {
@@ -274,13 +276,26 @@ export default class UserPage extends React.Component<IUserPage> {
       })
       .then(
         () => {
-          notifySuccess('Updated Token');
+          if (notifyOnSuccess) notifySuccess('Updated Token');
           this.getUserTokens();
         },
         (error: Error) => {
           notifyError(error);
         }
       );
+  }
+
+  @autobind
+  @action
+  extendTrialAccess(newDate: string) {
+    Promise.all(
+      this.userTokens.map(token => {
+        this.changeTokenExpirationDate(token, newDate, false);
+      })
+    ).then(
+      () => notifySuccess(`Trial ended to ${newDate}`),
+      error => notifyError(error)
+    );
   }
 
   @action.bound
@@ -452,7 +467,7 @@ export default class UserPage extends React.Component<IUserPage> {
 
   @autobind
   onClickTrialAccountButton() {
-    if (this.hasTrialAccountInfo) {
+    if (this.trialInitiated) {
       this.showTrialAccountModal = true;
     } else {
       this.showTrialAccountConfirmModal = true;
@@ -482,13 +497,21 @@ export default class UserPage extends React.Component<IUserPage> {
   }
 
   @computed
-  get hasTrialAccountInfo() {
+  get isTrialAccount() {
+    return (
+      this.userTokens.length > 0 &&
+      this.userTokens.filter(token => token.renewable).length < 1
+    );
+  }
+
+  @computed
+  get trialInitiated() {
     return !!this.user.additionalInfo?.trialAccount?.activation?.initiationDate;
   }
 
   @computed
   get trialAccountButtonText() {
-    return this.hasTrialAccountInfo
+    return this.trialInitiated
       ? 'Show Trial Activation Info'
       : 'Generate Trial Activation Link';
   }
@@ -523,6 +546,20 @@ export default class UserPage extends React.Component<IUserPage> {
                             >
                               {this.trialAccountButtonText}
                             </QuickToolButton>
+                            {this.isTrialAccount && this.shortestToken && (
+                              <DefaultTooltip
+                                overlay={
+                                  <DateSelector
+                                    currentDate={this.shortestToken.expiration}
+                                    afterChangeDate={this.extendTrialAccess}
+                                  />
+                                }
+                              >
+                                <QuickToolButton>
+                                  Extend Trial Access
+                                </QuickToolButton>
+                              </DefaultTooltip>
+                            )}
                             <QuickToolButton
                               onClick={() =>
                                 this.props.routing.history.push(
@@ -673,7 +710,9 @@ export default class UserPage extends React.Component<IUserPage> {
                             changeTokenExpirationDate={true}
                             tokens={this.userTokens}
                             onDeleteToken={this.deleteToken}
-                            extendExpirationDate={this.extendExpirationDate}
+                            extendExpirationDate={
+                              this.changeTokenExpirationDate
+                            }
                           />
                           <div className="mt-2 d-flex flex-row-reverse">
                             <ButtonWithTooltip

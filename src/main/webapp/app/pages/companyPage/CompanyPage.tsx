@@ -4,12 +4,11 @@ import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { AvField, AvForm } from 'availity-reactstrap-validation';
 import {
   COMPANY_TYPE_TITLES,
-  LicenseModel,
-  LicenseStatus,
   LICENSE_MODEL_TITLES,
   LICENSE_STATUS_TITLES,
   LICENSE_TITLES,
-  USAGE_TOP_USERS_LIMIT,
+  LicenseModel,
+  LicenseStatus,
   PAGE_ROUTE,
 } from 'app/config/constants';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
@@ -25,7 +24,7 @@ import { action, computed, observable } from 'mobx';
 import { Else, If, Then } from 'react-if';
 import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouteComponentProps } from 'react-router';
-import _, { parseInt } from 'lodash';
+import { parseInt } from 'lodash';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { PromiseStatus } from 'app/shared/utils/PromiseUtils';
 import { FormTextAreaField } from 'app/shared/textarea/FormTextAreaField';
@@ -61,6 +60,7 @@ import {
   usageHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
+import { DateSelector } from 'app/components/dateSelector/DateSelector';
 
 interface MatchParams {
   id: string;
@@ -137,6 +137,12 @@ export default class CompanyPage extends React.Component<
       .catch(() => (this.getCompanyStatus = PromiseStatus.error));
   }
 
+  @action.bound
+  getCompanyUserTokens() {
+    return client.getUsersTokensUsingPOST({
+      logins: this.companyUsers.map(user => user.login),
+    });
+  }
   @action
   getCompanyUserInfo() {
     client
@@ -145,10 +151,7 @@ export default class CompanyPage extends React.Component<
       })
       .then((users: UserDTO[]) => {
         this.companyUsers = users;
-        client
-          .getUsersTokensUsingPOST({
-            logins: users.map(user => user.login),
-          })
+        this.getCompanyUserTokens()
           .then((tokens: Token[]) => {
             this.companyUserTokens = tokens;
             this.getCompanyUsersStatus = PromiseStatus.complete;
@@ -349,6 +352,48 @@ export default class CompanyPage extends React.Component<
     this.resourcesTypeToggleValue = value;
   }
 
+  @action.bound
+  extendTrialAccess(newDate: string) {
+    Promise.all(
+      this.trialTokens.map(token => {
+        client
+          .updateTokenUsingPUT({
+            token: {
+              ...token,
+              expiration: newDate,
+            },
+          })
+          .then(
+            () => {},
+            (error: Error) => {
+              notifyError(error);
+            }
+          );
+      })
+    ).then(
+      () => {
+        this.getCompanyUserTokens().then(
+          tokens => {
+            this.companyUserTokens = tokens;
+            notifySuccess(`Extended all users' trial access to ${newDate}`);
+          },
+          error => notifyError(error)
+        );
+      },
+      error => notifyError(error)
+    );
+  }
+
+  @computed
+  get trialTokens() {
+    return this.companyUserTokens.filter(token => !token.renewable);
+  }
+
+  @computed
+  get companyHasTrialUsers() {
+    return this.trialTokens.length > 0;
+  }
+
   render() {
     return (
       <If condition={this.getCompanyStatus === PromiseStatus.pending}>
@@ -370,13 +415,26 @@ export default class CompanyPage extends React.Component<
                       <Col>
                         <div>Quick Tools</div>
                         <div>
-                          <Link
-                            to={`/companies/${this.company.id}/create-users`}
-                          >
-                            <QuickToolButton>
+                          <QuickToolButton>
+                            <Link
+                              to={`/companies/${this.company.id}/create-users`}
+                            >
                               Create Company Users
-                            </QuickToolButton>
-                          </Link>
+                            </Link>
+                          </QuickToolButton>
+                          {this.companyHasTrialUsers && (
+                            <DefaultTooltip
+                              overlay={
+                                <DateSelector
+                                  afterChangeDate={this.extendTrialAccess}
+                                />
+                              }
+                            >
+                              <QuickToolButton>
+                                Extend Trial Access
+                              </QuickToolButton>
+                            </DefaultTooltip>
+                          )}
                         </div>
                       </Col>
                     </Row>
