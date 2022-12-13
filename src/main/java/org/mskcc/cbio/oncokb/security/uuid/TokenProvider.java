@@ -20,8 +20,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.mskcc.cbio.oncokb.config.Constants.HALF_YEAR_IN_SECONDS;
-import static org.mskcc.cbio.oncokb.config.Constants.PUBLIC_WEBSITE_LOGIN;
+import static org.mskcc.cbio.oncokb.config.Constants.*;
 
 @Component("tokenProvider")
 public class TokenProvider implements InitializingBean {
@@ -29,7 +28,7 @@ public class TokenProvider implements InitializingBean {
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
     // This is for general users
-    public static final int EXPIRATION_TIME_IN_SECONDS = HALF_YEAR_IN_SECONDS;
+    public static final int EXPIRATION_TIME_IN_SECONDS = DEFAULT_TOKEN_EXPIRATION_IN_SECONDS;
 
     // This is for the public website
     private static final int EXPIRATION_TIME_PUBLIC_WEBSITE_IN_SECONDS = 60 * 60;

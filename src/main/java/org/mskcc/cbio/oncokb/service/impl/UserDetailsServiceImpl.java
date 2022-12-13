@@ -80,6 +80,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
+    public Optional<UserDetailsDTO> findOneByUser(User user) {
+        return userDetailsRepository.findOneByUser(user).map(userDetailsMapper::toDto);
+    }
+
+    @Override
     public Optional<UserDetailsDTO> findByUserIsCurrentUser() {
         return userDetailsRepository.findByUserIsCurrentUser()
             .map(userDetailsMapper::toDto);
