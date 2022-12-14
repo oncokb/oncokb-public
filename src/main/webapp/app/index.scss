@@ -231,6 +231,9 @@ input[type='radio']:checked {
 .rc-tooltip-inner {
   max-width: 300px;
 }
+.rc-tooltip {
+  opacity: 1 !important;
+}
 
 // Overwrite react-table styles
 .oncokbReactTable.ReactTable {
