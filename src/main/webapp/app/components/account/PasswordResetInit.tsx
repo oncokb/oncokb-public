@@ -33,7 +33,6 @@ export class PasswordResetInit extends React.Component<{}> {
     } else {
       this.resetStatus = API_CALL_STATUS.FAILURE;
     }
-    // window.grecaptcha.enterprise.reset();
   }
 
   render() {

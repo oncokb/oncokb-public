@@ -169,3 +169,5 @@ application:
     s3-region:
   github-token:
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
+  recaptcha-project-id: 'symbolic-nation-320615'
+  recaptcha-site-key: '6LdTXvMhAAAAAN7kj4MRKX0fl_gXUv_IQbxARe6W'

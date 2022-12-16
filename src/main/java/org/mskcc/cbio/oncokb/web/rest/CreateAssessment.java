@@ -1,24 +1,37 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import com.amazonaws.services.appstream.model.Application;
 import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceClient;
 import com.google.recaptchaenterprise.v1.Assessment;
 import com.google.recaptchaenterprise.v1.CreateAssessmentRequest;
 import com.google.recaptchaenterprise.v1.Event;
 import com.google.recaptchaenterprise.v1.ProjectName;
 import java.io.IOException;
+
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.ValidationException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@Component
 public class CreateAssessment {
-
+  
   private static final Logger LOGGER = LoggerFactory.getLogger(CreateAssessment.class);
+
+  static ApplicationProperties applicationProperties;
+
+  public CreateAssessment(ApplicationProperties applicationProperties){
+      this.applicationProperties = applicationProperties;
+  }
 
   /**
    * Create an assessment to analyze the risk of an UI action. Assessment approach
@@ -34,17 +47,14 @@ public class CreateAssessment {
   public static ResponseEntity<String> createAssessment(HttpServletRequest request, @RequestParam String recaptchaToken, String recaptchaAction)
       throws IOException, ValidationException {
 
-    String projectID = "symbolic-nation-320615";
-    String recaptchaSiteKey = "6LdTXvMhAAAAAN7kj4MRKX0fl_gXUv_IQbxARe6W";
-
     try (RecaptchaEnterpriseServiceClient client = RecaptchaEnterpriseServiceClient.create()) {
 
       // Set the properties of the event to be tracked.
-      Event event = Event.newBuilder().setSiteKey(recaptchaSiteKey).setToken(recaptchaToken).build();
+      Event event = Event.newBuilder().setSiteKey(applicationProperties.getRecaptchaSiteKey()).setToken(recaptchaToken).build();
 
       // Build the assessment request.
       CreateAssessmentRequest createAssessmentRequest = CreateAssessmentRequest.newBuilder()
-          .setParent(ProjectName.of(projectID).toString())
+          .setParent(ProjectName.of(applicationProperties.getRecaptchaProjectId()).toString())
           .setAssessment(Assessment.newBuilder().setEvent(event).build())
           .build();
 
