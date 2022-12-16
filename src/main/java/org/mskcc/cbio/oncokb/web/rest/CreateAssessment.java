@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import com.amazonaws.services.appstream.model.Application;
 import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceClient;
 import com.google.recaptchaenterprise.v1.Assessment;
 import com.google.recaptchaenterprise.v1.CreateAssessmentRequest;
@@ -16,6 +17,8 @@ import javax.naming.ConfigurationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.ValidationException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
