@@ -95,7 +95,7 @@ export type IAnnotationPage = {
 
 const MutationEffectInformation: React.FunctionComponent<{
   show: boolean;
-  mutationEffect: string | undefined;
+  mutationEffect: string;
   onClick: () => void;
   className?: string;
 }> = props => {
@@ -106,14 +106,7 @@ const MutationEffectInformation: React.FunctionComponent<{
         <ShowHideToggleIcon show={props.show} onToggle={() => {}} />
       </div>
       {props.show ? (
-        <SummaryWithRefs
-          content={
-            props.mutationEffect
-              ? props.mutationEffect
-              : 'Mutation effect description is not available.'
-          }
-          type="linkout"
-        />
+        <SummaryWithRefs content={props.mutationEffect} type="linkout" />
       ) : undefined}
     </div>
   );
@@ -132,14 +125,6 @@ export default class AnnotationPage extends React.Component<
     if (this.props.tumorType) {
       this.showMutationEffect = false;
     }
-  }
-
-  @computed
-  get mutationEffectDescription() {
-    return this.props.biologicalAlterations?.find(
-      mutationEffect =>
-        mutationEffect.variant.alteration === this.props.alteration
-    )?.mutationEffectDescription;
   }
 
   @action.bound
@@ -501,15 +486,17 @@ export default class AnnotationPage extends React.Component<
                 </div>
               );
             })}
-            <div>
+            {this.props.annotation.mutationEffect.description && (
               <MutationEffectInformation
                 show={this.showMutationEffect}
-                mutationEffect={this.mutationEffectDescription}
+                mutationEffect={
+                  this.props.annotation.mutationEffect.description
+                }
                 onClick={() =>
                   this.toggleMutationEffect(!this.showMutationEffect)
                 }
               />
-            </div>
+            )}
           </Col>
         </Row>
         <Row className="mt-4">
