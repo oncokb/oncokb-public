@@ -155,6 +155,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
           cancerTypeNames,
           excludedCancerTypeNames
         ),
+        drugDescription: variant.drugDescription,
         cancerTypesView: (
           <>
             <WithSeparator separator={', '}>

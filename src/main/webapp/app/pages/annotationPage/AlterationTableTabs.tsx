@@ -13,9 +13,7 @@ import {
   ANNOTATION_PAGE_TAB_NAMES,
   DEFAULT_MESSAGE_HEME_ONLY_DX,
   DEFAULT_MESSAGE_HEME_ONLY_PX,
-  LEVEL_PRIORITY,
   LEVEL_TYPES,
-  LEVELS,
   ONCOKB_TM,
   PAGE_ROUTE,
   REFERENCE_GENOME,
@@ -32,7 +30,7 @@ import {
   getDefaultColumnDefinition,
   IAlteration,
 } from 'app/shared/utils/Utils';
-import { AlterationPageLink, OncoTreeLink } from 'app/shared/utils/UrlUtils';
+import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
 import { Citations } from 'app/shared/api/generated/OncoKbAPI';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import { getTabDefaultActiveKey } from 'app/shared/utils/TempAnnotationUtils';
@@ -42,6 +40,8 @@ import {
   FdaImplication,
   TherapeuticImplication,
 } from 'app/store/AnnotationStore';
+import AuthenticationStore from 'app/store/AuthenticationStore';
+import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
 
 export type Column = {
   key: ANNOTATION_PAGE_TAB_KEYS;
@@ -62,9 +62,22 @@ export interface IEvidenceTableTabProps {
   ) => void;
   appStore?: AppStore; // it will be injected directly
   windowStore?: WindowStore; // it will be injected directly
+  authenticationStore?: AuthenticationStore; // it will be injected directly
 }
 
-@inject('windowStore', 'appStore')
+const DescriptionTooltip: React.FunctionComponent<{
+  description: JSX.Element;
+}> = props => {
+  return (
+    <DefaultTooltip placement={'right'} overlay={props.description}>
+      <span>
+        <i className="fa fa-book" />
+      </span>
+    </DefaultTooltip>
+  );
+};
+
+@inject('windowStore', 'appStore', 'authenticationStore')
 @observer
 export default class AlterationTableTabs extends React.Component<
   IEvidenceTableTabProps,
@@ -253,7 +266,75 @@ export default class AlterationTableTabs extends React.Component<
 
   @computed
   get therapeuticTableColumns(): SearchColumn<TherapeuticImplication>[] {
-    return [
+    let descriptionColumn = {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
+      Header: (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <span>Description</span>
+        </div>
+      ),
+      Cell(props: { original: TherapeuticImplication }) {
+        return (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <DescriptionTooltip
+              description={
+                <SummaryWithRefs
+                  content={props.original.drugDescription}
+                  type="tooltip"
+                />
+              }
+            />
+          </div>
+        );
+      },
+    };
+
+    // Users that are not logged in will see a message to login/register
+    if (!this.props.authenticationStore?.isUserAuthenticated) {
+      descriptionColumn = {
+        ...descriptionColumn,
+        Cell() {
+          return (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <DescriptionTooltip
+                description={
+                  <span>
+                    Get access to our treatment descriptions by{' '}
+                    <Link to={PAGE_ROUTE.LOGIN}> logging in </Link> or by{' '}
+                    <Link to={PAGE_ROUTE.REGISTER}>registering</Link> an
+                    account.
+                  </span>
+                }
+              />
+            </div>
+          );
+        },
+      };
+    }
+
+    const citationColumn = {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+      Cell(props: { original: TherapeuticImplication }) {
+        const numOfReferences =
+          props.original.citations.abstracts.length +
+          props.original.citations.pmids.length;
+        return (
+          <DefaultTooltip
+            placement={'left'}
+            overlay={() => (
+              <CitationTooltip
+                pmids={props.original.citations.pmids}
+                abstracts={props.original.citations.abstracts}
+              />
+            )}
+          >
+            <span>{numOfReferences}</span>
+          </DefaultTooltip>
+        );
+      },
+    };
+
+    const therapeuticTableColumns: SearchColumn<TherapeuticImplication>[] = [
       {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.LEVEL),
         onFilter: (data: TherapeuticImplication, keyword) =>
@@ -280,28 +361,13 @@ export default class AlterationTableTabs extends React.Component<
         onFilter: (data: TherapeuticImplication, keyword) =>
           filterByKeyword(data.drugs, keyword),
       },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
-        Cell(props: { original: TherapeuticImplication }) {
-          const numOfReferences =
-            props.original.citations.abstracts.length +
-            props.original.citations.pmids.length;
-          return (
-            <DefaultTooltip
-              placement={'left'}
-              overlay={() => (
-                <CitationTooltip
-                  pmids={props.original.citations.pmids}
-                  abstracts={props.original.citations.abstracts}
-                />
-              )}
-            >
-              <span>{numOfReferences}</span>
-            </DefaultTooltip>
-          );
-        },
-      },
+      ...(this.props.authenticationStore?.isUserAuthenticated
+        ? []
+        : [citationColumn]),
+      descriptionColumn,
     ];
+
+    return therapeuticTableColumns;
   }
 
   @computed
@@ -340,7 +406,7 @@ export default class AlterationTableTabs extends React.Component<
           filterByKeyword(data.mutationEffect, keyword),
       },
       {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
         accessor(d) {
           return {
             abstracts: d.mutationEffectAbstracts,
@@ -348,21 +414,19 @@ export default class AlterationTableTabs extends React.Component<
           } as Citations;
         },
         Cell(props: { original: BiologicalVariant }) {
-          const numOfReferences =
-            props.original.mutationEffectAbstracts.length +
-            props.original.mutationEffectPmids.length;
           return (
-            <DefaultTooltip
-              placement={'left'}
-              overlay={() => (
-                <CitationTooltip
-                  pmids={props.original.mutationEffectPmids}
-                  abstracts={props.original.mutationEffectAbstracts}
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              {props.original.mutationEffectDescription ? (
+                <DescriptionTooltip
+                  description={
+                    <SummaryWithRefs
+                      content={props.original.mutationEffectDescription}
+                      type="tooltip"
+                    />
+                  }
                 />
-              )}
-            >
-              <span>{numOfReferences}</span>
-            </DefaultTooltip>
+              ) : undefined}
+            </div>
           );
         },
       },
