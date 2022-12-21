@@ -1,6 +1,18 @@
 import * as request from "superagent";
 
 type CallbackHandler = (err: any, res ? : request.Response) => void;
+export type AnnotateMutationByGenomicChangeQuery = {
+    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
+
+        'genomicLocation': string
+
+        'id': string
+
+        'referenceGenome': "GRCh37" | "GRCh38"
+
+        'tumorType': string
+
+};
 export type UntranslatedRegion = {
     'end': number
 
@@ -300,6 +312,8 @@ export type ClinicalVariant = {
 
         'drugAbstracts': Array < ArticleAbstract >
 
+        'drugDescription': string
+
         'drugPmids': Array < string >
 
         'excludedCancerTypes': Array < TumorType >
@@ -401,6 +415,28 @@ export type Evidence = {
         'treatments': Array < Treatment >
 
         'uuid': string
+
+};
+export type GenomeNexusAnnotatedVariantInfo = {
+    'consequenceTerms': string
+
+        'entrezGeneId': number
+
+        'genomicLocation': string
+
+        'hgvsg': string
+
+        'hgvspShort': string
+
+        'hugoSymbol': string
+
+        'originalVariantQuery': string
+
+        'proteinEnd': number
+
+        'proteinStart': number
+
+        'referenceGenome': "GRCh37" | "GRCh38"
 
 };
 export type TypeaheadSearchResp = {
@@ -556,6 +592,8 @@ export type IndicatorQueryTreatment = {
 
         'levelAssociatedCancerType': TumorType
 
+        'levelExcludedCancerTypes': Array < TumorType >
+
         'pmids': Array < string >
 
 };
@@ -575,10 +613,24 @@ export type MutationEffectResp = {
         'knownEffect': string
 
 };
+export type AnnotateMutationByHGVSgQuery = {
+    'evidenceTypes': Array < "GENE_SUMMARY" | "MUTATION_SUMMARY" | "TUMOR_TYPE_SUMMARY" | "GENE_TUMOR_TYPE_SUMMARY" | "PROGNOSTIC_SUMMARY" | "DIAGNOSTIC_SUMMARY" | "GENE_BACKGROUND" | "ONCOGENIC" | "MUTATION_EFFECT" | "VUS" | "PROGNOSTIC_IMPLICATION" | "DIAGNOSTIC_IMPLICATION" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY" | "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_RESISTANCE" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_SENSITIVITY" | "INVESTIGATIONAL_THERAPEUTIC_IMPLICATIONS_DRUG_RESISTANCE" >
+
+        'hgvsg': string
+
+        'id': string
+
+        'referenceGenome': "GRCh37" | "GRCh38"
+
+        'tumorType': string
+
+};
 export type BiologicalVariant = {
     'mutationEffect': string
 
         'mutationEffectAbstracts': Array < ArticleAbstract >
+
+        'mutationEffectDescription': string
 
         'mutationEffectPmids': Array < string >
 
@@ -662,6 +714,160 @@ export default class OncoKbPrivateAPI {
         });
     }
 
+    fetchGenomeNexusVariantInfoByGenomicChangePostUsingPOSTURL(parameters: {
+        'body': Array < AnnotateMutationByGenomicChangeQuery > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/fetchGnVariants/byGenomicChange';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Fetch Genome Nexus variant info by genomic change
+     * @method
+     * @name OncoKbPrivateAPI#fetchGenomeNexusVariantInfoByGenomicChangePostUsingPOST
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    fetchGenomeNexusVariantInfoByGenomicChangePostUsingPOSTWithHttpInfo(parameters: {
+        'body': Array < AnnotateMutationByGenomicChangeQuery > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/fetchGnVariants/byGenomicChange';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Fetch Genome Nexus variant info by genomic change
+     * @method
+     * @name OncoKbPrivateAPI#fetchGenomeNexusVariantInfoByGenomicChangePostUsingPOST
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    fetchGenomeNexusVariantInfoByGenomicChangePostUsingPOST(parameters: {
+            'body': Array < AnnotateMutationByGenomicChangeQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < GenomeNexusAnnotatedVariantInfo >
+        > {
+            return this.fetchGenomeNexusVariantInfoByGenomicChangePostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    fetchGenomeNexusVariantInfoByHGVSgPostUsingPOSTURL(parameters: {
+        'body': Array < AnnotateMutationByHGVSgQuery > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/fetchGnVariants/byHGVSg';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Fetch Genome Nexus variant info by HGVSg
+     * @method
+     * @name OncoKbPrivateAPI#fetchGenomeNexusVariantInfoByHGVSgPostUsingPOST
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    fetchGenomeNexusVariantInfoByHGVSgPostUsingPOSTWithHttpInfo(parameters: {
+        'body': Array < AnnotateMutationByHGVSgQuery > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/fetchGnVariants/byHGVSg';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Fetch Genome Nexus variant info by HGVSg
+     * @method
+     * @name OncoKbPrivateAPI#fetchGenomeNexusVariantInfoByHGVSgPostUsingPOST
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    fetchGenomeNexusVariantInfoByHGVSgPostUsingPOST(parameters: {
+            'body': Array < AnnotateMutationByHGVSgQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < GenomeNexusAnnotatedVariantInfo >
+        > {
+            return this.fetchGenomeNexusVariantInfoByHGVSgPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     searchDrugGetUsingGETURL(parameters: {
         'query': string,
         'limit' ? : number,
@@ -1521,6 +1727,160 @@ export default class OncoKbPrivateAPI {
             return response.body;
         });
     };
+    utilFilterGenomicChangeBasedOnCoveragePostUsingPOSTURL(parameters: {
+        'body': Array < AnnotateMutationByGenomicChangeQuery > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/filterGenomicChangeBasedOnCoverage';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Filter genomic change based on oncokb coverage
+     * @method
+     * @name OncoKbPrivateAPI#utilFilterGenomicChangeBasedOnCoveragePostUsingPOST
+     * @param {} body - List of queries.
+     */
+    utilFilterGenomicChangeBasedOnCoveragePostUsingPOSTWithHttpInfo(parameters: {
+        'body': Array < AnnotateMutationByGenomicChangeQuery > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/filterGenomicChangeBasedOnCoverage';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Filter genomic change based on oncokb coverage
+     * @method
+     * @name OncoKbPrivateAPI#utilFilterGenomicChangeBasedOnCoveragePostUsingPOST
+     * @param {} body - List of queries.
+     */
+    utilFilterGenomicChangeBasedOnCoveragePostUsingPOST(parameters: {
+            'body': Array < AnnotateMutationByGenomicChangeQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < string >
+        > {
+            return this.utilFilterGenomicChangeBasedOnCoveragePostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
+    utilFilterHgvsgBasedOnCoveragePostUsingPOSTURL(parameters: {
+        'body': Array < AnnotateMutationByHGVSgQuery > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/utils/filterHgvsgBasedOnCoverage';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * Filter HGVSg based on oncokb coverage
+     * @method
+     * @name OncoKbPrivateAPI#utilFilterHgvsgBasedOnCoveragePostUsingPOST
+     * @param {} body - List of queries.
+     */
+    utilFilterHgvsgBasedOnCoveragePostUsingPOSTWithHttpInfo(parameters: {
+        'body': Array < AnnotateMutationByHGVSgQuery > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/utils/filterHgvsgBasedOnCoverage';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * Filter HGVSg based on oncokb coverage
+     * @method
+     * @name OncoKbPrivateAPI#utilFilterHgvsgBasedOnCoveragePostUsingPOST
+     * @param {} body - List of queries.
+     */
+    utilFilterHgvsgBasedOnCoveragePostUsingPOST(parameters: {
+            'body': Array < AnnotateMutationByHGVSgQuery > ,
+            $queryParameters ? : any,
+            $domain ? : string
+        }): Promise < Array < string >
+        > {
+            return this.utilFilterHgvsgBasedOnCoveragePostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+                return response.body;
+            });
+        };
     utilsHotspotMutationGetUsingGETURL(parameters: {
         'hugoSymbol' ? : string,
         'variant' ? : string,

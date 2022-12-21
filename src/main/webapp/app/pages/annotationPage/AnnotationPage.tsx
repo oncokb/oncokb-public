@@ -20,7 +20,7 @@ import InfoIcon from 'app/shared/icons/InfoIcon';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
 import { Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
-import { action, computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import {
   BiologicalVariant,
@@ -38,7 +38,6 @@ import {
   getAlterationName,
   getCancerTypeNameFromOncoTreeType,
   getCancerTypesName,
-  getCancerTypesNameFromOncoTreeType,
   getCategoricalAlterationDescription,
   getTreatmentNameFromEvidence,
   isCategoricalAlteration,
@@ -54,6 +53,8 @@ import { FeedbackType } from 'app/components/feedback/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
+import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
+import ShowHideText from 'app/shared/texts/ShowHideText';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -98,6 +99,20 @@ export default class AnnotationPage extends React.Component<
   IAnnotationPage,
   {}
 > {
+  @observable showMutationEffect = true;
+
+  constructor(props: any) {
+    super(props);
+    if (this.props.tumorType) {
+      this.showMutationEffect = false;
+    }
+  }
+
+  @action.bound
+  toggleMutationEffect(value: boolean) {
+    this.showMutationEffect = value;
+  }
+
   getImplications(evidences: Evidence[]) {
     return evidences.map(evidence => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
@@ -116,6 +131,7 @@ export default class AnnotationPage extends React.Component<
       return {
         level,
         fdaLevel,
+        drugDescription: evidence.description,
         alterations: alterations.map(alteration => alteration.name).join(', '),
         alterationsView: (
           <WithSeparator separator={', '}>
@@ -451,9 +467,24 @@ export default class AnnotationPage extends React.Component<
                 </div>
               );
             })}
+            {this.props.annotation.mutationEffect.description && (
+              <ShowHideText
+                show={this.showMutationEffect}
+                title="mutation effect description"
+                content={
+                  <SummaryWithRefs
+                    content={this.props.annotation.mutationEffect.description}
+                    type="linkout"
+                  />
+                }
+                onClick={() =>
+                  this.toggleMutationEffect(!this.showMutationEffect)
+                }
+              />
+            )}
           </Col>
         </Row>
-        <Row>
+        <Row className="mt-4">
           <Col>
             <div
               className={`d-flex align-items-center ${DEFAULT_MARGIN_BOTTOM_LG}`}

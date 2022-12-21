@@ -568,6 +568,8 @@ export type IndicatorQueryTreatment = {
 
         'levelAssociatedCancerType': TumorType
 
+        'levelExcludedCancerTypes': Array < TumorType >
+
         'pmids': Array < string >
 
 };

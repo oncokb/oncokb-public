@@ -64,6 +64,7 @@ export type TherapeuticImplication = {
   cancerTypes: string;
   cancerTypesView: JSX.Element;
   citations: Citations;
+  drugDescription: string;
 };
 
 export type FdaImplication = {

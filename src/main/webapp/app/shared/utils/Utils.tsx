@@ -335,7 +335,8 @@ export function getDefaultColumnDefinition<T>(
       style?: object;
       defaultSortDesc: boolean;
       Cell?: TableCellRenderer;
-      sortMethod: typeof defaultSortMethod;
+      sortMethod?: typeof defaultSortMethod;
+      sortable?: boolean;
     }
   | undefined {
   switch (columnKey) {
@@ -482,6 +483,7 @@ export function getDefaultColumnDefinition<T>(
         Header: <span>Citations</span>,
         accessor: 'citations',
         minWidth: 90,
+        width: 90,
         defaultSortDesc: false,
         sortMethod: citationsSortMethod,
         Cell(props: any) {
@@ -523,6 +525,16 @@ export function getDefaultColumnDefinition<T>(
         minWidth: 100,
         defaultSortDesc: false,
         sortMethod: mutationEffectSortMethod,
+      };
+    case TABLE_COLUMN_KEY.DESCRIPTION:
+      return {
+        id: TABLE_COLUMN_KEY.DESCRIPTION,
+        Header: <span>Description</span>,
+        accessor: 'description',
+        minWidth: 100,
+        width: 100,
+        defaultSortDesc: false,
+        sortable: false,
       };
     default:
       return undefined;
