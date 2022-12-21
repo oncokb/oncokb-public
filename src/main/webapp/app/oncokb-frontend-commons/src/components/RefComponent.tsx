@@ -26,9 +26,7 @@ export default class RefComponent extends React.Component<{
       .slice(1)
       .join('Abstract')
       .split(/(?=http)/i);
-    const isAbstract =
-      !(abstractParts.length < 2) &&
-      this.props.content.toLowerCase().includes('abstract');
+    const isAbstract = !(abstractParts.length < 2);
 
     let abstract = '';
     let abstractLink = '';
