@@ -266,51 +266,52 @@ export default class AlterationTableTabs extends React.Component<
 
   @computed
   get therapeuticTableColumns(): SearchColumn<TherapeuticImplication>[] {
-    let descriptionColumn = {
-      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
-      Header: (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <span>Description</span>
-        </div>
-      ),
-      Cell(props: { original: TherapeuticImplication }) {
-        return (
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <DescriptionTooltip
-              description={
-                <SummaryWithRefs
-                  content={props.original.drugDescription}
-                  type="tooltip"
-                />
-              }
-            />
-          </div>
-        );
-      },
-    };
+    /* Uncomment lines below to get the description column back */
+    // let descriptionColumn = {
+    //   ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
+    //   Header: (
+    //     <div style={{ display: 'flex', justifyContent: 'center' }}>
+    //       <span>Description</span>
+    //     </div>
+    //   ),
+    //   Cell(props: { original: TherapeuticImplication }) {
+    //     return (
+    //       <div style={{ display: 'flex', justifyContent: 'center' }}>
+    //         <DescriptionTooltip
+    //           description={
+    //             <SummaryWithRefs
+    //               content={props.original.drugDescription}
+    //               type="tooltip"
+    //             />
+    //           }
+    //         />
+    //       </div>
+    //     );
+    //   },
+    // };
 
     // Users that are not logged in will see a message to login/register
-    if (!this.props.authenticationStore?.isUserAuthenticated) {
-      descriptionColumn = {
-        ...descriptionColumn,
-        Cell() {
-          return (
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <DescriptionTooltip
-                description={
-                  <span>
-                    Get access to our treatment descriptions by{' '}
-                    <Link to={PAGE_ROUTE.LOGIN}> logging in </Link> or by{' '}
-                    <Link to={PAGE_ROUTE.REGISTER}>registering</Link> an
-                    account.
-                  </span>
-                }
-              />
-            </div>
-          );
-        },
-      };
-    }
+    // if (!this.props.authenticationStore?.isUserAuthenticated) {
+    //   descriptionColumn = {
+    //     ...descriptionColumn,
+    //     Cell() {
+    //       return (
+    //         <div style={{ display: 'flex', justifyContent: 'center' }}>
+    //           <DescriptionTooltip
+    //             description={
+    //               <span>
+    //                 Get access to our treatment descriptions by{' '}
+    //                 <Link to={PAGE_ROUTE.LOGIN}> logging in </Link> or by{' '}
+    //                 <Link to={PAGE_ROUTE.REGISTER}>registering</Link> an
+    //                 account.
+    //               </span>
+    //             }
+    //           />
+    //         </div>
+    //       );
+    //     },
+    //   };
+    // }
 
     const citationColumn = {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
@@ -361,10 +362,11 @@ export default class AlterationTableTabs extends React.Component<
         onFilter: (data: TherapeuticImplication, keyword) =>
           filterByKeyword(data.drugs, keyword),
       },
-      ...(this.props.authenticationStore?.isUserAuthenticated
-        ? []
-        : [citationColumn]),
-      descriptionColumn,
+      // ...(this.props.authenticationStore?.isUserAuthenticated
+      //   ? []
+      //   : [citationColumn]),
+      citationColumn,
+      // descriptionColumn,
     ];
 
     return therapeuticTableColumns;

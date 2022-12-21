@@ -53,8 +53,8 @@ import { FeedbackType } from 'app/components/feedback/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
-import ShowHideToggleIcon from 'app/shared/icons/ShowHideToggleIcon';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
+import ShowHideText from 'app/shared/texts/ShowHideText';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -91,25 +91,6 @@ export type IAnnotationPage = {
     selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
     newTabKey: ANNOTATION_PAGE_TAB_KEYS
   ) => void;
-};
-
-const MutationEffectInformation: React.FunctionComponent<{
-  show: boolean;
-  mutationEffect: string;
-  onClick: () => void;
-  className?: string;
-}> = props => {
-  return (
-    <div className={props.className}>
-      <div onClick={() => props.onClick()}>
-        <i>{`${props.show ? 'Hide' : 'Show'} mutation effect description`}</i>{' '}
-        <ShowHideToggleIcon show={props.show} onToggle={() => {}} />
-      </div>
-      {props.show ? (
-        <SummaryWithRefs content={props.mutationEffect} type="linkout" />
-      ) : undefined}
-    </div>
-  );
 };
 
 @inject('appStore')
@@ -487,10 +468,14 @@ export default class AnnotationPage extends React.Component<
               );
             })}
             {this.props.annotation.mutationEffect.description && (
-              <MutationEffectInformation
+              <ShowHideText
                 show={this.showMutationEffect}
-                mutationEffect={
-                  this.props.annotation.mutationEffect.description
+                title="mutation effect description"
+                content={
+                  <SummaryWithRefs
+                    content={this.props.annotation.mutationEffect.description}
+                    type="linkout"
+                  />
                 }
                 onClick={() =>
                   this.toggleMutationEffect(!this.showMutationEffect)

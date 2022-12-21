@@ -18,7 +18,6 @@ import { Col, Row } from 'react-bootstrap';
 import {
   getCancerTypeNameFromOncoTreeType,
   getCancerTypesName,
-  getCancerTypesNameFromOncoTreeType,
 } from 'app/shared/utils/Utils';
 import LoadingIndicator, {
   LoaderSize,
@@ -51,37 +50,15 @@ import { FeedbackType } from 'app/components/feedback/types';
 import * as QueryString from 'query-string';
 import { RouterStore } from 'mobx-react-router';
 import {
-  AlterationPageHashQueries,
   GenePageHashQueries,
   GenePageSearchQueries,
 } from 'app/shared/route/types';
 import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import GeneInfo from './GeneInfo';
-import ShowHideToggleIcon from 'app/shared/icons/ShowHideToggleIcon';
 import GeneAdditionalInfoTable from 'app/pages/genePage/GeneAdditionalInfoTable';
 import OncokbLollipopPlot from './OncokbLollipopPlot';
 import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
-import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
-
-const GeneBackground: React.FunctionComponent<{
-  show: boolean;
-  geneBackground: string;
-  hugoSymbol: string;
-  onClick: () => void;
-  className?: string;
-}> = props => {
-  return (
-    <div className={props.className}>
-      <div onClick={() => props.onClick()}>
-        <i>{`${props.show ? 'Hide' : 'Show'} ${
-          props.hugoSymbol
-        } background`}</i>{' '}
-        <ShowHideToggleIcon show={props.show} onToggle={() => {}} />
-      </div>
-      {props.show ? <CitationLink content={props.geneBackground} /> : undefined}
-    </div>
-  );
-};
+import ShowHideText from 'app/shared/texts/ShowHideText';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -482,12 +459,13 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                               </div>
                             )}
                             {this.store.geneBackground.result && (
-                              <GeneBackground
-                                className="mt-2"
+                              <ShowHideText
                                 show={this.showGeneBackground}
-                                hugoSymbol={this.store.hugoSymbol}
-                                geneBackground={
-                                  this.store.geneBackground.result
+                                title={`${this.store.hugoSymbol} background`}
+                                content={
+                                  <CitationLink
+                                    content={this.store.geneBackground.result}
+                                  />
                                 }
                                 onClick={this.toggleGeneBackground}
                               />

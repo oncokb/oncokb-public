@@ -21,7 +21,7 @@ export default class SummaryWithRefs extends React.Component<
     //     (PMID: 11753428, 16007150, 21467160)
     //     (cBioPortal, MSKCC, May 2015, PMID: 24718888)
     //     (NCT1234567)
-    const regex = /(\(.*?[PMID|NCT].*?\))/i;
+    const regex = /(\(.*?[PMID|NCT|Abstract].*?\))/i;
 
     // split the string with delimiters included
     const parts = this.props.content.split(regex);
