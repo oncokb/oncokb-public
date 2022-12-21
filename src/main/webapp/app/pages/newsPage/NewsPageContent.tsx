@@ -95,6 +95,16 @@ export const CHANGED_ANNOTATION_DRUG_COLUMNS = [
   { name: 'Reason' },
 ];
 
+export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS = [
+  { name: 'Gene' },
+  { name: 'Mutation' },
+  { name: 'Cancer Type' },
+  { name: 'Current Level of Evidence' },
+  { name: 'Drug(s) Already in OncoKB™' },
+  { name: 'Newly Added Drug' },
+  { name: 'Evidence' },
+];
+
 export const CDX_COLUMNS = [
   { name: 'Level' },
   { name: 'Gene' },
@@ -151,6 +161,46 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '12222022': {
+    priorityNews: [
+      <span>
+        Happy Holidays! OncoKB mutation effect descriptions are now available to
+        all users on our website, in cBioPortal and through our API. These
+        descriptions summarize the data supporting the biological and oncogenic
+        effect designation for each alteration, and represent seven years of
+        effort from the OncoKB scientific team.
+      </span>,
+    ],
+    changedAnnotationColumnHeaderType:
+      AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+    changedAnnotation: [
+      [
+        'KRAS',
+        'G12C',
+        'Non-Small Cell Lung Cancer',
+        '1',
+        'Sotorasib',
+        <span>
+          Adagrasib
+          <br />
+          (Level 1)
+        </span>,
+
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            approval={'adagrasib in NSCLC'}
+            link={
+              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-adagrasib-kras-g12c-mutated-nsclc'
+            }
+          />
+          <AbstractLink
+            abstract={'Spira et al. Abstract# 9002, ASCO 2022'}
+            link={'https://meetings.asco.org/abstracts-presentations/208088'}
+          />
+        </WithSeparator>,
+      ],
+    ],
+  },
   '12132022': {
     newlyAddedGenes: [
       'ATP1A1',
@@ -162,57 +212,35 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'TRIM27',
       'ZFP36L2',
     ],
-    news: [
-      <span>
-        Updated therapeutic implications - addition of therapies for variants
-        with a level of evidence
-        <Row className={'overflow-auto'}>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Gene</th>
-                <th>Mutation</th>
-                <th>Cancer Type</th>
-                <th>Current Level of Evidence</th>
-                <th>Drug(s) Already in {ONCOKB_TM}</th>
-                <th>Newly Added Drug</th>
-                <th>Evidence</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>IDH1</td>
-                <td>R132C/H/L/G/S</td>
-                <td>Acute Myeloid Leukemia</td>
-                <td>1</td>
-                <td>Ivosidenib</td>
-                <td>
-                  Olutasidenib
-                  <br />
-                  (Level 1)
-                </td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <FdaApprovalLink
-                      approval={'Olutasidenib in AML'}
-                      link={
-                        'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olutasidenib-relapsed-or-refractory-acute-myeloid-leukemia-susceptible-idh1-mutation'
-                      }
-                    />
-                    <AbstractLink
-                      abstract={'Cortes et al. Abstract #6193, ASH 2022'}
-                      link={
-                        'https://ashpublications.org/blood/article/140/Supplement%201/6193/487212'
-                      }
-                    />
-                  </WithSeparator>
-                  ,
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Row>
-      </span>,
+    changedAnnotationColumnHeaderType:
+      AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+    changedAnnotation: [
+      [
+        'IDH1',
+        'R132C/H/L/G/S',
+        'Acute Myeloid Leukemia',
+        '1',
+        'Ivosidenib',
+        <span>
+          Olutasidenib
+          <br />
+          (Level 1)
+        </span>,
+        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+          <FdaApprovalLink
+            approval={'olutasidenib in AML'}
+            link={
+              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olutasidenib-relapsed-or-refractory-acute-myeloid-leukemia-susceptible-idh1-mutation'
+            }
+          />
+          <AbstractLink
+            abstract={'Cortes et al. Abstract #6193, ASH 2022'}
+            link={
+              'https://ashpublications.org/blood/article/140/Supplement%201/6193/487212'
+            }
+          />
+        </WithSeparator>,
+      ],
     ],
   },
   '10282022': {
