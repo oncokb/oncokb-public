@@ -335,7 +335,8 @@ export function getDefaultColumnDefinition<T>(
       style?: object;
       defaultSortDesc: boolean;
       Cell?: TableCellRenderer;
-      sortMethod: typeof defaultSortMethod;
+      sortMethod?: typeof defaultSortMethod;
+      sortable?: boolean;
     }
   | undefined {
   switch (columnKey) {
@@ -533,7 +534,7 @@ export function getDefaultColumnDefinition<T>(
         minWidth: 100,
         width: 100,
         defaultSortDesc: false,
-        sortMethod: defaultSortMethod,
+        sortable: false,
       };
     default:
       return undefined;
