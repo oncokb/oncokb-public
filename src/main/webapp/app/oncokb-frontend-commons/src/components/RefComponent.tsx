@@ -12,13 +12,20 @@ export default class RefComponent extends React.Component<{
   componentType: 'tooltip' | 'linkout';
 }> {
   render() {
-    const parts = this.props.content.split(/pmid|nct|abstract:/i);
+    const parts = this.props.content.split(/pmid|nct|abstract/i);
 
     if (parts.length < 2) {
       return <span>{this.props.content}</span>;
     }
 
-    const abstractParts = parts[1].split(/(?=http)/i);
+    // Slicing from index 1 to end to rejoin the abstract title and links
+    // when there's the case that they also contain the string 'Abstract'
+    // Example :
+    //     (Abstract: Fakih et al. Abstract# 3003, ASCO 2019.)
+    const abstractParts = parts
+      .slice(1)
+      .join('Abstract')
+      .split(/(?=http)/i);
     const isAbstract =
       !(abstractParts.length < 2) &&
       this.props.content.toLowerCase().includes('abstract');
