@@ -18,7 +18,14 @@ export default class RefComponent extends React.Component<{
       return <span>{this.props.content}</span>;
     }
 
-    const abstractParts = parts[1].split(/(?=http)/i);
+    // Slicing from index 1 to end to rejoin the abstract title and links
+    // when there's the case that they also contain the string 'Abstract'
+    // Example :
+    //     (Abstract: Fakih et al. Abstract# 3003, ASCO 2019.)
+    const abstractParts = parts
+      .slice(1)
+      .join('Abstract')
+      .split(/(?=http)/i);
     const isAbstract = !(abstractParts.length < 2);
 
     let abstract = '';
@@ -30,9 +37,10 @@ export default class RefComponent extends React.Component<{
     if (isAbstract) {
       abstract = abstractParts[0].replace(/^[:\s]*/g, '').trim();
       abstractLink = abstractParts[1].replace(/[\\)]*$/g, '').trim();
+      prefix = 'Abstract: ';
       link = (
         <a target="_blank" rel="noopener noreferrer" href={abstractLink}>
-          {abstract}
+          {`${prefix}${abstract}`}
         </a>
       );
     } else {
