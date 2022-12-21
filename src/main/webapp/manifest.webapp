@@ -3,12 +3,22 @@
   "short_name": "OncoKB",
   "icons": [
       {
-          "src": "./content/images/oncokb.png",
-          "sizes": "1571x358",
+          "src": "./content/images/favicon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+      },
+      {
+          "src": "./content/images/favicon/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+      },
+      {
+          "src": "./content/images/favicon/android-chrome-512x512.png",
+          "sizes": "512x512",
           "type": "image/png"
       }
   ],
-  "theme_color": "#1c75cd",
+  "theme_color": "#0968c3",
   "background_color": "#ffffff",
   "start_url": "https://www.oncokb.org",
   "display": "standalone",

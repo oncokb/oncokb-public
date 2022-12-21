@@ -139,6 +139,8 @@ module.exports = options => ({
       { from: './src/main/webapp//swagger-ui/', to: 'swagger-ui' },
       { from: './src/main/webapp/content/', to: 'content' },
       { from: './src/main/webapp/content/images/favicon/favicon.ico', to: 'favicon.ico' },
+      { from: './src/main/webapp/content/images/favicon/apple-touch-icon.png', to: 'apple-touch-icon.png' },
+      { from: './src/main/webapp/content/images/favicon/browserconfig.xml', to: 'browserconfig.xml' },
       { from: './src/main/webapp/manifest.webapp', to: 'manifest.webapp' },
       // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
     ]),
