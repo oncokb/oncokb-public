@@ -12,14 +12,16 @@ export default class RefComponent extends React.Component<{
   componentType: 'tooltip' | 'linkout';
 }> {
   render() {
-    const parts = this.props.content.split(/pmid|nct|abstract/i);
+    const parts = this.props.content.split(/pmid|nct|abstract:/i);
 
     if (parts.length < 2) {
       return <span>{this.props.content}</span>;
     }
 
     const abstractParts = parts[1].split(/(?=http)/i);
-    const isAbstract = !(abstractParts.length < 2);
+    const isAbstract =
+      !(abstractParts.length < 2) &&
+      this.props.content.toLowerCase().includes('abstract');
 
     let abstract = '';
     let abstractLink = '';
@@ -30,9 +32,10 @@ export default class RefComponent extends React.Component<{
     if (isAbstract) {
       abstract = abstractParts[0].replace(/^[:\s]*/g, '').trim();
       abstractLink = abstractParts[1].replace(/[\\)]*$/g, '').trim();
+      prefix = 'Abstract: ';
       link = (
         <a target="_blank" rel="noopener noreferrer" href={abstractLink}>
-          {abstract}
+          {`${prefix}${abstract}`}
         </a>
       );
     } else {
