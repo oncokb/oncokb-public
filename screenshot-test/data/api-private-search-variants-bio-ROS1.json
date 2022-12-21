@@ -1,1628 +1,1657 @@
 [
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 G2032R mutation is located in the protein's kinase domain and is associated with acquired resistance to crizotinib in ROS1-rearranged non-small cell lung cancer (PMID: 25688157, 24047073, 23724914). In vitro studies demonstrated that G2032R confers resistance by interfering with crizotinib binding (PMID: 25351743). This mutation corresponds to the G1202R ALK kinase domain mutant (PMID: 23724914, 27401242).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "G2032R",
+            "name": "G2032R",
+            "refResidues": "G",
+            "proteinStart": 2032,
+            "proteinEnd": 2032,
+            "variantResidues": "R",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "25351743",
+            "24047073",
+            "23724914",
+            "27401242",
+            "25688157"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "CD74-ROS1 Fusion",
-      "name": "CD74-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "22919003",
-      "22215748",
-      "18083107",
-      "22327623"
-    ],
-    "mutationEffectAbstracts":
-    [
-      {
-        "link": "https://ascopubs.org/doi/full/10.1200/PO.18.00267",
-        "abstract": "Hegde et al. JCO PO, 2018"
-      }
-    ],
-    "oncogenic": "Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 F2004C mutation is located in the kinase domain of the protein. This mutation has been found in lung cancer (Abstract: Doebele et al. Abstract# LBA-28, ESMO 2019. https://www.sciencedirect.com/science/article/pii/S0923753419603777). Expression of this mutation in the context of a ROS1 fusion in Ba/F3 cells demonstrated decreased sensitivity to ROS1 inhibition (PMID: 26372962). Structural studies based on homology to ALK predict that ROS1 F2004C would confer resistance to ceritinib (PMID: 27401242). At least one patient with ROS1-fusion-positive non-small cell lung cancer acquired the ROS1 F2004C mutation upon disease progression on treatment with entrectinib (Abstract: Doebele et al. Abstract# LBA-28, ESMO 2019. https://www.sciencedirect.com/science/article/pii/S0923753419603777).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "F2004C",
+            "name": "F2004C",
+            "refResidues": "F",
+            "proteinStart": 2004,
+            "proteinEnd": 2004,
+            "variantResidues": "C",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Inconclusive",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "27401242",
+            "26372962"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
+        [
+            {
+                "link": "https://www.sciencedirect.com/science/article/pii/S0923753419603777",
+                "abstract": "Doebele et al. Abstract# LBA-28, ESMO 2019"
+            }
+        ],
+        "oncogenic": "Inconclusive",
+        "oncogenicPmids":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "MSN-ROS1 Fusion",
-      "name": "MSN-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "25264305"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "SDC4-ROS1, a rearrangement mutation that results in the fusion of exon 2 of SDC4 with exon 33 or 34 of ROS1, results in a constitutively active protein containing the ROS1 kinase domain (PMID: 22327623). This fusion demonstrated transforming capabilities when tested in foci forming assays in vitro, and also demonstrated the ability to form subcutaneous tumors in nude mice (PMID: 22327623).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "SDC4-ROS1 Fusion",
+            "name": "SDC4-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "22327623"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "S1986F",
-      "name": "S1986F",
-      "refResidues": "S",
-      "proteinStart": 1986,
-      "proteinEnd": 1986,
-      "variantResidues": "F",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "27401242"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The CEP85L-ROS1 fusion protein combines the N terminal of CEP85L until exon 8 with the C-terminal of ROS1 starting at exon 36 and is found in CNS tumors, angiosarcoma and glioblastoma (PMID: 23637631, 25204415, 30171048). The breakpoint preserves the coiled-coil domain of CEP85L and the tyrosine kinase domain of ROS1, and is predicted to possess transforming abilities (PMID: 23637631, 25204415, 30171048). Expression of this fusion protein in BaF3, NIH3T3, and immortalized human astrocyte cells demonstrated that it is activating as shown by IL3 independent growth, pathway activation and increased colony formation compared to ectopic expression of wildtype ROS1. Expression of this fusion in BaF3 cells also demonstrated that it is sensitive to multiple TKIs including crizotinib, foretinib, cabozantinib, ceritinib, brigatinib, AZD3463, lorlatinib, and entrectinib proliferation, pathway activation and colony formation (PMID: 30171048).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "CEP85L-ROS1 Fusion",
+            "name": "CEP85L-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "25204415",
+            "30171048",
+            "23637631"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "F2004C",
-      "name": "F2004C",
-      "refResidues": "F",
-      "proteinStart": 2004,
-      "proteinEnd": 2004,
-      "variantResidues": "C",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Inconclusive",
-    "mutationEffectPmids":
-    [
-      "27401242",
-      "26372962"
-    ],
-    "mutationEffectAbstracts":
-    [
-      {
-        "link": "https://www.sciencedirect.com/science/article/pii/S0923753419603777",
-        "abstract": "Doebele et al. Abstract# LBA-28, ESMO 2019"
-      }
-    ],
-    "oncogenic": "Inconclusive",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "EZR-ROS1 is a rearrangement mutation that results in the fusion of exon 10 of EZR with exon 34 of ROS1, results in a constitutively active protein containing the ROS1 kinase domain (PMID: 22327623). This fusion demonstrated transforming capabilities when tested in foci forming assays in vitro, and also demonstrated the ability to form subcutaneous tumors in nude mice (PMID: 22327623).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "EZR-ROS1 Fusion",
+            "name": "EZR-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "22327623"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "LIMA1-ROS1 Fusion",
-      "name": "LIMA1-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "25264305"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "KDELR2-ROS1, a rearrangement mutation that results in the fusion of the 5' end of KDELR2 with the 3' end of with ROS1 (PMID: 22980976). The oncogenic potential of this fusion has not been functionally tested.",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "KDELR2-ROS1 Fusion",
+            "name": "KDELR2-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "22980976"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "L1947R",
-      "name": "L1947R",
-      "refResidues": "L",
-      "proteinStart": 1947,
-      "proteinEnd": 1947,
-      "variantResidues": "R",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "24218589"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "TFG-ROS1 is a rearrangement mutation that results in the fusion of TFG (exon 4) to ROS1 (exon 36) (PMID: 24875859). The oncogenic potential of this fusion has not been functionally tested.",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "TFG-ROS1 Fusion",
+            "name": "TFG-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "24875859"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V2098I",
-      "name": "V2098I",
-      "refResidues": "V",
-      "proteinStart": 2098,
-      "proteinEnd": 2098,
-      "variantResidues": "I",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "24218589"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "Amplification of ROS1 has been shown to result in an increase in ROS1 transcript and ROS1 protein levels in cancer cell lines that is sensitive to ROS1 inhibition demonstrating that ROS1 amplification is likely activating (PMID: 25978031). Studies in cancer cell lines have demonstrated that ROS1 amplification can lead to resistance to EGFR inhibitors in cells that are otherwise sensitive to EGFR inhibition (PMID: (PMID: 25978031).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "Amplification",
+            "name": "Amplification",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "25978031"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "D2033N",
-      "name": "D2033N",
-      "refResidues": "D",
-      "proteinStart": 2033,
-      "proteinEnd": 2033,
-      "variantResidues": "N",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "26673800"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The GOPC-ROS1 fusion protein combines the N terminus of GOPC until exon 7 with the C-terminus of ROS1 starting at exon 35 and is found in CNS tumors (PMID: 30171048). This is the most frequent ROS1 fusion found in GBMs. Expression of this fusion protein in BaF3 and immortalized human astrocyte cells demonstrated that it is activating as shown by IL3 independent growth and increased colony formation compared to ectopic expression of wildtype ROS1 (PMID: 30171048). Expression of this fusion in BaF3 cells also demonstrated that it is sensitive to multiple TKIs including crizotinib, foretinib, cabozantinib, ceritinib, brigatinib, AZD3463, lorlatinib, and entrectinib as measured by proliferation, pathway activation and colony formation with lorlatinib having the highest potency (PMID: 30171048).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "GOPC-ROS1 Fusion",
+            "name": "GOPC-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "30171048"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "CEP85L-ROS1 Fusion",
-      "name": "CEP85L-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "25204415",
-      "30171048",
-      "23637631"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 S1986F mutation lies in the tyrosine kinase domain of the ROS1 protein. It has been detected in a patient with ROS1-fusion-positive lung cancer in concert with the S1986Y mutation. The two alterations at the same residue were associated with resistance to crizotinib but subsequent sensitivity to lorlatinib. In a murine B-cell line expression of individual S1986F- and S1986Y-mutated ROS1-fusion constructs were resistant to crizotinib and ceritinib but not lorlatinib, as assessed by cell viability and pathway activation assays (PMID: 27401242).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "S1986F",
+            "name": "S1986F",
+            "refResidues": "S",
+            "proteinStart": 1986,
+            "proteinEnd": 1986,
+            "variantResidues": "F",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "27401242"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Amplification",
-      "name": "Amplification",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "25978031"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "FIG-ROS1 is characterized by the fusion of the 3' region of ROS1 (exon 35) to the 5' region of FIG (exon 7); this fusion results from an intra-chromosomal deletion in chromosome 6 (PMID: 12661006). The FIG-ROS1 fusion results in a constitutively active ROS1 kinase (PMID: 2827175, 12661006).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "FIG-ROS1 Fusion",
+            "name": "FIG-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "12661006",
+            "2827175"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "E1935G",
-      "name": "E1935G",
-      "refResidues": "E",
-      "proteinStart": 1935,
-      "proteinEnd": 1935,
-      "variantResidues": "G",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "24218589"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "CCDC6-ROS1 is a fusion rearrangement mutation resulting in the fusion of the 3' region of ROS1 (exon 34) to the 5' region of CCDC6 (exon 6). This fusion retains the coiled-coil domain of CCDC6 and the kinase domain of ROS1 (PMID: 22975805, 25870798). The oncogenic potential of this fusion has not been functionally tested.",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "CCDC6-ROS1 Fusion",
+            "name": "CCDC6-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "22975805",
+            "25870798"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "F2004V",
-      "name": "F2004V",
-      "refResidues": "F",
-      "proteinStart": 2004,
-      "proteinEnd": 2004,
-      "variantResidues": "V",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Inconclusive",
-    "mutationEffectPmids":
-    [
-      "27401242"
-    ],
-    "mutationEffectAbstracts":
-    [
-      {
-        "link": "https://ascopubs.org/doi/full/10.1200/PO.19.00013",
-        "abstract": "Dimou et al. JCO PO, 2019"
-      }
-    ],
-    "oncogenic": "Inconclusive",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "YWHAE-ROS1 is a rearrangement mutation that results in the fusion of YWHAE (exon 4) to ROS1 (exon 36) (PMID: 24875859). The oncogenic potential of this fusion has not been functionally tested.",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "YWHAE-ROS1 Fusion",
+            "name": "YWHAE-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "24875859"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "G1971E",
-      "name": "G1971E",
-      "refResidues": "G",
-      "proteinStart": 1971,
-      "proteinEnd": 1971,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "24218589"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 D2033N mutation lies in the tyrosine kinase domain of the ROS1 protein. It has been detected in a patient with CD74-ROS1-fusion positive lung cancer with acquired resistance to crizotinib. In a murine B-cell line a D2033N-mutated CD74-ROS1 construct conferred reduced sensitivity to crizotinib while cabozantinib was equally effective as against the unmutated CD74-ROS, as measured in growth and downstream signaling assays. Experiments also supported the notion that D2033N confers resistance to ceritinib, brigatinib and lorlatinib. The analogous mutation in ALK (D1203N) confers crizotinib resistance in vitro and molecular studies indicate that mutations at these residues are important due to their being located at binding surface for ATP (PMID: 26673800).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "D2033N",
+            "name": "D2033N",
+            "refResidues": "D",
+            "proteinStart": 2033,
+            "proteinEnd": 2033,
+            "variantResidues": "N",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "26673800"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Fusions",
-      "name": "Fusions",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "31669155",
-      "22919003",
-      "22215748",
-      "23719267",
-      "28465216"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "LIMA1-ROS1 is a rearrangement mutation that results in the fusion of LIMA1 (exon 10) to ROS1 (exon 36). This novel fusion has recently been identified in a tumor sample from a patient with non small cell lung cancer (NSCLC) treated with crizotinib (PMID: 25264305).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "LIMA1-ROS1 Fusion",
+            "name": "LIMA1-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "25264305"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "GOPC-ROS1 Fusion",
-      "name": "GOPC-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "30171048"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "LRIG3-ROS1, a rearrangement mutation that results in the fusion of exon 16 of EZR with exon 35 of ROS1, results in a constitutively active protein containing the ROS1 kinase domain. This fusion demonstrated transforming capabilities when tested in foci forming assays in vitro, and also demonstrated the ability to form subcutaneous tumors in nude mice (PMID: 22327623).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "LRIG3-ROS1 Fusion",
+            "name": "LRIG3-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "22327623"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "EZR-ROS1 Fusion",
-      "name": "EZR-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "22327623"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 G2101A mutation lies in the tyrosine kinase domain of the ROS1 protein. In a murine B-cell line a G2101A-mutated CD74-ROS1 construct conferred increased resistance to crizotinib, as compared to the unmutated construct in cell-growth assays. The mutated construct showed slightly reduced sensitivity to the inhibitor foretinib. The variants is analogous to the previously described ALK G1269A resistance mutation (PMID: 25688157, 24675041, 22235099).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "G2101A",
+            "name": "G2101A",
+            "refResidues": "G",
+            "proteinStart": 2101,
+            "proteinEnd": 2101,
+            "variantResidues": "A",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "22235099",
+            "25688157",
+            "24675041"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "G2032R",
-      "name": "G2032R",
-      "refResidues": "G",
-      "proteinStart": 2032,
-      "proteinEnd": 2032,
-      "variantResidues": "R",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "25351743",
-      "24047073",
-      "24047072",
-      "23724914",
-      "27401242",
-      "25688157"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 S1986Y mutation lies in tyrosine kinase domain the of the ROS1 protein. It has been detected in a patient with ROS1-fusion positive lung cancer in concert with mutation S1986F. The two alterations at the same residue were associated with resistance to crizotinib but subsequent sensitivity to lorlatinib. In a murine B-cell line expression of individual S1986F- and S1986Y-mutated ROS1-fusion constructs were resistant to crizotinib and ceritinib but not lorlatinib, as assessed by cell viability and pathway activation assays (PMID: 27401242).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "S1986Y",
+            "name": "S1986Y",
+            "refResidues": "S",
+            "proteinStart": 1986,
+            "proteinEnd": 1986,
+            "variantResidues": "Y",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "27401242"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "CCDC6-ROS1 Fusion",
-      "name": "CCDC6-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "22975805",
-      "25870798"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "MSN-ROS1 is a rearrangement mutation that results in the fusion of MSN (exon 9) to ROS1 (exon 34). This novel fusion has recently been identified in a tumor sample from a patient with non small cell lung cancer (NSCLC) treated with crizotinib (PMID: 25264305).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "MSN-ROS1 Fusion",
+            "name": "MSN-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "25264305"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "SLC34A2-ROS1 Fusion",
-      "name": "SLC34A2-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "22919003",
-      "22215748",
-      "22327623"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 L1951R mutation lies in the tyrosine kinase domain of the ROS1 protein. In vitro studies in a CD74-ROS1-transformed cell line demonstrated that L1951R confers resistance to crizotinib and ceritinib as measured by cell viability and pathway activation assays. This effect is likely due to steric hindrance (PMID: 25351743).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "L1951R",
+            "name": "L1951R",
+            "refResidues": "L",
+            "proteinStart": 1951,
+            "proteinEnd": 1951,
+            "variantResidues": "R",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Inconclusive",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "25351743"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "C2060G",
-      "name": "C2060G",
-      "refResidues": "C",
-      "proteinStart": 2060,
-      "proteinEnd": 2060,
-      "variantResidues": "G",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Resistance",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "24218589"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 G1971E mutation lies in the tyrosine kinase domain of the ROS1 protein. In a murine B-cell line a G1971E-mutated FIG-ROS1 construct conferred increased resistance to crizotinib, as compared to the unmutated construct in cell-growth assays. The mutated construct showed slightly reduced sensitivity to the inhibitor foretinib (PMID: 24218589).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "G1971E",
+            "name": "G1971E",
+            "refResidues": "G",
+            "proteinStart": 1971,
+            "proteinEnd": 1971,
+            "variantResidues": "E",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "24218589"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "S1986Y",
-      "name": "S1986Y",
-      "refResidues": "S",
-      "proteinStart": 1986,
-      "proteinEnd": 1986,
-      "variantResidues": "Y",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "27401242"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 C2060G mutation lies in the tyrosine kinase domain of the ROS1 protein. In a murine B-cell line a C2060G-mutated FIG-ROS1 construct conferred increased resistance to crizotinib, as compared to the unmutated construct in cell-growth assays. The mutated construct showed slightly reduced sensitivity to the inhibitor foretinib (PMID: 24218589).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "C2060G",
+            "name": "C2060G",
+            "refResidues": "C",
+            "proteinStart": 2060,
+            "proteinEnd": 2060,
+            "variantResidues": "G",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "24218589"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "SDC4-ROS1 Fusion",
-      "name": "SDC4-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "22327623"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 V2098I mutation occurs in the tyrosine kinase domain of the ROS1 protein at a site implicated in inhibitor binding. In a murine B-cell line a V2098I -mutated FIG-ROS1 construct conferred increased resistance to crizotinib, as compared to the unmutated construct in cell-growth assays. The mutated construct showed slightly reduced sensitivity to the inhibitor foretinib (PMID: 24218589).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "V2098I",
+            "name": "V2098I",
+            "refResidues": "V",
+            "proteinStart": 2098,
+            "proteinEnd": 2098,
+            "variantResidues": "I",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "24218589"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "LRIG3-ROS1 Fusion",
-      "name": "LRIG3-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "22327623"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 E1935G mutation occurs in an uncharacterized region ten amino acid residues prior to the tyrosine kinase domain of the ROS1 protein. In a murine B-cell line a E1935G-mutated FIG-ROS1 construct conferred increased resistance to crizotinib, as compared to the unmutated construct in cell-growth assays. The mutated construct showed slightly reduced sensitivity to the inhibitor foretinib (PMID: 24218589).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "E1935G",
+            "name": "E1935G",
+            "refResidues": "E",
+            "proteinStart": 1935,
+            "proteinEnd": 1935,
+            "variantResidues": "G",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "24218589"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "TPM3-ROS1 Fusion",
-      "name": "TPM3-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "22327623"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "CD74-ROS1 is a rearrangement mutation characterized by the fusion of CD74 (exon 6) and ROS1 (exon 34). This fusion generates a protein with constitutive kinase activity (PMID: 22215748, 22919003, 22327623, 18083107). CD74-ROS1 demonstrated transforming capabilities when tested in foci forming assays in vitro, and also demonstrated the ability to form subcutaneous tumors in nude mice (PMID: 22327623). A patient with non-small cell lung cancer harboring a CD74-ROS1 fusion responded to treatment with brigatinib and ceritinib after progressing on crizotinib (Abstract: Hegde et al. JCO PO, 2018. https://ascopubs.org/doi/full/10.1200/PO.18.00267).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "CD74-ROS1 Fusion",
+            "name": "CD74-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "22919003",
+            "22215748",
+            "18083107",
+            "22327623"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
+        [
+            {
+                "link": "https://ascopubs.org/doi/full/10.1200/PO.18.00267",
+                "abstract": "Hegde et al. JCO PO, 2018"
+            }
+        ],
+        "oncogenic": "Oncogenic",
+        "oncogenicPmids":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "TFG-ROS1 Fusion",
-      "name": "TFG-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "24875859"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 L1947R mutation occurs in the protein's kinase domain and is often identified in the context of a ROS1 fusion protein. FIG-ROS1 Ba/F3 cells expressing the L1947R mutation demonstrated increased resistance to crizotinib compared to control FIG-ROS1 Ba/F3 cells, as measured by sustained cell growth and protein activation upon drug treatment (PMID: 24218589).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "L1947R",
+            "name": "L1947R",
+            "refResidues": "L",
+            "proteinStart": 1947,
+            "proteinEnd": 1947,
+            "variantResidues": "R",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "24218589"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "L1951R",
-      "name": "L1951R",
-      "refResidues": "L",
-      "proteinStart": 1951,
-      "proteinEnd": 1951,
-      "variantResidues": "R",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Inconclusive",
-    "mutationEffectPmids":
-    [
-      "25351743"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "The ROS1 F2004V mutation is located in the kinase domain of the protein. This mutation was found as a secondary mutation in a patient with lung adenocarcinoma who had progressive disease in the brain and bones after treatment with crizotinib, entrectinib and brigatinib but who had a dramatic response to treatment with lorlatinib (Abstract: Dimou et al. JCO PO, 2019. https://ascopubs.org/doi/full/10.1200/PO.19.00013). This mutation may confer resistance to entrectinib and brigatinib but remains sensitive to lorlatinib. Structural studies based on homology to ALK predict that ROS1 F2004V would confer resistance to ceritinib (PMID: 27401242).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "F2004V",
+            "name": "F2004V",
+            "refResidues": "F",
+            "proteinStart": 2004,
+            "proteinEnd": 2004,
+            "variantResidues": "V",
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Inconclusive",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "27401242"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
+        [
+            {
+                "link": "https://ascopubs.org/doi/full/10.1200/PO.19.00013",
+                "abstract": "Dimou et al. JCO PO, 2019"
+            }
+        ],
+        "oncogenic": "Inconclusive",
+        "oncogenicPmids":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "FIG-ROS1 Fusion",
-      "name": "FIG-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "12661006",
-      "2827175"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "TPM3-ROS1, a rearrangement mutation that results in the fusion of exon 8 of TPM3 with exon 35 of ROS1, results in a constitutively active protein containing the ROS1 kinase domain (PMID: 22327623). This fusion demonstrated transforming capabilities when tested in foci forming assays in vitro, and also demonstrated the ability to form subcutaneous tumors in nude mice (PMID: 22327623).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "TPM3-ROS1 Fusion",
+            "name": "TPM3-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "22327623"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "YWHAE-ROS1 Fusion",
-      "name": "YWHAE-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "24875859"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "Fusions of ROS1 arise from chromosomal translocations that fuse the N-terminal portion of a partner protein with the C-terminal kinase-domain-containing portion of ROS1. These fusion proteins are found in a variety of cancer types and result in constitutive activation of ROS1 kinase activity. Biological characterization of specific ROS1 fusion proteins demonstrates that they are activating as shown by enhanced proliferation and colony formation and that they are sensitive to treatment with the tyrosine kinase inhibitors crizotinib and entrectinib (PMID: 23719267, 22919003, 22215748, 28465216). Preliminary clinical data suggests that lorlatinib may also be efficacious in patients with ROS1 fusion-positive non-small cell lung cancer, including those with central nervous system disease (PMID: 31669155).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "Fusions",
+            "name": "Fusions",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Likely Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "31669155",
+            "22919003",
+            "22215748",
+            "23719267",
+            "28465216"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "G2101A",
-      "name": "G2101A",
-      "refResidues": "G",
-      "proteinStart": 2101,
-      "proteinEnd": 2101,
-      "variantResidues": "A",
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
     },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "22235099",
-      "25688157",
-      "24675041"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  },
-  {
-    "variant":
     {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
+        "mutationEffectDescription": "SLC34A2-ROS1 is a rearrangement mutation that results in the fusion of SLC34A2 (exon 4) and ROS1 (exon 32 and 34), creating a short and long transcript, respectively. This in-frame mutation generates a protein with constitutively active kinase activity (PMID: 22215748, 22919003). This fusion demonstrated transforming capabilities when tested in foci forming assays in vitro, and also demonstrated the ability to form subcutaneous tumors in nude mice (PMID: 22327623).",
+        "variant":
+        {
+            "gene":
+            {
+                "entrezGeneId": 6098,
+                "hugoSymbol": "ROS1",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000368508",
+                "grch37RefSeq": "NM_002944.2",
+                "grch38Isoform": "ENST00000368508",
+                "grch38RefSeq": "NM_002944.2",
+                "geneAliases":
+                [
+                    "MCF3",
+                    "ROS",
+                    "c-ros-1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+            },
+            "consequence":
+            {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "SLC34A2-ROS1 Fusion",
+            "name": "SLC34A2-ROS1 Fusion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes":
+            [
+                "GRCh38",
+                "GRCh37"
+            ]
+        },
+        "mutationEffect": "Gain-of-function",
+        "mutationEffectPmids":
         [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
+            "22919003",
+            "22215748",
+            "22327623"
         ],
-        "genesets":
+        "mutationEffectAbstracts":
         [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "KDELR2-ROS1 Fusion",
-      "name": "KDELR2-ROS1 Fusion",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
-    },
-    "mutationEffect": "Likely Gain-of-function",
-    "mutationEffectPmids":
-    [
-      "22980976"
-    ],
-    "mutationEffectAbstracts":
-    [],
-    "oncogenic": "Likely Oncogenic",
-    "oncogenicPmids":
-    [],
-    "oncogenicAbstracts":
-    []
-  }
+        "oncogenic": "Oncogenic",
+        "oncogenicPmids":
+        [],
+        "oncogenicAbstracts":
+        []
+    }
 ]
