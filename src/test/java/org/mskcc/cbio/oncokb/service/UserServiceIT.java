@@ -122,6 +122,40 @@ public class UserServiceIT {
 
     @Test
     @Transactional
+    public void assertThatInactivateUserWillRemoveActivationKey() {
+        user.setActivationKey(RandomUtil.generateActivationKey());
+        user = userRepository.saveAndFlush(user);
+        // make use the activation key is generated properly
+        assertThat(user.getActivationKey()).isNotEmpty();
+
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+        userDTO.setActivated(false);
+        Optional<UserDTO> updatedUserDto = userService.updateUser(userDTO);
+        assertThat(updatedUserDto).isPresent();
+        assertThat(updatedUserDto.get().isActivated()).isFalse();
+        assertThat(updatedUserDto.get().getActivationKey()).isNullOrEmpty();
+        userRepository.delete(user);
+    }
+    @Test
+    @Transactional
+    public void assertThatInactivateUserWillRemoveResetKeyAndDate() {
+        user.setActivationKey(RandomUtil.generateActivationKey());
+        user = userRepository.saveAndFlush(user);
+        // make use the activation key is generated properly
+        assertThat(user.getActivationKey()).isNotEmpty();
+
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+        userDTO.setActivated(false);
+        Optional<UserDTO> updatedUserDto = userService.updateUser(userDTO);
+        assertThat(updatedUserDto).isPresent();
+        assertThat(updatedUserDto.get().isActivated()).isFalse();
+        assertThat(updatedUserDto.get().getResetKey()).isNullOrEmpty();
+        assertThat(updatedUserDto.get().getResetDate()).isNull();
+        userRepository.delete(user);
+    }
+
+    @Test
+    @Transactional
     public void assertThatResetKeyMustBeValid() {
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         user.setActivated(true);
