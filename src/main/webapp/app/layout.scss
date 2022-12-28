@@ -49,10 +49,16 @@
     padding-left: 1rem;
     padding-right: 1rem;
   }
+  .sticky-panel-relevant-to-header {
+    top: 0;
+  }
 }
 
 @include media-breakpoint-up(sm) {
   $footer-height: 17rem;
+  .sticky-panel-relevant-to-header {
+    top: 106px;
+  }
   @include sticky-footer($footer-height);
 }
 

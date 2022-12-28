@@ -18,7 +18,7 @@ import LevelChange from 'content/images/loe-change.png';
 import AAC_IMAGE from 'content/images/level_AAC.png';
 import { Linkout } from 'app/shared/links/Linkout';
 import { RouterStore } from 'mobx-react-router';
-import { scrollWidthOffsetInNews } from 'app/shared/utils/Utils';
+import { scrollWidthOffset } from 'app/shared/utils/Utils';
 import { inject, observer } from 'mobx-react';
 import { Version } from 'app/pages/LevelOfEvidencePage';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
@@ -37,7 +37,7 @@ export default class NewsPage extends React.Component<{
       setTimeout(() => {
         const id = this.props.routing.location.hash.slice(1);
         const element = document.getElementById(id);
-        scrollWidthOffsetInNews(element);
+        scrollWidthOffset(element);
       }, 500);
     }
   }
@@ -81,6 +81,7 @@ export default class NewsPage extends React.Component<{
             <CitationText />
           </div>
           <div className="mt-2">
+            <NewsList date={'01052023'} />
             <NewsList date={'12222022'} />
             <NewsList date={'12132022'} />
             <NewsList date={'11302022'}>

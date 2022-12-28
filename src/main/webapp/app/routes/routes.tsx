@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import Login from 'app/components/login/LoginPage';
 import { Logout } from 'app/components/login/logout';
@@ -137,6 +137,11 @@ const AppRouts = (props: {
           <Route exact path={PAGE_ROUTE.ABOUT} component={AboutPageNavTab} />
           <Route exact path={PAGE_ROUTE.TEAM} component={AboutPageNavTab} />
           <Route exact path={PAGE_ROUTE.SOP} component={AboutPageNavTab} />
+          <Route
+            exact
+            path={PAGE_ROUTE.YEAR_END_REVIEW}
+            component={AboutPageNavTab}
+          />
           <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />
           <Route
             exact
