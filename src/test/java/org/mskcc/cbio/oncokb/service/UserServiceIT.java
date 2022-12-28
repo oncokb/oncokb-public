@@ -125,7 +125,7 @@ public class UserServiceIT {
     public void assertThatInactivateUserWillRemoveActivationKey() {
         user.setActivationKey(RandomUtil.generateActivationKey());
         user = userRepository.saveAndFlush(user);
-        // make use the activation key is generated properly
+        // make sure the activation key is generated properly
         assertThat(user.getActivationKey()).isNotEmpty();
 
         UserDTO userDTO = userMapper.userToUserDTO(user);
