@@ -391,7 +391,12 @@ public class UserService {
                     user.setEmail(userDTO.getEmail().toLowerCase());
                 }
                 user.setImageUrl(userDTO.getImageUrl());
-                user.setActivated(userDTO.isActivated());
+                if (userDTO.isActivated() != user.getActivated()) {
+                    user.setActivated(userDTO.isActivated());
+                    user.setActivationKey(null);
+                    user.setResetKey(null);
+                    user.setResetDate(null);
+                }
                 user.setLangKey(userDTO.getLangKey());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
