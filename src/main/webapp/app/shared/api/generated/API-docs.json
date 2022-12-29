@@ -379,13 +379,6 @@
             "schema": {
               "$ref": "#/definitions/LoginVM"
             }
-          },
-          {
-            "name": "recaptchaToken",
-            "in": "query",
-            "description": "recaptchaToken",
-            "required": false,
-            "type": "string"
           }
         ],
         "responses": {
@@ -474,13 +467,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "recaptchaToken",
-            "in": "query",
-            "description": "recaptchaToken",
-            "required": false,
-            "type": "string"
           }
         ],
         "responses": {
@@ -1747,13 +1733,6 @@
             "schema": {
               "$ref": "#/definitions/ManagedUserVM"
             }
-          },
-          {
-            "name": "recaptchaToken",
-            "in": "query",
-            "description": "recaptchaToken",
-            "required": false,
-            "type": "string"
           }
         ],
         "responses": {

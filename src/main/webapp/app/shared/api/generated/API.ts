@@ -946,15 +946,10 @@ export default class API {
     };
     resendVerificationUsingPOSTURL(parameters: {
         'loginVm': LoginVM,
-        'recaptchaToken' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/account/resend-verification';
-
-        if (parameters['recaptchaToken'] !== undefined) {
-            queryParameters['recaptchaToken'] = parameters['recaptchaToken'];
-        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -971,11 +966,9 @@ export default class API {
      * @method
      * @name API#resendVerificationUsingPOST
      * @param {} loginVm - loginVM
-     * @param {string} recaptchaToken - recaptchaToken
      */
     resendVerificationUsingPOSTWithHttpInfo(parameters: {
         'loginVm': LoginVM,
-        'recaptchaToken' ? : string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1000,10 +993,6 @@ export default class API {
                 return;
             }
 
-            if (parameters['recaptchaToken'] !== undefined) {
-                queryParameters['recaptchaToken'] = parameters['recaptchaToken'];
-            }
-
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -1021,11 +1010,9 @@ export default class API {
      * @method
      * @name API#resendVerificationUsingPOST
      * @param {} loginVm - loginVM
-     * @param {string} recaptchaToken - recaptchaToken
      */
     resendVerificationUsingPOST(parameters: {
         'loginVm': LoginVM,
-        'recaptchaToken' ? : string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < any > {
@@ -1111,15 +1098,10 @@ export default class API {
     };
     requestPasswordResetUsingPOSTURL(parameters: {
         'mail': string,
-        'recaptchaToken' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/account/reset-password/init';
-
-        if (parameters['recaptchaToken'] !== undefined) {
-            queryParameters['recaptchaToken'] = parameters['recaptchaToken'];
-        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -1136,11 +1118,9 @@ export default class API {
      * @method
      * @name API#requestPasswordResetUsingPOST
      * @param {} mail - mail
-     * @param {string} recaptchaToken - recaptchaToken
      */
     requestPasswordResetUsingPOSTWithHttpInfo(parameters: {
         'mail': string,
-        'recaptchaToken' ? : string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -1165,10 +1145,6 @@ export default class API {
                 return;
             }
 
-            if (parameters['recaptchaToken'] !== undefined) {
-                queryParameters['recaptchaToken'] = parameters['recaptchaToken'];
-            }
-
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -1186,11 +1162,9 @@ export default class API {
      * @method
      * @name API#requestPasswordResetUsingPOST
      * @param {} mail - mail
-     * @param {string} recaptchaToken - recaptchaToken
      */
     requestPasswordResetUsingPOST(parameters: {
         'mail': string,
-        'recaptchaToken' ? : string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < any > {
@@ -3495,15 +3469,10 @@ export default class API {
     };
     registerAccountUsingPOSTURL(parameters: {
         'managedUserVm': ManagedUserVM,
-        'recaptchaToken' ? : string,
         $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/register';
-
-        if (parameters['recaptchaToken'] !== undefined) {
-            queryParameters['recaptchaToken'] = parameters['recaptchaToken'];
-        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -3520,11 +3489,9 @@ export default class API {
      * @method
      * @name API#registerAccountUsingPOST
      * @param {} managedUserVm - managedUserVM
-     * @param {string} recaptchaToken - recaptchaToken
      */
     registerAccountUsingPOSTWithHttpInfo(parameters: {
         'managedUserVm': ManagedUserVM,
-        'recaptchaToken' ? : string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < request.Response > {
@@ -3549,10 +3516,6 @@ export default class API {
                 return;
             }
 
-            if (parameters['recaptchaToken'] !== undefined) {
-                queryParameters['recaptchaToken'] = parameters['recaptchaToken'];
-            }
-
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
                     var parameter = parameters.$queryParameters[parameterName];
@@ -3570,11 +3533,9 @@ export default class API {
      * @method
      * @name API#registerAccountUsingPOST
      * @param {} managedUserVm - managedUserVM
-     * @param {string} recaptchaToken - recaptchaToken
      */
     registerAccountUsingPOST(parameters: {
         'managedUserVm': ManagedUserVM,
-        'recaptchaToken' ? : string,
         $queryParameters ? : any,
         $domain ? : string
     }): Promise < any > {
