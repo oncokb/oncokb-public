@@ -35,8 +35,7 @@ public class ApplicationProperties {
     private String githubToken;
     private Boolean dbReadOnly;
     private SmartsheetProperties smartsheet;
-    private String recaptchaProjectId;
-    private String recaptchaSiteKey;
+    private RecaptchaProperties recaptcha;
 
     public String getName() {
         return name;
@@ -181,20 +180,12 @@ public class ApplicationProperties {
         this.smartsheet = smartsheet;
     }
 
-    public void setRecaptchaProjectId(String recaptchaProjectId) {
-        this.recaptchaProjectId = recaptchaProjectId;
+    public RecaptchaProperties getRecaptcha() {
+        return recaptcha;
     }
 
-    public String getRecaptchaProjectId() {
-        return this.recaptchaProjectId;
-    }
-
-    public void setRecaptchaSiteKey(String recaptchaSiteKey) {
-        this.recaptchaSiteKey = recaptchaSiteKey;
-    }
-
-    public String getRecaptchaSiteKey() {
-        return this.recaptchaSiteKey;
+    public void setRecaptcha(RecaptchaProperties recaptcha) {
+        this.recaptcha = recaptcha;
     }
 
 }

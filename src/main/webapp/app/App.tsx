@@ -62,8 +62,6 @@ class App extends React.Component {
       setRecaptchaToken(token);
       this.recaptchaToken = token;
     });
-    // console.log("token value")
-    // console.log(token)
     this.stores.appStore.recaptchaVerified = true;
   }
 

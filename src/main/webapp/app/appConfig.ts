@@ -9,6 +9,9 @@ type ServerConfig = {
   googleAnalyticsProjectId: string;
   sentryProjectId: string;
   readonly: boolean;
+  recaptchaProjectId: string;
+  recaptchaSiteKey: string;
+  recaptchaThreshold: number;
 };
 
 interface IAppConfig {

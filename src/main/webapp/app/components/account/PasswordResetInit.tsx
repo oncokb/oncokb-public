@@ -8,6 +8,7 @@ import { observer } from 'mobx-react';
 import { API_CALL_STATUS } from 'app/config/constants';
 import autobind from 'autobind-decorator';
 import ReCAPTCHA from 'app/shared/recaptcha/recaptcha';
+import { setRecaptchaToken } from 'app/indexUtils';
 
 @observer
 export class PasswordResetInit extends React.Component<{}> {
@@ -18,6 +19,7 @@ export class PasswordResetInit extends React.Component<{}> {
   @action
   async resetPassword(event: any, values: any) {
     const token: string = await this.recaptcha.getToken();
+    setRecaptchaToken(token);
     if (values.email) {
       client
         .requestPasswordResetUsingPOST({

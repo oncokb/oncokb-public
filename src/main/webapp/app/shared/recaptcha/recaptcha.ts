@@ -1,4 +1,5 @@
 import { RECAPTCHA_ENTERPRISE_SITE_KEY } from 'app/config/constants';
+import { AppConfig } from 'app/appConfig';
 
 declare global {
   interface Window {
@@ -19,8 +20,9 @@ export default class ReCAPTCHA {
   siteKey: string;
 
   constructor() {
-    loadReCaptcha(RECAPTCHA_ENTERPRISE_SITE_KEY);
-    this.siteKey = RECAPTCHA_ENTERPRISE_SITE_KEY;
+    this.siteKey = AppConfig.serverConfig.recaptchaSiteKey;
+    loadReCaptcha(this.siteKey);
+    // this.siteKey = RECAPTCHA_ENTERPRISE_SITE_KEY;
   }
 
   async getToken(): Promise<string> {

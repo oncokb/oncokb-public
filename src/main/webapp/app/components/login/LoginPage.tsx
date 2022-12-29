@@ -22,6 +22,7 @@ import {
 } from 'app/config/constants';
 import { TrialActivationPageLink } from 'app/shared/utils/UrlUtils';
 import ReCAPTCHA from 'app/shared/recaptcha/recaptcha';
+import { setRecaptchaToken } from 'app/indexUtils';
 export interface ILoginProps {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
@@ -40,6 +41,7 @@ export default class LoginPage extends React.Component<ILoginProps> {
   resentEmail = async () => {
     this.resendingVerification = true;
     const token: string = await this.recaptcha.getToken();
+    setRecaptchaToken(token);
     client
       .resendVerificationUsingPOST({
         loginVm: this.savedCredential,
