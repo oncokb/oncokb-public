@@ -38,17 +38,13 @@ public class CreateAssessment {
    * Create an assessment to analyze the risk of an UI action. Assessment approach
    * is the same for
    * both 'score' and 'checkbox' type recaptcha site keys.
-   *
-   * @param recaptchaToken           : The token obtained from the client on passing the
-   *                        recaptchaSiteKey.
-   * @param recaptchaAction : Action name corresponding to the token.
    * @return
    * @throws ValidationException
    */
-  public static ResponseEntity<String> createAssessment(HttpServletRequest request, @RequestParam String recaptchaToken, String recaptchaAction)
+  public static ResponseEntity<String> createAssessment(HttpServletRequest request)
       throws IOException, ValidationException {
 
-    String token = request.getHeader("g-recaptcha-response");
+    String recaptchaToken = request.getHeader("g-recaptcha-response");
 
     try (RecaptchaEnterpriseServiceClient client = RecaptchaEnterpriseServiceClient.create()) {
 
