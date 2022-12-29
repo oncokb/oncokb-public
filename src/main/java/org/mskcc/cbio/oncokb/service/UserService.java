@@ -391,6 +391,9 @@ public class UserService {
                     user.setEmail(userDTO.getEmail().toLowerCase());
                 }
                 user.setImageUrl(userDTO.getImageUrl());
+                user.setActivationKey(userDTO.getActivationKey());
+                user.setResetKey(userDTO.getResetKey());
+                user.setResetDate(userDTO.getResetDate());
                 if (userDTO.isActivated() != user.getActivated()) {
                     user.setActivated(userDTO.isActivated());
                     user.setActivationKey(null);

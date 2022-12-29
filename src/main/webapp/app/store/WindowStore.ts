@@ -59,10 +59,7 @@ class WindowStore {
 
   @computed
   get baseUrl() {
-    return (
-      window.location.hostname +
-      (window.location.port ? `:${window.location.port}` : '')
-    );
+    return window.location.origin;
   }
 }
 

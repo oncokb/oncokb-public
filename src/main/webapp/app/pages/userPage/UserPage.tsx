@@ -69,7 +69,6 @@ import DocumentTitle from 'react-document-title';
 import { Link } from 'react-router-dom';
 import { RouterStore } from 'mobx-react-router';
 import { SHORT_TEXT_VAL, TEXT_VAL } from 'app/shared/utils/FormValidationUtils';
-import classnames from 'classnames';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import ButtonWithTooltip from 'app/shared/button/ButtonWithTooltip';
 import {
@@ -78,6 +77,12 @@ import {
 } from 'app/pages/usageAnalysisPage/UsageAnalysisPage';
 import UserUsageDetailsTable from 'app/pages/usageAnalysisPage/UserUsageDetailsTable';
 import { DateSelector } from 'app/components/dateSelector/DateSelector';
+import { KeyInputGroups } from 'app/pages/userPage/KeyInputGroups';
+import { Input, Label } from 'reactstrap';
+import {
+  getAccountActivationLink,
+  getPasswordResetLink,
+} from 'app/shared/utils/UrlUtils';
 
 export enum AccountStatus {
   ACTIVATED = 'Activated',
@@ -109,6 +114,16 @@ const BoldAccountTitle: React.FunctionComponent<{
     </span>
   );
 };
+
+enum SimpleConfirmModalType {
+  NA,
+  DELETE_ACCOUNT,
+  INITIATE_TRIAL,
+  DELETE_ACTIVATION_KEY,
+  DELETE_RESET_KEY,
+  GENERATE_RESET_KEY,
+}
+
 @inject('windowStore', 'routing', 'authenticationStore')
 @observer
 export default class UserPage extends React.Component<IUserPage> {
@@ -120,8 +135,9 @@ export default class UserPage extends React.Component<IUserPage> {
   @observable userUsage: UserUsage;
   @observable getUserStatus: PromiseStatus;
   @observable showTrialAccountModal = false;
-  @observable showTrialAccountConfirmModal = false;
-  @observable showDeleteAccountConfirmModal = false;
+  @observable showSimpleConfirmModal = false;
+  @observable simpleConfirmModalType: SimpleConfirmModalType =
+    SimpleConfirmModalType.NA;
 
   private defaultPageSize = 5;
 
@@ -136,6 +152,16 @@ export default class UserPage extends React.Component<IUserPage> {
           this.selectedAccountType = newDefault;
         },
         true
+      )
+    );
+    this.reactions.push(
+      reaction(
+        () => this.simpleConfirmModalType,
+        newDefault => {
+          this.showSimpleConfirmModal =
+            newDefault !== SimpleConfirmModalType.NA;
+        },
+        false
       )
     );
     this.getUser();
@@ -311,6 +337,76 @@ export default class UserPage extends React.Component<IUserPage> {
   }
 
   @autobind
+  updateUserUsingPUT(updatedUser: UserDTO, tokenValidDays?: number) {
+    client
+      .updateUserUsingPUT({
+        userDto: updatedUser,
+        sendEmail: false,
+        unlinkUser: false,
+      })
+      .then(
+        (updatedUserDTO: UserDTO) => {
+          const tokenIsRenewable =
+            this.selectedAccountType !== AccountType.TRIAL;
+          let updatedTokenValidDays: number | undefined;
+          if (tokenValidDays) {
+            updatedTokenValidDays = Number(tokenValidDays);
+          }
+          notifySuccess('Updated User');
+          this.user = updatedUserDTO;
+          this.getUserStatus = PromiseStatus.complete;
+          client
+            .getUserTokensUsingGET({
+              login: updatedUserDTO.login,
+            })
+            .then(
+              tokens => {
+                this.userTokens = tokens;
+                tokens.forEach(token => {
+                  if (
+                    token.renewable !== tokenIsRenewable ||
+                    updatedTokenValidDays !== undefined
+                  ) {
+                    const now = new Date(Date.now());
+                    if (updatedTokenValidDays) {
+                      now.setDate(now.getDate() + updatedTokenValidDays);
+                    }
+                    client
+                      .updateTokenUsingPUT({
+                        token: {
+                          ...token,
+                          renewable: tokenIsRenewable,
+                          expiration: tokenValidDays
+                            ? now.toISOString()
+                            : token.expiration,
+                        },
+                      })
+                      .then(
+                        () => {
+                          notifySuccess('Updated Token');
+                        },
+                        (error: Error) => {
+                          this.getUserStatus = PromiseStatus.error;
+                          notifyError(error);
+                        }
+                      );
+                  }
+                });
+              },
+              (error: Error) => {
+                this.getUserStatus = PromiseStatus.error;
+                notifyError(error);
+              }
+            );
+        },
+        (error: Error) => {
+          this.getUserStatus = PromiseStatus.error;
+          notifyError(error);
+        }
+      );
+  }
+
+  @autobind
   @action
   async updateUser(event: any, values: any) {
     if (this.user) {
@@ -332,6 +428,9 @@ export default class UserPage extends React.Component<IUserPage> {
         authorities: values.authorities,
         activated: values.accountStatus === AccountStatus.ACTIVATED,
         jobTitle: values.jobTitle,
+        activationKey: values.activationKey,
+        resetKey: values.resetKey,
+        resetDate: values.resetDate,
         companyName: this.user.company
           ? this.user.company.name
           : values.company,
@@ -341,72 +440,7 @@ export default class UserPage extends React.Component<IUserPage> {
       };
       this.getUserStatus = PromiseStatus.pending;
       await this.verifyUserEmail();
-      client
-        .updateUserUsingPUT({
-          userDto: updatedUser,
-          sendEmail: false,
-          unlinkUser: false,
-        })
-        .then(
-          (updatedUserDTO: UserDTO) => {
-            const tokenIsRenewable =
-              this.selectedAccountType !== AccountType.TRIAL;
-            let tokenValidDays: number | undefined;
-            if (values.tokenValidDays) {
-              tokenValidDays = Number(values.tokenValidDays);
-            }
-            notifySuccess('Updated User');
-            this.user = updatedUserDTO;
-            this.getUserStatus = PromiseStatus.complete;
-            client
-              .getUserTokensUsingGET({
-                login: updatedUserDTO.login,
-              })
-              .then(
-                tokens => {
-                  this.userTokens = tokens;
-                  tokens.forEach(token => {
-                    if (
-                      token.renewable !== tokenIsRenewable ||
-                      tokenValidDays !== undefined
-                    ) {
-                      const now = new Date(Date.now());
-                      if (tokenValidDays) {
-                        now.setDate(now.getDate() + tokenValidDays);
-                      }
-                      client
-                        .updateTokenUsingPUT({
-                          token: {
-                            ...token,
-                            renewable: tokenIsRenewable,
-                            expiration: tokenValidDays
-                              ? now.toISOString()
-                              : token.expiration,
-                          },
-                        })
-                        .then(
-                          () => {
-                            notifySuccess('Updated Token');
-                          },
-                          (error: Error) => {
-                            this.getUserStatus = PromiseStatus.error;
-                            notifyError(error);
-                          }
-                        );
-                    }
-                  });
-                },
-                (error: Error) => {
-                  this.getUserStatus = PromiseStatus.error;
-                  notifyError(error);
-                }
-              );
-          },
-          (error: Error) => {
-            this.getUserStatus = PromiseStatus.error;
-            notifyError(error);
-          }
-        );
+      this.updateUserUsingPUT(updatedUser, values.tokenValidDays);
     }
   }
 
@@ -470,19 +504,45 @@ export default class UserPage extends React.Component<IUserPage> {
     if (this.trialInitiated) {
       this.showTrialAccountModal = true;
     } else {
-      this.showTrialAccountConfirmModal = true;
+      this.simpleConfirmModalType = SimpleConfirmModalType.INITIATE_TRIAL;
     }
   }
 
   @autobind
+  onConfirmSimpleConfirmModel() {
+    switch (this.simpleConfirmModalType) {
+      case SimpleConfirmModalType.INITIATE_TRIAL:
+        this.onConfirmInitiateTrialAccountButton();
+        break;
+      case SimpleConfirmModalType.DELETE_ACCOUNT:
+        this.onConfirmDeleteAccountButton();
+        break;
+      case SimpleConfirmModalType.DELETE_ACTIVATION_KEY:
+        delete this.user.activationKey;
+        this.updateUserUsingPUT(this.user);
+        break;
+      case SimpleConfirmModalType.DELETE_RESET_KEY:
+        delete this.user.resetKey;
+        delete this.user.resetDate;
+        this.updateUserUsingPUT(this.user);
+        break;
+      case SimpleConfirmModalType.GENERATE_RESET_KEY:
+        this.generateResetKey();
+        break;
+      case SimpleConfirmModalType.NA:
+      default:
+        break;
+    }
+    this.simpleConfirmModalType = SimpleConfirmModalType.NA;
+  }
+
+  @autobind
   onConfirmInitiateTrialAccountButton() {
-    this.showTrialAccountConfirmModal = false;
     this.generateTrialActivationKey();
   }
 
   @autobind
   onConfirmDeleteAccountButton() {
-    this.showDeleteAccountConfirmModal = false;
     client.deleteUserUsingDELETE({ login: this.user.login }).then(
       deletedUser => {
         notifySuccess(
@@ -516,6 +576,30 @@ export default class UserPage extends React.Component<IUserPage> {
       : 'Generate Trial Activation Link';
   }
 
+  generateActivationKeyInfoOverlay() {
+    return (
+      <>
+        <b>Account Activation Link</b>
+        <div>
+          {this.props.windowStore.baseUrl}
+          {getAccountActivationLink(this.user.activationKey, this.user.login)}
+        </div>
+      </>
+    );
+  }
+
+  generateResetKeyInfoOverlay() {
+    return (
+      <>
+        <b>Password Reset Link</b>
+        <div>
+          {this.props.windowStore.baseUrl}
+          {getPasswordResetLink(this.user.resetKey)}
+        </div>
+      </>
+    );
+  }
+
   render() {
     return (
       <If condition={this.getUserStatus === PromiseStatus.pending}>
@@ -532,15 +616,12 @@ export default class UserPage extends React.Component<IUserPage> {
                 <DocumentTitle
                   title={`${this.user.firstName} ${this.user.lastName}`}
                 >
-                  <AvForm onValidSubmit={this.updateUser}>
+                  <AvForm onValidSubmit={this.updateUser} model={this.user}>
                     <div>
                       <Row className={getSectionClassName()}>
                         <Col>
                           <div>Quick Tools</div>
                           <div>
-                            <QuickToolButton onClick={this.generateResetKey}>
-                              Generate Reset Key
-                            </QuickToolButton>
                             <QuickToolButton
                               onClick={this.onClickTrialAccountButton}
                             >
@@ -569,15 +650,6 @@ export default class UserPage extends React.Component<IUserPage> {
                             >
                               Send Email
                             </QuickToolButton>
-                            <SimpleConfirmModal
-                              show={this.showTrialAccountConfirmModal}
-                              onCancel={() =>
-                                (this.showTrialAccountConfirmModal = false)
-                              }
-                              onConfirm={
-                                this.onConfirmInitiateTrialAccountButton
-                              }
-                            />
                             {this.user.additionalInfo?.trialAccount ? (
                               <TrialAccountModal
                                 baseUrl={this.props.windowStore.baseUrl}
@@ -683,22 +755,36 @@ export default class UserPage extends React.Component<IUserPage> {
                             value={this.user.lastModifiedDate}
                             disabled
                           />
-                          <AvField
-                            name="activationKey"
-                            label={<b>Activation Key</b>}
-                            value={this.user.activationKey}
-                            disabled
+                          <Label>
+                            <b>Activation Key</b>
+                          </Label>
+                          <KeyInputGroups
+                            keyVal={this.user.activationKey}
+                            infoOverlay={this.generateActivationKeyInfoOverlay()}
+                            onDelete={() => {
+                              this.simpleConfirmModalType =
+                                SimpleConfirmModalType.DELETE_ACTIVATION_KEY;
+                            }}
                           />
-                          <AvField
-                            name="resetKey"
-                            label={<b>Reset Key</b>}
-                            value={this.user.resetKey}
-                            disabled
+                          <Label>
+                            <b>Reset Key</b>
+                          </Label>
+                          <KeyInputGroups
+                            keyVal={this.user.resetKey}
+                            infoOverlay={this.generateResetKeyInfoOverlay()}
+                            onCreate={() => {
+                              this.simpleConfirmModalType =
+                                SimpleConfirmModalType.GENERATE_RESET_KEY;
+                            }}
+                            onDelete={() => {
+                              this.simpleConfirmModalType =
+                                SimpleConfirmModalType.DELETE_RESET_KEY;
+                            }}
                           />
                           <AvField
                             name="resetDate"
                             label={<b>Reset Date</b>}
-                            value={this.user.resetDate}
+                            value={this.user.resetDate || ''}
                             disabled
                           />
                         </Col>
@@ -974,18 +1060,21 @@ export default class UserPage extends React.Component<IUserPage> {
                           <div>
                             <Button
                               variant="danger"
-                              onClick={() =>
-                                (this.showDeleteAccountConfirmModal = true)
-                              }
+                              onClick={() => {
+                                this.simpleConfirmModalType =
+                                  SimpleConfirmModalType.DELETE_ACCOUNT;
+                              }}
                             >
                               Delete Account
                             </Button>
                             <SimpleConfirmModal
-                              show={this.showDeleteAccountConfirmModal}
+                              key={'user-page-simple-confirm-modal'}
+                              show={this.showSimpleConfirmModal}
                               onCancel={() =>
-                                (this.showDeleteAccountConfirmModal = false)
+                                (this.simpleConfirmModalType =
+                                  SimpleConfirmModalType.NA)
                               }
-                              onConfirm={this.onConfirmDeleteAccountButton}
+                              onConfirm={this.onConfirmSimpleConfirmModel}
                             />
                           </div>
                         </Col>

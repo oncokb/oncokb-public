@@ -47,6 +47,7 @@ const InfoIcon: React.FunctionComponent<{
     <DefaultTooltip
       overlay={props.overlay ? props.overlay : <span></span>}
       placement={props.placement}
+      disabled={!props.overlay}
     >
       {getIcon()}
     </DefaultTooltip>
