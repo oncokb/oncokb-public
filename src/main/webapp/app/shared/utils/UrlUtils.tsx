@@ -1,21 +1,13 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
 import {
-  ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_REFERENCE_GENOME,
-  DELETION,
-  FUSIONS,
-  LEVEL_CLASSIFICATION,
-  LEVELS,
-  ONCOGENIC_MUTATIONS,
   ONCOKB_TM,
   PAGE_ROUTE,
   REFERENCE_GENOME,
   REGEXP,
   REGEXP_LINK,
-  SEARCH_QUERY_KEY,
   SOP_LINK,
-  TRUNCATING_MUTATIONS,
   YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
 import _ from 'lodash';
@@ -38,8 +30,6 @@ import {
 } from 'app/shared/route/types';
 import * as QueryString from 'querystring';
 import { LEVEL_TYPE_TO_VERSION, Version } from 'app/pages/LevelOfEvidencePage';
-import { EnsemblGene } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import InfoIcon from 'app/shared/icons/InfoIcon';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -244,4 +234,14 @@ export const TrialActivationPageLink: React.FunctionComponent<{
       Go to trial license agreement
     </Link>
   );
+};
+
+export const getAccountActivationLink = (
+  activationKey: string,
+  login: string
+) => {
+  return `${PAGE_ROUTE.ACCOUNT_VERIFY}?key=${activationKey}&login=${login}`;
+};
+export const getPasswordResetLink = (resetKey: string) => {
+  return `${PAGE_ROUTE.ACCOUNT_PASSWORD_RESET_FINISH}?key=${resetKey}`;
 };
