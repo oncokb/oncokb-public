@@ -494,7 +494,7 @@ export default class UserPage extends React.Component<IUserPage> {
   }
 
   @autobind
-  onConfirmSimpleConfirmModel() {
+  onConfirmSimpleConfirmModal() {
     switch (this.simpleConfirmModalType) {
       case SimpleConfirmModalType.INITIATE_TRIAL:
         this.onConfirmInitiateTrialAccountButton();
@@ -1059,7 +1059,7 @@ export default class UserPage extends React.Component<IUserPage> {
                                 (this.simpleConfirmModalType =
                                   SimpleConfirmModalType.NA)
                               }
-                              onConfirm={this.onConfirmSimpleConfirmModel}
+                              onConfirm={this.onConfirmSimpleConfirmModal}
                             />
                           </div>
                         </Col>
