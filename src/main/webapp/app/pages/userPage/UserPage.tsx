@@ -324,18 +324,6 @@ export default class UserPage extends React.Component<IUserPage> {
     );
   }
 
-  @action.bound
-  async verifyUserEmail() {
-    try {
-      await client.activateAccountUsingGET({
-        key: this.user.activationKey,
-        login: this.user.login,
-      });
-    } catch (error) {
-      return notifyError(error);
-    }
-  }
-
   @autobind
   updateUserUsingPUT(updatedUser: UserDTO, tokenValidDays?: number) {
     client
@@ -408,7 +396,7 @@ export default class UserPage extends React.Component<IUserPage> {
 
   @autobind
   @action
-  async updateUser(event: any, values: any) {
+  updateUser(event: any, values: any) {
     if (this.user) {
       const updatedUserCompany: UserCompany = {
         ...this.user.additionalInfo?.userCompany,
@@ -428,8 +416,6 @@ export default class UserPage extends React.Component<IUserPage> {
         authorities: values.authorities,
         activated: values.accountStatus === AccountStatus.ACTIVATED,
         jobTitle: values.jobTitle,
-        activationKey: values.activationKey,
-        resetKey: values.resetKey,
         resetDate: values.resetDate,
         companyName: this.user.company
           ? this.user.company.name
@@ -439,7 +425,6 @@ export default class UserPage extends React.Component<IUserPage> {
         country: values.country,
       };
       this.getUserStatus = PromiseStatus.pending;
-      await this.verifyUserEmail();
       this.updateUserUsingPUT(updatedUser, values.tokenValidDays);
     }
   }
