@@ -588,7 +588,6 @@ export default class UserPage extends React.Component<IUserPage> {
                                 onClose={() =>
                                   (this.showTrialAccountModal = false)
                                 }
-                                onRegenerate={this.generateTrialActivationKey}
                               />
                             ) : null}
                           </div>

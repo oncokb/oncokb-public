@@ -11,7 +11,6 @@ export const TrialAccountModal: React.FunctionComponent<{
   trialAccount: TrialAccount;
   show: boolean;
   onClose?: () => void;
-  onRegenerate?: () => void;
 }> = props => {
   const onClose = (event?: any) => {
     if (event) event.preventDefault();
@@ -97,14 +96,6 @@ export const TrialAccountModal: React.FunctionComponent<{
       <Modal.Footer>
         <Button variant="secondary" onClick={(event: any) => onClose(event)}>
           Close
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => {
-            if (props.onRegenerate) props.onRegenerate();
-          }}
-        >
-          Reinitiate
         </Button>
       </Modal.Footer>
     </Modal>
