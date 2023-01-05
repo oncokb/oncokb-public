@@ -24,6 +24,7 @@ import {
   GenePageLink,
   MSILink,
   SopPageLink,
+  YearEndReviewPageLink,
 } from 'app/shared/utils/UrlUtils';
 import { PMIDLink } from 'app/shared/links/PMIDLink';
 import { Linkout } from 'app/shared/links/Linkout';
@@ -161,6 +162,15 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '01052023': {
+    news: [
+      <span>
+        Happy New Year! 2022 brought many changes to the landscape of precision
+        oncology. The OncoKB 2022 year in review can be found{' '}
+        <YearEndReviewPageLink year={'2022'}>HERE</YearEndReviewPageLink>.
+      </span>,
+    ],
+  },
   '12222022': {
     priorityNews: [
       <span>

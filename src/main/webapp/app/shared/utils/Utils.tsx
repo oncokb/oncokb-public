@@ -605,7 +605,7 @@ export function decodeSlash(content: string | undefined) {
   return content ? content.replace(SLASH_HTML_ENTITY_CODE, '/') : content;
 }
 
-export const scrollWidthOffsetInNews = (el?: any) => {
+export const scrollWidthOffset = (el?: any) => {
   const yCoordinate =
     el === undefined ? 0 : el.getBoundingClientRect().top + window.pageYOffset;
   const yOffset = -80;

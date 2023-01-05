@@ -47,6 +47,8 @@ export const APP_WHOLE_NUMBER_FORMAT = '0,0';
 export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
 export const NEWS_DATE_FORMAT = 'MMDDYYYY';
 export const NEWS_TITLE_DATE_FORMAT = 'MMMM D, YYYY';
+export const YEAR_END_REVIEW_DATE_FORMAT = 'YYYY';
+export const YEAR_END_REVIEW_TITLE_DATE_FORMAT = 'YYYY';
 export const TABLE_MONTH_FORMAT = 'YYYY-MM';
 export const TABLE_DAY_FORMAT = 'YYYY-MM-DD';
 
@@ -473,6 +475,7 @@ export enum PAGE_TITLE {
   REGISTER = 'Register',
   TERMS = 'Terms of Use',
   SOP = 'SOP',
+  YEAR_END_REVIEW = 'Year End Review',
 }
 
 export enum PAGE_ROUTE {
@@ -493,6 +496,7 @@ export enum PAGE_ROUTE {
   TERMS = '/terms',
   SOP = '/sop',
   TEAM = '/team',
+  YEAR_END_REVIEW = '/year-end-review',
   NEWS = '/news',
   FDA_RECOGNITION = '/fda-recognition',
   LEVELS = '/levels',
@@ -669,6 +673,7 @@ export enum DOCUMENT_TITLES {
   ABOUT = 'About',
   ACTIONABLE_GENES = 'Actionable Genes',
   TERMS = 'Terms of Use',
+  YEAR_END_REVIEW = 'Year End Review',
   NEWS = 'Latest News',
   API_ACCESS = 'API Access',
   CANCER_GENES = 'Cancer Gene List',

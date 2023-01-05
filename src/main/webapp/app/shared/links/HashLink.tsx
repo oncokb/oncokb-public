@@ -1,7 +1,7 @@
 import React from 'react';
 import { observable } from 'mobx';
 import { HashLink as Link } from 'react-router-hash-link';
-import { scrollWidthOffsetInNews } from 'app/shared/utils/Utils';
+import { scrollWidthOffset } from 'app/shared/utils/Utils';
 
 export default class HashLink extends React.Component<{
   path: string;
@@ -19,8 +19,11 @@ export default class HashLink extends React.Component<{
         }}
       >
         <Link
-          to={`${this.props.path}#${this.props.hash}`}
-          scroll={scrollWidthOffsetInNews}
+          to={{
+            pathname: this.props.path,
+            hash: this.props.hash,
+          }}
+          scroll={scrollWidthOffset}
         >
           #
         </Link>
