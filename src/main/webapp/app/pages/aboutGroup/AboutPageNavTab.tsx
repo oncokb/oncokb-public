@@ -3,7 +3,7 @@ import { Row, Col, Tab, Nav } from 'react-bootstrap';
 import AppStore from 'app/store/AppStore';
 import { inject, observer } from 'mobx-react';
 import { ONCOKB_TM, PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
-import { observable, IReactionDisposer, reaction } from 'mobx';
+import { observable, IReactionDisposer, reaction, computed } from 'mobx';
 import { RouterStore } from 'mobx-react-router';
 import { AboutPage } from 'app/pages/AboutPage';
 import { TeamPage } from 'app/pages/teamPage/TeamPage';
@@ -58,6 +58,11 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
         },
         { fireImmediately: true }
       );
+  }
+
+  @computed
+  get inYearEndReviewSection() {
+    return this.selectedTab.startsWith(PAGE_ROUTE.YEAR_END_REVIEW);
   }
 
   getHistoryBySelectedTab(newSelectedTab: string): LocationDescriptorObject {
@@ -136,8 +141,8 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                     {PAGE_TITLE.YEAR_END_REVIEW}
                   </Nav.Link>
                 </Nav.Item>
-                <>
-                  {YEAR_END_REVIEW_RANGE.map(year => {
+                {this.inYearEndReviewSection &&
+                  YEAR_END_REVIEW_RANGE.map(year => {
                     const key = this.getYearEndReviewEventKey(year);
                     return (
                       <Nav.Item key={key}>
@@ -145,7 +150,6 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                       </Nav.Item>
                     );
                   })}
-                </>
               </Nav>
             </Col>
             <Col sm={10}>
@@ -186,14 +190,15 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                 >
                   <YearEndReviewPage />
                 </Tab.Pane>
-                {YEAR_END_REVIEW_RANGE.map(year => {
-                  const key = this.getYearEndReviewEventKey(year);
-                  return (
-                    <Tab.Pane eventKey={key} key={key} unmountOnExit>
-                      <YearEndReviewPage selectedYear={year} />
-                    </Tab.Pane>
-                  );
-                })}
+                {this.inYearEndReviewSection &&
+                  YEAR_END_REVIEW_RANGE.map(year => {
+                    const key = this.getYearEndReviewEventKey(year);
+                    return (
+                      <Tab.Pane eventKey={key} key={key} unmountOnExit>
+                        <YearEndReviewPage selectedYear={year} />
+                      </Tab.Pane>
+                    );
+                  })}
               </Tab.Content>
             </Col>
           </Row>

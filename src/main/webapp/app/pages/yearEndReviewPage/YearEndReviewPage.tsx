@@ -4,7 +4,7 @@ import DocumentTitle from 'react-document-title';
 import {
   DOCUMENT_TITLES,
   PAGE_ROUTE,
-  YEAR_END_REVIEW__TITLE_DATE_FORMAT,
+  YEAR_END_REVIEW_TITLE_DATE_FORMAT,
   YEAR_END_REVIEW_DATE_FORMAT,
 } from 'app/config/constants';
 import HashLink from 'app/shared/links/HashLink';
@@ -17,7 +17,7 @@ import { scrollWidthOffset } from 'app/shared/utils/Utils';
 
 const getTitle = (date: string) => {
   return moment(date, YEAR_END_REVIEW_DATE_FORMAT).format(
-    YEAR_END_REVIEW__TITLE_DATE_FORMAT
+    YEAR_END_REVIEW_TITLE_DATE_FORMAT
   );
 };
 
@@ -40,7 +40,7 @@ export const YearEndReviewPage: React.FunctionComponent<{
 
   return (
     <DocumentTitle title={DOCUMENT_TITLES.YEAR_END_REVIEW}>
-      <div className={'yearEndReview'}>
+      <div>
         <Row>
           <Col>
             <h4>Year End Review</h4>
