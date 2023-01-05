@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { YEAR_END_REVIEW_RANGE } from 'app/pages/aboutGroup/AboutPageNavTab';
-import { TableData } from 'app/pages/yearEndReviewPage/BiomarkerTable';
+import { YEAR_END_SUMMARY_RANGE } from 'app/pages/aboutGroup/AboutPageNavTab';
+import { TableData } from 'app/pages/yearEndSummaryPage/BiomarkerTable';
 import { LEVELS } from 'app/config/constants';
 
-type DataKey = typeof YEAR_END_REVIEW_RANGE[number];
+type DataKey = typeof YEAR_END_SUMMARY_RANGE[number];
 export const DATA: { [key in DataKey]: TableData } = {
   '2022': {
     [LEVELS.Tx1]: [

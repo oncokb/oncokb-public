@@ -7,6 +7,7 @@ export type SimpleTableRow = { key: string; content: SimpleTableCell[] };
 export type SimpleTableRows = SimpleTableRow[];
 export type SimpleTableColumn = {
   size?: number;
+  content?: ElementType;
   name: string;
 };
 export type SimpleTableProps = {
@@ -30,7 +31,12 @@ export const SimpleTable = (props: SimpleTableProps) => {
       <thead className={props.theadClassName}>
         <tr>
           {props.columns.map(column => (
-            <th key={column.name}>{column.name}</th>
+            <th
+              key={column.name}
+              style={column.size ? { width: column.size } : undefined}
+            >
+              {column.content ? column.content : column.name}
+            </th>
           ))}
         </tr>
       </thead>

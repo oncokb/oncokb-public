@@ -9,7 +9,7 @@ import { AboutPage } from 'app/pages/AboutPage';
 import { TeamPage } from 'app/pages/teamPage/TeamPage';
 import Iframe from 'react-iframe';
 import FdaRecognitionPage from 'app/pages/aboutGroup/FdaRecognitionPage';
-import { YearEndReviewPage } from 'app/pages/yearEndReviewPage/YearEndReviewPage';
+import { YearEndSummaryPage } from 'app/pages/yearEndSummaryPage/YearEndSummaryPage';
 import { LocationDescriptorObject } from 'history';
 import classnames from 'classnames';
 
@@ -20,11 +20,11 @@ export enum TabKey {
   TEAM = PAGE_ROUTE.TEAM,
   FDA_RECOGNITION = PAGE_ROUTE.FDA_RECOGNITION,
   SOP = PAGE_ROUTE.SOP,
-  YEAR_END_REVIEW = PAGE_ROUTE.YEAR_END_REVIEW,
+  YEAR_END_SUMMARY = PAGE_ROUTE.YEAR_END_SUMMARY,
 }
 
-export const YEAR_END_REVIEW_RANGE = ['2022'] as const;
-const YEAR_END_REVIEW_KEY_DIVIDER = '+';
+export const YEAR_END_SUMMARY_RANGE = ['2022'] as const;
+const YEAR_END_SUMMARY_KEY_DIVIDER = '+';
 
 @inject('appStore', 'routing')
 @observer
@@ -47,11 +47,11 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
         () => [props.routing.location.pathname],
         ([pathName]) => {
           if (
-            pathName.startsWith(PAGE_ROUTE.YEAR_END_REVIEW) &&
+            pathName.startsWith(PAGE_ROUTE.YEAR_END_SUMMARY) &&
             props.routing.location.hash
           ) {
             const year = props.routing.location.hash.slice(1);
-            this.selectedTab = this.getYearEndReviewEventKey(year);
+            this.selectedTab = this.getYearEndSummaryEventKey(year);
           } else if (Object.keys(TabKey).includes(pathName)) {
             this.selectedTab = pathName;
           }
@@ -61,16 +61,16 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
   }
 
   @computed
-  get inYearEndReviewSection() {
-    return this.selectedTab.startsWith(PAGE_ROUTE.YEAR_END_REVIEW);
+  get inYearEndSummarySection() {
+    return this.selectedTab.startsWith(PAGE_ROUTE.YEAR_END_SUMMARY);
   }
 
   getHistoryBySelectedTab(newSelectedTab: string): LocationDescriptorObject {
-    if (newSelectedTab.startsWith(PAGE_ROUTE.YEAR_END_REVIEW)) {
+    if (newSelectedTab.startsWith(PAGE_ROUTE.YEAR_END_SUMMARY)) {
       const location: LocationDescriptorObject = {
-        pathname: PAGE_ROUTE.YEAR_END_REVIEW,
+        pathname: PAGE_ROUTE.YEAR_END_SUMMARY,
       };
-      const year = this.parseYearEndReviewEventKey(newSelectedTab);
+      const year = this.parseYearEndSummaryEventKey(newSelectedTab);
       if (year !== undefined) {
         location.hash = `#${year}`;
       }
@@ -82,14 +82,14 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
     }
   }
 
-  getYearEndReviewEventKey(year: string | undefined) {
-    return `${TabKey.YEAR_END_REVIEW}${
-      year ? YEAR_END_REVIEW_KEY_DIVIDER + year : ''
+  getYearEndSummaryEventKey(year: string | undefined) {
+    return `${TabKey.YEAR_END_SUMMARY}${
+      year ? YEAR_END_SUMMARY_KEY_DIVIDER + year : ''
     }`;
   }
 
-  parseYearEndReviewEventKey(eventKey: string): string | undefined {
-    const components = eventKey.split(YEAR_END_REVIEW_KEY_DIVIDER);
+  parseYearEndSummaryEventKey(eventKey: string): string | undefined {
+    const components = eventKey.split(YEAR_END_SUMMARY_KEY_DIVIDER);
     if (components.length <= 1) {
       return undefined;
     } else {
@@ -137,13 +137,13 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                   <Nav.Link eventKey={TabKey.SOP}>{PAGE_TITLE.SOP}</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey={TabKey.YEAR_END_REVIEW}>
-                    {PAGE_TITLE.YEAR_END_REVIEW}
+                  <Nav.Link eventKey={TabKey.YEAR_END_SUMMARY}>
+                    {PAGE_TITLE.YEAR_END_SUMMARY}
                   </Nav.Link>
                 </Nav.Item>
-                {this.inYearEndReviewSection &&
-                  YEAR_END_REVIEW_RANGE.map(year => {
-                    const key = this.getYearEndReviewEventKey(year);
+                {this.inYearEndSummarySection &&
+                  YEAR_END_SUMMARY_RANGE.map(year => {
+                    const key = this.getYearEndSummaryEventKey(year);
                     return (
                       <Nav.Item key={key}>
                         <Nav.Link eventKey={key}>{year}</Nav.Link>
@@ -184,18 +184,18 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                   </div>
                 </Tab.Pane>
                 <Tab.Pane
-                  eventKey={TabKey.YEAR_END_REVIEW}
-                  key={TabKey.YEAR_END_REVIEW}
+                  eventKey={TabKey.YEAR_END_SUMMARY}
+                  key={TabKey.YEAR_END_SUMMARY}
                   unmountOnExit
                 >
-                  <YearEndReviewPage />
+                  <YearEndSummaryPage />
                 </Tab.Pane>
-                {this.inYearEndReviewSection &&
-                  YEAR_END_REVIEW_RANGE.map(year => {
-                    const key = this.getYearEndReviewEventKey(year);
+                {this.inYearEndSummarySection &&
+                  YEAR_END_SUMMARY_RANGE.map(year => {
+                    const key = this.getYearEndSummaryEventKey(year);
                     return (
                       <Tab.Pane eventKey={key} key={key} unmountOnExit>
-                        <YearEndReviewPage selectedYear={year} />
+                        <YearEndSummaryPage selectedYear={year} />
                       </Tab.Pane>
                     );
                   })}

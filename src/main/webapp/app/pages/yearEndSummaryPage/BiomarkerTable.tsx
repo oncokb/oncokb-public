@@ -1,14 +1,27 @@
-import { ElementType, SimpleTable } from 'app/components/SimpleTable';
+import {
+  ElementType,
+  SimpleTable,
+  SimpleTableColumn,
+} from 'app/components/SimpleTable';
 import { Col, Row } from 'react-bootstrap';
 import React from 'react';
 import styles from './main.module.scss';
 import { LEVEL_PRIORITY, LEVELS } from 'app/config/constants';
+import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 
 const COLUMNS = [
   { name: 'Molecular Biomarker' },
   { name: 'Cancer Type' },
   { name: 'Drug' },
-  { name: 'Significance (Reason for inclusion in OncoKB)' },
+  {
+    name: 'Significance (Reason for inclusion in OncoKB)',
+    content: (
+      <div className={'text-center'}>
+        <div>Significance</div>
+        <div>(Reason for inclusion in OncoKB)</div>
+      </div>
+    ),
+  },
 ];
 
 const TABLE_TITLE: { [level in LEVELS]?: string } = {

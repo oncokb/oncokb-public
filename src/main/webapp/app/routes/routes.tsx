@@ -139,7 +139,7 @@ const AppRouts = (props: {
           <Route exact path={PAGE_ROUTE.SOP} component={AboutPageNavTab} />
           <Route
             exact
-            path={PAGE_ROUTE.YEAR_END_REVIEW}
+            path={PAGE_ROUTE.YEAR_END_SUMMARY}
             component={AboutPageNavTab}
           />
           <Route exact path={PAGE_ROUTE.NEWS} component={NewsPage} />

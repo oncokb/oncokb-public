@@ -30,7 +30,7 @@ import {
 } from 'app/shared/route/types';
 import * as QueryString from 'querystring';
 import { LEVEL_TYPE_TO_VERSION, Version } from 'app/pages/LevelOfEvidencePage';
-import { YEAR_END_REVIEW_RANGE } from 'app/pages/aboutGroup/AboutPageNavTab';
+import { YEAR_END_SUMMARY_RANGE } from 'app/pages/aboutGroup/AboutPageNavTab';
 
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
@@ -248,9 +248,9 @@ export const getPasswordResetLink = (resetKey: string) => {
 };
 
 export const YearEndReviewPageLink: React.FunctionComponent<{
-  year?: typeof YEAR_END_REVIEW_RANGE[number];
+  year?: typeof YEAR_END_SUMMARY_RANGE[number];
 }> = props => {
-  const link = `${PAGE_ROUTE.YEAR_END_REVIEW}${
+  const link = `${PAGE_ROUTE.YEAR_END_SUMMARY}${
     props.year ? '#' + props.year : ''
   }`;
   return <Link to={link}>{props.children}</Link>;

@@ -166,7 +166,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         Happy New Year! 2022 brought many changes to the landscape of precision
-        oncology. The OncoKB 2022 year in review can be found{' '}
+        oncology. The OncoKB 2022 Year in Summary can be found{' '}
         <YearEndReviewPageLink year={'2022'}>HERE</YearEndReviewPageLink>.
       </span>,
     ],
