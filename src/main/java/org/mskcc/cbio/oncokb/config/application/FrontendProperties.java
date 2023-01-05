@@ -35,6 +35,14 @@ public class FrontendProperties {
         return recaptchaSiteKey;
     }
 
+    public void setRecaptchaEnabled(boolean recaptchaEnabled) {
+        this.recaptchaEnabled = recaptchaEnabled;
+    }
+
+    public boolean getRecaptchaEnabled(){
+        return recaptchaEnabled;
+    }
+
     public String getGoogleAnalyticsProjectId() {
         return googleAnalyticsProjectId;
     }

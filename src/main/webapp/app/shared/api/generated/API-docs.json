@@ -36,6 +36,10 @@
       "description": "Mails Controller"
     },
     {
+      "name": "recaptcha-resource",
+      "description": "Recaptcha Resource"
+    },
+    {
       "name": "token-resource",
       "description": "Token Resource"
     },
@@ -1697,6 +1701,36 @@
           },
           "201": {
             "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/recaptcha/validate": {
+      "get": {
+        "tags": [
+          "recaptcha-resource"
+        ],
+        "summary": "validateRecaptcha",
+        "operationId": "validateRecaptchaUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
           },
           "401": {
             "description": "Unauthorized"
