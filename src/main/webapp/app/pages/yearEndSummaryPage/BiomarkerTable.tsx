@@ -16,7 +16,7 @@ const COLUMNS = [
   {
     name: 'Significance (Reason for inclusion in OncoKB)',
     content: (
-      <div className={'text-center'}>
+      <div style={{ minWidth: 300 }}>
         <div>Significance</div>
         <div>(Reason for inclusion in OncoKB)</div>
       </div>
