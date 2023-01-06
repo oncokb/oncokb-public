@@ -535,7 +535,26 @@ export default class CompanyPage extends React.Component<
                             }
                             validate={{ ...textValidation(0, 255) }}
                           />
-
+                          <div className="form-group">
+                            <div className={'font-weight-bold'}>
+                              License Model
+                            </div>
+                            <AdditionalInfoSelect
+                              name={'licenseModel'}
+                              defaultValue={{
+                                value: this.company.licenseModel,
+                                label:
+                                  LICENSE_MODEL_TITLES[
+                                    this.company.licenseModel
+                                  ],
+                              }}
+                              options={COMPANY_FORM_OPTIONS.licenseModel}
+                              onSelection={(selectedOption: any) => {
+                                this.company.licenseModel =
+                                  selectedOption.value;
+                              }}
+                            />
+                          </div>
                           <FormSelectWithLabelField
                             labelText={'License Type'}
                             name={'licenseType'}
