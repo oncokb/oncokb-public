@@ -45,6 +45,9 @@ public class CreateAssessment {
       throws IOException, ValidationException {
 
     String recaptchaToken = request.getHeader("g-recaptcha-response");
+    if (recaptchaToken == null) {
+      throw new ValidationException("Unable to retrieve recaptcha token. Please try again.");
+    }
 
     try (RecaptchaEnterpriseServiceClient client = RecaptchaEnterpriseServiceClient.create()) {
 
