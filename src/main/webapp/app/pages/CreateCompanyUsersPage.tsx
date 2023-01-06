@@ -44,6 +44,8 @@ type UserInfoType = {
   email: string;
   firstName: string;
   lastName: string;
+  city: string;
+  country: string;
   needsMskRocReview: boolean;
 };
 
@@ -54,10 +56,12 @@ const emptyUserInfo: UserInfoType = {
   email: '',
   firstName: '',
   lastName: '',
-  needsMskRocReview: true,
+  city: '',
+  country: '',
+  needsMskRocReview: false,
 };
 
-const batchUserInputFormatText = `Enter the user informations (one user per line) using the format: email, first name, last name \nie) user@email.com,Sample,User
+const batchUserInputFormatText = `Enter the user information (one user per line) using the format: email, first name, last name, city, country \nie) user@email.com,Sample,User,City,Country
   \nYou can use commas or tabs to seperate each field`;
 
 /* The number of users that can be created at a time */
@@ -117,6 +121,8 @@ export class CreateCompanyUsersPage extends React.Component<
         lastName: userInfo.lastName,
         email: userInfo.email,
         login: userInfo.email,
+        city: userInfo.city,
+        country: userInfo.country,
         password: 'test',
         licenseType: this.company.result?.licenseType,
         tokenIsRenewable:
@@ -199,8 +205,10 @@ export class CreateCompanyUsersPage extends React.Component<
           email: userInfoFields[0] || '',
           firstName: userInfoFields[1] || '',
           lastName: userInfoFields[2] || '',
+          city: userInfoFields[3] || '',
+          country: userInfoFields[4] || '',
           creationStatus: { status },
-          needsMskRocReview: true,
+          needsMskRocReview: false,
         });
         return true;
       }
@@ -310,6 +318,36 @@ export class CreateCompanyUsersPage extends React.Component<
                 />
               </Col>
               <Col>
+                <AvField
+                  name={`city${idx}`}
+                  label={'City'}
+                  value={this.userInfos[idx].city}
+                  onChange={(event: any) => {
+                    this.userInfos[idx].city = event.target.value;
+                  }}
+                  validate={{
+                    ...fieldRequiredValidation('city'),
+                    ...SHORT_TEXT_VAL,
+                  }}
+                  disabled={CreateUserMode[mode] === CreateUserMode.BATCH}
+                />
+              </Col>
+              <Col>
+                <AvField
+                  name={`country${idx}`}
+                  label={'Country'}
+                  value={this.userInfos[idx].country}
+                  onChange={(event: any) => {
+                    this.userInfos[idx].country = event.target.value;
+                  }}
+                  validate={{
+                    ...fieldRequiredValidation('country'),
+                    ...SHORT_TEXT_VAL,
+                  }}
+                  disabled={CreateUserMode[mode] === CreateUserMode.BATCH}
+                />
+              </Col>
+              <Col>
                 <Form.Check
                   inline
                   onClick={() =>
@@ -392,6 +430,14 @@ export class CreateCompanyUsersPage extends React.Component<
                   </Link>
                 </Col>
               </Row>
+              <Row>
+                <Col>
+                  <div className={'alert alert-warning'}>
+                    Only send to MSK ROC review when user resides outside of
+                    United States
+                  </div>
+                </Col>
+              </Row>
               <Row className={getSectionClassName(true)}>
                 <Col>
                   <AvForm onValidSubmit={this.onValidSubmit}>
@@ -418,7 +464,9 @@ export class CreateCompanyUsersPage extends React.Component<
                         <Col>
                           {this.createdUsers[idx].email} (
                           {this.createdUsers[idx].firstName}{' '}
-                          {this.createdUsers[idx].lastName})
+                          {this.createdUsers[idx].lastName}){' '}
+                          {this.createdUsers[idx].city}){' '}
+                          {this.createdUsers[idx].country})
                         </Col>
                       </Row>
                     ))}
