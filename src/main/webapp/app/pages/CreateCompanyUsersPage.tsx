@@ -464,8 +464,10 @@ export class CreateCompanyUsersPage extends React.Component<
                         <Col>
                           {this.createdUsers[idx].email} (
                           {this.createdUsers[idx].firstName}{' '}
-                          {this.createdUsers[idx].lastName}){' '}
-                          {this.createdUsers[idx].city}){' '}
+                          {this.createdUsers[idx].lastName}
+                          {', '}
+                          {this.createdUsers[idx].city}
+                          {', '}
                           {this.createdUsers[idx].country})
                         </Col>
                       </Row>
