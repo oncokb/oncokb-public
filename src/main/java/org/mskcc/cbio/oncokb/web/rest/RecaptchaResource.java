@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * REST controller for managing {@link org.mskcc.cbio.oncokb.domain.Token}.
  * 
  */
 @RestController
@@ -15,8 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 public class RecaptchaResource {
 
     /**
-     * {@code GET  /tokens} : get all the tokens.
+     * {@code GET  /recaptcha/validate} : validate the tokens
      * @throws Exception
+     * @return true if token is validated
      */
     @GetMapping("/recaptcha/validate")
     public boolean validateRecaptcha(HttpServletRequest request) throws Exception {
@@ -29,5 +29,4 @@ public class RecaptchaResource {
             throw new Exception(errorMessage);
         }
     }
-
 }

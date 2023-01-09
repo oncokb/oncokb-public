@@ -6,7 +6,7 @@ import { ContactLink } from '../links/ContactLink';
 import AppStore from 'app/store/AppStore';
 import ReCAPTCHA from '../recaptcha/recaptcha';
 import { setRecaptchaToken } from 'app/indexUtils';
-import client from '../api/oncokbClientInstance';
+import client from 'app/shared/api/clientInstance';
 import { OncoKBError } from '../alert/ErrorAlertUtils';
 import { PAGE_ROUTE } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';

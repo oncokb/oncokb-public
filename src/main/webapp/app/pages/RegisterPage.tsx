@@ -66,8 +66,6 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   readonly reactions: IReactionDisposer[] = [];
 
-  recaptcha = new ReCAPTCHA();
-
   constructor(props: Readonly<IRegisterProps>) {
     super(props);
     this.reactions.push(
@@ -129,9 +127,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   @autobind
   @action
-  async handleValidSubmit(newAccount: Partial<ManagedUserVM>) {
-    const token: string = await this.recaptcha.getToken();
-    setRecaptchaToken(token);
+  handleValidSubmit(newAccount: Partial<ManagedUserVM>) {
     client
       .registerAccountUsingPOST({
         managedUserVm: newAccount as ManagedUserVM,
