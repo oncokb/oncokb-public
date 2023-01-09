@@ -11,7 +11,7 @@ type ServerConfig = {
   readonly: boolean;
   recaptchaProjectId: string;
   recaptchaSiteKey: string;
-  recaptchaThreshold: number;
+  recaptchaThreshold: string;
 };
 
 interface IAppConfig {

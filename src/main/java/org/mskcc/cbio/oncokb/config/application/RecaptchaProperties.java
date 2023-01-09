@@ -3,7 +3,7 @@ package org.mskcc.cbio.oncokb.config.application;
 public class RecaptchaProperties {
     String recaptchaProjectId;
     String recaptchaSiteKey;
-    Long recaptchaThreshold;
+    String recaptchaThreshold;
 
     public String getRecaptchaProjectId() {
         return recaptchaProjectId;
@@ -13,11 +13,11 @@ public class RecaptchaProperties {
         this.recaptchaProjectId = recaptchaProjectId;
     }
 
-    public Long getRecaptchaThreshold() {
+    public String getRecaptchaThreshold() {
         return recaptchaThreshold;
     }
 
-    public void setRecaptchaThreshold(Long recaptchaThreshold) {
+    public void setRecaptchaThreshold(String recaptchaThreshold) {
         this.recaptchaThreshold = recaptchaThreshold;
     }
 

@@ -65,7 +65,7 @@ public class CreateAssessment {
       client.close();
 
       // Check if the token is valid.
-      if (response.getTokenProperties().getValid() && response.getRiskAnalysis().getScore() >= recaptchaProperties.getRecaptchaThreshold()) {
+      if (response.getTokenProperties().getValid() && response.getRiskAnalysis().getScore() >= Long.valueOf(recaptchaProperties.getRecaptchaThreshold())) {
         LOGGER.info("RECAPTCHA TOKEN VERIFIED SUCCESSFULLY. SCORE: " + response.getRiskAnalysis().getScore());
         return new ResponseEntity<>("Recaptcha successfully validated", HttpStatus.OK);
       } else {
