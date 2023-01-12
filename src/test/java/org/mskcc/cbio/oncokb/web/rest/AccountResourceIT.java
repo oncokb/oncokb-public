@@ -131,7 +131,8 @@ public class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(validUser)))
+                .content(TestUtil.convertObjectToJsonBytes(validUser))
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isCreated());
 
         assertThat(userRepository.findOneWithAuthoritiesByLogin("test-register-valid").isPresent()).isTrue();
@@ -154,7 +155,8 @@ public class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser))
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("funky@example.com");
@@ -178,7 +180,8 @@ public class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser))
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneWithAuthoritiesByLogin("bob");
@@ -202,7 +205,8 @@ public class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser))
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneWithAuthoritiesByLogin("bob");
@@ -226,7 +230,8 @@ public class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser))
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneWithAuthoritiesByLogin("bob");
@@ -266,7 +271,8 @@ public class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(firstUser)))
+                .content(TestUtil.convertObjectToJsonBytes(firstUser))
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isCreated());
 
         Optional<User> testUser1 = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("alice@example.com");
@@ -276,7 +282,8 @@ public class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser)))
+                .content(TestUtil.convertObjectToJsonBytes(secondUser))
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().is4xxClientError());
 
         Optional<User> testUser2 = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("alice2@example.com");
@@ -301,7 +308,8 @@ public class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(firstUser)))
+                .content(TestUtil.convertObjectToJsonBytes(firstUser))
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isCreated());
 
         Optional<User> testUser1 = userRepository.findOneWithAuthoritiesByLogin("test-register-duplicate-email");
@@ -322,7 +330,8 @@ public class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser)))
+                .content(TestUtil.convertObjectToJsonBytes(secondUser))
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isBadRequest());
 
         Optional<User> testUser2 = userRepository.findOneWithAuthoritiesByLogin("test-register-duplicate-email");
@@ -347,7 +356,8 @@ public class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail)))
+                .content(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail))
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isBadRequest());
 
         Optional<User> testUser4 = userRepository.findOneWithAuthoritiesByLogin("test-register-duplicate-email-3");
@@ -371,7 +381,8 @@ public class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(validUser)))
+                .content(TestUtil.convertObjectToJsonBytes(validUser))
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isCreated());
 
         Optional<User> userDup = userRepository.findOneWithAuthoritiesByLogin("badguy");
@@ -704,7 +715,7 @@ public class AccountResourceIT {
 
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset@example.com")
-)
+            .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isOk());
     }
 
@@ -720,7 +731,7 @@ public class AccountResourceIT {
 
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset-upper-case@EXAMPLE.COM")
-)
+            .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isOk());
     }
 
@@ -728,7 +739,8 @@ public class AccountResourceIT {
     public void testRequestPasswordResetWrongEmail() throws Exception {
         restAccountMockMvc.perform(
             post("/api/account/reset-password/init")
-                .content("password-reset-wrong-email@example.com"))
+                .content("password-reset-wrong-email@example.com")
+                .header("g-recaptcha-response", "faketoken"))
             .andExpect(status().isOk());
     }
 

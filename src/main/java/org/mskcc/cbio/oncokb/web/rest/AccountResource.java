@@ -30,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
+import javax.xml.bind.ValidationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -109,17 +110,17 @@ public class AccountResource {
             HttpServletRequest request) throws Exception {
         try {
             ResponseEntity<String> rs = CreateAssessment.createAssessment(request);
-            // if (rs.getStatusCode() == HttpStatus.OK) {
+            if (rs.getStatusCode() == HttpStatus.OK) {
                 if (!checkPasswordLength(managedUserVM.getPassword())) {
                     throw new InvalidPasswordException();
                 }
                 User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
                 mailService.sendActivationEmail(userMapper.userToUserDTO(user));
-            // }
-        } catch (Exception e) {
+            }
+        } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
-            if (errorMessage.contains("token")) {
+            if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 throw new Exception(errorMessage);
             } else {
                 if (!checkPasswordLength(managedUserVM.getPassword())) {
@@ -391,10 +392,10 @@ public class AccountResource {
                     log.warn("Password reset requested for non existing mail");
                 }
             // }
-        } catch (Exception e) {
+        } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
-            if (errorMessage.contains("token")) {
+            if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 throw new Exception(errorMessage);
             } else {
                 Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
@@ -497,10 +498,10 @@ public class AccountResource {
                     mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
                 }
             // }
-        } catch (Exception e) {
+        } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
-            if (errorMessage.contains("token")) {
+            if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 throw new Exception(errorMessage);
             } else {
                 Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());

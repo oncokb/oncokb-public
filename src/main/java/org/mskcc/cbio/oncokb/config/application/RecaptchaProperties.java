@@ -1,32 +1,32 @@
 package org.mskcc.cbio.oncokb.config.application;
 
 public class RecaptchaProperties {
-    String recaptchaProjectId;
-    String recaptchaSiteKey;
-    String recaptchaThreshold;
+    String projectId;
+    String siteKey;
+    float threshold;
 
-    public String getRecaptchaProjectId() {
-        return recaptchaProjectId;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public void setRecaptchaProjectId(String recaptchaProjectId) {
-        this.recaptchaProjectId = recaptchaProjectId;
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 
-    public String getRecaptchaThreshold() {
-        return recaptchaThreshold;
+    public float getThreshold() {
+        return threshold;
     }
 
-    public void setRecaptchaThreshold(String recaptchaThreshold) {
-        this.recaptchaThreshold = recaptchaThreshold;
+    public void setThreshold(float threshold) {
+        this.threshold = threshold;
     }
 
-    public void setRecaptchaSiteKey(String recaptchaSiteKey) {
-        this.recaptchaSiteKey = recaptchaSiteKey;
+    public void setSiteKey(String siteKey) {
+        this.siteKey = siteKey;
     }
 
-    public String getRecaptchaSiteKey() {
-        return recaptchaSiteKey;
+    public String getSiteKey() {
+        return siteKey;
     }
 
 }

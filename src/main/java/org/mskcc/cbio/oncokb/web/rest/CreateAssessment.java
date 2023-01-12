@@ -52,11 +52,11 @@ public class CreateAssessment {
     try (RecaptchaEnterpriseServiceClient client = RecaptchaEnterpriseServiceClient.create()) {
 
       // Set the properties of the event to be tracked.
-      Event event = Event.newBuilder().setSiteKey(recaptchaProperties.getRecaptchaSiteKey()).setToken(recaptchaToken).build();
+      Event event = Event.newBuilder().setSiteKey(recaptchaProperties.getSiteKey()).setToken(recaptchaToken).build();
 
       // Build the assessment request.
       CreateAssessmentRequest createAssessmentRequest = CreateAssessmentRequest.newBuilder()
-          .setParent(ProjectName.of(recaptchaProperties.getRecaptchaProjectId()).toString())
+          .setParent(ProjectName.of(recaptchaProperties.getProjectId()).toString())
           .setAssessment(Assessment.newBuilder().setEvent(event).build())
           .build();
 
@@ -65,7 +65,7 @@ public class CreateAssessment {
       client.close();
 
       // Check if the token is valid.
-      if (response.getTokenProperties().getValid() && response.getRiskAnalysis().getScore() >= Long.valueOf(recaptchaProperties.getRecaptchaThreshold())) {
+      if (response.getTokenProperties().getValid() && response.getRiskAnalysis().getScore() >= recaptchaProperties.getThreshold()) {
         LOGGER.info("RECAPTCHA TOKEN VERIFIED SUCCESSFULLY. SCORE: " + response.getRiskAnalysis().getScore());
         return new ResponseEntity<>("Recaptcha successfully validated", HttpStatus.OK);
       } else {
