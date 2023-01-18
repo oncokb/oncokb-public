@@ -848,8 +848,8 @@ export const getCategoricalAlterationDescription = (
     }
     content = (
       <span>
-        {prefix} {geneLink} considered "oncogenic" or "likely oncogenic" as
-        defined by{' '}
+        {prefix} {geneLink} considered "oncogenic", "likely oncogenic" or
+        "resistance" as defined by{' '}
         <SopPageLink version={2.2}>
           {ONCOKB_TM} Curation Standard Operating Protocol v2.2, Chapter 2,
           Sub-Protocol 2.5
