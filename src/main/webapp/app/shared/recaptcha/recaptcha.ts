@@ -1,5 +1,6 @@
 import { RECAPTCHA_ENTERPRISE_SITE_KEY } from 'app/config/constants';
 import { AppConfig } from 'app/appConfig';
+import { notifyError } from '../utils/NotificationUtils';
 
 declare global {
   interface Window {
@@ -28,7 +29,9 @@ export default class ReCAPTCHA {
       .then((res: string) => {
         token = res;
       })
-      .catch((error: Error) => console.log(error));
+      .catch((error: Error) => {
+        notifyError(error);
+      });
     return token;
   }
 }
