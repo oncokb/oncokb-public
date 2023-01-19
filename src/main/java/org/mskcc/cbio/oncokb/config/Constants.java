@@ -40,6 +40,7 @@ public final class Constants {
 
     public static final String ONCOKB_TM = "OncoKB™";
 
-    private Constants() {
-    }
+    public static final String VALIDATION_ERROR = "Validation failed";
+
+    public static final String TESTING_TOKEN = "faketoken";
 }

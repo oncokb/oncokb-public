@@ -110,26 +110,20 @@ public class AccountResource {
             HttpServletRequest request) throws Exception {
         try {
             ResponseEntity<String> rs = CreateAssessment.createAssessment(request);
-            if (rs.getStatusCode() == HttpStatus.OK) {
-                if (!checkPasswordLength(managedUserVM.getPassword())) {
-                    throw new InvalidPasswordException();
-                }
-                User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-                mailService.sendActivationEmail(userMapper.userToUserDTO(user));
-            }
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 throw new Exception(errorMessage);
-            } else {
-                if (!checkPasswordLength(managedUserVM.getPassword())) {
-                    throw new InvalidPasswordException();
-                }
-                User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-                mailService.sendActivationEmail(userMapper.userToUserDTO(user));
-            }
+            } 
         }
+        // if (rs.getStatusCode() == HttpStatus.OK) {
+            if (!checkPasswordLength(managedUserVM.getPassword())) {
+                throw new InvalidPasswordException();
+            }
+            User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+            mailService.sendActivationEmail(userMapper.userToUserDTO(user));
+        // }
     }
 
     /**
@@ -378,41 +372,27 @@ public class AccountResource {
     public void requestPasswordReset(@RequestBody String mail, HttpServletRequest request) throws Exception {
         try {
             ResponseEntity<String> rs = CreateAssessment.createAssessment(request);
-            // if (rs.getStatusCode() == HttpStatus.OK) {
-                Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
-                if (user.isPresent()) {
-                    Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
-                    if (updatedUser.isPresent()) {
-                        mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
-                    }
-
-                } else {
-                    // Pretend the request has been successful to prevent checking which emails really exist
-                    // but log that an invalid attempt has been made
-                    log.warn("Password reset requested for non existing mail");
-                }
-            // }
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 throw new Exception(errorMessage);
-            } else {
-                Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
-                if (user.isPresent()) {
-                    Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
-                    if (updatedUser.isPresent()) {
-                        mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
-                    }
-
-                } else {
-                    // Pretend the request has been successful to prevent checking which emails really exist
-                    // but log that an invalid attempt has been made
-                    log.warn("Password reset requested for non existing mail");
-                }
-            }
-            
+            } 
         }
+        // if (rs.getStatusCode() == HttpStatus.OK) {
+            Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
+            if (user.isPresent()) {
+                Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
+                if (updatedUser.isPresent()) {
+                    mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
+                }
+
+            } else {
+                // Pretend the request has been successful to prevent checking which emails really exist
+                // but log that an invalid attempt has been made
+                log.warn("Password reset requested for non existing mail");
+            }
+        // }
     }
 
 
@@ -491,26 +471,20 @@ public class AccountResource {
     public void resendVerification(@RequestBody LoginVM loginVM, HttpServletRequest request) throws Exception {
         try {
             ResponseEntity<String> rs = CreateAssessment.createAssessment(request);
-            // if (rs.getStatusCode() == HttpStatus.OK) {
-                Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
-                if (userOptional.isPresent()
-                        && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
-                    mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
-                }
-            // }
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 throw new Exception(errorMessage);
-            } else {
-                Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
-                if (userOptional.isPresent()
-                        && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
-                    mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
-                }
-            }
+            } 
         }
+        // if (rs.getStatusCode() == HttpStatus.OK) {
+            Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
+            if (userOptional.isPresent()
+                    && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
+                mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
+            }
+        // }
     }
 
     private static boolean checkPasswordLength(String password) {

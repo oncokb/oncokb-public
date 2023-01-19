@@ -173,6 +173,6 @@ application:
   github-token:
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
   recaptcha:
-    recaptcha-project-id:
-    recaptcha-site-key:
-    recaptcha-threshold:
+    project-id:
+    site-key:
+    threshold:
