@@ -1,6 +1,5 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
-import com.amazonaws.services.appstream.model.Application;
 import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceClient;
 import com.google.recaptchaenterprise.v1.Assessment;
 import com.google.recaptchaenterprise.v1.CreateAssessmentRequest;
@@ -8,6 +7,7 @@ import com.google.recaptchaenterprise.v1.Event;
 import com.google.recaptchaenterprise.v1.ProjectName;
 import java.io.IOException;
 
+import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
 import org.slf4j.Logger;
@@ -16,12 +16,9 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.ValidationException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
 public class CreateAssessment {
@@ -63,6 +60,7 @@ public class CreateAssessment {
       Assessment response = client.createAssessment(createAssessmentRequest);
 
       client.close();
+      LOGGER.info("my site key " + recaptchaProperties.getSiteKey());
 
       // Check if the token is valid.
       if (response.getTokenProperties().getValid() && response.getRiskAnalysis().getScore() >= recaptchaProperties.getThreshold()) {
@@ -72,13 +70,12 @@ public class CreateAssessment {
         LOGGER.info(
             "The CreateAssessment call failed because the token was: "
                 + response.getTokenProperties().getInvalidReason().name());
-        throw new ValidationException("HTTP STATUS 400: CAPTCHA VALIDATION FAILED: " +
-            response.getTokenProperties().getInvalidReason().name(), "400");
+        throw new ValidationException(Constants.VALIDATION_ERROR);
       }
 
     } catch (Exception e) {
       e.printStackTrace();
-      throw new ValidationException("Validation failed");
+      throw new ValidationException(Constants.VALIDATION_ERROR);
     }
   }
 }
