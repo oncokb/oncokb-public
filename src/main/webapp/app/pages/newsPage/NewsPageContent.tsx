@@ -163,7 +163,24 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '02012023': {
-    newlyAddedGenes: ['ALDH2', 'ADHFE1', 'BTG2', 'MAP4K4', 'PRPF8'],
+    priorityNews: [
+      <NewlyAddedGenesListItem
+        sort
+        genes={['ALDH2', 'ADHFE1', 'BTG2', 'MAP4K4', 'PRPF8']}
+      />,
+      <span>
+        To better align with the FDA drug label, all KIT oncogenic mutations in
+        GIST are now level 1 in association with Imatinib, Sunitinib,
+        Ripretinib, and Regorafenib. Previously, only known sensitizing KIT exon
+        9, 11, 13, 14, 17 and 18 alterations were considered level 1 in this
+        indication.
+      </span>,
+      <span>
+        With the recent FDA approval of Tucatinib + Trastuzumab for patients
+        with RAS wildtype, HER2-positive colorectal cancer the following OncoKB
+        changes have been made:
+      </span>,
+    ],
     news: [
       <span>
         Updated therapeutic implications - addition of therapies for variants
@@ -184,11 +201,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             <tbody>
               <tr>
                 <td>KRAS, NRAS</td>
-                <td>Oncogenic mutations</td>
+                <td>Oncogenic Mutations</td>
                 <td>Colorectal Cancer</td>
                 <td>R1</td>
-                <td>Cetuximab, panitumumab</td>
-                <td>Tucatinib + trastuzumab</td>
+                <td>Cetuximab, Panitumumab</td>
+                <td>Tucatinib + Trastuzumab</td>
                 <td>
                   <FdaApprovalLink
                     link={
@@ -201,12 +218,6 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </tbody>
           </table>
         </Row>
-      </span>,
-      <span>
-        To better align with the FDA drug label, all KIT oncogenic mutations are
-        considered level 1 for imatinib, sunitinib, ripretinib, and regorafenib
-        in GIST, versus just those sensitizing KIT exon 9, 11, 13, 14, 17 and 18
-        alterations.
       </span>,
     ],
     changedAnnotation: [
