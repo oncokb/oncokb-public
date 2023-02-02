@@ -102,6 +102,12 @@
       window.serverConfig.appProfile = /*[[${appProfile}]]*/ '';
       window.serverConfig.readonly = /*[[${readonly}]]*/ false;
 
+      // the authentication is enabled by default.
+      // this is inlined with server side setting and used when in screenshot tests
+      if (window.serverConfig.enableAuth === undefined) {
+        window.serverConfig.enableAuth = true;
+      }
+
       // You are prohibited to use this token to access our API.
       // Please see our data access page for more information https://www.oncokb.org/apiAccess
       window.serverConfig.token = /*[[${publicToken}]]*/ '';
