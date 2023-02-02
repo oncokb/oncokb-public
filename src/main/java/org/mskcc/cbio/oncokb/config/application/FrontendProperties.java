@@ -6,6 +6,7 @@ package org.mskcc.cbio.oncokb.config.application;
 public class FrontendProperties {
     private String googleAnalyticsProjectId;
     private String sentryProjectId;
+    private Boolean enableAuth = true;
 
     public String getGoogleAnalyticsProjectId() {
         return googleAnalyticsProjectId;
@@ -21,5 +22,13 @@ public class FrontendProperties {
 
     public void setSentryProjectId(String sentryProjectId) {
         this.sentryProjectId = sentryProjectId;
+    }
+
+    public Boolean getEnableAuth() {
+        return enableAuth;
+    }
+
+    public void setEnableAuth(Boolean enableAuth) {
+        this.enableAuth = enableAuth;
     }
 }
