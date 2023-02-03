@@ -709,7 +709,13 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.firstName}
-                            validate={SHORT_TEXT_VAL}
+                            validate={{
+                              required: {
+                                value: true,
+                                errorMessage: 'First name is required',
+                              },
+                              ...SHORT_TEXT_VAL,
+                            }}
                           />
                           <AvField
                             name="lastName"
@@ -720,7 +726,13 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.lastName}
-                            validate={SHORT_TEXT_VAL}
+                            validate={{
+                              required: {
+                                value: true,
+                                errorMessage: 'First name is required',
+                              },
+                              ...SHORT_TEXT_VAL,
+                            }}
                           />
                           <AvField
                             name="createdDate"
