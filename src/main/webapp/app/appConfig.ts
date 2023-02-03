@@ -9,6 +9,7 @@ type ServerConfig = {
   googleAnalyticsProjectId: string;
   sentryProjectId: string;
   readonly: boolean;
+  enableAuth: boolean;
 };
 
 interface IAppConfig {

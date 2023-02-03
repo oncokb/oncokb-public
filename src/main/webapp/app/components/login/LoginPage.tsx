@@ -18,6 +18,7 @@ import client from 'app/shared/api/clientInstance';
 import { LoginVM } from 'app/shared/api/generated/API';
 import { PAGE_ROUTE } from 'app/config/constants';
 import { TrialActivationPageLink } from 'app/shared/utils/UrlUtils';
+import { AppConfig } from 'app/appConfig';
 export interface ILoginProps {
   authenticationStore: AuthenticationStore;
   routing: RouterStore;
@@ -106,7 +107,10 @@ export default class LoginPage extends React.Component<ILoginProps> {
     const { from } = this.props.routing.location.state || {
       from: { pathname: '/', search: location.search },
     };
-    if (this.props.authenticationStore.isUserAuthenticated) {
+    if (
+      !AppConfig.serverConfig.enableAuth ||
+      this.props.authenticationStore.isUserAuthenticated
+    ) {
       return <Redirect to={from} />;
     }
     return (

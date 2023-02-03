@@ -12,6 +12,7 @@ import { RouterStore } from 'mobx-react-router';
 import { PAGE_ROUTE } from 'app/config/constants';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { getRedirectLoginState } from 'app/shared/utils/Utils';
+import { AppConfig } from 'app/appConfig';
 
 export interface IPrivateRouteProps extends RouteProps {
   authenticationStore: AuthenticationStore;
@@ -64,7 +65,9 @@ export const PrivateRoute = observer(
                 routing.location.search,
                 routing.location.hash
               ),
-              pathname: PAGE_ROUTE.LOGIN,
+              pathname: AppConfig.serverConfig.enableAuth
+                ? PAGE_ROUTE.LOGIN
+                : PAGE_ROUTE.HOME,
             }}
           />
         );
