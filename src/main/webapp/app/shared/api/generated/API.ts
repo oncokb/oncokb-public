@@ -4698,59 +4698,10 @@ export default class API {
         });
     };
     getAllUsersUsingGETURL(parameters: {
-        'offset' ? : number,
-        'page' ? : number,
-        'pageNumber' ? : number,
-        'pageSize' ? : number,
-        'paged' ? : boolean,
-        'size' ? : number,
-        'sort' ? : Array < string > ,
-            'sortSorted' ? : boolean,
-            'sortUnsorted' ? : boolean,
-            'unpaged' ? : boolean,
-            $queryParameters ? : any
+        $queryParameters ? : any
     }): string {
         let queryParameters: any = {};
         let path = '/api/users';
-        if (parameters['offset'] !== undefined) {
-            queryParameters['offset'] = parameters['offset'];
-        }
-
-        if (parameters['page'] !== undefined) {
-            queryParameters['page'] = parameters['page'];
-        }
-
-        if (parameters['pageNumber'] !== undefined) {
-            queryParameters['pageNumber'] = parameters['pageNumber'];
-        }
-
-        if (parameters['pageSize'] !== undefined) {
-            queryParameters['pageSize'] = parameters['pageSize'];
-        }
-
-        if (parameters['paged'] !== undefined) {
-            queryParameters['paged'] = parameters['paged'];
-        }
-
-        if (parameters['size'] !== undefined) {
-            queryParameters['size'] = parameters['size'];
-        }
-
-        if (parameters['sort'] !== undefined) {
-            queryParameters['sort'] = parameters['sort'];
-        }
-
-        if (parameters['sortSorted'] !== undefined) {
-            queryParameters['sort.sorted'] = parameters['sortSorted'];
-        }
-
-        if (parameters['sortUnsorted'] !== undefined) {
-            queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
-        }
-
-        if (parameters['unpaged'] !== undefined) {
-            queryParameters['unpaged'] = parameters['unpaged'];
-        }
 
         if (parameters.$queryParameters) {
             Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -4766,29 +4717,9 @@ export default class API {
      * getAllUsers
      * @method
      * @name API#getAllUsersUsingGET
-     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {integer} page - Page number of the requested page
-     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {integer} size - Size of a page
-     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
     getAllUsersUsingGETWithHttpInfo(parameters: {
-        'offset' ? : number,
-        'page' ? : number,
-        'pageNumber' ? : number,
-        'pageSize' ? : number,
-        'paged' ? : boolean,
-        'size' ? : number,
-        'sort' ? : Array < string > ,
-            'sortSorted' ? : boolean,
-            'sortUnsorted' ? : boolean,
-            'unpaged' ? : boolean,
-            $queryParameters ? : any,
+        $queryParameters ? : any,
             $domain ? : string
     }): Promise < request.Response > {
         const domain = parameters.$domain ? parameters.$domain : this.domain;
@@ -4801,46 +4732,6 @@ export default class API {
         let form: any = {};
         return new Promise(function(resolve, reject) {
             headers['Accept'] = '*/*';
-
-            if (parameters['offset'] !== undefined) {
-                queryParameters['offset'] = parameters['offset'];
-            }
-
-            if (parameters['page'] !== undefined) {
-                queryParameters['page'] = parameters['page'];
-            }
-
-            if (parameters['pageNumber'] !== undefined) {
-                queryParameters['pageNumber'] = parameters['pageNumber'];
-            }
-
-            if (parameters['pageSize'] !== undefined) {
-                queryParameters['pageSize'] = parameters['pageSize'];
-            }
-
-            if (parameters['paged'] !== undefined) {
-                queryParameters['paged'] = parameters['paged'];
-            }
-
-            if (parameters['size'] !== undefined) {
-                queryParameters['size'] = parameters['size'];
-            }
-
-            if (parameters['sort'] !== undefined) {
-                queryParameters['sort'] = parameters['sort'];
-            }
-
-            if (parameters['sortSorted'] !== undefined) {
-                queryParameters['sort.sorted'] = parameters['sortSorted'];
-            }
-
-            if (parameters['sortUnsorted'] !== undefined) {
-                queryParameters['sort.unsorted'] = parameters['sortUnsorted'];
-            }
-
-            if (parameters['unpaged'] !== undefined) {
-                queryParameters['unpaged'] = parameters['unpaged'];
-            }
 
             if (parameters.$queryParameters) {
                 Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -4858,29 +4749,9 @@ export default class API {
      * getAllUsers
      * @method
      * @name API#getAllUsersUsingGET
-     * @param {integer} offset - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {integer} page - Page number of the requested page
-     * @param {integer} pageNumber - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {integer} pageSize - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {boolean} paged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {integer} size - Size of a page
-     * @param {array} sort - Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param {boolean} sortSorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {boolean} sortUnsorted - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
-     * @param {boolean} unpaged - OncoKB™ is a precision oncology knowledge base developed at Memorial Sloan Kettering Cancer Center that contains biological and clinical information about genomic alterations in cancer.
      */
     getAllUsersUsingGET(parameters: {
-            'offset' ? : number,
-            'page' ? : number,
-            'pageNumber' ? : number,
-            'pageSize' ? : number,
-            'paged' ? : boolean,
-            'size' ? : number,
-            'sort' ? : Array < string > ,
-                'sortSorted' ? : boolean,
-                'sortUnsorted' ? : boolean,
-                'unpaged' ? : boolean,
-                $queryParameters ? : any,
+            $queryParameters ? : any,
                 $domain ? : string
         }): Promise < Array < UserDTO >
         > {
