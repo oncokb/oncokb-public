@@ -729,7 +729,7 @@ export default class UserPage extends React.Component<IUserPage> {
                             validate={{
                               required: {
                                 value: true,
-                                errorMessage: 'First name is required',
+                                errorMessage: 'Last name is required',
                               },
                               ...SHORT_TEXT_VAL,
                             }}
