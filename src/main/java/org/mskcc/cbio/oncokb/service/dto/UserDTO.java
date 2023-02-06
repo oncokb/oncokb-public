@@ -201,7 +201,7 @@ public class UserDTO implements Serializable {
     }
 
     public void setCity(String city) {
-        this.city = city;
+        this.city = StringUtils.isEmpty(city) ? null : city;
     }
 
     public String getCountry() {
@@ -209,7 +209,7 @@ public class UserDTO implements Serializable {
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        this.country = StringUtils.isEmpty(country) ? null : country;
     }
 
     public AdditionalInfoDTO getAdditionalInfo() {
