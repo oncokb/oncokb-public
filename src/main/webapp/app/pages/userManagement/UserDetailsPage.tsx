@@ -5,7 +5,7 @@ import { defaultSortMethod } from 'app/shared/utils/ReactTableUtils';
 import client from 'app/shared/api/clientInstance';
 import { UserDTO } from 'app/shared/api/generated/API';
 import { match } from 'react-router';
-import { Button, Col, Modal, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { RouterStore } from 'mobx-react-router';
 import OncoKBTable, {
   SearchColumn,
@@ -14,19 +14,13 @@ import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import { filterByKeyword, toAppLocalDateFormat } from 'app/shared/utils/Utils';
 import _ from 'lodash';
-import {
-  AUTHORITIES,
-  LicenseType,
-  THRESHOLD_NUM_OF_USER,
-  USER_AUTHORITY,
-} from 'app/config/constants';
+import { AUTHORITIES, LicenseType, USER_AUTHORITY } from 'app/config/constants';
 import styles from './UserDetailsPage.module.scss';
 import LoadingIndicator, {
   LoaderSize,
 } from '../../components/loadingIndicator/LoadingIndicator';
 import { isAuthorized } from 'app/shared/auth/AuthUtils';
 import { Link } from 'react-router-dom';
-import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { UserStatusModal } from 'app/shared/modal/UserStatusModal';
 
 enum USER_BUTTON_TYPE {
@@ -73,11 +67,8 @@ export default class UserDetailsPage extends React.Component<{
   @action
   async getUsers() {
     try {
-      // Hard code the max returned user size. Need to fix pagination issue.
-      this.users = await client.getAllUsersUsingGET({
-        size: THRESHOLD_NUM_OF_USER,
-      });
-      // Display all commerical users by default
+      this.users = await client.getAllUsersUsingGET({});
+      // Display all commercial users by default
       this.toggleFilter(USER_BUTTON_TYPE.VERIFIED);
       this.loadedUsers = true;
     } catch (e) {

@@ -243,7 +243,7 @@ public class UserResourceIT {
         userRepository.saveAndFlush(user);
 
         // Get all the users
-        restUserMockMvc.perform(get("/api/users?sort=id,desc")
+        restUserMockMvc.perform(get("/api/users")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -253,18 +253,6 @@ public class UserResourceIT {
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGEURL)))
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
-    }
-
-    @Test
-    @Transactional
-    void getAllUsersSortedByParameters() throws Exception {
-        // Initialize the database
-        userRepository.saveAndFlush(user);
-
-            restUserMockMvc.perform(get("/api/users?sort=resetKey,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
-            restUserMockMvc.perform(get("/api/users?sort=password,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
-            restUserMockMvc.perform(get("/api/users?sort=resetKey,id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
-            restUserMockMvc.perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
