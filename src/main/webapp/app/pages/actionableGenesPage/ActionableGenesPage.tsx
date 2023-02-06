@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Button, Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import privateClient from 'app/shared/api/oncokbPrivateClientInstance';
-import { DefaultTooltip, remoteData } from 'cbioportal-frontend-commons';
+import { remoteData } from 'cbioportal-frontend-commons';
 import {
   action,
   computed,
@@ -14,6 +14,7 @@ import {
 import {
   Alteration,
   Evidence,
+  TumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import Select from 'react-select';
 import _ from 'lodash';
@@ -21,6 +22,7 @@ import {
   FdaLevelIcon,
   getCancerTypeNameFromOncoTreeType,
   getCancerTypesName,
+  getCancerTypesNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
   getTreatmentNameFromEvidence,
@@ -53,8 +55,6 @@ import * as QueryString from 'query-string';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import { AuthDownloadButton } from 'app/components/authDownloadButton/AuthDownloadButton';
 import DocumentTitle from 'react-document-title';
-import { COLOR_BLUE } from 'app/config/theme';
-import WithSeparator from 'react-with-separator';
 import LevelSelectionRow from './LevelSelectionRow';
 import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import {
@@ -63,7 +63,6 @@ import {
   GenePageHashQueries,
 } from 'app/shared/route/types';
 import AppStore from 'app/store/AppStore';
-import { If, Else, Then } from 'react-if';
 import ShortenTextWithTooltip from 'app/shared/texts/ShortenTextWithTooltip';
 
 type Treatment = {
@@ -71,9 +70,9 @@ type Treatment = {
   fdaLevel: string;
   hugoSymbol: string;
   alterations: Alteration[];
-  cancerTypes: string[];
-  excludedCancerTypes: string[];
-  relevantCancerTypes: string[];
+  cancerTypes: TumorType[];
+  excludedCancerTypes: TumorType[];
+  relevantCancerTypes: TumorType[];
   treatments: {}[];
   uniqueDrugs: string[];
   drugs: string;
@@ -131,7 +130,11 @@ export default class ActionableGenesPage extends React.Component<
       );
 
       this.allTreatments.forEach(treatment => {
-        allTumorTypes = allTumorTypes.concat(treatment.cancerTypes);
+        allTumorTypes = allTumorTypes.concat(
+          treatment.cancerTypes.map(cancerType =>
+            getCancerTypeNameFromOncoTreeType(cancerType)
+          )
+        );
       });
 
       return Promise.resolve(_.uniq(allTumorTypes));
@@ -145,27 +148,6 @@ export default class ActionableGenesPage extends React.Component<
       return await privateClient.utilsEvidencesByLevelsGetUsingGET({});
     },
     default: {},
-  });
-
-  readonly relevantTumorTypes = remoteData<string[]>({
-    await: () => [this.allTumorTypes],
-    invoke: async () => {
-      let result = [];
-      if (this.relevantTumorTypeSearchKeyword) {
-        const allRelevantTumorTypes = await privateClient.utilRelevantTumorTypesGetUsingGET(
-          {
-            tumorType: this.relevantTumorTypeSearchKeyword,
-          }
-        );
-        result = allRelevantTumorTypes.map(tumorType =>
-          getCancerTypeNameFromOncoTreeType(tumorType)
-        );
-      } else {
-        result = this.allTumorTypes.result;
-      }
-      return result.sort();
-    },
-    default: [],
   });
 
   readonly reactions: IReactionDisposer[] = [];
@@ -300,15 +282,9 @@ export default class ActionableGenesPage extends React.Component<
           fdaLevel: levelOfEvidence2Level(item.fdaLevel, true),
           hugoSymbol: item.gene.hugoSymbol || 'NA',
           alterations: _.sortBy(matchedAlterations, 'name'),
-          cancerTypes: item.cancerTypes.map(cancerType =>
-            getCancerTypeNameFromOncoTreeType(cancerType)
-          ),
-          excludedCancerTypes: item.excludedCancerTypes.map(cancerType =>
-            getCancerTypeNameFromOncoTreeType(cancerType)
-          ),
-          relevantCancerTypes: item.relevantCancerTypes.map(cancerType =>
-            getCancerTypeNameFromOncoTreeType(cancerType)
-          ),
+          cancerTypes: item.cancerTypes,
+          excludedCancerTypes: item.excludedCancerTypes,
+          relevantCancerTypes: item.relevantCancerTypes,
           treatments: item.treatments,
           uniqueDrugs: _.uniq(
             _.reduce(
@@ -413,9 +389,16 @@ export default class ActionableGenesPage extends React.Component<
       }
       if (
         this.relevantTumorTypeSearchKeyword &&
-        !treatment.relevantCancerTypes.includes(
-          this.relevantTumorTypeSearchKeyword
-        )
+        treatment.relevantCancerTypes.filter(rct => {
+          if (rct.code) {
+            return (
+              rct.code === this.relevantTumorTypeSearchKeyword ||
+              rct.subtype === this.relevantTumorTypeSearchKeyword
+            );
+          } else {
+            return rct.mainType === this.relevantTumorTypeSearchKeyword;
+          }
+        }).length === 0
       ) {
         match = false;
       }
@@ -471,7 +454,11 @@ export default class ActionableGenesPage extends React.Component<
   @computed
   get filteredTumorTypes() {
     return _.uniq(
-      this.filteredTreatments.map(treatment => treatment.cancerTypes.join(', '))
+      this.filteredTreatments.map(treatment =>
+        treatment.cancerTypes
+          .map(ct => getCancerTypeNameFromOncoTreeType(ct))
+          .join(', ')
+      )
     );
   }
 
@@ -600,7 +587,7 @@ export default class ActionableGenesPage extends React.Component<
           .map(alteration => alteration.name)
           .sort()
           .join(', '),
-        tumorType: getCancerTypesName(
+        tumorType: getCancerTypesNameFromOncoTreeType(
           treatment.cancerTypes,
           treatment.excludedCancerTypes
         ),
@@ -644,28 +631,35 @@ export default class ActionableGenesPage extends React.Component<
     }
     const linkedAlts = alterations.map<JSX.Element>(
       (alteration, index: number) => (
-        <>
-          <AlterationPageLink
-            key={index}
-            hugoSymbol={hugoSymbol}
-            alteration={{
-              alteration: alteration.alteration,
-              name: alteration.name,
-            }}
-            alterationRefGenomes={
-              alteration.referenceGenomes as REFERENCE_GENOME[]
+        <AlterationPageLink
+          key={index}
+          hugoSymbol={hugoSymbol}
+          alteration={{
+            alteration: alteration.alteration,
+            name: alteration.name,
+          }}
+          alterationRefGenomes={
+            alteration.referenceGenomes as REFERENCE_GENOME[]
+          }
+          hashQueries={alterationPageHashQueries}
+          onClick={() => {
+            if (this.fdaSectionIsOpen) {
+              this.props.appStore.toFdaRecognizedContent = true;
             }
-            hashQueries={alterationPageHashQueries}
-            onClick={() => {
-              if (this.fdaSectionIsOpen) {
-                this.props.appStore.toFdaRecognizedContent = true;
-              }
-            }}
-          />
-        </>
+          }}
+        />
       )
     );
-    return <ShortenTextWithTooltip threshold={5} data={linkedAlts} />;
+    const shortenTextKey = `${hugoSymbol}-${alterations
+      .map(a => a.alteration)
+      .join('-')}`;
+    return (
+      <ShortenTextWithTooltip
+        key={shortenTextKey}
+        threshold={5}
+        data={linkedAlts}
+      />
+    );
   }
 
   @computed
@@ -760,13 +754,15 @@ export default class ActionableGenesPage extends React.Component<
         Header: <span>Cancer Types</span>,
         minWidth: 300,
         accessor: 'cancerTypes',
-        sortMethod(a: string[], b: string[]) {
-          return a.join(', ').localeCompare(b.join(', '));
+        sortMethod(a: TumorType[], b: TumorType[]) {
+          return getCancerTypesNameFromOncoTreeType(a).localeCompare(
+            getCancerTypesNameFromOncoTreeType(b)
+          );
         },
         Cell(props: { original: Treatment }) {
           return (
             <span>
-              {getCancerTypesName(
+              {getCancerTypesNameFromOncoTreeType(
                 props.original.cancerTypes,
                 props.original.excludedCancerTypes
               )}
@@ -793,8 +789,7 @@ export default class ActionableGenesPage extends React.Component<
     const tableProps = {
       disableSearch: true,
       data: this.filteredTreatments,
-      loading:
-        this.relevantTumorTypes.isPending && this.evidencesByLevel.isPending,
+      loading: this.evidencesByLevel.isPending,
       columns: this.columns,
       defaultPageSize: 10,
       defaultSorted: [
@@ -882,6 +877,7 @@ export default class ActionableGenesPage extends React.Component<
       if (LEVEL_TYPES[key]) {
         levelSelectionSection.push(
           <LevelSelectionRow
+            key={key}
             levelType={LEVEL_TYPES[key]}
             collapseStatus={this.collapseStatus}
             levelNumbers={this.levelNumbers}
