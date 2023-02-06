@@ -1,4 +1,3 @@
-import { RECAPTCHA_ENTERPRISE_SITE_KEY } from 'app/config/constants';
 import { AppConfig } from 'app/appConfig';
 import { notifyError } from '../utils/NotificationUtils';
 
@@ -19,7 +18,11 @@ export default class ReCAPTCHA {
 
   constructor() {
     this.siteKey = AppConfig.serverConfig.recaptchaSiteKey;
-    loadReCaptcha(this.siteKey);
+    if (this.siteKey != null) {
+      loadReCaptcha(this.siteKey);
+    } else {
+      console.error('Recaptcha cannot load. Site key not added.');
+    }
   }
 
   async getToken(): Promise<string> {

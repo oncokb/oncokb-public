@@ -107,7 +107,7 @@ public class AccountResource {
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, 
             HttpServletRequest request) throws Exception {
         try {
-            ResponseEntity<String> rs = CreateAssessment.createAssessment(request);
+            ResponseEntity<String> rs = CreateAssessment.createAssessment(request, false);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
@@ -345,7 +345,7 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail, HttpServletRequest request) throws Exception {
         try {
-            ResponseEntity<String> rs = CreateAssessment.createAssessment(request);
+            ResponseEntity<String> rs = CreateAssessment.createAssessment(request,false);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
@@ -439,7 +439,7 @@ public class AccountResource {
     @PostMapping(path = "/account/resend-verification")
     public void resendVerification(@RequestBody LoginVM loginVM, HttpServletRequest request) throws Exception {
         try {
-            ResponseEntity<String> rs = CreateAssessment.createAssessment(request);
+            ResponseEntity<String> rs = CreateAssessment.createAssessment(request,false);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();

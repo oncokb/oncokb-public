@@ -2,7 +2,6 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
-import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,6 +25,9 @@ public class RecaptchaAssessmentIT {
 
     ApplicationProperties appProps;
     RecaptchaProperties recaptchaProp;
+    private static String RECAPTCHA_TESTING_TOKEN = "faketoken";
+    private static String RECAPTCHA_VALIDATION_ERROR = "Validation failed";
+    private static String RECAPTCHA_TOKEN_ERROR = "Unable to retrieve recaptcha token. Please try again.";
 
     @BeforeEach
     public void setup() {
@@ -42,8 +44,8 @@ public class RecaptchaAssessmentIT {
         CreateAssessment createAssess = new CreateAssessment(appProps);
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader("g-recaptcha-response", Constants.TESTING_TOKEN);
-        ResponseEntity<String> rs = createAssess.createAssessment(request);
+        request.addHeader("g-recaptcha-response", RECAPTCHA_TESTING_TOKEN);
+        ResponseEntity<String> rs = createAssess.createAssessment(request,true);
         
         assertThat(rs.getStatusCode() == HttpStatus.OK);
     }
@@ -59,9 +61,9 @@ public class RecaptchaAssessmentIT {
         MockHttpServletRequest request = new MockHttpServletRequest();
         
         Exception e = assertThrows(ValidationException.class, () -> {
-            createAssess.createAssessment(request);
+            createAssess.createAssessment(request,true);
         });
-        assertThat(e.getMessage().contains("token"));
+        assertThat(e.getMessage().equals(RECAPTCHA_TOKEN_ERROR));
     }
 
     @Test
@@ -73,12 +75,12 @@ public class RecaptchaAssessmentIT {
         CreateAssessment createAssess = new CreateAssessment(appProps);
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader("g-recaptcha-response", Constants.TESTING_TOKEN);
+        request.addHeader("g-recaptcha-response", RECAPTCHA_TESTING_TOKEN);
         
         Exception e = assertThrows(ValidationException.class, () -> {
-            createAssess.createAssessment(request);
+            createAssess.createAssessment(request,true);
         });
-        assertThat(e.getMessage().equals(Constants.VALIDATION_ERROR));
+        assertThat(e.getMessage().equals(RECAPTCHA_VALIDATION_ERROR));
     }
     
 }

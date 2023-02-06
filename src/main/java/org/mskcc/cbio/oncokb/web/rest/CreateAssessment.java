@@ -1,6 +1,8 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import com.google.api.gax.core.NoCredentialsProvider;
 import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceClient;
+import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceSettings;
 import com.google.recaptchaenterprise.v1.Assessment;
 import com.google.recaptchaenterprise.v1.CreateAssessmentRequest;
 import com.google.recaptchaenterprise.v1.Event;
@@ -25,6 +27,9 @@ public class CreateAssessment {
   
   private static final Logger LOGGER = LoggerFactory.getLogger(CreateAssessment.class);
 
+  private static String RECAPTCHA_VALIDATION_ERROR = "Validation failed";
+  private static String RECAPTCHA_TOKEN_ERROR = "Unable to retrieve recaptcha token. Please try again.";
+
   static RecaptchaProperties recaptchaProperties;
 
   public CreateAssessment(ApplicationProperties applicationProperties){
@@ -38,15 +43,28 @@ public class CreateAssessment {
    * @return
    * @throws ValidationException
    */
-  public static ResponseEntity<String> createAssessment(HttpServletRequest request)
+  public static ResponseEntity<String> createAssessment(HttpServletRequest request, boolean testingMode)
       throws IOException, ValidationException {
 
     String recaptchaToken = request.getHeader("g-recaptcha-response");
     if (recaptchaToken == null) {
-      throw new ValidationException("Unable to retrieve recaptcha token. Please try again.");
+      throw new ValidationException(RECAPTCHA_TOKEN_ERROR);
     }
 
-    try (RecaptchaEnterpriseServiceClient client = RecaptchaEnterpriseServiceClient.create()) {
+    RecaptchaEnterpriseServiceSettings settings;
+    if (testingMode) {
+      settings = RecaptchaEnterpriseServiceSettings.newBuilder()
+            .setCredentialsProvider(NoCredentialsProvider.create())
+            .build();
+    } else {
+      settings = null;
+    }
+
+    if (recaptchaProperties == null && !testingMode) {
+      LOGGER.info("Recaptcha enterprise is not initiated.");
+    }
+    
+    try (RecaptchaEnterpriseServiceClient client = RecaptchaEnterpriseServiceClient.create(settings)) {
 
       // Set the properties of the event to be tracked.
       Event event = Event.newBuilder().setSiteKey(recaptchaProperties.getSiteKey()).setToken(recaptchaToken).build();
@@ -70,12 +88,12 @@ public class CreateAssessment {
         LOGGER.info(
             "The CreateAssessment call failed because the token was: "
                 + response.getTokenProperties().getInvalidReason().name());
-        throw new ValidationException(Constants.VALIDATION_ERROR);
+        throw new ValidationException(RECAPTCHA_VALIDATION_ERROR);
       }
 
     } catch (Exception e) {
       e.printStackTrace();
-      throw new ValidationException(Constants.VALIDATION_ERROR);
+      throw new ValidationException(RECAPTCHA_VALIDATION_ERROR);
     }
   }
 }
