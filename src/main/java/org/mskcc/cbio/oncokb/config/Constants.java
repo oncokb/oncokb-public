@@ -39,6 +39,8 @@ public final class Constants {
     public static final String TOKEN_STATS_STORAGE_FILE_PREFIX = "public-website/token-usage/token-stats_";
 
     public static final String ONCOKB_TM = "OncoKB™";
+
+    public static final String TESTING_TOKEN = "faketoken";
     
     private Constants() {
     }
