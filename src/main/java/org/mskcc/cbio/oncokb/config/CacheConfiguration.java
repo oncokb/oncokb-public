@@ -60,6 +60,12 @@ public class CacheConfiguration {
                         .getAddress()
                 )
                 .setPassword(applicationProperties.getRedis().getPassword());
+        } else if (applicationProperties.getRedis().getType().equals(RedisType.CLUSTER.getType())) {
+            config
+                .useClusterServers()
+                .addNodeAddress(applicationProperties.getRedis().getAddress())
+                .setPassword(applicationProperties.getRedis().getPassword())
+                .setClientName(applicationProperties.getName());
         } else {
             throw new Exception("The redis type " + applicationProperties.getRedis().getType() + " is not supported. Only single and master-slave are supported.");
         }
