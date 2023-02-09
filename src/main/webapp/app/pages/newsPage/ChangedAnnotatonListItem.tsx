@@ -2,6 +2,7 @@ import {
   CHANGED_ANNOTATION_LEVEL_COLUMNS,
   CHANGED_ANNOTATION_DRUG_COLUMNS,
   CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS,
+  CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS,
 } from 'app/pages/newsPage/NewsPageContent';
 import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
@@ -14,6 +15,7 @@ export enum AnnotationColumnHeaderType {
   LEVEL,
   DRUG,
   ADDITIONAL_SAME_LEVEL_DRUG,
+  ADDITIONAL_DIFF_LEVEL_DRUG,
 }
 
 export const ChangedAnnotationListItem = (props: {
@@ -39,6 +41,11 @@ export const ChangedAnnotationListItem = (props: {
       useOneLineRowClass = false;
       defaultTitle =
         'Updated therapeutic implications - addition of therapies for variants with a level of evidence';
+      break;
+    case AnnotationColumnHeaderType.ADDITIONAL_DIFF_LEVEL_DRUG:
+      annotationColumnHeader = CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS;
+      useOneLineRowClass = false;
+      defaultTitle = 'Changed Annotation';
       break;
     case AnnotationColumnHeaderType.LEVEL:
     default:

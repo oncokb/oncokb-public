@@ -93,7 +93,7 @@ export const CHANGED_ANNOTATION_DRUG_COLUMNS = [
   { name: 'Cancer Type' },
   { name: 'Previous Drug' },
   { name: 'Current Drug' },
-  { name: 'Reason' },
+  { name: 'Evidence' },
 ];
 
 export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS = [
@@ -103,6 +103,17 @@ export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS = [
   { name: 'Current Level of Evidence' },
   { name: 'Drug(s) Already in OncoKB™' },
   { name: 'Newly Added Drug' },
+  { name: 'Evidence' },
+];
+
+export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS = [
+  { name: 'Gene' },
+  { name: 'Mutation' },
+  { name: 'Cancer Type' },
+  { name: 'Previous Level of Evidence' },
+  { name: 'Current Level of Evidence' },
+  { name: 'Drug(s) Already in OncoKB™' },
+  { name: 'Newly Added Drug(s)' },
   { name: 'Evidence' },
 ];
 
@@ -162,13 +173,64 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '01052023': {
-    news: [
-      <span>
-        Happy New Year! 2022 brought many changes to the landscape of precision
-        oncology. The OncoKB 2022 Year in Summary can be found{' '}
-        <YearEndReviewPageLink year={'2022'}>HERE</YearEndReviewPageLink>.
-      </span>,
+  '02102023': {
+    changedAnnotationColumnHeaderType:
+      AnnotationColumnHeaderType.ADDITIONAL_DIFF_LEVEL_DRUG,
+    changedAnnotationTitle:
+      'Changed annotation and addition of therapies for variants with a level of evidence',
+    changedAnnotation: [
+      [
+        'ESR1',
+        'Oncogenic Ligand-Binding Domain Missense Mutations (310_547)',
+        'Breast Cancer',
+        '3A',
+        '1',
+        <span>
+          Fulvestrant
+          <br />
+          (Level 3A)
+        </span>,
+        <span>
+          Elacestrant
+          <br />
+          (Level 1)
+        </span>,
+        <FdaApprovalLink
+          approval={'elacestrant in breast cancer'}
+          link={
+            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-elacestrant-er-positive-her2-negative-esr1-mutated-advanced-or-metastatic-breast-cancer'
+          }
+        />,
+      ],
+      [
+        'ESR1',
+        'Oncogenic Ligand-Binding Domain In-Frame Insertions or Deletions (310_547)',
+        'Breast Cancer',
+        '3A',
+        '3A',
+        <span>
+          Fulvestrant
+          <br />
+          (Level 3A)
+        </span>,
+        <span>
+          Elacestrant
+          <br />
+          (Level 3A)
+        </span>,
+        <>
+          <FdaApprovalLink
+            approval={'elacestrant in breast cancer'}
+            link={
+              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-elacestrant-er-positive-her2-negative-esr1-mutated-advanced-or-metastatic-breast-cancer'
+            }
+          />{' '}
+          <span>
+            (Level 1 ESR1 mutations limited to those specified in corresponding
+            FDA-approved CDx)
+          </span>
+        </>,
+      ],
     ],
   },
   '12222022': {
@@ -622,7 +684,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     news: [
       <span>
         Updated therapeutic implications: - addition of therapies for variants
-        with a level of evidence with a level of evidence
+        with a level of evidence
         <Row className={'overflow-auto'}>
           <table className="table">
             <thead>
