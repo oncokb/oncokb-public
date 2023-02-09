@@ -67,7 +67,7 @@ public class CacheConfiguration {
                 .setPassword(applicationProperties.getRedis().getPassword())
                 .setClientName(applicationProperties.getName());
         } else {
-            throw new Exception("The redis type " + applicationProperties.getRedis().getType() + " is not supported. Only single and master-slave are supported.");
+            throw new Exception("The redis type " + applicationProperties.getRedis().getType() + " is not supported. Only single, sentinel, and cluster are supported.");
         }
         return config;
     }
