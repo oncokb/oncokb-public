@@ -204,7 +204,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         'ESR1',
-        'Oncogenic Ligand-Binding Domain Non-missense Mutations (310_547)',
+        'Oncogenic Ligand-Binding Domain In-Frame Insertions or Deletions (310_547)',
         'Breast Cancer',
         '3A',
         '3A',
