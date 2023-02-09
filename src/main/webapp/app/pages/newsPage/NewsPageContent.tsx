@@ -218,15 +218,18 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           <br />
           (Level 3A)
         </span>,
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <PMIDLink pmids={'35584336'} />
+        <>
           <FdaApprovalLink
             approval={'elacestrant in breast cancer'}
             link={
               'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-elacestrant-er-positive-her2-negative-esr1-mutated-advanced-or-metastatic-breast-cancer'
             }
-          />
-        </WithSeparator>,
+          />{' '}
+          <span>
+            (Level 1 ESR1 mutations limited to those specified in corresponding
+            FDA-approved CDx)
+          </span>
+        </>,
       ],
     ],
   },
