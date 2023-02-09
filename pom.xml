@@ -369,7 +369,7 @@
         <dependency>
 	        <groupId>com.github.oncokb</groupId>
 	        <artifactId>oncokb-meta</artifactId>
-	        <version>4f57f6d0fa</version>
+	        <version>ee9b767985</version>
         </dependency>
         <dependency>
           <groupId>com.github.vladimir-bukhtoyarov</groupId>
