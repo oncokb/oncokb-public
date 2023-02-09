@@ -630,25 +630,28 @@ export default class ActionableGenesPage extends React.Component<
       alterationPageHashQueries.tab = ANNOTATION_PAGE_TAB_KEYS.FDA;
     }
     const linkedAlts = alterations.map<JSX.Element>(
-      (alteration, index: number) => (
-        <AlterationPageLink
-          key={index}
-          hugoSymbol={hugoSymbol}
-          alteration={{
-            alteration: alteration.alteration,
-            name: alteration.name,
-          }}
-          alterationRefGenomes={
-            alteration.referenceGenomes as REFERENCE_GENOME[]
-          }
-          hashQueries={alterationPageHashQueries}
-          onClick={() => {
-            if (this.fdaSectionIsOpen) {
-              this.props.appStore.toFdaRecognizedContent = true;
+      (alteration, index: number) =>
+        alteration.consequence ? (
+          <AlterationPageLink
+            key={index}
+            hugoSymbol={hugoSymbol}
+            alteration={{
+              alteration: alteration.alteration,
+              name: alteration.name,
+            }}
+            alterationRefGenomes={
+              alteration.referenceGenomes as REFERENCE_GENOME[]
             }
-          }}
-        />
-      )
+            hashQueries={alterationPageHashQueries}
+            onClick={() => {
+              if (this.fdaSectionIsOpen) {
+                this.props.appStore.toFdaRecognizedContent = true;
+              }
+            }}
+          />
+        ) : (
+          <span>{alteration.name}</span>
+        )
     );
     const shortenTextKey = `${hugoSymbol}-${alterations
       .map(a => a.alteration)

@@ -135,19 +135,23 @@ export default class AnnotationPage extends React.Component<
         alterations: alterations.map(alteration => alteration.name).join(', '),
         alterationsView: (
           <WithSeparator separator={', '}>
-            {alterations.map(alteration => (
-              <AlterationPageLink
-                key={alteration.name}
-                hugoSymbol={this.props.hugoSymbol}
-                alteration={{
-                  alteration: alteration.alteration,
-                  name: alteration.name,
-                }}
-                alterationRefGenomes={
-                  alteration.referenceGenomes as REFERENCE_GENOME[]
-                }
-              />
-            ))}
+            {alterations.map(alteration =>
+              alteration.consequence ? (
+                <AlterationPageLink
+                  key={alteration.name}
+                  hugoSymbol={this.props.hugoSymbol}
+                  alteration={{
+                    alteration: alteration.alteration,
+                    name: alteration.name,
+                  }}
+                  alterationRefGenomes={
+                    alteration.referenceGenomes as REFERENCE_GENOME[]
+                  }
+                />
+              ) : (
+                <span>{alteration.name}</span>
+              )
+            )}
           </WithSeparator>
         ),
         drugs: getTreatmentNameFromEvidence(evidence),

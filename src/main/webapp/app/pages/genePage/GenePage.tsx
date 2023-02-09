@@ -114,7 +114,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
       return {
         level: variant.level,
         alterations: variant.variant.name,
-        alterationsView: (
+        alterationsView: variant.variant.consequence ? (
           <AlterationPageLink
             key={variant.variant.name}
             hugoSymbol={this.store.hugoSymbol}
@@ -126,6 +126,8 @@ export default class GenePage extends React.Component<GenePageProps, any> {
               variant.variant.referenceGenomes as REFERENCE_GENOME[]
             }
           />
+        ) : (
+          <span>{variant.variant.name}</span>
         ),
         drugs: variant.drug.join(', '),
         cancerTypes: getCancerTypesName(
@@ -136,22 +138,26 @@ export default class GenePage extends React.Component<GenePageProps, any> {
         cancerTypesView: (
           <>
             <WithSeparator separator={', '}>
-              {cancerTypeNames.map(cancerType => (
-                <AlterationPageLink
-                  key={`${variant.variant.name}-${cancerType}`}
-                  hugoSymbol={this.store.hugoSymbol}
-                  alteration={{
-                    alteration: variant.variant.alteration,
-                    name: variant.variant.name,
-                  }}
-                  alterationRefGenomes={
-                    variant.variant.referenceGenomes as REFERENCE_GENOME[]
-                  }
-                  cancerType={cancerType}
-                >
-                  {cancerType}
-                </AlterationPageLink>
-              ))}
+              {cancerTypeNames.map(cancerType =>
+                variant.variant.consequence ? (
+                  <AlterationPageLink
+                    key={`${variant.variant.name}-${cancerType}`}
+                    hugoSymbol={this.store.hugoSymbol}
+                    alteration={{
+                      alteration: variant.variant.alteration,
+                      name: variant.variant.name,
+                    }}
+                    alterationRefGenomes={
+                      variant.variant.referenceGenomes as REFERENCE_GENOME[]
+                    }
+                    cancerType={cancerType}
+                  >
+                    {cancerType}
+                  </AlterationPageLink>
+                ) : (
+                  <span>{cancerType}</span>
+                )
+              )}
             </WithSeparator>
             {excludedCancerTypeNames.length > 0 ? (
               <span> (excluding {excludedCancerTypeNames.join(', ')})</span>
