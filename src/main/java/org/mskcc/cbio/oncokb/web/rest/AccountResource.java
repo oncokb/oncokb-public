@@ -29,6 +29,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceClient;
+
 import javax.naming.AuthenticationException;
 import javax.xml.bind.ValidationException;
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +66,8 @@ public class AccountResource {
 
     private final ApplicationProperties applicationProperties;
 
+    private CreateAssessment createAssess;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -91,6 +95,7 @@ public class AccountResource {
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
         this.applicationProperties = applicationProperties;
+        this.createAssess = new CreateAssessment(applicationProperties);
     }
 
     /**
@@ -107,7 +112,9 @@ public class AccountResource {
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, 
             HttpServletRequest request) throws Exception {
         try {
-            ResponseEntity<String> rs = CreateAssessment.createAssessment(request, false);
+            RecaptchaEnterpriseServiceClient client = createAssess.createClient();
+            String recaptchaToken = createAssess.getRecaptchaToken(request);
+            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
@@ -345,7 +352,9 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail, HttpServletRequest request) throws Exception {
         try {
-            ResponseEntity<String> rs = CreateAssessment.createAssessment(request,false);
+            RecaptchaEnterpriseServiceClient client = createAssess.createClient();
+            String recaptchaToken = createAssess.getRecaptchaToken(request);
+            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
@@ -439,7 +448,9 @@ public class AccountResource {
     @PostMapping(path = "/account/resend-verification")
     public void resendVerification(@RequestBody LoginVM loginVM, HttpServletRequest request) throws Exception {
         try {
-            ResponseEntity<String> rs = CreateAssessment.createAssessment(request,false);
+            RecaptchaEnterpriseServiceClient client = createAssess.createClient();
+            String recaptchaToken = createAssess.getRecaptchaToken(request);
+            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
