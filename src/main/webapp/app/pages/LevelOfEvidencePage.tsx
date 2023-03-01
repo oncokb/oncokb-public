@@ -3,11 +3,10 @@ import { Row, Col, Button, Tabs, Tab, Form } from 'react-bootstrap';
 import classnames from 'classnames';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import {
-  DOCUMENT_TITLES,
+  PAGE_TITLE,
   IMG_MAX_WIDTH,
   LEVEL_TYPES,
   ONCOKB_TM,
-  PAGE_ROUTE,
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
 import { inject, observer } from 'mobx-react';
@@ -15,12 +14,12 @@ import { action, IReactionDisposer, observable, reaction } from 'mobx';
 import * as QueryString from 'query-string';
 import { RouterStore } from 'mobx-react-router';
 import autobind from 'autobind-decorator';
-import { HashLink } from 'react-router-hash-link';
 import mainStyles from '../index.module.scss';
 import { ElementType } from 'app/components/SimpleTable';
 import WindowStore from 'app/store/WindowStore';
 import { Linkout } from 'app/shared/links/Linkout';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
+import { getPageTitle } from 'app/shared/utils/Utils';
 
 type LevelOfEvidencePageProps = {
   routing: RouterStore;
@@ -192,7 +191,11 @@ export default class LevelOfEvidencePage extends React.Component<
     const tabs: any[] = [];
     [Version.V2, Version.DX, Version.PX, Version.FDA_NGS].forEach(version => {
       tabs.push(
-        <Tab eventKey={Version[version]} title={TAB_TITLES[version]}>
+        <Tab
+          eventKey={Version[version]}
+          title={TAB_TITLES[version]}
+          key={version}
+        >
           <Row className="mt-2">
             <Col className="col-auto mr-auto d-flex align-content-center">
               {V2_RELATED_LEVELS.includes(this.version) && (
@@ -202,7 +205,7 @@ export default class LevelOfEvidencePage extends React.Component<
                       <Form.Check
                         label={`Show mapping to ${LEVEL_NAME[versionCheck]}`}
                         type="checkbox"
-                        onClick={() =>
+                        onChange={() =>
                           this.toggleVersion(
                             this.version === versionCheck
                               ? Version.V2
@@ -211,6 +214,7 @@ export default class LevelOfEvidencePage extends React.Component<
                         }
                         name="mapping-to-other-levels"
                         id={`mapping-to-other-levels-${versionCheck}`}
+                        key={`mapping-to-other-levels-${versionCheck}`}
                         checked={this.version === versionCheck}
                       />
                     ))}
@@ -305,7 +309,7 @@ export default class LevelOfEvidencePage extends React.Component<
     });
 
     return (
-      <DocumentTitle title={DOCUMENT_TITLES.LEVELS}>
+      <DocumentTitle title={getPageTitle(PAGE_TITLE.LEVELS)}>
         <Row className="justify-content-center">
           <Col lg={10}>
             <div className="levels-of-evidence">

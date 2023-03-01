@@ -21,10 +21,10 @@ import _ from 'lodash';
 import {
   FdaLevelIcon,
   getCancerTypeNameFromOncoTreeType,
-  getCancerTypesName,
   getCancerTypesNameFromOncoTreeType,
   getDefaultColumnDefinition,
   getDrugNameFromTreatment,
+  getPageTitle,
   getTreatmentNameFromEvidence,
   isFdaLevel,
   levelOfEvidence2Level,
@@ -38,13 +38,13 @@ import {
   ANNOTATION_PAGE_TAB_KEYS,
   COMPONENT_PADDING,
   DEFAULT_REFERENCE_GENOME,
-  DOCUMENT_TITLES,
   FDA_LEVELS,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
   LEVELS,
   LG_TABLE_FIXED_HEIGHT,
   ONCOKB_LEVELS,
+  PAGE_TITLE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   REFERENCE_GENOME,
   TABLE_COLUMN_KEY,
@@ -894,7 +894,7 @@ export default class ActionableGenesPage extends React.Component<
     }
 
     return (
-      <DocumentTitle title={DOCUMENT_TITLES.ACTIONABLE_GENES}>
+      <DocumentTitle title={getPageTitle(PAGE_TITLE.ACTIONABLE_GENES)}>
         <>
           {levelSelectionSection}
           <Row

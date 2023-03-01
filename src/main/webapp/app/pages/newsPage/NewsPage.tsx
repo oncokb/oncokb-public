@@ -3,7 +3,7 @@ import { CitationText } from 'app/components/CitationText';
 import NewsList, { getNews, getNewsTitle } from 'app/pages/newsPage/NewsList';
 import { NEWS_BY_DATE } from 'app/pages/newsPage/NewsPageContent';
 import {
-  DOCUMENT_TITLES,
+  PAGE_TITLE,
   FAQ_LINK,
   IMG_MAX_WIDTH,
   ONCOKB_CONTACT_EMAIL,
@@ -18,7 +18,7 @@ import LevelChange from 'content/images/loe-change.png';
 import AAC_IMAGE from 'content/images/level_AAC.png';
 import { Linkout } from 'app/shared/links/Linkout';
 import { RouterStore } from 'mobx-react-router';
-import { scrollWidthOffset } from 'app/shared/utils/Utils';
+import { getPageTitle, scrollWidthOffset } from 'app/shared/utils/Utils';
 import { inject, observer } from 'mobx-react';
 import { Version } from 'app/pages/LevelOfEvidencePage';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
@@ -46,7 +46,7 @@ export default class NewsPage extends React.Component<{
 
   render() {
     return (
-      <DocumentTitle title={DOCUMENT_TITLES.NEWS}>
+      <DocumentTitle title={getPageTitle(PAGE_TITLE.NEWS)}>
         <div className="news">
           <div>
             <p>

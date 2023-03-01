@@ -12,9 +12,10 @@ import OncoKBTable, {
 import {
   filterByKeyword,
   getDefaultColumnDefinition,
+  getPageTitle,
 } from 'app/shared/utils/Utils';
 import {
-  DOCUMENT_TITLES,
+  PAGE_TITLE,
   MSK_IMPACT_TM,
   ONCOKB_TM,
   TABLE_COLUMN_KEY,
@@ -448,7 +449,7 @@ export default class CancerGenesPage extends React.Component<{
 
   render() {
     return (
-      <DocumentTitle title={DOCUMENT_TITLES.CANCER_GENES}>
+      <DocumentTitle title={getPageTitle(PAGE_TITLE.CANCER_GENES)}>
         <div className="cancerGenes">
           <Row>
             <Col className="col-auto mr-auto">

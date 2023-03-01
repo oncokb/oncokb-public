@@ -128,7 +128,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
       content.push(this.store.annotationResultByHgvsg.result.query.alteration);
     }
     if (this.store.tumorTypeQuery) {
-      content.push(this.store.tumorTypeQuery);
+      content.push(`in ${this.store.tumorTypeQuery}`);
     }
     return content.join(', ');
   }

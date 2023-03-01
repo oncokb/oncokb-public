@@ -2,13 +2,14 @@ import * as React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
 import _ from 'lodash';
-import { DOCUMENT_TITLES, ONCOKB_TM } from 'app/config/constants';
+import { PAGE_TITLE, ONCOKB_TM } from 'app/config/constants';
 import {
   INSTITUTION,
   ITeamMember,
   TeamMember,
   TITLE,
 } from 'app/pages/teamPage/TeamMember';
+import { getPageTitle } from 'app/shared/utils/Utils';
 
 export const TeamPage = () => {
   const teamMembers: ITeamMember[] = [
@@ -686,7 +687,7 @@ export const TeamPage = () => {
     },
   ];
   return (
-    <DocumentTitle title={DOCUMENT_TITLES.TEAM}>
+    <DocumentTitle title={getPageTitle(PAGE_TITLE.TEAM)}>
       <div className="team">
         <Row>
           <Col>

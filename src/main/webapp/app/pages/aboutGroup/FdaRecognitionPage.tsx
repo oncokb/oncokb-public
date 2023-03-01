@@ -1,6 +1,5 @@
 import {
-  AsteriskMark,
-  DOCUMENT_TITLES,
+  PAGE_TITLE,
   FdaRecognitionDisclaimer,
   LEVEL_TYPES,
   ONCOKB_TM,
@@ -17,15 +16,15 @@ import {
   getLoEPageLink,
   SopPageLink,
 } from 'app/shared/utils/UrlUtils';
-import styles from 'app/components/downloadButton/DownloadButton.module.scss';
+import { getPageTitle } from 'app/shared/utils/Utils';
 
 const FdaRecognitionPage = () => {
   return (
-    <DocumentTitle title={DOCUMENT_TITLES.FDA_RECOGNITION}>
+    <DocumentTitle title={getPageTitle(PAGE_TITLE.FDA_RECOGNITION)}>
       <div className="fda-recognition">
         <Row>
           <Col>
-            <h4>{DOCUMENT_TITLES.FDA_RECOGNITION}</h4>
+            <h4>{PAGE_TITLE.FDA_RECOGNITION}</h4>
             <p>
               <i>
                 <FdaRecognitionDisclaimer enableLink={false} />

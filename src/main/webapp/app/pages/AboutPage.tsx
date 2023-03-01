@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   BILIBILI_VIDEO_IDS,
-  DOCUMENT_TITLES,
+  PAGE_TITLE,
   ONCOKB_TM,
   PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
@@ -23,7 +23,11 @@ import Iframe from 'react-iframe';
 import * as QueryString from 'query-string';
 import _ from 'lodash';
 import { RouterStore } from 'mobx-react-router';
-import { getBilibiliLink, getYouTubeLink } from 'app/shared/utils/Utils';
+import {
+  getBilibiliLink,
+  getPageTitle,
+  getYouTubeLink,
+} from 'app/shared/utils/Utils';
 import { WebinarLink } from 'app/shared/utils/UrlUtils';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 
@@ -125,7 +129,7 @@ export class AboutPage extends React.Component<AboutPageProps> {
 
   render() {
     return (
-      <DocumentTitle title={DOCUMENT_TITLES.ABOUT}>
+      <DocumentTitle title={getPageTitle(PAGE_TITLE.ABOUT)}>
         <>
           <Row>
             <Col md={6} xs={12}>

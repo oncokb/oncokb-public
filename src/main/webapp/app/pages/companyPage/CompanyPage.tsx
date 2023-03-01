@@ -44,7 +44,7 @@ import {
 import { Link } from 'react-router-dom';
 import { QuickToolButton } from '../userPage/QuickToolButton';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
-import { filterByKeyword } from 'app/shared/utils/Utils';
+import { filterByKeyword, getPageTitle } from 'app/shared/utils/Utils';
 import { UsageToggleGroup } from 'app/pages/usageAnalysisPage/UsageToggleGroup';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import {
@@ -409,7 +409,7 @@ export default class CompanyPage extends React.Component<
             </Then>
             <Else>
               {this.getCompanyStatus === PromiseStatus.complete && (
-                <DocumentTitle title={this.company.name}>
+                <DocumentTitle title={getPageTitle(this.company.name)}>
                   <>
                     <Row className={getSectionClassName()}>
                       <Col>

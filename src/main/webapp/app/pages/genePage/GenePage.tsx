@@ -18,6 +18,7 @@ import { Col, Row } from 'react-bootstrap';
 import {
   getCancerTypeNameFromOncoTreeType,
   getCancerTypesName,
+  getPageTitle,
 } from 'app/shared/utils/Utils';
 import LoadingIndicator, {
   LoaderSize,
@@ -28,6 +29,7 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_GENE,
+  PAGE_TITLE,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
   ONCOGENIC_MUTATIONS,
@@ -404,7 +406,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
 
   render() {
     return (
-      <DocumentTitle title={this.store.hugoSymbol}>
+      <DocumentTitle title={getPageTitle(`${this.store.hugoSymbol}`)}>
         <If condition={!!this.hugoSymbolQuery}>
           <Then>
             <If

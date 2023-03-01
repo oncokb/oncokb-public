@@ -8,8 +8,6 @@ import {
   DataRelease,
   DEFAULT_MARGIN_BOTTOM_LG,
   DEMO_WEBSITE_LINK,
-  DOCUMENT_TITLES,
-  LicenseType,
   ONCOKB_TM,
   PAGE_ROUTE,
   PAGE_TITLE,
@@ -33,6 +31,7 @@ import DocumentTitle from 'react-document-title';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Linkout } from 'app/shared/links/Linkout';
 import { If, Then, Else } from 'react-if';
+import { getPageTitle } from 'app/shared/utils/Utils';
 
 type DownloadAvailabilityWithDate = DataRelease & DownloadAvailability;
 
@@ -159,7 +158,7 @@ export default class APIAccessPage extends React.Component<{
 
   render() {
     return (
-      <DocumentTitle title={DOCUMENT_TITLES.API_ACCESS}>
+      <DocumentTitle title={getPageTitle(PAGE_TITLE.API_ACCESS)}>
         <>
           <If condition={this.props.authenticationStore.account !== undefined}>
             <Then>
