@@ -196,6 +196,7 @@ export default class AlterationTableTabs extends React.Component<
       ? {
           width: '80%',
           marginBottom: '-30px',
+          zIndex: 1,
         }
       : undefined;
   }
@@ -240,7 +241,7 @@ export default class AlterationTableTabs extends React.Component<
         title: tab.title,
         getContent: () => {
           return (
-            <div>
+            <div className={'d-flex flex-column'}>
               <div style={this.tabDescriptionStyle}>
                 <div>{this.getTabDescription(tab.key)}</div>
                 <ReportIssue
