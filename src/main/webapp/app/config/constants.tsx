@@ -482,7 +482,7 @@ export enum PAGE_TITLE {
   LOGIN = 'Log in',
   NEWS = 'Latest News',
   REGISTER = 'Register',
-  TEAM = 'OncoKB Team™',
+  TEAM = 'OncoKB™ Team',
   TERMS = 'Terms of Use',
   SOP = 'OncoKB™ Standard Operating Procedure',
   YEAR_END_SUMMARY = 'Year End Summary',
