@@ -16,6 +16,7 @@ Disallow: /api/mails/
 Disallow: /api/register/
 Disallow: /api/usage/
 Disallow: /api/users/
+Disallow: /api/user-details/
 Disallow: /api/user-mails/
 Disallow: /api/tokens/
 Disallow: /api/token-stats/
