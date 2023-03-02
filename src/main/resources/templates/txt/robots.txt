@@ -18,5 +18,6 @@ Disallow: /api/usage/
 Disallow: /api/users/
 Disallow: /api/user-mails/
 Disallow: /api/tokens/
+Disallow: /api/token-stats/
 Disallow: /management/
 Disallow: /v2/api-docs/
