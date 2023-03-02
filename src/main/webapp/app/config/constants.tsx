@@ -5,7 +5,6 @@ import {
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Linkout } from 'app/shared/links/Linkout';
 import { Feedback, FeedbackType } from 'app/components/feedback/types';
 
 /* eslint no-shadow: 0 */
@@ -34,7 +33,11 @@ export const messages = {
   DATA_ERROR_ALERT: 'Internal Error',
 };
 
-export const ONCOKB_TM = 'OncoKB™';
+export const ONCOKB = 'OncoKB';
+export const ONCOKB_TM = `${ONCOKB}™`;
+
+export const MSKCC = 'Memorial Sloan Kettering Cancer Center';
+
 export const MSK_IMPACT_TM = 'MSK-IMPACT™';
 
 export const APP_DATE_FORMAT = 'MM/DD/YY HH:mm';
@@ -458,20 +461,30 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
 };
 
 export enum PAGE_TITLE {
+  ABOUT = 'About OncoKB™',
   ACCOUNT = 'Account',
   ACCOUNT_SETTINGS = 'Account Settings',
   ACCOUNT_PASSWORD = 'Change Password',
+  ACTIONABLE_GENES = 'OncoKB™ Actionable Genes',
   ADMIN_USER_DETAILS = 'Registered Users',
   ADMIN_SEND_EMAILS = 'Send Emails to Users',
   ADMIN_CREATE_ACCOUNT = 'Create New Account',
   ADMIN_USAGE_ANALYSIS = 'Usage Analysis',
   ADMIN_ADD_COMPANY = 'Add New Company',
   ADMIN_COMPANY_DETAILS = 'Companies',
+  API_ACCESS = 'API Access',
+  CANCER_GENES = 'OncoKB™ Cancer Gene List',
+  FAQ = 'Frequently Asked Question',
+  FDA_RECOGNITION = 'OncoKB™ is now an FDA-recognized Public Human Genetic Variant Database*',
+  HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base | OncoKB™ is powered by the clinical expertise of Memorial Sloan Kettering Cancer Center and is the first somatic variant database with FDA recognition.",
+  LEVELS = 'OncoKB™ Levels of Evidence',
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
+  NEWS = 'Latest News',
   REGISTER = 'Register',
+  TEAM = 'OncoKB™ Team',
   TERMS = 'Terms of Use',
-  SOP = 'SOP',
+  SOP = 'OncoKB™ Standard Operating Procedure',
   YEAR_END_SUMMARY = 'Year End Summary',
 }
 
@@ -661,20 +674,6 @@ export enum TERM_DEFINITION {
   ONLY_ACADEMIC_USAGE = 'ONLY_ACADEMIC_USAGE',
   NO_COMPANY_USAGE = 'NO_COMPANY_USAGE',
   OK_WITH_TERMS_OF_USE = 'OK_WITH_TERMS_OF_USE',
-}
-
-export enum DOCUMENT_TITLES {
-  HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base",
-  LEVELS = 'Levels of Evidence',
-  TEAM = 'Team',
-  ABOUT = 'About',
-  ACTIONABLE_GENES = 'Actionable Genes',
-  TERMS = 'Terms of Use',
-  YEAR_END_SUMMARY = 'Year End Summary',
-  NEWS = 'Latest News',
-  API_ACCESS = 'API Access',
-  CANCER_GENES = 'Cancer Gene List',
-  FDA_RECOGNITION = 'OncoKB™ is now an FDA-recognized Public Human Genetic Variant Database*',
 }
 
 export const FDA_RECOGNITION_DISCLAIMER: React.FunctionComponent<{

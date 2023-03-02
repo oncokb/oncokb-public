@@ -5,18 +5,14 @@ import AuthenticationStore from 'app/store/AuthenticationStore';
 import { Provider, observer } from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';
 import { RouterStore, SynchronizedHistory } from 'mobx-react-router';
-import { Router, withRouter } from 'react-router';
+import { Router } from 'react-router';
 import { syncHistoryWithStore } from 'mobx-react-router';
 import { createBrowserHistory } from 'history';
 import DocumentTitle from 'react-document-title';
-import {
-  DOCUMENT_TITLES,
-  PAGE_ROUTE,
-  RECAPTCHA_SITE_KEY,
-} from 'app/config/constants';
-import { observable, action } from 'mobx';
+import { PAGE_TITLE, PAGE_ROUTE } from 'app/config/constants';
+import { action } from 'mobx';
 import autobind from 'autobind-decorator';
-import Reaptcha from 'reaptcha';
+import { getPageTitle } from 'app/shared/utils/Utils';
 
 export type Stores = {
   appStore: AppStore;
@@ -90,7 +86,7 @@ class App extends React.Component {
     this.checkHash(history);
 
     return (
-      <DocumentTitle title={DOCUMENT_TITLES.HOME}>
+      <DocumentTitle title={getPageTitle(PAGE_TITLE.HOME, false)}>
         <>
           {
             <Provider {...this.stores}>

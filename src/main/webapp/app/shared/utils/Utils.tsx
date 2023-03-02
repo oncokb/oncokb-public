@@ -28,6 +28,8 @@ import {
   LOSS_OF_FUNCTION_MUTATIONS,
   SWITCH_OF_FUNCTION_MUTATIONS,
   ONCOKB_TM,
+  ONCOKB,
+  MSKCC,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
@@ -871,4 +873,15 @@ export const isOncogenic = (oncogenicity: string) => {
     default:
       return false;
   }
+};
+
+export const getPageTitle = (mainContent: string, withPostFix = true) => {
+  const content = [mainContent];
+  if (withPostFix) {
+    if (!mainContent.includes(ONCOKB)) {
+      content.push(ONCOKB_TM);
+    }
+    content.push(MSKCC);
+  }
+  return `${content.join(' | ')}`;
 };
