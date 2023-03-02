@@ -3,37 +3,42 @@
         xmlns:th="http://www.thymeleaf.org">
   <url>
     <loc th:text="${baseUrl}+'/levels'"></loc>
-    <changefreq>monthly</changefreq>
+    <changefreq>yearly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc th:text="${baseUrl}+'/actionableGenes'"></loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc th:text="${baseUrl}+'/terms'"></loc>
-    <changefreq>monthly</changefreq>
+    <loc th:text="${baseUrl}+'/fda-recognition'"></loc>
+    <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc th:text="${baseUrl}+'/news'"></loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc th:text="${baseUrl}+'/cancerGenes'"></loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc th:text="${baseUrl}+'/about'"></loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc th:text="${baseUrl}+'/team'"></loc>
-    <changefreq>monthly</changefreq>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc th:text="${baseUrl}+'/year-end-summary'"></loc>
+    <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 </urlset>

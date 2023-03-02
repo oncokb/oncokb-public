@@ -3,12 +3,22 @@ Sitemap: [(${baseUrl})]/sitemap_index.xml
 # robotstxt.org/
 
 User-agent: *
-Disallow: /api/
-Disallow: /api/account
-Disallow: /api/account/change-password
-Disallow: /api/account/sessions
+Disallow: /api/v1/annotate/
+Disallow: /api/v1/utils/allCuratedGenes.txt
+Disallow: /api/v1/utils/cancerGeneList.txt
+Disallow: /api/account/
 Disallow: /api/audits/
+Disallow: /api/companies/
+Disallow: /api/companies-domains/
+Disallow: /api/cronjob/
 Disallow: /api/logs/
+Disallow: /api/mails/
+Disallow: /api/register/
+Disallow: /api/usage/
 Disallow: /api/users/
+Disallow: /api/user-details/
+Disallow: /api/user-mails/
+Disallow: /api/tokens/
+Disallow: /api/token-stats/
 Disallow: /management/
 Disallow: /v2/api-docs/
