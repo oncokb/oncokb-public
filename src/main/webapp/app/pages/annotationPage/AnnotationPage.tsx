@@ -520,6 +520,7 @@ export default class AnnotationPage extends React.Component<
                       margin: 0,
                       padding: 0,
                     }),
+                    menu: base => ({ ...base, zIndex: 10 }),
                   }}
                   tumorType={this.props.tumorType}
                   onChange={(selectedOption: any) =>
