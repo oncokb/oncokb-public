@@ -14,11 +14,9 @@ import {
   PAGE_ROUTE,
   SHORTEN_TEXT_FROM_LIST_THRESHOLD,
   TABLE_COLUMN_KEY,
-  LEVEL_TYPES,
   ONCOGENICITY,
   LEVELS,
   LEVEL_PRIORITY,
-  FDA_LEVELS,
   ONCOGENIC_MUTATIONS,
   DELETION,
   FUSIONS,
@@ -29,7 +27,6 @@ import {
   SWITCH_OF_FUNCTION_MUTATIONS,
   ONCOKB_TM,
   ONCOKB,
-  MSKCC,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
@@ -47,7 +44,6 @@ import {
 } from 'app/shared/utils/ReactTableUtils';
 import { TableCellRenderer } from 'react-table';
 import { LevelWithDescription } from 'app/components/LevelWithDescription';
-import pluralize from 'pluralize';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import {
@@ -55,13 +51,10 @@ import {
   GenePageLink,
   OncoTreeLink,
   SopPageLink,
-  TumorTypePageLink,
 } from 'app/shared/utils/UrlUtils';
 import moment from 'moment';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import WithSeparator from 'react-with-separator';
 import { COLOR_BLUE } from 'app/config/theme';
-import { Linkout } from 'app/shared/links/Linkout';
 import * as styles from 'app/index.module.scss';
 import { Version } from 'app/pages/LevelOfEvidencePage';
 import { Link } from 'react-router-dom';
@@ -876,12 +869,16 @@ export const isOncogenic = (oncogenicity: string) => {
 };
 
 export const getPageTitle = (mainContent: string, withPostFix = true) => {
-  const content = [mainContent];
-  if (withPostFix) {
-    if (!mainContent.includes(ONCOKB)) {
-      content.push(ONCOKB_TM);
+  const content = [];
+  if (mainContent) {
+    content.push(mainContent);
+    if (withPostFix) {
+      if (!mainContent.includes(ONCOKB)) {
+        content.push(ONCOKB_TM);
+      }
     }
-    content.push(MSKCC);
+  } else {
+    content.push(ONCOKB_TM);
   }
   return `${content.join(' | ')}`;
 };
