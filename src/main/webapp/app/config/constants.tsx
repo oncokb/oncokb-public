@@ -476,7 +476,7 @@ export enum PAGE_TITLE {
   CANCER_GENES = 'OncoKB™ Cancer Gene List',
   FAQ = 'Frequently Asked Question',
   FDA_RECOGNITION = 'OncoKB™ is now an FDA-recognized Public Human Genetic Variant Database*',
-  HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base | OncoKB™ is powered by the clinical expertise of Memorial Sloan Kettering Cancer Center and is the first somatic variant database with FDA recognition.",
+  HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base",
   LEVELS = 'OncoKB™ Levels of Evidence',
   LOGOUT = 'Log out',
   LOGIN = 'Log in',

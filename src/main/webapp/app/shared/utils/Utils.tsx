@@ -876,12 +876,16 @@ export const isOncogenic = (oncogenicity: string) => {
 };
 
 export const getPageTitle = (mainContent: string, withPostFix = true) => {
-  const content = [mainContent];
-  if (withPostFix) {
-    if (!mainContent.includes(ONCOKB)) {
-      content.push(ONCOKB_TM);
+  const content = [];
+  if (mainContent) {
+    content.push(mainContent);
+    if (withPostFix) {
+      if (!mainContent.includes(ONCOKB)) {
+        content.push(ONCOKB_TM);
+      }
     }
-    content.push(MSKCC);
+  } else {
+    content.push(ONCOKB_TM);
   }
   return `${content.join(' | ')}`;
 };
