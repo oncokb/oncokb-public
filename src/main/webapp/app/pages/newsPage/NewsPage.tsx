@@ -23,7 +23,7 @@ import { inject, observer } from 'mobx-react';
 import { Version } from 'app/pages/LevelOfEvidencePage';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
-import { SopPageLink } from 'app/shared/utils/UrlUtils';
+import { GenePageLink, SopPageLink } from 'app/shared/utils/UrlUtils';
 import { Row } from 'react-bootstrap';
 import { FdaApprovalLink } from 'app/pages/newsPage/Links';
 
@@ -127,7 +127,9 @@ export default class NewsPage extends React.Component<{
                             </thead>
                             <tbody>
                               <tr>
-                                <td>ERBB2</td>
+                                <td>
+                                  <GenePageLink hugoSymbol={'ERBB2'} />
+                                </td>
                                 <td>Amplification</td>
                                 <td>Colorectal Cancer</td>
                                 <td>Tucatinib + Trastuzumab</td>
@@ -168,7 +170,11 @@ export default class NewsPage extends React.Component<{
                             </thead>
                             <tbody>
                               <tr>
-                                <td>KRAS, NRAS</td>
+                                <td>
+                                  <GenePageLink hugoSymbol={'KRAS'} />
+                                  {', '}
+                                  <GenePageLink hugoSymbol={'NRAS'} />
+                                </td>
                                 <td>Oncogenic Mutations</td>
                                 <td>Colorectal Cancer</td>
                                 <td>R1</td>

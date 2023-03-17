@@ -180,7 +180,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'Changed annotation and addition of therapies for variants with a level of evidence',
     changedAnnotation: [
       [
-        'ESR1',
+        <GenePageLink hugoSymbol={'ESR1'} />,
         'Oncogenic Ligand-Binding Domain Missense Mutations (310_547)',
         'Breast Cancer',
         '3A',
@@ -203,7 +203,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         />,
       ],
       [
-        'ESR1',
+        <GenePageLink hugoSymbol={'ESR1'} />,
         'Oncogenic Ligand-Binding Domain In-Frame Insertions or Deletions (310_547)',
         'Breast Cancer',
         '3A',
@@ -247,7 +247,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
     changedAnnotation: [
       [
-        'KRAS',
+        <GenePageLink hugoSymbol={'KRAS'} />,
         'G12C',
         'Non-Small Cell Lung Cancer',
         '1',
@@ -288,7 +288,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
     changedAnnotation: [
       [
-        'IDH1',
+        <GenePageLink hugoSymbol={'IDH1'} />,
         'R132C/H/L/G/S',
         'Acute Myeloid Leukemia',
         '1',
@@ -321,7 +321,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'RET',
+        <GenePageLink hugoSymbol={'RET'} />,
         'Fusions',
         'All Solid Tumors',
         'Selpercatinib',
@@ -342,7 +342,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'TP53',
+        <GenePageLink hugoSymbol={'TP53'} />,
         'Y220C',
         'All Solid Tumors',
         'PC14586',
@@ -363,7 +363,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '4',
-        'PIK3CA',
+        <GenePageLink hugoSymbol={'PIK3CA'} />,
         'Oncogenic Mutations',
         'All Solid Tumors',
         'RLY-2608',
@@ -376,7 +376,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '4',
-        'PIK3CA',
+        <GenePageLink hugoSymbol={'PIK3CA'} />,
         'H1047R',
         'All Solid Tumors (excluding Colorectal Cancer)',
         'LOXO-783',
@@ -389,7 +389,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '4',
-        'CCNE1',
+        <GenePageLink hugoSymbol={'CCNE1'} />,
         'Amplification',
         'All Solid Tumors',
         'RP-6306, BLU-222',
@@ -405,7 +405,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '4',
-        'KRAS',
+        <GenePageLink hugoSymbol={'KRAS'} />,
         'G12D',
         'All Solid Tumors',
         'RMC-6236',
@@ -436,7 +436,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </thead>
             <tbody>
               <tr>
-                <td>FGFR2</td>
+                <td>
+                  <GenePageLink hugoSymbol={'FGFR2'} />
+                </td>
                 <td>Fusions</td>
                 <td>Cholangiocarcinoma</td>
                 <td>1</td>
@@ -464,7 +466,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>MET</td>
+                <td>
+                  <GenePageLink hugoSymbol={'MET'} />
+                </td>
                 <td>Amplification</td>
                 <td>Non-Small Cell Lung Cancer</td>
                 <td>2</td>
@@ -484,7 +488,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>PIK3CA</td>
+                <td>
+                  <GenePageLink hugoSymbol={'PIK3CA'} />
+                </td>
                 <td>
                   C420R, E542K, E545A, E545D, E545G, E545K, Q546E, Q546R,
                   H1047L, H1047R and H1047Y
@@ -507,7 +513,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>PIK3CA</td>
+                <td>
+                  <GenePageLink hugoSymbol={'PIK3CA'} />
+                </td>
                 <td>
                   Oncogenic Mutations (excluding C420R, E542K, E545A, E545D,
                   E545G, E545K, Q546E, Q546R, H1047L, H1047R, and H1047Y)
@@ -530,7 +538,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>PIK3CA</td>
+                <td>
+                  <GenePageLink hugoSymbol={'PIK3CA'} />
+                </td>
                 <td>H1047R</td>
                 <td>Breast Cancer</td>
                 <td>1</td>
@@ -570,7 +580,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'V600E',
         'All Solid Tumors (excluding Colorectal Cancer)',
         'Dabrafenib + Trametinib',
@@ -584,7 +594,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'V600E',
         'Biliary Tract Cancer, Diffuse Glioma, Encapsulated Glioma, Ganglioglioma, Pleomorphic Xanthoastrocytoma, Pilocytic Astrocytoma',
         'Dabrafenib + Trametinib',
@@ -598,7 +608,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         />,
       ],
       [
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Oncogenic Mutations',
         'Non-Small Cell Lung Cancer',
         'Trastuzumab Deruxtecan',
@@ -612,7 +622,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         />,
       ],
       [
-        'FGFR1',
+        <GenePageLink hugoSymbol={'FGFR1'} />,
         'Fusions',
         'Myeloid/Lymphoid Neoplasms with FGFR1 Rearrangement',
         'Pemigatinib',
@@ -634,7 +644,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '3A',
-        'KMT2A',
+        <GenePageLink hugoSymbol={'KMT2A'} />,
         'Fusions',
         'B-Lymphoblastic Leukemia/Lymphoma, Acute Myeloid Leukemia',
         'SNDX-5613 (Menin inhibitor)',
@@ -650,7 +660,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'NPM1',
+        <GenePageLink hugoSymbol={'NPM1'} />,
         'Oncogenic Mutations',
         'Acute Myeloid Leukemia',
         'SNDX-5613 (Menin inhibitor)',
@@ -667,7 +677,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'ALK',
+        <GenePageLink hugoSymbol={'ALK'} />,
         'Fusions',
         'Inflammatory Myofibroblastic Tumor',
         'Crizotinib',
@@ -700,7 +710,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </thead>
             <tbody>
               <tr>
-                <td>NRG1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'NRG1'} />
+                </td>
                 <td>Fusions</td>
                 <td>Non-Small Cell Lung Cancer</td>
                 <td>3A</td>
@@ -741,7 +753,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </thead>
             <tbody>
               <tr>
-                <td>ESR1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'ESR1'} />
+                </td>
                 <td>Oncogenic Mutations</td>
                 <td>Breast Cancer</td>
                 <td>3A</td>
@@ -760,7 +774,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '06062022': {
     changedAnnotation: [
       [
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'V600E',
         'Biliary Tract Cancer',
         'Dabrafenib + Trametinib',
@@ -791,7 +805,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </thead>
             <tbody>
               <tr>
-                <td>ALK</td>
+                <td>
+                  <GenePageLink hugoSymbol={'ALK'} />
+                </td>
                 <td>Fusions</td>
                 <td>Inflammatory Myofibroblastic Tumor</td>
                 <td>2</td>
@@ -812,7 +828,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>ROS1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'ROS1'} />
+                </td>
                 <td>Fusions</td>
                 <td>Non-Small Cell Lung Cancer</td>
                 <td>1</td>
@@ -839,7 +857,13 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>NTRK1, NTRK2, NTRK3</td>
+                <td>
+                  <GenePageLink hugoSymbol={'NTRK1'} />,
+                  <br />
+                  <GenePageLink hugoSymbol={'NTRK2'} />,
+                  <br />
+                  <GenePageLink hugoSymbol={'NTRK3'} />
+                </td>
                 <td>Fusions</td>
                 <td>All Solid Tumors</td>
                 <td>1</td>
@@ -901,7 +925,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </thead>
             <tbody>
               <tr>
-                <td>EGFR</td>
+                <td>
+                  <GenePageLink hugoSymbol={'EGFR'} />
+                </td>
                 <td>S768I, L861Q, G719</td>
                 <td>Non-Small Cell Lung Cancer</td>
                 <td>1</td>
@@ -919,7 +945,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>ROS1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'ROS1'} />
+                </td>
                 <td>Fusions</td>
                 <td>Non-Small Cell Lung Cancer</td>
                 <td>1</td>
@@ -937,7 +965,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>ROS1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'ROS1'} />
+                </td>
                 <td>Fusions</td>
                 <td>Non-Small Cell Lung Cancer</td>
                 <td>1</td>
@@ -951,7 +981,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>MET</td>
+                <td>
+                  <GenePageLink hugoSymbol={'MET'} />
+                </td>
                 <td>Amplifications</td>
                 <td>Non-Small Cell Lung Cancer</td>
                 <td>2</td>
@@ -969,7 +1001,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>MET</td>
+                <td>
+                  <GenePageLink hugoSymbol={'MET'} />
+                </td>
                 <td>Amplifications</td>
                 <td>Non-Small Cell Lung Cancer</td>
                 <td>2</td>
@@ -992,7 +1026,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>KRAS</td>
+                <td>
+                  <GenePageLink hugoSymbol={'KRAS'} />
+                </td>
                 <td>G12C</td>
                 <td>Pancreatic Cancer</td>
                 <td>3A</td>
@@ -1016,7 +1052,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>FGFR2</td>
+                <td>
+                  <GenePageLink hugoSymbol={'FGFR2'} />
+                </td>
                 <td>Fusions</td>
                 <td>Cholangiocarcinoma</td>
                 <td>1</td>
@@ -1047,7 +1085,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '2',
-        'BRCA2',
+        <GenePageLink hugoSymbol={'BRCA2'} />,
         'Oncogenic Mutations',
         'Uterine Sarcoma',
         'Olaparib, Rucaparib, Niraparib',
@@ -1058,7 +1096,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '2',
-        'PALB2',
+        <GenePageLink hugoSymbol={'PALB2'} />,
         'Oncogenic Mutations',
         'Pancreatic Cancer',
         'Rucaparib',
@@ -1070,7 +1108,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'BRCA1, BRCA2',
+        <>
+          <GenePageLink hugoSymbol={'BRCA1'} />,
+          <br />
+          <GenePageLink hugoSymbol={'BRCA2'} />
+        </>,
         'Oncogenic Mutations',
         'Pancreatic Cancer',
         'PARPi',
@@ -1100,7 +1142,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '3A',
-        'EGFR',
+        <GenePageLink hugoSymbol={'EGFR'} />,
         'Exon 19 deletion, Exon 19 insertion, G719, L858R, L861Q, S768I',
         'Non-Small Cell Lung Cancer',
         'Patritumab Deruxtecan',
@@ -1111,7 +1153,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'EGFR',
+        <GenePageLink hugoSymbol={'EGFR'} />,
         'Exon 20 insertion',
         'Non-Small Cell Lung Cancer',
         'CLN-081',
@@ -1125,7 +1167,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Oncogenic Mutations',
         'Non-Small Cell Lung Cancer',
         'Trastuzumab + Pertuzumab + Docetaxel',
@@ -1133,7 +1175,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'KRAS',
+        <GenePageLink hugoSymbol={'KRAS'} />,
         'G12C',
         'Gastrointestinal Cancers (excluding Colorectal and Appendiceal Cancer), Pancreatic Adenocarcinoma',
         'Adagrasib',
@@ -1157,7 +1199,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '4',
-        'STK11',
+        <GenePageLink hugoSymbol={'STK11'} />,
         'Oncogenic Mutations',
         'Non-Small Cell Lung Cancer',
         'Bemcentinib + Pembrolizumab',
@@ -1181,7 +1223,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'ABL1',
+        <GenePageLink hugoSymbol={'ABL1'} />,
         'T315I',
         'Chronic Myelogenous Leukemia',
         'Asciminib',
@@ -1200,7 +1242,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'IDH1',
+        <GenePageLink hugoSymbol={'IDH1'} />,
         'R132',
         'Glioma',
         'Ivosidenib',
@@ -1208,7 +1250,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'KRAS',
+        <GenePageLink hugoSymbol={'KRAS'} />,
         'G12C',
         'Colorectal Cancer',
         'Adagrasib, Adagrasib + Cetuximab',
@@ -1221,7 +1263,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '4',
-        'MDM2',
+        <GenePageLink hugoSymbol={'MDM2'} />,
         'Amplification',
         'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
         'Milademetan',
@@ -1232,7 +1274,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'Updated therapeutic implications: New variants with a level of evidence',
     changedAnnotation: [
       [
-        'ABL1',
+        <GenePageLink hugoSymbol={'ABL1'} />,
         'BCR-ABL1 Fusion',
         'Chronic Myelogenous Leukemia',
         'Asciminib',
@@ -1249,7 +1291,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </WithSeparator>,
       ],
       [
-        'BRCA1/BRCA2',
+        <>
+          <GenePageLink hugoSymbol={'BRCA1'} />/
+          <GenePageLink hugoSymbol={'BRCA2'} />
+        </>,
         'Oncogenic Mutations',
         'Breast Cancer',
         'Olaparib, Talazoparib',
@@ -1275,7 +1320,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
       ],
       [
-        'MET',
+        <GenePageLink hugoSymbol={'MET'} />,
         'Y1003mut',
         'Non-Small Cell Lung Cancer',
         'Tepotinib, Capmatinib',
@@ -1301,7 +1346,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
       ],
       [
-        'MET',
+        <GenePageLink hugoSymbol={'MET'} />,
         'Y1003mut',
         'Non-Small Cell Lung Cancer',
         'Crizotinib',
@@ -1331,7 +1376,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           rows={[
             [
               '1',
-              'ALK',
+              <GenePageLink hugoSymbol={'ALK'} />,
               'Oncogenic Mutations',
               'Fusions',
               'Non-Small Cell Lung Cancer',
@@ -1349,7 +1394,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             ],
             [
               '2',
-              'BRAF',
+              <GenePageLink hugoSymbol={'BRAF'} />,
               'V600',
               'V600 (Excluding V600E, V600K)',
               'Melanoma',
@@ -1363,7 +1408,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             ],
             [
               '2',
-              'EZH2',
+              <GenePageLink hugoSymbol={'EZH2'} />,
               'Oncogenic Mutations',
               'Oncogenic Mutations (Excluding Y646F, A692V, Y646C, Y646S, Y646N, Y646H, A682G)',
               'Follicular Lymphoma',
@@ -1378,7 +1423,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             ],
             [
               '2',
-              'PIK3CA',
+              <GenePageLink hugoSymbol={'PIK3CA'} />,
               'Oncogenic Mutations',
               'Oncogenic Mutations (Excluding E545G, Q546E, E545A, H1047R, C420R, H1047Y, Q546R, H1047L, E542K, E545D, E545K)',
               'Breast Cancer',
@@ -1421,7 +1466,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           rows={[
             [
               '3A',
-              'PTCH1',
+              <GenePageLink hugoSymbol={'PTCH1'} />,
               'Truncating Mutations',
               'Embryonal Tumor',
               'Medulloblastoma',
@@ -1465,7 +1510,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             <tbody>
               <tr>
                 <td>2</td>
-                <td>BRAF</td>
+                <td>
+                  <GenePageLink hugoSymbol={'BRAF'} />
+                </td>
                 <td>V600E</td>
                 <td>Encapsulated Glioma, Diffuse Glioma</td>
                 <td>Dabrafenib + Trametinib, Vemurafenib + Cobimetinib</td>
@@ -1480,7 +1527,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>2</td>
-                <td>BRAF</td>
+                <td>
+                  <GenePageLink hugoSymbol={'BRAF'} />
+                </td>
                 <td>V600</td>
                 <td>Langerhans Cell Histiocytosis</td>
                 <td>Vemurafenib, Dabrafenib</td>
@@ -1493,7 +1542,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td rowSpan={3}>2</td>
-                <td rowSpan={3}>BRAF</td>
+                <td rowSpan={3}>
+                  <GenePageLink hugoSymbol={'BRAF'} />
+                </td>
                 <td rowSpan={3}>Oncogenic Mutations, excluding V600</td>
                 <td>Erdheim-Chester Disease</td>
                 <td rowSpan={3}>Cobimetinib, Trametinib</td>
@@ -1524,7 +1575,21 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td rowSpan={3}>2</td>
-                <td rowSpan={3}>ARAF, RAF1, KRAS, NRAS, MAP2K1, MAP2K2</td>
+                <td rowSpan={3}>
+                  <>
+                    <GenePageLink hugoSymbol={'ARAF'} />
+                    {', '}
+                    <GenePageLink hugoSymbol={'RAF1'} />
+                    {', '}
+                    <GenePageLink hugoSymbol={'KRAS'} />
+                    {', '}
+                    <GenePageLink hugoSymbol={'NRAS'} />
+                    {', '}
+                    <GenePageLink hugoSymbol={'MAP2K1'} />
+                    {', '}
+                    <GenePageLink hugoSymbol={'MAP2K2'} />
+                  </>
+                </td>
                 <td rowSpan={3}>Oncogenic Mutations</td>
                 <td>Erdheim-Chester Disease</td>
                 <td rowSpan={3}>Cobimetinib, Trametinib</td>
@@ -1555,7 +1620,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>3A</td>
-                <td>BRAF</td>
+                <td>
+                  <GenePageLink hugoSymbol={'BRAF'} />
+                </td>
                 <td>V600</td>
                 <td>Histiocytosis</td>
                 <td>Vemurafenib, Dabrafenib</td>
@@ -1565,7 +1632,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>3A</td>
-                <td>KRAS</td>
+                <td>
+                  <GenePageLink hugoSymbol={'KRAS'} />
+                </td>
                 <td>Oncogenic Mutations</td>
                 <td>Histiocytosis</td>
                 <td>Cobimetinib, Trametinib</td>
@@ -1575,7 +1644,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>3A</td>
-                <td>NRG1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'NRG1'} />
+                </td>
                 <td>Fusions</td>
                 <td>All Solid Tumors</td>
                 <td>Zenocutuzumab</td>
@@ -1590,7 +1661,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>R2</td>
-                <td>BTK</td>
+                <td>
+                  <GenePageLink hugoSymbol={'BTK'} />
+                </td>
                 <td>C481R, C481F, C481Y, T474I, T474S, T316A</td>
                 <td>Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma</td>
                 <td>Ibrutinib</td>
@@ -1616,7 +1689,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     changedAnnotation: [
       [
         '3A',
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'Oncogenic Mutations, excluding V600',
         'Histiocytosis',
         'Cobimetinib',
@@ -1625,7 +1698,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'ARAF, RAF1, NRAS, MAP2K2',
+        <>
+          <GenePageLink hugoSymbol={'ARAF'} />,
+          <GenePageLink hugoSymbol={'RAF1'} />,
+          <GenePageLink hugoSymbol={'NRAS'} />,
+          <GenePageLink hugoSymbol={'MAP2K2'} />
+        </>,
         'Oncogenic Mutations',
         'Histiocytosis',
         'Cobimetinib',
@@ -1659,7 +1737,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         'R2',
-        'EGFR',
+        <GenePageLink hugoSymbol={'EGFR'} />,
         'G724S',
         'Non-Small Cell Lung Cancer',
         'Osimertinib',
@@ -1668,7 +1746,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'EGFR',
+        <GenePageLink hugoSymbol={'EGFR'} />,
         'Exon 20 Insertions',
         'Non-Small Cell Lung Cancer',
         'Mobocertinib',
@@ -1695,7 +1773,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '2',
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'Fusions',
         'Pilocytic Astrocytoma',
         'Selumetinib',
@@ -1707,7 +1785,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'IDH1',
+        <GenePageLink hugoSymbol={'IDH1'} />,
         'R132',
         'Cholangiocarcinoma',
         'Ivosidenib',
@@ -1733,7 +1811,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'KIT',
+        <GenePageLink hugoSymbol={'KIT'} />,
         'D816',
         'Mastocytosis',
         'Avapritinib',
@@ -1761,7 +1839,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </WithSeparator>,
       ],
       [
-        'EGFR',
+        <GenePageLink hugoSymbol={'EGFR'} />,
         'Exon 20 Insertions',
         'Non-Small Cell Lung Cancer',
         'Amivantamab',
@@ -1792,7 +1870,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Amplification',
         'Esophagogastric Cancer',
         'Pembrolizumab + Trastuzumab + Chemotherapy',
@@ -1808,7 +1886,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
-        'FGFR2',
+        <GenePageLink hugoSymbol={'FGFR2'} />,
         'Fusions',
         'Cholangiocarcinoma',
         'Infigratinib',
@@ -1829,7 +1907,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '4',
-        'ARID1A',
+        <GenePageLink hugoSymbol={'ARID1A'} />,
         'Truncating Mutations',
         'All Solid Tumors',
         'Tazemetostat',
@@ -1837,7 +1915,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '4',
-        'ARID1A',
+        <GenePageLink hugoSymbol={'ARID1A'} />,
         'Truncating Mutations',
         'All Solid Tumors',
         'PLX2853',
@@ -1846,7 +1924,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'KRAS',
+        <GenePageLink hugoSymbol={'KRAS'} />,
         'G12C',
         'Non-Small Cell Lung Cancer',
         'Sotorasib',
@@ -1873,7 +1951,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           rows={[
             [
               '1',
-              'EZH2',
+              <GenePageLink hugoSymbol={'EZH2'} />,
               'Follicular Lymphoma',
               'Tazemetostat',
               'Oncogenic Mutations',
@@ -1882,7 +1960,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             ],
             [
               '1',
-              'IDH1',
+              <GenePageLink hugoSymbol={'IDH1'} />,
               'AML',
               'Ivosidenib',
               'Oncogenic Mutations',
@@ -1891,7 +1969,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             ],
             [
               '1',
-              'IDH2',
+              <GenePageLink hugoSymbol={'IDH2'} />,
               'AML',
               'Enasidenib',
               'Oncogenic Mutations',
@@ -1900,7 +1978,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             ],
             [
               '1',
-              'PIK3CA',
+              <GenePageLink hugoSymbol={'PIK3CA'} />,
               'Breast Cancer',
               'Alpelisib + Fulvestrant',
               'Oncogenic Mutations',
@@ -1958,7 +2036,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '2',
-        'IDH1',
+        <GenePageLink hugoSymbol={'IDH1'} />,
         'Oncogenic Mutations',
         'Chondrosarcoma',
         'Ivosidenib',
@@ -1969,7 +2047,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '2',
-        'JAK2',
+        <GenePageLink hugoSymbol={'JAK2'} />,
         'Fusions',
         'Myeloid/Lymphoid Neoplasms with Eosinophilia and Rearrangement of PDGFRA/PDGFRB or FGFR1 or with PCM1-JAK2',
         'Ruxolitinib, Fedratinib',
@@ -1983,7 +2061,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '2',
-        'FGFR1',
+        <GenePageLink hugoSymbol={'FGFR1'} />,
         'Fusions',
         'Myeloid/Lymphoid Neoplasms with FGFR1 Rearrangement',
         'Pemigatinib',
@@ -2003,7 +2081,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'EGFR',
+        <GenePageLink hugoSymbol={'EGFR'} />,
         'Exon 20 Insertions',
         'Non-Small Cell Lung Cancer',
         'Mobocertinib',
@@ -2011,7 +2089,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'EGFR',
+        <GenePageLink hugoSymbol={'EGFR'} />,
         'Exon 20 Insertions',
         'Non-Small Cell Lung Cancer',
         'Amivantamab',
@@ -2024,7 +2102,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'KRAS',
+        <GenePageLink hugoSymbol={'KRAS'} />,
         'G12C',
         'Non-Small Cell Lung Cancer',
         'Adagrasib',
@@ -2037,7 +2115,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'HRAS',
+        <GenePageLink hugoSymbol={'HRAS'} />,
         'Oncogenic Mutations',
         'Bladder Urothelial Carcinoma',
         'Tipifarnib',
@@ -2045,7 +2123,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'V600E',
         'Biliary Tract Cancer',
         'Dabrafenib + Trametinib',
@@ -2053,7 +2131,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'TSC2',
+        <GenePageLink hugoSymbol={'TSC2'} />,
         'Oncogenic Mutations',
         'Perivascular Epithelioid Cell Tumor',
         'ABI-009',
@@ -2078,7 +2156,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'MET',
+        <GenePageLink hugoSymbol={'MET'} />,
         'Exon 14 Skipping Mutations',
         'Non-Small Cell Lung Cancer',
         'Tepotinib',
@@ -2094,7 +2172,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '2',
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Amplification',
         'Colorectal Cancer',
         'Trastuzumab Deruxtecan',
@@ -2110,7 +2188,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '2',
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Oncogenic Mutations',
         'Non-Small Cell Lung Cancer',
         'Trastuzumab Deruxtecan',
@@ -2124,7 +2202,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '2',
-        'ALK',
+        <GenePageLink hugoSymbol={'ALK'} />,
         'Fusions',
         'Inflammatory Myofibroblastic Tumor',
         'Brigatinib',
@@ -2135,7 +2213,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '4',
-        'KIT',
+        <GenePageLink hugoSymbol={'KIT'} />,
         'D816, D820, N822, Y823D, C809G, A829P',
         'Gastrointestinal Stromal Tumors',
         'Nilotinib',
@@ -2145,7 +2223,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '4',
-        'KIT',
+        <GenePageLink hugoSymbol={'KIT'} />,
         'D816, D820, N822, Y823D, C809G, A829P',
         'Gastrointestinal Stromal Tumors',
         'Pazopanib',
@@ -2155,7 +2233,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         'R1',
-        'NTRK3',
+        <GenePageLink hugoSymbol={'NTRK3'} />,
         'G623R, G696A, F617L',
         'All Solid Tumors',
         'Larotrectinib',
@@ -2172,7 +2250,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         'R2',
-        'NTRK1',
+        <GenePageLink hugoSymbol={'NTRK1'} />,
         'G623R',
         'All Solid Tumors',
         'Entrectinib',
@@ -2188,9 +2266,16 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
     ],
     changedAnnotation: [
-      ['NTRK1', 'G623R', 'All Solid Tumors', 'Larotrectinib', 'R2', 'R1'],
       [
-        'KIT',
+        <GenePageLink hugoSymbol={'NTRK1'} />,
+        'G623R',
+        'All Solid Tumors',
+        'Larotrectinib',
+        'R2',
+        'R1',
+      ],
+      [
+        <GenePageLink hugoSymbol={'KIT'} />,
         'D816, D820, N822, Y823D, C809G, A829P',
         'Gastrointestinal Stromal Tumors',
         'Sorafenib',
@@ -2198,7 +2283,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         '2',
       ],
       [
-        'CDK4',
+        <GenePageLink hugoSymbol={'CDK4'} />,
         'Amplification',
         'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
         'Palbociclib, Abemaciclib',
@@ -2218,7 +2303,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'ALK',
+        <GenePageLink hugoSymbol={'ALK'} />,
         'Fusions',
         'Anaplastic Large-Cell Lymphoma',
         'Crizotinib',
@@ -2234,7 +2319,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Amplification',
         'Breast Cancer',
         'Margetuximab + Chemotherapy',
@@ -2255,7 +2340,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Amplification',
         'Gastric or Gastroesophageal Adenocarcinoma',
         'Trastuzumab Deruxtecan',
@@ -2273,9 +2358,16 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotationTitle: `Changed annotation to adhere to our upcoming ${ONCOKB_TM} SOP v2.0`,
     changedAnnotation: [
-      ['RET', 'Fusions', 'Non-Small Cell Lung Cancer', 'Vandetanib', '2', '3A'],
       [
-        'NRAS',
+        <GenePageLink hugoSymbol={'RET'} />,
+        'Fusions',
+        'Non-Small Cell Lung Cancer',
+        'Vandetanib',
+        '2',
+        '3A',
+      ],
+      [
+        <GenePageLink hugoSymbol={'NRAS'} />,
         'Oncogenic Mutations',
         'Melanoma',
         'Binimetinib + Ribociclib',
@@ -2283,7 +2375,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         '4',
       ],
       [
-        'MET',
+        <GenePageLink hugoSymbol={'MET'} />,
         'Amplification',
         'Renal Cell Carcinoma',
         'Cabozantinib',
@@ -2291,7 +2383,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'None',
       ],
       [
-        'CDK4',
+        <GenePageLink hugoSymbol={'CDK4'} />,
         'Amplification',
         'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
         'Palbociclib, Abemaciclib',
@@ -2299,14 +2391,21 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         'None',
       ],
       [
-        'KIT',
+        <GenePageLink hugoSymbol={'KIT'} />,
         'A829P, C809G, D816, D820, N822, Y823D',
         'Gastrointestinal Stromal Tumor',
         'Sorafenib',
         '2',
         'None',
       ],
-      ['KIT', 'Oncogenic Mutations', 'Thymic Tumor', 'Sunitinib', '2', 'None'],
+      [
+        <GenePageLink hugoSymbol={'KIT'} />,
+        'Oncogenic Mutations',
+        'Thymic Tumor',
+        'Sunitinib',
+        '2',
+        'None',
+      ],
     ],
   },
   '01142021': {
@@ -2338,7 +2437,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'RET',
+        <GenePageLink hugoSymbol={'RET'} />,
         'Fusions',
         'Thyroid Cancer',
         'Pralsetinib',
@@ -2363,7 +2462,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'RET',
+        <GenePageLink hugoSymbol={'RET'} />,
         'Oncogenic Mutations',
         'Medullary Thyroid Cancer',
         <div>Pralsetinib</div>,
@@ -2414,7 +2513,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             <tbody>
               <tr>
                 <td rowSpan={8}>R1</td>
-                <td rowSpan={8}>ABL1</td>
+                <td rowSpan={8}>
+                  <GenePageLink hugoSymbol={'ABL1'} />
+                </td>
                 <td rowSpan={2}>V299L, F317L, G250E</td>
                 <td>CML</td>
                 <td rowSpan={2}>Bosutinib</td>
@@ -2510,7 +2611,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         'R1',
-        'BTK',
+        <GenePageLink hugoSymbol={'BTK'} />,
         'C481S',
         'Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma',
         'Ibrutinib',
@@ -2521,7 +2622,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'RET',
+        <GenePageLink hugoSymbol={'RET'} />,
         'Fusions',
         'Non-Small Cell Lung Cancer',
         <div>Pralsetinib</div>,
@@ -2567,7 +2668,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             <tbody>
               <tr>
                 <td>1</td>
-                <td>KIT</td>
+                <td>
+                  <GenePageLink hugoSymbol={'KIT'} />
+                </td>
                 <td>Select Oncogenic Mutations</td>
                 <td>Gastrointestinal Stromal Tumors</td>
                 <td>Ripretinib</td>
@@ -2584,7 +2687,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>1</td>
-                <td>BRAF</td>
+                <td>
+                  <GenePageLink hugoSymbol={'BRAF'} />
+                </td>
                 <td>V600</td>
                 <td>Melanoma</td>
                 <td>Vemurafenib + Cobimetinib + Atezulizumab</td>
@@ -2601,7 +2706,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td rowSpan={3}>2</td>
-                <td rowSpan={3}>PDGFRA</td>
+                <td rowSpan={3}>
+                  <GenePageLink hugoSymbol={'PDGFRA'} />
+                </td>
                 <td rowSpan={3}>Oncogenic Mutations</td>
                 <td rowSpan={3}>Gastrointestinal Stromal Tumors</td>
                 <td>Ripretinib</td>
@@ -2626,7 +2733,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>3A</td>
-                <td>BRCA1, BRCA2</td>
+                <td>
+                  <GenePageLink hugoSymbol={'BRCA1'} />,
+                  <br />
+                  <GenePageLink hugoSymbol={'BRCA2'} />
+                </td>
                 <td>Oncogenic Mutations</td>
                 <td>Pancreatic Adenocarcinoma</td>
                 <td>Olaparib</td>
@@ -2681,7 +2792,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'SMARCB1',
+        <GenePageLink hugoSymbol={'SMARCB1'} />,
         'Deletion',
         'Epithelioid Sarcoma',
         'Tazemetostat',
@@ -2707,7 +2818,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'EZH2',
+        <GenePageLink hugoSymbol={'EZH2'} />,
         'A682G, A692V, Y646C, Y646F, Y646H, Y646N, Y646S',
         'Follicular Lymphoma',
         <div>Tazemetostat</div>,
@@ -2740,7 +2851,34 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'BRCA1, BRCA2, BARD1, BRIP1, CDK12, CHEK1, CHEK2, FANCL, PALB2, RAD51B, RAD51C, RAD51D, RAD54L',
+        // 'BRCA1, BRCA2, BARD1, BRIP1, CDK12, CHEK1, CHEK2, FANCL, PALB2, RAD51B, RAD51C, RAD51D, RAD54L',
+        <>
+          <GenePageLink hugoSymbol={'BRCA1'} />
+          {', '}
+          <GenePageLink hugoSymbol={'BRCA2'} />
+          {', '}
+          <GenePageLink hugoSymbol={'BARD1'} />
+          {', '}
+          <GenePageLink hugoSymbol={'BRIP1'} />
+          {', '}
+          <GenePageLink hugoSymbol={'CDK12'} />
+          {', '}
+          <GenePageLink hugoSymbol={'CHEK1'} />
+          {', '}
+          <GenePageLink hugoSymbol={'CHEK2'} />
+          {', '}
+          <GenePageLink hugoSymbol={'FANCL'} />
+          {', '}
+          <GenePageLink hugoSymbol={'PALB2'} />
+          {', '}
+          <GenePageLink hugoSymbol={'RAD51B'} />
+          {', '}
+          <GenePageLink hugoSymbol={'RAD51C'} />
+          {', '}
+          <GenePageLink hugoSymbol={'RAD51D'} />
+          {', '}
+          <GenePageLink hugoSymbol={'RAD54L'} />
+        </>,
         <span style={{ whiteSpace: 'nowrap' }}>Oncogenic Mutations</span>,
         'Prostate Cancer',
         'Olaparib',
@@ -2757,7 +2895,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
-        'BRCA1, BRCA2',
+        <>
+          <GenePageLink hugoSymbol={'BRCA1'} />,
+          <GenePageLink hugoSymbol={'BRCA2'} />
+        </>,
         'Oncogenic Mutations',
         <span style={{ whiteSpace: 'nowrap' }}>Prostate Cancer</span>,
         'Rucaparib',
@@ -2783,7 +2924,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'ATM',
+        <GenePageLink hugoSymbol={'ATM'} />,
         'Oncogenic Mutations',
         'Prostate Cancer',
         <div>Olaparib</div>,
@@ -2821,7 +2962,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'FGFR2',
+        <GenePageLink hugoSymbol={'FGFR2'} />,
         'Fusions',
         'Cholangiocarcinoma',
         'Pemigatinib',
@@ -2838,7 +2979,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
-        'RET',
+        <GenePageLink hugoSymbol={'RET'} />,
         'Fusions',
         'Thyroid Cancer',
         'Selpercatinib',
@@ -2866,7 +3007,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Amplification',
         'Breast Cancer',
         'Tucatinib + Trastuzumab + Capecitabine',
@@ -2883,7 +3024,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Amplification',
         'Breast Cancer',
         'Trastuzumab Deruxtecan',
@@ -2896,7 +3037,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '2',
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'V600E',
         'Pilocytic Astrocytoma, Pleomorphic Xanthoastrocytoma and Ganglioglioma',
         'Dabrafenib + Trametinib, Vemurafenib + Cobimetinib',
@@ -2910,7 +3051,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'MET',
+        <GenePageLink hugoSymbol={'MET'} />,
         'Exon 14 Skipping Mutations',
         'Non-Small Cell Lung Cancer',
         <div>Capmatinib</div>,
@@ -2939,7 +3080,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </div>,
       ],
       [
-        'RET',
+        <GenePageLink hugoSymbol={'RET'} />,
         'Fusions',
         'Non-Small Cell Lung Cancer',
         'Selpercatinib',
@@ -2968,7 +3109,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </div>,
       ],
       [
-        'RET',
+        <GenePageLink hugoSymbol={'RET'} />,
         'Oncogenic Mutations',
         'Medullary Thyroid Cancer',
         'Selpercatinib',
@@ -3002,7 +3143,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'V600E',
         'Colorectal Cancer',
         'Encorafenib + Cetuximab',
@@ -3019,7 +3160,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
-        'NF1',
+        <GenePageLink hugoSymbol={'NF1'} />,
         'Oncogenic Mutations',
         'Neurofibroma',
         'Selumetinib',
@@ -3036,7 +3177,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '2',
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'V600E',
         'Colorectal Cancer',
         'Encorafenib + Panitumumab',
@@ -3047,7 +3188,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '2',
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Amplification',
         'Colorectal Cancer',
         'Trastuzumab + Lapatinib',
@@ -3058,7 +3199,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '2',
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Amplification',
         'Colorectal Cancer',
         'Trastuzumab + Pertuzumab',
@@ -3070,7 +3211,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'V600E',
         'Colorectal Cancer',
         <div>
@@ -3102,7 +3243,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'PDGFRA',
+        <GenePageLink hugoSymbol={'PDGFRA'} />,
         'D842V, D842Y, D842_H845del, D842_H845insV',
         'Gastrointestinal Stromal Tumor',
         'Avapritinib',
@@ -3123,7 +3264,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'BRCA2',
+        <GenePageLink hugoSymbol={'BRCA2'} />,
         'Oncogenic Mutations',
         'Pancreatic Adenocarcinoma',
         'Rucaparib',
@@ -3140,7 +3281,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '4',
-        'EGFR',
+        <GenePageLink hugoSymbol={'EGFR'} />,
         'L718V',
         'Non-Small Cell Lung Cancer',
         'Afatinib',
@@ -3150,7 +3291,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         'R2',
-        'EGFR',
+        <GenePageLink hugoSymbol={'EGFR'} />,
         'L718V',
         'Non-Small Cell Lung Cancer',
         'Osimertinib',
@@ -3160,7 +3301,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         'R2',
-        'KIT',
+        <GenePageLink hugoSymbol={'KIT'} />,
         'A829P',
         'Gastrointestinal Stromal Tumor',
         'Imatinib',
@@ -3170,7 +3311,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         'R2',
-        'KIT',
+        <GenePageLink hugoSymbol={'KIT'} />,
         'A829P',
         'Gastrointestinal Stromal Tumor',
         'Sunitinib',
@@ -3189,7 +3330,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '1',
-        'FLT3',
+        <GenePageLink hugoSymbol={'FLT3'} />,
         'D835, I836',
         'AML',
         'Gilteritinib',
@@ -3223,7 +3364,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '1',
-        'ROS1',
+        <GenePageLink hugoSymbol={'ROS1'} />,
         'Fusions',
         'NSCLC',
         'Entrectinib',
@@ -3248,7 +3389,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'KRAS',
+        <GenePageLink hugoSymbol={'KRAS'} />,
         'G12C',
         'NSCLC',
         'AMG-510',
@@ -3266,7 +3407,13 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'NTRK1/2/3',
+        <>
+          <GenePageLink hugoSymbol={'NTRK1'} />,
+          <br />
+          <GenePageLink hugoSymbol={'NTRK2'} />,
+          <br />
+          <GenePageLink hugoSymbol={'NTRK3'} />
+        </>,
         'Fusions',
         'All Solid Tumors',
         'Entrectinib',
@@ -3281,7 +3428,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </a>,
       ],
       [
-        'ERBB2',
+        <GenePageLink hugoSymbol={'ERBB2'} />,
         'Oncogenic Mutations',
         'NSCLC',
         'Ado-trastuzumab Emtansine',
@@ -3290,7 +3437,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <div>Listing in 1.2020 Non-Small Cell Lung Cancer NCCN</div>,
       ],
       [
-        'IDH1',
+        <GenePageLink hugoSymbol={'IDH1'} />,
         'Oncogenic Mutations',
         'Cholangiocarcinoma',
         'Ivosidenib',
@@ -3308,7 +3455,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
       ],
       [
-        'PIK3CA',
+        <GenePageLink hugoSymbol={'PIK3CA'} />,
         'Oncogenic Mutations',
         'Breast Cancer',
         'Alpelisib',
@@ -3373,7 +3520,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '3A',
-        'EZH2',
+        <GenePageLink hugoSymbol={'EZH2'} />,
         'Oncogenic Mutations',
         'Follicular Lymphoma',
         'Tazemetostat',
@@ -3392,7 +3539,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     updatedImplication: [
       [
         '2A',
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'V600E',
         'Hairy Cell Leukemia',
         'Vemurafenib',
@@ -3403,7 +3550,19 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       ],
       [
         '3A',
-        'ARAF, BRAF, RAF1, NRAS, KRAS, MAP2K2',
+        <>
+          <GenePageLink hugoSymbol={'ARAF'} />
+          {', '}
+          <GenePageLink hugoSymbol={'BRAF'} />
+          {', '}
+          <GenePageLink hugoSymbol={'RAF1'} />
+          {', '}
+          <GenePageLink hugoSymbol={'NRAS'} />
+          {', '}
+          <GenePageLink hugoSymbol={'KRAS'} />
+          {', '}
+          <GenePageLink hugoSymbol={'MAP2K2'} />
+        </>,
         'Oncogenic Mutations',
         'Histiocytic and Dendritic Cell Neoplasms',
         'Cobimetinib',
@@ -3412,7 +3571,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotation: [
       [
-        'BRAF',
+        <GenePageLink hugoSymbol={'BRAF'} />,
         'D287H, D594, F595L, G466, G596, N581, S467L, V459L',
         'All Solid Tumors',
         'PLX8394',
@@ -3507,7 +3666,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             <tbody>
               <tr>
                 <td rowSpan={5}>1</td>
-                <td rowSpan={3}>ABL1</td>
+                <td rowSpan={3}>
+                  <GenePageLink hugoSymbol={'ABL1'} />
+                </td>
                 <td rowSpan={2}>BCR-ABL1 fusion</td>
                 <td>B-Lymphoblastic Leukemia/Lymphoma (BLL)</td>
                 <td>Ponatinib</td>
@@ -3522,7 +3683,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>Ponatinib</td>
               </tr>
               <tr>
-                <td rowSpan={2}>FLT3</td>
+                <td rowSpan={2}>
+                  <GenePageLink hugoSymbol={'FLT3'} />
+                </td>
                 <td>Internal tandem duplications (ITD)</td>
                 <td rowSpan={2}>Acute Myeloid Leukemia (AML)</td>
                 <td>Gilteritinib</td>
@@ -3533,14 +3696,18 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>R1</td>
-                <td>ABL1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'ABL1'} />
+                </td>
                 <td>T315I</td>
                 <td>BLL, CML</td>
                 <td>Imatinib, Dasatinib, Nilotinib, Bosutinib</td>
               </tr>
               <tr>
                 <td rowSpan={4}>2A</td>
-                <td rowSpan={4}>ABL1</td>
+                <td rowSpan={4}>
+                  <GenePageLink hugoSymbol={'ABL1'} />
+                </td>
                 <td>BCR-ABL1 fusion</td>
                 <td>BLL</td>
                 <td>Bosutinib, Nilotinib</td>
@@ -3563,7 +3730,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td rowSpan={4}>3A</td>
-                <td rowSpan={3}>ABL1</td>
+                <td rowSpan={3}>
+                  <GenePageLink hugoSymbol={'ABL1'} />
+                </td>
                 <td>BCR-ABL1 fusion</td>
                 <td>CML</td>
                 <td>Asciminib</td>
@@ -3578,14 +3747,18 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>Nilotinib</td>
               </tr>
               <tr>
-                <td>FLT3</td>
+                <td>
+                  <GenePageLink hugoSymbol={'FLT3'} />
+                </td>
                 <td>ITD</td>
                 <td>AML</td>
                 <td>Crenolanib, Quizartinib</td>
               </tr>
               <tr>
                 <td rowSpan={4}>4</td>
-                <td>SF3B1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'SF3B1'} />
+                </td>
                 <td rowSpan={4}>Oncogenic Mutations</td>
                 <td rowSpan={4}>
                   AML, Chronic Myelomonocytic Leukemia (CMML), Myelodysplastic
@@ -3594,13 +3767,19 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td rowSpan={4}>H3B-8800</td>
               </tr>
               <tr>
-                <td>SRSF2</td>
+                <td>
+                  <GenePageLink hugoSymbol={'SRSF2'} />
+                </td>
               </tr>
               <tr>
-                <td>U2AF1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'U2AF1'} />
+                </td>
               </tr>
               <tr>
-                <td>ZRSR2</td>
+                <td>
+                  <GenePageLink hugoSymbol={'ZRSR2'} />
+                </td>
               </tr>
             </tbody>
           </table>
@@ -4081,9 +4260,15 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               return {
                 key: `NEWLY_ADDED_LEVEL_FOUR-${index}`,
                 content: record.map((subItem, subIndex) => {
+                  const content: any =
+                    subIndex === 0 ? (
+                      <GenePageLink hugoSymbol={subItem} />
+                    ) : (
+                      subItem
+                    );
                   return {
                     key: `NEWLY_ADDED_LEVEL_FOUR-${index}-${subIndex}`,
-                    content: subItem,
+                    content,
                   };
                 }),
               };
