@@ -154,7 +154,7 @@ export default class NewsList extends React.Component<NewsListProps> {
                           );
                         return {
                           key: `changedAnnotation-${date}-${index}-${subIndex}`,
-                          content: subItem,
+                          content,
                         };
                       }),
                     };
