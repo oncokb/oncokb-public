@@ -114,12 +114,24 @@ export default class NewsList extends React.Component<NewsListProps> {
                     return {
                       key: `updatedImplication-${date}-${index}`,
                       content: item.map((subItem, subIndex) => {
-                        const content: any =
-                          subIndex === 1 && typeof subItem === 'string' ? (
-                            <GenePageLink hugoSymbol={subItem} />
-                          ) : (
-                            subItem
-                          );
+                        let content = subItem;
+                        if (subIndex === 1 && typeof subItem === 'string') {
+                          const tokens = subItem.split(',');
+                          if (tokens.length > 1) {
+                            const itemLinks = tokens.map((token, _) => {
+                              token = token.trim();
+                              return (
+                                <>
+                                  <GenePageLink hugoSymbol={token} />
+                                  {', '}
+                                </>
+                              );
+                            });
+                            content = itemLinks;
+                          } else {
+                            content = <GenePageLink hugoSymbol={subItem} />;
+                          }
+                        }
                         return {
                           key: `updatedImplication-${date}-${index}-${subIndex}`,
                           content,
@@ -146,12 +158,24 @@ export default class NewsList extends React.Component<NewsListProps> {
                     return {
                       key: `changedAnnotation-${date}-${index}`,
                       content: item.map((subItem, subIndex) => {
-                        const content: any =
-                          subIndex === 0 && typeof subItem === 'string' ? (
-                            <GenePageLink hugoSymbol={subItem} />
-                          ) : (
-                            subItem
-                          );
+                        let content = subItem;
+                        if (subIndex === 0 && typeof subItem === 'string') {
+                          const tokens = subItem.split(',');
+                          if (tokens.length > 1) {
+                            const itemLinks = tokens.map((token, _) => {
+                              token = token.trim();
+                              return (
+                                <>
+                                  <GenePageLink hugoSymbol={token} />
+                                  {', '}
+                                </>
+                              );
+                            });
+                            content = itemLinks;
+                          } else {
+                            content = <GenePageLink hugoSymbol={subItem} />;
+                          }
+                        }
                         return {
                           key: `changedAnnotation-${date}-${index}-${subIndex}`,
                           content,

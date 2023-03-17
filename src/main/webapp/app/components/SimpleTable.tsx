@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Table } from 'react-bootstrap';
 
-export type ElementType = JSX.Element | string;
+export type ElementType = JSX.Element | string | JSX.Element[];
 export type SimpleTableCell = { key: string; content: ElementType };
 export type SimpleTableRow = { key: string; content: SimpleTableCell[] };
 export type SimpleTableRows = SimpleTableRow[];
