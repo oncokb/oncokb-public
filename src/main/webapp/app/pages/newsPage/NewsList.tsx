@@ -20,6 +20,7 @@ import { RouterStore } from 'mobx-react-router';
 import { observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import { observer } from 'mobx-react';
+import { GenePageLink } from 'app/shared/utils/UrlUtils';
 
 export type NewsListProps = {
   date: string;
@@ -113,9 +114,15 @@ export default class NewsList extends React.Component<NewsListProps> {
                     return {
                       key: `updatedImplication-${date}-${index}`,
                       content: item.map((subItem, subIndex) => {
+                        const content: any =
+                          subIndex === 1 && typeof subItem === 'string' ? (
+                            <GenePageLink hugoSymbol={subItem} />
+                          ) : (
+                            subItem
+                          );
                         return {
                           key: `updatedImplication-${date}-${index}-${subIndex}`,
-                          content: subItem,
+                          content,
                         };
                       }),
                     };
@@ -139,6 +146,12 @@ export default class NewsList extends React.Component<NewsListProps> {
                     return {
                       key: `changedAnnotation-${date}-${index}`,
                       content: item.map((subItem, subIndex) => {
+                        const content: any =
+                          subIndex === 0 && typeof subItem === 'string' ? (
+                            <GenePageLink hugoSymbol={subItem} />
+                          ) : (
+                            subItem
+                          );
                         return {
                           key: `changedAnnotation-${date}-${index}-${subIndex}`,
                           content: subItem,
