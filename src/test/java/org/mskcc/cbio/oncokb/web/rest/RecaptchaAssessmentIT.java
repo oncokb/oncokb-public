@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.web.rest;
 
+import org.junit.jupiter.api.*;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
@@ -11,7 +12,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import com.google.api.gax.core.NoCredentialsProvider;
 import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceClient;
-// import com.google.cloud.recaptchaenterprise.v1.MockRecaptchaEnterpriseService;
 import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceSettings;
 import com.google.api.gax.grpc.testing.MockServiceHelper;
 import com.google.api.gax.grpc.testing.LocalChannelProvider;
@@ -26,12 +26,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-// import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +43,7 @@ public class RecaptchaAssessmentIT {
     RecaptchaEnterpriseServiceClient client;
     private static String RECAPTCHA_TESTING_TOKEN = "faketoken";
 
-    @BeforeClass
+    @BeforeAll
     public static void startStaticServer() {
         LOGGER.info("start mock service");
         mockRecaptchaEnterpriseService = new MockRecaptchaEnterpriseService();
@@ -60,14 +54,17 @@ public class RecaptchaAssessmentIT {
         mockServiceHelper.start();
     }
 
-    @AfterClass
+    @AfterAll
     public static void stopServer() {
         mockServiceHelper.stop();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
-        LOGGER.info("resest mock helper");
+        appProps = new ApplicationProperties();
+        recaptchaProp = new RecaptchaProperties();
+
+        LOGGER.info("reset mock helper");
         mockServiceHelper.reset();
         LOGGER.info("create channel provider");
         channelProvider = mockServiceHelper.createChannelProvider();
@@ -80,7 +77,7 @@ public class RecaptchaAssessmentIT {
         client = RecaptchaEnterpriseServiceClient.create(settings);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         client.close();
     }
