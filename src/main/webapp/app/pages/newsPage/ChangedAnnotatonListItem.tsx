@@ -10,6 +10,7 @@ import React from 'react';
 import _ from 'lodash';
 
 import mainStyle from './main.module.scss';
+import { GenePageLink } from 'app/shared/utils/UrlUtils';
 
 export enum AnnotationColumnHeaderType {
   LEVEL,
@@ -54,6 +55,38 @@ export const ChangedAnnotationListItem = (props: {
       defaultTitle = 'Changed Annotation';
       break;
   }
+
+  // find the index of the gene column
+  const geneColumnIndex = annotationColumnHeader.findIndex(
+    column => column.name === 'Gene'
+  );
+  // transform the gene input to a link
+  props.data.forEach(row => {
+    const geneInput = row.content[geneColumnIndex].content;
+    console.log('geneInput', geneInput);
+    if (typeof geneInput === 'string') {
+      const tokens = geneInput.split(',');
+      if (tokens.length > 1) {
+        const itemLinks = tokens.map((token, i) => {
+          token = token.trim();
+          if (i === tokens.length - 1) {
+            return <GenePageLink hugoSymbol={token} />;
+          }
+          return (
+            <>
+              <GenePageLink hugoSymbol={token} />
+              {', '}
+            </>
+          );
+        });
+        row.content[geneColumnIndex].content = itemLinks;
+      } else {
+        row.content[geneColumnIndex].content = (
+          <GenePageLink hugoSymbol={geneInput} />
+        );
+      }
+    }
+  });
 
   return (
     <li>

@@ -20,7 +20,6 @@ import { RouterStore } from 'mobx-react-router';
 import { observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import { observer } from 'mobx-react';
-import { GenePageLink } from 'app/shared/utils/UrlUtils';
 
 export type NewsListProps = {
   date: string;
@@ -114,27 +113,9 @@ export default class NewsList extends React.Component<NewsListProps> {
                     return {
                       key: `updatedImplication-${date}-${index}`,
                       content: item.map((subItem, subIndex) => {
-                        let content = subItem;
-                        if (subIndex === 1 && typeof subItem === 'string') {
-                          const tokens = subItem.split(',');
-                          if (tokens.length > 1) {
-                            const itemLinks = tokens.map((token, _) => {
-                              token = token.trim();
-                              return (
-                                <>
-                                  <GenePageLink hugoSymbol={token} />
-                                  {', '}
-                                </>
-                              );
-                            });
-                            content = itemLinks;
-                          } else {
-                            content = <GenePageLink hugoSymbol={subItem} />;
-                          }
-                        }
                         return {
                           key: `updatedImplication-${date}-${index}-${subIndex}`,
-                          content,
+                          content: subItem,
                         };
                       }),
                     };
@@ -158,27 +139,9 @@ export default class NewsList extends React.Component<NewsListProps> {
                     return {
                       key: `changedAnnotation-${date}-${index}`,
                       content: item.map((subItem, subIndex) => {
-                        let content = subItem;
-                        if (subIndex === 0 && typeof subItem === 'string') {
-                          const tokens = subItem.split(',');
-                          if (tokens.length > 1) {
-                            const itemLinks = tokens.map((token, _) => {
-                              token = token.trim();
-                              return (
-                                <>
-                                  <GenePageLink hugoSymbol={token} />
-                                  {', '}
-                                </>
-                              );
-                            });
-                            content = itemLinks;
-                          } else {
-                            content = <GenePageLink hugoSymbol={subItem} />;
-                          }
-                        }
                         return {
                           key: `changedAnnotation-${date}-${index}-${subIndex}`,
-                          content,
+                          content: subItem,
                         };
                       }),
                     };
