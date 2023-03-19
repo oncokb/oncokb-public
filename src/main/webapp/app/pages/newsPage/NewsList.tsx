@@ -76,6 +76,7 @@ export default class NewsList extends React.Component<NewsListProps> {
   render() {
     const date = this.props.date;
     const newsData: NewsData = NEWS_BY_DATE[date];
+    console.log('newsData', newsData);
     return (
       <>
         <h3
@@ -131,23 +132,35 @@ export default class NewsList extends React.Component<NewsListProps> {
                   key={`UpdatedTxImplOldFormatListItem-${date}`}
                 />
               ) : undefined}
-              {newsData.changedAnnotation ? (
-                <ChangedAnnotationListItem
-                  title={newsData.changedAnnotationTitle}
-                  columnHeaderType={newsData.changedAnnotationColumnHeaderType}
-                  data={newsData.changedAnnotation.map((item, index) => {
-                    return {
-                      key: `changedAnnotation-${date}-${index}`,
-                      content: item.map((subItem, subIndex) => {
-                        return {
-                          key: `changedAnnotation-${date}-${index}-${subIndex}`,
-                          content: subItem,
-                        };
-                      }),
-                    };
-                  })}
-                />
-              ) : undefined}
+              {newsData.changedAnnotations
+                ? newsData.changedAnnotations.map((annotation, _) => {
+                    return (
+                      <ChangedAnnotationListItem
+                        title={annotation.changedAnnotationTitle}
+                        columnHeaderType={
+                          annotation.changedAnnotationColumnHeaderType
+                        }
+                        data={
+                          annotation.changedAnnotation
+                            ? annotation.changedAnnotation.map(
+                                (item, index) => {
+                                  return {
+                                    key: `changedAnnotation-${date}-${index}`,
+                                    content: item.map((subItem, subIndex) => {
+                                      return {
+                                        key: `changedAnnotation-${date}-${index}-${subIndex}`,
+                                        content: subItem,
+                                      };
+                                    }),
+                                  };
+                                }
+                              )
+                            : []
+                        }
+                      />
+                    );
+                  })
+                : undefined}
               {getNews({
                 key: `news-${date}`,
                 content: newsData.news ? newsData.news : [],

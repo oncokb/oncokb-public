@@ -41,6 +41,12 @@ import { PMALink } from 'app/shared/links/PMALink';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
 
+export type ChangedAnnotation = {
+  changedAnnotation?: ElementType[][];
+  changedAnnotationTitle?: string;
+  changedAnnotationColumnHeaderType?: AnnotationColumnHeaderType;
+};
+
 export type NewsData = {
   priorityNews?: ElementType[];
   news?: ElementType[];
@@ -50,9 +56,7 @@ export type NewsData = {
   updatedImplicationTitle?: string;
   numOfAssociationsInUpdatedImplication?: number;
   updatedImplicationInOldFormat?: { [level: string]: ElementType[] };
-  changedAnnotation?: ElementType[][];
-  changedAnnotationTitle?: string;
-  changedAnnotationColumnHeaderType?: AnnotationColumnHeaderType;
+  changedAnnotations?: ChangedAnnotation[];
 };
 
 export const NEWLY_ADDED_LEVEL_FOUR_COLUMNS = [
@@ -174,63 +178,67 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '02102023': {
-    changedAnnotationColumnHeaderType:
-      AnnotationColumnHeaderType.ADDITIONAL_DIFF_LEVEL_DRUG,
-    changedAnnotationTitle:
-      'Changed annotation and addition of therapies for variants with a level of evidence',
-    changedAnnotation: [
-      [
-        'ESR1',
-        'Oncogenic Ligand-Binding Domain Missense Mutations (310_547)',
-        'Breast Cancer',
-        '3A',
-        '1',
-        <span>
-          Fulvestrant
-          <br />
-          (Level 3A)
-        </span>,
-        <span>
-          Elacestrant
-          <br />
-          (Level 1)
-        </span>,
-        <FdaApprovalLink
-          approval={'elacestrant in breast cancer'}
-          link={
-            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-elacestrant-er-positive-her2-negative-esr1-mutated-advanced-or-metastatic-breast-cancer'
-          }
-        />,
-      ],
-      [
-        'ESR1',
-        'Oncogenic Ligand-Binding Domain In-Frame Insertions or Deletions (310_547)',
-        'Breast Cancer',
-        '3A',
-        '3A',
-        <span>
-          Fulvestrant
-          <br />
-          (Level 3A)
-        </span>,
-        <span>
-          Elacestrant
-          <br />
-          (Level 3A)
-        </span>,
-        <>
-          <FdaApprovalLink
-            approval={'elacestrant in breast cancer'}
-            link={
-              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-elacestrant-er-positive-her2-negative-esr1-mutated-advanced-or-metastatic-breast-cancer'
-            }
-          />{' '}
-          <span>
-            (Level 1 ESR1 mutations limited to those specified in corresponding
-            FDA-approved CDx)
-          </span>
-        </>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotationColumnHeaderType:
+          AnnotationColumnHeaderType.ADDITIONAL_DIFF_LEVEL_DRUG,
+        changedAnnotationTitle:
+          'Changed annotation and addition of therapies for variants with a level of evidence',
+        changedAnnotation: [
+          [
+            'ESR1',
+            'Oncogenic Ligand-Binding Domain Missense Mutations (310_547)',
+            'Breast Cancer',
+            '3A',
+            '1',
+            <span>
+              Fulvestrant
+              <br />
+              (Level 3A)
+            </span>,
+            <span>
+              Elacestrant
+              <br />
+              (Level 1)
+            </span>,
+            <FdaApprovalLink
+              approval={'elacestrant in breast cancer'}
+              link={
+                'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-elacestrant-er-positive-her2-negative-esr1-mutated-advanced-or-metastatic-breast-cancer'
+              }
+            />,
+          ],
+          [
+            'ESR1',
+            'Oncogenic Ligand-Binding Domain In-Frame Insertions or Deletions (310_547)',
+            'Breast Cancer',
+            '3A',
+            '3A',
+            <span>
+              Fulvestrant
+              <br />
+              (Level 3A)
+            </span>,
+            <span>
+              Elacestrant
+              <br />
+              (Level 3A)
+            </span>,
+            <>
+              <FdaApprovalLink
+                approval={'elacestrant in breast cancer'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-elacestrant-er-positive-her2-negative-esr1-mutated-advanced-or-metastatic-breast-cancer'
+                }
+              />{' '}
+              <span>
+                (Level 1 ESR1 mutations limited to those specified in
+                corresponding FDA-approved CDx)
+              </span>
+            </>,
+          ],
+        ],
+      },
     ],
   },
   '12222022': {
@@ -243,34 +251,39 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         effort from the OncoKB scientific team.
       </span>,
     ],
-    changedAnnotationColumnHeaderType:
-      AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
-    changedAnnotation: [
-      [
-        'KRAS',
-        'G12C',
-        'Non-Small Cell Lung Cancer',
-        '1',
-        'Sotorasib',
-        <span>
-          Adagrasib
-          <br />
-          (Level 1)
-        </span>,
-
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <FdaApprovalLink
-            approval={'adagrasib in NSCLC'}
-            link={
-              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-adagrasib-kras-g12c-mutated-nsclc'
-            }
-          />
-          <AbstractLink
-            abstract={'Spira et al. Abstract# 9002, ASCO 2022'}
-            link={'https://meetings.asco.org/abstracts-presentations/208088'}
-          />
-        </WithSeparator>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotationColumnHeaderType:
+          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        changedAnnotation: [
+          [
+            'KRAS',
+            'G12C',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Sotorasib',
+            <span>
+              Adagrasib
+              <br />
+              (Level 1)
+            </span>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'adagrasib in NSCLC'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-adagrasib-kras-g12c-mutated-nsclc'
+                }
+              />
+              <AbstractLink
+                abstract={'Spira et al. Abstract# 9002, ASCO 2022'}
+                link={
+                  'https://meetings.asco.org/abstracts-presentations/208088'
+                }
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
     ],
   },
   '12132022': {
@@ -284,35 +297,39 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'TRIM27',
       'ZFP36L2',
     ],
-    changedAnnotationColumnHeaderType:
-      AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
-    changedAnnotation: [
-      [
-        'IDH1',
-        'R132C/H/L/G/S',
-        'Acute Myeloid Leukemia',
-        '1',
-        'Ivosidenib',
-        <span>
-          Olutasidenib
-          <br />
-          (Level 1)
-        </span>,
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <FdaApprovalLink
-            approval={'olutasidenib in AML'}
-            link={
-              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olutasidenib-relapsed-or-refractory-acute-myeloid-leukemia-susceptible-idh1-mutation'
-            }
-          />
-          <AbstractLink
-            abstract={'Cortes et al. Abstract #6193, ASH 2022'}
-            link={
-              'https://ashpublications.org/blood/article/140/Supplement%201/6193/487212'
-            }
-          />
-        </WithSeparator>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotationColumnHeaderType:
+          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        changedAnnotation: [
+          [
+            'IDH1',
+            'R132C/H/L/G/S',
+            'Acute Myeloid Leukemia',
+            '1',
+            'Ivosidenib',
+            <span>
+              Olutasidenib
+              <br />
+              (Level 1)
+            </span>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                approval={'olutasidenib in AML'}
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-olutasidenib-relapsed-or-refractory-acute-myeloid-leukemia-susceptible-idh1-mutation'
+                }
+              />
+              <AbstractLink
+                abstract={'Cortes et al. Abstract #6193, ASH 2022'}
+                link={
+                  'https://ashpublications.org/blood/article/140/Supplement%201/6193/487212'
+                }
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
     ],
   },
   '10282022': {
@@ -417,150 +434,113 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         />,
       ],
     ],
-    news: [
-      <span>
-        Updated therapeutic implications: - addition of therapies for variants
-        with a level of evidence
-        <Row className={'overflow-auto'}>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Gene</th>
-                <th>Mutation</th>
-                <th>Cancer Type</th>
-                <th>Current Level of Evidence</th>
-                <th>Drug(s) Already in {ONCOKB_TM}</th>
-                <th>Newly Added Drug(s)</th>
-                <th>Evidence</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>FGFR2</td>
-                <td>Fusions</td>
-                <td>Cholangiocarcinoma</td>
-                <td>1</td>
-                <td>Infigratinib, Pemigatinib</td>
-                <td>
-                  Futibatinib
-                  <br />
-                  (Level 1)
-                </td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <FdaApprovalLink
-                      link={
-                        'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-futibatinib-cholangiocarcinoma'
-                      }
-                      approval={'futibatinib in cholangiocarcinoma'}
-                    />
-                    <AbstractLink
-                      abstract={'Goyal et al. Abstract# 4009, ASCO 2022'}
-                      link={
-                        'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.4009'
-                      }
-                    />
-                  </WithSeparator>
-                </td>
-              </tr>
-              <tr>
-                <td>MET</td>
-                <td>Amplification</td>
-                <td>Non-Small Cell Lung Cancer</td>
-                <td>2</td>
-                <td>Crizotinib, Capmatinib, Tepotinib</td>
-                <td>
-                  Telisotuzumab Vedotin
-                  <br />
-                  (Level 3A)
-                </td>
-                <td>
-                  <AbstractLink
-                    abstract={'Camidge et al. Abstract# 9016, ASCO 2022'}
-                    link={
-                      'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.9016'
-                    }
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>PIK3CA</td>
-                <td>
-                  C420R, E542K, E545A, E545D, E545G, E545K, Q546E, Q546R,
-                  H1047L, H1047R and H1047Y
-                </td>
-                <td>Breast Cancer</td>
-                <td>1</td>
-                <td>Alpelisib + Fulvestrant</td>
-                <td>
-                  RLY-2608 + Fulvestrant
-                  <br />
-                  (Level 4)
-                </td>
-                <td>
-                  <AbstractLink
-                    abstract={'Perez et al. Abstract# TPS1124, ASCO 2022'}
-                    link={
-                      'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.TPS1124'
-                    }
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>PIK3CA</td>
-                <td>
-                  Oncogenic Mutations (excluding C420R, E542K, E545A, E545D,
-                  E545G, E545K, Q546E, Q546R, H1047L, H1047R, and H1047Y)
-                </td>
-                <td>Breast Cancer</td>
-                <td>2</td>
-                <td>Alpelisib + Fulvestrant</td>
-                <td>
-                  RLY-2608 + Fulvestrant
-                  <br />
-                  (Level 4)
-                </td>
-                <td>
-                  <AbstractLink
-                    abstract={'Perez et al. Abstract# TPS1124, ASCO 2022'}
-                    link={
-                      'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.TPS1124'
-                    }
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>PIK3CA</td>
-                <td>H1047R</td>
-                <td>Breast Cancer</td>
-                <td>1</td>
-                <td>Alpelisib + Fulvestrant</td>
-                <td>
-                  LOXO-783 + Fulvestrant +/- Abemaciclib,
-                  <br />
-                  LOXO-783 + LY3484356 +/- Abemaciclib,
-                  <br />
-                  LOXO-783 + Aromitase Inhibitors + Abemaciclib,
-                  <br />
-                  LOXO-783 + Nab-Paclitaxel
-                  <br />
-                  (Level 4)
-                </td>
-                <td>
-                  <AbstractLink
-                    abstract={
-                      'Klippel et al. Abstract# P142, AACR-NCI-EORTC 2021'
-                    }
-                    link={
-                      'https://aacrjournals.org/mct/article/20/12_Supplement/P142/675896/Abstract-P142-Preclinical-characterization-of-LOX'
-                    }
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Row>
-      </span>,
+    changedAnnotations: [
+      {
+        changedAnnotationColumnHeaderType:
+          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        changedAnnotation: [
+          [
+            'FGFR2',
+            'Fusions',
+            'Cholangiocarcinoma',
+            '1',
+            'Infigratinib, Pemigatinib',
+            <>
+              Futibatinib
+              <br />
+              (Level 1)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-futibatinib-cholangiocarcinoma'
+                }
+                approval={'futibatinib in cholangiocarcinoma'}
+              />
+              <AbstractLink
+                abstract={'Goyal et al. Abstract# 4009, ASCO 2022'}
+                link={
+                  'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.4009'
+                }
+              />
+            </WithSeparator>,
+          ],
+          [
+            'MET',
+            'Amplification',
+            'Non-Small Cell Lung Cancer',
+            '2',
+            'Crizotinib, Capmatinib, Tepotinib',
+            <>
+              Telisotuzumab Vedotin
+              <br />
+              (Level 3A)
+            </>,
+            <AbstractLink
+              abstract={'Camidge et al. Abstract# 9016, ASCO 2022'}
+              link={
+                'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.9016'
+              }
+            />,
+          ],
+          [
+            'PIK3CA',
+            'C420R, E542K, E545A, E545D, E545G, E545K, Q546E, Q546R, H1047L, H1047R, H1047Y',
+            'Breast Cancer',
+            '1',
+            'Alpelisib + Fulvestrant',
+            <>
+              RLY-2608 + Fulvestrant
+              <br />
+              (Level 4)
+            </>,
+            <AbstractLink
+              abstract={'Perez et al. Abstract# TPS1124, ASCO 2022'}
+              link={
+                'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.TPS1124'
+              }
+            />,
+          ],
+          [
+            'PIK3CA',
+            'Oncogenic Mutations (excluding C420R, E542K, E545A, E545D, E545G, E545K, Q546E, Q546R, H1047L, H1047R, and H1047Y)',
+            'Breast Cancer',
+            '2',
+            'Alpelisib + Fulvestrant',
+            <>
+              RLY-2608 + Fulvestrant
+              <br />
+              (Level 4)
+            </>,
+            <AbstractLink
+              abstract={'Perez et al. Abstract# TPS1124, ASCO 2022'}
+              link={
+                'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.TPS1124'
+              }
+            />,
+          ],
+          [
+            'PIK3CA',
+            'H1047R',
+            'Breast Cancer',
+            '1',
+            'Alpelisib + Fulvestrant',
+            <>
+              LOXO-783 + Fulvestrant +/- Abemaciclib, LOXO-783 + LY3484356 +/-
+              Abemaciclib, LOXO-783 + Aromitase Inhibitors + Abemaciclib,
+              LOXO-783 + Nab-Paclitaxel
+              <br />
+              (Level 4)
+            </>,
+            <AbstractLink
+              abstract={'Klippel et al. Abstract# P142, AACR-NCI-EORTC 2021'}
+              link={
+                'https://aacrjournals.org/mct/article/20/12_Supplement/P142/675896/Abstract-P142-Preclinical-characterization-of-LOX'
+              }
+            />,
+          ],
+        ],
+      },
     ],
     newlyAddedGenes: ['MYH11', 'PUM1', 'FBXW2', 'NUP214'],
   },
@@ -582,49 +562,53 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         />,
       ],
     ],
-    changedAnnotation: [
-      [
-        'BRAF',
-        'V600E',
-        'Biliary Tract Cancer, Diffuse Glioma, Encapsulated Glioma, Ganglioglioma, Pleomorphic Xanthoastrocytoma, Pilocytic Astrocytoma',
-        'Dabrafenib + Trametinib',
-        '2',
-        '1',
-        <FdaApprovalLink
-          approval={'dabrafenib + trametinib in solid tumors'}
-          link={
-            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-dabrafenib-combination-trametinib-unresectable-or-metastatic-solid'
-          }
-        />,
-      ],
-      [
-        'ERBB2',
-        'Oncogenic Mutations',
-        'Non-Small Cell Lung Cancer',
-        'Trastuzumab Deruxtecan',
-        '2',
-        '1',
-        <FdaApprovalLink
-          approval={'trastuzumab deruxtecan in non-small cell lung cancer'}
-          link={
-            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-fam-trastuzumab-deruxtecan-nxki-her2-mutant-non-small-cell-lung'
-          }
-        />,
-      ],
-      [
-        'FGFR1',
-        'Fusions',
-        'Myeloid/Lymphoid Neoplasms with FGFR1 Rearrangement',
-        'Pemigatinib',
-        '2',
-        '1',
-        <FdaApprovalLink
-          approval={'pemigatinib in myeloid/lymphoid neoplasms'}
-          link={
-            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-pemigatinib-relapsed-or-refractory-myeloidlymphoid-neoplasms-fgfr1-rearrangement'
-          }
-        />,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'BRAF',
+            'V600E',
+            'Biliary Tract Cancer, Diffuse Glioma, Encapsulated Glioma, Ganglioglioma, Pleomorphic Xanthoastrocytoma, Pilocytic Astrocytoma',
+            'Dabrafenib + Trametinib',
+            '2',
+            '1',
+            <FdaApprovalLink
+              approval={'dabrafenib + trametinib in solid tumors'}
+              link={
+                'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-dabrafenib-combination-trametinib-unresectable-or-metastatic-solid'
+              }
+            />,
+          ],
+          [
+            'ERBB2',
+            'Oncogenic Mutations',
+            'Non-Small Cell Lung Cancer',
+            'Trastuzumab Deruxtecan',
+            '2',
+            '1',
+            <FdaApprovalLink
+              approval={'trastuzumab deruxtecan in non-small cell lung cancer'}
+              link={
+                'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-fam-trastuzumab-deruxtecan-nxki-her2-mutant-non-small-cell-lung'
+              }
+            />,
+          ],
+          [
+            'FGFR1',
+            'Fusions',
+            'Myeloid/Lymphoid Neoplasms with FGFR1 Rearrangement',
+            'Pemigatinib',
+            '2',
+            '1',
+            <FdaApprovalLink
+              approval={'pemigatinib in myeloid/lymphoid neoplasms'}
+              link={
+                'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-pemigatinib-relapsed-or-refractory-myeloidlymphoid-neoplasms-fgfr1-rearrangement'
+              }
+            />,
+          ],
+        ],
+      },
     ],
     newlyAddedGenes: ['MKI67', 'BRD3', 'BRSK1', 'BCL3'],
   },
@@ -665,210 +649,144 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </WithSeparator>,
       ],
     ],
-    changedAnnotation: [
-      [
-        'ALK',
-        'Fusions',
-        'Inflammatory Myofibroblastic Tumor',
-        'Crizotinib',
-        '2',
-        '1',
-        <FdaApprovalLink
-          approval={'crizotinib in inflammatory myofibroblastic tumor'}
-          link={
-            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-crizotinib-alk-positive-inflammatory-myofibroblastic-tumor'
-          }
-        />,
-      ],
-    ],
-    news: [
-      <span>
-        Updated therapeutic implications: - addition of therapies for variants
-        with a level of evidence
-        <Row className={'overflow-auto'}>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Gene</th>
-                <th>Mutation</th>
-                <th>Cancer Type</th>
-                <th>Current Level of Evidence</th>
-                <th>Drug(s) Already in {ONCOKB_TM}</th>
-                <th>Newly Added Drug</th>
-                <th>Evidence</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>NRG1</td>
-                <td>Fusions</td>
-                <td>Non-Small Cell Lung Cancer</td>
-                <td>3A</td>
-                <td>Zenocutuzumab</td>
-                <td>
-                  Seribantumab
-                  <br />
-                  (Level 3A)
-                </td>
-                <td>
-                  <AbstractLink
-                    abstract={'Carrizosa et al. Abstract# 3006, ASCO 2022'}
-                    link={
-                      'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.3006'
-                    }
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Row>
-      </span>,
-      <span>
-        Updated therapeutic implications: - Removal of therapies for variants
-        with a level of evidence
-        <Row className={'overflow-auto'}>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Gene</th>
-                <th>Mutation</th>
-                <th>Cancer Type</th>
-                <th>Current Level of Evidence</th>
-                <th>Drug(s) removed from OncoKB</th>
-                <th>Drug remaining in OncoKB</th>
-                <th>Evidence</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>ESR1</td>
-                <td>Oncogenic Mutations</td>
-                <td>Breast Cancer</td>
-                <td>3A</td>
-                <td>AZD9496</td>
-                <td>Fulvestrant</td>
-                <td>
-                  <PMIDLink pmids={'32234755'} />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Row>
-      </span>,
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'ALK',
+            'Fusions',
+            'Inflammatory Myofibroblastic Tumor',
+            'Crizotinib',
+            '2',
+            '1',
+            <FdaApprovalLink
+              approval={'crizotinib in inflammatory myofibroblastic tumor'}
+              link={
+                'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-crizotinib-alk-positive-inflammatory-myofibroblastic-tumor'
+              }
+            />,
+          ],
+        ],
+      },
+      {
+        changedAnnotationColumnHeaderType:
+          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        changedAnnotation: [
+          [
+            'NRG1',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            '3A',
+            'Zenocutuzumab',
+            <>
+              Seribantumab
+              <br />
+              (Level 3A)
+            </>,
+            <AbstractLink
+              abstract={'Carrizosa et al. Abstract# 3006, ASCO 2022'}
+              link={
+                'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.3006'
+              }
+            />,
+          ],
+        ],
+      },
     ],
   },
   '06062022': {
-    changedAnnotation: [
-      [
-        'BRAF',
-        'V600E',
-        'Biliary Tract Cancer',
-        'Dabrafenib + Trametinib',
-        '3A',
-        '2',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <NccnLink version={'v1.2022'} cancerType={'Hepatobiliary'} />
-          <PMIDLink pmids={'32818466, 32758030'} />
-        </WithSeparator>,
-      ],
-    ],
-    news: [
-      <span>
-        Updated therapeutic implications: - addition of therapies for variants
-        with a level of evidence
-        <Row className={'overflow-auto'}>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Gene</th>
-                <th>Mutation</th>
-                <th>Cancer Type</th>
-                <th>Current Level of Evidence</th>
-                <th>Drug(s) Already in {ONCOKB_TM}</th>
-                <th>Newly Added Drug</th>
-                <th>Evidence</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>ALK</td>
-                <td>Fusions</td>
-                <td>Inflammatory Myofibroblastic Tumor</td>
-                <td>2</td>
-                <td>Crizotinib, Ceritinib, Brigatinib</td>
-                <td>
-                  Lorlatinib
-                  <br />
-                  (Level 2)
-                </td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <NccnLink
-                      cancerType={'Soft Tissue Sarcoma'}
-                      version={'v1.2022'}
-                    />
-                    <PMIDLink pmids={'28713152, 32868646, 33007314'} />
-                  </WithSeparator>
-                </td>
-              </tr>
-              <tr>
-                <td>ROS1</td>
-                <td>Fusions</td>
-                <td>Non-Small Cell Lung Cancer</td>
-                <td>1</td>
-                <td>Crizotinib, Entrectinib</td>
-                <td>
-                  Repotrectinib
-                  <br />
-                  (Level 3A)
-                </td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <FdaBreakthroughLink
-                      link={
-                        'https://www.onclive.com/view/fda-grants-breakthrough-designation-to-repotrectinib-for-pretreated-ros1-metastatic-nsclc'
-                      }
-                    />
-                    <AbstractLink
-                      abstract={'Cho et al. Abstract# MA11.07, IASLC 2021'}
-                      link={
-                        'https://www.jto.org/article/S1556-0864(21)00293-8/fulltext'
-                      }
-                    />
-                  </WithSeparator>
-                </td>
-              </tr>
-              <tr>
-                <td>NTRK1, NTRK2, NTRK3</td>
-                <td>Fusions</td>
-                <td>All Solid Tumors</td>
-                <td>1</td>
-                <td>Larotrectinib, Entrectinib</td>
-                <td>
-                  Repotrectinib
-                  <br />
-                  (Level 3A)
-                </td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <FdaBreakthroughLink
-                      link={
-                        'https://www.onclive.com/view/fda-grants-breakthrough-designation-to-repotrectinib-for-pretreated-ros1-metastatic-nsclc'
-                      }
-                    />
-                    <AbstractLink
-                      abstract={'Cho et al. Abstract# MA11.07, IASLC 2021'}
-                      link={
-                        'https://www.jto.org/article/S1556-0864(21)00293-8/fulltext'
-                      }
-                    />
-                  </WithSeparator>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Row>
-      </span>,
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'BRAF',
+            'V600E',
+            'Biliary Tract Cancer',
+            'Dabrafenib + Trametinib',
+            '3A',
+            '2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <NccnLink version={'v1.2022'} cancerType={'Hepatobiliary'} />
+              <PMIDLink pmids={'32818466, 32758030'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
+      {
+        changedAnnotationColumnHeaderType:
+          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        changedAnnotation: [
+          [
+            'ALK',
+            'Fusions',
+            'Inflammatory Myofibroblastic Tumor',
+            '2',
+            'Crizotinib, Ceritinib, Brigatinib',
+            <>
+              Brigatinib
+              <br />
+              (Level 2)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <NccnLink
+                cancerType={'Soft Tissue Sarcoma'}
+                version={'v1.2022'}
+              />
+              <PMIDLink pmids={'28713152, 32868646, 33007314'} />
+            </WithSeparator>,
+          ],
+          [
+            'ROS1',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Crizotinib, Entrectinib',
+            <>
+              Repotrectinib
+              <br />
+              (Level 3A)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaBreakthroughLink
+                link={
+                  'https://www.onclive.com/view/fda-grants-breakthrough-designation-to-repotrectinib-for-pretreated-ros1-metastatic-nsclc'
+                }
+              />
+              <AbstractLink
+                abstract={'Cho et al. Abstract# MA11.07, IASLC 2021'}
+                link={
+                  'https://www.jto.org/article/S1556-0864(21)00293-8/fulltext'
+                }
+              />
+            </WithSeparator>,
+          ],
+          [
+            'NTRK1, NTRK2, NTRK3',
+            'Fusions',
+            'All Solid Tumors',
+            '1',
+            'Larotrectinib, Entrectinib',
+            <>
+              Repotrectinib
+              <br />
+              (Level 3A)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaBreakthroughLink
+                link={
+                  'https://www.onclive.com/view/fda-grants-breakthrough-designation-to-repotrectinib-for-pretreated-ros1-metastatic-nsclc'
+                }
+              />
+              <AbstractLink
+                abstract={'Cho et al. Abstract# MA11.07, IASLC 2021'}
+                link={
+                  'https://www.jto.org/article/S1556-0864(21)00293-8/fulltext'
+                }
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
     ],
   },
   '05052022': {
@@ -881,167 +799,140 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </a>
       </span>,
     ],
-    newlyAddedGenes: ['AFF4'],
-    news: [
-      <span>
-        Updated therapeutic implications: - addition of therapies for variants
-        with a level of evidence
-        <Row className={'overflow-auto'}>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Gene</th>
-                <th>Mutation</th>
-                <th>Cancer Type</th>
-                <th>Current Level of Evidence</th>
-                <th>Drug(s) Already in {ONCOKB_TM}</th>
-                <th>Newly Added Drug</th>
-                <th>Evidence</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>EGFR</td>
-                <td>S768I, L861Q, G719</td>
-                <td>Non-Small Cell Lung Cancer</td>
-                <td>1</td>
-                <td>Afatinib</td>
-                <td>
-                  Osimertinib
-                  <br />
-                  (Level 2)
-                </td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <span>Listing in NSCLC NCCN v1.2022</span>
-                    <PMIDLink pmids={'31825714'} />
-                  </WithSeparator>
-                </td>
-              </tr>
-              <tr>
-                <td>ROS1</td>
-                <td>Fusions</td>
-                <td>Non-Small Cell Lung Cancer</td>
-                <td>1</td>
-                <td>Crizotinib, Entrectinib</td>
-                <td>
-                  Ceritinib
-                  <br />
-                  (Level 2)
-                </td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <span>Listing in NSCLC NCCN v1.2022</span>
-                    <PMIDLink pmids={'28520527'} />
-                  </WithSeparator>
-                </td>
-              </tr>
-              <tr>
-                <td>ROS1</td>
-                <td>Fusions</td>
-                <td>Non-Small Cell Lung Cancer</td>
-                <td>1</td>
-                <td>Crizotinib, Entrectinib</td>
-                <td>Lorlatinib (Level 2)</td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <span>Listing in NSCLC NCCN v1.2022</span>
-                    <PMIDLink pmids={'31669155'} />
-                  </WithSeparator>
-                </td>
-              </tr>
-              <tr>
-                <td>MET</td>
-                <td>Amplifications</td>
-                <td>Non-Small Cell Lung Cancer</td>
-                <td>2</td>
-                <td>Crizotinib</td>
-                <td>
-                  Capmatinib
-                  <br />
-                  (Level 2)
-                </td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <span>Listing in NSCLC NCCN v1.2022</span>
-                    <PMIDLink pmids={'32877583'} />
-                  </WithSeparator>
-                </td>
-              </tr>
-              <tr>
-                <td>MET</td>
-                <td>Amplifications</td>
-                <td>Non-Small Cell Lung Cancer</td>
-                <td>2</td>
-                <td>Crizotinib</td>
-                <td>
-                  Tepotinib
-                  <br />
-                  (Level 2)
-                </td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <span>Listing in NSCLC NCCN v1.2022</span>
-                    <AbstractLink
-                      abstract={'Le et al. Abstract# 9021, ASCO 2021'}
-                      link={
-                        'https://ascopubs.org/doi/abs/10.1200/JCO.2021.39.15_suppl.9021'
-                      }
-                    />
-                  </WithSeparator>
-                </td>
-              </tr>
-              <tr>
-                <td>KRAS</td>
-                <td>G12C</td>
-                <td>Pancreatic Cancer</td>
-                <td>3A</td>
-                <td>Adagrasib</td>
-                <td>
-                  Sotorasib
-                  <br />
-                  (Level 3A)
-                </td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <AbstractLink
-                      abstract={
-                        'Strickler et al. Abstract# 360490, ASCO GI 2022'
-                      }
-                      link={
-                        'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.36_suppl.360490'
-                      }
-                    />
-                  </WithSeparator>
-                </td>
-              </tr>
-              <tr>
-                <td>FGFR2</td>
-                <td>Fusions</td>
-                <td>Cholangiocarcinoma</td>
-                <td>1</td>
-                <td>Infigratinib, Pemigatinib</td>
-                <td>
-                  Futibatinib
-                  <br />
-                  (Level 3A)
-                </td>
-                <td>
-                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-                    <AbstractLink
-                      abstract={'Goyal et al. Abstract# CT010, AACR 2021'}
-                      link={
-                        'https://aacrjournals.org/cancerres/article/81/13_Supplement/CT010/669687/Abstract-CT010-Primary-results-of-phase-2-FOENIX'
-                      }
-                    />
-                  </WithSeparator>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Row>
-      </span>,
+    changedAnnotations: [
+      {
+        changedAnnotationColumnHeaderType:
+          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        changedAnnotation: [
+          [
+            'EGFR',
+            'S768I, L861Q, G719',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Afatinib',
+            <>
+              Osimertinib
+              <br />
+              (Level 2)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>Listing in NSCLC NCCN v1.2022</span>
+              <PMIDLink pmids={'31825714'} />
+            </WithSeparator>,
+          ],
+          [
+            'ROS1',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Crizotinib, Entrectinib',
+            <>
+              Ceritinib
+              <br />
+              (Level 2)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>Listing in NSCLC NCCN v1.2022</span>
+              <PMIDLink pmids={'28520527'} />
+            </WithSeparator>,
+          ],
+          [
+            'ROS1',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            '1',
+            'Crizotinib, Entrectinib',
+            <>
+              Lorlatinib
+              <br />
+              (Level 2)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>Listing in NSCLC NCCN v1.2022</span>
+              <PMIDLink pmids={'31669155'} />
+            </WithSeparator>,
+          ],
+          [
+            'MET',
+            'Amplifications',
+            'Non-Small Cell Lung Cancer',
+            '2',
+            'Crizotinib',
+            <>
+              Capmatinib
+              <br />
+              (Level 2)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>Listing in NSCLC NCCN v1.2022</span>
+              <PMIDLink pmids={'32877583'} />
+            </WithSeparator>,
+          ],
+          [
+            'MET',
+            'Amplifications',
+            'Non-Small Cell Lung Cancer',
+            '2',
+            'Crizotinib',
+            <>
+              Tepotinib
+              <br />
+              (Level 2)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>Listing in NSCLC NCCN v1.2022</span>
+              <AbstractLink
+                abstract={'Le et al. Abstract# 9021, ASCO 2021'}
+                link={
+                  'https://ascopubs.org/doi/abs/10.1200/JCO.2021.39.15_suppl.9021'
+                }
+              />
+            </WithSeparator>,
+          ],
+          [
+            'KRAS',
+            'G12C',
+            'Pancreatic Cancer',
+            '3A',
+            'Adagrasib',
+            <>
+              Sotorasib
+              <br />
+              (Level 3A)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <AbstractLink
+                abstract={'Strickler et al. Abstract# 360490, ASCO GI 2022'}
+                link={
+                  'https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.36_suppl.360490'
+                }
+              />
+            </WithSeparator>,
+          ],
+          [
+            'FGFR2',
+            'Fusions',
+            'Cholangiocarcinoma',
+            '1',
+            'Infigratinib, Pemigatinib',
+            <>
+              Futibatinib
+              <br />
+              (Level 3A)
+            </>,
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <AbstractLink
+                abstract={'Goyal et al. Abstract# CT010, AACR 2021'}
+                link={
+                  'https://aacrjournals.org/cancerres/article/81/13_Supplement/CT010/669687/Abstract-CT010-Primary-results-of-phase-2-FOENIX'
+                }
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
     ],
+    newlyAddedGenes: ['AFF4'],
   },
   '03292022': {
     updatedImplication: [
@@ -1068,19 +959,25 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </WithSeparator>,
       ],
     ],
-    changedAnnotation: [
-      [
-        'BRCA1, BRCA2',
-        'Oncogenic Mutations',
-        'Pancreatic Cancer',
-        'PARPi',
-        '3A',
-        '2',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <span>Listing of Rucaparib in Pancreatic cancer NCCN v1.2022</span>
-          <PMIDLink pmids={'33970687, 34351646, 30051098'} />
-        </WithSeparator>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'BRCA1, BRCA2',
+            'Oncogenic Mutations',
+            'Pancreatic Cancer',
+            'PARPi',
+            '3A',
+            '2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>
+                Listing of Rucaparib in Pancreatic cancer NCCN v1.2022
+              </span>
+              <PMIDLink pmids={'33970687, 34351646, 30051098'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
     ],
     news: [
       <span>
@@ -1230,90 +1127,95 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     updatedImplicationTitle:
       'Updated therapeutic implications: New variants with a level of evidence',
-    changedAnnotation: [
-      [
-        'ABL1',
-        'BCR-ABL1 Fusion',
-        'Chronic Myelogenous Leukemia',
-        'Asciminib',
-        '3A',
-        '1',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <FdaApprovalLink
-            link={
-              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-asciminib-philadelphia-chromosome-positive-chronic-myeloid-leukemia'
-            }
-            approval={'Asciminib'}
-          />
-          <PMIDLink pmids={'34407542'} />
-        </WithSeparator>,
-      ],
-      [
-        'BRCA1/BRCA2',
-        'Oncogenic Mutations',
-        'Breast Cancer',
-        'Olaparib, Talazoparib',
-        '2',
-        '3A',
-        <span>
-          Strict adherence to FDA drug labels for{' '}
-          <Linkout
-            link={
-              'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/208558s014lbl.pdf'
-            }
-          >
-            olaparib
-          </Linkout>{' '}
-          and{' '}
-          <Linkout
-            link={
-              'https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/211651s000lbl.pdf'
-            }
-          >
-            talazoparib
-          </Linkout>
-        </span>,
-      ],
-      [
-        'MET',
-        'Y1003mut',
-        'Non-Small Cell Lung Cancer',
-        'Tepotinib, Capmatinib',
-        '1',
-        '3A',
-        <span>
-          Strict adherence to FDA drug labels for{' '}
-          <Linkout
-            link={
-              'https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/214096s000lbl.pdf'
-            }
-          >
-            tepotinib
-          </Linkout>{' '}
-          and{' '}
-          <Linkout
-            link={
-              'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/213591s000lbl.pdf'
-            }
-          >
-            capmatinib
-          </Linkout>
-        </span>,
-      ],
-      [
-        'MET',
-        'Y1003mut',
-        'Non-Small Cell Lung Cancer',
-        'Crizotinib',
-        '2',
-        '3A',
-        <span>
-          Strict adherence to listing in NCCN Non-Small Cell Lung Cancer v7.2021
-        </span>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotationTitle:
+          'Updated therapeutic implications: Changed annotations',
+        changedAnnotation: [
+          [
+            'ABL1',
+            'BCR-ABL1 Fusion',
+            'Chronic Myelogenous Leukemia',
+            'Asciminib',
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-asciminib-philadelphia-chromosome-positive-chronic-myeloid-leukemia'
+                }
+                approval={'Asciminib'}
+              />
+              <PMIDLink pmids={'34407542'} />
+            </WithSeparator>,
+          ],
+          [
+            'BRCA1/BRCA2',
+            'Oncogenic Mutations',
+            'Breast Cancer',
+            'Olaparib, Talazoparib',
+            '2',
+            '3A',
+            <span>
+              Strict adherence to FDA drug labels for{' '}
+              <Linkout
+                link={
+                  'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/208558s014lbl.pdf'
+                }
+              >
+                olaparib
+              </Linkout>{' '}
+              and{' '}
+              <Linkout
+                link={
+                  'https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/211651s000lbl.pdf'
+                }
+              >
+                talazoparib
+              </Linkout>
+            </span>,
+          ],
+          [
+            'MET',
+            'Y1003mut',
+            'Non-Small Cell Lung Cancer',
+            'Tepotinib, Capmatinib',
+            '1',
+            '3A',
+            <span>
+              Strict adherence to FDA drug labels for{' '}
+              <Linkout
+                link={
+                  'https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/214096s000lbl.pdf'
+                }
+              >
+                tepotinib
+              </Linkout>{' '}
+              and{' '}
+              <Linkout
+                link={
+                  'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/213591s000lbl.pdf'
+                }
+              >
+                capmatinib
+              </Linkout>
+            </span>,
+          ],
+          [
+            'MET',
+            'Y1003mut',
+            'Non-Small Cell Lung Cancer',
+            'Crizotinib',
+            '2',
+            '3A',
+            <span>
+              Strict adherence to listing in NCCN Non-Small Cell Lung Cancer
+              v7.2021
+            </span>,
+          ],
+        ],
+      },
     ],
-    changedAnnotationTitle:
-      'Updated therapeutic implications: Changed annotations',
     news: [
       <span>
         Updated therapeutic implications: Updated variant annotations to more
@@ -1613,27 +1515,31 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </Row>
       </span>,
     ],
-    changedAnnotation: [
-      [
-        '3A',
-        'BRAF',
-        'Oncogenic Mutations, excluding V600',
-        'Histiocytosis',
-        'Cobimetinib',
-        'Cobimetinib, Trametinib',
-        <PMIDLink pmids={'30361829'} />,
-      ],
-      [
-        '3A',
-        'ARAF, RAF1, NRAS, MAP2K2',
-        'Oncogenic Mutations',
-        'Histiocytosis',
-        'Cobimetinib',
-        'Cobimetinub, Trametinib',
-        <PMIDLink pmids={'30361829'} />,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotationColumnHeaderType: AnnotationColumnHeaderType.DRUG,
+        changedAnnotation: [
+          [
+            '3A',
+            'BRAF',
+            'Oncogenic Mutations, excluding V600',
+            'Histiocytosis',
+            'Cobimetinib',
+            'Cobimetinib, Trametinib',
+            <PMIDLink pmids={'30361829'} />,
+          ],
+          [
+            '3A',
+            'ARAF, RAF1, NRAS, MAP2K2',
+            'Oncogenic Mutations',
+            'Histiocytosis',
+            'Cobimetinib',
+            'Cobimetinub, Trametinib',
+            <PMIDLink pmids={'30361829'} />,
+          ],
+        ],
+      },
     ],
-    changedAnnotationColumnHeaderType: AnnotationColumnHeaderType.DRUG,
   },
   '10072021': {
     priorityNews: [
@@ -1666,29 +1572,33 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <PMIDLink pmids={'28838405, 30405134, 30228210, 30796031'} />,
       ],
     ],
-    changedAnnotation: [
-      [
-        'EGFR',
-        'Exon 20 Insertions',
-        'Non-Small Cell Lung Cancer',
-        'Mobocertinib',
-        '3A',
-        '1',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <FdaApprovalLink
-            link={
-              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-mobocertinib-metastatic-non-small-cell-lung-cancer-egfr-exon-20'
-            }
-            approval={'Mobocertinib'}
-          />
-          <AbstractLink
-            link={
-              'https://ascopubs.org/doi/abs/10.1200/JCO.2021.39.15_suppl.9014'
-            }
-            abstract={'Ramalingham et al. Abstract # 9014, ASCO 2021'}
-          />
-        </WithSeparator>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'EGFR',
+            'Exon 20 Insertions',
+            'Non-Small Cell Lung Cancer',
+            'Mobocertinib',
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-mobocertinib-metastatic-non-small-cell-lung-cancer-egfr-exon-20'
+                }
+                approval={'Mobocertinib'}
+              />
+              <AbstractLink
+                link={
+                  'https://ascopubs.org/doi/abs/10.1200/JCO.2021.39.15_suppl.9014'
+                }
+                abstract={'Ramalingham et al. Abstract # 9014, ASCO 2021'}
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
     ],
   },
   '08312021': {
@@ -1705,24 +1615,28 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </WithSeparator>,
       ],
     ],
-    changedAnnotation: [
-      [
-        'IDH1',
-        'R132',
-        'Cholangiocarcinoma',
-        'Ivosidenib',
-        '3A',
-        '1',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <FdaApprovalLink
-            link={
-              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-ivosidenib-advanced-or-metastatic-cholangiocarcinoma?utm_medium=email&utm_source=govdelivery'
-            }
-            approval={'Ivosidenib'}
-          />
-          <PMIDLink pmids={'32416072'} />
-        </WithSeparator>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'IDH1',
+            'R132',
+            'Cholangiocarcinoma',
+            'Ivosidenib',
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-ivosidenib-advanced-or-metastatic-cholangiocarcinoma?utm_medium=email&utm_source=govdelivery'
+                }
+                approval={'Ivosidenib'}
+              />
+              <PMIDLink pmids={'32416072'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
     ],
   },
   '07162021': {
@@ -1731,55 +1645,61 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         Release of <SopPageLink version={2.1} />
       </span>,
     ],
-    changedAnnotation: [
-      [
-        'KIT',
-        'D816',
-        'Mastocytosis',
-        'Avapritinib',
-        '3A',
-        '1',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <FdaApprovalLink
-            link={
-              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-avapritinib-advanced-systemic-mastocytosis'
-            }
-            approval={'Avapritinib'}
-          />
-          <AbstractLink
-            link={
-              'https://ashpublications.org/blood/article/136/Supplement%201/37/470030/Pure-Pathologic-Response-Is-Associated-with'
-            }
-            abstract={'Gotlib et al. Abstract# 634, ASH 2020'}
-          />
-          <AbstractLink
-            link={
-              'https://www.ashclinicalnews.org/on-location/other-meetings/pathfinder-avapritinib-induces-rapid-responses-advanced-systemic-mastocytosis/'
-            }
-            abstract={'DeAngelo et al. Absract# CT023, AACR 2021.'}
-          />
-        </WithSeparator>,
-      ],
-      [
-        'EGFR',
-        'Exon 20 Insertions',
-        'Non-Small Cell Lung Cancer',
-        'Amivantamab',
-        '3A',
-        '1',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <FdaApprovalLink
-            link={
-              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-amivantamab-vmjw-metastatic-non-small-cell-lung-cancer'
-            }
-            approval={'Amivantamab'}
-          />
-          <AbstractLink
-            link={'https://www.jto.org/article/S1556-0864(21)00326-9/fulltext'}
-            abstract={'Sabari et al. Abstract# OA04.04, WCLC, 2021.'}
-          />
-        </WithSeparator>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'KIT',
+            'D816',
+            'Mastocytosis',
+            'Avapritinib',
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link={
+                  'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-avapritinib-advanced-systemic-mastocytosis'
+                }
+                approval={'Avapritinib'}
+              />
+              <AbstractLink
+                link={
+                  'https://ashpublications.org/blood/article/136/Supplement%201/37/470030/Pure-Pathologic-Response-Is-Associated-with'
+                }
+                abstract={'Gotlib et al. Abstract# 634, ASH 2020'}
+              />
+              <AbstractLink
+                link={
+                  'https://www.ashclinicalnews.org/on-location/other-meetings/pathfinder-avapritinib-induces-rapid-responses-advanced-systemic-mastocytosis/'
+                }
+                abstract={'DeAngelo et al. Absract# CT023, AACR 2021.'}
+              />
+            </WithSeparator>,
+          ],
+          [
+            'EGFR',
+            'Exon 20 Insertions',
+            'Non-Small Cell Lung Cancer',
+            'Amivantamab',
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-amivantamab-vmjw-metastatic-non-small-cell-lung-cancer'
+                }
+                approval={'Amivantamab'}
+              />
+              <AbstractLink
+                link={
+                  'https://www.jto.org/article/S1556-0864(21)00326-9/fulltext'
+                }
+                abstract={'Sabari et al. Abstract# OA04.04, WCLC, 2021.'}
+              />
+            </WithSeparator>,
+          ],
+        ],
+      },
     ],
   },
   '06172021': {
@@ -1844,24 +1764,28 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <PMIDLink pmids={'29760405, 31913353'} />,
       ],
     ],
-    changedAnnotation: [
-      [
-        'KRAS',
-        'G12C',
-        'Non-Small Cell Lung Cancer',
-        'Sotorasib',
-        '3A',
-        '1',
-        <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
-          <FdaApprovalLink
-            link={
-              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-grants-accelerated-approval-sotorasib-kras-g12c-mutated-nsclc'
-            }
-            approval={'Sotorasib'}
-          />
-          <PMIDLink pmids={'34096690'} />
-        </WithSeparator>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'KRAS',
+            'G12C',
+            'Non-Small Cell Lung Cancer',
+            'Sotorasib',
+            '3A',
+            '1',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <FdaApprovalLink
+                link={
+                  'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-grants-accelerated-approval-sotorasib-kras-g12c-mutated-nsclc'
+                }
+                approval={'Sotorasib'}
+              />
+              <PMIDLink pmids={'34096690'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
     ],
     news: [
       <span>
@@ -2187,24 +2111,28 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </WithSeparator>,
       ],
     ],
-    changedAnnotation: [
-      ['NTRK1', 'G623R', 'All Solid Tumors', 'Larotrectinib', 'R2', 'R1'],
-      [
-        'KIT',
-        'D816, D820, N822, Y823D, C809G, A829P',
-        'Gastrointestinal Stromal Tumors',
-        'Sorafenib',
-        'None',
-        '2',
-      ],
-      [
-        'CDK4',
-        'Amplification',
-        'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
-        'Palbociclib, Abemaciclib',
-        'None',
-        '4',
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          ['NTRK1', 'G623R', 'All Solid Tumors', 'Larotrectinib', 'R2', 'R1'],
+          [
+            'KIT',
+            'D816, D820, N822, Y823D, C809G, A829P',
+            'Gastrointestinal Stromal Tumors',
+            'Sorafenib',
+            'None',
+            '2',
+          ],
+          [
+            'CDK4',
+            'Amplification',
+            'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
+            'Palbociclib, Abemaciclib',
+            'None',
+            '4',
+          ],
+        ],
+      },
     ],
   },
   '02102021': {
@@ -2271,42 +2199,60 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </WithSeparator>,
       ],
     ],
-    changedAnnotationTitle: `Changed annotation to adhere to our upcoming ${ONCOKB_TM} SOP v2.0`,
-    changedAnnotation: [
-      ['RET', 'Fusions', 'Non-Small Cell Lung Cancer', 'Vandetanib', '2', '3A'],
-      [
-        'NRAS',
-        'Oncogenic Mutations',
-        'Melanoma',
-        'Binimetinib + Ribociclib',
-        '3A',
-        '4',
-      ],
-      [
-        'MET',
-        'Amplification',
-        'Renal Cell Carcinoma',
-        'Cabozantinib',
-        '2',
-        'None',
-      ],
-      [
-        'CDK4',
-        'Amplification',
-        'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
-        'Palbociclib, Abemaciclib',
-        '2',
-        'None',
-      ],
-      [
-        'KIT',
-        'A829P, C809G, D816, D820, N822, Y823D',
-        'Gastrointestinal Stromal Tumor',
-        'Sorafenib',
-        '2',
-        'None',
-      ],
-      ['KIT', 'Oncogenic Mutations', 'Thymic Tumor', 'Sunitinib', '2', 'None'],
+    changedAnnotations: [
+      {
+        changedAnnotationTitle: `Changed annotation to adhere to our upcoming ${ONCOKB_TM} SOP v2.0`,
+        changedAnnotation: [
+          [
+            'RET',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            'Vandetanib',
+            '2',
+            '3A',
+          ],
+          [
+            'NRAS',
+            'Oncogenic Mutations',
+            'Melanoma',
+            'Binimetinib + Ribociclib',
+            '3A',
+            '4',
+          ],
+          [
+            'MET',
+            'Amplification',
+            'Renal Cell Carcinoma',
+            'Cabozantinib',
+            '2',
+            'None',
+          ],
+          [
+            'CDK4',
+            'Amplification',
+            'Dedifferentiated Liposarcoma, Well-Differentiated Liposarcoma',
+            'Palbociclib, Abemaciclib',
+            '2',
+            'None',
+          ],
+          [
+            'KIT',
+            'A829P, C809G, D816, D820, N822, Y823D',
+            'Gastrointestinal Stromal Tumor',
+            'Sorafenib',
+            '2',
+            'None',
+          ],
+          [
+            'KIT',
+            'Oncogenic Mutations',
+            'Thymic Tumor',
+            'Sunitinib',
+            '2',
+            'None',
+          ],
+        ],
+      },
     ],
   },
   '01142021': {
@@ -2361,32 +2307,36 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
       ],
     ],
-    changedAnnotation: [
-      [
-        'RET',
-        'Oncogenic Mutations',
-        'Medullary Thyroid Cancer',
-        <div>Pralsetinib</div>,
-        '3A',
-        '1',
-        <div>
-          <Linkout
-            link={
-              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-pralsetinib-ret-altered-thyroid-cancers'
-            }
-          >
-            FDA-approval of Pralsetinib
-          </Linkout>
-          ; Abstract:{' '}
-          <Linkout
-            link={
-              'https://oncologypro.esmo.org/meeting-resources/esmo-virtual-congress-2020/results-from-the-registrational-phase-i-ii-arrow-trial-of-pralsetinib-blu-667-in-patients-pts-with-advanced-ret-mutation-positive-medullary-thy'
-            }
-          >
-            Hu et al. Abstract# 19130, ESMO 2020
-          </Linkout>
-        </div>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'RET',
+            'Oncogenic Mutations',
+            'Medullary Thyroid Cancer',
+            <div>Pralsetinib</div>,
+            '3A',
+            '1',
+            <div>
+              <Linkout
+                link={
+                  'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-pralsetinib-ret-altered-thyroid-cancers'
+                }
+              >
+                FDA-approval of Pralsetinib
+              </Linkout>
+              ; Abstract:{' '}
+              <Linkout
+                link={
+                  'https://oncologypro.esmo.org/meeting-resources/esmo-virtual-congress-2020/results-from-the-registrational-phase-i-ii-arrow-trial-of-pralsetinib-blu-667-in-patients-pts-with-advanced-ret-mutation-positive-medullary-thy'
+                }
+              >
+                Hu et al. Abstract# 19130, ESMO 2020
+              </Linkout>
+            </div>,
+          ],
+        ],
+      },
     ],
   },
   '11132020': {
@@ -2519,33 +2469,37 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
       ],
     ],
-    changedAnnotation: [
-      [
-        'RET',
-        'Fusions',
-        'Non-Small Cell Lung Cancer',
-        <div>Pralsetinib</div>,
-        '3A',
-        '1',
-        <div>
-          Abstract:{' '}
-          <Linkout
-            link={
-              'https://ascopubs.org/doi/abs/10.1200/JCO.2020.38.15_suppl.109'
-            }
-          >
-            Subbiah et al. Abstract# 109, ASCO 2020
-          </Linkout>
-          ;{' '}
-          <Linkout
-            link={
-              'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-pralsetinib-lung-cancer-ret-gene-fusions'
-            }
-          >
-            FDA-approval of Pralsetinib
-          </Linkout>
-        </div>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'RET',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            <div>Pralsetinib</div>,
+            '3A',
+            '1',
+            <div>
+              Abstract:{' '}
+              <Linkout
+                link={
+                  'https://ascopubs.org/doi/abs/10.1200/JCO.2020.38.15_suppl.109'
+                }
+              >
+                Subbiah et al. Abstract# 109, ASCO 2020
+              </Linkout>
+              ;{' '}
+              <Linkout
+                link={
+                  'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-pralsetinib-lung-cancer-ret-gene-fusions'
+                }
+              >
+                FDA-approval of Pralsetinib
+              </Linkout>
+            </div>,
+          ],
+        ],
+      },
     ],
   },
   '08282020': {
@@ -2705,33 +2659,37 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
       ],
     ],
-    changedAnnotation: [
-      [
-        'EZH2',
-        'A682G, A692V, Y646C, Y646F, Y646H, Y646N, Y646S',
-        'Follicular Lymphoma',
-        <div>Tazemetostat</div>,
-        '3A',
-        '1',
-        <div>
-          Abstract:{' '}
-          <Linkout
-            link={
-              'https://ashpublications.org/blood/article/134/Supplement_1/123/426294/Phase-2-Multicenter-Study-of-Tazemetostat-an-EZH2'
-            }
-          >
-            Morschhauser et al. Abstract# 123, ASH 2019
-          </Linkout>
-          ,{' '}
-          <Linkout
-            link={
-              'https://www.fda.gov/drugs/fda-granted-accelerated-approval-tazemetostat-follicular-lymphoma'
-            }
-          >
-            FDA-approval of Tazemetostat
-          </Linkout>
-        </div>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'EZH2',
+            'A682G, A692V, Y646C, Y646F, Y646H, Y646N, Y646S',
+            'Follicular Lymphoma',
+            <div>Tazemetostat</div>,
+            '3A',
+            '1',
+            <div>
+              Abstract:{' '}
+              <Linkout
+                link={
+                  'https://ashpublications.org/blood/article/134/Supplement_1/123/426294/Phase-2-Multicenter-Study-of-Tazemetostat-an-EZH2'
+                }
+              >
+                Morschhauser et al. Abstract# 123, ASH 2019
+              </Linkout>
+              ,{' '}
+              <Linkout
+                link={
+                  'https://www.fda.gov/drugs/fda-granted-accelerated-approval-tazemetostat-follicular-lymphoma'
+                }
+              >
+                FDA-approval of Tazemetostat
+              </Linkout>
+            </div>,
+          ],
+        ],
+      },
     ],
     newlyAddedGenes: ['PPP2R2A'],
   },
@@ -2781,25 +2739,29 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
       ],
     ],
-    changedAnnotation: [
-      [
-        'ATM',
-        'Oncogenic Mutations',
-        'Prostate Cancer',
-        <div>Olaparib</div>,
-        '4',
-        '1',
-        <div>
-          <PMIDLink pmids={'32343890'} />,{' '}
-          <Linkout
-            link={
-              'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-olaparib-hrr-gene-mutated-metastatic-castration-resistant-prostate-cancer'
-            }
-          >
-            FDA-approval of Olaparib
-          </Linkout>
-        </div>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'ATM',
+            'Oncogenic Mutations',
+            'Prostate Cancer',
+            <div>Olaparib</div>,
+            '4',
+            '1',
+            <div>
+              <PMIDLink pmids={'32343890'} />,{' '}
+              <Linkout
+                link={
+                  'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-olaparib-hrr-gene-mutated-metastatic-castration-resistant-prostate-cancer'
+                }
+              >
+                FDA-approval of Olaparib
+              </Linkout>
+            </div>,
+          ],
+        ],
+      },
     ],
     newlyAddedGenes: ['FANCL'],
   },
@@ -2908,94 +2870,98 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
       ],
     ],
-    changedAnnotation: [
-      [
-        'MET',
-        'Exon 14 Skipping Mutations',
-        'Non-Small Cell Lung Cancer',
-        <div>Capmatinib</div>,
-        '3A',
-        '1',
-        <div>
-          <div>
-            Abstract:{' '}
-            <Linkout
-              link={
-                'https://ascopubs.org/doi/abs/10.1200/JCO.2019.37.15_suppl.9004'
-              }
-            >
-              Wolf, J. et al. Abstract# 9004, ASCO 2019;
-            </Linkout>
-          </div>
-          <div>
-            <Linkout
-              link={
-                'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-grants-accelerated-approval-capmatinib-metastatic-non-small-cell-lung-cancer'
-              }
-            >
-              FDA-approval of Capmatinib{' '}
-            </Linkout>
-          </div>
-        </div>,
-      ],
-      [
-        'RET',
-        'Fusions',
-        'Non-Small Cell Lung Cancer',
-        'Selpercatinib',
-        '3A',
-        '1',
-        <div>
-          <div>
-            Abstract:{' '}
-            <Linkout
-              link={
-                'https://www.jto.org/article/S1556-0864(19)30742-7/fulltext'
-              }
-            >
-              Drilon et al. Abstract# PL02.08, IASLC WCLC 2019;
-            </Linkout>
-          </div>
-          <div>
-            <Linkout
-              link={
-                'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-selpercatinib-lung-and-thyroid-cancers-ret-gene-mutations-or-fusions'
-              }
-            >
-              FDA-approval of Selpercatinib{' '}
-            </Linkout>
-          </div>
-        </div>,
-      ],
-      [
-        'RET',
-        'Oncogenic Mutations',
-        'Medullary Thyroid Cancer',
-        'Selpercatinib',
-        '3A',
-        '1',
-        <div>
-          <div>
-            Abstract:{' '}
-            <Linkout
-              link={
-                'https://www.sciencedirect.com/science/article/pii/S0923753419604539'
-              }
-            >
-              Wirth et al. Abstract# LBA93, ESMO 2019;
-            </Linkout>
-          </div>
-          <div>
-            <Linkout
-              link={
-                'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-selpercatinib-lung-and-thyroid-cancers-ret-gene-mutations-or-fusions'
-              }
-            >
-              FDA-approval of Selpercatinib{' '}
-            </Linkout>
-          </div>
-        </div>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'MET',
+            'Exon 14 Skipping Mutations',
+            'Non-Small Cell Lung Cancer',
+            <div>Capmatinib</div>,
+            '3A',
+            '1',
+            <div>
+              <div>
+                Abstract:{' '}
+                <Linkout
+                  link={
+                    'https://ascopubs.org/doi/abs/10.1200/JCO.2019.37.15_suppl.9004'
+                  }
+                >
+                  Wolf, J. et al. Abstract# 9004, ASCO 2019;
+                </Linkout>
+              </div>
+              <div>
+                <Linkout
+                  link={
+                    'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-grants-accelerated-approval-capmatinib-metastatic-non-small-cell-lung-cancer'
+                  }
+                >
+                  FDA-approval of Capmatinib{' '}
+                </Linkout>
+              </div>
+            </div>,
+          ],
+          [
+            'RET',
+            'Fusions',
+            'Non-Small Cell Lung Cancer',
+            'Selpercatinib',
+            '3A',
+            '1',
+            <div>
+              <div>
+                Abstract:{' '}
+                <Linkout
+                  link={
+                    'https://www.jto.org/article/S1556-0864(19)30742-7/fulltext'
+                  }
+                >
+                  Drilon et al. Abstract# PL02.08, IASLC WCLC 2019;
+                </Linkout>
+              </div>
+              <div>
+                <Linkout
+                  link={
+                    'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-selpercatinib-lung-and-thyroid-cancers-ret-gene-mutations-or-fusions'
+                  }
+                >
+                  FDA-approval of Selpercatinib{' '}
+                </Linkout>
+              </div>
+            </div>,
+          ],
+          [
+            'RET',
+            'Oncogenic Mutations',
+            'Medullary Thyroid Cancer',
+            'Selpercatinib',
+            '3A',
+            '1',
+            <div>
+              <div>
+                Abstract:{' '}
+                <Linkout
+                  link={
+                    'https://www.sciencedirect.com/science/article/pii/S0923753419604539'
+                  }
+                >
+                  Wirth et al. Abstract# LBA93, ESMO 2019;
+                </Linkout>
+              </div>
+              <div>
+                <Linkout
+                  link={
+                    'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-selpercatinib-lung-and-thyroid-cancers-ret-gene-mutations-or-fusions'
+                  }
+                >
+                  FDA-approval of Selpercatinib{' '}
+                </Linkout>
+              </div>
+            </div>,
+          ],
+        ],
+      },
     ],
   },
   '04232020': {
@@ -3068,19 +3034,23 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
       ],
     ],
-    changedAnnotation: [
-      [
-        'BRAF',
-        'V600E',
-        'Colorectal Cancer',
-        <div>
-          <div>Encorafenib + Cetuximab + Binimetinib,</div>
-          <div>Dabrafenib + Panitumumab + Trametinib</div>
-        </div>,
-        '2',
-        'None',
-        'Listing removed from 2.2020 Colon Cancer NCCN',
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'BRAF',
+            'V600E',
+            'Colorectal Cancer',
+            <div>
+              <div>Encorafenib + Cetuximab + Binimetinib,</div>
+              <div>Dabrafenib + Panitumumab + Trametinib</div>
+            </div>,
+            '2',
+            'None',
+            'Listing removed from 2.2020 Colon Cancer NCCN',
+          ],
+        ],
+      },
     ],
     news: [
       <span>
@@ -3264,67 +3234,71 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         </span>,
       ],
     ],
-    changedAnnotation: [
-      [
-        'NTRK1/2/3',
-        'Fusions',
-        'All Solid Tumors',
-        'Entrectinib',
-        '3A',
-        '1',
-        <a
-          href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-entrectinib-ntrk-solid-tumors-and-ros-1-nsclc"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          FDA-approval of Entrectinib
-        </a>,
-      ],
-      [
-        'ERBB2',
-        'Oncogenic Mutations',
-        'NSCLC',
-        'Ado-trastuzumab Emtansine',
-        '3A',
-        '2A',
-        <div>Listing in 1.2020 Non-Small Cell Lung Cancer NCCN</div>,
-      ],
-      [
-        'IDH1',
-        'Oncogenic Mutations',
-        'Cholangiocarcinoma',
-        'Ivosidenib',
-        '2B',
-        '3A',
-        <span>
-          Abstract:{' '}
-          <a
-            href="https://oncologypro.esmo.org/Meeting-Resources/ESMO-2019-Congress/ClarIDHy-A-global-phase-3-randomized-double-blind-study-of-ivosidenib-IVO-vs-placebo-in-patients-with-advanced-cholangiocarcinoma-CC-with-an-isocitrate-dehydrogenase-1-IDH1-mutation"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Abou-Alfa et al. Abstract# LBA10_PR, ESMO 2019
-          </a>
-        </span>,
-      ],
-      [
-        'PIK3CA',
-        'Oncogenic Mutations',
-        'Breast Cancer',
-        'Alpelisib',
-        '3A',
-        'None',
-        <div>
-          Alpelisib in combination with fulvestrant is{' '}
-          <a
-            href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-alpelisib-metastatic-breast-cancer"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            FDA-approved to treat patients with PIK3CA mutant breast cancer
-          </a>
-        </div>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'NTRK1/2/3',
+            'Fusions',
+            'All Solid Tumors',
+            'Entrectinib',
+            '3A',
+            '1',
+            <a
+              href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-entrectinib-ntrk-solid-tumors-and-ros-1-nsclc"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              FDA-approval of Entrectinib
+            </a>,
+          ],
+          [
+            'ERBB2',
+            'Oncogenic Mutations',
+            'NSCLC',
+            'Ado-trastuzumab Emtansine',
+            '3A',
+            '2A',
+            <div>Listing in 1.2020 Non-Small Cell Lung Cancer NCCN</div>,
+          ],
+          [
+            'IDH1',
+            'Oncogenic Mutations',
+            'Cholangiocarcinoma',
+            'Ivosidenib',
+            '2B',
+            '3A',
+            <span>
+              Abstract:{' '}
+              <a
+                href="https://oncologypro.esmo.org/Meeting-Resources/ESMO-2019-Congress/ClarIDHy-A-global-phase-3-randomized-double-blind-study-of-ivosidenib-IVO-vs-placebo-in-patients-with-advanced-cholangiocarcinoma-CC-with-an-isocitrate-dehydrogenase-1-IDH1-mutation"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Abou-Alfa et al. Abstract# LBA10_PR, ESMO 2019
+              </a>
+            </span>,
+          ],
+          [
+            'PIK3CA',
+            'Oncogenic Mutations',
+            'Breast Cancer',
+            'Alpelisib',
+            '3A',
+            'None',
+            <div>
+              Alpelisib in combination with fulvestrant is{' '}
+              <a
+                href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-alpelisib-metastatic-breast-cancer"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                FDA-approved to treat patients with PIK3CA mutant breast cancer
+              </a>
+            </div>,
+          ],
+        ],
+      },
     ],
     news: [
       <span>
@@ -3410,26 +3384,30 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <PMIDLink pmids={'30867592'} />,
       ],
     ],
-    changedAnnotation: [
-      [
-        'BRAF',
-        'D287H, D594, F595L, G466, G596, N581, S467L, V459L',
-        'All Solid Tumors',
-        'PLX8394',
-        '4',
-        'No level',
-        <>
-          <div>Re-review of PMID</div>
-          <div>
-            <PMIDLink pmids={'28783719'} />
-          </div>
-          <br />
-          <div>
-            BRAF class III mutants are not necessarily sensitive to dimer
-            disrupter RAF inhibitor PLX8394
-          </div>
-        </>,
-      ],
+    changedAnnotations: [
+      {
+        changedAnnotation: [
+          [
+            'BRAF',
+            'D287H, D594, F595L, G466, G596, N581, S467L, V459L',
+            'All Solid Tumors',
+            'PLX8394',
+            '4',
+            'No level',
+            <>
+              <div>Re-review of PMID</div>
+              <div>
+                <PMIDLink pmids={'28783719'} />
+              </div>
+              <br />
+              <div>
+                BRAF class III mutants are not necessarily sensitive to dimer
+                disrupter RAF inhibitor PLX8394
+              </div>
+            </>,
+          ],
+        ],
+      },
     ],
   },
   '06212019': {
