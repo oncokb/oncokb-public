@@ -9,18 +9,14 @@ import DocumentTitle from 'react-document-title';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { getPageTitle } from 'app/shared/utils/Utils';
 import { ElementType } from 'app/components/SimpleTable';
+import { Version } from './LevelOfEvidencePage';
 
 interface DxPxLevelsPageProps {
   pageTitle: string;
   version: string;
 }
 
-export enum Version {
-  DX = 'DX',
-  PX = 'PX',
-}
-
-const LEVEL_TITLE: { [key in Version]: ElementType } = {
+const LEVEL_TITLE: { [key in Version]?: ElementType } = {
   [Version.DX]: <>${ONCOKB_TM} Diagnostic Levels of Evidence</>,
   [Version.PX]: <>${ONCOKB_TM} Prognostic Levels of Evidence</>,
 };

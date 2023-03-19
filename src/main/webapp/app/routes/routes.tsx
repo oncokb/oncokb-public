@@ -35,7 +35,7 @@ import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
 import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTab';
 import FAQPage from 'app/pages/FAQPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
-import { Version } from 'app/pages/DxPxLevelsPage';
+import { Version } from 'app/pages/LevelOfEvidencePage';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
