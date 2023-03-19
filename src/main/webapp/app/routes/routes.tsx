@@ -1,10 +1,11 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
+import DxPxLevelsPage from 'app/pages/DxPxLevelsPage';
 import Login from 'app/components/login/LoginPage';
 import { Logout } from 'app/components/login/logout';
 import { RegisterPage } from 'app/pages/RegisterPage';
 import { PrivateRoute } from 'app/shared/auth/private-route';
-import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
+import { AUTHORITIES, PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
@@ -34,6 +35,7 @@ import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
 import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTab';
 import FAQPage from 'app/pages/FAQPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
+import { Version } from 'app/pages/DxPxLevelsPage';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -158,6 +160,18 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.LEVELS}
             component={LevelOfEvidencePage}
           />
+          <Route exact path={PAGE_ROUTE.DX_LEVELS}>
+            <DxPxLevelsPage
+              pageTitle={PAGE_TITLE.DX_LEVELS}
+              version={Version.DX}
+            />
+          </Route>
+          <Route exact path={PAGE_ROUTE.PX_LEVELS}>
+            <DxPxLevelsPage
+              pageTitle={PAGE_TITLE.PX_LEVELS}
+              version={Version.PX}
+            />
+          </Route>
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}

@@ -478,6 +478,8 @@ export enum PAGE_TITLE {
   FDA_RECOGNITION = 'OncoKB™ is now an FDA-recognized Public Human Genetic Variant Database*',
   HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base",
   LEVELS = 'OncoKB™ Levels of Evidence',
+  DX_LEVELS = 'OncoKB™ Diagnostic Levels of Evidence',
+  PX_LEVELS = 'OncoKB™ Prognostic Levels of Evidence',
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
   NEWS = 'Latest News',
@@ -510,6 +512,9 @@ export enum PAGE_ROUTE {
   NEWS = '/news',
   FDA_RECOGNITION = '/fda-recognition',
   LEVELS = '/levels',
+  DX_LEVELS = '/levels/dx',
+  PX_LEVELS = '/levels/px',
+
   SWAGGER_UI = '/swagger-ui/index.html',
   ADMIN = '/admin',
   ADMIN_USER_DETAILS = '/admin/user-details',

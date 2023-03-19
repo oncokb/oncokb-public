@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';
 import { RouterStore } from 'mobx-react-router';
 import { withRouter } from 'react-router';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import AccountMenu from 'app/pages/menus/account';
 import { action, observable } from 'mobx';
 import {
