@@ -3,7 +3,7 @@ import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
 import React from 'react';
 import pluralize from 'pluralize';
-import { GenePageLink } from 'app/shared/utils/UrlUtils';
+import { convertGeneInputToLinks } from './Util';
 
 export const UpdatedTxImplListItem = (props: {
   title?: string;
@@ -18,32 +18,12 @@ export const UpdatedTxImplListItem = (props: {
     numOFAssociations
   )}`;
 
-  // Its always one?, where zero column is level, then gene?
   const geneColumnIndex = 1;
   // transform the gene input to a link
   props.data.forEach(row => {
     const geneInput = row.content[geneColumnIndex].content;
     if (typeof geneInput === 'string') {
-      const tokens = geneInput.split(',');
-      if (tokens.length > 1) {
-        const itemLinks = tokens.map((token, i) => {
-          token = token.trim();
-          if (i === tokens.length - 1) {
-            return <GenePageLink hugoSymbol={token} />;
-          }
-          return (
-            <>
-              <GenePageLink hugoSymbol={token} />
-              {', '}
-            </>
-          );
-        });
-        row.content[geneColumnIndex].content = itemLinks;
-      } else {
-        row.content[geneColumnIndex].content = (
-          <GenePageLink hugoSymbol={geneInput} />
-        );
-      }
+      row.content[geneColumnIndex].content = convertGeneInputToLinks(geneInput);
     }
   });
 

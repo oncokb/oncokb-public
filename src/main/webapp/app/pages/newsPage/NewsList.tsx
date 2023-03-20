@@ -136,25 +136,21 @@ export default class NewsList extends React.Component<NewsListProps> {
                 ? newsData.changedAnnotations.map((annotation, _) => {
                     return (
                       <ChangedAnnotationListItem
-                        title={annotation.changedAnnotationTitle}
-                        columnHeaderType={
-                          annotation.changedAnnotationColumnHeaderType
-                        }
+                        title={annotation.title}
+                        columnHeaderType={annotation.columnHeaderType}
                         data={
-                          annotation.changedAnnotation
-                            ? annotation.changedAnnotation.map(
-                                (item, index) => {
-                                  return {
-                                    key: `changedAnnotation-${date}-${index}`,
-                                    content: item.map((subItem, subIndex) => {
-                                      return {
-                                        key: `changedAnnotation-${date}-${index}-${subIndex}`,
-                                        content: subItem,
-                                      };
-                                    }),
-                                  };
-                                }
-                              )
+                          annotation.content
+                            ? annotation.content.map((item, index) => {
+                                return {
+                                  key: `changedAnnotation-${date}-${index}`,
+                                  content: item.map((subItem, subIndex) => {
+                                    return {
+                                      key: `changedAnnotation-${date}-${index}-${subIndex}`,
+                                      content: subItem,
+                                    };
+                                  }),
+                                };
+                              })
                             : []
                         }
                       />

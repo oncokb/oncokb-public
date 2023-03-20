@@ -42,9 +42,9 @@ import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
 
 export type ChangedAnnotation = {
-  changedAnnotation?: ElementType[][];
-  changedAnnotationTitle?: string;
-  changedAnnotationColumnHeaderType?: AnnotationColumnHeaderType;
+  content?: ElementType[][];
+  title?: string;
+  columnHeaderType?: AnnotationColumnHeaderType;
 };
 
 export type NewsData = {
@@ -180,11 +180,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '02102023': {
     changedAnnotations: [
       {
-        changedAnnotationColumnHeaderType:
-          AnnotationColumnHeaderType.ADDITIONAL_DIFF_LEVEL_DRUG,
-        changedAnnotationTitle:
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_DIFF_LEVEL_DRUG,
+        title:
           'Changed annotation and addition of therapies for variants with a level of evidence',
-        changedAnnotation: [
+        content: [
           [
             'ESR1',
             'Oncogenic Ligand-Binding Domain Missense Mutations (310_547)',
@@ -253,9 +252,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotationColumnHeaderType:
-          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
-        changedAnnotation: [
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
           [
             'KRAS',
             'G12C',
@@ -299,9 +297,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotationColumnHeaderType:
-          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
-        changedAnnotation: [
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
           [
             'IDH1',
             'R132C/H/L/G/S',
@@ -436,9 +433,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotationColumnHeaderType:
-          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
-        changedAnnotation: [
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
           [
             'FGFR2',
             'Fusions',
@@ -564,7 +560,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'BRAF',
             'V600E',
@@ -651,7 +647,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'ALK',
             'Fusions',
@@ -669,9 +665,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         ],
       },
       {
-        changedAnnotationColumnHeaderType:
-          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
-        changedAnnotation: [
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
           [
             'NRG1',
             'Fusions',
@@ -697,7 +692,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
   '06062022': {
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'BRAF',
             'V600E',
@@ -713,9 +708,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         ],
       },
       {
-        changedAnnotationColumnHeaderType:
-          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
-        changedAnnotation: [
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
           [
             'ALK',
             'Fusions',
@@ -801,9 +795,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotationColumnHeaderType:
-          AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
-        changedAnnotation: [
+        columnHeaderType: AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG,
+        content: [
           [
             'EGFR',
             'S768I, L861Q, G719',
@@ -961,7 +954,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'BRCA1, BRCA2',
             'Oncogenic Mutations',
@@ -1129,9 +1122,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       'Updated therapeutic implications: New variants with a level of evidence',
     changedAnnotations: [
       {
-        changedAnnotationTitle:
-          'Updated therapeutic implications: Changed annotations',
-        changedAnnotation: [
+        title: 'Updated therapeutic implications: Changed annotations',
+        content: [
           [
             'ABL1',
             'BCR-ABL1 Fusion',
@@ -1517,8 +1509,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotationColumnHeaderType: AnnotationColumnHeaderType.DRUG,
-        changedAnnotation: [
+        columnHeaderType: AnnotationColumnHeaderType.DRUG,
+        content: [
           [
             '3A',
             'BRAF',
@@ -1574,7 +1566,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'EGFR',
             'Exon 20 Insertions',
@@ -1617,7 +1609,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'IDH1',
             'R132',
@@ -1647,7 +1639,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'KIT',
             'D816',
@@ -1766,7 +1758,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'KRAS',
             'G12C',
@@ -2113,7 +2105,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           ['NTRK1', 'G623R', 'All Solid Tumors', 'Larotrectinib', 'R2', 'R1'],
           [
             'KIT',
@@ -2201,8 +2193,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotationTitle: `Changed annotation to adhere to our upcoming ${ONCOKB_TM} SOP v2.0`,
-        changedAnnotation: [
+        title: `Changed annotation to adhere to our upcoming ${ONCOKB_TM} SOP v2.0`,
+        content: [
           [
             'RET',
             'Fusions',
@@ -2309,7 +2301,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'RET',
             'Oncogenic Mutations',
@@ -2471,7 +2463,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'RET',
             'Fusions',
@@ -2661,7 +2653,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'EZH2',
             'A682G, A692V, Y646C, Y646F, Y646H, Y646N, Y646S',
@@ -2741,7 +2733,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'ATM',
             'Oncogenic Mutations',
@@ -2872,7 +2864,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'MET',
             'Exon 14 Skipping Mutations',
@@ -3036,7 +3028,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'BRAF',
             'V600E',
@@ -3236,7 +3228,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'NTRK1/2/3',
             'Fusions',
@@ -3386,7 +3378,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     changedAnnotations: [
       {
-        changedAnnotation: [
+        content: [
           [
             'BRAF',
             'D287H, D594, F595L, G466, G596, N581, S467L, V459L',
