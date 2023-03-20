@@ -1142,7 +1142,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             </WithSeparator>,
           ],
           [
-            'BRCA1/BRCA2',
+            'BRCA1, BRCA2',
             'Oncogenic Mutations',
             'Breast Cancer',
             'Olaparib, Talazoparib',
@@ -3230,7 +3230,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       {
         content: [
           [
-            'NTRK1/2/3',
+            'NTRK1, NTRK2, NTRK3',
             'Fusions',
             'All Solid Tumors',
             'Entrectinib',
