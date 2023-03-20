@@ -10,10 +10,18 @@ export const convertGeneInputToLinks = (geneInput: string): ElementType => {
     return <GenePageLink hugoSymbol={geneInput} />;
   }
 
-  const itemLinks = tokens.map((token, _) => {
+  const itemLinks = tokens.map(token => {
     token = token.trim();
     return <GenePageLink hugoSymbol={token} />;
   });
 
   return <WithSeparator separator=", ">{itemLinks}</WithSeparator>;
+};
+
+export const getGeneColumnIndex = (
+  annotationColumnHeader: {
+    name: string;
+  }[]
+): number => {
+  return annotationColumnHeader.findIndex(column => column.name === 'Gene');
 };

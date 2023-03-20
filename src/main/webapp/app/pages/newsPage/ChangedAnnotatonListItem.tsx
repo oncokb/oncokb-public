@@ -10,7 +10,7 @@ import React from 'react';
 import _ from 'lodash';
 
 import mainStyle from './main.module.scss';
-import { convertGeneInputToLinks } from './Util';
+import { convertGeneInputToLinks, getGeneColumnIndex } from './Util';
 
 export enum AnnotationColumnHeaderType {
   LEVEL,
@@ -33,11 +33,9 @@ export const ChangedAnnotationListItem = (props: {
   let annotationColumnHeader = undefined;
   let useOneLineRowClass = true;
   let defaultTitle = '';
-  let geneColumnIndex = 0;
   switch (props.columnHeaderType) {
     case AnnotationColumnHeaderType.DRUG:
       annotationColumnHeader = CHANGED_ANNOTATION_DRUG_COLUMNS;
-      geneColumnIndex = 1;
       break;
     case AnnotationColumnHeaderType.ADDITIONAL_SAME_LEVEL_DRUG:
       annotationColumnHeader = CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS;
@@ -57,6 +55,8 @@ export const ChangedAnnotationListItem = (props: {
       defaultTitle = 'Changed Annotation';
       break;
   }
+
+  const geneColumnIndex = getGeneColumnIndex(annotationColumnHeader);
 
   // transform the gene input to link(s)
   props.data.forEach(row => {

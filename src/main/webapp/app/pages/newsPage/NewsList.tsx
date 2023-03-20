@@ -76,7 +76,6 @@ export default class NewsList extends React.Component<NewsListProps> {
   render() {
     const date = this.props.date;
     const newsData: NewsData = NEWS_BY_DATE[date];
-    console.log('newsData', newsData);
     return (
       <>
         <h3
