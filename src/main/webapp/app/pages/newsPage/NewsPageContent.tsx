@@ -173,6 +173,37 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '03212023': {
+    priorityNews: [
+      <span>
+        Release of <SopPageLink version={3} />.
+      </span>,
+      <span>
+        We have updated our <Link to={PAGE_ROUTE.FAQ_ACCESS}>FAQ page</Link>{' '}
+        with the most commonly asked questions of 2022. Take a look at what our
+        users are asking us.
+      </span>,
+      <span>
+        This release contains significant data updates including to citations,
+        mutation effect descriptions, etc. in alignment with our current SOP.
+      </span>,
+    ],
+    newlyAddedGenes: [
+      'ACKR3',
+      'ECSIT',
+      'FES',
+      'HSD17B2',
+      'ID1',
+      'KAT7',
+      'LRP1B',
+      'MAL2',
+      'MBD4',
+      'MEF2C',
+      'PHF19',
+      'TNFSF13',
+      'UBE2A',
+    ],
+  },
   '02102023': {
     changedAnnotationColumnHeaderType:
       AnnotationColumnHeaderType.ADDITIONAL_DIFF_LEVEL_DRUG,
