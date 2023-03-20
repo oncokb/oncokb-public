@@ -59,76 +59,98 @@ export type NewsData = {
   changedAnnotations?: ChangedAnnotation[];
 };
 
+export const GENE = 'Gene';
+export const MUTATION = 'Mutation';
+export const CANCER_TYPE = 'Cancer Type';
+export const DRUG = 'Drug';
+export const LEVEL = 'Level';
+export const DRUGS = 'Drug(s)';
+export const EVIDENCE = 'Evidence';
+export const PREVIOUS_LEVEL = 'Previous Level';
+export const CURRENT_LEVEL = 'Current Level';
+export const REASON = 'Reason';
+export const PREVIOUS_DRUG = 'Previous Drug';
+export const CURRENT_DRUG = 'Current Drug';
+export const PREVIOUS_DRUGS = 'Previous Drug(s)';
+export const CURRENT_DRUGS = 'Current Drug(s)';
+export const UPDATE = 'Update';
+export const CURRENT_LEVEL_OF_EVIDENCE = 'Current Level of Evidence';
+export const PREVIOUS_LEVEL_OF_EVIDENCE = 'Previous Level of Evidence';
+export const NEWLY_ADDED_DRUGS = 'Newly Added Drug(s)';
+export const DRUGS_ALREADY_IN_ONCOKB = 'Drug(s) Already in OncoKB™';
+export const PREVIOUS_BIOMARKER_ASSOCIATION = 'Previous Biomarker Association';
+export const CURRENT_BIOMARKER_ASSOCIATION = 'Current Biomarker Association';
+
 export const NEWLY_ADDED_LEVEL_FOUR_COLUMNS = [
-  { name: 'Gene', size: 2 },
-  { name: 'Mutation', size: 6 },
-  { name: 'Cancer Type', size: 2 },
-  { name: 'Drug', size: 2 },
+  { name: GENE, size: 2 },
+  { name: MUTATION, size: 6 },
+  { name: CANCER_TYPE, size: 2 },
+  { name: DRUG, size: 2 },
 ];
 
 export const UPDATED_IMPLICATION_COLUMNS = [
-  { name: 'Level' },
-  { name: 'Gene' },
-  { name: 'Mutation' },
-  { name: 'Cancer Type' },
-  { name: 'Drug(s)' },
-  { name: 'Evidence' },
+  { name: LEVEL },
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: DRUGS },
+  { name: EVIDENCE },
 ];
 
 export const UPDATED_IMPLICATION_OLD_FORMAT_COLUMNS = [
-  { name: 'Level' },
-  { name: 'Update' },
+  { name: LEVEL },
+  { name: UPDATE },
 ];
 
 export const CHANGED_ANNOTATION_LEVEL_COLUMNS = [
-  { name: 'Gene' },
-  { name: 'Mutation' },
-  { name: 'Cancer Type' },
-  { name: 'Drug(s)' },
-  { name: 'Previous Level' },
-  { name: 'Current Level' },
-  { name: 'Reason' },
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: DRUGS },
+  { name: PREVIOUS_LEVEL },
+  { name: CURRENT_LEVEL },
+  { name: REASON },
 ];
 
 export const CHANGED_ANNOTATION_DRUG_COLUMNS = [
-  { name: 'Level' },
-  { name: 'Gene' },
-  { name: 'Mutation' },
-  { name: 'Cancer Type' },
-  { name: 'Previous Drug' },
-  { name: 'Current Drug' },
-  { name: 'Evidence' },
+  { name: LEVEL },
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: PREVIOUS_DRUG },
+  { name: CURRENT_DRUG },
+  { name: EVIDENCE },
 ];
 
 export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS = [
-  { name: 'Gene' },
-  { name: 'Mutation' },
-  { name: 'Cancer Type' },
-  { name: 'Current Level of Evidence' },
-  { name: 'Drug(s) Already in OncoKB™' },
-  { name: 'Newly Added Drug' },
-  { name: 'Evidence' },
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: CURRENT_LEVEL_OF_EVIDENCE },
+  { name: DRUGS_ALREADY_IN_ONCOKB },
+  { name: NEWLY_ADDED_DRUGS },
+  { name: EVIDENCE },
 ];
 
 export const CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS = [
-  { name: 'Gene' },
-  { name: 'Mutation' },
-  { name: 'Cancer Type' },
-  { name: 'Previous Level of Evidence' },
-  { name: 'Current Level of Evidence' },
-  { name: 'Drug(s) Already in OncoKB™' },
-  { name: 'Newly Added Drug(s)' },
-  { name: 'Evidence' },
+  { name: GENE },
+  { name: MUTATION },
+  { name: CANCER_TYPE },
+  { name: PREVIOUS_LEVEL_OF_EVIDENCE },
+  { name: CURRENT_LEVEL_OF_EVIDENCE },
+  { name: DRUGS_ALREADY_IN_ONCOKB },
+  { name: NEWLY_ADDED_DRUGS },
+  { name: EVIDENCE },
 ];
 
 export const CDX_COLUMNS = [
-  { name: 'Level' },
-  { name: 'Gene' },
-  { name: 'Cancer Type' },
-  { name: 'Drug' },
-  { name: 'Previous Biomarker Association' },
-  { name: 'Current Biomarker Association' },
-  { name: 'Evidence' },
+  { name: LEVEL },
+  { name: GENE },
+  { name: CANCER_TYPE },
+  { name: DRUG },
+  { name: PREVIOUS_BIOMARKER_ASSOCIATION },
+  { name: CURRENT_BIOMARKER_ASSOCIATION },
+  { name: EVIDENCE },
 ];
 export const NEWLY_ADDED_LEVEL_FOUR = [
   ['ATM', 'Oncogenic Mutations', 'Prostate Cancer', 'Olaparib'],

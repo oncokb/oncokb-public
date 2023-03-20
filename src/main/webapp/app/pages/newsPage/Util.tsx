@@ -18,10 +18,11 @@ export const convertGeneInputToLinks = (geneInput: string): ElementType => {
   return <WithSeparator separator=", ">{itemLinks}</WithSeparator>;
 };
 
-export const getGeneColumnIndex = (
+export const getColumnIndexByName = (
   annotationColumnHeader: {
     name: string;
-  }[]
+  }[],
+  columnName: string
 ): number => {
-  return annotationColumnHeader.findIndex(column => column.name === 'Gene');
+  return annotationColumnHeader.findIndex(column => column.name === columnName);
 };
