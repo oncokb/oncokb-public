@@ -42,7 +42,7 @@ import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
 
 export type ChangedAnnotation = {
-  content?: ElementType[][];
+  content: ElementType[][];
   title?: string;
   columnHeaderType?: AnnotationColumnHeaderType;
 };
