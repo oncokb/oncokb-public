@@ -4,16 +4,9 @@ import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import WithSeparator from 'react-with-separator';
 
 export const convertGeneInputToLinks = (geneInput: string): ElementType => {
-  geneInput = geneInput.trim();
-  const tokens = geneInput.split(',');
-  if (tokens.length === 1) {
-    return <GenePageLink hugoSymbol={geneInput} />;
-  }
-
-  const itemLinks = tokens.map(token => {
-    token = token.trim();
-    return <GenePageLink hugoSymbol={token} />;
-  });
+const itemLinks = geneInput.trim().split(',').map(token => (
+    <GenePageLink hugoSymbol={token.trim()}/>
+  ));
 
   return <WithSeparator separator=", ">{itemLinks}</WithSeparator>;
 };
