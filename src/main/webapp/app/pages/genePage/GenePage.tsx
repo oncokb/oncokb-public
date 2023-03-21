@@ -496,7 +496,12 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                           />
                         </Col>
                       </Row>
-                      <If condition={this.store.gene.result.entrezGeneId > 0}>
+                      <If
+                        condition={
+                          this.store.gene.result.entrezGeneId > 0 &&
+                          this.store.mutationMapperDataPortal.result.length > 0
+                        }
+                      >
                         <Row className={'mt-5'}>
                           <Col
                             xl={this.genePanelClass.xl}
