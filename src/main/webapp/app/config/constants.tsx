@@ -480,6 +480,7 @@ export enum PAGE_TITLE {
   LEVELS = 'OncoKB™ Levels of Evidence',
   DX_LEVELS = 'OncoKB™ Diagnostic Levels of Evidence',
   PX_LEVELS = 'OncoKB™ Prognostic Levels of Evidence',
+
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
   NEWS = 'Latest News',
@@ -512,8 +513,10 @@ export enum PAGE_ROUTE {
   NEWS = '/news',
   FDA_RECOGNITION = '/fda-recognition',
   LEVELS = '/levels',
-  DX_LEVELS = '/levels/dx',
-  PX_LEVELS = '/levels/px',
+  DX = '/levels/diagnostics-levels',
+  PX = '/levels/prognostics-levels',
+  V2 = '/levels/therapeutic-levels',
+  FDA_NGS = '/levels/fda-levels',
 
   SWAGGER_UI = '/swagger-ui/index.html',
   ADMIN = '/admin',

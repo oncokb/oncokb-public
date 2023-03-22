@@ -1,6 +1,5 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
-import DxPxLevelsPage from 'app/pages/DxPxLevelsPage';
 import Login from 'app/components/login/LoginPage';
 import { Logout } from 'app/components/login/logout';
 import { RegisterPage } from 'app/pages/RegisterPage';
@@ -155,23 +154,18 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.TERMS}
             component={ApiAccessPageNavTab}
           />
+          <Route exact path={PAGE_ROUTE.LEVELS}>
+            <Redirect to={PAGE_ROUTE.V2} />
+          </Route>
+          <Route exact path={PAGE_ROUTE.DX} component={LevelOfEvidencePage} />
+          <Route exact path={PAGE_ROUTE.PX} component={LevelOfEvidencePage} />
+          <Route exact path={PAGE_ROUTE.V2} component={LevelOfEvidencePage} />
           <Route
             exact
-            path={PAGE_ROUTE.LEVELS}
+            path={PAGE_ROUTE.FDA_NGS}
             component={LevelOfEvidencePage}
           />
-          <Route exact path={PAGE_ROUTE.DX_LEVELS}>
-            <DxPxLevelsPage
-              pageTitle={PAGE_TITLE.DX_LEVELS}
-              version={Version.DX}
-            />
-          </Route>
-          <Route exact path={PAGE_ROUTE.PX_LEVELS}>
-            <DxPxLevelsPage
-              pageTitle={PAGE_TITLE.PX_LEVELS}
-              version={Version.PX}
-            />
-          </Route>
+
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
