@@ -203,8 +203,8 @@ export default class LevelOfEvidencePage extends React.Component<
 
     const activeLinkUnderLine = {
       backgroundColor: 'rgb(9,104,195)',
-      borderRadius: 10,
-      height: 5,
+      borderRadius: 20,
+      height: 4,
       width: '50%',
       margin: 'auto',
       transtion: 'all 1s',
