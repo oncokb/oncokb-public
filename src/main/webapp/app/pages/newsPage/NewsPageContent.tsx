@@ -708,6 +708,42 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         ],
       },
     ],
+    news: [
+      <span>
+        Updated therapeutic implications: - Removal of therapies for variants
+        with a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Current Level of Evidence</th>
+                <th>Drug(s) removed from OncoKB</th>
+                <th>Drug remaining in OncoKB</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'ESR1'} />
+                </td>
+                <td>Oncogenic Mutations</td>
+                <td>Breast Cancer</td>
+                <td>3A</td>
+                <td>AZD9496</td>
+                <td>Fulvestrant</td>
+                <td>
+                  <PMIDLink pmids={'32234755'} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
   },
   '06062022': {
     changedAnnotations: [
