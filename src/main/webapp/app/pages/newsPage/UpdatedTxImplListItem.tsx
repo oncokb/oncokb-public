@@ -3,6 +3,7 @@ import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
 import React from 'react';
 import pluralize from 'pluralize';
+import { convertGeneInputToLinks } from './Util';
 
 export const UpdatedTxImplListItem = (props: {
   title?: string;
@@ -16,6 +17,16 @@ export const UpdatedTxImplListItem = (props: {
     'association',
     numOFAssociations
   )}`;
+
+  const geneColumnIndex = 1;
+  // transform the gene input to a link
+  props.data.forEach(row => {
+    const geneInput = row.content[geneColumnIndex].content;
+    if (typeof geneInput === 'string') {
+      row.content[geneColumnIndex].content = convertGeneInputToLinks(geneInput);
+    }
+  });
+
   return (
     <li>
       {props.title ? props.title : defaultTitle}
