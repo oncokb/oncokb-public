@@ -3,6 +3,7 @@ import {
   CHANGED_ANNOTATION_DRUG_COLUMNS,
   CHANGED_ANNOTATION_ADDITIONAL_DRUG_SAME_LEVEL_COLUMNS,
   CHANGED_ANNOTATION_ADDITIONAL_DRUG_DIFF_LEVEL_COLUMNS,
+  GENE,
 } from 'app/pages/newsPage/NewsPageContent';
 import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
@@ -10,6 +11,7 @@ import React from 'react';
 import _ from 'lodash';
 
 import mainStyle from './main.module.scss';
+import { convertGeneInputToLinks, getColumnIndexByName } from './Util';
 
 export enum AnnotationColumnHeaderType {
   LEVEL,
@@ -53,6 +55,20 @@ export const ChangedAnnotationListItem = (props: {
       useOneLineRowClass = true;
       defaultTitle = 'Changed Annotation';
       break;
+  }
+
+  const geneColumnIndex = getColumnIndexByName(annotationColumnHeader, GENE);
+
+  if (geneColumnIndex > -1) {
+    // transform the gene input to link(s)
+    props.data.forEach(row => {
+      const geneInput = row.content[geneColumnIndex].content;
+      if (typeof geneInput === 'string') {
+        row.content[geneColumnIndex].content = convertGeneInputToLinks(
+          geneInput
+        );
+      }
+    });
   }
 
   return (
