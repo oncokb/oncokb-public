@@ -21,7 +21,7 @@ import WindowStore from 'app/store/WindowStore';
 import { Linkout } from 'app/shared/links/Linkout';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { getPageTitle } from 'app/shared/utils/Utils';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 
 type LevelOfEvidencePageProps = {
