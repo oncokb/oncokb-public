@@ -21,7 +21,7 @@ import WindowStore from 'app/store/WindowStore';
 import { Linkout } from 'app/shared/links/Linkout';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { getPageTitle } from 'app/shared/utils/Utils';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 
 type LevelOfEvidencePageProps = {
@@ -133,9 +133,29 @@ export default class LevelOfEvidencePage extends React.Component<
 
   readonly reactions: IReactionDisposer[] = [];
 
+  redirectToNewPage = (version: Version) => {
+    // redirects from former version format
+    switch (version.toUpperCase()) {
+      case Version.DX:
+        this.props.routing.history.push(PAGE_ROUTE[Version.DX]);
+        break;
+      case Version.PX:
+        this.props.routing.history.push(PAGE_ROUTE[Version.PX]);
+        break;
+      case Version.FDA_NGS:
+        this.props.routing.history.push(PAGE_ROUTE[Version.FDA_NGS]);
+        break;
+      default:
+        break;
+    }
+  };
+
   updateLocationHash = (newVersion: Version) => {
+    this.redirectToNewPage(newVersion);
     if (window.location.pathname.includes(PAGE_ROUTE[Version.V2])) {
-      window.location.hash = QueryString.stringify({ version: newVersion });
+      window.location.hash = QueryString.stringify({
+        version: newVersion.toUpperCase(),
+      });
     }
   };
 
@@ -163,11 +183,13 @@ export default class LevelOfEvidencePage extends React.Component<
     );
   }
 
+  componentDidMount(): void {
+    this.redirectToNewPage(this.version);
+  }
+
   componentWillUnmount(): void {
     this.reactions.forEach(componentReaction => componentReaction());
   }
-
-  componentDidMount(): void {}
 
   getSubTitle(version: Version) {
     switch (version) {
@@ -197,22 +219,8 @@ export default class LevelOfEvidencePage extends React.Component<
   }
 
   render() {
-    const activeLinkStyle = {
-      fontWeight: 700,
-    };
-
-    const activeLinkUnderLine = {
-      backgroundColor: 'rgb(9,104,195)',
-      borderRadius: 20,
-      height: 4,
-      width: '50%',
-      margin: 'auto',
-      transtion: 'all 1s',
-      marginTop: 2,
-    };
-
     return (
-      <DocumentTitle title={getPageTitle(PAGE_TITLE.LEVELS)}>
+      <DocumentTitle title={getPageTitle(PAGE_TITLE[this.version])}>
         <Row className="justify-content-center">
           <Col lg={10}>
             <div className="levels-of-evidence">
@@ -231,7 +239,9 @@ export default class LevelOfEvidencePage extends React.Component<
                             window.location.pathname.includes(
                               PAGE_ROUTE[version]
                             )
-                              ? activeLinkStyle
+                              ? {
+                                  fontWeight: 700,
+                                }
                               : {}
                           }
                         >
@@ -242,7 +252,14 @@ export default class LevelOfEvidencePage extends React.Component<
                               window.location.pathname.includes(
                                 PAGE_ROUTE[version]
                               )
-                                ? activeLinkUnderLine
+                                ? {
+                                    backgroundColor: 'rgb(9,104,195)',
+                                    borderRadius: 20,
+                                    height: 4,
+                                    width: '50%',
+                                    margin: 'auto',
+                                    marginTop: 2,
+                                  }
                                 : {}
                             }
                           ></div>
@@ -257,6 +274,7 @@ export default class LevelOfEvidencePage extends React.Component<
                 windowStore={this.props.windowStore}
                 toggleVersion={this.toggleVersion}
                 version={this.version}
+                routing={this.props.routing}
               />
             </div>
           </Col>
@@ -266,36 +284,40 @@ export default class LevelOfEvidencePage extends React.Component<
   }
 }
 
-interface PageContentProps {
+type PageContentProps = {
   toggleVersion: (version: Version) => void;
   windowStore: WindowStore;
   version: Version;
-}
+  routing: RouterStore;
+};
 
 class PageContent extends React.Component<PageContentProps> {
-  pathname: string;
+  state = {
+    pathname: window.location.pathname,
+  };
 
   componentDidMount(): void {
-    if (window.location.pathname.includes(PAGE_ROUTE[Version.V2])) return;
-    this.getVersionFromPathname();
-    this.pathname = window.location.pathname;
+    if (!window.location.pathname.includes(PAGE_ROUTE[Version.V2])) {
+      this.getVersionFromPathname();
+    }
   }
 
   componentDidUpdate(): void {
-    if (window.location.pathname !== this.pathname) {
+    if (window.location.pathname !== this.state.pathname) {
       this.getVersionFromPathname();
-      this.pathname = window.location.pathname;
+      this.setState({
+        pathname: window.location.pathname,
+      });
     }
   }
 
   getVersionFromPathname() {
-    const version =
-      Version[
-        Object.keys(PAGE_ROUTE).find(
-          key => PAGE_ROUTE[key] === window.location.pathname
-        ) ?? ''
-      ] || this.props.version;
+    const versionKey: string =
+      Object.keys(PAGE_ROUTE).find(
+        key => PAGE_ROUTE[key] === window.location.pathname
+      ) ?? '';
 
+    const version = Version[versionKey] ?? this.props.version;
     this.props.toggleVersion(version);
   }
 
