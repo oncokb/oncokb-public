@@ -2,6 +2,8 @@ package org.mskcc.cbio.oncokb.web.rest;
 
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.Constants;
+import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
@@ -25,6 +27,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
+
+import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 
@@ -57,6 +61,25 @@ public class AccountResourceIT {
 
     @Autowired
     private MockMvc restAccountMockMvc;
+
+    @Autowired
+    private ApplicationProperties applicationProperties;
+
+    RecaptchaProperties recaptchaProp;
+
+    private AccountResource accountResource;
+
+    @BeforeEach
+    public void setUp() throws IOException {
+        // applicationProperties = new ApplicationProperties();
+        recaptchaProp = new RecaptchaProperties();
+        recaptchaProp.setProjectId("symbolic-nation-320615");
+        recaptchaProp.setSiteKey("6LfAOe4jAAAAANjzxWQ8mKilcvk1QvLLohd7EV7F");
+        recaptchaProp.setThreshold((float) 0.5);
+        applicationProperties.setRecaptcha(recaptchaProp);
+
+        accountResource = new AccountResource(userRepository, userService, null, null, null, null, null, null, passwordEncoder, null, null, applicationProperties);
+    }
 
     @Test
     @WithUnauthenticatedMockUser
