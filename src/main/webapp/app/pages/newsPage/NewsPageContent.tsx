@@ -40,6 +40,7 @@ import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
+import { hasExcludedChars } from './Util';
 
 export type ChangedAnnotation = {
   content: ElementType[][];
@@ -4193,15 +4194,21 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           <SimpleTable
             columns={NEWLY_ADDED_LEVEL_FOUR_COLUMNS}
             rows={NEWLY_ADDED_LEVEL_FOUR.map((record, index) => {
+              const geneInput = record[0];
               return {
                 key: `NEWLY_ADDED_LEVEL_FOUR-${index}`,
                 content: record.map((subItem, subIndex) => {
-                  const content: ElementType =
-                    subIndex === 0 ? (
-                      <GenePageLink hugoSymbol={subItem} />
-                    ) : (
-                      subItem
+                  let content: ElementType = subItem;
+                  if (subIndex === 0) {
+                    content = <GenePageLink hugoSymbol={subItem} />;
+                  } else if (subIndex === 1 && !hasExcludedChars(subItem)) {
+                    content = (
+                      <AlterationPageLink
+                        hugoSymbol={geneInput}
+                        alteration={subItem}
+                      />
                     );
+                  }
                   return {
                     key: `NEWLY_ADDED_LEVEL_FOUR-${index}-${subIndex}`,
                     content,
