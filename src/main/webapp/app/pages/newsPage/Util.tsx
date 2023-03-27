@@ -23,9 +23,9 @@ export const convertGeneAndAlterationInputToLink = (
   );
 };
 
-export const hasExclusionChars = (input: string): boolean => {
-  const exclusionChars = [',', '|', '/'];
-  return exclusionChars.some(char => input.includes(char));
+export const hasExcludedChars = (input: string): boolean => {
+  const excludedChars = [',', '|', '/'];
+  return excludedChars.some(char => input.includes(char));
 };
 
 export const getColumnIndexByName = (

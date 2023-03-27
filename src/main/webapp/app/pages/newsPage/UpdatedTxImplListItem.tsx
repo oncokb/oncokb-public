@@ -6,7 +6,7 @@ import pluralize from 'pluralize';
 import {
   convertGeneAndAlterationInputToLink,
   convertGeneInputToLinks,
-  hasExclusionChars,
+  hasExcludedChars,
 } from './Util';
 
 export const UpdatedTxImplListItem = (props: {
@@ -31,10 +31,7 @@ export const UpdatedTxImplListItem = (props: {
       const geneInput = row.content[geneColumnIndex].content;
       const mutationInput = row.content[mutationColumnIndex].content;
       if (typeof geneInput === 'string' && typeof mutationInput === 'string') {
-        if (
-          !hasExclusionChars(mutationInput) &&
-          !hasExclusionChars(geneInput)
-        ) {
+        if (!hasExcludedChars(mutationInput) && !hasExcludedChars(geneInput)) {
           row.content[
             mutationColumnIndex
           ].content = convertGeneAndAlterationInputToLink(
