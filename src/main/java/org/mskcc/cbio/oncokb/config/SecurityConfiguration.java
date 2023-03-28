@@ -107,6 +107,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/utils/cancerGeneList").permitAll()
             .antMatchers("/api/v1/utils/cancerGeneList.txt").permitAll()
             .antMatchers("/api/v1/utils/cancerGeneList.json").permitAll()
+            .antMatchers("/api/v1/utils/actionableGeneEvidences").hasAnyAuthority(AuthoritiesConstants.USER)
             .antMatchers("/api/v1/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
 
             .antMatchers("/api/account/reset-password/init").permitAll()
