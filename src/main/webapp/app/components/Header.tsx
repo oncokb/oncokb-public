@@ -42,6 +42,27 @@ type SubpageLink = {
   link: string;
 };
 
+const checkIfActive = (title: string, subPages: SubpageLink[]) => {
+  const currentPath = window.location.pathname;
+  if (title === subPages[0].title) {
+    if (
+      currentPath.includes(PAGE_ROUTE.V2) ||
+      currentPath.includes(PAGE_ROUTE.DX) ||
+      currentPath.includes(PAGE_ROUTE.PX) ||
+      currentPath.includes(PAGE_ROUTE.FDA_NGS)
+    )
+      return true;
+  } else if (title === subPages[3].title) {
+    if (
+      currentPath.includes(PAGE_ROUTE.TERMS) ||
+      currentPath.includes(PAGE_ROUTE.REGISTER)
+    )
+      return true;
+  }
+
+  return false;
+};
+
 // @ts-ignore
 @withRouter
 @observer
@@ -74,7 +95,15 @@ class Header extends React.Component<IHeaderProps> {
 
   getLink(page: SubpageLink) {
     return (
-      <NavLink to={page.link} key={page.title} className={'mr-auto nav-item'}>
+      <NavLink
+        to={page.link}
+        key={page.title}
+        className={'mr-auto nav-item'}
+        isActive={match => {
+          if (match || checkIfActive(page.title, this.subPages)) return true;
+          return false;
+        }}
+      >
         {page.title}
       </NavLink>
     );

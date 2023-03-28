@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button, Form, Container } from 'react-bootstrap';
+import { Row, Col, Button, Form, Tab, Tabs } from 'react-bootstrap';
 import classnames from 'classnames';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import {
@@ -21,8 +21,6 @@ import WindowStore from 'app/store/WindowStore';
 import { Linkout } from 'app/shared/links/Linkout';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { getPageTitle } from 'app/shared/utils/Utils';
-import { Link } from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap';
 
 type LevelOfEvidencePageProps = {
   routing: RouterStore;
@@ -123,6 +121,13 @@ const LEVEL_FILE_NAME: { [key in Version]: string } = {
     'CDRH’s-Approach-to-Tumor-Profiling-Next-Generation-Sequencing-Tests',
 };
 
+const REDIRECTPAGE: { [key in Version]?: PAGE_ROUTE } = {
+  [Version.V2]: PAGE_ROUTE[Version.V2],
+  [Version.DX]: PAGE_ROUTE[Version.DX],
+  [Version.PX]: PAGE_ROUTE[Version.PX],
+  [Version.FDA_NGS]: PAGE_ROUTE[Version.FDA_NGS],
+};
+
 @inject('routing', 'windowStore')
 @observer
 export default class LevelOfEvidencePage extends React.Component<
@@ -130,28 +135,27 @@ export default class LevelOfEvidencePage extends React.Component<
   any
 > {
   @observable version: Version = Version.V2;
+  @observable activeKey: Version = Version.V2;
 
   readonly reactions: IReactionDisposer[] = [];
 
   redirectToNewPage = (version: Version) => {
     // redirects from former version format
-    switch (version.toUpperCase()) {
-      case Version.DX:
-        this.props.routing.history.push(PAGE_ROUTE[Version.DX]);
-        break;
-      case Version.PX:
-        this.props.routing.history.push(PAGE_ROUTE[Version.PX]);
-        break;
-      case Version.FDA_NGS:
-        this.props.routing.history.push(PAGE_ROUTE[Version.FDA_NGS]);
-        break;
-      default:
-        break;
+    const newPath = REDIRECTPAGE[version.toUpperCase()];
+    if (newPath) {
+      this.props.routing.history.push(newPath);
     }
+  };
+
+  updateActiveKey = (version: Version) => {
+    this.activeKey = [Version.DX, Version.PX, Version.FDA_NGS].includes(version)
+      ? Version[version]
+      : Version.V2;
   };
 
   updateLocationHash = (newVersion: Version) => {
     this.redirectToNewPage(newVersion);
+    this.updateActiveKey(newVersion);
     if (window.location.pathname.includes(PAGE_ROUTE[Version.V2])) {
       window.location.hash = QueryString.stringify({
         version: newVersion.toUpperCase(),
@@ -224,58 +228,28 @@ export default class LevelOfEvidencePage extends React.Component<
         <Row className="justify-content-center">
           <Col lg={10}>
             <div className="levels-of-evidence">
-              <Navbar className="mb-3">
-                <Nav
-                  className="mr-auto"
-                  activeKey={location.pathname.split('/')[1]}
-                >
-                  <Container fluid>
-                    {[Version.V2, Version.DX, Version.PX, Version.FDA_NGS].map(
-                      version => (
-                        <Link
-                          to={PAGE_ROUTE[version]}
-                          className="nav-link mr-3 text-dark w-full"
-                          style={
-                            window.location.pathname.includes(
-                              PAGE_ROUTE[version]
-                            )
-                              ? {
-                                  fontWeight: 700,
-                                }
-                              : {}
-                          }
-                        >
-                          {TAB_TITLES[version]}
-                          <div
-                            className="line"
-                            style={
-                              window.location.pathname.includes(
-                                PAGE_ROUTE[version]
-                              )
-                                ? {
-                                    backgroundColor: 'rgb(9,104,195)',
-                                    borderRadius: 20,
-                                    height: 4,
-                                    width: '50%',
-                                    margin: 'auto',
-                                    marginTop: 2,
-                                  }
-                                : {}
-                            }
-                          ></div>
-                        </Link>
-                      )
-                    )}
-                  </Container>
-                </Nav>
-              </Navbar>
-
-              <PageContent
-                windowStore={this.props.windowStore}
-                toggleVersion={this.toggleVersion}
-                version={this.version}
-                routing={this.props.routing}
-              />
+              <Tabs
+                id="level-type-tabs"
+                onSelect={k => this.toggleVersion(Version[k || this.version])}
+                activeKey={this.activeKey}
+              >
+                {[Version.V2, Version.DX, Version.PX, Version.FDA_NGS].map(
+                  version => (
+                    <Tab
+                      eventKey={Version[version]}
+                      title={TAB_TITLES[version]}
+                      key={version}
+                    >
+                      <PageContent
+                        windowStore={this.props.windowStore}
+                        toggleVersion={this.toggleVersion}
+                        version={this.version}
+                        routing={this.props.routing}
+                      />
+                    </Tab>
+                  )
+                )}
+              </Tabs>
             </div>
           </Col>
         </Row>
