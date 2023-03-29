@@ -136,32 +136,40 @@ export default class LevelOfEvidencePage extends React.Component<
 > {
   @observable version: Version = Version.V2;
   @observable activeKey: Version = Version.V2;
+  pathname: string = window.location.pathname;
 
   readonly reactions: IReactionDisposer[] = [];
 
   redirectToNewPage = (version: Version) => {
-    // redirects from former version format
+    // if page is v2 page and version is v2 do nothing
     const newPath = REDIRECTPAGE[version.toUpperCase()];
     if (newPath) {
       this.props.routing.history.push(newPath);
     }
   };
 
-  updateActiveKey = (version: Version) => {
-    this.activeKey = [Version.DX, Version.PX, Version.FDA_NGS].includes(version)
-      ? Version[version]
-      : Version.V2;
-  };
-
   updateLocationHash = (newVersion: Version) => {
     this.redirectToNewPage(newVersion);
     this.updateActiveKey(newVersion);
-    if (window.location.pathname.includes(PAGE_ROUTE[Version.V2])) {
+
+    if (window.location.pathname === PAGE_ROUTE.V2) {
       window.location.hash = QueryString.stringify({
         version: newVersion.toUpperCase(),
       });
     }
   };
+
+  getVersionFromPathname(returnVersion?: boolean) {
+    const versionKey: string =
+      Object.keys(PAGE_ROUTE).find(
+        key => PAGE_ROUTE[key] === window.location.pathname
+      ) ?? '';
+
+    const version = Version[versionKey] ?? this.version;
+    this.toggleVersion(version);
+    this.pathname = window.location.pathname;
+    return version;
+  }
 
   constructor(props: Readonly<LevelOfEvidencePageProps>) {
     super(props);
@@ -188,7 +196,16 @@ export default class LevelOfEvidencePage extends React.Component<
   }
 
   componentDidMount(): void {
-    this.redirectToNewPage(this.version);
+    if (!window.location.pathname.includes(PAGE_ROUTE[Version.V2])) {
+      this.getVersionFromPathname();
+    }
+    this.updateLocationHash(this.version);
+  }
+
+  componentDidUpdate(): void {
+    if (window.location.pathname !== this.pathname) {
+      this.getVersionFromPathname();
+    }
   }
 
   componentWillUnmount(): void {
@@ -222,6 +239,13 @@ export default class LevelOfEvidencePage extends React.Component<
     this.version = version;
   }
 
+  @action
+  updateActiveKey = (version: Version) => {
+    this.activeKey = [Version.DX, Version.PX, Version.FDA_NGS].includes(version)
+      ? Version[version]
+      : Version.V2;
+  };
+
   render() {
     return (
       <DocumentTitle title={getPageTitle(PAGE_TITLE[this.version])}>
@@ -244,7 +268,6 @@ export default class LevelOfEvidencePage extends React.Component<
                         windowStore={this.props.windowStore}
                         toggleVersion={this.toggleVersion}
                         version={this.version}
-                        routing={this.props.routing}
                       />
                     </Tab>
                   )
@@ -262,151 +285,119 @@ type PageContentProps = {
   toggleVersion: (version: Version) => void;
   windowStore: WindowStore;
   version: Version;
-  routing: RouterStore;
 };
 
-class PageContent extends React.Component<PageContentProps> {
-  state = {
-    pathname: window.location.pathname,
-  };
-
-  componentDidMount(): void {
-    if (!window.location.pathname.includes(PAGE_ROUTE[Version.V2])) {
-      this.getVersionFromPathname();
-    }
-  }
-
-  componentDidUpdate(): void {
-    if (window.location.pathname !== this.state.pathname) {
-      this.getVersionFromPathname();
-      this.setState({
-        pathname: window.location.pathname,
-      });
-    }
-  }
-
-  getVersionFromPathname() {
-    const versionKey: string =
-      Object.keys(PAGE_ROUTE).find(
-        key => PAGE_ROUTE[key] === window.location.pathname
-      ) ?? '';
-
-    const version = Version[versionKey] ?? this.props.version;
-    this.props.toggleVersion(version);
-  }
-
-  render(): React.ReactNode {
-    return (
-      <>
-        <Row className="mt-2">
-          <Col className="col-auto mr-auto d-flex align-content-center">
-            {V2_RELATED_LEVELS.includes(this.props.version) && (
-              <span className={'d-flex align-items-center form-check'}>
-                <Form.Group>
-                  {[Version.FDA, Version.AAC].map(versionCheck => (
-                    <Form.Check
-                      label={`Show mapping to ${LEVEL_NAME[versionCheck]}`}
-                      type="checkbox"
-                      onChange={() =>
-                        this.props.toggleVersion(
-                          this.props.version === versionCheck
-                            ? Version.V2
-                            : versionCheck
-                        )
-                      }
-                      name="mapping-to-other-levels"
-                      id={`mapping-to-other-levels-${versionCheck}`}
-                      key={`mapping-to-other-levels-${versionCheck}`}
-                      checked={this.props.version === versionCheck}
-                    />
-                  ))}
-                </Form.Group>
-              </span>
-            )}
-          </Col>
-          <Col className={'col-auto'}>
-            {this.props.version !== Version.FDA_NGS && (
-              <Button
-                size={'sm'}
-                className={classnames('ml-1')}
-                href={`content/files/levelOfEvidence/${this.props.version}/${
-                  LEVEL_FILE_NAME[this.props.version]
-                }.ppt`}
-              >
-                <i className={'fa fa-cloud-download mr-1'} />
-                Download Slide
-              </Button>
-            )}
-            <DownloadButton
+const PageContent: React.FC<PageContentProps> = props => {
+  return (
+    <>
+      <Row className="mt-2">
+        <Col className="col-auto mr-auto d-flex align-content-center">
+          {V2_RELATED_LEVELS.includes(props.version) && (
+            <span className={'d-flex align-items-center form-check'}>
+              <Form.Group>
+                {[Version.FDA, Version.AAC].map(versionCheck => (
+                  <Form.Check
+                    label={`Show mapping to ${LEVEL_NAME[versionCheck]}`}
+                    type="checkbox"
+                    onChange={() =>
+                      props.toggleVersion(
+                        props.version === versionCheck
+                          ? Version.V2
+                          : versionCheck
+                      )
+                    }
+                    name="mapping-to-other-levels"
+                    id={`mapping-to-other-levels-${versionCheck}`}
+                    key={`mapping-to-other-levels-${versionCheck}`}
+                    checked={props.version === versionCheck}
+                  />
+                ))}
+              </Form.Group>
+            </span>
+          )}
+        </Col>
+        <Col className={'col-auto'}>
+          {props.version !== Version.FDA_NGS && (
+            <Button
               size={'sm'}
               className={classnames('ml-1')}
-              href={`content/files/levelOfEvidence/${this.props.version}/${
-                LEVEL_FILE_NAME[this.props.version]
-              }.pdf`}
+              href={`content/files/levelOfEvidence/${props.version}/${
+                LEVEL_FILE_NAME[props.version]
+              }.ppt`}
             >
               <i className={'fa fa-cloud-download mr-1'} />
-              Download PDF
-            </DownloadButton>
-          </Col>
-        </Row>
-        <Row className={'justify-content-md-center mt-5'}>
-          <Col className={'col-md-auto text-center'}>
-            <h4>{LEVEL_TITLE[this.props.version]}</h4>
-            <div>
-              <span
-                onClick={() =>
-                  this.props.toggleVersion(
-                    V2_RELATED_LEVELS.includes(this.props.version)
-                      ? Version.V1
-                      : Version.V2
-                  )
-                }
-                className={mainStyles.btnLinkText}
-              >
-                {LEVEL_SUBTITLE[this.props.version]}
-              </span>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col className={'d-md-flex justify-content-center mt-2'}>
-            <div
-              style={{
-                maxWidth: [
-                  Version.AAC,
-                  Version.FDA,
-                  Version.V1,
-                  Version.V2,
-                ].includes(this.props.version)
-                  ? undefined
-                  : IMG_MAX_WIDTH,
-              }}
+              Download Slide
+            </Button>
+          )}
+          <DownloadButton
+            size={'sm'}
+            className={classnames('ml-1')}
+            href={`content/files/levelOfEvidence/${props.version}/${
+              LEVEL_FILE_NAME[props.version]
+            }.pdf`}
+          >
+            <i className={'fa fa-cloud-download mr-1'} />
+            Download PDF
+          </DownloadButton>
+        </Col>
+      </Row>
+      <Row className={'justify-content-md-center mt-5'}>
+        <Col className={'col-md-auto text-center'}>
+          <h4>{LEVEL_TITLE[props.version]}</h4>
+          <div>
+            <span
+              onClick={() =>
+                props.toggleVersion(
+                  V2_RELATED_LEVELS.includes(props.version)
+                    ? Version.V1
+                    : Version.V2
+                )
+              }
+              className={mainStyles.btnLinkText}
             >
-              <OptimizedImage
-                style={{ width: '100%' }}
-                progressiveLoading
-                src={`content/images/level_${this.props.version}.png`}
-              />
-              {this.props.version === Version.AAC ? (
-                <div className="text-right">
-                  <span
-                    style={{
-                      marginRight: this.props.windowStore.isLargeScreen
-                        ? '130px'
-                        : '35px',
-                    }}
-                  >
-                    <sup>1</sup>{' '}
-                    <Linkout link="https://www.sciencedirect.com/science/article/pii/S1525157816302239?via%3Dihub">
-                      Li, MM et al., J Mol Diagn 2017
-                    </Linkout>
-                  </span>
-                </div>
-              ) : null}
-            </div>
-          </Col>
-        </Row>
-      </>
-    );
-  }
-}
+              {LEVEL_SUBTITLE[props.version]}
+            </span>
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col className={'d-md-flex justify-content-center mt-2'}>
+          <div
+            style={{
+              maxWidth: [
+                Version.AAC,
+                Version.FDA,
+                Version.V1,
+                Version.V2,
+              ].includes(props.version)
+                ? undefined
+                : IMG_MAX_WIDTH,
+            }}
+          >
+            <OptimizedImage
+              style={{ width: '100%' }}
+              progressiveLoading
+              src={`content/images/level_${props.version}.png`}
+            />
+            {props.version === Version.AAC ? (
+              <div className="text-right">
+                <span
+                  style={{
+                    marginRight: props.windowStore.isLargeScreen
+                      ? '130px'
+                      : '35px',
+                  }}
+                >
+                  <sup>1</sup>{' '}
+                  <Linkout link="https://www.sciencedirect.com/science/article/pii/S1525157816302239?via%3Dihub">
+                    Li, MM et al., J Mol Diagn 2017
+                  </Linkout>
+                </span>
+              </div>
+            ) : null}
+          </div>
+        </Col>
+      </Row>
+    </>
+  );
+};

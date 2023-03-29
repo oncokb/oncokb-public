@@ -24,6 +24,7 @@ import MskccLogo from 'app/components/MskccLogo';
 import AppStore from 'app/store/AppStore';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { AppConfig } from 'app/appConfig';
+import { Location } from 'history';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -40,26 +41,20 @@ export interface IHeaderProps {
 type SubpageLink = {
   title: string;
   link: string;
+  matchedPaths?: PAGE_ROUTE[];
 };
 
-const checkIfActive = (title: string, subPages: SubpageLink[]) => {
-  const currentPath = window.location.pathname;
-  if (title === subPages[0].title) {
-    if (
-      currentPath.includes(PAGE_ROUTE.V2) ||
-      currentPath.includes(PAGE_ROUTE.DX) ||
-      currentPath.includes(PAGE_ROUTE.PX) ||
-      currentPath.includes(PAGE_ROUTE.FDA_NGS)
-    )
-      return true;
-  } else if (title === subPages[3].title) {
-    if (
-      currentPath.includes(PAGE_ROUTE.TERMS) ||
-      currentPath.includes(PAGE_ROUTE.REGISTER)
-    )
-      return true;
-  }
+const checkIfNavLinkIsActive = (
+  title: string,
+  location: Location,
+  subPages: SubpageLink[]
+) => {
+  const currentPage: SubpageLink = subPages.find(page => page.title === title)!;
+  const currentLink = currentPage.matchedPaths?.find(link =>
+    link.includes(location.pathname)
+  );
 
+  if (currentLink) return true;
   return false;
 };
 
@@ -68,10 +63,23 @@ const checkIfActive = (title: string, subPages: SubpageLink[]) => {
 @observer
 class Header extends React.Component<IHeaderProps> {
   private subPages: SubpageLink[] = [
-    { title: 'Levels of Evidence', link: PAGE_ROUTE.LEVELS },
+    {
+      title: 'Levels of Evidence',
+      link: PAGE_ROUTE.LEVELS,
+      matchedPaths: [
+        PAGE_ROUTE.V2,
+        // PAGE_ROUTE.DX,
+        PAGE_ROUTE.PX,
+        PAGE_ROUTE.FDA_NGS,
+      ],
+    },
     { title: 'Actionable Genes', link: PAGE_ROUTE.ACTIONABLE_GENE },
     { title: 'Cancer Genes', link: PAGE_ROUTE.CANCER_GENES },
-    { title: 'API / License', link: PAGE_ROUTE.API_ACCESS },
+    {
+      title: 'API / License',
+      link: PAGE_ROUTE.API_ACCESS,
+      matchedPaths: [PAGE_ROUTE.TERMS, PAGE_ROUTE.REGISTER],
+    },
     { title: 'About', link: PAGE_ROUTE.ABOUT },
     { title: 'News', link: PAGE_ROUTE.NEWS },
     { title: 'FAQ', link: PAGE_ROUTE.FAQ_ACCESS },
@@ -99,8 +107,12 @@ class Header extends React.Component<IHeaderProps> {
         to={page.link}
         key={page.title}
         className={'mr-auto nav-item'}
-        isActive={match => {
-          if (match || checkIfActive(page.title, this.subPages)) return true;
+        isActive={(match, location) => {
+          if (
+            match ||
+            checkIfNavLinkIsActive(page.title, location, this.subPages)
+          )
+            return true;
           return false;
         }}
       >
