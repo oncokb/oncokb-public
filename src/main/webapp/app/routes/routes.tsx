@@ -155,7 +155,12 @@ const AppRouts = (props: {
             component={ApiAccessPageNavTab}
           />
           <Route exact path={PAGE_ROUTE.LEVELS}>
-            <Redirect to={PAGE_ROUTE.V2} />
+            <Redirect
+              to={{
+                pathname: PAGE_ROUTE.V2,
+                hash: window.location.hash,
+              }}
+            />
           </Route>
           <Route exact path={PAGE_ROUTE.DX} component={LevelOfEvidencePage} />
           <Route exact path={PAGE_ROUTE.PX} component={LevelOfEvidencePage} />
