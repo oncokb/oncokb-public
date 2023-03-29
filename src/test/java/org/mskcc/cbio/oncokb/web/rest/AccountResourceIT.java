@@ -71,7 +71,6 @@ public class AccountResourceIT {
 
     @BeforeEach
     public void setUp() throws IOException {
-        // applicationProperties = new ApplicationProperties();
         recaptchaProp = new RecaptchaProperties();
         recaptchaProp.setProjectId("symbolic-nation-320615");
         recaptchaProp.setSiteKey("6LfAOe4jAAAAANjzxWQ8mKilcvk1QvLLohd7EV7F");

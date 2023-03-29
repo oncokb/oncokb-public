@@ -6,9 +6,9 @@ package org.mskcc.cbio.oncokb.config.application;
 public class FrontendProperties {
     private String googleAnalyticsProjectId;
     private String sentryProjectId;
-    String recaptchaProjectId;
-    String recaptchaSiteKey;
-    Long recaptchaThreshold;
+    private String recaptchaProjectId;
+    private String recaptchaSiteKey;
+    private Long recaptchaThreshold;
 
     public String getRecaptchaProjectId() {
         return recaptchaProjectId;

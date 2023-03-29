@@ -1,9 +1,9 @@
 package org.mskcc.cbio.oncokb.config.application;
 
 public class RecaptchaProperties {
-    String projectId;
-    String siteKey;
-    float threshold;
+    private String projectId;
+    private String siteKey;
+    private float threshold;
 
     public String getProjectId() {
         return projectId;
