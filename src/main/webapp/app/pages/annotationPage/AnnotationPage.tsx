@@ -4,6 +4,8 @@ import { inject, observer } from 'mobx-react';
 import {
   AlterationPageLink,
   GenePageLink,
+  getAlterationPageLink,
+  getGenePageLink,
   OncoTreeLink,
 } from 'app/shared/utils/UrlUtils';
 import {
@@ -18,7 +20,7 @@ import {
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import InfoIcon from 'app/shared/icons/InfoIcon';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Breadcrumb } from 'react-bootstrap';
 import classnames from 'classnames';
 import { action, computed, observable } from 'mobx';
 import autobind from 'autobind-decorator';
@@ -55,6 +57,7 @@ import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
 import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
 import ShowHideText from 'app/shared/texts/ShowHideText';
+import { Link } from 'react-router-dom';
 
 enum SummaryKey {
   GENE_SUMMARY = 'geneSummary',
@@ -385,6 +388,64 @@ export default class AnnotationPage extends React.Component<
     }
   }
 
+  @computed
+  get alterationName() {
+    return getAlterationName(
+      this.props.matchedAlteration === undefined
+        ? this.props.alteration
+        : {
+            alteration: this.props.matchedAlteration.alteration,
+            name: this.props.matchedAlteration.name,
+          },
+      true
+    );
+  }
+
+  getBreadcrumbItem(key: string, to: string, text: string) {
+    return (
+      <Breadcrumb.Item key={key} linkAs={Link} linkProps={{ to }}>
+        {text}
+      </Breadcrumb.Item>
+    );
+  }
+
+  @computed
+  get navBreadcrumbs() {
+    const items = [
+      this.getBreadcrumbItem(
+        'gene',
+        getGenePageLink({
+          hugoSymbol: this.props.hugoSymbol,
+        }),
+        this.props.hugoSymbol
+      ),
+      this.getBreadcrumbItem(
+        'alteration',
+        getAlterationPageLink({
+          hugoSymbol: this.props.hugoSymbol,
+          alteration: this.alterationName,
+        }),
+        this.alterationName
+      ),
+    ];
+
+    if (this.props.tumorType) {
+      items.push(
+        this.getBreadcrumbItem(
+          'cancertype',
+          getAlterationPageLink({
+            hugoSymbol: this.props.hugoSymbol,
+            alteration: this.alterationName,
+            cancerType: this.props.tumorType,
+          }),
+          this.props.tumorType
+        )
+      );
+    }
+
+    return <Breadcrumb>{items}</Breadcrumb>;
+  }
+
   render() {
     const categoricalAlterationDescription = getCategoricalAlterationDescription(
       this.props.hugoSymbol,
@@ -394,6 +455,7 @@ export default class AnnotationPage extends React.Component<
     );
     return (
       <>
+        {this.navBreadcrumbs}
         <h2
           className={'d-flex align-items-baseline'}
           style={{ marginBottom: 0 }}
@@ -406,15 +468,7 @@ export default class AnnotationPage extends React.Component<
               />
             </span>
           )}
-          <span>{`${getAlterationName(
-            this.props.matchedAlteration === undefined
-              ? this.props.alteration
-              : {
-                  alteration: this.props.matchedAlteration.alteration,
-                  name: this.props.matchedAlteration.name,
-                },
-            true
-          )}`}</span>
+          <span>{this.alterationName}</span>
           <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
             <FeedbackIcon
               feedback={{
