@@ -42,6 +42,7 @@ import {
 } from 'app/store/AnnotationStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
+import { LongText } from 'app/oncokb-frontend-commons/src/components/LongText';
 
 export type Column = {
   key: ANNOTATION_PAGE_TAB_KEYS;
@@ -267,52 +268,42 @@ export default class AlterationTableTabs extends React.Component<
 
   @computed
   get therapeuticTableColumns(): SearchColumn<TherapeuticImplication>[] {
-    /* Uncomment lines below to get the description column back */
-    // let descriptionColumn = {
-    //   ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
-    //   Header: (
-    //     <div style={{ display: 'flex', justifyContent: 'center' }}>
-    //       <span>Description</span>
-    //     </div>
-    //   ),
-    //   Cell(props: { original: TherapeuticImplication }) {
-    //     return (
-    //       <div style={{ display: 'flex', justifyContent: 'center' }}>
-    //         <DescriptionTooltip
-    //           description={
-    //             <SummaryWithRefs
-    //               content={props.original.drugDescription}
-    //               type="tooltip"
-    //             />
-    //           }
-    //         />
-    //       </div>
-    //     );
-    //   },
-    // };
+    let descriptionColumn = {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
+      Header: (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <span>Description</span>
+        </div>
+      ),
+      width: 520,
+      Cell(props: { original: TherapeuticImplication }) {
+        return <LongText text={props.original.drugDescription} />;
+      },
+    };
 
     // Users that are not logged in will see a message to login/register
-    // if (!this.props.authenticationStore?.isUserAuthenticated) {
-    //   descriptionColumn = {
-    //     ...descriptionColumn,
-    //     Cell() {
-    //       return (
-    //         <div style={{ display: 'flex', justifyContent: 'center' }}>
-    //           <DescriptionTooltip
-    //             description={
-    //               <span>
-    //                 Get access to our treatment descriptions by{' '}
-    //                 <Link to={PAGE_ROUTE.LOGIN}> logging in </Link> or by{' '}
-    //                 <Link to={PAGE_ROUTE.REGISTER}>registering</Link> an
-    //                 account.
-    //               </span>
-    //             }
-    //           />
-    //         </div>
-    //       );
-    //     },
-    //   };
-    // }
+    if (!this.props.authenticationStore?.isUserAuthenticated) {
+      descriptionColumn = {
+        ...descriptionColumn,
+        width: 100,
+        Cell() {
+          return (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <DescriptionTooltip
+                description={
+                  <span>
+                    Get access to our treatment descriptions by{' '}
+                    <Link to={PAGE_ROUTE.LOGIN}> logging in </Link> or by{' '}
+                    <Link to={PAGE_ROUTE.REGISTER}>registering</Link> an
+                    account.
+                  </span>
+                }
+              />
+            </div>
+          );
+        },
+      };
+    }
 
     const citationColumn = {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
@@ -363,11 +354,10 @@ export default class AlterationTableTabs extends React.Component<
         onFilter: (data: TherapeuticImplication, keyword) =>
           filterByKeyword(data.drugs, keyword),
       },
-      // ...(this.props.authenticationStore?.isUserAuthenticated
-      //   ? []
-      //   : [citationColumn]),
-      citationColumn,
-      // descriptionColumn,
+      ...(this.props.authenticationStore?.isUserAuthenticated
+        ? []
+        : [citationColumn]),
+      descriptionColumn,
     ];
 
     return therapeuticTableColumns;
