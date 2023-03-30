@@ -32,6 +32,21 @@ import * as QueryString from 'querystring';
 import { LEVEL_TYPE_TO_VERSION, Version } from 'app/pages/LevelOfEvidencePage';
 import { YEAR_END_SUMMARY_RANGE } from 'app/pages/aboutGroup/AboutPageNavTab';
 
+export const getGenePageLink = (props: {
+  hugoSymbol: string;
+  searchQueries?: GenePageSearchQueries;
+  hashQueries?: GenePageHashQueries;
+}): string => {
+  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}`;
+  if (props.searchQueries && Object.keys(props.searchQueries).length > 0) {
+    pageLink = `${pageLink}?${QueryString.stringify(props.searchQueries)}`;
+  }
+  if (props.hashQueries) {
+    pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
+  }
+  return pageLink;
+};
+
 export const GenePageLink: React.FunctionComponent<{
   hugoSymbol: string;
   highlightContent?: boolean;
@@ -41,14 +56,11 @@ export const GenePageLink: React.FunctionComponent<{
 }> = props => {
   const highlightContent =
     props.highlightContent === undefined ? true : props.highlightContent;
-  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}`;
-  if (props.searchQueries && Object.keys(props.searchQueries).length > 0) {
-    pageLink = `${pageLink}?${QueryString.stringify(props.searchQueries)}`;
-  }
-  if (props.hashQueries) {
-    pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
-  }
-
+  const pageLink = getGenePageLink({
+    hugoSymbol: props.hugoSymbol,
+    searchQueries: props.searchQueries,
+    hashQueries: props.hashQueries,
+  });
   return (
     <Link
       style={{ color: highlightContent ? undefined : 'black' }}
@@ -58,6 +70,39 @@ export const GenePageLink: React.FunctionComponent<{
       {props.children ? props.children : props.hugoSymbol}
     </Link>
   );
+};
+
+export const getAlterationPageLink = (props: {
+  hugoSymbol: string;
+  alteration: IAlteration | string;
+  alterationRefGenomes?: REFERENCE_GENOME[];
+  cancerType?: string;
+  searchQueries?: AlterationPageSearchQueries;
+  hashQueries?: AlterationPageHashQueries;
+}): string => {
+  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${
+    typeof props.alteration === 'string'
+      ? props.alteration
+      : props.alteration.name
+  }`;
+  if (props.cancerType) {
+    pageLink = `${pageLink}/${encodeSlash(props.cancerType)}`;
+  }
+  const sq = props.searchQueries || {};
+
+  // Prop alterationRefGenomes is just a convinient way to process reference genomes when it's a list.
+  if (!sq.refGenome && props.alterationRefGenomes) {
+    if (!props.alterationRefGenomes.includes(DEFAULT_REFERENCE_GENOME)) {
+      sq.refGenome = props.alterationRefGenomes[0];
+    }
+  }
+  if (Object.keys(sq).length > 0) {
+    pageLink = `${pageLink}?${QueryString.stringify(sq)}`;
+  }
+  if (props.hashQueries) {
+    pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
+  }
+  return pageLink;
 };
 
 export const AlterationPageLink: React.FunctionComponent<{
@@ -70,29 +115,15 @@ export const AlterationPageLink: React.FunctionComponent<{
   showGene?: boolean;
   onClick?: () => void;
 }> = props => {
-  let pageLink = `${PAGE_ROUTE.GENE_HEADER}/${props.hugoSymbol}/${
-    typeof props.alteration === 'string'
-      ? props.alteration
-      : props.alteration.name
-  }`;
-  if (props.cancerType) {
-    pageLink = `${pageLink}/${encodeSlash(props.cancerType)}`;
-  }
-  const searchQueries = props.searchQueries || {};
-
-  // Prop alterationRefGenomes is just a convinient way to process reference genomes when it's a list.
-  if (!searchQueries.refGenome && props.alterationRefGenomes) {
-    if (!props.alterationRefGenomes.includes(DEFAULT_REFERENCE_GENOME)) {
-      searchQueries.refGenome = props.alterationRefGenomes[0];
-    }
-  }
-  if (Object.keys(searchQueries).length > 0) {
-    pageLink = `${pageLink}?${QueryString.stringify(searchQueries)}`;
-  }
-  if (props.hashQueries) {
-    pageLink = `${pageLink}#${QueryString.stringify(props.hashQueries)}`;
-  }
   const alterationName = getAlterationName(props.alteration);
+  const pageLink = getAlterationPageLink({
+    hugoSymbol: props.hugoSymbol,
+    alteration: props.alteration,
+    alterationRefGenomes: props.alterationRefGenomes,
+    cancerType: props.cancerType,
+    searchQueries: props.searchQueries,
+    hashQueries: props.hashQueries,
+  });
   return (
     <>
       <Link to={pageLink} onClick={props.onClick}>
