@@ -119,7 +119,7 @@ public class AccountResource {
             e.printStackTrace();
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
-                throw new Exception(errorMessage);
+                log.info(errorMessage);
             } 
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
@@ -359,7 +359,7 @@ public class AccountResource {
             e.printStackTrace();
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
-                throw new Exception(errorMessage);
+                log.info(errorMessage);
             } 
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
@@ -455,7 +455,7 @@ public class AccountResource {
             e.printStackTrace();
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
-                throw new Exception(errorMessage);
+                log.info(errorMessage);
             } 
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
