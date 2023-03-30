@@ -469,6 +469,9 @@ export default class AnnotationPage extends React.Component<
             </span>
           )}
           <span>{this.alterationName}</span>
+          {this.props.tumorType && (
+            <span className={'mx-2'}>in {this.props.tumorType}</span>
+          )}
           <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
             <FeedbackIcon
               feedback={{
