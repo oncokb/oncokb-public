@@ -7,7 +7,12 @@ import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
 import { ANNOTATION_PAGE_TAB_KEYS, DEFAULT_GENE } from 'app/config/constants';
-import { decodeSlash, encodeSlash, getPageTitle } from 'app/shared/utils/Utils';
+import {
+  decodeSlash,
+  encodeSlash,
+  getCancerTypeNameFromOncoTreeType,
+  getPageTitle,
+} from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import DocumentTitle from 'react-document-title';
 import { Else, If, Then } from 'react-if';
@@ -148,7 +153,7 @@ export default class AlterationPage extends React.Component<
       content.push(this.store.alterationQuery);
     }
     if (this.store.tumorTypeQuery) {
-      content.push(`in ${this.store.tumorTypeQuery}`);
+      content.push(`in ${this.store.cancerTypeName}`);
     }
     return getPageTitle(content.join(' '));
   }
@@ -188,10 +193,9 @@ export default class AlterationPage extends React.Component<
                   hugoSymbol={this.store.hugoSymbol}
                   oncogene={this.store.gene.result.oncogene}
                   tsg={this.store.gene.result.tsg}
-                  ensemblGenes={this.store.ensemblGenes.result}
                   alteration={this.store.alterationQuery}
                   matchedAlteration={this.store.alteration.result}
-                  tumorType={this.store.tumorTypeQuery}
+                  tumorType={this.store.cancerTypeName}
                   refGenome={this.store.referenceGenomeQuery}
                   annotation={this.store.annotationResult.result}
                   biologicalAlterations={

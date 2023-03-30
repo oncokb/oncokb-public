@@ -175,7 +175,6 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
                   }
                   oncogene={this.store.gene.result.oncogene}
                   tsg={this.store.gene.result.tsg}
-                  ensemblGenes={this.store.ensemblGenes.result}
                   alteration={
                     this.store.annotationResultByHgvsg.result.query.alteration
                   }
