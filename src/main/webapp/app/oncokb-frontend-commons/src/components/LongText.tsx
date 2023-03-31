@@ -5,7 +5,7 @@ import styles from '../../../index.module.scss';
 
 const shortenTextByWords = (text: string, cutoff: number) => {
   const separator = ' ';
-  const words = text.slice(0, cutoff).split(separator);
+  const words = (text || '').slice(0, cutoff).split(separator);
   words.pop();
   return words.join(separator);
 };
