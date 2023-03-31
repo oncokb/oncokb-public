@@ -40,7 +40,7 @@ import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
-import { hasExcludedChars } from './Util';
+import { linkableMutationName } from './Util';
 
 export type ChangedAnnotation = {
   content: ElementType[][];
@@ -4219,7 +4219,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                   let content: ElementType = subItem;
                   if (subIndex === 0) {
                     content = <GenePageLink hugoSymbol={subItem} />;
-                  } else if (subIndex === 1 && !hasExcludedChars(subItem)) {
+                  } else if (
+                    subIndex === 1 &&
+                    linkableMutationName(geneInput, subItem)
+                  ) {
                     content = (
                       <AlterationPageLink
                         hugoSymbol={geneInput}

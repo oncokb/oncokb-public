@@ -3,11 +3,8 @@ import { SimpleTable, SimpleTableRow } from 'app/components/SimpleTable';
 import { Row } from 'react-bootstrap';
 import React from 'react';
 import pluralize from 'pluralize';
-import {
-  convertGeneAndAlterationInputToLink,
-  convertGeneInputToLinks,
-  hasExcludedChars,
-} from './Util';
+import { convertGeneInputToLinks, linkableMutationName } from './Util';
+import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
 
 export const UpdatedTxImplListItem = (props: {
   title?: string;
@@ -31,12 +28,12 @@ export const UpdatedTxImplListItem = (props: {
       const geneInput = row.content[geneColumnIndex].content;
       const mutationInput = row.content[mutationColumnIndex].content;
       if (typeof geneInput === 'string' && typeof mutationInput === 'string') {
-        if (!hasExcludedChars(mutationInput) && !hasExcludedChars(geneInput)) {
-          row.content[
-            mutationColumnIndex
-          ].content = convertGeneAndAlterationInputToLink(
-            geneInput,
-            mutationInput
+        if (linkableMutationName(geneInput, mutationInput)) {
+          row.content[mutationColumnIndex].content = (
+            <AlterationPageLink
+              hugoSymbol={geneInput}
+              alteration={mutationInput}
+            />
           );
         }
       }

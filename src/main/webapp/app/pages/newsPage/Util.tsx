@@ -1,6 +1,6 @@
 import React from 'react';
 import { ElementType } from 'app/components/SimpleTable';
-import { AlterationPageLink, GenePageLink } from 'app/shared/utils/UrlUtils';
+import { GenePageLink } from 'app/shared/utils/UrlUtils';
 import WithSeparator from 'react-with-separator';
 
 export const convertGeneInputToLinks = (geneInput: string): ElementType => {
@@ -12,20 +12,22 @@ export const convertGeneInputToLinks = (geneInput: string): ElementType => {
   return <WithSeparator separator=", ">{itemLinks}</WithSeparator>;
 };
 
-export const convertGeneAndAlterationInputToLink = (
+export const linkableMutationName = (
   geneInput: string,
-  alterationInput: string
-): ElementType => {
-  geneInput = geneInput.trim();
-  alterationInput = alterationInput.trim();
-  return (
-    <AlterationPageLink hugoSymbol={geneInput} alteration={alterationInput} />
-  );
-};
-
-export const hasExcludedChars = (input: string): boolean => {
+  mutationInput: string
+): boolean => {
   const excludedChars = [',', '|', '/'];
-  return excludedChars.some(char => input.includes(char));
+  const geneInputHasExcludedChars = excludedChars.some(char =>
+    geneInput.includes(char)
+  );
+  const mutationInputHasExcludedChars = excludedChars.some(char =>
+    mutationInput.includes(char)
+  );
+  return (
+    !geneInputHasExcludedChars &&
+    !mutationInputHasExcludedChars &&
+    geneInput !== 'ESR1'
+  );
 };
 
 export const getColumnIndexByName = (

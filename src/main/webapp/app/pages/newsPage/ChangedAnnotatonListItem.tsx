@@ -14,10 +14,10 @@ import _ from 'lodash';
 import mainStyle from './main.module.scss';
 import {
   convertGeneInputToLinks,
-  convertGeneAndAlterationInputToLink,
   getColumnIndexByName,
-  hasExcludedChars,
+  linkableMutationName,
 } from './Util';
+import { AlterationPageLink } from 'app/shared/utils/UrlUtils';
 
 export enum AnnotationColumnHeaderType {
   LEVEL,
@@ -74,17 +74,13 @@ export const ChangedAnnotationListItem = (props: {
     props.data.forEach(row => {
       const geneInput = row.content[geneColumnIndex].content;
       const mutationInput = row.content[mutationColumnIndex].content;
-      if (
-        typeof geneInput === 'string' &&
-        typeof mutationInput === 'string' &&
-        geneInput !== 'ESR1'
-      ) {
-        if (!hasExcludedChars(mutationInput) && !hasExcludedChars(geneInput)) {
-          row.content[
-            mutationColumnIndex
-          ].content = convertGeneAndAlterationInputToLink(
-            geneInput,
-            mutationInput
+      if (typeof geneInput === 'string' && typeof mutationInput === 'string') {
+        if (linkableMutationName(geneInput, mutationInput)) {
+          row.content[mutationColumnIndex].content = (
+            <AlterationPageLink
+              hugoSymbol={geneInput}
+              alteration={mutationInput}
+            />
           );
         }
       }
