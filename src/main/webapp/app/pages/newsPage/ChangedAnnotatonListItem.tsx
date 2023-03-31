@@ -74,7 +74,11 @@ export const ChangedAnnotationListItem = (props: {
     props.data.forEach(row => {
       const geneInput = row.content[geneColumnIndex].content;
       const mutationInput = row.content[mutationColumnIndex].content;
-      if (typeof geneInput === 'string' && typeof mutationInput === 'string') {
+      if (
+        typeof geneInput === 'string' &&
+        typeof mutationInput === 'string' &&
+        geneInput !== 'ESR1'
+      ) {
         if (!hasExcludedChars(mutationInput) && !hasExcludedChars(geneInput)) {
           row.content[
             mutationColumnIndex
