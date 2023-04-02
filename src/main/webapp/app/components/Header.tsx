@@ -51,7 +51,7 @@ const checkIfNavLinkIsActive = (
 ) => {
   const currentPage: SubpageLink = subPages.find(page => page.title === title)!;
   const currentLink = currentPage.matchedPaths?.find(link =>
-    link.includes(location.pathname)
+    location.pathname.includes(link)
   );
 
   if (currentLink) return true;
@@ -68,7 +68,7 @@ class Header extends React.Component<IHeaderProps> {
       link: PAGE_ROUTE.LEVELS,
       matchedPaths: [
         PAGE_ROUTE.V2,
-        // PAGE_ROUTE.DX,
+        PAGE_ROUTE.DX,
         PAGE_ROUTE.PX,
         PAGE_ROUTE.FDA_NGS,
       ],
