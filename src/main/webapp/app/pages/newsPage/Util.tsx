@@ -16,7 +16,13 @@ export const linkableMutationName = (
   geneInput: string,
   mutationInput: string
 ): boolean => {
-  const excludedChars = [',', '|', '/'];
+  const excludedChars = [
+    ',',
+    '|',
+    '/',
+    'Oncogenic Ligand-Binding Domain Missense Mutations (310_547)',
+    'Oncogenic Ligand-Binding Domain In-Frame Insertions or Deletions (310_547)',
+  ];
   const geneInputHasExcludedChars = excludedChars.some(char =>
     geneInput.includes(char)
   );
