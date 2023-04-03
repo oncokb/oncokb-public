@@ -87,25 +87,15 @@ if (
       id: '2021-fda-recognition',
     },
     {
-      dateEnd: 1649696400000,
+      dateEnd: 1681966800000,
       content: (
         <div>
-          <span>
-            {ONCOKB_TM} is going to present at AACR Poster Session(04/11, 9am,
-            Section 28), come and join us! Click
-          </span>
-          <a
-            className="btn btn-primary btn-sm mx-2 user-messager-container-button"
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://www.abstractsonline.com/pp8/#!/10517/presentation/15708"
-          >
-            HERE
-          </a>
-          for more details.
+          Join us at AACR 2023! Visit our booth (#519) and our poster (Wed
+          04/19, 9am, Section 31, Poster 18) to meet our team and explore the
+          latest developments from OncoKB™. See you there!
         </div>
       ),
-      id: '2022_aacr_poster_session',
+      id: '2023_aacr',
     },
   ];
 }
