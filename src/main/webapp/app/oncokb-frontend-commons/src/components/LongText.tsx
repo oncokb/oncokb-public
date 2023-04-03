@@ -1,21 +1,24 @@
 import * as React from 'react';
 import { useState } from 'react';
 import SummaryWithRefs from './SummaryWithRefs';
+import styles from '../../../index.module.scss';
 
-const shortenTextByWords = (text: string, numOfWords: number) => {
+const shortenTextByCharacters = (text: string, cutoff: number) => {
   const separator = ' ';
-  return text.split(separator).slice(0, numOfWords).join(separator);
+  const words = (text || '').slice(0, cutoff).split(separator);
+  words.pop();
+  return words.join(separator);
 };
 
 export const LongText: React.FunctionComponent<{
   text: string;
-  numOfWords?: number;
+  cutoff?: number;
 }> = props => {
-  const numOfWords = props.numOfWords || 20;
+  const cutoff = props.cutoff || 200;
   const [expandedText, setExpandedText] = useState(false);
   const text = expandedText
     ? props.text
-    : shortenTextByWords(props.text, numOfWords);
+    : shortenTextByCharacters(props.text, cutoff);
   return (
     <div>
       <SummaryWithRefs content={text} type={'linkout'} />
@@ -23,8 +26,7 @@ export const LongText: React.FunctionComponent<{
         <>
           <span className={'mx-2'}>...</span>
           <span
-            className={'text-primary'}
-            style={{ cursor: 'pointer' }}
+            className={styles.linkOutText}
             onClick={() => setExpandedText(true)}
           >
             Show more

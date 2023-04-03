@@ -11,7 +11,7 @@ export type SimpleTableColumn = {
   name: string;
 };
 export type SimpleTableProps = {
-  columns: SimpleTableColumn[];
+  columns?: SimpleTableColumn[];
   rows: SimpleTableRows;
   tableClassName?: string;
   theadClassName?: string;
@@ -28,18 +28,20 @@ export const SimpleTable = (props: SimpleTableProps) => {
   };
   return (
     <Table className={props.tableClassName}>
-      <thead className={props.theadClassName}>
-        <tr>
-          {props.columns.map(column => (
-            <th
-              key={column.name}
-              style={column.size ? { width: column.size } : undefined}
-            >
-              {column.content ? column.content : column.name}
-            </th>
-          ))}
-        </tr>
-      </thead>
+      {props.columns && (
+        <thead className={props.theadClassName}>
+          <tr>
+            {props.columns.map(column => (
+              <th
+                key={column.name}
+                style={column.size ? { width: column.size } : undefined}
+              >
+                {column.content ? column.content : column.name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+      )}
       <tbody className={props.tbodyClassName}>
         {props.rows.map(row => (
           <tr key={row.key}>{getRow(row)}</tr>
