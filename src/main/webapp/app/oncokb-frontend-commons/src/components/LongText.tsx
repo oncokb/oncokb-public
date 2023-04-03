@@ -3,7 +3,7 @@ import { useState } from 'react';
 import SummaryWithRefs from './SummaryWithRefs';
 import styles from '../../../index.module.scss';
 
-const shortenTextByWords = (text: string, cutoff: number) => {
+const shortenTextByCharacters = (text: string, cutoff: number) => {
   const separator = ' ';
   const words = (text || '').slice(0, cutoff).split(separator);
   words.pop();
@@ -18,7 +18,7 @@ export const LongText: React.FunctionComponent<{
   const [expandedText, setExpandedText] = useState(false);
   const text = expandedText
     ? props.text
-    : shortenTextByWords(props.text, cutoff);
+    : shortenTextByCharacters(props.text, cutoff);
   return (
     <div>
       <SummaryWithRefs content={text} type={'linkout'} />
