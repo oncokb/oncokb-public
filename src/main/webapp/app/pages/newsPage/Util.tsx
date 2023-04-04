@@ -29,11 +29,7 @@ export const linkableMutationName = (
   const mutationInputHasExcludedChars = excludedChars.some(char =>
     mutationInput.includes(char)
   );
-  return (
-    !geneInputHasExcludedChars &&
-    !mutationInputHasExcludedChars &&
-    geneInput !== 'ESR1'
-  );
+  return !geneInputHasExcludedChars && !mutationInputHasExcludedChars;
 };
 
 export const getColumnIndexByName = (
