@@ -33,14 +33,19 @@ const CompactDrugCell: React.FunctionComponent<{
   cancerTypes: string;
   drugs: string;
 }> = props => {
+  const altNameIncludesHugoSymbol = props.alterations.includes(
+    props.hugoSymbol
+  );
   return (
     <div style={{ minWidth: 300 }}>
       <div>{props.drugs}</div>
       <div className={'text-secondary'}>
-        Associated with {props.hugoSymbol} {props.alterations}
+        Associated with{' '}
+        {altNameIncludesHugoSymbol ? '' : `${props.hugoSymbol} `}
+        {props.alterations}
       </div>
       <div className={'text-secondary'}>
-        In {props.cancerTypes.toLowerCase()}
+        in {props.cancerTypes.toLowerCase()}
       </div>
     </div>
   );

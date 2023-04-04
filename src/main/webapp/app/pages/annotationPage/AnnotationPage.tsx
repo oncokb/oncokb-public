@@ -309,7 +309,7 @@ export default class AnnotationPage extends React.Component<
   }
 
   @computed
-  get showGeneNameLink() {
+  get showGeneName() {
     const lHugo = this.props.hugoSymbol.toLowerCase();
     const altNameIncludesGene = this.props.alteration
       .toLowerCase()
@@ -390,13 +390,8 @@ export default class AnnotationPage extends React.Component<
           className={'d-flex align-items-baseline'}
           style={{ marginBottom: 0 }}
         >
-          {this.showGeneNameLink && (
-            <span className={'mr-2'}>
-              <GenePageLink
-                hugoSymbol={this.props.hugoSymbol}
-                highlightContent={false}
-              />
-            </span>
+          {this.showGeneName && (
+            <span className={'mr-2'}>{this.props.hugoSymbol}</span>
           )}
           <span>{this.alterationName}</span>
           {this.props.tumorType && (
