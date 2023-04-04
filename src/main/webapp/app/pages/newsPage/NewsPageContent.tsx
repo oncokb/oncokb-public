@@ -40,6 +40,7 @@ import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
+import { linkableMutationName } from './Util';
 
 export type ChangedAnnotation = {
   content: ElementType[][];
@@ -1089,7 +1090,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         '3A',
         'EGFR',
-        'Exon 20 insertion',
+        'Exon 20 in-frame insertions',
         'Non-Small Cell Lung Cancer',
         'CLN-081',
         <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -1256,7 +1257,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'MET',
-            'Y1003mut',
+            <AlterationPageLink hugoSymbol={'MET'} alteration={'Y1003'}>
+              {' '}
+              Y1003mut{' '}
+            </AlterationPageLink>,
             'Non-Small Cell Lung Cancer',
             'Tepotinib, Capmatinib',
             '1',
@@ -1282,7 +1286,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'MET',
-            'Y1003mut',
+            <AlterationPageLink hugoSymbol={'MET'} alteration={'Y1003'}>
+              {' '}
+              Y1003mut{' '}
+            </AlterationPageLink>,
             'Non-Small Cell Lung Cancer',
             'Crizotinib',
             '2',
@@ -1682,7 +1689,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         content: [
           [
             'EGFR',
-            'Exon 20 Insertions',
+            'Exon 20 in-frame insertions',
             'Non-Small Cell Lung Cancer',
             'Mobocertinib',
             '3A',
@@ -1783,7 +1790,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'EGFR',
-            'Exon 20 Insertions',
+            'Exon 20 in-frame insertions',
             'Non-Small Cell Lung Cancer',
             'Amivantamab',
             '3A',
@@ -2033,7 +2040,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         '3A',
         'EGFR',
-        'Exon 20 Insertions',
+        'Exon 20 in-frame insertions',
         'Non-Small Cell Lung Cancer',
         'Mobocertinib',
         <PMIDLink pmids={'33632775'} />,
@@ -2041,7 +2048,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         '3A',
         'EGFR',
-        'Exon 20 Insertions',
+        'Exon 20 in-frame insertions',
         'Non-Small Cell Lung Cancer',
         'Amivantamab',
         <AbstractLink
@@ -2108,7 +2115,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         '1',
         'MET',
-        'Exon 14 Skipping Mutations',
+        'Exon 14 Deletion',
         'Non-Small Cell Lung Cancer',
         'Tepotinib',
         <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -2650,7 +2657,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>
                   <GenePageLink hugoSymbol={'BRAF'} />
                 </td>
-                <td>V600</td>
+                <td>
+                  <AlterationPageLink hugoSymbol={'BRAF'} alteration={'V600'} />
+                </td>
                 <td>Melanoma</td>
                 <td>Vemurafenib + Cobimetinib + Atezulizumab</td>
                 <td>
@@ -2669,7 +2678,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td rowSpan={3}>
                   <GenePageLink hugoSymbol={'PDGFRA'} />
                 </td>
-                <td rowSpan={3}>Oncogenic Mutations</td>
+                <td rowSpan={3}>
+                  <AlterationPageLink
+                    hugoSymbol={'PDGFRA'}
+                    alteration={'Oncogenic Mutations'}
+                  />
+                </td>
                 <td rowSpan={3}>Gastrointestinal Stromal Tumors</td>
                 <td>Ripretinib</td>
                 <td>
@@ -2723,7 +2737,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         '1',
         'Other Biomarkers',
-        'Tumor Mutational Burden - High',
+        <AlterationPageLink
+          hugoSymbol={'Other Biomarkers'}
+          alteration={'TMB-H'}
+        >
+          Tumor Mutational Burden - High
+        </AlterationPageLink>,
         'All Solid Tumors',
         'Pembrolizumab',
         <span>
@@ -2992,7 +3011,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         content: [
           [
             'MET',
-            'Exon 14 Skipping Mutations',
+            'Exon 14 Deletion',
             'Non-Small Cell Lung Cancer',
             <div>Capmatinib</div>,
             '3A',
@@ -4193,15 +4212,24 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           <SimpleTable
             columns={NEWLY_ADDED_LEVEL_FOUR_COLUMNS}
             rows={NEWLY_ADDED_LEVEL_FOUR.map((record, index) => {
+              const geneInput = record[0];
               return {
                 key: `NEWLY_ADDED_LEVEL_FOUR-${index}`,
                 content: record.map((subItem, subIndex) => {
-                  const content: ElementType =
-                    subIndex === 0 ? (
-                      <GenePageLink hugoSymbol={subItem} />
-                    ) : (
-                      subItem
+                  let content: ElementType = subItem;
+                  if (subIndex === 0) {
+                    content = <GenePageLink hugoSymbol={subItem} />;
+                  } else if (
+                    subIndex === 1 &&
+                    linkableMutationName(geneInput, subItem)
+                  ) {
+                    content = (
+                      <AlterationPageLink
+                        hugoSymbol={geneInput}
+                        alteration={subItem}
+                      />
                     );
+                  }
                   return {
                     key: `NEWLY_ADDED_LEVEL_FOUR-${index}-${subIndex}`,
                     content,
