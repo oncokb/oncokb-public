@@ -3,19 +3,7 @@ import { useState } from 'react';
 import SummaryWithRefs from './SummaryWithRefs';
 import styles from '../../../index.module.scss';
 import classnames from 'classnames';
-import showHideText from 'app/shared/texts/ShowHideText';
-
-const shortenTextByCharacters = (text: string, cutoff: number) => {
-  const shortText = (text || '').trim();
-  if (shortText.length <= cutoff) {
-    return shortText;
-  } else {
-    const separator = ' ';
-    const words = (text || '').slice(0, cutoff).split(separator);
-    words.pop();
-    return words.join(separator);
-  }
-};
+import { shortenTextByCharacters } from 'app/shared/utils/Utils';
 
 export const LongText: React.FunctionComponent<{
   text: string;
