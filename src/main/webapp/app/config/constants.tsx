@@ -1,5 +1,6 @@
 import { Gene, OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
 import {
+  GeneNumber,
   MainNumber,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -398,6 +399,17 @@ export const DEFAULT_GENE: Gene = {
   hugoSymbol: '',
   oncogene: false,
   tsg: false,
+};
+
+export const DEFAULT_GENE_NUMBER: GeneNumber = {
+  gene: DEFAULT_GENE,
+  alteration: 0,
+  highestSensitiveLevel: '',
+  highestResistanceLevel: '',
+  highestDiagnosticImplicationLevel: '',
+  highestPrognosticImplicationLevel: '',
+  highestFdaLevel: '',
+  tumorType: 0,
 };
 
 export const DEFAULT_MUTATION_EFFECT = {

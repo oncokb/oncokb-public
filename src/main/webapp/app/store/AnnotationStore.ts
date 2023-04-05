@@ -19,6 +19,7 @@ import {
 import {
   DEFAULT_ANNOTATION,
   DEFAULT_GENE,
+  DEFAULT_GENE_NUMBER,
   EVIDENCE_TYPES,
   REFERENCE_GENOME,
 } from 'app/config/constants';
@@ -291,20 +292,15 @@ export class AnnotationStore {
   readonly geneNumber = remoteData<GeneNumber>({
     await: () => [this.gene],
     invoke: async () => {
-      return privateClient.utilsNumbersGeneGetUsingGET({
-        hugoSymbol: this.gene.result.hugoSymbol,
-      });
+      try {
+        return await privateClient.utilsNumbersGeneGetUsingGET({
+          hugoSymbol: this.gene.result.hugoSymbol,
+        });
+      } catch (e) {
+        return DEFAULT_GENE_NUMBER;
+      }
     },
-    default: {
-      gene: DEFAULT_GENE,
-      alteration: 0,
-      highestSensitiveLevel: '',
-      highestResistanceLevel: '',
-      highestDiagnosticImplicationLevel: '',
-      highestPrognosticImplicationLevel: '',
-      highestFdaLevel: '',
-      tumorType: 0,
-    },
+    default: DEFAULT_GENE_NUMBER,
   });
 
   readonly mutationEffect = remoteData<Evidence[]>({

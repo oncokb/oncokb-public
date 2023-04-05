@@ -409,11 +409,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
       <DocumentTitle title={getPageTitle(`${this.store.hugoSymbol}`)}>
         <If condition={!!this.hugoSymbolQuery}>
           <Then>
-            <If
-              condition={
-                this.store.gene.isComplete && this.store.geneNumber.isComplete
-              }
-            >
+            <If condition={this.store.gene.isComplete}>
               <Then>
                 {this.store.gene.isError ||
                 this.store.gene.result === DEFAULT_GENE ? (
