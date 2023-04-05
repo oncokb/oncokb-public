@@ -17,9 +17,11 @@ import {
 import { FdaTabDescription } from 'app/pages/annotationPage/TabDescriptor';
 import { CancerTypeViewTable } from 'app/pages/annotationPage/CancerTypeViewTable';
 import { sortTherapeuticImplications } from 'app/pages/annotationPage/Utils';
+import WindowStore from 'app/store/WindowStore';
 
 export type ICancerTypeView = {
   appStore?: AppStore;
+  isLargeScreen: boolean;
   userAuthenticated: boolean;
   hugoSymbol: string;
   alteration: string;
@@ -41,6 +43,7 @@ export type ICancerTypeView = {
 };
 
 const TxView: React.FunctionComponent<{
+  isLargeScreen: boolean;
   userAuthenticated: boolean;
   hugoSymbol: string;
   summary?: string;
@@ -70,6 +73,7 @@ const TxView: React.FunctionComponent<{
         <>
           <h6>FDA-approved and/or NCCN-recommended drug association(s):</h6>
           <CancerTypeViewTable
+            isLargeScreen={props.isLargeScreen}
             userAuthenticated={props.userAuthenticated}
             type={'tx'}
             hugoSymbol={props.hugoSymbol}
@@ -90,6 +94,7 @@ const TxView: React.FunctionComponent<{
         <>
           <h6>Investigational drug association(s):</h6>
           <CancerTypeViewTable
+            isLargeScreen={props.isLargeScreen}
             userAuthenticated={props.userAuthenticated}
             type={'tx'}
             hugoSymbol={props.hugoSymbol}
@@ -111,6 +116,7 @@ const TxView: React.FunctionComponent<{
 };
 
 const DxPxView: React.FunctionComponent<{
+  isLargeScreen: boolean;
   userAuthenticated: boolean;
   type: 'dx' | 'px';
   hugoSymbol: string;
@@ -125,6 +131,7 @@ const DxPxView: React.FunctionComponent<{
       </h5>
       {props.summary && <p>{props.summary}</p>}
       <CancerTypeViewTable
+        isLargeScreen={props.isLargeScreen}
         userAuthenticated={props.userAuthenticated}
         type={props.type}
         hugoSymbol={props.hugoSymbol}
@@ -143,6 +150,7 @@ const DxPxView: React.FunctionComponent<{
 };
 
 const FdaView: React.FunctionComponent<{
+  isLargeScreen: boolean;
   userAuthenticated: boolean;
   hugoSymbol: string;
   summary?: string;
@@ -155,6 +163,7 @@ const FdaView: React.FunctionComponent<{
         <FdaTabDescription hugoSymbol={props.hugoSymbol} />
       </p>
       <CancerTypeViewTable
+        isLargeScreen={props.isLargeScreen}
         userAuthenticated={props.userAuthenticated}
         type={'fda'}
         hugoSymbol={props.hugoSymbol}
@@ -175,6 +184,7 @@ export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props =>
     <div className={'mt-3'}>
       {props.therapeuticImplications.length > 0 && (
         <TxView
+          isLargeScreen={props.isLargeScreen}
           userAuthenticated={props.userAuthenticated}
           hugoSymbol={props.hugoSymbol}
           summary={props.annotation.tumorTypeSummary}
@@ -183,6 +193,7 @@ export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props =>
       )}
       {props.diagnosticImplications.length > 0 && (
         <DxPxView
+          isLargeScreen={props.isLargeScreen}
           userAuthenticated={props.userAuthenticated}
           type={'dx'}
           hugoSymbol={props.hugoSymbol}
@@ -192,6 +203,7 @@ export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props =>
       )}
       {props.prognosticImplications.length > 0 && (
         <DxPxView
+          isLargeScreen={props.isLargeScreen}
           userAuthenticated={props.userAuthenticated}
           type={'px'}
           hugoSymbol={props.hugoSymbol}
@@ -201,6 +213,7 @@ export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props =>
       )}
       {props.fdaImplication.length > 0 && (
         <FdaView
+          isLargeScreen={props.isLargeScreen}
           userAuthenticated={props.userAuthenticated}
           hugoSymbol={props.hugoSymbol}
           summary={props.annotation.prognosticSummary}

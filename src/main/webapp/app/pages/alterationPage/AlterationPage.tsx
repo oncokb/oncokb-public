@@ -25,6 +25,8 @@ import {
   AlterationPageSearchQueries,
 } from 'app/shared/route/types';
 import autobind from 'autobind-decorator';
+import WindowStore from 'app/store/WindowStore';
+import AuthenticationStore from 'app/store/AuthenticationStore';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -34,10 +36,12 @@ interface MatchParams {
 
 interface AlterationPageProps extends RouteComponentProps<MatchParams> {
   appStore: AppStore;
+  windowStore: WindowStore;
   routing: RouterStore;
+  authenticationStore: AuthenticationStore;
 }
 
-@inject('appStore', 'routing', 'windowStore')
+@inject('appStore', 'routing', 'windowStore', 'authenticationStore')
 @observer
 export default class AlterationPage extends React.Component<
   AlterationPageProps,
@@ -190,6 +194,8 @@ export default class AlterationPage extends React.Component<
               this.pageShouldBeRendered && (
                 <AnnotationPage
                   appStore={this.props.appStore}
+                  windowStore={this.props.windowStore}
+                  authenticationStore={this.props.authenticationStore}
                   hugoSymbol={this.store.hugoSymbol}
                   oncogene={this.store.gene.result.oncogene}
                   tsg={this.store.gene.result.tsg}

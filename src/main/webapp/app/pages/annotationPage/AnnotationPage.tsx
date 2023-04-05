@@ -59,9 +59,11 @@ import { Link } from 'react-router-dom';
 import AlterationView from 'app/pages/annotationPage/AlterationView';
 import { CancerTypeView } from 'app/pages/annotationPage/CancerTypeView';
 import AuthenticationStore from 'app/store/AuthenticationStore';
+import WindowStore from 'app/store/WindowStore';
 
 export type IAnnotationPage = {
-  appStore?: AppStore;
+  appStore: AppStore;
+  windowStore: WindowStore;
   hugoSymbol: string;
   oncogene?: boolean;
   tsg?: boolean;
@@ -78,10 +80,9 @@ export type IAnnotationPage = {
     selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
     newTabKey: ANNOTATION_PAGE_TAB_KEYS
   ) => void;
-  authenticationStore?: AuthenticationStore;
+  authenticationStore: AuthenticationStore;
 };
 
-@inject('appStore', 'authenticationStore')
 @observer
 export default class AnnotationPage extends React.Component<
   IAnnotationPage,
@@ -387,7 +388,7 @@ export default class AnnotationPage extends React.Component<
       <>
         {this.navBreadcrumbs}
         <h2
-          className={'d-flex align-items-baseline'}
+          className={'d-flex align-items-baseline flex-wrap'}
           style={{ marginBottom: 0 }}
         >
           {this.showGeneName && (
@@ -407,7 +408,7 @@ export default class AnnotationPage extends React.Component<
                   cancerType: this.props.tumorType,
                 },
               }}
-              appStore={this.props.appStore!}
+              appStore={this.props.appStore}
             />
           </span>
         </h2>
@@ -473,8 +474,9 @@ export default class AnnotationPage extends React.Component<
         {this.props.tumorType ? (
           <CancerTypeView
             appStore={this.props.appStore}
+            isLargeScreen={this.props.windowStore.isLargeScreen}
             userAuthenticated={
-              this.props.authenticationStore!.isUserAuthenticated
+              this.props.authenticationStore.isUserAuthenticated
             }
             hugoSymbol={this.props.hugoSymbol}
             alteration={this.props.alteration}
