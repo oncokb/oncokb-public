@@ -65,6 +65,18 @@ export function shortenOncogenicity(oncogenicity: string): string {
   return GENERAL_ONCOGENICITY[oncogenicity];
 }
 
+export function shortenTextByCharacters(text: string, cutoff: number) {
+  const shortText = (text || '').trim();
+  if (shortText.length <= cutoff) {
+    return shortText;
+  } else {
+    const separator = ' ';
+    const words = (text || '').slice(0, cutoff).split(separator);
+    words.pop();
+    return words.join(separator);
+  }
+}
+
 export function getCancerTypeNameFromOncoTreeType(
   oncoTreeType: TumorType
 ): string {

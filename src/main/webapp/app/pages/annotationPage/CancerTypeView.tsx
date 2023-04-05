@@ -172,7 +172,7 @@ const FdaView: React.FunctionComponent<{
 
 export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props => {
   return (
-    <div className={'mt-5'}>
+    <div className={'mt-3'}>
       {props.therapeuticImplications.length > 0 && (
         <TxView
           userAuthenticated={props.userAuthenticated}
