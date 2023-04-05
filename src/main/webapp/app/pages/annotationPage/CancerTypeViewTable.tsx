@@ -51,11 +51,15 @@ const CompactDrugCell: React.FunctionComponent<{
   );
 };
 
-function getColumns(userAuthenticated: boolean, type: DataType) {
+function getColumns(
+  userAuthenticated: boolean,
+  type: DataType,
+  hasDescription: boolean
+) {
   let columns: string[] = [];
   switch (type) {
     case 'tx':
-      if (userAuthenticated) {
+      if (userAuthenticated && hasDescription) {
         columns = [];
       } else {
         columns = [
@@ -64,8 +68,10 @@ function getColumns(userAuthenticated: boolean, type: DataType) {
           'Alterations',
           'Level-associated cancer types',
           'Citations',
-          'Description',
         ];
+        if (hasDescription) {
+          columns.push('Description');
+        }
       }
       break;
     case 'dx':
@@ -86,11 +92,16 @@ function getColumns(userAuthenticated: boolean, type: DataType) {
   return columns;
 }
 
+function tableHasDescriptionInfo(data: ITableRow[]) {
+  return data.filter(row => !!row.description).length > 0;
+}
+
 function getRows(
   userAuthenticated: boolean,
   type: DataType,
   data: ITableRow[],
-  hugoSymbol: string
+  hugoSymbol: string,
+  hasDescription: boolean
 ) {
   return data.map((row, index) => {
     const content = [
@@ -112,7 +123,7 @@ function getRows(
     ];
 
     // only add the compact drug column for tx implications when user logged in
-    if (type === 'tx' && userAuthenticated) {
+    if (type === 'tx' && userAuthenticated && hasDescription) {
       content.push({
         key: `${type}-row-${index}-compact-drugs}`,
         content: row.drugs ? (
@@ -146,7 +157,7 @@ function getRows(
 
     // only add the citations column if the table is not tx implications or when user not logged in
     if (type !== 'fda') {
-      if (!userAuthenticated || type !== 'tx') {
+      if (!userAuthenticated || type !== 'tx' || !hasDescription) {
         const numOfReferences = row.citations
           ? row.citations.abstracts.length + row.citations.pmids.length
           : 0;
@@ -171,7 +182,7 @@ function getRows(
       }
     }
 
-    if (type === 'tx') {
+    if (hasDescription) {
       content.push({
         key: `tx-row-${index}-description}`,
         content: (
@@ -190,7 +201,14 @@ function getRows(
 }
 
 export const CancerTypeViewTable: React.FunctionComponent<ITable> = props => {
-  const columns = getColumns(props.userAuthenticated, props.type);
+  // we only show tx description at the moment
+  const hasDescription =
+    props.type === 'tx' && tableHasDescriptionInfo(props.data);
+  const columns = getColumns(
+    props.userAuthenticated,
+    props.type,
+    hasDescription
+  );
   return (
     <SimpleTable
       theadClassName={styles.cancerTypeSimpleTableHead}
@@ -201,7 +219,8 @@ export const CancerTypeViewTable: React.FunctionComponent<ITable> = props => {
         props.userAuthenticated,
         props.type,
         props.data,
-        props.hugoSymbol
+        props.hugoSymbol,
+        hasDescription
       )}
     />
   );

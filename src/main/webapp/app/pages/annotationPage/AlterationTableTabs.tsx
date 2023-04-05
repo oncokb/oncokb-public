@@ -166,6 +166,14 @@ export default class AlterationTableTabs extends React.Component<
   }
 
   @computed
+  get txHasDescriptions() {
+    return (
+      this.props.tx.filter(implication => !!implication.drugDescription)
+        .length > 0
+    );
+  }
+
+  @computed
   get tabDescriptionStyle() {
     return this.props.windowStore && this.props.windowStore.isLargeScreen
       ? {
@@ -256,7 +264,10 @@ export default class AlterationTableTabs extends React.Component<
     };
 
     // Users that are not logged in will see a message to login/register
-    if (!this.props.authenticationStore?.isUserAuthenticated) {
+    if (
+      !this.props.authenticationStore?.isUserAuthenticated &&
+      this.txHasDescriptions
+    ) {
       descriptionColumn = {
         ...descriptionColumn,
         width: 100,
@@ -328,10 +339,11 @@ export default class AlterationTableTabs extends React.Component<
         onFilter: (data: TherapeuticImplication, keyword) =>
           filterByKeyword(data.drugs, keyword),
       },
-      ...(this.props.authenticationStore?.isUserAuthenticated
+      ...(this.props.authenticationStore?.isUserAuthenticated &&
+      this.txHasDescriptions
         ? []
         : [citationColumn]),
-      descriptionColumn,
+      ...(this.txHasDescriptions ? [descriptionColumn] : []),
     ];
 
     return therapeuticTableColumns;
