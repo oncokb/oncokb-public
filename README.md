@@ -23,7 +23,7 @@ Make sure your running environment is the following:
 - **MySQL version: 5.7.28**
 - **Redis**
 
-### Setup Redis
+### Setup Redis (optional)
 
 The following steps is one way to set up the redis. As long as you have redis setup and ready to connect, then that would work.
 
@@ -94,24 +94,6 @@ or
 localStorage.setItem("localdev", false)
 ```
 
-### PWA Support
-
-JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
-
-The service worker initialization code is commented out by default. To enable it, uncomment the following code in `src/main/webapp/index.html`:
-
-```html
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js').then(function () {
-      console.log('Service Worker Registered');
-    });
-  }
-</script>
-```
-
-Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
-
 ### Managing dependencies
 
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
@@ -173,7 +155,7 @@ To package your application as a war in order to deploy it to an application ser
 
 ```
 
-    ./mvnw package -Pprod verify jib:dockerBuild -DskipTests
+./mvnw package -Pprod verify jib:dockerBuild -DskipTests
 
 
 ```
@@ -204,65 +186,14 @@ Screenshot tests are run by [Jest][], [Puppeteer][]. They're located in [screens
 yarn run screenshot-test-in-docker
 ```
 
-If you are confident with the changes from the [`__diff_output__`](screenshot-test/__diff_output__/) directory, you have two options to update the images stored in the [`__baseline_snapshots__`](screenshot-test/__baseline_snapshots__/) directory.
+#### Update screenshot tests
 
-```
-yarn run screenshot-test-in-docker:update
-```
+After running the command above, you will see `__diff_output__` and `__latest_snapshots__` folders created under `screenshot-test`. These new images indicate potential changes. If these changes are expected, please follow the below steps to update the images under `__baseline_snapshots__`.
 
-or
-
-repalce the out-of-date images with the up-to-date images stored in [`__latest_snapshots__`](screenshot-test/__latest_snapshots__/).
-
-> **NOTE:** The cmds above can only be executed in unix-based systems. If you are using Windows, please use `docker-compose build local_test` ,`docker-compose run --rm local_test` to run the tests, and use `docker-compose build local_test_update`, `docker-compose run --rm local_test_update` to update baseline images.
-
-If you don't want to use docker, you can just use
-
-```
-yarn run screenshot-test
-```
-
-to run the tests and use
-
-```
-yarn run screenshot-test:update
-```
-
-to update baseline images. However, please keep in mind that the result images may not match the baseline images even you didn't change any thing. And the tests in CI process may fail as well.
-
-**Why Puppeteer?**
-
-We used _jest w/ puppeteer_ instead of _Webdriverio w/ Selenium_ basically based on below pros:
-
-- Simple to set up, good document and easy to handle on.
-- Maintained by Google and it gives you direct access to the [CDP][].
-- Faster execution speed.
-- Network interception. Your test codes can record, modify, block or generate responses to requests made by the browser.
-- JavaScript first, so the code feels very natural
-
-### Code quality
-
-Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
-
-```
-docker-compose -f src/main/docker/sonar.yml up -d
-```
-
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
-
-Then, run a Sonar analysis:
-
-```
-./mvnw -Pprod clean verify sonar:sonar
-```
-
-If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
-
-```
-./mvnw initialize sonar:sonar
-```
-
-For more information, refer to the [Code quality page][].
+1. Send a pull request to the intended branch
+2. The PR will trigger the [Screenshot Test](https://github.com/oncokb/oncokb-public/actions/workflows/screenshot-test.yml) GitHub action
+3. Using [this example](https://github.com/oncokb/oncokb-public/actions/runs/4623078834), the action will generate two folders(`visual-regression-diff-report` and `visual-regression-screenshots`) under the Artifacts section.
+4. `visual-regression-diff-report` folder includes the files should be updated. You can copy over the ones with the same name under `visual-regression-screenshots` to your pull request.
 
 ## Using Docker to simplify development (optional)
 
@@ -294,10 +225,6 @@ docker-compose -f src/main/docker/app.yml up -d
 ```
 
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
-
-## Continuous Integration (optional)
-
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
 [jhipster 6.10.3 archive]: https://www.jhipster.tech/documentation-archive/v6.10.3
