@@ -61,10 +61,7 @@ Run the following commands in two separate terminals to create a blissful develo
 auto-refreshes when files change on your hard drive.
 
 ```
-
 ./mvnw
-
-
 yarn start
 ```
 
@@ -120,20 +117,14 @@ For further instructions on how to develop with JHipster, have a look at [Using 
 To build the final jar and optimize the oncokb application for production, run:
 
 ```
-
 ./mvnw -Pprod clean verify
-
-
 ```
 
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 To ensure everything worked, run:
 
 ```
-
 java -jar target/*.jar
-
-
 ```
 
 Then navigate to [http://localhost:9090](http://localhost:9090) in your browser.
@@ -145,19 +136,13 @@ Refer to [Using JHipster in production][] for more details.
 To package your application as a war in order to deploy it to an application server, run:
 
 ```
-
 ./mvnw -Pprod,war clean verify
-
-
 ```
 
 ### Packaging with a docker image ready
 
 ```
-
 ./mvnw package -Pprod verify jib:dockerBuild -DskipTests
-
-
 ```
 
 ## Testing
