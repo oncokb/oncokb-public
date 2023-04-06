@@ -10,6 +10,11 @@ const VIEW_PORT_1080 = {
   height: 1080,
   deviceScaleFactor: 1,
 }
+const MOBILE_VIEW_PORT = {
+  width: 400,
+  height: 800,
+  deviceScaleFactor: 1,
+}
 const WAITING_TIME = 2000;
 const LONG_WAITING_TIME = 10000;
 const LATEST_SNAPSHOTS_DIR = './screenshot-test/__latest_snapshots__/';
@@ -519,5 +524,58 @@ describe('Tests without login', () => {
   afterAll(async () => {
     await browser.close();
   })
+})
+
+
+describe('Tests on mobile view (< large grid)', () => {
+  let browser;
+  let page;
+
+  beforeAll(async () => {
+    browser = await puppeteer.launch(browserConfig);
+    page = await browser.newPage();
+    await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled!
+    page.on('request', (request) => {
+      let url = request.url()
+      if (getMockResponse(url) !== undefined){
+        request.respond(
+          getMockResponse(url)
+        )
+      }
+      else request.continue();
+    });
+    await page.goto(`${CLIENT_URL}`);
+    await page.evaluate(() => {
+      localStorage.setItem('localdev', 'true');
+      localStorage.setItem('disablebanner', 'true');
+    });
+  })
+
+  it('Alteration Page with Cancer Type - With login - Mobile', async() => {
+    await page.evaluate(() => {
+      localStorage.setItem('oncokb-user-token', 'oncokb-public-demo-admin-token');
+    });
+    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/HCL`);
+    await page.setViewport(MOBILE_VIEW_PORT);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - With login - Mobile'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Cancer Type - With login - Mobile' });
+  })
+
+  it('Alteration Page with Cancer Type - Without login - Mobile', async() => {
+    await page.evaluate(() => {
+      localStorage.removeItem('oncokb-user-token');
+    });
+    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/HCL`);
+    await page.setViewport(MOBILE_VIEW_PORT);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Without login - Mobile'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Cancer Type - Without login - Mobile' });
+  })
+
+  afterAll(async () => {
+    await browser.close();
+  })
+
 })
 

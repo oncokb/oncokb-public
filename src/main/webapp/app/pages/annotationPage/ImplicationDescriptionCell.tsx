@@ -7,11 +7,12 @@ import { DescriptionTooltip } from 'app/pages/annotationPage/DescriptionTooltip'
 export const ImplicationDescriptionCell: React.FunctionComponent<{
   userAuthenticated: boolean;
   description: string;
+  cutoff?: number;
 }> = props => {
   if (props.userAuthenticated) {
     return (
       <span>
-        <LongText text={props.description} />
+        <LongText text={props.description} cutoff={props.cutoff} />
       </span>
     );
   } else {

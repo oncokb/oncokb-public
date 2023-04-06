@@ -27,26 +27,28 @@ export const SimpleTable = (props: SimpleTableProps) => {
       : null;
   };
   return (
-    <Table className={props.tableClassName}>
-      {props.columns && (
-        <thead className={props.theadClassName}>
-          <tr>
-            {props.columns.map(column => (
-              <th
-                key={column.name}
-                style={column.size ? { width: column.size } : undefined}
-              >
-                {column.content ? column.content : column.name}
-              </th>
-            ))}
-          </tr>
-        </thead>
-      )}
-      <tbody className={props.tbodyClassName}>
-        {props.rows.map(row => (
-          <tr key={row.key}>{getRow(row)}</tr>
-        ))}
-      </tbody>
-    </Table>
+    <div className={'table-responsive'}>
+      <Table className={props.tableClassName}>
+        {props.columns && (
+          <thead className={props.theadClassName}>
+            <tr>
+              {props.columns.map(column => (
+                <th
+                  key={column.name}
+                  style={column.size ? { width: column.size } : undefined}
+                >
+                  {column.content ? column.content : column.name}
+                </th>
+              ))}
+            </tr>
+          </thead>
+        )}
+        <tbody className={props.tbodyClassName}>
+          {props.rows.map(row => (
+            <tr key={row.key}>{getRow(row)}</tr>
+          ))}
+        </tbody>
+      </Table>
+    </div>
   );
 };

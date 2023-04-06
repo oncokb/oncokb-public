@@ -108,6 +108,9 @@ export const USAGE_ALL_TIME_VALUE = 'This year';
 export const USAGE_DETAIL_TIME_KEY = 'Detail';
 export const USAGE_DAY_DETAIL_TIME_KEY = 'Day Detail';
 
+export const LONG_TEXT_CUTOFF = 200;
+export const LONG_TEXT_CUTOFF_COMPACT = 80;
+
 export enum ONCOGENICITY {
   ONCOGENIC = 'Oncogenic',
   LIKELY_ONCOGENIC = 'Likely Oncogenic',

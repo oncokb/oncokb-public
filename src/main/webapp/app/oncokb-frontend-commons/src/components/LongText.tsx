@@ -4,13 +4,14 @@ import SummaryWithRefs from './SummaryWithRefs';
 import styles from '../../../index.module.scss';
 import classnames from 'classnames';
 import { shortenTextByCharacters } from 'app/shared/utils/Utils';
+import { LONG_TEXT_CUTOFF } from 'app/config/constants';
 
 export const LongText: React.FunctionComponent<{
   text: string;
   cutoff?: number;
 }> = props => {
   const propText = (props.text || '').trim();
-  const cutoff = props.cutoff || 200;
+  const cutoff = props.cutoff || LONG_TEXT_CUTOFF;
   const [expandedText, setExpandedText] = useState(false);
   const text = expandedText
     ? propText

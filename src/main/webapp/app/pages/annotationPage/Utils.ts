@@ -5,9 +5,6 @@ import {
 import _ from 'lodash';
 import { LEVEL_PRIORITY, LEVELS, PAGE_ROUTE } from 'app/config/constants';
 import { VariantAnnotation } from 'app/shared/api/generated/OncoKbPrivateAPI';
-import { Link } from 'react-router-dom';
-import { Version } from 'app/pages/LevelOfEvidencePage';
-import React from 'react';
 
 const getFdaImplicationKey = (fdaImplication: FdaImplication) => {
   return `${fdaImplication.alteration.alteration}-${fdaImplication.cancerType}`;
