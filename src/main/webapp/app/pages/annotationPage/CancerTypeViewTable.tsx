@@ -34,7 +34,7 @@ function inCompactView(store: WindowStore) {
   return !store.isLargeScreen;
 }
 
-function geDrugAssociationCellText(
+function getDrugAssociationCellText(
   hugoSymbol: string,
   alterations: string,
   cancerTypes: string
@@ -55,7 +55,7 @@ const CompactDrugCell: React.FunctionComponent<{
     <div style={{ minWidth: 300 }}>
       <div>{props.drugs}</div>
       <div className={'text-secondary'}>
-        {geDrugAssociationCellText(
+        {getDrugAssociationCellText(
           props.hugoSymbol,
           props.alterations,
           props.cancerTypes
@@ -195,7 +195,7 @@ function getCompactTxRows(
             </div>
             <div className={'text-secondary'}>
               <LongText
-                text={geDrugAssociationCellText(
+                text={getDrugAssociationCellText(
                   hugoSymbol,
                   row.alterations,
                   row.cancerTypes
@@ -221,7 +221,7 @@ function getCompactTxRows(
   });
 }
 
-function getNoneCompactTxRows(
+function getNonCompactTxRows(
   userAuthenticated: boolean,
   data: ITableRow[],
   hugoSymbol: string,
@@ -322,7 +322,7 @@ function getTxRows(
 ): SimpleTableRow[] {
   return !isLargeScreen && userAuthenticated
     ? getCompactTxRows(userAuthenticated, data, hugoSymbol)
-    : getNoneCompactTxRows(userAuthenticated, data, hugoSymbol, hasDescription);
+    : getNonCompactTxRows(userAuthenticated, data, hugoSymbol, hasDescription);
 }
 
 export const CancerTypeViewTable: React.FunctionComponent<ITable> = props => {
