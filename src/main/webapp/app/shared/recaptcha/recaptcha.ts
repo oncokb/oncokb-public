@@ -1,6 +1,8 @@
 import { AppConfig } from 'app/appConfig';
 import { notifyError } from '../utils/NotificationUtils';
 
+/* eslint no-console: 0 */
+
 declare global {
   interface Window {
     grecaptcha: any;
@@ -18,23 +20,25 @@ export default class ReCAPTCHA {
 
   constructor() {
     this.siteKey = AppConfig.serverConfig.recaptchaSiteKey;
-    if (this.siteKey != null) {
+    if (this.siteKey !== '' && this.siteKey !== null) {
       loadReCaptcha(this.siteKey);
     } else {
-      console.error('Recaptcha cannot load. Site key not added.');
+      console.log('Recaptcha is not enabled. Site key not added.');
     }
   }
 
   async getToken(): Promise<string> {
     let token = '';
-    await window.grecaptcha.enterprise
-      .execute(this.siteKey)
-      .then((res: string) => {
-        token = res;
-      })
-      .catch((error: Error) => {
-        notifyError(error);
-      });
+    if (this.siteKey !== '' && this.siteKey !== null) {
+      await window.grecaptcha.enterprise
+        .execute(this.siteKey)
+        .then((res: string) => {
+          token = res;
+        })
+        .catch((error: Error) => {
+          notifyError(error);
+        });
+    }
     return token;
   }
 }
