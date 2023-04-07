@@ -165,7 +165,7 @@ application:
     google-analytics-project-id:
     recaptcha-project-id:
     recaptcha-site-key:
-    recaptcha-threshold:
+    recaptcha-threshold: 0.1
   aws:
     s3-access-key:
     s3-secret-key:
@@ -175,4 +175,4 @@ application:
   recaptcha:
     project-id:
     site-key:
-    threshold:
+    threshold: 0.1

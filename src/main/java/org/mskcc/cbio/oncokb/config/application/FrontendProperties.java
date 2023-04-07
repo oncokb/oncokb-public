@@ -8,7 +8,7 @@ public class FrontendProperties {
     private String sentryProjectId;
     private String recaptchaProjectId;
     private String recaptchaSiteKey;
-    private Long recaptchaThreshold;
+    private Float recaptchaThreshold;
 
     public String getRecaptchaProjectId() {
         return recaptchaProjectId;
@@ -18,11 +18,11 @@ public class FrontendProperties {
         this.recaptchaProjectId = recaptchaProjectId;
     }
 
-    public Long getRecaptchaThreshold() {
+    public Float getRecaptchaThreshold() {
         return recaptchaThreshold;
     }
 
-    public void setRecaptchaThreshold(Long recaptchaThreshold) {
+    public void setRecaptchaThreshold(Float recaptchaThreshold) {
         this.recaptchaThreshold = recaptchaThreshold;
     }
 

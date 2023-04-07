@@ -3,7 +3,7 @@ package org.mskcc.cbio.oncokb.config.application;
 public class RecaptchaProperties {
     private String projectId;
     private String siteKey;
-    private float threshold;
+    private Float threshold;
 
     public String getProjectId() {
         return projectId;
@@ -13,11 +13,11 @@ public class RecaptchaProperties {
         this.projectId = projectId;
     }
 
-    public float getThreshold() {
+    public Float getThreshold() {
         return threshold;
     }
 
-    public void setThreshold(float threshold) {
+    public void setThreshold(Float threshold) {
         this.threshold = threshold;
     }
 

@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceClient;
 
 import javax.naming.AuthenticationException;
+import javax.naming.ConfigurationException;
 import javax.xml.bind.ValidationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -121,6 +122,8 @@ public class AccountResource {
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 log.info(errorMessage);
             } 
+        } catch (ConfigurationException e) {
+            log.warn(e.getMessage());
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
             if (!checkPasswordLength(managedUserVM.getPassword())) {
@@ -361,6 +364,8 @@ public class AccountResource {
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 log.info(errorMessage);
             } 
+        } catch (ConfigurationException e) {
+            log.warn(e.getMessage());
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
             Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
@@ -457,6 +462,8 @@ public class AccountResource {
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 log.info(errorMessage);
             } 
+        } catch (ConfigurationException e) {
+            log.warn(e.getMessage());
         }
         // if (rs.getStatusCode() == HttpStatus.OK) {
             Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());

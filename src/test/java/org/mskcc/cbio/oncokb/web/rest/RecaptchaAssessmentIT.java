@@ -12,6 +12,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceClient;
 import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceSettings;
 
+import javax.naming.ConfigurationException;
 import javax.xml.bind.ValidationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,16 +38,6 @@ public class RecaptchaAssessmentIT {
     public void setUp() throws IOException {
         appProps = new ApplicationProperties();
         recaptchaProp = new RecaptchaProperties();
-
-        RecaptchaEnterpriseServiceSettings settings = RecaptchaEnterpriseServiceSettings.newBuilder()
-                .build();
-        LOGGER.info("create client");
-        client = RecaptchaEnterpriseServiceClient.create(settings);
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        client.close();
     }
 
     @Test
@@ -77,9 +68,19 @@ public class RecaptchaAssessmentIT {
 
         Exception e = assertThrows(ValidationException.class, () -> {
             String recaptchaToken = createAssess.getRecaptchaToken(request);
-            ResponseEntity<String> rs = createAssess.createAssessment(client, recaptchaToken);
         });
         assertThat(e.getMessage().equals(CreateAssessment.RECAPTCHA_TOKEN_ERROR));
+    }
+
+    @Test
+    public void testGetRecaptchaWithoutConfiguration() throws Exception {
+        appProps.setRecaptcha(recaptchaProp);
+        CreateAssessment createAssess = new CreateAssessment(appProps);
+
+        Exception e = assertThrows(ConfigurationException.class, () -> {
+            RecaptchaEnterpriseServiceClient client = createAssess.createClient();
+        });
+        assertThat(e.getMessage().equals(CreateAssessment.RECAPTCHA_CONFIGURATION_ERROR));
     }
 
 }

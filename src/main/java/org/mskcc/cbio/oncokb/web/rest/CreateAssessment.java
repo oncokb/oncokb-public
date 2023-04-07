@@ -12,6 +12,7 @@ import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.naming.ConfigurationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.ValidationException;
 
@@ -26,6 +27,7 @@ public class CreateAssessment {
 
   public static String RECAPTCHA_VALIDATION_ERROR = "Validation failed";
   public static String RECAPTCHA_TOKEN_ERROR = "Unable to retrieve recaptcha token. Please try again.";
+  public static String RECAPTCHA_CONFIGURATION_ERROR = "Recaptcha configuration is not set up. Recaptcha protection is now disabled.";
 
   static RecaptchaProperties recaptchaProperties;
 
@@ -42,7 +44,10 @@ public class CreateAssessment {
     }
   }
 
-  public RecaptchaEnterpriseServiceClient createClient() throws ValidationException {
+  public RecaptchaEnterpriseServiceClient createClient() throws ValidationException, ConfigurationException {
+    if (recaptchaProperties.getSiteKey() == null || recaptchaProperties.getProjectId() == null || recaptchaProperties.getThreshold() == null) {
+      throw new ConfigurationException(RECAPTCHA_CONFIGURATION_ERROR);
+    }
     try {
       RecaptchaEnterpriseServiceClient client = RecaptchaEnterpriseServiceClient.create();
       return client;
