@@ -1,5 +1,5 @@
 import { AppConfig } from 'app/appConfig';
-import { notifyError } from '../utils/NotificationUtils';
+import * as Sentry from '@sentry/react';
 
 /* eslint no-console: 0 */
 
@@ -36,7 +36,9 @@ export default class ReCAPTCHA {
           token = res;
         })
         .catch((error: Error) => {
-          notifyError(error);
+          if (AppConfig.serverConfig?.sentryProjectId) {
+            Sentry.captureException(error);
+          }
         });
     }
     return token;
