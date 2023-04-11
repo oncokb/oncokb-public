@@ -198,6 +198,33 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '04122023': {
+    priorityNews: [
+      <span>
+        Release of NEW cancer-type pages, allowing easier visualization of
+        variant and cancer type-specific clinical implications. As an example,
+        see tables for treatment, diagnostic and prognostic implications on the{' '}
+        <AlterationPageLink
+          hugoSymbol={'ABL1'}
+          alteration={'BCR-ABL1 Fusion'}
+          cancerType={'B-lymphoblastic leukemia/lymphoma'}
+        >
+          BCR-ABL1, B-lymphoblastic leukemia/lymphoma
+        </AlterationPageLink>{' '}
+        cancer-type page.
+      </span>,
+      <span>
+        Release of therapeutic descriptions for all alteration- and tumor
+        type-specific leveled associations. These are located on the variant-
+        and cancer-type pages. See{' '}
+        <AlterationPageLink hugoSymbol={'BRAF'} alteration={'V600E'}>
+          BRAF V600E
+        </AlterationPageLink>{' '}
+        as an example.
+      </span>,
+    ],
+    newlyAddedGenes: ['MERTK'],
+  },
   '03222023': {
     priorityNews: [
       <span>
