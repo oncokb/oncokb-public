@@ -1,6 +1,75 @@
 [
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 25412846, 25952993).",
+    "cancerTypes":
+    [
+      {
+        "id": 418,
+        "subtype": "Therapy-Related Myeloid Neoplasms",
+        "code": "TMN",
+        "color": "LightSalmon",
+        "mainType": "Leukemia",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 7157,
+        "hugoSymbol": "TP53",
+        "oncogene": false,
+        "grch37Isoform": "ENST00000269305",
+        "grch37RefSeq": "NM_000546.5",
+        "grch38Isoform": "ENST00000269305",
+        "grch38RefSeq": "NM_000546.5",
+        "geneAliases":
+        [
+          "LFS1",
+          "p53"
+        ],
+        "genesets":
+        [],
+        "tsg": true
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations",
+      "name": "Oncogenic Mutations",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "Px1",
+    "fdaLevel": null,
+    "drug":
+    [],
+    "drugPmids":
+    [
+      "25412846",
+      "25952993"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 28819011, 26022239, 24684350, 8639789, 7579380).",
     "cancerTypes":
     [
       {
@@ -71,142 +140,7 @@
   },
   {
     "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 355,
-        "subtype": "Myelodysplastic Syndromes",
-        "code": "MDS",
-        "color": "LightSalmon",
-        "mainType": "Myelodysplastic Syndromes",
-        "level": 3,
-        "tissue": "Myeloid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "excludedCancerTypes":
-    [],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 7157,
-        "hugoSymbol": "TP53",
-        "oncogene": false,
-        "grch37Isoform": "ENST00000269305",
-        "grch37RefSeq": "NM_000546.5",
-        "grch38Isoform": "ENST00000269305",
-        "grch38RefSeq": "NM_000546.5",
-        "geneAliases":
-        [
-          "LFS1",
-          "p53"
-        ],
-        "genesets":
-        [],
-        "tsg": true
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Oncogenic Mutations",
-      "name": "Oncogenic Mutations",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
-    },
-    "level": "Px1",
-    "fdaLevel": null,
-    "drug":
-    [],
-    "drugPmids":
-    [
-      "24220272",
-      "25092778",
-      "21714648"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 185,
-        "subtype": "Myeloproliferative Neoplasms",
-        "code": "MPN",
-        "color": "LightSalmon",
-        "mainType": "Myeloproliferative Neoplasms",
-        "level": 3,
-        "tissue": "Myeloid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "excludedCancerTypes":
-    [],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 7157,
-        "hugoSymbol": "TP53",
-        "oncogene": false,
-        "grch37Isoform": "ENST00000269305",
-        "grch37RefSeq": "NM_000546.5",
-        "grch38Isoform": "ENST00000269305",
-        "grch38RefSeq": "NM_000546.5",
-        "geneAliases":
-        [
-          "LFS1",
-          "p53"
-        ],
-        "genesets":
-        [],
-        "tsg": true
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Oncogenic Mutations",
-      "name": "Oncogenic Mutations",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
-    },
-    "level": "Px1",
-    "fdaLevel": null,
-    "drug":
-    [],
-    "drugPmids":
-    [
-      "22887079",
-      "25516983",
-      "22052707"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 25860933, 25412851).",
     "cancerTypes":
     [
       {
@@ -274,16 +208,17 @@
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 19188171, 20697090, 24652989, 23243274, 24004666).",
     "cancerTypes":
     [
       {
-        "id": 418,
-        "subtype": "Therapy-Related Myeloid Neoplasms",
-        "code": "TMN",
-        "color": "LightSalmon",
-        "mainType": "Leukemia",
-        "level": 4,
-        "tissue": "Myeloid",
+        "id": 533,
+        "subtype": "Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma",
+        "code": "CLLSLL",
+        "color": "LimeGreen",
+        "mainType": "Mature B-Cell Neoplasms",
+        "level": 5,
+        "tissue": "Lymphoid",
         "tumorForm": "LIQUID"
       }
     ],
@@ -333,82 +268,18 @@
     [],
     "drugPmids":
     [
-      "25412846",
-      "25952993"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 695,
-        "subtype": "Essential Thrombocythemia",
-        "code": "ET",
-        "color": "LightSalmon",
-        "mainType": "Myeloproliferative Neoplasms",
-        "level": 4,
-        "tissue": "Myeloid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "excludedCancerTypes":
-    [],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 7157,
-        "hugoSymbol": "TP53",
-        "oncogene": false,
-        "grch37Isoform": "ENST00000269305",
-        "grch37RefSeq": "NM_000546.5",
-        "grch38Isoform": "ENST00000269305",
-        "grch38RefSeq": "NM_000546.5",
-        "geneAliases":
-        [
-          "LFS1",
-          "p53"
-        ],
-        "genesets":
-        [],
-        "tsg": true
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Oncogenic Mutations",
-      "name": "Oncogenic Mutations",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
-    },
-    "level": "Px1",
-    "fdaLevel": null,
-    "drug":
-    [],
-    "drugPmids":
-    [
-      "29296692",
-      "22887079",
-      "24478400"
+      "23243274",
+      "24004666",
+      "20697090",
+      "19188171",
+      "24652989"
     ],
     "drugAbstracts":
     []
   },
   {
     "oncogenic": "Likely Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 9680348, 18337559, 17209057 Abstract: Hofste op Bruinink, D. et al. Abstract# Blood 128:3271, 2017. http://www.bloodjournal.org/content/128/22/3271?sso-checked=true; http://www.bloodjournal.org/content/122/21/1846).",
     "cancerTypes":
     [
       {
@@ -482,6 +353,7 @@
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 22186996, 18596741).",
     "cancerTypes":
     [
       {
@@ -549,6 +421,221 @@
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 22887079, 29296692, 24478400).",
+    "cancerTypes":
+    [
+      {
+        "id": 695,
+        "subtype": "Essential Thrombocythemia",
+        "code": "ET",
+        "color": "LightSalmon",
+        "mainType": "Myeloproliferative Neoplasms",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 7157,
+        "hugoSymbol": "TP53",
+        "oncogene": false,
+        "grch37Isoform": "ENST00000269305",
+        "grch37RefSeq": "NM_000546.5",
+        "grch38Isoform": "ENST00000269305",
+        "grch38RefSeq": "NM_000546.5",
+        "geneAliases":
+        [
+          "LFS1",
+          "p53"
+        ],
+        "genesets":
+        [],
+        "tsg": true
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations",
+      "name": "Oncogenic Mutations",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "Px1",
+    "fdaLevel": null,
+    "drug":
+    [],
+    "drugPmids":
+    [
+      "29296692",
+      "22887079",
+      "24478400"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 24220272, 21714648, 25092778).",
+    "cancerTypes":
+    [
+      {
+        "id": 355,
+        "subtype": "Myelodysplastic Syndromes",
+        "code": "MDS",
+        "color": "LightSalmon",
+        "mainType": "Myelodysplastic Syndromes",
+        "level": 3,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 7157,
+        "hugoSymbol": "TP53",
+        "oncogene": false,
+        "grch37Isoform": "ENST00000269305",
+        "grch37RefSeq": "NM_000546.5",
+        "grch38Isoform": "ENST00000269305",
+        "grch38RefSeq": "NM_000546.5",
+        "geneAliases":
+        [
+          "LFS1",
+          "p53"
+        ],
+        "genesets":
+        [],
+        "tsg": true
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations",
+      "name": "Oncogenic Mutations",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "Px1",
+    "fdaLevel": null,
+    "drug":
+    [],
+    "drugPmids":
+    [
+      "24220272",
+      "25092778",
+      "21714648"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "PC14586 is an orally available, small-molecule structural corrector specific for the Y220C-mutant p53 protein. In a phase I study of PC14586 in 29 patients with advanced solid tumors harboring a TP53 Y220C mutation, one patient with small cell lung cancer and one patient with breast cancer each had a partial response to treatment (Abstract: Dumbrava et al. Abstract# 3003, ASCO 2022. https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.3003). In vivo xenograft studies with TP53 Y220C-mutant gastric cancer cell line NUGC3 and Y220C-mutant patient-derived xenografts demonstrated sensitivity to PC14586 treatment as measured by dose-dependent tumor shrinkage and conversion of TP53 Y220C to the wildtype conformation (Abstract: Dumble et al. Abstract# LB006, AACR 2021. https://aacrjournals.org/cancerres/article/81/13_Supplement/LB006/669897/Abstract-LB006-PC14586-The-first-orally).",
+    "cancerTypes":
+    [
+      {
+        "id": 984,
+        "subtype": "",
+        "code": "",
+        "color": "",
+        "mainType": "All Solid Tumors",
+        "level": -1,
+        "tissue": "",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 7157,
+        "hugoSymbol": "TP53",
+        "oncogene": false,
+        "grch37Isoform": "ENST00000269305",
+        "grch37RefSeq": "NM_000546.5",
+        "grch38Isoform": "ENST00000269305",
+        "grch38RefSeq": "NM_000546.5",
+        "geneAliases":
+        [
+          "LFS1",
+          "p53"
+        ],
+        "genesets":
+        [],
+        "tsg": true
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "Y220C",
+      "name": "Y220C",
+      "refResidues": "Y",
+      "proteinStart": 220,
+      "proteinEnd": 220,
+      "variantResidues": "C",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "3A",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "PC14586"
+    ],
+    "drugPmids":
+    [],
+    "drugAbstracts":
+    [
+      {
+        "link": "https://aacrjournals.org/cancerres/article/81/13_Supplement/LB006/669897/Abstract-LB006-PC14586-The-first-orally",
+        "abstract": "Dumble et al. Abstract# LB006, AACR 2021"
+      },
+      {
+        "link": "https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.16_suppl.3003",
+        "abstract": "Dumbrava et al. Abstract# 3003, ASCO 2022"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 22887079, 25516983, 22052707).",
     "cancerTypes":
     [
       {
@@ -617,16 +704,17 @@
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 22887079, 25516983, 22052707).",
     "cancerTypes":
     [
       {
-        "id": 533,
-        "subtype": "Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma",
-        "code": "CLLSLL",
-        "color": "LimeGreen",
-        "mainType": "Mature B-Cell Neoplasms",
-        "level": 5,
-        "tissue": "Lymphoid",
+        "id": 185,
+        "subtype": "Myeloproliferative Neoplasms",
+        "code": "MPN",
+        "color": "LightSalmon",
+        "mainType": "Myeloproliferative Neoplasms",
+        "level": 3,
+        "tissue": "Myeloid",
         "tumorForm": "LIQUID"
       }
     ],
@@ -676,11 +764,9 @@
     [],
     "drugPmids":
     [
-      "23243274",
-      "24004666",
-      "20697090",
-      "19188171",
-      "24652989"
+      "22887079",
+      "25516983",
+      "22052707"
     ],
     "drugAbstracts":
     []

@@ -1,583 +1,583 @@
 {
-    "query":
+  "query":
+  {
+    "id": null,
+    "referenceGenome": "GRCh37",
+    "hugoSymbol": "BRAF",
+    "entrezGeneId": 673,
+    "alteration": "V600E",
+    "alterationType": "MUTATION",
+    "svType": null,
+    "tumorType": "HCL",
+    "consequence": "missense_variant",
+    "proteinStart": 600,
+    "proteinEnd": 600,
+    "hgvs": null
+  },
+  "geneExist": true,
+  "variantExist": true,
+  "alleleExist": true,
+  "oncogenic": "Oncogenic",
+  "mutationEffect":
+  {
+    "knownEffect": "Gain-of-function",
+    "description": "The class I activating exon 15 BRAF V600E mutation is located in the kinase domain of the BRAF protein and is highly recurrent in melanoma, lung and thyroid cancer, among others (PMID: 28783719, 26091043, 25079552, 23833300, 25417114, 28783719, 12068308). This mutation has been comprehensively biologically characterized and has been shown to activate the downstream MAPK pathway independent of RAS (PMID: 15035987, 12068308, 19251651, 26343582), to render BRAF constitutively activated in monomeric form (PMID: 20179705), and to retain sensitivity to RAF monomer inhibitors such as vemurafenib and dabrafenib (PMID:26343582, 28783719, 20179705, 30351999).",
+    "citations":
     {
-        "id": null,
-        "referenceGenome": "GRCh37",
-        "hugoSymbol": "BRAF",
-        "entrezGeneId": 673,
-        "alteration": "V600E",
-        "alterationType": "MUTATION",
-        "svType": null,
-        "tumorType": "HCL",
-        "consequence": "missense_variant",
-        "proteinStart": 600,
-        "proteinEnd": 600,
-        "hgvs": null
-    },
-    "geneExist": true,
-    "variantExist": true,
-    "alleleExist": true,
-    "oncogenic": "Oncogenic",
-    "mutationEffect":
+      "pmids":
+      [
+        "25417114",
+        "20179705",
+        "23833300",
+        "26091043",
+        "26343582",
+        "12068308",
+        "30351999",
+        "25079552",
+        "28783719",
+        "19251651",
+        "15035987"
+      ],
+      "abstracts":
+      []
+    }
+  },
+  "highestSensitiveLevel": "LEVEL_2",
+  "highestResistanceLevel": null,
+  "highestDiagnosticImplicationLevel": "LEVEL_Dx2",
+  "highestPrognosticImplicationLevel": null,
+  "highestFdaLevel": "LEVEL_Fda2",
+  "otherSignificantSensitiveLevels":
+  [],
+  "otherSignificantResistanceLevels":
+  [],
+  "hotspot": true,
+  "geneSummary": "BRAF, an intracellular kinase, is frequently mutated in melanoma, thyroid and lung cancers among others.",
+  "variantSummary": "The BRAF V600E mutation is known to be oncogenic.",
+  "tumorTypeSummary": "The RAF-targeted inhibitor vemurafenib is NCCN-compendium listed for the treatment of patients with relapsed or refractory BRAF V600E-mutant hairy cell leukemia.",
+  "prognosticSummary": "",
+  "diagnosticSummary": "The presence of a BRAF V600E mutation strongly supports a diagnosis of hairy cell leukemia.",
+  "diagnosticImplications":
+  [
     {
-        "knownEffect": "Gain-of-function",
-        "description": "The class I activating exon 15 BRAF V600E mutation is located in the kinase domain of the BRAF protein and is highly recurrent in melanoma, lung and thyroid cancer, among others (PMID: 28783719, 26091043, 25079552, 23833300, 25417114, 28783719, 12068308). This mutation has been comprehensively biologically characterized and has been shown to activate the downstream MAPK pathway independent of RAS (PMID: 15035987, 12068308, 19251651, 26343582), to render BRAF constitutively activated in monomeric form (PMID: 20179705), and to retain sensitivity to RAF monomer inhibitors such as vemurafenib and dabrafenib (PMID:26343582, 28783719, 20179705, 30351999).",
-        "citations":
+      "levelOfEvidence": "LEVEL_Dx2",
+      "alterations":
+      [
+        "V600E"
+      ],
+      "tumorType":
+      {
+        "id": 276,
+        "code": "HCL",
+        "color": "LimeGreen",
+        "name": "Hairy Cell Leukemia",
+        "mainType":
         {
-            "pmids":
-            [
-                "25417114",
-                "20179705",
-                "23833300",
-                "26091043",
-                "26343582",
-                "12068308",
-                "30351999",
-                "25079552",
-                "28783719",
-                "19251651",
-                "15035987"
-            ],
-            "abstracts":
-            []
+          "id": null,
+          "name": "Mature B-Cell Neoplasms",
+          "tumorForm": "LIQUID"
+        },
+        "tissue": "Lymphoid",
+        "children":
+        {},
+        "parent": "MBN",
+        "level": 5,
+        "tumorForm": "LIQUID"
+      },
+      "pmids":
+      [
+        "23347903",
+        "25480661",
+        "22072557",
+        "21910720",
+        "22210875",
+        "25120816",
+        "22028477",
+        "21663470",
+        "26071465",
+        "22531170"
+      ],
+      "abstracts":
+      [],
+      "description": "This assertion is supported by (PMID: 21663470, 25480661, 22072557, 22028477, 21910720, 22531170, 22210875, 23347903, 25120816, 26071465)."
+    }
+  ],
+  "prognosticImplications":
+  [],
+  "treatments":
+  [
+    {
+      "alterations":
+      [
+        "V600E"
+      ],
+      "drugs":
+      [
+        {
+          "ncitCode": "C64768",
+          "drugName": "Vemurafenib",
+          "uuid": "4e91da20-6cf0-4e07-995f-7f7db4c7c077",
+          "synonyms":
+          [
+            "Vemurafenib",
+            "BRAF(V600E) Kinase Inhibitor RO5185426",
+            "RO 5185426",
+            "PLX4032",
+            "PLX-4032",
+            "1-propanesulfonamide, n-(3-((5-(4-chlorophenyl)-1h-pyrrolo(2,3-b)pyridin-3-yl)carbonyl)-2,4-difluorophenyl)-",
+            "RG 7204",
+            "Zelboraf",
+            "BRAF (V600E) kinase inhibitor RO5185426",
+            "RG7204",
+            "VEMURAFENIB"
+          ]
         }
-    },
-    "highestSensitiveLevel": "LEVEL_2",
-    "highestResistanceLevel": null,
-    "highestDiagnosticImplicationLevel": "LEVEL_Dx2",
-    "highestPrognosticImplicationLevel": null,
-    "highestFdaLevel": "LEVEL_Fda2",
-    "otherSignificantSensitiveLevels":
-    [],
-    "otherSignificantResistanceLevels":
-    [],
-    "hotspot": true,
-    "geneSummary": "BRAF, an intracellular kinase, is frequently mutated in melanoma, thyroid and lung cancers among others.",
-    "variantSummary": "The BRAF V600E mutation is known to be oncogenic.",
-    "tumorTypeSummary": "The RAF-targeted inhibitor vemurafenib is NCCN-compendium listed for the treatment of patients with relapsed or refractory BRAF V600E-mutant hairy cell leukemia.",
-    "prognosticSummary": "",
-    "diagnosticSummary": "The presence of a BRAF V600E mutation strongly supports a diagnosis of hairy cell leukemia.",
-    "diagnosticImplications":
-    [
+      ],
+      "approvedIndications":
+      [],
+      "level": "LEVEL_2",
+      "fdaLevel": "LEVEL_Fda2",
+      "levelAssociatedCancerType":
+      {
+        "id": 276,
+        "code": "HCL",
+        "color": "LimeGreen",
+        "name": "Hairy Cell Leukemia",
+        "mainType":
         {
-            "levelOfEvidence": "LEVEL_Dx2",
-            "alterations":
-            [
-                "V600E"
-            ],
-            "tumorType":
+          "id": null,
+          "name": "Mature B-Cell Neoplasms",
+          "tumorForm": "LIQUID"
+        },
+        "tissue": "Lymphoid",
+        "children":
+        {},
+        "parent": "MBN",
+        "level": 5,
+        "tumorForm": "LIQUID"
+      },
+      "levelExcludedCancerTypes":
+      [],
+      "pmids":
+      [
+        "26352686"
+      ],
+      "abstracts":
+      [],
+      "description": "Vemurafenib is an orally available kinse inhibitor of V600-mutant BRAF that is FDA-approved for treatment of patients with various BRAF V600-harboring tumors, including melanoma and Edheim-Chester Disease (ECD). Vemurafenib is listed as a 2A therapeutic in the NCCN guidelines for Hairy Cell Leukemia (HCL) based on data from two Phase II trials. In one study of vemurafenib in patients with BRAF V600E-mutant HCL (n=24), the overall response rate was 100%, with 42% of patients (10 of 24) having complete responses, with a response duration of 11.7 months and one year progression free and overall survival rates of 73% and 91%, repectively (PMID: 26352686). In another study of vemurafenib in patients with BRAF V600E-mutant HCL (n=26), the overall response rate was 96%, with 35% of patients (9 of 26) having complete responses (PMID: 26352686)."
+    }
+  ],
+  "dataVersion": "V4.3",
+  "lastUpdate": "02/15/2023",
+  "background": "BRAF is a serine/threonine kinase that plays a key role in the regulation of the mitogen-activated protein kinase (MAPK) cascade (PMID: 15520807), which under physiologic conditions regulates the expression of genes involved in cellular functions, including proliferation (PMID: 24202393). Genetic alterations in BRAF are found in a large percentage of melanomas, thyroid cancers and histiocytic neoplasms as well as a small fraction of lung and colorectal cancers. The most common BRAF point mutation is V600E, which deregulates the protein's kinase activity leading to constitutive BRAF activation, as BRAF V600E can signal as a monomer independently of RAS or upstream activation (PMID: 20179705). Other BRAF mutations have been found that affect the protein's propensity to dimerize (PMID: 16858395, 26343582, 12068308). The product of these alterations is a BRAF kinase that can activate MAPK signaling in an unregulated manner and, in some instances, is directly responsible for cancer growth (PMID: 15520807). Inhibitors of mutant BRAF, including vemurafenib and dabrafenib, are FDA-approved for the treatment of late-stage or unresectable melanoma.",
+  "tumorTypes":
+  [
+    {
+      "relevantTumorType": true,
+      "tumorType":
+      {
+        "id": 276,
+        "subtype": "Hairy Cell Leukemia",
+        "code": "HCL",
+        "color": "LimeGreen",
+        "mainType": "Mature B-Cell Neoplasms",
+        "level": 5,
+        "tissue": "Lymphoid",
+        "tumorForm": "LIQUID"
+      },
+      "evidences":
+      [
+        {
+          "id": 2149,
+          "uuid": "565e1375-b008-47ab-9b14-5807616072fb",
+          "evidenceType": "DIAGNOSTIC_IMPLICATION",
+          "cancerTypes":
+          [
             {
-                "id": 276,
-                "code": "HCL",
-                "color": "LimeGreen",
-                "name": "Hairy Cell Leukemia",
-                "mainType":
-                {
-                    "id": null,
-                    "name": "Mature B-Cell Neoplasms",
-                    "tumorForm": "LIQUID"
-                },
-                "tissue": "Lymphoid",
-                "children":
-                {},
-                "parent": "MBN",
-                "level": 5,
-                "tumorForm": "LIQUID"
-            },
-            "pmids":
+              "id": 276,
+              "subtype": "Hairy Cell Leukemia",
+              "code": "HCL",
+              "color": "LimeGreen",
+              "mainType": "Mature B-Cell Neoplasms",
+              "level": 5,
+              "tissue": "Lymphoid",
+              "tumorForm": "LIQUID"
+            }
+          ],
+          "excludedCancerTypes":
+          [],
+          "relevantCancerTypes":
+          [
+            {
+              "id": 276,
+              "subtype": "Hairy Cell Leukemia",
+              "code": "HCL",
+              "color": "LimeGreen",
+              "mainType": "Mature B-Cell Neoplasms",
+              "level": 5,
+              "tissue": "Lymphoid",
+              "tumorForm": "LIQUID"
+            }
+          ],
+          "gene":
+          {
+            "entrezGeneId": 673,
+            "hugoSymbol": "BRAF",
+            "oncogene": true,
+            "grch37Isoform": "ENST00000288602",
+            "grch37RefSeq": "NM_004333.4",
+            "grch38Isoform": "ENST00000646891",
+            "grch38RefSeq": "NM_004333.4",
+            "geneAliases":
             [
-                "23347903",
-                "25480661",
-                "22072557",
-                "21910720",
-                "22210875",
-                "25120816",
-                "22028477",
-                "21663470",
-                "26071465",
-                "22531170"
+              "BRAF1"
             ],
-            "abstracts":
+            "genesets":
             [],
-            "description": ""
-        }
-    ],
-    "prognosticImplications":
-    [],
-    "treatments":
-    [
+            "tsg": false
+          },
+          "alterations":
+          [
+            {
+              "gene":
+              {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "NM_004333.4",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "NM_004333.4",
+                "geneAliases":
+                [
+                  "BRAF1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+              },
+              "consequence":
+              {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+              },
+              "alteration": "V600E",
+              "name": "V600E",
+              "refResidues": "V",
+              "proteinStart": 600,
+              "proteinEnd": 600,
+              "variantResidues": "E",
+              "referenceGenomes":
+              [
+                "GRCh38",
+                "GRCh37"
+              ]
+            }
+          ],
+          "description": "This assertion is supported by (PMID: 21663470, 25480661, 22072557, 22028477, 21910720, 22531170, 22210875, 23347903, 25120816, 26071465).",
+          "additionalInfo": null,
+          "treatments":
+          [],
+          "knownEffect": null,
+          "lastEdit": 1600293135000,
+          "lastReview": null,
+          "levelOfEvidence": "LEVEL_Dx2",
+          "fdaLevel": null,
+          "solidPropagationLevel": null,
+          "liquidPropagationLevel": null,
+          "articles":
+          [
+            {
+              "pmid": "25480661",
+              "title": "BRAF inhibitors reverse the unique molecular signature and phenotype of hairy cell leukemia and exert potent antileukemic activity.",
+              "journal": "Blood",
+              "pubDate": "2015 Feb 19",
+              "volume": "125",
+              "issue": "8",
+              "pages": "1207-16",
+              "authors": "Pettirossi V et al",
+              "elocationId": "doi: 10.1182/blood-2014-10-603100",
+              "link": null,
+              "reference": "Pettirossi V et al. Blood. 2015 Feb 19;125(8)1207-16.",
+              "abstract": null
+            },
+            {
+              "pmid": "26071465",
+              "title": "Immunohistochemistry for BRAF V600E in the Differential Diagnosis of Hairy Cell Leukemia vs Other Splenic B-Cell Lymphomas.",
+              "journal": "American journal of clinical pathology",
+              "pubDate": "2015 Jul",
+              "volume": "144",
+              "issue": "1",
+              "pages": "87-93",
+              "authors": "Turakhia S et al",
+              "elocationId": "doi: 10.1309/AJCP5WVXJ2KTLODO",
+              "link": null,
+              "reference": "Turakhia S et al. American journal of clinical pathology. 2015 Jul;144(1)87-93.",
+              "abstract": null
+            },
+            {
+              "pmid": "22531170",
+              "title": "Application of a BRAF V600E mutation-specific antibody for the diagnosis of hairy cell leukemia.",
+              "journal": "The American journal of surgical pathology",
+              "pubDate": "2012 Dec",
+              "volume": "36",
+              "issue": "12",
+              "pages": "1796-800",
+              "authors": "Andrulis M et al",
+              "elocationId": "doi: 10.1097/PAS.0b013e3182549b50",
+              "link": null,
+              "reference": "Andrulis M et al. The American journal of surgical pathology. 2012 Dec;36(12)1796-800.",
+              "abstract": null
+            },
+            {
+              "pmid": "22028477",
+              "title": "Simple genetic diagnosis of hairy cell leukemia by sensitive detection of the BRAF-V600E mutation.",
+              "journal": "Blood",
+              "pubDate": "2012 Jan 5",
+              "volume": "119",
+              "issue": "1",
+              "pages": "192-5",
+              "authors": "Tiacci E et al",
+              "elocationId": "doi: 10.1182/blood-2011-08-371179",
+              "link": null,
+              "reference": "Tiacci E et al. Blood. 2012 Jan 5;119(1)192-5.",
+              "abstract": null
+            },
+            {
+              "pmid": "22210875",
+              "title": "Both variant and IGHV4-34-expressing hairy cell leukemia lack the BRAF V600E mutation.",
+              "journal": "Blood",
+              "pubDate": "2012 Apr 5",
+              "volume": "119",
+              "issue": "14",
+              "pages": "3330-2",
+              "authors": "Xi L et al",
+              "elocationId": "doi: 10.1182/blood-2011-09-379339",
+              "link": null,
+              "reference": "Xi L et al. Blood. 2012 Apr 5;119(14)3330-2.",
+              "abstract": null
+            },
+            {
+              "pmid": "22072557",
+              "title": "The BRAF V600E mutation in hairy cell leukemia and other mature B-cell neoplasms.",
+              "journal": "Blood",
+              "pubDate": "2012 Jan 5",
+              "volume": "119",
+              "issue": "1",
+              "pages": "188-91",
+              "authors": "Arcaini L et al",
+              "elocationId": "doi: 10.1182/blood-2011-08-368209",
+              "link": null,
+              "reference": "Arcaini L et al. Blood. 2012 Jan 5;119(1)188-91.",
+              "abstract": null
+            },
+            {
+              "pmid": "21910720",
+              "title": "High resolution melting analysis for detection of BRAF exon 15 mutations in hairy cell leukaemia and other lymphoid malignancies.",
+              "journal": "British journal of haematology",
+              "pubDate": "2011 Dec",
+              "volume": "155",
+              "issue": "5",
+              "pages": "609-12",
+              "authors": "Boyd EM et al",
+              "elocationId": "doi: 10.1111/j.1365-2141.2011.08868.x",
+              "link": null,
+              "reference": "Boyd EM et al. British journal of haematology. 2011 Dec;155(5)609-12.",
+              "abstract": null
+            },
+            {
+              "pmid": "23347903",
+              "title": "Distinguishing hairy cell leukemia variant from hairy cell leukemia: development and validation of diagnostic criteria.",
+              "journal": "Leukemia research",
+              "pubDate": "2013 Apr",
+              "volume": "37",
+              "issue": "4",
+              "pages": "401-409",
+              "authors": "Shao H et al",
+              "elocationId": "doi: 10.1016/j.leukres.2012.11.021",
+              "link": null,
+              "reference": "Shao H et al. Leukemia research. 2013 Apr;37(4)401-409.",
+              "abstract": null
+            },
+            {
+              "pmid": "21663470",
+              "title": "BRAF mutations in hairy-cell leukemia.",
+              "journal": "The New England journal of medicine",
+              "pubDate": "2011 Jun 16",
+              "volume": "364",
+              "issue": "24",
+              "pages": "2305-15",
+              "authors": "Tiacci E et al",
+              "elocationId": "doi: 10.1056/NEJMoa1014209",
+              "link": null,
+              "reference": "Tiacci E et al. The New England journal of medicine. 2011 Jun 16;364(24)2305-15.",
+              "abstract": null
+            },
+            {
+              "pmid": "25120816",
+              "title": "Immunohistochemical analysis using a BRAF V600E mutation specific antibody is highly sensitive and specific for the diagnosis of hairy cell leukemia.",
+              "journal": "International journal of clinical and experimental pathology",
+              "pubDate": "2014",
+              "volume": "7",
+              "issue": "7",
+              "pages": "4323-8",
+              "authors": "Wang XJ et al",
+              "elocationId": "",
+              "link": null,
+              "reference": "Wang XJ et al. International journal of clinical and experimental pathology. 2014;7(7)4323-8.",
+              "abstract": null
+            }
+          ]
+        },
         {
-            "alterations":
+          "id": 2151,
+          "uuid": "4e56b02d-394e-4397-9465-a3cc2c5026cd",
+          "evidenceType": "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
+          "cancerTypes":
+          [
+            {
+              "id": 276,
+              "subtype": "Hairy Cell Leukemia",
+              "code": "HCL",
+              "color": "LimeGreen",
+              "mainType": "Mature B-Cell Neoplasms",
+              "level": 5,
+              "tissue": "Lymphoid",
+              "tumorForm": "LIQUID"
+            }
+          ],
+          "excludedCancerTypes":
+          [],
+          "relevantCancerTypes":
+          [
+            {
+              "id": 276,
+              "subtype": "Hairy Cell Leukemia",
+              "code": "HCL",
+              "color": "LimeGreen",
+              "mainType": "Mature B-Cell Neoplasms",
+              "level": 5,
+              "tissue": "Lymphoid",
+              "tumorForm": "LIQUID"
+            }
+          ],
+          "gene":
+          {
+            "entrezGeneId": 673,
+            "hugoSymbol": "BRAF",
+            "oncogene": true,
+            "grch37Isoform": "ENST00000288602",
+            "grch37RefSeq": "NM_004333.4",
+            "grch38Isoform": "ENST00000646891",
+            "grch38RefSeq": "NM_004333.4",
+            "geneAliases":
             [
-                "V600E"
+              "BRAF1"
             ],
-            "drugs":
-            [
+            "genesets":
+            [],
+            "tsg": false
+          },
+          "alterations":
+          [
+            {
+              "gene":
+              {
+                "entrezGeneId": 673,
+                "hugoSymbol": "BRAF",
+                "oncogene": true,
+                "grch37Isoform": "ENST00000288602",
+                "grch37RefSeq": "NM_004333.4",
+                "grch38Isoform": "ENST00000646891",
+                "grch38RefSeq": "NM_004333.4",
+                "geneAliases":
+                [
+                  "BRAF1"
+                ],
+                "genesets":
+                [],
+                "tsg": false
+              },
+              "consequence":
+              {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+              },
+              "alteration": "V600E",
+              "name": "V600E",
+              "refResidues": "V",
+              "proteinStart": 600,
+              "proteinEnd": 600,
+              "variantResidues": "E",
+              "referenceGenomes":
+              [
+                "GRCh38",
+                "GRCh37"
+              ]
+            }
+          ],
+          "description": "Vemurafenib is an orally available kinse inhibitor of V600-mutant BRAF that is FDA-approved for treatment of patients with various BRAF V600-harboring tumors, including melanoma and Edheim-Chester Disease (ECD). Vemurafenib is listed as a 2A therapeutic in the NCCN guidelines for Hairy Cell Leukemia (HCL) based on data from two Phase II trials. In one study of vemurafenib in patients with BRAF V600E-mutant HCL (n=24), the overall response rate was 100%, with 42% of patients (10 of 24) having complete responses, with a response duration of 11.7 months and one year progression free and overall survival rates of 73% and 91%, repectively (PMID: 26352686). In another study of vemurafenib in patients with BRAF V600E-mutant HCL (n=26), the overall response rate was 96%, with 35% of patients (9 of 26) having complete responses (PMID: 26352686).",
+          "additionalInfo": null,
+          "treatments":
+          [
+            {
+              "approvedIndications":
+              [],
+              "priority": 1,
+              "drugs":
+              [
                 {
-                    "ncitCode": "C64768",
-                    "drugName": "Vemurafenib",
-                    "uuid": "4e91da20-6cf0-4e07-995f-7f7db4c7c077",
-                    "synonyms":
-                    [
-                        "Vemurafenib",
-                        "BRAF(V600E) Kinase Inhibitor RO5185426",
-                        "RO 5185426",
-                        "PLX4032",
-                        "PLX-4032",
-                        "1-propanesulfonamide, n-(3-((5-(4-chlorophenyl)-1h-pyrrolo(2,3-b)pyridin-3-yl)carbonyl)-2,4-difluorophenyl)-",
-                        "RG 7204",
-                        "Zelboraf",
-                        "BRAF (V600E) kinase inhibitor RO5185426",
-                        "RG7204",
-                        "VEMURAFENIB"
-                    ]
+                  "ncitCode": "C64768",
+                  "drugName": "Vemurafenib",
+                  "uuid": "4e91da20-6cf0-4e07-995f-7f7db4c7c077",
+                  "synonyms":
+                  [
+                    "Vemurafenib",
+                    "BRAF(V600E) Kinase Inhibitor RO5185426",
+                    "RO 5185426",
+                    "PLX4032",
+                    "PLX-4032",
+                    "1-propanesulfonamide, n-(3-((5-(4-chlorophenyl)-1h-pyrrolo(2,3-b)pyridin-3-yl)carbonyl)-2,4-difluorophenyl)-",
+                    "RG 7204",
+                    "Zelboraf",
+                    "BRAF (V600E) kinase inhibitor RO5185426",
+                    "RG7204",
+                    "VEMURAFENIB"
+                  ],
+                  "priority": 1
                 }
-            ],
-            "approvedIndications":
-            [],
-            "level": "LEVEL_2",
-            "fdaLevel": "LEVEL_Fda2",
-            "levelAssociatedCancerType":
+              ]
+            }
+          ],
+          "knownEffect": "Sensitive",
+          "lastEdit": 1676497200000,
+          "lastReview": null,
+          "levelOfEvidence": "LEVEL_2",
+          "fdaLevel": "LEVEL_Fda2",
+          "solidPropagationLevel": "LEVEL_3B",
+          "liquidPropagationLevel": "NO",
+          "articles":
+          [
             {
-                "id": 276,
-                "code": "HCL",
-                "color": "LimeGreen",
-                "name": "Hairy Cell Leukemia",
-                "mainType":
-                {
-                    "id": null,
-                    "name": "Mature B-Cell Neoplasms",
-                    "tumorForm": "LIQUID"
-                },
-                "tissue": "Lymphoid",
-                "children":
-                {},
-                "parent": "MBN",
-                "level": 5,
-                "tumorForm": "LIQUID"
-            },
-            "levelExcludedCancerTypes":
-            [],
-            "pmids":
-            [
-                "26352686"
-            ],
-            "abstracts":
-            [],
-            "description": ""
+              "pmid": "26352686",
+              "title": "Targeting Mutant BRAF in Relapsed or Refractory Hairy-Cell Leukemia.",
+              "journal": "The New England journal of medicine",
+              "pubDate": "2015 Oct 29",
+              "volume": "373",
+              "issue": "18",
+              "pages": "1733-47",
+              "authors": "Tiacci E et al",
+              "elocationId": "doi: 10.1056/NEJMoa1506583",
+              "link": null,
+              "reference": "Tiacci E et al. The New England journal of medicine. 2015 Oct 29;373(18)1733-47.",
+              "abstract": null
+            }
+          ]
         }
-    ],
-    "dataVersion": "v4.0",
-    "lastUpdate": "10/17/2022",
-    "background": "BRAF is a serine/threonine kinase that plays a key role in the regulation of the mitogen-activated protein kinase (MAPK) cascade (PMID: 15520807), which under physiologic conditions regulates the expression of genes involved in cellular functions, including proliferation (PMID: 24202393). Genetic alterations in BRAF are found in a large percentage of melanomas, thyroid cancers and histiocytic neoplasms as well as a small fraction of lung and colorectal cancers. The most common BRAF point mutation is V600E, which deregulates the protein's kinase activity leading to constitutive BRAF activation, as BRAF V600E can signal as a monomer independently of RAS or upstream activation (PMID: 20179705). Other BRAF mutations have been found that affect the protein's propensity to dimerize (PMID: 16858395, 26343582, 12068308). The product of these alterations is a BRAF kinase that can activate MAPK signaling in an unregulated manner and, in some instances, is directly responsible for cancer growth (PMID: 15520807). Inhibitors of mutant BRAF, including vemurafenib and dabrafenib, are FDA-approved for the treatment of late-stage or unresectable melanoma.",
-    "tumorTypes":
-    [
-        {
-            "relevantTumorType": true,
-            "tumorType":
-            {
-                "id": 276,
-                "subtype": "Hairy Cell Leukemia",
-                "code": "HCL",
-                "color": "LimeGreen",
-                "mainType": "Mature B-Cell Neoplasms",
-                "level": 5,
-                "tissue": "Lymphoid",
-                "tumorForm": "LIQUID"
-            },
-            "evidences":
-            [
-                {
-                    "id": 2102,
-                    "uuid": "565e1375-b008-47ab-9b14-5807616072fb",
-                    "evidenceType": "DIAGNOSTIC_IMPLICATION",
-                    "cancerTypes":
-                    [
-                        {
-                            "id": 276,
-                            "subtype": "Hairy Cell Leukemia",
-                            "code": "HCL",
-                            "color": "LimeGreen",
-                            "mainType": "Mature B-Cell Neoplasms",
-                            "level": 5,
-                            "tissue": "Lymphoid",
-                            "tumorForm": "LIQUID"
-                        }
-                    ],
-                    "excludedCancerTypes":
-                    [],
-                    "relevantCancerTypes":
-                    [
-                        {
-                            "id": 276,
-                            "subtype": "Hairy Cell Leukemia",
-                            "code": "HCL",
-                            "color": "LimeGreen",
-                            "mainType": "Mature B-Cell Neoplasms",
-                            "level": 5,
-                            "tissue": "Lymphoid",
-                            "tumorForm": "LIQUID"
-                        }
-                    ],
-                    "gene":
-                    {
-                        "entrezGeneId": 673,
-                        "hugoSymbol": "BRAF",
-                        "oncogene": true,
-                        "grch37Isoform": "ENST00000288602",
-                        "grch37RefSeq": "NM_004333.4",
-                        "grch38Isoform": "ENST00000646891",
-                        "grch38RefSeq": "NM_004333.4",
-                        "geneAliases":
-                        [
-                            "BRAF1"
-                        ],
-                        "genesets":
-                        [],
-                        "tsg": false
-                    },
-                    "alterations":
-                    [
-                        {
-                            "gene":
-                            {
-                                "entrezGeneId": 673,
-                                "hugoSymbol": "BRAF",
-                                "oncogene": true,
-                                "grch37Isoform": "ENST00000288602",
-                                "grch37RefSeq": "NM_004333.4",
-                                "grch38Isoform": "ENST00000646891",
-                                "grch38RefSeq": "NM_004333.4",
-                                "geneAliases":
-                                [
-                                    "BRAF1"
-                                ],
-                                "genesets":
-                                [],
-                                "tsg": false
-                            },
-                            "consequence":
-                            {
-                                "term": "missense_variant",
-                                "isGenerallyTruncating": false,
-                                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-                            },
-                            "alteration": "V600E",
-                            "name": "V600E",
-                            "refResidues": "V",
-                            "proteinStart": 600,
-                            "proteinEnd": 600,
-                            "variantResidues": "E",
-                            "referenceGenomes":
-                            [
-                                "GRCh38",
-                                "GRCh37"
-                            ]
-                        }
-                    ],
-                    "description": "",
-                    "additionalInfo": null,
-                    "treatments":
-                    [],
-                    "knownEffect": null,
-                    "lastEdit": 1600278735000,
-                    "lastReview": null,
-                    "levelOfEvidence": "LEVEL_Dx2",
-                    "fdaLevel": null,
-                    "solidPropagationLevel": null,
-                    "liquidPropagationLevel": null,
-                    "articles":
-                    [
-                        {
-                            "pmid": "25480661",
-                            "title": "BRAF inhibitors reverse the unique molecular signature and phenotype of hairy cell leukemia and exert potent antileukemic activity.",
-                            "journal": "Blood",
-                            "pubDate": "2015 Feb 19",
-                            "volume": "125",
-                            "issue": "8",
-                            "pages": "1207-16",
-                            "authors": "Pettirossi V et al",
-                            "elocationId": "doi: 10.1182/blood-2014-10-603100",
-                            "link": null,
-                            "reference": "Pettirossi V et al. Blood. 2015 Feb 19;125(8)1207-16.",
-                            "abstract": null
-                        },
-                        {
-                            "pmid": "26071465",
-                            "title": "Immunohistochemistry for BRAF V600E in the Differential Diagnosis of Hairy Cell Leukemia vs Other Splenic B-Cell Lymphomas.",
-                            "journal": "American journal of clinical pathology",
-                            "pubDate": "2015 Jul",
-                            "volume": "144",
-                            "issue": "1",
-                            "pages": "87-93",
-                            "authors": "Turakhia S et al",
-                            "elocationId": "doi: 10.1309/AJCP5WVXJ2KTLODO",
-                            "link": null,
-                            "reference": "Turakhia S et al. American journal of clinical pathology. 2015 Jul;144(1)87-93.",
-                            "abstract": null
-                        },
-                        {
-                            "pmid": "22531170",
-                            "title": "Application of a BRAF V600E mutation-specific antibody for the diagnosis of hairy cell leukemia.",
-                            "journal": "The American journal of surgical pathology",
-                            "pubDate": "2012 Dec",
-                            "volume": "36",
-                            "issue": "12",
-                            "pages": "1796-800",
-                            "authors": "Andrulis M et al",
-                            "elocationId": "doi: 10.1097/PAS.0b013e3182549b50",
-                            "link": null,
-                            "reference": "Andrulis M et al. The American journal of surgical pathology. 2012 Dec;36(12)1796-800.",
-                            "abstract": null
-                        },
-                        {
-                            "pmid": "22028477",
-                            "title": "Simple genetic diagnosis of hairy cell leukemia by sensitive detection of the BRAF-V600E mutation.",
-                            "journal": "Blood",
-                            "pubDate": "2012 Jan 5",
-                            "volume": "119",
-                            "issue": "1",
-                            "pages": "192-5",
-                            "authors": "Tiacci E et al",
-                            "elocationId": "doi: 10.1182/blood-2011-08-371179",
-                            "link": null,
-                            "reference": "Tiacci E et al. Blood. 2012 Jan 5;119(1)192-5.",
-                            "abstract": null
-                        },
-                        {
-                            "pmid": "22210875",
-                            "title": "Both variant and IGHV4-34-expressing hairy cell leukemia lack the BRAF V600E mutation.",
-                            "journal": "Blood",
-                            "pubDate": "2012 Apr 5",
-                            "volume": "119",
-                            "issue": "14",
-                            "pages": "3330-2",
-                            "authors": "Xi L et al",
-                            "elocationId": "doi: 10.1182/blood-2011-09-379339",
-                            "link": null,
-                            "reference": "Xi L et al. Blood. 2012 Apr 5;119(14)3330-2.",
-                            "abstract": null
-                        },
-                        {
-                            "pmid": "22072557",
-                            "title": "The BRAF V600E mutation in hairy cell leukemia and other mature B-cell neoplasms.",
-                            "journal": "Blood",
-                            "pubDate": "2012 Jan 5",
-                            "volume": "119",
-                            "issue": "1",
-                            "pages": "188-91",
-                            "authors": "Arcaini L et al",
-                            "elocationId": "doi: 10.1182/blood-2011-08-368209",
-                            "link": null,
-                            "reference": "Arcaini L et al. Blood. 2012 Jan 5;119(1)188-91.",
-                            "abstract": null
-                        },
-                        {
-                            "pmid": "21910720",
-                            "title": "High resolution melting analysis for detection of BRAF exon 15 mutations in hairy cell leukaemia and other lymphoid malignancies.",
-                            "journal": "British journal of haematology",
-                            "pubDate": "2011 Dec",
-                            "volume": "155",
-                            "issue": "5",
-                            "pages": "609-12",
-                            "authors": "Boyd EM et al",
-                            "elocationId": "doi: 10.1111/j.1365-2141.2011.08868.x",
-                            "link": null,
-                            "reference": "Boyd EM et al. British journal of haematology. 2011 Dec;155(5)609-12.",
-                            "abstract": null
-                        },
-                        {
-                            "pmid": "23347903",
-                            "title": "Distinguishing hairy cell leukemia variant from hairy cell leukemia: development and validation of diagnostic criteria.",
-                            "journal": "Leukemia research",
-                            "pubDate": "2013 Apr",
-                            "volume": "37",
-                            "issue": "4",
-                            "pages": "401-409",
-                            "authors": "Shao H et al",
-                            "elocationId": "doi: 10.1016/j.leukres.2012.11.021",
-                            "link": null,
-                            "reference": "Shao H et al. Leukemia research. 2013 Apr;37(4)401-409.",
-                            "abstract": null
-                        },
-                        {
-                            "pmid": "21663470",
-                            "title": "BRAF mutations in hairy-cell leukemia.",
-                            "journal": "The New England journal of medicine",
-                            "pubDate": "2011 Jun 16",
-                            "volume": "364",
-                            "issue": "24",
-                            "pages": "2305-15",
-                            "authors": "Tiacci E et al",
-                            "elocationId": "doi: 10.1056/NEJMoa1014209",
-                            "link": null,
-                            "reference": "Tiacci E et al. The New England journal of medicine. 2011 Jun 16;364(24)2305-15.",
-                            "abstract": null
-                        },
-                        {
-                            "pmid": "25120816",
-                            "title": "Immunohistochemical analysis using a BRAF V600E mutation specific antibody is highly sensitive and specific for the diagnosis of hairy cell leukemia.",
-                            "journal": "International journal of clinical and experimental pathology",
-                            "pubDate": "2014",
-                            "volume": "7",
-                            "issue": "7",
-                            "pages": "4323-8",
-                            "authors": "Wang XJ et al",
-                            "elocationId": "",
-                            "link": null,
-                            "reference": "Wang XJ et al. International journal of clinical and experimental pathology. 2014;7(7)4323-8.",
-                            "abstract": null
-                        }
-                    ]
-                },
-                {
-                    "id": 2104,
-                    "uuid": "4e56b02d-394e-4397-9465-a3cc2c5026cd",
-                    "evidenceType": "STANDARD_THERAPEUTIC_IMPLICATIONS_FOR_DRUG_SENSITIVITY",
-                    "cancerTypes":
-                    [
-                        {
-                            "id": 276,
-                            "subtype": "Hairy Cell Leukemia",
-                            "code": "HCL",
-                            "color": "LimeGreen",
-                            "mainType": "Mature B-Cell Neoplasms",
-                            "level": 5,
-                            "tissue": "Lymphoid",
-                            "tumorForm": "LIQUID"
-                        }
-                    ],
-                    "excludedCancerTypes":
-                    [],
-                    "relevantCancerTypes":
-                    [
-                        {
-                            "id": 276,
-                            "subtype": "Hairy Cell Leukemia",
-                            "code": "HCL",
-                            "color": "LimeGreen",
-                            "mainType": "Mature B-Cell Neoplasms",
-                            "level": 5,
-                            "tissue": "Lymphoid",
-                            "tumorForm": "LIQUID"
-                        }
-                    ],
-                    "gene":
-                    {
-                        "entrezGeneId": 673,
-                        "hugoSymbol": "BRAF",
-                        "oncogene": true,
-                        "grch37Isoform": "ENST00000288602",
-                        "grch37RefSeq": "NM_004333.4",
-                        "grch38Isoform": "ENST00000646891",
-                        "grch38RefSeq": "NM_004333.4",
-                        "geneAliases":
-                        [
-                            "BRAF1"
-                        ],
-                        "genesets":
-                        [],
-                        "tsg": false
-                    },
-                    "alterations":
-                    [
-                        {
-                            "gene":
-                            {
-                                "entrezGeneId": 673,
-                                "hugoSymbol": "BRAF",
-                                "oncogene": true,
-                                "grch37Isoform": "ENST00000288602",
-                                "grch37RefSeq": "NM_004333.4",
-                                "grch38Isoform": "ENST00000646891",
-                                "grch38RefSeq": "NM_004333.4",
-                                "geneAliases":
-                                [
-                                    "BRAF1"
-                                ],
-                                "genesets":
-                                [],
-                                "tsg": false
-                            },
-                            "consequence":
-                            {
-                                "term": "missense_variant",
-                                "isGenerallyTruncating": false,
-                                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-                            },
-                            "alteration": "V600E",
-                            "name": "V600E",
-                            "refResidues": "V",
-                            "proteinStart": 600,
-                            "proteinEnd": 600,
-                            "variantResidues": "E",
-                            "referenceGenomes":
-                            [
-                                "GRCh38",
-                                "GRCh37"
-                            ]
-                        }
-                    ],
-                    "description": "",
-                    "additionalInfo": null,
-                    "treatments":
-                    [
-                        {
-                            "approvedIndications":
-                            [],
-                            "priority": 1,
-                            "drugs":
-                            [
-                                {
-                                    "ncitCode": "C64768",
-                                    "drugName": "Vemurafenib",
-                                    "uuid": "4e91da20-6cf0-4e07-995f-7f7db4c7c077",
-                                    "synonyms":
-                                    [
-                                        "Vemurafenib",
-                                        "BRAF(V600E) Kinase Inhibitor RO5185426",
-                                        "RO 5185426",
-                                        "PLX4032",
-                                        "PLX-4032",
-                                        "1-propanesulfonamide, n-(3-((5-(4-chlorophenyl)-1h-pyrrolo(2,3-b)pyridin-3-yl)carbonyl)-2,4-difluorophenyl)-",
-                                        "RG 7204",
-                                        "Zelboraf",
-                                        "BRAF (V600E) kinase inhibitor RO5185426",
-                                        "RG7204",
-                                        "VEMURAFENIB"
-                                    ],
-                                    "priority": 1
-                                }
-                            ]
-                        }
-                    ],
-                    "knownEffect": "Sensitive",
-                    "lastEdit": 1564666586000,
-                    "lastReview": null,
-                    "levelOfEvidence": "LEVEL_2",
-                    "fdaLevel": "LEVEL_Fda2",
-                    "solidPropagationLevel": "LEVEL_3B",
-                    "liquidPropagationLevel": "NO",
-                    "articles":
-                    [
-                        {
-                            "pmid": "26352686",
-                            "title": "Targeting Mutant BRAF in Relapsed or Refractory Hairy-Cell Leukemia.",
-                            "journal": "The New England journal of medicine",
-                            "pubDate": "2015 Oct 29",
-                            "volume": "373",
-                            "issue": "18",
-                            "pages": "1733-47",
-                            "authors": "Tiacci E et al",
-                            "elocationId": "doi: 10.1056/NEJMoa1506583",
-                            "link": null,
-                            "reference": "Tiacci E et al. The New England journal of medicine. 2015 Oct 29;373(18)1733-47.",
-                            "abstract": null
-                        }
-                    ]
-                }
-            ]
-        }
-    ],
-    "vus": false
+      ]
+    }
+  ],
+  "vus": false
 }

@@ -1,6 +1,7 @@
 [
   {
-    "oncogenic": "Likely Oncogenic",
+    "oncogenic": "Oncogenic",
+    "drugDescription": "PLX8394 is an orally available, second-generation, small-molecule BRAF inhibitor that inhibits mutated, oncogenic BRAF without causing paradoxical MAPK pathway activation as is seen with first-generation BRAF inhibitors (PMID: 28659148). In a phase I clinical trial for patients with refractory or relapsed solid tumors with or without BRAF mutation, there were two (28%) partial responses of seven evaluable BRAF-mutant patients treated with PLX8394 and cobicistat, a CYP3A4 inhibitor (Abstract: Janku et al. Abstract# B176, AACR-NCI-EORTC 2017. http://mct.aacrjournals.org/content/17/1_Supplement/B176). Both responses were in patients with BRAF V600 mutations. Preclinical studies show that PLX8394 specifically inhibits BRAF-containing dimers and inhibits proliferation and pathway activation in BRAF-mutated colorectal cancer cell lines (PMID: 26466569, 28659148, 30559419, 28783719).",
     "cancerTypes":
     [
       {
@@ -14,1612 +15,8 @@
         "tumorForm": "SOLID"
       }
     ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "L597",
-      "name": "L597",
-      "refResidues": "L",
-      "proteinStart": 597,
-      "proteinEnd": 597,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "4",
-    "drug":
-    [
-      "PLX8394"
-    ],
-    "drugPmids":
-    [
-      "26466569",
-      "28659148",
-      "28783719",
-      "30559419"
-    ],
-    "drugAbstracts":
-    [
-      {
-        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
-        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
-      }
-    ]
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 876,
-        "subtype": "",
-        "code": "",
-        "color": "Gainsboro",
-        "mainType": "Non-Small Cell Lung Cancer",
-        "level": 0,
-        "tissue": "Lung",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Dabrafenib + Trametinib"
-    ],
-    "drugPmids":
-    [
-      "27283860",
-      "28919011"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 409,
-        "subtype": "Anaplastic Thyroid Cancer",
-        "code": "THAP",
-        "color": "Teal",
-        "mainType": "Thyroid Cancer",
-        "level": 2,
-        "tissue": "Thyroid",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Dabrafenib + Trametinib"
-    ],
-    "drugPmids":
-    [
-      "29072975"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 862,
-        "subtype": "Langerhans Cell Histiocytosis",
-        "code": "LCH",
-        "color": "LightSalmon",
-        "mainType": "Histiocytosis",
-        "level": 4,
-        "tissue": "Myeloid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "V600",
-      "name": "V600",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "2",
-    "drug":
-    [
-      "Vemurafenib",
-      "Dabrafenib"
-    ],
-    "drugPmids":
-    [
-      "30867592"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "V600 {excluding V600E ; V600K}",
-      "name": "V600 (excluding V600E and V600K)",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "2",
-    "drug":
-    [
-      "Encorafenib + Binimetinib"
-    ],
-    "drugPmids":
-    [
-      "29573941"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Fusions",
-      "name": "Fusions",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "3A",
-    "drug":
-    [
-      "Cobimetinib",
-      "Trametinib"
-    ],
-    "drugPmids":
-    [
-      "26314551",
-      "24345920",
-      "26072686"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "K601",
-      "name": "K601",
-      "refResidues": "K",
-      "proteinStart": 601,
-      "proteinEnd": 601,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "3A",
-    "drug":
-    [
-      "Trametinib"
-    ],
-    "drugPmids":
-    [
-      "22798288",
-      "28344857",
-      "24933606",
-      "23248257",
-      "29903896"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 611,
-        "subtype": "Erdheim-Chester Disease",
-        "code": "ECD",
-        "color": "LightSalmon",
-        "mainType": "Histiocytosis",
-        "level": 4,
-        "tissue": "Myeloid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "Dx3",
-    "drug":
+    "excludedCancerTypes":
     [],
-    "drugPmids":
-    [
-      "25422482",
-      "26637772"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Dabrafenib"
-    ],
-    "drugPmids":
-    [
-      "22735384",
-      "22608338",
-      "23051966"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 934,
-        "subtype": "",
-        "code": "",
-        "color": "LightSalmon",
-        "mainType": "Histiocytosis",
-        "level": 0,
-        "tissue": "Myeloid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Oncogenic Mutations {excluding V600}",
-      "name": "Oncogenic Mutations (excluding V600)",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "3A",
-    "drug":
-    [
-      "Cobimetinib",
-      "Trametinib"
-    ],
-    "drugPmids":
-    [
-      "30361829"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Vemurafenib"
-    ],
-    "drugPmids":
-    [
-      "28961848",
-      "24508103",
-      "25399551"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "V600",
-      "name": "V600",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Vemurafenib + Cobimetinib + Atezolizumab"
-    ],
-    "drugPmids":
-    [
-      "32534646"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600K",
-      "name": "V600K",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "K",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Vemurafenib + Cobimetinib"
-    ],
-    "drugPmids":
-    [
-      "31732523",
-      "27480103",
-      "25265494"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 367,
-        "subtype": "Rosai-Dorfman Disease",
-        "code": "RDD",
-        "color": "LightSalmon",
-        "mainType": "Histiocytosis",
-        "level": 4,
-        "tissue": "Myeloid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Oncogenic Mutations {excluding V600}",
-      "name": "Oncogenic Mutations (excluding V600)",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "2",
-    "drug":
-    [
-      "Cobimetinib",
-      "Trametinib"
-    ],
-    "drugPmids":
-    [
-      "29236635"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 984,
-        "subtype": "",
-        "code": "",
-        "color": "",
-        "mainType": "All Solid Tumors",
-        "level": -1,
-        "tissue": "",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "K601",
-      "name": "K601",
-      "refResidues": "K",
-      "proteinStart": 601,
-      "proteinEnd": 601,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "4",
-    "drug":
-    [
-      "PLX8394"
-    ],
-    "drugPmids":
-    [
-      "26466569",
-      "28659148",
-      "28783719",
-      "30559419"
-    ],
-    "drugAbstracts":
-    [
-      {
-        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
-        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
-      }
-    ]
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "V600 {excluding V600E ; V600K}",
-      "name": "V600 (excluding V600E and V600K)",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "2",
-    "drug":
-    [
-      "Vemurafenib + Cobimetinib"
-    ],
-    "drugPmids":
-    [
-      "27480103",
-      "25265494"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 669,
-        "subtype": "Ganglioglioma",
-        "code": "GNG",
-        "color": "Gray",
-        "mainType": "Glioma",
-        "level": 3,
-        "tissue": "CNS/Brain",
-        "tumorForm": "SOLID"
-      },
-      {
-        "id": 32,
-        "subtype": "Pleomorphic Xanthoastrocytoma",
-        "code": "PXA",
-        "color": "Gray",
-        "mainType": "Glioma",
-        "level": 3,
-        "tissue": "CNS/Brain",
-        "tumorForm": "SOLID"
-      },
-      {
-        "id": 407,
-        "subtype": "Pilocytic Astrocytoma",
-        "code": "PAST",
-        "color": "Gray",
-        "mainType": "Glioma",
-        "level": 3,
-        "tissue": "CNS/Brain",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "2",
-    "drug":
-    [
-      "Vemurafenib + Cobimetinib",
-      "Dabrafenib + Trametinib"
-    ],
-    "drugPmids":
-    [
-      "29380516",
-      "28984141",
-      "30120137"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Trametinib"
-    ],
-    "drugPmids":
-    [
-      "22663011",
-      "25265492",
-      "29361468",
-      "25399551"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600K",
-      "name": "V600K",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "K",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Encorafenib + Binimetinib"
-    ],
-    "drugPmids":
-    [
-      "29573941"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 934,
-        "subtype": "",
-        "code": "",
-        "color": "LightSalmon",
-        "mainType": "Histiocytosis",
-        "level": 0,
-        "tissue": "Myeloid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "V600",
-      "name": "V600",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "3A",
-    "drug":
-    [
-      "Vemurafenib",
-      "Dabrafenib"
-    ],
-    "drugPmids":
-    [
-      "31213430",
-      "25209580",
-      "31376203"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 407,
-        "subtype": "Pilocytic Astrocytoma",
-        "code": "PAST",
-        "color": "Gray",
-        "mainType": "Glioma",
-        "level": 3,
-        "tissue": "CNS/Brain",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Fusions",
-      "name": "Fusions",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "2",
-    "drug":
-    [
-      "Selumetinib"
-    ],
-    "drugPmids":
-    [
-      "31151904"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 611,
-        "subtype": "Erdheim-Chester Disease",
-        "code": "ECD",
-        "color": "LightSalmon",
-        "mainType": "Histiocytosis",
-        "level": 4,
-        "tissue": "Myeloid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Oncogenic Mutations {excluding V600}",
-      "name": "Oncogenic Mutations (excluding V600)",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "2",
-    "drug":
-    [
-      "Cobimetinib",
-      "Trametinib"
-    ],
-    "drugPmids":
-    [
-      "30867592"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 857,
-        "subtype": "Early T-Cell Precursor Lymphoblastic Leukemia",
-        "code": "ETPLL",
-        "color": "LimeGreen",
-        "mainType": "T-Lymphoblastic Leukemia/Lymphoma",
-        "level": 4,
-        "tissue": "Lymphoid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Oncogenic Mutations",
-      "name": "Oncogenic Mutations",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "Dx3",
-    "drug":
-    [],
-    "drugPmids":
-    [
-      "22237106"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600K",
-      "name": "V600K",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "K",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Dabrafenib + Trametinib"
-    ],
-    "drugPmids":
-    [
-      "31171876",
-      "28891408",
-      "31171878",
-      "31171879",
-      "25265492",
-      "25287827",
-      "29361468",
-      "28991513",
-      "23020132",
-      "25399551"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 984,
-        "subtype": "",
-        "code": "",
-        "color": "",
-        "mainType": "All Solid Tumors",
-        "level": -1,
-        "tissue": "",
-        "tumorForm": "SOLID"
-      }
-    ],
     "variant":
     {
       "gene":
@@ -1653,11 +50,12 @@
       "variantResidues": "A",
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
       ]
     },
     "level": "4",
+    "fdaLevel": "Fda3",
     "drug":
     [
       "PLX8394"
@@ -1679,335 +77,7 @@
   },
   {
     "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 276,
-        "subtype": "Hairy Cell Leukemia",
-        "code": "HCL",
-        "color": "LimeGreen",
-        "mainType": "Mature B-Cell Neoplasms",
-        "level": 5,
-        "tissue": "Lymphoid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "2",
-    "drug":
-    [
-      "Vemurafenib"
-    ],
-    "drugPmids":
-    [
-      "26352686"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 619,
-        "subtype": "Diffuse Glioma",
-        "code": "DIFG",
-        "color": "Gray",
-        "mainType": "Glioma",
-        "level": 2,
-        "tissue": "CNS/Brain",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "2",
-    "drug":
-    [
-      "Dabrafenib + Trametinib",
-      "Vemurafenib + Cobimetinib"
-    ],
-    "drugPmids":
-    [
-      "24725538",
-      "29039591",
-      "30462564",
-      "34232949",
-      "29621181",
-      "30351999",
-      "26287849",
-      "33117675"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 862,
-        "subtype": "Langerhans Cell Histiocytosis",
-        "code": "LCH",
-        "color": "LightSalmon",
-        "mainType": "Histiocytosis",
-        "level": 4,
-        "tissue": "Myeloid",
-        "tumorForm": "LIQUID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "Dx2",
-    "drug":
-    [],
-    "drugPmids":
-    [
-      "30157397",
-      "26637772",
-      "20519626",
-      "24938183"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Encorafenib + Binimetinib"
-    ],
-    "drugPmids":
-    [
-      "29573941"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 935,
-        "subtype": "",
-        "code": "",
-        "color": "SaddleBrown",
-        "mainType": "Colorectal Cancer",
-        "level": 0,
-        "tissue": "Bowel",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Encorafenib + Cetuximab"
-    ],
-    "drugPmids":
-    [
-      "31566309"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 25422482, 26637772).",
     "cancerTypes":
     [
       {
@@ -2021,216 +91,8 @@
         "tumorForm": "LIQUID"
       }
     ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "V600",
-      "name": "V600",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "1",
-    "drug":
-    [
-      "Vemurafenib"
-    ],
-    "drugPmids":
-    [
-      "26287849",
-      "29188284"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 984,
-        "subtype": "",
-        "code": "",
-        "color": "",
-        "mainType": "All Solid Tumors",
-        "level": -1,
-        "tissue": "",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "G464",
-      "name": "G464",
-      "refResidues": "G",
-      "proteinStart": 464,
-      "proteinEnd": 464,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "4",
-    "drug":
-    [
-      "PLX8394"
-    ],
-    "drugPmids":
-    [
-      "26466569",
-      "28659148",
-      "28783719",
-      "30559419"
-    ],
-    "drugAbstracts":
-    [
-      {
-        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
-        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
-      }
-    ]
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "V600 {excluding V600E ; V600K}",
-      "name": "V600 (excluding V600E and V600K)",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "2",
-    "drug":
-    [
-      "Dabrafenib + Trametinib"
-    ],
-    "drugPmids":
-    [
-      "31171876",
-      "28891408",
-      "31171878",
-      "31171879",
-      "25265492",
-      "25287827",
-      "29361468",
-      "28991513",
-      "23020132",
-      "25399551"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
+    "excludedCancerTypes":
+    [],
     "variant":
     {
       "gene":
@@ -2264,26 +126,93 @@
       "variantResidues": "E",
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
       ]
     },
-    "level": "1",
+    "level": "Dx3",
+    "fdaLevel": null,
     "drug":
-    [
-      "Vemurafenib + Cobimetinib"
-    ],
+    [],
     "drugPmids":
     [
-      "31732523",
-      "27480103",
-      "25265494"
+      "25422482",
+      "26637772"
     ],
     "drugAbstracts":
     []
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "Vemurafenib is an orally available kinse inhibitor of V600-mutant BRAF that is FDA-approved for treatment of patients with various BRAF V600-harboring tumors, including melanoma and Edheim-Chester Disease (ECD). Vemurafenib is listed as a 2A therapeutic in the NCCN guidelines for Hairy Cell Leukemia (HCL) based on data from two Phase II trials. In one study of vemurafenib in patients with BRAF V600E-mutant HCL (n=24), the overall response rate was 100%, with 42% of patients (10 of 24) having complete responses, with a response duration of 11.7 months and one year progression free and overall survival rates of 73% and 91%, repectively (PMID: 26352686). In another study of vemurafenib in patients with BRAF V600E-mutant HCL (n=26), the overall response rate was 96%, with 35% of patients (9 of 26) having complete responses (PMID: 26352686).",
+    "cancerTypes":
+    [
+      {
+        "id": 276,
+        "subtype": "Hairy Cell Leukemia",
+        "code": "HCL",
+        "color": "LimeGreen",
+        "mainType": "Mature B-Cell Neoplasms",
+        "level": 5,
+        "tissue": "Lymphoid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Vemurafenib"
+    ],
+    "drugPmids":
+    [
+      "26352686"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Encorafenib, a small molecule inhibitor of RAF kinase, and cetuximab, an antibody that targets EGFR, are FDA-approved in combination for the treatment of adult patients with metastatic colorectal cancer with a BRAF V600E mutation after prior therapy. FDA approval was based on results of the Phase III BEACON study of encorafenib + cetuximab versus triplet treatment (including a MEK1/2 inhibitor) versus chemotherapy in 665 patients with BRAF V600E-mutant colorectal cancer, in which the overall response rate (complete or partial response) was 20% (95% CI= 13-29) in the doublet arm (n=220) versus 2% (95% CI= <1%-7%) in the chemotherapy arm (n=221), with median overall survival of 8.4 months in the doublet arm (95% CI= 7.5-11.0) and 5.4 months in the control arm (95% CI= 4.8-6.6) (PMID: 31566309).",
     "cancerTypes":
     [
       {
@@ -2297,6 +226,8 @@
         "tumorForm": "SOLID"
       }
     ],
+    "excludedCancerTypes":
+    [],
     "variant":
     {
       "gene":
@@ -2330,18 +261,18 @@
       "variantResidues": "E",
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
       ]
     },
-    "level": "2",
+    "level": "1",
+    "fdaLevel": "Fda2",
     "drug":
     [
-      "Encorafenib + Panitumumab"
+      "Encorafenib + Cetuximab"
     ],
     "drugPmids":
     [
-      "29431699",
       "31566309"
     ],
     "drugAbstracts":
@@ -2349,19 +280,22 @@
   },
   {
     "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Selumetinib is a small molecule tyrosine kinase inhibitor of MEK1/2. In stratum one of the phase II PBTC study of selumetinib in 25 patients with pilocytic astrocytoma harboring a KIAA1549–BRAF fusion or BRAF V600E mutation, seven of eighteen patients with a KIAA1549–BRAF fusion had a partial response to treatment (PMID: 31151904). Additionally, the two year progression-free survival rate for the BRAF study population (n=25) was 70% (95% CI = 47–85) (PMID: 31151904).",
     "cancerTypes":
     [
       {
-        "id": 880,
-        "subtype": "",
-        "code": "",
-        "color": "LightBlue",
-        "mainType": "Ovarian Cancer",
-        "level": 0,
-        "tissue": "Ovary/Fallopian Tube",
+        "id": 407,
+        "subtype": "Pilocytic Astrocytoma",
+        "code": "PAST",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 3,
+        "tissue": "CNS/Brain",
         "tumorForm": "SOLID"
       }
     ],
+    "excludedCancerTypes":
+    [],
     "variant":
     {
       "gene":
@@ -2395,39 +329,182 @@
       "variantResidues": null,
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Selumetinib"
+    ],
+    "drugPmids":
+    [
+      "31151904"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Trametinib is a small molecule inhibitor of the MEK1/2 kinases that is FDA-approved in combination with a RAF inhibitor for use in BRAF V600E-positive metastatic melanoma. Anecdotal evidence of clinical activity of trametinib in BRAF K601-mutant melanoma includes a patient who experienced a complete response to trametinib over 36 months (PMID: 28344857), and four patients in various other studies who achieved a partial response or stable disease upon treatment with trametinib (PMID: 23248257, 24933606). In vitro studies of cell lines engineered to express BRAF K601E demonstrated sensitivity to MEK inhibition as measured by decreased activation of downstream effector proteins upon treatment with trametinib (PMID: 22798288, 29903896).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "K601",
+      "name": "K601",
+      "refResidues": "K",
+      "proteinStart": 601,
+      "proteinEnd": 601,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
       ]
     },
     "level": "3A",
+    "fdaLevel": "Fda3",
     "drug":
     [
-      "Cobimetinib",
       "Trametinib"
     ],
     "drugPmids":
     [
-      "26324360",
-      "24345920"
+      "22798288",
+      "28344857",
+      "24933606",
+      "23248257",
+      "29903896"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Vemurafenib is an orally available kinse inhibitor of V600-mutant BRAF that is FDA-approved for treatment of patients with Edheim-Chester Disease (ECD) harboring BRAF V600-mutations. FDA approval was based on the open-label, nonrandomized, multicohort VE-BASKET clinical trial of vemurafenib in BRAF V600E-mutant non-melanoma cancers in which 26 evaluable patients (ECD, n=22; LCH, n=4 ) achieved stable disease or better, and the confirmed overall response rate in ECD was 54.5% (12/22; 95% CI= 32.2-75.6%). Median progression-free survival and overall survival were not reached at study completion with a median follow-up of 28.8 months (PMID: 29188284, 26287849).",
+    "cancerTypes":
+    [
+      {
+        "id": 611,
+        "subtype": "Erdheim-Chester Disease",
+        "code": "ECD",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600",
+      "name": "V600",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Vemurafenib"
+    ],
+    "drugPmids":
+    [
+      "26287849",
+      "29188284"
     ],
     "drugAbstracts":
     []
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "Encorafenib, a small molecule inhibitor of RAF kinase, and panitumumab, an antibody that targets EGFR, are NCCN-compendium listed in combination as level 2A therapy for patients with BRAF V600E-positive colorectal cancer. In the Phase III BEACON study of encorafenib + cetuximab, another EGFR antibody, versus triplet treatment (including a MEK1/2 inhibitor) versus chemotherapy in 665 patients with BRAF V600E-mutant colorectal cancer, the overall response rate (complete or partial response) was 20% (95% CI= 13-29) in the doublet arm (n=220) versus 2% (95% CI= <1%-7%) in the chemotherapy arm (n=221), with median overall survival of 8.4 months in the doublet arm (95% CI= 7.5-11.0) and 5.4 months in the control arm (95% CI= 4.8-6.6) (PMID: 31566309). Panitumumab has also been used in doublet and triplet combination therapy, with a response rate in one study of 26% (PMID: 29431699).",
     "cancerTypes":
     [
       {
-        "id": 276,
-        "subtype": "Hairy Cell Leukemia",
-        "code": "HCL",
-        "color": "LimeGreen",
-        "mainType": "Mature B-Cell Neoplasms",
-        "level": 5,
-        "tissue": "Lymphoid",
-        "tumorForm": "LIQUID"
+        "id": 935,
+        "subtype": "",
+        "code": "",
+        "color": "SaddleBrown",
+        "mainType": "Colorectal Cancer",
+        "level": 0,
+        "tissue": "Bowel",
+        "tumorForm": "SOLID"
       }
     ],
+    "excludedCancerTypes":
+    [],
     "variant":
     {
       "gene":
@@ -2461,31 +538,173 @@
       "variantResidues": "E",
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
       ]
     },
-    "level": "Dx2",
+    "level": "2",
+    "fdaLevel": "Fda2",
     "drug":
-    [],
+    [
+      "Encorafenib + Panitumumab"
+    ],
     "drugPmids":
     [
-      "23347903",
-      "25480661",
-      "22072557",
-      "21910720",
-      "22210875",
-      "25120816",
-      "22028477",
-      "21663470",
-      "26071465",
-      "22531170"
+      "29431699",
+      "31566309"
     ],
     "drugAbstracts":
     []
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 24938183, 20519626, 30157397, 26637772).",
+    "cancerTypes":
+    [
+      {
+        "id": 862,
+        "subtype": "Langerhans Cell Histiocytosis",
+        "code": "LCH",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "Dx2",
+    "fdaLevel": null,
+    "drug":
+    [],
+    "drugPmids":
+    [
+      "30157397",
+      "26637772",
+      "20519626",
+      "24938183"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Dabrafenib, an orally bioavailable RAF inhibitor, and trametinib, an orally bioavailable MEK1/2 inhibitor, are FDA-approved alone or in combination for the treatment of patients with metastatic melanoma harboring a V600E or V600K BRAF mutation. FDA approval of dabrafenib in combination with trametinib was based on results from an open-label Phase III study of combination therapy versus dabrafenib monotherapy in 247 patients with metastatic melanoma who were naive to treatment with BRAF inhibitors. Combined dabrafenib and trametinib, administered in full monotherapy doses, improved the response rate in patients with BRAF V600-mutant metastatic melanoma versus dabrafenib monotherapy (67% vs.51%; p<0.002). However, median progression-free survival improved by only 2 weeks (9.3 months vs 8.8 months; HR = 0.75) compared with dabrafenib monotherapy (PMID: 23020132). Combination therapy is associated with less cutaneous toxicity than monotherapy, but systemic toxicity may be increased (PMID: 25287827, 25399551). Follow-up trials have demonstrated that all clinical measures inclusive of overall and median progression-free survival as well as objective response rates, median duration of response and number of patients with complete response favored patients treated with combination dabrafenib and trametinib, administered in full monotherapy doses, compared to either dabrafenib or vemurafenib monotherapy, including patients who previously progressed on BRAF inhibitor monotherapy (PMID: 25287827, 25399551, 25265492). Additionally, patients with melanoma treated with dabrafenib and trametinib in both the neoadjuvant and adjuvant settings have improved survival over patients given standard of care (PMID: 29361468, 28991513, 28891408). Promising clinical data has also suggested that addition of an immunotherapy agent to combination RAF and MEK inhibitor treatment may improve rate of overall response and duration of response in melanoma patients (PMID: 31171876, 31171879, 31171878).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "31171876",
+      "28891408",
+      "31171878",
+      "31171879",
+      "25265492",
+      "25287827",
+      "29361468",
+      "28991513",
+      "23020132",
+      "25399551"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "PLX8394 is an orally available, second-generation, small-molecule BRAF inhibitor that inhibits mutated, oncogenic BRAF without causing paradoxical MAPK pathway activation as is seen with first-generation BRAF inhibitors (PMID: 28659148). In a phase I clinical trial for patients with refractory or relapsed solid tumors with or without BRAF mutation, there were two (28%) partial responses of seven evaluable BRAF-mutant patients treated with PLX8394 and cobicistat, a CYP3A4 inhibitor (Abstract: Janku et al. Abstract# B176, AACR-NCI-EORTC 2017. http://mct.aacrjournals.org/content/17/1_Supplement/B176). Both responses were in patients with BRAF V600 mutations. Preclinical studies show that PLX8394 specifically inhibits BRAF-containing dimers and inhibits proliferation and pathway activation in BRAF-mutated colorectal cancer cell lines (PMID: 26466569, 28659148, 30559419, 28783719).",
     "cancerTypes":
     [
       {
@@ -2499,6 +718,8 @@
         "tumorForm": "SOLID"
       }
     ],
+    "excludedCancerTypes":
+    [],
     "variant":
     {
       "gene":
@@ -2532,11 +753,12 @@
       "variantResidues": "R",
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
       ]
     },
     "level": "4",
+    "fdaLevel": "Fda3",
     "drug":
     [
       "PLX8394"
@@ -2558,88 +780,13 @@
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "Trametinib and cobimetinib are MEK1/2 kinase inhibitors that are FDA-approved for patients with unresectable or metastatic melanoma with BRAF V600E or V600K mutations and are NCCN-listed for patients with Rosai-Dorfman Disease. One adult patient with Rosai-Dorfman Disease with an activating KRAS G12R mutation was treated with cobimetinib, and a follow-up CT scan two months after treatment showed a substantial response (PMID: 29236635).",
     "cancerTypes":
     [
       {
-        "id": 54,
-        "subtype": "Encapsulated Glioma",
-        "code": "ENCG",
-        "color": "Gray",
-        "mainType": "Glioma",
-        "level": 2,
-        "tissue": "CNS/Brain",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "missense_variant",
-        "isGenerallyTruncating": false,
-        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
-      },
-      "alteration": "V600E",
-      "name": "V600E",
-      "refResidues": "V",
-      "proteinStart": 600,
-      "proteinEnd": 600,
-      "variantResidues": "E",
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "2",
-    "drug":
-    [
-      "Vemurafenib + Cobimetinib",
-      "Dabrafenib + Trametinib"
-    ],
-    "drugPmids":
-    [
-      "25524464",
-      "29039591",
-      "31985841",
-      "25092772",
-      "31502039",
-      "27398937",
-      "29380516",
-      "28984141",
-      "24821190",
-      "30351999",
-      "26579623",
-      "26287849"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 862,
-        "subtype": "Langerhans Cell Histiocytosis",
-        "code": "LCH",
+        "id": 367,
+        "subtype": "Rosai-Dorfman Disease",
+        "code": "RDD",
         "color": "LightSalmon",
         "mainType": "Histiocytosis",
         "level": 4,
@@ -2647,6 +794,8 @@
         "tumorForm": "LIQUID"
       }
     ],
+    "excludedCancerTypes":
+    [],
     "variant":
     {
       "gene":
@@ -2680,11 +829,12 @@
       "variantResidues": null,
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
       ]
     },
     "level": "2",
+    "fdaLevel": "Fda3",
     "drug":
     [
       "Cobimetinib",
@@ -2692,27 +842,98 @@
     ],
     "drugPmids":
     [
-      "32991018",
-      "30867592"
+      "29236635"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "The combination of vemurafenib, an orally available kinse inhibitor of V600-mutant BRAF, and cobimetinib, an orally available kinase inhibitor of MEK1/2, is FDA-approved for the treatment of patients with BRAF V600-mutant metastatic or unresectable locally advanced melanoma. FDA approval was based on results from the randomized Phase III coBRIM trial of combined vemurafenib and cobimetinib versus vemurafenib and placebo in 495 patients with metastatic BRAF V600-mutant melanoma that demonstrated superior clinical benefit measures in the combination versus the control arm. Specifically, median progression-free survival was 9.9 months in the combination arm versus 6.2 months in the control arm (HR = 0.51), with a complete response rate of 10% versus 4%, respectively, and interim nine-month overall survival of 81% versus 73%, respectively (PMID: 25265494). Follow-up analysis of the coBRIM trial showed two-year overall survival was 48.3% in the combination group versus 38.0% in the monotherapy group (PMID: 27480103).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600 {excluding V600E ; V600K}",
+      "name": "V600 (excluding V600E and V600K)",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib"
+    ],
+    "drugPmids":
+    [
+      "27480103",
+      "25265494"
     ],
     "drugAbstracts":
     []
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "Dabrafenib is an orally bioavailable RAF inhibitor that is FDA-approved for use in patients with BRAF V600E- and V600K-mutant metastatic melanoma. FDA approval is based on the randomized Phase III trial in which dabrafenib (150 mg orally twice daily) was compared with dacarbazine (1000 mg/m2 intravenously every three weeks) in 250 patients with BRAF V600E-mutated metastatic melanoma. Dabrafenib was associated with improved progression-free survival (median 5.1 months vs. 2.7 months with dacarbazine; hazard ratio = 0.30, p<0.0001) (PMID: 22735384). Dabrafenib may also be effective against brain metastases, as demonstrated by a Phase II trial in which approximately 40% of previously untreated and 30% of previously treated patients experienced an overall intracranial response and a separate trial in which nine out of ten patients had a reduction in the size of their brain metastases (PMID: 23051966, 22608338).",
     "cancerTypes":
     [
       {
-        "id": 946,
-        "subtype": "",
-        "code": "",
-        "color": "Green",
-        "mainType": "Biliary Tract Cancer, NOS",
-        "level": 0,
-        "tissue": "Biliary Tract",
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
         "tumorForm": "SOLID"
       }
     ],
+    "excludedCancerTypes":
+    [],
     "variant":
     {
       "gene":
@@ -2746,91 +967,28 @@
       "variantResidues": "E",
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
       ]
     },
-    "level": "2",
+    "level": "1",
+    "fdaLevel": "Fda2",
     "drug":
     [
-      "Dabrafenib + Trametinib"
+      "Dabrafenib"
     ],
     "drugPmids":
     [
-      "32758030",
-      "32818466"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 453,
-        "subtype": "Melanoma",
-        "code": "MEL",
-        "color": "Black",
-        "mainType": "Melanoma",
-        "level": 2,
-        "tissue": "Skin",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 673,
-        "hugoSymbol": "BRAF",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000288602",
-        "grch37RefSeq": "NM_004333.4",
-        "grch38Isoform": "ENST00000646891",
-        "grch38RefSeq": "NM_004333.4",
-        "geneAliases":
-        [
-          "BRAF1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "L597",
-      "name": "L597",
-      "refResidues": "L",
-      "proteinStart": 597,
-      "proteinEnd": 597,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh37",
-        "GRCh38"
-      ]
-    },
-    "level": "3A",
-    "drug":
-    [
-      "Trametinib"
-    ],
-    "drugPmids":
-    [
-      "22798288",
-      "24933606",
-      "29903896"
+      "22735384",
+      "22608338",
+      "23051966"
     ],
     "drugAbstracts":
     []
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "The RAF inhibitor vemurafenib in combination with the MEK inhibitor cobimetinib is FDA-approved for the treatment of patients with BRAF V600-mutant metastatic or unresectable locally advanced melanoma. FDA approval was based on results from the randomized Phase III coBRIM trial of combined vemurafenib and cobimetinib versus vemurafenib and placebo in 495 patients with metastatic BRAF V600-mutant melanoma that demonstrated superior clinical benefit measures in the combination versus the control arm. Specifically, median progression-free survival was 9.9 months in the combination arm versus 6.2 months in the control arm (HR = 0.51), with a complete response rate of 10% versus 4%, respectively, and interim nine-month overall survival of 81% versus 73%, respectively (PMID: 25265494). Follow-up analysis of the coBRIM trial showed two-year overall survival was 48.3% in the combination group versus 38.0% in the monotherapy group (PMID: 27480103), and five-year followup of the BRIM7 study showed a median overall survival of 31.8 months and a five-year survival rate of 39.2% (PMID: 31732523).",
     "cancerTypes":
     [
       {
@@ -2844,6 +1002,8 @@
         "tumorForm": "SOLID"
       }
     ],
+    "excludedCancerTypes":
+    [],
     "variant":
     {
       "gene":
@@ -2877,11 +1037,604 @@
       "variantResidues": "K",
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
       ]
     },
     "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib"
+    ],
+    "drugPmids":
+    [
+      "31732523",
+      "27480103",
+      "25265494"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "The RAF inhibitor vemurafenib in combination with the MEK inhibitor cobimetinib is FDA-approved for patients with melanoma, non-small cell lung cancer, and anaplastic thyroid cancer, and is NCCN-compendium listed as recommended treatment of central nervous system cancers such as pilocytic astrocytoma, pleomorphic xanthoastrocytoma (PXA) and ganglioglioma. In a case series of two patients with BRAF V600E-mutant PXA, combination treatment of dabrafenib with trametinib led to partial responses by RANO criteria in both patients (PMID: 28984141). In a case report of a sixteen-year-old female with BRAF V600E-mutant anaplastic ganglioglioma, dabrafenib and trametinib in combination led to a significant response that was maintained at least six months after treatment initiation (PMID: 29380516). In a separate case report of a 28-year-old man with BRAF V600E-mutant anaplastic ganglioglioma, combination treatment of vemurafenib and cobimetinib led to a complete response after three months, with no evidence of recurrence after sixteen months of treatment (PMID: 30120137).",
+    "cancerTypes":
+    [
+      {
+        "id": 32,
+        "subtype": "Pleomorphic Xanthoastrocytoma",
+        "code": "PXA",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 3,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      },
+      {
+        "id": 407,
+        "subtype": "Pilocytic Astrocytoma",
+        "code": "PAST",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 3,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      },
+      {
+        "id": 669,
+        "subtype": "Ganglioglioma",
+        "code": "GNG",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 3,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib"
+    ],
+    "drugPmids":
+    [
+      "29380516",
+      "28984141",
+      "30120137"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Trametinib is a small molecule inhibitor of the MEK1/2 kinases that is FDA-approved in combination with a RAF inhibitor for use in BRAF V600E-positive metastatic melanoma. In a small study of trametinib in patients with non-V600E BRAF-mutated metastatic melanoma, one patient harboring a BRAF L597Q mutation achieved partial response (6.2 months) upon treatment with trametinib (PMID: 24933606). In vitro studies of cell lines engineered to express BRAF L597R or L597S mutations demonstrated sensitivity to MEK inhibition as measured by decreased activation of downstream effector proteins upon treatment with trametinib (PMID: 22798288, 29903896).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "L597",
+      "name": "L597",
+      "refResidues": "L",
+      "proteinStart": 597,
+      "proteinEnd": 597,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "3A",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "22798288",
+      "24933606",
+      "29903896"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "The combination of vemurafenib, an inhibitor of V600-mutant BRAF, and cobimetinib, an inhibitor of MEK1/2, with atezolizumab, an immunotherapeutic PD-L1 antibody, is FDA-approved for patients with BRAF V600 mutation-positive unresectable or metastatic melanoma. FDA approval was based on the results of the Phase III double-blind, randomized, placebo-controlled IMspire150 trial of Atezolizumab + Cobimetinib + Vemurafenib versus Placebo + Cobimetinib + Vemurafenib in 514 patients with BRAF V600-mutant melanoma in which the median progression-free survival was 15.1 mos (95% CI=11.4,18.4) in the triplet arm versus 10.6 mos (95% CI=9.3,12.7) in the doublet + placebo arm (HR=0.78; 95% CI= 0.63, 0.97; p=0.0249) (PMID: 32534646).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600",
+      "name": "V600",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib + Atezolizumab"
+    ],
+    "drugPmids":
+    [
+      "32534646"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Dabrafenib, an orally bioavailable RAF inhibitor, and trametinib, an orally bioavailable MEK1/2 inhibitor, are FDA-approved in combination for the treatment of patients with solid tumors other than colorectal harboring BRAF V600E mutation. FDA approval was based on data from 131 adult patients with solid tumors treated with dabrafenib and trametinib in the BRF117019 and NCI-MATCH trials and 36 pediatric patients treated with dabrafenib and trametinib in the CTMT212X2101 study. Of the 131 adult patients treated with dabrafenib and trametinib, the overall response rate was 41% (54/131; 95% CI = 33-50) and of the 36 pediatric patients treated with dabrafenib and trametinib (low grade glioma, n=34; high grade glioma, n=2), the overall response rate was 25% (95% CI = 12-24) (PMID: 32818466, 34838156, 32758030)(Abstract: Bouffet et al. Abstract# LGG-49, Neuro-Oncology 2020. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7715318/). Approval was supported by results in COMBI-d, COMBI-v and BRF113928 studies in melanoma and lung cancer (PMID: 23020132, 25399551, 27283860). In a Phase II, single-arm basket trial of dabrafenib + trametinib in patients with BRAF V600E-mutant solid tumors, of 43 patients with biliary tract cancer, the overall response rate was 51% (22/43, 95% CI = 36–67), the median progression-free survival was nine months (95% CI = 5-10), and the median overall survival was fourteen months (95% CI = 10-33). Of the 43 patients with biliary tract cancer, 51% of patients (22/43) had a partial response and 40% (17/43) had stable disease (PMID: 32818466). Additionally, in subprotocol H of the NCI-MATCH basket trial of dabrafenib + trametinib in patients with BRAF V600E-mutant solid tumors (N=4 patients with intrahepatic cholangiocarcinoma), the overall response rate was 100%, with 4/4 patients achieving a partial response (PMID: 32758030).",
+    "cancerTypes":
+    [
+      {
+        "id": 946,
+        "subtype": "",
+        "code": "",
+        "color": "Green",
+        "mainType": "Biliary Tract Cancer, NOS",
+        "level": 0,
+        "tissue": "Biliary Tract",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "32758030",
+      "27283860",
+      "23020132",
+      "32818466",
+      "25399551",
+      "34838156"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7715318/",
+        "abstract": "Bouffet et al. Abstract# LGG-49, Neuro-Oncology 2020"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Vemurafenib and dabrafenib are orally available kinse inhibitors of V600-mutant BRAF that are FDA-approved for patients with unresectable or metastatic melanoma with the BRAF V600E mutation, and are NCCN-listed for patients with histiocytic neoplasms harboring BRAF V600 mutations. In a case study of a 40-year-old man with histiocytic sarcoma harboring a heterozygous BRAF V600E mutation, the patient was treated with vemurafenib and maintained both clinical and radiologic tumor responses for three months until disease progression (PMID: 25209580). In a separate case study of a 22-year-old woman with histiocytic sarcoma harboring a BRAF V600E mutation, the patient was treated with a combination of chemotherapy, antibiotics, steroids, and vemurafenib, and remained in complete remission eighteen months after treatment initiation (PMID: 31376203). An additional case study of a six-year-old child with BRAF V600E-mutant mixed systemic Rosai-Dorfman-Destombes disease and Langerhans cell histiocytosis reported sustained clinical and radiographic responses after treatment with dabrafenib prior to disease relapse at thirteen months (PMID: 31213430).",
+    "cancerTypes":
+    [
+      {
+        "id": 934,
+        "subtype": "",
+        "code": "",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 0,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600",
+      "name": "V600",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "3A",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Vemurafenib",
+      "Dabrafenib"
+    ],
+    "drugPmids":
+    [
+      "31213430",
+      "25209580",
+      "31376203"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "The combination of encorafenib, an inhibitor of V600E- or V600K-mutant BRAF, and binimetinib, an inhibitor of MEK1/2, is FDA-approved in combination for patients with unresectable or metastatic melanoma with a BRAF V600E or V600K mutation. FDA approval was based on the results of the Phase III COLUMBUS trial of combined encorafenib plus binimetinib versus single-agent vemurafenib in 577 patients with BRAF V600E- or V600K-mutant metastatic melanoma in which the median progression-free survival was 14.9 months (95% CI = 11.0-18.5) in the encorafenib plus binimetinib group versus 7.3 months (95% CI = 5.6-8.2) in the single agent vemurafenib group (HR= 0.54, 95% CI = 0.41-0.71; p<0·0001) (PMID: 29573941). In the five-year update of the Phase III COLUMBUS trial, the progression-free survival and overall survival were 23% and 35% respectively in the encorafenib plus binimetinib group (n=192) versus 10% and 21% respectively in the single agent vemurafenib group (n=191), and the median duration of response and disease control rate were 18.6 months and 92.2% in the encorafenib plus binimetinib group versus 12.3 months and 81.2% in the single-agent vemurafenib group (PMID: 35862871).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600K",
+      "name": "V600K",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "K",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Encorafenib + Binimetinib"
+    ],
+    "drugPmids":
+    [
+      "29573941",
+      "35862871"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "PLX8394 is an orally available, second-generation, small-molecule BRAF inhibitor that inhibits mutated, oncogenic BRAF without causing paradoxical MAPK pathway activation as is seen with first-generation BRAF inhibitors (PMID: 28659148). In a phase I clinical trial for patients with refractory or relapsed solid tumors with or without BRAF mutation, there were two (28%) partial responses of seven evaluable BRAF-mutant patients treated with PLX8394 and cobicistat, a CYP3A4 inhibitor (Abstract: Janku et al. Abstract# B176, AACR-NCI-EORTC 2017. http://mct.aacrjournals.org/content/17/1_Supplement/B176). Both responses were in patients with BRAF V600 mutations. Preclinical studies show that PLX8394 specifically inhibits BRAF-containing dimers and inhibits proliferation and pathway actiavtion in BRAF-mutated colorectal cancer cell lines (PMID: 26466569, 28659148, 30559419, 28783719).",
+    "cancerTypes":
+    [
+      {
+        "id": 984,
+        "subtype": "",
+        "code": "",
+        "color": "",
+        "mainType": "All Solid Tumors",
+        "level": -1,
+        "tissue": "",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "K601",
+      "name": "K601",
+      "refResidues": "K",
+      "proteinStart": 601,
+      "proteinEnd": 601,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "4",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "PLX8394"
+    ],
+    "drugPmids":
+    [
+      "26466569",
+      "28659148",
+      "28783719",
+      "30559419"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
+        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Trametinib is an oral small molecule inhibitor of MEK1/2 that is FDA-approved alone or with dabrafenib for the treatment of patients with metastatic melanoma harboring a V600E or V600K BRAF mutation. In an open-label, randomized Phase III trial, patients with BRAF V600E/K-mutated unresectable, metastatic melanoma received oral trametinib (2 mg once daily) or an intravenous regimen of either dacarbazine (1000 mg/m2) or paclitaxel (175 mg/m2) every three weeks. Trametinib demonstrated improved progression-free survival (HR for disease progression or death = 0.45) and six-month overall survival (81% vs. 67%; death HR = 0.54; p=0.01) (PMID: 22663011). However, like other MEK inhibitors, the benefit of trametinib is limited by adverse reactions, most notably grade three or four rash and diarrhea (PMID: 22663011). Trametinib is not typically used as monotherapy for patients with BRAF V600K melanoma given its lower response rate compared to BRAF inhibitors and combined BRAF and MEK inhibitors. Patients previously treated with a RAF inhibitor appear to be less likely than untreated patients to respond to trametinib treatment (PMID: 22663011), and FDA guidelines state that trametinib as a monotherapy is not indicated for these patients. Dabrafenib and trametinib are FDA-approved as a combination therapy, which has superior clinical outcomes compared to dabrafenib or trametinib monotherapy (PMID: 25399551, 25265492). Additionally, patients with melanoma treated with dabrafenib and trametinib in both the neoadjuvant and adjuvant settings had improved survival over patients given standard of care (PMID: 29361468).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
     "drug":
     [
       "Trametinib"
@@ -2898,6 +1651,447 @@
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "Trametinib and cobimetinib are MEK1/2 kinase inhibitors that are FDA-approved for patients with unresectable or metastatic melanoma with BRAF V600E or V600K mutations and both are NCCN-listed for patients with Langerhans Cell Histiocytosis (LCH) harboring MAPK pathway mutations. In an open-label phase II trial (NCT02649972) of cobimetinib in eighteen adult patients with histiocytoses (n = two patients with LCH) of any mutational status, the overall response rate was 89% (90% CI: 73–100), 100% of responses were ongoing at one year, and 94% of patients remained progression-free (PMID: 30867592). In a study of three patients with LCH who were treated with trametinib, two patients harbored BRAF N486_P490del mutations, of which one had no reactivation and the other had a partial response, and the third patient with a MAP2K1 K57_G61del mutation had a complete response with no active disease after 22 months (PMID: 32991018).",
+    "cancerTypes":
+    [
+      {
+        "id": 862,
+        "subtype": "Langerhans Cell Histiocytosis",
+        "code": "LCH",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations {excluding V600}",
+      "name": "Oncogenic Mutations (excluding V600)",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Cobimetinib",
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "32991018",
+      "30867592"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "The RAF inhibitor vemurafenib in combination with the MEK inhibitor cobimetinib is FDA-approved for patients with melanoma, non-small cell lung cancer, and anaplastic thyroid cancer, and is NCCN-listed for patients with low-grade glioma, anaplastic glioma, and glioblastoma. Patients with various glioma subtypes harboring BRAF V600E mutations have shown responses to RAF and MEK inhibition. Six patients with ganglioglioma had a partial response to either vemurafenib monotherapy (n=2), vemurafenib + cobimetinib (n=1), or dabrafenib monotherapy (n=​​3)(PMID: 25524464, 31985841, 26579623, 31502039). Twelve out of thirteen patients with pleomorphic xanthoastrocytoma had a response (one complete response, one “near-complete” response, six partial response, four stable disease) to either dabrafenib + trametinib (n=2) or vemurafenib monotherapy (n=11) (PMID: 28984141, 26287849, 30351999). Three patients with anaplastic pleomorphic xanthoastrocytoma had a response (one complete response, one “near-complete” response, one partial response) to either vemurafenib monotherapy (n=1) or dabrafenib monotherapy (n=2)(PMID: 25092772, 29039591). One patient with low-grade glioma, NOS had a partial response to dabrafenib monotherapy (PMID: 27398937). Two patients with pilocytic astrocytoma had a response (one partial response, one stable disease) to vemurafenib monotherapy (PMID: 30351999). Three of four patients with anaplastic ganglioglioma had a response (one partial response, one \"significant response\", one stable disease, one not evaluable) to either dabrafenib + trametinib (n=1) or vemurafenib monotherapy (n=3)(PMID: 29380516, 30351999). One patient with pilomyxoid astrocytoma had a partial response to vemurafenib monotherapy (PMID: 24821190).",
+    "cancerTypes":
+    [
+      {
+        "id": 54,
+        "subtype": "Encapsulated Glioma",
+        "code": "ENCG",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 2,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib"
+    ],
+    "drugPmids":
+    [
+      "25524464",
+      "29039591",
+      "31985841",
+      "25092772",
+      "31502039",
+      "27398937",
+      "29380516",
+      "28984141",
+      "24821190",
+      "30351999",
+      "26579623",
+      "26287849"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Dabrafenib, an orally bioavailable RAF inhibitor, and trametinib, an orally bioavailable MEK1/2 inhibitor, are FDA-approved alone or in combination for the treatment of patients with metastatic melanoma harboring a V600E or V600K BRAF mutation. FDA approval of dabrafenib in combination with trametinib was based on results from an open-label Phase III study of combination therapy versus dabrafenib monotherapy in 247 patients with metastatic melanoma who were naive to treatment with BRAF inhibitors. Combined dabrafenib and trametinib, administered in full monotherapy doses, improved the response rate in patients with BRAF V600-mutant metastatic melanoma versus dabrafenib monotherapy (67% vs.51%; p<0.002). However, median progression-free survival improved by only two weeks (9.3 months vs 8.8 months; HR = 0.75) compared with dabrafenib monotherapy (PMID: 23020132). Combination therapy is associated with less cutaneous toxicity than monotherapy, but systemic toxicity may be increased (PMID: 25287827, 25399551). Follow-up trials have demonstrated that all clinical measures inclusive of overall and median progression-free survival as well as objective response rates, median duration of response and number of patients with complete response favored patients treated with combination dabrafenib and trametinib, administered in full monotherapy doses, compared to either dabrafenib or vemurafenib monotherapy, including patients who previously progressed on BRAF inhibitor monotherapy (PMID: 25287827, 25399551, 25265492). Additionally, patients with melanoma treated with dabrafenib and trametinib in both the neoadjuvant and adjuvant settings have improved survival over patients given standard of care (PMID: 29361468, 28991513, 28891408). Promising clinical data has also suggested that addition of an immunotherapy agent to combination RAF and MEK inhibitor treatment may improve rate of overall response and duration of response in melanoma patients (PMID: 31171876, 31171879, 31171878).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600 {excluding V600E ; V600K}",
+      "name": "V600 (excluding V600E and V600K)",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "31171876",
+      "28891408",
+      "31171878",
+      "31171879",
+      "25265492",
+      "25287827",
+      "29361468",
+      "28991513",
+      "23020132",
+      "25399551"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Dabrafenib, an orally bioavailable RAF inhibitor, and trametinib, an orally bioavailable MEK1/2 inhibitor, are FDA-approved alone or in combination for the treatment of patients with metastatic non-small cell lung cancer (NSCLC) with BRAF V600E mutation. FDA approval was based on a Phase II, multicenter, non-randomized, open-label study of dabrafenib in combination with trametinib in patients with chemotherapy-pretreated, metastatic, stage IV BRAF(V600E)-mutant non-small cell lung cancer, in which 36 of 57 patients (63%) achieved overall tumor response, with two patients experiencing durable complete responses and 34 patients having durable partial responses (PMID: 27283860). In the third arm of that study, which included patients with untreated, metastatic, stage IV BRAF(V600E)-mutant non-small cell lung cancer, 23 of 26 patients (64%, 95% CI 46-79) had an overall response, with two patients (6%) having durable complete response and 21 (58%) having partial response (PMID: 28919011).",
+    "cancerTypes":
+    [
+      {
+        "id": 876,
+        "subtype": "",
+        "code": "",
+        "color": "Gainsboro",
+        "mainType": "Non-Small Cell Lung Cancer",
+        "level": 0,
+        "tissue": "Lung",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "27283860",
+      "28919011"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Dabrafenib, an orally bioavailable RAF inhibitor, and trametinib, an orally bioavailable MEK1/2 inhibitor, are FDA-approved alone or in combination for the treatment of patients with metastatic melanoma harboring a V600E or V600K BRAF mutation. FDA approval of dabrafenib in combination with trametinib was based on results from an open-label Phase III study of combination therapy versus dabrafenib monotherapy in 247 patients with metastatic melanoma who were naive to treatment with BRAF inhibitors. Combined dabrafenib and trametinib, administered in full monotherapy doses, improved the response rate in patients with BRAF V600-mutant metastatic melanoma versus dabrafenib monotherapy (67% vs.51%; p<0.002). However, median progression-free survival improved by only 2 weeks (9.3 months vs 8.8 months; HR = 0.75) compared with dabrafenib monotherapy (PMID: 23020132). Combination therapy is associated with less cutaneous toxicity than monotherapy, but systemic toxicity may be increased (PMID: 25287827, 25399551). Follow-up trials have demonstrated that all clinical measures inclusive of overall and median progression-free survival as well as objective response rates, median duration of response and number of patients with complete response favored patients treated with combination dabrafenib and trametinib, administered in full monotherapy doses, compared to either dabrafenib or vemurafenib monotherapy, including patients who previously progressed on BRAF inhibitor monotherapy (PMID: 25287827, 25399551, 25265492). Additionally, patients with melanoma treated with dabrafenib and trametinib in both the neoadjuvant and adjuvant settings have improved survival over patients given standard of care (PMID: 29361468, 28991513, 28891408). Promising clinical data has also suggested that addition of an immunotherapy agent to combination RAF and MEK inhibitor treatment may improve rate of overall response and duration of response in melanoma patients (PMID: 31171876, 31171879, 31171878).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600K",
+      "name": "V600K",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "K",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "31171876",
+      "28891408",
+      "31171878",
+      "31171879",
+      "25265492",
+      "25287827",
+      "29361468",
+      "28991513",
+      "23020132",
+      "25399551"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "The combination of encorafenib, an inhibitor of V600E- or V600K-mutant BRAF, and binimetinib, an inhibitor of MEK1/2, is FDA-approved in combination for patients with unresectable or metastatic melanoma with a BRAF V600E or V600K mutation. FDA approval was based on the results of the Phase III COLUMBUS trial of combined encorafenib plus binimetinib versus single agent vemurafenib in 577 patients with BRAF V600E- or V600K-mutant metastatic melanoma in which the median progression-free survival was 14.9 months (95% CI: 11.0-18.5) in the encorafenib plus binimetinib group versus 7.3 months (95% CI: 5.6-8.2) in the single agent vemurafenib group (HR= 0.54, 95% CI: 0.41-0.71; p<0·0001) (PMID: 29573941).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600 {excluding V600E ; V600K}",
+      "name": "V600 (excluding V600E and V600K)",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Encorafenib + Binimetinib"
+    ],
+    "drugPmids":
+    [
+      "29573941"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Dabrafenib, an orally bioavailable RAF inhibitor, and trametinib, an orally bioavailable MEK1/2 inhibitor, are FDA-approved in combination for the treatment of patients with solid tumors other than colorectal harboring BRAF V600E mutation. FDA approval was based on data from 131 adult patients with solid tumors treated with dabrafenib and trametinib in the BRF117019 and NCI-MATCH trials and 36 pediatric patients treated with dabrafenib and trametinib in the CTMT212X2101 study. Of the 131 adult patients treated with dabrafenib and trametinib, the overall response rate was 41% (54/131; 95% CI = 33-50) and of the 36 pediatric patients treated with dabrafenib and trametinib (low-grade glioma, n=34; high-grade glioma, n=2), the overall response rate was 25% (95% CI = 12-24) (PMID: 32818466, 34838156, 32758030)(Abstract: Bouffet et al. Abstract# LGG-49, Neuro-Oncology 2020. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7715318/). In the randomized, Phase II study of dabrafenib and trametinib in 110 patients with BRAF V600–mutant pediatric low-grade glioma (dabrafenib + trametinib treatment, n=37; carboplatin + vincristine treatment, n=37), the overall response rate was 47% (95% CI= 35%-59%) with dabrafenib and trametinib and 11% (95% CI= 3%-25%) with carboplatin and vincristine, and the progression-free survival was 20.1 months (95% CI= 12.8 mo-not estimable) with dabrafenib and trametinib and 7.4 months (95% CI= 3.6-11.8 mo) with carboplatin and vincristine (Abstract: Bouffet et al. Abstract# LBA2002, ASCO 2022. https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.17_suppl.LBA2002). FDA approval was supported by results in COMBI-d, COMBI-v and BRF113928 studies in melanoma and lung cancer (PMID: 23020132, 25399551, 27283860).",
     "cancerTypes":
     [
       {
@@ -2911,6 +2105,170 @@
         "tumorForm": "SOLID"
       }
     ],
+    "excludedCancerTypes":
+    [
+      {
+        "id": 935,
+        "subtype": "",
+        "code": "",
+        "color": "SaddleBrown",
+        "mainType": "Colorectal Cancer",
+        "level": 0,
+        "tissue": "Bowel",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "32758030",
+      "27283860",
+      "23020132",
+      "32818466",
+      "25399551",
+      "34838156"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7715318/",
+        "abstract": "Bouffet et al. Abstract# LGG-49, Neuro-Oncology 2020"
+      },
+      {
+        "link": "https://ascopubs.org/doi/abs/10.1200/JCO.2022.40.17_suppl.LBA2002",
+        "abstract": "Bouffet et al. Abstract# LBA2002, ASCO 2022"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "The combination of encorafenib, an inhibitor of V600E- or V600K-mutant BRAF, and binimetinib, an inhibitor of MEK1/2, is FDA-approved in combination for patients with unresectable or metastatic melanoma with a BRAF V600E or V600K mutation. FDA approval was based on the results of the Phase III COLUMBUS trial of combined encorafenib plus binimetinib versus single-agent vemurafenib in 577 patients with BRAF V600E- or V600K-mutant metastatic melanoma in which the median progression-free survival was 14.9 months (95% CI = 11.0-18.5) in the encorafenib plus binimetinib group versus 7.3 months (95% CI = 5.6-8.2) in the single agent vemurafenib group (HR= 0.54, 95% CI = 0.41-0.71; p<0·0001) (PMID: 29573941). In the five-year update of the Phase III COLUMBUS trial, the progression-free survival and overall survival were 23% and 35% respectively in the encorafenib plus binimetinib group (n=192) versus 10% and 21% respectively in the single agent vemurafenib group (n=191), and the median duration of response and disease control rate were 18.6 months and 92.2% in the encorafenib plus binimetinib group versus 12.3 months and 81.2% in the single-agent vemurafenib group (PMID: 35862871).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Encorafenib + Binimetinib"
+    ],
+    "drugPmids":
+    [
+      "29573941",
+      "35862871"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "PLX8394 is an orally available, second-generation, small-molecule BRAF inhibitor that inhibits mutated, oncogenic BRAF without causing paradoxical MAPK pathway activation as is seen with first-generation BRAF inhibitors (PMID: 28659148). In a phase I clinical trial for patients with refractory or relapsed solid tumors with or without BRAF mutation, there were two (28%) partial responses of seven evaluable BRAF-mutant patients treated with PLX8394 and cobicistat, a CYP3A4 inhibitor (Abstract: Janku et al. Abstract# B176, AACR-NCI-EORTC 2017. http://mct.aacrjournals.org/content/17/1_Supplement/B176). Both responses were in patients with BRAF V600 mutations. Preclinical studies show that PLX8394 specifically inhibits BRAF-containing dimers and inhibits proliferation and pathway activation in BRAF-mutated colorectal cancer cell lines (PMID: 26466569, 28659148, 30559419, 28783719).",
+    "cancerTypes":
+    [
+      {
+        "id": 984,
+        "subtype": "",
+        "code": "",
+        "color": "",
+        "mainType": "All Solid Tumors",
+        "level": -1,
+        "tissue": "",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
     "variant":
     {
       "gene":
@@ -2944,11 +2302,12 @@
       "variantResidues": "V",
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
       ]
     },
     "level": "4",
+    "fdaLevel": "Fda3",
     "drug":
     [
       "PLX8394"
@@ -2970,19 +2329,22 @@
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 21663470, 25480661, 22072557, 22028477, 21910720, 22531170, 22210875, 23347903, 25120816, 26071465).",
     "cancerTypes":
     [
       {
-        "id": 407,
-        "subtype": "Pilocytic Astrocytoma",
-        "code": "PAST",
-        "color": "Gray",
-        "mainType": "Glioma",
-        "level": 3,
-        "tissue": "CNS/Brain",
-        "tumorForm": "SOLID"
+        "id": 276,
+        "subtype": "Hairy Cell Leukemia",
+        "code": "HCL",
+        "color": "LimeGreen",
+        "mainType": "Mature B-Cell Neoplasms",
+        "level": 5,
+        "tissue": "Lymphoid",
+        "tumorForm": "LIQUID"
       }
     ],
+    "excludedCancerTypes":
+    [],
     "variant":
     {
       "gene":
@@ -3016,24 +2378,314 @@
       "variantResidues": "E",
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
       ]
     },
-    "level": "2",
+    "level": "Dx2",
+    "fdaLevel": null,
     "drug":
-    [
-      "Selumetinib"
-    ],
+    [],
     "drugPmids":
     [
-      "31151904"
+      "23347903",
+      "25480661",
+      "22072557",
+      "21910720",
+      "22210875",
+      "25120816",
+      "22028477",
+      "21663470",
+      "26071465",
+      "22531170"
     ],
     "drugAbstracts":
     []
   },
   {
     "oncogenic": "Oncogenic",
+    "drugDescription": "Trametinib and cobimetinib are MEK1/2 kinase inhibitors that are FDA-approved for patients with unresectable or metastatic melanoma with BRAF V600E or V600K mutations and both are NCCN-listed for patients with Erdheim-Chester Disease (ECD) harboring MAPK pathway mutations. In an open-label phase II trial (NCT02649972) of cobimetinib in eighteen adult patients with histiocytoses (n = twelve patients with ECD) of any mutational status, the overall response rate was 89% (90% CI: 73–100), 100% of responses were ongoing at one year, and 94% of patients remained progression-free (PMID: 30867592).",
+    "cancerTypes":
+    [
+      {
+        "id": 611,
+        "subtype": "Erdheim-Chester Disease",
+        "code": "ECD",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations {excluding V600}",
+      "name": "Oncogenic Mutations (excluding V600)",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Cobimetinib",
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "30867592"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Dabrafenib, an orally bioavailable RAF inhibitor, and trametinib, an orally bioavailable MEK1/2 inhibitor, are FDA-approved alone or in combination for the treatment of patients with locally advanced or metastatic anaplastic thyroid cancer (ATC) with BRAF V600E mutation and with no satisfactory locoregional treatment options. FDA approval was based on results of the Phase II study of dabrafenib combined with trametinib in patients with BRAF V600E-positive ATC in which the overall response rate in sixteen evaluable patients was 69% (11/16; 95% CI= 41%-89%)(PMID: 29072975).",
+    "cancerTypes":
+    [
+      {
+        "id": 409,
+        "subtype": "Anaplastic Thyroid Cancer",
+        "code": "THAP",
+        "color": "Teal",
+        "mainType": "Thyroid Cancer",
+        "level": 2,
+        "tissue": "Thyroid",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Dabrafenib + Trametinib"
+    ],
+    "drugPmids":
+    [
+      "29072975"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Trametinib and cobimetinib are MEK1/2 kinase inhibitors that are FDA-approved for patients with unresectable or metastatic melanoma with BRAF V600E or V600K mutations and both are NCCN-listed for patients with histiocytic neoplasms harboring MAPK pathway mutations. In a case study of one eighteen-year-old patient with refractory histiocytic sarcoma harboring a pathogenic variant of MAP2K1 (F53L), the patient was treated with trametinib and showed an excellent response prior to treatment interruption due to severe adverse events (PMID: 30361829).",
+    "cancerTypes":
+    [
+      {
+        "id": 934,
+        "subtype": "",
+        "code": "",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 0,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations {excluding V600}",
+      "name": "Oncogenic Mutations (excluding V600)",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "3A",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Cobimetinib",
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "30361829"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "The RAF inhibitor vemurafenib in combination with the MEK inhibitor cobimetinib is FDA-approved for patients with BRAF V600E-positive melanoma, non-small cell lung cancer, and anaplastic thyroid cancer, and is NCCN-listed for patients with low-grade glioma, anaplastic glioma, and glioblastoma. Patients with various glioma subtypes harboring BRAF V600E mutations have shown responses to RAF and MEK inhibition. Three out of five patients with anaplastic astrocytoma had a response (one partial response, two stable disease) to vemurafenib monotherapy (PMID: 30351999). One patient with high-grade glioma (NOS) had stable disease in response to vemurafenib monotherapy (PMID:30351999). Four out of eight patients with glioma (NOS) had a response (one partial response, three stable disease, two progressive disease, two not evaluable) to vemurafenib monotherapy (PMID: 26287849). One patient with anaplastic oligoastrocytoma had stable disease in response to vemurafenib monotherapy (PMID: 30462564). Four of seven patients with glioblastoma multiforme had a response (one complete response, three stable disease, one progressive disease, two not evaluable) to vemurafenib monotherapy (PMID: 30351999, 24725538). Four patients with glioblastoma (including epithelioid glioblastoma) had a response (one “near-complete” response, three stable disease) to either dabrafenib monotherapy (n=2) or vemurafenib monotherapy (n=2) (PMID: 29621181, 29039591, 33117675, 34232949).",
+    "cancerTypes":
+    [
+      {
+        "id": 619,
+        "subtype": "Diffuse Glioma",
+        "code": "DIFG",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 2,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib"
+    ],
+    "drugPmids":
+    [
+      "24725538",
+      "29039591",
+      "30462564",
+      "34232949",
+      "29621181",
+      "30351999",
+      "26287849",
+      "33117675"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Trametinib is an oral small molecule inhibitor of MEK1/2 that is FDA-approved alone or with dabrafenib for the treatment of patients with metastatic melanoma harboring a V600E or V600K BRAF mutation. In an open-label, randomized Phase III trial, patients with BRAF V600E/K-mutated unresectable, metastatic melanoma received oral trametinib (2 mg once daily) or an intravenous regimen of either dacarbazine (1000 mg/m2) or paclitaxel (175 mg/m2) every three weeks. Trametinib demonstrated improved progression-free survival (HR for disease progression or death = 0.45) and six-month overall survival (81% vs. 67%; death HR = 0.54; p=0.01) (PMID: 22663011). However, like other MEK inhibitors, the benefit of trametinib is limited by adverse reactions, most notably grade three or four rash and diarrhea (PMID: 22663011). Trametinib is not typically used as monotherapy for patients with BRAF V600K melanoma given its lower response rate compared to BRAF inhibitors and combined BRAF and MEK inhibitors. Patients previously treated with a RAF inhibitor appear to be less likely than untreated patients to respond to trametinib treatment (PMID: 22663011), and FDA guidelines state that trametinib as a monotherapy is not indicated for these patients. Dabrafenib and trametinib are FDA-approved as a combination therapy, which has superior clinical outcomes compared to dabrafenib or trametinib monotherapy (PMID: 25399551, 25265492). Additionally, patients with melanoma treated with dabrafenib and trametinib in both the neoadjuvant and adjuvant settings had improved survival over patients given standard of care (PMID: 29361468).",
     "cancerTypes":
     [
       {
@@ -3047,6 +2699,150 @@
         "tumorForm": "SOLID"
       }
     ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600K",
+      "name": "V600K",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "K",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "22663011",
+      "25265492",
+      "29361468",
+      "25399551"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Cobimetinib and trametinib are small molecule inhibitors of the MEK1/2 kinases that are FDA-approved in combination with a RAF inhibitor for use in BRAF V600E-positive metastatic melanoma. Two studies from independent groups have shown that three patients with BRAF-fusion positive metastatic melanoma experienced clinical benefit, such as improvement of ECOG status, tumor shrinkage, or stable disease upon treatment with the MEK inhibitor trametinib (PMID: 26314551, 26072686). In vitro studies have demonstrated that BRAF fusions are sensitive to MEK inhibition as measured by decreased downstream MAPK pathway signaling in BRAF fusion-containing cells upon treatment with trametinib (PMID: 24345920).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "3A",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Cobimetinib",
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "26314551",
+      "24345920",
+      "26072686"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Vemurafenib is an orally available kinse inhibitor of V600-mutant BRAF that is FDA-approved for treatment of patients with unresectable or metastatic melanoma with the BRAF V600E mutation. Vemurafenib has been shown to have nearly equivalent activity against melanomas with BRAF V600E and V600K mutations (PMID: 24508103). In a randomized Phase III trial comparing vemurafenib (960 mg orally twice daily) with dacarbazine (1000 mg/m2 i.v. every 3 weeks) for treatment-naive, metastatic, BRAF V600E-mutant melanoma, vemurafenib was associated with better overall survival (median survival 13.6 months vs. 9.7 months; hazard ratio 0.70, p=.0008) and longer median progression-free survival (6.9 months vs. 1.6 months) (PMID: 24508103). Final overall survival data from the BRIM-3 study showed that the survival advantage of vemurafenib over dacarbazine persisted through the 4-year landmark, with survival rates for vemurafenib and dacarbazine at the 4-year landmark being 17.0% and 15.6%, respectively (PMID: 28961848). However, a trial evaluating clinical outcomes in patients with melanoma treated with either combination therapy of dabrafenib and trametinib compared to those treated with vemurafenib monotherapy demonstrated improved survival outcomes in the combination-therapy group compared to the vemurafenib group (PMID: 25399551).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
     "variant":
     {
       "gene":
@@ -3080,27 +2876,516 @@
       "variantResidues": "E",
       "referenceGenomes":
       [
-        "GRCh37",
-        "GRCh38"
+        "GRCh38",
+        "GRCh37"
       ]
     },
     "level": "1",
+    "fdaLevel": "Fda2",
     "drug":
     [
-      "Dabrafenib + Trametinib"
+      "Vemurafenib"
     ],
     "drugPmids":
     [
-      "31171876",
-      "28891408",
-      "31171878",
-      "31171879",
-      "25265492",
-      "25287827",
-      "29361468",
-      "28991513",
-      "23020132",
+      "28961848",
+      "24508103",
       "25399551"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "The RAF inhibitor vemurafenib in combination with the MEK inhibitor cobimetinib is FDA-approved for the treatment of patients with BRAF V600-mutant metastatic or unresectable locally advanced melanoma. FDA approval was based on results from the randomized Phase III coBRIM trial of combined vemurafenib and cobimetinib versus vemurafenib and placebo in 495 patients with metastatic BRAF V600-mutant melanoma that demonstrated superior clinical benefit measures in the combination versus the control arm. Specifically, median progression-free survival was 9.9 months in the combination arm versus 6.2 months in the control arm (HR = 0.51), with a complete response rate of 10% versus 4%, respectively, and interim nine-month overall survival of 81% versus 73%, respectively (PMID: 25265494). Follow-up analysis of the coBRIM trial showed two-year overall survival was 48.3% in the combination group versus 38.0% in the monotherapy group (PMID: 27480103), and five-year followup of the BRIM7 study showed a median overall survival of 31.8 months and a five-year survival rate of 39.2% (PMID: 31732523).",
+    "cancerTypes":
+    [
+      {
+        "id": 453,
+        "subtype": "Melanoma",
+        "code": "MEL",
+        "color": "Black",
+        "mainType": "Melanoma",
+        "level": 2,
+        "tissue": "Skin",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Vemurafenib + Cobimetinib"
+    ],
+    "drugPmids":
+    [
+      "31732523",
+      "27480103",
+      "25265494"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "Selumetinib is a small molecule tyrosine kinase inhibitor of MEK1/2. In stratum one of the phase II PBTC study of selumetinib in 25 patients with pilocytic astrocytoma harboring a KIAA1549–BRAF fusion or BRAF V600E mutation, seven of eighteen patients with a KIAA1549–BRAF fusion had a partial response to treatment (PMID: 31151904). Additionally, the two year progression-free survival rate for the BRAF study population (n=25) was 70% (95% CI = 47–85) (PMID: 31151904).",
+    "cancerTypes":
+    [
+      {
+        "id": 407,
+        "subtype": "Pilocytic Astrocytoma",
+        "code": "PAST",
+        "color": "Gray",
+        "mainType": "Glioma",
+        "level": 3,
+        "tissue": "CNS/Brain",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "missense_variant",
+        "isGenerallyTruncating": false,
+        "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+      },
+      "alteration": "V600E",
+      "name": "V600E",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": "E",
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Selumetinib"
+    ],
+    "drugPmids":
+    [
+      "31151904"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Vemurafenib and dabrafenib, inhibitors of BRAF V600E that are FDA-approved for patients with BRAF V600E or V600K mutant positive melanoma, are NCCN-listed for patients with Langerhans Cell Histiocytosis (LCH) harboring BRAF V600E mutations. NCCN recommendation is based on the Phase II VE BASKET study of vemurafenib in patients with BRAF V600E-mutant cancer in which four of four patients with LCH harboring BRAF V600E mutations had partial response to vemurafenib treatment (PMID: 29188284).",
+    "cancerTypes":
+    [
+      {
+        "id": 862,
+        "subtype": "Langerhans Cell Histiocytosis",
+        "code": "LCH",
+        "color": "LightSalmon",
+        "mainType": "Histiocytosis",
+        "level": 4,
+        "tissue": "Myeloid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "V600",
+      "name": "V600",
+      "refResidues": "V",
+      "proteinStart": 600,
+      "proteinEnd": 600,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Vemurafenib",
+      "Dabrafenib"
+    ],
+    "drugPmids":
+    [
+      "29188284"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "PLX8394 is an orally available, second-generation, small-molecule BRAF inhibitor that inhibits mutated, oncogenic BRAF without causing paradoxical MAPK pathway activation as is seen with first-generation BRAF inhibitors (PMID: 28659148). In a phase I clinical trial for patients with refractory or relapsed solid tumors with or without BRAF mutation, there were two (28%) partial responses of seven evaluable BRAF-mutant patients treated with PLX8394 and cobicistat, a CYP3A4 inhibitor (Abstract: Janku et al. Abstract# B176, AACR-NCI-EORTC 2017. http://mct.aacrjournals.org/content/17/1_Supplement/B176). Both responses were in patients with BRAF V600 mutations. Preclinical studies show that PLX8394 specifically inhibits BRAF-containing dimers and inhibits proliferation and pathway activation in BRAF-mutated colorectal cancer cell lines (PMID: 26466569, 28659148, 30559419, 28783719).",
+    "cancerTypes":
+    [
+      {
+        "id": 984,
+        "subtype": "",
+        "code": "",
+        "color": "",
+        "mainType": "All Solid Tumors",
+        "level": -1,
+        "tissue": "",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "G464",
+      "name": "G464",
+      "refResidues": "G",
+      "proteinStart": 464,
+      "proteinEnd": 464,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "4",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "PLX8394"
+    ],
+    "drugPmids":
+    [
+      "26466569",
+      "28659148",
+      "28783719",
+      "30559419"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
+        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "PLX8394 is an orally available, second-generation, small-molecule BRAF inhibitor that inhibits mutated, oncogenic BRAF without causing paradoxical MAPK pathway activation as is seen with first-generation BRAF inhibitors (PMID: 28659148). In a phase I clinical trial for patients with refractory or relapsed solid tumors with or without BRAF mutation, there were two (28%) partial responses of seven evaluable BRAF-mutant patients treated with PLX8394 and cobicistat, a CYP3A4 inhibitor (Abstract: Janku et al. Abstract# B176, AACR-NCI-EORTC 2017. http://mct.aacrjournals.org/content/17/1_Supplement/B176). Both responses were in patients with BRAF V600 mutations. Preclinical studies show that PLX8394 specifically inhibits BRAF-containing dimers and inhibits proliferation and pathway actiavtion in BRAF-mutated colorectal cancer cell lines (PMID: 26466569, 28659148, 30559419, 28783719).",
+    "cancerTypes":
+    [
+      {
+        "id": 984,
+        "subtype": "",
+        "code": "",
+        "color": "",
+        "mainType": "All Solid Tumors",
+        "level": -1,
+        "tissue": "",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "L597",
+      "name": "L597",
+      "refResidues": "L",
+      "proteinStart": 597,
+      "proteinEnd": 597,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "4",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "PLX8394"
+    ],
+    "drugPmids":
+    [
+      "26466569",
+      "28659148",
+      "28783719",
+      "30559419"
+    ],
+    "drugAbstracts":
+    [
+      {
+        "link": "http://mct.aacrjournals.org/content/17/1_Supplement/B176",
+        "abstract": "Janku et al. Abstract# B176, AACR-NCI-EORTC 2017"
+      }
+    ]
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Cobimetinib and trametinib are small molecule inhibitors of the MEK1/2 kinases that are FDA-approved in combination with a RAF inhibitor for use in BRAF V600E-positive metastatic melanoma. In a study of patients with low-grade serous ovarian cancer, a patient with a CUL1-BRAF fusion who progressed on carboplatin and paclitaxel had a sustained complete response to treatment with paclitaxel and a MEK1/2 inhibitor (selumetinib) (PMID: 26324360).  Additionally, in vitro studies have demonstrated that BRAF fusions are sensitive to MEK inhibition as measured decreased downstream MAPK pathway signaling in BRAF fusion-containing cells upon treatment with trametinib (PMID: 24345920).",
+    "cancerTypes":
+    [
+      {
+        "id": 880,
+        "subtype": "",
+        "code": "",
+        "color": "LightBlue",
+        "mainType": "Ovarian Cancer",
+        "level": 0,
+        "tissue": "Ovary/Fallopian Tube",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "3A",
+    "fdaLevel": "Fda3",
+    "drug":
+    [
+      "Cobimetinib",
+      "Trametinib"
+    ],
+    "drugPmids":
+    [
+      "26324360",
+      "24345920"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Oncogenic",
+    "drugDescription": "This assertion is supported by (PMID: 22237106).",
+    "cancerTypes":
+    [
+      {
+        "id": 857,
+        "subtype": "Early T-Cell Precursor Lymphoblastic Leukemia",
+        "code": "ETPLL",
+        "color": "LimeGreen",
+        "mainType": "T-Lymphoblastic Leukemia/Lymphoma",
+        "level": 4,
+        "tissue": "Lymphoid",
+        "tumorForm": "LIQUID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 673,
+        "hugoSymbol": "BRAF",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000288602",
+        "grch37RefSeq": "NM_004333.4",
+        "grch38Isoform": "ENST00000646891",
+        "grch38RefSeq": "NM_004333.4",
+        "geneAliases":
+        [
+          "BRAF1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Oncogenic Mutations",
+      "name": "Oncogenic Mutations",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "Dx3",
+    "fdaLevel": null,
+    "drug":
+    [],
+    "drugPmids":
+    [
+      "22237106"
     ],
     "drugAbstracts":
     []

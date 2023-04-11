@@ -10,8 +10,12 @@
 }
 
 .linkOutText {
-  textdecoration: 'underscore';
-  color: $oncokb-dark-blue;
+  color: $primary;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .biggerText {

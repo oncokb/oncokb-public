@@ -24,6 +24,7 @@ import {
   AlterationPageSearchQueries,
 } from 'app/shared/route/types';
 import WindowStore from 'app/store/WindowStore';
+import AuthenticationStore from 'app/store/AuthenticationStore';
 
 interface MatchParams {
   hgvsg: string;
@@ -33,9 +34,10 @@ interface HgvsgPageProps extends RouteComponentProps<MatchParams> {
   appStore: AppStore;
   routing: RouterStore;
   windowStore: WindowStore;
+  authenticationStore: AuthenticationStore;
 }
 
-@inject('appStore', 'routing', 'windowStore')
+@inject('appStore', 'routing', 'windowStore', 'authenticationStore')
 @observer
 export default class HgvsgPage extends React.Component<HgvsgPageProps> {
   @observable tumorType = '';
@@ -170,12 +172,14 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
             >
               <Then>
                 <AnnotationPage
+                  appStore={this.props.appStore}
+                  windowStore={this.props.windowStore}
+                  authenticationStore={this.props.authenticationStore}
                   hugoSymbol={
                     this.store.annotationResultByHgvsg.result.query.hugoSymbol
                   }
                   oncogene={this.store.gene.result.oncogene}
                   tsg={this.store.gene.result.tsg}
-                  ensemblGenes={this.store.ensemblGenes.result}
                   alteration={
                     this.store.annotationResultByHgvsg.result.query.alteration
                   }

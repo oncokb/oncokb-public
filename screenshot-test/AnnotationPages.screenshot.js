@@ -10,6 +10,11 @@ const VIEW_PORT_1080 = {
   height: 1080,
   deviceScaleFactor: 1,
 }
+const MOBILE_VIEW_PORT = {
+  width: 400,
+  height: 800,
+  deviceScaleFactor: 1,
+}
 const WAITING_TIME = 2000;
 const LONG_WAITING_TIME = 10000;
 const LATEST_SNAPSHOTS_DIR = './screenshot-test/__latest_snapshots__/';
@@ -23,6 +28,8 @@ const browserConfig = { // Docker requires --no-sandbox to be able to run the te
 // Shared API response data
 const apiAccount = fs.readFileSync(`${DATA_DIR}api-account.json`).toString();
 const apiV1Info = fs.readFileSync(`${DATA_DIR}api-v1-info.json`).toString();
+const numbersMain = fs.readFileSync(`${DATA_DIR}private-utils-numbers-main.json`).toString();
+const numbersLevels = fs.readFileSync(`${DATA_DIR}private-utils-numbers-levels.json`).toString();
 const tumorTypes = fs.readFileSync(`${DATA_DIR}private-utils-tumorTypes.json`).toString();
 
 // ROS1 gene page - API response data
@@ -118,11 +125,32 @@ function getMockResponse(url){
           body: apiV1Info
       };
       break;
+    case `${SERVER_URL}api/private/utils/numbers/main/`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: numbersMain
+      };
+      break;
+    case `${SERVER_URL}api/private/utils/numbers/levels/`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: numbersLevels
+      };
+      break;
     case `${SERVER_URL}api/private/utils/tumorTypes`:
       res = {
         status: 200,
         contentType: 'application/json',
         body: tumorTypes
+      };
+      break;
+    case `${SERVER_URL}api/users/admin/tokens`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: userToken
       };
       break;
 
@@ -197,11 +225,11 @@ function getMockResponse(url){
         body: '[]'
       };
       break;
-    case `https://www.genomenexus.org//ensembl/transcript`:
+    case `https://www.genomenexus.org//ensembl/canonical-transcript/hgnc/ROS1?isoformOverrideSource=mskcc`:
       res = {
         status: 200,
         contentType: 'application/json',
-        body: '[]'
+        body: '{}'
       };
       break;
     case `https://www.genomenexus.org//pfam/domain`:
@@ -353,7 +381,7 @@ function getMockResponse(url){
   return res;
 }
 
-describe.skip('Tests with login', () => {
+describe('Tests with login', () => {
   let browser;
   let page;
 
@@ -387,11 +415,27 @@ describe.skip('Tests with login', () => {
   })
 
   it('Alteration Page', async() => {
-    await page.goto(`${CLIENT_URL}gene/ROS1/BCR-ROS1%20Fusion`);
+    await page.goto(`${CLIENT_URL}gene/TP53/Deletion`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('Alteration Page with Login'));
     expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Login' });
+  })
+
+  it('Alteration Page with Cancer Type - Solid', async() => {
+    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/MEL`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Solid with Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Cancer Type - Solid with Login' });
+  })
+
+  it('Alteration Page with Cancer Type - Heme', async() => {
+    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/HCL`);
+    await page.setViewport(VIEW_PORT_1080);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Heme with Login'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Cancer Type - Heme with Login' });
   })
 
   it('HGVSg Page', async() => {
@@ -480,5 +524,58 @@ describe('Tests without login', () => {
   afterAll(async () => {
     await browser.close();
   })
+})
+
+
+describe('Tests on mobile view (< large grid)', () => {
+  let browser;
+  let page;
+
+  beforeAll(async () => {
+    browser = await puppeteer.launch(browserConfig);
+    page = await browser.newPage();
+    await page.setRequestInterception(true); // Handle UnhandledPromiseRejectionWarning: Error: Request Interception is not enabled!
+    page.on('request', (request) => {
+      let url = request.url()
+      if (getMockResponse(url) !== undefined){
+        request.respond(
+          getMockResponse(url)
+        )
+      }
+      else request.continue();
+    });
+    await page.goto(`${CLIENT_URL}`);
+    await page.evaluate(() => {
+      localStorage.setItem('localdev', 'true');
+      localStorage.setItem('disablebanner', 'true');
+    });
+  })
+
+  it('Alteration Page with Cancer Type - With login - Mobile', async() => {
+    await page.evaluate(() => {
+      localStorage.setItem('oncokb-user-token', 'oncokb-public-demo-admin-token');
+    });
+    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/HCL`);
+    await page.setViewport(MOBILE_VIEW_PORT);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - With login - Mobile'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Cancer Type - With login - Mobile' });
+  })
+
+  it('Alteration Page with Cancer Type - Without login - Mobile', async() => {
+    await page.evaluate(() => {
+      localStorage.removeItem('oncokb-user-token');
+    });
+    await page.goto(`${CLIENT_URL}gene/BRAF/V600E/HCL`);
+    await page.setViewport(MOBILE_VIEW_PORT);
+    await page.waitFor(WAITING_TIME);
+    let image = await page.screenshot(getScreenshotConfig('Alteration Page with Cancer Type - Without login - Mobile'));
+    expect(image).toMatchImageSnapshot({ customSnapshotIdentifier: 'Alteration Page with Cancer Type - Without login - Mobile' });
+  })
+
+  afterAll(async () => {
+    await browser.close();
+  })
+
 })
 
