@@ -56,7 +56,7 @@ import LoadingIndicator from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouteComponentProps } from 'react-router';
 import autobind from 'autobind-decorator';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import { daysDiff } from 'app/shared/utils/Utils';
+import { daysDiff, getPageTitle } from 'app/shared/utils/Utils';
 import _ from 'lodash';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import TokenInputGroups from 'app/components/tokenInputGroups/TokenInputGroups';
@@ -599,7 +599,9 @@ export default class UserPage extends React.Component<IUserPage> {
             <Else>
               {this.user !== undefined && (
                 <DocumentTitle
-                  title={`${this.user.firstName} ${this.user.lastName}`}
+                  title={getPageTitle(
+                    `${this.user.firstName} ${this.user.lastName}`
+                  )}
                 >
                   <AvForm onValidSubmit={this.updateUser} model={this.user}>
                     <div>
@@ -709,7 +711,13 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.firstName}
-                            validate={SHORT_TEXT_VAL}
+                            validate={{
+                              required: {
+                                value: true,
+                                errorMessage: 'First name is required',
+                              },
+                              ...SHORT_TEXT_VAL,
+                            }}
                           />
                           <AvField
                             name="lastName"
@@ -720,7 +728,13 @@ export default class UserPage extends React.Component<IUserPage> {
                               />
                             }
                             value={this.user.lastName}
-                            validate={SHORT_TEXT_VAL}
+                            validate={{
+                              required: {
+                                value: true,
+                                errorMessage: 'Last name is required',
+                              },
+                              ...SHORT_TEXT_VAL,
+                            }}
                           />
                           <AvField
                             name="createdDate"

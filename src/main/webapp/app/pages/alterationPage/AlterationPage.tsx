@@ -7,7 +7,12 @@ import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
 import { ANNOTATION_PAGE_TAB_KEYS, DEFAULT_GENE } from 'app/config/constants';
-import { decodeSlash, encodeSlash } from 'app/shared/utils/Utils';
+import {
+  decodeSlash,
+  encodeSlash,
+  getCancerTypeNameFromOncoTreeType,
+  getPageTitle,
+} from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import DocumentTitle from 'react-document-title';
 import { Else, If, Then } from 'react-if';
@@ -20,6 +25,8 @@ import {
   AlterationPageSearchQueries,
 } from 'app/shared/route/types';
 import autobind from 'autobind-decorator';
+import WindowStore from 'app/store/WindowStore';
+import AuthenticationStore from 'app/store/AuthenticationStore';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -29,10 +36,12 @@ interface MatchParams {
 
 interface AlterationPageProps extends RouteComponentProps<MatchParams> {
   appStore: AppStore;
+  windowStore: WindowStore;
   routing: RouterStore;
+  authenticationStore: AuthenticationStore;
 }
 
-@inject('appStore', 'routing', 'windowStore')
+@inject('appStore', 'routing', 'windowStore', 'authenticationStore')
 @observer
 export default class AlterationPage extends React.Component<
   AlterationPageProps,
@@ -148,9 +157,9 @@ export default class AlterationPage extends React.Component<
       content.push(this.store.alterationQuery);
     }
     if (this.store.tumorTypeQuery) {
-      content.push(this.store.tumorTypeQuery);
+      content.push(`in ${this.store.cancerTypeName}`);
     }
-    return content.join(', ');
+    return getPageTitle(content.join(' '));
   }
 
   @autobind
@@ -185,13 +194,14 @@ export default class AlterationPage extends React.Component<
               this.pageShouldBeRendered && (
                 <AnnotationPage
                   appStore={this.props.appStore}
+                  windowStore={this.props.windowStore}
+                  authenticationStore={this.props.authenticationStore}
                   hugoSymbol={this.store.hugoSymbol}
                   oncogene={this.store.gene.result.oncogene}
                   tsg={this.store.gene.result.tsg}
-                  ensemblGenes={this.store.ensemblGenes.result}
                   alteration={this.store.alterationQuery}
                   matchedAlteration={this.store.alteration.result}
-                  tumorType={this.store.tumorTypeQuery}
+                  tumorType={this.store.cancerTypeName}
                   refGenome={this.store.referenceGenomeQuery}
                   annotation={this.store.annotationResult.result}
                   biologicalAlterations={

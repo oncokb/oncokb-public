@@ -1,6 +1,7 @@
 [
   {
     "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Ceritinib is a small molecule inhibitor of ALK that also binds to and inhibits ROS1 and is NCCN-listed as a category 2A treatment recommendation for patients with non-small cell lung cancer (NSCLC) who have ROS1 rearrangements. In a Phase II study of ceritinib in 32 patients with NSCLC harboring ROS1 rearrangement, the overall response rate in 28 evaluable patients was 62% (95% CI= 45 - 77) with one patient having a complete response and nineteen patients having a partial response (PMID: 28520527).",
     "cancerTypes":
     [
       {
@@ -70,6 +71,79 @@
   },
   {
     "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Crizotinib, an inhibitor of ALK, ROS1 and MET tyrosine kinases, is FDA-approved for the treatment of patients with metastatic non-small cell lung cancer (NSCLC) whose tumors are ROS1-positive. FDA approval is based on the results of a Phase I trial of crizotinib in 53 patients with advanced NSCLC positive for ROS1 rearrangements in which the objective response rate was 72% (95% CI= 58-84), including six complete responses, 32 partial responses (66%) and a median progression-free survival (PFS) of 19.3 months (95% CI= 15.2-39.1)(PMID: 25264305, 30980071). In a Phase II trial of crizotinib in 127 East Asian patients with ROS1-positive NSCLC, the overall response rate was 71.1% (95% CI= 63.0-79.3), including seventeen of 127 patients with complete responses (13.4%), 74 of 127 patients with partial responses (58.3%), and a median PFS of 15.9 months (95% CI= 12.9-24.0) (PMID: 29596029).",
+    "cancerTypes":
+    [
+      {
+        "id": 876,
+        "subtype": "",
+        "code": "",
+        "color": "Gainsboro",
+        "mainType": "Non-Small Cell Lung Cancer",
+        "level": 0,
+        "tissue": "Lung",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "1",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Crizotinib"
+    ],
+    "drugPmids":
+    [
+      "30980071",
+      "25264305",
+      "29596029"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Repotrectinib is an orally bioavailable tyrosine kinase inhibitor that targets ROS1. In the Phase I/II TRIDENT-1 study of repotrectinib in 171 patients with ROS1-fusion-positive non-small lung cancer (NSCLC), an overall objective response rate of 79% was found in patients who had not previously received a ROS1 tyrosine kinase inhibitor treatment. For patients previously treated with a ROS1 tyrosine kinase inhibitor, overall response rates were 38% if the patient did not previously receive chemotherapy, 42% if the patient did previously receive chemotherapy and 28% if the patient previously received two different ROS1 tyrosine kinase inhibitors (Abstract: Cho et al. Abstract# 2LBA, EJC 2022. https://www.ejcancer.com/article/S0959-8049(22)00812-7/fulltext).",
     "cancerTypes":
     [
       {
@@ -135,13 +209,84 @@
     "drugAbstracts":
     [
       {
-        "link": "https://www.jto.org/article/S1556-0864(21",
-        "abstract": "Cho et al. Abstract# MA11.07, IASLC 2021"
+        "link": "https://www.ejcancer.com/article/S0959-8049(22",
+        "abstract": "Cho et al. Abstract# 2LBA, EJC 2022"
       }
     ]
   },
   {
     "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Lorlatinib is a third-generation small molecule inhibitor of ALK and ROS1 that is NCCN-listed as a category 2A recommended subsequent therapy option for patients with ROS1-rearrangement-positive non-small cell lung cancer (NSCLC) who progressed on entrectinib, crizotinib or ceritinib. In a phase I/II trial of lorlatinib in patients with ROS1-fusion-positive NSCLC, thirteen of 21 tyrosine kinase inhibitor-naive patients had a response to lorlatinib for an overall response rate of 62% (95% CI= 38-82), while fourteen of 40 crizotinib pre-treated patients had a response to lorlatinib with an overall response rate of 35% (95% CI= 21-52)(PMID: 31669155).",
+    "cancerTypes":
+    [
+      {
+        "id": 876,
+        "subtype": "",
+        "code": "",
+        "color": "Gainsboro",
+        "mainType": "Non-Small Cell Lung Cancer",
+        "level": 0,
+        "tissue": "Lung",
+        "tumorForm": "SOLID"
+      }
+    ],
+    "excludedCancerTypes":
+    [],
+    "variant":
+    {
+      "gene":
+      {
+        "entrezGeneId": 6098,
+        "hugoSymbol": "ROS1",
+        "oncogene": true,
+        "grch37Isoform": "ENST00000368508",
+        "grch37RefSeq": "NM_002944.2",
+        "grch38Isoform": "ENST00000368508",
+        "grch38RefSeq": "NM_002944.2",
+        "geneAliases":
+        [
+          "MCF3",
+          "ROS",
+          "c-ros-1"
+        ],
+        "genesets":
+        [],
+        "tsg": false
+      },
+      "consequence":
+      {
+        "term": "NA",
+        "isGenerallyTruncating": false,
+        "description": "NA"
+      },
+      "alteration": "Fusions",
+      "name": "Fusions",
+      "refResidues": null,
+      "proteinStart": -1,
+      "proteinEnd": 100000,
+      "variantResidues": null,
+      "referenceGenomes":
+      [
+        "GRCh38",
+        "GRCh37"
+      ]
+    },
+    "level": "2",
+    "fdaLevel": "Fda2",
+    "drug":
+    [
+      "Lorlatinib"
+    ],
+    "drugPmids":
+    [
+      "31669155"
+    ],
+    "drugAbstracts":
+    []
+  },
+  {
+    "oncogenic": "Likely Oncogenic",
+    "drugDescription": "Entrectinib is a potent, orally available, ATP-competitive tyrosine kinase inhibitor that is highly effective against NTRK1/2/3, ROS1 and ALK and is FDA-approved for patients with ROS1-fusion-positive non-small cell lung cancer (NSCLC). FDA approval was based on the results of three multicenter, single-arm clinical trials (ALKA, STARTRK-1 and STARTRK-2) in which of 51 evaluable patients with ROS1-fusion-positive NSCLC who were treated with entrectinib, the overall response rate was 78% (95% CI = 65-89) and response duration was more than one year for 55% of patients (PMID: 28183697)(Abstract: Drilon et al. Abstract# CT060, AACR 2017. https://cancerres.aacrjournals.org/content/77/13_Supplement/CT060)(Abstract: Braud et al. Abstract# 64P, ESMO 2019. https://academic.oup.com/annonc/article/30/Supplement_9/mdz420.003/5638397).",
     "cancerTypes":
     [
       {
@@ -217,145 +362,5 @@
         "abstract": "Drilon et al. Abstract# CT060, AACR 2017"
       }
     ]
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 876,
-        "subtype": "",
-        "code": "",
-        "color": "Gainsboro",
-        "mainType": "Non-Small Cell Lung Cancer",
-        "level": 0,
-        "tissue": "Lung",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "excludedCancerTypes":
-    [],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
-        [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Fusions",
-      "name": "Fusions",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
-    },
-    "level": "1",
-    "fdaLevel": "Fda2",
-    "drug":
-    [
-      "Crizotinib"
-    ],
-    "drugPmids":
-    [
-      "30980071",
-      "25264305",
-      "29596029"
-    ],
-    "drugAbstracts":
-    []
-  },
-  {
-    "oncogenic": "Likely Oncogenic",
-    "cancerTypes":
-    [
-      {
-        "id": 876,
-        "subtype": "",
-        "code": "",
-        "color": "Gainsboro",
-        "mainType": "Non-Small Cell Lung Cancer",
-        "level": 0,
-        "tissue": "Lung",
-        "tumorForm": "SOLID"
-      }
-    ],
-    "excludedCancerTypes":
-    [],
-    "variant":
-    {
-      "gene":
-      {
-        "entrezGeneId": 6098,
-        "hugoSymbol": "ROS1",
-        "oncogene": true,
-        "grch37Isoform": "ENST00000368508",
-        "grch37RefSeq": "NM_002944.2",
-        "grch38Isoform": "ENST00000368508",
-        "grch38RefSeq": "NM_002944.2",
-        "geneAliases":
-        [
-          "MCF3",
-          "ROS",
-          "c-ros-1"
-        ],
-        "genesets":
-        [],
-        "tsg": false
-      },
-      "consequence":
-      {
-        "term": "NA",
-        "isGenerallyTruncating": false,
-        "description": "NA"
-      },
-      "alteration": "Fusions",
-      "name": "Fusions",
-      "refResidues": null,
-      "proteinStart": -1,
-      "proteinEnd": 100000,
-      "variantResidues": null,
-      "referenceGenomes":
-      [
-        "GRCh38",
-        "GRCh37"
-      ]
-    },
-    "level": "2",
-    "fdaLevel": "Fda2",
-    "drug":
-    [
-      "Lorlatinib"
-    ],
-    "drugPmids":
-    [
-      "31669155"
-    ],
-    "drugAbstracts":
-    []
   }
 ]

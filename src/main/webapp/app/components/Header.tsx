@@ -23,6 +23,7 @@ import AccountMessage from 'app/components/accountMessage/AccountMessage';
 import MskccLogo from 'app/components/MskccLogo';
 import AppStore from 'app/store/AppStore';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
+import { AppConfig } from 'app/appConfig';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -166,10 +167,12 @@ class Header extends React.Component<IHeaderProps> {
                       )}
                     </>
                   )}
-                  <AccountMenu
-                    isAuthenticated={this.props.isUserAuthenticated}
-                    isAdmin={this.props.isAdmin}
-                  />
+                  {AppConfig.serverConfig.enableAuth && (
+                    <AccountMenu
+                      isAuthenticated={this.props.isUserAuthenticated}
+                      isAdmin={this.props.isAdmin}
+                    />
+                  )}
                   <Nav.Item style={{ paddingRight: 0 }}>
                     <MskccLogo
                       imageHeight={35}

@@ -157,5 +157,7 @@ application:
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
   smartsheet:
     editor: OncoKB
+  frontend:
+    enable-auth: true
   recaptcha:
     threshold: 0.1

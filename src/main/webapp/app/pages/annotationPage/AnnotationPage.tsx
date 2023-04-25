@@ -4,7 +4,8 @@ import { inject, observer } from 'mobx-react';
 import {
   AlterationPageLink,
   GenePageLink,
-  OncoTreeLink,
+  getAlterationPageLink,
+  getGenePageLink,
 } from 'app/shared/utils/UrlUtils';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
@@ -16,15 +17,12 @@ import {
   TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
-import InfoIcon from 'app/shared/icons/InfoIcon';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Breadcrumb } from 'react-bootstrap';
 import classnames from 'classnames';
 import { action, computed, observable } from 'mobx';
-import autobind from 'autobind-decorator';
 import {
   BiologicalVariant,
-  EnsemblGene,
   Evidence,
   VariantAnnotation,
   VariantAnnotationTumorType,
@@ -45,39 +43,30 @@ import {
   levelOfEvidence2Level,
 } from 'app/shared/utils/Utils';
 import _ from 'lodash';
-import CancerTypeSelect from 'app/shared/dropdown/CancerTypeSelect';
 import WithSeparator from 'react-with-separator';
 import AppStore from 'app/store/AppStore';
 import { FeedbackIcon } from 'app/components/feedback/FeedbackIcon';
 import { FeedbackType } from 'app/components/feedback/types';
-import AlterationTableTabs from 'app/pages/annotationPage/AlterationTableTabs';
 import { Alteration } from 'app/shared/api/generated/OncoKbAPI';
-import { getUniqueFdaImplications } from 'app/pages/annotationPage/Utils';
+import {
+  getSummaries,
+  getUniqueFdaImplications,
+  SummaryKey,
+} from 'app/pages/annotationPage/Utils';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
 import ShowHideText from 'app/shared/texts/ShowHideText';
-
-enum SummaryKey {
-  GENE_SUMMARY = 'geneSummary',
-  ALTERATION_SUMMARY = 'variantSummary',
-  TUMOR_TYPE_SUMMARY = 'tumorTypeSummary',
-  DIAGNOSTIC_SUMMARY = 'diagnosticSummary',
-  PROGNOSTIC_SUMMARY = 'prognosticSummary',
-}
-
-const SUMMARY_TITLE = {
-  [SummaryKey.GENE_SUMMARY]: 'Gene Summary',
-  [SummaryKey.ALTERATION_SUMMARY]: 'Alteration Summary',
-  [SummaryKey.TUMOR_TYPE_SUMMARY]: 'Therapeutic Summary',
-  [SummaryKey.DIAGNOSTIC_SUMMARY]: 'Diagnostic Summary',
-  [SummaryKey.PROGNOSTIC_SUMMARY]: 'Prognostic Summary',
-};
+import { Link } from 'react-router-dom';
+import AlterationView from 'app/pages/annotationPage/AlterationView';
+import { CancerTypeView } from 'app/pages/annotationPage/CancerTypeView';
+import AuthenticationStore from 'app/store/AuthenticationStore';
+import WindowStore from 'app/store/WindowStore';
 
 export type IAnnotationPage = {
-  appStore?: AppStore;
+  appStore: AppStore;
+  windowStore: WindowStore;
   hugoSymbol: string;
   oncogene?: boolean;
   tsg?: boolean;
-  ensemblGenes: EnsemblGene[];
   alteration: string;
   matchedAlteration: Alteration | undefined;
   tumorType: string;
@@ -91,9 +80,9 @@ export type IAnnotationPage = {
     selectedTabKey: ANNOTATION_PAGE_TAB_KEYS,
     newTabKey: ANNOTATION_PAGE_TAB_KEYS
   ) => void;
+  authenticationStore: AuthenticationStore;
 };
 
-@inject('appStore')
 @observer
 export default class AnnotationPage extends React.Component<
   IAnnotationPage,
@@ -135,19 +124,23 @@ export default class AnnotationPage extends React.Component<
         alterations: alterations.map(alteration => alteration.name).join(', '),
         alterationsView: (
           <WithSeparator separator={', '}>
-            {alterations.map(alteration => (
-              <AlterationPageLink
-                key={alteration.name}
-                hugoSymbol={this.props.hugoSymbol}
-                alteration={{
-                  alteration: alteration.alteration,
-                  name: alteration.name,
-                }}
-                alterationRefGenomes={
-                  alteration.referenceGenomes as REFERENCE_GENOME[]
-                }
-              />
-            ))}
+            {alterations.map(alteration =>
+              alteration.consequence ? (
+                <AlterationPageLink
+                  key={alteration.name}
+                  hugoSymbol={this.props.hugoSymbol}
+                  alteration={{
+                    alteration: alteration.alteration,
+                    name: alteration.name,
+                  }}
+                  alterationRefGenomes={
+                    alteration.referenceGenomes as REFERENCE_GENOME[]
+                  }
+                />
+              ) : (
+                <span>{alteration.name}</span>
+              )
+            )}
           </WithSeparator>
         ),
         drugs: getTreatmentNameFromEvidence(evidence),
@@ -215,8 +208,10 @@ export default class AnnotationPage extends React.Component<
     evidences.forEach(evidence => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
       const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
-      const alterations = evidence.alterations.filter(alteration =>
-        alteration.referenceGenomes.includes(this.props.refGenome)
+      const alterations = evidence.alterations.filter(
+        alteration =>
+          alteration.referenceGenomes.includes(this.props.refGenome) &&
+          alteration.alteration === this.props.matchedAlteration?.alteration
       );
       alterations.forEach(alt => {
         // if the evidence is for Oncogenic Mutations and it's returned for the current variant,
@@ -301,52 +296,13 @@ export default class AnnotationPage extends React.Component<
     );
   }
 
-  @autobind
-  @action
-  updateTumorTypeQuery(selectedOption: any) {
-    this.props.onChangeTumorType(selectedOption ? selectedOption.value : '');
-  }
-
   @computed
   get alterationSummaries() {
     const orderedSummaries = [SummaryKey.GENE_SUMMARY];
     if (!this.isCategoricalAlteration) {
       orderedSummaries.push(SummaryKey.ALTERATION_SUMMARY);
     }
-    return this.getSummaries(orderedSummaries);
-  }
-
-  @computed
-  get tumorTypeSummaries() {
-    const orderedSummaries = this.props.tumorType
-      ? [
-          SummaryKey.TUMOR_TYPE_SUMMARY,
-          SummaryKey.DIAGNOSTIC_SUMMARY,
-          SummaryKey.PROGNOSTIC_SUMMARY,
-        ]
-      : [];
-    return this.getSummaries(orderedSummaries);
-  }
-
-  getSummaries(orderedSummaries: string[]) {
-    return _.reduce(
-      orderedSummaries,
-      (acc, next) => {
-        if (this.props.annotation[next]) {
-          acc.push({
-            key: next,
-            title: SUMMARY_TITLE[next],
-            content: this.props.annotation[next],
-          });
-        }
-        return acc;
-      },
-      [] as { key: string; title: string; content: string }[]
-    );
-  }
-
-  formatGroupLabel(data: any) {
-    return <span>{data.label}</span>;
+    return getSummaries(this.props.annotation, orderedSummaries);
   }
 
   @computed get isCategoricalAlteration() {
@@ -354,7 +310,7 @@ export default class AnnotationPage extends React.Component<
   }
 
   @computed
-  get showGeneNameLink() {
+  get showGeneName() {
     const lHugo = this.props.hugoSymbol.toLowerCase();
     const altNameIncludesGene = this.props.alteration
       .toLowerCase()
@@ -364,21 +320,61 @@ export default class AnnotationPage extends React.Component<
   }
 
   @computed
-  get relevantBiologicalVariants(): BiologicalVariant[] {
-    if (
-      this.isCategoricalAlteration &&
-      this.props.biologicalAlterations &&
-      this.props.relevantAlterations
-    ) {
-      const relevantAltNames = this.props.relevantAlterations.map(
-        alt => alt.alteration
+  get alterationName() {
+    return getAlterationName(
+      this.props.matchedAlteration === undefined
+        ? this.props.alteration
+        : {
+            alteration: this.props.matchedAlteration.alteration,
+            name: this.props.matchedAlteration.name,
+          },
+      true
+    );
+  }
+
+  getBreadcrumbItem(key: string, to: string, text: string) {
+    return (
+      <Breadcrumb.Item key={key} linkAs={Link} linkProps={{ to }}>
+        {text}
+      </Breadcrumb.Item>
+    );
+  }
+
+  @computed
+  get navBreadcrumbs() {
+    const items = [
+      this.getBreadcrumbItem(
+        'gene',
+        getGenePageLink({
+          hugoSymbol: this.props.hugoSymbol,
+        }),
+        this.props.hugoSymbol
+      ),
+      this.getBreadcrumbItem(
+        'alteration',
+        getAlterationPageLink({
+          hugoSymbol: this.props.hugoSymbol,
+          alteration: this.alterationName,
+        }),
+        this.alterationName
+      ),
+    ];
+
+    if (this.props.tumorType) {
+      items.push(
+        this.getBreadcrumbItem(
+          'cancertype',
+          getAlterationPageLink({
+            hugoSymbol: this.props.hugoSymbol,
+            alteration: this.alterationName,
+            cancerType: this.props.tumorType,
+          }),
+          this.props.tumorType
+        )
       );
-      return this.props.biologicalAlterations.filter(variant =>
-        relevantAltNames.includes(variant.variant.alteration)
-      );
-    } else {
-      return [];
     }
+
+    return <Breadcrumb>{items}</Breadcrumb>;
   }
 
   render() {
@@ -390,27 +386,18 @@ export default class AnnotationPage extends React.Component<
     );
     return (
       <>
+        {this.navBreadcrumbs}
         <h2
-          className={'d-flex align-items-baseline'}
+          className={'d-flex align-items-baseline flex-wrap'}
           style={{ marginBottom: 0 }}
         >
-          {this.showGeneNameLink && (
-            <span className={'mr-2'}>
-              <GenePageLink
-                hugoSymbol={this.props.hugoSymbol}
-                highlightContent={false}
-              />
-            </span>
+          {this.showGeneName && (
+            <span className={'mr-2'}>{this.props.hugoSymbol}</span>
           )}
-          <span>{`${getAlterationName(
-            this.props.matchedAlteration === undefined
-              ? this.props.alteration
-              : {
-                  alteration: this.props.matchedAlteration.alteration,
-                  name: this.props.matchedAlteration.name,
-                },
-            true
-          )}`}</span>
+          <span>{this.alterationName}</span>
+          {this.props.tumorType && (
+            <span className={'mx-2'}>in {this.props.tumorType}</span>
+          )}
           <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
             <FeedbackIcon
               feedback={{
@@ -421,7 +408,7 @@ export default class AnnotationPage extends React.Component<
                   cancerType: this.props.tumorType,
                 },
               }}
-              appStore={this.props.appStore!}
+              appStore={this.props.appStore}
             />
           </span>
         </h2>
@@ -484,102 +471,47 @@ export default class AnnotationPage extends React.Component<
             )}
           </Col>
         </Row>
-        <Row className="mt-4">
-          <Col>
-            <div
-              className={`d-flex align-items-center ${DEFAULT_MARGIN_BOTTOM_LG}`}
-            >
-              <span
-                className={classnames(styles.headerTumorTypeSelection, 'mr-2')}
-              >
-                <CancerTypeSelect
-                  styles={{
-                    control: (base, state) => ({
-                      ...base,
-                      height: '30px',
-                      minHeight: '30px',
-                    }),
-                    dropdownIndicator: base => ({
-                      ...base,
-                      padding: 4,
-                    }),
-                    clearIndicator: base => ({
-                      ...base,
-                      padding: 4,
-                    }),
-                    valueContainer: base => ({
-                      ...base,
-                      padding: '0px 6px',
-                    }),
-                    input: base => ({
-                      ...base,
-                      margin: 0,
-                      padding: 0,
-                    }),
-                  }}
-                  tumorType={this.props.tumorType}
-                  onChange={(selectedOption: any) =>
-                    this.updateTumorTypeQuery(selectedOption)
-                  }
-                />
-              </span>
-              <InfoIcon
-                overlay={
-                  <span>
-                    For cancer type specific information, please select a cancer
-                    type from the dropdown. The cancer type is curated using{' '}
-                    <OncoTreeLink />
-                  </span>
-                }
-                placement="top"
-              />
-            </div>
-          </Col>
-        </Row>
-        {this.props.tumorType && !this.isCategoricalAlteration ? (
-          <Row>
-            <Col>
-              {this.tumorTypeSummaries.map((summary, index) => {
-                return (
-                  <div
-                    className={DEFAULT_MARGIN_BOTTOM_LG}
-                    key={`summary-${index}`}
-                  >
-                    <h6 className={'mb-0'}>{summary.title}</h6>
-                    {summary.content}
-                  </div>
-                );
-              })}
-            </Col>
-          </Row>
-        ) : null}
-        <Row className="mt-2">
-          <Col>
-            <AlterationTableTabs
-              selectedTab={this.props.defaultSelectedTab}
-              appStore={this.props.appStore}
-              hugoSymbol={this.props.hugoSymbol}
-              alteration={
-                this.props.matchedAlteration
-                  ? {
-                      alteration: this.props.matchedAlteration.alteration,
-                      name: this.props.matchedAlteration.name,
-                    }
-                  : {
-                      alteration: this.props.alteration,
-                      name: this.props.alteration,
-                    }
-              }
-              cancerType={this.props.tumorType}
-              biological={this.relevantBiologicalVariants}
-              tx={this.therapeuticImplications}
-              dx={this.diagnosticImplications}
-              px={this.prognosticImplications}
-              fda={this.fdaImplication}
-              onChangeTab={this.props.onChangeTab}
-            />
-          </Col>
-        </Row>
+        {this.props.tumorType ? (
+          <CancerTypeView
+            appStore={this.props.appStore}
+            isLargeScreen={this.props.windowStore.isLargeScreen}
+            userAuthenticated={
+              this.props.authenticationStore.isUserAuthenticated
+            }
+            hugoSymbol={this.props.hugoSymbol}
+            alteration={this.props.alteration}
+            matchedAlteration={this.props.matchedAlteration}
+            tumorType={this.props.tumorType}
+            onChangeTumorType={this.props.onChangeTumorType}
+            annotation={this.props.annotation}
+            biologicalAlterations={this.props.biologicalAlterations}
+            relevantAlterations={this.props.relevantAlterations}
+            fdaImplication={this.fdaImplication}
+            therapeuticImplications={this.therapeuticImplications}
+            diagnosticImplications={this.diagnosticImplications}
+            prognosticImplications={this.prognosticImplications}
+            defaultSelectedTab={this.props.defaultSelectedTab}
+            onChangeTab={this.props.onChangeTab}
+          />
+        ) : (
+          <AlterationView
+            appStore={this.props.appStore}
+            hugoSymbol={this.props.hugoSymbol}
+            alteration={this.props.alteration}
+            matchedAlteration={this.props.matchedAlteration}
+            tumorType={this.props.tumorType}
+            onChangeTumorType={this.props.onChangeTumorType}
+            annotation={this.props.annotation}
+            biologicalAlterations={this.props.biologicalAlterations}
+            relevantAlterations={this.props.relevantAlterations}
+            fdaImplication={this.fdaImplication}
+            therapeuticImplications={this.therapeuticImplications}
+            diagnosticImplications={this.diagnosticImplications}
+            prognosticImplications={this.prognosticImplications}
+            defaultSelectedTab={this.props.defaultSelectedTab}
+            onChangeTab={this.props.onChangeTab}
+          />
+        )}
       </>
     );
   }

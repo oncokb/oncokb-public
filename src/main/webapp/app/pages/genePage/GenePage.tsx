@@ -18,6 +18,7 @@ import { Col, Row } from 'react-bootstrap';
 import {
   getCancerTypeNameFromOncoTreeType,
   getCancerTypesName,
+  getPageTitle,
 } from 'app/shared/utils/Utils';
 import LoadingIndicator, {
   LoaderSize,
@@ -28,6 +29,7 @@ import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_GENE,
+  PAGE_TITLE,
   LEVEL_CLASSIFICATION,
   LEVEL_TYPES,
   ONCOGENIC_MUTATIONS,
@@ -114,7 +116,7 @@ export default class GenePage extends React.Component<GenePageProps, any> {
       return {
         level: variant.level,
         alterations: variant.variant.name,
-        alterationsView: (
+        alterationsView: variant.variant.consequence ? (
           <AlterationPageLink
             key={variant.variant.name}
             hugoSymbol={this.store.hugoSymbol}
@@ -126,6 +128,8 @@ export default class GenePage extends React.Component<GenePageProps, any> {
               variant.variant.referenceGenomes as REFERENCE_GENOME[]
             }
           />
+        ) : (
+          <span>{variant.variant.name}</span>
         ),
         drugs: variant.drug.join(', '),
         cancerTypes: getCancerTypesName(
@@ -136,22 +140,26 @@ export default class GenePage extends React.Component<GenePageProps, any> {
         cancerTypesView: (
           <>
             <WithSeparator separator={', '}>
-              {cancerTypeNames.map(cancerType => (
-                <AlterationPageLink
-                  key={`${variant.variant.name}-${cancerType}`}
-                  hugoSymbol={this.store.hugoSymbol}
-                  alteration={{
-                    alteration: variant.variant.alteration,
-                    name: variant.variant.name,
-                  }}
-                  alterationRefGenomes={
-                    variant.variant.referenceGenomes as REFERENCE_GENOME[]
-                  }
-                  cancerType={cancerType}
-                >
-                  {cancerType}
-                </AlterationPageLink>
-              ))}
+              {cancerTypeNames.map(cancerType =>
+                variant.variant.consequence ? (
+                  <AlterationPageLink
+                    key={`${variant.variant.name}-${cancerType}`}
+                    hugoSymbol={this.store.hugoSymbol}
+                    alteration={{
+                      alteration: variant.variant.alteration,
+                      name: variant.variant.name,
+                    }}
+                    alterationRefGenomes={
+                      variant.variant.referenceGenomes as REFERENCE_GENOME[]
+                    }
+                    cancerType={cancerType}
+                  >
+                    {cancerType}
+                  </AlterationPageLink>
+                ) : (
+                  <span>{cancerType}</span>
+                )
+              )}
             </WithSeparator>
             {excludedCancerTypeNames.length > 0 ? (
               <span> (excluding {excludedCancerTypeNames.join(', ')})</span>
@@ -398,14 +406,10 @@ export default class GenePage extends React.Component<GenePageProps, any> {
 
   render() {
     return (
-      <DocumentTitle title={this.store.hugoSymbol}>
+      <DocumentTitle title={getPageTitle(`${this.store.hugoSymbol}`)}>
         <If condition={!!this.hugoSymbolQuery}>
           <Then>
-            <If
-              condition={
-                this.store.gene.isComplete && this.store.geneNumber.isComplete
-              }
-            >
+            <If condition={this.store.gene.isComplete}>
               <Then>
                 {this.store.gene.isError ||
                 this.store.gene.result === DEFAULT_GENE ? (
@@ -488,7 +492,12 @@ export default class GenePage extends React.Component<GenePageProps, any> {
                           />
                         </Col>
                       </Row>
-                      <If condition={this.store.gene.result.entrezGeneId > 0}>
+                      <If
+                        condition={
+                          this.store.gene.result.entrezGeneId > 0 &&
+                          this.store.mutationMapperDataPortal.result.length > 0
+                        }
+                      >
                         <Row className={'mt-5'}>
                           <Col
                             xl={this.genePanelClass.xl}

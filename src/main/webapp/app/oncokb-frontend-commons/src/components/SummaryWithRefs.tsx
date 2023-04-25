@@ -30,10 +30,14 @@ export default class SummaryWithRefs extends React.Component<
       // if delimiter convert to a JSX component
       if (part.match(regex)) {
         content.push(
-          <RefComponent componentType={this.props.type} content={part} />
+          <RefComponent
+            componentType={this.props.type}
+            content={part}
+            key={content.length}
+          />
         );
       } else {
-        content.push(<span>{part}</span>);
+        content.push(<span key={content.length}>{part}</span>);
       }
     });
 

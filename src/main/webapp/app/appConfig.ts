@@ -9,6 +9,7 @@ type ServerConfig = {
   googleAnalyticsProjectId: string;
   sentryProjectId: string;
   readonly: boolean;
+  enableAuth: boolean;
   recaptchaProjectId: string;
   recaptchaSiteKey: string;
   recaptchaThreshold: string;

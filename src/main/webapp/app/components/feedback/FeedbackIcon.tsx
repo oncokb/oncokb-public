@@ -31,7 +31,12 @@ export const FeedbackIcon = (props: {
   return (
     <>
       <DefaultTooltip overlay={tooltipOverlay}>
-        <i className="fa fa-envelope-o" aria-hidden="true" onClick={onClick} />
+        <i
+          className="fa fa-envelope-o"
+          aria-hidden="true"
+          onClick={onClick}
+          style={{ cursor: 'pointer' }}
+        />
       </DefaultTooltip>
     </>
   );

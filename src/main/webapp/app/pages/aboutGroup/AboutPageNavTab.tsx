@@ -12,6 +12,8 @@ import FdaRecognitionPage from 'app/pages/aboutGroup/FdaRecognitionPage';
 import { YearEndSummaryPage } from 'app/pages/yearEndSummaryPage/YearEndSummaryPage';
 import { LocationDescriptorObject } from 'history';
 import classnames from 'classnames';
+import DocumentTitle from 'react-document-title';
+import { getPageTitle } from 'app/shared/utils/Utils';
 
 type AboutPageNavTabProps = { appStore: AppStore; routing: RouterStore };
 
@@ -134,7 +136,7 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey={TabKey.SOP}>{PAGE_TITLE.SOP}</Nav.Link>
+                  <Nav.Link eventKey={TabKey.SOP}>SOP</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                   <Nav.Link eventKey={TabKey.YEAR_END_SUMMARY}>
@@ -167,21 +169,23 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
                   <FdaRecognitionPage />
                 </Tab.Pane>
                 <Tab.Pane eventKey={TabKey.SOP}>
-                  <div>
-                    <div style={{ marginTop: '-5px' }}>
-                      <Iframe
-                        width="100%"
-                        height="1000px"
-                        url="https://sop.oncokb.org"
-                        frameBorder={0}
-                        allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
+                  <DocumentTitle title={getPageTitle(PAGE_TITLE.SOP)}>
+                    <div>
+                      <div style={{ marginTop: '-5px' }}>
+                        <Iframe
+                          width="100%"
+                          height="1000px"
+                          url="https://sop.oncokb.org"
+                          frameBorder={0}
+                          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                      <h2 style={{ position: 'absolute', top: 0 }}>
+                        {ONCOKB_TM} Standard Operating Procedure
+                      </h2>
                     </div>
-                    <h2 style={{ position: 'absolute', top: 0 }}>
-                      {ONCOKB_TM} Standard Operating Procedure
-                    </h2>
-                  </div>
+                  </DocumentTitle>
                 </Tab.Pane>
                 <Tab.Pane
                   eventKey={TabKey.YEAR_END_SUMMARY}

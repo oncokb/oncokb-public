@@ -14,11 +14,9 @@ import {
   PAGE_ROUTE,
   SHORTEN_TEXT_FROM_LIST_THRESHOLD,
   TABLE_COLUMN_KEY,
-  LEVEL_TYPES,
   ONCOGENICITY,
   LEVELS,
   LEVEL_PRIORITY,
-  FDA_LEVELS,
   ONCOGENIC_MUTATIONS,
   DELETION,
   FUSIONS,
@@ -28,6 +26,7 @@ import {
   LOSS_OF_FUNCTION_MUTATIONS,
   SWITCH_OF_FUNCTION_MUTATIONS,
   ONCOKB_TM,
+  ONCOKB,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
@@ -45,7 +44,6 @@ import {
 } from 'app/shared/utils/ReactTableUtils';
 import { TableCellRenderer } from 'react-table';
 import { LevelWithDescription } from 'app/components/LevelWithDescription';
-import pluralize from 'pluralize';
 import { DefaultTooltip } from 'cbioportal-frontend-commons';
 import { CitationTooltip } from 'app/components/CitationTooltip';
 import {
@@ -53,13 +51,10 @@ import {
   GenePageLink,
   OncoTreeLink,
   SopPageLink,
-  TumorTypePageLink,
 } from 'app/shared/utils/UrlUtils';
 import moment from 'moment';
 import InfoIcon from 'app/shared/icons/InfoIcon';
-import WithSeparator from 'react-with-separator';
 import { COLOR_BLUE } from 'app/config/theme';
-import { Linkout } from 'app/shared/links/Linkout';
 import * as styles from 'app/index.module.scss';
 import { Version } from 'app/pages/LevelOfEvidencePage';
 import { Link } from 'react-router-dom';
@@ -68,6 +63,18 @@ import { Link } from 'react-router-dom';
 // Likely Neutral will be converted to Neutral
 export function shortenOncogenicity(oncogenicity: string): string {
   return GENERAL_ONCOGENICITY[oncogenicity];
+}
+
+export function shortenTextByCharacters(text: string, cutoff: number) {
+  const shortText = (text || '').trim();
+  if (shortText.length <= cutoff) {
+    return shortText;
+  } else {
+    const separator = ' ';
+    const words = (text || '').slice(0, cutoff).split(separator);
+    words.pop();
+    return words.join(separator);
+  }
 }
 
 export function getCancerTypeNameFromOncoTreeType(
@@ -848,8 +855,8 @@ export const getCategoricalAlterationDescription = (
     }
     content = (
       <span>
-        {prefix} {geneLink} considered "oncogenic" or "likely oncogenic" as
-        defined by{' '}
+        {prefix} {geneLink} considered "oncogenic", "likely oncogenic" or
+        "resistance" as defined by{' '}
         <SopPageLink version={2.2}>
           {ONCOKB_TM} Curation Standard Operating Protocol v2.2, Chapter 2,
           Sub-Protocol 2.5
@@ -871,4 +878,19 @@ export const isOncogenic = (oncogenicity: string) => {
     default:
       return false;
   }
+};
+
+export const getPageTitle = (mainContent: string, withPostFix = true) => {
+  const content = [];
+  if (mainContent) {
+    content.push(mainContent);
+    if (withPostFix) {
+      if (!mainContent.includes(ONCOKB)) {
+        content.push(ONCOKB_TM);
+      }
+    }
+  } else {
+    content.push(ONCOKB_TM);
+  }
+  return `${content.join(' | ')}`;
 };

@@ -20,7 +20,6 @@ import {
   TABLE_COLUMN_KEY,
 } from 'app/config/constants';
 import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
-import { Version } from 'app/pages/LevelOfEvidencePage';
 import { BiologicalVariant } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import { GenePageTable } from 'app/pages/genePage/GenePageTable';
 import AppStore from 'app/store/AppStore';
@@ -42,6 +41,9 @@ import {
 } from 'app/store/AnnotationStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
+import { LongText } from 'app/oncokb-frontend-commons/src/components/LongText';
+import { FdaTabDescription } from 'app/pages/annotationPage/TabDescriptor';
+import { DescriptionTooltip } from './DescriptionTooltip';
 
 export type Column = {
   key: ANNOTATION_PAGE_TAB_KEYS;
@@ -64,18 +66,6 @@ export interface IEvidenceTableTabProps {
   windowStore?: WindowStore; // it will be injected directly
   authenticationStore?: AuthenticationStore; // it will be injected directly
 }
-
-const DescriptionTooltip: React.FunctionComponent<{
-  description: JSX.Element;
-}> = props => {
-  return (
-    <DefaultTooltip placement={'right'} overlay={props.description}>
-      <span>
-        <i className="fa fa-book" />
-      </span>
-    </DefaultTooltip>
-  );
-};
 
 @inject('windowStore', 'appStore', 'authenticationStore')
 @observer
@@ -150,22 +140,7 @@ export default class AlterationTableTabs extends React.Component<
         </span>
       );
     } else if (key === ANNOTATION_PAGE_TAB_KEYS.FDA) {
-      return (
-        <span>
-          A list of the tumor type-specific {this.props.hugoSymbol} alterations
-          and the corresponding{' '}
-          <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}>
-            FDA Level of Evidence
-          </Link>{' '}
-          assigning their clinical significance. The assigned{' '}
-          <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
-            FDA level of evidence
-          </Link>{' '}
-          is based on these alterations being tested in Formalin Fixed Paraffin
-          Embedded (FFPE) specimen types, except in cases where specimen type is
-          not specified.
-        </span>
-      );
+      return <FdaTabDescription hugoSymbol={this.props.hugoSymbol} />;
     }
     return null;
   }
@@ -191,11 +166,20 @@ export default class AlterationTableTabs extends React.Component<
   }
 
   @computed
+  get txHasDescriptions() {
+    return (
+      this.props.tx.filter(implication => !!implication.drugDescription)
+        .length > 0
+    );
+  }
+
+  @computed
   get tabDescriptionStyle() {
     return this.props.windowStore && this.props.windowStore.isLargeScreen
       ? {
           width: '80%',
           marginBottom: '-30px',
+          zIndex: 1,
         }
       : undefined;
   }
@@ -240,7 +224,7 @@ export default class AlterationTableTabs extends React.Component<
         title: tab.title,
         getContent: () => {
           return (
-            <div>
+            <div className={'d-flex flex-column'}>
               <div style={this.tabDescriptionStyle}>
                 <div>{this.getTabDescription(tab.key)}</div>
                 <ReportIssue
@@ -266,52 +250,45 @@ export default class AlterationTableTabs extends React.Component<
 
   @computed
   get therapeuticTableColumns(): SearchColumn<TherapeuticImplication>[] {
-    /* Uncomment lines below to get the description column back */
-    // let descriptionColumn = {
-    //   ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
-    //   Header: (
-    //     <div style={{ display: 'flex', justifyContent: 'center' }}>
-    //       <span>Description</span>
-    //     </div>
-    //   ),
-    //   Cell(props: { original: TherapeuticImplication }) {
-    //     return (
-    //       <div style={{ display: 'flex', justifyContent: 'center' }}>
-    //         <DescriptionTooltip
-    //           description={
-    //             <SummaryWithRefs
-    //               content={props.original.drugDescription}
-    //               type="tooltip"
-    //             />
-    //           }
-    //         />
-    //       </div>
-    //     );
-    //   },
-    // };
+    let descriptionColumn = {
+      ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.DESCRIPTION),
+      Header: (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <span>Description</span>
+        </div>
+      ),
+      width: 520,
+      Cell(props: { original: TherapeuticImplication }) {
+        return <LongText text={props.original.drugDescription} />;
+      },
+    };
 
     // Users that are not logged in will see a message to login/register
-    // if (!this.props.authenticationStore?.isUserAuthenticated) {
-    //   descriptionColumn = {
-    //     ...descriptionColumn,
-    //     Cell() {
-    //       return (
-    //         <div style={{ display: 'flex', justifyContent: 'center' }}>
-    //           <DescriptionTooltip
-    //             description={
-    //               <span>
-    //                 Get access to our treatment descriptions by{' '}
-    //                 <Link to={PAGE_ROUTE.LOGIN}> logging in </Link> or by{' '}
-    //                 <Link to={PAGE_ROUTE.REGISTER}>registering</Link> an
-    //                 account.
-    //               </span>
-    //             }
-    //           />
-    //         </div>
-    //       );
-    //     },
-    //   };
-    // }
+    if (
+      !this.props.authenticationStore?.isUserAuthenticated &&
+      this.txHasDescriptions
+    ) {
+      descriptionColumn = {
+        ...descriptionColumn,
+        width: 100,
+        Cell() {
+          return (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <DescriptionTooltip
+                description={
+                  <span>
+                    Get access to our treatment descriptions by{' '}
+                    <Link to={PAGE_ROUTE.LOGIN}> logging in </Link> or by{' '}
+                    <Link to={PAGE_ROUTE.REGISTER}>registering</Link> an
+                    account.
+                  </span>
+                }
+              />
+            </div>
+          );
+        },
+      };
+    }
 
     const citationColumn = {
       ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.CITATIONS),
@@ -362,11 +339,11 @@ export default class AlterationTableTabs extends React.Component<
         onFilter: (data: TherapeuticImplication, keyword) =>
           filterByKeyword(data.drugs, keyword),
       },
-      // ...(this.props.authenticationStore?.isUserAuthenticated
-      //   ? []
-      //   : [citationColumn]),
-      citationColumn,
-      // descriptionColumn,
+      ...(this.props.authenticationStore?.isUserAuthenticated &&
+      this.txHasDescriptions
+        ? []
+        : [citationColumn]),
+      ...(this.txHasDescriptions ? [descriptionColumn] : []),
     ];
 
     return therapeuticTableColumns;

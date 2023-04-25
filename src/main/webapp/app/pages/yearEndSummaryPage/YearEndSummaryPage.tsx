@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import DocumentTitle from 'react-document-title';
 import {
-  DOCUMENT_TITLES,
+  PAGE_TITLE,
   PAGE_ROUTE,
   YEAR_END_SUMMARY_TITLE_DATE_FORMAT,
   YEAR_END_SUMMARY_DATE_FORMAT,
@@ -13,7 +13,7 @@ import moment from 'moment/moment';
 import { BiomarkerTable } from 'app/pages/yearEndSummaryPage/BiomarkerTable';
 import { YEAR_END_SUMMARY_RANGE } from 'app/pages/aboutGroup/AboutPageNavTab';
 import { DATA } from 'app/pages/yearEndSummaryPage/BiomarkerTableData';
-import { scrollWidthOffset } from 'app/shared/utils/Utils';
+import { getPageTitle, scrollWidthOffset } from 'app/shared/utils/Utils';
 
 const getTitle = (date: string) => {
   return moment(date, YEAR_END_SUMMARY_DATE_FORMAT).format(
@@ -39,7 +39,13 @@ export const YearEndSummaryPage: React.FunctionComponent<{
   }, [props.selectedYear]);
 
   return (
-    <DocumentTitle title={DOCUMENT_TITLES.YEAR_END_SUMMARY}>
+    <DocumentTitle
+      title={getPageTitle(
+        `${props.selectedYear ? `${props.selectedYear} ` : ''}${
+          PAGE_TITLE.YEAR_END_SUMMARY
+        }`
+      )}
+    >
       <div>
         <Row>
           <Col>

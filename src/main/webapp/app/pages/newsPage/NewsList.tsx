@@ -131,23 +131,31 @@ export default class NewsList extends React.Component<NewsListProps> {
                   key={`UpdatedTxImplOldFormatListItem-${date}`}
                 />
               ) : undefined}
-              {newsData.changedAnnotation ? (
-                <ChangedAnnotationListItem
-                  title={newsData.changedAnnotationTitle}
-                  columnHeaderType={newsData.changedAnnotationColumnHeaderType}
-                  data={newsData.changedAnnotation.map((item, index) => {
-                    return {
-                      key: `changedAnnotation-${date}-${index}`,
-                      content: item.map((subItem, subIndex) => {
-                        return {
-                          key: `changedAnnotation-${date}-${index}-${subIndex}`,
-                          content: subItem,
-                        };
-                      }),
-                    };
-                  })}
-                />
-              ) : undefined}
+              {newsData.changedAnnotations
+                ? newsData.changedAnnotations.map(annotation => {
+                    return (
+                      <ChangedAnnotationListItem
+                        title={annotation.title}
+                        columnHeaderType={annotation.columnHeaderType}
+                        data={
+                          annotation.content
+                            ? annotation.content.map((item, index) => {
+                                return {
+                                  key: `changedAnnotation-${date}-${index}`,
+                                  content: item.map((subItem, subIndex) => {
+                                    return {
+                                      key: `changedAnnotation-${date}-${index}-${subIndex}`,
+                                      content: subItem,
+                                    };
+                                  }),
+                                };
+                              })
+                            : []
+                        }
+                      />
+                    );
+                  })
+                : undefined}
               {getNews({
                 key: `news-${date}`,
                 content: newsData.news ? newsData.news : [],

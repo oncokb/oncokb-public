@@ -1,11 +1,11 @@
 import { Gene, OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
 import {
+  GeneNumber,
   MainNumber,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Linkout } from 'app/shared/links/Linkout';
 import { Feedback, FeedbackType } from 'app/components/feedback/types';
 
 /* eslint no-shadow: 0 */
@@ -32,7 +32,11 @@ export const messages = {
   DATA_ERROR_ALERT: 'Internal Error',
 };
 
-export const ONCOKB_TM = 'OncoKB™';
+export const ONCOKB = 'OncoKB';
+export const ONCOKB_TM = `${ONCOKB}™`;
+
+export const MSKCC = 'Memorial Sloan Kettering Cancer Center';
+
 export const MSK_IMPACT_TM = 'MSK-IMPACT™';
 
 export const APP_DATE_FORMAT = 'MM/DD/YY HH:mm';
@@ -102,6 +106,9 @@ export const USAGE_ALL_TIME_KEY = 'All';
 export const USAGE_ALL_TIME_VALUE = 'This year';
 export const USAGE_DETAIL_TIME_KEY = 'Detail';
 export const USAGE_DAY_DETAIL_TIME_KEY = 'Day Detail';
+
+export const LONG_TEXT_CUTOFF = 200;
+export const LONG_TEXT_CUTOFF_COMPACT = 80;
 
 export enum ONCOGENICITY {
   ONCOGENIC = 'Oncogenic',
@@ -343,9 +350,6 @@ export const COMPONENT_PADDING = ['pl-2', 'pr-2', 'mb-2'];
 export const H5_FONT_SIZE = '1.25rem';
 export const FONT_FAMILY = "'Gotham Book', sans-serif";
 
-// we do not have the table component to support api pagination, have to set the threshold to pull the list of all users
-export const THRESHOLD_NUM_OF_USER = 10000;
-
 // Defaults for tooltip size
 export const TOOLTIP_MAX_HEIGHT = 300;
 
@@ -396,6 +400,17 @@ export const DEFAULT_GENE: Gene = {
   hugoSymbol: '',
   oncogene: false,
   tsg: false,
+};
+
+export const DEFAULT_GENE_NUMBER: GeneNumber = {
+  gene: DEFAULT_GENE,
+  alteration: 0,
+  highestSensitiveLevel: '',
+  highestResistanceLevel: '',
+  highestDiagnosticImplicationLevel: '',
+  highestPrognosticImplicationLevel: '',
+  highestFdaLevel: '',
+  tumorType: 0,
 };
 
 export const DEFAULT_MUTATION_EFFECT = {
@@ -459,20 +474,30 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
 };
 
 export enum PAGE_TITLE {
+  ABOUT = 'About OncoKB™',
   ACCOUNT = 'Account',
   ACCOUNT_SETTINGS = 'Account Settings',
   ACCOUNT_PASSWORD = 'Change Password',
+  ACTIONABLE_GENES = 'OncoKB™ Actionable Genes',
   ADMIN_USER_DETAILS = 'Registered Users',
   ADMIN_SEND_EMAILS = 'Send Emails to Users',
   ADMIN_CREATE_ACCOUNT = 'Create New Account',
   ADMIN_USAGE_ANALYSIS = 'Usage Analysis',
   ADMIN_ADD_COMPANY = 'Add New Company',
   ADMIN_COMPANY_DETAILS = 'Companies',
+  API_ACCESS = 'API Access',
+  CANCER_GENES = 'OncoKB™ Cancer Gene List',
+  FAQ = 'Frequently Asked Question',
+  FDA_RECOGNITION = 'OncoKB™ is now an FDA-recognized Public Human Genetic Variant Database*',
+  HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base",
+  LEVELS = 'OncoKB™ Levels of Evidence',
   LOGOUT = 'Log out',
   LOGIN = 'Log in',
+  NEWS = 'Latest News',
   REGISTER = 'Register',
+  TEAM = 'OncoKB™ Team',
   TERMS = 'Terms of Use',
-  SOP = 'SOP',
+  SOP = 'OncoKB™ Standard Operating Procedure',
   YEAR_END_SUMMARY = 'Year End Summary',
 }
 
@@ -664,20 +689,6 @@ export enum TERM_DEFINITION {
   OK_WITH_TERMS_OF_USE = 'OK_WITH_TERMS_OF_USE',
 }
 
-export enum DOCUMENT_TITLES {
-  HOME = "OncoKB™ - MSK's Precision Oncology Knowledge Base",
-  LEVELS = 'Levels of Evidence',
-  TEAM = 'Team',
-  ABOUT = 'About',
-  ACTIONABLE_GENES = 'Actionable Genes',
-  TERMS = 'Terms of Use',
-  YEAR_END_SUMMARY = 'Year End Summary',
-  NEWS = 'Latest News',
-  API_ACCESS = 'API Access',
-  CANCER_GENES = 'Cancer Gene List',
-  FDA_RECOGNITION = 'OncoKB™ is now an FDA-recognized Public Human Genetic Variant Database*',
-}
-
 export const FDA_RECOGNITION_DISCLAIMER: React.FunctionComponent<{
   enableLink: boolean;
 }> = props => (
@@ -731,6 +742,10 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '04122023', version: 'v4.4' },
+  { date: '03222023', version: 'v4.3' },
+  { date: '02102023', version: 'v4.2' },
+  { date: '02012023', version: 'v4.1' },
   { date: '12222022', version: 'v4.0' },
   { date: '12132022', version: 'v3.19' },
   { date: '11302022', version: 'v3.18' },

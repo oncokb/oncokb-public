@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>public-website</artifactId>
-    <version>3.8.13</version>
+    <version>3.8.21</version>
     <packaging>jar</packaging>
     <name>OncoKB Public Website</name>
 
@@ -391,7 +391,7 @@
         <dependency>
 	        <groupId>com.github.oncokb</groupId>
 	        <artifactId>oncokb-meta</artifactId>
-	        <version>4f57f6d0fa</version>
+	        <version>ee9b767985</version>
         </dependency>
         <dependency>
           <groupId>com.github.vladimir-bukhtoyarov</groupId>

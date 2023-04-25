@@ -21,6 +21,7 @@ import {
   TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS,
 } from 'app/config/constants';
 import { TrialActivationPageLink } from 'app/shared/utils/UrlUtils';
+import { AppConfig } from 'app/appConfig';
 import ReCAPTCHA from 'app/shared/recaptcha/recaptcha';
 import { setRecaptchaToken } from 'app/indexUtils';
 export interface ILoginProps {
@@ -115,7 +116,10 @@ export default class LoginPage extends React.Component<ILoginProps> {
     const { from } = this.props.routing.location.state || {
       from: { pathname: '/', search: location.search },
     };
-    if (this.props.authenticationStore.isUserAuthenticated) {
+    if (
+      !AppConfig.serverConfig.enableAuth ||
+      this.props.authenticationStore.isUserAuthenticated
+    ) {
       return <Redirect to={from} />;
     }
     return (

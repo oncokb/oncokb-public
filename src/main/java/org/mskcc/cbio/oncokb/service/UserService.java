@@ -22,7 +22,6 @@ import org.mskcc.cbio.oncokb.service.dto.CompanyDTO;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.service.mapper.UserMapper;
 import org.mskcc.cbio.oncokb.service.mapper.CompanyMapper;
-import org.mskcc.cbio.oncokb.util.ObjectUtil;
 import org.mskcc.cbio.oncokb.util.StringUtil;
 import org.mskcc.cbio.oncokb.web.rest.errors.LoginAlreadyUsedException;
 
@@ -35,6 +34,7 @@ import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -528,6 +528,13 @@ public class UserService {
         List<User> users = userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).getContent();
         List<UserDTO> userDTOs = findAllUsersWithUserDetailsByUsersIn(users);
         return new PageImpl<>(userDTOs, pageable, users.size());
+    }
+
+    @Transactional(readOnly = true)
+    @Cacheable(cacheResolver = "userCacheResolver", key = "#root.methodName")
+    public List<UserDTO> getAllManagedUsers() {
+        final PageRequest pageable = PageRequest.of(0, (int) userRepository.count());
+        return this.getAllManagedUsers(pageable).getContent();
     }
 
     @Transactional(readOnly = true)

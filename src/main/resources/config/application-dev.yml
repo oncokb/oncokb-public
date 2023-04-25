@@ -163,6 +163,7 @@ application:
   frontend:
     sentry-project-id:
     google-analytics-project-id:
+    enable-auth: true
     recaptcha-project-id:
     recaptcha-site-key:
     recaptcha-threshold: 0.1

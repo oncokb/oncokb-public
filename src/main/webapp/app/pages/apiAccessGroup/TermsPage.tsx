@@ -3,12 +3,9 @@ import { Row, Col, Tabs, Tab } from 'react-bootstrap';
 import './TermsPage.scss';
 import { Link } from 'react-router-dom';
 import {
-  DOCUMENT_TITLES,
-  IMG_MAX_WIDTH,
   ONCOKB_CONTACT_EMAIL,
   ONCOKB_TM,
   PAGE_ROUTE,
-  PAGE_TITLE,
 } from 'app/config/constants';
 import { OncoKBLink } from 'app/shared/links/OncoKBLink';
 import { ContactLink } from 'app/shared/links/ContactLink';

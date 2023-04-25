@@ -20,11 +20,7 @@ import { RouterStore } from 'mobx-react-router';
 import { getSectionClassName } from 'app/pages/account/AccountUtils';
 import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
 import _ from 'lodash';
-import {
-  ANNOTATION_PAGE_TAB_KEYS,
-  COMPONENT_PADDING,
-  THRESHOLD_NUM_OF_USER,
-} from 'app/config/constants';
+import { COMPONENT_PADDING } from 'app/config/constants';
 import Select from 'react-select';
 import classnames from 'classnames';
 import LoadingIndicator, {
@@ -138,7 +134,7 @@ export default class UserManagementPage extends React.Component<{
 
   readonly users = remoteData<UserDTO[]>({
     invoke() {
-      return client.getAllUsersUsingGET({ size: THRESHOLD_NUM_OF_USER });
+      return client.getAllUsersUsingGET({});
     },
     default: [],
   });
