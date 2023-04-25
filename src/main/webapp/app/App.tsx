@@ -9,14 +9,12 @@ import { Router, withRouter } from 'react-router';
 import { syncHistoryWithStore } from 'mobx-react-router';
 import { createBrowserHistory } from 'history';
 import DocumentTitle from 'react-document-title';
-import {
-  DOCUMENT_TITLES,
-  PAGE_ROUTE,
-  RECAPTCHA_SITE_KEY,
-} from 'app/config/constants';
+import { DOCUMENT_TITLES, PAGE_ROUTE } from 'app/config/constants';
 import { observable, action } from 'mobx';
 import autobind from 'autobind-decorator';
 import Reaptcha from 'reaptcha';
+import { setRecaptchaToken } from './indexUtils';
+import { COILinkout } from './pages/teamPage/COILinkout';
 
 export type Stores = {
   appStore: AppStore;
@@ -35,6 +33,7 @@ class App extends React.Component {
   };
   public recaptchaRef: any = React.createRef();
   public recaptchaRendered = false;
+  public recaptchaToken: string;
 
   constructor(props: IAppConfig) {
     super(props);
@@ -58,6 +57,11 @@ class App extends React.Component {
   @autobind
   @action
   onRecaptchaVerify(value: string) {
+    const response = this.recaptchaRef.current.getResponse();
+    response.then((token: string) => {
+      setRecaptchaToken(token);
+      this.recaptchaToken = token;
+    });
     this.stores.appStore.recaptchaVerified = true;
   }
 

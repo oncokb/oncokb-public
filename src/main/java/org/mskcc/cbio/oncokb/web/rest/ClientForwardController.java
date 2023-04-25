@@ -36,6 +36,7 @@ public class ClientForwardController {
         context.setVariable("frontConfig", applicationProperties.getFrontend());
         context.setVariable("readonly", applicationProperties.getDbReadOnly());
         context.setVariable("publicToken", tokenProvider.getPubWebToken());
+        context.setVariable("recaptcha",applicationProperties.getRecaptcha());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_HTML);

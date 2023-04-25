@@ -3350,7 +3350,7 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 50,
-          "pattern": "^[_.@A-Za-z0-9-]*$"
+          "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "needsMskRocReview": {
           "type": "boolean"
@@ -3469,7 +3469,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "integer",
-            "format": "int32"
+            "format": "int64"
           }
         }
       },
@@ -3518,7 +3518,7 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 50,
-          "pattern": "^[_.@A-Za-z0-9-]*$"
+          "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "resetDate": {
           "type": "string",
@@ -3646,7 +3646,7 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 50,
-          "pattern": "^[_.@A-Za-z0-9-]*$"
+          "pattern": "^[_.\\-\\+@A-Za-z0-9]*$"
         },
         "resetDate": {
           "type": "string",
@@ -3774,18 +3774,18 @@
         },
         "maxUsage": {
           "type": "integer",
-          "format": "int32"
+          "format": "int64"
         },
         "noPrivateEndpoint": {
           "type": "string"
         },
         "noPrivateMaxUsage": {
           "type": "integer",
-          "format": "int32"
+          "format": "int64"
         },
         "totalUsage": {
           "type": "integer",
-          "format": "int32"
+          "format": "int64"
         },
         "userEmail": {
           "type": "string"

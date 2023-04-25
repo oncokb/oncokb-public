@@ -22,6 +22,7 @@ import {
   assignPublicToken,
   getStoredToken,
   getPublicWebsiteToken,
+  getStoredRecaptchaToken,
 } from 'app/indexUtils';
 import { UNAUTHORIZED_ALLOWED_PATH } from 'app/config/constants';
 import _ from 'lodash';
@@ -46,6 +47,10 @@ superagent.Request.prototype.query = function (queryParameters: any) {
     if (this.url.endsWith('sqlDump')) {
       this.responseType('blob');
     }
+  }
+  const recaptchaToken = getStoredRecaptchaToken();
+  if (recaptchaToken) {
+    this.set('g-recaptcha-response', `${recaptchaToken}`);
   }
 
   return query.call(this, queryParameters);

@@ -40,6 +40,9 @@ public final class Constants {
 
     public static final String ONCOKB_TM = "OncoKB™";
 
+    public static final String TESTING_TOKEN = "faketoken";
+    
     private Constants() {
     }
+
 }

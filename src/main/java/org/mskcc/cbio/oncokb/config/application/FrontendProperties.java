@@ -6,6 +6,33 @@ package org.mskcc.cbio.oncokb.config.application;
 public class FrontendProperties {
     private String googleAnalyticsProjectId;
     private String sentryProjectId;
+    private String recaptchaProjectId;
+    private String recaptchaSiteKey;
+    private Float recaptchaThreshold;
+
+    public String getRecaptchaProjectId() {
+        return recaptchaProjectId;
+    }
+
+    public void setRecaptchaProjectId(String recaptchaProjectId) {
+        this.recaptchaProjectId = recaptchaProjectId;
+    }
+
+    public Float getRecaptchaThreshold() {
+        return recaptchaThreshold;
+    }
+
+    public void setRecaptchaThreshold(Float recaptchaThreshold) {
+        this.recaptchaThreshold = recaptchaThreshold;
+    }
+
+    public void setRecaptchaSiteKey(String recaptchaSiteKey) {
+        this.recaptchaSiteKey = recaptchaSiteKey;
+    }
+
+    public String getRecaptchaSiteKey() {
+        return recaptchaSiteKey;
+    }
 
     public String getGoogleAnalyticsProjectId() {
         return googleAnalyticsProjectId;
