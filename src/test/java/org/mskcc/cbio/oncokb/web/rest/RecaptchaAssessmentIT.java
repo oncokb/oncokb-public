@@ -42,9 +42,6 @@ public class RecaptchaAssessmentIT {
 
     @Test
     public void testGetRecaptchaTokenWithToken() throws Exception {
-        recaptchaProp.setProjectId("symbolic-nation-320615");
-        recaptchaProp.setSiteKey("6LfAOe4jAAAAANjzxWQ8mKilcvk1QvLLohd7EV7F");
-        recaptchaProp.setThreshold((float) 0.5);
         appProps.setRecaptcha(recaptchaProp);
         CreateAssessment createAssess = new CreateAssessment(appProps);
 
@@ -58,9 +55,6 @@ public class RecaptchaAssessmentIT {
 
     @Test
     public void testGetRecaptchaTokenWithoutToken() throws Exception {
-        recaptchaProp.setProjectId("symbolic-nation-320615");
-        recaptchaProp.setSiteKey("6LfAOe4jAAAAANjzxWQ8mKilcvk1QvLLohd7EV7F");
-        recaptchaProp.setThreshold((float) 0.5);
         appProps.setRecaptcha(recaptchaProp);
         CreateAssessment createAssess = new CreateAssessment(appProps);
 
