@@ -1694,7 +1694,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       <span>
         {ONCOKB_TM} is the first somatic human genetic variant database to
         achieve{' '}
-        <Linkout link={'https://www.fda.gov/media/99200/download'}>
+        <Linkout
+          link={
+            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-recognizes-memorial-sloan-kettering-database-molecular-tumor-marker-information'
+          }
+        >
           FDA partial recognition
         </Linkout>
         ! Read more about the scope of the recognition, the recognition process,
