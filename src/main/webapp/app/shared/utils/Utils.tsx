@@ -894,3 +894,22 @@ export const getPageTitle = (mainContent: string, withPostFix = true) => {
   }
   return `${content.join(' | ')}`;
 };
+
+export const convertObjectArrayToDelimitedString = (
+  array: Array<object>,
+  delimiter = '\t'
+) => {
+  if (array.length < 1) {
+    return '';
+  }
+
+  const rows = [];
+
+  // Add header using the keys of the object
+  rows.push(Object.keys(array[0]).join(delimiter));
+
+  for (const e of array) {
+    rows.push(Object.values(e).join(delimiter));
+  }
+  return rows.join('\n');
+};
