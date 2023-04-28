@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.mskcc.oncokb.meta.model.application.RedisProperties;
+import org.mskcc.oncokb.meta.model.application.AWSProperties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
