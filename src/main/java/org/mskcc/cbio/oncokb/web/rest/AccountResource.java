@@ -24,11 +24,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import com.google.cloud.recaptchaenterprise.v1.RecaptchaEnterpriseServiceClient;
+
 import javax.naming.AuthenticationException;
+import javax.naming.ConfigurationException;
+import javax.xml.bind.ValidationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -62,6 +67,8 @@ public class AccountResource {
 
     private final ApplicationProperties applicationProperties;
 
+    private CreateAssessment createAssess;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -89,24 +96,42 @@ public class AccountResource {
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
         this.applicationProperties = applicationProperties;
+        this.createAssess = new CreateAssessment(applicationProperties);
     }
 
     /**
      * {@code POST  /register} : register the user.
      *
      * @param managedUserVM the managed user View Model.
+     * @throws Exception
      * @throws InvalidPasswordException  {@code 400 (Bad Request)} if the password is incorrect.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        if (!checkPasswordLength(managedUserVM.getPassword())) {
-            throw new InvalidPasswordException();
+    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, 
+            HttpServletRequest request) throws Exception {
+        try {
+            RecaptchaEnterpriseServiceClient client = createAssess.createClient();
+            String recaptchaToken = createAssess.getRecaptchaToken(request);
+            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
+                log.info(errorMessage);
+            } 
+        } catch (ConfigurationException e) {
+            log.warn(e.getMessage());
         }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(userMapper.userToUserDTO(user));
+        // if (rs.getStatusCode() == HttpStatus.OK) {
+            if (!checkPasswordLength(managedUserVM.getPassword())) {
+                throw new InvalidPasswordException();
+            }
+            User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+            mailService.sendActivationEmail(userMapper.userToUserDTO(user));
+        // }
     }
 
     /**
@@ -325,20 +350,37 @@ public class AccountResource {
      * {@code POST   /account/reset-password/init} : Send an email to reset the password of the user.
      *
      * @param mail the mail of the user.
+     * @throws Exception
      */
     @PostMapping(path = "/account/reset-password/init")
-    public void requestPasswordReset(@RequestBody String mail) {
-        Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
-        if (user.isPresent()) {
-            Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
-            if (updatedUser.isPresent()) {
-                mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
-            }
-        } else {
-            // Pretend the request has been successful to prevent checking which emails really exist
-            // but log that an invalid attempt has been made
-            log.warn("Password reset requested for non existing mail");
+    public void requestPasswordReset(@RequestBody String mail, HttpServletRequest request) throws Exception {
+        try {
+            RecaptchaEnterpriseServiceClient client = createAssess.createClient();
+            String recaptchaToken = createAssess.getRecaptchaToken(request);
+            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
+                log.info(errorMessage);
+            } 
+        } catch (ConfigurationException e) {
+            log.warn(e.getMessage());
         }
+        // if (rs.getStatusCode() == HttpStatus.OK) {
+            Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
+            if (user.isPresent()) {
+                Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
+                if (updatedUser.isPresent()) {
+                    mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
+                }
+
+            } else {
+                // Pretend the request has been successful to prevent checking which emails really exist
+                // but log that an invalid attempt has been made
+                log.warn("Password reset requested for non existing mail");
+            }
+        // }
     }
 
     /**
@@ -408,14 +450,28 @@ public class AccountResource {
         throw new CustomMessageRuntimeException("No key found");
     }
 
-
     @PostMapping(path = "/account/resend-verification")
-    public void resendVerification(@RequestBody LoginVM loginVM) {
-        Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
-
-        if (userOptional.isPresent() && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
-            mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
+    public void resendVerification(@RequestBody LoginVM loginVM, HttpServletRequest request) throws Exception {
+        try {
+            RecaptchaEnterpriseServiceClient client = createAssess.createClient();
+            String recaptchaToken = createAssess.getRecaptchaToken(request);
+            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
+                log.info(errorMessage);
+            } 
+        } catch (ConfigurationException e) {
+            log.warn(e.getMessage());
         }
+        // if (rs.getStatusCode() == HttpStatus.OK) {
+            Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
+            if (userOptional.isPresent()
+                    && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
+                mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
+            }
+        // }
     }
 
     private static boolean checkPasswordLength(String password) {

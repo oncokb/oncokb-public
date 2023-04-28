@@ -23,8 +23,6 @@ export const DISABLE_BANNER_OPT = 'disablebanner';
 
 export const DEV_URL = 'http://localhost:9095';
 
-export const RECAPTCHA_SITE_KEY = '6LcxRsMZAAAAAFYpXX6KAc9ASGSf8IptsIKehJby';
-
 export const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
   USER: 'ROLE_USER',
