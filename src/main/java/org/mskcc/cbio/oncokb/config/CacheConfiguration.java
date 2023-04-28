@@ -1,20 +1,18 @@
 package org.mskcc.cbio.oncokb.config;
 
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.cache.*;
 import org.mskcc.oncokb.meta.enumeration.RedisType;
-import org.mskcc.cbio.oncokb.config.cache.CacheNameResolver;
-import org.mskcc.cbio.oncokb.config.cache.CompanyCacheResolver;
-import org.mskcc.cbio.oncokb.config.cache.CustomCacheManager;
-import org.mskcc.cbio.oncokb.config.cache.TokenCacheResolver;
-import org.mskcc.cbio.oncokb.config.cache.UserCacheResolver;
 import org.redisson.api.RedissonClient;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.redisson.Redisson;
 import org.redisson.config.Config;
 import org.redisson.jcache.configuration.RedissonConfiguration;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.cache.interceptor.CacheResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +29,7 @@ import io.github.jhipster.config.JHipsterProperties;
 
 @Configuration
 @EnableCaching
-public class CacheConfiguration {
+public class CacheConfiguration extends CachingConfigurerSupport {
 
     private final String PROP_PREFIX = "application.redis";
     private final String PROP_NAME = "enabled";
@@ -48,10 +46,16 @@ public class CacheConfiguration {
         Config config = new Config();
         if (applicationProperties.getRedis().getType().equals(RedisType.SINGLE.getType())) {
             config.useSingleServer()
+                .setTimeout(applicationProperties.getRedis().getTimeout())
+                .setRetryAttempts(applicationProperties.getRedis().getRetryAttempts())
+                .setRetryInterval(applicationProperties.getRedis().getRetryInterval())
                 .setAddress(applicationProperties.getRedis().getAddress())
                 .setPassword(applicationProperties.getRedis().getPassword());
         } else if (applicationProperties.getRedis().getType().equals(RedisType.SENTINEL.getType())) {
             config.useSentinelServers()
+                .setTimeout(applicationProperties.getRedis().getTimeout())
+                .setRetryAttempts(applicationProperties.getRedis().getRetryAttempts())
+                .setRetryInterval(applicationProperties.getRedis().getRetryInterval())
                 .setMasterName(applicationProperties.getRedis().getSentinelMasterName())
                 .setCheckSentinelsList(false)
                 .addSentinelAddress(
@@ -63,6 +67,9 @@ public class CacheConfiguration {
         } else if (applicationProperties.getRedis().getType().equals(RedisType.CLUSTER.getType())) {
             config
                 .useClusterServers()
+                .setTimeout(applicationProperties.getRedis().getTimeout())
+                .setRetryAttempts(applicationProperties.getRedis().getRetryAttempts())
+                .setRetryInterval(applicationProperties.getRedis().getRetryInterval())
                 .addNodeAddress(applicationProperties.getRedis().getAddress())
                 .setPassword(applicationProperties.getRedis().getPassword())
                 .setClientName(applicationProperties.getName());
@@ -123,6 +130,11 @@ public class CacheConfiguration {
     @Bean
     public CacheResolver companyCacheResolver(CacheManager cm, ApplicationProperties applicationProperties, CacheNameResolver cacheNameResolver) {
         return new CompanyCacheResolver(cm, applicationProperties, cacheNameResolver);
+    }
+
+    @Override
+    public CacheErrorHandler errorHandler() {
+        return new LoggingCacheErrorHandler();
     }
 
     private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration, CacheNameResolver cacheNameResolver) {
