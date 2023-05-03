@@ -622,7 +622,9 @@ export default class CompanyPage extends React.Component<
                         <Col>
                           <div className="form-group">
                             <div>
-                              <span>Company Users</span>
+                              <span className={'font-weight-bold'}>
+                                Company Users
+                              </span>
                               {this.companyUsers.length > 0 ? (
                                 <DownloadButton
                                   className={'ml-2 btn-sm'}
