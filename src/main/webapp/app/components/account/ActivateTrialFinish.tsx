@@ -104,11 +104,9 @@ export default class ActivateTrialFinish extends React.Component<{
                 <Row>
                   <Col>
                     <DownloadButton
-                      className="float-right"
-                      size={'sm'}
+                      className="float-right btn-sm"
                       href={agreementPdf}
                     >
-                      <i className={'fa fa-cloud-download mr-1'} />
                       Download PDF
                     </DownloadButton>
                   </Col>

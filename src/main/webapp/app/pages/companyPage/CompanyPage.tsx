@@ -44,7 +44,12 @@ import {
 import { Link } from 'react-router-dom';
 import { QuickToolButton } from '../userPage/QuickToolButton';
 import { SimpleConfirmModal } from 'app/shared/modal/SimpleConfirmModal';
-import { filterByKeyword, getPageTitle } from 'app/shared/utils/Utils';
+import {
+  convertObjectArrayToDelimitedString,
+  filterByKeyword,
+  getPageTitle,
+  toAppLocalDateFormat,
+} from 'app/shared/utils/Utils';
 import { UsageToggleGroup } from 'app/pages/usageAnalysisPage/UsageToggleGroup';
 import OncoKBTable from 'app/components/oncokbTable/OncoKBTable';
 import {
@@ -61,6 +66,7 @@ import {
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
 import { DateSelector } from 'app/components/dateSelector/DateSelector';
+import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 
 interface MatchParams {
   id: string;
@@ -336,6 +342,31 @@ export default class CompanyPage extends React.Component<
     );
   }
 
+  @computed
+  get companyUserDownloadData() {
+    const userData = this.companyUsers.map(
+      ({
+        createdDate,
+        email,
+        jobTitle,
+        firstName,
+        lastName,
+        activated,
+        authorities,
+      }) => ({
+        createdDate: toAppLocalDateFormat(createdDate),
+        firstName,
+        lastName,
+        jobTitle,
+        email,
+        status: activated ? 'Activated' : 'Inactivated',
+        profiles: authorities,
+      })
+    );
+    const blob = new Blob([convertObjectArrayToDelimitedString(userData)]);
+    return blob;
+  }
+
   readonly users = remoteData<UserOverviewUsage[]>({
     await: () => [],
     invoke: async () => {
@@ -590,8 +621,22 @@ export default class CompanyPage extends React.Component<
                       <Row className={getSectionClassName()}>
                         <Col>
                           <div className="form-group">
-                            <div className={'font-weight-bold'}>
-                              Company Users
+                            <div>
+                              <span>Company Users</span>
+                              {this.companyUsers.length > 0 ? (
+                                <DownloadButton
+                                  className={'ml-2 btn-sm'}
+                                  href={window.URL.createObjectURL(
+                                    this.companyUserDownloadData
+                                  )}
+                                  download={`${this.company.name
+                                    .toLowerCase()
+                                    .split(' ')
+                                    .join('_')}_users.tsv`}
+                                >
+                                  Users
+                                </DownloadButton>
+                              ) : undefined}
                             </div>
                             <UserTable
                               data={this.companyUsers}
