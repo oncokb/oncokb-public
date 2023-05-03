@@ -1,0 +1,40 @@
+[
+  {
+    "id": 3,
+    "login": "user",
+    "firstName": "User",
+    "lastName": "User",
+    "licenseType": "RESEARCH_IN_COMMERCIAL",
+    "jobTitle": "Senior Solutions Representative",
+    "company": {
+      "id": 1,
+      "name": "OncoKB",
+      "description": null,
+      "companyType": "BRANCH",
+      "licenseType": "RESEARCH_IN_COMMERCIAL",
+      "licenseModel": "LIMITED",
+      "licenseStatus": "REGULAR",
+      "businessContact": "Representative",
+      "legalContact": "override orchid reboot",
+      "companyDomains": ["oncokb.org"],
+      "numberOfUsers": 0
+    },
+    "companyName": "OncoKB",
+    "city": "East Markusberg",
+    "country": "Japan",
+    "additionalInfo": null,
+    "email": "user@localhost",
+    "emailVerified": true,
+    "imageUrl": "",
+    "activated": true,
+    "langKey": "en",
+    "activationKey": null,
+    "resetKey": null,
+    "resetDate": null,
+    "createdBy": "system",
+    "createdDate": null,
+    "lastModifiedBy": "user",
+    "lastModifiedDate": "2019-11-14T17:31:05Z",
+    "authorities": ["ROLE_USER"]
+  }
+]
