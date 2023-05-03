@@ -236,13 +236,11 @@ export default class LevelOfEvidencePage extends React.Component<
                 </Button>
               )}
               <DownloadButton
-                size={'sm'}
-                className={classnames('ml-1')}
+                className={classnames('ml-1 btn-sm')}
                 href={`content/files/levelOfEvidence/${this.version}/${
                   LEVEL_FILE_NAME[this.version]
                 }.pdf`}
               >
-                <i className={'fa fa-cloud-download mr-1'} />
                 Download PDF
               </DownloadButton>
             </Col>

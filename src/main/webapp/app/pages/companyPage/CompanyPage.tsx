@@ -355,12 +355,12 @@ export default class CompanyPage extends React.Component<
         authorities,
       }) => ({
         createdDate: toAppLocalDateFormat(createdDate),
-        email,
-        jobTitle,
         firstName,
         lastName,
-        activated,
-        authorities,
+        jobTitle,
+        email,
+        status: activated ? 'Activated' : 'Inactivated',
+        profiles: authorities,
       })
     );
     const blob = new Blob([convertObjectArrayToDelimitedString(userData)]);
@@ -625,8 +625,7 @@ export default class CompanyPage extends React.Component<
                               <span>Company Users</span>
                               {this.companyUsers.length > 0 ? (
                                 <DownloadButton
-                                  size={'sm'}
-                                  className={'ml-2'}
+                                  className={'ml-2 btn-sm'}
                                   href={window.URL.createObjectURL(
                                     this.companyUserDownloadData
                                   )}
@@ -635,7 +634,6 @@ export default class CompanyPage extends React.Component<
                                     .split(' ')
                                     .join('_')}_users.tsv`}
                                 >
-                                  <i className={'fa fa-cloud-download mr-1'} />
                                   Users
                                 </DownloadButton>
                               ) : undefined}
