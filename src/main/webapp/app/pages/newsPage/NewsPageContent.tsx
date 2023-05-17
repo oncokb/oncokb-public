@@ -40,7 +40,7 @@ import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
-import { linkableMutationName } from './Util';
+import { linkableMutationName, convertGeneInputToLinks } from './Util';
 
 export type ChangedAnnotation = {
   content: ElementType[][];
@@ -198,6 +198,183 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '05202023': {
+    priorityNews: [
+      <span>
+        Updated therapeutic implications - new alterations with a level of
+        evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Drug</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowSpan={3}>1</td>
+                <td rowSpan={3}>RARA</td>
+                <td rowSpan={3}>PML-RARA Fusion</td>
+                <td rowSpan={3}>Acute Promyelocytic Leukemia</td>
+                <td>Tretinoin</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <PMIDLink pmids={'1850498'} />
+                    <FdaApprovalLink
+                      approval={'FDA-approval (1995) of Tretinoin'}
+                      link={
+                        'https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/020438s007s008lbl.pdf'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Arsenic Trioxide</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <PMIDLink pmids={'11559723'} />
+                    <FdaApprovalLink
+                      approval={'FDA-approval (2000) of Arsenic Trioxide'}
+                      link={
+                        'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/021248s019lbl.pdf'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Tretinoin + Arsenic Trioxide</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <PMIDLink pmids={'23841729'} />
+                    <FdaApprovalLink
+                      approval={
+                        'FDA-approval (2000) of Arsenic Trioxide + Tretinoin'
+                      }
+                      link={
+                        'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/021248s019lbl.pdf'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>ERBB2</td>
+                <td>Amplification</td>
+                <td>Biliary Tract Cancer</td>
+                <td>Trastuzumab + Pertuzumab</td>
+                <td>
+                  Inclusion in Biliary Tract Cancer NCCN guidelines (v2.2023)
+                </td>
+              </tr>
+              <tr>
+                <td>R2</td>
+                <td>EGFR</td>
+                <td>L792H</td>
+                <td>Non-Small Cell Lung Cancer</td>
+                <td>Osimertinib</td>
+                <td>
+                  <PMIDLink
+                    pmids={'28093244, 28625641, 29506987, 29857056, 34526717'}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        content: [
+          [
+            'ESR1',
+            'Oncogenic ligand-binding domain in-frame insertions or deletions',
+            'Breast Cancer',
+            'Elacestrant',
+            '3A',
+            '2',
+            'Inclusion in Breast Cancer NCCN guidelines (v4.2023)',
+          ],
+          [
+            'KRAS',
+            'G12C',
+            'Pancreatic Adenocarcinoma',
+            'Pancreatic Adenocarcinoma',
+            '3A',
+            '2',
+            'Inclusion in Pancreatic Cancer NCCN guidelines (v1.2023)',
+          ],
+        ],
+      },
+    ],
+    news: [
+      <span>
+        Updated therapeutic implications: - Removal of therapies for variants
+        with a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th style={{ width: 2 }}>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Current Level of Evidence</th>
+                <th>Drug(s) removed from OncoKB</th>
+                <th>Drug remaining in OncoKB</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'FGFR2'} />
+                </td>
+                <td>Fusions</td>
+                <td>Cholangiocarcinoma</td>
+                <td rowSpan={3}>Infigratinib</td>
+                <td>AZD9496</td>
+                <td>Pemigatinib, Futibatinib</td>
+                <td rowSpan={3}>
+                  <Linkout
+                    link={
+                      'https://professionals.optumrx.com/content/dam/optum3/professional-optumrx/news/rxnews/drug-withdrawls/drugwithdrawal_truseltiq_2022-1117.pdf'
+                    }
+                  >
+                    Discontinuation of infigratinib
+                  </Linkout>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'FGFR1'} />
+                </td>
+                <td>Amplification</td>
+                <td>Lung Squamous Cell Carcinoma</td>
+                <td>3A</td>
+                <td>Debio1347, Erdafitinib</td>
+              </tr>
+              <tr>
+                <td>{convertGeneInputToLinks('FGFR1, FGFR2, FGFR3')}</td>
+                <td>Oncogenic Mutations</td>
+                <td>All Solid Tumors</td>
+                <td>4</td>
+                <td>Debio1347, Erdafitinib, AZD4547</td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    newlyAddedGenes: ['ALDH1L2', 'FOLH1', 'IQGAP1', 'POU3F4', 'TIGAR'],
+  },
   '04122023': {
     priorityNews: [
       <span>
