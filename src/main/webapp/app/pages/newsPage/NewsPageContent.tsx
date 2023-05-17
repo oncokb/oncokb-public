@@ -218,8 +218,15 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             <tbody>
               <tr>
                 <td rowSpan={3}>1</td>
-                <td rowSpan={3}>RARA</td>
-                <td rowSpan={3}>PML-RARA Fusion</td>
+                <td rowSpan={3}>
+                  <GenePageLink hugoSymbol={'RARA'} />
+                </td>
+                <td rowSpan={3}>
+                  <AlterationPageLink
+                    hugoSymbol={'RARA'}
+                    alteration={'PML-RARA Fusion'}
+                  />
+                </td>
                 <td rowSpan={3}>Acute Promyelocytic Leukemia</td>
                 <td>Tretinoin</td>
                 <td>
@@ -266,8 +273,16 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>2</td>
-                <td>ERBB2</td>
-                <td>Amplification</td>
+                <td>
+                  <GenePageLink hugoSymbol={'ERBB2'} />
+                </td>
+                <td>
+                  {' '}
+                  <AlterationPageLink
+                    hugoSymbol={'ERBB2'}
+                    alteration={'Amplification'}
+                  />
+                </td>
                 <td>Biliary Tract Cancer</td>
                 <td>Trastuzumab + Pertuzumab</td>
                 <td>
@@ -276,8 +291,15 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               </tr>
               <tr>
                 <td>R2</td>
-                <td>EGFR</td>
-                <td>L792H</td>
+                <td>
+                  <GenePageLink hugoSymbol={'EGFR'} />
+                </td>
+                <td>
+                  <AlterationPageLink
+                    hugoSymbol={'EGFR'}
+                    alteration={'L792H'}
+                  />
+                </td>
                 <td>Non-Small Cell Lung Cancer</td>
                 <td>Osimertinib</td>
                 <td>
@@ -337,7 +359,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>
                   <GenePageLink hugoSymbol={'FGFR2'} />
                 </td>
-                <td>Fusions</td>
+                <td>
+                  <AlterationPageLink
+                    hugoSymbol={'FGFR2'}
+                    alteration={'Fusions'}
+                  />
+                </td>
                 <td>Cholangiocarcinoma</td>
                 <td rowSpan={3}>Infigratinib</td>
                 <td>AZD9496</td>
@@ -356,7 +383,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>
                   <GenePageLink hugoSymbol={'FGFR1'} />
                 </td>
-                <td>Amplification</td>
+                <td>
+                  <AlterationPageLink
+                    hugoSymbol={'FGFR1'}
+                    alteration={'Amplification'}
+                  />
+                </td>
                 <td>Lung Squamous Cell Carcinoma</td>
                 <td>3A</td>
                 <td>Debio1347, Erdafitinib</td>
