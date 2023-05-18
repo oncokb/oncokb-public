@@ -198,7 +198,7 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '05202023': {
+  '05192023': {
     priorityNews: [
       <span>
         Updated therapeutic implications - new alterations with a level of
@@ -211,7 +211,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th>Gene</th>
                 <th>Mutation</th>
                 <th>Cancer Type</th>
-                <th>Drug</th>
+                <th>Drug(s)</th>
                 <th>Evidence</th>
               </tr>
             </thead>
@@ -233,7 +233,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <PMIDLink pmids={'1850498'} />
                     <FdaApprovalLink
-                      approval={'FDA-approval (1995) of Tretinoin'}
+                      approval={'Tretinoin'}
+                      year={'1995'}
                       link={
                         'https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/020438s007s008lbl.pdf'
                       }
@@ -247,7 +248,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <PMIDLink pmids={'11559723'} />
                     <FdaApprovalLink
-                      approval={'FDA-approval (2000) of Arsenic Trioxide'}
+                      approval={'Arsenic Trioxide'}
+                      year={'2000'}
                       link={
                         'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/021248s019lbl.pdf'
                       }
@@ -261,9 +263,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <PMIDLink pmids={'23841729'} />
                     <FdaApprovalLink
-                      approval={
-                        'FDA-approval (2000) of Arsenic Trioxide + Tretinoin'
-                      }
+                      approval={'Arsenic Trioxide + Tretinoin'}
+                      year={'2000'}
                       link={
                         'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/021248s019lbl.pdf'
                       }
@@ -318,7 +319,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         content: [
           [
             'ESR1',
-            'Oncogenic ligand-binding domain in-frame insertions or deletions',
+            <span>
+              Oncogenic ligand-binding domain in-frame insertions or deletions
+            </span>,
             'Breast Cancer',
             'Elacestrant',
             '3A',
@@ -329,7 +332,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
             'KRAS',
             'G12C',
             'Pancreatic Adenocarcinoma',
-            'Pancreatic Adenocarcinoma',
+            'Adagrasib, Sotorasib',
             '3A',
             '2',
             'Inclusion in Pancreatic Cancer NCCN guidelines (v1.2023)',
@@ -339,7 +342,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     news: [
       <span>
-        Updated therapeutic implications: - Removal of therapies for variants
+        Updated therapeutic implications - Removal of therapies for variants
         with a level of evidence
         <Row className={'overflow-auto'}>
           <table className="table">
@@ -350,7 +353,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <th>Cancer Type</th>
                 <th>Current Level of Evidence</th>
                 <th>Drug(s) removed from OncoKB</th>
-                <th>Drug remaining in OncoKB</th>
+                <th>Drug(s) remaining in OncoKB</th>
                 <th>Evidence</th>
               </tr>
             </thead>
@@ -366,8 +369,8 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                   />
                 </td>
                 <td>Cholangiocarcinoma</td>
+                <td>1</td>
                 <td rowSpan={3}>Infigratinib</td>
-                <td>AZD9496</td>
                 <td>Pemigatinib, Futibatinib</td>
                 <td rowSpan={3}>
                   <Linkout
@@ -987,7 +990,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     news: [
       <span>
-        Updated therapeutic implications: - Removal of therapies for variants
+        Updated therapeutic implications - Removal of therapies for variants
         with a level of evidence
         <Row className={'overflow-auto'}>
           <table className="table">
