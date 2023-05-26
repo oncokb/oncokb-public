@@ -77,12 +77,13 @@ public class AccountResource {
     private final TokenProvider tokenProvider;
 
     public AccountResource(UserRepository userRepository, UserService userService,
-            MailService mailService, TokenProvider tokenProvider,
-            SlackService slackService, EmailService emailService,
-            SmartsheetService smartsheetService,
-            AuthenticationManagerBuilder authenticationManagerBuilder,
-            PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
-            TokenService tokenService, ApplicationProperties applicationProperties) {
+                           MailService mailService, TokenProvider tokenProvider,
+                           SlackService slackService, EmailService emailService,
+                           SmartsheetService smartsheetService,
+                           AuthenticationManagerBuilder authenticationManagerBuilder,
+                           PasswordEncoder passwordEncoder, UserDetailsService userDetailsService,
+                           TokenService tokenService, ApplicationProperties applicationProperties
+                           ) {
 
         this.userRepository = userRepository;
         this.userDetailsService = userDetailsService;
@@ -137,19 +138,15 @@ public class AccountResource {
      * {@code GET  /activate} : activate the registered user.
      *
      * @param key the activation key.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user
-     *                          couldn't be activated.
+     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
      */
     @GetMapping("/activate")
-    public boolean activateAccount(@RequestParam(value = "key") String key,
-            @RequestParam(value = "login") String login) {
+    public boolean activateAccount(@RequestParam(value = "key") String key, @RequestParam(value = "login") String login) {
         Optional<User> userOptional = userService.getUserByLogin(login);
-        if (!userOptional.isPresent() || (userOptional.get().getActivationKey() != null
-                && !userOptional.get().getActivationKey().equals(key))) {
-            throw new CustomMessageRuntimeException(
-                    "Your user account could not be activated as no user was found associated with this activation key.");
+        if (!userOptional.isPresent() || (userOptional.get().getActivationKey() != null && !userOptional.get().getActivationKey().equals(key))) {
+            throw new CustomMessageRuntimeException("Your user account could not be activated as no user was found associated with this activation key.");
         } else {
-            if (userOptional.get().getActivationKey() == null) {
+            if(userOptional.get().getActivationKey() == null) {
                 return userOptional.get().getActivated();
             }
 
@@ -157,9 +154,9 @@ public class AccountResource {
             userOptional = userService.activateRegistration(key);
 
             User user;
-            if (userOptional.isPresent()) {
+            if(userOptional.isPresent()){
                 user = userOptional.get();
-            } else {
+            }else{
                 throw new CustomMessageRuntimeException("User could not be found");
             }
 
@@ -167,22 +164,17 @@ public class AccountResource {
                 UserDTO userDTO = userMapper.userToUserDTO(user);
                 return activateUser(userDTO, userService.findCompanyCandidate(userDTO));
             } else {
-                // This user exists before, we are looking for to extend the expiration date of
-                // all tokens associated
+                // This user exists before, we are looking for to extend the expiration date of all tokens associated
                 List<Token> userTokens = tokenService.findByUser(user);
-                boolean userAccountCanNOTBeExtended = !userTokens.stream().filter(token -> token.isRenewable())
-                        .findAny().isPresent();
+                boolean userAccountCanNOTBeExtended = !userTokens.stream().filter(token -> token.isRenewable()).findAny().isPresent();
                 if (userAccountCanNOTBeExtended) {
                     throw new CustomMessageRuntimeException("Your account token is expired and cannot be extended.");
                 } else {
                     Instant defaultExpiration = Instant.now().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
                     tokenService.findByUser(user).forEach(token -> {
-                        // if the extended date based on the current token expiration is before the date
-                        // in 6month, we should use the bigger one
-                        Instant expirationBased = token.getExpiration()
-                                .plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
-                        token.setExpiration(
-                                expirationBased.isBefore(defaultExpiration) ? defaultExpiration : expirationBased);
+                        // if the extended date based on the current token expiration is before the date in 6month, we should use the bigger one
+                        Instant expirationBased = token.getExpiration().plusSeconds(tokenProvider.EXPIRATION_TIME_IN_SECONDS);
+                        token.setExpiration(expirationBased.isBefore(defaultExpiration) ? defaultExpiration : expirationBased);
                         tokenService.save(token);
                     });
                 }
@@ -192,12 +184,12 @@ public class AccountResource {
     }
 
     private boolean activateUser(
-            @NotNull UserDTO userDTO,
-            @NotNull CompanyCandidate companyCandidate) {
+        @NotNull UserDTO userDTO,
+        @NotNull CompanyCandidate companyCandidate
+    ) {
         boolean userIsActivated = false;
 
-        // When the possible company is on LIMITED tier, we proceed with the manual
-        // approval process
+        // When the possible company is on LIMITED tier, we proceed with the manual approval process
         if (!companyCandidate.getCanAssociate()) {
             Company limitedCompany = null;
             if (companyCandidate.getCompanyCandidate().isPresent()) {
@@ -223,8 +215,7 @@ public class AccountResource {
     }
 
     /**
-     * {@code GET  /authenticate} : check if the user is authenticated, and return
-     * its login.
+     * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
      *
      * @param request the HTTP request.
      * @return the login if the user is authenticated.
@@ -239,29 +230,25 @@ public class AccountResource {
      * {@code GET  /account} : get the current user.
      *
      * @return the current user.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user
-     *                          couldn't be returned.
+     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
      */
     @GetMapping("/account")
     public UserDTO getAccount() {
         return userService.getUserWithAuthorities()
-                .map(user -> userMapper.userToUserDTO(user))
-                .orElseThrow(() -> new CustomMessageRuntimeException("User could not be found"));
+            .map(user -> userMapper.userToUserDTO(user))
+            .orElseThrow(() -> new CustomMessageRuntimeException("User could not be found"));
     }
 
     /**
      * {@code POST  /account} : update the current user information.
      *
      * @param userDTO the current user information.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is
-     *                                   already used.
-     * @throws RuntimeException          {@code 500 (Internal Server Error)} if the
-     *                                   user login wasn't found.
+     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
+     * @throws RuntimeException          {@code 500 (Internal Server Error)} if the user login wasn't found.
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
-        String userLogin = SecurityUtils.getCurrentUserLogin()
-                .orElseThrow(() -> new CustomMessageRuntimeException("Current user login not found"));
+        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new CustomMessageRuntimeException("Current user login not found"));
         Optional<User> existingUser = userRepository.findOneWithAuthoritiesByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
@@ -277,8 +264,7 @@ public class AccountResource {
      * {@code POST  /account/change-password} : changes the current user's password.
      *
      * @param passwordChangeDto current and new password.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new
-     *                                  password is incorrect.
+     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
      */
     @PostMapping(path = "/account/change-password")
     public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
@@ -289,8 +275,7 @@ public class AccountResource {
     }
 
     /**
-     * {@code GET  /account/tokens} : get the list of current logged in user's
-     * tokens.
+     * {@code GET  /account/tokens} : get the list of current logged in user's tokens.
      *
      * @return list of tokens
      */
@@ -310,8 +295,7 @@ public class AccountResource {
     }
 
     /**
-     * {@code POST  /account/tokens} : create a new token for the current user's
-     * token.
+     * {@code POST  /account/tokens} : create a new token for the current user's token.
      *
      * @return the new token
      */
@@ -325,23 +309,17 @@ public class AccountResource {
                 // We allow users to regenerate their tokens, so they can have 2 tokens.
                 throw new CustomMessageRuntimeException("No more than two tokens can be created");
             } else {
-                // if there is a token already available, we should use the longest expiration
-                // time
+                // if there is a token already available, we should use the longest expiration time
                 // also set the old token's expiration to the min(current expiration, 7 days)
-                // we only renew the token after validating the account is valid on half year
-                // basis
+                // we only renew the token after validating the account is valid on half year basis
                 if (tokens.size() > 0) {
-                    Instant expiration = tokens.stream().max(Comparator.comparing(Token::getExpiration)).get()
-                            .getExpiration();
+                    Instant expiration = tokens.stream().max(Comparator.comparing(Token::getExpiration)).get().getExpiration();
                     Instant sevenDaysFromNow = Instant.now().plus(7, ChronoUnit.DAYS);
-                    for (Token token : tokens) {
-                        token.setExpiration(
-                                token.getExpiration().compareTo(sevenDaysFromNow) < 0 ? token.getExpiration()
-                                        : sevenDaysFromNow);
+                    for (Token token: tokens) {
+                        token.setExpiration(token.getExpiration().compareTo(sevenDaysFromNow) < 0 ? token.getExpiration() : sevenDaysFromNow);
                         tokenService.save(token);
                     }
-                    return tokenProvider.createTokenForCurrentUserLogin(Optional.of(expiration),
-                            Optional.of(tokens.iterator().next().isRenewable()));
+                    return tokenProvider.createTokenForCurrentUserLogin(Optional.of(expiration), Optional.of(tokens.iterator().next().isRenewable()));
                 } else {
                     return tokenProvider.createTokenForCurrentUserLogin(Optional.empty(), Optional.empty());
                 }
@@ -369,8 +347,7 @@ public class AccountResource {
     }
 
     /**
-     * {@code POST   /account/reset-password/init} : Send an email to reset the
-     * password of the user.
+     * {@code POST   /account/reset-password/init} : Send an email to reset the password of the user.
      *
      * @param mail the mail of the user.
      * @throws Exception
@@ -406,24 +383,20 @@ public class AccountResource {
         // }
     }
 
-
     /**
-     * {@code POST   /account/reset-password/finish} : Finish to reset the password
-     * of the user.
+     * {@code POST   /account/reset-password/finish} : Finish to reset the password of the user.
      *
      * @param keyAndPassword the generated key and the new password.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is
-     *                                  incorrect.
-     * @throws RuntimeException         {@code 500 (Internal Server Error)} if the
-     *                                  password could not be reset.
+     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws RuntimeException         {@code 500 (Internal Server Error)} if the password could not be reset.
      */
     @PostMapping(path = "/account/reset-password/finish")
     public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }
-        Optional<User> user = userService.completePasswordReset(keyAndPassword.getNewPassword(),
-                keyAndPassword.getKey());
+        Optional<User> user =
+            userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
             throw new CustomMessageRuntimeException("No user was found for this reset key");
@@ -455,8 +428,7 @@ public class AccountResource {
         if (keyAndTermsVM.getReadAndAgreeWithTheTerms() != Boolean.TRUE) {
             throw new CustomMessageRuntimeException("You have to read and agree with the terms.");
         }
-        Optional<UserDetailsDTO> userDetailsDTO = userDetailsService
-                .findOneByTrialActivationKey(keyAndTermsVM.getKey());
+        Optional<UserDetailsDTO> userDetailsDTO = userDetailsService.findOneByTrialActivationKey(keyAndTermsVM.getKey());
         if (userDetailsDTO.isPresent()) {
             Optional<UserDTO> userDTOOptional = userService.finishTrialAccountActivation(keyAndTermsVM.getKey());
             if (userDTOOptional.isPresent()) {
@@ -504,7 +476,7 @@ public class AccountResource {
 
     private static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) &&
-                password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
-                password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+            password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
+            password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
     }
 }

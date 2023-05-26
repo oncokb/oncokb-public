@@ -13,10 +13,13 @@ import { setRecaptchaToken } from 'app/indexUtils';
 @observer
 export class PasswordResetInit extends React.Component<{}> {
   @observable resetStatus: API_CALL_STATUS;
+  recaptcha = new ReCAPTCHA();
 
   @autobind
   @action
-  resetPassword(event: any, values: any) {
+  async resetPassword(event: any, values: any) {
+    const token: string = await this.recaptcha.getToken();
+    setRecaptchaToken(token);
     if (values.email) {
       client
         .requestPasswordResetUsingPOST({

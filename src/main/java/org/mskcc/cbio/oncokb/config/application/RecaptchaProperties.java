@@ -28,4 +28,5 @@ public class RecaptchaProperties {
     public String getSiteKey() {
         return siteKey;
     }
+    
 }

@@ -37,8 +37,12 @@ export default class LoginPage extends React.Component<ILoginProps> {
   @observable resendingVerification = false;
   @observable resendVerificationMessage: string;
 
-  resentEmail = () => {
+  recaptcha = new ReCAPTCHA();
+
+  resentEmail = async () => {
     this.resendingVerification = true;
+    const token: string = await this.recaptcha.getToken();
+    setRecaptchaToken(token);
     client
       .resendVerificationUsingPOST({
         loginVm: this.savedCredential,
