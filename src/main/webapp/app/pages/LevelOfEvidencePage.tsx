@@ -141,25 +141,20 @@ export default class LevelOfEvidencePage extends React.Component<
   readonly reactions: IReactionDisposer[] = [];
 
   redirectToNewPage = (version: Version) => {
-    // if page is v2 page and version is v2 do nothing
     const newPath = REDIRECTPAGE[version.toUpperCase()];
     if (newPath) {
       this.props.routing.history.push(newPath);
+      this.updateActiveKey(version);
     }
-  };
-
-  updateLocationHash = (newVersion: Version) => {
-    this.redirectToNewPage(newVersion);
-    this.updateActiveKey(newVersion);
 
     if (window.location.pathname === PAGE_ROUTE.V2) {
       window.location.hash = QueryString.stringify({
-        version: newVersion.toUpperCase(),
+        version: version.toUpperCase(),
       });
     }
   };
 
-  getVersionFromPathname(returnVersion?: boolean) {
+  getVersionFromPathname() {
     const versionKey: string =
       Object.keys(PAGE_ROUTE).find(
         key => PAGE_ROUTE[key] === window.location.pathname
@@ -189,7 +184,7 @@ export default class LevelOfEvidencePage extends React.Component<
       reaction(
         () => this.version,
         newVersion => {
-          return this.updateLocationHash(newVersion);
+          return this.redirectToNewPage(newVersion);
         }
       )
     );
@@ -199,7 +194,7 @@ export default class LevelOfEvidencePage extends React.Component<
     if (!window.location.pathname.includes(PAGE_ROUTE[Version.V2])) {
       this.getVersionFromPathname();
     }
-    this.updateLocationHash(this.version);
+    this.redirectToNewPage(this.version);
   }
 
   componentDidUpdate(): void {

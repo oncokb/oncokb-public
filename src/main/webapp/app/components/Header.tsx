@@ -49,7 +49,11 @@ const checkIfNavLinkIsActive = (
   location: Location,
   subPages: SubpageLink[]
 ) => {
-  const currentPage: SubpageLink = subPages.find(page => page.title === title)!;
+  const currentPage: SubpageLink | undefined = subPages.find(
+    page => page.title === title
+  );
+
+  if (!currentPage) return false;
   const currentLink = currentPage.matchedPaths?.find(link =>
     location.pathname.includes(link)
   );
