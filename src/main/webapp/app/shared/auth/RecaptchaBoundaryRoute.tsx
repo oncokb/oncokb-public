@@ -52,7 +52,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
     if (this.recaptchaEnabled) {
       this.loadData();
 
-      return this.recaptchaValidated === true ? (
+      return this.recaptchaValidated ? (
         <ErrorBoundaryRoute {...this.props} />
       ) : (
         <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />

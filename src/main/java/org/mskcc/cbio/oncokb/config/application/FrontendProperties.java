@@ -10,6 +10,7 @@ public class FrontendProperties {
     private String recaptchaProjectId;
     private String recaptchaSiteKey;
     private Float recaptchaThreshold;
+    public Boolean recaptchaEnabled;
 
     public String getRecaptchaProjectId() {
         return recaptchaProjectId;
@@ -57,5 +58,13 @@ public class FrontendProperties {
 
     public void setEnableAuth(Boolean enableAuth) {
         this.enableAuth = enableAuth;
+    }
+    
+    public void setRecaptchaEnabled(Boolean recaptchaEnabled) {
+        this.recaptchaEnabled = recaptchaEnabled;
+    }
+
+    public boolean getRecaptchaEnabled(){
+        return recaptchaEnabled;
     }
 }
