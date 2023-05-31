@@ -49,6 +49,9 @@ const userDetails = fs
 const companyUserDetails = fs
   .readFileSync(`${DATA_DIR}api-company-user-details.json`)
   .toString();
+const companyUsers = fs
+  .readFileSync(`${DATA_DIR}api-company-users.json`)
+  .toString();
 const companies = fs.readFileSync(`${DATA_DIR}api-companies.json`).toString();
 const companyDetails = fs
   .readFileSync(`${DATA_DIR}api-company-details.json`)
@@ -227,7 +230,7 @@ function getMockResponse(url) {
       res = {
         status: 200,
         contentType: 'application/json',
-        body: '[]',
+        body: companyUsers,
       };
       break;
     case `${SERVER_URL}api/users/admin/tokens`:

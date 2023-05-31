@@ -13,6 +13,9 @@ import { PAGE_TITLE, PAGE_ROUTE } from 'app/config/constants';
 import { action } from 'mobx';
 import autobind from 'autobind-decorator';
 import { getPageTitle } from 'app/shared/utils/Utils';
+import Reaptcha from 'reaptcha';
+import { setRecaptchaToken } from './indexUtils';
+import { COILinkout } from './pages/teamPage/COILinkout';
 
 export type Stores = {
   appStore: AppStore;
@@ -31,6 +34,7 @@ class App extends React.Component {
   };
   public recaptchaRef: any = React.createRef();
   public recaptchaRendered = false;
+  public recaptchaToken: string;
 
   constructor(props: IAppConfig) {
     super(props);
@@ -54,6 +58,11 @@ class App extends React.Component {
   @autobind
   @action
   onRecaptchaVerify(value: string) {
+    const response = this.recaptchaRef.current.getResponse();
+    response.then((token: string) => {
+      setRecaptchaToken(token);
+      this.recaptchaToken = token;
+    });
     this.stores.appStore.recaptchaVerified = true;
   }
 

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.domain.enumeration.ProjectProfile;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.mskcc.oncokb.meta.model.application.RedisProperties;
+import org.mskcc.oncokb.meta.model.application.AWSProperties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +36,7 @@ public class ApplicationProperties {
     private String githubToken;
     private Boolean dbReadOnly;
     private SmartsheetProperties smartsheet;
+    private RecaptchaProperties recaptcha;
 
     public String getName() {
         return name;
@@ -178,4 +180,13 @@ public class ApplicationProperties {
     public void setSmartsheet(SmartsheetProperties smartsheet) {
         this.smartsheet = smartsheet;
     }
+
+    public RecaptchaProperties getRecaptcha() {
+        return recaptcha;
+    }
+
+    public void setRecaptcha(RecaptchaProperties recaptcha) {
+        this.recaptcha = recaptcha;
+    }
+
 }

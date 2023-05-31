@@ -10,8 +10,11 @@ const ShowHideText: React.FunctionComponent<{
 }> = props => {
   return (
     <div className={props.className}>
-      <div style={{ cursor: 'pointer' }} onClick={() => props.onClick()}>
-        <i>{`${props.show ? 'Hide' : 'Show'} ${props.title}`}</i>{' '}
+      <div
+        style={{ cursor: 'pointer', color: 'grey' }}
+        onClick={() => props.onClick()}
+      >
+        <span>{`${props.show ? 'Hide' : 'Show'} ${props.title}`}</span>{' '}
         <ShowHideToggleIcon show={props.show} onToggle={() => {}} />
       </div>
       {props.show ? props.content : undefined}

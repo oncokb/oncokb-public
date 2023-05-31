@@ -4,8 +4,14 @@ import { Linkout } from 'app/shared/links/Linkout';
 export const FdaApprovalLink: React.FunctionComponent<{
   link: string;
   approval: string;
+  year?: string;
 }> = props => {
-  return <Linkout link={props.link}>FDA-approval of {props.approval}</Linkout>;
+  let linkText = 'FDA-approval ';
+  if (props.year) {
+    linkText += `(${props.year}) `;
+  }
+  linkText += `of ${props.approval}`;
+  return <Linkout link={props.link}>{linkText}</Linkout>;
 };
 export const FdaBreakthroughLink: React.FunctionComponent<{
   link: string;

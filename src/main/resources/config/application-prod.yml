@@ -159,3 +159,5 @@ application:
     editor: OncoKB
   frontend:
     enable-auth: true
+  recaptcha:
+    threshold: 0.1

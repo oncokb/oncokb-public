@@ -10,6 +10,9 @@ type ServerConfig = {
   sentryProjectId: string;
   readonly: boolean;
   enableAuth: boolean;
+  recaptchaProjectId: string;
+  recaptchaSiteKey: string;
+  recaptchaThreshold: string;
 };
 
 interface IAppConfig {

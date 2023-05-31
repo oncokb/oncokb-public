@@ -65,6 +65,18 @@ export function shortenOncogenicity(oncogenicity: string): string {
   return GENERAL_ONCOGENICITY[oncogenicity];
 }
 
+export function shortenTextByCharacters(text: string, cutoff: number) {
+  const shortText = (text || '').trim();
+  if (shortText.length <= cutoff) {
+    return shortText;
+  } else {
+    const separator = ' ';
+    const words = (text || '').slice(0, cutoff).split(separator);
+    words.pop();
+    return words.join(separator);
+  }
+}
+
 export function getCancerTypeNameFromOncoTreeType(
   oncoTreeType: TumorType
 ): string {
@@ -881,4 +893,23 @@ export const getPageTitle = (mainContent: string, withPostFix = true) => {
     content.push(ONCOKB_TM);
   }
   return `${content.join(' | ')}`;
+};
+
+export const convertObjectArrayToDelimitedString = (
+  array: Array<object>,
+  delimiter = '\t'
+) => {
+  if (array.length < 1) {
+    return '';
+  }
+
+  const rows = [];
+
+  // Add header using the keys of the object
+  rows.push(Object.keys(array[0]).join(delimiter));
+
+  for (const e of array) {
+    rows.push(Object.values(e).join(delimiter));
+  }
+  return rows.join('\n');
 };

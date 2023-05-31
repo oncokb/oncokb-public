@@ -19,6 +19,7 @@ import {
 import {
   DEFAULT_ANNOTATION,
   DEFAULT_GENE,
+  DEFAULT_GENE_NUMBER,
   EVIDENCE_TYPES,
   REFERENCE_GENOME,
 } from 'app/config/constants';
@@ -29,11 +30,16 @@ import {
   EnsemblGene,
   GeneNumber,
   PortalAlteration,
+  TumorType,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
-import { isOncogenic, shortenOncogenicity } from 'app/shared/utils/Utils';
+import {
+  getCancerTypeNameFromOncoTreeType,
+  isOncogenic,
+  shortenOncogenicity,
+} from 'app/shared/utils/Utils';
 import { oncogenicitySortMethod } from 'app/shared/utils/ReactTableUtils';
 import { Oncogenicity } from 'app/components/oncokbMutationMapper/OncokbMutationMapper';
 import { OncokbMutation } from 'app/components/oncokbMutationMapper/OncokbMutation';
@@ -248,6 +254,23 @@ export class AnnotationStore {
     );
   }
 
+  @computed
+  get cancerTypeName() {
+    if (this.tumorTypeQuery) {
+      if (this.tumorTypeQuery.toUpperCase() === this.tumorTypeQuery) {
+        // we should use the cancer type name if the query is the OncoTree code.
+        const matchedCancerType = this.allCancerTypes.result.filter(
+          ct => ct.code === this.tumorTypeQuery
+        );
+        if (matchedCancerType.length === 1) {
+          return getCancerTypeNameFromOncoTreeType(matchedCancerType[0]);
+        }
+      }
+      return this.tumorTypeQuery;
+    }
+    return '';
+  }
+
   readonly geneSummary = remoteData<string | undefined>({
     await: () => [this.gene],
     invoke: async () => {
@@ -291,20 +314,15 @@ export class AnnotationStore {
   readonly geneNumber = remoteData<GeneNumber>({
     await: () => [this.gene],
     invoke: async () => {
-      return privateClient.utilsNumbersGeneGetUsingGET({
-        hugoSymbol: this.gene.result.hugoSymbol,
-      });
+      try {
+        return await privateClient.utilsNumbersGeneGetUsingGET({
+          hugoSymbol: this.gene.result.hugoSymbol,
+        });
+      } catch (e) {
+        return DEFAULT_GENE_NUMBER;
+      }
     },
-    default: {
-      gene: DEFAULT_GENE,
-      alteration: 0,
-      highestSensitiveLevel: '',
-      highestResistanceLevel: '',
-      highestDiagnosticImplicationLevel: '',
-      highestPrognosticImplicationLevel: '',
-      highestFdaLevel: '',
-      tumorType: 0,
-    },
+    default: DEFAULT_GENE_NUMBER,
   });
 
   readonly mutationEffect = remoteData<Evidence[]>({
@@ -470,6 +488,15 @@ export class AnnotationStore {
       });
 
       return Promise.resolve(data);
+    },
+    default: [],
+  });
+
+  readonly allCancerTypes = remoteData<TumorType[]>({
+    await: () => [],
+    async invoke() {
+      const result = await privateClient.utilsTumorTypesGetUsingGET({});
+      return result.sort();
     },
     default: [],
   });

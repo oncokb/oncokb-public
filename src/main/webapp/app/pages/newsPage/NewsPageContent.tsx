@@ -40,6 +40,7 @@ import mainstyle from 'app/pages/newsPage/main.module.scss';
 import { PMALink } from 'app/shared/links/PMALink';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { AnnotationColumnHeaderType } from './ChangedAnnotatonListItem';
+import { linkableMutationName, convertGeneInputToLinks } from './Util';
 
 export type ChangedAnnotation = {
   content: ElementType[][];
@@ -197,6 +198,245 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '05192023': {
+    priorityNews: [
+      <span>
+        Updated therapeutic implications - new alterations with a level of
+        evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Drug(s)</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowSpan={3}>1</td>
+                <td rowSpan={3}>
+                  <GenePageLink hugoSymbol={'RARA'} />
+                </td>
+                <td rowSpan={3}>
+                  <AlterationPageLink
+                    hugoSymbol={'RARA'}
+                    alteration={'PML-RARA Fusion'}
+                  />
+                </td>
+                <td rowSpan={3}>Acute Promyelocytic Leukemia</td>
+                <td>Tretinoin</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <PMIDLink pmids={'1850498'} />
+                    <FdaApprovalLink
+                      approval={'Tretinoin'}
+                      year={'1995'}
+                      link={
+                        'https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/020438s007s008lbl.pdf'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Arsenic Trioxide</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <PMIDLink pmids={'11559723'} />
+                    <FdaApprovalLink
+                      approval={'Arsenic Trioxide'}
+                      year={'2000'}
+                      link={
+                        'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/021248s019lbl.pdf'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Tretinoin + Arsenic Trioxide</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <PMIDLink pmids={'23841729'} />
+                    <FdaApprovalLink
+                      approval={'Arsenic Trioxide + Tretinoin'}
+                      year={'2000'}
+                      link={
+                        'https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/021248s019lbl.pdf'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>
+                  <GenePageLink hugoSymbol={'ERBB2'} />
+                </td>
+                <td>
+                  {' '}
+                  <AlterationPageLink
+                    hugoSymbol={'ERBB2'}
+                    alteration={'Amplification'}
+                  />
+                </td>
+                <td>Biliary Tract Cancer</td>
+                <td>Trastuzumab + Pertuzumab</td>
+                <td>
+                  Inclusion in Biliary Tract Cancer NCCN guidelines (v2.2023)
+                </td>
+              </tr>
+              <tr>
+                <td>R2</td>
+                <td>
+                  <GenePageLink hugoSymbol={'EGFR'} />
+                </td>
+                <td>
+                  <AlterationPageLink
+                    hugoSymbol={'EGFR'}
+                    alteration={'L792H'}
+                  />
+                </td>
+                <td>Non-Small Cell Lung Cancer</td>
+                <td>Osimertinib</td>
+                <td>
+                  <PMIDLink
+                    pmids={'28093244, 28625641, 29506987, 29857056, 34526717'}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        content: [
+          [
+            'ESR1',
+            <span>
+              Oncogenic ligand-binding domain in-frame insertions or deletions
+            </span>,
+            'Breast Cancer',
+            'Elacestrant',
+            '3A',
+            '2',
+            'Inclusion in Breast Cancer NCCN guidelines (v4.2023)',
+          ],
+          [
+            'KRAS',
+            'G12C',
+            'Pancreatic Adenocarcinoma',
+            'Adagrasib, Sotorasib',
+            '3A',
+            '2',
+            'Inclusion in Pancreatic Cancer NCCN guidelines (v1.2023)',
+          ],
+        ],
+      },
+    ],
+    news: [
+      <span>
+        Updated therapeutic implications - Removal of therapies for variants
+        with a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th style={{ width: 2 }}>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Current Level of Evidence</th>
+                <th>Drug(s) removed from OncoKB</th>
+                <th>Drug(s) remaining in OncoKB</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'FGFR2'} />
+                </td>
+                <td>
+                  <AlterationPageLink
+                    hugoSymbol={'FGFR2'}
+                    alteration={'Fusions'}
+                  />
+                </td>
+                <td>Cholangiocarcinoma</td>
+                <td>1</td>
+                <td rowSpan={3}>Infigratinib</td>
+                <td>Pemigatinib, Futibatinib</td>
+                <td rowSpan={3}>
+                  <Linkout
+                    link={
+                      'https://professionals.optumrx.com/content/dam/optum3/professional-optumrx/news/rxnews/drug-withdrawls/drugwithdrawal_truseltiq_2022-1117.pdf'
+                    }
+                  >
+                    Discontinuation of infigratinib
+                  </Linkout>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'FGFR1'} />
+                </td>
+                <td>
+                  <AlterationPageLink
+                    hugoSymbol={'FGFR1'}
+                    alteration={'Amplification'}
+                  />
+                </td>
+                <td>Lung Squamous Cell Carcinoma</td>
+                <td>3A</td>
+                <td>Debio1347, Erdafitinib</td>
+              </tr>
+              <tr>
+                <td>{convertGeneInputToLinks('FGFR1, FGFR2, FGFR3')}</td>
+                <td>Oncogenic Mutations</td>
+                <td>All Solid Tumors</td>
+                <td>4</td>
+                <td>Debio1347, Erdafitinib, AZD4547</td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    newlyAddedGenes: ['ALDH1L2', 'FOLH1', 'IQGAP1', 'POU3F4', 'TIGAR'],
+  },
+  '04122023': {
+    priorityNews: [
+      <span>
+        Release of NEW cancer-type pages, allowing easier visualization of
+        variant and cancer type-specific clinical implications. As an example,
+        see tables for treatment, diagnostic and prognostic implications on the{' '}
+        <AlterationPageLink
+          hugoSymbol={'ABL1'}
+          alteration={'BCR-ABL1 Fusion'}
+          cancerType={'B-lymphoblastic leukemia/lymphoma'}
+        >
+          BCR-ABL1, B-lymphoblastic leukemia/lymphoma
+        </AlterationPageLink>{' '}
+        cancer-type page.
+      </span>,
+      <span>
+        Release of therapeutic descriptions for all alteration- and tumor
+        type-specific leveled associations. These are located on the variant-
+        and cancer-type pages. See{' '}
+        <AlterationPageLink hugoSymbol={'BRAF'} alteration={'V600E'}>
+          BRAF V600E
+        </AlterationPageLink>{' '}
+        as an example.
+      </span>,
+    ],
+    newlyAddedGenes: ['MERTK'],
+  },
   '03222023': {
     priorityNews: [
       <span>
@@ -289,6 +529,15 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
         ],
       },
+    ],
+  },
+  '01052023': {
+    news: [
+      <span>
+        Happy New Year! 2022 brought many changes to the landscape of precision
+        oncology. The OncoKB 2022 year in review can be found{' '}
+        <YearEndReviewPageLink year={'2022'}>HERE</YearEndReviewPageLink>.
+      </span>,
     ],
   },
   '12222022': {
@@ -741,7 +990,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
     ],
     news: [
       <span>
-        Updated therapeutic implications: - Removal of therapies for variants
+        Updated therapeutic implications - Removal of therapies for variants
         with a level of evidence
         <Row className={'overflow-auto'}>
           <table className="table">
@@ -1089,7 +1338,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         '3A',
         'EGFR',
-        'Exon 20 insertion',
+        'Exon 20 in-frame insertions',
         'Non-Small Cell Lung Cancer',
         'CLN-081',
         <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -1256,7 +1505,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'MET',
-            'Y1003mut',
+            <AlterationPageLink hugoSymbol={'MET'} alteration={'Y1003'}>
+              {' '}
+              Y1003mut{' '}
+            </AlterationPageLink>,
             'Non-Small Cell Lung Cancer',
             'Tepotinib, Capmatinib',
             '1',
@@ -1282,7 +1534,10 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'MET',
-            'Y1003mut',
+            <AlterationPageLink hugoSymbol={'MET'} alteration={'Y1003'}>
+              {' '}
+              Y1003mut{' '}
+            </AlterationPageLink>,
             'Non-Small Cell Lung Cancer',
             'Crizotinib',
             '2',
@@ -1651,7 +1906,11 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       <span>
         {ONCOKB_TM} is the first somatic human genetic variant database to
         achieve{' '}
-        <Linkout link={'https://www.fda.gov/media/99200/download'}>
+        <Linkout
+          link={
+            'https://www.fda.gov/drugs/resources-information-approved-drugs/fda-recognizes-memorial-sloan-kettering-database-molecular-tumor-marker-information'
+          }
+        >
           FDA partial recognition
         </Linkout>
         ! Read more about the scope of the recognition, the recognition process,
@@ -1682,7 +1941,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         content: [
           [
             'EGFR',
-            'Exon 20 Insertions',
+            'Exon 20 in-frame insertions',
             'Non-Small Cell Lung Cancer',
             'Mobocertinib',
             '3A',
@@ -1783,7 +2042,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           ],
           [
             'EGFR',
-            'Exon 20 Insertions',
+            'Exon 20 in-frame insertions',
             'Non-Small Cell Lung Cancer',
             'Amivantamab',
             '3A',
@@ -2033,7 +2292,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         '3A',
         'EGFR',
-        'Exon 20 Insertions',
+        'Exon 20 in-frame insertions',
         'Non-Small Cell Lung Cancer',
         'Mobocertinib',
         <PMIDLink pmids={'33632775'} />,
@@ -2041,7 +2300,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         '3A',
         'EGFR',
-        'Exon 20 Insertions',
+        'Exon 20 in-frame insertions',
         'Non-Small Cell Lung Cancer',
         'Amivantamab',
         <AbstractLink
@@ -2108,7 +2367,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         '1',
         'MET',
-        'Exon 14 Skipping Mutations',
+        'Exon 14 Deletion',
         'Non-Small Cell Lung Cancer',
         'Tepotinib',
         <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
@@ -2650,7 +2909,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>
                   <GenePageLink hugoSymbol={'BRAF'} />
                 </td>
-                <td>V600</td>
+                <td>
+                  <AlterationPageLink hugoSymbol={'BRAF'} alteration={'V600'} />
+                </td>
                 <td>Melanoma</td>
                 <td>Vemurafenib + Cobimetinib + Atezulizumab</td>
                 <td>
@@ -2669,7 +2930,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td rowSpan={3}>
                   <GenePageLink hugoSymbol={'PDGFRA'} />
                 </td>
-                <td rowSpan={3}>Oncogenic Mutations</td>
+                <td rowSpan={3}>
+                  <AlterationPageLink
+                    hugoSymbol={'PDGFRA'}
+                    alteration={'Oncogenic Mutations'}
+                  />
+                </td>
                 <td rowSpan={3}>Gastrointestinal Stromal Tumors</td>
                 <td>Ripretinib</td>
                 <td>
@@ -2723,7 +2989,12 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
       [
         '1',
         'Other Biomarkers',
-        'Tumor Mutational Burden - High',
+        <AlterationPageLink
+          hugoSymbol={'Other Biomarkers'}
+          alteration={'TMB-H'}
+        >
+          Tumor Mutational Burden - High
+        </AlterationPageLink>,
         'All Solid Tumors',
         'Pembrolizumab',
         <span>
@@ -2992,7 +3263,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         content: [
           [
             'MET',
-            'Exon 14 Skipping Mutations',
+            'Exon 14 Deletion',
             'Non-Small Cell Lung Cancer',
             <div>Capmatinib</div>,
             '3A',
@@ -4193,15 +4464,24 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
           <SimpleTable
             columns={NEWLY_ADDED_LEVEL_FOUR_COLUMNS}
             rows={NEWLY_ADDED_LEVEL_FOUR.map((record, index) => {
+              const geneInput = record[0];
               return {
                 key: `NEWLY_ADDED_LEVEL_FOUR-${index}`,
                 content: record.map((subItem, subIndex) => {
-                  const content: ElementType =
-                    subIndex === 0 ? (
-                      <GenePageLink hugoSymbol={subItem} />
-                    ) : (
-                      subItem
+                  let content: ElementType = subItem;
+                  if (subIndex === 0) {
+                    content = <GenePageLink hugoSymbol={subItem} />;
+                  } else if (
+                    subIndex === 1 &&
+                    linkableMutationName(geneInput, subItem)
+                  ) {
+                    content = (
+                      <AlterationPageLink
+                        hugoSymbol={geneInput}
+                        alteration={subItem}
+                      />
                     );
+                  }
                   return {
                     key: `NEWLY_ADDED_LEVEL_FOUR-${index}-${subIndex}`,
                     content,

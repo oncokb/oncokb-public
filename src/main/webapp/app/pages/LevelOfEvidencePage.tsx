@@ -242,32 +242,144 @@ export default class LevelOfEvidencePage extends React.Component<
   };
 
   render() {
+    const tabs: any[] = [];
+    [Version.V2, Version.DX, Version.PX, Version.FDA_NGS].forEach(version => {
+      tabs.push(
+        <Tab
+          eventKey={Version[version]}
+          title={TAB_TITLES[version]}
+          key={version}
+        >
+          <Row className="mt-2">
+            <Col className="col-auto mr-auto d-flex align-content-center">
+              {V2_RELATED_LEVELS.includes(this.version) && (
+                <span className={'d-flex align-items-center form-check'}>
+                  <Form.Group>
+                    {[Version.FDA, Version.AAC].map(versionCheck => (
+                      <Form.Check
+                        label={`Show mapping to ${LEVEL_NAME[versionCheck]}`}
+                        type="checkbox"
+                        onChange={() =>
+                          this.toggleVersion(
+                            this.version === versionCheck
+                              ? Version.V2
+                              : versionCheck
+                          )
+                        }
+                        name="mapping-to-other-levels"
+                        id={`mapping-to-other-levels-${versionCheck}`}
+                        key={`mapping-to-other-levels-${versionCheck}`}
+                        checked={this.version === versionCheck}
+                      />
+                    ))}
+                  </Form.Group>
+                </span>
+              )}
+            </Col>
+            <Col className={'col-auto'}>
+              {this.version !== Version.FDA_NGS && (
+                <Button
+                  size={'sm'}
+                  className={classnames('ml-1')}
+                  href={`content/files/levelOfEvidence/${this.version}/${
+                    LEVEL_FILE_NAME[this.version]
+                  }.ppt`}
+                >
+                  <i className={'fa fa-cloud-download mr-1'} />
+                  Download Slide
+                </Button>
+              )}
+              <DownloadButton
+                className={classnames('ml-1 btn-sm')}
+                href={`content/files/levelOfEvidence/${this.version}/${
+                  LEVEL_FILE_NAME[this.version]
+                }.pdf`}
+              >
+                Download PDF
+              </DownloadButton>
+            </Col>
+          </Row>
+          <Row className={'justify-content-md-center mt-5'}>
+            <Col className={'col-md-auto text-center'}>
+              <h4>{LEVEL_TITLE[this.version]}</h4>
+              <div>
+                <span
+                  onClick={() =>
+                    this.toggleVersion(
+                      V2_RELATED_LEVELS.includes(this.version)
+                        ? Version.V1
+                        : Version.V2
+                    )
+                  }
+                  className={mainStyles.btnLinkText}
+                >
+                  {LEVEL_SUBTITLE[this.version]}
+                </span>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col className={'d-md-flex justify-content-center mt-2'}>
+              <div
+                style={{
+                  maxWidth: [
+                    Version.AAC,
+                    Version.FDA,
+                    Version.V1,
+                    Version.V2,
+                  ].includes(this.version)
+                    ? undefined
+                    : IMG_MAX_WIDTH,
+                }}
+              >
+                <OptimizedImage
+                  style={{ width: '100%' }}
+                  progressiveLoading
+                  src={`content/images/level_${this.version}.png`}
+                />
+                {this.version === Version.AAC ? (
+                  <div className="text-right">
+                    <span
+                      style={{
+                        marginRight: this.props.windowStore.isLargeScreen
+                          ? '130px'
+                          : '35px',
+                      }}
+                    >
+                      <sup>1</sup>{' '}
+                      <Linkout link="https://www.sciencedirect.com/science/article/pii/S1525157816302239?via%3Dihub">
+                        Li, MM et al., J Mol Diagn 2017
+                      </Linkout>
+                    </span>
+                  </div>
+                ) : null}
+              </div>
+            </Col>
+          </Row>
+        </Tab>
+      );
+    });
+
     return (
-      <DocumentTitle title={getPageTitle(PAGE_TITLE[this.version])}>
+      <DocumentTitle title={getPageTitle(PAGE_TITLE.LEVELS)}>
         <Row className="justify-content-center">
           <Col lg={10}>
             <div className="levels-of-evidence">
-              <Tabs
-                id="level-type-tabs"
-                onSelect={k => this.toggleVersion(Version[k || this.version])}
-                activeKey={this.activeKey}
-              >
-                {[Version.V2, Version.DX, Version.PX, Version.FDA_NGS].map(
-                  version => (
-                    <Tab
-                      eventKey={Version[version]}
-                      title={TAB_TITLES[version]}
-                      key={version}
-                    >
-                      <PageContent
-                        windowStore={this.props.windowStore}
-                        toggleVersion={this.toggleVersion}
-                        version={this.version}
-                      />
-                    </Tab>
-                  )
-                )}
-              </Tabs>
+              <>
+                <Tabs
+                  defaultActiveKey={
+                    [Version.DX, Version.PX, Version.FDA_NGS].includes(
+                      this.version
+                    )
+                      ? Version[this.version]
+                      : Version.V2
+                  }
+                  id="level-type-tabs"
+                  onSelect={k => this.toggleVersion(Version[k || Version.V2])}
+                >
+                  {tabs}
+                </Tabs>
+              </>
             </div>
           </Col>
         </Row>
@@ -275,124 +387,3 @@ export default class LevelOfEvidencePage extends React.Component<
     );
   }
 }
-
-type PageContentProps = {
-  toggleVersion: (version: Version) => void;
-  windowStore: WindowStore;
-  version: Version;
-};
-
-const PageContent: React.FC<PageContentProps> = props => {
-  return (
-    <>
-      <Row className="mt-2">
-        <Col className="col-auto mr-auto d-flex align-content-center">
-          {V2_RELATED_LEVELS.includes(props.version) && (
-            <span className={'d-flex align-items-center form-check'}>
-              <Form.Group>
-                {[Version.FDA, Version.AAC].map(versionCheck => (
-                  <Form.Check
-                    label={`Show mapping to ${LEVEL_NAME[versionCheck]}`}
-                    type="checkbox"
-                    onChange={() =>
-                      props.toggleVersion(
-                        props.version === versionCheck
-                          ? Version.V2
-                          : versionCheck
-                      )
-                    }
-                    name="mapping-to-other-levels"
-                    id={`mapping-to-other-levels-${versionCheck}`}
-                    key={`mapping-to-other-levels-${versionCheck}`}
-                    checked={props.version === versionCheck}
-                  />
-                ))}
-              </Form.Group>
-            </span>
-          )}
-        </Col>
-        <Col className={'col-auto'}>
-          {props.version !== Version.FDA_NGS && (
-            <Button
-              size={'sm'}
-              className={classnames('ml-1')}
-              href={`content/files/levelOfEvidence/${props.version}/${
-                LEVEL_FILE_NAME[props.version]
-              }.ppt`}
-            >
-              <i className={'fa fa-cloud-download mr-1'} />
-              Download Slide
-            </Button>
-          )}
-          <DownloadButton
-            size={'sm'}
-            className={classnames('ml-1')}
-            href={`content/files/levelOfEvidence/${props.version}/${
-              LEVEL_FILE_NAME[props.version]
-            }.pdf`}
-          >
-            <i className={'fa fa-cloud-download mr-1'} />
-            Download PDF
-          </DownloadButton>
-        </Col>
-      </Row>
-      <Row className={'justify-content-md-center mt-5'}>
-        <Col className={'col-md-auto text-center'}>
-          <h4>{LEVEL_TITLE[props.version]}</h4>
-          <div>
-            <span
-              onClick={() =>
-                props.toggleVersion(
-                  V2_RELATED_LEVELS.includes(props.version)
-                    ? Version.V1
-                    : Version.V2
-                )
-              }
-              className={mainStyles.btnLinkText}
-            >
-              {LEVEL_SUBTITLE[props.version]}
-            </span>
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col className={'d-md-flex justify-content-center mt-2'}>
-          <div
-            style={{
-              maxWidth: [
-                Version.AAC,
-                Version.FDA,
-                Version.V1,
-                Version.V2,
-              ].includes(props.version)
-                ? undefined
-                : IMG_MAX_WIDTH,
-            }}
-          >
-            <OptimizedImage
-              style={{ width: '100%' }}
-              progressiveLoading
-              src={`content/images/level_${props.version}.png`}
-            />
-            {props.version === Version.AAC ? (
-              <div className="text-right">
-                <span
-                  style={{
-                    marginRight: props.windowStore.isLargeScreen
-                      ? '130px'
-                      : '35px',
-                  }}
-                >
-                  <sup>1</sup>{' '}
-                  <Linkout link="https://www.sciencedirect.com/science/article/pii/S1525157816302239?via%3Dihub">
-                    Li, MM et al., J Mol Diagn 2017
-                  </Linkout>
-                </span>
-              </div>
-            ) : null}
-          </div>
-        </Col>
-      </Row>
-    </>
-  );
-};

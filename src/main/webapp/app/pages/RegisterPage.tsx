@@ -31,6 +31,8 @@ import {
 import { getErrorMessage, OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { LicenseInquireLink } from 'app/shared/links/LicenseInquireLink';
 import _ from 'lodash';
+import ReCAPTCHA from 'app/shared/recaptcha/recaptcha';
+import { setRecaptchaToken } from 'app/indexUtils';
 
 export type NewUserRequiredFields = {
   username: string;
@@ -63,6 +65,8 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   @observable visibleSections: FormSection[] | undefined;
 
   readonly reactions: IReactionDisposer[] = [];
+
+  recaptcha = new ReCAPTCHA();
 
   constructor(props: Readonly<IRegisterProps>) {
     super(props);
@@ -125,7 +129,9 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
   @autobind
   @action
-  handleValidSubmit(newAccount: Partial<ManagedUserVM>) {
+  async handleValidSubmit(newAccount: Partial<ManagedUserVM>) {
+    const token: string = await this.recaptcha.getToken();
+    setRecaptchaToken(token);
     client
       .registerAccountUsingPOST({
         managedUserVm: newAccount as ManagedUserVM,

@@ -1,5 +1,6 @@
 import { Gene, OncoKBInfo } from 'app/shared/api/generated/OncoKbAPI';
 import {
+  GeneNumber,
   MainNumber,
   VariantAnnotation,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
@@ -21,8 +22,6 @@ export const LOCAL_DEV_OPT = 'localdev';
 export const DISABLE_BANNER_OPT = 'disablebanner';
 
 export const DEV_URL = 'http://localhost:9095';
-
-export const RECAPTCHA_SITE_KEY = '6LcxRsMZAAAAAFYpXX6KAc9ASGSf8IptsIKehJby';
 
 export const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',
@@ -107,6 +106,9 @@ export const USAGE_ALL_TIME_KEY = 'All';
 export const USAGE_ALL_TIME_VALUE = 'This year';
 export const USAGE_DETAIL_TIME_KEY = 'Detail';
 export const USAGE_DAY_DETAIL_TIME_KEY = 'Day Detail';
+
+export const LONG_TEXT_CUTOFF = 200;
+export const LONG_TEXT_CUTOFF_COMPACT = 80;
 
 export enum ONCOGENICITY {
   ONCOGENIC = 'Oncogenic',
@@ -398,6 +400,17 @@ export const DEFAULT_GENE: Gene = {
   hugoSymbol: '',
   oncogene: false,
   tsg: false,
+};
+
+export const DEFAULT_GENE_NUMBER: GeneNumber = {
+  gene: DEFAULT_GENE,
+  alteration: 0,
+  highestSensitiveLevel: '',
+  highestResistanceLevel: '',
+  highestDiagnosticImplicationLevel: '',
+  highestPrognosticImplicationLevel: '',
+  highestFdaLevel: '',
+  tumorType: 0,
 };
 
 export const DEFAULT_MUTATION_EFFECT = {
@@ -741,6 +754,8 @@ export type DataRelease = {
 };
 
 export const DATA_RELEASES: DataRelease[] = [
+  { date: '05192023', version: 'v4.5' },
+  { date: '04122023', version: 'v4.4' },
   { date: '03222023', version: 'v4.3' },
   { date: '02102023', version: 'v4.2' },
   { date: '02012023', version: 'v4.1' },

@@ -1,5 +1,12 @@
 FROM node:12.16.1
 
+# The location of deb.debian has been moved to archive. We need to change the source without modifying the node image
+# Answer from https://stackoverflow.com/questions/76094428/debian-stretch-repositories-404-not-found
+# Update stretch repositories
+RUN sed -i s/deb.debian.org/archive.debian.org/g /etc/apt/sources.list
+RUN sed -i 's|security.debian.org|archive.debian.org/|g' /etc/apt/sources.list
+RUN sed -i '/stretch-updates/d' /etc/apt/sources.list
+
 RUN mkdir /app
 WORKDIR /app
 

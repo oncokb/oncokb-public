@@ -5,7 +5,7 @@
 
     <groupId>org.mskcc.cbio.oncokb</groupId>
     <artifactId>public-website</artifactId>
-    <version>3.8.19</version>
+    <version>3.9.1</version>
     <packaging>jar</packaging>
     <name>OncoKB Public Website</name>
 
@@ -99,6 +99,13 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+              <groupId>com.google.cloud</groupId>
+              <artifactId>libraries-bom</artifactId>
+              <version>26.1.4</version>
+              <type>pom</type>
+              <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>io.github.jhipster</groupId>
                 <artifactId>jhipster-dependencies</artifactId>
                 <version>${jhipster-dependencies.version}</version>
@@ -110,6 +117,16 @@
     </dependencyManagement>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-recaptchaenterprise</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.api</groupId>
+            <artifactId>gax-grpc</artifactId>
+            <!-- <version>2.23.0</version> -->
+        </dependency>
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>
@@ -122,6 +139,11 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
             <version>1.11.163</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
@@ -369,13 +391,14 @@
         <dependency>
 	        <groupId>com.github.oncokb</groupId>
 	        <artifactId>oncokb-meta</artifactId>
-	        <version>ee9b767985</version>
+	        <version>b2d8daff89</version>
         </dependency>
         <dependency>
           <groupId>com.github.vladimir-bukhtoyarov</groupId>
           <artifactId>bucket4j-core</artifactId>
           <version>${bucket4j.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>
