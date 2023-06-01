@@ -1,6 +1,7 @@
 package org.mskcc.cbio.oncokb.web.rest.slack;
 
 import com.amazonaws.services.pinpoint.model.transform.RawEmailJsonUnmarshaller;
+import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 
 /**
  * Created by Benjamin Xu on 6/30/21.
@@ -22,7 +23,6 @@ public enum BlockId {
     , APPROVED_NOTE("approved-note")
     , TRIAL_ACCOUNT_NOTE("trial-account-note")
     , CONVERT_TO_REGULAR_ACCOUNT_NOTE("convert-to-regular-account-note")
-    , SUMMARY_NOTE("summary-note") // This refers to any note at the bottom of an expanded webhook
     , COLLAPSED("collapsed")
     , SUBJECT_INPUT("subject-input")
     , BODY_INPUT("body-input")
@@ -51,17 +51,17 @@ public enum BlockId {
         if (blockId == null) {
             return false;
         }
-        return blockId == ACADEMIC_CLARIFICATION_NOTE
-            || blockId == FOR_PROFIT_CLARIFICATION_NOTE
-            || blockId == USE_CASE_CLARIFICATION_NOTE
-            || blockId == DUPLICATE_USER_CLARIFICATION_NOTE
-            || blockId == REGISTRATION_INFO_CLARIFICATION_NOTE
-            || blockId == LICENSE_OPTIONS_NOTE
-            || blockId == APPROVED_NOTE
-            || blockId == TRIAL_ACCOUNT_NOTE
-            || blockId == CONVERT_TO_REGULAR_ACCOUNT_NOTE
-            || blockId == REJECTION_NOTE
-            || blockId == REJECT_ALUMNI_ADDRESS_NOTE
-            || blockId == SUMMARY_NOTE;
+
+        // mail notes
+        for (MailType mailType : MailType.values()) {
+            if (blockId.equals(mailType.getBlockId().orElse(null)))
+                return true;
+        }
+
+        // non mail notes
+        if (blockId == CONVERT_TO_REGULAR_ACCOUNT_NOTE)
+            return true;
+
+        return false;
     }
 }

@@ -152,7 +152,7 @@ public class MailService {
 
     @Async
     public void sendEmailFromTemplate(UserDTO user, MailType mailType, Context additionalContext) {
-        Optional<String> titleKey = getTitleKeyByMailType(mailType);
+        Optional<String> titleKey = mailType.getTitleKey();
         sendEmailFromTemplate(
             user, mailType,
             titleKey.isPresent() ? messageSource.getMessage(titleKey.get(), new Object[]{}, Locale.forLanguageTag(user.getLangKey())) : "",
@@ -164,7 +164,7 @@ public class MailService {
         Context context = new Context();
         context.setVariable(MAIL_LICENSE, user.getLicenseType().getName());
         sendEmailFromTemplate(user, mailType,
-            messageSource.getMessage(getTitleKeyByMailType(mailType).orElse(""), new Object[]{user.getLicenseType().getName()}, Locale.forLanguageTag(user.getLangKey())),
+            messageSource.getMessage(mailType.getTitleKey().orElse(""), new Object[]{user.getLicenseType().getName()}, Locale.forLanguageTag(user.getLangKey())),
             from, cc, by, context);
     }
 
@@ -178,7 +178,7 @@ public class MailService {
         Context context = new Context();
         context.setVariable(EXPIRE_IN_DAYS, days);
         sendEmailFromTemplate(user, mailType,
-            messageSource.getMessage(getTitleKeyByMailType(mailType).orElse(""), new Object[]{days}, Locale.forLanguageTag(user.getLangKey())),
+            messageSource.getMessage(mailType.getTitleKey().orElse(""), new Object[]{days}, Locale.forLanguageTag(user.getLangKey())),
             applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null, context);
     }
 
@@ -227,8 +227,8 @@ public class MailService {
             if (by == null) {
                 by = from;
             }
-            List<String> attachmentFileNames = (mailType == null || mailType.getAttachmentFileNames() == null) ? null : Arrays.asList(StringUtils.split(mailType.getAttachmentFileNames(), ",")).stream().map(item -> item.trim()).collect(Collectors.toList());
-            sendEmail(to, from, cc, subject, content, attachmentFileNames, (attachmentFileNames == null || attachmentFileNames.size() == 0) ? false : true, true);
+            List<String> attachmentFileNames = (mailType == null || !mailType.getAttachmentFileNames().isPresent()) ? null : Arrays.asList(StringUtils.split(mailType.getAttachmentFileNames().get(), ",")).stream().map(item -> item.trim()).collect(Collectors.toList());
+            sendEmail(to, from, cc, subject, content, attachmentFileNames, attachmentFileNames != null && attachmentFileNames.size() != 0, true);
             if (to.equals(user.getEmail())) {
                 addUserMailsRecord(user, mailType, from, by);
                 log.info("Sent email to User '{}'", user.getEmail());
@@ -287,39 +287,6 @@ public class MailService {
     @Async
     public void sendAcademicClarificationEmail(UserDTO user) {
         sendEmailWithLicenseContext(user, MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
-    }
-
-    @Async
-    public void sendAcademicForProfitEmail(UserDTO user) {
-        sendEmailWithLicenseContext(user, MailType.CLARIFY_ACADEMIC_FOR_PROFIT, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
-    }
-
-    @Async
-    public void sendUseCaseClarificationEmail(UserDTO user) {
-        sendEmailWithLicenseContext(user, MailType.CLARIFY_USE_CASE, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
-    }
-    @Async
-    public void sendRegistrationInfoClarificationEmail(UserDTO user) {
-        sendEmailWithLicenseContext(user, MailType.CLARIFY_REGISTRATION_INFO, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
-    }
-
-    public void sendLicenseOptionsEmail(UserDTO user) {
-        sendEmailWithLicenseContext(user, MailType.LICENSE_OPTIONS, applicationProperties.getEmailAddresses().getLicenseAddress(), null, null);
-    }
-
-    @Async
-    public void sendDuplicateUserClarificationEmail(UserDTO user) {
-        sendEmailWithLicenseContext(user, MailType.CLARIFY_DUPLICATE_USER, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
-    }
-
-    @Async
-    public void sendRejectionEmail(UserDTO user) {
-        sendEmailWithLicenseContext(user, MailType.REJECTION, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
-    }
-
-    @Async
-    public void sendRejectAlumniAddressEmail(UserDTO user) {
-        sendEmailWithLicenseContext(user, MailType.REJECT_ALUMNI_ADDRESS, applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null);
     }
 
     @Async
@@ -421,46 +388,5 @@ public class MailService {
         mailFrom.add(applicationProperties.getEmailAddresses().getLicenseAddress());
         mailFrom.add(applicationProperties.getEmailAddresses().getContactAddress());
         return mailFrom;
-    }
-
-    private Optional<String> getTitleKeyByMailType(MailType mailType) {
-        if (mailType == null) {
-            return Optional.empty();
-        }
-        switch (mailType) {
-            case ACTIVATION:
-                return Optional.of("email.activation.title");
-            case CREATION:
-                return Optional.of("email.creation.title");
-            case APPROVAL:
-            case APPROVAL_ALIGN_LICENSE_WITH_COMPANY:
-                return Optional.of("email.approval.title");
-            case REJECTION:
-            case REJECT_ALUMNI_ADDRESS:
-                return Optional.of("email.reject.title");
-            case PASSWORD_RESET:
-                return Optional.of("email.reset.title");
-            case LICENSE_REVIEW_COMMERCIAL:
-            case LICENSE_REVIEW_HOSPITAL:
-            case LICENSE_REVIEW_RESEARCH_COMMERCIAL:
-                return Optional.of("email.license.review.title");
-            case CLARIFY_ACADEMIC_FOR_PROFIT:
-            case CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL:
-            case CLARIFY_USE_CASE:
-            case CLARIFY_DUPLICATE_USER:
-            case CLARIFY_REGISTRATION_INFO:
-                return Optional.of("email.license.clarify.title");
-            case LICENSE_OPTIONS:
-                return Optional.of("email.license.options.title");
-            case VERIFY_EMAIL_BEFORE_ACCOUNT_EXPIRES:
-                return Optional.of("email.account.expires.by.days.title");
-            case ACTIVATE_FREE_TRIAL:
-                return Optional.of("email.active.free.trial.title");
-            case DATA_USAGE_EXCEEDS_THRESHOLD:
-                return Optional.of("email.unusual.activities.title");
-            default:
-                return Optional.of("email.default.title");
-
-        }
     }
 }

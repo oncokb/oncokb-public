@@ -1,6 +1,8 @@
 package org.mskcc.cbio.oncokb.web.rest.slack;
 
 
+import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
+
 /**
  * Created by Hongxin Zhang on 4/30/21.
  */
@@ -56,45 +58,39 @@ public enum ActionId {
         if (actionId == null) {
             return false;
         }
-        return actionId == SEND_ACADEMIC_FOR_PROFIT_EMAIL
-            || actionId == SEND_ACADEMIC_CLARIFICATION_EMAIL
-            || actionId == SEND_USE_CASE_CLARIFICATION_EMAIL
-            || actionId == SEND_DUPLICATE_USER_CLARIFICATION_EMAIL
-            || actionId == SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL
-            || actionId == SEND_LICENSE_OPTIONS_EMAIL
-            || actionId == SEND_REJECTION_EMAIL
-            || actionId == SEND_REJECT_ALUMNI_ADDRESS_EMAIL;
+        for (MailType mailType : MailType.values()) {
+            if (actionId.equals(mailType.getActionId().orElse(null)))
+                return true;
+        }
+        return false;
     }
 
     public static boolean isConfirmEmailAction(ActionId actionId) {
         if (actionId == null) {
             return false;
         }
-        return actionId == CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL
-            || actionId == CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL
-            || actionId == CONFIRM_SEND_USE_CASE_CLARIFICATION_EMAIL
-            || actionId == CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL
-            || actionId == CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL
-            || actionId == CONFIRM_SEND_LICENSE_OPTIONS_EMAIL
-            || actionId == CONFIRM_SEND_REJECTION_EMAIL
-            || actionId == CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL;
+        for (MailType mailType : MailType.values()) {
+            if (actionId.equals(mailType.getConfirmActionId().orElse(null)))
+                return true;
+        }
+        return false;
     }
 
     public static boolean isDropdownAction(ActionId actionId) {
         if (actionId == null) {
             return false;
         }
-        return actionId == SEND_ACADEMIC_FOR_PROFIT_EMAIL
-            || actionId == SEND_ACADEMIC_CLARIFICATION_EMAIL
-            || actionId == SEND_USE_CASE_CLARIFICATION_EMAIL
-            || actionId == SEND_DUPLICATE_USER_CLARIFICATION_EMAIL
-            || actionId == SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL
-            || actionId == SEND_LICENSE_OPTIONS_EMAIL
-            || actionId == SEND_REJECTION_EMAIL
-            || actionId == SEND_REJECT_ALUMNI_ADDRESS_EMAIL
-            || actionId == GIVE_TRIAL_ACCESS
-            || actionId == CONVERT_TO_REGULAR_ACCOUNT
-            || actionId == UPDATE_USER
-            || actionId == COLLAPSE;
+
+        // mail actions
+        for (MailType mailType : MailType.values()) {
+            if (actionId.equals(mailType.getActionId().orElse(null)))
+                return true;
+        }
+
+        // non mail actions
+        if (actionId == CONVERT_TO_REGULAR_ACCOUNT || actionId == UPDATE_USER || actionId == COLLAPSE)
+            return true;
+
+        return false;
     }
 }
