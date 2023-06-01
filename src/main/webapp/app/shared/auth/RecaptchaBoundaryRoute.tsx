@@ -23,7 +23,6 @@ export class RecaptchaBoundaryRoute extends React.Component<
 > {
   public recaptcha = new ReCAPTCHA();
   public recaptchaValidated: boolean;
-  public recaptchaEnabled: boolean;
   public recaptchaError: any;
 
   async loadData() {
@@ -47,15 +46,14 @@ export class RecaptchaBoundaryRoute extends React.Component<
   }
 
   render() {
-    this.recaptchaEnabled = AppConfig.serverConfig.recaptchaEnabled;
-
-    if (this.recaptchaEnabled) {
+    if (this.recaptcha.siteKey !== '' && this.recaptcha.siteKey !== null) {
       this.loadData();
 
       return this.recaptchaValidated ? (
         <ErrorBoundaryRoute {...this.props} />
       ) : (
-        <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
+        <ErrorBoundaryRoute {...this.props} />
+        // <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
       );
     } else {
       return <ErrorBoundaryRoute {...this.props} />;

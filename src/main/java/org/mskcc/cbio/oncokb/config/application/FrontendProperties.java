@@ -59,12 +59,4 @@ public class FrontendProperties {
     public void setEnableAuth(Boolean enableAuth) {
         this.enableAuth = enableAuth;
     }
-    
-    public void setRecaptchaEnabled(Boolean recaptchaEnabled) {
-        this.recaptchaEnabled = recaptchaEnabled;
-    }
-
-    public boolean getRecaptchaEnabled(){
-        return recaptchaEnabled;
-    }
 }
