@@ -10,7 +10,6 @@ public class FrontendProperties {
     private String recaptchaProjectId;
     private String recaptchaSiteKey;
     private Float recaptchaThreshold;
-    public Boolean recaptchaEnabled;
 
     public String getRecaptchaProjectId() {
         return recaptchaProjectId;
