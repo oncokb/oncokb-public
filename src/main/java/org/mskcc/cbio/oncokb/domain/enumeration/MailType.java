@@ -24,7 +24,6 @@ public enum MailType {
     , CLARIFY_ACADEMIC_FOR_PROFIT(new MailTypeBuilder()
         .templateName("clarifyLicenseInForProfileCompany")
         .description("Clarify - Requested academic license from a for-profit company")
-        .fromAddress(EmailAddress.REGISTRATION)
         .titleKey("email.license.clarify.title")
         .stringTemplateName("clarifyLicenseInForProfileCompanyString.txt")
         .modalTitle("For Profit Clarification")
@@ -70,7 +69,6 @@ public enum MailType {
         private Optional<String> titleKey = Optional.of("email.default.title");
 
         // Below properties for Slack
-        private Optional<EmailAddress> fromAddress = Optional.empty();
         // for view modal
         private Optional<String> stringTemplateName = Optional.empty();
         private Optional<String> modalTitle = Optional.empty();
@@ -98,11 +96,6 @@ public enum MailType {
 
         private MailTypeBuilder attachmentFileNames(String attachmentFileNames) {
             this.attachmentFileNames = Optional.of(attachmentFileNames);
-            return this;
-        }
-
-        private MailTypeBuilder fromAddress(EmailAddress fromAddress) {
-            this.fromAddress = Optional.of(fromAddress);
             return this;
         }
 
@@ -167,7 +160,6 @@ public enum MailType {
     private Optional<String> attachmentFileNames;
 
     // Below properties for Slack
-    private Optional<EmailAddress> fromAddress;
     private Optional<String> titleKey;
     // for view modal
     private Optional<String> stringTemplateName;
@@ -188,7 +180,6 @@ public enum MailType {
         this.templateName = builder.templateName;
         this.description = builder.description;
         this.attachmentFileNames = builder.attachmentFileNames;
-        this.fromAddress = builder.fromAddress;
         this.titleKey = builder.titleKey;
         this.stringTemplateName = builder.stringTemplateName;
         this.modalTitle = builder.modalTitle;
@@ -216,10 +207,6 @@ public enum MailType {
 
     public Optional<String> getStringTemplateName() {
         return stringTemplateName;
-    }
-
-    public Optional<EmailAddress> getFromAddress() {
-        return fromAddress;
     }
 
     public Optional<String> getTitleKey() {
