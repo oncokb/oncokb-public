@@ -136,28 +136,9 @@ public class SlackController {
                 UserDTO userDTO = userMapper.userToUserDTO(user.get());
                 ActionId actionId = this.slackService.getActionId(viewSubmissionPayload);
                 MailType mailType = null;
-                switch (actionId) {
-                    case CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL:
-                        mailType = MailType.CLARIFY_ACADEMIC_FOR_PROFIT;
-                        break;
-                    case CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL:
-                        mailType = MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL;
-                        break;
-                    case CONFIRM_SEND_USE_CASE_CLARIFICATION_EMAIL:
-                        mailType = MailType.CLARIFY_USE_CASE;
-                        break;
-                    case CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL:
-                        mailType = MailType.CLARIFY_DUPLICATE_USER;
-                        break;
-                    case CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL:
-                        mailType = MailType.CLARIFY_REGISTRATION_INFO;
-                        break;
-                    case CONFIRM_SEND_REJECTION_EMAIL:
-                        mailType = MailType.REJECTION;
-                        break;
-                    case CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL:
-                        mailType = MailType.REJECT_ALUMNI_ADDRESS;
-                        break;
+                for (MailType curMailType : MailType.values()) {
+                    if (actionId == (curMailType.getConfirmActionId().orElse(null)))
+                        mailType = curMailType;
                 }
                 mailService.sendEmailFromSlack(userDTO,
                     viewSubmissionPayload.getView().getState().getValues().get(BlockId.SUBJECT_INPUT.getId()).get(ActionId.INPUT_SUBJECT.getId()).getValue(),
