@@ -1,5 +1,6 @@
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 import React from 'react';
 import { Route, RouteProps } from 'react-router-dom';
 import AppStore from 'app/store/AppStore';
@@ -17,9 +18,10 @@ export interface IRecaptchaBoundaryRoute extends RouteProps {
 export class RecaptchaBoundaryRoute extends React.Component<
   IRecaptchaBoundaryRoute
 > {
-  public recaptcha = new ReCAPTCHA();
-  public recaptchaValidated: boolean;
-  public recaptchaError: any;
+  recaptcha = new ReCAPTCHA();
+
+  @observable recaptchaValidated: boolean;
+  @observable recaptchaError: any;
 
   async loadData() {
     try {
