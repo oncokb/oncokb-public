@@ -42,7 +42,6 @@ public class RecaptchaResource {
             ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
             return rs.getStatusCode() == HttpStatus.OK;
         } catch (ValidationException e) {
-            e.printStackTrace();
             String errorMessage = e.getMessage();
             if (errorMessage.contains("Unable to retrieve recaptcha token.")) {
                 log.info(errorMessage);

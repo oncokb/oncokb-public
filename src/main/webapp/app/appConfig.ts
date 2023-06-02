@@ -13,7 +13,6 @@ type ServerConfig = {
   recaptchaProjectId: string;
   recaptchaSiteKey: string;
   recaptchaThreshold: string;
-  recaptchaEnabled: boolean;
 };
 
 interface IAppConfig {
