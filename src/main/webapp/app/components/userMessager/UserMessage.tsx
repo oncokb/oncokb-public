@@ -87,23 +87,30 @@ if (
       id: '2021-fda-recognition',
     },
     {
-      dateEnd: 1681966800000,
+      dateEnd: 1686196800000,
       content: (
         <div>
-          Join us at AACR 2023! Visit our booth (
+          Join us at ASCO 2023! Visit our booth (
           <Linkout
             link={
-              'https://aacr23.mapyourshow.com/8_0/floorplan/?hallID=B&selectedBooth=519'
+              'https://events.jspargo.com/asco23/Public/EventMap.aspx?ver=html&EventID=729&MapID=906&MapItBoothID=887434&MapItBooth=28161'
             }
             style={{ color: 'white', textDecoration: 'underline' }}
           >
-            #519
+            #28161
           </Linkout>
-          ) and our poster (Wed 04/19, 9am, Section 31, Poster 18) to meet our
-          team and explore the latest developments from OncoKB™. See you there!
+          ) and our{' '}
+          <Linkout
+            link={'https://meetings.asco.org/abstracts-presentations/219452'}
+            style={{ color: 'white', textDecoration: 'underline' }}
+          >
+            poster
+          </Linkout>{' '}
+          (Mon 06/05, 1pm, Hall A, Poster Bd #171) to meet our team and explore
+          the latest developments from OncoKB™. See you there!
         </div>
       ),
-      id: '2023_aacr',
+      id: '2023_asco',
     },
   ];
 }
