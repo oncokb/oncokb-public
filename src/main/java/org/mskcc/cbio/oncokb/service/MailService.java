@@ -152,10 +152,8 @@ public class MailService {
 
     @Async
     public void sendEmailFromTemplate(UserDTO user, MailType mailType, Context additionalContext) {
-        Optional<String> titleKey = mailType.getTitleKey();
         sendEmailFromTemplate(
-            user, mailType,
-            titleKey.isPresent() ? messageSource.getMessage(titleKey.get(), new Object[]{}, Locale.forLanguageTag(user.getLangKey())) : "",
+            user, mailType, messageSource.getMessage(mailType.getTitleKey(), new Object[]{}, Locale.forLanguageTag(user.getLangKey())),
             jHipsterProperties.getMail().getFrom(), null, jHipsterProperties.getMail().getFrom(), additionalContext);
     }
 
@@ -164,7 +162,7 @@ public class MailService {
         Context context = new Context();
         context.setVariable(MAIL_LICENSE, user.getLicenseType().getName());
         sendEmailFromTemplate(user, mailType,
-            messageSource.getMessage(mailType.getTitleKey().orElse(""), new Object[]{user.getLicenseType().getName()}, Locale.forLanguageTag(user.getLangKey())),
+            messageSource.getMessage(mailType.getTitleKey(), new Object[]{user.getLicenseType().getName()}, Locale.forLanguageTag(user.getLangKey())),
             from, cc, by, context);
     }
 
@@ -178,7 +176,7 @@ public class MailService {
         Context context = new Context();
         context.setVariable(EXPIRE_IN_DAYS, days);
         sendEmailFromTemplate(user, mailType,
-            messageSource.getMessage(mailType.getTitleKey().orElse(""), new Object[]{days}, Locale.forLanguageTag(user.getLangKey())),
+            messageSource.getMessage(mailType.getTitleKey(), new Object[]{days}, Locale.forLanguageTag(user.getLangKey())),
             applicationProperties.getEmailAddresses().getRegistrationAddress(), null, null, context);
     }
 

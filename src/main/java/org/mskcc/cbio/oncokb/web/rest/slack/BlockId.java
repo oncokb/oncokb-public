@@ -53,8 +53,8 @@ public enum BlockId {
         }
 
         // mail notes
-        for (MailType mailType : MailType.values()) {
-            if (blockId.equals(mailType.getBlockId().orElse(null)))
+        for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
+            if (blockId.equals(mailOption.getBlockId().orElse(null)))
                 return true;
         }
 

@@ -1,8 +1,5 @@
 package org.mskcc.cbio.oncokb.domain.enumeration;
 
-import org.mskcc.cbio.oncokb.web.rest.slack.ActionId;
-import org.mskcc.cbio.oncokb.web.rest.slack.BlockId;
-
 import java.util.Optional;
 
 /**
@@ -25,15 +22,7 @@ public enum MailType {
         .templateName("clarifyLicenseInForProfileCompany")
         .description("Clarify - Requested academic license from a for-profit company")
         .titleKey("email.license.clarify.title")
-        .stringTemplateName("clarifyLicenseInForProfileCompanyString.txt")
-        .modalTitle("For Profit Clarification")
-        .blockId(BlockId.FOR_PROFIT_CLARIFICATION_NOTE)
-        .actionId(ActionId.SEND_ACADEMIC_FOR_PROFIT_EMAIL)
-        .confirmActionId(ActionId.CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL)
-        .category(EmailCategory.CLARIFY)
-        .dropdownKey("Send Academic For Profit Email")
-        .collapsedNote("Clarified with user on for-profit affiliation")
-        .expandedNote("We have sent a clarification email to the user asking why they are applying for the academic license while affiliated with a for-profit company."))
+        .stringTemplateName("clarifyLicenseInForProfileCompanyString.txt"))
     , CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL(new MailTypeBuilder()
         .templateName("clarifyAcademicUseWithoutInstituteEmail")
         .description("Clarify - Requested academic license from a non-institute email")) // not complete
@@ -49,10 +38,7 @@ public enum MailType {
     , ACTIVATE_FREE_TRIAL(new MailTypeBuilder()
         .templateName("activateFreeTrial")
         .description("OncoKB Trial Activation Link")
-        .titleKey("email.active.free.trial.title")
-        .actionId(ActionId.GIVE_TRIAL_ACCESS)
-        .category(EmailCategory.TRIAL)
-        .dropdownKey("Give Trial Access"))
+        .titleKey("email.active.free.trial.title"))
     , TOKEN_HAS_BEEN_EXPOSED(new MailTypeBuilder()) //"tokenHasBeenExposed", "Token has been exposed", null)
     , TOKEN_HAS_BEEN_EXPOSED_USER(new MailTypeBuilder()) //"tokenHasBeenExposedToUser", "Token has been exposed", null)
     , SEARCHING_RESPONSE_STRUCTURE_HAS_CHANGED(new MailTypeBuilder()) //"searchingResponseStructureHasChanged", "Searching Response Structure Has Changed", null)
@@ -65,24 +51,9 @@ public enum MailType {
     private static class MailTypeBuilder {
         private String templateName;
         private String description;
-        private Optional<String> attachmentFileNames = Optional.empty();
-        private Optional<String> titleKey = Optional.of("email.default.title");
-
-        // Below properties for Slack
-        // for view modal
+        private String titleKey = "email.default.title";
         private Optional<String> stringTemplateName = Optional.empty();
-        private Optional<String> modalTitle = Optional.empty();
-        private Optional<EmailSubject> modalSubject = Optional.of(EmailSubject.DEFAULT);
-        // blockId/actionId
-        private Optional<BlockId> blockId = Optional.empty();
-        private Optional<ActionId> actionId = Optional.empty();
-        private Optional<ActionId> confirmActionId = Optional.empty();
-        // dropdown section
-        private Optional<EmailCategory> category = Optional.empty();
-        private Optional<String> dropdownKey = Optional.empty();
-        // additional info block
-        private Optional<String> collapsedNote = Optional.empty();
-        private Optional<String> expandedNote = Optional.empty();
+        private Optional<String> attachmentFileNames = Optional.empty();
 
         private MailTypeBuilder templateName(String templateName) {
             this.templateName = templateName;
@@ -94,103 +65,34 @@ public enum MailType {
             return this;
         }
 
-        private MailTypeBuilder attachmentFileNames(String attachmentFileNames) {
-            this.attachmentFileNames = Optional.of(attachmentFileNames);
-            return this;
-        }
-
         private MailTypeBuilder titleKey(String titleKey) {
-            this.titleKey = Optional.of(titleKey);
+            this.titleKey = titleKey;
             return this;
         }
 
-        private MailTypeBuilder stringTemplateName(String stringTemplateName) {
+        private MailTypeBuilder stringTemplateName(String stringTemplateName){
             this.stringTemplateName = Optional.of(stringTemplateName);
             return this;
         }
 
-        private MailTypeBuilder modalTitle(String modalTitle) {
-            this.modalTitle = Optional.of(modalTitle);
-            return this;
-        }
-
-        private MailTypeBuilder modalSubject(EmailSubject modalSubject) {
-            this.modalSubject = Optional.of(modalSubject);
-            return this;
-        }
-
-        private MailTypeBuilder blockId(BlockId blockId) {
-            this.blockId = Optional.of(blockId);
-            return this;
-        }
-
-        private MailTypeBuilder actionId(ActionId actionId) {
-            this.actionId = Optional.of(actionId);
-            return this;
-        }
-
-        private MailTypeBuilder confirmActionId(ActionId confirmActionId) {
-            this.confirmActionId = Optional.of(confirmActionId);
-            return this;
-        }
-
-        private MailTypeBuilder category(EmailCategory category) {
-            this.category = Optional.of(category);
-            return this;
-        }
-
-        private MailTypeBuilder dropdownKey(String dropdownKey) {
-            this.dropdownKey = Optional.of(dropdownKey);
-            return this;
-        }
-
-        private MailTypeBuilder collapsedNote(String collapsedNote) {
-            this.collapsedNote = Optional.of(collapsedNote);
-            return this;
-        }
-
-        private MailTypeBuilder expandedNote(String expandedNote) {
-            this.expandedNote = Optional.of(expandedNote);
+        private MailTypeBuilder attachmentFileNames(String attachmentFileNames) {
+            this.attachmentFileNames = Optional.of(attachmentFileNames);
             return this;
         }
     }
 
     private String templateName;
     private String description;
-    private Optional<String> attachmentFileNames;
-
-    // Below properties for Slack
-    private Optional<String> titleKey;
-    // for view modal
+    private String titleKey;
     private Optional<String> stringTemplateName;
-    private Optional<String> modalTitle;
-    private Optional<EmailSubject> modalSubject;
-    // blockId
-    private Optional<BlockId> blockId;
-    private Optional<ActionId> actionId;
-    private Optional<ActionId> confirmActionId;
-    // dropdown section
-    private Optional<EmailCategory> category;
-    private Optional<String> dropdownKey;
-    // additional info block
-    private Optional<String> collapsedNote;
-    private Optional<String> expandedNote;
+    private Optional<String> attachmentFileNames;
 
     MailType(MailTypeBuilder builder) {
         this.templateName = builder.templateName;
         this.description = builder.description;
-        this.attachmentFileNames = builder.attachmentFileNames;
         this.titleKey = builder.titleKey;
         this.stringTemplateName = builder.stringTemplateName;
-        this.modalTitle = builder.modalTitle;
-        this.modalSubject = builder.modalSubject;
-        this.blockId = builder.blockId;
-        this.actionId = builder.actionId;
-        this.confirmActionId = builder.confirmActionId;
-        this.category = builder.category;
-        this.dropdownKey = builder.dropdownKey;
-        this.collapsedNote = builder.collapsedNote;
-        this.expandedNote = builder.expandedNote;
+        this.attachmentFileNames = builder.attachmentFileNames;
     }
 
     public String getTemplateName() {
@@ -201,51 +103,15 @@ public enum MailType {
         return description;
     }
 
-    public Optional<String> getAttachmentFileNames() {
-        return attachmentFileNames;
+    public String getTitleKey() {
+        return titleKey;
     }
 
     public Optional<String> getStringTemplateName() {
         return stringTemplateName;
     }
 
-    public Optional<String> getTitleKey() {
-        return titleKey;
-    }
-
-    public Optional<BlockId> getBlockId() {
-        return blockId;
-    }
-
-    public Optional<ActionId> getActionId() {
-        return actionId;
-    }
-
-    public Optional<ActionId> getConfirmActionId() {
-        return confirmActionId;
-    }
-
-    public Optional<EmailCategory> getCategory() {
-        return category;
-    }
-
-    public Optional<String> getDropdownKey() {
-        return dropdownKey;
-    }
-
-    public Optional<String> getModalTitle() {
-        return modalTitle;
-    }
-
-    public Optional<EmailSubject> getModalSubject() {
-        return modalSubject;
-    }
-
-    public Optional<String> getCollapsedNote() {
-        return collapsedNote;
-    }
-
-    public Optional<String> getExpandedNote() {
-        return expandedNote;
+    public Optional<String> getAttachmentFileNames() {
+        return attachmentFileNames;
     }
 }

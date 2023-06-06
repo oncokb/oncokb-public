@@ -58,8 +58,8 @@ public enum ActionId {
         if (actionId == null) {
             return false;
         }
-        for (MailType mailType : MailType.values()) {
-            if (actionId.equals(mailType.getActionId().orElse(null)))
+        for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
+            if (actionId.equals(mailOption.getActionId()))
                 return true;
         }
         return false;
@@ -69,8 +69,8 @@ public enum ActionId {
         if (actionId == null) {
             return false;
         }
-        for (MailType mailType : MailType.values()) {
-            if (actionId.equals(mailType.getConfirmActionId().orElse(null)))
+        for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
+            if (actionId.equals(mailOption.getConfirmActionId().orElse(null)))
                 return true;
         }
         return false;
@@ -82,8 +82,8 @@ public enum ActionId {
         }
 
         // mail actions
-        for (MailType mailType : MailType.values()) {
-            if (actionId.equals(mailType.getActionId().orElse(null)))
+        for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
+            if (actionId.equals(mailOption.getActionId()))
                 return true;
         }
 
