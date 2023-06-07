@@ -361,10 +361,11 @@ export default class LevelOfEvidencePage extends React.Component<
     });
 
     return (
-      <DocumentTitle title={getPageTitle(PAGE_TITLE.LEVELS)}>
+      <DocumentTitle title={getPageTitle(PAGE_TITLE[this.version])}>
         <Row className="justify-content-center">
           <Col lg={10}>
             <div className="levels-of-evidence">
+              {this.version}
               <>
                 <Tabs
                   defaultActiveKey={
