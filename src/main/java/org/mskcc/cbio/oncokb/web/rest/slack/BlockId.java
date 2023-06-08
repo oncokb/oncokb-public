@@ -1,8 +1,5 @@
 package org.mskcc.cbio.oncokb.web.rest.slack;
 
-import com.amazonaws.services.pinpoint.model.transform.RawEmailJsonUnmarshaller;
-import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
-
 /**
  * Created by Benjamin Xu on 6/30/21.
  */
@@ -54,7 +51,7 @@ public enum BlockId {
 
         // mail notes
         for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
-            if (blockId.equals(mailOption.getBlockId().orElse(null)))
+            if (blockId.equals(mailOption.getBlockId()))
                 return true;
         }
 

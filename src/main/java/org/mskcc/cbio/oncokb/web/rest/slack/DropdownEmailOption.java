@@ -1,5 +1,6 @@
 package org.mskcc.cbio.oncokb.web.rest.slack;
 
+import jdk.nashorn.internal.ir.Block;
 import org.mskcc.cbio.oncokb.domain.enumeration.EmailCategory;
 import org.mskcc.cbio.oncokb.domain.enumeration.EmailSubject;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
@@ -14,31 +15,106 @@ import java.util.Optional;
  */
 public enum DropdownEmailOption {
     GIVE_TRIAL_ACCESS(new DropdownEmailOptionBuilder()
+        .blockId(BlockId.TRIAL_ACCOUNT_NOTE)
         .actionId(ActionId.GIVE_TRIAL_ACCESS)
+        .mailType(MailType.ACTIVATE_FREE_TRIAL)
         .category(EmailCategory.TRIAL)
-        .dropdownKey("Give Trial Access"))
+        .dropdownKey("Give Trial Access")
+        .expandedNote("The trial account has been initialized and notified."))
     , CLARIFY_ACADEMIC_FOR_PROFIT(new DropdownEmailOptionBuilder()
-        .modalTitle("For Profit Clarification")
         .blockId(BlockId.FOR_PROFIT_CLARIFICATION_NOTE)
         .actionId(ActionId.SEND_ACADEMIC_FOR_PROFIT_EMAIL)
         .confirmActionId(ActionId.CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL)
+        .mailType(MailType.CLARIFY_ACADEMIC_FOR_PROFIT)
         .category(EmailCategory.CLARIFY)
         .dropdownKey("Send Academic For Profit Email")
+        .modalTitle("For Profit Clarification")
+        .modalSubject(EmailSubject.DEFAULT)
         .collapsedNote("Clarified with user on for-profit affiliation")
         .expandedNote("We have sent a clarification email to the user asking why they are applying for the academic license while affiliated with a for-profit company."))
-    , CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL(new DropdownEmailOptionBuilder()) // not complete
-    , CLARIFY_USE_CASE(new DropdownEmailOptionBuilder()) //"clarifyUseCase", "Clarify - Use case unclear", null)
-    , CLARIFY_DUPLICATE_USER(new DropdownEmailOptionBuilder()) //"clarifyDuplicateUser", "Clarify - User registered multiple accounts", null)
-    , CLARIFY_REGISTRATION_INFO(new DropdownEmailOptionBuilder()) //"clarifyRegistrationInfo", "Clarify - Detailed registration info required", null)
-    , LICENSE_OPTIONS(new DropdownEmailOptionBuilder())
-    , REJECT(new DropdownEmailOptionBuilder()) //"rejectionEmail", "User Rejection", null)
-    , REJECT_ALUMNI_ADDRESS(new DropdownEmailOptionBuilder()) //"alumniEmailAddress", "Reject - Registered under alumni email address", null)
+    , CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL(new DropdownEmailOptionBuilder()
+        .blockId(BlockId.ACADEMIC_CLARIFICATION_NOTE)
+        .actionId(ActionId.SEND_ACADEMIC_CLARIFICATION_EMAIL)
+        .confirmActionId(ActionId.CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL)
+        .mailType(MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL)
+        .category(EmailCategory.CLARIFY)
+        .dropdownKey("Send Academic Domain Clarification Email")
+        .modalTitle("Domain Clarification")
+        .modalSubject(EmailSubject.DEFAULT)
+        .collapsedNote("Clarified with user on noninstitutional email")
+        .expandedNote("We have sent a clarification email to the user asking why they could not use an institution email to register."))
+    , CLARIFY_USE_CASE(new DropdownEmailOptionBuilder()
+        .blockId(BlockId.USE_CASE_CLARIFICATION_NOTE)
+        .actionId(ActionId.SEND_USE_CASE_CLARIFICATION_EMAIL)
+        .confirmActionId(ActionId.CONFIRM_SEND_USE_CASE_CLARIFICATION_EMAIL)
+        .mailType(MailType.CLARIFY_USE_CASE)
+        .category(EmailCategory.CLARIFY)
+        .dropdownKey("Send Use Case Clarification Email")
+        .modalTitle("Use Case Clarification")
+        .modalSubject(EmailSubject.DEFAULT)
+        .collapsedNote("Sent use case clarification")
+        .expandedNote("We have sent a clarification email to the user asking to further explain their use case."))
+    , CLARIFY_DUPLICATE_USER(new DropdownEmailOptionBuilder()
+        .blockId(BlockId.DUPLICATE_USER_CLARIFICATION_NOTE)
+        .actionId(ActionId.SEND_DUPLICATE_USER_CLARIFICATION_EMAIL)
+        .confirmActionId(ActionId.CONFIRM_SEND_DUPLICATE_USER_CLARIFICATION_EMAIL)
+        .mailType(MailType.CLARIFY_DUPLICATE_USER)
+        .category(EmailCategory.CLARIFY)
+        .dropdownKey("Send Duplicate User Email")
+        .modalTitle("Clarify Duplicate User")
+        .modalSubject(EmailSubject.DEFAULT)
+        .collapsedNote("Clarified with user on multiple account requests")
+        .expandedNote("We have sent a clarification email to the user asking why they registered multiple accounts."))
+    , CLARIFY_REGISTRATION_INFO(new DropdownEmailOptionBuilder()
+        .blockId(BlockId.REGISTRATION_INFO_CLARIFICATION_NOTE)
+        .actionId(ActionId.SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL)
+        .confirmActionId(ActionId.CONFIRM_SEND_REGISTRATION_INFO_CLARIFICATION_EMAIL)
+        .mailType(MailType.CLARIFY_REGISTRATION_INFO)
+        .category(EmailCategory.CLARIFY)
+        .dropdownKey("Send Registration Info Clarification Email")
+        .modalTitle("Clarify Registry Info")
+        .modalSubject(EmailSubject.DEFAULT)
+        .collapsedNote("Clarified with user on registration info")
+        .expandedNote("We have sent a clarification email to the user asking to provide more detailed registration info."))
+    , LICENSE_OPTIONS(new DropdownEmailOptionBuilder()
+        .blockId(BlockId.LICENSE_OPTIONS_NOTE)
+        .actionId(ActionId.SEND_LICENSE_OPTIONS_EMAIL)
+        .confirmActionId(ActionId.CONFIRM_SEND_LICENSE_OPTIONS_EMAIL)
+        .mailType(MailType.LICENSE_OPTIONS)
+        .category(EmailCategory.LICENSE)
+        .dropdownKey("Send License Options Email")
+        .modalTitle("Send License Options")
+        .modalSubject(EmailSubject.COMPANY)
+        .collapsedNote("Sent license options email")
+        .expandedNote("We have sent an email to the user with license options for their affiliated company."))
+    , REJECT(new DropdownEmailOptionBuilder()
+        .blockId(BlockId.REJECTION_NOTE)
+        .actionId(ActionId.SEND_REJECTION_EMAIL)
+        .confirmActionId(ActionId.CONFIRM_SEND_REJECTION_EMAIL)
+        .mailType(MailType.REJECTION)
+        .category(EmailCategory.DENY)
+        .dropdownKey("Send Rejection Email")
+        .modalTitle("Rejection Email")
+        .modalSubject(EmailSubject.DEFAULT)
+        .collapsedNote("Sent rejection email")
+        .expandedNote("The user has been rejected and notified."))
+    , REJECT_ALUMNI_ADDRESS(new DropdownEmailOptionBuilder()
+        .blockId(BlockId.REJECT_ALUMNI_ADDRESS_NOTE)
+        .actionId(ActionId.SEND_REJECT_ALUMNI_ADDRESS_EMAIL)
+        .confirmActionId(ActionId.CONFIRM_SEND_REJECT_ALUMNI_ADDRESS_EMAIL)
+        .mailType(MailType.REJECT_ALUMNI_ADDRESS)
+        .category(EmailCategory.DENY)
+        .dropdownKey("Send Alumni Rejection Email")
+        .modalTitle("Reject Alumni Address")
+        .modalSubject(EmailSubject.DEFAULT)
+        .collapsedNote("Rejected user due to alumni email address")
+        .expandedNote("The user has been rejected due to alumni email address."))
     ;
 
 
     private static class DropdownEmailOptionBuilder {
         // blockId/actionId
-        private Optional<BlockId> blockId = Optional.empty();
+        private BlockId blockId;
         private ActionId actionId;
         private Optional<ActionId> confirmActionId = Optional.empty();
         // Email
@@ -51,10 +127,10 @@ public enum DropdownEmailOption {
         private Optional<EmailSubject> modalSubject = Optional.of(EmailSubject.DEFAULT);
         // Additional info block
         private Optional<String> collapsedNote = Optional.empty();
-        private Optional<String> expandedNote = Optional.empty();
+        private String expandedNote;
 
         public DropdownEmailOptionBuilder blockId(BlockId blockId) {
-            this.blockId = Optional.of(blockId);
+            this.blockId = blockId;
             return this;
         }
 
@@ -99,13 +175,13 @@ public enum DropdownEmailOption {
         }
 
         public DropdownEmailOptionBuilder expandedNote(String expandedNote) {
-            this.expandedNote = Optional.ofNullable(expandedNote);
+            this.expandedNote = expandedNote;
             return this;
         }
     }
 
     // blockId/actionId
-    private Optional<BlockId> blockId;
+    private BlockId blockId;
     private ActionId actionId;
     private Optional<ActionId> confirmActionId;
     // Email
@@ -118,7 +194,7 @@ public enum DropdownEmailOption {
     private Optional<EmailSubject> modalSubject;
     // Additional info block
     private Optional<String> collapsedNote;
-    private Optional<String> expandedNote;
+    private String expandedNote;
 
     DropdownEmailOption(DropdownEmailOptionBuilder builder) {
         this.blockId = builder.blockId;
@@ -133,7 +209,7 @@ public enum DropdownEmailOption {
         this.expandedNote = builder.expandedNote;
     }
 
-    public Optional<BlockId> getBlockId() {
+    public BlockId getBlockId() {
         return blockId;
     }
 
@@ -169,7 +245,5 @@ public enum DropdownEmailOption {
         return collapsedNote;
     }
 
-    public Optional<String> getExpandedNote() {
-        return expandedNote;
-    }
+    public String getExpandedNote() { return expandedNote;}
 }

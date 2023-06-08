@@ -397,7 +397,7 @@ public class SlackService {
     }
 
     public boolean withNote(DropdownEmailOption mailOption, UserDTO userDTO, ActionId actionId) {
-        if (!mailOption.getExpandedNote().isPresent())
+        if (mailOption.getExpandedNote() == null)
             return false;
 
         switch (mailOption) {
@@ -440,7 +440,7 @@ public class SlackService {
         if (userDTO.isActivated())
             return true;
         for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
-            if (mailOption.getExpandedNote().isPresent() && withNote(mailOption, userDTO, actionId))
+            if (mailOption.getExpandedNote() != null && withNote(mailOption, userDTO, actionId))
                 return true;
         }
         return false;
@@ -521,7 +521,7 @@ public class SlackService {
 
         for (DropdownEmailOption inquiryOption : Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getCategory() == EmailCategory.CLARIFY || mo.getCategory() == EmailCategory.LICENSE).collect(Collectors.toList())) {
             if (withNote(inquiryOption, userDTO, actionId))
-                layoutBlocks.add(buildPlainTextBlock(inquiryOption.getExpandedNote().orElse(null), inquiryOption.getBlockId().orElse(null)));
+                layoutBlocks.add(buildPlainTextBlock(inquiryOption.getExpandedNote(), inquiryOption.getBlockId()));
         }
         if (userDTO.isActivated() && !trialAccountActivated) {
             if (!withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId)) {
@@ -530,11 +530,11 @@ public class SlackService {
                 layoutBlocks.add(buildPlainTextBlock("The trial account has been converted to a regular account.", CONVERT_TO_REGULAR_ACCOUNT_NOTE));
             }
         } else if (withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId)) {
-            layoutBlocks.add(buildPlainTextBlock("The trial account has been initialized and notified.", TRIAL_ACCOUNT_NOTE));
+            layoutBlocks.add(buildPlainTextBlock(DropdownEmailOption.GIVE_TRIAL_ACCESS.getExpandedNote(), TRIAL_ACCOUNT_NOTE));
         } else {
             for (DropdownEmailOption rejectOption : Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getCategory() == EmailCategory.DENY).collect(Collectors.toList())) {
                 if (withNote(rejectOption, userDTO, actionId))
-                    layoutBlocks.add(buildPlainTextBlock(rejectOption.getExpandedNote().orElse(null), rejectOption.getBlockId().orElse(null)));
+                    layoutBlocks.add(buildPlainTextBlock(rejectOption.getExpandedNote(), rejectOption.getBlockId()));
             }
         }
 

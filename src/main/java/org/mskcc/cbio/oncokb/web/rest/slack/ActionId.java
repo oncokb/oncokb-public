@@ -1,8 +1,5 @@
 package org.mskcc.cbio.oncokb.web.rest.slack;
 
-
-import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
-
 /**
  * Created by Hongxin Zhang on 4/30/21.
  */

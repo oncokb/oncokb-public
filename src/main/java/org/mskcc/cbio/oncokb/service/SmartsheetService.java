@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
 import org.mskcc.cbio.oncokb.config.application.SmartsheetProperties;
 import org.mskcc.cbio.oncokb.service.dto.UserDTO;
+import org.mskcc.cbio.oncokb.web.rest.slack.DropdownEmailOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -143,7 +144,7 @@ public class SmartsheetService {
     }
 
     public boolean shouldAddUser(UserDTO userDTO) {
-        boolean withNote = this.slackService.withAcademicClarificationNote(userDTO, null);
+        boolean withNote = this.slackService.withNote(DropdownEmailOption.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL, userDTO, null);
         if (withNote) {
             log.debug("User is not added to smartsheet since academic clarification note is present");
             return false;
