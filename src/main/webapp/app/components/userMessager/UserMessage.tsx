@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { remoteData } from 'cbioportal-frontend-commons';
 import {
   action,
   observable,
@@ -9,7 +8,6 @@ import {
   IReactionDisposer,
   toJS,
 } from 'mobx';
-import autobind from 'autobind-decorator';
 import * as _ from 'lodash';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
@@ -23,11 +21,14 @@ import {
 import { Link } from 'react-router-dom';
 import AppStore from 'app/store/AppStore';
 import { Linkout } from 'app/shared/links/Linkout';
+import { COLOR_BLACK, COLOR_WARNING } from 'app/config/theme';
 
 export interface IUserMessage {
   dateStart?: number;
   dateEnd: number;
   content: JSX.Element;
+  backgroundColor?: string;
+  color?: string;
   id: string;
 }
 
@@ -112,6 +113,24 @@ if (
       ),
       id: '2023_asco',
     },
+    {
+      dateEnd: 1686456000000,
+      content: (
+        <div>
+          <b>Attention</b>: We want to inform you of an upcoming infrastructure
+          update that may lead to a temporary service disruption over the
+          weekend, planned <b>June 10th, 10am-12pm EDT</b>.
+          <br />
+          During this period, you may experience intermittent service
+          interruptions, brief outages, or slower response times while accessing
+          our services. Thank you for your understanding and cooperation as we
+          strive to provide you with an improved service experience.
+        </div>
+      ),
+      backgroundColor: COLOR_WARNING,
+      color: COLOR_BLACK,
+      id: 'warning_msg_06102023',
+    },
   ];
 }
 
@@ -172,7 +191,14 @@ export default class UserMessage extends React.Component<UserMessageProps> {
   render() {
     if (this.showBeVisible) {
       return toJS(this.messages).map(message => (
-        <div className={styles.message} key={message.id}>
+        <div
+          className={styles.message}
+          key={message.id}
+          style={{
+            backgroundColor: message.backgroundColor,
+            color: message.color,
+          }}
+        >
           <Container
             fluid={!this.props.windowStore.isXLscreen}
             className={styles.messageContainer}
