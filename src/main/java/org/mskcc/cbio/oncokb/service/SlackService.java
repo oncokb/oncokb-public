@@ -99,7 +99,7 @@ public class SlackService {
 
     @Async
     public void sendLatestBlocks(String url, UserDTO userDTO, boolean trialAccountActivated, ActionId actionId, String triggerId) {
-        if (ActionId.isEmailAction(actionId)) {
+        if (ActionId.isModalEmailAction(actionId)) {
             this.sendModal(triggerId, this.buildModalView(userDTO, actionId, url));
         } else {
             this.sendBlocks(url, this.buildBlocks(userDTO, trialAccountActivated, actionId, null));
@@ -249,7 +249,7 @@ public class SlackService {
 
         if (buildCollapsed) {
             // Add collapsed blocks
-            blocks.add(buildCollapsedBlock(userDTO, actionId));
+            blocks.add(buildCollapsedBlock(userDTO, trialAccountActivated, actionId));
         } else {
             // Add expanded blocks
             blocks.addAll(buildExpandedBlocks(userDTO, trialAccountActivated, actionId, company));
@@ -261,9 +261,11 @@ public class SlackService {
         return blocks;
     }
 
-    private LayoutBlock buildCollapsedBlock(UserDTO userDTO, ActionId actionId) {
+    private LayoutBlock buildCollapsedBlock(UserDTO userDTO, boolean trialAccountActivated, ActionId actionId) {
         StringBuilder sb = new StringBuilder();
-        sb.append(userDTO.getEmail() + "\n" + userDTO.getCompanyName() + " (" + userDTO.getLicenseType().getShortName() + (withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId) ? ", *TRIAL*)" : userDTO.isActivated() ? ")" : ")\n*NOT ACTIVATED*: "));
+        sb.append(userDTO.getEmail() + "\n" + userDTO.getCompanyName() + " (" + userDTO.getLicenseType().getShortName()
+            + ((withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId) && !(userDTO.isActivated() && !trialAccountActivated)) ? ", *TRIAL*)" :
+            (userDTO.isActivated() ? ")" : ")\n*NOT ACTIVATED*: ")));
         if (!userDTO.isActivated() && !withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId)) {
             List<DropdownEmailOption> sentMails = new ArrayList<>();
             for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
@@ -303,7 +305,7 @@ public class SlackService {
         blocks.add(buildCurrentLicense(userDTO));
 
         // Add account status
-        blocks.add(buildAccountStatusBlock(userDTO, withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId)));
+        blocks.add(buildAccountStatusBlock(userDTO, withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, userDTO, actionId), trialAccountActivated));
 
         // Add user info section
         blocks.addAll(buildUserInfoBlocks(userDTO));
@@ -365,13 +367,13 @@ public class SlackService {
         return SectionBlock.builder().text(MarkdownTextObject.builder().text(sb.toString()).build()).accessory(getLicenseTypeElement(userDTO)).blockId(LICENSE_TYPE.getId()).build();
     }
 
-    private LayoutBlock buildAccountStatusBlock(UserDTO userDTO, boolean isTrialAccountInitiated) {
+    private LayoutBlock buildAccountStatusBlock(UserDTO userDTO, boolean isTrialAccountInitiated, boolean trialAccountActivated) {
         List<TextObject> userInfo = new ArrayList<>();
 
         // Add account information
         userInfo.add(getTextObject("Account Status", userDTO.isActivated() ? "Activated" : (StringUtils.isNotEmpty(userDTO.getActivationKey()) ? "Email not validated" : "Not Activated")));
-        userInfo.add(getTextObject("Account Type", isTrialAccountInitiated ? "TRIAL" : "REGULAR"));
-        if (isTrialAccountInitiated) {
+        userInfo.add(getTextObject("Account Type", isTrialAccountInitiated && !(userDTO.isActivated() && !trialAccountActivated) ? "TRIAL" : "REGULAR"));
+        if (isTrialAccountInitiated && !(userDTO.isActivated() && !trialAccountActivated)) {
             // There is a period of time when the user has been approved but did not activate their trial yet.
             // In this case, the activationDate is null, so we need to omit this text.
             Instant activationDate = userDTO.getAdditionalInfo().getTrialAccount().getActivation().getActivationDate();
@@ -576,43 +578,34 @@ public class SlackService {
     private StaticSelectElement buildMoreActionsDropdown(UserDTO user, boolean trialAccountActivated, ActionId actionId) {
         List<OptionGroupObject> optionGroups = new ArrayList<>();
 
+        // Add option group - Trial
         if (user.getLicenseType() != LicenseType.ACADEMIC) {
-            // Add option group - Trial
             List<OptionObject> trialGroup = new ArrayList<>();
             // Add option - Give Trial Access
             if (!withNote(DropdownEmailOption.GIVE_TRIAL_ACCESS, user, actionId) && !user.isActivated()) {
                 trialGroup.add(buildEmailOption(DropdownEmailOption.GIVE_TRIAL_ACCESS, user));
             }
             // Add option - Convert to regular
-            if (trialAccountActivated) {
+            if (user.isActivated() && trialAccountActivated) {
                 trialGroup.add(buildConvertToRegularAccountOption(user));
             }
             if (!trialGroup.isEmpty()) {
                 optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("Trial").build()).options(trialGroup).build());
             }
-
-            // Add option group - License
-            List<OptionObject> licenseGroup = new ArrayList<>();
-            for (DropdownEmailOption licenseOption: Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getCategory() == EmailCategory.LICENSE).collect(Collectors.toList())) {
-                licenseGroup.add(buildEmailOption(licenseOption, user));
-            }
-            optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("License").build()).options(licenseGroup).build());
         }
 
+        // Add other option groups
         if (!user.isActivated()) {
-            // Add option group - Clarify
-            List<OptionObject> clarifyGroup = new ArrayList<>();
-            for (DropdownEmailOption clarifyOption : Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getCategory() == EmailCategory.CLARIFY).collect(Collectors.toList())) {
-                clarifyGroup.add(buildEmailOption(clarifyOption, user));
+            for (EmailCategory emailCategory : Arrays.stream(EmailCategory.values()).filter(ec -> !ec.equals(EmailCategory.TRIAL)).collect(Collectors.toList())) {
+                List<OptionObject> optionGroup = new ArrayList<>();
+                for (DropdownEmailOption emailOption : Arrays.stream(DropdownEmailOption.values()).filter(eo -> eo.getCategory().equals(emailCategory)).collect(Collectors.toList())) {
+                    if (emailOption.getSpecificLicenses().isEmpty() || emailOption.getSpecificLicenses().contains(user.getLicenseType()))
+                        optionGroup.add(buildEmailOption(emailOption, user));
+                }
+                if (!optionGroup.isEmpty()) {
+                    optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text(emailCategory.getLabel()).build()).options(optionGroup).build());
+                }
             }
-            optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("Clarify").build()).options(clarifyGroup).build());
-
-            // Add option group - Deny
-            List<OptionObject> denyGroup = new ArrayList<>();
-            for (DropdownEmailOption denyOption : Arrays.stream(DropdownEmailOption.values()).filter(mo -> mo.getCategory() == EmailCategory.DENY).collect(Collectors.toList())) {
-                denyGroup.add(buildEmailOption(denyOption, user));
-            }
-            optionGroups.add(OptionGroupObject.builder().label(PlainTextObject.builder().text("Deny").build()).options(denyGroup).build());
         }
 
         // Add option group - Other

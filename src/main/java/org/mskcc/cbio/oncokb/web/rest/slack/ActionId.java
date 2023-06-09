@@ -1,5 +1,8 @@
 package org.mskcc.cbio.oncokb.web.rest.slack;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * Created by Hongxin Zhang on 4/30/21.
  */
@@ -51,11 +54,11 @@ public enum ActionId {
         return null;
     }
 
-    public static boolean isEmailAction(ActionId actionId) {
+    public static boolean isModalEmailAction(ActionId actionId) {
         if (actionId == null) {
             return false;
         }
-        for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
+        for (DropdownEmailOption mailOption : Arrays.stream(DropdownEmailOption.values()).filter(mo -> !mo.isNotModalEmail()).collect(Collectors.toList())) {
             if (actionId.equals(mailOption.getActionId()))
                 return true;
         }

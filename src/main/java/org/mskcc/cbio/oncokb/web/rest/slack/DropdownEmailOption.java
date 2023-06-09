@@ -1,10 +1,12 @@
 package org.mskcc.cbio.oncokb.web.rest.slack;
 
-import jdk.nashorn.internal.ir.Block;
 import org.mskcc.cbio.oncokb.domain.enumeration.EmailCategory;
 import org.mskcc.cbio.oncokb.domain.enumeration.EmailSubject;
+import org.mskcc.cbio.oncokb.domain.enumeration.LicenseType;
 import org.mskcc.cbio.oncokb.domain.enumeration.MailType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,6 +22,7 @@ public enum DropdownEmailOption {
         .mailType(MailType.ACTIVATE_FREE_TRIAL)
         .category(EmailCategory.TRIAL)
         .dropdownKey("Give Trial Access")
+        .isNotModalEmail()
         .expandedNote("The trial account has been initialized and notified."))
     , CLARIFY_ACADEMIC_FOR_PROFIT(new DropdownEmailOptionBuilder()
         .blockId(BlockId.FOR_PROFIT_CLARIFICATION_NOTE)
@@ -27,6 +30,7 @@ public enum DropdownEmailOption {
         .confirmActionId(ActionId.CONFIRM_SEND_ACADEMIC_FOR_PROFIT_EMAIL)
         .mailType(MailType.CLARIFY_ACADEMIC_FOR_PROFIT)
         .category(EmailCategory.CLARIFY)
+        .specificLicense(LicenseType.ACADEMIC)
         .dropdownKey("Send Academic For Profit Email")
         .modalTitle("For Profit Clarification")
         .modalSubject(EmailSubject.DEFAULT)
@@ -38,6 +42,7 @@ public enum DropdownEmailOption {
         .confirmActionId(ActionId.CONFIRM_SEND_ACADEMIC_CLARIFICATION_EMAIL)
         .mailType(MailType.CLARIFY_ACADEMIC_NON_INSTITUTE_EMAIL)
         .category(EmailCategory.CLARIFY)
+        .specificLicense(LicenseType.ACADEMIC)
         .dropdownKey("Send Academic Domain Clarification Email")
         .modalTitle("Domain Clarification")
         .modalSubject(EmailSubject.DEFAULT)
@@ -82,6 +87,9 @@ public enum DropdownEmailOption {
         .confirmActionId(ActionId.CONFIRM_SEND_LICENSE_OPTIONS_EMAIL)
         .mailType(MailType.LICENSE_OPTIONS)
         .category(EmailCategory.LICENSE)
+        .specificLicense(LicenseType.COMMERCIAL)
+        .specificLicense(LicenseType.HOSPITAL)
+        .specificLicense(LicenseType.RESEARCH_IN_COMMERCIAL)
         .dropdownKey("Send License Options Email")
         .modalTitle("Send License Options")
         .modalSubject(EmailSubject.COMPANY)
@@ -121,8 +129,10 @@ public enum DropdownEmailOption {
         private MailType mailType;
         // Dropdown menu
         private EmailCategory category;
+        private List<LicenseType> specificLicenses = new ArrayList<>();
         private String dropdownKey;
         // View modal
+        private boolean notModalEmail = false;
         private Optional<String> modalTitle = Optional.empty();
         private Optional<EmailSubject> modalSubject = Optional.of(EmailSubject.DEFAULT);
         // Additional info block
@@ -149,6 +159,11 @@ public enum DropdownEmailOption {
             return this;
         }
 
+        public DropdownEmailOptionBuilder isNotModalEmail() {
+            this.notModalEmail = true;
+            return this;
+        }
+
         public DropdownEmailOptionBuilder modalTitle(String modalTitle) {
             this.modalTitle = Optional.ofNullable(modalTitle);
             return this;
@@ -156,6 +171,11 @@ public enum DropdownEmailOption {
 
         public DropdownEmailOptionBuilder category(EmailCategory category) {
             this.category = category;
+            return this;
+        }
+
+        public DropdownEmailOptionBuilder specificLicense(LicenseType licenseType) {
+            specificLicenses.add(licenseType);
             return this;
         }
 
@@ -188,8 +208,10 @@ public enum DropdownEmailOption {
     private MailType mailType;
     // Dropdown menu
     private EmailCategory category;
+    private List<LicenseType> specificLicenses;
     private String dropdownKey;
     // View modal
+    private boolean notModalEmail;
     private Optional<String> modalTitle;
     private Optional<EmailSubject> modalSubject;
     // Additional info block
@@ -202,7 +224,9 @@ public enum DropdownEmailOption {
         this.confirmActionId = builder.confirmActionId;
         this.mailType = builder.mailType;
         this.category = builder.category;
+        this.specificLicenses = builder.specificLicenses;
         this.dropdownKey = builder.dropdownKey;
+        this.notModalEmail = builder.notModalEmail;
         this.modalTitle = builder.modalTitle;
         this.modalSubject = builder.modalSubject;
         this.collapsedNote = builder.collapsedNote;
@@ -225,13 +249,15 @@ public enum DropdownEmailOption {
         return mailType;
     }
 
-    public EmailCategory getCategory() {
-        return category;
-    }
+    public EmailCategory getCategory() { return category; }
+
+    public List<LicenseType> getSpecificLicenses() { return specificLicenses; }
 
     public String getDropdownKey() {
         return dropdownKey;
     }
+
+    public boolean isNotModalEmail() { return notModalEmail; }
 
     public Optional<String> getModalTitle() {
         return modalTitle;
