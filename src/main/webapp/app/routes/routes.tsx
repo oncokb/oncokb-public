@@ -4,7 +4,7 @@ import Login from 'app/components/login/LoginPage';
 import { Logout } from 'app/components/login/logout';
 import { RegisterPage } from 'app/pages/RegisterPage';
 import { PrivateRoute } from 'app/shared/auth/private-route';
-import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
+import { AUTHORITIES, PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
@@ -34,6 +34,7 @@ import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
 import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTab';
 import FAQPage from 'app/pages/FAQPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
+import { Version } from 'app/pages/LevelOfEvidencePage';
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -153,11 +154,23 @@ const AppRouts = (props: {
             path={PAGE_ROUTE.TERMS}
             component={ApiAccessPageNavTab}
           />
+          <Route exact path={PAGE_ROUTE.LEVELS}>
+            <Redirect
+              to={{
+                pathname: PAGE_ROUTE.V2,
+                hash: window.location.hash,
+              }}
+            />
+          </Route>
+          <Route exact path={PAGE_ROUTE.DX} component={LevelOfEvidencePage} />
+          <Route exact path={PAGE_ROUTE.PX} component={LevelOfEvidencePage} />
+          <Route exact path={PAGE_ROUTE.V2} component={LevelOfEvidencePage} />
           <Route
             exact
-            path={PAGE_ROUTE.LEVELS}
+            path={PAGE_ROUTE.FDA_NGS}
             component={LevelOfEvidencePage}
           />
+
           <RecaptchaBoundaryRoute
             exact
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}

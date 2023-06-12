@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button, Tabs, Tab, Form } from 'react-bootstrap';
+import { Row, Col, Button, Form, Tab, Tabs } from 'react-bootstrap';
 import classnames from 'classnames';
 import { DownloadButton } from 'app/components/downloadButton/DownloadButton';
 import {
@@ -7,6 +7,7 @@ import {
   IMG_MAX_WIDTH,
   LEVEL_TYPES,
   ONCOKB_TM,
+  PAGE_ROUTE,
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
 import { inject, observer } from 'mobx-react';
@@ -120,6 +121,13 @@ const LEVEL_FILE_NAME: { [key in Version]: string } = {
     'CDRH’s-Approach-to-Tumor-Profiling-Next-Generation-Sequencing-Tests',
 };
 
+const REDIRECTPAGE: { [key in Version]?: PAGE_ROUTE } = {
+  [Version.V2]: PAGE_ROUTE[Version.V2],
+  [Version.DX]: PAGE_ROUTE[Version.DX],
+  [Version.PX]: PAGE_ROUTE[Version.PX],
+  [Version.FDA_NGS]: PAGE_ROUTE[Version.FDA_NGS],
+};
+
 @inject('routing', 'windowStore')
 @observer
 export default class LevelOfEvidencePage extends React.Component<
@@ -127,12 +135,36 @@ export default class LevelOfEvidencePage extends React.Component<
   any
 > {
   @observable version: Version = Version.V2;
+  @observable activeKey: Version = Version.V2;
+  pathname: string = window.location.pathname;
 
   readonly reactions: IReactionDisposer[] = [];
 
-  updateLocationHash = (newVersion: Version) => {
-    window.location.hash = QueryString.stringify({ version: newVersion });
+  redirectToNewPage = (version: Version) => {
+    const newPath = REDIRECTPAGE[version.toUpperCase()];
+    if (newPath) {
+      this.props.routing.history.push(newPath);
+      this.updateActiveKey(version);
+    }
+
+    if (window.location.pathname === PAGE_ROUTE.V2) {
+      window.location.hash = QueryString.stringify({
+        version: version.toUpperCase(),
+      });
+    }
   };
+
+  getVersionFromPathname() {
+    const versionKey: string =
+      Object.keys(PAGE_ROUTE).find(
+        key => PAGE_ROUTE[key] === window.location.pathname
+      ) ?? '';
+
+    const version = Version[versionKey] ?? this.version;
+    this.toggleVersion(version);
+    this.pathname = window.location.pathname;
+    return version;
+  }
 
   constructor(props: Readonly<LevelOfEvidencePageProps>) {
     super(props);
@@ -151,9 +183,24 @@ export default class LevelOfEvidencePage extends React.Component<
       ),
       reaction(
         () => this.version,
-        newVersion => this.updateLocationHash(newVersion)
+        newVersion => {
+          return this.redirectToNewPage(newVersion);
+        }
       )
     );
+  }
+
+  componentDidMount(): void {
+    if (!window.location.pathname.includes(PAGE_ROUTE[Version.V2])) {
+      this.getVersionFromPathname();
+    }
+    this.redirectToNewPage(this.version);
+  }
+
+  componentDidUpdate(): void {
+    if (window.location.pathname !== this.pathname) {
+      this.getVersionFromPathname();
+    }
   }
 
   componentWillUnmount(): void {
@@ -186,6 +233,13 @@ export default class LevelOfEvidencePage extends React.Component<
   toggleVersion(version: Version) {
     this.version = version;
   }
+
+  @action
+  updateActiveKey = (version: Version) => {
+    this.activeKey = [Version.DX, Version.PX, Version.FDA_NGS].includes(version)
+      ? Version[version]
+      : Version.V2;
+  };
 
   render() {
     const tabs: any[] = [];
@@ -307,10 +361,11 @@ export default class LevelOfEvidencePage extends React.Component<
     });
 
     return (
-      <DocumentTitle title={getPageTitle(PAGE_TITLE.LEVELS)}>
+      <DocumentTitle title={getPageTitle(PAGE_TITLE[this.version])}>
         <Row className="justify-content-center">
           <Col lg={10}>
             <div className="levels-of-evidence">
+              {this.version}
               <>
                 <Tabs
                   defaultActiveKey={
