@@ -10,10 +10,63 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The SlackOption enumeration. This enum is for all the options
- * the team can select for a license request in the Slack channel.
- *
+ * The DropdownEmailOption enumeration. This enum is for the email
+ * options in the Slack dropdown menu that the team can select.
  * Approval is not included as the logic is complex and unique.
+ *
+ * To add a new email option, add the following fields:
+ *
+ * REQUIRED:
+ * - Block blockId (the corresponding BlockId enum constant
+ * associated with the additional info block after email sent)
+ * - ActionId actionId (the corresponding ActionId enum constant
+ * associated with the initial selection from the menu)
+ * - MailType mailType (the corresponding MailType associated
+ * with the dropdown option)
+ * - EmailCategory category (the EmailCategory enum constant,
+ * which is the group the option goes in)
+ * - String dropdownKey (the name of the option in the menu)
+ * - String expandedNote (the string that appears in the
+ * additional info block after email sent)
+ *
+ * OPTIONAL:
+ * - Optional<ActionId> confirmActionId (the corresponding ActionId
+ * associated with confirming the dispatch of email in input modal.
+ * This property is REQUIRED if the email uses an input modal.)
+ * - List<LicenseType> specificLicenses (the specific license(s)
+ * where the option should show up at all. Used if given email
+ * will only need to be sent to certain license(s).)
+ * - boolean notModalEmail (if the email option doesn't prompt an
+ * input modal. Is 'false' by default.)
+ * - Optional<String> modalTitle (the title of the input modal
+ * when option is selected. This property is encouraged if the
+ * email option uses an input modal.)
+ * - Optional<EmailSubject> modalSubject (the default subject of
+ * the input modal. Defaults to EmailSubject.DEFAULT if not defined.)
+ * - Optional<String> collapsedNote (the string that appears in the
+ * collapsed block after email sent. This property is REQUIRED if the
+ * email option does not grant a token to the user.)
+ *
+ * To add a new property to this enum, add a new variable to both the
+ * Builder and the enum, as well as a builder function in the static
+ * Builder class and a getter function in the enum.
+ *
+ *
+ * The following template can be used to add a new option:
+ *
+ , EMAIL_OPTION(new DropdownEmailOptionBuilder()
+     .blockId(BlockId)
+     .actionId(ActionId)
+     .confirmActionId(ActionId)
+     .mailType(MailType)
+     .category(EmailCategory)
+     .specificLicense(LicenseType)
+     .dropdownKey("")
+     .modalTitle("")
+     .modalSubject(EmailSubject)
+     .collapsedNote("")
+     .expandedNote(""))
+ *
  */
 public enum DropdownEmailOption {
     GIVE_TRIAL_ACCESS(new DropdownEmailOptionBuilder()
@@ -119,6 +172,79 @@ public enum DropdownEmailOption {
         .expandedNote("The user has been rejected due to alumni email address."))
     ;
 
+    // blockId/actionId
+    private BlockId blockId;
+    private ActionId actionId;
+    private Optional<ActionId> confirmActionId;
+    // Email
+    private MailType mailType;
+    // Dropdown menu
+    private EmailCategory category;
+    private List<LicenseType> specificLicenses;
+    private String dropdownKey;
+    // View modal
+    private boolean notModalEmail;
+    private Optional<String> modalTitle;
+    private Optional<EmailSubject> modalSubject;
+    // Additional info block
+    private Optional<String> collapsedNote;
+    private String expandedNote;
+
+    DropdownEmailOption(DropdownEmailOptionBuilder builder) {
+        this.blockId = builder.blockId;
+        this.actionId = builder.actionId;
+        this.confirmActionId = builder.confirmActionId;
+        this.mailType = builder.mailType;
+        this.category = builder.category;
+        this.specificLicenses = builder.specificLicenses;
+        this.dropdownKey = builder.dropdownKey;
+        this.notModalEmail = builder.notModalEmail;
+        this.modalTitle = builder.modalTitle;
+        this.modalSubject = builder.modalSubject;
+        this.collapsedNote = builder.collapsedNote;
+        this.expandedNote = builder.expandedNote;
+    }
+
+    public BlockId getBlockId() {
+        return blockId;
+    }
+
+    public ActionId getActionId() {
+        return actionId;
+    }
+
+    public Optional<ActionId> getConfirmActionId() {
+        return confirmActionId;
+    }
+
+    public MailType getMailType() {
+        return mailType;
+    }
+
+    public EmailCategory getCategory() { return category; }
+
+    public List<LicenseType> getSpecificLicenses() { return specificLicenses; }
+
+    public String getDropdownKey() {
+        return dropdownKey;
+    }
+
+    public boolean isNotModalEmail() { return notModalEmail; }
+
+    public Optional<String> getModalTitle() {
+        return modalTitle;
+    }
+
+    public Optional<EmailSubject> getModalSubject() {
+        return modalSubject;
+    }
+
+    public Optional<String> getCollapsedNote() {
+        return collapsedNote;
+    }
+
+    public String getExpandedNote() { return expandedNote;}
+
 
     private static class DropdownEmailOptionBuilder {
         // blockId/actionId
@@ -199,77 +325,4 @@ public enum DropdownEmailOption {
             return this;
         }
     }
-
-    // blockId/actionId
-    private BlockId blockId;
-    private ActionId actionId;
-    private Optional<ActionId> confirmActionId;
-    // Email
-    private MailType mailType;
-    // Dropdown menu
-    private EmailCategory category;
-    private List<LicenseType> specificLicenses;
-    private String dropdownKey;
-    // View modal
-    private boolean notModalEmail;
-    private Optional<String> modalTitle;
-    private Optional<EmailSubject> modalSubject;
-    // Additional info block
-    private Optional<String> collapsedNote;
-    private String expandedNote;
-
-    DropdownEmailOption(DropdownEmailOptionBuilder builder) {
-        this.blockId = builder.blockId;
-        this.actionId = builder.actionId;
-        this.confirmActionId = builder.confirmActionId;
-        this.mailType = builder.mailType;
-        this.category = builder.category;
-        this.specificLicenses = builder.specificLicenses;
-        this.dropdownKey = builder.dropdownKey;
-        this.notModalEmail = builder.notModalEmail;
-        this.modalTitle = builder.modalTitle;
-        this.modalSubject = builder.modalSubject;
-        this.collapsedNote = builder.collapsedNote;
-        this.expandedNote = builder.expandedNote;
-    }
-
-    public BlockId getBlockId() {
-        return blockId;
-    }
-
-    public ActionId getActionId() {
-        return actionId;
-    }
-
-    public Optional<ActionId> getConfirmActionId() {
-        return confirmActionId;
-    }
-
-    public MailType getMailType() {
-        return mailType;
-    }
-
-    public EmailCategory getCategory() { return category; }
-
-    public List<LicenseType> getSpecificLicenses() { return specificLicenses; }
-
-    public String getDropdownKey() {
-        return dropdownKey;
-    }
-
-    public boolean isNotModalEmail() { return notModalEmail; }
-
-    public Optional<String> getModalTitle() {
-        return modalTitle;
-    }
-
-    public Optional<EmailSubject> getModalSubject() {
-        return modalSubject;
-    }
-
-    public Optional<String> getCollapsedNote() {
-        return collapsedNote;
-    }
-
-    public String getExpandedNote() { return expandedNote;}
 }

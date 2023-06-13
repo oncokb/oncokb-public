@@ -273,7 +273,7 @@ public class SlackService {
                     sentMails.add(mailOption);
             }
             if (!sentMails.isEmpty()) {
-                sentMails = sentMails.stream().sorted((mo1, mo2) -> mo1.getCategory() == EmailCategory.DENY ? 1 : 0).collect(Collectors.toList());
+                sentMails = sentMails.stream().sorted(Comparator.comparing(DropdownEmailOption::getCategory)).collect(Collectors.toList());
                 sb.append(sentMails.get(0).getCollapsedNote().orElse(""));
                 sentMails.remove(0);
                 for (DropdownEmailOption otherSentMail : sentMails) {
@@ -399,9 +399,6 @@ public class SlackService {
     }
 
     public boolean withNote(DropdownEmailOption mailOption, UserDTO userDTO, ActionId actionId) {
-        if (mailOption.getExpandedNote() == null)
-            return false;
-
         switch (mailOption) {
             case GIVE_TRIAL_ACCESS:
                 if (
@@ -442,7 +439,7 @@ public class SlackService {
         if (userDTO.isActivated())
             return true;
         for (DropdownEmailOption mailOption : DropdownEmailOption.values()) {
-            if (mailOption.getExpandedNote() != null && withNote(mailOption, userDTO, actionId))
+            if (withNote(mailOption, userDTO, actionId))
                 return true;
         }
         return false;
