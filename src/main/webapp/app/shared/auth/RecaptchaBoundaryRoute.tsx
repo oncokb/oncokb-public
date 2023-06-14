@@ -8,6 +8,7 @@ import ReCAPTCHA from '../recaptcha/recaptcha';
 import { setRecaptchaToken } from 'app/indexUtils';
 import client from 'app/shared/api/clientInstance';
 import { OncoKBError } from '../alert/ErrorAlertUtils';
+import * as Sentry from '@sentry/react';
 
 export interface IRecaptchaBoundaryRoute extends RouteProps {
   isUserAuthenticated: boolean;
@@ -41,6 +42,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
 
   failedToValidate(error: OncoKBError) {
     this.recaptchaValidated = false;
+    Sentry.captureException(error);
   }
 
   render() {

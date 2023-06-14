@@ -8,7 +8,6 @@ import com.google.recaptchaenterprise.v1.ProjectName;
 import java.io.IOException;
 
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,10 +28,14 @@ public class CreateAssessment {
   public static String RECAPTCHA_TOKEN_ERROR = "Unable to retrieve recaptcha token. Please try again.";
   public static String RECAPTCHA_CONFIGURATION_ERROR = "Recaptcha configuration is not set up. Recaptcha protection is now disabled.";
 
-  static RecaptchaProperties recaptchaProperties;
+  String projectId;
+  String siteKey;
+  Float threshold;
 
   public CreateAssessment(ApplicationProperties applicationProperties) {
-    this.recaptchaProperties = applicationProperties.getRecaptcha();
+    this.projectId = applicationProperties.getFrontend().getRecaptchaProjectId();
+    this.siteKey = applicationProperties.getFrontend().getRecaptchaSiteKey();
+    this.threshold = applicationProperties.getFrontend().getRecaptchaThreshold();
   }
 
   public String getRecaptchaToken(HttpServletRequest request) throws ValidationException {
@@ -45,7 +48,7 @@ public class CreateAssessment {
   }
 
   public RecaptchaEnterpriseServiceClient createClient() throws ValidationException, ConfigurationException {
-    if (recaptchaProperties.getSiteKey() == null || recaptchaProperties.getProjectId() == null || recaptchaProperties.getThreshold() == null) {
+    if (this.siteKey == null || this.projectId == null || this.threshold == null) {
       throw new ConfigurationException(RECAPTCHA_CONFIGURATION_ERROR);
     }
     try {
@@ -59,22 +62,22 @@ public class CreateAssessment {
 
   public ResponseEntity<String> createAssessment(RecaptchaEnterpriseServiceClient client, String recaptchaToken)
       throws IOException, ValidationException {
-        Event event = Event.newBuilder().setSiteKey(recaptchaProperties.getSiteKey()).setToken(recaptchaToken).build();
+        Event event = Event.newBuilder().setSiteKey(this.siteKey).setToken(recaptchaToken).build();
 
       // Build the assessment request.
       CreateAssessmentRequest createAssessmentRequest = CreateAssessmentRequest.newBuilder()
-          .setParent(ProjectName.of(recaptchaProperties.getProjectId()).toString())
+          .setParent(ProjectName.of(this.projectId).toString())
           .setAssessment(Assessment.newBuilder().setEvent(event).build())
           .build();
 
       Assessment response = client.createAssessment(createAssessmentRequest);
 
       client.close();
-      LOGGER.info("my site key " + recaptchaProperties.getSiteKey());
+      LOGGER.info("my site key " + this.siteKey);
 
       // Check if the token is valid.
       if (response.getTokenProperties().getValid()
-          && response.getRiskAnalysis().getScore() >= recaptchaProperties.getThreshold()) {
+          && response.getRiskAnalysis().getScore() >= this.threshold) {
         LOGGER.info("RECAPTCHA TOKEN VERIFIED SUCCESSFULLY. SCORE: " + response.getRiskAnalysis().getScore());
         return new ResponseEntity<>("Recaptcha successfully validated", HttpStatus.OK);
       } else {

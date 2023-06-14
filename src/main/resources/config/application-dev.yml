@@ -164,8 +164,8 @@ application:
     sentry-project-id:
     google-analytics-project-id:
     enable-auth: true
-    recaptcha-project-id:
-    recaptcha-site-key:
+    recaptcha-project-id: 'symbolic-nation-320615'
+    recaptcha-site-key: '6LdTXvMhAAAAAN7kj4MRKX0fl_gXUv_IQbxARe6W'
     recaptcha-threshold: 0.1
   aws:
     s3-access-key:
@@ -173,7 +173,3 @@ application:
     s3-region:
   github-token:
   db-read-only: false # Certain endpoints will be disabled when readonly is set to true
-  recaptcha:
-    project-id:
-    site-key:
-    threshold: 0.1
