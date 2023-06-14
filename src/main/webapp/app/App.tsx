@@ -1,4 +1,6 @@
 import * as React from 'react';
+import ReactGA from 'react-ga4';
+
 import Main from './Main';
 import AppStore, { IAppConfig } from 'app/store/AppStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -13,9 +15,8 @@ import { PAGE_TITLE, PAGE_ROUTE } from 'app/config/constants';
 import { action } from 'mobx';
 import autobind from 'autobind-decorator';
 import { getPageTitle } from 'app/shared/utils/Utils';
-import Reaptcha from 'reaptcha';
 import { setRecaptchaToken } from './indexUtils';
-import { COILinkout } from './pages/teamPage/COILinkout';
+import { AppConfig } from 'app/appConfig';
 
 export type Stores = {
   appStore: AppStore;
@@ -93,6 +94,11 @@ class App extends React.Component {
     const history = syncHistoryWithStore(browserHistory, this.stores.routing);
 
     this.checkHash(history);
+
+    // Install Ggoogle Analytics 4 if GA project id is configured on server side
+    if (AppConfig.serverConfig?.googleAnalyticsProjectId) {
+      ReactGA.initialize(AppConfig.serverConfig.googleAnalyticsProjectId);
+    }
 
     return (
       <DocumentTitle title={getPageTitle(PAGE_TITLE.HOME, false)}>
