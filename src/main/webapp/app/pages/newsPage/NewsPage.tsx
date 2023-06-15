@@ -1,31 +1,33 @@
 import * as React from 'react';
-import { CitationText } from 'app/components/CitationText';
-import NewsList, { getNews, getNewsTitle } from 'app/pages/newsPage/NewsList';
-import { NEWS_BY_DATE } from 'app/pages/newsPage/NewsPageContent';
+import {CitationText} from 'app/components/CitationText';
+import NewsList, {getNews, getNewsTitle} from 'app/pages/newsPage/NewsList';
+import {NEWS_BY_DATE} from 'app/pages/newsPage/NewsPageContent';
 import {
-  PAGE_TITLE,
   FAQ_LINK,
   IMG_MAX_WIDTH,
+  LEVEL_TYPES,
   ONCOKB_CONTACT_EMAIL,
   ONCOKB_NEWS_GROUP_SUBSCRIPTION_LINK,
   ONCOKB_TM,
   PAGE_ROUTE,
+  PAGE_TITLE,
   SOP_LINK,
 } from 'app/config/constants';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import LevelChange from 'content/images/loe-change.png';
 import AAC_IMAGE from 'content/images/level_AAC.png';
-import { Linkout } from 'app/shared/links/Linkout';
-import { RouterStore } from 'mobx-react-router';
-import { getPageTitle, scrollWidthOffset } from 'app/shared/utils/Utils';
-import { inject, observer } from 'mobx-react';
-import { Version } from 'app/pages/LevelOfEvidencePage';
+import {Linkout} from 'app/shared/links/Linkout';
+import {RouterStore} from 'mobx-react-router';
+import {getPageTitle, scrollWidthOffset} from 'app/shared/utils/Utils';
+import {inject, observer} from 'mobx-react';
+import {Version} from 'app/pages/LevelOfEvidencePage';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
-import { NewlyAddedGenesListItem } from 'app/pages/newsPage/NewlyAddedGenesListItem';
-import { GenePageLink, SopPageLink } from 'app/shared/utils/UrlUtils';
-import { Row } from 'react-bootstrap';
-import { FdaApprovalLink } from 'app/pages/newsPage/Links';
+import {NewlyAddedGenesListItem} from 'app/pages/newsPage/NewlyAddedGenesListItem';
+import {GenePageLink, SopPageLink} from 'app/shared/utils/UrlUtils';
+import {Row} from 'react-bootstrap';
+import {FdaApprovalLink} from 'app/pages/newsPage/Links';
+import {LevelOfEvidencePageLink} from "app/shared/links/LevelOfEvidencePageLink";
 
 @inject('routing')
 @observer
@@ -290,9 +292,9 @@ export default class NewsPage extends React.Component<{
                 <li>
                   We now show a comparison between the {ONCOKB_TM} and
                   AMP/ASCO/CAP Levels of Evidence on the{' '}
-                  <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.AAC}`}>
+                  <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX} version={Version.AAC}>
                     Levels of Evidence
-                  </Link>{' '}
+                  </LevelOfEvidencePageLink>{' '}
                   page.
                 </li>
                 <OptimizedImage

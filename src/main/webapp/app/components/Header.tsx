@@ -69,7 +69,7 @@ class Header extends React.Component<IHeaderProps> {
   private subPages: SubpageLink[] = [
     {
       title: 'Levels of Evidence',
-      link: PAGE_ROUTE.LEVELS,
+      link: PAGE_ROUTE.V2,
       matchedPaths: [
         PAGE_ROUTE.V2,
         PAGE_ROUTE.DX,

@@ -320,175 +320,6 @@ describe('Tests with login', () => {
     });
   });
 
-  it.skip('Home Page', async () => {
-    await page.goto(`${CLIENT_URL}`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('Home Page with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'Home Page with Login',
-    });
-  });
-
-  it.skip('Home Page #levelType=Dx', async () => {
-    await page.goto(`${CLIENT_URL}#levelType=Dx`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('Home Page DX with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'Home Page DX with Login',
-    });
-  });
-
-  it.skip('Home Page #levelType=Px', async () => {
-    await page.goto(`${CLIENT_URL}#levelType=Px`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('Home Page PX with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'Home Page PX with Login',
-    });
-  });
-
-  it.skip('Levels of Evidence Page', async () => {
-    await page.goto(`${CLIENT_URL}levels`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('LoE Page with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'LoE Page with Login',
-    });
-  });
-
-  it.skip('Levels of Evidence Page #version=DX', async () => {
-    await page.goto(`${CLIENT_URL}levels#version=DX`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('LoE Page DX with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'LoE Page DX with Login',
-    });
-  });
-
-  it.skip('Levels of Evidence Page #version=PX', async () => {
-    await page.goto(`${CLIENT_URL}levels#version=PX`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('LoE Page PX with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'LoE Page PX with Login',
-    });
-  });
-
-  it.skip('Levels of Evidence Page #version=AAC', async () => {
-    await page.goto(`${CLIENT_URL}levels#version=AAC`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('LoE Page AAC with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'LoE Page AAC with Login',
-    });
-  });
-
-  it.skip('Levels of Evidence Page #version=V1', async () => {
-    await page.goto(`${CLIENT_URL}levels#version=V1`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('LoE Page V1 with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'LoE Page V1 with Login',
-    });
-  });
-
-  it.skip('Actionable Genes Page', async () => {
-    await page.goto(`${CLIENT_URL}actionableGenes`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('Actionable Genes Page with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'Actionable Genes Page with Login',
-    });
-  });
-
-  it.skip('Actionable Genes Page #levels=1,Dx1,Px1', async () => {
-    await page.goto(`${CLIENT_URL}actionableGenes#levels=1,Dx1,Px1`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('Actionable Genes Page Levels Selected with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier:
-        'Actionable Genes Page Levels Selected with Login',
-    });
-  });
-
-  it.skip('Cancer Genes Page', async () => {
-    await page.goto(`${CLIENT_URL}cancerGenes`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('Cancer Genes Page with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'Cancer Genes Page with Login',
-    });
-  });
-
-  it.skip('About Page', async () => {
-    await page.goto(`${CLIENT_URL}about`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(LONG_WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('About Page with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'About Page with Login',
-    });
-  });
-
-  it.skip('Team Page', async () => {
-    await page.goto(`${CLIENT_URL}team`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('Team Page with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'Team Page with Login',
-    });
-  });
-
-  it.skip('Terms Page', async () => {
-    await page.goto(`${CLIENT_URL}terms`);
-    await page.setViewport(VIEW_PORT_1080);
-    await page.waitFor(WAITING_TIME);
-    let image = await page.screenshot(
-      getScreenshotConfig('Terms Page with Login')
-    );
-    expect(image).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'Terms Page with Login',
-    });
-  });
-
   it('Account Settings Page', async () => {
     await page.goto(`${CLIENT_URL}account/settings`);
     await page.setViewport(VIEW_PORT_1080);
@@ -675,8 +506,8 @@ describe('Tests without login', () => {
     });
   });
 
-  it('Levels of Evidence Page', async () => {
-    await page.goto(`${CLIENT_URL}levels`);
+  it('Therapeutic Level of Evidence V2 Page', async () => {
+    await page.goto(`${CLIENT_URL}therapeutic-levels`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(
@@ -687,8 +518,8 @@ describe('Tests without login', () => {
     });
   });
 
-  it('Levels of Evidence Page #version=DX', async () => {
-    await page.goto(`${CLIENT_URL}levels#version=DX`);
+  it('Diagnostic Level of Evidence', async () => {
+    await page.goto(`${CLIENT_URL}diagnostic-levels`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(
@@ -699,8 +530,8 @@ describe('Tests without login', () => {
     });
   });
 
-  it('Levels of Evidence Page #version=PX', async () => {
-    await page.goto(`${CLIENT_URL}levels#version=PX`);
+  it('Prognostic Level of Evidence', async () => {
+    await page.goto(`${CLIENT_URL}prognostic-levels`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(
@@ -712,7 +543,7 @@ describe('Tests without login', () => {
   });
 
   it('Levels of Evidence Page #version=AAC', async () => {
-    await page.goto(`${CLIENT_URL}levels#version=AAC`);
+    await page.goto(`${CLIENT_URL}therapeutic-levels#version=AAC`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(
@@ -724,7 +555,7 @@ describe('Tests without login', () => {
   });
 
   it('Levels of Evidence Page #version=V1', async () => {
-    await page.goto(`${CLIENT_URL}levels#version=V1`);
+    await page.goto(`${CLIENT_URL}therapeutic-levels#version=V1`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(
