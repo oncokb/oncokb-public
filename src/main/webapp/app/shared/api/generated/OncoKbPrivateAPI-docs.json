@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "OncoKB, a comprehensive and curated precision oncology knowledge base, offers oncologists detailed, evidence-based information about individual somatic mutations and structural alterations present in patient tumors with the goal of supporting optimal treatment decisions.",
-    "version": "v1.4.0",
+    "version": "v1.4.1",
     "title": "OncoKB APIs",
     "contact": {
       "name": "OncoKB",
@@ -29,6 +29,59 @@
     }
   ],
   "paths": {
+    "/cacheGnVariantInfo": {
+      "post": {
+        "tags": [
+          "Transcript"
+        ],
+        "summary": "cacheGenomeNexusVariantInfoPost",
+        "description": "cache Genome Nexus variant info",
+        "operationId": "cacheGenomeNexusVariantInfoPostUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of queries. Please see swagger.json for request body format.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GenomeNexusAnnotatedVariantInfo"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Error, error message will be given.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/fetchGnVariants/byGenomicChange": {
       "post": {
         "tags": [
@@ -2225,6 +2278,9 @@
         "variantSummary": {
           "type": "string"
         },
+        "vue": {
+          "type": "boolean"
+        },
         "vus": {
           "type": "boolean"
         }
@@ -2626,6 +2682,9 @@
         "transcriptId": {
           "type": "string",
           "description": "Ensembl transcript id"
+        },
+        "uniprotId": {
+          "type": "string"
         },
         "utrs": {
           "type": "array",
@@ -3051,6 +3110,17 @@
           "type": "boolean"
         },
         "term": {
+          "type": "string"
+        }
+      }
+    },
+    "TranscriptCoverageFilterResult": {
+      "type": "object",
+      "properties": {
+        "isCovered": {
+          "type": "boolean"
+        },
+        "variant": {
           "type": "string"
         }
       }

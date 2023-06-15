@@ -61,6 +61,10 @@ import { CancerTypeView } from 'app/pages/annotationPage/CancerTypeView';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import WindowStore from 'app/store/WindowStore';
 
+import gnLogo from 'content/images/gn_logo.png';
+import revueLogo from 'content/images/revue_logo.png';
+import { PowerBySource } from 'app/pages/annotationPage/PowerBySource';
+
 export type IAnnotationPage = {
   appStore: AppStore;
   windowStore: WindowStore;
@@ -387,56 +391,60 @@ export default class AnnotationPage extends React.Component<
     return (
       <>
         {this.navBreadcrumbs}
-        <h2
-          className={'d-flex align-items-baseline flex-wrap'}
-          style={{ marginBottom: 0 }}
-        >
-          {this.showGeneName && (
-            <span className={'mr-2'}>{this.props.hugoSymbol}</span>
-          )}
-          <span>{this.alterationName}</span>
-          {this.props.tumorType && (
-            <span className={'mx-2'}>in {this.props.tumorType}</span>
-          )}
-          <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
-            <FeedbackIcon
-              feedback={{
-                type: FeedbackType.ANNOTATION,
-                annotation: {
-                  gene: this.props.hugoSymbol,
-                  alteration: this.props.alteration,
-                  cancerType: this.props.tumorType,
-                },
-              }}
-              appStore={this.props.appStore}
+        <div className={'d-flex justify-content-between flex-wrap'}>
+          <div>
+            <h2
+              className={'d-flex align-items-baseline flex-wrap'}
+              style={{ marginBottom: 0 }}
+            >
+              {this.showGeneName && (
+                <span className={'mr-2'}>{this.props.hugoSymbol}</span>
+              )}
+              <span>{this.alterationName}</span>
+              {this.props.tumorType && (
+                <span className={'mx-2'}>in {this.props.tumorType}</span>
+              )}
+              <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
+                <FeedbackIcon
+                  feedback={{
+                    type: FeedbackType.ANNOTATION,
+                    annotation: {
+                      gene: this.props.hugoSymbol,
+                      alteration: this.props.alteration,
+                      cancerType: this.props.tumorType,
+                    },
+                  }}
+                  appStore={this.props.appStore}
+                />
+              </span>
+            </h2>
+            <AlterationInfo
+              isPositionalAlteration={isPositionalAlteration(
+                this.props.annotation.query.proteinStart,
+                this.props.annotation.query.proteinEnd,
+                this.props.annotation.query.consequence
+              )}
+              oncogenicity={this.props.annotation.oncogenic}
+              mutationEffect={
+                this.isCategoricalAlteration
+                  ? undefined
+                  : this.props.annotation.mutationEffect
+              }
+              isVus={this.props.annotation.vus}
+              highestSensitiveLevel={
+                this.props.annotation.highestSensitiveLevel
+              }
+              highestResistanceLevel={
+                this.props.annotation.highestResistanceLevel
+              }
+              highestDiagnosticImplicationLevel={
+                this.props.annotation.highestDiagnosticImplicationLevel
+              }
+              highestPrognosticImplicationLevel={
+                this.props.annotation.highestPrognosticImplicationLevel
+              }
+              highestFdaLevel={this.props.annotation.highestFdaLevel}
             />
-          </span>
-        </h2>
-        <AlterationInfo
-          isPositionalAlteration={isPositionalAlteration(
-            this.props.annotation.query.proteinStart,
-            this.props.annotation.query.proteinEnd,
-            this.props.annotation.query.consequence
-          )}
-          oncogenicity={this.props.annotation.oncogenic}
-          mutationEffect={
-            this.isCategoricalAlteration
-              ? undefined
-              : this.props.annotation.mutationEffect
-          }
-          isVus={this.props.annotation.vus}
-          highestSensitiveLevel={this.props.annotation.highestSensitiveLevel}
-          highestResistanceLevel={this.props.annotation.highestResistanceLevel}
-          highestDiagnosticImplicationLevel={
-            this.props.annotation.highestDiagnosticImplicationLevel
-          }
-          highestPrognosticImplicationLevel={
-            this.props.annotation.highestPrognosticImplicationLevel
-          }
-          highestFdaLevel={this.props.annotation.highestFdaLevel}
-        />
-        <Row>
-          <Col>
             {categoricalAlterationDescription && (
               <div
                 className={classnames(
@@ -454,7 +462,26 @@ export default class AnnotationPage extends React.Component<
                 </div>
               );
             })}
-            {this.props.annotation.mutationEffect.description && (
+          </div>
+          <div className={'my-1 d-flex flex-column align-items-center'}>
+            <div>HGVSg annotation powered by</div>
+            <PowerBySource
+              name={'Genome Nexus'}
+              url={'genomenexus.org'}
+              logo={gnLogo}
+            />
+            {this.props.annotation.vue && (
+              <PowerBySource
+                name={'reVUE'}
+                url={'cancerrevue.org'}
+                logo={revueLogo}
+              />
+            )}
+          </div>
+        </div>
+        {this.props.annotation.mutationEffect.description && (
+          <Row>
+            <Col>
               <ShowHideText
                 show={this.showMutationEffect}
                 title="mutation effect description"
@@ -468,9 +495,9 @@ export default class AnnotationPage extends React.Component<
                   this.toggleMutationEffect(!this.showMutationEffect)
                 }
               />
-            )}
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        )}
         {this.props.tumorType ? (
           <CancerTypeView
             appStore={this.props.appStore}

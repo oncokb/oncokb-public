@@ -194,6 +194,8 @@ export type VariantAnnotation = {
 
         'variantSummary': string
 
+        'vue': boolean
+
         'vus': boolean
 
 };
@@ -364,6 +366,8 @@ export type EnsemblTranscript = {
 
         'transcriptId': string
 
+        'uniprotId': string
+
         'utrs': Array < UntranslatedRegion >
 
 };
@@ -523,6 +527,12 @@ export type VariantConsequence = {
         'isGenerallyTruncating': boolean
 
         'term': string
+
+};
+export type TranscriptCoverageFilterResult = {
+    'isCovered': boolean
+
+        'variant': string
 
 };
 export type EnsemblGene = {
@@ -714,6 +724,82 @@ export default class OncoKbPrivateAPI {
         });
     }
 
+    cacheGenomeNexusVariantInfoPostUsingPOSTURL(parameters: {
+        'body': Array < GenomeNexusAnnotatedVariantInfo > ,
+        $queryParameters ? : any
+    }): string {
+        let queryParameters: any = {};
+        let path = '/cacheGnVariantInfo';
+
+        if (parameters.$queryParameters) {
+            Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                var parameter = parameters.$queryParameters[parameterName];
+                queryParameters[parameterName] = parameter;
+            });
+        }
+        let keys = Object.keys(queryParameters);
+        return this.domain + path + (keys.length > 0 ? '?' + (keys.map(key => key + '=' + encodeURIComponent(queryParameters[key])).join('&')) : '');
+    };
+
+    /**
+     * cache Genome Nexus variant info
+     * @method
+     * @name OncoKbPrivateAPI#cacheGenomeNexusVariantInfoPostUsingPOST
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    cacheGenomeNexusVariantInfoPostUsingPOSTWithHttpInfo(parameters: {
+        'body': Array < GenomeNexusAnnotatedVariantInfo > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < request.Response > {
+        const domain = parameters.$domain ? parameters.$domain : this.domain;
+        const errorHandlers = this.errorHandlers;
+        const request = this.request;
+        let path = '/cacheGnVariantInfo';
+        let body: any;
+        let queryParameters: any = {};
+        let headers: any = {};
+        let form: any = {};
+        return new Promise(function(resolve, reject) {
+            headers['Accept'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
+
+            if (parameters['body'] !== undefined) {
+                body = parameters['body'];
+            }
+
+            if (parameters['body'] === undefined) {
+                reject(new Error('Missing required  parameter: body'));
+                return;
+            }
+
+            if (parameters.$queryParameters) {
+                Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
+                    var parameter = parameters.$queryParameters[parameterName];
+                    queryParameters[parameterName] = parameter;
+                });
+            }
+
+            request('POST', domain + path, body, headers, queryParameters, form, reject, resolve, errorHandlers);
+
+        });
+    };
+
+    /**
+     * cache Genome Nexus variant info
+     * @method
+     * @name OncoKbPrivateAPI#cacheGenomeNexusVariantInfoPostUsingPOST
+     * @param {} body - List of queries. Please see swagger.json for request body format.
+     */
+    cacheGenomeNexusVariantInfoPostUsingPOST(parameters: {
+        'body': Array < GenomeNexusAnnotatedVariantInfo > ,
+        $queryParameters ? : any,
+        $domain ? : string
+    }): Promise < any > {
+        return this.cacheGenomeNexusVariantInfoPostUsingPOSTWithHttpInfo(parameters).then(function(response: request.Response) {
+            return response.body;
+        });
+    };
     fetchGenomeNexusVariantInfoByGenomicChangePostUsingPOSTURL(parameters: {
         'body': Array < AnnotateMutationByGenomicChangeQuery > ,
         $queryParameters ? : any
