@@ -7,12 +7,12 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc th:text="${baseUrl}+'/prognostics-levels'"></loc>
+    <loc th:text="${baseUrl}+'/prognostic-levels'"></loc>
     <changefreq>yearly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc th:text="${baseUrl}+'/diagnostics-levels'"></loc>
+    <loc th:text="${baseUrl}+'/diagnostic-levels'"></loc>
     <changefreq>yearly</changefreq>
     <priority>1.0</priority>
   </url>

@@ -530,8 +530,8 @@ export enum PAGE_ROUTE {
   NEWS = '/news',
   FDA_RECOGNITION = '/fda-recognition',
   LEVELS = '/levels',
-  DX = '/diagnostics-levels',
-  PX = '/prognostics-levels',
+  DX = '/diagnostic-levels',
+  PX = '/prognostic-levels',
   V2 = '/therapeutic-levels',
   FDA_NGS = '/fda-levels',
 

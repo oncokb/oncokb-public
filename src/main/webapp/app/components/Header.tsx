@@ -1,19 +1,14 @@
 import * as React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import {Container, Nav, Navbar} from 'react-bootstrap';
 import oncokbImg from 'oncokb-styles/dist/images/logo/oncokb-white.svg';
-import { observer } from 'mobx-react';
+import {observer} from 'mobx-react';
 import WindowStore from 'app/store/WindowStore';
-import { RouterStore } from 'mobx-react-router';
-import { withRouter } from 'react-router';
-import { NavLink } from 'react-router-dom';
+import {RouterStore} from 'mobx-react-router';
+import {withRouter} from 'react-router';
+import {NavLink} from 'react-router-dom';
 import AccountMenu from 'app/pages/menus/account';
-import { action, observable } from 'mobx';
-import {
-  MSK_LOGO_ICON_CUTOFF,
-  ONCOKB_TM,
-  PAGE_ROUTE,
-  PAGE_TITLE,
-} from 'app/config/constants';
+import {action, observable} from 'mobx';
+import {MSK_LOGO_ICON_CUTOFF, ONCOKB_TM, PAGE_ROUTE, PAGE_TITLE,} from 'app/config/constants';
 import UserMessage from 'app/components/userMessager/UserMessage';
 import OncoKBSearch from 'app/components/oncokbSearch/OncoKBSearch';
 import classnames from 'classnames';
@@ -23,8 +18,8 @@ import AccountMessage from 'app/components/accountMessage/AccountMessage';
 import MskccLogo from 'app/components/MskccLogo';
 import AppStore from 'app/store/AppStore';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
-import { AppConfig } from 'app/appConfig';
-import { Location } from 'history';
+import {AppConfig} from 'app/appConfig';
+import {Location} from 'history';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -82,9 +77,13 @@ class Header extends React.Component<IHeaderProps> {
     {
       title: 'API / License',
       link: PAGE_ROUTE.API_ACCESS,
-      matchedPaths: [PAGE_ROUTE.TERMS, PAGE_ROUTE.REGISTER],
+      matchedPaths: [PAGE_ROUTE.API_ACCESS, PAGE_ROUTE.TERMS, PAGE_ROUTE.REGISTER],
     },
-    { title: 'About', link: PAGE_ROUTE.ABOUT },
+    {
+      title: 'About',
+      link: PAGE_ROUTE.ABOUT,
+      matchedPaths: [PAGE_ROUTE.ABOUT, PAGE_ROUTE.TEAM, PAGE_ROUTE.FDA_RECOGNITION, PAGE_ROUTE.SOP, PAGE_ROUTE.YEAR_END_SUMMARY]
+    },
     { title: 'News', link: PAGE_ROUTE.NEWS },
     { title: 'FAQ', link: PAGE_ROUTE.FAQ_ACCESS },
   ];

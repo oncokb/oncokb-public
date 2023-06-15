@@ -16,7 +16,7 @@ export const FdaTabDescription: React.FunctionComponent<{
       assigning their clinical significance. The assigned{' '}
       <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX} version={Version.FDA}>
          FDA level of evidence
-      </LevelOfEvidencePageLink>
+      </LevelOfEvidencePageLink>{' '}
       is based on these alterations being tested in Formalin Fixed Paraffin
       Embedded (FFPE) specimen types, except in cases where specimen type is not
       specified.
