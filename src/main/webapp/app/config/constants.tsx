@@ -470,6 +470,7 @@ export const DEFAULT_ANNOTATION: VariantAnnotation = {
 
   variantSummary: '',
 
+  vue: false,
   vus: false,
 };
 
