@@ -8,7 +8,7 @@ export const Linkout: React.FunctionComponent<{
 }> = props => {
   let updatedLink = props.link;
   if (props.addHttpsProtocol === undefined || props.addHttpsProtocol) {
-    if (!/http(s)?\/\/.*/.test(updatedLink)) {
+    if (!/http(s)?:\/\/.*/.test(updatedLink)) {
       updatedLink = `https://${updatedLink}`;
     }
   }
