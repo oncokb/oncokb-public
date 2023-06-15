@@ -9,6 +9,8 @@ import { setRecaptchaToken } from 'app/indexUtils';
 import client from 'app/shared/api/clientInstance';
 import { OncoKBError } from '../alert/ErrorAlertUtils';
 import * as Sentry from '@sentry/react';
+import { PAGE_ROUTE } from 'app/config/constants';
+import HomePage from 'app/pages/HomePage';
 
 export interface IRecaptchaBoundaryRoute extends RouteProps {
   isUserAuthenticated: boolean;
@@ -46,14 +48,13 @@ export class RecaptchaBoundaryRoute extends React.Component<
   }
 
   render() {
-    if (this.recaptcha.siteKey) {
+    if (this.recaptcha.siteKey && this.recaptcha !== undefined) {
       this.loadData();
 
       return this.recaptchaValidated ? (
         <ErrorBoundaryRoute {...this.props} />
       ) : (
-        <ErrorBoundaryRoute {...this.props} />
-        // <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
+        <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />
       );
     } else {
       return <ErrorBoundaryRoute {...this.props} />;
