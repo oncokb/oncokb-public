@@ -1,7 +1,7 @@
 import React from 'react';
-import { PAGE_ROUTE } from 'app/config/constants';
-import { Link } from 'react-router-dom';
-import { Version } from 'app/pages/LevelOfEvidencePage';
+import {LEVEL_TYPES, PAGE_ROUTE} from 'app/config/constants';
+import {Version} from 'app/pages/LevelOfEvidencePage';
+import {LevelOfEvidencePageLink} from "app/shared/links/LevelOfEvidencePageLink";
 
 export const FdaTabDescription: React.FunctionComponent<{
   hugoSymbol: string;
@@ -10,13 +10,13 @@ export const FdaTabDescription: React.FunctionComponent<{
     <span>
       A list of the tumor type-specific {props.hugoSymbol} alterations and the
       corresponding{' '}
-      <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}>
+      <LevelOfEvidencePageLink levelType={LEVEL_TYPES.FDA}>
         FDA Level of Evidence
-      </Link>{' '}
+      </LevelOfEvidencePageLink>{' '}
       assigning their clinical significance. The assigned{' '}
-      <Link to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA}`}>
-        FDA level of evidence
-      </Link>{' '}
+      <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX} version={Version.FDA}>
+         FDA level of evidence
+      </LevelOfEvidencePageLink>{' '}
       is based on these alterations being tested in Formalin Fixed Paraffin
       Embedded (FFPE) specimen types, except in cases where specimen type is not
       specified.

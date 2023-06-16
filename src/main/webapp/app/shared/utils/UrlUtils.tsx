@@ -222,10 +222,6 @@ export const WebinarLink: React.FunctionComponent<{}> = props => {
   );
 };
 
-export const getLoEPageLink = (version: Version) => {
-  return `${PAGE_ROUTE.LEVELS}#version=${version}`;
-};
-
 export const getActionableGenesPageLink = (
   levels?: string,
   sections?: string

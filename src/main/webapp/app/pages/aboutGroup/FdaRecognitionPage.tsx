@@ -1,22 +1,13 @@
-import {
-  PAGE_TITLE,
-  FdaRecognitionDisclaimer,
-  LEVEL_TYPES,
-  ONCOKB_TM,
-  PAGE_ROUTE,
-} from 'app/config/constants';
+import {FdaRecognitionDisclaimer, LEVEL_TYPES, ONCOKB_TM, PAGE_ROUTE, PAGE_TITLE,} from 'app/config/constants';
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import { Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { Linkout } from 'app/shared/links/Linkout';
-import { Version } from 'app/pages/LevelOfEvidencePage';
-import {
-  getActionableGenesPageLink,
-  getLoEPageLink,
-  SopPageLink,
-} from 'app/shared/utils/UrlUtils';
-import { getPageTitle } from 'app/shared/utils/Utils';
+import {Col, Row} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
+import {Linkout} from 'app/shared/links/Linkout';
+import {getActionableGenesPageLink, SopPageLink,} from 'app/shared/utils/UrlUtils';
+import {getPageTitle} from 'app/shared/utils/Utils';
+import {LevelOfEvidencePageLink} from "app/shared/links/LevelOfEvidencePageLink";
+import {Version} from "app/pages/LevelOfEvidencePage";
 
 const FdaRecognitionPage = () => {
   return (
@@ -72,12 +63,12 @@ const FdaRecognitionPage = () => {
             <h5>Important Database Links</h5>
             <ul>
               <li>
-                <SopPageLink version={2.0} />
+                <SopPageLink version={2.0}/>
               </li>
               <li>
-                <Link to={getLoEPageLink(Version.FDA)}>
+                <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX} version={Version.FDA}>
                   Mapping to the FDA Levels of Evidence
-                </Link>
+                </LevelOfEvidencePageLink>
               </li>
               <li>
                 <Link to={PAGE_ROUTE.FAQ_ACCESS}>

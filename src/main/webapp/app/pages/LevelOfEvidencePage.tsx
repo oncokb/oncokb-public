@@ -365,7 +365,6 @@ export default class LevelOfEvidencePage extends React.Component<
         <Row className="justify-content-center">
           <Col lg={10}>
             <div className="levels-of-evidence">
-              {this.version}
               <>
                 <Tabs
                   defaultActiveKey={
@@ -375,6 +374,7 @@ export default class LevelOfEvidencePage extends React.Component<
                       ? Version[this.version]
                       : Version.V2
                   }
+                  activeKey={this.activeKey}
                   id="level-type-tabs"
                   onSelect={k => this.toggleVersion(Version[k || Version.V2])}
                 >
