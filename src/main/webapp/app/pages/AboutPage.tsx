@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {Col, Row} from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import processImg from 'content/images/process.png';
 import AppStore from 'app/store/AppStore';
-import {inject, observer} from 'mobx-react';
-import {CitationText} from 'app/components/CitationText';
-import {Link} from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import { CitationText } from 'app/components/CitationText';
+import { Link } from 'react-router-dom';
 import {
   BILIBILI_VIDEO_IDS,
   LEVEL_TYPES,
@@ -14,13 +14,17 @@ import {
   YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
-import {IReactionDisposer, observable} from 'mobx';
+import { IReactionDisposer, observable } from 'mobx';
 import Tabs from 'react-responsive-tabs';
 import Iframe from 'react-iframe';
-import {RouterStore} from 'mobx-react-router';
-import {getBilibiliLink, getPageTitle, getYouTubeLink,} from 'app/shared/utils/Utils';
+import { RouterStore } from 'mobx-react-router';
+import {
+  getBilibiliLink,
+  getPageTitle,
+  getYouTubeLink,
+} from 'app/shared/utils/Utils';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
-import {LevelOfEvidencePageLink} from "app/shared/links/LevelOfEvidencePageLink";
+import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 
 type AboutPageProps = { appStore: AppStore; routing: RouterStore };
 

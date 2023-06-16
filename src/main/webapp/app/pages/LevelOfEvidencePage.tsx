@@ -11,7 +11,13 @@ import {
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
 import { inject, observer } from 'mobx-react';
-import { action, IReactionDisposer, observable, reaction } from 'mobx';
+import {
+  action,
+  computed,
+  IReactionDisposer,
+  observable,
+  reaction,
+} from 'mobx';
 import * as QueryString from 'query-string';
 import { RouterStore } from 'mobx-react-router';
 import autobind from 'autobind-decorator';
@@ -36,6 +42,13 @@ export enum Version {
   AAC = 'AAC',
   DX = 'DX',
   PX = 'PX',
+}
+
+export enum TabKey {
+  V2 = PAGE_ROUTE.V2,
+  DX = PAGE_ROUTE.DX,
+  PX = PAGE_ROUTE.PX,
+  FDA_NGS = PAGE_ROUTE.FDA_NGS,
 }
 
 const TAB_TITLES = {
@@ -121,11 +134,18 @@ const LEVEL_FILE_NAME: { [key in Version]: string } = {
     'CDRH’s-Approach-to-Tumor-Profiling-Next-Generation-Sequencing-Tests',
 };
 
-const REDIRECTPAGE: { [key in Version]?: PAGE_ROUTE } = {
+const VERSION_TO_PAGE: { [key in Version]?: PAGE_ROUTE } = {
   [Version.V2]: PAGE_ROUTE[Version.V2],
   [Version.DX]: PAGE_ROUTE[Version.DX],
   [Version.PX]: PAGE_ROUTE[Version.PX],
   [Version.FDA_NGS]: PAGE_ROUTE[Version.FDA_NGS],
+};
+
+const PAGE_TO_VERSION: { [key in PAGE_ROUTE]?: Version } = {
+  [PAGE_ROUTE.V2]: Version.V2,
+  [PAGE_ROUTE.DX]: Version.DX,
+  [PAGE_ROUTE.PX]: Version.PX,
+  [PAGE_ROUTE.FDA_NGS]: Version.FDA_NGS,
 };
 
 @inject('routing', 'windowStore')
@@ -135,16 +155,14 @@ export default class LevelOfEvidencePage extends React.Component<
   any
 > {
   @observable version: Version = Version.V2;
-  @observable activeKey: Version = Version.V2;
   pathname: string = window.location.pathname;
 
   readonly reactions: IReactionDisposer[] = [];
 
   redirectToNewPage = (version: Version) => {
-    const newPath = REDIRECTPAGE[version.toUpperCase()];
+    const newPath = VERSION_TO_PAGE[version.toUpperCase()];
     if (newPath) {
       this.props.routing.history.push(newPath);
-      this.updateActiveKey(version);
     }
 
     if (window.location.pathname === PAGE_ROUTE.V2) {
@@ -168,6 +186,11 @@ export default class LevelOfEvidencePage extends React.Component<
 
   constructor(props: Readonly<LevelOfEvidencePageProps>) {
     super(props);
+
+    if (Object.keys(PAGE_TO_VERSION).includes(window.location.pathname)) {
+      this.version = PAGE_TO_VERSION[window.location.pathname];
+    }
+
     this.reactions.push(
       reaction(
         () => [props.routing.location.hash],
@@ -188,19 +211,6 @@ export default class LevelOfEvidencePage extends React.Component<
         }
       )
     );
-  }
-
-  componentDidMount(): void {
-    if (!window.location.pathname.includes(PAGE_ROUTE[Version.V2])) {
-      this.getVersionFromPathname();
-    }
-    this.redirectToNewPage(this.version);
-  }
-
-  componentDidUpdate(): void {
-    if (window.location.pathname !== this.pathname) {
-      this.getVersionFromPathname();
-    }
   }
 
   componentWillUnmount(): void {
@@ -234,16 +244,23 @@ export default class LevelOfEvidencePage extends React.Component<
     this.version = version;
   }
 
-  @action
-  updateActiveKey = (version: Version) => {
-    this.activeKey = [Version.DX, Version.PX, Version.FDA_NGS].includes(version)
-      ? Version[version]
-      : Version.V2;
-  };
+  @computed
+  get activeKey() {
+    switch (this.version) {
+      case Version.DX:
+        return Version.DX;
+      case Version.PX:
+        return Version.PX;
+      case Version.FDA_NGS:
+        return Version.FDA_NGS;
+      default:
+        return Version.V2;
+    }
+  }
 
   render() {
     const tabs: any[] = [];
-    [Version.V2, Version.DX, Version.PX, Version.FDA_NGS].forEach(version => {
+    Object.keys(TabKey).forEach(version => {
       tabs.push(
         <Tab
           eventKey={Version[version]}
@@ -367,13 +384,7 @@ export default class LevelOfEvidencePage extends React.Component<
             <div className="levels-of-evidence">
               <>
                 <Tabs
-                  defaultActiveKey={
-                    [Version.DX, Version.PX, Version.FDA_NGS].includes(
-                      this.version
-                    )
-                      ? Version[this.version]
-                      : Version.V2
-                  }
+                  defaultActiveKey={this.activeKey}
                   activeKey={this.activeKey}
                   id="level-type-tabs"
                   onSelect={k => this.toggleVersion(Version[k || Version.V2])}
