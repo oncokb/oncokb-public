@@ -1,10 +1,9 @@
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import Login from 'app/components/login/LoginPage';
 import { Logout } from 'app/components/login/logout';
-import { RegisterPage } from 'app/pages/RegisterPage';
 import { PrivateRoute } from 'app/shared/auth/private-route';
-import { AUTHORITIES, PAGE_ROUTE, PAGE_TITLE } from 'app/config/constants';
+import { AUTHORITIES, PAGE_ROUTE } from 'app/config/constants';
 import HomePage from 'app/pages/HomePage';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 import CancerGenesPage from 'app/pages/CancerGenesPage';
@@ -21,7 +20,7 @@ import AccountPassword from 'app/components/account/AccountPassword';
 import AdminRoutes from 'app/routes/AdminRoutes';
 import PageContainer from 'app/components/PageContainer';
 import React from 'react';
-import LevelOfEvidencePage from 'app/pages/LevelOfEvidencePage';
+import LevelOfEvidencePage, { Version } from 'app/pages/LevelOfEvidencePage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
 import { RecaptchaBoundaryRoute } from '../shared/auth/RecaptchaBoundaryRoute';
 import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
@@ -34,7 +33,34 @@ import { AboutPageNavTab } from 'app/pages/aboutGroup/AboutPageNavTab';
 import { ApiAccessPageNavTab } from 'app/pages/apiAccessGroup/ApiAccessPageNavTab';
 import FAQPage from 'app/pages/FAQPage';
 import ReadOnlyMode from 'app/shared/readonly/ReadOnlyMode';
-import { Version } from 'app/pages/LevelOfEvidencePage';
+import * as QueryString from 'query-string';
+
+const getOldLevelsRedirectRoute = (hash: string) => {
+  const queryStrings = QueryString.parse(hash) as {
+    version: Version;
+  };
+  const redirectPath = {
+    pathname: PAGE_ROUTE.V2,
+    hash: '',
+  };
+  if (queryStrings.version) {
+    switch (queryStrings.version) {
+      case Version.DX:
+        redirectPath.pathname = PAGE_ROUTE.DX;
+        break;
+      case Version.PX:
+        redirectPath.pathname = PAGE_ROUTE.PX;
+        break;
+      case Version.FDA_NGS:
+        redirectPath.pathname = PAGE_ROUTE.FDA_NGS;
+        break;
+      default:
+        redirectPath.hash = window.location.hash;
+        break;
+    }
+  }
+  return <Redirect to={redirectPath} />;
+};
 
 const AppRouts = (props: {
   authenticationStore: AuthenticationStore;
@@ -155,12 +181,7 @@ const AppRouts = (props: {
             component={ApiAccessPageNavTab}
           />
           <Route exact path={PAGE_ROUTE.LEVELS}>
-            <Redirect
-              to={{
-                pathname: PAGE_ROUTE.V2,
-                hash: window.location.hash,
-              }}
-            />
+            {getOldLevelsRedirectRoute(window.location.hash)}
           </Route>
           <Route exact path={PAGE_ROUTE.DX} component={LevelOfEvidencePage} />
           <Route exact path={PAGE_ROUTE.PX} component={LevelOfEvidencePage} />
