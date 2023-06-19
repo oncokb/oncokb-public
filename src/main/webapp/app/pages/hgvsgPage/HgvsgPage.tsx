@@ -10,7 +10,9 @@ import { RouterStore } from 'mobx-react-router';
 import DocumentTitle from 'react-document-title';
 import { Else, If, Then } from 'react-if';
 import { RouteComponentProps } from 'react-router';
-import AnnotationPage from 'app/pages/annotationPage/AnnotationPage';
+import AnnotationPage, {
+  AnnotationType,
+} from 'app/pages/annotationPage/AnnotationPage';
 import * as QueryString from 'query-string';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
@@ -175,6 +177,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
                   appStore={this.props.appStore}
                   windowStore={this.props.windowStore}
                   authenticationStore={this.props.authenticationStore}
+                  annotationType={AnnotationType.HGVSG}
                   hugoSymbol={
                     this.store.annotationResultByHgvsg.result.query.hugoSymbol
                   }

@@ -65,9 +65,15 @@ import gnLogo from 'content/images/gn_logo.png';
 import revueLogo from 'content/images/revue_logo.png';
 import { PowerBySource } from 'app/pages/annotationPage/PowerBySource';
 
+export enum AnnotationType {
+  PROTEIN_CHANGE,
+  HGVSG,
+}
+
 export type IAnnotationPage = {
   appStore: AppStore;
   windowStore: WindowStore;
+  annotationType: AnnotationType;
   hugoSymbol: string;
   oncogene?: boolean;
   tsg?: boolean;
@@ -463,21 +469,23 @@ export default class AnnotationPage extends React.Component<
               );
             })}
           </div>
-          <div className={'my-1 d-flex flex-column align-items-center'}>
-            <div>HGVSg annotation powered by</div>
-            <PowerBySource
-              name={'Genome Nexus'}
-              url={'genomenexus.org'}
-              logo={gnLogo}
-            />
-            {this.props.annotation.vue && (
+          {this.props.annotationType === AnnotationType.HGVSG && (
+            <div className={'my-1 d-flex flex-column align-items-center'}>
+              <div>HGVSg annotation powered by</div>
               <PowerBySource
-                name={'reVUE'}
-                url={'cancerrevue.org'}
-                logo={revueLogo}
+                name={'Genome Nexus'}
+                url={'genomenexus.org'}
+                logo={gnLogo}
               />
-            )}
-          </div>
+              {this.props.annotation.vue && (
+                <PowerBySource
+                  name={'reVUE'}
+                  url={'cancerrevue.org'}
+                  logo={revueLogo}
+                />
+              )}
+            </div>
+          )}
         </div>
         {this.props.annotation.mutationEffect.description && (
           <Row>

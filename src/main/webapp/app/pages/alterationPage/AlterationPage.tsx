@@ -18,7 +18,9 @@ import DocumentTitle from 'react-document-title';
 import { Else, If, Then } from 'react-if';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { RouteComponentProps } from 'react-router';
-import AnnotationPage from 'app/pages/annotationPage/AnnotationPage';
+import AnnotationPage, {
+  AnnotationType,
+} from 'app/pages/annotationPage/AnnotationPage';
 import * as QueryString from 'query-string';
 import {
   AlterationPageHashQueries,
@@ -196,6 +198,7 @@ export default class AlterationPage extends React.Component<
                   appStore={this.props.appStore}
                   windowStore={this.props.windowStore}
                   authenticationStore={this.props.authenticationStore}
+                  annotationType={AnnotationType.PROTEIN_CHANGE}
                   hugoSymbol={this.store.hugoSymbol}
                   oncogene={this.store.gene.result.oncogene}
                   tsg={this.store.gene.result.tsg}
