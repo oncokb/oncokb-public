@@ -84,7 +84,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/api/v1/info").permitAll()
             .antMatchers("/api/v1/levels/**").permitAll()
-            .antMatchers("/api/v1/therpeutic-levels/**").permitAll()
+            .antMatchers("/api/v1/therapeutic-levels/**").permitAll()
             .antMatchers("/api/v1/diagnostic-levels/**").permitAll()
             .antMatchers("/api/v1/prognostic-levels/**").permitAll()
             .antMatchers("/api/authenticate").permitAll()
