@@ -67,6 +67,7 @@ const brafV600eHgvsgVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-
 // APC G279Ffs*10 HGVSg page - API response data
 // Mainly test the revue icon is shown properly
 const apcGeneQuery = fs.readFileSync(`${DATA_DIR}api-v1-genes-APC.json`).toString();
+const apcBiologicalVariants = fs.readFileSync(`${DATA_DIR}api-private-search-variants-bio-APC.json`).toString();
 const apcFSHgvsgVariantAnnotation = fs.readFileSync(`${DATA_DIR}api-private-utils-variantAnnotation-APC-HGVSG.json`).toString();
 
 
@@ -245,9 +246,6 @@ function getMockResponse(url){
       };
       break;
 
-
-
-
     // TP53 Deletion
     case `${SERVER_URL}api/private/utils/numbers/gene/TP53`:
       res = {
@@ -393,6 +391,13 @@ function getMockResponse(url){
         body: []
       };
       break;
+    case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=APC`:
+      res = {
+        status: 200,
+        contentType: 'application/json',
+        body: apcBiologicalVariants
+      };
+      break;
     case `${SERVER_URL}api/private/utils/variantAnnotation?referenceGenome=GRCh37&hgvsg=5%3Ag.112151184A%3EG`:
       res = {
         status: 200,
@@ -476,7 +481,7 @@ describe('Tests with login', () => {
 
   it('HGVSg Page - reVUE', async() => {
     // this is a variant that reannotated by reVUE. APC G279Ffs*10
-    await page.goto(`${CLIENT_URL}hgvsg/5:g.112151184A>G\t?refGenome=GRCh37`);
+    await page.goto(`${CLIENT_URL}hgvsg/5:g.112151184A>G?refGenome=GRCh37`);
     await page.setViewport(VIEW_PORT_1080);
     await page.waitFor(WAITING_TIME);
     let image = await page.screenshot(getScreenshotConfig('HGVSg Page on VUE variant with Login'));
