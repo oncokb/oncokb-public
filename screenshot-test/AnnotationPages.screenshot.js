@@ -388,7 +388,7 @@ function getMockResponse(url){
       res = {
         status: 200,
         contentType: 'application/json',
-        body: []
+        body: '[]'
       };
       break;
     case `${SERVER_URL}api/private/search/variants/biological?hugoSymbol=APC`:
