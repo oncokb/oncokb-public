@@ -1,35 +1,30 @@
 import * as React from 'react';
-import { Row, Col, Button, Modal } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import processImg from 'content/images/process.png';
 import AppStore from 'app/store/AppStore';
 import { inject, observer } from 'mobx-react';
 import { CitationText } from 'app/components/CitationText';
 import { Link } from 'react-router-dom';
 import {
-  ANNOTATION_PAGE_TAB_KEYS,
   BILIBILI_VIDEO_IDS,
-  PAGE_TITLE,
+  LEVEL_TYPES,
   ONCOKB_TM,
   PAGE_ROUTE,
-  QUERY_SEPARATOR_FOR_QUERY_STRING,
-  SOP_LINK,
+  PAGE_TITLE,
   YOUTUBE_VIDEO_IDS,
 } from 'app/config/constants';
 import DocumentTitle from 'react-document-title';
-import { Linkout } from 'app/shared/links/Linkout';
-import { observable, IReactionDisposer, reaction, computed } from 'mobx';
+import { IReactionDisposer, observable } from 'mobx';
 import Tabs from 'react-responsive-tabs';
 import Iframe from 'react-iframe';
-import * as QueryString from 'query-string';
-import _ from 'lodash';
 import { RouterStore } from 'mobx-react-router';
 import {
   getBilibiliLink,
   getPageTitle,
   getYouTubeLink,
 } from 'app/shared/utils/Utils';
-import { WebinarLink } from 'app/shared/utils/UrlUtils';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
+import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 
 type AboutPageProps = { appStore: AppStore; routing: RouterStore };
 
@@ -142,9 +137,9 @@ export class AboutPage extends React.Component<AboutPageProps> {
               <p>
                 Alteration- and tumor type-specific therapeutic implications are
                 classified using the{' '}
-                <Link to={PAGE_ROUTE.LEVELS}>
+                <LevelOfEvidencePageLink levelType={LEVEL_TYPES.TX}>
                   {ONCOKB_TM} Levels of Evidence
-                </Link>{' '}
+                </LevelOfEvidencePageLink>{' '}
                 system, which assigns clinical actionability to individual
                 mutational events.
               </p>

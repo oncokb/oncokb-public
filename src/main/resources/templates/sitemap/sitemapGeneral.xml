@@ -2,7 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:th="http://www.thymeleaf.org">
   <url>
-    <loc th:text="${baseUrl}+'/levels'"></loc>
+    <loc th:text="${baseUrl}+'/therapeutic-levels'"></loc>
+    <changefreq>yearly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc th:text="${baseUrl}+'/prognostic-levels'"></loc>
+    <changefreq>yearly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc th:text="${baseUrl}+'/diagnostic-levels'"></loc>
     <changefreq>yearly</changefreq>
     <priority>1.0</priority>
   </url>

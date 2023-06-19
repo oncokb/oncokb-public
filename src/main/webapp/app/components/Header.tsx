@@ -24,6 +24,7 @@ import MskccLogo from 'app/components/MskccLogo';
 import AppStore from 'app/store/AppStore';
 import OptimizedImage from 'app/shared/image/OptimizedImage';
 import { AppConfig } from 'app/appConfig';
+import { Location } from 'history';
 
 export interface IHeaderProps {
   isUserAuthenticated: boolean;
@@ -40,6 +41,25 @@ export interface IHeaderProps {
 type SubpageLink = {
   title: string;
   link: string;
+  matchedPaths?: PAGE_ROUTE[];
+};
+
+const checkIfNavLinkIsActive = (
+  title: string,
+  location: Location,
+  subPages: SubpageLink[]
+) => {
+  const currentPage: SubpageLink | undefined = subPages.find(
+    page => page.title === title
+  );
+
+  if (!currentPage) return false;
+  const currentLink = currentPage.matchedPaths?.find(link =>
+    location.pathname.includes(link)
+  );
+
+  if (currentLink) return true;
+  return false;
 };
 
 // @ts-ignore
@@ -47,11 +67,38 @@ type SubpageLink = {
 @observer
 class Header extends React.Component<IHeaderProps> {
   private subPages: SubpageLink[] = [
-    { title: 'Levels of Evidence', link: PAGE_ROUTE.LEVELS },
+    {
+      title: 'Levels of Evidence',
+      link: PAGE_ROUTE.V2,
+      matchedPaths: [
+        PAGE_ROUTE.V2,
+        PAGE_ROUTE.DX,
+        PAGE_ROUTE.PX,
+        PAGE_ROUTE.FDA_NGS,
+      ],
+    },
     { title: 'Actionable Genes', link: PAGE_ROUTE.ACTIONABLE_GENE },
     { title: 'Cancer Genes', link: PAGE_ROUTE.CANCER_GENES },
-    { title: 'API / License', link: PAGE_ROUTE.API_ACCESS },
-    { title: 'About', link: PAGE_ROUTE.ABOUT },
+    {
+      title: 'API / License',
+      link: PAGE_ROUTE.API_ACCESS,
+      matchedPaths: [
+        PAGE_ROUTE.API_ACCESS,
+        PAGE_ROUTE.TERMS,
+        PAGE_ROUTE.REGISTER,
+      ],
+    },
+    {
+      title: 'About',
+      link: PAGE_ROUTE.ABOUT,
+      matchedPaths: [
+        PAGE_ROUTE.ABOUT,
+        PAGE_ROUTE.TEAM,
+        PAGE_ROUTE.FDA_RECOGNITION,
+        PAGE_ROUTE.SOP,
+        PAGE_ROUTE.YEAR_END_SUMMARY,
+      ],
+    },
     { title: 'News', link: PAGE_ROUTE.NEWS },
     { title: 'FAQ', link: PAGE_ROUTE.FAQ_ACCESS },
   ];
@@ -74,7 +121,19 @@ class Header extends React.Component<IHeaderProps> {
 
   getLink(page: SubpageLink) {
     return (
-      <NavLink to={page.link} key={page.title} className={'mr-auto nav-item'}>
+      <NavLink
+        to={page.link}
+        key={page.title}
+        className={'mr-auto nav-item'}
+        isActive={(match, location) => {
+          if (
+            match ||
+            checkIfNavLinkIsActive(page.title, location, this.subPages)
+          )
+            return true;
+          return false;
+        }}
+      >
         {page.title}
       </NavLink>
     );

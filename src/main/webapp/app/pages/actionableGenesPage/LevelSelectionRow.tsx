@@ -4,19 +4,16 @@ import {
   COMPONENT_PADDING,
   LEVEL_BUTTON_DESCRIPTION,
   LEVEL_CLASSIFICATION,
-  LEVEL_TYPE_NAMES,
   LEVEL_TYPES,
   LEVELS,
   ONCOKB_TM,
-  PAGE_ROUTE,
 } from 'app/config/constants';
 import React from 'react';
 import { Button, Col, Collapse, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import { observer } from 'mobx-react';
 import { FDA_L1_DISABLED_BTN_TOOLTIP } from 'app/pages/genePage/FdaUtils';
-import { Link } from 'react-router-dom';
-import { Version } from 'app/pages/LevelOfEvidencePage';
+import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 
 type LevelSelectionRowProps = {
   levelType: LEVEL_TYPES;
@@ -131,12 +128,8 @@ export default class LevelSelectionRow extends React.Component<
                       Below is the FDA-recognized content in {ONCOKB_TM},
                       including tumor type-specific alterations and their
                       corresponding{' '}
-                      <Link
-                        to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
-                      >
-                        FDA level of evidence
-                      </Link>
-                      . The assigned FDA level of evidence is based on these
+                      <LevelOfEvidencePageLink levelType={LEVEL_TYPES.FDA} />.
+                      The assigned FDA level of evidence is based on these
                       alterations being tested in Formalin Fixed Paraffin
                       Embedded (FFPE) specimen types, except in cases where
                       specimen type is not specified.

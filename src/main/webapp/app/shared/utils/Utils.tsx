@@ -1,32 +1,33 @@
 import {
+  Article,
   Citations,
   TreatmentDrug,
-  Article,
 } from 'app/shared/api/generated/OncoKbAPI';
 import _ from 'lodash';
 import React, { ReactNode } from 'react';
 import {
+  AMPLIFICATION,
   APP_LOCAL_DATE_FORMAT,
   APP_LOCAL_DATETIME_FORMAT_Z,
   APP_TIMESTAMP_FORMAT,
-  GENERAL_ONCOGENICITY,
-  ONCOGENICITY_CLASS_NAMES,
-  PAGE_ROUTE,
-  SHORTEN_TEXT_FROM_LIST_THRESHOLD,
-  TABLE_COLUMN_KEY,
-  ONCOGENICITY,
-  LEVELS,
-  LEVEL_PRIORITY,
-  ONCOGENIC_MUTATIONS,
   DELETION,
   FUSIONS,
-  TRUNCATING_MUTATIONS,
-  AMPLIFICATION,
   GAIN_OF_FUNCTION_MUTATIONS,
+  GENERAL_ONCOGENICITY,
+  LEVEL_PRIORITY,
+  LEVEL_TYPES,
+  LEVELS,
   LOSS_OF_FUNCTION_MUTATIONS,
-  SWITCH_OF_FUNCTION_MUTATIONS,
-  ONCOKB_TM,
+  ONCOGENIC_MUTATIONS,
+  ONCOGENICITY,
+  ONCOGENICITY_CLASS_NAMES,
   ONCOKB,
+  ONCOKB_TM,
+  PAGE_ROUTE,
+  SHORTEN_TEXT_FROM_LIST_THRESHOLD,
+  SWITCH_OF_FUNCTION_MUTATIONS,
+  TABLE_COLUMN_KEY,
+  TRUNCATING_MUTATIONS,
 } from 'app/config/constants';
 import classnames from 'classnames';
 import {
@@ -58,6 +59,7 @@ import { COLOR_BLUE } from 'app/config/theme';
 import * as styles from 'app/index.module.scss';
 import { Version } from 'app/pages/LevelOfEvidencePage';
 import { Link } from 'react-router-dom';
+import { LevelOfEvidencePageLink } from 'app/shared/links/LevelOfEvidencePageLink';
 
 // Likely Oncogenic, Predicted Oncogenic will be converted to Oncogenic
 // Likely Neutral will be converted to Neutral
@@ -451,12 +453,9 @@ export function getDefaultColumnDefinition<T>(
                 <span>
                   For more information about the FDA Level of Evidence, please
                   see{' '}
-                  <Link
-                    to={`${PAGE_ROUTE.LEVELS}#version=${Version.FDA_NGS}`}
-                    className={'font-bold'}
-                  >
-                    HERE
-                  </Link>
+                  <LevelOfEvidencePageLink levelType={LEVEL_TYPES.FDA}>
+                    <b>HERE</b>
+                  </LevelOfEvidencePageLink>
                   .
                 </span>
               }
