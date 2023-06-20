@@ -51,6 +51,7 @@
     "react-day-picker": "^7.4.8",
     "react-document-title": "^2.0.3",
     "react-dom": "16.13.1",
+    "react-ga4": "^2.1.0",
     "react-highlight-words": "^0.16.0",
     "react-hot-loader": "4.12.20",
     "react-html-parser": "^2.0.2",
