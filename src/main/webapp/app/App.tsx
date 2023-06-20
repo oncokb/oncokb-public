@@ -95,7 +95,7 @@ class App extends React.Component {
 
     this.checkHash(history);
 
-    // Install Ggoogle Analytics 4 if GA project id is configured on server side
+    // Install Google Analytics 4 if GA project id is configured on server side
     if (AppConfig.serverConfig?.googleAnalyticsProjectId) {
       ReactGA.initialize(AppConfig.serverConfig.googleAnalyticsProjectId);
     }
