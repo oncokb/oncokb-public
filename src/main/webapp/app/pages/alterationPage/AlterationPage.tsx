@@ -6,7 +6,11 @@ import AppStore from 'app/store/AppStore';
 import LoadingIndicator, {
   LoaderSize,
 } from 'app/components/loadingIndicator/LoadingIndicator';
-import { ANNOTATION_PAGE_TAB_KEYS, DEFAULT_GENE } from 'app/config/constants';
+import {
+  ANNOTATION_PAGE_TAB_KEYS,
+  DEFAULT_GENE,
+  PAGE_ROUTE,
+} from 'app/config/constants';
 import {
   decodeSlash,
   encodeSlash,
@@ -17,7 +21,7 @@ import { RouterStore } from 'mobx-react-router';
 import DocumentTitle from 'react-document-title';
 import { Else, If, Then } from 'react-if';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
-import { RouteComponentProps } from 'react-router';
+import { Route, RouteComponentProps } from 'react-router';
 import AnnotationPage from 'app/pages/annotationPage/AnnotationPage';
 import * as QueryString from 'query-string';
 import {
@@ -27,6 +31,12 @@ import {
 import autobind from 'autobind-decorator';
 import WindowStore from 'app/store/WindowStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
+import ReCAPTCHA from 'app/shared/recaptcha/recaptcha';
+import { setRecaptchaToken } from 'app/indexUtils';
+import client from 'app/shared/api/clientInstance';
+import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
+import * as Sentry from '@sentry/react';
+import HomePage from '../HomePage';
 
 interface MatchParams {
   hugoSymbol: string;
@@ -52,6 +62,33 @@ export default class AlterationPage extends React.Component<
   readonly reactions: IReactionDisposer[] = [];
 
   private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
+
+  private recaptcha = new ReCAPTCHA();
+
+  recaptchaValidated: boolean;
+  recaptchaError: any;
+
+  componentDidMount(): void {
+    try {
+      if (this.recaptcha !== undefined) {
+        this.recaptcha.getToken().then(token => setRecaptchaToken(token));
+        client
+          .validateRecaptchaUsingGET({})
+          .then(this.successToValidate, this.failedToValidate);
+      }
+    } catch (e) {
+      this.recaptchaError = e;
+    }
+  }
+
+  successToValidate() {
+    this.recaptchaValidated = true;
+  }
+
+  failedToValidate(error: OncoKBError) {
+    this.recaptchaValidated = false;
+    Sentry.captureException(error);
+  }
 
   constructor(props: any) {
     super(props);
@@ -183,6 +220,10 @@ export default class AlterationPage extends React.Component<
   }
 
   render() {
+    if (this.recaptchaValidated !== undefined && !this.recaptchaValidated) {
+      return <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />;
+    }
+
     return (
       <DocumentTitle title={this.documentTitle}>
         <If condition={this.pageShouldBeRendered}>

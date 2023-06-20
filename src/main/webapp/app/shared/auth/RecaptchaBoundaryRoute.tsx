@@ -26,10 +26,9 @@ export class RecaptchaBoundaryRoute extends React.Component<
   @observable recaptchaValidated: boolean;
   @observable recaptchaError: any;
 
-  async loadData() {
+  loadData() {
     try {
-      const token: string = await this.recaptcha.getToken();
-      setRecaptchaToken(token);
+      this.recaptcha.getToken().then(token => setRecaptchaToken(token));
       client
         .validateRecaptchaUsingGET({})
         .then(this.successToValidate, this.failedToValidate);
@@ -48,7 +47,12 @@ export class RecaptchaBoundaryRoute extends React.Component<
   }
 
   render() {
-    if (this.recaptcha.siteKey && this.recaptcha !== undefined) {
+    if (
+      this.recaptcha.siteKey &&
+      this.recaptcha !== undefined &&
+      !this.recaptchaValidated &&
+      this.recaptchaError == undefined
+    ) {
       this.loadData();
 
       return this.recaptchaValidated ? (

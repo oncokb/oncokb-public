@@ -3,7 +3,7 @@ package org.mskcc.cbio.oncokb.web.rest;
 import org.mskcc.cbio.oncokb.OncokbPublicApp;
 import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
-import org.mskcc.cbio.oncokb.config.application.RecaptchaProperties;
+import org.mskcc.cbio.oncokb.config.application.FrontendProperties;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
@@ -65,17 +65,17 @@ public class AccountResourceIT {
     @Autowired
     private ApplicationProperties applicationProperties;
 
-    RecaptchaProperties recaptchaProp;
+    FrontendProperties frontendProps;
 
     private AccountResource accountResource;
 
     @BeforeEach
     public void setUp() throws IOException {
-        recaptchaProp = new RecaptchaProperties();
-        recaptchaProp.setProjectId("symbolic-nation-320615");
-        recaptchaProp.setSiteKey("6LfAOe4jAAAAANjzxWQ8mKilcvk1QvLLohd7EV7F");
-        recaptchaProp.setThreshold((float) 0.5);
-        applicationProperties.setRecaptcha(recaptchaProp);
+        frontendProps = new FrontendProperties();
+        frontendProps.setRecaptchaProjectId("symbolic-nation-320615");
+        frontendProps.setRecaptchaSiteKey("6LfAOe4jAAAAANjzxWQ8mKilcvk1QvLLohd7EV7F");
+        frontendProps.setRecaptchaThreshold((float) 0.5);
+        applicationProperties.setFrontend(frontendProps);
 
         accountResource = new AccountResource(userRepository, userService, null, null, null, null, null, null, passwordEncoder, null, null, applicationProperties);
     }
