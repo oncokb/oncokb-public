@@ -1,0 +1,53 @@
+{
+  "query": {
+    "id": null,
+    "referenceGenome": "GRCh37",
+    "hugoSymbol": "APC",
+    "entrezGeneId": 324,
+    "alteration": "G279Ffs*10",
+    "alterationType": null,
+    "svType": null,
+    "tumorType": null,
+    "consequence": "splice_region_variant",
+    "proteinStart": 279,
+    "proteinEnd": 10,
+    "hgvs": "5:g.112151184A>G"
+  },
+  "geneExist": true,
+  "variantExist": false,
+  "alleleExist": false,
+  "oncogenic": "Likely Oncogenic",
+  "mutationEffect": {
+    "knownEffect": "Likely Loss-of-function",
+    "description": "Truncating APC mutations result in loss of full-length APC protein leading to impaired or abnormal APC function. APC deregulation is associated with accumulation of β-catenin, an oncogenic transcription factor, which in turn leads to aberrant target gene expression and tumorigenesis (PMID: 11062151). APC truncating mutations are typically early events occurring on a single allele (germline or somatic); however, the tumor often acquires a second hit on the second allele, reducing the overall amount of functional APC in the cell (PMID: 11257105). Furthermore, expression of truncating mutations of APC has been shown to result in chromosomal instability in a dominant manner, postulated to play an important role in the accumulation of additional oncogenic alterations (PMID: 15561772).",
+    "citations": {
+      "pmids": [
+        "11062151",
+        "15561772",
+        "11257105"
+      ],
+      "abstracts": []
+    }
+  },
+  "highestSensitiveLevel": null,
+  "highestResistanceLevel": null,
+  "highestDiagnosticImplicationLevel": null,
+  "highestPrognosticImplicationLevel": null,
+  "highestFdaLevel": null,
+  "otherSignificantSensitiveLevels": [],
+  "otherSignificantResistanceLevels": [],
+  "hotspot": false,
+  "geneSummary": "APC, a tumor suppressor involved in WNT signaling, is recurrently altered in colorectal cancer.",
+  "variantSummary": "The APC G279Ffs*10 mutation is likely oncogenic.",
+  "tumorTypeSummary": "",
+  "prognosticSummary": "",
+  "diagnosticSummary": "",
+  "diagnosticImplications": [],
+  "prognosticImplications": [],
+  "treatments": [],
+  "dataVersion": "v4.5",
+  "lastUpdate": "10/23/2017",
+  "background": "APC is a negative regulator of the pro-oncogenic WNT/ β-catenin signaling pathway (PMID: 8259518, 8259519). The main tumor suppressive role of APC is to modulate intracellular levels of β-catenin (PMID: 11978510). APC is an essential member of the destruction complex, which targets cytosolic β-catenin for ubiquitination and degradation (PMID: 10984057). When the activity of APC is lost, there is an aberrant increase in WNT-pathway activation, often leading to hyperplasia and eventually tumor progression (PMID: 8259511). A threshold of APC expression is required to suppress tumor formation, and this level is finely balanced (PMID: 11743581). Germline mutations in the APC gene cause familial adenomatous polyposis (FAP) (PMID: 1651174, 1651562), a disease in which 95% of people progress to develop colorectal cancer (PMID: 1528264). In addition, heritable mutations in APC are responsible for the development of a number of related diseases, including Turcot Syndrome, Gardner Syndrome and Flat Adenoma Syndrome (FAS) (PMID: 8593545). APC mutations, much like those seen in FAS, have been observed in 50-80% of sporadic colorectal cancers (PMID: 17143297). Somatic mutations in APC function as tumor-initiating events and are also observed in a number of other human cancers including breast, stomach, and prostate (PMID: 27302369, 29316426). The majority of APC mutations are loss-of-function and occur in a region important for β-catenin binding (PMID: 10784639, 1338904). Inhibitors of the WNT pathway are currently in clinical development (PMID: 24981364).",
+  "tumorTypes": [],
+  "vus": false
+}

@@ -153,16 +153,6 @@ To launch your application's tests, run:
 ./mvnw verify
 ```
 
-### Client tests
-
-Unit tests are run by [Jest][] and written with [Jasmine][]. They're located in [src/test/javascript/](src/test/javascript/) and can be run with:
-
-```
-yarn test
-```
-
-For more information, refer to the [Running tests page][].
-
 ### Screenshot tests
 
 Screenshot tests are run by [Jest][], [Puppeteer][]. They're located in [screenshot-test/](screenshot-test/). Because different dev environments have different systems, which may cause the resulting image doesn’t quite match the expected one from the [`__baseline_snapshots__`](screenshot-test/__baseline_snapshots__/) directory saved in source control, we dockerized the test process and can be run with:
@@ -170,6 +160,8 @@ Screenshot tests are run by [Jest][], [Puppeteer][]. They're located in [screens
 ```
 yarn run screenshot-test-in-docker
 ```
+
+You can also run screenshot-test locally using `yarn run screenshot-test`
 
 #### Update screenshot tests
 

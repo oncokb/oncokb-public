@@ -1,0 +1,222 @@
+[
+    {
+        "mutationEffectDescription": "The APC R640G mutation is located in the Armadillo repeat region of the APC protein. This mutation has been found as a germline mutation in familial adenomatous polyposis (FAP), a cancer predisposition syndrome. In vitro studies have demonstrated that this mutation is likely inactivating as measured by defective splicing of the APC protein compared to wildtype (PMID: 19111562).",
+        "variant": {
+            "gene": {
+                "entrezGeneId": 324,
+                "hugoSymbol": "APC",
+                "oncogene": false,
+                "grch37Isoform": "ENST00000257430",
+                "grch37RefSeq": "NM_000038.5",
+                "grch38Isoform": "ENST00000257430",
+                "grch38RefSeq": "NM_000038.5",
+                "geneAliases": [
+                    "PPP1R46",
+                    "DP2.5"
+                ],
+                "genesets": [],
+                "tsg": true
+            },
+            "consequence": {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "R640G",
+            "name": "R640G",
+            "refResidues": "R",
+            "proteinStart": 640,
+            "proteinEnd": 640,
+            "variantResidues": "G",
+            "referenceGenomes": [
+                "GRCh37",
+                "GRCh38"
+            ]
+        },
+        "mutationEffect": "Loss-of-function",
+        "mutationEffectPmids": [
+            "19111562"
+        ],
+        "mutationEffectAbstracts": [],
+        "oncogenic": "Oncogenic",
+        "oncogenicPmids": [],
+        "oncogenicAbstracts": []
+    },
+    {
+        "mutationEffectDescription": "APC deletions have been detected in patients with familial adenomatous polyposis (PMID: 15643602, 25317407). These alterations predominantly encompass the entire APC locus leading to haploinsuffuciciency (PMID: 11867715). Based on the function of APC as a tumor suppressor, loss of APC through deletion mutations is likely to result in aberrant WNT-pathway activation and is associated with hyperplasia and eventual tumor progression (PMID: 8259511).",
+        "variant": {
+            "gene": {
+                "entrezGeneId": 324,
+                "hugoSymbol": "APC",
+                "oncogene": false,
+                "grch37Isoform": "ENST00000257430",
+                "grch37RefSeq": "NM_000038.5",
+                "grch38Isoform": "ENST00000257430",
+                "grch38RefSeq": "NM_000038.5",
+                "geneAliases": [
+                    "PPP1R46",
+                    "DP2.5"
+                ],
+                "genesets": [],
+                "tsg": true
+            },
+            "consequence": {
+                "term": "NA",
+                "isGenerallyTruncating": false,
+                "description": "NA"
+            },
+            "alteration": "Deletion",
+            "name": "Deletion",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes": [
+                "GRCh37",
+                "GRCh38"
+            ]
+        },
+        "mutationEffect": "Likely Loss-of-function",
+        "mutationEffectPmids": [
+            "8259511",
+            "15643602",
+            "25317407",
+            "11867715"
+        ],
+        "mutationEffectAbstracts": [],
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids": [],
+        "oncogenicAbstracts": []
+    },
+    {
+        "mutationEffectDescription": "Truncating APC mutations result in loss of full-length APC protein leading to impaired or abnormal APC function. APC deregulation is associated with accumulation of β-catenin, an oncogenic transcription factor, which in turn leads to aberrant target gene expression and tumorigenesis (PMID: 11062151). APC truncating mutations are typically early events occurring on a single allele (germline or somatic); however, the tumor often acquires a second hit on the second allele, reducing the overall amount of functional APC in the cell (PMID: 11257105). Furthermore, expression of truncating mutations of APC has been shown to result in chromosomal instability in a dominant manner, postulated to play an important role in the accumulation of additional oncogenic alterations (PMID: 15561772).",
+        "variant": {
+            "gene": {
+                "entrezGeneId": 324,
+                "hugoSymbol": "APC",
+                "oncogene": false,
+                "grch37Isoform": "ENST00000257430",
+                "grch37RefSeq": "NM_000038.5",
+                "grch38Isoform": "ENST00000257430",
+                "grch38RefSeq": "NM_000038.5",
+                "geneAliases": [
+                    "PPP1R46",
+                    "DP2.5"
+                ],
+                "genesets": [],
+                "tsg": true
+            },
+            "consequence": {
+                "term": "feature_truncation",
+                "isGenerallyTruncating": true,
+                "description": "A sequence variant that causes the reduction of a genomic feature, with regard to the reference sequence"
+            },
+            "alteration": "Truncating Mutations",
+            "name": "Truncating Mutations",
+            "refResidues": null,
+            "proteinStart": -1,
+            "proteinEnd": 100000,
+            "variantResidues": null,
+            "referenceGenomes": [
+                "GRCh37",
+                "GRCh38"
+            ]
+        },
+        "mutationEffect": "Likely Loss-of-function",
+        "mutationEffectPmids": [
+            "11062151",
+            "15561772",
+            "11257105"
+        ],
+        "mutationEffectAbstracts": [],
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids": [],
+        "oncogenicAbstracts": []
+    },
+    {
+        "mutationEffectDescription": "The APC I1307K mutation is located near a β-catenin binding domain in the APC protein. This mutation has been found as a germline mutation in familial adenomatous polyposis (FAP), a cancer predisposition syndrome, and sporadic colorectal cancer. While this mutation has not been functionally characterized, structural modeling shows that this mutation is likely inactivating because the I1307K mutation is predicted to impact β-catenin binding (PMID: 9724771).",
+        "variant": {
+            "gene": {
+                "entrezGeneId": 324,
+                "hugoSymbol": "APC",
+                "oncogene": false,
+                "grch37Isoform": "ENST00000257430",
+                "grch37RefSeq": "NM_000038.5",
+                "grch38Isoform": "ENST00000257430",
+                "grch38RefSeq": "NM_000038.5",
+                "geneAliases": [
+                    "PPP1R46",
+                    "DP2.5"
+                ],
+                "genesets": [],
+                "tsg": true
+            },
+            "consequence": {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "I1307K",
+            "name": "I1307K",
+            "refResidues": "I",
+            "proteinStart": 1307,
+            "proteinEnd": 1307,
+            "variantResidues": "K",
+            "referenceGenomes": [
+                "GRCh37",
+                "GRCh38"
+            ]
+        },
+        "mutationEffect": "Inconclusive",
+        "mutationEffectPmids": [
+            "9724771"
+        ],
+        "mutationEffectAbstracts": [],
+        "oncogenic": "Inconclusive",
+        "oncogenicPmids": [],
+        "oncogenicAbstracts": []
+    },
+    {
+        "mutationEffectDescription": "The APC N1026S mutation is located near a β-catenin binding domain in the APC protein. This mutation has been found as a germline mutation in familial adenomatous polyposis (FAP), a cancer predisposition syndrome, and sporadic colorectal cancer. In vitro studies have demonstrated that this mutation is likely inactivating as measured by decreased β-catenin binding compared to wildtype (PMID: 18166348).",
+        "variant": {
+            "gene": {
+                "entrezGeneId": 324,
+                "hugoSymbol": "APC",
+                "oncogene": false,
+                "grch37Isoform": "ENST00000257430",
+                "grch37RefSeq": "NM_000038.5",
+                "grch38Isoform": "ENST00000257430",
+                "grch38RefSeq": "NM_000038.5",
+                "geneAliases": [
+                    "PPP1R46",
+                    "DP2.5"
+                ],
+                "genesets": [],
+                "tsg": true
+            },
+            "consequence": {
+                "term": "missense_variant",
+                "isGenerallyTruncating": false,
+                "description": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"
+            },
+            "alteration": "N1026S",
+            "name": "N1026S",
+            "refResidues": "N",
+            "proteinStart": 1026,
+            "proteinEnd": 1026,
+            "variantResidues": "S",
+            "referenceGenomes": [
+                "GRCh37",
+                "GRCh38"
+            ]
+        },
+        "mutationEffect": "Loss-of-function",
+        "mutationEffectPmids": [
+            "18166348"
+        ],
+        "mutationEffectAbstracts": [],
+        "oncogenic": "Likely Oncogenic",
+        "oncogenicPmids": [],
+        "oncogenicAbstracts": []
+    }
+]
