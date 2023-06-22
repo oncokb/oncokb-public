@@ -23,7 +23,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
 > {
   recaptcha = new ReCAPTCHA();
 
-  @observable recaptchaValidated: boolean;
+  @observable recaptchaValidated = false;
   @observable recaptchaError: any;
 
   loadData() {
@@ -51,7 +51,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
       this.recaptcha.siteKey &&
       this.recaptcha !== undefined &&
       !this.recaptchaValidated &&
-      this.recaptchaError == undefined
+      this.recaptchaError === undefined
     ) {
       this.loadData();
 

@@ -220,7 +220,12 @@ export default class AlterationPage extends React.Component<
   }
 
   render() {
-    if (this.recaptchaValidated !== undefined && !this.recaptchaValidated) {
+    if (
+      this.recaptcha.siteKey &&
+      this.recaptcha !== undefined &&
+      !this.recaptchaValidated &&
+      this.recaptchaError === undefined
+    ) {
       return <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />;
     }
 
