@@ -49,6 +49,18 @@ export function defaultSortMethod(a: any, b: any): number {
   return 0;
 }
 
+export function defaultFdaImplicationSortMethod(a: any, b: any): number {
+  // sort by level first
+  let compareScore = sortByLevel(a.level, b.level);
+  if (compareScore === 0) {
+    compareScore = defaultSortMethod(a.cancerTypes, b.cancerTypes);
+    if (compareScore === 0) {
+      compareScore = defaultSortMethod(a.alterations, b.alterations);
+    }
+  }
+  return compareScore;
+}
+
 export function sortNumber(a: number, b: number): number {
   if (!_.isNumber(a)) {
     if (!_.isNumber(b)) {

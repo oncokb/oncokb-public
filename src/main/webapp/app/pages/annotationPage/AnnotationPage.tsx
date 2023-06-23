@@ -218,19 +218,25 @@ export default class AnnotationPage extends React.Component<
     evidences.forEach(evidence => {
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
       const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
-      const alterations = evidence.alterations.filter(
-        alteration =>
-          alteration.referenceGenomes.includes(this.props.refGenome) &&
-          alteration.alteration === this.props.matchedAlteration?.alteration
+      const alterations = evidence.alterations.filter(alteration =>
+        alteration.referenceGenomes.includes(this.props.refGenome)
       );
       alterations.forEach(alt => {
-        // if the evidence is for Oncogenic Mutations and it's returned for the current variant,
-        // that indicates the variant is oncogenic. We could convert the alteration name to the current one
-        if (alt.name === ONCOGENIC_MUTATIONS) {
+        // convert all alterations to matchedAlteration/alteration query if not positional variant
+        let mappedAlteration = {} as Alteration;
+        if (
+          isPositionalAlteration(
+            alt.proteinStart,
+            alt.proteinEnd,
+            alt.consequence?.term
+          )
+        ) {
+          mappedAlteration = alt;
+        } else {
           if (this.props.matchedAlteration) {
-            alt = this.props.matchedAlteration;
+            mappedAlteration = this.props.matchedAlteration;
           } else {
-            alt.name = alt.alteration = this.props.alteration;
+            mappedAlteration.name = mappedAlteration.alteration = this.props.alteration;
           }
         }
         const ctNames = evidence.cancerTypes.map(ct =>
@@ -241,16 +247,18 @@ export default class AnnotationPage extends React.Component<
         );
         fdaImplications.push({
           level: fdaLevel,
-          alteration: alt,
+          alteration: mappedAlteration,
           alterationView: (
             <AlterationPageLink
-              key={alt.name}
+              key={mappedAlteration.name}
               hugoSymbol={this.props.hugoSymbol}
               alteration={{
-                alteration: alt.alteration,
-                name: alt.name,
+                alteration: mappedAlteration.alteration,
+                name: mappedAlteration.name,
               }}
-              alterationRefGenomes={alt.referenceGenomes as REFERENCE_GENOME[]}
+              alterationRefGenomes={
+                mappedAlteration.referenceGenomes as REFERENCE_GENOME[]
+              }
               hashQueries={{
                 tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
               }}
