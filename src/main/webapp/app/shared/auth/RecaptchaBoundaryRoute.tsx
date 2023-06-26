@@ -26,16 +26,36 @@ export class RecaptchaBoundaryRoute extends React.Component<
   @observable recaptchaValidated = false;
   @observable recaptchaError: any;
 
-  loadData() {
-    try {
-      this.recaptcha.getToken().then(token => setRecaptchaToken(token));
-      client
-        .validateRecaptchaUsingGET({})
-        .then(this.successToValidate, this.failedToValidate);
-    } catch (e) {
-      this.recaptchaError = e;
+  componentDidMount(): void {
+    if (
+      this.recaptcha.siteKey &&
+      this.recaptcha !== undefined &&
+      !this.recaptchaValidated &&
+      this.recaptchaError === undefined
+    ) {
+      try {
+        if (this.recaptcha !== undefined) {
+          this.recaptcha.getToken().then(token => setRecaptchaToken(token));
+          client
+            .validateRecaptchaUsingGET({})
+            .then(this.successToValidate, this.failedToValidate);
+        }
+      } catch (e) {
+        this.recaptchaError = e;
+      }
     }
   }
+
+  // loadData() {
+  //   try {
+  //     this.recaptcha.getToken().then(token => setRecaptchaToken(token));
+  //     client
+  //       .validateRecaptchaUsingGET({})
+  //       .then(this.successToValidate, this.failedToValidate);
+  //   } catch (e) {
+  //     this.recaptchaError = e;
+  //   }
+  // }
 
   successToValidate() {
     this.recaptchaValidated = true;
@@ -50,11 +70,10 @@ export class RecaptchaBoundaryRoute extends React.Component<
     if (
       this.recaptcha.siteKey &&
       this.recaptcha !== undefined &&
-      !this.recaptchaValidated &&
+      this.recaptchaValidated &&
       this.recaptchaError === undefined
     ) {
-      this.loadData();
-
+      // this.loadData();
       return this.recaptchaValidated ? (
         <ErrorBoundaryRoute {...this.props} />
       ) : (
