@@ -63,32 +63,32 @@ export default class AlterationPage extends React.Component<
 
   private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
-  private recaptcha = new ReCAPTCHA();
+  // private recaptcha = new ReCAPTCHA();
 
   recaptchaValidated: boolean;
   recaptchaError: any;
 
-  componentDidMount(): void {
-    try {
-      if (this.recaptcha !== undefined) {
-        this.recaptcha.getToken().then(token => setRecaptchaToken(token));
-        client
-          .validateRecaptchaUsingGET({})
-          .then(this.successToValidate, this.failedToValidate);
-      }
-    } catch (e) {
-      this.recaptchaError = e;
-    }
-  }
+  // componentDidMount(): void {
+  //   try {
+  //     if (this.recaptcha !== undefined) {
+  //       this.recaptcha.getToken().then(token => setRecaptchaToken(token));
+  //       client
+  //         .validateRecaptchaUsingGET({})
+  //         .then(this.successToValidate, this.failedToValidate);
+  //     }
+  //   } catch (e) {
+  //     this.recaptchaError = e;
+  //   }
+  // }
 
-  successToValidate() {
-    this.recaptchaValidated = true;
-  }
+  // successToValidate() {
+  //   this.recaptchaValidated = true;
+  // }
 
-  failedToValidate(error: OncoKBError) {
-    this.recaptchaValidated = false;
-    Sentry.captureException(error);
-  }
+  // failedToValidate(error: OncoKBError) {
+  //   this.recaptchaValidated = false;
+  //   Sentry.captureException(error);
+  // }
 
   constructor(props: any) {
     super(props);
@@ -220,14 +220,14 @@ export default class AlterationPage extends React.Component<
   }
 
   render() {
-    if (
-      this.recaptcha.siteKey &&
-      this.recaptcha !== undefined &&
-      !this.recaptchaValidated &&
-      this.recaptchaError === undefined
-    ) {
-      return <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />;
-    }
+    // if (
+    //   this.recaptcha.siteKey &&
+    //   this.recaptcha !== undefined &&
+    //   !this.recaptchaValidated &&
+    //   this.recaptchaError === undefined
+    // ) {
+    //   return <Route exact path={PAGE_ROUTE.HOME} component={HomePage} />;
+    // }
 
     return (
       <DocumentTitle title={this.documentTitle}>

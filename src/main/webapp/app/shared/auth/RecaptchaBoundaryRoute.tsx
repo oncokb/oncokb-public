@@ -26,7 +26,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
   @observable recaptchaValidated = false;
   @observable recaptchaError: any;
 
-  componentDidMount(): void {
+  loadData() {
     if (
       this.recaptcha.siteKey &&
       this.recaptcha !== undefined &&
@@ -46,17 +46,6 @@ export class RecaptchaBoundaryRoute extends React.Component<
     }
   }
 
-  // loadData() {
-  //   try {
-  //     this.recaptcha.getToken().then(token => setRecaptchaToken(token));
-  //     client
-  //       .validateRecaptchaUsingGET({})
-  //       .then(this.successToValidate, this.failedToValidate);
-  //   } catch (e) {
-  //     this.recaptchaError = e;
-  //   }
-  // }
-
   successToValidate() {
     this.recaptchaValidated = true;
   }
@@ -66,14 +55,21 @@ export class RecaptchaBoundaryRoute extends React.Component<
     Sentry.captureException(error);
   }
 
+  runAfterRender = () => {
+    const recaptchaElem = document.getElementById('script');
+    if (recaptchaElem) {
+      this.loadData();
+    }
+  };
+
   render() {
+    this.runAfterRender();
     if (
       this.recaptcha.siteKey &&
       this.recaptcha !== undefined &&
       this.recaptchaValidated &&
       this.recaptchaError === undefined
     ) {
-      // this.loadData();
       return this.recaptchaValidated ? (
         <ErrorBoundaryRoute {...this.props} />
       ) : (
