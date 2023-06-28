@@ -56,7 +56,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
   }
 
   runAfterRender = () => {
-    const recaptchaElem = document.getElementById('script');
+    const recaptchaElem = document.getElementById('recaptcha');
     if (recaptchaElem) {
       this.loadData();
     }
