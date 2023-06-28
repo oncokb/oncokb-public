@@ -23,7 +23,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
 > {
   recaptcha = new ReCAPTCHA();
 
-  @observable recaptchaValidated: boolean;
+  @observable recaptchaValidated = false;
   @observable recaptchaError: any;
 
   loadData() {
@@ -35,11 +35,13 @@ export class RecaptchaBoundaryRoute extends React.Component<
     ) {
       try {
         if (this.recaptcha !== undefined) {
-          this.recaptchaValidated = false;
           this.recaptcha.getToken().then(token => setRecaptchaToken(token));
           client
             .validateRecaptchaUsingGET({})
-            .then(this.successToValidate, this.failedToValidate);
+            .then(
+              this.successToValidate.bind(this),
+              this.failedToValidate.bind(this)
+            );
         }
       } catch (e) {
         this.recaptchaError = e;
@@ -53,7 +55,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
       if (recaptchaElem) {
         this.loadData();
       }
-    }, 5000);
+    }, 2000);
   }
 
   successToValidate() {
