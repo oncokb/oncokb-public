@@ -166,7 +166,7 @@ application:
     enable-auth: true
     recaptcha-project-id:
     recaptcha-site-key:
-    recaptcha-threshold: 0.1
+    recaptcha-threshold: 0.5
   aws:
     s3-access-key:
     s3-secret-key:

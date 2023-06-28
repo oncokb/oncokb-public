@@ -116,6 +116,14 @@ public class AccountResource {
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
             ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
+
+            if (rs.getStatusCode() == HttpStatus.OK) {
+                if (!checkPasswordLength(managedUserVM.getPassword())) {
+                    throw new InvalidPasswordException();
+                }
+                User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+                mailService.sendActivationEmail(userMapper.userToUserDTO(user));
+            }
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
@@ -125,13 +133,6 @@ public class AccountResource {
         } catch (ConfigurationException e) {
             log.warn(e.getMessage());
         }
-        // if (rs.getStatusCode() == HttpStatus.OK) {
-            if (!checkPasswordLength(managedUserVM.getPassword())) {
-                throw new InvalidPasswordException();
-            }
-            User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-            mailService.sendActivationEmail(userMapper.userToUserDTO(user));
-        // }
     }
 
     /**
@@ -358,6 +359,21 @@ public class AccountResource {
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
             ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
+
+            if (rs.getStatusCode() == HttpStatus.OK) {
+                Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
+                if (user.isPresent()) {
+                    Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
+                    if (updatedUser.isPresent()) {
+                        mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
+                    }
+
+                } else {
+                    // Pretend the request has been successful to prevent checking which emails really exist
+                    // but log that an invalid attempt has been made
+                    log.warn("Password reset requested for non existing mail");
+                }
+            }
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
@@ -367,20 +383,6 @@ public class AccountResource {
         } catch (ConfigurationException e) {
             log.warn(e.getMessage());
         }
-        // if (rs.getStatusCode() == HttpStatus.OK) {
-            Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
-            if (user.isPresent()) {
-                Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
-                if (updatedUser.isPresent()) {
-                    mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
-                }
-
-            } else {
-                // Pretend the request has been successful to prevent checking which emails really exist
-                // but log that an invalid attempt has been made
-                log.warn("Password reset requested for non existing mail");
-            }
-        // }
     }
 
     /**
@@ -456,6 +458,14 @@ public class AccountResource {
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
             ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
+
+            if (rs.getStatusCode() == HttpStatus.OK) {
+                Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
+                if (userOptional.isPresent()
+                        && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
+                    mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
+                }
+            }
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
@@ -465,13 +475,6 @@ public class AccountResource {
         } catch (ConfigurationException e) {
             log.warn(e.getMessage());
         }
-        // if (rs.getStatusCode() == HttpStatus.OK) {
-            Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
-            if (userOptional.isPresent()
-                    && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
-                mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
-            }
-        // }
     }
 
     private static boolean checkPasswordLength(String password) {

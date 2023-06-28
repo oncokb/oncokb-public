@@ -84,7 +84,7 @@ public class CreateAssessment {
         LOGGER.info(
             "The CreateAssessment call failed because the token was: "
                 + response.getTokenProperties().getInvalidReason().name());
-        throw new ValidationException(RECAPTCHA_VALIDATION_ERROR);
+        return new ResponseEntity<>("Recaptcha failed to be validated", HttpStatus.BAD_REQUEST);
       }
   }
 }
