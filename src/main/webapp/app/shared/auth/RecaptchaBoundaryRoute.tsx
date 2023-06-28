@@ -23,7 +23,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
 > {
   recaptcha = new ReCAPTCHA();
 
-  @observable recaptchaValidated = false;
+  @observable recaptchaValidated: boolean;
   @observable recaptchaError: any;
 
   loadData() {
@@ -35,6 +35,7 @@ export class RecaptchaBoundaryRoute extends React.Component<
     ) {
       try {
         if (this.recaptcha !== undefined) {
+          this.recaptchaValidated = false;
           this.recaptcha.getToken().then(token => setRecaptchaToken(token));
           client
             .validateRecaptchaUsingGET({})
@@ -46,24 +47,25 @@ export class RecaptchaBoundaryRoute extends React.Component<
     }
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      const recaptchaElem = document.getElementById('recaptcha');
+      if (recaptchaElem) {
+        this.loadData();
+      }
+    }, 5000);
+  }
+
   successToValidate() {
     this.recaptchaValidated = true;
   }
 
   failedToValidate(error: OncoKBError) {
-    this.recaptchaValidated = false;
+    this.recaptchaError = error;
     Sentry.captureException(error);
   }
 
-  runAfterRender = () => {
-    const recaptchaElem = document.getElementById('recaptcha');
-    if (recaptchaElem) {
-      this.loadData();
-    }
-  };
-
   render() {
-    this.runAfterRender();
     if (
       this.recaptcha.siteKey &&
       this.recaptcha !== undefined &&
