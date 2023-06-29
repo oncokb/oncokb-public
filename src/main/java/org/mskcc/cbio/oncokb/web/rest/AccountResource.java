@@ -67,8 +67,6 @@ public class AccountResource {
 
     private final ApplicationProperties applicationProperties;
 
-    private CreateAssessment createAssess;
-
     @Autowired
     private UserMapper userMapper;
 
@@ -96,7 +94,6 @@ public class AccountResource {
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
         this.applicationProperties = applicationProperties;
-        this.createAssess = new CreateAssessment(applicationProperties);
     }
 
     /**
@@ -113,6 +110,7 @@ public class AccountResource {
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, 
             HttpServletRequest request) throws Exception {
         try {
+            CreateAssessment createAssess = new CreateAssessment(applicationProperties);
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
             ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
@@ -356,6 +354,7 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail, HttpServletRequest request) throws Exception {
         try {
+            CreateAssessment createAssess = new CreateAssessment(applicationProperties);
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
             ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
@@ -455,6 +454,7 @@ public class AccountResource {
     @PostMapping(path = "/account/resend-verification")
     public void resendVerification(@RequestBody LoginVM loginVM, HttpServletRequest request) throws Exception {
         try {
+            CreateAssessment createAssess = new CreateAssessment(applicationProperties);
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
             ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);

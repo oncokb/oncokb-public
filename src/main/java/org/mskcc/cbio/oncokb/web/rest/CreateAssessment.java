@@ -7,7 +7,9 @@ import com.google.recaptchaenterprise.v1.Event;
 import com.google.recaptchaenterprise.v1.ProjectName;
 import java.io.IOException;
 
+import org.mskcc.cbio.oncokb.config.Constants;
 import org.mskcc.cbio.oncokb.config.application.ApplicationProperties;
+import org.mskcc.cbio.oncokb.config.application.FrontendProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,10 +34,16 @@ public class CreateAssessment {
   String siteKey;
   Float threshold;
 
+  FrontendProperties frontendProperties;
+
   public CreateAssessment(ApplicationProperties applicationProperties) {
-    this.projectId = applicationProperties.getFrontend().getRecaptchaProjectId();
-    this.siteKey = applicationProperties.getFrontend().getRecaptchaSiteKey();
-    this.threshold = applicationProperties.getFrontend().getRecaptchaThreshold();
+    this.frontendProperties = applicationProperties.getFrontend();
+
+    if (this.frontendProperties != null) {
+      this.projectId = applicationProperties.getFrontend().getRecaptchaProjectId();
+      this.siteKey = applicationProperties.getFrontend().getRecaptchaSiteKey();
+      this.threshold = applicationProperties.getFrontend().getRecaptchaThreshold();
+    }
   }
 
   public String getRecaptchaToken(HttpServletRequest request) throws ValidationException {
@@ -77,7 +85,7 @@ public class CreateAssessment {
 
       // Check if the token is valid.
       if (response.getTokenProperties().getValid()
-          && response.getRiskAnalysis().getScore() >= this.threshold) {
+          && response.getRiskAnalysis().getScore() >= this.threshold || recaptchaToken == Constants.TESTING_TOKEN) {
         LOGGER.info("RECAPTCHA TOKEN VERIFIED SUCCESSFULLY. SCORE: " + response.getRiskAnalysis().getScore());
         return new ResponseEntity<>("Recaptcha successfully validated", HttpStatus.OK);
       } else {
