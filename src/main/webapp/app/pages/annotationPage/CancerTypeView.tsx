@@ -18,6 +18,7 @@ import { FdaTabDescription } from 'app/pages/annotationPage/TabDescriptor';
 import { CancerTypeViewTable } from 'app/pages/annotationPage/CancerTypeViewTable';
 import { sortTherapeuticImplications } from 'app/pages/annotationPage/Utils';
 import WindowStore from 'app/store/WindowStore';
+import { defaultFdaImplicationSortMethod } from 'app/shared/utils/ReactTableUtils';
 
 export type ICancerTypeView = {
   appStore?: AppStore;
@@ -167,13 +168,15 @@ const FdaView: React.FunctionComponent<{
         userAuthenticated={props.userAuthenticated}
         type={'fda'}
         hugoSymbol={props.hugoSymbol}
-        data={props.implications.map(implication => {
-          return {
-            level: implication.level as LEVELS,
-            alterations: implication.alteration.name,
-            cancerTypes: implication.cancerType,
-          };
-        })}
+        data={props.implications
+          .map(implication => {
+            return {
+              level: implication.level as LEVELS,
+              alterations: implication.alteration.name,
+              cancerTypes: implication.cancerType,
+            };
+          })
+          .sort(defaultFdaImplicationSortMethod)}
       />
     </div>
   );

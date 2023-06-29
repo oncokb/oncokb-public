@@ -466,6 +466,11 @@ export default class AlterationTableTabs extends React.Component<
   get fdaTableColumns() {
     return [
       {
+        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.FDA_LEVEL),
+        onFilter: (data: FdaImplication, keyword: string) =>
+          filterByKeyword(data.level, keyword),
+      },
+      {
         ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.ALTERATION),
         Cell(props: { original: FdaImplication }) {
           return props.original.alterationView;
@@ -484,11 +489,6 @@ export default class AlterationTableTabs extends React.Component<
         },
         onFilter: (data: FdaImplication, keyword: string) =>
           filterByKeyword(data.cancerType, keyword),
-      },
-      {
-        ...getDefaultColumnDefinition(TABLE_COLUMN_KEY.FDA_LEVEL),
-        onFilter: (data: FdaImplication, keyword: string) =>
-          filterByKeyword(data.level, keyword),
       },
     ];
   }
