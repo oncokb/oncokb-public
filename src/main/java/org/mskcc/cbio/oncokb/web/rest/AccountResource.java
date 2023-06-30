@@ -130,6 +130,9 @@ public class AccountResource {
             } 
         } catch (ConfigurationException e) {
             log.warn(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
         }
     }
 
@@ -381,7 +384,10 @@ public class AccountResource {
             } 
         } catch (ConfigurationException e) {
             log.warn(e.getMessage());
-        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        }   
     }
 
     /**
@@ -474,6 +480,9 @@ public class AccountResource {
             } 
         } catch (ConfigurationException e) {
             log.warn(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
         }
     }
 
