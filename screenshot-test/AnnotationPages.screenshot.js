@@ -495,7 +495,7 @@ describe('Tests without login', () => {
     page.on('request', (request) => {
       let url = request.url()
         request.respond(
-          res = {
+          {
             status: 200,
             contentType: 'application/json',
             body: true
@@ -514,7 +514,7 @@ describe('Tests without login', () => {
     page.on('request', (request) => {
       let url = request.url()
         request.respond(
-          res = {
+          {
             status: 200,
             contentType: 'application/json',
             body: false
