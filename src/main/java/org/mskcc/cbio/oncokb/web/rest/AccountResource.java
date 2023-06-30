@@ -96,7 +96,7 @@ public class AccountResource {
         this.applicationProperties = applicationProperties;
     }
 
-    /**
+/**
      * {@code POST  /register} : register the user.
      *
      * @param managedUserVM the managed user View Model.
@@ -109,19 +109,12 @@ public class AccountResource {
     @ResponseStatus(HttpStatus.CREATED)
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, 
             HttpServletRequest request) throws Exception {
+        ResponseEntity<String> rs = null;
         try {
             CreateAssessment createAssess = new CreateAssessment(applicationProperties);
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
-            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
-
-            if (rs.getStatusCode() == HttpStatus.OK) {
-                if (!checkPasswordLength(managedUserVM.getPassword())) {
-                    throw new InvalidPasswordException();
-                }
-                User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-                mailService.sendActivationEmail(userMapper.userToUserDTO(user));
-            }
+            rs = createAssess.createAssessment(client,recaptchaToken);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
@@ -130,9 +123,13 @@ public class AccountResource {
             } 
         } catch (ConfigurationException e) {
             log.warn(e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception(e);
+        }
+        if (rs != null && rs.getStatusCode() == HttpStatus.OK) {
+            if (!checkPasswordLength(managedUserVM.getPassword())) {
+                throw new InvalidPasswordException();
+            }
+            User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+            mailService.sendActivationEmail(userMapper.userToUserDTO(user));
         }
     }
 
@@ -356,26 +353,12 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail, HttpServletRequest request) throws Exception {
+        ResponseEntity<String> rs = null;
         try {
             CreateAssessment createAssess = new CreateAssessment(applicationProperties);
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
-            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
-
-            if (rs.getStatusCode() == HttpStatus.OK) {
-                Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
-                if (user.isPresent()) {
-                    Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
-                    if (updatedUser.isPresent()) {
-                        mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
-                    }
-
-                } else {
-                    // Pretend the request has been successful to prevent checking which emails really exist
-                    // but log that an invalid attempt has been made
-                    log.warn("Password reset requested for non existing mail");
-                }
-            }
+            rs = createAssess.createAssessment(client,recaptchaToken);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
@@ -387,7 +370,22 @@ public class AccountResource {
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception(e);
-        }   
+        }  
+        
+        if (rs != null && rs.getStatusCode() == HttpStatus.OK) {
+            Optional<User> user = userService.getUserWithAuthoritiesByEmailIgnoreCase(mail);
+            if (user.isPresent()) {
+                Optional<User> updatedUser = userService.requestPasswordReset(user.get().getLogin());
+                if (updatedUser.isPresent()) {
+                    mailService.sendPasswordResetMail(userMapper.userToUserDTO(updatedUser.get()));
+                }
+
+            } else {
+                // Pretend the request has been successful to prevent checking which emails really exist
+                // but log that an invalid attempt has been made
+                log.warn("Password reset requested for non existing mail");
+            }
+        }
     }
 
     /**
@@ -459,19 +457,12 @@ public class AccountResource {
 
     @PostMapping(path = "/account/resend-verification")
     public void resendVerification(@RequestBody LoginVM loginVM, HttpServletRequest request) throws Exception {
+        ResponseEntity<String> rs = null;
         try {
             CreateAssessment createAssess = new CreateAssessment(applicationProperties);
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
-            ResponseEntity<String> rs = createAssess.createAssessment(client,recaptchaToken);
-
-            if (rs.getStatusCode() == HttpStatus.OK) {
-                Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
-                if (userOptional.isPresent()
-                        && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
-                    mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
-                }
-            }
+            rs = createAssess.createAssessment(client,recaptchaToken);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
@@ -483,6 +474,14 @@ public class AccountResource {
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception(e);
+        }
+
+        if (rs != null && rs.getStatusCode() == HttpStatus.OK) {
+            Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername());
+            if (userOptional.isPresent()
+                    && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
+                mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
+            }
         }
     }
 
