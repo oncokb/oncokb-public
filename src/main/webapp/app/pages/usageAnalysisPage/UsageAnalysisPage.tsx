@@ -26,6 +26,10 @@ import {
   PAGE_ROUTE,
   USAGE_TOP_USERS_LIMIT,
   USAGE_ALL_TIME_KEY,
+  USAGE_DETAIL_TIME_KEY,
+  USAGE_DAY_DETAIL_TIME_KEY,
+  TABLE_MONTH_FORMAT,
+  TABLE_DAY_FORMAT,
 } from 'app/config/constants';
 import { remoteData } from 'cbioportal-frontend-commons';
 import * as QueryString from 'query-string';
@@ -40,8 +44,11 @@ import {
   timeHeader,
   usageHeader,
   filterDependentResourceHeader,
+  filterDependentTimeHeader,
 } from 'app/components/oncokbTable/HeaderConstants';
 import UsageText from 'app/shared/texts/UsageText';
+import { UsageAnalysisCalendarButton } from 'app/components/calendarButton/UsageAnalysisCalendarButton';
+import moment from 'moment';
 
 export type UsageRecord = {
   resource: string;
@@ -130,6 +137,15 @@ export default class UsageAnalysisPage extends React.Component<{
     ToggleValue.PUBLIC_RESOURCES;
   @observable resourceTabResourcesTypeToggleValue: ToggleValue =
     ToggleValue.PUBLIC_RESOURCES;
+
+  @observable resourceTabTimeTypeToggleValue: ToggleValue =
+    ToggleValue.RESULTS_BY_MONTH;
+
+  @observable resourceTabFromDate: string | undefined;
+  @observable resourceTabToDate: string | undefined;
+  @observable resourceTabFilterToggled: boolean;
+  @observable resourceTabDropdownMenuOpen: boolean;
+
   @observable dropdownList: string[] = [];
   @observable dropdownValue = 'All';
   @observable usageType: UsageType = UsageType.USER;
@@ -227,24 +243,84 @@ export default class UsageAnalysisPage extends React.Component<{
 
   @autobind
   @action
+  handleResourceTabTimeTypeToggleChange(value: ToggleValue) {
+    this.resourceTabTimeTypeToggleValue = value;
+  }
+
+  @autobind
+  @action
   toggleType(usageType: UsageType) {
     this.usageType = usageType;
   }
 
   @computed get calculateResourcesTabData(): UsageRecord[] {
+    let data = this.usageDetail.result.get(
+      this.resourceTabTimeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
+        ? USAGE_ALL_TIME_KEY
+        : this.resourceTabTimeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH
+        ? USAGE_DETAIL_TIME_KEY
+        : USAGE_DAY_DETAIL_TIME_KEY
+    );
+    if (
+      this.resourceTabFilterToggled &&
+      data &&
+      this.resourceTabTimeTypeToggleValue !== ToggleValue.RESULTS_IN_TOTAL
+    ) {
+      let tableFormat: string;
+      if (
+        this.resourceTabTimeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH
+      ) {
+        tableFormat = TABLE_MONTH_FORMAT;
+      } else if (
+        this.resourceTabTimeTypeToggleValue === ToggleValue.RESULTS_BY_DAY
+      ) {
+        tableFormat = TABLE_DAY_FORMAT;
+      }
+      data = data.filter(resource => {
+        const fromTime = moment(this.resourceTabFromDate).format(tableFormat);
+        const toTime = moment(this.resourceTabToDate).format(tableFormat);
+        return resource.time >= fromTime && resource.time <= toTime;
+      });
+    }
     if (
       this.resourceTabResourcesTypeToggleValue === ToggleValue.ALL_RESOURCES
     ) {
-      return this.usageDetail.result.get(this.dropdownValue) || [];
-    } else {
+      return data || [];
+    } else if (
+      this.resourceTabResourcesTypeToggleValue === ToggleValue.PUBLIC_RESOURCES
+    ) {
       return (
-        _.filter(this.usageDetail.result.get(this.dropdownValue), function (
-          usage
-        ) {
+        _.filter(data, function (usage) {
           return !usage.resource.includes('/private/');
         }) || []
       );
+    } else if (
+      this.resourceTabResourcesTypeToggleValue === ToggleValue.CUMULATIVE_USAGE
+    ) {
+      if (data) {
+        const cumulativeData: Map<string, UsageRecord> = new Map<
+          string,
+          UsageRecord
+        >();
+        data.forEach(resource => {
+          if (!cumulativeData.has(resource.time)) {
+            cumulativeData.set(resource.time, {
+              resource: 'ALL',
+              usage: 0,
+              time: resource.time,
+            });
+          }
+          const resourceTimeRange = cumulativeData.get(resource.time);
+          if (resourceTimeRange) {
+            resourceTimeRange.usage += resource.usage;
+          }
+        });
+        return Array.from(cumulativeData.values()) || [];
+      } else {
+        return [];
+      }
     }
+    return [];
   }
 
   render() {
@@ -323,6 +399,10 @@ export default class UsageAnalysisPage extends React.Component<{
                 loading={this.users.isPending}
                 defaultSorted={[
                   {
+                    id: UsageTableColumnKey.TIME,
+                    desc: true,
+                  },
+                  {
                     id: 'totalUsage',
                     desc: true,
                   },
@@ -345,6 +425,7 @@ export default class UsageAnalysisPage extends React.Component<{
                         toggleValues={[
                           ToggleValue.ALL_RESOURCES,
                           ToggleValue.PUBLIC_RESOURCES,
+                          ToggleValue.CUMULATIVE_USAGE,
                         ]}
                         handleToggle={
                           this.handleUserTabResourcesTypeToggleChange
@@ -397,9 +478,21 @@ export default class UsageAnalysisPage extends React.Component<{
                       );
                     },
                   },
+                  {
+                    ...getUsageTableColumnDefinition(UsageTableColumnKey.TIME),
+                    Header: filterDependentTimeHeader(
+                      this.resourceTabTimeTypeToggleValue
+                    ),
+                    onFilter: (data: UsageRecord, keyword) =>
+                      filterByKeyword(data.time, keyword),
+                  },
                 ]}
                 loading={this.usageDetail.isComplete ? false : true}
                 defaultSorted={[
+                  {
+                    id: UsageTableColumnKey.TIME,
+                    desc: true,
+                  },
                   {
                     id: UsageTableColumnKey.USAGE,
                     desc: true,
@@ -434,10 +527,39 @@ export default class UsageAnalysisPage extends React.Component<{
                         toggleValues={[
                           ToggleValue.ALL_RESOURCES,
                           ToggleValue.PUBLIC_RESOURCES,
+                          ToggleValue.CUMULATIVE_USAGE,
                         ]}
                         handleToggle={
                           this.handleResourceTabResourcesTypeToggleChange
                         }
+                      />
+                      <UsageToggleGroup
+                        defaultValue={this.resourceTabTimeTypeToggleValue}
+                        toggleValues={[
+                          ToggleValue.RESULTS_BY_DAY,
+                          ToggleValue.RESULTS_BY_MONTH,
+                          ToggleValue.RESULTS_IN_TOTAL,
+                        ]}
+                        handleToggle={
+                          this.handleResourceTabTimeTypeToggleChange
+                        }
+                      />
+                      <UsageAnalysisCalendarButton
+                        currentFromDate={this.resourceTabFromDate}
+                        currentToDate={this.resourceTabToDate}
+                        currentMenuState={this.resourceTabDropdownMenuOpen}
+                        menuState={(isOpen: boolean) => {
+                          this.resourceTabDropdownMenuOpen = isOpen;
+                        }}
+                        fromDate={(newDate: string) => {
+                          this.resourceTabFromDate = newDate;
+                        }}
+                        toDate={(newDate: string) => {
+                          this.resourceTabToDate = newDate;
+                        }}
+                        filterToggled={(filterActive: boolean) => {
+                          this.resourceTabFilterToggled = filterActive;
+                        }}
                       />
                     </Row>
                   ) : (
