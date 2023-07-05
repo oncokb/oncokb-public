@@ -454,9 +454,11 @@ export type TypeaheadSearchResp = {
 
         'oncogenicity': string
 
-        'queryType': "GENE" | "VARIANT" | "DRUG" | "TEXT"
+        'queryType': "GENE" | "VARIANT" | "DRUG" | "CANCER_TYPE" | "TEXT"
 
         'tumorTypes': Array < TumorType >
+
+        'cancer': TumorType
 
         'variantExist': boolean
 
@@ -1051,6 +1053,7 @@ export default class OncoKbPrivateAPI {
         }): Promise < Array < Treatment >
         > {
             return this.searchTreatmentsGetUsingGETWithHttpInfo(parameters).then(function(response: request.Response) {
+                console.log("this is the response: " +  response.body);
                 return response.body;
             });
         };

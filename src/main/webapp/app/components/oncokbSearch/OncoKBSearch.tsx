@@ -11,6 +11,7 @@ import oncokbPrivateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import {
   getAllAlterationsName,
   getAllTumorTypesName,
+  getTumorTypeName,
 } from 'app/shared/utils/Utils';
 import { inject, observer } from 'mobx-react';
 import autobind from 'autobind-decorator';
@@ -48,6 +49,7 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
           acc.push({
             tumorTypesName: getAllTumorTypesName(result.tumorTypes),
             alterationsName: getAllAlterationsName(result.variants),
+            cancerName: getTumorTypeName(result.cancer),
             ...result,
           });
           return acc;
@@ -125,7 +127,7 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
 
     return (
       <AsyncSelect
-        placeholder="Search Gene / Alteration / Drug"
+        placeholder="Search Gene / Alteration / Drug / Cancer Type"
         components={{
           Option,
           DropdownIndicator: () => null,

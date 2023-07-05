@@ -2916,6 +2916,9 @@
             "$ref": "#/definitions/TumorType"
           }
         },
+        "cancer": {
+          "$ref": "#/definitions/TumorType"
+        },
         "variantExist": {
           "type": "boolean"
         },

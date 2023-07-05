@@ -17,6 +17,7 @@ export enum SearchOptionType {
   GENE = 'GENE',
   VARIANT = 'VARIANT',
   DRUG = 'DRUG',
+  CANCER_TYPE = 'CANCER_TYPE',
   TEXT = 'TEXT',
 }
 type SearchOptionProps = {
@@ -170,6 +171,22 @@ const DrugSearchOption: React.FunctionComponent<{
   );
 };
 
+const CancerTypeSearchOption: React.FunctionComponent<{
+  search: string;
+  data: ExtendedTypeaheadSearchResp;
+}> = props => {
+  return (
+    <>
+      <div>
+        <Highlighter
+          searchWords={[props.search]}
+          textToHighlight={props.data.cancerName}
+        />
+      </div>
+    </>
+  );
+};
+
 export const SearchOption: React.FunctionComponent<SearchOptionProps> = props => {
   const searchKeyword = props.search ? props.search : '';
   return (
@@ -193,10 +210,20 @@ export const SearchOption: React.FunctionComponent<SearchOptionProps> = props =>
                   <DrugSearchOption search={searchKeyword} data={props.data} />
                 </Then>
                 <Else>
-                  <If condition={props.type === SearchOptionType.TEXT}>
+                  <If condition={props.type === SearchOptionType.CANCER_TYPE}>
                     <Then>
-                      <span>{props.data.annotation}</span>
+                      <CancerTypeSearchOption
+                        search={searchKeyword}
+                        data={props.data}
+                      />
                     </Then>
+                    <Else>
+                      <If condition={props.type === SearchOptionType.TEXT}>
+                        <Then>
+                          <span>{props.data.annotation}</span>
+                        </Then>
+                      </If>
+                    </Else>
                   </If>
                 </Else>
               </If>

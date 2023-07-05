@@ -157,6 +157,10 @@ export function getAllTumorTypesName(tumorTypes: TumorType[]) {
     : '';
 }
 
+export function getTumorTypeName(tumorType: TumorType) {
+  return tumorType ? getCancerTypeNameFromOncoTreeType(tumorType) : '';
+}
+
 export function getDrugNameFromTreatment(drug: TreatmentDrug) {
   // have to use ignore to escape the actual model structure. The swagger does not reflect the actually json structure
   // @ts-ignore
