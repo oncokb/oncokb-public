@@ -151,7 +151,14 @@ const AppRouts = (props: {
             exact
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
-            path={PAGE_ROUTE.HGVSG}
+            path={PAGE_ROUTE.HGVSG_WITH_QUERY}
+            component={HgvsgPage}
+          />
+          <RecaptchaBoundaryRoute
+            exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
+            path={PAGE_ROUTE.GENOMIC_CHANGE_WITH_QUERY}
             component={HgvsgPage}
           />
           <RecaptchaBoundaryRoute

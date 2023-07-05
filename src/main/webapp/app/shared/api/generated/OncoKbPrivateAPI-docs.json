@@ -1716,6 +1716,13 @@
             "type": "string"
           },
           {
+            "name": "genomicChange",
+            "in": "query",
+            "description": "Genomic change format. Example: 7,140453136,140453136,A,T",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "tumorType",
             "in": "query",
             "description": "OncoTree tumor type name/main type/code",

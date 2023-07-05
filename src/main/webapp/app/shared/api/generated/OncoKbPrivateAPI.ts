@@ -3366,6 +3366,7 @@ export default class OncoKbPrivateAPI {
         'referenceGenome' ? : string,
         'alteration' ? : string,
         'hgvsg' ? : string,
+        'genomicChange' ? : string,
         'tumorType' ? : string,
         $queryParameters ? : any
     }): string {
@@ -3391,6 +3392,10 @@ export default class OncoKbPrivateAPI {
             queryParameters['hgvsg'] = parameters['hgvsg'];
         }
 
+        if (parameters['genomicChange'] !== undefined) {
+            queryParameters['genomicChange'] = parameters['genomicChange'];
+        }
+
         if (parameters['tumorType'] !== undefined) {
             queryParameters['tumorType'] = parameters['tumorType'];
         }
@@ -3414,6 +3419,7 @@ export default class OncoKbPrivateAPI {
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} alteration - Alteration
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
+     * @param {string} genomicChange - Genomic change format. Example: 7,140453136,140453136,A,T
      * @param {string} tumorType - OncoTree tumor type name/main type/code
      */
     utilVariantAnnotationGetUsingGETWithHttpInfo(parameters: {
@@ -3422,6 +3428,7 @@ export default class OncoKbPrivateAPI {
         'referenceGenome' ? : string,
         'alteration' ? : string,
         'hgvsg' ? : string,
+        'genomicChange' ? : string,
         'tumorType' ? : string,
         $queryParameters ? : any,
             $domain ? : string
@@ -3458,6 +3465,10 @@ export default class OncoKbPrivateAPI {
                 queryParameters['hgvsg'] = parameters['hgvsg'];
             }
 
+            if (parameters['genomicChange'] !== undefined) {
+                queryParameters['genomicChange'] = parameters['genomicChange'];
+            }
+
             if (parameters['tumorType'] !== undefined) {
                 queryParameters['tumorType'] = parameters['tumorType'];
             }
@@ -3483,6 +3494,7 @@ export default class OncoKbPrivateAPI {
      * @param {string} referenceGenome - Reference genome, either GRCh37 or GRCh38. The default is GRCh37
      * @param {string} alteration - Alteration
      * @param {string} hgvsg - HGVS genomic format. Example: 7:g.140453136A>T
+     * @param {string} genomicChange - Genomic change format. Example: 7,140453136,140453136,A,T
      * @param {string} tumorType - OncoTree tumor type name/main type/code
      */
     utilVariantAnnotationGetUsingGET(parameters: {
@@ -3491,6 +3503,7 @@ export default class OncoKbPrivateAPI {
         'referenceGenome' ? : string,
         'alteration' ? : string,
         'hgvsg' ? : string,
+        'genomicChange' ? : string,
         'tumorType' ? : string,
         $queryParameters ? : any,
             $domain ? : string

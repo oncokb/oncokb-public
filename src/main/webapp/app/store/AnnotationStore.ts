@@ -53,11 +53,12 @@ import {
 } from 'app/components/oncokbMutationMapper/FilterUtils';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
 
-interface IAnnotationStore {
+export interface IAnnotationStore {
   hugoSymbolQuery?: string;
   alterationQuery?: string;
   tumorTypeQuery?: string;
   hgsvgQuery?: string;
+  genomicChangeQuery?: string;
   referenceGenomeQuery?: REFERENCE_GENOME;
 }
 
@@ -93,6 +94,7 @@ export class AnnotationStore {
   @observable alterationQuery: string;
   @observable tumorTypeQuery: string;
   @observable hgvsgQuery: string;
+  @observable genomicChangeQuery: string;
   @observable referenceGenomeQuery: REFERENCE_GENOME = REFERENCE_GENOME.GRCh37;
 
   @computed get cancerTypeFilter() {
@@ -183,6 +185,8 @@ export class AnnotationStore {
     if (props.alterationQuery) this.alterationQuery = props.alterationQuery;
     if (props.tumorTypeQuery) this.tumorTypeQuery = props.tumorTypeQuery;
     if (props.hgsvgQuery) this.hgvsgQuery = props.hgsvgQuery;
+    if (props.genomicChangeQuery)
+      this.genomicChangeQuery = props.genomicChangeQuery;
     if (props.referenceGenomeQuery)
       this.referenceGenomeQuery = props.referenceGenomeQuery;
   }
@@ -408,6 +412,13 @@ export class AnnotationStore {
     },
   });
 
+  readonly defaultAnnotationResult = remoteData<VariantAnnotation>({
+    invoke() {
+      return Promise.resolve(DEFAULT_ANNOTATION);
+    },
+    default: DEFAULT_ANNOTATION,
+  });
+
   readonly annotationResult = remoteData<VariantAnnotation>({
     await: () => [this.gene],
     invoke: () => {
@@ -426,6 +437,18 @@ export class AnnotationStore {
     invoke: () => {
       return privateClient.utilVariantAnnotationGetUsingGET({
         hgvsg: this.hgvsgQuery,
+        tumorType: this.tumorTypeQuery,
+        referenceGenome: this.referenceGenomeQuery,
+      });
+    },
+    default: DEFAULT_ANNOTATION,
+  });
+
+  readonly annotationResultByGenomicChange = remoteData<VariantAnnotation>({
+    await: () => [],
+    invoke: () => {
+      return privateClient.utilVariantAnnotationGetUsingGET({
+        genomicChange: this.genomicChangeQuery,
         tumorType: this.tumorTypeQuery,
         referenceGenome: this.referenceGenomeQuery,
       });

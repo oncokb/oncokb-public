@@ -68,6 +68,7 @@ import { PowerBySource } from 'app/pages/annotationPage/PowerBySource';
 export enum AnnotationType {
   PROTEIN_CHANGE,
   HGVSG,
+  GENOMIC_CHANGE,
 }
 
 export type IAnnotationPage = {
