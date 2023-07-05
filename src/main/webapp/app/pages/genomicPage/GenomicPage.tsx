@@ -16,7 +16,6 @@ import AnnotationPage, {
 import * as QueryString from 'query-string';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
-  DEFAULT_ANNOTATION,
   PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   REFERENCE_GENOME,
@@ -29,14 +28,12 @@ import {
 } from 'app/shared/route/types';
 import WindowStore from 'app/store/WindowStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
-import { remoteData } from 'cbioportal-frontend-commons';
-import { VariantAnnotation } from 'app/shared/api/generated/OncoKbPrivateAPI';
 
 interface MatchParams {
   query: string;
 }
 
-interface HgvsgPageProps extends RouteComponentProps<MatchParams> {
+interface GenomicPageProps extends RouteComponentProps<MatchParams> {
   appStore: AppStore;
   routing: RouterStore;
   windowStore: WindowStore;
@@ -45,7 +42,7 @@ interface HgvsgPageProps extends RouteComponentProps<MatchParams> {
 
 @inject('appStore', 'routing', 'windowStore', 'authenticationStore')
 @observer
-export default class HgvsgPage extends React.Component<HgvsgPageProps> {
+export default class GenomicPage extends React.Component<GenomicPageProps> {
   @observable tumorType = '';
   @observable refGenome = REFERENCE_GENOME.GRCh37;
 
