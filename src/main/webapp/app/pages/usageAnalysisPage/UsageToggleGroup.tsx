@@ -4,6 +4,7 @@ import { ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 import { ToggleValue } from './UsageAnalysisPage';
 
 type IUsageToggleGroupProps = {
+  key?: any;
   defaultValue: ToggleValue;
   toggleValues: ToggleValue[];
   handleToggle: (value: ToggleValue) => void;
@@ -12,7 +13,11 @@ type IUsageToggleGroupProps = {
 export const UsageToggleGroup = observer((props: IUsageToggleGroupProps) => {
   const ToggleButtons: any[] = [];
   props.toggleValues.forEach(value => {
-    ToggleButtons.push(<ToggleButton value={value}>{value}</ToggleButton>);
+    ToggleButtons.push(
+      <ToggleButton value={value} key={value}>
+        {value}
+      </ToggleButton>
+    );
   });
   return (
     <ToggleButtonGroup

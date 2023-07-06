@@ -508,7 +508,7 @@ export default class UsageAnalysisPage extends React.Component<{
                       .reverse()
                       .forEach(key => {
                         monthDropdown.push(
-                          <Dropdown.Item eventKey={key}>{key}</Dropdown.Item>
+                          <Dropdown.Item key={key}>{key}</Dropdown.Item>
                         );
                       });
                   }
