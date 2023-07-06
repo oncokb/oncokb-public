@@ -15,6 +15,7 @@ import {
 import {
   USAGE_DETAIL_TIME_KEY,
   USAGE_ALL_TIME_KEY,
+  USAGE_DAY_DETAIL_TIME_KEY,
 } from 'app/config/constants';
 import { UsageToggleGroup } from './UsageToggleGroup';
 import {
@@ -49,7 +50,9 @@ export default class ResourceUsageDetailsTable extends React.Component<
           data={
             this.timeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
               ? this.props.data.get(USAGE_ALL_TIME_KEY) || []
-              : this.props.data.get(USAGE_DETAIL_TIME_KEY) || []
+              : this.timeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH
+              ? this.props.data.get(USAGE_DETAIL_TIME_KEY) || []
+              : this.props.data.get(USAGE_DAY_DETAIL_TIME_KEY) || []
           }
           columns={[
             {
@@ -92,6 +95,7 @@ export default class ResourceUsageDetailsTable extends React.Component<
                   toggleValues={[
                     ToggleValue.RESULTS_IN_TOTAL,
                     ToggleValue.RESULTS_BY_MONTH,
+                    ToggleValue.RESULTS_BY_DAY,
                   ]}
                   handleToggle={this.handleTimeTypeToggleChange}
                 />
