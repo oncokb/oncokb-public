@@ -198,6 +198,463 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
+  '07112023': {
+    news: [
+      <span>
+        Updated therapeutic implications - new alterations with a level of
+        evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Drug(s)</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'ATR'} />
+                </td>
+                <td rowSpan={5}>Oncogenic Mutations</td>
+                <td rowSpan={5}>Prostate Cancer</td>
+                <td rowSpan={5}>Talazoparib + Enzalutamide</td>
+                <td rowSpan={5}>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaApprovalLink
+                      approval={'Talazoparib + Enzalutamide'}
+                      link={
+                        'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-talazoparib-enzalutamide-hrr-gene-mutated-metastatic-castration-resistant-prostate#:~:text=On%20June%2020%2C%202023%2C%20the,resistant%20prostate%20cancer%20(mCRPC).'
+                      }
+                    />
+                    <PMIDLink pmids={'37285865'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'FANCA'} />
+                </td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'MLH1'} />
+                </td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'MRE11'} />
+                </td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>
+                  <GenePageLink hugoSymbol={'NBN'} />
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>
+                  <GenePageLink hugoSymbol={'IDH1'} />
+                </td>
+                <td>Oncogenic Mutations (except R132)</td>
+                <td>Oligodendroglioma</td>
+                <td>Ivosidenib</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <span>Inclusion in CNS NCCN Guidelines v1.2023</span>
+                    <PMIDLink pmids={'32530764'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>3A</td>
+                <td>
+                  <GenePageLink hugoSymbol={'IDH2'} />
+                </td>
+                <td>R172</td>
+                <td>Oligodendroglioma, Astrocytoma</td>
+                <td>Vorasidenib</td>
+                <td>
+                  <PMIDLink pmids={'37272516'} />
+                </td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>
+                  <GenePageLink hugoSymbol={'KRAS'} />
+                </td>
+                <td>G12</td>
+                <td>All solid tumors</td>
+                <td>RMC-6236</td>
+                <td>
+                  <AbstractLink
+                    abstract={'Koltun et al. Abstract# 3597, AACR 2022'}
+                    link={
+                      'https://aacrjournals.org/cancerres/article/82/12_Supplement/3597/702320/Abstract-3597-Direct-targeting-of-KRASG12X-mutant'
+                    }
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>
+                  <GenePageLink hugoSymbol={'FGFR2'} />
+                </td>
+                <td>Amplification</td>
+                <td>All solid tumors</td>
+                <td>RLY-4008</td>
+                <td>
+                  <AbstractLink
+                    abstract={'Borad et al. Abstract# 4009, ASCO 2023'}
+                    link={
+                      'https://ascopubs.org/doi/abs/10.1200/JCO.2023.41.16_suppl.4009?af=R)(PMID: 37270847'
+                    }
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+      <span>
+        Updated therapeutic implications - Addition of therapies for variants
+        with a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Current Level of Evidence</th>
+                <th>Drug(s) currently in OncoKB</th>
+                <th>Drug(s) added to OncoKB</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'ALK'} />
+                </td>
+                <td>Fusions</td>
+                <td>Inflammatory Myofibroblastic Tumors</td>
+                <td>1</td>
+                <td>
+                  Crizotinib (Level 1); Brigatinib, Lorlatinib, Ceritinib (Level
+                  2)
+                </td>
+                <td>Alectinib (Level 2)</td>
+                <td>
+                  Inclusion in Soft Tissue Sarcoma NCCN Guidelines v2.2023
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'FGFR2'} />
+                </td>
+                <td>Fusions</td>
+                <td>Cholangiocarcinoma</td>
+                <td>1</td>
+                <td>Futibatinib, Pemigatinib (Level 1)</td>
+                <td>RLY-4008 (Level 3A)</td>
+                <td>
+                  <AbstractLink
+                    abstract={'Borad et al. Abstract# 4009, ASCO 2023'}
+                    link={
+                      'https://ascopubs.org/doi/abs/10.1200/JCO.2023.41.16_suppl.4009?af=R)(PMID: 37270847'
+                    }
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={2}>
+                  <GenePageLink hugoSymbol={'BRCA1'} />
+                </td>
+                <td rowSpan={2}>Oncogenic Mutations</td>
+                <td rowSpan={2}>Prostate Cancer</td>
+                <td rowSpan={2}>1</td>
+                <td rowSpan={2}>Olaparib, Rucaparib (Level 1)</td>
+                <td>Talazoparib + Enzalutamide (Level 1)</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaApprovalLink
+                      approval={'Talazoparib + Enzalutamide'}
+                      link={
+                        'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-talazoparib-enzalutamide-hrr-gene-mutated-metastatic-castration-resistant-prostate#:~:text=On%20June%2020%2C%202023%2C%20the,resistant%20prostate%20cancer%20(mCRPC).'
+                      }
+                    />
+                    <PMIDLink pmids={'37285865'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Olaparib + Abiraterone + Prednisone/Prednisolone</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaApprovalLink
+                      approval={
+                        'Olaparib + Abiraterone + Prednisone/Prednisolone'
+                      }
+                      link={
+                        'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-olaparib-abiraterone-and-prednisone-or-prednisolone-brca-mutated-metastatic-castration'
+                      }
+                    />
+                    <AbstractLink
+                      abstract={'Clarke et al. Abstract# LBA16, ASCO GUCS 2023'}
+                      link={
+                        'https://ascopubs.org/doi/abs/10.1200/JCO.2023.41.6_suppl.LBA16'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td rowSpan={2}>
+                  <GenePageLink hugoSymbol={'BRCA2'} />
+                </td>
+                <td rowSpan={2}>Oncogenic Mutations</td>
+                <td rowSpan={2}>Prostate Cancer</td>
+                <td rowSpan={2}>1</td>
+                <td rowSpan={2}>Olaparib, Rucaparib (Level 1)</td>
+                <td>Talazoparib + Enzalutamide (Level 1)</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaApprovalLink
+                      approval={'Talazoparib + Enzalutamide'}
+                      link={
+                        'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-talazoparib-enzalutamide-hrr-gene-mutated-metastatic-castration-resistant-prostate#:~:text=On%20June%2020%2C%202023%2C%20the,resistant%20prostate%20cancer%20(mCRPC).'
+                      }
+                    />
+                    <PMIDLink pmids={'37285865'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>Olaparib + Abiraterone + Prednisone/Prednisolone</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaApprovalLink
+                      approval={
+                        'Olaparib + Abiraterone + Prednisone/Prednisolone'
+                      }
+                      link={
+                        'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-olaparib-abiraterone-and-prednisone-or-prednisolone-brca-mutated-metastatic-castration'
+                      }
+                    />
+                    <AbstractLink
+                      abstract={'Clarke et al. Abstract# LBA16, ASCO GUCS 2023'}
+                      link={
+                        'https://ascopubs.org/doi/abs/10.1200/JCO.2023.41.6_suppl.LBA16'
+                      }
+                    />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'ATM'} />
+                </td>
+                <td rowSpan={4}>Oncogenic Mutations</td>
+                <td rowSpan={4}>Prostate Cancer</td>
+                <td rowSpan={4}>1</td>
+                <td rowSpan={4}>Olaparib (Level 1)</td>
+                <td rowSpan={4}>Talazoparib + Enzalutamide (Level 1)</td>
+                <td rowSpan={4}>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <FdaApprovalLink
+                      approval={'Talazoparib + Enzalutamide'}
+                      link={
+                        'https://www.fda.gov/drugs/drug-approvals-and-databases/fda-approves-talazoparib-enzalutamide-hrr-gene-mutated-metastatic-castration-resistant-prostate#:~:text=On%20June%2020%2C%202023%2C%20the,resistant%20prostate%20cancer%20(mCRPC).'
+                      }
+                    />
+                    <PMIDLink pmids={'37285865'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'PALB2'} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'CDK12'} />
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'CHEK2'} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'RAD51C'} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'IDH1'} />
+                </td>
+                <td>R132</td>
+                <td>Oligodendroglioma, Astrocytoma</td>
+                <td>3A</td>
+                <td>Ivosidenib</td>
+                <td>Vorasidenib (Level 3A)</td>
+                <td>
+                  <PMIDLink pmids={'37272516'} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'IDH1'} />
+                </td>
+                <td>R132</td>
+                <td>Oligodendroglioma, Astrocytoma</td>
+                <td>3A</td>
+                <td>Ivosidenib</td>
+                <td>Vorasidenib (Level 3A)</td>
+                <td>
+                  <PMIDLink pmids={'37272516'} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'FGFR2'} />
+                </td>
+                <td>Oncogenic Mutations</td>
+                <td>All Solid Tumors</td>
+                <td>4</td>
+                <td>Erdafitinib and AZD4547 (Level 4)</td>
+                <td>RLY-4008 (Level 4)</td>
+                <td>
+                  <AbstractLink
+                    abstract={'Borad et al. Abstract# 4009, ASCO 2023'}
+                    link={
+                      'https://ascopubs.org/doi/abs/10.1200/JCO.2023.41.16_suppl.4009?af=R)(PMID:%2037270847'
+                    }
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'KRAS'} />
+                </td>
+                <td>G12D</td>
+                <td>All Solid Tumors</td>
+                <td>4</td>
+                <td>RMC-6236</td>
+                <td>MRTX-1133 and ASP3082 (level 4)</td>
+                <td>
+                  <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+                    <AbstractLink
+                      abstract={'Nagashima et al. Abstract# 5735, AACR 2023'}
+                      link={
+                        'https://aacrjournals.org/cancerres/article/83/7_Supplement/5735/722276'
+                      }
+                    />
+                    <PMIDLink pmids={'36472553'} />
+                  </WithSeparator>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+      <span>
+        Updated therapeutic implications - Removal of therapies for variants
+        with a level of evidence
+        <Row className={'overflow-auto'}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Gene</th>
+                <th>Mutation</th>
+                <th>Cancer Type</th>
+                <th>Current Level of Evidence</th>
+                <th>Drug(s) currently in OncoKB</th>
+                <th>Drug(s) removed from OncoKB</th>
+                <th>Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <GenePageLink hugoSymbol={'FGFR1'} />
+                </td>
+                <td>Amplification</td>
+                <td>Lung Squamous Cell Carcinoma</td>
+                <td>3A</td>
+                <td>Erdafitinib</td>
+                <td rowSpan={2}>Debio1347</td>
+                <td rowSpan={2}>
+                  <Linkout
+                    link={
+                      'https://classic.clinicaltrials.gov/ct2/show/NCT03834220'
+                    }
+                  >
+                    Failed in basket study
+                  </Linkout>{' '}
+                  - no further clinical development
+                </td>
+              </tr>
+              <tr>
+                <td>{convertGeneInputToLinks('FGFR1, FGFR2, FGFR3')}</td>
+                <td>Oncogenic Mutations</td>
+                <td>All Solid Tumors</td>
+                <td>4</td>
+                <td>Erdafitinib, AZD4547</td>
+              </tr>
+            </tbody>
+          </table>
+        </Row>
+      </span>,
+    ],
+    changedAnnotations: [
+      {
+        title: 'Changed level of evidence',
+        content: [
+          [
+            'FGFR2',
+            'Oncogenic Mutations',
+            'Cholangiocarcinoma',
+            'RLY-4008 (Level 3A); Erdafitinib and AZD4547 (Currently Level 4)',
+            '4',
+            '3A',
+            <AbstractLink
+              abstract={'Borad et al. Abstract# 4009, ASCO 2023'}
+              link={
+                'https://ascopubs.org/doi/abs/10.1200/JCO.2023.41.16_suppl.4009?af=R)(PMID: 37270847'
+              }
+            />,
+          ],
+          [
+            'IDH1',
+            'R132',
+            'Oligodendroglioma',
+            'Ivosidenib',
+            '3A',
+            '2',
+            <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
+              <span>Inclusion in CNS NCCN Guidelines v1.2023</span>
+              <PMIDLink pmids={'32530764'} />
+            </WithSeparator>,
+          ],
+        ],
+      },
+    ],
+    newlyAddedGenes: ['CAD', 'CHD4', 'H4C6', 'TRIB3'],
+  },
   '05192023': {
     priorityNews: [
       <span>
@@ -726,7 +1183,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
         <AbstractLink
           abstract={'Koltun et al. Abstract# 3597, AACR 2022'}
           link={
-            'https://aacrjournals.org/cancerres/article/82/12_Supplement/3597/702320'
+            'https://aacrjournals.org/cancerres/article/82/12_Supplement/3597/702320/Abstract-3597-Direct-targeting-of-KRASG12X-mutant'
           }
         />,
       ],
