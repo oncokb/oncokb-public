@@ -183,6 +183,18 @@ const CancerTypeSearchOption: React.FunctionComponent<{
           textToHighlight={props.data.cancerName}
         />
       </div>
+      <div className={styles.subTitle}>
+        <LevelString
+          highestSensitiveLevel={props.data.highestSensitiveLevel}
+          highestResistanceLevel={props.data.highestResistanceLevel}
+        />
+        in
+        {` ${props.data.gene.hugoSymbol} `}
+        {props.data.variants.length > 1
+          ? `(${props.data.alterationsName})`
+          : ''}
+        {props.data.variants.length === 1 ? props.data.alterationsName : ''}
+      </div>
     </>
   );
 };
