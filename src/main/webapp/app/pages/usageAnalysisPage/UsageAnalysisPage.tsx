@@ -209,7 +209,7 @@ export default class UsageAnalysisPage extends React.Component<{
         const usageArray: UsageRecord[] = [];
         Object.values(monthUsage).forEach(resourceEntry => {
           usageArray.push({
-            resource: resourceEntry,
+            resource: resourceEntry as string,
             usage: monthUsage[resourceEntry],
             time: month,
           });
