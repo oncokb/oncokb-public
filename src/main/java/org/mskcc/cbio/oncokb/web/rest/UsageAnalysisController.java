@@ -7,10 +7,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.lang.reflect.Type;
 
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.domain.enumeration.FileExtension;
@@ -33,6 +36,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 
 import javax.validation.constraints.NotNull;
 
@@ -211,13 +215,27 @@ public class UsageAnalysisController {
         HttpStatus status = HttpStatus.OK;
 
         int year = TimeUtil.getCurrentNYTime().getYear();
-        JSONObject jsonObject = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
-
+        JSONObject yearSummaryFile = requestData(YEAR_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + year + FileExtension.JSON_FILE.getExtension());
         Gson gson = new Gson();
+        Type longMapType = new TypeToken<Map<String, Long>>() {}.getType();
+        Map<String, Long> yearSummary = gson.fromJson(yearSummaryFile.toJSONString(), longMapType);
+
+        Map<String, JSONObject> monthSummaries = new HashMap<String,JSONObject>();
+            int monthsBack = 0;
+            JSONObject monthSummary;
+            do {
+                String month = TimeUtil.getCurrentNYTime().minus(monthsBack, ChronoUnit.MONTHS).format(DateTimeFormatter.ofPattern("yyyy-MM"));
+                monthSummary = requestData(MONTH_RESOURCES_USAGE_SUMMARY_FILE_PREFIX + month + FileExtension.JSON_FILE.getExtension());
+                if (monthSummary != null) {
+                    monthSummaries.put(month, monthSummary);
+                }
+                monthsBack++;
+            } while (monthsBack < 12);
+
         UsageSummary summary = new UsageSummary();
-        if (jsonObject != null) {
-            summary = gson.fromJson(jsonObject.toString(), UsageSummary.class);
-        }
+        summary.setYear(yearSummary);
+        summary.setMonth(monthSummaries);
+
         return new ResponseEntity<UsageSummary>(summary, status);
     }
 
