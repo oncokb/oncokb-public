@@ -74,6 +74,8 @@ public class AccountResource {
 
     private final TokenProvider tokenProvider;
 
+    public static String RECAPTCHA_VALIDATION_ERROR = "Validation failed";
+
     public AccountResource(UserRepository userRepository, UserService userService,
                            MailService mailService, TokenProvider tokenProvider,
                            SlackService slackService, EmailService emailService,
@@ -104,6 +106,7 @@ public class AccountResource {
      * @throws InvalidPasswordException  {@code 400 (Bad Request)} if the password is incorrect.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
+     * @throws ValidationException  {@code 400 (Bad Request)} if the recaptcha failed.
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -130,6 +133,8 @@ public class AccountResource {
             }
             User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
             mailService.sendActivationEmail(userMapper.userToUserDTO(user));
+        } else {
+            throw new ValidationException(RECAPTCHA_VALIDATION_ERROR);
         }
     }
 
@@ -350,6 +355,7 @@ public class AccountResource {
      *
      * @param mail the mail of the user.
      * @throws Exception
+     * @throws ValidationException  {@code 400 (Bad Request)} if the recaptcha failed.
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail, HttpServletRequest request) throws Exception {
@@ -385,6 +391,8 @@ public class AccountResource {
                 // but log that an invalid attempt has been made
                 log.warn("Password reset requested for non existing mail");
             }
+        } else {
+            throw new ValidationException(RECAPTCHA_VALIDATION_ERROR);
         }
     }
 
@@ -482,6 +490,8 @@ public class AccountResource {
                     && passwordEncoder.matches(loginVM.getPassword(), userOptional.get().getPassword())) {
                 mailService.sendActivationEmail(userMapper.userToUserDTO(userOptional.get()));
             }
+        } else {
+            throw new ValidationException(RECAPTCHA_VALIDATION_ERROR);
         }
     }
 
