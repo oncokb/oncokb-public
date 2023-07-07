@@ -207,7 +207,7 @@ export default class UsageAnalysisPage extends React.Component<{
       Object.keys(monthSummary).forEach(month => {
         const monthUsage = monthSummary[month];
         const usageArray: UsageRecord[] = [];
-        Object.keys(monthUsage).forEach(resourceEntry => {
+        Object.values(monthUsage).forEach(resourceEntry => {
           usageArray.push({
             resource: resourceEntry,
             usage: monthUsage[resourceEntry],
@@ -254,13 +254,19 @@ export default class UsageAnalysisPage extends React.Component<{
   }
 
   @computed get calculateResourcesTabData(): UsageRecord[] {
-    let data = this.usageDetail.result.get(
-      this.resourceTabTimeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL
-        ? USAGE_ALL_TIME_KEY
-        : this.resourceTabTimeTypeToggleValue === ToggleValue.RESULTS_BY_MONTH
-        ? USAGE_DETAIL_TIME_KEY
-        : USAGE_DAY_DETAIL_TIME_KEY
-    );
+    const keysIterator = Array.from(this.usageDetail.result.keys());
+    let data: UsageRecord[] = [];
+    if (this.resourceTabTimeTypeToggleValue === ToggleValue.RESULTS_IN_TOTAL) {
+      data = this.usageDetail.result.get(USAGE_ALL_TIME_KEY) || [];
+    } else {
+      for (const key of keysIterator) {
+        if (key !== USAGE_ALL_TIME_KEY) {
+          const monthData = this.usageDetail.result.get(key);
+          data = data.concat(monthData || []);
+        }
+      }
+    }
+
     if (
       this.resourceTabFilterToggled &&
       data &&
@@ -536,7 +542,6 @@ export default class UsageAnalysisPage extends React.Component<{
                       <UsageToggleGroup
                         defaultValue={this.resourceTabTimeTypeToggleValue}
                         toggleValues={[
-                          ToggleValue.RESULTS_BY_DAY,
                           ToggleValue.RESULTS_BY_MONTH,
                           ToggleValue.RESULTS_IN_TOTAL,
                         ]}
