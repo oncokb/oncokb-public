@@ -404,7 +404,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>Olaparib + Abiraterone + Prednisone/Prednisolone</td>
+                <td>
+                  Olaparib + Abiraterone + Prednisone/Prednisolone (Level 1)
+                </td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <FdaApprovalLink
@@ -446,7 +448,9 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 </td>
               </tr>
               <tr>
-                <td>Olaparib + Abiraterone + Prednisone/Prednisolone</td>
+                <td>
+                  Olaparib + Abiraterone + Prednisone/Prednisolone (Level 1)
+                </td>
                 <td>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <FdaApprovalLink
