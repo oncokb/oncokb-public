@@ -221,10 +221,16 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>
                   <GenePageLink hugoSymbol={'ATR'} />
                 </td>
-                <td rowSpan={5}>Oncogenic Mutations</td>
-                <td rowSpan={5}>Prostate Cancer</td>
-                <td rowSpan={5}>Talazoparib + Enzalutamide</td>
-                <td rowSpan={5}>
+                <td rowSpan={5} style={{ verticalAlign: 'middle' }}>
+                  Oncogenic Mutations
+                </td>
+                <td rowSpan={5} style={{ verticalAlign: 'middle' }}>
+                  Prostate Cancer
+                </td>
+                <td rowSpan={5} style={{ verticalAlign: 'middle' }}>
+                  Talazoparib + Enzalutamide
+                </td>
+                <td rowSpan={5} style={{ verticalAlign: 'middle' }}>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <FdaApprovalLink
                       approval={'Talazoparib + Enzalutamide'}
@@ -265,7 +271,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>
                   <GenePageLink hugoSymbol={'IDH1'} />
                 </td>
-                <td>Oncogenic Mutations (except R132)</td>
+                <td>Oncogenic Mutations</td>
                 <td>Oligodendroglioma</td>
                 <td>Ivosidenib</td>
                 <td>
@@ -464,12 +470,22 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                 <td>
                   <GenePageLink hugoSymbol={'ATM'} />
                 </td>
-                <td rowSpan={4}>Oncogenic Mutations</td>
-                <td rowSpan={4}>Prostate Cancer</td>
-                <td rowSpan={4}>1</td>
-                <td rowSpan={4}>Olaparib (Level 1)</td>
-                <td rowSpan={4}>Talazoparib + Enzalutamide (Level 1)</td>
-                <td rowSpan={4}>
+                <td rowSpan={5} style={{ verticalAlign: 'middle' }}>
+                  Oncogenic Mutations
+                </td>
+                <td rowSpan={5} style={{ verticalAlign: 'middle' }}>
+                  Prostate Cancer
+                </td>
+                <td rowSpan={5} style={{ verticalAlign: 'middle' }}>
+                  1
+                </td>
+                <td rowSpan={5} style={{ verticalAlign: 'middle' }}>
+                  Olaparib (Level 1)
+                </td>
+                <td rowSpan={5} style={{ verticalAlign: 'middle' }}>
+                  Talazoparib + Enzalutamide (Level 1)
+                </td>
+                <td rowSpan={5} style={{ verticalAlign: 'middle' }}>
                   <WithSeparator separator={EVIDENCE_COLUMN_SEPARATOR}>
                     <FdaApprovalLink
                       approval={'Talazoparib + Enzalutamide'}
@@ -500,19 +516,6 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
               <tr>
                 <td>
                   <GenePageLink hugoSymbol={'RAD51C'} />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <GenePageLink hugoSymbol={'IDH1'} />
-                </td>
-                <td>R132</td>
-                <td>Oligodendroglioma, Astrocytoma</td>
-                <td>3A</td>
-                <td>Ivosidenib</td>
-                <td>Vorasidenib (Level 3A)</td>
-                <td>
-                  <PMIDLink pmids={'37272516'} />
                 </td>
               </tr>
               <tr>
