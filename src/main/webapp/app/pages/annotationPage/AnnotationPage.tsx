@@ -1,9 +1,8 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 
 import {
   AlterationPageLink,
-  GenePageLink,
   getAlterationPageLink,
   getGenePageLink,
 } from 'app/shared/utils/UrlUtils';
@@ -11,14 +10,13 @@ import {
   ANNOTATION_PAGE_TAB_KEYS,
   DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
-  ONCOGENIC_MUTATIONS,
   OTHER_BIOMARKERS,
   REFERENCE_GENOME,
   TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
-import { Col, Row, Breadcrumb } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import classnames from 'classnames';
 import { action, computed, observable } from 'mobx';
 import {
@@ -55,7 +53,6 @@ import {
 } from 'app/pages/annotationPage/Utils';
 import SummaryWithRefs from 'app/oncokb-frontend-commons/src/components/SummaryWithRefs';
 import ShowHideText from 'app/shared/texts/ShowHideText';
-import { Link } from 'react-router-dom';
 import AlterationView from 'app/pages/annotationPage/AlterationView';
 import { CancerTypeView } from 'app/pages/annotationPage/CancerTypeView';
 import AuthenticationStore from 'app/store/AuthenticationStore';
@@ -64,6 +61,13 @@ import WindowStore from 'app/store/WindowStore';
 import gnLogo from 'content/images/gn_logo.png';
 import revueLogo from 'content/images/revue_logo.png';
 import { PowerBySource } from 'app/pages/annotationPage/PowerBySource';
+import {
+  AnnotationBreadcrumbs,
+  IDropdownBreadcrumb,
+  IInputBreadcrumb,
+  ILinkBreadcrumb,
+  ITextBreadcrumb,
+} from 'app/pages/annotationPage/AnnotationBreadcrumbs';
 
 export enum AnnotationType {
   PROTEIN_CHANGE,
@@ -351,49 +355,66 @@ export default class AnnotationPage extends React.Component<
     );
   }
 
-  getBreadcrumbItem(key: string, to: string, text: string) {
-    return (
-      <Breadcrumb.Item key={key} linkAs={Link} linkProps={{ to }}>
-        {text}
-      </Breadcrumb.Item>
-    );
-  }
-
   @computed
   get navBreadcrumbs() {
-    const items = [
-      this.getBreadcrumbItem(
-        'gene',
-        getGenePageLink({
-          hugoSymbol: this.props.hugoSymbol,
-        }),
-        this.props.hugoSymbol
-      ),
-      this.getBreadcrumbItem(
-        'alteration',
-        getAlterationPageLink({
-          hugoSymbol: this.props.hugoSymbol,
-          alteration: this.alterationName,
-        }),
-        this.alterationName
-      ),
-    ];
-
-    if (this.props.tumorType) {
-      items.push(
-        this.getBreadcrumbItem(
-          'cancertype',
-          getAlterationPageLink({
-            hugoSymbol: this.props.hugoSymbol,
-            alteration: this.alterationName,
-            cancerType: this.props.tumorType,
-          }),
-          this.props.tumorType
-        )
-      );
+    let breadcrumbs: (
+      | ITextBreadcrumb
+      | ILinkBreadcrumb
+      | IDropdownBreadcrumb
+      | IInputBreadcrumb
+    )[] = [];
+    switch (this.props.annotationType) {
+      case AnnotationType.PROTEIN_CHANGE:
+        breadcrumbs = [
+          {
+            type: 'link',
+            key: 'gene',
+            text: this.props.hugoSymbol,
+            to: getGenePageLink({
+              hugoSymbol: this.props.hugoSymbol,
+            }),
+          } as ILinkBreadcrumb,
+          {
+            type: 'link',
+            key: 'alteration',
+            text: this.alterationName,
+            to: getAlterationPageLink({
+              hugoSymbol: this.props.hugoSymbol,
+              alteration: this.alterationName,
+            }),
+          } as ILinkBreadcrumb,
+        ];
+        break;
+      case AnnotationType.HGVSG:
+        breadcrumbs = [
+          {
+            type: 'dropdown',
+            key: 'referenceGenome',
+            text: this.props.refGenome,
+            onChange: () => null,
+            options: [REFERENCE_GENOME.GRCh37, REFERENCE_GENOME.GRCh38],
+          } as IDropdownBreadcrumb,
+          {
+            type: 'input',
+            key: 'hgvgs',
+            text: 'test',
+            onChange: () => null,
+          } as IInputBreadcrumb,
+        ];
+        break;
+      default:
+        break;
     }
 
-    return <Breadcrumb>{items}</Breadcrumb>;
+    if (this.props.tumorType) {
+      breadcrumbs.push({
+        type: 'text',
+        text: this.props.tumorType,
+        key: 'cancertype',
+      } as ITextBreadcrumb);
+    }
+
+    return <AnnotationBreadcrumbs breadcrumbs={breadcrumbs} />;
   }
 
   render() {
