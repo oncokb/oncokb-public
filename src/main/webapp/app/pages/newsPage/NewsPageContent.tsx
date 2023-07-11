@@ -299,7 +299,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                   <GenePageLink hugoSymbol={'KRAS'} />
                 </td>
                 <td>G12</td>
-                <td>All solid tumors</td>
+                <td>All Solid Tumors</td>
                 <td>RMC-6236</td>
                 <td>
                   <AbstractLink
@@ -316,7 +316,7 @@ export const NEWS_BY_DATE: { [date: string]: NewsData } = {
                   <GenePageLink hugoSymbol={'FGFR2'} />
                 </td>
                 <td>Amplification</td>
-                <td>All solid tumors</td>
+                <td>All Solid Tumors</td>
                 <td>RLY-4008</td>
                 <td>
                   <AbstractLink
