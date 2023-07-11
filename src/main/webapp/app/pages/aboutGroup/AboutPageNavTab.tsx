@@ -48,14 +48,15 @@ export class AboutPageNavTab extends React.Component<AboutPageNavTabProps> {
       reaction(
         () => [props.routing.location.pathname],
         ([pathName]) => {
+          const lowerCasePathName = pathName.toLowerCase();
           if (
-            pathName.startsWith(PAGE_ROUTE.YEAR_END_SUMMARY) &&
+            lowerCasePathName.startsWith(PAGE_ROUTE.YEAR_END_SUMMARY) &&
             props.routing.location.hash
           ) {
             const year = props.routing.location.hash.slice(1);
             this.selectedTab = this.getYearEndSummaryEventKey(year);
-          } else if (Object.keys(TabKey).includes(pathName)) {
-            this.selectedTab = pathName;
+          } else if (Object.keys(TabKey).includes(lowerCasePathName)) {
+            this.selectedTab = lowerCasePathName;
           }
         },
         { fireImmediately: true }

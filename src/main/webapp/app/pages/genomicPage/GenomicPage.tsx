@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { AnnotationStore } from 'app/store/AnnotationStore';
+import { AnnotationStore, IAnnotationStore } from 'app/store/AnnotationStore';
 import { computed, IReactionDisposer, observable, reaction } from 'mobx';
 import AppStore from 'app/store/AppStore';
 import LoadingIndicator, {
@@ -16,6 +16,7 @@ import AnnotationPage, {
 import * as QueryString from 'query-string';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
+  PAGE_ROUTE,
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   REFERENCE_GENOME,
 } from 'app/config/constants';
@@ -29,10 +30,10 @@ import WindowStore from 'app/store/WindowStore';
 import AuthenticationStore from 'app/store/AuthenticationStore';
 
 interface MatchParams {
-  hgvsg: string;
+  query: string;
 }
 
-interface HgvsgPageProps extends RouteComponentProps<MatchParams> {
+interface GenomicPageProps extends RouteComponentProps<MatchParams> {
   appStore: AppStore;
   routing: RouterStore;
   windowStore: WindowStore;
@@ -41,9 +42,11 @@ interface HgvsgPageProps extends RouteComponentProps<MatchParams> {
 
 @inject('appStore', 'routing', 'windowStore', 'authenticationStore')
 @observer
-export default class HgvsgPage extends React.Component<HgvsgPageProps> {
+export default class GenomicPage extends React.Component<GenomicPageProps> {
   @observable tumorType = '';
   @observable refGenome = REFERENCE_GENOME.GRCh37;
+
+  private readonly annotationType: AnnotationType;
   private selectedTab: ANNOTATION_PAGE_TAB_KEYS;
 
   private store: AnnotationStore;
@@ -52,13 +55,31 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
   constructor(props: any) {
     super(props);
 
+    const lowerCasePathName = props.routing.location.pathname.toLowerCase();
+    if (lowerCasePathName.startsWith(PAGE_ROUTE.HGVSG)) {
+      this.annotationType = AnnotationType.HGVSG;
+    } else if (lowerCasePathName.startsWith(PAGE_ROUTE.GENOMIC_CHANGE)) {
+      this.annotationType = AnnotationType.GENOMIC_CHANGE;
+    }
+
     if (props.match.params) {
-      this.store = new AnnotationStore({
-        hgsvgQuery: props.match.params.hgvsg,
+      const params: IAnnotationStore = {
         tumorTypeQuery: this.tumorType,
         referenceGenomeQuery: this.refGenome,
-      });
+      };
+      switch (this.annotationType) {
+        case AnnotationType.HGVSG:
+          params.hgsvgQuery = props.match.params.query;
+          break;
+        case AnnotationType.GENOMIC_CHANGE:
+          params.genomicChangeQuery = props.match.params.query;
+          break;
+        default:
+          break;
+      }
+      this.store = new AnnotationStore(params);
     }
+
     this.props.appStore.toFdaRecognizedContent = false;
 
     this.reactions.push(
@@ -107,6 +128,21 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
   }
 
   @computed
+  get annotationData() {
+    switch (this.annotationType) {
+      case AnnotationType.GENOMIC_CHANGE:
+        return this.store.annotationResultByGenomicChange;
+        break;
+      case AnnotationType.HGVSG:
+        return this.store.annotationResultByHgvsg;
+        break;
+      default:
+        return this.store.defaultAnnotationResult;
+        break;
+    }
+  }
+
+  @computed
   get searchQueries() {
     const queryString: Partial<AlterationPageSearchQueries> = {};
     if (this.refGenome) {
@@ -125,21 +161,23 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
   @computed
   get documentTitle() {
     const content = [];
-    if (this.store.annotationResultByHgvsg.result.query.hugoSymbol) {
-      content.push(this.store.annotationResultByHgvsg.result.query.hugoSymbol);
-    }
-    if (this.store.annotationResultByHgvsg.result.query.alteration) {
-      content.push(this.store.annotationResultByHgvsg.result.query.alteration);
-    }
-    if (this.store.tumorTypeQuery) {
-      content.push(`in ${this.store.tumorTypeQuery}`);
+    if (this.annotationData.isComplete) {
+      if (this.annotationData.result.query.hugoSymbol) {
+        content.push(this.annotationData.result.query.hugoSymbol);
+      }
+      if (this.annotationData.result.query.alteration) {
+        content.push(this.annotationData.result.query.alteration);
+      }
+      if (this.store.tumorTypeQuery) {
+        content.push(`in ${this.store.tumorTypeQuery}`);
+      }
     }
     return content.join(', ');
   }
 
   @computed
   get pageShouldBeRendered() {
-    return this.store.annotationResultByHgvsg.isComplete;
+    return this.annotationData.isComplete;
   }
 
   @autobind
@@ -167,29 +205,21 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
       <DocumentTitle title={this.documentTitle}>
         <If condition={this.pageShouldBeRendered}>
           <Then>
-            <If
-              condition={
-                !!this.store.annotationResultByHgvsg.result.query.hugoSymbol
-              }
-            >
+            <If condition={!!this.annotationData.result.query.hugoSymbol}>
               <Then>
                 <AnnotationPage
                   appStore={this.props.appStore}
                   windowStore={this.props.windowStore}
                   authenticationStore={this.props.authenticationStore}
-                  annotationType={AnnotationType.HGVSG}
-                  hugoSymbol={
-                    this.store.annotationResultByHgvsg.result.query.hugoSymbol
-                  }
+                  annotationType={this.annotationType}
+                  hugoSymbol={this.annotationData.result.query.hugoSymbol}
                   oncogene={this.store.gene.result.oncogene}
                   tsg={this.store.gene.result.tsg}
-                  alteration={
-                    this.store.annotationResultByHgvsg.result.query.alteration
-                  }
+                  alteration={this.annotationData.result.query.alteration}
                   matchedAlteration={this.store.alteration.result}
                   tumorType={this.store.tumorTypeQuery}
                   refGenome={this.store.referenceGenomeQuery}
-                  annotation={this.store.annotationResultByHgvsg.result}
+                  annotation={this.annotationData.result}
                   biologicalAlterations={
                     this.store.biologicalAlterations.result
                   }
@@ -209,7 +239,7 @@ export default class HgvsgPage extends React.Component<HgvsgPageProps> {
             </If>
           </Then>
           <Else>
-            <If condition={this.store.annotationResultByHgvsg.isError}>
+            <If condition={this.annotationData.isError}>
               <Then>
                 <Alert variant="warning" className={'text-center'}>
                   An error occurred while annotating your variant.

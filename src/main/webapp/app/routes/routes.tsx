@@ -23,7 +23,7 @@ import React from 'react';
 import LevelOfEvidencePage, { Version } from 'app/pages/LevelOfEvidencePage';
 import NewsPage from 'app/pages/newsPage/NewsPage';
 import { RecaptchaBoundaryRoute } from '../shared/auth/RecaptchaBoundaryRoute';
-import HgvsgPage from 'app/pages/hgvsgPage/HgvsgPage';
+import GenomicPage from 'app/pages/genomicPage/GenomicPage';
 import UserPage from 'app/pages/userPage/UserPage';
 import AppStore from 'app/store/AppStore';
 import ActivateTrialFinish from 'app/components/account/ActivateTrialFinish';
@@ -151,8 +151,15 @@ const AppRouts = (props: {
             exact
             isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
             appStore={props.appStore}
-            path={PAGE_ROUTE.HGVSG}
-            component={HgvsgPage}
+            path={PAGE_ROUTE.HGVSG_WITH_QUERY}
+            component={GenomicPage}
+          />
+          <RecaptchaBoundaryRoute
+            exact
+            isUserAuthenticated={props.authenticationStore.isUserAuthenticated}
+            appStore={props.appStore}
+            path={PAGE_ROUTE.GENOMIC_CHANGE_WITH_QUERY}
+            component={GenomicPage}
           />
           <RecaptchaBoundaryRoute
             exact
