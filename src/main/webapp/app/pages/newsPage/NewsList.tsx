@@ -18,7 +18,6 @@ import {
 import HashLink from 'app/shared/links/HashLink';
 import { RouterStore } from 'mobx-react-router';
 import { observable } from 'mobx';
-import autobind from 'autobind-decorator';
 import { observer } from 'mobx-react';
 
 export type NewsListProps = {

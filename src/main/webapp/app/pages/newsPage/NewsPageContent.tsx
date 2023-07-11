@@ -198,7 +198,7 @@ const EVIDENCE_COLUMN_SEPARATOR = '; ';
 // https://stackoverflow.com/questions/41947168/is-it-possible-to-use-keyof-operator-on-literals-instead-of-interfaces
 
 export const NEWS_BY_DATE: { [date: string]: NewsData } = {
-  '07112023': {
+  '07122023': {
     news: [
       <span>
         Updated therapeutic implications - new alterations with a level of
