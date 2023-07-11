@@ -185,15 +185,13 @@ const FdaView: React.FunctionComponent<{
 export const CancerTypeView: React.FunctionComponent<ICancerTypeView> = props => {
   return (
     <div className={'mt-3'}>
-      {props.therapeuticImplications.length > 0 && (
-        <TxView
-          isLargeScreen={props.isLargeScreen}
-          userAuthenticated={props.userAuthenticated}
-          hugoSymbol={props.hugoSymbol}
-          summary={props.annotation.tumorTypeSummary}
-          implications={props.therapeuticImplications}
-        />
-      )}
+      <TxView
+        isLargeScreen={props.isLargeScreen}
+        userAuthenticated={props.userAuthenticated}
+        hugoSymbol={props.hugoSymbol}
+        summary={props.annotation.tumorTypeSummary}
+        implications={props.therapeuticImplications}
+      />
       {props.diagnosticImplications.length > 0 && (
         <DxPxView
           isLargeScreen={props.isLargeScreen}
