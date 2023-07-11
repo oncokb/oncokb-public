@@ -55,11 +55,10 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
   constructor(props: any) {
     super(props);
 
-    if (props.routing.location.pathname.startsWith(PAGE_ROUTE.HGVSG)) {
+    const lowerCasePathName = props.routing.location.pathname.toLowerCase();
+    if (lowerCasePathName.startsWith(PAGE_ROUTE.HGVSG)) {
       this.annotationType = AnnotationType.HGVSG;
-    } else if (
-      props.routing.location.pathname.startsWith(PAGE_ROUTE.GENOMIC_CHANGE)
-    ) {
+    } else if (lowerCasePathName.startsWith(PAGE_ROUTE.GENOMIC_CHANGE)) {
       this.annotationType = AnnotationType.GENOMIC_CHANGE;
     }
 
