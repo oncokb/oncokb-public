@@ -70,6 +70,9 @@ public class AccountResource {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private CreateAssessment createAssess;
+
     private final MailService mailService;
 
     private final TokenProvider tokenProvider;
@@ -114,10 +117,9 @@ public class AccountResource {
             HttpServletRequest request) throws Exception {
         ResponseEntity<String> rs = null;
         try {
-            CreateAssessment createAssess = new CreateAssessment(applicationProperties);
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
-            rs = createAssess.createAssessment(client,recaptchaToken);
+            rs = createAssess.createAssessment(client, recaptchaToken);
         } catch (ValidationException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
@@ -361,7 +363,6 @@ public class AccountResource {
     public void requestPasswordReset(@RequestBody String mail, HttpServletRequest request) throws Exception {
         ResponseEntity<String> rs = null;
         try {
-            CreateAssessment createAssess = new CreateAssessment(applicationProperties);
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
             rs = createAssess.createAssessment(client,recaptchaToken);
@@ -467,7 +468,6 @@ public class AccountResource {
     public void resendVerification(@RequestBody LoginVM loginVM, HttpServletRequest request) throws Exception {
         ResponseEntity<String> rs = null;
         try {
-            CreateAssessment createAssess = new CreateAssessment(applicationProperties);
             RecaptchaEnterpriseServiceClient client = createAssess.createClient();
             String recaptchaToken = createAssess.getRecaptchaToken(request);
             rs = createAssess.createAssessment(client,recaptchaToken);

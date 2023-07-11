@@ -23,10 +23,6 @@ jobs:
               run: sudo /etc/init.d/mysql stop
             - name: Install node.js packages
               run: yarn install
-            - name: 'Authenticate to Google Cloud'
-              uses: 'google-github-actions/auth@v1'
-              with:
-                credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
             - name: Run backend test
               run: |
                 chmod +x mvnw

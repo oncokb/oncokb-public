@@ -7,6 +7,7 @@ import org.mskcc.cbio.oncokb.config.application.FrontendProperties;
 import org.mskcc.cbio.oncokb.domain.User;
 import org.mskcc.cbio.oncokb.repository.AuthorityRepository;
 import org.mskcc.cbio.oncokb.repository.UserRepository;
+import org.mskcc.cbio.oncokb.web.rest.errors.ExceptionTranslator;
 import org.mskcc.cbio.oncokb.security.AuthoritiesConstants;
 import org.mskcc.cbio.oncokb.service.UserService;
 import org.mskcc.cbio.oncokb.service.dto.PasswordChangeDTO;
@@ -14,25 +15,33 @@ import org.mskcc.cbio.oncokb.service.dto.UserDTO;
 import org.mskcc.cbio.oncokb.web.rest.vm.KeyAndPasswordVM;
 import org.mskcc.cbio.oncokb.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
+import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
+import javax.xml.bind.ValidationException;
+import javax.naming.ConfigurationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mskcc.cbio.oncokb.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -67,17 +76,36 @@ public class AccountResourceIT {
 
     FrontendProperties frontendProps;
 
+    @Mock
+    private CreateAssessment createAssessment;
+
+    @InjectMocks
+    @Autowired
     private AccountResource accountResource;
 
+    @Autowired 
+    private ExceptionTranslator exceptionTranslator;
+
     @BeforeEach
-    public void setUp() throws IOException {
+    public void setUp() throws IOException, ValidationException, ConfigurationException {
         frontendProps = new FrontendProperties();
         frontendProps.setRecaptchaProjectId("symbolic-nation-320615");
         frontendProps.setRecaptchaSiteKey("6LfAOe4jAAAAANjzxWQ8mKilcvk1QvLLohd7EV7F");
         frontendProps.setRecaptchaThreshold((float) 0.5);
         applicationProperties.setFrontend(frontendProps);
 
-        accountResource = new AccountResource(userRepository, userService, null, null, null, null, null, null, passwordEncoder, null, null, applicationProperties);
+        MockitoAnnotations.initMocks(this);
+        this.restAccountMockMvc = MockMvcBuilders.standaloneSetup(accountResource).setControllerAdvice(exceptionTranslator).build();
+        mockRecaptcha();
+    }
+
+    private void mockRecaptcha() throws IOException, ValidationException, ConfigurationException{
+        Mockito.when(createAssessment.createClient())
+            .thenReturn(null);
+        Mockito.when(createAssessment.getRecaptchaToken(any(HttpServletRequest.class)))
+            .thenReturn(Constants.TESTING_TOKEN);
+        Mockito.when(createAssessment.createAssessment(isNull(), any(String.class)))
+            .thenReturn(ResponseEntity.ok("Mocked recaptcha assessment"));
     }
 
     @Test
