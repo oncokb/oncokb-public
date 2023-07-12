@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Breadcrumb } from 'react-bootstrap';
+import { Breadcrumb, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Else, If, Then } from 'react-if';
 import Select from 'react-select';
@@ -43,8 +43,8 @@ const Icon: React.FunctionComponent<{
 }> = props => {
   return (
     <i
-      className={`fa fa-${props.iconClassName} ml-1 ${props.colorClassName}`}
-      style={{ cursor: 'pointer' }}
+      className={`fa fa-${props.iconClassName} ${props.colorClassName}`}
+      style={{ cursor: 'pointer', width: 13 }}
       onClick={props.onClick}
     ></i>
   );
@@ -75,38 +75,60 @@ const InputBreadcrumb: React.FunctionComponent<IInputBreadcrumb> = props => {
   const [text, setText] = useState(props.text);
   const editableContentFontSize = '13px';
   return (
-    <Breadcrumb.Item key={props.key} active style={{ color: COLOR_BLUE }}>
+    <Breadcrumb.Item
+      key={props.key}
+      active={editing}
+      style={{ color: COLOR_BLUE }}
+    >
       <If condition={editing}>
         <Then>
           <span style={{ fontSize: editableContentFontSize }}>
             <input
               type={'text'}
               value={text}
-              style={{ border: '1px solid lightgrey', borderRadius: 4 }}
+              style={{
+                border: '1px solid lightgrey',
+                borderRadius: 4,
+                minWidth: 180,
+              }}
               onChange={e => setText(e.target.value)}
             />
-            <Icon
-              colorClassName="text-success"
-              iconClassName="check"
-              onClick={() => {
-                props.onChange(text);
-                setEditing(false);
-              }}
-            />
-            <Icon
-              colorClassName="text-danger"
-              iconClassName="times"
-              onClick={() => {
-                setText(props.text);
-                setEditing(false);
-              }}
-            />
+            <Button
+              size={'sm'}
+              variant={'success'}
+              style={{ padding: '0 0.25rem' }}
+              className={'ml-1'}
+            >
+              <Icon
+                colorClassName="text-white"
+                iconClassName="check"
+                onClick={() => {
+                  props.onChange(text);
+                  setEditing(false);
+                }}
+              />
+            </Button>
+            <Button
+              size={'sm'}
+              variant={'danger'}
+              style={{ padding: '0 0.25rem' }}
+              className={'ml-1'}
+            >
+              <Icon
+                colorClassName="text-white"
+                iconClassName="times"
+                onClick={() => {
+                  setText(props.text);
+                  setEditing(false);
+                }}
+              />
+            </Button>
           </span>
         </Then>
         <Else>
           {props.text}
           <Icon
-            iconClassName="pencil-square-o"
+            iconClassName="pencil-square-o ml-1"
             onClick={() => setEditing(true)}
           />
         </Else>
@@ -176,7 +198,7 @@ const DropdownBreadcrumb: React.FunctionComponent<IDropdownBreadcrumb> = props =
         <Else>
           {props.text}
           <Icon
-            iconClassName="pencil-square-o"
+            iconClassName="pencil-square-o ml-1"
             onClick={() => setEditing(true)}
           />
         </Else>
