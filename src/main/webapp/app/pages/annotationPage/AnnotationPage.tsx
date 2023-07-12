@@ -8,6 +8,7 @@ import {
 } from 'app/shared/utils/UrlUtils';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
+  DEFAULT_GENE,
   DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
   OTHER_BIOMARKERS,
@@ -16,7 +17,7 @@ import {
 } from 'app/config/constants';
 import styles from 'app/pages/alterationPage/AlterationPage.module.scss';
 import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Alert } from 'react-bootstrap';
 import classnames from 'classnames';
 import { action, computed, observable } from 'mobx';
 import {
@@ -26,6 +27,7 @@ import {
   VariantAnnotationTumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
+  AnnotationStore,
   FdaImplication,
   TherapeuticImplication,
 } from 'app/store/AnnotationStore';
@@ -68,8 +70,14 @@ import {
   ILinkBreadcrumb,
   ITextBreadcrumb,
 } from 'app/pages/annotationPage/AnnotationBreadcrumbs';
+import LoadingIndicator, {
+  LoaderSize,
+} from 'app/components/loadingIndicator/LoadingIndicator';
+import { Else, If, Then } from 'react-if';
+import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 
 export enum AnnotationType {
+  GENE,
   PROTEIN_CHANGE,
   HGVSG,
   GENOMIC_CHANGE,
@@ -78,17 +86,9 @@ export enum AnnotationType {
 export type IAnnotationPage = {
   appStore: AppStore;
   windowStore: WindowStore;
+  store: AnnotationStore;
   annotationType: AnnotationType;
-  hugoSymbol: string;
-  oncogene?: boolean;
-  tsg?: boolean;
-  alteration: string;
-  matchedAlteration: Alteration | undefined;
-  tumorType: string;
-  refGenome: REFERENCE_GENOME;
   onChangeTumorType: (newTumorType: string) => void;
-  annotation: VariantAnnotation;
-  biologicalAlterations?: BiologicalVariant[];
   relevantAlterations?: Alteration[];
   defaultSelectedTab?: ANNOTATION_PAGE_TAB_KEYS;
   onChangeTab?: (
@@ -107,7 +107,7 @@ export default class AnnotationPage extends React.Component<
 
   constructor(props: any) {
     super(props);
-    if (this.props.tumorType) {
+    if (this.props.store.tumorTypeQuery) {
       this.showMutationEffect = false;
     }
   }
@@ -123,7 +123,9 @@ export default class AnnotationPage extends React.Component<
       const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
       const alterations = _.chain(evidence.alterations)
         .filter(alteration =>
-          alteration.referenceGenomes.includes(this.props.refGenome)
+          alteration.referenceGenomes.includes(
+            this.props.store.referenceGenomeQuery
+          )
         )
         .value();
       const cancerTypes = evidence.cancerTypes.map(cancerType =>
@@ -143,7 +145,7 @@ export default class AnnotationPage extends React.Component<
               alteration.consequence ? (
                 <AlterationPageLink
                   key={alteration.name}
-                  hugoSymbol={this.props.hugoSymbol}
+                  hugoSymbol={this.props.store.hugoSymbol}
                   alteration={{
                     alteration: alteration.alteration,
                     name: alteration.name,
@@ -165,10 +167,10 @@ export default class AnnotationPage extends React.Component<
             <WithSeparator separator={', '}>
               {cancerTypes.map(cancerType => (
                 <AlterationPageLink
-                  key={`${this.props.alteration}-${cancerType}`}
-                  hugoSymbol={this.props.hugoSymbol}
-                  alteration={this.props.alteration}
-                  alterationRefGenomes={[this.props.refGenome]}
+                  key={`${this.props.store.alterationName}-${cancerType}`}
+                  hugoSymbol={this.props.store.hugoSymbol}
+                  alteration={this.props.store.alterationName}
+                  alterationRefGenomes={[this.props.store.referenceGenomeQuery]}
                   cancerType={cancerType}
                 >
                   {cancerType}
@@ -207,7 +209,7 @@ export default class AnnotationPage extends React.Component<
   get therapeuticImplications(): TherapeuticImplication[] {
     return this.getImplications(
       this.getEvidenceByEvidenceTypes(
-        this.props.annotation.tumorTypes,
+        this.props.store.annotationData.result.tumorTypes,
         TREATMENT_EVIDENCE_TYPES
       )
     );
@@ -216,7 +218,7 @@ export default class AnnotationPage extends React.Component<
   @computed
   get fdaImplication(): FdaImplication[] {
     const evidences = this.getEvidenceByEvidenceTypes(
-      this.props.annotation.tumorTypes,
+      this.props.store.annotationData.result.tumorTypes,
       TREATMENT_EVIDENCE_TYPES
     );
     const fdaImplications: FdaImplication[] = [];
@@ -224,7 +226,9 @@ export default class AnnotationPage extends React.Component<
       const level = levelOfEvidence2Level(evidence.levelOfEvidence);
       const fdaLevel = levelOfEvidence2Level(evidence.fdaLevel);
       const alterations = evidence.alterations.filter(alteration =>
-        alteration.referenceGenomes.includes(this.props.refGenome)
+        alteration.referenceGenomes.includes(
+          this.props.store.referenceGenomeQuery
+        )
       );
       alterations.forEach(alt => {
         // convert all alterations to matchedAlteration/alteration query if not positional variant
@@ -238,10 +242,10 @@ export default class AnnotationPage extends React.Component<
         ) {
           mappedAlteration = alt;
         } else {
-          if (this.props.matchedAlteration) {
-            mappedAlteration = this.props.matchedAlteration;
+          if (this.props.store.alteration.result) {
+            mappedAlteration = this.props.store.alteration.result;
           } else {
-            mappedAlteration.name = mappedAlteration.alteration = this.props.alteration;
+            mappedAlteration.name = mappedAlteration.alteration = this.props.store.alterationName;
           }
         }
         const ctNames = evidence.cancerTypes.map(ct =>
@@ -256,7 +260,7 @@ export default class AnnotationPage extends React.Component<
           alterationView: (
             <AlterationPageLink
               key={mappedAlteration.name}
-              hugoSymbol={this.props.hugoSymbol}
+              hugoSymbol={this.props.store.hugoSymbol}
               alteration={{
                 alteration: mappedAlteration.alteration,
                 name: mappedAlteration.name,
@@ -275,10 +279,12 @@ export default class AnnotationPage extends React.Component<
               <WithSeparator separator={', '}>
                 {ctNames.map(cancerType => (
                   <AlterationPageLink
-                    key={`${this.props.alteration}-${cancerType}`}
-                    hugoSymbol={this.props.hugoSymbol}
-                    alteration={this.props.alteration}
-                    alterationRefGenomes={[this.props.refGenome]}
+                    key={`${this.props.store.alterationName}-${cancerType}`}
+                    hugoSymbol={this.props.store.hugoSymbol}
+                    alteration={this.props.store.alterationName}
+                    alterationRefGenomes={[
+                      this.props.store.referenceGenomeQuery,
+                    ]}
                     cancerType={cancerType}
                     hashQueries={{
                       tab: ANNOTATION_PAGE_TAB_KEYS.FDA,
@@ -304,18 +310,20 @@ export default class AnnotationPage extends React.Component<
   @computed
   get diagnosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
-      this.getEvidenceByEvidenceTypes(this.props.annotation.tumorTypes, [
-        EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION,
-      ])
+      this.getEvidenceByEvidenceTypes(
+        this.props.store.annotationData.result.tumorTypes,
+        [EVIDENCE_TYPES.DIAGNOSTIC_IMPLICATION]
+      )
     );
   }
 
   @computed
   get prognosticImplications(): TherapeuticImplication[] {
     return this.getImplications(
-      this.getEvidenceByEvidenceTypes(this.props.annotation.tumorTypes, [
-        EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION,
-      ])
+      this.getEvidenceByEvidenceTypes(
+        this.props.store.annotationData.result.tumorTypes,
+        [EVIDENCE_TYPES.PROGNOSTIC_IMPLICATION]
+      )
     );
   }
 
@@ -325,17 +333,20 @@ export default class AnnotationPage extends React.Component<
     if (!this.isCategoricalAlteration) {
       orderedSummaries.push(SummaryKey.ALTERATION_SUMMARY);
     }
-    return getSummaries(this.props.annotation, orderedSummaries);
+    return getSummaries(
+      this.props.store.annotationData.result,
+      orderedSummaries
+    );
   }
 
   @computed get isCategoricalAlteration() {
-    return isCategoricalAlteration(this.props.alteration);
+    return isCategoricalAlteration(this.props.store.alterationName);
   }
 
   @computed
   get showGeneName() {
-    const lHugo = this.props.hugoSymbol.toLowerCase();
-    const altNameIncludesGene = this.props.alteration
+    const lHugo = this.props.store.hugoSymbol.toLowerCase();
+    const altNameIncludesGene = this.props.store.annotationData.result.query.alteration
       .toLowerCase()
       .includes(lHugo);
     const isOtherBiomarkers = lHugo === OTHER_BIOMARKERS.toLowerCase();
@@ -343,16 +354,19 @@ export default class AnnotationPage extends React.Component<
   }
 
   @computed
-  get alterationName() {
-    return getAlterationName(
-      this.props.matchedAlteration === undefined
-        ? this.props.alteration
-        : {
-            alteration: this.props.matchedAlteration.alteration,
-            name: this.props.matchedAlteration.name,
-          },
-      true
-    );
+  get pageShouldBeRendered() {
+    if (this.props.annotationType === AnnotationType.PROTEIN_CHANGE) {
+      return (
+        this.props.store.gene.isComplete &&
+        this.props.store.geneNumber.isComplete &&
+        this.props.store.ensemblGenes.isComplete &&
+        this.props.store.clinicalAlterations.isComplete &&
+        this.props.store.biologicalAlterations.isComplete &&
+        this.props.store.annotationData.isComplete
+      );
+    } else {
+      return this.props.store.annotationData.isComplete;
+    }
   }
 
   @computed
@@ -369,18 +383,18 @@ export default class AnnotationPage extends React.Component<
           {
             type: 'link',
             key: 'gene',
-            text: this.props.hugoSymbol,
+            text: this.props.store.hugoSymbol,
             to: getGenePageLink({
-              hugoSymbol: this.props.hugoSymbol,
+              hugoSymbol: this.props.store.hugoSymbol,
             }),
           } as ILinkBreadcrumb,
           {
             type: 'link',
             key: 'alteration',
-            text: this.alterationName,
+            text: this.props.store.alterationName,
             to: getAlterationPageLink({
-              hugoSymbol: this.props.hugoSymbol,
-              alteration: this.alterationName,
+              hugoSymbol: this.props.store.hugoSymbol,
+              alteration: this.props.store.alterationName,
             }),
           } as ILinkBreadcrumb,
         ];
@@ -390,14 +404,31 @@ export default class AnnotationPage extends React.Component<
           {
             type: 'dropdown',
             key: 'referenceGenome',
-            text: this.props.refGenome,
+            text: this.props.store.referenceGenomeQuery,
             onChange: () => null,
             options: [REFERENCE_GENOME.GRCh37, REFERENCE_GENOME.GRCh38],
           } as IDropdownBreadcrumb,
           {
             type: 'input',
             key: 'hgvgs',
-            text: 'test',
+            text: this.props.store.hgvsgQuery,
+            onChange: () => null,
+          } as IInputBreadcrumb,
+        ];
+        break;
+      case AnnotationType.GENOMIC_CHANGE:
+        breadcrumbs = [
+          {
+            type: 'dropdown',
+            key: 'referenceGenome',
+            text: this.props.store.referenceGenomeQuery,
+            onChange: () => null,
+            options: [REFERENCE_GENOME.GRCh37, REFERENCE_GENOME.GRCh38],
+          } as IDropdownBreadcrumb,
+          {
+            type: 'input',
+            key: 'genomicChange',
+            text: this.props.store.genomicChangeQuery,
             onChange: () => null,
           } as IInputBreadcrumb,
         ];
@@ -406,10 +437,10 @@ export default class AnnotationPage extends React.Component<
         break;
     }
 
-    if (this.props.tumorType) {
+    if (this.props.store.tumorTypeQuery) {
       breadcrumbs.push({
         type: 'text',
-        text: this.props.tumorType,
+        text: this.props.store.tumorTypeQuery,
         key: 'cancertype',
       } as ITextBreadcrumb);
     }
@@ -417,16 +448,15 @@ export default class AnnotationPage extends React.Component<
     return <AnnotationBreadcrumbs breadcrumbs={breadcrumbs} />;
   }
 
-  render() {
+  getAnnotationComponents() {
     const categoricalAlterationDescription = getCategoricalAlterationDescription(
-      this.props.hugoSymbol,
-      this.props.alteration,
-      this.props.oncogene,
-      this.props.tsg
+      this.props.store.hugoSymbol,
+      this.props.store.annotationData.result.query.alteration,
+      this.props.store.gene.result.oncogene,
+      this.props.store.gene.result.tsg
     );
     return (
       <>
-        {this.navBreadcrumbs}
         <div className={'d-flex justify-content-between flex-wrap'}>
           <div>
             <h2
@@ -434,20 +464,22 @@ export default class AnnotationPage extends React.Component<
               style={{ marginBottom: 0 }}
             >
               {this.showGeneName && (
-                <span className={'mr-2'}>{this.props.hugoSymbol}</span>
+                <span className={'mr-2'}>{this.props.store.hugoSymbol}</span>
               )}
-              <span>{this.alterationName}</span>
-              {this.props.tumorType && (
-                <span className={'mx-2'}>in {this.props.tumorType}</span>
+              <span>{this.props.store.alterationName}</span>
+              {this.props.store.tumorTypeQuery && (
+                <span className={'mx-2'}>
+                  in {this.props.store.tumorTypeQuery}
+                </span>
               )}
               <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
                 <FeedbackIcon
                   feedback={{
                     type: FeedbackType.ANNOTATION,
                     annotation: {
-                      gene: this.props.hugoSymbol,
-                      alteration: this.props.alteration,
-                      cancerType: this.props.tumorType,
+                      gene: this.props.store.hugoSymbol,
+                      alteration: this.props.store.alterationName,
+                      cancerType: this.props.store.tumorTypeQuery,
                     },
                   }}
                   appStore={this.props.appStore}
@@ -456,30 +488,34 @@ export default class AnnotationPage extends React.Component<
             </h2>
             <AlterationInfo
               isPositionalAlteration={isPositionalAlteration(
-                this.props.annotation.query.proteinStart,
-                this.props.annotation.query.proteinEnd,
-                this.props.annotation.query.consequence
+                this.props.store.annotationData.result.query.proteinStart,
+                this.props.store.annotationData.result.query.proteinEnd,
+                this.props.store.annotationData.result.query.consequence
               )}
-              oncogenicity={this.props.annotation.oncogenic}
+              oncogenicity={this.props.store.annotationData.result.oncogenic}
               mutationEffect={
                 this.isCategoricalAlteration
                   ? undefined
-                  : this.props.annotation.mutationEffect
+                  : this.props.store.annotationData.result.mutationEffect
               }
-              isVus={this.props.annotation.vus}
+              isVus={this.props.store.annotationData.result.vus}
               highestSensitiveLevel={
-                this.props.annotation.highestSensitiveLevel
+                this.props.store.annotationData.result.highestSensitiveLevel
               }
               highestResistanceLevel={
-                this.props.annotation.highestResistanceLevel
+                this.props.store.annotationData.result.highestResistanceLevel
               }
               highestDiagnosticImplicationLevel={
-                this.props.annotation.highestDiagnosticImplicationLevel
+                this.props.store.annotationData.result
+                  .highestDiagnosticImplicationLevel
               }
               highestPrognosticImplicationLevel={
-                this.props.annotation.highestPrognosticImplicationLevel
+                this.props.store.annotationData.result
+                  .highestPrognosticImplicationLevel
               }
-              highestFdaLevel={this.props.annotation.highestFdaLevel}
+              highestFdaLevel={
+                this.props.store.annotationData.result.highestFdaLevel
+              }
             />
             {categoricalAlterationDescription && (
               <div
@@ -507,7 +543,7 @@ export default class AnnotationPage extends React.Component<
                 url={'genomenexus.org'}
                 logo={gnLogo}
               />
-              {this.props.annotation.vue && (
+              {this.props.store.annotationData.result.vue && (
                 <PowerBySource
                   name={'reVUE'}
                   url={'cancerrevue.org'}
@@ -517,7 +553,7 @@ export default class AnnotationPage extends React.Component<
             </div>
           )}
         </div>
-        {this.props.annotation.mutationEffect.description && (
+        {this.props.store.annotationData.result.mutationEffect.description && (
           <Row>
             <Col>
               <ShowHideText
@@ -525,7 +561,10 @@ export default class AnnotationPage extends React.Component<
                 title="mutation effect description"
                 content={
                   <SummaryWithRefs
-                    content={this.props.annotation.mutationEffect.description}
+                    content={
+                      this.props.store.annotationData.result.mutationEffect
+                        .description
+                    }
                     type="linkout"
                   />
                 }
@@ -536,20 +575,22 @@ export default class AnnotationPage extends React.Component<
             </Col>
           </Row>
         )}
-        {this.props.tumorType ? (
+        {this.props.store.tumorTypeQuery ? (
           <CancerTypeView
             appStore={this.props.appStore}
             isLargeScreen={this.props.windowStore.isLargeScreen}
             userAuthenticated={
               this.props.authenticationStore.isUserAuthenticated
             }
-            hugoSymbol={this.props.hugoSymbol}
-            alteration={this.props.alteration}
-            matchedAlteration={this.props.matchedAlteration}
-            tumorType={this.props.tumorType}
+            hugoSymbol={this.props.store.hugoSymbol}
+            alteration={this.props.store.alterationName}
+            matchedAlteration={this.props.store.alteration.result}
+            tumorType={this.props.store.tumorTypeQuery}
             onChangeTumorType={this.props.onChangeTumorType}
-            annotation={this.props.annotation}
-            biologicalAlterations={this.props.biologicalAlterations}
+            annotation={this.props.store.annotationData.result}
+            biologicalAlterations={
+              this.props.store.biologicalAlterations.result
+            }
             relevantAlterations={this.props.relevantAlterations}
             fdaImplication={this.fdaImplication}
             therapeuticImplications={this.therapeuticImplications}
@@ -561,13 +602,15 @@ export default class AnnotationPage extends React.Component<
         ) : (
           <AlterationView
             appStore={this.props.appStore}
-            hugoSymbol={this.props.hugoSymbol}
-            alteration={this.props.alteration}
-            matchedAlteration={this.props.matchedAlteration}
-            tumorType={this.props.tumorType}
+            hugoSymbol={this.props.store.hugoSymbol}
+            alteration={this.props.store.alterationName}
+            matchedAlteration={this.props.store.alteration.result}
+            tumorType={this.props.store.tumorTypeQuery}
             onChangeTumorType={this.props.onChangeTumorType}
-            annotation={this.props.annotation}
-            biologicalAlterations={this.props.biologicalAlterations}
+            annotation={this.props.store.annotationData.result}
+            biologicalAlterations={
+              this.props.store.biologicalAlterations.result
+            }
             relevantAlterations={this.props.relevantAlterations}
             fdaImplication={this.fdaImplication}
             therapeuticImplications={this.therapeuticImplications}
@@ -576,6 +619,42 @@ export default class AnnotationPage extends React.Component<
             defaultSelectedTab={this.props.defaultSelectedTab}
             onChangeTab={this.props.onChangeTab}
           />
+        )}
+      </>
+    );
+  }
+
+  render() {
+    return this.props.annotationType === AnnotationType.GENE &&
+      (this.props.store.gene.isError ||
+        this.props.store.gene.result === DEFAULT_GENE) ? (
+      <UnknownGeneAlert />
+    ) : (
+      <>
+        {this.navBreadcrumbs}
+        {this.pageShouldBeRendered ? (
+          this.props.store.annotationData.result.query.hugoSymbol ? (
+            this.getAnnotationComponents()
+          ) : (
+            <Alert variant="warning" className={'text-center'}>
+              We do not have any information for this variant
+            </Alert>
+          )
+        ) : (
+          <If condition={this.props.store.annotationData.isError}>
+            <Then>
+              <Alert variant="warning" className={'text-center'}>
+                An error occurred while annotating your variant.
+              </Alert>
+            </Then>
+            <Else>
+              <LoadingIndicator
+                size={LoaderSize.LARGE}
+                center={true}
+                isLoading={true}
+              />
+            </Else>
+          </If>
         )}
       </>
     );

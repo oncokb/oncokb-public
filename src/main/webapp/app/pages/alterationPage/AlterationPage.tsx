@@ -1,22 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { AnnotationStore } from 'app/store/AnnotationStore';
-import { computed, action, IReactionDisposer, reaction } from 'mobx';
+import { action, computed, IReactionDisposer, reaction } from 'mobx';
 import AppStore from 'app/store/AppStore';
-import LoadingIndicator, {
-  LoaderSize,
-} from 'app/components/loadingIndicator/LoadingIndicator';
-import { ANNOTATION_PAGE_TAB_KEYS, DEFAULT_GENE } from 'app/config/constants';
-import {
-  decodeSlash,
-  encodeSlash,
-  getCancerTypeNameFromOncoTreeType,
-  getPageTitle,
-} from 'app/shared/utils/Utils';
+import { ANNOTATION_PAGE_TAB_KEYS } from 'app/config/constants';
+import { decodeSlash, encodeSlash, getPageTitle } from 'app/shared/utils/Utils';
 import { RouterStore } from 'mobx-react-router';
 import DocumentTitle from 'react-document-title';
-import { Else, If, Then } from 'react-if';
-import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
 import { RouteComponentProps } from 'react-router';
 import AnnotationPage, {
   AnnotationType,
@@ -57,10 +47,14 @@ export default class AlterationPage extends React.Component<
 
   constructor(props: any) {
     super(props);
+    const alterationQuery = decodeSlash(props.match.params.alteration);
     if (props.match.params) {
       this.store = new AnnotationStore({
+        type: alterationQuery
+          ? AnnotationType.PROTEIN_CHANGE
+          : AnnotationType.GENE,
         hugoSymbolQuery: props.match.params.hugoSymbol,
-        alterationQuery: decodeSlash(props.match.params.alteration),
+        alterationQuery,
         tumorTypeQuery: props.match.params.tumorType
           ? decodeSlash(props.match.params.tumorType)
           : props.match.params.tumorType,
@@ -138,18 +132,6 @@ export default class AlterationPage extends React.Component<
   }
 
   @computed
-  get pageShouldBeRendered() {
-    return (
-      this.store.gene.isComplete &&
-      this.store.geneNumber.isComplete &&
-      this.store.ensemblGenes.isComplete &&
-      this.store.clinicalAlterations.isComplete &&
-      this.store.biologicalAlterations.isComplete &&
-      this.store.annotationResult.isComplete
-    );
-  }
-
-  @computed
   get documentTitle() {
     const content = [];
     if (this.store.hugoSymbol) {
@@ -187,47 +169,18 @@ export default class AlterationPage extends React.Component<
   render() {
     return (
       <DocumentTitle title={this.documentTitle}>
-        <If condition={this.pageShouldBeRendered}>
-          <Then>
-            {this.store.gene.isError ||
-            this.store.gene.result === DEFAULT_GENE ? (
-              <UnknownGeneAlert />
-            ) : (
-              this.pageShouldBeRendered && (
-                <AnnotationPage
-                  appStore={this.props.appStore}
-                  windowStore={this.props.windowStore}
-                  authenticationStore={this.props.authenticationStore}
-                  annotationType={AnnotationType.PROTEIN_CHANGE}
-                  hugoSymbol={this.store.hugoSymbol}
-                  oncogene={this.store.gene.result.oncogene}
-                  tsg={this.store.gene.result.tsg}
-                  alteration={this.store.alterationQuery}
-                  matchedAlteration={this.store.alteration.result}
-                  tumorType={this.store.cancerTypeName}
-                  refGenome={this.store.referenceGenomeQuery}
-                  annotation={this.store.annotationResult.result}
-                  biologicalAlterations={
-                    this.store.biologicalAlterations.result
-                  }
-                  relevantAlterations={this.store.relevantAlterations.result}
-                  onChangeTumorType={newTumorType =>
-                    (this.store.tumorTypeQuery = newTumorType)
-                  }
-                  defaultSelectedTab={this.selectedTab}
-                  onChangeTab={this.onChangeTab}
-                />
-              )
-            )}
-          </Then>
-          <Else>
-            <LoadingIndicator
-              size={LoaderSize.LARGE}
-              center={true}
-              isLoading={true}
-            />
-          </Else>
-        </If>
+        <AnnotationPage
+          store={this.store}
+          appStore={this.props.appStore}
+          windowStore={this.props.windowStore}
+          authenticationStore={this.props.authenticationStore}
+          annotationType={AnnotationType.PROTEIN_CHANGE}
+          onChangeTumorType={newTumorType =>
+            (this.store.tumorTypeQuery = newTumorType)
+          }
+          defaultSelectedTab={this.selectedTab}
+          onChangeTab={this.onChangeTab}
+        />
       </DocumentTitle>
     );
   }

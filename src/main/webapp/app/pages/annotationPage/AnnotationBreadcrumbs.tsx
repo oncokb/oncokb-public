@@ -87,12 +87,12 @@ const InputBreadcrumb: React.FunctionComponent<IInputBreadcrumb> = props => {
             <Icon
               colorClassName="text-success"
               iconClassName="check"
-              onClick={() => setEditing(true)}
+              onClick={() => setEditing(false)}
             />
             <Icon
               colorClassName="text-danger"
               iconClassName="times"
-              onClick={() => setEditing(true)}
+              onClick={() => setEditing(false)}
             />
           </span>
         </Then>

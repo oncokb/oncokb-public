@@ -7,7 +7,7 @@ export const convertGeneInputToLinks = (geneInput: string): ElementType => {
   const itemLinks = geneInput
     .trim()
     .split(',')
-    .map(token => <GenePageLink hugoSymbol={token.trim()} />);
+    .map(gene => <GenePageLink key={gene} hugoSymbol={gene.trim()} />);
 
   return <WithSeparator separator=", ">{itemLinks}</WithSeparator>;
 };

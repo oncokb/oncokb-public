@@ -36,7 +36,9 @@ import {
 import _ from 'lodash';
 import { BarChartDatum } from 'app/components/barChart/BarChart';
 import {
+  getAlterationName,
   getCancerTypeNameFromOncoTreeType,
+  getPageTitle,
   isOncogenic,
   shortenOncogenicity,
 } from 'app/shared/utils/Utils';
@@ -52,8 +54,10 @@ import {
   ONCOGENICITY_FILTER_TYPE,
 } from 'app/components/oncokbMutationMapper/FilterUtils';
 import { notifyError } from 'app/shared/utils/NotificationUtils';
+import { AnnotationType } from 'app/pages/annotationPage/AnnotationPage';
 
 export interface IAnnotationStore {
+  type: AnnotationType;
   hugoSymbolQuery?: string;
   alterationQuery?: string;
   tumorTypeQuery?: string;
@@ -97,55 +101,7 @@ export class AnnotationStore {
   @observable genomicChangeQuery: string;
   @observable referenceGenomeQuery: REFERENCE_GENOME = REFERENCE_GENOME.GRCh37;
 
-  @computed get cancerTypeFilter() {
-    return this.mutationMapperStore.result
-      ? findCancerTypeFilter(
-          this.mutationMapperStore.result.dataStore.dataFilters
-        )
-      : undefined;
-  }
-
-  @computed get selectedCancerTypes() {
-    if (this.cancerTypeFilter) {
-      return this.cancerTypeFilter.values;
-    } else if (this.selectedPositions.length > 0) {
-      return this.barChartData
-        .filter(
-          data =>
-            data.alterations.filter(alteration =>
-              this.selectedPositions.includes(alteration.proteinStartPosition)
-            ).length > 0
-        )
-        .map(data => data.x);
-    }
-    return [];
-  }
-
-  @computed
-  public get oncogenicityFilter() {
-    return this.mutationMapperStore.result
-      ? findOncogenicityFilter(
-          this.mutationMapperStore.result.dataStore.dataFilters
-        )
-      : undefined;
-  }
-
-  @computed
-  public get oncogenicityFilters() {
-    return this.oncogenicityFilter ? this.oncogenicityFilter.values : [];
-  }
-
-  @computed get positionFilter() {
-    return this.mutationMapperStore.result
-      ? findPositionFilter(
-          this.mutationMapperStore.result.dataStore.selectionFilters
-        )
-      : undefined;
-  }
-
-  @computed get selectedPositions() {
-    return this.positionFilter ? this.positionFilter.values : [];
-  }
+  private readonly annotationType: AnnotationType;
 
   readonly mutationMapperProps = remoteData<Partial<MutationMapperProps>>({
     await: () => [
@@ -181,6 +137,7 @@ export class AnnotationStore {
   readonly reactions: IReactionDisposer[] = [];
 
   constructor(props: IAnnotationStore) {
+    this.annotationType = props.type;
     if (props.hugoSymbolQuery) this.hugoSymbolQuery = props.hugoSymbolQuery;
     if (props.alterationQuery) this.alterationQuery = props.alterationQuery;
     if (props.tumorTypeQuery) this.tumorTypeQuery = props.tumorTypeQuery;
@@ -244,36 +201,6 @@ export class AnnotationStore {
     },
     default: [],
   });
-
-  // this is for easier access of the hugoSymbol from the gene call
-  @computed
-  get hugoSymbol() {
-    return this.gene.result.hugoSymbol;
-  }
-
-  @computed
-  get oncogenicBiologicalVariants() {
-    return this.biologicalAlterations.result.filter(variant =>
-      isOncogenic(variant.oncogenic)
-    );
-  }
-
-  @computed
-  get cancerTypeName() {
-    if (this.tumorTypeQuery) {
-      if (this.tumorTypeQuery.toUpperCase() === this.tumorTypeQuery) {
-        // we should use the cancer type name if the query is the OncoTree code.
-        const matchedCancerType = this.allCancerTypes.result.filter(
-          ct => ct.code === this.tumorTypeQuery
-        );
-        if (matchedCancerType.length === 1) {
-          return getCancerTypeNameFromOncoTreeType(matchedCancerType[0]);
-        }
-      }
-      return this.tumorTypeQuery;
-    }
-    return '';
-  }
 
   readonly geneSummary = remoteData<string | undefined>({
     await: () => [this.gene],
@@ -524,6 +451,155 @@ export class AnnotationStore {
     default: [],
   });
 
+  calculateOncogenicities(biologicalAlterations: BiologicalVariant[]) {
+    const oncogenicities = _.groupBy(
+      _.reduce(
+        biologicalAlterations,
+        (acc, item) => {
+          acc.push({
+            ...item,
+            oncogenic: shortenOncogenicity(item.oncogenic),
+          });
+          return acc;
+        },
+        [] as BiologicalVariant[]
+      ),
+      'oncogenic'
+    );
+    const keys = _.keys(oncogenicities).sort(oncogenicitySortMethod);
+    return _.reduce(
+      keys,
+      (acc, oncogenicity) => {
+        const datum = oncogenicities[oncogenicity];
+        acc.push({
+          oncogenicity,
+          counts: datum.length,
+        });
+        return acc;
+      },
+      [] as Oncogenicity[]
+    );
+  }
+
+  @computed
+  get annotationData() {
+    switch (this.annotationType) {
+      case AnnotationType.GENOMIC_CHANGE:
+        return this.annotationResultByGenomicChange;
+        break;
+      case AnnotationType.HGVSG:
+        return this.annotationResultByHgvsg;
+        break;
+      case AnnotationType.PROTEIN_CHANGE:
+        return this.annotationResult;
+        break;
+      default:
+        return this.defaultAnnotationResult;
+        break;
+    }
+  }
+
+  @computed get cancerTypeFilter() {
+    return this.mutationMapperStore.result
+      ? findCancerTypeFilter(
+          this.mutationMapperStore.result.dataStore.dataFilters
+        )
+      : undefined;
+  }
+
+  @computed get selectedCancerTypes() {
+    if (this.cancerTypeFilter) {
+      return this.cancerTypeFilter.values;
+    } else if (this.selectedPositions.length > 0) {
+      return this.barChartData
+        .filter(
+          data =>
+            data.alterations.filter(alteration =>
+              this.selectedPositions.includes(alteration.proteinStartPosition)
+            ).length > 0
+        )
+        .map(data => data.x);
+    }
+    return [];
+  }
+
+  @computed
+  public get oncogenicityFilter() {
+    return this.mutationMapperStore.result
+      ? findOncogenicityFilter(
+          this.mutationMapperStore.result.dataStore.dataFilters
+        )
+      : undefined;
+  }
+
+  @computed
+  public get oncogenicityFilters() {
+    return this.oncogenicityFilter ? this.oncogenicityFilter.values : [];
+  }
+
+  @computed get positionFilter() {
+    return this.mutationMapperStore.result
+      ? findPositionFilter(
+          this.mutationMapperStore.result.dataStore.selectionFilters
+        )
+      : undefined;
+  }
+
+  @computed get selectedPositions() {
+    return this.positionFilter ? this.positionFilter.values : [];
+  }
+
+  // this is for easier access of the hugoSymbol from the gene call
+  @computed
+  get hugoSymbol() {
+    if (this.annotationType === AnnotationType.PROTEIN_CHANGE) {
+      return this.gene.result.hugoSymbol;
+    } else {
+      return this.annotationData.result.query.hugoSymbol;
+    }
+  }
+
+  @computed
+  get alterationName() {
+    if (this.annotationType === AnnotationType.PROTEIN_CHANGE) {
+      return getAlterationName(
+        this.alteration.result === undefined
+          ? this.alterationQuery
+          : {
+              alteration: this.alteration.result.alteration,
+              name: this.alteration.result.name,
+            },
+        true
+      );
+    } else {
+      return this.annotationData.result.query.alteration || '';
+    }
+  }
+
+  @computed
+  get oncogenicBiologicalVariants() {
+    return this.biologicalAlterations.result.filter(variant =>
+      isOncogenic(variant.oncogenic)
+    );
+  }
+
+  @computed
+  get cancerTypeName() {
+    if (this.tumorTypeQuery) {
+      if (this.tumorTypeQuery.toUpperCase() === this.tumorTypeQuery) {
+        // we should use the cancer type name if the query is the OncoTree code.
+        const matchedCancerType = this.allCancerTypes.result.filter(
+          ct => ct.code === this.tumorTypeQuery
+        );
+        if (matchedCancerType.length === 1) {
+          return getCancerTypeNameFromOncoTreeType(matchedCancerType[0]);
+        }
+      }
+      return this.tumorTypeQuery;
+    }
+    return '';
+  }
+
   @computed
   get barChartData() {
     const groupedCanerTypeCounts = _.groupBy(
@@ -563,36 +639,6 @@ export class AnnotationStore {
   @computed
   get uniqOncogenicity() {
     return this.calculateOncogenicities(this.biologicalAlterations.result);
-  }
-
-  calculateOncogenicities(biologicalAlterations: BiologicalVariant[]) {
-    const oncogenicities = _.groupBy(
-      _.reduce(
-        biologicalAlterations,
-        (acc, item) => {
-          acc.push({
-            ...item,
-            oncogenic: shortenOncogenicity(item.oncogenic),
-          });
-          return acc;
-        },
-        [] as BiologicalVariant[]
-      ),
-      'oncogenic'
-    );
-    const keys = _.keys(oncogenicities).sort(oncogenicitySortMethod);
-    return _.reduce(
-      keys,
-      (acc, oncogenicity) => {
-        const datum = oncogenicities[oncogenicity];
-        acc.push({
-          oncogenicity,
-          counts: datum.length,
-        });
-        return acc;
-      },
-      [] as Oncogenicity[]
-    );
   }
 
   @computed

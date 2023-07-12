@@ -10,18 +10,13 @@ import autobind from 'autobind-decorator';
 import client from 'app/shared/api/clientInstance';
 import { Token, UserDTO } from 'app/shared/api/generated/API';
 import * as _ from 'lodash';
+import { TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS } from 'app/config/constants';
 import {
-  AUTHORITIES,
-  TOKEN_ABOUT_2_EXPIRE_NOTICE_IN_DAYS,
-} from 'app/config/constants';
-import { remoteData } from 'cbioportal-frontend-commons';
-import {
-  assignPublicToken,
   getPublicWebsiteToken,
   getStoredToken,
   AUTH_UER_TOKEN_KEY,
 } from 'app/indexUtils';
-import { notifyError, notifySuccess } from 'app/shared/utils/NotificationUtils';
+import { notifyError } from 'app/shared/utils/NotificationUtils';
 import { OncoKBError } from 'app/shared/alert/ErrorAlertUtils';
 import { daysDiff } from 'app/shared/utils/Utils';
 
