@@ -552,7 +552,10 @@ export class AnnotationStore {
   // this is for easier access of the hugoSymbol from the gene call
   @computed
   get hugoSymbol() {
-    if (this.annotationType === AnnotationType.PROTEIN_CHANGE) {
+    if (
+      this.annotationType === AnnotationType.GENE ||
+      this.annotationType === AnnotationType.PROTEIN_CHANGE
+    ) {
       return this.gene.result.hugoSymbol;
     } else {
       return this.annotationData.result.query.hugoSymbol;
