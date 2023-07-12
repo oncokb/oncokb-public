@@ -458,8 +458,6 @@ export type TypeaheadSearchResp = {
 
         'tumorTypes': Array < TumorType >
 
-        'cancer': TumorType
-
         'variantExist': boolean
 
         'variants': Array < Alteration >

@@ -46,7 +46,6 @@ interface IHomeProps {
 export type ExtendedTypeaheadSearchResp = TypeaheadSearchResp & {
   alterationsName: string;
   tumorTypesName: string;
-  cancerName: string;
 };
 
 @inject('routing', 'appStore', 'windowStore')

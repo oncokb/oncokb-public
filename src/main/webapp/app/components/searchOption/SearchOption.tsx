@@ -180,21 +180,25 @@ const CancerTypeSearchOption: React.FunctionComponent<{
       <div>
         <Highlighter
           searchWords={[props.search]}
-          textToHighlight={props.data.cancerName}
+          textToHighlight={props.data.tumorTypesName}
         />
       </div>
-      <div className={styles.subTitle}>
-        <LevelString
-          highestSensitiveLevel={props.data.highestSensitiveLevel}
-          highestResistanceLevel={props.data.highestResistanceLevel}
-        />
-        in
-        {` ${props.data.gene.hugoSymbol} `}
-        {props.data.variants.length > 1
-          ? `(${props.data.alterationsName})`
-          : ''}
-        {props.data.variants.length === 1 ? props.data.alterationsName : ''}
-      </div>
+      {props.data.gene !== null ? (
+        <div className={styles.subTitle}>
+          <LevelString
+            highestSensitiveLevel={props.data.highestSensitiveLevel}
+            highestResistanceLevel={props.data.highestResistanceLevel}
+          />
+          in
+          {` ${props.data.gene.hugoSymbol} `}
+          {props.data.variants.length > 1
+            ? `(${props.data.alterationsName})`
+            : ''}
+          {props.data.variants.length === 1 ? props.data.alterationsName : ''}
+        </div>
+      ) : (
+        <div>No evidence found.</div>
+      )}
     </>
   );
 };
