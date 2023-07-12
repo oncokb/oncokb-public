@@ -75,11 +75,7 @@ const InputBreadcrumb: React.FunctionComponent<IInputBreadcrumb> = props => {
   const [text, setText] = useState(props.text);
   const editableContentFontSize = '13px';
   return (
-    <Breadcrumb.Item
-      key={props.key}
-      active={editing}
-      style={{ color: COLOR_BLUE }}
-    >
+    <Breadcrumb.Item key={props.key} active style={{ color: COLOR_BLUE }}>
       <If condition={editing}>
         <Then>
           <span style={{ fontSize: editableContentFontSize }}>
