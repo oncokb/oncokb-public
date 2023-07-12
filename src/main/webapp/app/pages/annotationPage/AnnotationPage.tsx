@@ -575,9 +575,10 @@ export default class AnnotationPage extends React.Component<
               );
             })}
           </div>
-          {this.props.annotationType === AnnotationType.HGVSG && (
+          {(this.props.annotationType === AnnotationType.HGVSG ||
+            this.props.annotationType === AnnotationType.GENOMIC_CHANGE) && (
             <div className={'my-1 d-flex flex-column align-items-center'}>
-              <div>HGVSg annotation powered by</div>
+              <div>Genomic annotation powered by</div>
               <PowerBySource
                 name={'Genome Nexus'}
                 url={'genomenexus.org'}
