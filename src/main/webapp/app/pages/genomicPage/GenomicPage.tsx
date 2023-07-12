@@ -3,9 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { AnnotationStore, IAnnotationStore } from 'app/store/AnnotationStore';
 import { computed, IReactionDisposer, observable, reaction } from 'mobx';
 import AppStore from 'app/store/AppStore';
-import LoadingIndicator, {
-  LoaderSize,
-} from 'app/components/loadingIndicator/LoadingIndicator';
 import { RouterStore } from 'mobx-react-router';
 import DocumentTitle from 'react-document-title';
 import { RouteComponentProps } from 'react-router';
@@ -19,7 +16,6 @@ import {
   QUERY_SEPARATOR_FOR_QUERY_STRING,
   REFERENCE_GENOME,
 } from 'app/config/constants';
-import { Alert } from 'react-bootstrap';
 import autobind from 'autobind-decorator';
 import {
   AlterationPageHashQueries,
@@ -188,6 +184,7 @@ export default class GenomicPage extends React.Component<GenomicPageProps> {
         <AnnotationPage
           appStore={this.props.appStore}
           windowStore={this.props.windowStore}
+          routing={this.props.routing}
           store={this.store}
           authenticationStore={this.props.authenticationStore}
           annotationType={this.annotationType}

@@ -172,6 +172,7 @@ export default class AlterationPage extends React.Component<
         <AnnotationPage
           store={this.store}
           appStore={this.props.appStore}
+          routing={this.props.routing}
           windowStore={this.props.windowStore}
           authenticationStore={this.props.authenticationStore}
           annotationType={AnnotationType.PROTEIN_CHANGE}

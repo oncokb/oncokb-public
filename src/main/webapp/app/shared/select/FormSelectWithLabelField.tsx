@@ -12,6 +12,11 @@ export type IFormSelectWithLabelProps = {
   value?: { value: any; label: any } | null;
 };
 
+export type Option = {
+  label: string;
+  value: string;
+};
+
 export const FormSelectWithLabelField: React.FunctionComponent<IFormSelectWithLabelProps> = props => {
   return (
     <div className="form-group">

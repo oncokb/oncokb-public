@@ -5,6 +5,8 @@ import {
   AlterationPageLink,
   getAlterationPageLink,
   getGenePageLink,
+  getGenomicPageLink,
+  getGenomicPageLocation,
 } from 'app/shared/utils/UrlUtils';
 import {
   ANNOTATION_PAGE_TAB_KEYS,
@@ -12,6 +14,7 @@ import {
   DEFAULT_MARGIN_BOTTOM_LG,
   EVIDENCE_TYPES,
   OTHER_BIOMARKERS,
+  PAGE_ROUTE,
   REFERENCE_GENOME,
   TREATMENT_EVIDENCE_TYPES,
 } from 'app/config/constants';
@@ -20,10 +23,9 @@ import { AlterationInfo } from 'app/pages/annotationPage/AlterationInfo';
 import { Col, Row, Alert } from 'react-bootstrap';
 import classnames from 'classnames';
 import { action, computed, observable } from 'mobx';
+import * as QueryString from 'querystring';
 import {
-  BiologicalVariant,
   Evidence,
-  VariantAnnotation,
   VariantAnnotationTumorType,
 } from 'app/shared/api/generated/OncoKbPrivateAPI';
 import {
@@ -33,7 +35,6 @@ import {
 } from 'app/store/AnnotationStore';
 import {
   articles2Citations,
-  getAlterationName,
   getCancerTypeNameFromOncoTreeType,
   getCancerTypesName,
   getCategoricalAlterationDescription,
@@ -75,6 +76,8 @@ import LoadingIndicator, {
 } from 'app/components/loadingIndicator/LoadingIndicator';
 import { Else, If, Then } from 'react-if';
 import { UnknownGeneAlert } from 'app/shared/alert/UnknownGeneAlert';
+import { RouterStore } from 'mobx-react-router';
+import { Option } from 'app/shared/select/FormSelectWithLabelField';
 
 export enum AnnotationType {
   GENE,
@@ -84,6 +87,7 @@ export enum AnnotationType {
 }
 
 export type IAnnotationPage = {
+  routing: RouterStore;
   appStore: AppStore;
   windowStore: WindowStore;
   store: AnnotationStore;
@@ -405,14 +409,32 @@ export default class AnnotationPage extends React.Component<
             type: 'dropdown',
             key: 'referenceGenome',
             text: this.props.store.referenceGenomeQuery,
-            onChange: () => null,
+            onChange: (selectedOption: Option) => {
+              this.props.routing.history.push(
+                getGenomicPageLink({
+                  rootRoute: PAGE_ROUTE.HGVSG,
+                  query: this.props.store.hgvsgQuery,
+                  refGenome: selectedOption.value as REFERENCE_GENOME,
+                  cancerType: this.props.store.tumorTypeQuery,
+                })
+              );
+            },
             options: [REFERENCE_GENOME.GRCh37, REFERENCE_GENOME.GRCh38],
           } as IDropdownBreadcrumb,
           {
             type: 'input',
             key: 'hgvgs',
             text: this.props.store.hgvsgQuery,
-            onChange: () => null,
+            onChange: (newQuery: string) => {
+              const location = getGenomicPageLocation({
+                rootRoute: PAGE_ROUTE.HGVSG,
+                query: newQuery,
+                refGenome: this.props.store.referenceGenomeQuery,
+                cancerType: this.props.store.tumorTypeQuery,
+              });
+              window.location.search = QueryString.stringify(location.search);
+              window.location.pathname = location.pathname;
+            },
           } as IInputBreadcrumb,
         ];
         break;
@@ -422,14 +444,32 @@ export default class AnnotationPage extends React.Component<
             type: 'dropdown',
             key: 'referenceGenome',
             text: this.props.store.referenceGenomeQuery,
-            onChange: () => null,
+            onChange: (selectedOption: Option) => {
+              this.props.routing.history.push(
+                getGenomicPageLink({
+                  rootRoute: PAGE_ROUTE.GENOMIC_CHANGE,
+                  query: this.props.store.genomicChangeQuery,
+                  refGenome: selectedOption.value as REFERENCE_GENOME,
+                  cancerType: this.props.store.tumorTypeQuery,
+                })
+              );
+            },
             options: [REFERENCE_GENOME.GRCh37, REFERENCE_GENOME.GRCh38],
           } as IDropdownBreadcrumb,
           {
             type: 'input',
             key: 'genomicChange',
             text: this.props.store.genomicChangeQuery,
-            onChange: () => null,
+            onChange: (newQuery: string) => {
+              const location = getGenomicPageLocation({
+                rootRoute: PAGE_ROUTE.GENOMIC_CHANGE,
+                query: newQuery,
+                refGenome: this.props.store.referenceGenomeQuery,
+                cancerType: this.props.store.tumorTypeQuery,
+              });
+              window.location.search = QueryString.stringify(location.search);
+              window.location.pathname = location.pathname;
+            },
           } as IInputBreadcrumb,
         ];
         break;

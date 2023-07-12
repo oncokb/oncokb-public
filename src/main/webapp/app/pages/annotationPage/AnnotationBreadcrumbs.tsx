@@ -5,6 +5,7 @@ import { Else, If, Then } from 'react-if';
 import Select from 'react-select';
 import { REFERENCE_GENOME } from 'app/config/constants';
 import { COLOR_BLUE } from 'app/config/theme';
+import { Option } from 'app/shared/select/FormSelectWithLabelField';
 
 export type BreadcrumbType = 'text' | 'link' | 'input' | 'dropdown';
 
@@ -26,12 +27,12 @@ export interface ILinkBreadcrumb extends IBasicBreadcrumb {
 
 export interface IInputBreadcrumb extends IBasicBreadcrumb {
   type: 'input';
-  onChange: () => void;
+  onChange: (newVal: string) => void;
 }
 
 export interface IDropdownBreadcrumb extends IBasicBreadcrumb {
   type: 'dropdown';
-  onChange: () => void;
+  onChange: (selectedOption: Option) => void;
   options: string[];
 }
 
@@ -87,12 +88,18 @@ const InputBreadcrumb: React.FunctionComponent<IInputBreadcrumb> = props => {
             <Icon
               colorClassName="text-success"
               iconClassName="check"
-              onClick={() => setEditing(false)}
+              onClick={() => {
+                props.onChange(text);
+                setEditing(false);
+              }}
             />
             <Icon
               colorClassName="text-danger"
               iconClassName="times"
-              onClick={() => setEditing(false)}
+              onClick={() => {
+                setText(props.text);
+                setEditing(false);
+              }}
             />
           </span>
         </Then>
@@ -156,8 +163,8 @@ const DropdownBreadcrumb: React.FunctionComponent<IDropdownBreadcrumb> = props =
             options={props.options.map(option => {
               return { label: option, value: option };
             })}
-            onChange={() => {
-              props.onChange();
+            onChange={(selectedOption: Option) => {
+              props.onChange(selectedOption);
               setEditing(false);
             }}
             defaultValue={{
@@ -212,7 +219,7 @@ export const AnnotationBreadcrumbs: React.FunctionComponent<{
                 {...commonProps}
                 type={'dropdown'}
                 options={[REFERENCE_GENOME.GRCh37, REFERENCE_GENOME.GRCh38]}
-                onChange={() => null}
+                onChange={breadcrumb.onChange}
               />
             );
           case 'input':
@@ -220,7 +227,7 @@ export const AnnotationBreadcrumbs: React.FunctionComponent<{
               <InputBreadcrumb
                 {...commonProps}
                 type={'input'}
-                onChange={() => null}
+                onChange={breadcrumb.onChange}
               />
             );
           default:
