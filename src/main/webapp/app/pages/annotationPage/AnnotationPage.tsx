@@ -111,7 +111,7 @@ export default class AnnotationPage extends React.Component<
 
   constructor(props: any) {
     super(props);
-    if (this.props.store.tumorTypeQuery) {
+    if (this.props.store.cancerTypeName) {
       this.showMutationEffect = false;
     }
   }
@@ -415,7 +415,7 @@ export default class AnnotationPage extends React.Component<
                   rootRoute: PAGE_ROUTE.HGVSG,
                   query: this.props.store.hgvsgQuery,
                   refGenome: selectedOption.value as REFERENCE_GENOME,
-                  cancerType: this.props.store.tumorTypeQuery,
+                  cancerType: this.props.store.cancerTypeName,
                 })
               );
             },
@@ -430,7 +430,7 @@ export default class AnnotationPage extends React.Component<
                 rootRoute: PAGE_ROUTE.HGVSG,
                 query: newQuery,
                 refGenome: this.props.store.referenceGenomeQuery,
-                cancerType: this.props.store.tumorTypeQuery,
+                cancerType: this.props.store.cancerTypeName,
               });
               window.location.search = QueryString.stringify(location.search);
               window.location.pathname = location.pathname;
@@ -450,7 +450,7 @@ export default class AnnotationPage extends React.Component<
                   rootRoute: PAGE_ROUTE.GENOMIC_CHANGE,
                   query: this.props.store.genomicChangeQuery,
                   refGenome: selectedOption.value as REFERENCE_GENOME,
-                  cancerType: this.props.store.tumorTypeQuery,
+                  cancerType: this.props.store.cancerTypeName,
                 })
               );
             },
@@ -465,7 +465,7 @@ export default class AnnotationPage extends React.Component<
                 rootRoute: PAGE_ROUTE.GENOMIC_CHANGE,
                 query: newQuery,
                 refGenome: this.props.store.referenceGenomeQuery,
-                cancerType: this.props.store.tumorTypeQuery,
+                cancerType: this.props.store.cancerTypeName,
               });
               window.location.search = QueryString.stringify(location.search);
               window.location.pathname = location.pathname;
@@ -477,10 +477,10 @@ export default class AnnotationPage extends React.Component<
         break;
     }
 
-    if (this.props.store.tumorTypeQuery) {
+    if (this.props.store.cancerTypeName) {
       breadcrumbs.push({
         type: 'text',
-        text: this.props.store.tumorTypeQuery,
+        text: this.props.store.cancerTypeName,
         key: 'cancertype',
       } as ITextBreadcrumb);
     }
@@ -507,9 +507,9 @@ export default class AnnotationPage extends React.Component<
                 <span className={'mr-2'}>{this.props.store.hugoSymbol}</span>
               )}
               <span>{this.props.store.alterationName}</span>
-              {this.props.store.tumorTypeQuery && (
+              {this.props.store.cancerTypeName && (
                 <span className={'mx-2'}>
-                  in {this.props.store.tumorTypeQuery}
+                  in {this.props.store.cancerTypeName}
                 </span>
               )}
               <span style={{ fontSize: '0.5em' }} className={'ml-2'}>
@@ -519,7 +519,7 @@ export default class AnnotationPage extends React.Component<
                     annotation: {
                       gene: this.props.store.hugoSymbol,
                       alteration: this.props.store.alterationName,
-                      cancerType: this.props.store.tumorTypeQuery,
+                      cancerType: this.props.store.cancerTypeName,
                     },
                   }}
                   appStore={this.props.appStore}
@@ -616,7 +616,7 @@ export default class AnnotationPage extends React.Component<
             </Col>
           </Row>
         )}
-        {this.props.store.tumorTypeQuery ? (
+        {this.props.store.cancerTypeName ? (
           <CancerTypeView
             appStore={this.props.appStore}
             isLargeScreen={this.props.windowStore.isLargeScreen}
@@ -626,7 +626,7 @@ export default class AnnotationPage extends React.Component<
             hugoSymbol={this.props.store.hugoSymbol}
             alteration={this.props.store.alterationName}
             matchedAlteration={this.props.store.alteration.result}
-            tumorType={this.props.store.tumorTypeQuery}
+            tumorType={this.props.store.cancerTypeName}
             onChangeTumorType={this.props.onChangeTumorType}
             annotation={this.props.store.annotationData.result}
             biologicalAlterations={
@@ -646,7 +646,7 @@ export default class AnnotationPage extends React.Component<
             hugoSymbol={this.props.store.hugoSymbol}
             alteration={this.props.store.alterationName}
             matchedAlteration={this.props.store.alteration.result}
-            tumorType={this.props.store.tumorTypeQuery}
+            tumorType={this.props.store.cancerTypeName}
             onChangeTumorType={this.props.onChangeTumorType}
             annotation={this.props.store.annotationData.result}
             biologicalAlterations={
