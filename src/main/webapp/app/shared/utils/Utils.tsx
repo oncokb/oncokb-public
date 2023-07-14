@@ -604,11 +604,15 @@ export function secDiff(date: string) {
 const SLASH_HTML_ENTITY_CODE = '%2F';
 
 export function encodeSlash(content: string | undefined) {
-  return content ? content.replace('/', SLASH_HTML_ENTITY_CODE) : content;
+  return content
+    ? content.replace(new RegExp('/', 'g'), SLASH_HTML_ENTITY_CODE)
+    : content;
 }
 
 export function decodeSlash(content: string | undefined) {
-  return content ? content.replace(SLASH_HTML_ENTITY_CODE, '/') : content;
+  return content
+    ? content.replace(new RegExp(SLASH_HTML_ENTITY_CODE, 'g'), '/')
+    : content;
 }
 
 export const scrollWidthOffset = (el?: any) => {
