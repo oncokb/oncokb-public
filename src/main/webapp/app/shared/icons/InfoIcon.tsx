@@ -8,6 +8,7 @@ const InfoIcon: React.FunctionComponent<{
     | React.ReactChild
     | React.ReactFragment
     | React.ReactPortal;
+  overlayClassName?: string;
   placement?: RCTooltip.Placement;
   style?: React.CSSProperties;
   type?: IconType;
@@ -46,6 +47,7 @@ const InfoIcon: React.FunctionComponent<{
   return (
     <DefaultTooltip
       overlay={props.overlay ? props.overlay : <span></span>}
+      overlayClassName={props.overlayClassName}
       placement={props.placement}
       disabled={!props.overlay}
     >
