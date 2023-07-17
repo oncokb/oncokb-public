@@ -1,25 +1,23 @@
 import React from 'react';
-import {ExtendedTypeaheadSearchResp} from 'app/pages/HomePage';
+import { ExtendedTypeaheadSearchResp } from 'app/pages/HomePage';
 import Select from 'react-select';
 import {
   SearchOption,
   SearchOptionType,
 } from 'app/components/searchOption/SearchOption';
-import {components} from 'react-select';
-import {RouterStore} from 'mobx-react-router';
+import { components } from 'react-select';
+import { RouterStore } from 'mobx-react-router';
 import oncokbPrivateClient from 'app/shared/api/oncokbPrivateClientInstance';
 import {
   getAllAlterationsName,
   getAllTumorTypesName,
 } from 'app/shared/utils/Utils';
-import {inject, observer} from 'mobx-react';
-import {observable} from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { observable } from 'mobx';
 import _ from 'lodash';
 import AppStore from 'app/store/AppStore';
-import {FeedbackIcon} from 'app/components/feedback/FeedbackIcon';
-import {FeedbackType} from 'app/components/feedback/types';
-import SearchInfoIcon from "app/components/oncokbSearch/SearchInfoIcon";
-import {remoteData} from 'cbioportal-frontend-commons';
+import SearchInfoIcon from 'app/components/oncokbSearch/SearchInfoIcon';
+import { remoteData } from 'cbioportal-frontend-commons';
 
 interface IOncoKBSearch {
   routing?: RouterStore;
@@ -71,7 +69,7 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
         }
         return errorOptions;
       }
-    }
+    },
   });
 
   private debouncedUpdate = (searchTerm: string) => {
@@ -103,19 +101,7 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
       if (this.keyword) {
         return (
           <components.Option {...props}>
-            <span className="mr-2">
-              No result found, please send us an email if you would like{' '}
-              {this.keyword} to be curated.
-            </span>
-            <FeedbackIcon
-              feedback={{
-                type: FeedbackType.ANNOTATION,
-                annotation: {
-                  gene: this.keyword,
-                },
-              }}
-              appStore={this.props.appStore!}
-            />
+            <span>No result found</span>
           </components.Option>
         );
       } else {
@@ -172,10 +158,12 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
           />
         </div>
         <div className={'ml-2'}>
-          <SearchInfoIcon onSelectQuery={(newQuery) => {
-            this.selectInput = newQuery;
-            this.keyword = newQuery;
-          }}/>
+          <SearchInfoIcon
+            onSelectQuery={newQuery => {
+              this.selectInput = newQuery;
+              this.keyword = newQuery;
+            }}
+          />
         </div>
       </div>
     );
