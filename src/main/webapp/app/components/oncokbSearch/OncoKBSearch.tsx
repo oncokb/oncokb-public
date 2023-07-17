@@ -113,7 +113,7 @@ export default class OncoKBSearch extends React.Component<IOncoKBSearch, {}> {
       <div className={'d-flex align-items-center'}>
         <div className={'flex-grow-1'}>
           <Select
-            placeholder="Search Gene / Alteration / Drug"
+            placeholder="Search Gene / Alteration / Drug / Genomic Variant"
             components={{
               Option,
               DropdownIndicator: () => null,
